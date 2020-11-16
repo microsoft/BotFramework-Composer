@@ -5113,6 +5113,10 @@
                     "title": "Dialog",
                     "description": "The root dialog to execute the test script against."
                 },
+                "languagePolicy": {
+                    "title": "Language policy",
+                    "description": "Defines fall back languages to try per user input language."
+                },
                 "description": {
                     "title": "Description",
                     "description": "Description of the test script"
@@ -6025,8 +6029,404 @@
                 }
             }
         },
+        "Teams.GetMember": {
+            "title": "Get member",
+            "description": "Get teams member information.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "property": {
+                    "title": "Property",
+                    "description": "Property (named location to store information)."
+                },
+                "memberId": {
+                    "title": "Member Id",
+                    "description": "Member Id or expression to a member id to use to get the member information. Default value is the current turn.activity.from.id."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnAppBasedLinkQuery": {
+            "title": "OnTeamsAppBasedLinkQuery",
+            "description": "Actions triggered when a Teams activity is received with activity.name == 'composeExtension/queryLink'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnCardAction": {
+            "title": "On Teams card action",
+            "description": "Actions triggered when a Teams InvokeActivity is received with no activity.name.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnChannelCreated": {
+            "title": "On Teams channel created",
+            "description": "Actions triggered when a Teams ConversationUpdateActivity with channelData.eventType == 'channelCreated'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnChannelDeleted": {
+            "title": "On Teams channel deleted",
+            "description": "Actions triggered when a Teams ConversationUpdateActivity with channelData.eventType == 'channelDeleted'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnChannelRenamed": {
+            "title": "On Teams channel renamed",
+            "description": "Actions triggered when a Teams ConversationUpdateActivity with channelData.eventType == 'channelRenamed'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnChannelRestored": {
+            "title": "On Teams channel restored",
+            "description": "Actions triggered when a Teams ConversationUpdateActivity with channelData.eventType == 'channelRestored'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnFileConsent": {
+            "title": "On Teams file consent",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name == 'fileConsent/invoke'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnMessagingExtensionCardButtonClicked": {
+            "title": "On Teams messaging extension card button clicked",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/onCardButtonClicked'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnMessagingExtensionConfigurationQuerySettingUrl": {
+            "title": "On Teams messaging extension configuration query setting url",
+            "description": "Actions triggered when a Teams InvokeActivity is received with name='composeExtension/querySettingUrl'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnMessagingExtensionConfigurationSetting": {
+            "title": "On Teams messaging extension configuration setting",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/setting'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
         "Teams.OnMessagingExtensionFetchTask": {
-            "title": "On Teams Messaging Extension Fetch Task",
+            "title": "On Teams messaging extension fetch task",
             "description": "Actions triggered when a Teams InvokeActivity is received when activity.name='composeExtension/fetchTask'.",
             "patternProperties": {
                 "^\\$": {
@@ -6062,7 +6462,7 @@
             }
         },
         "Teams.OnMessagingExtensionQuery": {
-            "title": "OnTeamsMessagingExtensionQuery",
+            "title": "On Teams messaging extension query",
             "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/query'.",
             "patternProperties": {
                 "^\\$": {
@@ -6098,7 +6498,7 @@
             }
         },
         "Teams.OnMessagingExtensionSelectItem": {
-            "title": "OnTeamsMessagingExtensionSelectItem",
+            "title": "On Teams messaging extension select item",
             "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/selectItem'.",
             "patternProperties": {
                 "^\\$": {
@@ -6134,368 +6534,8 @@
             }
         },
         "Teams.OnMessagingExtensionSubmitAction": {
-            "title": "On Teams Messaging Extension Submit Action",
+            "title": "On teams messaging extension submit action",
             "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/submitAction'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnO365ConnectorCardAction": {
-            "title": "OnTeamsO365ConnectorCardAction",
-            "description": "Actions triggered when a Teams InvokeActivity is received for 'actionableMessage/executeAction'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTaskModuleFetch": {
-            "title": "On Teams Task Module Fetch",
-            "description": "Actions triggered when a Teams Invoke Activity is received with activity.name='task/fetch'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTaskModuleSubmit": {
-            "title": "On Teams Task Module Submit",
-            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='task/submit'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTeamArchived": {
-            "title": "OnTeamsTeamArchived",
-            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamArchived'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTeamDeleted": {
-            "title": "OnTeamsTeamDeleted",
-            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamDeleted'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTeamHardDeleted": {
-            "title": "OnTeamsTeamHardDeleted",
-            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamHardDeleted'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTeamRenamed": {
-            "title": "OnTeamsTeamRenamed",
-            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamRenamed'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTeamRestored": {
-            "title": "OnTeamsTeamRestored",
-            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamRestored'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTeamUnarchived": {
-            "title": "OnTeamsTeamUnarchived",
-            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamUnarchived'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.SendMessagingExtensionQueryLinkResponse": {
-            "title": "Send query link response",
-            "description": "Send a response to a query link request.  Query link requests have activity.name='composeExtension/queryLink'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6525,9 +6565,9 @@
                 }
             }
         },
-        "Teams.SendTaskModuleContinueResponse": {
-            "title": "Send Task Module Continue Response",
-            "description": "Send a continue response to a Task Module request.",
+        "Teams.OnO365ConnectorCardAction": {
+            "title": "On Teams O365 connector card action",
+            "description": "Actions triggered when a Teams InvokeActivity is received for 'actionableMessage/executeAction'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6577,9 +6617,9 @@
                 }
             }
         },
-        "Teams.SendTaskModuleMessageResponse": {
-            "title": "Send Task Module Message Response",
-            "description": "Send a message response to a Task Module request.",
+        "Teams.OnTaskModuleFetch": {
+            "title": "On Teams task module fetch",
+            "description": "Actions triggered when a Teams Invoke Activity is received with activity.name='task/fetch'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6609,9 +6649,9 @@
                 }
             }
         },
-        "Testbot.JavascriptAction": {
-            "title": "Javascript Action",
-            "description": "This gives you the ability to execute javascript to manipulate memory",
+        "Teams.OnTaskModuleSubmit": {
+            "title": "On Teams task module submit",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='task/submit'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6653,9 +6693,9 @@
                 }
             }
         },
-        "Testbot.Multiply": {
-            "title": "Multiply",
-            "description": "This will return the result of arg1*arg2",
+        "Teams.OnTeamArchived": {
+            "title": "On Teams team archived",
+            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamArchived'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6719,9 +6759,9 @@
                 }
             }
         },
-        "Microsoft.TelemetryTrackEvent": {
-            "title": "Telemetry - track event",
-            "description": "Track a custom event using the registered Telemetry Client.",
+        "Teams.OnTeamDeleted": {
+            "title": "On Teams team deleted",
+            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamDeleted'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6755,9 +6795,9 @@
                 }
             }
         },
-        "Microsoft.TemperatureEntityRecognizer": {
-            "title": "Temperature recognizer",
-            "description": "Recognizer which recognizes temperatures.",
+        "Teams.OnTeamHardDeleted": {
+            "title": "On Teams team hard deleted",
+            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamHardDeleted'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6775,9 +6815,9 @@
                 }
             }
         },
-        "Microsoft.TemplateEngineLanguageGenerator": {
-            "title": "Template multi-language generator",
-            "description": "Template Generator which allows only inline evaluation of templates.",
+        "Teams.OnTeamRenamed": {
+            "title": "On Teams team renamed",
+            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamRenamed'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6799,11 +6839,9 @@
                 }
             }
         },
-        "role": {
-            "title": "$role",
-            "description": "Defines the role played in the dialog schema from [expression|interface|implements($kind)|extends($kind)]."
-        },
-        "root": {
+        "Teams.OnTeamRestored": {
+            "title": "On Teams team restored",
+            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamRestored'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6821,17 +6859,9 @@
                 }
             }
         },
-        "stringExpression": {
-            "title": "String or expression",
-            "description": "Interpolated string or expression to evaluate.",
-            "oneOf": {
-                "0": {
-                    "title": "String",
-                    "description": "Interpolated string"
-                }
-            }
-        },
-        "test": {
+        "Teams.OnTeamUnarchived": {
+            "title": "On Teams team unarchived",
+            "description": "Actions triggered when a Teams ConversationUpdate with channelData.eventType == 'teamUnarchived'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6923,9 +6953,9 @@
                 }
             }
         },
-        "Microsoft.TextTemplate": {
-            "title": "Microsoft TextTemplate",
-            "description": "Use LG Templates to create text",
+        "Teams.SendMessagingExtensionAuthResponse": {
+            "title": "Send messaging extension auth response",
+            "description": "Send a response to a messaging extensin requiring auth. If the user is signed in, the dialog will end setting the TokenResponse in the specified property.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6933,9 +6963,29 @@
                 }
             },
             "properties": {
-                "template": {
-                    "title": "Template",
-                    "description": "Language Generator template to evaluate to create the text."
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "connectionName": {
+                    "title": "OAuth connection name",
+                    "description": "The OAuth Connection Name, that will be used to perform the Sign On."
+                },
+                "resultProperty": {
+                    "title": "Property",
+                    "description": "Property to store the TokenResponse in once Sign In completes."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
                 },
                 "$kind": {
                     "title": "Kind of dialog object",
@@ -6947,9 +6997,9 @@
                 }
             }
         },
-        "Microsoft.ThrowException": {
-            "title": "Throw an exception",
-            "description": "Throw an exception. Capture this exception with OnError trigger.",
+        "Teams.SendMessagingExtensionQueryLinkResponse": {
+            "title": "Send query link response",
+            "description": "Query link requests have activity.name='composeExtension/queryLink'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6960,6 +7010,78 @@
                 "id": {
                     "title": "Id",
                     "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "activity": {
+                    "title": "Activity",
+                    "description": "Expession for an Attachment template of Hero Card or Thumbnail Card to send. Attachment is required."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.SendTaskModuleContinueResponse": {
+            "title": "Send task module continue response",
+            "description": "Send a continue response to a Task Module request.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "title": {
+                    "title": "Title",
+                    "description": "Title of the Task Module Response."
+                },
+                "height": {
+                    "title": "Height",
+                    "description": "Height of the Task Module Response."
+                },
+                "width": {
+                    "title": "Width",
+                    "description": "Width of the Task Module Response."
+                },
+                "url": {
+                    "title": "Url",
+                    "description": "Url to use for the Task Module Response."
+                },
+                "fallbackUrl": {
+                    "title": "Fallback Url",
+                    "description": "Fallback Url to use for the Task Module Response."
+                },
+                "activity": {
+                    "title": "Activity",
+                    "description": "Expession for an Attachment template of Hero Card or Adaptive Card to send. Attachment is required."
                 },
                 "disabled": {
                     "title": "Disabled",
@@ -6979,9 +7101,9 @@
                 }
             }
         },
-        "Microsoft.TraceActivity": {
-            "title": "Send a TraceActivity",
-            "description": "Send a trace activity to the transcript logger and/ or Bot Framework Emulator.",
+        "Teams.SendTaskModuleMessageResponse": {
+            "title": "Send task module message response",
+            "description": "Send a message response to a Task Module request.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6992,6 +7114,18 @@
                 "id": {
                     "title": "Id",
                     "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "message": {
+                    "title": "Message",
+                    "description": "The response message to send."
                 },
                 "disabled": {
                     "title": "Disabled",

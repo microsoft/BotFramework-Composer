@@ -189,4 +189,12 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Retrieve meeting participant information'),
     submenu: [SubmenuNames.Teams],
   },
+  [SDKKinds.SendMessagingExtensionAuthResponse]: {
+    label: formatMessage('Send messaging extension auth response'),
+    submenu: [SubmenuNames.Teams],
+  },
+  [SDKKinds.GetMember]: {
+    label: formatMessage('Retrieve Team member information'),
+    submenu: [SubmenuNames.Teams],
+  },
 };

@@ -257,4 +257,95 @@ export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } =
   [SDKKinds.TrueSelector]: {
     title: formatMessage('TrueSelector'),
   },
+  [SDKKinds.OnAppBasedLinkQuery]: {
+    title: formatMessage('App based link query'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/queryLink".',
+  },
+  [SDKKinds.OnFileConsent]: {
+    title: formatMessage('File consent'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "fileConsent/invoke".',
+  },
+  [SDKKinds.OnCardAction]: {
+    title: formatMessage('Card action'),
+    description: 'Handle the event fired when an Invoke activity is received with no activity.name.',
+  },
+  [SDKKinds.OnO365ConnectorCardAction]: {
+    title: formatMessage('O365 card action'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "actionableMessage/executeAction"',
+  },
+  [SDKKinds.OnTaskModuleFetch]: {
+    title: formatMessage('Task module fetch'),
+    description: 'Handle the event fired when an Invoke activity is recieved with activity.name == "task/fetch"',
+  },
+  [SDKKinds.OnTaskModuleSubmit]: {
+    title: formatMessage('Task module submit'),
+    description: 'Handle the event fired when an Invoke activity is recieved with activity.name == "task/submit"',
+  },
+  [SDKKinds.OnMessagingExtensionCardButtonClicked]: {
+    title: formatMessage('Messaging extension card button clicked'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/onCardButtonClicked"',
+  },
+  [SDKKinds.OnMessagingExtensionConfigurationQuerySettingUrl]: {
+    title: formatMessage('Messaging extension config query setting url'),
+    description: 'Handle the event fired when an Invoke activity is recieved with activity.name == ',
+  },
+  [SDKKinds.OnMessagingExtensionQuery]: {
+    title: formatMessage('Messaging extension query'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/querySettingUrl"',
+  },
+  [SDKKinds.OnMessagingExtensionFetchTask]: {
+    title: formatMessage('Messaging extension fetch task'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/fetchTask"',
+  },
+  [SDKKinds.OnMessagingExtensionConfigurationSetting]: {
+    title: formatMessage('Messaging extension config setting'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/setting"',
+  },
+  [SDKKinds.OnMessagingExtensionSelectItem]: {
+    title: formatMessage('Messaging extension select item'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/selectItem"',
+  },
+  [SDKKinds.OnMessagingExtensionSubmitAction]: {
+    title: formatMessage('Messaging extension submit action'),
+    description:
+      'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/submitAction"',
+  },
+  [SDKKinds.OnChannelCreated]: {
+    title: formatMessage('Channel created'),
+  },
+  [SDKKinds.OnChannelDeleted]: {
+    title: formatMessage('Channel deleted'),
+  },
+  [SDKKinds.OnChannelRenamed]: {
+    title: formatMessage('Channel renamed'),
+  },
+  [SDKKinds.OnChannelRestored]: {
+    title: formatMessage('Channel restored'),
+  },
+  [SDKKinds.OnTeamArchived]: {
+    title: formatMessage('Team archived'),
+  },
+  [SDKKinds.OnTeamUnarchived]: {
+    title: formatMessage('Team unarchived'),
+  },
+  [SDKKinds.OnTeamDeleted]: {
+    title: formatMessage('Team deleted'),
+  },
+  [SDKKinds.OnTeamHardDeleted]: {
+    title: formatMessage('Team hard deleted'),
+  },
+  [SDKKinds.OnTeamRestored]: {
+    title: formatMessage('Team restored'),
+  },
+  [SDKKinds.OnTeamRenamed]: {
+    title: formatMessage('Team renamed'),
+  },
 });
