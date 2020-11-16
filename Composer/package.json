@@ -47,7 +47,9 @@
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
+    "start:dev:electron": "concurrently  \"npm:start:client\" \"npm:start:electron\"",
     "start:client": "yarn workspace @bfc/client start",
+    "start:electron": "wait-on -t 300000 http://localhost:3000 && yarn workspace @bfc/electron-server start",
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
@@ -121,6 +123,7 @@
     "ts-loader": "7.0.4",
     "tslib": "^2.0.0",
     "typescript": "3.9.2",
+    "wait-on": "^5.2.0",
     "wsrun": "^5.2.0"
   }
 }
