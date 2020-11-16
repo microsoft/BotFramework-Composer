@@ -17,7 +17,7 @@
     "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix",
     "pack": "node scripts/electronBuilderPack.js",
-    "start": "DEBUG=composer* cross-env NODE_ENV=development electron --inspect=7777 --remote-debugging-port=7778 .",
+    "start": "cross-env NODE_ENV=development DEBUG=composer* electron --inspect=7777 --remote-debugging-port=7778 .",
     "test": "jest",
     "test:watch": "jest --watch",
     "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json l10ntemp/**/*.js",
