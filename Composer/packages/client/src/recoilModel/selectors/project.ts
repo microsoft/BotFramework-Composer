@@ -14,7 +14,6 @@ import {
   botProjectIdsState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
-  settingsState,
   luFilesState,
   lgFilesState,
   qnaFilesState,
@@ -22,6 +21,7 @@ import {
   dialogSchemasState,
   jsonSchemaFilesState,
   projectMetaDataState,
+  settingsState,
   dialogIdsState,
   dialogState,
 } from '../atoms';
@@ -97,6 +97,7 @@ export const botProjectSpaceSelector = selector({
         projectId,
         name,
         ...metaData,
+        setting,
         error: botError,
         diagnostics,
         botNameId,

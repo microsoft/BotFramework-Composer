@@ -16,7 +16,7 @@ import {
   botEndpointsState,
 } from '../atoms';
 
-import { setSettingState } from './setting';
+import { setRootBotSettingState } from './setting';
 
 export const skillDispatcher = () => {
   // For endpoints in manifests the settings are updated immediately in SelectSkill. If "Composer Local" is chosen needs updating when rootbot is started.
@@ -53,7 +53,7 @@ export const skillDispatcher = () => {
         });
       }
     }
-    setSettingState(callbackHelpers, rootBotId, updatedSettings);
+    setRootBotSettingState(callbackHelpers, rootBotId, updatedSettings);
   });
 
   const createSkillManifest = async (callbackHelpers: CallbackInterface, { id, content, projectId }) => {

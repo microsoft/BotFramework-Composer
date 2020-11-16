@@ -6,8 +6,10 @@ import { jsx } from '@emotion/core';
 import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
@@ -26,7 +28,16 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
-import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
+import {
+  breathingSpace,
+  runtimeSettingsStyle,
+  runtimeControls,
+  runtimeToggle,
+  labelContainer,
+  customerLabel,
+  iconStyle,
+  textOr,
+} from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -54,10 +65,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
     if (projectId) getBoilerplateVersion(projectId);
-  }, []);
+  }, [projectId]);
 
   useEffect(() => {
-    setNeedsUpdate(boilerplateVersion.updateRequired || false);
+    setNeedsUpdate(!!boilerplateVersion.updateRequired);
   }, [boilerplateVersion.updateRequired]);
 
   useEffect(() => {
@@ -67,7 +78,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
   }, [ejectedRuntimeExists, templateKey]);
 
-  const handleChangeToggle = (_, isOn = false) => {
+  const toggleCustomRuntime = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
   };
 
@@ -90,17 +101,17 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const header = () => (
     <div css={runtimeControls}>
-      <p>{formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}</p>
+      {formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}
     </div>
   );
 
-  const toggle = () => (
+  const toggleOfCustomRuntime = () => (
     <div css={runtimeToggle}>
       <Toggle
         inlineLabel
         checked={settings.runtime?.customRuntime}
         label={formatMessage('Use custom runtime')}
-        onChange={handleChangeToggle}
+        onChange={toggleCustomRuntime}
       />
     </div>
   );
@@ -153,11 +164,22 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
   };
 
+  const onRenderLabel = (props) => {
+    return (
+      <div css={labelContainer}>
+        <div css={customerLabel(props.disabled)}> {props.label} </div>
+        <TooltipHost content={props.label}>
+          <Icon iconName="Unknown" styles={iconStyle(props.disabled)} />
+        </TooltipHost>
+      </div>
+    );
+  };
+
   return botName ? (
     <div css={runtimeSettingsStyle}>
       {header()}
-      {toggle()}
-      <div css={controlGroup}>
+      {toggleOfCustomRuntime()}
+      <div>
         <TextField
           required
           data-testid="runtimeCodeLocation"
@@ -167,8 +189,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           styles={name}
           value={settings.runtime ? settings.runtime.path : ''}
           onChange={updateSetting('path')}
+          onRenderLabel={onRenderLabel}
         />
-        {formatMessage('Or: ')}
+        <span css={textOr}>{formatMessage('Or: ')}</span>
         <Link
           css={breathingSpace}
           disabled={!settings.runtime || !settings.runtime.customRuntime}
@@ -186,11 +209,12 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           styles={name}
           value={settings.runtime ? settings.runtime.command : ''}
           onChange={updateSetting('command')}
+          onRenderLabel={onRenderLabel}
         />
       </div>
       <br />
       {needsUpdate && (
-        <div css={controlGroup}>
+        <div>
           <p>
             {formatMessage(
               'A newer version of the provisioning scripts has been found, and this project can be updated to the latest.'
@@ -208,8 +232,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           </DefaultButton>
         </div>
       )}
-      <WorkingModal hidden={!ejecting} title={formatMessage('Ejecting runtime...')} />
-      <EjectModal closeModal={closeEjectModal} ejectRuntime={callEjectRuntime} hidden={!ejectModalVisible} />
+      <WorkingModal isOpen={ejecting} title={formatMessage('Ejecting runtime...')} />
+      <EjectModal ejectRuntime={callEjectRuntime} hidden={!ejectModalVisible} onDismiss={closeEjectModal} />
     </div>
   ) : (
     <LoadingSpinner />

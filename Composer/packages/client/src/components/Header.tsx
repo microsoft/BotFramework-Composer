@@ -5,10 +5,13 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { useCallback, Fragment, useState, useEffect } from 'react';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
+import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import {
   dispatcherState,
@@ -16,11 +19,13 @@ import {
   botDisplayNameState,
   localeState,
   currentProjectIdState,
+  settingsState,
   currentModeState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
+import { languageListTemplates } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
 export const actionButton = css`
@@ -50,6 +55,11 @@ const botName = css`
   margin-left: 20px;
   font-size: 16px;
   color: #fff;
+  border-radius: 19px;
+  background: #3393dd;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
 `;
 
 const divider = css`
@@ -92,14 +102,41 @@ const buttonStyles: IButtonStyles = {
   },
 };
 
+const teachingBubbleStyle = {
+  root: {
+    selectors: {
+      '.ms-Callout-beak': {
+        background: NeutralColors.white,
+      },
+    },
+  },
+  bodyContent: {
+    background: NeutralColors.white,
+    selectors: {
+      '.ms-TeachingBubble-headline': {
+        color: NeutralColors.black,
+        fontSize: FontSizes.size20,
+      },
+      '.ms-TeachingBubble-subText': {
+        color: NeutralColors.black,
+        fontSize: FontSizes.size12,
+      },
+    },
+  },
+};
+
 // -------------------- Header -------------------- //
 
 export const Header = () => {
-  const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
+  const { setAppUpdateShowing, setLocale } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
   const projectName = useRecoilValue(botDisplayNameState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
+  const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
+  const settings = useRecoilValue(settingsState(projectId));
+
+  const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
   const currentMode = useRecoilValue(currentModeState);
@@ -118,6 +155,26 @@ export const Header = () => {
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
+  const languageListOptions = useMemo(() => {
+    const languageList = languageListTemplates(languages, locale, defaultLanguage);
+    const enableLanguages = languageList.filter(({ isEnabled }) => !!isEnabled);
+    return enableLanguages.map((item) => {
+      const { language, locale } = item;
+      return {
+        key: locale,
+        title: locale,
+        text: language,
+      };
+    });
+  }, [languages]);
+
+  const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, _index?: number) => {
+    const selectedLang = option?.key as string;
+    if (selectedLang && selectedLang !== locale) {
+      setLocale(selectedLang, projectId);
+    }
+  };
+
   return (
     <div css={headerContainer} role="banner">
       <img
@@ -131,7 +188,15 @@ export const Header = () => {
         {projectName && (
           <Fragment>
             <div css={divider} />
-            <span css={botName}>{`${projectName} (${locale})`}</span>
+            <span
+              css={botName}
+              id="targetButton"
+              role={'button'}
+              tabIndex={0}
+              onClick={() => setTeachingBubbleVisibility(true)}
+            >
+              {`${projectName} (${locale})`}
+            </span>
           </Fragment>
         )}
       </div>
@@ -148,6 +213,28 @@ export const Header = () => {
         )}
         <NotificationButton buttonStyles={buttonStyles} />
       </div>
+      {teachingBubbleVisibility && (
+        <TeachingBubble
+          isWide
+          calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
+          headline={formatMessage('Active language')}
+          styles={teachingBubbleStyle}
+          target="#targetButton"
+          onDismiss={() => setTeachingBubbleVisibility(false)}
+        >
+          {formatMessage(
+            'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
+          )}
+          <Dropdown
+            disabled={languageListOptions.length === 1}
+            options={languageListOptions}
+            placeholder="Select an option"
+            selectedKey={locale}
+            styles={{ root: { marginTop: 12 } }}
+            onChange={onLanguageChange}
+          />
+        </TeachingBubble>
+      )}
     </div>
   );
 };
