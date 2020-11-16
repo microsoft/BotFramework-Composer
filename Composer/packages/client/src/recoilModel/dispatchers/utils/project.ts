@@ -18,16 +18,20 @@ import {
   LuFile,
   QnAFile,
   SensitiveProperties,
+  RootBotManagedProperties,
   defaultPublishConfig,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
+import set from 'lodash/set';
 
 import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
@@ -79,7 +83,8 @@ import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../se
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
-import { setSettingState } from '../setting';
+import { setRootBotSettingState } from '../setting';
+import settingsStorage from '../../../utils/dialogSettingStorage';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -129,6 +134,9 @@ const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
   const mergedSettings = { ...settings };
   if (localSetting) {
     for (const property of SensitiveProperties) {
+      if (RootBotManagedProperties.includes(property)) {
+        continue;
+      }
       const value = objectGet(localSetting, property);
       if (value) {
         objectSet(mergedSettings, property, value);
@@ -138,6 +146,41 @@ const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
     }
   }
   return mergedSettings;
+};
+
+export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjectId, settings: DialogSetting) => {
+  const localSetting = settingStorage.get(rootBotProjectId);
+  const mergedSettings = cloneDeep(settings);
+  if (localSetting) {
+    for (const property of RootBotManagedProperties) {
+      const rootValue = get(localSetting, property, {}).root;
+      if (projectId === rootBotProjectId) {
+        objectSet(mergedSettings, property, rootValue ?? '');
+      }
+      if (projectId !== rootBotProjectId) {
+        const skillValue = get(localSetting, property, {})[projectId];
+        objectSet(mergedSettings, property, skillValue ?? '');
+      }
+    }
+  }
+  return mergedSettings;
+};
+
+export const getSensitiveProperties = (projectId: string, rootBotProjectId: string) => {
+  const rootBotLocalStorage = settingsStorage.get(rootBotProjectId);
+  const skillBotLocalStorage = settingsStorage.get(projectId);
+  const sensitiveProperties = {};
+  for (const property of SensitiveProperties) {
+    if (!RootBotManagedProperties.includes(property)) {
+      const value = get(skillBotLocalStorage, property, '');
+      set(sensitiveProperties, property, value);
+    } else {
+      const groupValue = get(rootBotLocalStorage, property, {});
+      const value = get(groupValue, projectId, '');
+      set(sensitiveProperties, property, value);
+    }
+  }
+  return sensitiveProperties;
 };
 
 export const getMergedSettings = (projectId, settings): DialogSetting => {
@@ -526,7 +569,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         mergedSettings.skill
       );
       if (!isEmpty(skillSettings)) {
-        setSettingState(callbackHelpers, rootBotProjectId, {
+        setRootBotSettingState(callbackHelpers, rootBotProjectId, {
           ...mergedSettings,
           skill: skillSettings,
         });

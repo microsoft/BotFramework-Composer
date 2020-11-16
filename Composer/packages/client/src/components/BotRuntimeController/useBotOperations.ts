@@ -66,7 +66,6 @@ export function useBotOperations() {
     }
 
     const trackProjects: string[] = skillsBots.map((skillBot) => skillBot.projectId);
-
     setProjectsToTrack(trackProjects);
     for (const botBuildConfig of skillsBots) {
       if (botBuildConfig.status !== BotStatus.connected) {

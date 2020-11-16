@@ -4,6 +4,8 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
+import { RootBotManagedProperties } from '@bfc/shared';
+import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { BotStatus } from '../../constants';
@@ -203,6 +205,17 @@ export const projectDispatcher = () => {
           isRemote: false,
         });
         projectIdCache.set(projectId);
+
+        //migration on some sensitive property in browser local storage
+        for (const property of RootBotManagedProperties) {
+          const settings = settingStorage.get(projectId);
+          const value = get(settings, property, '');
+          if (!value.root && value.root !== '') {
+            const newValue = { root: value };
+            settingStorage.setField(projectId, property, newValue);
+          }
+        }
+
         if (navigate) {
           navigateToBot(callbackHelpers, projectId, mainDialog);
         }
