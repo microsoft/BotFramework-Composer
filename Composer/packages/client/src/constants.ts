@@ -90,6 +90,8 @@ export enum CreationFlowStatus {
   CLOSE = 'Close',
 }
 
+export type CreationFlowType = 'Bot' | 'Skill';
+
 export const Steps = {
   CREATE: 'CREATE',
   DEFINE: 'DEFINE',
@@ -110,6 +112,10 @@ export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create bot from template or scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+  },
+  CREATE_NEW_SKILLBOT: {
+    title: formatMessage('Create a skill in your bot'),
+    subText: '',
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),
@@ -186,6 +192,13 @@ export const addSkillDialog = {
     title: formatMessage('Edit a skill'),
     subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
   },
+};
+
+export const repairSkillDialog = (name: string) => {
+  return {
+    title: formatMessage('Link to this skill has been broken'),
+    subText: formatMessage('{name} cannot be found at the location.', { name }),
+  };
 };
 
 export const SupportedFileTypes = [
