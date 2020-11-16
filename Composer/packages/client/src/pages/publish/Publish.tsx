@@ -12,11 +12,11 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import settingsStorage from '../../utils/dialogSettingStorage';
 import { dispatcherState, botProjectSpaceSelector } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
+import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
 
 import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -162,19 +162,22 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
                 addNotification(createNotification(publishedNotificationCard(bot)));
                 setShowNotifications({ ...showNotifications, [bot.id]: false });
               }
-              setBotStatusList(
-                botStatusList.map((item) => {
-                  if (item.id === bot.id) {
-                    item.status = botPublishHistory[0].status;
-                  }
-                  return item;
-                })
-              );
             } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
               // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
               // we still poll for the results IF we see that a publish has happened previously
               getPublishStatus(projectId, selectedTarget);
             }
+            setBotStatusList(
+              botStatusList.map((item) => {
+                if (item.id === bot.id) {
+                  item.status = botPublishHistory[0].status;
+                  item.comment = botPublishHistory[0].comment;
+                  item.message = botPublishHistory[0].message;
+                  item.time = botPublishHistory[0].time;
+                }
+                return item;
+              })
+            );
           }
         }
       }
@@ -204,8 +207,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [botProjectsMeta]);
 
   const rollbackToVersion = (version, item) => {
-    const sensitiveSettings = settingsStorage.get(item.id);
-    rollbackToVersionDispatcher(projectId, item.publishTarget, version.id, sensitiveSettings);
+    const sensitiveSettings = getSensitiveProperties(projectId, item.id);
+    rollbackToVersionDispatcher(item.id, item.publishTarget, version.id, sensitiveSettings);
   };
 
   const onRollbackToVersion = (selectedVersion, item) => {
@@ -255,13 +258,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       for (const bot of items) {
         if (bot.publishTarget && bot.publishTargets) {
           const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
-          const projectId = bot.id;
+          const botProjectId = bot.id;
           const settings = botSettingsList.find((botSettings) => botSettings.projectId === bot.id)?.settings || {};
           if (settings.publishTargets) {
             if (settings.qna && Object(settings.qna).subscriptionKey) {
-              await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
+              await setQnASettings(botProjectId, Object(settings.qna).subscriptionKey);
             }
-            const sensitiveSettings = settingsStorage.get(projectId);
+            const sensitiveSettings = getSensitiveProperties(projectId, botProjectId);
             await publishToTarget(projectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
 
             // update the target with a lastPublished date
