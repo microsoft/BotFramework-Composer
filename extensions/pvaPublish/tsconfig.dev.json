@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": true, // we will rebuild the node files with TS sourcemaps instead of webpack sourcemaps
+    "outDir": "lib/node",
+    "module": "CommonJS"
+  },
+  "exclude": [
+    "src/ui",
+    "testing"
+  ]
+}
