@@ -9,6 +9,7 @@ import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+
 import { isLUISMandatory, isQnAKeyMandatory } from '../../utils/dialogValidator';
 import {
   dispatcherState,
