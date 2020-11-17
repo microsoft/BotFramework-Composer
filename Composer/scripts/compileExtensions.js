@@ -9,10 +9,16 @@ const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
 
+const FORCE_BUILD = process.argv.includes('--force') || process.argv.includes('-f');
+
 const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '../../extensions');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
 console.log('Compiling extensions in %s', extensionsDir);
+
+if (FORCE_BUILD) {
+  console.log('--force is true. Forcing a rebuild of all extensions.');
+}
 
 const allExtensions = fs.readdirSync(extensionsDir, { withFileTypes: true });
 
@@ -112,7 +118,7 @@ for (const entry of allExtensions) {
 
     const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
     const lastModified = getLastModified(extPath);
-    if (missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
+    if (FORCE_BUILD || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
       try {
         compile(entry.name, extPath);
         writeToCache(entry.name, lastModified);
