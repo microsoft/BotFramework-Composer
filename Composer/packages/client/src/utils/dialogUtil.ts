@@ -49,6 +49,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
+export const teamsEventKey: string = 'Teams.';
 export const eventTypeKey: string = SDKKinds.OnDialogEvent;
 export const intentTypeKey: string = SDKKinds.OnIntent;
 export const qnaTypeKey: string = SDKKinds.OnQnAMatch;
@@ -211,6 +212,10 @@ export function getTriggerTypes(): IDropdownOption[] {
       key: customEventKey,
       text: formatMessage('Custom events'),
     },
+    {
+      key: teamsEventKey,
+      text: formatMessage('Teams events'),
+    },
   ];
   return triggerTypes;
 }
@@ -219,6 +224,27 @@ export function getEventTypes(): IComboBoxOption[] {
   const conceptLabels = conceptLabelsFn();
   const eventTypes: IComboBoxOption[] = [
     ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
+      let name = t as string;
+      const labelOverrides = conceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        if (labelOverrides.subtitle) {
+          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
+        } else {
+          name = labelOverrides.title;
+        }
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return eventTypes;
+}
+
+export function getTeamsEventTypes(): IDropdownOption[] {
+  const conceptLabels = conceptLabelsFn();
+  const eventTypes: IComboBoxOption[] = [
+    ...dialogGroups[DialogGroup.TEAMS_EVENTS].types.map((t) => {
       let name = t as string;
       const labelOverrides = conceptLabels[t];
 

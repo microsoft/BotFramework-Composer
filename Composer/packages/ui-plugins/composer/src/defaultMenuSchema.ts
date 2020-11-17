@@ -13,6 +13,7 @@ const SubmenuNames = {
   PropertyManagement: formatMessage('Manage properties'),
   AccessExternalResources: formatMessage('Access external resources'),
   Debugging: formatMessage('Debugging options'),
+  Teams: formatMessage('Teams'),
 };
 
 export const DefaultMenuSchema: MenuUISchema = {
@@ -170,5 +171,22 @@ export const DefaultMenuSchema: MenuUISchema = {
   [SDKKinds.DeleteActivity]: {
     label: formatMessage('Delete activity'),
     submenu: [SubmenuNames.PropertyManagement],
+  },
+  // Teams options
+  [SDKKinds.SendMessagingExtensionQueryLinkResponse]: {
+    label: formatMessage('Send query link response'),
+    submenu: [SubmenuNames.Teams],
+  },
+  [SDKKinds.SendTaskModuleContinueResponse]: {
+    label: formatMessage('Send task module continue response'),
+    submenu: [SubmenuNames.Teams],
+  },
+  [SDKKinds.SendTaskModuleMessageResponse]: {
+    label: formatMessage('Send task module message response'),
+    submenu: [SubmenuNames.Teams],
+  },
+  [SDKKinds.GetMeetingParticipant]: {
+    label: formatMessage('Retrieve meeting participant information'),
+    submenu: [SubmenuNames.Teams],
   },
 };

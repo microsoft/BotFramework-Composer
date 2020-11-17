@@ -777,5 +777,44 @@
       ],
       "subtitle": "Unknown intent recognized"
     }
+  },
+  "Teams.OnMessagingExtensionFetchTask": {
+    "form": {
+      "hidden": [
+        "actions"
+      ],
+      "label": "Teams Messaging Extension Fetch Task",
+      "order": [
+        "condition",
+        "*"
+      ],
+      "subtitle": "Invoke activity.name='composeExtension/fetchTask'"
+    }
+  },
+  "Teams.OnTaskModuleFetch": {
+    "form": {
+      "hidden": [
+        "actions"
+      ],
+      "label": "Teams Task Module Fetch",
+      "order": [
+        "condition",
+        "*"
+      ],
+      "subtitle": "Invoke activity.name='task/fetch'"
+    }
+  },
+  "Teams.OnTaskModuleSubmit": {
+    "form": {
+      "hidden": [
+        "actions"
+      ],
+      "label": "Teams Task Module Submit",
+      "order": [
+        "condition",
+        "*"
+      ],
+      "subtitle": "Invoke activity.name='task/submit'"
+    }
   }
 }
