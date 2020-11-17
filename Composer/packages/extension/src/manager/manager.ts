@@ -185,15 +185,15 @@ export class ExtensionManagerImp {
    * @param id Id of the extension to be removed
    */
   public async remove(id: string) {
-    log('Removing %s', id);
-
     const metadata = this.find(id);
 
     if (metadata) {
       if (metadata.builtIn) {
+        this.manifest.updateExtensionConfig(id, { enabled: false });
         return;
       }
 
+      log('Removing %s', id);
       await remove(metadata.path);
       this.manifest.removeExtension(id);
     } else {
