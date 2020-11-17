@@ -88,7 +88,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} skillId={skillId} />
-          <TableView path="/" />
+          <TableView path="/" projectId={projectId} />
         </Router>
         <CreateQnAModal
           dialogId={createOnDialogId || dialogId}

@@ -58,6 +58,7 @@ interface QnASectionItem extends QnASection {
   dialogId: string | undefined;
   used: boolean;
   usedIn: { id: string; displayName: string }[];
+  sectionId: string;
 }
 
 const createQnASectionItem = (fileId: string): QnASectionItem => {
