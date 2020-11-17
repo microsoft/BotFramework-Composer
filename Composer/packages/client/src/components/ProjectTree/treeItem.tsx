@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
@@ -79,14 +79,15 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, isBroken: boolean, padLeft: number) => css`
+
+const navItem = (isActive: boolean, isBroken: boolean, padLeft: number, isAnyMenuOpen: boolean, menuOpenHere: boolean) => css`
   label: navItem;
   position: relative;
   height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
-  color: ${isActive ? NeutralColors.white : '#545454'};
-  background: ${isActive ? '#0078d4' : 'transparent'};
+  color: ${isActive && !menuOpenHere ? NeutralColors.white : '#545454'};
+  background: ${isActive ? '#0078d4' : menuOpenHere ? '#f2f2f2' : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
 
@@ -94,14 +95,16 @@ const navItem = (isActive: boolean, isBroken: boolean, padLeft: number) => css`
   flex-direction: row;
   align-items: center;
 
-  &:hover {
+  ${isAnyMenuOpen
+    ? ''
+    : `&:hover {
     color: #545454;
     background: #f2f2f2;
 
     .dialog-more-btn {
       visibility: visible;
     }
-  }
+  }`}
 
   &:focus {
     outline: none;
@@ -206,6 +209,8 @@ interface ITreeItemProps {
   extraSpace?: number;
   padLeft?: number;
   hasChildren?: boolean;
+  menuOpenCallback?: (boolean) => void;
+  isMenuOpen?: boolean;
 }
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -230,7 +235,7 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   };
 };
 
-const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
+const onRenderItem = (textWidth: number, isMenuOpen: boolean) => (item: IOverflowSetItemProps) => {
   const { diagnostics = [] } = item;
   const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
   const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
@@ -311,7 +316,11 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
   );
 };
 
-const onRenderOverflowButton = (isActive: boolean) => {
+const onRenderOverflowButton = (
+  isActive: boolean,
+  menuOpenCallback: (boolean) => void,
+  setThisItemSelected: (boolean) => void
+) => {
   const moreLabel = formatMessage('Actions');
   return (overflowItems: IContextualMenuItem[] | undefined) => {
     if (overflowItems == null) return null;
@@ -323,7 +332,18 @@ const onRenderOverflowButton = (isActive: boolean) => {
           data-is-focusable={isActive}
           data-testid="dialogMoreButton"
           menuIconProps={{ iconName: 'MoreVertical' }}
-          menuProps={{ items: overflowItems, styles: menuStyle }}
+          menuProps={{
+            items: overflowItems,
+            styles: menuStyle,
+            onMenuOpened: () => {
+              setThisItemSelected(true);
+              menuOpenCallback(true);
+            },
+            onMenuDismissed: () => {
+              setThisItemSelected(false);
+              menuOpenCallback(false);
+            },
+          }}
           role="cell"
           styles={moreButton(isActive)}
           onKeyDown={(e) => {
@@ -348,7 +368,11 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   menu = [],
   extraSpace = 0,
   padLeft = 0,
+  menuOpenCallback = () => {},
+  isMenuOpen = false,
 }) => {
+  const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
+
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
@@ -360,7 +384,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(isActive, isBroken, padLeft)}
+      css={navItem(isActive, isBroken, padLeft, isMenuOpen, thisItemSelected)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -390,8 +414,8 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace)}
-        onRenderOverflowButton={onRenderOverflowButton(!!isActive)}
+        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, isMenuOpen)}
+        onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected)}
       />
     </div>
   );

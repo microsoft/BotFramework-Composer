@@ -185,6 +185,7 @@ export const ProjectTree: React.FC<Props> = ({
     setPageElementState('design', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
+  const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
   const delayedSetFilter = throttle((newValue) => setFilter(newValue), 200);
@@ -328,8 +329,10 @@ export const ProjectTree: React.FC<Props> = ({
           hasChildren={!bot.isRemote}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
           isActive={doesLinkMatch(link, selectedLink)}
+          isMenuOpen={isMenuOpen}
           link={link}
           menu={menu}
+          menuOpenCallback={setMenuOpen}
           textWidth={leftSplitWidth - TREE_PADDING}
           onSelect={handleOnSelect}
         />
@@ -398,9 +401,11 @@ export const ProjectTree: React.FC<Props> = ({
             showProps
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
+            isMenuOpen={isMenuOpen}
             link={dialogLink}
             menu={menu}
             padLeft={padLeft}
+            menuOpenCallback={setMenuOpen}
             textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />
@@ -429,6 +434,7 @@ export const ProjectTree: React.FC<Props> = ({
         extraSpace={INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
+        isMenuOpen={isMenuOpen}
         link={link}
         menu={[
           ...(showDelete
@@ -443,6 +449,7 @@ export const ProjectTree: React.FC<Props> = ({
               ]
             : []),
         ]}
+        menuOpenCallback={setMenuOpen}
         textWidth={leftSplitWidth - TREE_PADDING}
         onSelect={handleOnSelect}
       />
@@ -494,7 +501,14 @@ export const ProjectTree: React.FC<Props> = ({
         `}
         role="grid"
       >
-        <TreeItem showProps isSubItemActive={false} link={link} textWidth={leftSplitWidth - TREE_PADDING} />
+        <TreeItem
+          showProps
+          isMenuOpen={isMenuOpen}
+          isSubItemActive={false}
+          link={link}
+          menuOpenCallback={setMenuOpen}
+          textWidth={leftSplitWidth - TREE_PADDING}
+        />
       </span>
     );
   };
@@ -639,7 +653,7 @@ export const ProjectTree: React.FC<Props> = ({
           )}
           aria-live={'polite'}
         />
-        <div css={tree}>{projectTree}</div>
+        <div css={tree}>{projectTree}</d
       </FocusZone>
     </div>
   );
