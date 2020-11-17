@@ -404,8 +404,8 @@ export const ProjectTree: React.FC<Props> = ({
             isMenuOpen={isMenuOpen}
             link={dialogLink}
             menu={menu}
-            padLeft={padLeft}
             menuOpenCallback={setMenuOpen}
+            padLeft={padLeft}
             textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />
@@ -653,7 +653,7 @@ export const ProjectTree: React.FC<Props> = ({
           )}
           aria-live={'polite'}
         />
-        <div css={tree}>{projectTree}</d
+        <div css={tree}>{projectTree}</div>
       </FocusZone>
     </div>
   );
