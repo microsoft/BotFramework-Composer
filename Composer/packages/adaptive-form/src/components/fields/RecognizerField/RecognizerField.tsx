@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -20,8 +20,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
 
   useMigrationEffect(value, onChange);
   const { recognizers: recognizerConfigs, currentRecognizer } = useRecognizerConfig();
-  //const dropdownOptions = useMemo(() => getDropdownOptions(recognizerConfigs, shellApi), [recognizerConfigs]);
-  const dropdownOptions = getDropdownOptions(recognizerConfigs, shellApi);
+  const dropdownOptions = useMemo(() => getDropdownOptions(recognizerConfigs, shellApi), [recognizerConfigs]);
 
   const RecognizerEditor = currentRecognizer?.recognizerEditor;
   const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;

@@ -80,7 +80,7 @@ export class Builder {
 
       await this.runLuBuild(luBuildFiles);
       await this.runQnaBuild(interruptionQnaFiles);
-      await this.doOrchestratorBuildAsync(orchestratorBuildFiles);
+      await this.runOrchestratorBuild(orchestratorBuildFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
@@ -112,62 +112,66 @@ export class Builder {
   public getModelPathAsync = async () => {
     let appDataPath = '';
     if (process.versions.hasOwnProperty('electron')) {
-      // Electron-specific code
       const { app } = await import('electron');
       appDataPath = app.getPath('appData');
     } else {
       appDataPath = process.env.APPDATA || process.env.HOME || '';
     }
     const baseModelPath = Path.resolve(appDataPath, 'BotFrameworkComposer', 'models');
-    console.log('Saving models to: ' + baseModelPath);
     return baseModelPath;
   };
 
-  public doOrchestratorBuildAsync = async (luFiles: FileInfo[]) => {
+  /**
+   * Orchestrator: Perform the full build process
+   * 1) Query the Orchestrator service for the latest default model
+   * 2) If it has changed or never been downloaded, download it to user's AppData/BotFrameworkComposer folder
+   * 3) Generate the embedding/snapshot data for Orchestrator (.blu files) and place in /generated folder
+   * 4) Generate settings file for runtime to lookup model and snapshot paths
+   * @param luFiles LU Files needed to build snapshot data
+   */
+  public runOrchestratorBuild = async (luFiles: FileInfo[]) => {
     if (!luFiles.length) return;
-    //orchestrator stuff
+
     const nlrList = await this.runOrchestratorNlrList();
     const defaultNLR = nlrList.default;
     const modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
 
     if (!existsSync(modelPath)) {
       const handler: IOrchestratorProgress = (status) => {
-        console.log(status);
+        log(status);
       };
       await this.runOrchestratorNlrGet(modelPath, defaultNLR, handler, handler);
-    } else {
-      console.log('already exists');
     }
 
-    console.log('modelPath: ' + modelPath);
-    const returnData = await this.runOrchestratorBuild(luFiles, modelPath);
+    // build snapshots from LU files
+    const returnData = await this.orchestratorBuilder(luFiles, modelPath);
 
-    const orchestratorSettings: any = {
-      orchestrator: {
-        ModelPath: modelPath,
-      },
-    };
-
+    // write snapshot data into /generated folder
     const snapshots: any = {};
-
     for (const dialog of returnData.outputs) {
       const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
       snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
 
       writeFile(bluFilePath, Buffer.from(dialog.snapshot), (err) => {
         if (err) {
-          console.log('cannot write snapshot');
+          log('cannot write snapshot');
         }
       });
     }
 
-    //put out the general settings file - write into orchestrator.settings.json
+    // write settings into /generated/orchestrator.settings.json
+    const orchestratorSettings: any = {
+      orchestrator: {
+        ModelPath: modelPath,
+      },
+    };
+
     orchestratorSettings.orchestrator.snapshots = snapshots;
     const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
 
     writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings), (err) => {
       if (err) {
-        console.log('cannot write snapshot');
+        log('cannot write snapshot');
       }
     });
   };
@@ -209,7 +213,7 @@ export class Builder {
    * @param fullEmbedding - Use larger embeddings and skip size optimization (default: false)
    * @returns An object containing snapshot bytes and recognizer dialogs for each .lu file
    */
-  public async runOrchestratorBuild(
+  public async orchestratorBuilder(
     files: FileInfo[],
     modelPath: string,
     isDialog = true,

@@ -49,20 +49,20 @@ describe('Orchestrator Tests', () => {
   it('throws if input empty', () => {
     const builder = new Builder('', {} as IFileStorage, 'en-us');
 
-    expect(builder.runOrchestratorBuild([], nlrPath)).rejects.toThrow();
+    expect(builder.orchestratorBuilder([], nlrPath)).rejects.toThrow();
   });
 
   it('throws if NLR path invalid', () => {
     const builder = new Builder('', {} as IFileStorage, 'en-us');
 
     const data: FileInfo[] = [{ name: 'hello', content: 'test', lastModified: '', path: '', relativePath: '' }];
-    expect(builder.runOrchestratorBuild(data, 'invalidPath')).rejects.toThrow();
+    expect(builder.orchestratorBuilder(data, 'invalidPath')).rejects.toThrow();
   });
 
   it('produces expected snapshot and recognizer shape', async () => {
     const builder = new Builder('', {} as IFileStorage, 'en-us');
 
-    const buildOutput = await builder.runOrchestratorBuild(mockLUInput, nlrPath);
+    const buildOutput = await builder.orchestratorBuilder(mockLUInput, nlrPath);
 
     expect(buildOutput.outputs.map((o) => o.id)).toContain('additem.en-us.lu');
 
@@ -72,7 +72,7 @@ describe('Orchestrator Tests', () => {
 
   it('produces expected recognizer shape', async () => {
     const builder = new Builder('', {} as IFileStorage, 'en-us');
-    const buildOutput = await builder.runOrchestratorBuild(mockLUInput, nlrPath);
+    const buildOutput = await builder.orchestratorBuilder(mockLUInput, nlrPath);
 
     expect(buildOutput.outputs.map((o) => o.id)).toContain('additem.en-us.lu');
 

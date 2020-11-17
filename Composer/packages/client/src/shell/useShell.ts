@@ -231,12 +231,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     redo,
     commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
-    featureFlags: (featureFlagKey: any): boolean => {
-      if (featureFlags?.[featureFlagKey]) {
-        return featureFlags[featureFlagKey].enabled;
-      }
-      return false;
-    },
+    featureFlags: (featureFlagKey: string): boolean => featureFlags?.[featureFlagKey]?.enabled ?? false,
     updateUserSettings,
     announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
