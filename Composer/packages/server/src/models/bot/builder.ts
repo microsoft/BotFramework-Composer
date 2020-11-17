@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { writeFile, existsSync } from 'fs';
-
+import { pathExists, writeFile } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
@@ -123,10 +122,10 @@ export class Builder {
 
   /**
    * Orchestrator: Perform the full build process
-   * 1) Query the Orchestrator service for the latest default model
-   * 2) If it has changed or never been downloaded, download it to user's AppData/BotFrameworkComposer folder
+   * 1) Query the Orchestrator service for the latest default NLR model
+   * 2) If the default model has changed or never been downloaded, download it to user's AppData/BotFrameworkComposer folder
    * 3) Generate the embedding/snapshot data for Orchestrator (.blu files) and place in /generated folder
-   * 4) Generate settings file for runtime to lookup model and snapshot paths
+   * 4) Generate settings file for runtime containing model and snapshot paths and place in /generated folder
    * @param luFiles LU Files needed to build snapshot data
    */
   public runOrchestratorBuild = async (luFiles: FileInfo[]) => {
@@ -136,7 +135,7 @@ export class Builder {
     const defaultNLR = nlrList.default;
     const modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
 
-    if (!existsSync(modelPath)) {
+    if (!(await pathExists(modelPath))) {
       const handler: IOrchestratorProgress = (status) => {
         log(status);
       };
@@ -152,11 +151,7 @@ export class Builder {
       const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
       snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
 
-      writeFile(bluFilePath, Buffer.from(dialog.snapshot), (err) => {
-        if (err) {
-          log('cannot write snapshot');
-        }
-      });
+      await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
     }
 
     // write settings into /generated/orchestrator.settings.json
@@ -168,12 +163,7 @@ export class Builder {
 
     orchestratorSettings.orchestrator.snapshots = snapshots;
     const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
-
-    writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings), (err) => {
-      if (err) {
-        log('cannot write snapshot');
-      }
-    });
+    await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
   };
 
   /**
