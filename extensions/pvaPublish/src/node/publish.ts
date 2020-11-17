@@ -92,23 +92,37 @@ export const publish = async (
         'If-Match': project.eTag,
       },
     });
-    const job: PVAPublishJob = await res.json();
-    logger.log('Publish job started: %O', job);
+    if (res.status === 202) {
+      const job: PVAPublishJob = await res.json();
+      logger.log('Publish job started: %O', job);
 
-    // transform the PVA job to a publish response
-    const result = xformJobToResult(job);
+      // transform the PVA job to a publish response
+      const result = xformJobToResult(job);
 
-    // add to publish history
-    const botProjectId = project.id;
-    ensurePublishProfileHistory(botProjectId, profileName);
-    publishHistory[botProjectId][profileName].unshift(result);
+      // add to publish history
+      const botProjectId = project.id;
+      ensurePublishProfileHistory(botProjectId, profileName);
+      publishHistory[botProjectId][profileName].unshift(result);
 
-    logger.log('Publish call successful.');
+      logger.log('Publish call successful.');
 
-    return {
-      status: result.status,
-      result,
-    };
+      return {
+        status: result.status,
+        result,
+      };
+    } else {
+      // otherwise we should surface the error in the UI
+      let errorText = res.statusText;
+      if (res && res.text) {
+        errorText = await res.text();
+      }
+      return {
+        status: res.status,
+        result: {
+          message: errorText,
+        },
+      };
+    }
   } catch (e) {
     return {
       status: 500,
