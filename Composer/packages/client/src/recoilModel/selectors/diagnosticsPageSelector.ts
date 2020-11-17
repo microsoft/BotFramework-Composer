@@ -21,7 +21,6 @@ import {
   SkillDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
-  botDiagnosticsState,
   botProjectFileState,
   botProjectIdsState,
   dialogSchemasState,
