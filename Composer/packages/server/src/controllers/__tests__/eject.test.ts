@@ -51,7 +51,6 @@ beforeAll(async () => {
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
     path: './',
-    identifyManifest: jest.fn(),
     eject: jest.fn(),
     build: jest.fn(),
     run: jest.fn(),
