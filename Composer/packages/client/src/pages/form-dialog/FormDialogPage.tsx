@@ -27,10 +27,10 @@ const EmptyView = styled(Stack)({
   opacity: 0.5,
 });
 
-type Props = RouteComponentProps<{ projectId: string; schemaId: string }>;
+type Props = RouteComponentProps<{ projectId: string; skillId: string; schemaId: string }>;
 
 const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
-  const { projectId = '', schemaId = '' } = props;
+  const { projectId = '', skillId = '', schemaId = '' } = props;
   const formDialogSchemaIds = useRecoilValue(formDialogSchemaIdsState(projectId));
   const formDialogLibraryTemplates = useRecoilValue(formDialogLibraryTemplatesState);
   const formDialogGenerationProgressing = useRecoilValue(formDialogGenerationProgressingState);
@@ -90,7 +90,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const viewDialog = React.useCallback(
     (schemaId: string) => {
       if (schemaId) {
-        navigateToGeneratedDialog({ projectId, schemaId });
+        navigateToGeneratedDialog({ projectId, skillId, schemaId });
       }
     },
     [navigateToGeneratedDialog, projectId]
