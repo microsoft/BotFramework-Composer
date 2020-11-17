@@ -111,7 +111,7 @@ export class Builder {
 
   public getModelPathAsync = async () => {
     let appDataPath = '';
-    if (process.versions.hasOwnProperty('electron')) {
+    if (process?.versions?.hasOwnProperty('electron')) {
       const { app } = await import('electron');
       appDataPath = app.getPath('appData');
     } else {
