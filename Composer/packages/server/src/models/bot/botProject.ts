@@ -107,7 +107,7 @@ export class BotProject implements IBotProject {
   public get formDialogSchemaFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
-      if (file.name.endsWith('.form-dialog')) {
+      if (file.name.endsWith(FileExtensions.FormDialogSchema)) {
         files.push(file);
       }
     });
@@ -567,11 +567,22 @@ export class BotProject implements IBotProject {
       console.log(`${type} - ${message}`);
     };
 
+    // fix casing for case-sensitive schema paths
+    const schemaLocale = defaultLocale
+      .replace(/en-us/i, 'en-US')
+      .replace(/en-us-pseudo/i, 'en-US-pseudo')
+      .replace(/zh-hans/i, 'zh-Hans')
+      .replace(/zh-hant/i, 'zh-Hant')
+      .replace(/pt-br/i, 'pt-BR')
+      .replace(/pt-pt/i, 'pt-PT');
+
+    const metaSchema = `https://raw.githubusercontent.com/microsoft/BotFramework-Composer/main/Composer/packages/server/schemas/sdk.${schemaLocale}.schema`;
+
     const generateParams = {
       schemaPath,
       prefix: name,
       outDir,
-      metaSchema: undefined,
+      metaSchema: metaSchema,
       allLocales: undefined,
       templateDirs: templateDirs || [],
       force: false,
@@ -757,7 +768,7 @@ export class BotProject implements IBotProject {
     const patterns = [
       '**/*.dialog',
       '**/*.dialog.schema',
-      '**/*.form-dialog',
+      '**/*.form',
       '**/*.lg',
       '**/*.lu',
       '**/*.qna',
@@ -778,7 +789,14 @@ export class BotProject implements IBotProject {
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/appsettings.json)'],
+        [
+          pattern,
+          '!(generated/**)',
+          '!(runtime/**)',
+          '!(scripts/**)',
+          '!(settings/appsettings.json)',
+          '!(**/luconfig.json)',
+        ],
         root
       );
 
