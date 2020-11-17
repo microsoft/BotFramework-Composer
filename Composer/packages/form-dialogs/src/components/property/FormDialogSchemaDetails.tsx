@@ -37,6 +37,11 @@ export const FormDialogSchemaDetails = () => {
     const lifetime = new Lifetime();
 
     const clickOutsideLists = (e: MouseEvent) => {
+      const selection = window.getSelection();
+
+      // If click outside is the continuation of text select within the card, don't dismiss the card.
+      if (selection && selection.toString()) return;
+
       const { x, y } = e;
       const elms = Array.prototype.slice.call(
         containerRef.current.querySelectorAll(`.${jsPropertyListClassName}`) || []
