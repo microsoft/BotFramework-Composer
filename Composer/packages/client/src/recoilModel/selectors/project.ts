@@ -76,6 +76,7 @@ export const botProjectSpaceSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(dialogsSelectorFamily(projectId));
       const luFiles = get(luFilesState(projectId));
       const lgFiles = get(lgFilesState(projectId));
@@ -89,7 +90,16 @@ export const botProjectSpaceSelector = selector({
       const setting = get(settingsState(projectId));
       const skillManifests = get(skillManifestsState(projectId));
 
-      const diagnostics = BotIndexer.validate({ dialogs, setting, luFiles, lgFiles, qnaFiles, skillManifests });
+      const diagnostics = BotIndexer.validate({
+        dialogs,
+        setting,
+        luFiles,
+        lgFiles,
+        qnaFiles,
+        skillManifests,
+        isRemote,
+        isRootBot,
+      });
 
       return {
         dialogs,

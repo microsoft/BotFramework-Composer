@@ -166,8 +166,13 @@ const validate = (assets: {
   qnaFiles: QnAFile[];
   setting: DialogSetting;
   skillManifests: SkillManifestFile[];
+  isRemote?: boolean;
+  isRootBot?: boolean;
 }): Diagnostic[] => {
-  return [...checkManifest(assets), ...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
+  if (assets.isRemote) return [];
+  const settingDiagnostics = [...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
+  if (assets.isRootBot) return settingDiagnostics;
+  return [...checkManifest(assets), ...settingDiagnostics];
 };
 
 const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
