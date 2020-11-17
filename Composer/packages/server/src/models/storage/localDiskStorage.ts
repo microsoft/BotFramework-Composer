@@ -91,25 +91,41 @@ export class LocalDiskStorage implements IFileStorage {
     return await rename(oldPath, newPath);
   }
 
-  async zip(source: string, cb): Promise<void> {
+  async zip(source: string, exclusions, cb): Promise<void> {
+    const defaultDirectories = [
+      '/dialogs/',
+      '/language-understanding/',
+      '/language-generation/',
+      '/settings/',
+      '/generated/',
+      '/knowledge-base/',
+    ];
+
+    const directoriesToInclude = defaultDirectories.filter((elem) => {
+      return exclusions?.directories == undefined || exclusions?.directories?.indexOf(elem) == -1;
+    });
+
+    const defaultFiles = ['*.botproject', '*.dialog'];
+
+    const filesToInclude = defaultFiles.filter((elem) => {
+      return exclusions?.files == undefined || exclusions?.files?.indexOf(elem) == -1;
+    });
+
     const archive = archiver('zip');
     cb(archive);
 
     // We're selectively adding specific directories/files to the archive.
     // If a user has ejected the runtime into the path, we don't want to include
     // these files into the archive
-    [
-      path.format({ dir: `${source}/dialogs/` }),
-      path.format({ dir: `${source}/language-understanding/` }),
-      path.format({ dir: `${source}/language-generation/` }),
-      path.format({ dir: `${source}/settings/` }),
-      path.format({ dir: `${source}/generated/` }),
-      path.format({ dir: `${source}/knowledge-base/` }),
-    ].forEach((directory) => {
+    const directoriesForArchive = directoriesToInclude.map((elem) => {
+      return path.format({ dir: `${source}${elem}` });
+    });
+
+    directoriesForArchive.forEach((directory) => {
       archive.directory(directory, directory.split(source)[1]);
     });
 
-    const files = await glob(['*.dialog', '*.botproj'], { cwd: source, dot: true });
+    const files = await glob(filesToInclude, { cwd: source, dot: true });
     files.forEach((file) => {
       archive.file(path.format({ dir: `${source}/`, base: `${file}` }), { name: path.basename(file) });
     });

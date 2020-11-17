@@ -12,6 +12,7 @@ import {
   creationFlowStatusState,
   currentModeState,
   PageMode,
+  pageElementState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -79,6 +80,13 @@ export const applicationDispatcher = () => {
     set(currentModeState, mode);
   });
 
+  const setPageElementState = useRecoilCallback(({ set }: CallbackInterface) => (mode: PageMode, settings: {}) => {
+    set(pageElementState, (currentElementState) => ({
+      ...currentElementState,
+      [mode]: settings,
+    }));
+  });
+
   const onboardingAddCoachMarkRef = useRecoilCallback(
     ({ set }: CallbackInterface) => (coachMarkRef: { [key: string]: any }) => {
       set(onboardingState, (onboardingObj) => ({
@@ -120,5 +128,6 @@ export const applicationDispatcher = () => {
     setCreationFlowStatus,
     setApplicationLevelError,
     setCurrentPageMode,
+    setPageElementState,
   };
 };
