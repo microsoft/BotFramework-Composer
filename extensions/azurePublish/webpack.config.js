@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
   entry: './src/index.ts',
@@ -20,4 +21,14 @@ module.exports = {
     extensions: ['.js', '.ts', '.tsx', '.json'],
     mainFields: ['main'],
   },
+  optimization:  {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          keep_fnames: /AbortSignal/,
+        },
+      }),
+    ],
+  }
 };
