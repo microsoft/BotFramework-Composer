@@ -21,13 +21,13 @@ const schemaPath = process.argv[2] || path.resolve(__dirname, '../runtime/dotnet
 const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
 const types = Object.keys(schema.definitions).reduce((all, defName) => {
 
-  if (defName.startsWith('Microsoft.') && !defName.startsWith('Microsoft.Test')) {
+  if ((defName.startsWith('Teams.') || defName.startsWith('Microsoft.')) && !defName.startsWith('Microsoft.Test')) {
     all.push(defName);
   }
 
   return all;
 }, []);
 let uType = 'export enum SDKKinds {\n';
-uType += types.map(t => `  ${t.replace('Microsoft.', '').replace('.', '')} = '${t}',`).join('\n');
+uType += types.map(t => `  ${t.replace('Teams.', '').replace('Microsoft.', '').replace('.', '')} = '${t}',`).join('\n');
 uType += '\n}';
 console.log(uType);

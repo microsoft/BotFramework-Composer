@@ -172,12 +172,6 @@
             "subtitle": "Trace Activity"
         }
     },
-    "Microsoft.Ask": {
-        "form": {
-            "label": "Send a response to ask a question",
-            "subtitle": "Ask Activity"
-        }
-    },
     "Microsoft.AttachmentInput": {
         "form": {
             "label": "Prompt for a file or an attachment",
@@ -351,6 +345,24 @@
         "form": {
             "label": "Unknown intent",
             "subtitle": "Unknown intent recognized"
+        }
+    },
+    "Teams.OnMessagingExtensionFetchTask": {
+        "form": {
+            "label": "Teams Messaging Extension Fetch Task",
+            "subtitle": "Invoke activity.name='composeExtension/fetchTask'"
+        }
+    },
+    "Teams.OnTaskModuleFetch": {
+        "form": {
+            "label": "Teams Task Module Fetch",
+            "subtitle": "Invoke activity.name='task/fetch'"
+        }
+    },
+    "Teams.OnTaskModuleSubmit": {
+        "form": {
+            "label": "Teams Task Module Submit",
+            "subtitle": "Invoke activity.name='task/submit'"
         }
     }
 }

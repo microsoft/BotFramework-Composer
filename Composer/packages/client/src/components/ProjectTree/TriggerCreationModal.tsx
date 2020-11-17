@@ -30,8 +30,10 @@ import {
   customEventKey,
   intentTypeKey,
   activityTypeKey,
+  teamsEventKey,
   getEventTypes,
   getActivityTypes,
+  getTeamsEventTypes,
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
@@ -231,9 +233,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
   const showEventDropDown = selectedType === eventTypeKey;
   const showActivityDropDown = selectedType === activityTypeKey;
+  const showTeamsEventDropDown = selectedType.startsWith(teamsEventKey);
   const showCustomEvent = selectedType === customEventKey;
   const eventTypes: IComboBoxOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
+
+  const teamsEventTypes: IDropdownOption[] = getTeamsEventTypes();
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
   if (schemas && checkForPVASchema(schemas.sdk)) {
@@ -288,7 +293,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const onSelectTriggerType = (e, option) => {
     setSelectedType(option.key || '');
     const compoundTypes = [activityTypeKey, eventTypeKey];
-    const isCompound = compoundTypes.some((t) => option.key === t);
+    const isCompound = compoundTypes.some((t) => option.key === t) || option.key.startsWith(teamsEventKey);
     let newFormData: TriggerFormData = initialFormData;
     if (isCompound) {
       newFormData = { ...newFormData, $kind: '' };
@@ -400,6 +405,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               label={formatMessage('Which activity type?')}
               options={activityTypes}
               placeholder={formatMessage('Select an activity type')}
+              styles={dropdownStyles}
+              onChange={handleEventTypeChange}
+            />
+          )}
+          {showTeamsEventDropDown && (
+            <Dropdown
+              data-testid={'teamsEventTypeDropDown'}
+              errorMessage={formData.errors.activity}
+              label={formatMessage('Which teams event type?')}
+              options={teamsEventTypes}
+              placeholder={formatMessage('Select a teams event type')}
               styles={dropdownStyles}
               onChange={handleEventTypeChange}
             />

@@ -1928,9 +1928,6 @@
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logo"
   },
-  "powervirtualagents_logo_11858924": {
-    "message": "PowerVirtualAgents Logo"
-  },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
   },
@@ -1999,9 +1996,6 @@
   },
   "property_name_914371f5": {
     "message": "Property name"
-  },
-  "property_name_is_required_5bc57d97": {
-    "message": "Property name is required!"
   },
   "property_title_f2b443b7": {
     "message": "Property title"
@@ -2177,6 +2171,9 @@
   "restart_bot_34e36428": {
     "message": "Restart Bot"
   },
+  "retrieve_meeting_participant_information_73c714f5": {
+    "message": "Retrieve meeting participant information"
+  },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
@@ -2237,6 +2234,9 @@
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
   },
+  "select_a_teams_event_type_ab33d3ac": {
+    "message": "Select a teams event type"
+  },
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "Select a trigger on the left"
   },
@@ -2296,6 +2296,15 @@
   },
   "send_messages_c48b239": {
     "message": "Send Messages"
+  },
+  "send_query_link_response_3298d645": {
+    "message": "Send query link response"
+  },
+  "send_task_module_continue_response_416a36d3": {
+    "message": "Send task module continue response"
+  },
+  "send_task_module_message_response_6266d944": {
+    "message": "Send task module message response"
   },
   "sentence_wrap_930c8ced": {
     "message": "Sentence wrap"
@@ -2371,12 +2380,6 @@
   },
   "skills_49cccd6a": {
     "message": "Skills"
-  },
-  "something_happened_while_attempting_to_pull_e_952c7afe": {
-    "message": "Something happened while attempting to pull: { e }"
-  },
-  "something_went_wrong_d238c551": {
-    "message": "Something went wrong"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
@@ -2461,6 +2464,15 @@
   },
   "tb_149f379c": {
     "message": "TB"
+  },
+  "teams_53f78b01": {
+    "message": "Teams"
+  },
+  "teams_events_506d7c4a": {
+    "message": "Teams Events"
+  },
+  "teams_events_57c1797c": {
+    "message": "Teams events"
   },
   "templatename_is_missing_or_empty_23e6b06e": {
     "message": "templateName is missing or empty"
@@ -2918,8 +2930,8 @@
   "which_event_6e655d2b": {
     "message": "Which event?"
   },
-  "write_an_expression_8773ea5c": {
-    "message": "Write an expression"
+  "which_teams_event_type_5ad16873": {
+    "message": "Which teams event type?"
   },
   "yes_dde87d5": {
     "message": "Yes"
