@@ -16,6 +16,7 @@ import {
   FileExtensions,
   Skill,
   DialogUtils,
+  checkForPVASchema,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
@@ -55,6 +56,7 @@ export class BotProject implements IBotProject {
   public name: string;
   public dir: string;
   public dataDir: string;
+  public eTag?: string;
   public fileStorage: IFileStorage;
   public builder: Builder;
   public defaultSDKSchema: {
@@ -70,11 +72,12 @@ export class BotProject implements IBotProject {
 
   private files = new Map<string, FileInfo>();
 
-  constructor(ref: LocationRef, user?: UserIdentity) {
+  constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we switch to posix style after here
     this.dataDir = this.dir;
     this.name = Path.basename(this.dir);
+    this.eTag = eTag;
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
     this.defaultUISchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.uischema'), 'utf-8'));
@@ -104,7 +107,7 @@ export class BotProject implements IBotProject {
   public get formDialogSchemaFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
-      if (file.name.endsWith('.form-dialog')) {
+      if (file.name.endsWith(FileExtensions.FormDialogSchema)) {
         files.push(file);
       }
     });
@@ -255,9 +258,9 @@ export class BotProject implements IBotProject {
     this.settings = config;
   };
 
-  public exportToZip = (cb) => {
+  public exportToZip = (exclusions, cb) => {
     try {
-      this.fileStorage.zip(this.dataDir, cb);
+      this.fileStorage.zip(this.dataDir, exclusions, cb);
     } catch (e) {
       debug('error zipping assets', e);
     }
@@ -519,7 +522,7 @@ export class BotProject implements IBotProject {
 
   public copyTo = async (locationRef: LocationRef, user?: UserIdentity) => {
     const newProjRef = await this.cloneFiles(locationRef);
-    return new BotProject(newProjRef, user);
+    return new BotProject(newProjRef, user, this.eTag || '');
   };
 
   public async exists(): Promise<boolean> {
@@ -564,11 +567,22 @@ export class BotProject implements IBotProject {
       console.log(`${type} - ${message}`);
     };
 
+    // fix casing for case-sensitive schema paths
+    const schemaLocale = defaultLocale
+      .replace(/en-us/i, 'en-US')
+      .replace(/en-us-pseudo/i, 'en-US-pseudo')
+      .replace(/zh-hans/i, 'zh-Hans')
+      .replace(/zh-hant/i, 'zh-Hant')
+      .replace(/pt-br/i, 'pt-BR')
+      .replace(/pt-pt/i, 'pt-PT');
+
+    const metaSchema = `https://raw.githubusercontent.com/microsoft/BotFramework-Composer/main/Composer/packages/server/schemas/sdk.${schemaLocale}.schema`;
+
     const generateParams = {
       schemaPath,
       prefix: name,
       outDir,
-      metaSchema: undefined,
+      metaSchema: metaSchema,
       allLocales: undefined,
       templateDirs: templateDirs || [],
       force: false,
@@ -610,6 +624,11 @@ export class BotProject implements IBotProject {
     if (dirToDelete.length > 3 && this.fileStorage.exists(dirToDelete)) {
       this.fileStorage.rmrfDir(dirToDelete);
     }
+  }
+
+  public updateETag(eTag: string): void {
+    this.eTag = eTag;
+    // also update the bot project map
   }
 
   private async removeLocalRuntimeData(projectId) {
@@ -749,7 +768,7 @@ export class BotProject implements IBotProject {
     const patterns = [
       '**/*.dialog',
       '**/*.dialog.schema',
-      '**/*.form-dialog',
+      '**/*.form',
       '**/*.lg',
       '**/*.lu',
       '**/*.qna',
@@ -770,7 +789,14 @@ export class BotProject implements IBotProject {
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/appsettings.json)'],
+        [
+          pattern,
+          '!(generated/**)',
+          '!(runtime/**)',
+          '!(scripts/**)',
+          '!(settings/appsettings.json)',
+          '!(**/luconfig.json)',
+        ],
         root
       );
 
@@ -810,6 +836,9 @@ export class BotProject implements IBotProject {
   private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
     // flowing migration scripts depends on files;
     this.files = new Map<string, FileInfo>([...files]);
+    const schemas = await this.getSchemas();
+    if (checkForPVASchema(schemas.sdk)) return new Map<string, FileInfo>();
+
     const dialogFiles: FileInfo[] = [];
     const qnaFiles: FileInfo[] = [];
     files.forEach((file) => {

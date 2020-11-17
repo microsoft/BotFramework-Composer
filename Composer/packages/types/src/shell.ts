@@ -63,7 +63,7 @@ export type LuContextApi = {
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
   debouncedUpdateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
   renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<LuFile[] | undefined>;
-  removeLuIntent: (id: string, intentName: string) => void;
+  removeLuIntent: (id: string, intentName: string) => Promise<LuFile[] | undefined>;
 };
 
 export type LgContextApi = {
@@ -121,9 +121,9 @@ export type ActionContextApi = {
 };
 
 export type DialogEditingContextApi = {
-  saveData: <T = any>(newData: T, updatePath?: string) => Promise<void>;
-  onFocusSteps: (stepIds: string[], focusedTab?: string) => void;
-  onFocusEvent: (eventId: string) => void;
+  saveData: <T = any>(newData: T, updatePath?: string, callback?: () => void | Promise<void>) => Promise<void>;
+  onFocusSteps: (stepIds: string[], focusedTab?: string) => Promise<void>;
+  onFocusEvent: (eventId: string) => Promise<void>;
   onSelect: (ids: string[]) => void;
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;

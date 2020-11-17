@@ -13,6 +13,7 @@ using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
+using Microsoft.Bot.Builder.Azure.Blobs;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
@@ -50,7 +51,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         {
             if (ConfigSectionValid(settings?.BlobStorage?.ConnectionString) && ConfigSectionValid(settings?.BlobStorage?.Container))
             {
-                adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings?.BlobStorage?.ConnectionString, settings?.BlobStorage?.Container)));
+                adapter.Use(new TranscriptLoggerMiddleware(new BlobsTranscriptStore(settings?.BlobStorage?.ConnectionString, settings?.BlobStorage?.Container)));
             }
         }
 
@@ -130,14 +131,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
 
             // Register AuthConfiguration to enable custom claim validation for skills.
-            if (IsSkill(settings))
-            {
-                services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
-            }
-            else
-            {
-                services.AddSingleton(sp => new AuthenticationConfiguration());
-            }
+            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
 
             // register components.
             ComponentRegistration.Add(new DialogsComponentRegistration());
