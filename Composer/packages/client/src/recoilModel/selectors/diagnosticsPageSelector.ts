@@ -21,6 +21,7 @@ import {
   SkillDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
+  botDiagnosticsState,
   botProjectFileState,
   botProjectIdsState,
   dialogSchemasState,
@@ -47,6 +48,7 @@ export const diagnosticsSelector = selectorFamily({
     const dialogs = get(validateDialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const lgFiles = get(lgFilesState(projectId));
+    const diagnostics = get(botDiagnosticsState(projectId));
     const setting = get(settingsState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
@@ -73,6 +75,9 @@ export const diagnosticsSelector = selectorFamily({
     };
 
     const diagnosticList: DiagnosticInfo[] = [];
+    diagnostics.forEach((d) => {
+      diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
+    });
     BotIndexer.validate(botAssets).forEach((d) => {
       diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
     });

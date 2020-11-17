@@ -394,7 +394,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   }
   set(schemasState(projectId), schemas);
   set(localeState(projectId), locale);
-  set(botDiagnosticsState(projectId), [...diagnostics, ...botFiles.diagnostics]);
+  set(botDiagnosticsState(projectId), diagnostics);
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
 
