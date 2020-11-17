@@ -20,7 +20,10 @@ if (FORCE_BUILD) {
   console.log('--force is true. Forcing a rebuild of all extensions.');
 }
 
-const allExtensions = fs.readdirSync(extensionsDir, { withFileTypes: true }).filter((ent) => ent.name !== 'scripts');
+const ignoredDirs = ['scripts', 'node_modules'];
+const allExtensions = fs
+  .readdirSync(extensionsDir, { withFileTypes: true })
+  .filter((ent) => !ignoredDirs.includes(ent.name));
 
 const checkComposerLibs = () => {
   const libsToCheck = ['types', 'extension', 'extension-client', 'lib/shared'];
