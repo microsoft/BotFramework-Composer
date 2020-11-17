@@ -102,13 +102,13 @@ export class LocalDiskStorage implements IFileStorage {
     ];
 
     const directoriesToInclude = defaultDirectories.filter((elem) => {
-      return exclusions?.directories?.indexOf(elem) == -1;
+      return exclusions?.directories == undefined || exclusions?.directories?.indexOf(elem) == -1;
     });
 
     const defaultFiles = ['*.botproject', '*.dialog'];
 
     const filesToInclude = defaultFiles.filter((elem) => {
-      return exclusions?.files?.indexOf(elem) == -1;
+      return exclusions?.files == undefined || exclusions?.files?.indexOf(elem) == -1;
     });
 
     const archive = archiver('zip');
