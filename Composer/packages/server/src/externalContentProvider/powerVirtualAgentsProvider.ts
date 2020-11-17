@@ -109,7 +109,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       // write the zip to disk
       if (result && result.body) {
         ensureDirSync(this.tempBotAssetsDir);
-        const zipPath = join(this.tempBotAssetsDir, `bot-assets-${Date.now()}.zip-}`);
+        const zipPath = join(this.tempBotAssetsDir, `bot-assets-${Date.now()}.zip`);
         const writeStream = createWriteStream(zipPath);
         await new Promise((resolve, reject) => {
           writeStream.once('finish', resolve);
