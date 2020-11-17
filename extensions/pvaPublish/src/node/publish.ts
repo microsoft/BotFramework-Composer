@@ -1,11 +1,20 @@
-import { IBotProject, UserIdentity, PublishResponse, PublishResult } from '@botframework-composer/types';
+import { IBotProject } from '@botframework-composer/types';
 import { join } from 'path';
 import { createWriteStream } from 'fs';
 import { ensureDirSync } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
 import stream from 'stream';
 
-import { PVAPublishJob, PublishConfig, PublishState, PublishHistory, PullResponse } from './types';
+import {
+  PVAPublishJob,
+  PublishConfig,
+  PublishResponse,
+  PublishResult,
+  UserIdentity,
+  PublishState,
+  PublishHistory,
+  PullResponse,
+} from './types';
 import { getAuthCredentials, getBaseUrl } from './utils';
 import { logger } from './logger';
 import { API_VERSION } from './constants';
@@ -276,7 +285,6 @@ export const pull = async (
 const xformJobToResult = (job: PVAPublishJob): PublishResult => {
   const result: PublishResult = {
     comment: job.comment,
-    // @ts-ignore
     eTag: job.importedContentEtag,
     id: job.operationId, // what is this used for in Composer?
     log: (job.diagnostics || []).map((diag) => `---\n${JSON.stringify(diag, null, 2)}\n---\n`).join('\n'),

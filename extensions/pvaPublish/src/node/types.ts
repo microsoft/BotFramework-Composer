@@ -1,5 +1,3 @@
-import { PublishResult } from '@botframework-composer/types';
-
 export type PVAPublishJob = {
   comment: string;
   diagnostics: DiagnosticInfo[];
