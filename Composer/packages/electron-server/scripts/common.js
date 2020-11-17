@@ -55,7 +55,22 @@ function hashFileAsync(file, algorithm = 'sha512', encoding = 'base64', options)
   });
 }
 
+const scriptName = path.basename(process.argv[1]);
+function logInfo(...args) {
+  const [formatter, ...rest] = args;
+  console.log(`[${scriptName}] ${formatter}`, ...rest);
+}
+
+function logError(...args) {
+  const [formatter, ...rest] = args;
+  console.error(`[${scriptName}] ${formatter}`, ...rest);
+}
+
 module.exports = {
   hashFileAsync,
   writeToDist,
+  log: {
+    info: logInfo,
+    error: logError,
+  },
 };

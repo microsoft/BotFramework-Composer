@@ -24,6 +24,7 @@ import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
+import { ImportModal } from '../ImportModal/ImportModal';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -46,6 +47,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createNewBot,
     saveProjectAs,
     fetchProjectById,
+    createNewBotV2,
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(filteredTemplatesSelector);
@@ -120,8 +122,17 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       schemaUrl: formData.schemaUrl,
       appLocale,
       qnaKbUrls,
+      templateDir: formData.templateDir,
+      eTag: formData.eTag,
+      urlSuffix: formData.urlSuffix,
+      alias: formData.alias,
+      preserveRoot: formData.preserveRoot,
     };
-    createNewBot(newBotData);
+    if (templateId === 'conversationalcore') {
+      createNewBotV2(newBotData);
+    } else {
+      createNewBot(newBotData);
+    }
   };
 
   const handleSaveAs = (formData) => {
@@ -199,6 +210,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             path="create/vaCore/*"
             onDismiss={handleDismiss}
           />
+          <ImportModal path="import" />
         </Router>
       </EditorExtension>
     </Fragment>

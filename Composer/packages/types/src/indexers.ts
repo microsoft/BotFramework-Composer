@@ -10,13 +10,13 @@ import { DialogSetting } from './index';
 export enum FileExtensions {
   Dialog = '.dialog',
   DialogSchema = '.schema',
+  FormDialogSchema = '.form',
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
   Qna = '.qna',
   SourceQnA = '.source.qna',
   Setting = 'appsettings.json',
-  FormDialogSchema = '.form-dialog',
   BotProject = '.botproj',
   Json = '.json',
 }
@@ -62,6 +62,7 @@ export type DialogInfo = {
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
   skills: string[];
+  isFormDialog: boolean;
 };
 
 export type LgTemplateJsonPath = {

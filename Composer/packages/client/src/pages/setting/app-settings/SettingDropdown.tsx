@@ -19,10 +19,11 @@ interface ISettingToggleProps {
   title: string;
   options: { key: string; text: string }[];
   selected?: string;
+  dropdownWidth?: number;
 }
 
 const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
-  const { id, title, description, image, onChange, options, selected } = props;
+  const { id, title, description, dropdownWidth, image, onChange, options, selected } = props;
   const uniqueId = useId(kebabCase(title));
 
   return (
@@ -38,6 +39,7 @@ const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
       </div>
       <div>
         <Dropdown
+          dropdownWidth={dropdownWidth}
           id={id || uniqueId}
           options={options}
           selectedKey={selected}
