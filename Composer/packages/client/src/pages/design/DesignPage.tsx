@@ -694,7 +694,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <LeftRightSplit initialLeftGridWidth="75%" minLeftPixels={500} minRightPixels={300}>
+                <LeftRightSplit initialLeftGridWidth="65%" minLeftPixels={500} minRightPixels={350}>
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
                     {breadcrumbItems}
                     {dialogJsonVisible ? (
