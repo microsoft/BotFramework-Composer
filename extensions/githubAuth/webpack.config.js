@@ -1,17 +1,6 @@
-const { resolve } = require('path');
+const withDefaults = require('../webpack.config.shared');
 
-module.exports = {
-  entry: './index.js',
-  mode: 'production',
-  devtool: 'source-map',
-  target: 'node',
-  output: {
-    path: resolve(__dirname, 'lib'),
-    filename: 'index.js',
-    libraryTarget: 'commonjs2',
-  },
-  resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.json'],
-    mainFields: ['main'],
-  },
-};
+module.exports = withDefaults({
+  entry: { extension: './index.js' },
+  context: __dirname,
+});

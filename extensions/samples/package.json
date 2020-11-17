@@ -2,7 +2,7 @@
   "name": "samples",
   "version": "1.0.0",
   "description": "providing samples to Composer core",
-  "main": "lib/index.js",
+  "main": "dist/extension.js",
   "scripts": {
     "build": "webpack"
   },

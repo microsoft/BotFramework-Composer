@@ -2,7 +2,7 @@
   "name": "vacore",
   "version": "1.0.0",
   "description": "A plug-in to provide the declarative VA template as an option in the new bot creation flow",
-  "main": "lib/index.js",
+  "main": "dist/extension.js",
   "scripts": {
     "build": "webpack"
   },
