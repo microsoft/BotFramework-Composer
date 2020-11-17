@@ -7,6 +7,8 @@ import formatMessage from 'format-message';
 import * as React from 'react';
 import { Tag } from 'src/components/tags/Tag';
 
+import { csvToArray } from './utils';
+
 const Root = styled.div({
   position: 'relative',
   boxSizing: 'border-box',
@@ -106,6 +108,22 @@ export const TagInput = (props: TagInputProps) => {
     onChange(clonedTags);
   };
 
+  const onPaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    setInput('');
+    event.preventDefault();
+
+    const pasteData = event.clipboardData;
+
+    if (!pasteData.types.includes('text/plain')) {
+      return;
+    }
+
+    const text = pasteData.getData('text/plain');
+    const tags = csvToArray(text);
+
+    onChange(tags);
+  };
+
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       // Prevent form submission if tag input is nested in <form>
@@ -176,6 +194,7 @@ export const TagInput = (props: TagInputProps) => {
           value={input}
           onChange={onInputChange}
           onKeyDown={onInputKeyDown}
+          onPaste={onPaste}
         />
       )}
     </Root>
