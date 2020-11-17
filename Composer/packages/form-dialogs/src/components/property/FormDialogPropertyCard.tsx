@@ -113,7 +113,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
   } = props;
 
   // Indicates if the form in the card has been touched by the user.
-  const touchedRef = React.useRef(false);
+  const touchedRef = React.useRef(!!property.name);
   const { id: propertyId, array, kind, name, payload, required } = property;
 
   const rootElmRef = React.useRef<HTMLDivElement>();
