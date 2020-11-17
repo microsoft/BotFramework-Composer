@@ -88,7 +88,7 @@ export const publish = async (
       headers: {
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
-        'Content-Length': botContent.buffer.byteLength,
+        'Content-Length': botContent.buffer.byteLength.toString(),
         'If-Match': project.eTag,
       },
     });

@@ -28,9 +28,9 @@
   },
   "main": "lib/node/index.js",
   "dependencies": {
-    "@botframework-composer/types": "file:../../Composer/packages/types",
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "@uifabric/icons": "7.3.59",
     "@uifabric/react-hooks": "7.4.12",
     "debug": "^4.2.0",
@@ -47,6 +47,7 @@
     "@botframework-composer/test-utils": "^0.0.1",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.11.2",
+    "@types/node-fetch": "^2.5.7",
     "jest": "^26.6.0",
     "mini-svg-data-uri": "^1.2.3",
     "rimraf": "^3.0.2",
