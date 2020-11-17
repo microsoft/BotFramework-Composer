@@ -4,7 +4,6 @@
 import path from 'path';
 
 import moment from 'moment';
-import mapValues from 'lodash/mapValues';
 import formatMessage from 'format-message';
 import generate from 'format-message-generate-id';
 
@@ -87,11 +86,19 @@ export const calculateTimeDiff = (time: any) => {
 };
 
 function sanitizeString(str: string) {
-  if (str.match(/{}'/g)) {
+  if (str.match(/[}{']/g)) {
     console.log('sanitizing ', str);
     return `'${str.replace("'", "''")}'`;
   }
   return str;
+}
+
+function sanitizeLocale(data: { [key: string]: { message: string } }) {
+  const out = {};
+  for (const key of Object.keys(data)) {
+    out[key] = { message: sanitizeString(data[key].message) };
+  }
+  return out;
 }
 
 export async function loadLocale(locale: string) {
@@ -105,18 +112,14 @@ export async function loadLocale(locale: string) {
   } else {
     // We don't care about the return value except in our unit tests
     console.log(data);
+
+    const sanitizedData = sanitizeLocale(data);
+
     return formatMessage.setup({
       locale: locale,
       generateId: generate.underscored_crc32,
       missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
-      translations: {
-        [locale]: mapValues(data as { [key: string]: { message: string } }, (obj) => {
-          console.log(obj);
-          return {
-            message: sanitizeString(obj.message),
-          };
-        }),
-      },
+      translations: sanitizedData,
     });
   }
 }
