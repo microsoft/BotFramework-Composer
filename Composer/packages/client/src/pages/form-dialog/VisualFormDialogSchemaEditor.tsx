@@ -3,6 +3,7 @@
 
 import { JsonEditor } from '@bfc/code-editor';
 import { FormDialogSchemaEditor } from '@bfc/form-dialogs';
+import { FileExtensions } from '@bfc/shared';
 import styled from '@emotion/styled';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
@@ -113,7 +114,7 @@ export const VisualFormDialogSchemaEditor = React.memo((props: Props) => {
             editorId={`${projectId}:${schema.id}`}
             isGenerating={generationInProgress}
             schema={schema}
-            schemaExtension=".form-dialog"
+            schemaExtension={FileExtensions.FormDialogSchema}
             templates={templates}
             onGenerateDialog={onGenerate}
             onSchemaUpdated={onSchemaUpdated}
