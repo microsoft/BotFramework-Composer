@@ -2,7 +2,8 @@
   "name": "pva-publish-composer",
   "version": "1.0.0",
   "scripts": {
-    "build": "yarn clean && webpack",
+    "build": "yarn clean && cross-env NODE_ENV=production webpack",
+    "build:dev": "yarn clean && cross-env NODE_ENV=development webpack",
     "clean": "rimraf lib",
     "test": "yarn test:node && yarn test:ui",
     "test:node": "jest --config jest.config.node.js",
@@ -48,6 +49,7 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^14.11.2",
     "@types/node-fetch": "^2.5.7",
+    "cross-env": "^7.0.2",
     "jest": "^26.6.0",
     "mini-svg-data-uri": "^1.2.3",
     "rimraf": "^3.0.2",
