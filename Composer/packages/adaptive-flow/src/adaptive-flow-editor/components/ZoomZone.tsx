@@ -142,9 +142,11 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ flowZoomRate, focusedId, upd
   }, [flowZoomRate]);
 
   return (
-    <div ref={divRef} css={{ overflow: 'scroll', width: '100%', height: '100%' }}>
-      {children}
-      {buttonRender()}
+    <div css={{ width: '100%', height: '100%' }}>
+      <div ref={divRef} css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+        {children}
+        {buttonRender()}
+      </div>
     </div>
   );
 };
