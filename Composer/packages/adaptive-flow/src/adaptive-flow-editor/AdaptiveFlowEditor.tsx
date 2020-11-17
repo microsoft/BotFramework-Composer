@@ -131,6 +131,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
   };
 
+  const marqueeStyles = (_) => {
+    return {
+      root: {
+        width: '100%',
+        height: '100%',
+      },
+    };
+  };
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
@@ -144,9 +152,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >
-            <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
-              <SelectionContext.Provider value={selectionContext}>
-                <MarqueeSelection selection={selection}>
+            <SelectionContext.Provider value={selectionContext}>
+              <MarqueeSelection selection={selection} styles={marqueeStyles}>
+                <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
                   <div
                     className="flow-editor-container"
                     css={{
@@ -180,9 +188,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                       }}
                     />
                   </div>
-                </MarqueeSelection>
-              </SelectionContext.Provider>
-            </ZoomZone>
+                </ZoomZone>
+              </MarqueeSelection>
+            </SelectionContext.Provider>
           </div>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
