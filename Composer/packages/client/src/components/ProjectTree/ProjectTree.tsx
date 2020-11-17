@@ -229,7 +229,7 @@ export const ProjectTree: React.FC<Props> = ({
   const doesLinkMatch = (linkInTree?: Partial<TreeLink>, selectedLink?: Partial<TreeLink>) => {
     if (linkInTree == null || selectedLink == null) return false;
     return (
-      (selectedLink.projectId === selectedLink.skillId || linkInTree.skillId === selectedLink.skillId) &&
+      linkInTree.skillId === selectedLink.skillId &&
       linkInTree.dialogId === selectedLink.dialogId &&
       linkInTree.trigger === selectedLink.trigger
     );
