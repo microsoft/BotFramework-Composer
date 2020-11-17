@@ -1829,6 +1829,9 @@
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -1918,6 +1921,9 @@
   },
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Please select an activity type"
+  },
+  "powervirtualagents_logo_11858924": {
+    "message": "PowerVirtualAgents Logo"
   },
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logo"
@@ -2359,6 +2365,12 @@
   },
   "skills_49cccd6a": {
     "message": "Skills"
+  },
+  "something_happened_while_attempting_to_pull_e_952c7afe": {
+    "message": "Something happened while attempting to pull: { e }"
+  },
+  "something_went_wrong_d238c551": {
+    "message": "Something went wrong"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
