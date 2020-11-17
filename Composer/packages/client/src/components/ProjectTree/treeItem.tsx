@@ -79,14 +79,14 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, isBroken: boolean, isAnyMenuOpen: boolean) => css`
+const navItem = (isActive: boolean, isBroken: boolean, isAnyMenuOpen: boolean, menuOpenHere: boolean) => css`
   label: navItem;
   min-width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
-  color: ${isActive ? NeutralColors.white : '#545454'};
-  background: ${isActive ? '#0078d4' : 'transparent'};
+  color: ${isActive && !menuOpenHere ? NeutralColors.white : '#545454'};
+  background: ${isActive ? '#0078d4' : menuOpenHere ? '#f2f2f2' : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
 
@@ -381,7 +381,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(isMenuOpen ? thisItemSelected : isActive, isBroken, isMenuOpen)}
+      css={navItem(isActive, isBroken, isMenuOpen, thisItemSelected)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
