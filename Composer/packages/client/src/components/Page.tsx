@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 import { navigateTo, buildURL } from '../utils/navigation';
-import { currentModeState, rootBotProjectIdSelector } from '../recoilModel';
+import { currentModeState } from '../recoilModel';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
@@ -114,7 +114,6 @@ const Page: React.FC<IPageProps> = (props) => {
   } = props;
 
   const pageMode = useRecoilValue(currentModeState);
-  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
 
   return (
     <div css={root} data-testid={props['data-testid']}>
@@ -132,9 +131,6 @@ const Page: React.FC<IPageProps> = (props) => {
                 showTriggers={false}
                 onSelect={(link) => {
                   navigateTo(buildURL(pageMode, link));
-                }}
-                onSelectAllLink={() => {
-                  navigateTo(buildURL(pageMode, { projectId: rootProjectId, dialogId: '$all' }));
                 }}
               />
             ) : (

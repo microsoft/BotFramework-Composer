@@ -137,7 +137,6 @@ type BotInProject = {
 
 type Props = {
   onSelect?: (link: TreeLink) => void;
-  onSelectAllLink?: () => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
@@ -158,7 +157,6 @@ type Props = {
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
 
 export const ProjectTree: React.FC<Props> = ({
-  onSelectAllLink: onAllSelected = undefined,
   showTriggers = true,
   showDialogs = true,
   headerMenu = [],
@@ -641,17 +639,7 @@ export const ProjectTree: React.FC<Props> = ({
           )}
           aria-live={'polite'}
         />
-        <div css={tree}>
-          {onAllSelected != null ? (
-            <TreeItem
-              hasChildren={false}
-              link={{ displayName: formatMessage('All'), projectId: rootProjectId, isRoot: true, diagnostics: [] }}
-              textWidth={leftSplitWidth - TREE_PADDING}
-              onSelect={onAllSelected}
-            />
-          ) : null}
-          {projectTree}
-        </div>
+        <div css={tree}>{projectTree}</div>
       </FocusZone>
     </div>
   );
