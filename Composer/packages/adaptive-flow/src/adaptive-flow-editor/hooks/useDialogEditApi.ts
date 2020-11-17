@@ -64,7 +64,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
 
   async function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
     const cutActions = await copySelectedActions(dialogId, dialogData, actionIds);
-    const newDialog = deleteSelectedActions(dialogId, dialogData, actionIds);
+    const newDialog = await deleteSelectedActions(dialogId, dialogData, actionIds);
     return { dialog: newDialog, cutActions };
   }
 
