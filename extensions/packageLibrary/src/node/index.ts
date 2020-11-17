@@ -31,11 +31,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           if (Array.isArray(raw.data)) {
             combined = combined.concat(raw.data);
           } else {
-            console.error('Received non-JSON response from ', url);
+            composer.log('Received non-JSON response from ', url);
           }
         } catch (err) {
-          console.error('Could not load library from URL');
-          console.error(err);
+          composer.log('Could not load library from URL');
+          composer.log(err);
         }
       }
       res.json(combined);
@@ -48,7 +48,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const mergeErrors: string[] = [];
 
       const captureErrors = (msg: string): void => {
-        console.error(msg);
+        composer.log(msg);
         mergeErrors.push(msg);
       };
 
@@ -61,8 +61,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           path.join(currentProject.dataDir, 'dialogs/imported'),
           true, // copy only? true = dry run
           false, // verbosity: true = verbose
-          console.log,
-          console.warn,
+          composer.log,
+          composer.log,
           captureErrors
         );
         const dryRunMergeResults = await dryrun.merge();
@@ -89,13 +89,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const runtime = composer.getRuntimeByProject(currentProject);
 
       // get URL or package name
-      const packageName = req.query.package || req.body.package;
-      const version = req.query.version || req.body.version;
-      const isUpdating = req.query.isUpdating || req.body.isUpdating || false;
+      const packageName = req.body.package;
+      const version = req.body.version;
+      const isUpdating = req.body.isUpdating || false;
       const mergeErrors: string[] = [];
 
       const captureErrors = (msg: string): void => {
-        console.error(msg);
+        composer.log(msg);
         mergeErrors.push(msg);
       };
 
@@ -117,8 +117,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             path.join(currentProject.dataDir, 'dialogs/imported'),
             true, // copy only? true = dry run
             false, // verbosity: true = verbose
-            console.log,
-            console.warn,
+            composer.log,
+            composer.log,
             captureErrors
           );
 
@@ -150,9 +150,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               path.join(currentProject.dataDir, 'dialogs/imported'),
               false, // copy only? true = dry run
               false, // verbosity: true = verbose
-              console.log,
-              console.warn,
-              console.error
+              composer.log,
+              composer.log,
+              composer.log
             );
 
             const mergeResults = await realMerge.merge();
@@ -169,11 +169,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             }
           }
         } catch (err) {
-          console.error('Error in import', { message: err.message });
+          composer.log('Error in import', { message: err.message });
           try {
             await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
           } catch (err) {
-            console.log('Error uninstalling', err);
+            composer.log('Error uninstalling', err);
           }
           // if packageName is in the github form <username/package> remove the first part, because otherwise the unisntall doesn't work
           if (packageName.match(/.*\/.*/)) {
@@ -198,12 +198,12 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const mergeErrors: string[] = [];
 
       const captureErrors = (msg: string): void => {
-        console.error(msg);
+        composer.log(msg);
         mergeErrors.push(msg);
       };
 
       // get URL or package name
-      const packageName = req.query.package || req.body.package;
+      const packageName = req.body.package;
       if (packageName && currentProject.settings?.runtime?.path) {
         try {
           const output = await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
@@ -217,8 +217,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             path.join(currentProject.dataDir, 'dialogs/imported'),
             false, // copy only? true = dry run
             false, // verbosity: true = verbose
-            console.log,
-            console.warn,
+            composer.log,
+            composer.log,
             captureErrors
           );
 

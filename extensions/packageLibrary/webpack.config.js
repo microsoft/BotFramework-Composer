@@ -4,9 +4,9 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require("path");
 
-module.exports = {
+module.exports = [{
   entry: {
-    "asset-library": "./src/client/Library.tsx",
+    "package-library": "./src/client/Library.tsx",
   },
   mode: "development",
   devtool: "eval-source-map",
@@ -26,4 +26,22 @@ module.exports = {
   resolve: {
     extensions: [".js", ".ts", ".tsx"],
   },
-};
+},
+{
+  entry: './src/node/index.ts',
+  mode: 'production',
+  devtool: 'source-map',
+  target: 'node',
+  output: {
+    path: path.resolve(__dirname, 'lib', 'node'),
+    filename: 'index.js',
+    libraryTarget: 'commonjs2',
+  },
+  module: {
+    rules: [{ test: /\.tsx?$/, use: 'ts-loader', exclude: [/node_modules/] }],
+  },
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx', '.json'],
+    mainFields: ['main'],
+  },
+}];

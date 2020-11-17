@@ -14,7 +14,7 @@ export type FeatureFlag = {
   enabled: boolean;
 };
 
-export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE' | 'PACKAGE_LIBRARY';
+export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
@@ -37,12 +37,6 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
       'If turned on then externally stored templates will be selectable in the new bot flow template list'
     ),
     isHidden: true,
-    enabled: false,
-  },
-  PACKAGE_LIBRARY: {
-    displayName: formatMessage('Package library'),
-    description: formatMessage('Discover and use components that can be installed into your bot.'),
-    isHidden: false,
     enabled: false,
   },
 });

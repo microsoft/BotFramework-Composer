@@ -37,7 +37,6 @@ import {
   getSkillNameIdentifier,
   handleProjectFailure,
   initBotState,
-  // loadProjectData,
   navigateToBot,
   openLocalSkill,
   openRemoteSkill,
@@ -366,9 +365,6 @@ export const projectDispatcher = () => {
   const reloadProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     callbackHelpers.reset(filePersistenceState(projectId));
     await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
-    // const { projectData, botFiles } = loadProjectData(response);
-
-    // await initBotState(callbackHelpers, projectData, botFiles);
   });
 
   /** Resets the file persistence of a project, and then reloads the bot state. */

@@ -1,12 +1,10 @@
 {
   "name": "asset-library",
   "version": "1.0.0",
-  "description": "Manage external dialog assets.",
+  "description": "Discover and use components that can be installed into your bot.",
   "main": "lib/index.js",
   "scripts": {
-    "build": "yarn clean && yarn build:client && yarn build:node",
-    "build:client": "webpack --config webpack.config.js",
-    "build:node": "tsc --project tsconfig.node.json",
+    "build": "yarn clean && webpack --config webpack.config.js",
     "clean": "rimraf dist"
   },
   "keywords": [],
@@ -16,16 +14,16 @@
     "enabled": true,
     "bundles": [
       {
-        "id": "asset-library",
-        "path": "./lib/pages/asset-library.js"
+        "id": "package-library",
+        "path": "./lib/pages/package-library.js"
       }
     ],
     "contributes": {
       "views": {
         "pages": [
           {
-            "bundleId": "asset-library",
-            "label": "Asset Library",
+            "bundleId": "package-library",
+            "label": "Package Library",
             "icon": "Library"
           }
         ]
@@ -39,7 +37,7 @@
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/ui-shared": "file:../../Composer/packages/lib/ui-shared",
-    "@microsoft/bf-dialog": "4.11.0-rc.20201026.e06ad47",
+    "@microsoft/bf-dialog": "4.11.0",
     "@emotion/core": "^10.0.35",
     "@uifabric/fluent-theme": "^7.1.4",
     "date-fns": "^2.16.1",
