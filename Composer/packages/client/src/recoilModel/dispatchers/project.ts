@@ -428,7 +428,7 @@ export const projectDispatcher = () => {
       const timer = setInterval(async () => {
         try {
           const response = await httpClient.get(`/status/${jobId}`);
-          if (response.data?.httpStatusCode === 200 && response.data.result && response.data.result != {}) {
+          if (response.data?.httpStatusCode === 200 && response.data.result) {
             // Bot creation successful
             clearInterval(timer);
             callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
