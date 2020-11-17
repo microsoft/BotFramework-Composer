@@ -130,6 +130,10 @@ export const DialogCreationCopy = {
       'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
     ),
   },
+  IMPORT_BOT_PROJECT: {
+    title: formatMessage('Import your bot to new project'),
+    subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+  },
 };
 
 export const DialogDeleting = {

@@ -9,6 +9,7 @@ using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
+using Microsoft.Bot.Builder.Azure.Blobs;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
@@ -176,7 +177,7 @@ namespace Microsoft.BotFramework.Composer.Functions
         {
             if (ConfigSectionValid(settings?.BlobStorage?.ConnectionString) && ConfigSectionValid(settings?.BlobStorage?.Container))
             {
-                adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings?.BlobStorage?.ConnectionString, settings?.BlobStorage?.Container)));
+                adapter.Use(new TranscriptLoggerMiddleware(new BlobsTranscriptStore(settings?.BlobStorage?.ConnectionString, settings?.BlobStorage?.Container)));
             }
         }
 
