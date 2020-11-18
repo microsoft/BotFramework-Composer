@@ -3,91 +3,92 @@
 
 import { TriggerUISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 export const DefaultTriggerSchema: TriggerUISchema = {
   [SDKKinds.OnIntent]: {
-    label: 'Intent recognized',
+    label: formatMessage('Intent recognized'),
   },
   [SDKKinds.OnQnAMatch]: {
-    label: 'QnA Intent recognized',
+    label: formatMessage('QnA Intent recognized'),
   },
   [SDKKinds.OnUnknownIntent]: {
-    label: 'Unknown intent',
+    label: formatMessage('Unknown intent'),
   },
   [SDKKinds.OnChooseIntent]: {
-    label: 'Duplicated intents recognized',
+    label: formatMessage('Duplicated intents recognized'),
   },
   [SDKKinds.OnDialogEvent]: {
-    label: 'Custom events',
+    label: formatMessage('Custom events'),
   },
   // Subgroup - Dialog events
   [SDKKinds.OnBeginDialog]: {
-    label: 'Dialog started (Begin dialog event)',
+    label: formatMessage('Dialog started (Begin dialog event)'),
     submenu: {
-      label: 'Dialog events',
-      prompt: 'Which event?',
-      placeholder: 'Select an event type',
+      label: formatMessage('Dialog events'),
+      prompt: formatMessage('Which event?'),
+      placeholder: formatMessage('Select an event type'),
     },
   },
   [SDKKinds.OnCancelDialog]: {
-    label: 'Dialog cancelled (Cancel dialog event)',
-    submenu: 'Dialog events',
+    label: formatMessage('Dialog cancelled (Cancel dialog event)'),
+    submenu: formatMessage('Dialog events'),
   },
   [SDKKinds.OnError]: {
-    label: 'Error occurred (Error event)',
-    submenu: 'Dialog events',
+    label: formatMessage('Error occurred (Error event)'),
+    submenu: formatMessage('Dialog events'),
   },
   [SDKKinds.OnRepromptDialog]: {
-    label: 'Re-prompt for input (Reprompt dialog event)',
-    submenu: 'Dialog events',
+    label: formatMessage('Re-prompt for input (Reprompt dialog event)'),
+    submenu: formatMessage('Dialog events'),
   },
   // Subgroup - Activities
   [SDKKinds.OnActivity]: {
-    label: 'Activities (Activity received)',
+    label: formatMessage('Activities (Activity received)'),
     submenu: {
-      label: 'Activities',
-      prompt: 'Which activity type?',
-      placeholder: 'Select an activity type',
+      label: formatMessage('Activities'),
+      prompt: formatMessage('Which activity type?'),
+      placeholder: formatMessage('Select an activity type'),
     },
   },
   [SDKKinds.OnConversationUpdateActivity]: {
-    label: 'Greeting (ConversationUpdate activity)',
-    submenu: 'Activities',
+    label: formatMessage('Greeting (ConversationUpdate activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnEndOfConversationActivity]: {
-    label: 'Conversation ended (EndOfConversation activity)',
-    submenu: 'Activities',
+    label: formatMessage('Conversation ended (EndOfConversation activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnEventActivity]: {
-    label: 'Event received (Event activity)',
-    submenu: 'Activities',
+    label: formatMessage('Event received (Event activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnHandoffActivity]: {
-    label: 'Handover to human (Handoff activity)',
-    submenu: 'Activities',
+    label: formatMessage('Handover to human (Handoff activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnInvokeActivity]: {
-    label: 'Conversation invoked (Invoke activity)',
-    submenu: 'Activities',
+    label: formatMessage('Conversation invoked (Invoke activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnTypingActivity]: {
-    label: 'User is typing (Typing activity)',
-    submenu: 'Activities',
+    label: formatMessage('User is typing (Typing activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnMessageActivity]: {
-    label: 'Message received (Message received activity)',
-    submenu: 'Activities',
+    label: formatMessage('Message received (Message received activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnMessageDeleteActivity]: {
-    label: 'Message deleted (Message deleted activity)',
-    submenu: 'Activities',
+    label: formatMessage('Message deleted (Message deleted activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnMessageReactionActivity]: {
-    label: 'Message reaction (Message reaction activity)',
-    submenu: 'Activities',
+    label: formatMessage('Message reaction (Message reaction activity)'),
+    submenu: formatMessage('Activities'),
   },
   [SDKKinds.OnMessageUpdateActivity]: {
-    label: 'Message updated (Message updated activity)',
-    submenu: 'Activities',
+    label: formatMessage('Message updated (Message updated activity)'),
+    submenu: formatMessage('Activities'),
   },
 };
