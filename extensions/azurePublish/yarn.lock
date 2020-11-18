@@ -29,12 +29,14 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
-"@azure/arm-botservice@./vendor/arm-botservice":
-  version "1.0.0"
+"@azure/arm-botservice@2.0.0":
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@azure/arm-botservice/-/@azure/arm-botservice-2.0.0.tgz#f82469374dde5ed6cdbe1f11669aa30d27889ec6"
+  integrity sha1-+CRpN03eXtbNvh8RZpqjDSeInsY=
   dependencies:
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@azure/ms-rest-js" "2.0.7"
-    tslib "^1.9.3"
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
 
 "@azure/arm-cognitiveservices@^5.2.0":
   version "5.2.0"
@@ -169,7 +171,21 @@
     adal-angular "^1.0.17"
     tslib "^1.9.3"
 
-"@azure/ms-rest-js@2.0.7", "@azure/ms-rest-js@^2.0.3", "@azure/ms-rest-js@^2.0.4":
+"@azure/ms-rest-js@^1.1.0", "@azure/ms-rest-js@^1.8.1", "@azure/ms-rest-js@^1.8.10":
+  version "1.8.15"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
+  integrity sha512-kIB71V3DcrA4iysBbOsYcxd4WWlOE7OFtCUYNfflPODM0lbIR23A236QeTn5iAeYwcHmMjR/TAKp5KQQh/WqoQ==
+  dependencies:
+    "@types/tunnel" "0.0.0"
+    axios "^0.19.0"
+    form-data "^2.3.2"
+    tough-cookie "^2.4.3"
+    tslib "^1.9.2"
+    tunnel "0.0.6"
+    uuid "^3.2.1"
+    xml2js "^0.4.19"
+
+"@azure/ms-rest-js@^2.0.3", "@azure/ms-rest-js@^2.0.4":
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-2.0.7.tgz#3165bb7068387bf36c4c43db85d3662c916fd581"
   integrity sha512-rQpNxDhyOIyS4E+4sUCBMvjrtbNwB32wH06cC2SFoQM4TR29bIKaTlIC1tMe0K07w9c5tNk/2uUHs6/ld/Z3+A==
@@ -183,20 +199,6 @@
     tslib "^1.10.0"
     tunnel "0.0.6"
     uuid "^3.3.2"
-    xml2js "^0.4.19"
-
-"@azure/ms-rest-js@^1.1.0", "@azure/ms-rest-js@^1.8.1", "@azure/ms-rest-js@^1.8.10":
-  version "1.8.15"
-  resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
-  integrity sha512-kIB71V3DcrA4iysBbOsYcxd4WWlOE7OFtCUYNfflPODM0lbIR23A236QeTn5iAeYwcHmMjR/TAKp5KQQh/WqoQ==
-  dependencies:
-    "@types/tunnel" "0.0.0"
-    axios "^0.19.0"
-    form-data "^2.3.2"
-    tough-cookie "^2.4.3"
-    tslib "^1.9.2"
-    tunnel "0.0.6"
-    uuid "^3.2.1"
     xml2js "^0.4.19"
 
 "@azure/ms-rest-js@^2.0.7":

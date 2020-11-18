@@ -5,10 +5,9 @@
   "main": "lib/node/index.js",
   "license": "MIT",
   "scripts": {
-    "build:botservice": "cd ./vendor/arm-botservice && yarn && yarn build",
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
-    "build": "yarn build:botservice && webpack"
+    "build": "webpack"
   },
   "composer": {
     "bundles": [
@@ -35,7 +34,7 @@
     "@azure/arm-appinsights": "^3.0.0",
     "@azure/arm-appservice": "^6.0.0",
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "1.0.0",
-    "@azure/arm-botservice": "./vendor/arm-botservice",
+    "@azure/arm-botservice": "2.0.0",
     "@azure/arm-cognitiveservices": "^5.2.0",
     "@azure/arm-cosmosdb": "^9.0.0",
     "@azure/arm-deploymentmanager": "3.0.0",
