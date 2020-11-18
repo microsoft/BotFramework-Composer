@@ -153,6 +153,7 @@ type Props = {
     showTriggers?: boolean;
     showDialogs?: boolean;
     showDelete?: boolean;
+    showRemote?: boolean;
   };
 };
 
@@ -176,6 +177,7 @@ export const ProjectTree: React.FC<Props> = ({
     showDelete: true,
     showDialogs: true,
     showTriggers: true,
+    showRemote: true,
   },
 }) => {
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
@@ -615,8 +617,10 @@ export const ProjectTree: React.FC<Props> = ({
           <div>{createDetailsTree(bot, 1)}</div>
         </ExpandableNode>
       );
-    } else {
+    } else if (options.showRemote) {
       return renderBotHeader(bot);
+    } else {
+      return null;
     }
   };
 

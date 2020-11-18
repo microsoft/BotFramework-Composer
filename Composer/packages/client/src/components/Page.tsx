@@ -129,6 +129,8 @@ const Page: React.FC<IPageProps> = (props) => {
                 options={{
                   showDelete: false,
                   showTriggers: false,
+                  showDialogs: true,
+                  showRemote: false,
                 }}
                 onSelect={(link) => {
                   navigateTo(buildURL(pageMode, link));
