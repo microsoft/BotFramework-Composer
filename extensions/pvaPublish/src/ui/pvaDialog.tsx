@@ -32,9 +32,9 @@ export const PVADialog: FC = () => {
   const [token, setToken] = useState('');
   const [tenantId, setTenantId] = useState('');
   const [envs, setEnvs] = useState<BotEnvironment[]>([]);
-  const [env, setEnv] = useState<string>(null);
+  const [env, setEnv] = useState<string | undefined>(undefined);
   const [bots, setBots] = useState<Bot[]>([]);
-  const [bot, setBot] = useState<Bot>(null);
+  const [bot, setBot] = useState<Bot | undefined>(undefined);
   const [loggingIn, setLoggingIn] = useState(false);
   const [fetchingEnvironments, setFetchingEnvironments] = useState(false);
   const [fetchingBots, setFetchingBots] = useState(false);
@@ -94,15 +94,19 @@ export const PVADialog: FC = () => {
     }
   }, [tenantId, token, pvaHeaders]);
 
-  const onSelectEnv = useCallback((event, item: IDropdownOption) => {
-    setEnv(item.key + '');
+  const onSelectEnv = useCallback((event, item?: IDropdownOption) => {
+    if (item) {
+      setEnv(`${item.key}`);
+    }
   }, []);
 
   const onSelectBot = useCallback(
-    (event, item: IDropdownOption) => {
-      const botId = item.key + '';
-      const bot = bots.find((bot) => bot.id === botId);
-      setBot(bot);
+    (event, item?: IDropdownOption) => {
+      if (item) {
+        const botId = `${item.key}`;
+        const bot = bots.find((bot) => bot.id === botId);
+        setBot(bot);
+      }
     },
     [bots, env]
   );
@@ -120,7 +124,7 @@ export const PVADialog: FC = () => {
         if (bots && bots.length) {
           setBot(bots[0]);
         } else {
-          setBot(null);
+          setBot(undefined);
         }
       };
       fetchBots();
