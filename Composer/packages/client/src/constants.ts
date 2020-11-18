@@ -72,6 +72,7 @@ export const OpenStatus = {
 };
 
 export enum BotStatus {
+  queued = 'queued',
   connected = 'connected',
   unConnected = 'unConnected',
   publishing = 'publishing',
@@ -105,7 +106,9 @@ export const BotStatusesCopy = {
   published: formatMessage('Starting'),
   unConnected: formatMessage('Inactive'),
   failed: formatMessage('Failed to start'),
-  loading: formatMessage('Loading'),
+  loading: formatMessage('Building'),
+  queued: formatMessage('Queued'),
+  reloading: formatMessage('Starting'),
 };
 
 export const DialogCreationCopy = {

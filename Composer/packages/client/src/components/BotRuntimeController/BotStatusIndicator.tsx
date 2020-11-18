@@ -7,9 +7,11 @@ import { useRef, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
 import { getBotStatusText } from '../../utils/botRuntimeUtils';
+import { BotStatus, BotStatusesCopy } from '../../constants';
 
 import { ErrorCallout } from './errorCallout';
 import { useBotOperations } from './useBotOperations';
@@ -29,6 +31,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
   const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
   const [calloutVisible, setErrorCallout] = useState(false);
   const { startSingleBot } = useBotOperations();
+  const [botStatusStyle, setBotStatusStyle] = useState({});
 
   function dismissErrorDialog() {
     setErrorCallout(false);
@@ -44,12 +47,27 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
   };
 
   const botStatusText = useMemo(() => {
+    if (botStatus === BotStatus.connected) {
+      setBotStatusStyle({
+        color: SharedColors.green20,
+      });
+    } else if (botStatus === BotStatus.failed) {
+      setBotStatusStyle({
+        color: SharedColors.red10,
+      });
+    } else {
+      setBotStatusStyle({
+        color: SharedColors.gray20,
+      });
+    }
     return getBotStatusText(botStatus);
   }, [botStatus]);
 
   return (
     <div ref={botActionRef} css={botStatusContainer}>
-      <span aria-live={'assertive'}>{botStatusText}</span>
+      <span aria-live={'assertive'} style={botStatusStyle}>
+        {botStatusText}
+      </span>
       {botLoadErrorMsg?.message && (
         <ActionButton
           styles={{

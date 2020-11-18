@@ -12,13 +12,16 @@ export const getBotStatusText = (currentBotStatus) => {
       return BotStatusesCopy.published;
 
     case BotStatus.reloading:
-      return BotStatusesCopy.loading;
+      return BotStatusesCopy.reloading;
 
     case BotStatus.connected: {
       return BotStatusesCopy.connected;
     }
     case BotStatus.publishing:
       return BotStatusesCopy.publishing;
+
+    case BotStatus.queued:
+      return BotStatusesCopy.queued;
 
     default:
     case BotStatus.unConnected:
