@@ -163,12 +163,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       disabled: !isPullSupported,
     },
   ];
-  const getUpdatedStatus = (target) => {
+  const getUpdatedStatus = (target, botProjectId) => {
     if (target) {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
       setTimeout(async () => {
-        getPublishStatus(projectId, target);
+        getPublishStatus(botProjectId, target);
       }, 10000);
     }
   };
@@ -180,27 +180,29 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     selectedBots.forEach((bot) => {
       if (bot.publishTarget && bot.publishTargets) {
         const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
-        const projectId = bot.id;
+        const botProjectId = bot.id;
         if (selectedTarget) {
-          const botPublishHistory = botPublishHistoryList.find((publishHistory) => publishHistory.projectId === bot.id)
-            ?.publishHistory[bot.publishTarget];
+          const botPublishHistory = botPublishHistoryList.find(
+            (publishHistory) => publishHistory.projectId === botProjectId
+          )?.publishHistory[bot.publishTarget];
           if (botPublishHistory && botPublishHistory.length > 0) {
             if (botPublishHistory[0].status === 202) {
-              getUpdatedStatus(selectedTarget);
+              getUpdatedStatus(selectedTarget, botProjectId);
             } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
+              bot.status = botPublishHistory[0].status;
               if (showNotifications[bot.id]) {
                 pendingNotification && deleteNotification(pendingNotification.id);
                 addNotification(createNotification(publishedNotificationCard(bot)));
-                setShowNotifications({ ...showNotifications, [bot.id]: false });
+                setShowNotifications({ ...showNotifications, [botProjectId]: false });
               }
             } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
               // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
               // we still poll for the results IF we see that a publish has happened previously
-              getPublishStatus(projectId, selectedTarget);
+              getPublishStatus(botProjectId, selectedTarget);
             }
             setBotStatusList(
               botStatusList.map((item) => {
-                if (item.id === bot.id) {
+                if (item.id === botProjectId) {
                   item.status = botPublishHistory[0].status;
                   item.comment = botPublishHistory[0].comment;
                   item.message = botPublishHistory[0].message;
@@ -236,6 +238,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       setHasGetPublishHistory(true);
     }
   }, [botProjectsMeta]);
+  useEffect(() => {
+    setBotStatusList(statusList);
+  }, [botProjectsMeta.length]);
 
   const rollbackToVersion = (version, item) => {
     const sensitiveSettings = getSensitiveProperties(projectId, item.id);
@@ -296,7 +301,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               await setQnASettings(botProjectId, Object(setting.qna).subscriptionKey);
             }
             const sensitiveSettings = getSensitiveProperties(projectId, botProjectId);
-            await publishToTarget(projectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
+            await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
 
             // update the target with a lastPublished date
             const updatedPublishTargets = setting.publishTargets.map((profile) => {

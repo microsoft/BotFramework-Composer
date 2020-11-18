@@ -73,6 +73,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isRowHeader: true,
       isResizable: true,
       data: 'string',
+      styles: { display: 'flex', alignItems: 'center' },
       onRender: (item: IStatus) => {
         return <span>{moment(item.time).format('h:mm a')}</span>;
       },
@@ -87,6 +88,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 90,
       isRowHeader: true,
       isResizable: true,
+      styles: { display: 'flex', alignItems: 'center' },
       onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: IStatus) => {
@@ -103,6 +105,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 40,
       isResizable: true,
       data: 'string',
+      styles: { display: 'flex', alignItems: 'center' },
       onRender: (item: IStatus) => {
         if (item.status === 200) {
           return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
@@ -129,6 +132,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
+      styles: { display: 'flex', alignItems: 'center' },
       onRender: (item: IStatus) => {
         return (
           <span>
@@ -160,6 +164,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
+      styles: { display: 'flex', alignItems: 'center' },
       onRender: (item: IStatus) => {
         return <span>{item.comment}</span>;
       },
