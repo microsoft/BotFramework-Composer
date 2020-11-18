@@ -78,21 +78,13 @@ export const diagnosticsSelector = selectorFamily({
     diagnostics.forEach((d) => {
       diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
     });
-    BotIndexer.validate(botAssets).forEach((d) => {
-      diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
-    });
-    const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
-    skillDiagnostics.forEach((item) => {
+
+    BotIndexer.validate(botAssets).forEach((item) => {
       if (item.source.endsWith('.json')) {
-        diagnosticList.push(new SkillDiagnostic(rootProjectId, projectId, item.source, item.source, item));
+        diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', item.source, item));
       } else {
         diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, item.source, item.source, item));
       }
-    });
-    const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
-
-    luisLocaleDiagnostics.forEach((item) => {
-      diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
 
     dialogs.forEach((dialog) => {
