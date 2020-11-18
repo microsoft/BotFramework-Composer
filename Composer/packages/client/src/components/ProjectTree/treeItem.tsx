@@ -18,6 +18,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
+import isEmpty from 'lodash/isEmpty';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE } from './constants';
@@ -289,12 +290,12 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
           />
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
-        {warnings.length && (
+        {!isEmpty(warnings) && (
           <TooltipHost closeDelay={500} content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'WarningSolid'} style={warningIcon} />
           </TooltipHost>
         )}
-        {errors.length && (
+        {!isEmpty(errors) && (
           <TooltipHost closeDelay={500} content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'StatusErrorFull'} style={errorIcon} />
           </TooltipHost>

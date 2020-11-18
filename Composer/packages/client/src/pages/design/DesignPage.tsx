@@ -39,7 +39,6 @@ import {
   userSettingsState,
   dispatcherState,
   schemasState,
-  displaySkillManifestState,
   validateDialogsSelectorFamily,
   focusPathState,
   showCreateDialogModalState,
@@ -51,6 +50,7 @@ import {
   skillNameIdentifierByProjectIdSelector,
   SkillInfo,
   projectMetaDataState,
+  displayManifestModalOnProjectIdSelector,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -137,7 +137,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);
-  const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
+  const displaySkillManifestOnProjectId = useRecoilValue(displayManifestModalOnProjectIdSelector);
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useBotOperations();
@@ -742,7 +742,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const handleDisplayManifestModal = (skillId: string) => {
     const skillNameIdentifier = skillsByProjectId[skillId];
     if (!skillNameIdentifier) return;
-    displayManifestModal(skillNameIdentifier, projectId);
+    displayManifestModal(skillNameIdentifier, skillId);
   };
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
@@ -886,11 +886,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {dialogId && (
           <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
         )}
-        {displaySkillManifest && (
+        {displaySkillManifestOnProjectId && (
           <DisplayManifestModal
-            projectId={projectId}
-            skillNameIdentifier={displaySkillManifest}
-            onDismiss={() => dismissManifestModal(projectId)}
+            projectId={displaySkillManifestOnProjectId}
+            onDismiss={() => dismissManifestModal(displaySkillManifestOnProjectId)}
           />
         )}
         {brokenSkillInfo && (
