@@ -7,7 +7,12 @@ context('Notification Page', () => {
   });
 
   it('can show lg syntax error ', () => {
+    cy.visitPage('Design');
     cy.visitPage('Bot Responses');
+
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findAllByText('__TestToDoBotWithLuisSample').last().click();
+    });
 
     cy.findByTestId('showcode').click();
     cy.get('textarea').type('#', { delay: 200 });
@@ -15,13 +20,14 @@ context('Notification Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
 
     cy.findByTestId('diagnostics-table-view').within(() => {
-      cy.findAllByText('common.en-us.lg').should('exist').first().click();
+      cy.findAllByText('__TestToDoBotWithLuisSample.en-us.lg').should('exist').first().click();
     });
 
     cy.findAllByText('Bot Responses').should('exist');
   });
 
   it('can show lu syntax error ', () => {
+    cy.visitPage('Design');
     cy.visitPage('User Input');
 
     cy.findByTestId('ProjectTree').within(() => {
@@ -29,7 +35,7 @@ context('Notification Page', () => {
     });
 
     cy.findByTestId('showcode').click();
-    cy.get('textarea').type('t', { delay: 200 });
+    cy.get('textarea').type('t*', { delay: 200 });
 
     cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
 
