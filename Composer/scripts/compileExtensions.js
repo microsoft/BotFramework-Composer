@@ -118,11 +118,7 @@ for (const entry of allExtensions) {
 
     const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
     const lastModified = getLastModified(extPath);
-<<<<<<< HEAD
-    if (FORCE || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
-=======
     if (FORCE_BUILD || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
->>>>>>> origin/main
       try {
         compile(entry.name, extPath);
         writeToCache(entry.name, lastModified);
