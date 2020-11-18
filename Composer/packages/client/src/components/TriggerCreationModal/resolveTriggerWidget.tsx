@@ -10,7 +10,7 @@ import { UserSettings, DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
-import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
+import { isRegExRecognizerType, isLUISnQnARecognizerType, isPVARecognizerType } from '../../utils/dialogValidator';
 
 import { intentStyles } from './styles';
 import { validateEventName, validateIntentName, getLuDiagnostics, validateRegExPattern } from './validators';
@@ -25,8 +25,8 @@ export function resolveTriggerWidget(
   dialogId: string
 ) {
   const isRegEx = isRegExRecognizerType(dialogFile);
-  const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
-  const showTriggerPhrase = selectedType === SDKKinds.OnIntent && isLUISnQnA;
+  const isLUISnQnA = isLUISnQnARecognizerType(dialogFile) || isPVARecognizerType(dialogFile);
+  const showTriggerPhrase = selectedType === SDKKinds.OnIntent && !isRegEx;
 
   const onNameChange = (e, name) => {
     const errors: TriggerFormDataErrors = {};

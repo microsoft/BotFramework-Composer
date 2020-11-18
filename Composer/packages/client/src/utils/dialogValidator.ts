@@ -24,6 +24,11 @@ export const isRegExRecognizerType = (dialog: DialogInfo | undefined) => {
   return get(dialog, 'content.recognizer.$kind', '') === SDKKinds.RegexRecognizer;
 };
 
+export const isPVARecognizerType = (dialog: DialogInfo | undefined) => {
+  if (!dialog) return false;
+  return get(dialog, 'content.recognizer.$kind', '') === 'Microsoft.VirtualAgents.Recognizer';
+};
+
 export const isLUISnQnARecognizerType = (dialog: DialogInfo | undefined) => {
   if (!dialog) return false;
   const recognizer = get(dialog, 'content.recognizer', '');
