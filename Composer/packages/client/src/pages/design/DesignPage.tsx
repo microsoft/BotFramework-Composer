@@ -884,13 +884,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {dialogId && (
-          <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+          <CreateQnAModal
+            dialogId={dialogId}
+            projectId={skillId ?? projectId}
+            qnaFiles={qnaFiles}
+            onSubmit={handleCreateQnA}
+          />
         )}
         {displaySkillManifest && (
           <DisplayManifestModal
-            projectId={projectId}
+            projectId={skillId ?? projectId}
             skillNameIdentifier={displaySkillManifest}
-            onDismiss={() => dismissManifestModal(projectId)}
+            onDismiss={() => dismissManifestModal(skillId ?? projectId)}
           />
         )}
         {brokenSkillInfo && (
