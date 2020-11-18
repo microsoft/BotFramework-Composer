@@ -10,7 +10,7 @@ import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/ex
 
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
-import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
+import { ContentHeaderStyle, HeaderText } from './styles';
 import { ImportDialog } from './importDialog';
 import { LibraryRef, LibraryList } from './libraryList';
 import { WorkingModal } from './workingModal';
@@ -20,34 +20,7 @@ const RECENTLY_USED_KEY = 'recentlyUsedItems';
 
 const docsUrl = `https://aka.ms/composer-use-package-library`;
 
-const strings = {
-  title: formatMessage('Package Manager'),
-  description: formatMessage('Discover and use components that can be installed into your bot.'),
-  descriptionLink: formatMessage('Learn more'),
-  installButton: formatMessage('Install Package'),
-  importDialogTitle: formatMessage('Install a Package'),
-  installProgress: formatMessage('Installing package...'),
-  recentlyUsedCategory: formatMessage('Recently Used'),
-  installedCategory: formatMessage('Installed'),
-  updateConfirmationPrompt: formatMessage('Any changes you made to this package will be lost! Are you sure you want to continue?'),
-  updateConfirmationTitle: formatMessage('Update Package'),
-  conflictConfirmationTitle: formatMessage('Conflicting changes detected'),
-  conflictConfirmationPrompt: formatMessage(
-    'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
-  ),
-  removeConfirmationTitle: formatMessage('Remove Package'),
-  removeConfirmationPrompt: formatMessage(
-      'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
-  ),
-  requireEject: formatMessage('To install components, this project must have an ejected runtime. Please navigate to the runtime settings page.'),
-  ejectRuntime: formatMessage('Eject Runtime'),
-  noComponentsInstalled: formatMessage('No packages installed'),
-  noComponentsFound: formatMessage('No packages found. Check extension configuration.'),
-  browseHeader: formatMessage('Browse'),
-  installHeader: formatMessage('Installed'),
-  libraryError: formatMessage('Package Manager Error'),
-  importError: formatMessage('Install Error'),
-}
+
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
@@ -56,9 +29,9 @@ const Library: React.FC = () => {
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
-  const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
-  const [installedComponents, updateInstalledComponents] = useState<any[]>([]);
-  const [recentlyUsed, setRecentlyUsed] = useState<any[]>([]);
+  const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[]>([]);
+  const [installedComponents, updateInstalledComponents] = useState<LibraryRef[]>([]);
+  const [recentlyUsed, setRecentlyUsed] = useState<LibraryRef[]>([]);
   const [programmingLanguageSelection, setProgrammingLanguageSelection] = useState<string>('c#');
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
 
@@ -67,6 +40,35 @@ const Library: React.FC = () => {
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const httpClient = useHttpClient();
   const API_ROOT = '';
+
+  const strings = {
+    title: formatMessage('Package Manager'),
+    description: formatMessage('Discover and use components that can be installed into your bot.'),
+    descriptionLink: formatMessage('Learn more'),
+    installButton: formatMessage('Install Package'),
+    importDialogTitle: formatMessage('Install a Package'),
+    installProgress: formatMessage('Installing package...'),
+    recentlyUsedCategory: formatMessage('Recently Used'),
+    installedCategory: formatMessage('Installed'),
+    updateConfirmationPrompt: formatMessage('Any changes you made to this package will be lost! Are you sure you want to continue?'),
+    updateConfirmationTitle: formatMessage('Update Package'),
+    conflictConfirmationTitle: formatMessage('Conflicting changes detected'),
+    conflictConfirmationPrompt: formatMessage(
+      'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
+    ),
+    removeConfirmationTitle: formatMessage('Remove Package'),
+    removeConfirmationPrompt: formatMessage(
+        'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
+    ),
+    requireEject: formatMessage('To install components, this project must have an ejected runtime. Please navigate to the runtime settings page.'),
+    ejectRuntime: formatMessage('Eject Runtime'),
+    noComponentsInstalled: formatMessage('No packages installed'),
+    noComponentsFound: formatMessage('No packages found. Check extension configuration.'),
+    browseHeader: formatMessage('Browse'),
+    installHeader: formatMessage('Installed'),
+    libraryError: formatMessage('Package Manager Error'),
+    importError: formatMessage('Install Error'),
+  }
 
   const programmingLanguages = [
     {
@@ -84,7 +86,7 @@ const Library: React.FC = () => {
     return true;
   }
 
-  const installComponentAPI = async (projectId: string, packageName: string, version: string, isUpdating: boolean) => {
+  const installComponentAPI = (projectId: string, packageName: string, version: string, isUpdating: boolean) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/import`, {
       package: packageName,
       version: version,
@@ -92,15 +94,15 @@ const Library: React.FC = () => {
     });
   };
 
-  const getLibraryAPI = async () => {
+  const getLibraryAPI = () => {
     return httpClient.get(`${API_ROOT}/library`);
   };
 
-  const getInstalledComponentsAPI = async (projectId: string) => {
+  const getInstalledComponentsAPI = (projectId: string) => {
     return httpClient.get(`${API_ROOT}/projects/${projectId}/installedComponents`);
   };
 
-  const uninstallComponentAPI = async (projectId: string, packageName: string) => {
+  const uninstallComponentAPI = (projectId: string, packageName: string) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/unimport`, {
       package: packageName,
     });
@@ -256,7 +258,7 @@ const Library: React.FC = () => {
         const title = strings.conflictConfirmationTitle;
         const msg = strings.conflictConfirmationPrompt;
         if (await confirm(title, msg)) {
-          await await installComponentAPI(projectId, packageName, version, true);
+          await installComponentAPI(projectId, packageName, version, true);
         }
       } else {
         updateInstalledComponents(results.data.components);

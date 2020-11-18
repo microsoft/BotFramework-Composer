@@ -27,15 +27,17 @@ import { listRoot, tableView, detailList } from "./styles";
 export interface LibraryRef {
   name: string;
   version: string;
-  authors: string[];
-  releaseNotes: string;
-  keywords: string[];
-  license: string;
-  repository: string;
-  copyright: string;
-  icon: string;
+  authors?: string[];
+  releaseNotes?: string;
+  keywords?: string[];
+  license?: string;
+  repository?: string;
+  copyright?: string;
+  icon?: string;
   description: string;
-  type: string;
+  type?: string;
+  category?: string;
+  source?: string;
 }
 
 
