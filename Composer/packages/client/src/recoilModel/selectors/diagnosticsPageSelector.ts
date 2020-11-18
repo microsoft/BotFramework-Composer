@@ -17,8 +17,6 @@ import {
   DiagnosticInfo,
   QnADiagnostic,
   BotDiagnostic,
-  SettingDiagnostic,
-  SkillDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
