@@ -295,12 +295,12 @@ const onRenderItem = (textWidth: number, isMenuOpen: boolean) => (item: IOverflo
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
         {!isEmpty(warnings) && (
-          <TooltipHost closeDelay={500} content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+          <TooltipHost closeDelay={1000} content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'WarningSolid'} style={warningIcon} />
           </TooltipHost>
         )}
         {!isEmpty(errors) && (
-          <TooltipHost closeDelay={500} content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+          <TooltipHost closeDelay={1000} content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'StatusErrorFull'} style={errorIcon} />
           </TooltipHost>
         )}
