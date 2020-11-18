@@ -7,17 +7,24 @@ import { Suspense, Fragment } from 'react';
 import React from 'react';
 
 import { isElectron } from './../../utils/electronUtil';
-import { onboardingState } from './../../recoilModel';
+import { ServerSettingsState, onboardingState } from './../../recoilModel';
 
 const Onboarding = React.lazy(() => import('./../../Onboarding/Onboarding'));
 const AppUpdater = React.lazy(() => import('./../AppUpdater').then((module) => ({ default: module.AppUpdater })));
+const DataCollectionDialog = React.lazy(() => import('./../DataCollectionDialog'));
 
 export const Assistant = () => {
+  const { telemetry } = useRecoilValue(ServerSettingsState);
   const onboarding = useRecoilValue(onboardingState);
   const renderAppUpdater = isElectron();
+
+  const renderDataCollectionDialog = telemetry?.allowDataCollection === null;
+  const renderOnboarding = !renderDataCollectionDialog && !onboarding.complete;
+
   return (
     <Fragment>
-      <Suspense fallback={<div />}>{!onboarding.complete && <Onboarding />}</Suspense>
+      <Suspense fallback={<div />}>{renderDataCollectionDialog && <DataCollectionDialog />}</Suspense>
+      <Suspense fallback={<div />}>{renderOnboarding && <Onboarding />}</Suspense>
       <Suspense fallback={<div />}>{renderAppUpdater && <AppUpdater />}</Suspense>
     </Fragment>
   );
