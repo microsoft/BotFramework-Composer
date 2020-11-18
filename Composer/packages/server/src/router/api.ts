@@ -17,6 +17,7 @@ import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
 import { ImportController } from '../controllers/import';
 import { StatusController } from '../controllers/status';
+import { SettingsController } from '../controllers/settings';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -106,6 +107,10 @@ router.post('/import/:source/authenticate', ImportController.authenticate);
 
 // Process status
 router.get('/status/:jobId', StatusController.getStatus);
+
+// User Server Settings
+router.get('/settings', SettingsController.getUserSettings);
+router.post('/settings', SettingsController.updateUserSettings);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
