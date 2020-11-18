@@ -45,7 +45,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [showNotifications, setShowNotifications] = useState<{ [key: string]: boolean }>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
-  const botSettingsList: { [key: string]: any }[] = [];
+  const botsettingList: { [key: string]: any }[] = [];
   const statusList: IBotStatus[] = [];
   const botPublishTypesList: { [key: string]: any }[] = [];
   const publishHistoyList: { [key: string]: any }[] = [];
@@ -55,9 +55,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     .filter((bot) => bot.isRemote === false)
     .forEach((bot) => {
       const botProjectId = bot.projectId;
-      botSettingsList.push({
+      botsettingList.push({
         projectId: botProjectId,
-        settings: bot.settings,
+        setting: bot.setting,
       });
       botPublishTypesList.push({
         projectId: botProjectId,
@@ -68,7 +68,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         projectId: botProjectId,
         publishHistory,
       });
-      const publishTargets = bot.settings ? bot.settings.publishTargets || [] : [];
+      const publishTargets = bot.setting ? bot.setting.publishTargets || [] : [];
       publishTargetsList.push({
         projectId: botProjectId,
         publishTargets,
@@ -290,16 +290,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         if (bot.publishTarget && bot.publishTargets) {
           const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
           const botProjectId = bot.id;
-          const settings = botSettingsList.find((botSettings) => botSettings.projectId === bot.id)?.settings || {};
-          if (settings.publishTargets) {
-            if (settings.qna && Object(settings.qna).subscriptionKey) {
-              await setQnASettings(botProjectId, Object(settings.qna).subscriptionKey);
+          const setting = botsettingList.find((botsetting) => botsetting.projectId === bot.id)?.setting || {};
+          if (setting.publishTargets) {
+            if (setting.qna && Object(setting.qna).subscriptionKey) {
+              await setQnASettings(botProjectId, Object(setting.qna).subscriptionKey);
             }
             const sensitiveSettings = getSensitiveProperties(projectId, botProjectId);
             await publishToTarget(projectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
 
             // update the target with a lastPublished date
-            const updatedPublishTargets = settings.publishTargets.map((profile) => {
+            const updatedPublishTargets = setting.publishTargets.map((profile) => {
               if (profile.name === selectedTarget) {
                 return {
                   ...profile,

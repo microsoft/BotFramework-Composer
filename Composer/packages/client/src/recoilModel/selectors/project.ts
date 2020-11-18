@@ -78,7 +78,6 @@ export const botProjectSpaceSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      const settings = get(settingsState(projectId));
       const dialogs = get(dialogsSelectorFamily(projectId));
       const luFiles = get(luFilesState(projectId));
       const lgFiles = get(lgFilesState(projectId));
@@ -99,10 +98,10 @@ export const botProjectSpaceSelector = selector({
       return {
         dialogs,
         formDialogSchemas,
-        settings,
         projectId,
         name,
         ...metaData,
+        setting,
         error: botError,
         botNameId,
         publishHistory,
