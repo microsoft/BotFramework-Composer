@@ -77,7 +77,7 @@ export const topLinks = (
           {
             to: `/bot/${projectId}/forms`,
             iconName: 'Table',
-            labelName: formatMessage('Forms'),
+            labelName: formatMessage('Forms (preview)'),
             exact: false,
             disabled: !botLoaded,
           },
