@@ -2,7 +2,10 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react",
-    "sourceMap": true
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "sourceMap": true,
+    "strict": true
   },
   "include": [
     "src/**/*",
