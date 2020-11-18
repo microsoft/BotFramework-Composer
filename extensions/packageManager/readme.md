@@ -61,7 +61,12 @@ The steps are:
 
 **For JS bots:**
 
-TK TK TK
+In the `src/composerBot.ts` file, 2 lines need to be added to include the new component in the code.
+
+The steps are:
+
+1. Add `import { MyNewCustomActionComponentRegistration } from 'MyNewCustomAction';`
+2. Add `ComponentRegistration.add(new MyNewCustomActionComponentRegistration());` after the other calls to `ComponentRegistration`
 
 # How to install packages
 
