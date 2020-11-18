@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 
-import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
+import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 
 import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { AppIdAndPassword } from './AppIdAndPassword';
@@ -30,8 +30,8 @@ const container = css`
 
 export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
-  const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
-  const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
+  const botProjects = useRecoilValue(localBotsDataSelector);
+  const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
 
   return (
