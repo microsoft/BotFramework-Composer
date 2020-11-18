@@ -61,8 +61,16 @@ export function useForm<D extends object>(fields: FieldConfig<D>, opts: FormOpti
 
   const updateForm = useCallback((newData: D) => {
     setFormData(newData);
-    setFormErrors(mapValues(newData, () => undefined));
+    Object.entries(newData).forEach(([key, value]) => {
+      validateField(key as keyof D, fields[key], value);
+    });
   }, []);
+
+  const validateForm = useCallback(() => {
+    Object.entries(formData).forEach(([key, value]) => {
+      validateField(key as keyof D, fields[key], value);
+    });
+  }, [fields, formData]);
 
   useEffect(() => {
     if (opts.validateOnMount) {
@@ -72,5 +80,5 @@ export function useForm<D extends object>(fields: FieldConfig<D>, opts: FormOpti
     }
   }, []);
 
-  return { formData, formErrors, updateField, updateForm, hasErrors: hasErrors(formErrors) };
+  return { formData, formErrors, updateField, updateForm, validateForm, hasErrors: hasErrors(formErrors) };
 }

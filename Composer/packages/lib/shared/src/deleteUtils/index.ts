@@ -48,10 +48,10 @@ const collectLuIntents = (action: any, outputTemplates: string[]) => {
   }
 };
 
-export const deleteAdaptiveAction = (
+export const deleteAdaptiveAction = async (
   data: MicrosoftIDialog,
-  deleteLgTemplates: (lgTemplates: string[]) => any,
-  deleteLuIntents: (luIntents: string[]) => any
+  deleteLgTemplates: (lgTemplates: string[]) => Promise<void>,
+  deleteLuIntents: (luIntents: string[]) => Promise<void>
 ) => {
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];
@@ -59,14 +59,14 @@ export const deleteAdaptiveAction = (
   walkAdaptiveAction(data, (action) => collectLgTemplates(action, lgTemplates));
   walkAdaptiveAction(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
-  deleteLuIntents(luIntents);
+  await deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
+  await deleteLuIntents(luIntents);
 };
 
-export const deleteAdaptiveActionList = (
+export const deleteAdaptiveActionList = async (
   data: MicrosoftIDialog[],
-  deleteLgTemplates: (lgTemplates: string[]) => any,
-  deleteLuIntents: (luIntents: string[]) => any
+  deleteLgTemplates: (lgTemplates: string[]) => Promise<void>,
+  deleteLuIntents: (luIntents: string[]) => Promise<void>
 ) => {
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];
@@ -74,6 +74,6 @@ export const deleteAdaptiveActionList = (
   walkAdaptiveActionList(data, (action) => collectLgTemplates(action, lgTemplates));
   walkAdaptiveActionList(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
-  deleteLuIntents(luIntents);
+  await deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
+  await deleteLuIntents(luIntents);
 };

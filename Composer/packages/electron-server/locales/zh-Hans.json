@@ -3,7 +3,7 @@
     "message": "关于"
   },
   "actual_zoom_211ec99": {
-    "message": "Actual Zoom"
+    "message": "实际缩放"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "全部置于顶层"
@@ -18,7 +18,7 @@
     "message": "关闭窗口"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer on GitHub"
+    "message": "GitHub 上的 Composer"
   },
   "copy_9748f9f": {
     "message": "复制"
@@ -45,7 +45,7 @@
     "message": "帮助"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Hide Bot Framework Composer"
+    "message": "隐藏 Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "隐藏其他"
@@ -54,7 +54,7 @@
     "message": "正在初始化..."
   },
   "learn_more_about_bot_framework_2daca065": {
-    "message": "Learn More About Bot Framework"
+    "message": "详细了解 Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "最小化"
@@ -66,7 +66,7 @@
     "message": "隐私声明"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Quit Bot Framework Composer"
+    "message": "退出 Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "重做"
