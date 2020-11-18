@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getDefaultFeatureFlags } from '@bfc/shared';
+import { getDefaultFeatureFlags, ServerSettings } from '@bfc/shared';
 
 import settings from '../settings';
 import { LocationRef } from '../models/bot/interface';
@@ -23,4 +23,9 @@ export default {
   recentBotProjects: [] as LocationRef[],
   projectLocationMap: {} as Record<string, BotProjectMetadata>,
   featureFlags: getDefaultFeatureFlags(),
+  settings: {
+    telemetry: {
+      allowDataCollection: null,
+    },
+  } as ServerSettings,
 };
