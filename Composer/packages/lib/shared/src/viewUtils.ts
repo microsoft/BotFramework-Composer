@@ -191,7 +191,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.GetTeamChannels,
       SDKKinds.GetTeamDetails,
       SDKKinds.GetTeamMember,
-    ]
+    ],
   },
   [DialogGroup.TEAMS_RESPONSE_TYPES]: {
     label: formatMessage('Teams Responses'),
