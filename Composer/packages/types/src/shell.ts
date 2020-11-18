@@ -46,6 +46,7 @@ export type ApplicationContextApi = {
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   announce: (message: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
+  featureFlags: (key: any) => boolean;
 };
 
 export type ApplicationContext = {

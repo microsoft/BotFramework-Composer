@@ -79,7 +79,7 @@ export type RecognizerSchema = {
   /** If is default, will be used as dropdown's default selection */
   default?: boolean;
   /** If disabled, cannot be selected from dropdown */
-  disabled?: boolean;
+  disabled?: boolean | ((shellApi: ShellApi) => boolean);
   /** Display name used in the UI. Recommended to use function over static string to enable multi-locale feature. */
   displayName: UIOptionValue<string>;
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */

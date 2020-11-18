@@ -14,7 +14,7 @@ export type FeatureFlag = {
   enabled: boolean;
 };
 
-export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE';
+export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE' | 'ORCHESTRATOR';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
@@ -37,6 +37,14 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
       'If turned on then externally stored templates will be selectable in the new bot flow template list'
     ),
     isHidden: true,
+    enabled: false,
+  },
+  ORCHESTRATOR: {
+    displayName: formatMessage('Orchestrator'),
+    description: formatMessage(
+      'Use as intent-only recognizer, typically for routing to skills or subsequent LUIS or QnAMaker processing or when entity extraction is not needed.'
+    ),
+    isHidden: false,
     enabled: false,
   },
 });

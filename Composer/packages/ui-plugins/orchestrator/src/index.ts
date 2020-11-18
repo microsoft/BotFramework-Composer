@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig } from '@bfc/extension-client';
+import { PluginConfig, ShellApi } from '@bfc/extension-client';
 import { SDKKinds, DialogInfo } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -9,6 +9,7 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.OrchestratorRecognizer]: {
       recognizer: {
+        disabled: (shellAPI: ShellApi) => shellAPI.featureFlags('ORCHESTRATOR'),
         displayName: () => formatMessage('Orchestrator Recognizer'),
         isSelected: (_, dialog: DialogInfo) => {
           return dialog.luProvider === SDKKinds.OrchestratorRecognizer;
