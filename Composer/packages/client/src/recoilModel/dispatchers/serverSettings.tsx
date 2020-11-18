@@ -30,8 +30,6 @@ export const serverSettingsDispatcher = () => {
         const currentSettings = await snapshot.getPromise(ServerSettingsState);
         const settings = merge({}, currentSettings, partialSettings);
 
-        console.log('bfc', { partialSettings, currentSettings, settings });
-
         await httpClient.post('/settings', { settings });
         set(ServerSettingsState, settings);
       } catch (error) {
