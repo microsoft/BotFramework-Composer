@@ -41,7 +41,11 @@ describe('server setting dispatcher', () => {
 
   it('should set allowDataCollection to false', async () => {
     await act(async () => {
-      await dispatcher.setAllowDataCollection(false);
+      await dispatcher.updateServerSettings({
+        telemetry: {
+          allowDataCollection: false,
+        },
+      });
     });
 
     expect(renderedComponent.current.serverSettings.telemetry.allowDataCollection).toBe(false);
@@ -61,7 +65,11 @@ describe('server setting dispatcher', () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
     await act(async () => {
-      await dispatcher.setAllowDataCollection(true);
+      await dispatcher.updateServerSettings({
+        telemetry: {
+          allowDataCollection: true,
+        },
+      });
     });
 
     expect(renderedComponent.current.serverSettings.telemetry.allowDataCollection).toBe(true);

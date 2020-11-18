@@ -11,14 +11,14 @@ import { useRecoilValue } from 'recoil';
 import { dispatcherState } from '../recoilModel';
 
 const DataCollectionDialog: React.FC = () => {
-  const { setAllowDataCollection } = useRecoilValue(dispatcherState);
+  const { updateServerSettings } = useRecoilValue(dispatcherState);
 
-  const handleDismiss = () => {
-    setAllowDataCollection(false);
-  };
-
-  const handleAgree = () => {
-    setAllowDataCollection(true);
+  const handleDataCollectionChange = (allowDataCollection: boolean) => () => {
+    updateServerSettings({
+      telemetry: {
+        allowDataCollection,
+      },
+    });
   };
 
   return (
@@ -28,7 +28,7 @@ const DataCollectionDialog: React.FC = () => {
         isBlocking: true,
       }}
       title={formatMessage('Help us improve?')}
-      onDismiss={handleDismiss}
+      onDismiss={handleDataCollectionChange(false)}
     >
       <p>
         {formatMessage(
@@ -46,8 +46,8 @@ const DataCollectionDialog: React.FC = () => {
         </Link>
       </p>
       <DialogFooter>
-        <DefaultButton text={formatMessage('Not now')} onClick={handleDismiss} />
-        <PrimaryButton text={formatMessage('Yes, collect data')} onClick={handleAgree} />
+        <DefaultButton text={formatMessage('Not now')} onClick={handleDataCollectionChange(false)} />
+        <PrimaryButton text={formatMessage('Yes, collect data')} onClick={handleDataCollectionChange(true)} />
       </DialogFooter>
     </Dialog>
   );

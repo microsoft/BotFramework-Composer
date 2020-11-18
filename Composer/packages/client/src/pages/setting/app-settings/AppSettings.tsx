@@ -28,7 +28,7 @@ const ElectronSettings = lazy(() =>
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
-  const { onboardingSetComplete, updateUserSettings, setAllowDataCollection } = useRecoilValue(dispatcherState);
+  const { onboardingSetComplete, updateUserSettings, updateServerSettings } = useRecoilValue(dispatcherState);
   const { telemetry } = useRecoilValue(ServerSettingsState);
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
@@ -49,8 +49,12 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     updateUserSettings({ appLocale });
   };
 
-  const handleDataCollectionChange = () => {
-    setAllowDataCollection(!telemetry?.allowDataCollection);
+  const handleDataCollectionChange = (allowDataCollection) => {
+    updateServerSettings({
+      telemetry: {
+        allowDataCollection,
+      },
+    });
   };
 
   const renderElectronSettings = isElectron();

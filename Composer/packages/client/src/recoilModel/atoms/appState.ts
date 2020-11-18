@@ -240,5 +240,9 @@ export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any
 
 export const ServerSettingsState = atom<ServerSettings>({
   key: getFullyQualifiedKey('serverSettings'),
-  default: {},
+  default: {
+    telemetry: {
+      allowDataCollection: false,
+    },
+  },
 });
