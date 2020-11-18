@@ -14,4 +14,5 @@ export * from './sdk';
 export * from './server';
 export * from './settings';
 export * from './shell';
+export * from './telemetry';
 export * from './user';
