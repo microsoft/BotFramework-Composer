@@ -94,16 +94,16 @@ export const PVADialog: FC = () => {
     }
   }, [tenantId, token, pvaHeaders]);
 
-  const onSelectEnv = useCallback((event, item: IDropdownOption | undefined) => {
+  const onSelectEnv = useCallback((event, item?: IDropdownOption) => {
     if (item) {
-      setEnv(item.key + '');
+      setEnv(`${item.key}`);
     }
   }, []);
 
   const onSelectBot = useCallback(
-    (event, item: IDropdownOption | undefined) => {
+    (event, item?: IDropdownOption) => {
       if (item) {
-        const botId = item.key + '';
+        const botId = `${item.key}`;
         const bot = bots.find((bot) => bot.id === botId);
         setBot(bot);
       }
