@@ -6,9 +6,11 @@ Param(
 	[string] $luisAuthoringRegion,
 	[string] $luisEndpointKey,
 	[string] $qnaSubscriptionKey,
+	[string] $qnaEndpoint,
 	[string] $language,
 	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
+	[string] $publishProfilePath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt"),
 	[string] $runtimeIdentifier = 'win-x64',
 	[string] $luisResource
@@ -25,6 +27,31 @@ if ((dotnet --version) -lt 3) {
 	Write-Host "! dotnet core 3.0 is required, please refer following documents for help."
 	Write-Host "https://dotnet.microsoft.com/download/dotnet-core/3.0"
 	Break
+}
+
+# read settings from publishing profile
+if ($publishProfilePath) {
+	Write-Host "Reading publishing profile from : $publishProfilePath ..."
+	$publishProfile = Get-Content $publishProfilePath | ConvertFrom-Json
+
+	Write-Host ($publishProfile | Format-List | Out-String)
+	$name = $publishProfile.name
+	$environment = $publishProfile.environment
+	$hostName = $publishProfile.hostname
+	$luisResource = $publishProfile.luisResource
+
+	#luis configuration
+	$luisConfig = $publishProfile.settings.luis
+	$luisAuthoringKey = $luisConfig.authoringKey
+	$luisEndpointKey = $luisConfig.endpointKey
+	$luisAuthoringRegion = $luisConfig.region
+
+	#qna configuration
+	$qnaConfig = $publishProfile.settings.qna
+	$qnaEndpoint = $qnaConfig.endpoint
+	$qnaSubscriptionKey = $qnaConfig.subscriptionKey
+
+	$runtimeIdentifier = $publishProfile.runtimeIdentifier
 }
 
 # Get mandatory parameters
@@ -170,6 +197,11 @@ if ($luisAuthoringKey) {
 
 	$luisConfig["endpoint"] = $luisEndpoint
 	$luisConfig["authoringKey"] = $luisAuthoringKey
+	$luisConfig["authoringEndpoint"] = $luisEndpointKey
+	$luisConfig["authoringRegion"] = $luisAuthoringRegion
+	$luisConfig["defaultLanguage"] = $language
+	$luisConfig["environment"] = $environment
+	$luisConfig["region"] = $luisAuthoringRegion
 	$luisConfig["endpointKey"] = $luisEndpointKey
 
 	foreach ($key in $luisAppIds.Keys) { $luisConfig[$key] = $luisAppIds[$key] }
@@ -241,10 +273,16 @@ if ($qnaSubscriptionKey) {
 		Write-Host "qna build failed, please verify your qna models."
 		Break
 	}
+
+	$qnaConfig = @{ }
+
+	$qnaConfig["endpoint"] = $qnaEndpoint
+	$qnaConfig["subscriptionKey"] = $qnaSubscriptionKey
+	$settings | Add-Member -Type NoteProperty -Force -Name 'qna' -Value $qnaConfig
 }
 
 
-# add feature config to the settings
+# write settings file to settings path
 $settings | ConvertTo-Json -depth 100 | Out-File $settingsPath
 
 $resourceGroup = "$name-$environment"
