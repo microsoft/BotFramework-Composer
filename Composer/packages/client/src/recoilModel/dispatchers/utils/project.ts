@@ -584,7 +584,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
     const skills: { [skillId: string]: BotProjectSpaceSkill } = currentBotProjectFile.skills;
 
     const totalProjectsCount = Object.keys(skills).length + 1;
-    if (totalProjectsCount > 0) {
+    if (totalProjectsCount > 1) {
       for (const nameIdentifier in skills) {
         const skill = skills[nameIdentifier];
         let skillPromise;
@@ -615,6 +615,9 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
             });
         }
       }
+    } else {
+      //only contains rootBot
+      set(botProjectSpaceLoadedState, true);
     }
   } else {
     // Should never hit here as all projects should have a botproject file
