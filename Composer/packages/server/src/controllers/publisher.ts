@@ -5,7 +5,7 @@ import { join } from 'path';
 
 import merge from 'lodash/merge';
 import { ExtensionContext } from '@bfc/extension';
-import { defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig, PublishResult } from '@bfc/shared';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
@@ -86,22 +86,22 @@ export const PublishController = {
         );
 
         // copy status into payload for ease of access in client
-        // const response = {
-        //   ...results.result,
-        //   status: results.status,
-        // };
+        const response = {
+          ...results.result,
+          status: results.status,
+        };
 
         // set status and return value as json
-        res.status(results.status).json(results);
+        res.status(results.status).json(response);
       } catch (err) {
         res.status(400).json({
-          statusCode: '400',
+          status: '400',
           message: err.message,
         });
       }
     } else {
       res.status(400).json({
-        statusCode: '400',
+        status: '400',
         message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
       });
     }
@@ -144,7 +144,7 @@ export const PublishController = {
           BotProjectService.setProjectLocationData(projectId, { eTag: results.result.eTag });
         }
         // copy status into payload for ease of access in client
-        const response = {
+        const response: PublishResult = {
           ...results.result,
           status: results.status,
         };
@@ -155,7 +155,7 @@ export const PublishController = {
     }
 
     res.status(400).json({
-      statusCode: '400',
+      status: '400',
       message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
     });
   },

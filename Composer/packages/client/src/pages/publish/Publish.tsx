@@ -527,12 +527,7 @@ const LogDialog: React.FC<{ version: PublishResult | null; onDismiss: () => void
       modalProps={{ isBlocking: true }}
       onDismiss={props.onDismiss}
     >
-      <TextField
-        multiline
-        placeholder="Log Output"
-        style={{ minHeight: 300 }}
-        value={props.version?.log?.join('\n\n') ?? ''}
-      />
+      <TextField multiline placeholder="Log Output" style={{ minHeight: 300 }} value={props.version?.log || ''} />
     </Dialog>
   );
 };

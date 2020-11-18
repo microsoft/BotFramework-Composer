@@ -26,7 +26,9 @@ interface RunningBot {
   process?: ChildProcess;
   port?: number;
   status: number;
-  message: string;
+  result: {
+    message: string;
+  };
 }
 interface PublishConfig {
   botId: string;
@@ -95,13 +97,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       this.stopBot(botId);
       this.setBotStatus(botId, {
         status: 500,
-        message: error.message,
+        result: {
+          message: error.message,
+        },
       });
     }
   };
 
   // config include botId and version, project is content(ComposerDialogs)
-  publish = async (config: PublishConfig, project, metadata, user) => {
+  publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
     const { fullSettings } = config;
     const botId = project.id;
     const version = 'default';
@@ -111,7 +115,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     // set the running bot status
     this.setBotStatus(botId, {
       status: 202,
-      message: 'Reloading...',
+      result: { message: 'Reloading...' },
     });
 
     try {
@@ -120,18 +124,21 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       this.publishAsync(botId, version, fullSettings, project, user);
       return {
         status: 202,
-        id: uuid(),
-        message: 'Local publish success.',
+        result: {
+          id: uuid(),
+          message: 'Local publish success.',
+        },
       };
     } catch (error) {
       return {
         status: 500,
-        message: error,
+        result: {
+          message: error,
+        },
       };
     }
   };
-
-  async getStatus(config: PublishConfig, project, user) {
+  getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
     if (LocalPublisher.runningBots[botId]) {
       if (LocalPublisher.runningBots[botId].status === 200) {
@@ -139,26 +146,31 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         const url = `http://localhost:${port}`;
         return {
           status: 200,
-          message: 'Running',
-          endpointURL: url,
+          result: {
+            message: 'Running',
+            endpointURL: url,
+          },
         };
       } else {
-        const status = {
-          ...LocalPublisher.runningBots[botId],
+        const publishResult = {
+          status: LocalPublisher.runningBots[botId].status,
+          result: LocalPublisher.runningBots[botId].result,
         };
         if (LocalPublisher.runningBots[botId].status === 500) {
           // after we return the 500 status once, delete it out of the running bots list.
           delete LocalPublisher.runningBots[botId];
         }
-        return status;
+        return publishResult;
       }
     } else {
       return {
         status: 200,
-        message: 'Ready',
+        result: {
+          message: 'Ready',
+        },
       };
     }
-  }
+  };
 
   removeRuntimeData = async (botId: string) => {
     const targetDir = path.resolve(__dirname, `../hostedBots/${botId}`);
@@ -296,7 +308,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       this.stopBot(botId);
       this.setBotStatus(botId, {
         status: 500,
-        message: error,
+        result: {
+          message: error,
+        },
       });
     }
   };
@@ -336,7 +350,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         process: spawnProcess,
         port: port,
         status: 200,
-        message: 'Runtime started',
+        result: { message: 'Runtime started' },
       });
       const processLog = this.composer.log.extend(spawnProcess.pid);
       this.addListeners(spawnProcess, botId, processLog);
@@ -394,7 +408,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         logger('error on exit: %s, exit code %d', erroutput, code);
         this.setBotStatus(botId, {
           status: 500,
-          message: erroutput,
+          result: { message: erroutput },
         });
       }
     });
@@ -403,7 +417,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       logger('error: %s', err.message);
       this.setBotStatus(botId, {
         status: 500,
-        message: err.message,
+        result: { message: err.message },
       });
     });
 

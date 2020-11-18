@@ -425,7 +425,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
           {currentUser? <Persona size={PersonaSize.size32} text={currentUser.name} />: null}
           <div>
-            <DefaultButton text={'Back'} onClick={onBack} />
+            <DefaultButton text={'Back'} onClick={onBack} style={{margin: '0 4px'}} />
             {choice.key === 'create' ? (
               <PrimaryButton
                 disabled={isDisAble}
@@ -433,9 +433,10 @@ export const AzureProvisionDialog: React.FC = () => {
                 onClick={() => {
                   onNext(currentHostName);
                 }}
+                style={{margin: '0 4px'}}
               />
             ) : (
-              <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
+              <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} style={{margin: '0 4px'}} />
             )}
           </div>
         </div>
@@ -451,6 +452,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 setPage(PageTypes.ConfigProvision);
                 setTitle(DialogTitle.CONFIG_RESOURCES);
               }}
+              style={{margin: '0 4px'}}
             />
             <PrimaryButton
               disabled={isDisAble}
@@ -466,6 +468,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   externalResources: selectedResources,
                 });
               }}
+              style={{margin: '0 4px'}}
             />
           </div>
         </div>

@@ -12,7 +12,7 @@ export type PublishResult = {
   message: string;
   comment?: string;
   eTag?: string;
-  log?: string[];
+  log?: string;
   id?: string;
   time?: Date;
   endpointURL?: string;

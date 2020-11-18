@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig, PublishResult } from '@bfc/shared';
 
 import { getAccessTokenInCache } from '../../utils/auth';
 import {
@@ -42,7 +42,7 @@ export const publisherDispatcher = () => {
     });
   };
 
-  const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data, target) => {
+  const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data: PublishResult, target) => {
     const { endpointURL, status } = data;
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
@@ -68,7 +68,7 @@ export const publisherDispatcher = () => {
     });
   };
 
-  const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {
+  const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: PublishResult) => {
     if (data == null) return;
     const { endpointURL, status, id } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
