@@ -20,7 +20,7 @@ export type PublishResult = {
   action?: {
     href: string;
     label: string;
-  };
+  } | null;
 };
 
 export type PublishResponse = {

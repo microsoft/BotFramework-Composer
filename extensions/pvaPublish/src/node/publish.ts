@@ -1,4 +1,4 @@
-import { IBotProject } from '@botframework-composer/types';
+import { IBotProject, PublishResponse, PublishResult, } from '@botframework-composer/types';
 import { join } from 'path';
 import { createWriteStream } from 'fs';
 import { ensureDirSync } from 'fs-extra';
@@ -8,8 +8,6 @@ import stream from 'stream';
 import {
   PVAPublishJob,
   PublishConfig,
-  PublishResponse,
-  PublishResult,
   UserIdentity,
   PublishState,
   PublishHistory,
