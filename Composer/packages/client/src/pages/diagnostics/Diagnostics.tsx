@@ -60,6 +60,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       mainRegionName={formatMessage('Diagnostic List')}
       navLinks={navLinks}
       navRegionName={formatMessage('Diagnostics Pane')}
+      pageMode="diagnostics"
       title={formatMessage('Diagnostics')}
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}

@@ -60,10 +60,6 @@ const QnAPage: React.FC<RouteComponentProps<{
     [dialogId, actualProjectId, edit]
   );
 
-  useEffect(() => {
-    actions.setCurrentPageMode('qna');
-  }, []);
-
   const onRenderHeaderContent = () => {
     if (!isRoot) {
       return (
@@ -81,6 +77,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
       navRegionName={formatMessage('Qna Navigation Pane')}
+      pageMode={'knowledge-base'}
       title={formatMessage('QnA')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}

@@ -136,11 +136,9 @@ type BotInProject = {
 };
 
 type Props = {
-  onSelect?: (link: TreeLink) => void;
-  showTriggers?: boolean;
-  showDialogs?: boolean;
   navLinks?: TreeLink[];
   headerMenu?: ProjectTreeHeaderMenuItem[];
+  onSelect?: (link: TreeLink) => void;
   onBotDeleteDialog?: (projectId: string, dialogId: string) => void;
   onBotCreateDialog?: (projectId: string) => void;
   onBotStart?: (projectId: string) => void;
@@ -151,14 +149,17 @@ type Props = {
   onDialogCreateTrigger?: (projectId: string, dialogId: string) => void;
   onDialogDeleteTrigger?: (projectId: string, dialogId: string, index: number) => void;
   defaultSelected?: Partial<TreeLink>;
-  showDelete?: boolean;
+  options?: {
+    showTriggers?: boolean;
+    showDialogs?: boolean;
+    showDelete?: boolean;
+  };
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
+const LEVEL_PADDING = 44; // the size of a reveal-triangle and the space around it
 
 export const ProjectTree: React.FC<Props> = ({
-  showTriggers = true,
-  showDialogs = true,
   headerMenu = [],
   onBotDeleteDialog = () => {},
   onDialogDeleteTrigger = () => {},
@@ -171,18 +172,22 @@ export const ProjectTree: React.FC<Props> = ({
   onBotRemoveSkill = () => {},
   onDialogCreateTrigger = () => {},
   defaultSelected,
-  showDelete = true,
+  options = {
+    showDelete: true,
+    showDialogs: true,
+    showTriggers: true,
+  },
 }) => {
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
     dispatcherState
   );
   const treeRef = useRef<HTMLDivElement>(null);
 
-  const pageElements = useRecoilValue(pageElementState).design;
+  const pageElements = useRecoilValue(pageElementState).dialogs;
   const leftSplitWidth = pageElements?.leftSplitWidth ?? treeRef?.current?.clientWidth ?? 0;
   const getPageElement = (name: string) => pageElements?.[name];
   const setPageElement = (name: string, value: any) =>
-    setPageElementState('design', { ...pageElements, [name]: value });
+    setPageElementState('dialogs', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
@@ -340,7 +345,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, padLeft: number) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -367,7 +372,7 @@ export const ProjectTree: React.FC<Props> = ({
     const isFormDialog = dialogIsFormDialog(dialog);
     const showEditSchema = formDialogSchemaExists(skillId, dialog);
 
-    if (!dialog.isRoot && showDelete) {
+    if (!dialog.isRoot && options.showDelete) {
       menu.push({
         label: formatMessage('Remove this dialog'),
         onClick: () => {
@@ -405,7 +410,7 @@ export const ProjectTree: React.FC<Props> = ({
             link={dialogLink}
             menu={menu}
             menuOpenCallback={setMenuOpen}
-            padLeft={padLeft}
+            padLeft={depth * LEVEL_PADDING}
             textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />
@@ -436,8 +441,8 @@ export const ProjectTree: React.FC<Props> = ({
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
-        menu={[
-          ...(showDelete
+        menu={
+          options.showDelete
             ? [
                 {
                   label: formatMessage('Remove this trigger'),
@@ -447,8 +452,8 @@ export const ProjectTree: React.FC<Props> = ({
                   },
                 },
               ]
-            : []),
-        ]}
+            : []
+        }
         menuOpenCallback={setMenuOpen}
         textWidth={leftSplitWidth - TREE_PADDING}
         onSelect={handleOnSelect}
@@ -575,7 +580,7 @@ export const ProjectTree: React.FC<Props> = ({
               filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
           );
 
-    if (showTriggers) {
+    if (options.showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
         const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0);
         const key = 'dialog-' + dialog.id;
@@ -593,13 +598,13 @@ export const ProjectTree: React.FC<Props> = ({
         );
       });
     } else {
-      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 44).summaryElement);
+      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1).summaryElement);
     }
   };
 
   const createBotSubtree = (bot: BotInProject & { hasWarnings: boolean }) => {
     const key = 'bot-' + bot.projectId;
-    if (showDialogs && !bot.isRemote) {
+    if (options.showDialogs && !bot.isRemote) {
       return (
         <ExpandableNode
           key={key}

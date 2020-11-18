@@ -240,6 +240,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
       mainRegionName={formatMessage('Settings editor')}
       navLinks={links}
       navRegionName={formatMessage('Settings menu')}
+      pageMode={'settings'}
       title={title}
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}

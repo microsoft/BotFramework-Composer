@@ -172,7 +172,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
-    setCurrentPageMode,
     createTrigger,
     deleteTrigger,
     displayManifestModal,
@@ -237,10 +236,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
   }, [dialogId]);
-
-  useEffect(() => {
-    setCurrentPageMode('design');
-  }, []);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {

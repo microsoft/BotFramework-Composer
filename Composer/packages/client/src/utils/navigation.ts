@@ -115,17 +115,10 @@ export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; Micr
   document.body.appendChild(i);
 };
 
-const modeMap: { [page in PageMode]?: string } = {
-  lg: 'language-generation/',
-  lu: 'language-understanding/',
-  qna: 'knowledge-base/',
-  design: 'dialogs/',
-};
-
-export function buildURL(page: PageMode, link: Partial<TreeLink>) {
+export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
   const { projectId, skillId, dialogId } = link;
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
-  return `${baseURL}${modeMap[page]}${dialogId ?? 'all'}`;
+  return `${baseURL}${pageMode}/${dialogId ?? 'all'}`;
 }

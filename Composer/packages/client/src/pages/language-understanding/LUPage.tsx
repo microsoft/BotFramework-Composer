@@ -26,7 +26,7 @@ const LUPage: React.FC<RouteComponentProps<{
 
   const { setCurrentPageMode } = useRecoilValue(dispatcherState);
   useEffect(() => {
-    setCurrentPageMode('lu');
+    setCurrentPageMode('language-understanding');
   }, []);
 
   const path = props.location?.pathname ?? '';
@@ -36,12 +36,12 @@ const LUPage: React.FC<RouteComponentProps<{
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length) {
-      navigateTo(buildURL('lu', { projectId, skillId }));
+      navigateTo(buildURL('language-understanding', { projectId, skillId }));
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(() => {
-    let url = buildURL('lu', { projectId, skillId, dialogId });
+    let url = buildURL('language-understanding', { projectId, skillId, dialogId });
     if (!edit) url += `/edit`;
     navigateTo(url);
   }, [dialogId, projectId, edit]);
@@ -63,6 +63,7 @@ const LUPage: React.FC<RouteComponentProps<{
       data-testid="LUPage"
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}
+      pageMode={'language-understanding'}
       title={formatMessage('User Input')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
