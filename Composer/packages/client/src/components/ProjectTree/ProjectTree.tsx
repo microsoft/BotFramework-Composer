@@ -133,6 +133,7 @@ type BotInProject = {
   diagnostics: Diagnostic[];
   error: { [key: string]: any };
   buildEssentials: { [key: string]: any };
+  isPvaSchema: boolean;
 };
 
 type Props = {
@@ -173,9 +174,12 @@ export const ProjectTree: React.FC<Props> = ({
   onDialogCreateTrigger = () => {},
   defaultSelected,
 }) => {
-  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    onboardingAddCoachMarkRef,
+    navigateToFormDialogSchema,
+    setPageElementState,
+    createQnAFromUrlDialogBegin,
+  } = useRecoilValue(dispatcherState);
   const treeRef = useRef<HTMLDivElement>(null);
 
   const pageElements = useRecoilValue(pageElementState).design;
@@ -294,6 +298,16 @@ export const ProjectTree: React.FC<Props> = ({
         },
       },
     ];
+
+    if (!bot.isPvaSchema) {
+      menu.splice(1, 0, {
+        label: formatMessage('Add new knowledge base'),
+        icon: 'Add',
+        onClick: () => {
+          createQnAFromUrlDialogBegin({ projectId: bot.projectId });
+        },
+      });
+    }
 
     if (!bot.isRootBot) {
       menu.splice(
