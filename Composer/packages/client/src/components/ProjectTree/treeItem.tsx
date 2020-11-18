@@ -19,6 +19,8 @@ import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 
+import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
+
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE } from './constants';
 
@@ -234,7 +236,7 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
 };
 
 const onRenderItem = (textWidth: number, isMenuOpen: boolean) => (item: IOverflowSetItemProps) => {
-  const { diagnostics = [] } = item;
+  const { diagnostics = [], projectId, skillId } = item;
   const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
   const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
 
@@ -269,7 +271,7 @@ const onRenderItem = (textWidth: number, isMenuOpen: boolean) => (item: IOverflo
         <span css={diagnosticLinkMessages} title={item.message}>
           {item.message}
         </span>
-        <Link>{linkText}</Link>
+        <Link onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}>{linkText}</Link>
       </div>
     );
   });

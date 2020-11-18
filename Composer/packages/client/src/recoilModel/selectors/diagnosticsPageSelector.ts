@@ -16,7 +16,7 @@ import {
   LuDiagnostic,
   DiagnosticInfo,
   QnADiagnostic,
-  ServerDiagnostic,
+  BotDiagnostic,
   SettingDiagnostic,
   SkillDiagnostic,
 } from '../../pages/diagnostics/types';
@@ -42,6 +42,7 @@ export const diagnosticsSelector = selectorFamily({
   key: 'diagnosticsSelector',
   get: (projectId: string) => ({ get }) => {
     const projectsMetaData = get(projectMetaDataState(projectId));
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
     if (!projectsMetaData || projectsMetaData.isRemote) return [];
 
     const dialogs = get(validateDialogsSelectorFamily(projectId));
@@ -75,44 +76,51 @@ export const diagnosticsSelector = selectorFamily({
 
     const diagnosticList: DiagnosticInfo[] = [];
     diagnostics.forEach((d) => {
-      diagnosticList.push(new ServerDiagnostic(projectId, '', d.source, d));
+      diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
+    });
+    BotIndexer.validate(botAssets).forEach((d) => {
+      diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
     });
     const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
       if (item.source.endsWith('.json')) {
-        diagnosticList.push(new SkillDiagnostic(projectId, item.source, item.source, item));
+        diagnosticList.push(new SkillDiagnostic(rootProjectId, projectId, item.source, item.source, item));
       } else {
-        diagnosticList.push(new DialogDiagnostic(projectId, item.source, item.source, item));
+        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, item.source, item.source, item));
       }
     });
     const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
 
     luisLocaleDiagnostics.forEach((item) => {
-      diagnosticList.push(new SettingDiagnostic(projectId, item.source, item.source, item));
+      diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
 
     dialogs.forEach((dialog) => {
       dialog.diagnostics.forEach((diagnostic) => {
         const location = `${dialog.id}.dialog`;
-        diagnosticList.push(new DialogDiagnostic(projectId, dialog.id, location, diagnostic));
+        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialog.id, location, diagnostic));
       });
     });
     getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
       lufile.diagnostics.forEach((diagnostic) => {
         const location = `${lufile.id}.lu`;
-        diagnosticList.push(new LuDiagnostic(projectId, lufile.id, location, diagnostic, lufile, dialogs));
+        diagnosticList.push(
+          new LuDiagnostic(rootProjectId, projectId, lufile.id, location, diagnostic, lufile, dialogs)
+        );
       });
     });
     lgFiles.forEach((lgFile) => {
       lgFile.diagnostics.forEach((diagnostic) => {
         const location = `${lgFile.id}.lg`;
-        diagnosticList.push(new LgDiagnostic(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
+        diagnosticList.push(
+          new LgDiagnostic(rootProjectId, projectId, lgFile.id, location, diagnostic, lgFile, dialogs)
+        );
       });
     });
     qnaFiles.forEach((qnaFile) => {
       lodashGet(qnaFile, 'diagnostics', []).forEach((diagnostic) => {
         const location = `${qnaFile.id}.qna`;
-        diagnosticList.push(new QnADiagnostic(projectId, qnaFile.id, location, diagnostic));
+        diagnosticList.push(new QnADiagnostic(rootProjectId, projectId, qnaFile.id, location, diagnostic));
       });
     });
     return diagnosticList;
