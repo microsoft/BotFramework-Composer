@@ -15,12 +15,15 @@ import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
+import { ImportController } from '../controllers/import';
+import { StatusController } from '../controllers/status';
 
 import { UtilitiesController } from './../controllers/utilities';
 
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
+router.post('/v2/projects', ProjectController.createProjectV2);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
 router.get('/projects/generateProjectId', ProjectController.generateProjectId);
@@ -36,6 +39,9 @@ router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
+router.get('/projects/alias/:alias', ProjectController.getProjectByAlias);
+router.post('/projects/:projectId/backup', ProjectController.backupProject);
+router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
 
 // form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
@@ -62,6 +68,7 @@ router.post('/publish/:projectId/publish/:target', PublishController.publish);
 router.get('/publish/:projectId/history/:target', PublishController.history);
 router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
 router.post('/publish/:projectId/stopPublish/:target', PublishController.stopBot);
+router.post('/publish/:projectId/pull/:target', PublishController.pull);
 
 router.get('/publish/:method', PublishController.publish);
 
@@ -89,9 +96,16 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 // authentication from client
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 
-//FeatureFlags
+// FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
+
+// importing
+router.post('/import/:source', ImportController.startImport);
+router.post('/import/:source/authenticate', ImportController.authenticate);
+
+// Process status
+router.get('/status/:jobId', StatusController.getStatus);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

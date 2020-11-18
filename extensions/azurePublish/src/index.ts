@@ -166,9 +166,13 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
      * @param resourcekey
      */
     private async cleanup(resourcekey: string) {
-      const projFolder = this.getRuntimeFolder(resourcekey);
-      await emptyDir(projFolder);
-      await rmdir(projFolder);
+      try {
+        const projFolder = this.getRuntimeFolder(resourcekey);
+        await emptyDir(projFolder);
+        await rmdir(projFolder);
+      } catch (error) {
+        this.logger('$O', error);
+      }
     }
 
     /**
@@ -196,15 +200,17 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         // Create the BotProjectDeploy object, which is used to carry out the deploy action.
         const azDeployer = new BotProjectDeploy({
           subId: subscriptionID, // deprecate - not used
-          logger: (msg: any) => {
-            this.logger(msg);
-            this.logMessages.push(JSON.stringify(msg, null, 2));
+          logger: (msg: any, ...args: any[]) => {
+            this.logger(msg, ...args);
+            if (msg?.status || msg?.message) {
+              this.logMessages.push(JSON.stringify(msg, null, 2));
 
-            // update the log messages provided to Composer via the status API.
-            const status = this.getLoadingStatus(botId, profileName, jobId);
-            status.result.log = this.logMessages.join('\n');
+              // update the log messages provided to Composer via the status API.
+              const status = this.getLoadingStatus(botId, profileName, jobId);
+              status.result.log = this.logMessages.join('\n');
 
-            this.updateLoadingStatus(botId, profileName, jobId, status);
+              this.updateLoadingStatus(botId, profileName, jobId, status);
+            }
           },
           accessToken: accessToken,
           projPath: this.getProjectFolder(resourcekey, this.mode),
@@ -226,7 +232,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           await this.cleanup(resourcekey);
         }
       } catch (error) {
-        this.logger(error);
+        this.logger('%O', error);
         if (error instanceof Error) {
           this.logMessages.push(error.message);
         } else if (typeof error === 'object') {
@@ -334,34 +340,53 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         runtimeCodePath = project.settings.runtime.path;
       }
 
-      // Prepare the temporary project
-      // this writes all the settings to the root settings/appsettings.json file
-      await this.init(project, runtimeCodePath, resourcekey, runtime);
+      try {
+        // Prepare the temporary project
+        // this writes all the settings to the root settings/appsettings.json file
+        await this.init(project, runtimeCodePath, resourcekey, runtime);
 
-      // Merge all the settings
-      // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
-      // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-      const mergedSettings = mergeDeep(fullSettings, settings);
+        // Merge all the settings
+        // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
+        // these will be written to the appropriate settings file inside the appropriate runtime plugin.
+        const mergedSettings = mergeDeep(fullSettings, settings);
 
-      // Prepare parameters and then perform the actual deployment action
-      const customizeConfiguration: CreateAndDeployResources = {
-        accessToken,
-        subscriptionID,
-        name,
-        environment,
-        hostname,
-        luisResource,
-      };
-      await this.performDeploymentAction(
-        project,
-        mergedSettings,
-        runtime,
-        project.id,
-        profileName,
-        jobId,
-        resourcekey,
-        customizeConfiguration
-      );
+        // Prepare parameters and then perform the actual deployment action
+        const customizeConfiguration: CreateAndDeployResources = {
+          accessToken,
+          subscriptionID,
+          name,
+          environment,
+          hostname,
+          luisResource,
+        };
+        await this.performDeploymentAction(
+          project,
+          mergedSettings,
+          runtime,
+          project.id,
+          profileName,
+          jobId,
+          resourcekey,
+          customizeConfiguration
+        );
+      } catch (err) {
+        this.logger('%O', err);
+        if (err instanceof Error) {
+          this.logMessages.push(err.message);
+        } else if (typeof err === 'object') {
+          this.logMessages.push(JSON.stringify(err));
+        } else {
+          this.logMessages.push(err);
+        }
+
+        const response = this.getLoadingStatus(project.id, profileName, jobId);
+        response.status = 500;
+        response.result.message = this.logMessages[this.logMessages.length - 1];
+
+        await this.updateHistory(project.id, profileName, { status: response.status, ...response.result });
+        this.removeLoadingStatus(project.id, profileName, jobId);
+        this.cleanup(resourcekey);
+      }
     };
 
     /**************************************************************************************************
@@ -414,7 +439,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
         this.asyncPublish(config, project, resourcekey, jobId);
       } catch (err) {
-        console.log(err);
+        this.logger('%O', err);
         if (err instanceof Error) {
           this.logMessages.push(err.message);
         } else if (typeof err === 'object') {

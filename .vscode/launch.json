@@ -88,7 +88,14 @@
         "DEBUG": "composer*",
         "COMPOSER_ENABLE_ONEAUTH": "false"
       },
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "preLaunchTask": "electron: build",
+      "outFiles": [
+        "${workspaceRoot}/Composer/packages/electron-server/build/**/*.js",
+        "${workspaceRoot}/Composer/packages/server/build/**/*.js",
+        "${workspaceRoot}/extensions/**/*.js"
+      ],
+      "sourceMaps": true
     },
     {
       "name": "Debug current jest test",

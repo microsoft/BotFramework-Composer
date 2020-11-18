@@ -12,7 +12,7 @@ const { log } = require('./common');
 const oneauthSource = () => {
   const oneauthPath = path.resolve(__dirname, '../oneauth-temp');
   if (['win32', 'darwin'].includes(process.platform) && fs.existsSync(oneauthPath)) {
-    return { source: oneauthPath, dest: 'oneauth', force: true };
+    return { source: oneauthPath, dest: 'oneauth', opts: { force: true } };
   } else {
     log.info('Skipping OneAuth. Either on an unsupported platform or it has not been installed to %s.', oneauthPath);
   }
@@ -20,9 +20,14 @@ const oneauthSource = () => {
 
 const sources = [
   // extensions
-  { source: path.resolve(__dirname, '../../../../extensions'), dest: 'extensions' },
+  {
+    source: path.resolve(__dirname, '../../../../extensions'),
+    dest: 'extensions',
+    // ignore hostedBots in localPublish extension
+    opts: { exclude: [/^node_modules/, /^src/, /^hostedBots/] },
+  },
   // runtimes
-  { source: path.resolve(__dirname, '../../../../runtime'), dest: 'runtime' },
+  { source: path.resolve(__dirname, '../../../../runtime'), dest: 'runtime', opts: { exclude: [/^node_modules/] } },
   // form-dialog templates
   {
     source: path.resolve(__dirname, '../../../node_modules/@microsoft/bf-generate-library/templates'),
@@ -56,28 +61,30 @@ switch (process.platform) {
     process.exit(1);
 }
 
-const filterOutTS = (src) => {
-  // true keeps the file, false omits it
-  return !src.endsWith('.ts') || !src.endsWith('.ts.map');
-};
-
-async function copyArtifacts(source, dest, force = false) {
+async function copyArtifacts(source, dest, opts = {}) {
   log.info('-------- %s --------', dest);
   log.info('Copying %s from: %s', dest, source);
   for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
-    if (force || entry.isDirectory()) {
+    if (opts.force || entry.isDirectory()) {
       const extPath = path.join(source, entry.name);
       const output = path.join(destinationDir, dest, entry.name);
       log.info('Copying %s', entry.name);
 
-      await fs.copy(extPath, output, { filter: filterOutTS });
+      const filter = opts.exclude
+        ? (src) => {
+            const relPath = path.relative(extPath, src);
+            return !opts.exclude.some((pattern) => pattern.test(relPath));
+          }
+        : undefined;
+
+      await fs.copy(extPath, output, { filter });
     }
   }
 }
 
 async function copyAll() {
   for (const source of sources) {
-    await copyArtifacts(source.source, source.dest, source.force);
+    await copyArtifacts(source.source, source.dest, source.opts);
   }
 }
 

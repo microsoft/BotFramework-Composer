@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI } from '@bfc/shared';
+import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI, MicrosoftIDialog } from '@bfc/shared';
 import get from 'lodash/get';
 import { useDialogApi } from '@bfc/extension-client';
 
@@ -21,7 +21,12 @@ import { calculateRangeSelection } from '../utils/calculateRangeSelection';
 import { useDialogEditApi } from './useDialogEditApi';
 
 export const useEditorEventApi = (
-  state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
+  state: {
+    path: string;
+    data: MicrosoftIDialog;
+    nodeContext: NodeRendererContextValue;
+    selectionContext: SelectionContextData;
+  },
   shellApi: ShellApi
 ) => {
   const { actionsContainLuIntent } = shellApi;
@@ -64,7 +69,7 @@ export const useEditorEventApi = (
   const trackActionChange = (actionPath: string) => {
     const affectedPaths = DialogUtils.getParentPaths(actionPath);
     for (const path of affectedPaths) {
-      const json = get(data, path);
+      const json = get(data, path) as MicrosoftIDialog;
       designerCache.uncacheBoundary(json);
     }
   };
@@ -160,10 +165,12 @@ export const useEditorEventApi = (
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
         handler = (e) => {
-          onChange(deleteSelectedAction(path, data, e.id), undefined, async () => {
-            await onFocusSteps([]);
-            announce(ScreenReaderMessage.ActionDeleted);
-          });
+          deleteSelectedAction(path, data, e.id).then((value) =>
+            onChange(value, undefined, async () => {
+              await onFocusSteps([]);
+              announce(ScreenReaderMessage.ActionDeleted);
+            })
+          );
         };
         break;
       case NodeEventTypes.Insert:
@@ -248,7 +255,7 @@ export const useEditorEventApi = (
           updateDialog(newDialogId, newDialogData);
 
           // Delete moved actions
-          const deleteResult = deleteSelectedActions(path, data, actionIds);
+          const deleteResult = await deleteSelectedActions(path, data, actionIds);
 
           // Insert a BeginDialog as placeholder
           const placeholderPosition = DialogUtils.parseNodePath(actionIds[0]);
@@ -272,10 +279,12 @@ export const useEditorEventApi = (
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
           trackActionListChange(actionIds);
-          onChange(deleteSelectedActions(path, data, actionIds), undefined, async () => {
-            await onFocusSteps([]);
-            announce(ScreenReaderMessage.ActionsDeleted);
-          });
+          deleteSelectedActions(path, data, actionIds).then((value) =>
+            onChange(value, undefined, async () => {
+              await onFocusSteps([]);
+              announce(ScreenReaderMessage.ActionsDeleted);
+            })
+          );
         };
         break;
       case NodeEventTypes.DisableSelection:
