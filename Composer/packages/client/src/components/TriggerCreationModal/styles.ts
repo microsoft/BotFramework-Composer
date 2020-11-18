@@ -50,12 +50,12 @@ export const intentStyles = {
 
 export const optionStyles = {
   display: 'flex',
-  height: 15,
-  fontSize: 15,
+  height: '15px',
+  fontSize: '15px',
 };
 
 export const warningIconStyles = {
-  marginLeft: 5,
+  marginLeft: '5px',
   color: '#BE880A',
-  fontSize: 12,
+  fontSize: '12px',
 };
