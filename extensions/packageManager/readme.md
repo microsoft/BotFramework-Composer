@@ -21,6 +21,7 @@ Each package can contain one or more component parts for bots to use, including 
 | Pre-built Dialogs | Yes
 | LG files | Yes
 | Custom actions w/ schema | Partial support
+| Cards | Coming soon
 | Middleware | Coming soon
 | Adapters | Coming soon
 
