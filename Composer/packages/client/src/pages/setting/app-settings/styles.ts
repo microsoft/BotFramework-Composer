@@ -70,3 +70,8 @@ export const featureFlagContainer = css`
 export const featureFlagTitle = css`
   font-weight: ${FontWeights.semibold};
 `;
+
+export const noFeatureFlagText = css`
+  font-size: ${FontSizes.size14};
+  font-style: italic;
+`;
