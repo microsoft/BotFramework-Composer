@@ -21,7 +21,7 @@ const RECENTLY_USED_KEY = 'recentlyUsedItems';
 const docsUrl = `https://aka.ms/composer-use-package-library`;
 
 const strings = {
-  title: formatMessage('Package Library'),
+  title: formatMessage('Package Manager'),
   description: formatMessage('Discover and use components that can be installed into your bot.'),
   descriptionLink: formatMessage('Learn more'),
   installButton: formatMessage('Install Package'),
@@ -45,7 +45,7 @@ const strings = {
   noComponentsFound: formatMessage('No packages found. Check extension configuration.'),
   browseHeader: formatMessage('Browse'),
   installHeader: formatMessage('Installed'),
-  libraryError: formatMessage('Library Error'),
+  libraryError: formatMessage('Package Manager Error'),
   importError: formatMessage('Install Error'),
 }
 

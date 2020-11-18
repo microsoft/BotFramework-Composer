@@ -6,7 +6,7 @@ const path = require("path");
 
 module.exports = [{
   entry: {
-    "package-library": "./src/client/Library.tsx",
+    "package-manager": "./src/client/Library.tsx",
   },
   mode: "development",
   devtool: "eval-source-map",

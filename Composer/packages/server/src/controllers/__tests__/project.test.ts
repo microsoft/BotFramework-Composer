@@ -373,6 +373,7 @@ describe('publish luis files', () => {
         crossTrainConfig: {},
         luFiles: [],
       },
+      setTimeout: (msecs: number, callback: () => any): void => {},
     } as Request;
     await ProjectController.build(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalled();

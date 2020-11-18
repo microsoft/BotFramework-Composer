@@ -1,5 +1,5 @@
 {
-  "name": "asset-library",
+  "name": "package-manager",
   "version": "1.0.0",
   "description": "Discover and use components that can be installed into your bot.",
   "main": "lib/index.js",
@@ -14,16 +14,16 @@
     "enabled": true,
     "bundles": [
       {
-        "id": "package-library",
-        "path": "./lib/pages/package-library.js"
+        "id": "package-manager",
+        "path": "./lib/pages/package-manager.js"
       }
     ],
     "contributes": {
       "views": {
         "pages": [
           {
-            "bundleId": "package-library",
-            "label": "Package Library",
+            "bundleId": "package-manager",
+            "label": "Package manager",
             "icon": "Library"
           }
         ]
