@@ -19,7 +19,7 @@ export const serverSettingsDispatcher = () => {
 
       set(ServerSettingsState, settings);
     } catch (error) {
-      logMessage(callbackHelpers, `Error fetching data collection settings: ${error}`);
+      logMessage(callbackHelpers, `Error fetching server settings: ${error}`);
     }
   });
 
@@ -33,7 +33,7 @@ export const serverSettingsDispatcher = () => {
         await httpClient.post('/settings', { settings });
         set(ServerSettingsState, settings);
       } catch (error) {
-        logMessage(callbackHelpers, `Error fetching data collection settings: ${error}`);
+        logMessage(callbackHelpers, `Error updating server settings: ${error}`);
       }
     }
   );
