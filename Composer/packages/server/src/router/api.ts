@@ -16,12 +16,15 @@ import { FeatureFlagController } from '../controllers/featureFlags';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
 import { ImportController } from '../controllers/import';
+import { StatusController } from '../controllers/status';
+import { SettingsController } from '../controllers/settings';
 
 import { UtilitiesController } from './../controllers/utilities';
 
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
+router.post('/v2/projects', ProjectController.createProjectV2);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
 router.get('/projects/generateProjectId', ProjectController.generateProjectId);
@@ -94,13 +97,20 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 // authentication from client
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 
-//FeatureFlags
+// FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 
 // importing
 router.post('/import/:source', ImportController.startImport);
 router.post('/import/:source/authenticate', ImportController.authenticate);
+
+// Process status
+router.get('/status/:jobId', StatusController.getStatus);
+
+// User Server Settings
+router.get('/settings', SettingsController.getUserSettings);
+router.post('/settings', SettingsController.updateUserSettings);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
