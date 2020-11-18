@@ -271,7 +271,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           projectId: props.projectId,
           dialogId: props.dialogId,
         },
-        onClick: () => navTo(projectId, dialogId),
+        onClick: () => navTo(skillId ?? null, dialogId),
       });
       if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
@@ -282,7 +282,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             dialogId: props.dialogId,
             trigger: triggerIndex,
           },
-          onClick: () => navTo(projectId, dialogId, `${triggerIndex}`),
+          onClick: () => navTo(skillId ?? null, dialogId, `${triggerIndex}`),
         });
       }
 
@@ -347,6 +347,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       setBrokenSkillInfo(link);
     }
     const { skillId, dialogId, trigger, parentLink } = link;
+
     updateZoomRate({ currentRate: 1 });
     const breadcrumbArray: Array<BreadcrumbItem> = [];
     if (dialogId != null) {
