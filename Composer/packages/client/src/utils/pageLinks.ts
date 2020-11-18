@@ -57,7 +57,7 @@ export const topLinks = (
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/diagnostics`,
+      to: `/bot/${rootProjectId || projectId}/diagnostics`,
       iconName: 'Warning',
       labelName: formatMessage('Diagnostics'),
       exact: true,
