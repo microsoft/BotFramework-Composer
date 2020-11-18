@@ -353,6 +353,18 @@
             "subtitle": "Trace Activity"
         }
     },
+    "Teams.GetPagedMembers": {
+        "form": {
+            "label": "Get paged members",
+            "subtitle": "Gets members of a one-on-one, group, or team conversation."
+        }
+    },
+    "Teams.GetPagedTeamMembers": {
+        "form": {
+            "label": "Get paged team members",
+            "subtitle": "Gets members for a team conversation."
+        }
+    },
     "Teams.OnMessagingExtensionFetchTask": {
         "form": {
             "label": "Teams messaging extension fetch task",
@@ -371,22 +383,34 @@
             "subtitle": "Invoke activity.name='task/submit'"
         }
     },
+    "Teams.SendMessageToTeamsChannel": {
+        "form": {
+            "label": "Send a message to a teams channel",
+            "subtitle": "Create a thread and send a message to a teams channel."
+        }
+    },
     "Teams.SendMessagingExtensionQueryLinkResponse": {
         "form": {
             "label": "Send a query link response",
             "subtitle": "Send a response to a query link request."
         }
     },
-    "Teams.SendTaskModuleContinueResponse": {
+    "Teams.SendTaskModuleCardResponse": {
         "form": {
-            "label": "Send task module continue response",
-            "subtitle": "Send a continue response containing a card, or url."
+            "label": "Send task module card response",
+            "subtitle": "Send a continue response containing a card."
         }
     },
     "Teams.SendTaskModuleMessageResponse": {
         "form": {
             "label": "Send task module message response",
             "subtitle": "Send a message response containing text only."
+        }
+    },
+    "Teams.SendTaskModuleUrlResponse": {
+        "form": {
+            "label": "Send task module url response",
+            "subtitle": "Send a continue response containing or url."
         }
     }
 }

@@ -48,8 +48,6 @@ export const defaultMenuOrder = [
   // submenu - debugging options
   'Log to console',
   'Emit a trace event',
-  // submenu - Teams
-  'Send query link response',
 ];
 
 export const menuOrderMap: { [label: string]: number } = defaultMenuOrder.reduce((result, label, index) => {

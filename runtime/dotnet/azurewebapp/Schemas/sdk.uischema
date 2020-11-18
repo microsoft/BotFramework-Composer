@@ -375,19 +375,6 @@
       "subtitle": "EntityAssigned activity"
     }
   },
-  "Microsoft.OnAssignEntity": {
-    "form": {
-      "hidden": [
-        "actions"
-      ],
-      "label": "Handle a condition when an entity is assigned",
-      "order": [
-        "condition",
-        "*"
-      ],
-      "subtitle": "EntityAssigned activity"
-    }
-  },
   "Microsoft.OnBeginDialog": {
     "form": {
       "hidden": [
@@ -786,9 +773,34 @@
   },
   "Microsoft.TraceActivity": {
     "form": {
-      "helpLink": "https://aka.ms/bfc-debugging-bots",
+      "helpLink": "https://aka.ms/composer-telemetry",
       "label": "Emit a trace event",
       "subtitle": "Trace Activity"
+    }
+  },
+  "Teams.GetPagedMembers": {
+    "form": {
+      "label": "Get paged members",
+      "order": [
+        "property",
+        "pageSize",
+        "continuationToken",
+        "*"
+      ],
+      "subtitle": "Gets members of a one-on-one, group, or team conversation."
+    }
+  },
+  "Teams.GetPagedTeamMembers": {
+    "form": {
+      "label": "Get paged team members",
+      "order": [
+        "property",
+        "teamId",
+        "pageSize",
+        "continuationToken",
+        "*"
+      ],
+      "subtitle": "Gets members for a team conversation."
     }
   },
   "Teams.OnMessagingExtensionFetchTask": {
@@ -830,6 +842,19 @@
       "subtitle": "Invoke activity.name='task/submit'"
     }
   },
+  "Teams.SendMessageToTeamsChannel": {
+    "form": {
+      "label": "Send a message to a teams channel",
+      "order": [
+        "activity",
+        "teamsChannelId",
+        "activityIdProperty",
+        "conversationReferenceProperty",
+        "*"
+      ],
+      "subtitle": "Create a thread and send a message to a teams channel."
+    }
+  },
   "Teams.SendMessagingExtensionQueryLinkResponse": {
     "form": {
       "label": "Send a query link response",
@@ -842,21 +867,19 @@
       "subtitle": "Send a response to a query link request."
     }
   },
-  "Teams.SendTaskModuleContinueResponse": {
+  "Teams.SendTaskModuleCardResponse": {
     "form": {
-      "label": "Send task module continue response",
+      "label": "Send task module card response",
       "order": [
         "activity",
         "title",
         "height",
         "width",
-        "url",
-        "fallbackUrl",
         "cacheType",
         "cacheDuration",
         "*"
       ],
-      "subtitle": "Send a continue response containing a card, or url."
+      "subtitle": "Send a continue response containing a card."
     }
   },
   "Teams.SendTaskModuleMessageResponse": {
@@ -869,6 +892,22 @@
         "*"
       ],
       "subtitle": "Send a message response containing text only."
+    }
+  },
+  "Teams.SendTaskModuleUrlResponse": {
+    "form": {
+      "label": "Send task module url response",
+      "order": [
+        "title",
+        "url",
+        "fallbackUrl",
+        "height",
+        "width",
+        "cacheType",
+        "cacheDuration",
+        "*"
+      ],
+      "subtitle": "Send a continue response containing or url."
     }
   }
 }

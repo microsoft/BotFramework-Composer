@@ -20,9 +20,6 @@
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
     "message": "A form dialog enables your bot to collect pieces of information ."
   },
-  "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
-    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
-  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -845,9 +842,6 @@
   "delete_property_b3786fa0": {
     "message": "Delete Property"
   },
-  "deleting_dialogid_failed_1d7cc05a": {
-    "message": "Deleting \"{ dialogId }\" failed."
-  },
   "describe_your_skill_88554792": {
     "message": "Describe your skill"
   },
@@ -1223,8 +1217,8 @@
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_8062f953": {
+    "message": "Generating form dialog using ${ schemaId } schema failed."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1411,6 +1405,9 @@
   },
   "kb_d9c53902": {
     "message": "KB"
+  },
+  "kb_name_cannot_contain_speacial_characters_6588abda": {
+    "message": "KB name cannot contain speacial characters."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
@@ -1829,9 +1826,6 @@
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
   },
-  "numeric_field_c2564f69": {
-    "message": "numeric field"
-  },
   "o365_card_action_2602363c": {
     "message": "O365 card action"
   },
@@ -2044,6 +2038,9 @@
   },
   "property_name_914371f5": {
     "message": "Property name"
+  },
+  "property_name_is_required_5bc57d97": {
+    "message": "Property name is required!"
   },
   "property_title_f2b443b7": {
     "message": "Property title"
@@ -2399,12 +2396,6 @@
   "show_code_f3e9d1cc": {
     "message": "Show code"
   },
-  "show_form_dialog_90aad050": {
-    "message": "Show Form Dialog"
-  },
-  "show_form_dialog_editor_in_the_canvas_140492b2": {
-    "message": "Show form dialog editor in the canvas"
-  },
   "show_keys_3072a5b8": {
     "message": "Show keys"
   },
@@ -2578,9 +2569,6 @@
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
-  },
-  "the_file_name_can_not_be_empty_cbdbe9c8": {
-    "message": "The file name can not be empty"
   },
   "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
     "message": "The following customizations will be applied to your bot"
@@ -2888,12 +2876,6 @@
   "user_is_typing_790cb502": {
     "message": "User is typing"
   },
-  "va_creation_6babf7db": {
-    "message": "VA Creation"
-  },
-  "va_template_made_available_in_new_bot_flow_5f85baa4": {
-    "message": "VA template made available in new bot flow."
-  },
   "validating_35b79a96": {
     "message": "Validating..."
   },
@@ -3011,11 +2993,14 @@
   "which_teams_event_type_5ad16873": {
     "message": "Which teams event type?"
   },
+  "write_an_expression_8773ea5c": {
+    "message": "Write an expression"
+  },
   "yes_dde87d5": {
     "message": "Yes"
   },
-  "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
-    "message": "You already have a KB with that name. Choose another name and try again."
+  "you_already_have_a_kb_with_that_name_choose_anothe_fc2f7156": {
+    "message": "You already have a KB with that name.Choose another name and try again."
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
