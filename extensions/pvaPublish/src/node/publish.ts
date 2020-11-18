@@ -26,8 +26,8 @@ export const publish = async (
   config: PublishConfig,
   project: IBotProject,
   metadata: any,
-  _user: UserIdentity,
-  getAccessToken
+  _user?: UserIdentity,
+  getAccessToken?
 ): Promise<PublishResponse> => {
   const {
     // these are provided by Composer
@@ -52,8 +52,8 @@ export const publish = async (
     // write the .zip to a buffer in memory
     logger.log('Writing bot content to in-memory buffer.');
     const botContentWriter = new stream.Writable();
-    const botContentData = [];
-    botContentWriter._write = (chunk, encoding, callback) => {
+    const botContentData: Uint8Array[] = [];
+    botContentWriter._write = (chunk: Buffer, encoding, callback) => {
       botContentData.push(chunk);
       callback(); // let the internal write() call know that the _write() was successful
     };
@@ -88,8 +88,8 @@ export const publish = async (
       headers: {
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
-        'Content-Length': botContent.buffer.byteLength,
-        'If-Match': project.eTag,
+        'Content-Length': botContent.buffer.byteLength.toString(),
+        'If-Match': project.eTag || '',
       },
     });
     if (res.status === 202) {
@@ -100,14 +100,14 @@ export const publish = async (
       const result = xformJobToResult(job);
 
       // add to publish history
-      const botProjectId = project.id;
+      const botProjectId = project.id || '';
       ensurePublishProfileHistory(botProjectId, profileName);
       publishHistory[botProjectId][profileName].unshift(result);
 
       logger.log('Publish call successful.');
 
       return {
-        status: result.status,
+        status: result.status as number,
         result,
       };
     } else {
@@ -136,8 +136,8 @@ export const publish = async (
 export const getStatus = async (
   config: PublishConfig,
   project: IBotProject,
-  user: UserIdentity,
-  getAccessToken
+  user?: UserIdentity,
+  getAccessToken?
 ): Promise<PublishResponse> => {
   const {
     // these are provided by Composer
@@ -149,7 +149,7 @@ export const getStatus = async (
     envId,
     tenantId,
   } = config;
-  const botProjectId = project.id;
+  const botProjectId = project.id || '';
 
   const operationId = getOperationIdOfLastJob(botProjectId, profileName);
   if (!operationId) {
@@ -174,7 +174,7 @@ export const getStatus = async (
       method: 'GET',
       headers: {
         ...getAuthHeaders(accessToken, tenantId),
-        'If-None-Match': project.eTag,
+        'If-None-Match': project.eTag || '',
       },
     });
     const job: PVAPublishJob = await res.json();
@@ -187,14 +187,16 @@ export const getStatus = async (
     const result = xformJobToResult(job);
 
     // update publish history
-    const botProjectId = project.id;
+    const botProjectId = project.id || '';
     ensurePublishProfileHistory(botProjectId, profileName);
     const oldRecord = publishHistory[botProjectId][profileName].shift();
-    result.comment = oldRecord.comment; // persist comment from initial publish
+    if (oldRecord) {
+      result.comment = oldRecord.comment; // persist comment from initial publish
+    }
     publishHistory[botProjectId][profileName].unshift(result);
 
     return {
-      status: result.status,
+      status: result.status as number,
       result,
     };
   } catch (e) {
@@ -210,8 +212,8 @@ export const getStatus = async (
 export const history = async (
   config: PublishConfig,
   _project: IBotProject,
-  _user: UserIdentity,
-  getAccessToken
+  _user?: UserIdentity,
+  getAccessToken?
 ): Promise<PublishResult[]> => {
   const {
     // these are specific to the PVA publish profile shape
@@ -245,8 +247,8 @@ export const history = async (
 export const pull = async (
   config: PublishConfig,
   _project: IBotProject,
-  _user: UserIdentity,
-  getAccessToken
+  _user?: UserIdentity,
+  getAccessToken?
 ): Promise<PullResponse> => {
   const {
     // these are specific to the PVA publish profile shape
@@ -348,7 +350,7 @@ const getOperationIdOfLastJob = (botProjectId: string, profileName: string): str
     !!publishHistory[botProjectId][profileName].length
   ) {
     const mostRecentJob = publishHistory[botProjectId][profileName][0];
-    return mostRecentJob.id;
+    return mostRecentJob.id || '';
   }
   // couldn't find any jobs for the bot project / profile name combo
   return '';
