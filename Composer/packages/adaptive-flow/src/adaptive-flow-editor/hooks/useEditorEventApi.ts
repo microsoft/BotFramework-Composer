@@ -250,7 +250,7 @@ export const useEditorEventApi = (
           updateDialog(newDialogId, newDialogData);
 
           // Delete moved actions
-          const deleteResult = deleteSelectedActions(path, data, actionIds);
+          const deleteResult = await deleteSelectedActions(path, data, actionIds);
 
           // Insert a BeginDialog as placeholder
           const placeholderPosition = DialogUtils.parseNodePath(actionIds[0]);

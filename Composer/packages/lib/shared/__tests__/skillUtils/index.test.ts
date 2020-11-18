@@ -1,16 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { DialogSetting } from '../../src';
+import { DialogSetting } from '../../src/';
 import {
   fetchFromSettings,
   getSkillNameFromSetting,
   isLocalhostUrl,
   isSkillHostUpdateRequired,
   fetchEndpointNameForSkill,
+  convertSkillsToDictionary,
 } from '../../src/skillsUtils';
 
 describe('skills utils', () => {
+  it('migrate skills array in older bots to skills dictionary', () => {
+    const skills: any[] = [
+      { name: 'oneNoteSync', manifestUrl: 'http://test.onenotesync/manifests/one-note.json' },
+      { name: 'googleSync', manifestUrl: 'http://test.googlesync/manifests/google-sync.json' },
+    ];
+    const result = convertSkillsToDictionary(skills);
+    expect(result.oneNoteSync.manifestUrl).toBe('http://test.onenotesync/manifests/one-note.json');
+  });
   it('can fetch from settings given dialog settings', () => {
     const result = fetchFromSettings('=settings.luis.authoringKey', {
       luis: {
