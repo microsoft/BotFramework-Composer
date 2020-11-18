@@ -37,7 +37,7 @@ describe('should return the proper PVA base URL for the environment', () => {
 
 describe('it should return the proper PVA auth parameters for the base URL', () => {
   it('fallback to prod', () => {
-    let url = undefined;
+    let url: string | undefined = undefined;
     expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.PROD);
 
     url = 'https://dev.botframework.com/';
