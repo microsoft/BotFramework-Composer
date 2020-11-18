@@ -31,8 +31,9 @@ export enum DialogGroup {
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
   OTHER = 'OTHER',
-  TEAMS = 'Teams',
-  TEAMS_EVENTS = 'Teams Events',
+  TEAMS_ACTION_TYPES = 'TEAMS_ACTION_TYPES',
+  TEAMS_RESPONSE_TYPES = 'TEAMS_RESPONSE_TYPES',
+  TEAMS_EVENTS = 'TEAMS_EVENTS',
 }
 
 export interface DialogGroupItem {
@@ -138,11 +139,8 @@ export const dialogGroups: DialogGroupsMap = {
     label: formatMessage('Teams Events'),
     types: [
       SDKKinds.OnAppBasedLinkQuery,
-      SDKKinds.OnFileConsent,
       SDKKinds.OnCardAction,
-      SDKKinds.OnO365ConnectorCardAction,
-      SDKKinds.OnTaskModuleFetch,
-      SDKKinds.OnTaskModuleSubmit,
+      SDKKinds.OnFileConsent,
       SDKKinds.OnMessagingExtensionCardButtonClicked,
       SDKKinds.OnMessagingExtensionConfigurationQuerySettingUrl,
       SDKKinds.OnMessagingExtensionQuery,
@@ -150,6 +148,9 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.OnMessagingExtensionConfigurationSetting,
       SDKKinds.OnMessagingExtensionSelectItem,
       SDKKinds.OnMessagingExtensionSubmitAction,
+      SDKKinds.OnO365ConnectorCardAction,
+      SDKKinds.OnTaskModuleFetch,
+      SDKKinds.OnTaskModuleSubmit,
       SDKKinds.OnChannelCreated,
       SDKKinds.OnChannelDeleted,
       SDKKinds.OnChannelRenamed,
@@ -180,13 +181,27 @@ export const dialogGroups: DialogGroupsMap = {
     label: formatMessage('Other'),
     types: [SDKKinds.AdaptiveDialog],
   },
-  [DialogGroup.TEAMS]: {
-    label: formatMessage('Teams'),
+  [DialogGroup.TEAMS_ACTION_TYPES]: {
+    label: formatMessage('Teams Actions'),
     types: [
-      SDKKinds.SendMessagingExtensionQueryLinkResponse,
-      SDKKinds.SendTaskModuleContinueResponse,
-      SDKKinds.SendTaskModuleMessageResponse,
       SDKKinds.GetMeetingParticipant,
+      SDKKinds.GetMember,
+      SDKKinds.GetPagedMembers,
+      SDKKinds.GetPagedTeamMembers,
+      SDKKinds.GetTeamChannels,
+      SDKKinds.GetTeamDetails,
+      SDKKinds.GetTeamMember,
+    ]
+  },
+  [DialogGroup.TEAMS_RESPONSE_TYPES]: {
+    label: formatMessage('Teams Responses'),
+    types: [
+      SDKKinds.SendMessageToTeamsChannel,
+      SDKKinds.SendTaskModuleCardResponse,
+      SDKKinds.SendTaskModuleUrlResponse,
+      SDKKinds.SendTaskModuleMessageResponse,
+      SDKKinds.SendMessagingExtensionAuthResponse,
+      SDKKinds.SendMessagingExtensionQueryLinkResponse,
     ],
   },
 };

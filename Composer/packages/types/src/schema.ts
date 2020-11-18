@@ -131,6 +131,11 @@ export enum SDKKinds {
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
   GetMeetingParticipant = 'Teams.GetMeetingParticipant',
   GetMember = 'Teams.GetMember',
+  GetPagedMembers = 'Teams.GetPagedMembers',
+  GetPagedTeamMembers = 'Teams.GetPagedTeamMembers',
+  GetTeamChannels = 'Teams.GetTeamChannels',
+  GetTeamDetails = 'Teams.GetTeamDetails',
+  GetTeamMember = 'Teams.GetTeamMember',
   OnAppBasedLinkQuery = 'Teams.OnAppBasedLinkQuery',
   OnCardAction = 'Teams.OnCardAction',
   OnChannelCreated = 'Teams.OnChannelCreated',
@@ -156,7 +161,9 @@ export enum SDKKinds {
   OnTeamUnarchived = 'Teams.OnTeamUnarchived',
   SendMessagingExtensionAuthResponse = 'Teams.SendMessagingExtensionAuthResponse',
   SendMessagingExtensionQueryLinkResponse = 'Teams.SendMessagingExtensionQueryLinkResponse',
-  SendTaskModuleContinueResponse = 'Teams.SendTaskModuleContinueResponse',
+  SendMessageToTeamsChannel = 'Teams.SendMessageToTeamsChannel',
+  SendTaskModuleUrlResponse = 'Teams.SendTaskModuleUrlResponse',
+  SendTaskModuleCardResponse = 'Teams.SendTaskModuleCardResponse',
   SendTaskModuleMessageResponse = 'Teams.SendTaskModuleMessageResponse',
 }
 
