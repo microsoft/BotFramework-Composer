@@ -122,17 +122,11 @@ const navItem = (isActive: boolean, isBroken: boolean) => css`
 
 export const diagnosticLink = css`
   display: flex;
-  align-items: center;
-  span {
+  align-content: start;
+  p {
     margin: 2px 5px;
+    width: 300px;
   }
-`;
-
-export const diagnosticLinkMessages = css`
-  max-width: 200px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 `;
 
 export const overflowSet = (isBroken: boolean) => css`
@@ -246,10 +240,10 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
     return (
       <div key={item.message} css={diagnosticLink}>
         <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
-        <span css={diagnosticLinkMessages} title={item.message}>
+        <p title={item.message}>
           {item.message}
-        </span>
-        <Link>{linkText}</Link>
+          <Link styles={{ root: { marginLeft: '5px' } }}>{linkText}</Link>
+        </p>
       </div>
     );
   });
@@ -262,10 +256,10 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
     return (
       <div key={item.message} css={diagnosticLink}>
         <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
-        <span css={diagnosticLinkMessages} title={item.message}>
+        <p title={item.message}>
           {item.message}
-        </span>
-        <Link>{linkText}</Link>
+          <Link styles={{ root: { marginLeft: '5px' } }}>{linkText}</Link>
+        </p>
       </div>
     );
   });
@@ -295,16 +289,16 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
           />
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
-        {warnings.length ? (
-          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+        {warnings.length && (
+          <TooltipHost closeDelay={500} content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'WarningSolid'} style={warningIcon} />
           </TooltipHost>
-        ) : undefined}
-        {errors.length ? (
-          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+        )}
+        {errors.length && (
+          <TooltipHost closeDelay={500} content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'StatusErrorFull'} style={errorIcon} />
           </TooltipHost>
-        ) : undefined}
+        )}
       </div>
     </div>
   );
