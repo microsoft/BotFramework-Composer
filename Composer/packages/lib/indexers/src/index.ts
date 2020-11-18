@@ -30,7 +30,7 @@ class Indexer {
       {
         [FileExtensions.lg]: [],
         [FileExtensions.Lu]: [],
-        [FileExtensions.FormDialog]: [],
+        [FileExtensions.FormDialogSchema]: [],
         [FileExtensions.QnA]: [],
         [FileExtensions.Dialog]: [],
         [FileExtensions.DialogSchema]: [],
@@ -94,7 +94,7 @@ class Indexer {
       skillManifests: skillManifestIndexer.index(skillManifestFiles),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
       jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
-      formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
+      formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialogSchema]),
       recognizers: recognizerIndexer.index(recognizers),
       crossTrainConfig: crossTrainConfigIndexer.index(crossTrainConfigs),
     };
