@@ -188,6 +188,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
     undefined
   );
+  const [createQnAModalInfo, setCreateQnAModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
+    undefined
+  );
   const [dialogModalInfo, setDialogModalInfo] = useState<undefined | string>(undefined);
   const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | string>(undefined);
   const [skillManifestFile, setSkillManifestFile] = useState<undefined | SkillInfo>(undefined);
@@ -723,7 +726,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, []);
 
   const handleCreateQnA = async (data) => {
-    if (!dialogId) return;
+    if (!createQnAModalInfo) return;
+    const { projectId, dialogId } = createQnAModalInfo;
     createTrigger(projectId, dialogId, defaultQnATriggerData);
 
     const { name, url, multiTurn } = data;
@@ -772,6 +776,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               setTriggerModalInfo({ projectId, dialogId });
             }}
             onDialogDeleteTrigger={handleDeleteTrigger}
+            onDialogCreateQnAKBFromScratch={(projectId, dialogId) => {
+              setCreateQnAModalInfo({ projectId, dialogId });
+            }}
+            onDialogCreateQnAKBFromUrl={(projectId, dialogId) => {
+              setCreateQnAModalInfo({ projectId, dialogId });
+            }}
             onSelect={handleSelect}
           />
           <div css={contentWrapper} role="main">
@@ -883,8 +893,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }}
           />
         )}
-        {dialogId && (
-          <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+        {createQnAModalInfo && (
+          <CreateQnAModal
+            dialogId={createQnAModalInfo.dialogId}
+            projectId={createQnAModalInfo.projectId}
+            qnaFiles={qnaFiles}
+            onSubmit={handleCreateQnA}
+          />
         )}
         {displaySkillManifest && (
           <DisplayManifestModal
