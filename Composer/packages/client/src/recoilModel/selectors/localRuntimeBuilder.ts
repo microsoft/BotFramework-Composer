@@ -19,9 +19,10 @@ import {
 import { Dispatcher } from '../dispatchers';
 import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
+import { getSensitiveProperties } from '../dispatchers/utils/project';
 
 import { validateDialogsSelectorFamily } from './validatedDialogs';
-import { localBotsWithoutErrorsSelector } from './project';
+import { localBotsWithoutErrorsSelector, rootBotProjectIdSelector } from './project';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',
@@ -73,6 +74,7 @@ export const buildConfigurationSelector = selector({
   key: 'buildConfigurationSelector',
   get: ({ get }) => {
     const localProjects = get(localBotsWithoutErrorsSelector);
+    const rootBotId = get(rootBotProjectIdSelector);
 
     return localProjects
       .filter((projectId: string) => {
@@ -84,7 +86,12 @@ export const buildConfigurationSelector = selector({
         const result = get(buildEssentialsSelector(projectId));
         const name = get(botDisplayNameState(projectId));
         const dialogs = get(validateDialogsSelectorFamily(projectId));
-        return { ...result, name, dialogs };
+        const settings = get(settingsState(projectId));
+        let sensitiveSettings = {};
+        if (rootBotId) {
+          sensitiveSettings = getSensitiveProperties(settings);
+        }
+        return { ...result, name, dialogs, sensitiveSettings };
       });
   },
 });
@@ -113,9 +120,8 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
         await dispatcher.build(projectId, config.luis, config.qna);
       }
     },
-    startBot: async (projectId: string) => {
+    startBot: async (projectId: string, sensitiveSettings) => {
       dispatcher.setBotStatus(projectId, BotStatus.reloading);
-      const sensitiveSettings = settingsStorage.get(projectId);
       await dispatcher.publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
     },
     stopBot: async (projectId: string) => {
