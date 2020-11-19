@@ -3,10 +3,11 @@
 
 import { FieldProps } from '@bfc/extension-client';
 import { Intellisense } from '@bfc/intellisense';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
-import { ExpressionSwitchWindow } from '../ExpressionSwitchWindow';
+import { ExpressionSwitchWindow } from '../expressions/ExpressionSwitchWindow';
+import { ExpressionsListMenu } from '../expressions/ExpressionsListMenu';
 
 import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
@@ -58,8 +59,23 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
+  const [expressionsListMenuRef, setExpressionsListMenuRef] = useState<HTMLDivElement[]>([]);
+
+  const completionListOverrideResolver = (value: string) => {
+    return value === '=' ? (
+      <ExpressionsListMenu
+        onExpressionSelected={(expression: string) => onChange(expression)}
+        onMenuMount={(refs) => {
+          setExpressionsListMenuRef(refs);
+        }}
+      />
+    ) : null;
+  };
+
   return (
     <Intellisense
+      completionListOverrideRefs={expressionsListMenuRef}
+      completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
