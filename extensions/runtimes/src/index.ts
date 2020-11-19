@@ -155,7 +155,7 @@ export default async (composer: any): Promise<void> => {
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
         const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/Schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
-        return destPath;
+        return path.relative(project.dir, destPath);
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
