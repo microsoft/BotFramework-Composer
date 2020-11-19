@@ -87,7 +87,7 @@ const navItem = (isActive: boolean, isBroken: boolean, isAnyMenuOpen: boolean, m
   position: relative;
   height: 24px;
   font-size: 12px;
-  color: ${isActive && !menuOpenHere ? NeutralColors.white : '#545454'};
+  color: ${isActive ? NeutralColors.white : '#545454'};
   background: ${isActive ? '#0078d4' : menuOpenHere ? '#f2f2f2' : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
