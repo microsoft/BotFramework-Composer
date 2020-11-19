@@ -4,6 +4,12 @@
 import '@testing-library/cypress/add-commands';
 
 Cypress.Commands.add('createBot', (botId: string, botName?: string) => {
+  cy.get('body').then((body) => {
+    if (body.find('[data-testid="data collection dialog"]').length > 0) {
+      cy.findByText('Not now').click();
+    }
+  });
+
   const name = `__Test${botName || botId}`;
 
   const params = {

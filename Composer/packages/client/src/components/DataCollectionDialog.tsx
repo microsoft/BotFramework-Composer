@@ -23,6 +23,7 @@ const DataCollectionDialog: React.FC = () => {
 
   return (
     <Dialog
+      data-testid="data collection dialog"
       hidden={false}
       modalProps={{
         isBlocking: true,
