@@ -63,7 +63,6 @@ const LUPage: React.FC<RouteComponentProps<{
       data-testid="LUPage"
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}
-      pageMode={'language-understanding'}
       title={formatMessage('User Input')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}

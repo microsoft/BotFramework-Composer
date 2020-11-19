@@ -12,8 +12,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
-import { dispatcherState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFilesState, dispatcherState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 
 import TableView from './table-view';
@@ -38,6 +37,10 @@ const QnAPage: React.FC<RouteComponentProps<{
   //const locale = useRecoilValue(localeState);
   const [createOnDialogId, setCreateOnDialogId] = useState('');
 
+  const { setCurrentPageMode } = useRecoilValue(dispatcherState);
+  useEffect(() => {
+    setCurrentPageMode('knowledge-base');
+  }, []);
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
@@ -77,7 +80,6 @@ const QnAPage: React.FC<RouteComponentProps<{
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
       navRegionName={formatMessage('Qna Navigation Pane')}
-      pageMode={'knowledge-base'}
       title={formatMessage('QnA')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}

@@ -176,6 +176,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     deleteTrigger,
     displayManifestModal,
     createDialogCancel,
+    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -183,6 +184,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     dialogs.find((x) => x.id === props.dialogId)?.content,
     params.get('selected') || ''
   );
+  useEffect(() => {
+    setCurrentPageMode('dialogs');
+  }, []);
 
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
     undefined

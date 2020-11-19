@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -15,6 +15,7 @@ import {
   allDiagnosticsSelectorFamily,
   diagnosticNavLinksSelector,
 } from '../../recoilModel/selectors/diagnosticsPageSelector';
+import { dispatcherState } from '../../recoilModel';
 import { IToolbarItem } from '../../components/Toolbar';
 import { WarningInfo } from '../../components/BotRuntimeController/warningInfo';
 import { ErrorInfo } from '../../components/BotRuntimeController/errorInfo';
@@ -32,6 +33,11 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
   const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
   const warnings = useRecoilValue(allDiagnosticsSelectorFamily('Warning'));
+  const { setCurrentPageMode } = useRecoilValue(dispatcherState);
+  useEffect(() => {
+    setCurrentPageMode('diagnostics');
+  }, []);
+
   const { projectId = '', skillId } = props;
   const toolbarItems: IToolbarItem[] = [
     {
@@ -60,7 +66,6 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       mainRegionName={formatMessage('Diagnostic List')}
       navLinks={navLinks}
       navRegionName={formatMessage('Diagnostics Pane')}
-      pageMode="diagnostics"
       title={formatMessage('Diagnostics')}
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}

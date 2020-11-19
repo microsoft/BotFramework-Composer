@@ -43,7 +43,8 @@ export type PageMode =
   | 'diagnostics'
   | 'settings'
   | 'projects'
-  | 'home';
+  | 'home'
+  | 'botProjectsSettings';
 
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;

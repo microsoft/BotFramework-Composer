@@ -155,6 +155,7 @@ type Props = {
     showDelete?: boolean;
     showRemote?: boolean;
     showMenu?: boolean;
+    showErrors?: boolean;
   };
 };
 
@@ -180,6 +181,7 @@ export const ProjectTree: React.FC<Props> = ({
     showTriggers: true,
     showRemote: true,
     showMenu: true,
+    showErrors: true,
   },
 }) => {
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
@@ -343,6 +345,7 @@ export const ProjectTree: React.FC<Props> = ({
           link={link}
           menu={menu}
           menuOpenCallback={setMenuOpen}
+          showErrors={options.showErrors}
           textWidth={leftSplitWidth - TREE_PADDING}
           onSelect={handleOnSelect}
         />
@@ -417,6 +420,7 @@ export const ProjectTree: React.FC<Props> = ({
             menu={menu}
             menuOpenCallback={setMenuOpen}
             padLeft={depth * LEVEL_PADDING}
+            showErrors={options.showErrors}
             textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />
@@ -461,6 +465,7 @@ export const ProjectTree: React.FC<Props> = ({
             : []
         }
         menuOpenCallback={setMenuOpen}
+        showErrors={options.showErrors}
         textWidth={leftSplitWidth - TREE_PADDING}
         onSelect={handleOnSelect}
       />
@@ -517,6 +522,7 @@ export const ProjectTree: React.FC<Props> = ({
           isSubItemActive={false}
           link={link}
           menuOpenCallback={setMenuOpen}
+          showErrors={options.showErrors}
           textWidth={leftSplitWidth - TREE_PADDING}
         />
       </span>

@@ -49,7 +49,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     publishToTarget,
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
+    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
+
+  useEffect(() => {
+    setCurrentPageMode('publish');
+  }, []);
 
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [editDialogHidden, setEditDialogHidden] = useState(true);

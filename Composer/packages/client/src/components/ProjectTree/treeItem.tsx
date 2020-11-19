@@ -217,6 +217,7 @@ interface ITreeItemProps {
   menu?: TreeMenuItem[];
   menuOpenCallback?: (boolean) => void;
   isMenuOpen?: boolean;
+  showErrors?: boolean;
 }
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -241,51 +242,73 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   };
 };
 
-const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
+const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
   const { diagnostics = [], projectId, skillId } = item;
-  const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
-  const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
 
-  const warningContent = warnings.map((diag) => diag.message).join(',');
+  let diagnosticIcons: JSX.Element | null = null;
+  let warningContent = '';
+  let errorContent = '';
 
-  const errorContent = errors.map((diag) => diag.message).join(',');
+  if (showErrors) {
+    const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
+    const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
 
-  const warningHTML = warnings.map((item) => {
-    let linkText = item.source;
-    if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
-      linkText = 'Create skill mainfest';
-    }
-    return (
-      <div key={item.message} css={diagnosticLink}>
-        <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
-        <span css={diagnosticLinkMessages} title={item.message}>
-          {item.message}
-        </span>
-        <Link>{linkText}</Link>
-      </div>
+    warningContent = warnings.map((diag) => diag.message).join(',');
+
+    errorContent = errors.map((diag) => diag.message).join(',');
+
+    const warningHTML = warnings.map((item) => {
+      let linkText = item.source;
+      if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
+        linkText = 'Create skill mainfest';
+      }
+      return (
+        <div key={item.message} css={diagnosticLink}>
+          <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
+          <span css={diagnosticLinkMessages} title={item.message}>
+            {item.message}
+          </span>
+          <Link>{linkText}</Link>
+        </div>
+      );
+    });
+
+    const errorHTML = errors.map((item) => {
+      let linkText = item.source;
+      if (item.source === 'appsettings.json') {
+        linkText = 'Fix in bot settings';
+      }
+      return (
+        <div key={item.message} css={diagnosticLink}>
+          <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
+          <span css={diagnosticLinkMessages} title={item.message}>
+            {item.message}
+          </span>
+          <Link onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}>{linkText}</Link>
+        </div>
+      );
+    });
+
+    diagnosticIcons = (
+      <React.Fragment>
+        {warnings.length ? (
+          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'WarningSolid'} style={warningIcon} />
+          </TooltipHost>
+        ) : undefined}
+        {errors.length ? (
+          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
+          </TooltipHost>
+        ) : undefined}
+      </React.Fragment>
     );
-  });
-
-  const errorHTML = errors.map((item) => {
-    let linkText = item.source;
-    if (item.source === 'appsettings.json') {
-      linkText = 'Fix in bot settings';
-    }
-    return (
-      <div key={item.message} css={diagnosticLink}>
-        <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
-        <span css={diagnosticLinkMessages} title={item.message}>
-          {item.message}
-        </span>
-        <Link onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}>{linkText}</Link>
-      </div>
-    );
-  });
+  }
 
   return (
     <div
       data-is-focusable
-      aria-label={`${item.displayName} ${warningContent ?? ''} ${errorContent ?? ''}`}
+      aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
       css={projectTreeItemContainer}
       role="cell"
       tabIndex={0}
@@ -307,16 +330,7 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
           />
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
-        {warnings.length ? (
-          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'WarningSolid'} style={warningIcon} />
-          </TooltipHost>
-        ) : undefined}
-        {errors.length ? (
-          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
-          </TooltipHost>
-        ) : undefined}
+        {diagnosticIcons}
       </div>
     </div>
   );
@@ -376,6 +390,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   padLeft = 0,
   menuOpenCallback = () => {},
   isMenuOpen = false,
+  showErrors = true,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
 
@@ -420,7 +435,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace)}
+        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, showErrors)}
         onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected)}
       />
     </div>
