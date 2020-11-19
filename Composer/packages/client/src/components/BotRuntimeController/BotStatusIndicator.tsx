@@ -10,7 +10,6 @@ import formatMessage from 'format-message';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
-import { getBotStatusText } from '../../utils/botRuntimeUtils';
 import { BotStatus, BotStatusesCopy } from '../../constants';
 
 import { ErrorCallout } from './errorCallout';
