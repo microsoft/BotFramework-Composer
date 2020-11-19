@@ -772,16 +772,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onBotRemoveSkill={removeSkillFromBotProject}
             onBotStart={startSingleBot}
             onBotStop={stopSingleBot}
-            onDialogCreateTrigger={(projectId, dialogId) => {
-              setTriggerModalInfo({ projectId, dialogId });
-            }}
-            onDialogDeleteTrigger={handleDeleteTrigger}
             onDialogCreateQnAKBFromScratch={(projectId, dialogId) => {
               setCreateQnAModalInfo({ projectId, dialogId });
             }}
             onDialogCreateQnAKBFromUrl={(projectId, dialogId) => {
               setCreateQnAModalInfo({ projectId, dialogId });
             }}
+            onDialogCreateTrigger={(projectId, dialogId) => {
+              setTriggerModalInfo({ projectId, dialogId });
+            }}
+            onDialogDeleteTrigger={handleDeleteTrigger}
             onSelect={handleSelect}
           />
           <div css={contentWrapper} role="main">
