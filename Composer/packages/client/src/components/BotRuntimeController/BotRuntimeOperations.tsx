@@ -36,7 +36,7 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
           onClick={() => stopSingleBot(projectId)}
         />
       );
-    case BotStatus.unConnected:
+    case BotStatus.inactive:
     case BotStatus.failed:
       return (
         <IconButton

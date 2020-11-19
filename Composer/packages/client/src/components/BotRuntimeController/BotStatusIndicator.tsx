@@ -11,7 +11,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
 import { getBotStatusText } from '../../utils/botRuntimeUtils';
-import { BotStatus } from '../../constants';
+import { BotStatus, BotStatusesCopy } from '../../constants';
 
 import { ErrorCallout } from './errorCallout';
 import { useBotOperations } from './useBotOperations';
@@ -60,7 +60,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
         color: SharedColors.gray20,
       });
     }
-    return getBotStatusText(botStatus);
+    return BotStatusesCopy[botStatus] ?? BotStatusesCopy.inactive;
   }, [botStatus]);
 
   return (

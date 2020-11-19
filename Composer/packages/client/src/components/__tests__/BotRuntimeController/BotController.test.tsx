@@ -69,9 +69,9 @@ describe('<BotController />', () => {
     const initRecoilState = ({ set }) => {
       const projectIds = ['123a.234', '456a.234', '789a.234'];
       set(botProjectIdsState, projectIds);
-      set(botStatusState(projectIds[0]), BotStatus.unConnected);
-      set(botStatusState(projectIds[1]), BotStatus.unConnected);
-      set(botStatusState(projectIds[2]), BotStatus.unConnected);
+      set(botStatusState(projectIds[0]), BotStatus.inactive);
+      set(botStatusState(projectIds[1]), BotStatus.inactive);
+      set(botStatusState(projectIds[2]), BotStatus.inactive);
     };
     const { findByText } = renderWithRecoil(<BotController />, initRecoilState);
     await findByText('Start all bots');
@@ -98,9 +98,9 @@ describe('<BotController />', () => {
     const initRecoilState = ({ set }) => {
       const projectIds = ['123a.234', '456a.234', '789a.234'];
       set(botProjectIdsState, projectIds);
-      set(botStatusState(projectIds[0]), BotStatus.unConnected);
-      set(botStatusState(projectIds[1]), BotStatus.unConnected);
-      set(botStatusState(projectIds[2]), BotStatus.unConnected);
+      set(botStatusState(projectIds[0]), BotStatus.inactive);
+      set(botStatusState(projectIds[1]), BotStatus.inactive);
+      set(botStatusState(projectIds[2]), BotStatus.inactive);
     };
     const { findByTestId } = renderWithRecoil(<BotController />, initRecoilState);
     const button = await findByTestId('button');
