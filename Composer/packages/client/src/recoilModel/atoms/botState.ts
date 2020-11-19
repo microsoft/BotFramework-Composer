@@ -107,7 +107,7 @@ export const localeState = atomFamily<string, string>({
 export const botStatusState = atomFamily<BotStatus, string>({
   key: getFullyQualifiedKey('botStatus'),
   default: (id) => {
-    return BotStatus.unConnected;
+    return BotStatus.inactive;
   },
 });
 

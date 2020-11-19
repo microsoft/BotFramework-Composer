@@ -120,7 +120,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
     },
     stopBot: async (projectId: string) => {
       dispatcher.stopPublishBot(projectId);
-      dispatcher.setBotStatus(projectId, BotStatus.unConnected);
+      dispatcher.setBotStatus(projectId, BotStatus.inactive);
     },
   };
 };

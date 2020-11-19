@@ -59,6 +59,9 @@ export function useBotOperations() {
   }, trackedProjectIds);
 
   const startAllBots = async () => {
+    builderEssentials.forEach((bot) => {
+      setBotStatus(bot.projectId, BotStatus.queued);
+    });
     const [, ...skillsBots] = builderEssentials;
     if (skillsBots.length === 0) {
       startRootBot();
