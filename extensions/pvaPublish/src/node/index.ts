@@ -1,9 +1,9 @@
-import { ExtensionRegistration } from '@bfc/extension';
+import { IExtensionRegistration } from '@botframework-composer/types';
 
 import { getStatus, history, publish, pull } from './publish';
 import { setLogger } from './logger';
 
-function initialize(registration: ExtensionRegistration) {
+function initialize(registration: IExtensionRegistration) {
   setLogger(registration.log);
   const extension = {
     name: 'pva-publish-composer',

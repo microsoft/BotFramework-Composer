@@ -2,11 +2,12 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
+import { ExtensionMetadata } from '@botframework-composer/types';
 
 import * as ExtensionsController from '../extensions';
+import { ExtensionManager } from '../../services/extensionManager';
 
-jest.mock('@bfc/extension', () => ({
+jest.mock('../../services/extensionManager', () => ({
   ExtensionManager: {
     disable: jest.fn(),
     enable: jest.fn(),
