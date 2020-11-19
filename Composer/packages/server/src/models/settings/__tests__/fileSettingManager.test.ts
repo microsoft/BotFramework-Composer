@@ -3,9 +3,19 @@
 
 import { FileSettingManager } from '../../../models/settings/fileSettingManager';
 import { Path } from '../../../utility/path';
+import StorageService from '../../../services/storage';
+import { LocalDiskStorage } from '../../storage/localDiskStorage';
+
+jest.mock('../../../services/storage', () => ({
+  getStorageClient: jest.fn(),
+}));
 
 const dir = './mocks';
 const defaultDir = Path.join(__dirname, dir);
+
+beforeEach(() => {
+  (StorageService.getStorageClient as jest.Mock).mockReturnValue(new LocalDiskStorage());
+});
 
 describe('get', () => {
   it('return values', async () => {

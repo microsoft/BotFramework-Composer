@@ -3,7 +3,7 @@
     "message": "Acerca de"
   },
   "actual_zoom_211ec99": {
-    "message": "Actual Zoom"
+    "message": "Zoom Real"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Trazer Tudo para a Frente"
@@ -18,7 +18,7 @@
     "message": "Fechar Janela"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer on GitHub"
+    "message": "Composer no GitHub"
   },
   "copy_9748f9f": {
     "message": "Copiar"
@@ -45,7 +45,7 @@
     "message": "Ajuda"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Hide Bot Framework Composer"
+    "message": "Ocultar Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "Ocultar Outros"
@@ -54,7 +54,7 @@
     "message": "A inicializar..."
   },
   "learn_more_about_bot_framework_2daca065": {
-    "message": "Learn More About Bot Framework"
+    "message": "Mais Informações sobre o Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Minimizar"
@@ -66,7 +66,7 @@
     "message": "Declaração de Privacidade"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Quit Bot Framework Composer"
+    "message": "Sair do Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "Refazer"
@@ -75,31 +75,31 @@
     "message": "Comunicar um Problema"
   },
   "select_all_cf7e0248": {
-    "message": "Seleccionar Tudo"
+    "message": "Selecionar Tudo"
   },
   "services_ccd7bca0": {
     "message": "Serviços"
   },
   "show_all_ae37d610": {
-    "message": "Mostrar Todas"
+    "message": "Mostrar Tudo"
   },
   "speech_16063aed": {
     "message": "Voz"
   },
   "start_speaking_f8d406ff": {
-    "message": "Start Speaking"
+    "message": "Iniciar Fala"
   },
   "starting_server_721c37fd": {
-    "message": "Starting server..."
+    "message": "Iniciar servidor..."
   },
   "stop_speaking_7b4b9834": {
-    "message": "Stop Speaking"
+    "message": "Parar Fala"
   },
   "toggle_developer_tools_d2ef8ea7": {
-    "message": "Alternar Ferramentas de Programação"
+    "message": "Ativar/Desativar Ferramentas de Programação"
   },
   "toggle_full_screen_272a0c5": {
-    "message": "Toggle Full Screen"
+    "message": "Ativar/Desativar Ecrã Inteiro"
   },
   "undo_a7be8fef": {
     "message": "Anular"
@@ -108,7 +108,7 @@
     "message": "Ver"
   },
   "view_license_720d341a": {
-    "message": "View License"
+    "message": "Ver Licença"
   },
   "window_171922c7": {
     "message": "Janela"

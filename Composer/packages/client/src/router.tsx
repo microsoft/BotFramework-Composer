@@ -12,7 +12,14 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { dispatcherState, schemasState, botProjectIdsState, botOpeningState, pluginPagesSelector } from './recoilModel';
+import {
+  dispatcherState,
+  schemasState,
+  botProjectIdsState,
+  botOpeningState,
+  pluginPagesSelector,
+  botOpeningMessage,
+} from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -32,6 +39,7 @@ const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPa
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
+  const spinnerText = useRecoilValue(botOpeningMessage);
 
   return (
     <div css={data}>
@@ -87,7 +95,7 @@ const Routes = (props) => {
         <div
           css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)' }}
         >
-          <LoadingSpinner />
+          <LoadingSpinner message={spinnerText} />
         </div>
       )}
     </div>

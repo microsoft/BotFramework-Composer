@@ -16,7 +16,6 @@ import {
   clipboardActionsState,
   schemasState,
   validateDialogsSelectorFamily,
-  breadcrumbState,
   focusPathState,
   skillsState,
   localeState,
@@ -30,6 +29,9 @@ import {
   rootBotProjectIdSelector,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
+import httpClient from '../utils/httpUtil';
+import { navigateTo } from '../utils/navigation';
+import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -58,6 +60,7 @@ const stubDialog = (): DialogInfo => ({
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isFormDialog: false,
 });
 
 export function useShell(source: EventSource, projectId: string): Shell {
@@ -65,7 +68,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
-  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsState(projectId));
   const locale = useRecoilValue(localeState(projectId));
@@ -99,6 +101,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkill,
     updateZoomRate,
+    reloadProject,
+    setApplicationLevelError,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -136,17 +140,17 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateDialog({ id, content: newDialog.content, projectId });
   }
 
-  function navigationTo(path) {
+  async function navigationTo(path, rest?) {
     if (rootBotProjectId == null) return;
-    navTo(projectId, path, breadcrumb);
+    await navTo(projectId, path, rest);
   }
 
-  function focusEvent(subPath) {
+  async function focusEvent(subPath) {
     if (rootBotProjectId == null) return;
-    selectTo(projectId, dialogId, subPath);
+    await selectTo(projectId, dialogId, subPath);
   }
 
-  function focusSteps(subPaths: string[] = [], fragment?: string) {
+  async function focusSteps(subPaths: string[] = [], fragment?: string) {
     let dataPath: string = subPaths[0];
 
     if (source === FORM_EDITOR) {
@@ -157,8 +161,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         dataPath = `${focused}.${dataPath}`;
       }
     }
-
-    focusTo(rootBotProjectId ?? projectId, projectId, dataPath, fragment ?? '');
+    await focusTo(rootBotProjectId ?? projectId, projectId, dataPath, fragment ?? '');
   }
 
   function updateFlowZoomRate(currentRate) {
@@ -179,7 +182,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         projectId,
       });
     },
-    saveData: (newData, updatePath) => {
+    saveData: (newData, updatePath, callback) => {
       let dataPath = '';
       if (source === FORM_EDITOR) {
         dataPath = updatePath || focused || '';
@@ -192,8 +195,12 @@ export function useShell(source: EventSource, projectId: string): Shell {
         projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
-      updateDialog(payload);
-      commitChanges();
+      return updateDialog(payload).then(async () => {
+        if (typeof callback === 'function') {
+          await callback();
+        }
+        commitChanges();
+      });
     },
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
@@ -224,20 +231,26 @@ export function useShell(source: EventSource, projectId: string): Shell {
     undo,
     redo,
     commitChanges,
-    addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings,
-    announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
     updateFlowZoomRate,
+    reloadProject: () => reloadProject(projectId),
     ...lgApi,
     ...luApi,
     ...qnaApi,
     ...triggerApi,
     ...actionApi,
+
+    // application context
+    addCoachMarkRef: onboardingAddCoachMarkRef,
+    announce: setMessage,
+    navigateTo,
+    setApplicationLevelError,
+    updateUserSettings,
+    confirm: OpenConfirmModal,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
@@ -275,6 +288,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     skills,
     skillsSettings: settings.skill || {},
     flowZoomRate,
+    settings,
+    httpClient,
   };
 
   return {
