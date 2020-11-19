@@ -12,7 +12,6 @@ import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
-import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import {
   dispatcherState,

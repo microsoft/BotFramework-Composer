@@ -5,7 +5,6 @@ import { defaultPublishConfig } from '@bfc/shared';
 import { selector, selectorFamily } from 'recoil';
 import { checkForPVASchema } from '@bfc/shared';
 
-import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import {

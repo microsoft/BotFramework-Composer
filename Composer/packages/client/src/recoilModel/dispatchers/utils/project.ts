@@ -82,7 +82,6 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
-import settingsStorage from '../../../utils/dialogSettingStorage';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
