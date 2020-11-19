@@ -231,7 +231,7 @@ export const publisherDispatcher = () => {
         await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
         const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
         if (currentBotStatus !== BotStatus.failed) {
-          set(botStatusState(projectId), BotStatus.unConnected);
+          set(botStatusState(projectId), BotStatus.inactive);
         }
       } catch (err) {
         setError(callbackHelpers, err);
