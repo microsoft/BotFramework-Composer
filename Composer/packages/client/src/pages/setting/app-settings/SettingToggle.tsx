@@ -16,7 +16,7 @@ interface ISettingToggleProps {
   checked?: boolean;
   description: React.ReactChild;
   id?: string;
-  image: string;
+  image?: string;
   onToggle: (checked: boolean) => void;
   title: string;
   hideToggle?: boolean;
