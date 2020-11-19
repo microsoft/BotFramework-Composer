@@ -5,13 +5,10 @@
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { forwardRef } from 'react';
-// import formatMessage from 'format-message';
 
 import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { Conversation } from '../Conversation';
-//import { ProjectTree } from '../ProjectTree/ProjectTree';
-//import { LeftRightSplit } from '../Split/LeftRightSplit';
 
 import Routes from './../../router';
 import { applicationErrorState, dispatcherState, currentProjectIdState } from './../../recoilModel';
@@ -37,8 +34,6 @@ const content = css`
 
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-// const SHOW_TREE = ['design'];
-
 export const RightPanel = () => {
   const applicationError = useRecoilValue(applicationErrorState);
   const { setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
@@ -58,17 +53,7 @@ export const RightPanel = () => {
         setApplicationLevelError={setApplicationLevelError}
       >
         <RequireAuth>
-          <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>
-            {/*
-            {SHOW_TREE.includes(currentMode) ? (
-              <LeftRightSplit initialLeftGridWidth="200px" minLeftPixels={200} minRightPixels={800}>
-                <ProjectTree regionName={formatMessage('Project tree')} showTriggers={currentMode === 'design'} />
-                {conversation}
-              </LeftRightSplit>
-            ) : ( */}
-            {conversation}
-            {/* })} */}
-          </div>
+          <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>{conversation}</div>
         </RequireAuth>
       </ErrorBoundary>
     </div>
