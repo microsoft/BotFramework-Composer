@@ -29,7 +29,6 @@
   },
   "main": "lib/node/index.js",
   "dependencies": {
-    "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@uifabric/icons": "7.3.59",

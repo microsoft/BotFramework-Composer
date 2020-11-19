@@ -8,7 +8,7 @@ import { IFileStorage } from '../storage/interface';
 import StorageService from '../../services/storage';
 import log from '../../logger';
 
-import { ISettingManager, OBFUSCATED_VALUE } from '.';
+import { ISettingManager, OBFUSCATED_VALUE } from './interface';
 
 const debug = log.extend('file-settings-manager');
 

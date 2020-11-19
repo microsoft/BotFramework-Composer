@@ -8,7 +8,7 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { ExtensionRegistration, PublishResponse, PublishPlugin, JSONSchema7 } from '@bfc/extension';
+import { IExtensionRegistration, PublishResponse, PublishPlugin, JSONSchema7 } from '@botframework-composer/types';
 
 import schema from './schema';
 
@@ -23,12 +23,12 @@ interface PublishConfig {
 
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   private data: { [botId: string]: LocalPublishData };
-  private composer: ExtensionRegistration;
+  private composer: IExtensionRegistration;
   public schema: JSONSchema7;
   public name = 'mockRemotePublish';
   public description = 'Publish bot to mock remote';
 
-  constructor(composer: ExtensionRegistration) {
+  constructor(composer: IExtensionRegistration) {
     this.data = {};
     this.composer = composer;
     this.schema = schema;
@@ -137,7 +137,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 }
 
-export default async (composer: ExtensionRegistration): Promise<void> => {
+export default async (composer: IExtensionRegistration): Promise<void> => {
   const publisher = new LocalPublisher(composer);
   // pass in the custom storage class that will override the default
   await composer.addPublishMethod(publisher);
