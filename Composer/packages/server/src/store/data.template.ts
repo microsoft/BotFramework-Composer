@@ -20,4 +20,7 @@ export default {
   recentBotProjects: [],
   projectLocationMap: {},
   featureFlags: getDefaultFeatureFlags(),
+  settings: {
+    telemetry: {},
+  },
 };

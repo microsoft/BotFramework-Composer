@@ -6,16 +6,9 @@ import { ServerSettings } from '@bfc/shared';
 import { Store } from '../store/store';
 
 const KEY = 'settings';
-
-const DEFAULT_SETTINGS: ServerSettings = {
-  telemetry: {
-    allowDataCollection: null,
-  },
-};
-
 export class SettingsService {
   public static getSettings(): ServerSettings {
-    return Store.get(KEY, DEFAULT_SETTINGS);
+    return Store.get(KEY, {});
   }
 
   public static setSettings(settings: ServerSettings): ServerSettings {

@@ -43,7 +43,16 @@ const migrations: Migration[] = [
   {
     name: 'Re-init when version update',
     condition: (data) => !data.version || data.version != initData.version,
-    run: (data) => initData,
+    run: (data) => {
+      return {
+        ...initData,
+        settings: {
+          telemetry: {
+            ...data.settings.telemetry,
+          },
+        },
+      };
+    },
   },
 ];
 
