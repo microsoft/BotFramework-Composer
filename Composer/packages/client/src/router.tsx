@@ -19,6 +19,7 @@ import {
   botOpeningState,
   pluginPagesSelector,
   botProjectSpaceSelector,
+  botOpeningMessage,
 } from './recoilModel';
 import { rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
@@ -42,6 +43,7 @@ const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPa
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
+  const spinnerText = useRecoilValue(botOpeningMessage);
 
   return (
     <div css={data}>
@@ -99,7 +101,7 @@ const Routes = (props) => {
         <div
           css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)' }}
         >
-          <LoadingSpinner />
+          <LoadingSpinner message={spinnerText} />
         </div>
       )}
     </div>
