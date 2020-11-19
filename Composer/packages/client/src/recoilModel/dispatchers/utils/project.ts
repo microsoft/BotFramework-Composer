@@ -389,7 +389,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(botDisplayNameState(projectId), botName);
   set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
   if (location !== curLocation) {
-    set(botStatusState(projectId), BotStatus.unConnected);
+    set(botStatusState(projectId), BotStatus.inactive);
     set(locationState(projectId), location);
   }
   set(schemasState(projectId), schemas);

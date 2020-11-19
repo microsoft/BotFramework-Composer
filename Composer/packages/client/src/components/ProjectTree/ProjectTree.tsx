@@ -133,6 +133,7 @@ type BotInProject = {
   diagnostics: Diagnostic[];
   error: { [key: string]: any };
   buildEssentials: { [key: string]: any };
+  isPvaSchema: boolean;
 };
 
 type Props = {
