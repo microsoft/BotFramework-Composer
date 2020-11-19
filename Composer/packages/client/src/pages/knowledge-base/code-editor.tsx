@@ -22,11 +22,13 @@ import { backIcon } from './styles';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
+  skillId: string;
 }
 
 const lspServerPath = '/lu-language-server';
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { projectId = '', dialogId = '' } = props;
+  const { dialogId = '' } = props;
+  const projectId = props.skillId ?? props.projectId ?? '';
   const actions = useRecoilValue(dispatcherState);
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   //To do: support other languages

@@ -26,13 +26,13 @@ const QnAPage: React.FC<RouteComponentProps<{
   projectId: string;
   skillId: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
-
+  const { dialogId = '', projectId = '', skillId = '' } = props;
+  const currentBotProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(currentBotProjectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(currentBotProjectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
@@ -58,7 +58,7 @@ const QnAPage: React.FC<RouteComponentProps<{
             key: 'Create KB from scratch',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
-              actions.createQnAFromScratchDialogBegin({ projectId });
+              actions.createQnAFromScratchDialogBegin({ projectId: currentBotProjectId });
             },
           },
           {
@@ -66,7 +66,7 @@ const QnAPage: React.FC<RouteComponentProps<{
             key: 'Create KB from URL or file',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
-              actions.createQnAFromUrlDialogBegin({ projectId });
+              actions.createQnAFromUrlDialogBegin({ projectId: currentBotProjectId });
             },
           },
         ],
@@ -93,7 +93,7 @@ const QnAPage: React.FC<RouteComponentProps<{
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
       navigateTo(`${baseURL}knowledge-base/${dialogId}`);
     }
-  }, [dialogId, dialogs, projectId]);
+  }, [dialogId, dialogs, currentBotProjectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
@@ -101,7 +101,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       if (!edit) url += `/edit`;
       navigateTo(url);
     },
-    [dialogId, projectId, edit]
+    [dialogId, currentBotProjectId, edit]
   );
 
   useEffect(() => {
@@ -131,15 +131,15 @@ const QnAPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
-          <TableView dialogId={dialogId} path="/" projectId={projectId} />
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={currentBotProjectId} skillId={skillId} />
+          <TableView dialogId={dialogId} path="/" projectId={currentBotProjectId} skillId={skillId} />
         </Router>
         <CreateQnAModal
           dialogId={createOnDialogId || dialogId}
-          projectId={projectId}
+          projectId={currentBotProjectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId });
+            actions.createQnAFromUrlDialogCancel({ projectId: currentBotProjectId });
           }}
           onSubmit={async ({ name, url, multiTurn = false }) => {
             if (url) {
@@ -148,13 +148,13 @@ const QnAPage: React.FC<RouteComponentProps<{
                 name,
                 url,
                 multiTurn,
-                projectId,
+                projectId: currentBotProjectId,
               });
             } else {
               await actions.createQnAKBFromScratch({
                 id: `${createOnDialogId || dialogId}.${locale}`,
                 name,
-                projectId,
+                projectId: currentBotProjectId,
               });
             }
           }}
