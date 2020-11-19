@@ -18,8 +18,8 @@ import {
   botProjectIdsState,
   botOpeningState,
   pluginPagesSelector,
-  botProjectSpaceSelector,
   botOpeningMessage,
+  localBotsDataSelector,
 } from './recoilModel';
 import { rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
@@ -124,17 +124,18 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-  const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+  const localBots = useRecoilValue(localBotsDataSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));
 
+  //initialize settings after bot projects loaded
   useEffect(() => {
-    if (botProjectSpaceLoaded && rootBotProjectId && botProjectsMetaData) {
-      for (let i = 0; i < botProjectsMetaData.length; i++) {
-        if (!botProjectsMetaData[i].isRemote) {
-          const id = botProjectsMetaData[i].projectId;
-          const setting = botProjectsMetaData[i].setting;
+    if (botProjectSpaceLoaded && rootBotProjectId && localBots) {
+      for (let i = 0; i < localBots.length; i++) {
+        if (!localBots[i].isRemote) {
+          const id = localBots[i].projectId;
+          const setting = localBots[i].setting;
           const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
           setSettings(id, mergedSettings);
         }
@@ -148,7 +149,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
       setLocale(storedLocale, rootBotProjectId);
     }
   }, [botProjectSpaceLoaded, rootBotProjectId, botName]);
-
 
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {
