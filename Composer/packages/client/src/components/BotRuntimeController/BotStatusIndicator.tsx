@@ -11,7 +11,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
 import { getBotStatusText } from '../../utils/botRuntimeUtils';
-import { BotStatus, BotStatusesCopy } from '../../constants';
+import { BotStatus } from '../../constants';
 
 import { ErrorCallout } from './errorCallout';
 import { useBotOperations } from './useBotOperations';
@@ -49,7 +49,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
   const botStatusText = useMemo(() => {
     if (botStatus === BotStatus.connected) {
       setBotStatusStyle({
-        color: SharedColors.green20,
+        color: SharedColors.green10,
       });
     } else if (botStatus === BotStatus.failed) {
       setBotStatusStyle({

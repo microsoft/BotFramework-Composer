@@ -895,7 +895,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <DisplayManifestModal
             projectId={skillId ?? projectId}
             skillNameIdentifier={displaySkillManifest}
-            onDismiss={() => dismissManifestModal(skillId ?? projectId)}
+            onDismiss={() => dismissManifestModal(projectId)}
           />
         )}
         {brokenSkillInfo && (

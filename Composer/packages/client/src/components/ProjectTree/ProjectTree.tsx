@@ -300,6 +300,16 @@ export const ProjectTree: React.FC<Props> = ({
       },
     ];
 
+    if (!bot.isPvaSchema) {
+      menu.splice(1, 0, {
+        label: formatMessage('Add new knowledge base'),
+        icon: 'Add',
+        onClick: () => {
+          createQnAFromUrlDialogBegin({ projectId: bot.projectId });
+        },
+      });
+    }
+
     if (!bot.isRootBot) {
       menu.splice(
         3,
@@ -345,7 +355,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -355,7 +365,6 @@ export const ProjectTree: React.FC<Props> = ({
       projectId: rootProjectId,
       skillId: skillId === rootProjectId ? undefined : skillId,
     };
-
     const menu: any[] = [
       {
         label: formatMessage('Add a trigger'),
@@ -363,6 +372,10 @@ export const ProjectTree: React.FC<Props> = ({
         onClick: () => {
           onDialogCreateTrigger(skillId, dialog.id);
         },
+      },
+      {
+        label: '',
+        onClick: () => {},
       },
     ];
 
