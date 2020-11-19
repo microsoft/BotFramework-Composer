@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "jsx": "react",
+    "esModuleInterop": true
+  },
+  "include": [
+    "src/client/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}

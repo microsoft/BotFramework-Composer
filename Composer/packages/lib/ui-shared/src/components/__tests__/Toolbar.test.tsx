@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@botframework-composer/test-utils';
+import { render, fireEvent } from '@botframework-composer/test-utils';
 
-import { renderWithRecoil } from '../testUtils';
-import { Toolbar } from '../../src/components/Toolbar';
+import { Toolbar } from '../Toolbar';
 
 const toolbarItems = (onClick) => [
   {
@@ -50,7 +49,7 @@ const toolbarItems = (onClick) => [
 
 describe('<Toolbar />', () => {
   it('should render the Toolbar', () => {
-    const { container } = renderWithRecoil(<Toolbar toolbarItems={toolbarItems(() => {})} />);
+    const { container } = render(<Toolbar toolbarItems={toolbarItems(() => {})} />);
 
     expect(container).toHaveTextContent('New');
     expect(container).toHaveTextContent('Open');
@@ -60,7 +59,7 @@ describe('<Toolbar />', () => {
 
   it('should have item click event', async () => {
     const mockSetCreationFlowStatus = jest.fn(() => null);
-    const { findByText } = renderWithRecoil(<Toolbar toolbarItems={toolbarItems(mockSetCreationFlowStatus)} />);
+    const { findByText } = render(<Toolbar toolbarItems={toolbarItems(mockSetCreationFlowStatus)} />);
     const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);

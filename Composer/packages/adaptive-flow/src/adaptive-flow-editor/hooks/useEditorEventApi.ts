@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI } from '@bfc/shared';
+import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI, MicrosoftIDialog } from '@bfc/shared';
 import get from 'lodash/get';
 import { useDialogApi } from '@bfc/extension-client';
 
@@ -21,7 +21,12 @@ import { calculateRangeSelection } from '../utils/calculateRangeSelection';
 import { useDialogEditApi } from './useDialogEditApi';
 
 export const useEditorEventApi = (
-  state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
+  state: {
+    path: string;
+    data: MicrosoftIDialog;
+    nodeContext: NodeRendererContextValue;
+    selectionContext: SelectionContextData;
+  },
   shellApi: ShellApi
 ) => {
   const { actionsContainLuIntent } = shellApi;
@@ -64,7 +69,7 @@ export const useEditorEventApi = (
   const trackActionChange = (actionPath: string) => {
     const affectedPaths = DialogUtils.getParentPaths(actionPath);
     for (const path of affectedPaths) {
-      const json = get(data, path);
+      const json = get(data, path) as MicrosoftIDialog;
       designerCache.uncacheBoundary(json);
     }
   };
@@ -153,7 +158,7 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.OpenDialog:
         handler = ({ callee }) => {
-          navTo(callee, '"beginDialog"');
+          navTo(callee);
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;

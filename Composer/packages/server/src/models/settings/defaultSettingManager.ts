@@ -77,6 +77,7 @@ export class DefaultSettingManager extends FileSettingManager {
         customRuntime: false,
         path: '',
         command: '',
+        key: '',
       },
       downsampling: {
         maxImbalanceRatio: 10,
@@ -89,6 +90,7 @@ export class DefaultSettingManager extends FileSettingManager {
       skill: {},
       defaultLanguage: 'en-us',
       languages: ['en-us'],
+      importedLibraries: [],
     };
   };
 
