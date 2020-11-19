@@ -151,6 +151,8 @@ type Props = {
   onBotRemoveSkill?: (skillId: string) => void;
   onDialogCreateTrigger?: (projectId: string, dialogId: string) => void;
   onDialogDeleteTrigger?: (projectId: string, dialogId: string, index: number) => void;
+  onDialogCreateQnAKBFromUrl?: (projectId: string, dialogId: string) => void;
+  onDialogCreateQnAKBFromScratch?: (projectId: string, dialogId: string) => void;
   defaultSelected?: Partial<TreeLink>;
 };
 
@@ -171,11 +173,17 @@ export const ProjectTree: React.FC<Props> = ({
   onBotExportZip = () => {},
   onBotRemoveSkill = () => {},
   onDialogCreateTrigger = () => {},
+  onDialogCreateQnAKBFromUrl = () => {},
+  onDialogCreateQnAKBFromScratch = () => {},
   defaultSelected,
 }) => {
-  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    onboardingAddCoachMarkRef,
+    navigateToFormDialogSchema,
+    setPageElementState,
+    createQnAFromScratchDialogBegin,
+    createQnAFromUrlDialogBegin,
+  } = useRecoilValue(dispatcherState);
   const treeRef = useRef<HTMLDivElement>(null);
 
   const pageElements = useRecoilValue(pageElementState).design;
@@ -356,6 +364,20 @@ export const ProjectTree: React.FC<Props> = ({
         icon: 'Add',
         onClick: () => {
           onDialogCreateTrigger(skillId, dialog.id);
+        },
+      },
+      {
+        label: formatMessage('Create KB from scratch'),
+        onClick: () => {
+          createQnAFromScratchDialogBegin({ projectId: skillId });
+          onDialogCreateQnAKBFromUrl(skillId, dialog.id);
+        },
+      },
+      {
+        label: formatMessage('Create KB from URL or file'),
+        onClick: () => {
+          createQnAFromUrlDialogBegin({ projectId: skillId });
+          onDialogCreateQnAKBFromScratch(skillId, dialog.id);
         },
       },
       {
