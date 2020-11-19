@@ -73,13 +73,7 @@ const createQnASectionItem = (fileId: string): QnASectionItem => {
   };
 };
 
-interface TableViewProps extends RouteComponentProps<{}> {
-  dialogId: string;
-  projectId: string;
-  skillId: string;
-}
-
-const TableView: React.FC<TableViewProps> = (props) => {
+const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (props) => {
   const { dialogId = '' } = props;
   const projectId = props.skillId ?? props.projectId ?? '';
   const actions = useRecoilValue(dispatcherState);

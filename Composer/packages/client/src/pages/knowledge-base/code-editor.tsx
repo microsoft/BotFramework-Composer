@@ -19,14 +19,11 @@ import { getBaseName } from '../../utils/fileUtil';
 
 import { backIcon } from './styles';
 
-interface CodeEditorProps extends RouteComponentProps<{}> {
-  dialogId: string;
-  projectId: string;
-  skillId: string;
-}
-
 const lspServerPath = '/lu-language-server';
-const CodeEditor: React.FC<CodeEditorProps> = (props) => {
+
+const CodeEditor: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
+  props
+) => {
   const { dialogId = '' } = props;
   const projectId = props.skillId ?? props.projectId ?? '';
   const actions = useRecoilValue(dispatcherState);
