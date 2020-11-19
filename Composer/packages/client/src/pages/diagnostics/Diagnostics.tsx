@@ -47,7 +47,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   ];
 
   const handleItemClick = (item: IDiagnosticInfo) => {
-    navigateTo(item.getUrl(projectId));
+    navigateTo(item.getUrl());
   };
 
   const onRenderHeaderContent = () => {

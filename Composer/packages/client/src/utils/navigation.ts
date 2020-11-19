@@ -115,10 +115,23 @@ export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; Micr
   document.body.appendChild(i);
 };
 
+
 export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
   const { projectId, skillId, dialogId } = link;
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   return `${baseURL}${pageMode}/${dialogId ?? 'all'}`;
+}
+
+export function createBotSettingUrl(rootProjectId: string, activeProjectId: string) {
+  let url = '';
+  const base = `/bot/${rootProjectId}/botProjectsSettings`;
+  if (rootProjectId === activeProjectId) {
+    url = `${base}/root`;
+  } else {
+    url = `${base}/${activeProjectId}`;
+  }
+
+  return url;
 }
