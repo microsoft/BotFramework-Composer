@@ -76,10 +76,12 @@ const createQnASectionItem = (fileId: string): QnASectionItem => {
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
+  skillId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId = '', projectId = '' } = props;
+  const { dialogId = '' } = props;
+  const projectId = props.skillId ?? props.projectId ?? '';
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
