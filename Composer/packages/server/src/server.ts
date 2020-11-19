@@ -17,8 +17,9 @@ import { IntellisenseServer } from '@bfc/intellisense-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
 import chalk from 'chalk';
-import { ExtensionContext, ExtensionManager } from '@bfc/extension';
 
+import { ExtensionManager } from './services/extensionManager';
+import { ExtensionContext } from './models/extension/extensionContext';
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';

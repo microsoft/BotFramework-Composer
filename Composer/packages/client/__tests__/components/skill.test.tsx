@@ -18,8 +18,6 @@ import Skills from '../../src/pages/skills';
 
 jest.mock('../../src//utils/httpUtil');
 
-jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
-
 const skills: Skill[] = [
   {
     id: 'email-skill',
