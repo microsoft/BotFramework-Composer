@@ -8,7 +8,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
-import { IBotStatus } from './botStatusList';
+import { IBotStatus } from './BotStatusList';
 
 const cardContent = css`
   display: flex;
@@ -35,7 +35,7 @@ const cardDescription = css`
   word-break: break-word;
 `;
 
-export const publishedNotificationCard = (item: IBotStatus): CardProps => {
+export const getPublishedNotificationCardProps = (item: IBotStatus): CardProps => {
   const statusIconStyle = css({
     margin: '12px 0 0 -1px',
     width: '12px',
@@ -46,11 +46,16 @@ export const publishedNotificationCard = (item: IBotStatus): CardProps => {
   });
   return {
     title: '',
-    description: formatMessage(`You have {status} published {name} to {publishTarget}`, {
-      status: item.status === 200 ? 'successfully' : 'unsuccessfully',
-      name: item.name,
-      publishTarget: item.publishTarget,
-    }),
+    description:
+      item.status === 200
+        ? formatMessage(`You have successfully published {name} to {publishTarget}`, {
+            name: item.name,
+            publishTarget: item.publishTarget,
+          })
+        : formatMessage(`Publishing {name} to {publishTarget} failed.`, {
+            name: item.name,
+            publishTarget: item.publishTarget,
+          }),
     type: 'pending',
     onRenderCardContent: (props) => (
       <div css={cardContent}>
@@ -63,7 +68,7 @@ export const publishedNotificationCard = (item: IBotStatus): CardProps => {
     ),
   };
 };
-export const pendingNotificationCard = (items): CardProps => {
+export const getPendingNotificationCardProps = (items: IBotStatus[]): CardProps => {
   return {
     title: '',
     description: formatMessage(`Publishing {count} bots`, { count: items.length }),

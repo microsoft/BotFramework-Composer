@@ -47,9 +47,15 @@ export const localBotsDataSelector = selector({
   get: ({ get }) => {
     const botProjectIds = get(localBotsWithoutErrorsSelector);
     return botProjectIds.map((projectId: string) => {
+      const publishHistory = get(publishHistoryState(projectId));
+      const publishTypes = get(publishTypesState(projectId));
+      const setting = get(settingsState(projectId));
       return {
         projectId,
         name: get(botDisplayNameState(projectId)),
+        setting,
+        publishHistory,
+        publishTypes,
       };
     });
   },
@@ -88,8 +94,6 @@ export const botProjectSpaceSelector = selector({
       const buildEssentials = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      const publishHistory = get(publishHistoryState(projectId));
-      const publishTypes = get(publishTypesState(projectId));
       const setting = get(settingsState(projectId));
       const skillManifests = get(skillManifestsState(projectId));
 
@@ -104,8 +108,6 @@ export const botProjectSpaceSelector = selector({
         setting,
         error: botError,
         botNameId,
-        publishHistory,
-        publishTypes,
         diagnostics,
         buildEssentials,
       };

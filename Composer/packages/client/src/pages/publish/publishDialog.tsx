@@ -10,7 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { IBotStatus } from './botStatusList';
+import { IBotStatus } from './BotStatusList';
 
 export const PublishDialog = (props) => {
   const { items } = props;
@@ -63,6 +63,7 @@ export const PublishDialog = (props) => {
       maxWidth: 90,
       data: 'string',
       onRender: (item: IBotStatus) => {
+        // message for each publish bot
         return (
           <TextField
             placeholder={formatMessage('Write your message')}

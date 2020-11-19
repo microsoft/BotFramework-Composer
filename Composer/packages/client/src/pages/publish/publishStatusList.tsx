@@ -27,8 +27,8 @@ import { listRoot, tableView, detailList } from './styles';
 
 export interface IStatusListProps {
   items: IStatus[];
-  onLogClick: (item: IStatus | null) => void;
-  onRollbackClick: (item: IStatus | null) => void;
+  onLogClick: (item: IStatus) => void;
+  onRollbackClick: (item: IStatus) => void;
   updateItems: (items: IStatus[]) => void;
 }
 
@@ -194,7 +194,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
               onLogClick(item);
             }}
           >
-            {formatMessage('See log')}
+            {formatMessage('View log')}
           </ActionButton>
         );
       },

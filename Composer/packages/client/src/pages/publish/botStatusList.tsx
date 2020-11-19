@@ -11,31 +11,32 @@ import React, { useState } from 'react';
 import { Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { PublishTarget } from '@botframework-composer/types/lib/publish';
 
 import { navigateTo } from '../../utils/navigation';
 
-import { IStatus, PublishStatusList } from './publishStatusList';
+import { IStatus, PublishStatusList } from './PublishStatusList';
 
 // Licensed under the MIT License.
-export interface IBotStatus {
+export type IBotStatus = {
   id: string;
   name: string;
-  publishTargets?: any[];
+  publishTargets?: PublishTarget[];
   publishTarget?: string;
   time?: string;
   status?: number;
   message?: string;
   comment?: string;
-}
-export interface IBotStatusListProps {
+};
+export type IBotStatusListProps = {
   items: IBotStatus[];
-  botPublishHistoryList: { [key: string]: any }[];
+  botPublishHistoryList: { projectId: string; publishHistory: IStatus[] }[];
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: IBotStatus) => void;
-  onLogClick: (item: IStatus | null) => void;
-  onRollbackClick: (selectedVersion: IStatus | null, item: IBotStatus) => void;
-}
+  onLogClick: (item: IStatus) => void;
+  onRollbackClick: (selectedVersion: IStatus, item: IBotStatus) => void;
+};
 export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const {
     items,
@@ -46,7 +47,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     onRollbackClick,
   } = props;
   const [botDescend, setBotDescend] = useState(false);
-  const sortBot = () => {
+  const sortBotByName = () => {
     setBotDescend(!botDescend);
   };
 
@@ -87,8 +88,8 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       });
       return options;
     };
-    const onRenderOption = (option?: IDropdownOption): JSX.Element => {
-      if (!option) return <div></div>;
+    const onRenderOption = (option?: IDropdownOption): JSX.Element | null => {
+      if (!option) return null;
       return <div style={option.data && option.data.style}>{option.text}</div>;
     };
     const publishStatusList = item.publishTarget
@@ -192,25 +193,23 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     display: 'inline-block',
   });
   return (
-    <Fragment>
-      <table css={tableStyle}>
-        <thead>
-          <tr>
-            <th css={headerStyle}>
-              <ActionButton onClick={sortBot}>
-                {formatMessage('Bot')}
-                <FontIcon iconName={botDescend ? 'Down' : 'Up'} />
-              </ActionButton>
-            </th>
-            <th css={headerStyle}>{formatMessage('Publish target')}</th>
-            <th css={headerStyle}>{formatMessage('Date')}</th>
-            <th css={headerStyle}>{formatMessage('Status')}</th>
-            <th css={headerStyle}>{formatMessage('Message')}</th>
-            <th css={headerStyle}>{formatMessage('Comment')}</th>
-          </tr>
-        </thead>
-        <tbody>{items.map((item, index) => RenderItem(item, index))}</tbody>
-      </table>
-    </Fragment>
+    <table css={tableStyle}>
+      <thead>
+        <tr>
+          <th css={headerStyle}>
+            <ActionButton onClick={sortBotByName}>
+              {formatMessage('Bot')}
+              <FontIcon iconName={botDescend ? 'Down' : 'Up'} />
+            </ActionButton>
+          </th>
+          <th css={headerStyle}>{formatMessage('Publish target')}</th>
+          <th css={headerStyle}>{formatMessage('Date')}</th>
+          <th css={headerStyle}>{formatMessage('Status')}</th>
+          <th css={headerStyle}>{formatMessage('Message')}</th>
+          <th css={headerStyle}>{formatMessage('Comment')}</th>
+        </tr>
+      </thead>
+      <tbody>{items.map((item, index) => RenderItem(item, index))}</tbody>
+    </table>
   );
 };

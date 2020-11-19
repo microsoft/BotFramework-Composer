@@ -82,7 +82,7 @@ const cardTitle = css`
   margin-right: 16px;
 `;
 
-export const cardDescription = css`
+const cardDescription = css`
   text-size-adjust: none;
   font-size: ${FontSizes.size10};
   margin-top: 8px;
