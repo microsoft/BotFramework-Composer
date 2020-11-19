@@ -174,13 +174,9 @@ export const ProjectTree: React.FC<Props> = ({
   onDialogCreateTrigger = () => {},
   defaultSelected,
 }) => {
-  const {
-    onboardingAddCoachMarkRef,
-    navigateToFormDialogSchema,
-    setPageElementState,
-    createQnAFromUrlDialogBegin,
-    navTo,
-  } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
+    dispatcherState
+  );
   const treeRef = useRef<HTMLDivElement>(null);
 
   const pageElements = useRecoilValue(pageElementState).design;
