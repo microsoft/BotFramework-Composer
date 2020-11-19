@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ExtensionContext, UserIdentity } from '@bfc/extension';
+import { UserIdentity } from '@bfc/extension';
+
+import { ExtensionContext } from '../extension/extensionContext';
 
 import { LocalDiskStorage } from './localDiskStorage';
 import { StorageConnection, IFileStorage } from './interface';
