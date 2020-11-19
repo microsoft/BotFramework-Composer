@@ -9,14 +9,14 @@ const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
 
-const FORCE_BUILD = process.argv.includes('--force') || process.argv.includes('-f');
+const FORCE = process.argv.includes('--force') || process.argv.includes('-f');
 
 const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '..');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
 console.log('Compiling extensions in %s', extensionsDir);
 
-if (FORCE_BUILD) {
+if (FORCE) {
   console.log('--force is true. Forcing a rebuild of all extensions.');
 }
 
@@ -90,13 +90,13 @@ const hasChanges = (name, lastModified) => {
   return buildCache[name] ? new Date(buildCache[name]) < lastModified : true;
 };
 
-const compile = (name, extPath) => {
+const compile = async (name, extPath) => {
   const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
   const hasBuild = packageJSON && packageJSON.scripts && packageJSON.scripts.build;
 
   console.log('[%s] compiling', name);
   console.log('[%s] yarn install', name);
-  execSync('yarn --force --production=false --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
+  execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
 
   if (hasBuild) {
     console.log('[%s] yarn build', name);
@@ -106,38 +106,42 @@ const compile = (name, extPath) => {
   }
 };
 
-checkComposerLibs();
+async function main() {
+  checkComposerLibs();
 
-const errors = [];
+  const errors = [];
 
-for (const entry of allExtensions) {
-  if (entry.isDirectory()) {
-    const extPath = path.join(extensionsDir, entry.name);
-    const packageJSONPath = path.join(extPath, 'package.json');
-    if (!fs.existsSync(packageJSONPath)) {
-      console.warn(`Ignore directory ${extPath} which is not a npm module.`);
-      continue;
-    }
+  for (const entry of allExtensions) {
+    if (entry.isDirectory()) {
+      const extPath = path.join(extensionsDir, entry.name);
+      const packageJSONPath = path.join(extPath, 'package.json');
+      if (!fs.existsSync(packageJSONPath)) {
+        console.warn(`Ignore directory ${extPath} which is not a npm module.`);
+        continue;
+      }
 
-    const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
-    const lastModified = getLastModified(extPath);
-    if (FORCE_BUILD || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
-      try {
-        compile(entry.name, extPath);
-        writeToCache(entry.name, lastModified);
-      } catch (err) {
-        errors.push({
-          name: entry.name,
-          message: err.message,
-        });
-        console.error(err);
+      const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
+      const lastModified = getLastModified(extPath);
+      if (FORCE || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
+        try {
+          await compile(entry.name, extPath);
+          writeToCache(entry.name, lastModified);
+        } catch (err) {
+          errors.push({
+            name: entry.name,
+            message: err.message,
+          });
+          console.error(err);
+        }
       }
     }
   }
+
+  if (errors.length > 0) {
+    const formattedErrors = errors.map((e) => `\t- [${e.name}] ${e.message}`).join('\n');
+    console.error(`There was an error compiling these extensions:\n${formattedErrors}`);
+    process.exit(1);
+  }
 }
 
-if (errors.length > 0) {
-  const formattedErrors = errors.map((e) => `\t- [${e.name}] ${e.message}`).join('\n');
-  console.error(`There was an error compiling these extensions:\n${formattedErrors}`);
-  process.exit(1);
-}
+main();
