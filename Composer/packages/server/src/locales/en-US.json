@@ -1640,6 +1640,9 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
+  "msg_bf173fef": {
+    "message": "{ msg }"
+  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -2011,6 +2014,9 @@
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
+  },
+  "provisioning_1330aede": {
+    "message": "Provisioning ..."
   },
   "provisioning_summary_2be9422f": {
     "message": "Provisioning Summary"
