@@ -1982,9 +1982,6 @@
   "open_skills_page_for_configuration_details_a2a484ea": {
     "message": "Open Skills page for configuration details"
   },
-  "open_start_bots_panel_f7f87200": {
-    "message": "Open start bots panel"
-  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -2077,6 +2074,9 @@
   },
   "populate_your_knowledge_base_bb2d3605": {
     "message": "Populate your Knowledge Base"
+  },
+  "powervirtualagents_logo_11858924": {
+    "message": "PowerVirtualAgents Logo"
   },
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logo"
@@ -2593,6 +2593,12 @@
   },
   "skip_this_step_to_add_questions_and_answers_manual_ed1b9f80": {
     "message": "Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. "
+  },
+  "something_happened_while_attempting_to_pull_e_952c7afe": {
+    "message": "Something happened while attempting to pull: { e }"
+  },
+  "something_went_wrong_d238c551": {
+    "message": "Something went wrong"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
