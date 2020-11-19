@@ -174,14 +174,12 @@ export const ProjectTree: React.FC<Props> = ({
   onBotRemoveSkill = () => {},
   onDialogCreateTrigger = () => {},
   onDialogCreateQnAKBFromUrl = () => {},
-  onDialogCreateQnAKBFromScratch = () => {},
   defaultSelected,
 }) => {
   const {
     onboardingAddCoachMarkRef,
     navigateToFormDialogSchema,
     setPageElementState,
-    createQnAFromScratchDialogBegin,
     createQnAFromUrlDialogBegin,
   } = useRecoilValue(dispatcherState);
   const treeRef = useRef<HTMLDivElement>(null);
@@ -367,17 +365,11 @@ export const ProjectTree: React.FC<Props> = ({
         },
       },
       {
-        label: formatMessage('Create KB from scratch'),
-        onClick: () => {
-          createQnAFromScratchDialogBegin({ projectId: skillId });
-          onDialogCreateQnAKBFromUrl(skillId, dialog.id);
-        },
-      },
-      {
-        label: formatMessage('Create KB from URL or file'),
+        label: formatMessage('Add new knowledge base'),
+        icon: 'Add',
         onClick: () => {
           createQnAFromUrlDialogBegin({ projectId: skillId });
-          onDialogCreateQnAKBFromScratch(skillId, dialog.id);
+          onDialogCreateQnAKBFromUrl(skillId, dialog.id);
         },
       },
       {

@@ -26,7 +26,7 @@ const QnAPage: React.FC<RouteComponentProps<{
   projectId: string;
   skillId: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId = '' } = props;
+  const { dialogId = '', projectId = '', skillId } = props;
   const currentBotProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
@@ -54,7 +54,7 @@ const QnAPage: React.FC<RouteComponentProps<{
         },
         menuItems: [
           {
-            name: formatMessage('Create KB from scratch'),
+            name: formatMessage('Create knowledge base from scratch'),
             key: 'Create KB from scratch',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
@@ -62,7 +62,7 @@ const QnAPage: React.FC<RouteComponentProps<{
             },
           },
           {
-            name: formatMessage('Create KB from URL or file'),
+            name: formatMessage('Create knowledge base from URL or file'),
             key: 'Create KB from URL or file',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
