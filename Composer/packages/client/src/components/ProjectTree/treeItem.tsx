@@ -266,8 +266,8 @@ const onRenderItem = (textWidth: number, isMenuOpen: boolean) => (item: IOverflo
         <p title={item.message}>
           {item.message}
           <Link
-            onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}
             styles={{ root: { marginLeft: '5px' } }}
+            onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}
           >
             {linkText}
           </Link>
