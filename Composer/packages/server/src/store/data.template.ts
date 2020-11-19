@@ -25,5 +25,5 @@ export default {
   featureFlags: getDefaultFeatureFlags(),
   settings: {
     telemetry: {},
-  }
+  },
 };
