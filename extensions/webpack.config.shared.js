@@ -6,6 +6,12 @@ const svgToMiniDataURI = require('mini-svg-data-uri');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
+const serverPkg = require(path.resolve(__dirname, '../Composer/packages/server/package.json'));
+const serverDeps = Object.keys(serverPkg.dependencies).reduce((all, name) => {
+  all[name] = `commonjs ${name}`;
+  return all;
+}, {});
+
 function withNodeDefaults(extConfig) {
   if (!extConfig.context) {
     throw new Error('Must set context (usually to __dirname)');
@@ -14,10 +20,8 @@ function withNodeDefaults(extConfig) {
   const defaultConfig = {
     mode: isDevelopment ? 'development' : 'production',
     target: 'node',
-    devtool: 'source-map',
-    node: {
-      __dirname: false,
-    },
+    devtool: 'cheap-module-source-map',
+    node: false,
     output: {
       path: path.join(extConfig.context, 'dist'),
       filename: '[name].js',
@@ -31,7 +35,7 @@ function withNodeDefaults(extConfig) {
       rules: [
         {
           test: /\.tsx?$/,
-          use: { loader: 'ts-loader', options: { compilerOptions: { sourceMaps: true } } },
+          use: ['cache-loader', { loader: 'ts-loader', options: { compilerOptions: { sourceMaps: true } } }],
           exclude: [/node_modules/],
         },
       ],
@@ -40,9 +44,7 @@ function withNodeDefaults(extConfig) {
       extensions: ['.js', '.ts', '.json'],
       mainFields: ['main'],
     },
-    externals: {
-      '@botframework-composer/types': 'commonjs @botframework-composer/types',
-    },
+    externals: serverDeps,
     optimization: {
       minimize: !isDevelopment,
       minimizer: [
@@ -78,7 +80,7 @@ function withBrowserDefaults(extConfig) {
       rules: [
         {
           test: /\.tsx?$/,
-          use: { loader: 'ts-loader', options: { compilerOptions: { sourceMaps: true } } },
+          use: ['cache-loader', { loader: 'ts-loader', options: { compilerOptions: { sourceMaps: true } } }],
           exclude: [/node_modules/],
         },
         {
