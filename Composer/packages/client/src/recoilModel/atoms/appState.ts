@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ServerSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 
 import {
   StorageFolder,
@@ -212,6 +213,11 @@ export const botOpeningState = atom<boolean>({
   default: false,
 });
 
+export const botOpeningMessage = atom({
+  key: getFullyQualifiedKey('botOpeningMessage'),
+  default: formatMessage('Loading'),
+});
+
 export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({
   key: getFullyQualifiedKey('formDialogLibraryTemplates'),
   default: [],
@@ -229,5 +235,14 @@ export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any
     lg: {},
     lu: {},
     qna: {},
+  },
+});
+
+export const ServerSettingsState = atom<ServerSettings>({
+  key: getFullyQualifiedKey('serverSettings'),
+  default: {
+    telemetry: {
+      allowDataCollection: false,
+    },
   },
 });

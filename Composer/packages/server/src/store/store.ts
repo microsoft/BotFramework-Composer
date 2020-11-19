@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import fs from 'fs';
 import path from 'path';
@@ -22,16 +23,18 @@ const migrateStore = () => {
 
 migrateStore();
 
-interface KVStore {
-  get(key: string, defaultValue?: any): any;
-  set(key: string, value: any): void;
-}
-
-class JsonStore implements KVStore {
-  private data: any;
+export class JsonStore<T = any> {
+  private data: T;
   private filePath: string;
 
-  public get<T = unknown>(key: string, defaultValue?: T): T {
+  public read(): T {
+    this.readStore();
+    return this.data;
+  }
+
+  public get<K extends keyof T>(key: K): T[K] | undefined;
+  public get<K extends keyof T>(key: K, defaultValue: T[K]): T[K];
+  public get<K extends keyof T>(key: K, defaultValue?: T[K]): T[K] | undefined {
     this.readStore();
     if (key in this.data) {
       return this.data[key];
@@ -39,13 +42,15 @@ class JsonStore implements KVStore {
       // when default value is present, save it
       this.set(key, defaultValue);
       return defaultValue;
-    } else {
-      throw Error(`no such key ${key} in store`);
     }
   }
 
-  public set<T = unknown>(key: string, value: T): void {
-    this.data[key] = value;
+  public set<K extends keyof T>(key: K, value?: T[K]): void {
+    if (value === undefined) {
+      delete this.data[key];
+    } else {
+      this.data[key] = value;
+    }
     this.flush();
   }
 
@@ -53,20 +58,21 @@ class JsonStore implements KVStore {
     fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2) + '\n');
   };
 
-  constructor(jsonFilePath: string) {
+  constructor(jsonFilePath: string, initialValue: T) {
     this.filePath = path.resolve(jsonFilePath);
+    this.data = initialValue;
     this.ensureStore();
   }
 
   private ensureStore() {
     if (!fs.existsSync(this.filePath)) {
-      log('data.json not found. Re-initializing with initial data.');
+      log('%s not found. Re-initializing with initial data.', this.filePath);
       this.initializeStore();
     }
   }
 
   private initializeStore() {
-    fs.writeFileSync(this.filePath, JSON.stringify(initData, null, 2) + '\n');
+    fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2) + '\n');
   }
 
   private readStore() {
@@ -76,4 +82,4 @@ class JsonStore implements KVStore {
   }
 }
 
-export const Store = new JsonStore(dataStorePath);
+export const Store = new JsonStore(dataStorePath, initData);

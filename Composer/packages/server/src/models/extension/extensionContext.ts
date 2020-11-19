@@ -5,11 +5,19 @@ import passport from 'passport';
 import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
 import formatMessage from 'format-message';
-import { UserIdentity, ExtensionCollection, RuntimeTemplate } from '@botframework-composer/types';
+import {
+  UserIdentity,
+  ExtensionCollection,
+  RuntimeTemplate,
+  IBotProject,
+  IExtensionContext,
+} from '@botframework-composer/types';
+
+import { BotProjectService } from '../../services/project';
 
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
-class ExtensionContext {
+class ExtensionContext implements IExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
   public loginUri = '/login';
@@ -38,6 +46,10 @@ class ExtensionContext {
     return this._webserver;
   }
 
+  public get botProjectService() {
+    return BotProjectService;
+  }
+
   // allow webserver to be set programmatically
   public useExpress(webserver: Express) {
     this._webserver = webserver;
@@ -61,8 +73,8 @@ class ExtensionContext {
   }
 
   // get the runtime template currently used from project
-  public getRuntimeByProject(project): RuntimeTemplate {
-    const type = project.settings.runtime?.key || DEFAULT_RUNTIME;
+  public getRuntimeByProject(project: IBotProject): RuntimeTemplate {
+    const type = project.settings?.runtime?.key || DEFAULT_RUNTIME;
     const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
     if (template) {
       return template;
@@ -86,6 +98,14 @@ class ExtensionContext {
 
   public async getUserFromRequest(req): Promise<UserIdentity | undefined> {
     return req.user || undefined;
+  }
+
+  public async getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject> {
+    if (this.botProjectService !== undefined) {
+      return this.botProjectService.getProjectById(projectId, user);
+    } else {
+      throw new Error('No BotProjectService available');
+    }
   }
 }
 

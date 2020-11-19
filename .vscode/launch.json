@@ -44,12 +44,12 @@
       "type": "node",
       "request": "launch",
       "name": "Server: Launch",
-      "args": ["./build/init.js"],
+      "program": "${workspaceFolder}/Composer/packages/server/src/init.ts",
       "env": {
-        "DEBUG": ""
+        "DEBUG": "composer*"
       },
       "restart": true,
-      "outFiles": ["./build/*"],
+      "outFiles": ["${workspaceFolder}/Composer/packages/server/build/**/*.js"],
       "preLaunchTask": "server: build",
       "outputCapture": "std",
       "cwd": "${workspaceFolder}/Composer/packages/server"
@@ -94,7 +94,8 @@
         "${workspaceRoot}/Composer/packages/electron-server/build/**/*.js",
         "${workspaceRoot}/Composer/packages/server/build/**/*.js",
         "${workspaceRoot}/extensions/**/*.js"
-      ]
+      ],
+      "sourceMaps": true
     },
     {
       "name": "Debug current jest test",

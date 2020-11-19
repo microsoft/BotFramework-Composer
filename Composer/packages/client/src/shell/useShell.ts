@@ -29,6 +29,9 @@ import {
   rootBotProjectIdSelector,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
+import httpClient from '../utils/httpUtil';
+import { navigateTo } from '../utils/navigation';
+import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -98,6 +101,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkill,
     updateZoomRate,
+    reloadProject,
+    setApplicationLevelError,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -226,20 +231,26 @@ export function useShell(source: EventSource, projectId: string): Shell {
     undo,
     redo,
     commitChanges,
-    addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings,
-    announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
     updateFlowZoomRate,
+    reloadProject: () => reloadProject(projectId),
     ...lgApi,
     ...luApi,
     ...qnaApi,
     ...triggerApi,
     ...actionApi,
+
+    // application context
+    addCoachMarkRef: onboardingAddCoachMarkRef,
+    announce: setMessage,
+    navigateTo,
+    setApplicationLevelError,
+    updateUserSettings,
+    confirm: OpenConfirmModal,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
@@ -277,6 +288,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     skills,
     skillsSettings: settings.skill || {},
     flowZoomRate,
+    settings,
+    httpClient,
   };
 
   return {
