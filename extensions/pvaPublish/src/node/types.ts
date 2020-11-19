@@ -53,7 +53,7 @@ export interface PublishResult {
   message: string;
   status?: number;
   time?: Date;
-  action?: { href: string; label: string };
+  action?: { href: string; label: string } | null;
 }
 
 /** Copied from @bfc/extension */

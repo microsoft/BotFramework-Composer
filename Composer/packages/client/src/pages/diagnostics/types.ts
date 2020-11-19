@@ -6,7 +6,7 @@ import get from 'lodash/get';
 
 import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
-import { convertPathToUrl } from '../../utils/navigation';
+import { convertPathToUrl, createBotSettingUrl } from '../../utils/navigation';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
 export enum DiagnosticType {
@@ -20,6 +20,7 @@ export enum DiagnosticType {
 }
 
 export interface IDiagnosticInfo {
+  rootProjectId: string;
   projectId: string;
   id: string;
   severity: string;
@@ -29,10 +30,11 @@ export interface IDiagnosticInfo {
   diagnostic: any;
   dialogPath?: string; //the data path in dialog
   resourceId: string; // id without locale
-  getUrl: (projectId: string) => string;
+  getUrl: () => string;
 }
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
+  rootProjectId: string;
   projectId: string;
   id: string;
   severity: string;
@@ -42,9 +44,10 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   diagnostic: Diagnostic;
   dialogPath?: string;
   resourceId: string;
-  getUrl = (projectId: string) => '';
+  getUrl = () => '';
 
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    this.rootProjectId = rootProjectId;
     this.projectId = projectId;
     this.id = id;
     this.resourceId = getBaseName(id);
@@ -54,59 +57,70 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   }
 }
 
-export class ServerDiagnostic extends DiagnosticInfo {
+export class BotDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.GENERAL;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(rootProjectId, projectId, id, location, diagnostic);
     this.message = diagnostic.message;
   }
 
-  getUrl = () => '';
+  getUrl = () => {
+    let url = '';
+    switch (this.location) {
+      case 'appsettings.json': {
+        url = createBotSettingUrl(this.rootProjectId, this.projectId);
+        break;
+      }
+    }
+
+    return url;
+  };
 }
 
 export class DialogDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.DIALOG;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
 
-  getUrl = (rootProjectId: string) => {
+  getUrl = () => {
     //path is like main.trigers[0].actions[0]
     //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-    const { projectId, id, dialogPath = '' } = this;
+    const { rootProjectId, projectId, id, dialogPath = '' } = this;
     return convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, id, dialogPath);
   };
 }
 
 export class SkillDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.SKILL;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
-  getUrl = (rootProjectId: string) => {
-    return `/bot/${rootProjectId}/skills`;
+  getUrl = () => {
+    return `/bot/${this.rootProjectId}/skills`;
   };
 }
 
 export class SettingDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.SETTING;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
-  getUrl = (rootProjectId: string) => {
-    return `/settings/bot/${rootProjectId}/dialog-settings`;
+  getUrl = () => {
+    return `/settings/bot/${this.rootProjectId}/dialog-settings`;
   };
 }
 
 export class LgDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.LG;
   constructor(
+    rootProjectId: string,
     projectId: string,
     id: string,
     location: string,
@@ -114,7 +128,7 @@ export class LgDiagnostic extends DiagnosticInfo {
     lgFile: LgFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, id, location, diagnostic);
+    super(rootProjectId, projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
   }
@@ -134,8 +148,8 @@ export class LgDiagnostic extends DiagnosticInfo {
     }
   }
 
-  getUrl = (rootProjectId: string) => {
-    const { projectId, resourceId, diagnostic, dialogPath } = this;
+  getUrl = () => {
+    const { rootProjectId, projectId, resourceId, diagnostic, dialogPath } = this;
     let uri = `/bot/${rootProjectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
     //the format of item.id is lgFile#inlineTemplateId
     if (dialogPath) {
@@ -149,6 +163,7 @@ export class LgDiagnostic extends DiagnosticInfo {
 export class LuDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.LU;
   constructor(
+    rootProjectId: string,
     projectId: string,
     id: string,
     location: string,
@@ -156,7 +171,7 @@ export class LuDiagnostic extends DiagnosticInfo {
     luFile: LuFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, id, location, diagnostic);
+    super(rootProjectId, projectId, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
     this.message = createSingleMessage(diagnostic);
   }
@@ -173,8 +188,8 @@ export class LuDiagnostic extends DiagnosticInfo {
       ?.referredLuIntents.find((lu) => lu.name === intentName)?.path;
   }
 
-  getUrl = (rootProjectId: string) => {
-    const { projectId, resourceId, diagnostic, dialogPath } = this;
+  getUrl = () => {
+    const { rootProjectId, projectId, resourceId, diagnostic, dialogPath } = this;
     let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
     if (dialogPath) {
       uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
@@ -185,14 +200,14 @@ export class LuDiagnostic extends DiagnosticInfo {
 
 export class QnADiagnostic extends DiagnosticInfo {
   type = DiagnosticType.QNA;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(rootProjectId, projectId, id, location, diagnostic);
     this.dialogPath = '';
     this.message = createSingleMessage(diagnostic);
   }
 
-  getUrl = (rootProjectId: string) => {
-    const { resourceId, diagnostic } = this;
+  getUrl = () => {
+    const { rootProjectId, resourceId, diagnostic } = this;
     return `/bot/${rootProjectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
   };
 }
