@@ -177,7 +177,9 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
           recognizers = [...recognizers, ...preserveRecognizer(qnaMakeRecognizers, curRecognizers)];
         }
       });
-    setRecognizers(recognizers);
+    if (recognizers.length != curRecognizers.length) {
+      setRecognizers(recognizers);
+    }
   }, [dialogs, luFiles, qnaFiles]);
 
   useEffect(() => {
