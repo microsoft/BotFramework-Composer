@@ -72,7 +72,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   useEffect(() => {
-    setCurrentPageMode('home');
+    setCurrentPageMode?.('home');
   }, []);
 
   const onItemChosen = async (item) => {
