@@ -242,7 +242,6 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   };
 };
 
-
 const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
   const { diagnostics = [], projectId, skillId } = item;
   const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);

@@ -115,7 +115,6 @@ export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; Micr
   document.body.appendChild(i);
 };
 
-
 export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
   const { projectId, skillId, dialogId } = link;
 
