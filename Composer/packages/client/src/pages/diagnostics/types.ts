@@ -102,7 +102,13 @@ export class SkillDiagnostic extends DiagnosticInfo {
     this.dialogPath = diagnostic.path;
   }
   getUrl = () => {
-    return `/bot/${this.rootProjectId}/skills`;
+    const { rootProjectId, projectId, id } = this;
+
+    if (this.location === 'appsettings.json') {
+      return createBotSettingUrl(rootProjectId, projectId);
+    }
+
+    return convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, id);
   };
 }
 

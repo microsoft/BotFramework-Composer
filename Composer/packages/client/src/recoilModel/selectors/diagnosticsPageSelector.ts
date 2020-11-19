@@ -113,11 +113,7 @@ export const skillDiagnosticsSelectorFamily = selectorFamily({
 
     const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
-      if (item.source.endsWith('.json')) {
-        diagnosticList.push(new SkillDiagnostic(rootProjectId, projectId, item.source, item.source, item));
-      } else {
-        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, item.source, item.source, item));
-      }
+      diagnosticList.push(new SkillDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
     return diagnosticList;
   },
