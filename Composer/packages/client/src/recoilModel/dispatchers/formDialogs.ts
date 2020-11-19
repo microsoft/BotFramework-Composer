@@ -75,7 +75,7 @@ export const formDialogsDispatcher = () => {
         const response = await httpClient.post(`/formDialogs/${projectId}/generate`, {
           name: schemaId,
         });
-        await reloadProject(callbackHelpers, response);
+        await reloadProject(response.data.id);
       } catch (error) {
         set(applicationErrorState, {
           message: error.message,
@@ -99,8 +99,8 @@ export const formDialogsDispatcher = () => {
           return;
         }
 
-        const response = await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
-        await reloadProject(callbackHelpers, response);
+        await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
+        await reloadProject(projectId);
       } catch (error) {
         set(applicationErrorState, {
           message: error.message,
@@ -110,8 +110,9 @@ export const formDialogsDispatcher = () => {
     }
   );
 
-  const navigateToGeneratedDialog = ({ projectId, schemaId }) => {
-    navigate(`/bot/${projectId}/dialogs/${schemaId}`);
+  const navigateToGeneratedDialog = ({ projectId, skillId, schemaId }) => {
+    skillId = skillId || projectId;
+    navigate(`/bot/${projectId}/skill/${skillId}/dialogs/${schemaId}`);
   };
 
   const navigateToFormDialogSchema = ({ projectId, schemaId }) => {

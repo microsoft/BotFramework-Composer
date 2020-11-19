@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import path from 'path';
+import fs from 'fs';
 
 import { readJson, ensureDir, remove } from 'fs-extra';
 import glob from 'globby';
 
-import { search, downloadPackage } from '../../utils/npm';
-import { ExtensionManifestStore, ExtensionManifest } from '../../storage/extensionManifestStore';
-import { ExtensionManagerImp } from '../manager';
+import { search, downloadPackage } from '../../utility/npm';
+import { ExtensionManagerImp, ExtensionManifest } from '../extensionManager';
+import { JsonStore } from '../../store/store';
 
 const mockManifest = ({
   extension1: {
@@ -24,6 +25,7 @@ const mockManifest = ({
   extension2: {
     id: 'extension2',
     enabled: true,
+    path: '/some/path',
   },
   extension3: {
     id: 'extension3',
@@ -31,29 +33,37 @@ const mockManifest = ({
   },
 } as unknown) as ExtensionManifest;
 
-jest.mock('../../storage/extensionManifestStore');
-
 jest.mock('globby', () => jest.fn());
 
 jest.mock('fs-extra', () => ({
   ensureDir: jest.fn(),
   readJson: jest.fn(),
   remove: jest.fn(),
+  pathExists: jest.fn(),
 }));
 
-jest.mock('../../utils/npm');
+jest.mock('../../utility/npm');
 
 let manager: ExtensionManagerImp;
-let manifest: ExtensionManifestStore;
+let loadSpy: jest.SpyInstance;
+let updateManifestSpy: jest.SpyInstance;
 
 beforeEach(() => {
-  manifest = new ExtensionManifestStore('/some/path');
+  manager = new ExtensionManagerImp(
+    new JsonStore(process.env.COMPOSER_EXTENSION_MANIFEST as string, { ...mockManifest })
+  );
+  loadSpy = jest.spyOn(manager, 'load');
+  updateManifestSpy = jest.spyOn(manager, 'updateManifest');
+
+  (remove as jest.Mock).mockClear();
+});
+
+afterEach(() => {
+  fs.unlinkSync(process.env.COMPOSER_EXTENSION_MANIFEST as string);
 });
 
 describe('#getAll', () => {
   it('return an array of all extensions', () => {
-    (manifest.getExtensions as jest.Mock).mockReturnValue(mockManifest);
-    manager = new ExtensionManagerImp(manifest);
     expect(manager.getAll()).toEqual([
       {
         id: 'extension1',
@@ -69,6 +79,7 @@ describe('#getAll', () => {
       {
         id: 'extension2',
         enabled: true,
+        path: '/some/path',
       },
       {
         id: 'extension3',
@@ -80,10 +91,6 @@ describe('#getAll', () => {
 
 describe('#find', () => {
   it('returns extension metadata for id', () => {
-    (manifest.getExtensionConfig as jest.Mock).mockImplementation((id) => {
-      return mockManifest[id];
-    });
-    manager = new ExtensionManagerImp(manifest);
     expect(manager.find('extension1')).toEqual({
       id: 'extension1',
       builtIn: true,
@@ -100,15 +107,11 @@ describe('#find', () => {
 });
 
 describe('#loadAll', () => {
-  let loadSpy: jest.SpyInstance;
+  let loadFromDirSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    (manifest.getExtensions as jest.Mock).mockReturnValue({});
-
-    manager = new ExtensionManagerImp(manifest);
-    loadSpy = jest.spyOn(manager, 'loadFromDir');
-
-    loadSpy.mockReturnValue(Promise.resolve());
+    loadFromDirSpy = jest.spyOn(manager, 'loadFromDir');
+    loadFromDirSpy.mockReturnValue(Promise.resolve());
   });
 
   it('ensures remote dir is created', async () => {
@@ -120,16 +123,15 @@ describe('#loadAll', () => {
   it('loads built-in extensions and remote extensions that are enabled', async () => {
     await manager.loadAll();
 
-    expect(loadSpy).toHaveBeenCalledTimes(2);
-    expect(loadSpy).toHaveBeenNthCalledWith(1, process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR, true);
-    expect(loadSpy).toHaveBeenNthCalledWith(2, process.env.COMPOSER_REMOTE_EXTENSIONS_DIR);
+    expect(loadFromDirSpy).toHaveBeenCalledTimes(2);
+    expect(loadFromDirSpy).toHaveBeenNthCalledWith(1, process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR, true);
+    expect(loadFromDirSpy).toHaveBeenNthCalledWith(2, process.env.COMPOSER_REMOTE_EXTENSIONS_DIR);
   });
 });
 
 describe('#loadFromDir', () => {
   it('finds all package.json files in dir', async () => {
     ((glob as unknown) as jest.Mock).mockReturnValue([]);
-    manager = new ExtensionManagerImp(manifest);
 
     await manager.loadFromDir('/some/dir');
     expect(glob).toHaveBeenCalledWith('*/package.json', { cwd: '/some/dir' });
@@ -151,8 +153,6 @@ describe('#loadFromDir', () => {
       return {};
     });
 
-    manager = new ExtensionManagerImp(manifest);
-    const loadSpy = jest.spyOn(manager, 'load');
     loadSpy.mockResolvedValue(undefined);
 
     await manager.loadFromDir('/some/dir');
@@ -160,14 +160,8 @@ describe('#loadFromDir', () => {
     expect(readJson).toHaveBeenCalledWith('/some/dir/extension1/package.json');
     expect(readJson).toHaveBeenCalledWith('/some/dir/extension2/package.json');
 
-    expect(manifest.updateExtensionConfig).toHaveBeenCalledWith(
-      'extension1',
-      expect.objectContaining({ id: 'extension1' })
-    );
-    expect(manifest.updateExtensionConfig).toHaveBeenCalledWith(
-      'extension2',
-      expect.objectContaining({ id: 'extension2' })
-    );
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension1', expect.objectContaining({ id: 'extension1' }));
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension2', expect.objectContaining({ id: 'extension2' }));
 
     expect(loadSpy).toHaveBeenCalledWith('extension1');
     expect(loadSpy).toHaveBeenCalledWith('extension2');
@@ -181,31 +175,25 @@ describe('#loadFromDir', () => {
         enabled: false,
       },
     });
-    (manifest.getExtensionConfig as jest.Mock).mockReturnValueOnce('extension1');
 
-    manager = new ExtensionManagerImp(manifest);
-    const loadSpy = jest.spyOn(manager, 'load');
     loadSpy.mockResolvedValue(undefined);
 
     await manager.loadFromDir('/some/dir');
 
-    expect(manifest.updateExtensionConfig).not.toHaveBeenCalled();
     expect(loadSpy).not.toHaveBeenCalled();
-    expect(manifest.removeExtension).toHaveBeenCalledTimes(1);
-    expect(manifest.removeExtension).toHaveBeenCalledWith('extension1');
+    expect(updateManifestSpy).toHaveBeenCalledTimes(1);
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension1', undefined);
   });
 });
 
 describe('#installRemote', () => {
   it('ensures remote dir exists', async () => {
-    manager = new ExtensionManagerImp(manifest);
     await manager.installRemote('extension1');
 
     expect(ensureDir).toHaveBeenLastCalledWith(process.env.COMPOSER_REMOTE_EXTENSIONS_DIR);
   });
 
   it('validates destination directory', () => {
-    manager = new ExtensionManagerImp(manifest);
     expect(manager.installRemote('../extension')).rejects.toThrow();
     expect(manager.installRemote('../../extension')).rejects.toThrow();
   });
@@ -215,7 +203,6 @@ describe('#installRemote', () => {
       name: 'extension1',
     });
 
-    manager = new ExtensionManagerImp(manifest);
     await manager.installRemote('extension1');
 
     expect(downloadPackage).toHaveBeenCalledWith(
@@ -224,15 +211,11 @@ describe('#installRemote', () => {
       path.join(process.env.COMPOSER_REMOTE_EXTENSIONS_DIR as string, 'extension1')
     );
 
-    expect(manifest.updateExtensionConfig).toHaveBeenCalledWith(
-      'extension1',
-      expect.objectContaining({ id: 'extension1' })
-    );
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension1', expect.objectContaining({ id: 'extension1' }));
   });
 
   it('throws an error if problem downloading', () => {
     (downloadPackage as jest.Mock).mockRejectedValue(undefined);
-    manager = new ExtensionManagerImp(manifest);
 
     expect(manager.installRemote('extension1', '2.0.0')).rejects.toThrow(/Unable to install/);
   });
@@ -242,73 +225,46 @@ describe('#installRemote', () => {
 
 describe('#enable', () => {
   it('updates the manifest and reloads the extension', async () => {
-    manager = new ExtensionManagerImp(manifest);
-    const loadSpy = jest.spyOn(manager, 'load');
     (loadSpy as jest.Mock).mockResolvedValue(undefined);
 
     await manager.enable('extension1');
 
-    expect(manifest.updateExtensionConfig).toHaveBeenCalledWith('extension1', { enabled: true });
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension1', { enabled: true });
     expect(loadSpy).toHaveBeenCalledWith('extension1');
   });
 });
 
 describe('#disable', () => {
   it('updates the manifest', async () => {
-    manager = new ExtensionManagerImp(manifest);
-
     await manager.disable('extension1');
 
-    expect(manifest.updateExtensionConfig).toHaveBeenCalledWith('extension1', { enabled: false });
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension1', { enabled: false });
   });
 });
 
 describe('#remove', () => {
   it('throws an error if extension not found', () => {
-    (manifest.getExtensionConfig as jest.Mock).mockReturnValue(undefined);
-    manager = new ExtensionManagerImp(manifest);
-
-    expect(manager.remove('extension1')).rejects.toThrow(/Unable to remove extension/);
+    expect(manager.remove('does-not-exist')).rejects.toThrow(/Unable to remove extension/);
   });
 
   it('is a no-op if the extension is builtin', async () => {
-    (manifest.getExtensionConfig as jest.Mock).mockReturnValue({ builtIn: true });
-    manager = new ExtensionManagerImp(manifest);
-
     await manager.remove('extension1');
 
     expect(remove).not.toHaveBeenCalled();
-    expect(manifest.removeExtension).not.toHaveBeenCalled();
+    expect(updateManifestSpy).not.toHaveBeenCalled();
   });
 
   it('removes the extension from the manifest and cleans up', async () => {
-    (manifest.getExtensionConfig as jest.Mock).mockReturnValue({ builtIn: false, path: '/some/path' });
-    manager = new ExtensionManagerImp(manifest);
-
-    await manager.remove('extension1');
+    await manager.remove('extension2');
 
     expect(remove).toHaveBeenCalledWith('/some/path');
-    expect(manifest.removeExtension).toHaveBeenCalledWith('extension1');
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension2', undefined);
   });
 });
 
 describe('#search', () => {
-  beforeEach(() => {
+  it('filters the search results by the extension keyword', async () => {
     (search as jest.Mock).mockResolvedValue([
-      {
-        id: 'extension1',
-        keywords: ['botframework-composer', 'extension', 'foo', 'bar'],
-        description: 'LOREM ipsum',
-        version: '1.0.0',
-        url: 'extension1 npm link',
-      },
-      {
-        id: 'extension-2',
-        keywords: ['botframework-composer', 'extension', 'bar'],
-        description: 'foo',
-        version: '1.0.0',
-        url: 'extension-2 npm link',
-      },
       {
         id: 'foo',
         keywords: ['botframework-composer'],
@@ -318,56 +274,67 @@ describe('#search', () => {
       },
       {
         id: 'bar',
-        keywords: ['botframework-composer'],
+        keywords: ['botframework-composer', 'extension'],
         description: '',
         version: '1.0.0',
         url: 'bar npm link',
       },
+      {
+        id: 'missing-keyword',
+        keywords: ['botframework-composer'],
+        description: '',
+        version: '1.0.0',
+        url: 'npm link',
+      },
     ]);
-  });
-
-  it('filters the search results by the extension keyword', async () => {
-    manager = new ExtensionManagerImp(manifest);
-
-    const results = await manager.search('foo');
-
-    expect(search).toHaveBeenCalledWith('foo');
-    expect(results).toHaveLength(2);
-  });
-
-  it('omits currently installed extensions', async () => {
-    (manifest.getExtensionConfig as jest.Mock).mockImplementation((id) => {
-      return mockManifest[id];
-    });
-
-    manager = new ExtensionManagerImp(manifest);
-
     const results = await manager.search('foo');
 
     expect(search).toHaveBeenCalledWith('foo');
     expect(results).toHaveLength(1);
   });
+
+  it('omits currently installed extensions', async () => {
+    (search as jest.Mock).mockResolvedValue([
+      {
+        id: 'extension1',
+        keywords: ['botframework-composer', 'extension', 'foo', 'bar'],
+        description: 'LOREM ipsum',
+        version: '1.0.0',
+        url: 'extension1 npm link',
+      },
+      {
+        id: 'extension2',
+        keywords: ['botframework-composer', 'extension', 'bar'],
+        description: 'foo',
+        version: '1.0.0',
+        url: 'extension-2 npm link',
+      },
+      {
+        id: 'bar',
+        keywords: ['botframework-composer', 'extension'],
+        description: '',
+        version: '1.0.0',
+        url: 'bar npm link',
+      },
+    ]);
+
+    const results = await manager.search('bar');
+
+    expect(search).toHaveBeenCalledWith('bar');
+    expect(results).toHaveLength(1);
+  });
 });
 
 describe('#getBundle', () => {
-  beforeEach(() => {
-    (manifest.getExtensionConfig as jest.Mock).mockImplementation((id) => {
-      return mockManifest[id];
-    });
-  });
-
   it('throws an error if extension not found', () => {
-    manager = new ExtensionManagerImp(manifest);
     expect(() => manager.getBundle('does-not-exist', 'bundleId')).toThrow('extension not found');
   });
 
   it('throws an error if bundle not found', () => {
-    manager = new ExtensionManagerImp(manifest);
     expect(() => manager.getBundle('extension1', 'does-not-exist')).toThrow('bundle not found');
   });
 
   it('returns the bundle path', () => {
-    manager = new ExtensionManagerImp(manifest);
     expect(manager.getBundle('extension1', 'bundleId')).toEqual('/some/path');
   });
 });
