@@ -23,6 +23,7 @@ import {
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
+import { useLocation } from '../utils/hooks';
 
 import { languageListTemplates } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
@@ -139,12 +140,13 @@ export const Header = () => {
   const { showing, status } = appUpdate;
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
 
+  const {
+    location: { pathname },
+  } = useLocation();
+
   useEffect(() => {
-    if (location.pathname === '/home') {
-      setStartBotsWidgetVisible(true);
-      return;
-    }
-    setStartBotsWidgetVisible(false);
+    // hide it on the /home page, but make sure not to hide on /bot/stuff/home in case someone names a dialog "home"
+    setStartBotsWidgetVisible(!pathname.endsWith('/home') || pathname.includes('/bot/'));
   }, [location]);
 
   const onUpdateAvailableClick = useCallback(() => {
