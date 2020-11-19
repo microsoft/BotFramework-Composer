@@ -179,6 +179,7 @@ export const ProjectTree: React.FC<Props> = ({
     navigateToFormDialogSchema,
     setPageElementState,
     createQnAFromUrlDialogBegin,
+    navTo,
   } = useRecoilValue(dispatcherState);
   const treeRef = useRef<HTMLDivElement>(null);
 
@@ -369,7 +370,8 @@ export const ProjectTree: React.FC<Props> = ({
       menu.push({
         label: formatMessage('Add new knowledge base'),
         icon: 'Add',
-        onClick: () => {
+        onClick: async () => {
+          await navTo(skillId, dialog.id);
           createQnAFromUrlDialogBegin({ projectId: skillId });
         },
       });
