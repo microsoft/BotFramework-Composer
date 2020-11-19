@@ -9,6 +9,8 @@ import {
   SelectionMode,
   IColumn,
   CheckboxVisibility,
+  IDetailsColumnStyleProps,
+  IDetailsColumnStyles,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -19,6 +21,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { IStyleFunctionOrObject } from 'office-ui-fabric-react/lib';
 
 import { listRoot, tableView, detailList } from './styles';
 
@@ -62,6 +65,9 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       props.updateItems(newItems);
     }
   };
+  const colomnStyle: IStyleFunctionOrObject<IDetailsColumnStyleProps, IDetailsColumnStyles> = {
+    root: { display: 'flex', alignItems: 'center' },
+  };
   const columns = [
     {
       key: 'PublishTime',
@@ -73,7 +79,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isRowHeader: true,
       isResizable: true,
       data: 'string',
-      styles: { display: 'flex', alignItems: 'center' },
+      styles: colomnStyle,
       onRender: (item: IStatus) => {
         return <span>{moment(item.time).format('h:mm a')}</span>;
       },
@@ -88,7 +94,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 90,
       isRowHeader: true,
       isResizable: true,
-      styles: { display: 'flex', alignItems: 'center' },
+      styles: colomnStyle,
       onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: IStatus) => {
@@ -105,7 +111,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 40,
       isResizable: true,
       data: 'string',
-      styles: { display: 'flex', alignItems: 'center' },
+      styles: colomnStyle,
       onRender: (item: IStatus) => {
         if (item.status === 200) {
           return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
@@ -132,7 +138,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      styles: { display: 'flex', alignItems: 'center' },
+      styles: colomnStyle,
       onRender: (item: IStatus) => {
         return (
           <span>
@@ -164,7 +170,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      styles: { display: 'flex', alignItems: 'center' },
+      styles: colomnStyle,
       onRender: (item: IStatus) => {
         return <span>{item.comment}</span>;
       },
