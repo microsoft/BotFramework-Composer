@@ -67,8 +67,9 @@ export class BotDiagnostic extends DiagnosticInfo {
   getUrl = () => {
     let url = '';
     switch (this.location) {
-      case 'appsettings.json': {
-        url = createBotSettingUrl(this.rootProjectId, this.projectId);
+      case 'manifest.json': {
+        const { rootProjectId, projectId } = this;
+        url = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, null);
         break;
       }
     }
@@ -113,7 +114,7 @@ export class SettingDiagnostic extends DiagnosticInfo {
     this.dialogPath = diagnostic.path;
   }
   getUrl = () => {
-    return `/settings/bot/${this.rootProjectId}/dialog-settings`;
+    return createBotSettingUrl(this.rootProjectId, this.projectId);
   };
 }
 
