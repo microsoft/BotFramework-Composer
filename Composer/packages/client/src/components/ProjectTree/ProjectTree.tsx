@@ -154,6 +154,7 @@ type Props = {
     showDialogs?: boolean;
     showDelete?: boolean;
     showRemote?: boolean;
+    showMenu?: boolean;
   };
 };
 
@@ -178,6 +179,7 @@ export const ProjectTree: React.FC<Props> = ({
     showDialogs: true,
     showTriggers: true,
     showRemote: true,
+    showMenu: true,
   },
 }) => {
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
@@ -269,40 +271,42 @@ export const ProjectTree: React.FC<Props> = ({
     };
     const isRunning = bot.buildEssentials.status === BotStatus.connected;
 
-    const menu = [
-      {
-        label: formatMessage('Add a dialog'),
-        icon: 'Add',
-        onClick: () => {
-          onBotCreateDialog(bot.projectId);
-        },
-      },
-      {
-        label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
-        icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
-        onClick: () => {
-          isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
-        },
-      },
-      {
-        label: '',
-        onClick: () => {},
-      },
-      {
-        label: formatMessage('Export this bot as .zip'),
-        onClick: () => {
-          onBotExportZip(bot.projectId);
-        },
-      },
-      {
-        label: formatMessage('Settings'),
-        onClick: () => {
-          navigateTo('/settings');
-        },
-      },
-    ];
+    const menu = options.showMenu
+      ? [
+          {
+            label: formatMessage('Add a dialog'),
+            icon: 'Add',
+            onClick: () => {
+              onBotCreateDialog(bot.projectId);
+            },
+          },
+          {
+            label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
+            icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
+            onClick: () => {
+              isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
+            },
+          },
+          {
+            label: '',
+            onClick: () => {},
+          },
+          {
+            label: formatMessage('Export this bot as .zip'),
+            onClick: () => {
+              onBotExportZip(bot.projectId);
+            },
+          },
+          {
+            label: formatMessage('Settings'),
+            onClick: () => {
+              navigateTo('/settings');
+            },
+          },
+        ]
+      : [];
 
-    if (!bot.isRootBot) {
+    if (!bot.isRootBot && options.showMenu) {
       menu.splice(
         3,
         0,
@@ -332,7 +336,6 @@ export const ProjectTree: React.FC<Props> = ({
         role="grid"
       >
         <TreeItem
-          showProps
           hasChildren={!bot.isRemote}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
           isActive={doesLinkMatch(link, selectedLink)}
@@ -357,19 +360,21 @@ export const ProjectTree: React.FC<Props> = ({
       projectId: rootProjectId,
       skillId: skillId === rootProjectId ? undefined : skillId,
     };
-    const menu: any[] = [
-      {
-        label: formatMessage('Add a trigger'),
-        icon: 'Add',
-        onClick: () => {
-          onDialogCreateTrigger(skillId, dialog.id);
-        },
-      },
-      {
-        label: '',
-        onClick: () => {},
-      },
-    ];
+    const menu: any[] = options.showMenu
+      ? [
+          {
+            label: formatMessage('Add a trigger'),
+            icon: 'Add',
+            onClick: () => {
+              onDialogCreateTrigger(skillId, dialog.id);
+            },
+          },
+          {
+            label: '',
+            onClick: () => {},
+          },
+        ]
+      : [];
 
     const isFormDialog = dialogIsFormDialog(dialog);
     const showEditSchema = formDialogSchemaExists(skillId, dialog);
@@ -405,7 +410,6 @@ export const ProjectTree: React.FC<Props> = ({
         >
           <TreeItem
             hasChildren
-            showProps
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
@@ -509,7 +513,6 @@ export const ProjectTree: React.FC<Props> = ({
         role="grid"
       >
         <TreeItem
-          showProps
           isMenuOpen={isMenuOpen}
           isSubItemActive={false}
           link={link}

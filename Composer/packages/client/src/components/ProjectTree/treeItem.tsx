@@ -207,15 +207,14 @@ interface ITreeItemProps {
   link: TreeLink;
   isActive?: boolean;
   isSubItemActive?: boolean;
-  menu?: TreeMenuItem[];
   onSelect?: (link: TreeLink) => void;
   icon?: string;
   dialogName?: string;
-  showProps?: boolean;
   textWidth?: number;
   extraSpace?: number;
   padLeft?: number;
   hasChildren?: boolean;
+  menu?: TreeMenuItem[];
   menuOpenCallback?: (boolean) => void;
   isMenuOpen?: boolean;
 }
