@@ -9,6 +9,7 @@ import { RouteComponentProps } from '@reach/router';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
+import { IToolbarItem } from '@bfc/ui-shared';
 
 import {
   dispatcherState,
@@ -24,7 +25,6 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
-import { IToolbarItem } from '../../components/Toolbar';
 import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
 import { useProjectIdCache } from '../../utils/hooks';
 
