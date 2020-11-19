@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useMemo, useState, useEffect, Suspense } from 'react';
+import React, { useMemo, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
@@ -71,11 +71,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   const [isAdvancedSettingsEnabled, setAdvancedSettingsEnabled] = useState<boolean>(false);
 
-  const { setSettings, setCurrentPageMode } = useRecoilValue(dispatcherState);
-
-  useEffect(() => {
-    setCurrentPageMode('botProjectsSettings');
-  }, []);
+  const { setSettings } = useRecoilValue(dispatcherState);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const localBotProjects = botProjectsMetaData.filter((b) => !b.isRemote);
@@ -128,6 +124,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       mainRegionName={formatMessage('Bot projects settings list View')}
       navLinks={navLinks}
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
+      pageMode={'botProjectsSettings'}
       shouldShowEditorError={false}
       title={formatMessage('Bot management and configurations')}
       toolbarItems={[]}

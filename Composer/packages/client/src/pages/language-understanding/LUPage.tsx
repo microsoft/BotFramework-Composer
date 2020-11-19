@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo, buildURL } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily, dispatcherState } from '../../recoilModel';
+import { validateDialogsSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -23,11 +23,6 @@ const LUPage: React.FC<RouteComponentProps<{
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
-
-  const { setCurrentPageMode } = useRecoilValue(dispatcherState);
-  useEffect(() => {
-    setCurrentPageMode('language-understanding');
-  }, []);
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
@@ -63,6 +58,7 @@ const LUPage: React.FC<RouteComponentProps<{
       data-testid="LUPage"
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}
+      pageMode={'language-understanding'}
       title={formatMessage('User Input')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}

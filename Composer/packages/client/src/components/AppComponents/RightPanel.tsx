@@ -14,12 +14,7 @@ import { Conversation } from '../Conversation';
 //import { LeftRightSplit } from '../Split/LeftRightSplit';
 
 import Routes from './../../router';
-import {
-  applicationErrorState,
-  dispatcherState,
-  currentProjectIdState,
-  // currentModeState,
-} from './../../recoilModel';
+import { applicationErrorState, dispatcherState, currentProjectIdState } from './../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -48,7 +43,6 @@ export const RightPanel = () => {
   const applicationError = useRecoilValue(applicationErrorState);
   const { setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
-  //const currentMode = useRecoilValue(currentModeState);
 
   const conversation = (
     <Conversation>

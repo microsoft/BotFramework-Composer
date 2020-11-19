@@ -20,7 +20,6 @@ import {
   localeState,
   currentProjectIdState,
   settingsState,
-  currentModeState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
@@ -139,15 +138,14 @@ export const Header = () => {
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
-  const currentMode = useRecoilValue(currentModeState);
 
   useEffect(() => {
-    if (currentMode !== 'home') {
+    if (location.pathname === '/home') {
       setStartBotsWidgetVisible(true);
       return;
     }
     setStartBotsWidgetVisible(false);
-  }, [currentMode]);
+  }, [location]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);

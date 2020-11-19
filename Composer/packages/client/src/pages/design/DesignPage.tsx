@@ -176,7 +176,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     deleteTrigger,
     displayManifestModal,
     createDialogCancel,
-    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -184,9 +183,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     dialogs.find((x) => x.id === props.dialogId)?.content,
     params.get('selected') || ''
   );
-  useEffect(() => {
-    setCurrentPageMode('dialogs');
-  }, []);
 
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
     undefined
@@ -751,7 +747,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={'dialogs'}>
           <ProjectTree
             defaultSelected={{
               projectId,
@@ -784,7 +780,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <LeftRightSplit initialLeftGridWidth="65%" minLeftPixels={500} minRightPixels={350}>
+                <LeftRightSplit
+                  initialLeftGridWidth="65%"
+                  minLeftPixels={500}
+                  minRightPixels={350}
+                  pageMode={'dialogs'}
+                >
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
                     {!isRemoteSkill ? breadcrumbItems : null}
                     {dialogJsonVisible ? (

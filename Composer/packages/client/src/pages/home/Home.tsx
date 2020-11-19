@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -66,14 +66,9 @@ const Home: React.FC<RouteComponentProps> = () => {
     onboardingAddCoachMarkRef,
     saveTemplateId,
     setCreationFlowType,
-    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
-
-  useEffect(() => {
-    setCurrentPageMode?.('home');
-  }, []);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {

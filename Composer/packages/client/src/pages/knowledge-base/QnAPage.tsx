@@ -37,10 +37,6 @@ const QnAPage: React.FC<RouteComponentProps<{
   //const locale = useRecoilValue(localeState);
   const [createOnDialogId, setCreateOnDialogId] = useState('');
 
-  const { setCurrentPageMode } = useRecoilValue(dispatcherState);
-  useEffect(() => {
-    setCurrentPageMode('knowledge-base');
-  }, []);
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
@@ -80,6 +76,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
       navRegionName={formatMessage('Qna Navigation Pane')}
+      pageMode={'knowledge-base'}
       title={formatMessage('QnA')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}

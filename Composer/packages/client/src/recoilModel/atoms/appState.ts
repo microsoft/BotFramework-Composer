@@ -206,11 +206,6 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
-export const currentModeState = atom<PageMode>({
-  key: getFullyQualifiedKey('currentMode'),
-  default: 'home',
-});
-
 export const botProjectSpaceLoadedState = atom<boolean>({
   key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
   default: false,

@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily, dispatcherState } from '../../recoilModel';
+import { validateDialogsSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -24,11 +24,6 @@ const LGPage: React.FC<RouteComponentProps<{
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
-
-  const { setCurrentPageMode } = useRecoilValue(dispatcherState);
-  useEffect(() => {
-    setCurrentPageMode('language-generation');
-  }, []);
 
   const path = props.location?.pathname ?? '';
 
@@ -66,6 +61,7 @@ const LGPage: React.FC<RouteComponentProps<{
       data-testid="LGPage"
       mainRegionName={formatMessage('LG editor')}
       navRegionName={formatMessage('LG Navigation Pane')}
+      pageMode={'language-generation'}
       title={formatMessage('Bot Responses')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}

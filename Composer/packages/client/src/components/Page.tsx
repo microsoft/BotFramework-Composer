@@ -5,11 +5,10 @@
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 import { navigateTo, buildURL } from '../utils/navigation';
-import { currentModeState } from '../recoilModel';
+import { PageMode } from '../recoilModel';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
@@ -97,6 +96,7 @@ type IPageProps = {
   'data-testid'?: string;
   useNewTree?: boolean;
   navLinks?: INavTreeItem[];
+  pageMode: PageMode;
 };
 
 const Page: React.FC<IPageProps> = (props) => {
@@ -111,9 +111,8 @@ const Page: React.FC<IPageProps> = (props) => {
     headerStyle = header,
     shouldShowEditorError = true,
     useNewTree,
+    pageMode,
   } = props;
-
-  const pageMode = useRecoilValue(currentModeState);
 
   return (
     <div css={root} data-testid={props['data-testid']}>
@@ -124,7 +123,7 @@ const Page: React.FC<IPageProps> = (props) => {
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={pageMode}>
             {useNewTree ? (
               <ProjectTree
                 options={{
