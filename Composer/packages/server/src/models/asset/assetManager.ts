@@ -7,10 +7,11 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 
 import find from 'lodash/find';
-import { UserIdentity, ExtensionContext, BotTemplate, FileExtensions } from '@bfc/extension';
+import { UserIdentity, BotTemplate, FileExtensions } from '@bfc/extension';
 import { mkdirs, readFile } from 'fs-extra';
 import rimraf from 'rimraf';
 
+import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';

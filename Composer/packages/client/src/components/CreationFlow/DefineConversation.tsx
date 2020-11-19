@@ -156,7 +156,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
           : '',
     },
   };
-  const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
+  const { formData, formErrors, hasErrors, updateField, updateForm, validateForm } = useForm(formConfig);
   const [isImported, setIsImported] = useState<boolean>(false);
 
   useEffect(() => {
@@ -176,30 +176,29 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
           ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name)
           : '',
     };
-    updateForm(formData);
     if (props.location?.search) {
-      const updatedFormData = {
-        ...formData,
-      };
-
       const decoded = decodeURIComponent(props.location.search);
       const { name, description, schemaUrl } = querystring.parse(decoded);
       if (description) {
-        updatedFormData.description = description as string;
+        formData.description = description as string;
       }
 
       if (schemaUrl) {
-        updatedFormData.schemaUrl = schemaUrl as string;
+        formData.schemaUrl = schemaUrl as string;
       }
 
       if (name) {
-        updatedFormData.name = name as string;
+        formData.name = name as string;
       } else {
-        updatedFormData.name = getDefaultName();
+        formData.name = getDefaultName();
       }
-      updateForm(updatedFormData);
     }
+    updateForm(formData);
   }, [templateId]);
+
+  useEffect(() => {
+    validateForm();
+  }, [focusedStorageFolder]);
 
   const handleSubmit = useCallback(
     (e) => {
