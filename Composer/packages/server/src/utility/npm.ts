@@ -12,7 +12,7 @@ import logger from '../logger';
 
 const streamPipeline = promisify(require('stream').pipeline);
 
-const log = logger.extend('npm');
+const log = logger.extend('extension-manager:npm');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function search(query = ''): Promise<ExtensionSearchResult[]> {

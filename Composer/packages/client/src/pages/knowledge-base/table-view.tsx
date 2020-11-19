@@ -433,8 +433,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isResizable: true,
         data: 'string',
         onRender: (item: QnASectionItem, index) => {
-          const questions = item.Questions;
           const isExpanded = expandedIndex === index;
+          const questions = isExpanded ? item.Questions : item.Questions.slice(0, 1);
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           const isCreatingQnA =
@@ -452,14 +452,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 const isQuestionEmpty = question.content === '';
                 const isOnlyQuestion = questions.length === 1 && qIndex === 0;
                 return (
-                  <div key={question.id} style={{ display: isExpanded ? 'block' : qIndex === 0 ? 'block' : 'none' }}>
+                  <div key={question.id}>
                     <EditableField
                       key={question.id}
                       ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
                       depth={0}
                       disabled={isAllowEdit}
                       enableIcon={isExpanded}
-                      extraContent={qIndex === 0 && !isExpanded && !isQuestionEmpty ? ` (${questions.length})` : ''}
+                      extraContent={
+                        qIndex === 0 && !isExpanded && !isQuestionEmpty ? ` (${item.Questions.length})` : ''
+                      }
                       iconProps={{
                         iconName: 'Cancel',
                       }}

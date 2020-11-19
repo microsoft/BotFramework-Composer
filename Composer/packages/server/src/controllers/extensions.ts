@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
+import { ExtensionMetadata } from '@botframework-composer/types';
+
+import { ExtensionManager } from '../services/extensionManager';
 
 interface AddExtensionRequest extends Request {
   body: {

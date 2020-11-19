@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, ShellApi } from '@botframework-composer/types';
+import { MicrosoftIDialog, MicrosoftIRecognizer, ShellApi } from '@botframework-composer/types';
 import { DialogUtils } from '@bfc/shared';
 
 export interface DialogApiContext {
-  copyAction: (actionId: string) => BaseSchema;
-  deleteAction: (actionId: BaseSchema) => BaseSchema;
-  copyActions: (actionIds: string[]) => BaseSchema[];
-  deleteActions: (actionIds: BaseSchema[]) => BaseSchema[];
+  copyAction: (actionId: string) => MicrosoftIDialog;
+  deleteAction: (actionId: MicrosoftIDialog) => MicrosoftIDialog;
+  copyActions: (actionIds: string[]) => MicrosoftIDialog[];
+  deleteActions: (actionIds: MicrosoftIDialog[]) => MicrosoftIDialog[];
 }
 
 const { disableNodes, enableNodes, appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
@@ -18,57 +18,90 @@ export function useDialogEditApi(shellApi: ShellApi) {
 
   async function insertActions(
     dialogId: string,
-    dialogData,
+    dialogData: MicrosoftIDialog,
     targetArrayPath: string,
     targetArrayPosition: number,
-    actionsToInsert: BaseSchema[]
-  ) {
+    actionsToInsert: MicrosoftIDialog[]
+  ): Promise<MicrosoftIDialog> {
     const newNodes = await constructActions(dialogId, actionsToInsert);
-    return insertNodes(dialogData, targetArrayPath, targetArrayPosition, newNodes);
+    return insertNodes(dialogData, targetArrayPath, targetArrayPosition, newNodes) as MicrosoftIDialog;
   }
 
   async function insertAction(
     dialogId: string,
-    dialogData,
+    dialogData: MicrosoftIDialog,
     targetArrayPath: string,
     targetArrayPosition: number,
-    actionToInsert: BaseSchema
-  ) {
+    actionToInsert: MicrosoftIDialog
+  ): Promise<MicrosoftIDialog> {
     return insertActions(dialogId, dialogData, targetArrayPath, targetArrayPosition, [actionToInsert]);
   }
 
-  async function insertActionsAfter(dialogId: string, dialogData, targetId: string, actionsToInsert: BaseSchema[]) {
+  async function insertActionsAfter(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    targetId: string,
+    actionsToInsert: MicrosoftIDialog[]
+  ): Promise<MicrosoftIDialog> {
     const newNodes = await constructActions(dialogId, actionsToInsert);
-    return appendNodesAfter(dialogData, targetId, newNodes);
+    return appendNodesAfter(dialogData, targetId, newNodes) as MicrosoftIDialog;
   }
 
-  function deleteSelectedAction(dialogId, dialogData, actionId: string) {
+  function deleteSelectedAction(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    actionId: string
+  ): Promise<MicrosoftIDialog> {
     return deleteNode(dialogData, actionId, (node) => deleteAction(dialogId, node));
   }
 
-  function deleteSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+  function deleteSelectedActions(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    actionIds: string[]
+  ): Promise<MicrosoftIDialog> {
     return deleteNodes(dialogData, actionIds, (nodes) => deleteActions(dialogId, nodes));
   }
 
-  function disableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+  function disableSelectedActions(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    actionIds: string[]
+  ): MicrosoftIDialog {
     return disableNodes(dialogData, actionIds);
   }
 
-  function enableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+  function enableSelectedActions(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    actionIds: string[]
+  ): MicrosoftIDialog {
     return enableNodes(dialogData, actionIds);
   }
-  async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
+  async function copySelectedActions(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    actionIds: string[]
+  ): Promise<MicrosoftIDialog[]> {
     const actions = queryNodes(dialogData, actionIds);
     return copyActions(dialogId, actions);
   }
 
-  async function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
+  async function cutSelectedActions(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    actionIds: string[]
+  ): Promise<{ dialog: MicrosoftIDialog; cutActions: MicrosoftIDialog[] }> {
     const cutActions = await copySelectedActions(dialogId, dialogData, actionIds);
     const newDialog = await deleteSelectedActions(dialogId, dialogData, actionIds);
     return { dialog: newDialog, cutActions };
   }
 
-  function updateRecognizer(dialogId, dialogData, recognizer) {
+  function updateRecognizer(
+    dialogId: string,
+    dialogData: MicrosoftIDialog,
+    recognizer: MicrosoftIRecognizer | string
+  ): MicrosoftIDialog {
     dialogData.recognizer = recognizer;
     return dialogData;
   }
