@@ -32,11 +32,23 @@ if (os.platform() === 'win32') {
   }
 }
 
+// resolves a path from Composer root directory
+const resolveFromRoot = (path: string) => {
+  const composerRoot = Path.resolve(__dirname, '../../../..');
+  return Path.resolve(composerRoot, path);
+};
+
 export const diskNames = names;
 export const platform = os.platform();
 export const environment = process.env.NODE_ENV || 'development';
 export const botsFolder = folder;
 export const botEndpoint = process.env.BOT_ENDPOINT || 'http://localhost:3979';
 export const appDataPath = process.env.COMPOSER_APP_DATA || Path.resolve(__dirname, '../../data.json');
-export const runtimeFolder = process.env.COMPOSER_RUNTIME_FOLDER || Path.resolve(__dirname, '../../../../../runtime');
+export const runtimeFolder = process.env.COMPOSER_RUNTIME_FOLDER || resolveFromRoot('../runtime');
 export const runtimeFrameworkVersion = process.env.COMPOSER_RUNTIME_VERSION || 'netcoreapp3.1';
+export const extensionManifestPath =
+  process.env.COMPOSER_EXTENSION_MANIFEST || resolveFromRoot('.composer/extensions.json');
+export const extensionDataDir = process.env.COMPOSER_EXTENSION_DATA_DIR || resolveFromRoot('.composer/extension-data');
+export const extensionsbuiltinDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || resolveFromRoot('../extensions');
+export const extensionsRemoteDir =
+  process.env.COMPOSER_REMOTE_EXTENSIONS_DIR || resolveFromRoot('.composer/extensions');
