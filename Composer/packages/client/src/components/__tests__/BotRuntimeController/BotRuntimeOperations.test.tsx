@@ -26,7 +26,7 @@ describe('<BotRuntimeOperations.test />', () => {
 
   it('should render the BotRuntimeOperations with unconnected status', () => {
     const { container } = renderWithRecoil(<BotRuntimeOperations projectId={projectId} />, ({ set }) => {
-      set(botStatusState(projectId), BotStatus.unConnected);
+      set(botStatusState(projectId), BotStatus.inactive);
     });
     expect(container.innerHTML.includes('Play')).toBeTruthy();
   });

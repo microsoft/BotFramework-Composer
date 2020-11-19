@@ -77,7 +77,7 @@ const BotController: React.FC = () => {
     setDisableOnStartBotsWidget(false);
   }, [projectCollection, errors]);
 
-  const running = useMemo(() => !projectCollection.every(({ status }) => status === BotStatus.unConnected), [
+  const running = useMemo(() => !projectCollection.every(({ status }) => status === BotStatus.inactive), [
     projectCollection,
   ]);
 
