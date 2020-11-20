@@ -8,7 +8,7 @@ import difference from 'lodash/difference';
 
 import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
-import { botProjectSpaceSelector, rootBotProjectIdSelector } from '../selectors/project';
+import { localBotsDataSelector, rootBotProjectIdSelector } from '../selectors/project';
 
 import {
   lgFilesState,
@@ -60,12 +60,12 @@ export const multilangDispatcher = () => {
   const setLocale = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (locale: string, projectId: string) => {
       const botName = await snapshot.getPromise(botDisplayNameState(projectId));
-      const botProjectsMetaData = await snapshot.getPromise(botProjectSpaceSelector);
+      const botProjects = await snapshot.getPromise(localBotsDataSelector);
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (projectId === rootBotProjectId) {
-        for (let i = 0; i < botProjectsMetaData.length; i++) {
-          if (!botProjectsMetaData[i].isRootBot && !botProjectsMetaData[i].isRemote) {
-            const skillBotProjectId = botProjectsMetaData[i].projectId;
+        for (let i = 0; i < botProjects.length; i++) {
+          if (!botProjects[i].isRootBot && !botProjects[i].isRemote) {
+            const skillBotProjectId = botProjects[i].projectId;
             const settings = await snapshot.getPromise(settingsState(skillBotProjectId));
             const languages = settings.languages;
             const defaultLang = settings.defaultLang;
