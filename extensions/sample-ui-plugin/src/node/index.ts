@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ExtensionRegistration } from '@bfc/extension';
+import { IExtensionRegistration } from '@botframework-composer/types';
 
 // this will be called by composer
-function initialize(registration: ExtensionRegistration) {
+function initialize(registration: IExtensionRegistration) {
   const plugin1 = {
     name: 'samplePublishPlugin1',
     description: 'Publish using custom UI',

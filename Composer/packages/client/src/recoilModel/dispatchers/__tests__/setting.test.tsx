@@ -48,6 +48,7 @@ const settings = {
     environment: 'composer',
   },
   publishTargets: [],
+  importedLibraries: [],
   qna: {
     knowledgebaseid: '',
     endpointKey: '',
@@ -62,6 +63,7 @@ const settings = {
     customRuntime: false,
     path: '',
     command: '',
+    key: '',
   },
   downsampling: {
     maxImbalanceRatio: 10,
