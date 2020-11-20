@@ -23,7 +23,7 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
-import { diagnosticsSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
+import { diagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
 
 import { IDiagnosticInfo } from './types';
 
@@ -202,7 +202,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const DiagnosticList: React.FC<IDiagnosticListProps> = (props) => {
   const { onItemClick, skillId = '', showType } = props;
-  const diagnostics = useRecoilValue(diagnosticsSelector(skillId));
+  const diagnostics = useRecoilValue(diagnosticsSelectorFamily(skillId));
   const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
 
