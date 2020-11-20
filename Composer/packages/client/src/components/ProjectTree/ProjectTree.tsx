@@ -347,7 +347,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -366,18 +366,21 @@ export const ProjectTree: React.FC<Props> = ({
         },
       },
       {
+        label: '',
+        onClick: () => {},
+      },
+    ];
+
+    if (!isPvaSchema) {
+      menu.splice(1, 0, {
         label: formatMessage('Add new knowledge base'),
         icon: 'Add',
         onClick: () => {
           createQnAFromUrlDialogBegin({ projectId: skillId });
           onDialogCreateQnAKBFromUrl(skillId, dialog.id);
         },
-      },
-      {
-        label: '',
-        onClick: () => {},
-      },
-    ];
+      });
+    }
 
     const isFormDialog = dialogIsFormDialog(dialog);
     const showEditSchema = formDialogSchemaExists(skillId, dialog);
@@ -600,7 +603,7 @@ export const ProjectTree: React.FC<Props> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
-        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, startDepth);
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, startDepth, bot.isPvaSchema);
         const key = 'dialog-' + dialog.id;
         return (
           <ExpandableNode
@@ -616,7 +619,9 @@ export const ProjectTree: React.FC<Props> = ({
         );
       });
     } else {
-      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, startDepth));
+      return filteredDialogs.map((dialog: DialogInfo) =>
+        renderDialogHeader(projectId, dialog, startDepth, bot.isPvaSchema)
+      );
     }
   };
 
