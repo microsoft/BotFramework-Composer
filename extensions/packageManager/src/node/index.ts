@@ -18,7 +18,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // if no sources are in the config file, set the default list to our 1st party feed.
       if (!packageSources) {
         packageSources = [
-          `https://gist.githubusercontent.com/benbrown/b932bbbf8b7c1583bbfb0cc70f051c62/raw/botframework-composer-packages.json`,
+          `https://raw.githubusercontent.com/microsoft/botframework-components/main/experimental/feeds/components.json`,
         ];
         composer.store.write('sources', packageSources);
       }
