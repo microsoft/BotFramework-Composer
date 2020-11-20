@@ -12,7 +12,7 @@ import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, checkForPVASche
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -60,6 +60,7 @@ import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
+import { exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
@@ -188,7 +189,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     undefined
   );
   const [dialogModalInfo, setDialogModalInfo] = useState<undefined | string>(undefined);
-  const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | string>(undefined);
+  const [exportSkillModalInfo, setExportSkillModalInfo] = useRecoilState(exportSkillModalInfoState);
   const [skillManifestFile, setSkillManifestFile] = useState<undefined | SkillInfo>(undefined);
   const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
   const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
