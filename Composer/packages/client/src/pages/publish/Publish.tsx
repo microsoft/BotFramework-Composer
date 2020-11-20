@@ -17,7 +17,6 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification, PublishType } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
-import { useInterval } from '../../utils/hooks';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -170,7 +169,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     if (target) {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
-      useInterval(async () => {
+      setTimeout(async () => {
         getPublishStatus(botProjectId, target);
       }, getPublishStatusInterval);
     }
@@ -250,8 +249,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const rollbackToVersion = (version, item) => {
     const setting = botsettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
-    const sensitiveSettings = getSensitiveProperties(setting);
-    rollbackToVersionDispatcher(item.id, item.publishTarget, version.id, sensitiveSettings);
+    if (setting) {
+      const sensitiveSettings = getSensitiveProperties(setting);
+      rollbackToVersionDispatcher(item.id, item.publishTarget, version.id, sensitiveSettings);
+    }
   };
 
   const onRollbackToVersion = (selectedVersion: IStatus, item: IBotStatus) => {

@@ -11,10 +11,10 @@ import {
   currentProjectIdState,
 } from '../../../src/recoilModel';
 import { CreatePublishTarget } from '../../../src/pages/publish/createPublishTarget';
-import { PublishStatusList } from '../../../src/pages/publish/publishStatusList';
+import { PublishStatusList } from '../../../src/pages/publish/PublishStatusList';
 import { TargetList } from '../../../src/pages/publish/targetList';
 import Publish from '../../../src/pages/publish/Publish';
-import { PublishDialog } from '../../../src/pages/publish/publishDialog';
+import { PublishDialog } from '../../../src/pages/publish/PublishDialog';
 
 const state = {
   projectId: 'test',
