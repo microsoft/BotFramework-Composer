@@ -31,17 +31,20 @@ export type CurrentUser = {
   sessionExpired: boolean;
 };
 
+// These values should align with the paths in the app's router
 export type PageMode =
-  | 'home'
-  | 'design'
-  | 'lg'
-  | 'lu'
-  | 'qna'
-  | 'notifications'
+  | 'dialogs' // used for the design page
+  | 'language-understanding'
+  | 'language-generation'
+  | 'knowledge-base'
   | 'publish'
-  | 'skills'
+  | 'botProjectsSettings'
+  | 'forms'
+  | 'diagnostics'
   | 'settings'
-  | 'about';
+  | 'projects'
+  | 'home'
+  | 'botProjectsSettings';
 
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
@@ -203,11 +206,6 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
-export const currentModeState = atom<PageMode>({
-  key: getFullyQualifiedKey('currentMode'),
-  default: 'home',
-});
-
 export const botProjectSpaceLoadedState = atom<boolean>({
   key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
   default: false,
@@ -236,10 +234,10 @@ export const formDialogGenerationProgressingState = atom({
 export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any } }>({
   key: getFullyQualifiedKey('pageElement'),
   default: {
-    design: {},
-    lg: {},
-    lu: {},
-    qna: {},
+    dialogs: {},
+    'language-generation': {},
+    'language-understanding': {},
+    'knowledge-base': {},
   },
 });
 
