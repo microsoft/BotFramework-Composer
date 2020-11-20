@@ -18,16 +18,17 @@ import {
   botProjectIdsState,
   botOpeningState,
   pluginPagesSelector,
-  botProjectSpaceSelector,
   botOpeningMessage,
+  localBotsDataSelector,
 } from './recoilModel';
 import { rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
-import { botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
+import { botProjectSpaceLoadedState, botDisplayNameState } from './recoilModel/atoms';
+import languageStorage from './utils/languageStorage';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -121,22 +122,31 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const { fetchProjectById, setSettings } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-  const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+  const localBots = useRecoilValue(localBotsDataSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));
 
+  //initialize settings after bot projects loaded
   useEffect(() => {
-    if (botProjectSpaceLoaded && rootBotProjectId && botProjectsMetaData) {
-      for (let i = 0; i < botProjectsMetaData.length; i++) {
-        if (!botProjectsMetaData[i].isRemote) {
-          const id = botProjectsMetaData[i].projectId;
-          const setting = botProjectsMetaData[i].setting;
+    if (botProjectSpaceLoaded && rootBotProjectId && localBots) {
+      for (let i = 0; i < localBots.length; i++) {
+        if (!localBots[i].isRemote) {
+          const id = localBots[i].projectId;
+          const setting = localBots[i].setting;
           const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
           setSettings(id, mergedSettings);
         }
       }
+    }
+  }, [botProjectSpaceLoaded, rootBotProjectId]);
+
+  useEffect(() => {
+    if (botProjectSpaceLoadedState && rootBotProjectId && botName) {
+      const storedLocale = languageStorage.get(botName)?.locale;
+      setLocale(storedLocale, rootBotProjectId);
     }
   }, [botProjectSpaceLoaded, rootBotProjectId]);
 

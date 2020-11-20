@@ -18,7 +18,7 @@ import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';
 import { settingsState, userSettingsState, schemasState } from '../../recoilModel/atoms';
-import { botProjectSpaceSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
@@ -57,12 +57,12 @@ const mainContentHeader = css`
 // -------------------- BotProjectSettings -------------------- //
 
 const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
-  const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+  const botProjects = useRecoilValue(localBotsDataSelector);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
   const projectId = (props['*'] === 'root' ? rootBotProjectId : props['*']) || '';
   const schemas = useRecoilValue(schemasState(projectId));
-  const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
+  const botProject = botProjects.find((b) => b.projectId === projectId);
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
@@ -74,7 +74,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const { setSettings } = useRecoilValue(dispatcherState);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
-    const localBotProjects = botProjectsMetaData.filter((b) => !b.isRemote);
+    const localBotProjects = botProjects.filter((b) => !b.isRemote);
     const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
       return {
         id: b.projectId,
@@ -93,7 +93,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       newbotProjectLinks.splice(0, 0, rootBotLink);
     }
     return newbotProjectLinks;
-  }, [botProjectsMetaData]);
+  }, [botProjects]);
 
   const onRenderHeaderContent = () => {
     return formatMessage(
