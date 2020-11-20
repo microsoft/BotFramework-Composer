@@ -132,6 +132,7 @@ const Page: React.FC<IPageProps> = (props) => {
                   showDialogs: true,
                   showRemote: false,
                   showMenu: false,
+                  showQnAMenu: title === 'QnA' ? true : false,
                   showErrors: false,
                 }}
                 onSelect={(link) => {

@@ -74,13 +74,7 @@ const createQnASectionItem = (fileId: string): QnASectionItem => {
   };
 };
 
-interface TableViewProps extends RouteComponentProps<{}> {
-  dialogId?: string;
-  projectId?: string;
-  skillId?: string;
-}
-
-const TableView: React.FC<TableViewProps> = (props) => {
+const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
 
   const actualProjectId = skillId ?? projectId;
@@ -149,7 +143,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
 
   const initializeQnASections = (qnaFiles, dialogId) => {
-    if (isEmpty(qnaFiles)) return;
+    if (isEmpty(qnaFiles)) return [];
 
     const allSections = qnaFiles
       .filter(({ id }) => id.endsWith('.source'))
@@ -782,7 +776,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             data-testid={'createKnowledgeBase'}
             text={formatMessage('Create new KB')}
             onClick={() => {
-              actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId });
+              actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId, dialogId });
             }}
           />
         </div>
