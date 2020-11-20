@@ -37,7 +37,7 @@ export const PublishController = {
             extensionId: plugin.extensionId,
             bundleId: plugin.bundleId,
             features: {
-              history: typeof methods.history === 'function',
+              history: typeof methods.getHistory === 'function',
               publish: typeof methods.publish === 'function',
               status: typeof methods.getStatus === 'function',
               rollback: typeof methods.rollback === 'function',
@@ -170,9 +170,9 @@ export const PublishController = {
     // get the publish plugin key
     const extensionName = profile ? profile.type : '';
 
-    if (profile && extensionImplementsMethod(extensionName, 'history')) {
+    if (profile && extensionImplementsMethod(extensionName, 'getHistory')) {
       // get the externally defined method
-      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.history;
+      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.getHistory;
       if (typeof pluginMethod === 'function') {
         const configuration = {
           profileName: profile.name,

@@ -9,7 +9,7 @@ function initialize(registration: ExtensionRegistration) {
     name: 'pva-publish-composer',
     description: 'Publish bot to Power Virtual Agents (Preview)',
     bundleId: 'publish',
-    history,
+    getHistory: history,
     getStatus,
     publish,
     pull,
