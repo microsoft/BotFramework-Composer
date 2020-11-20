@@ -172,7 +172,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
-    setCurrentPageMode,
     createTrigger,
     deleteTrigger,
     displayManifestModal,
@@ -237,10 +236,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
   }, [dialogId]);
-
-  useEffect(() => {
-    setCurrentPageMode('design');
-  }, []);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
@@ -752,7 +747,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={'dialogs'}>
           <ProjectTree
             defaultSelected={{
               projectId,
@@ -785,7 +780,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <LeftRightSplit initialLeftGridWidth="65%" minLeftPixels={500} minRightPixels={350}>
+                <LeftRightSplit
+                  initialLeftGridWidth="65%"
+                  minLeftPixels={500}
+                  minRightPixels={350}
+                  pageMode={'dialogs'}
+                >
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
                     {!isRemoteSkill ? breadcrumbItems : null}
                     {dialogJsonVisible ? (
