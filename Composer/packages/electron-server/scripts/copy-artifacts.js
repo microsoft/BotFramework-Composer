@@ -32,6 +32,7 @@ const sources = [
   {
     source: path.resolve(__dirname, '../../../node_modules/@microsoft/bf-generate-library/templates'),
     dest: 'form-dialog-templates',
+    opts: { force: true },
   },
   // oneauth
   oneauthSource(),
