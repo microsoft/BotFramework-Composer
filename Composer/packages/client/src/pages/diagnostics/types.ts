@@ -67,8 +67,9 @@ export class BotDiagnostic extends DiagnosticInfo {
   getUrl = () => {
     let url = '';
     switch (this.location) {
-      case 'appsettings.json': {
-        url = createBotSettingUrl(this.rootProjectId, this.projectId);
+      case 'manifest.json': {
+        const { rootProjectId, projectId } = this;
+        url = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, null);
         break;
       }
     }
@@ -93,7 +94,7 @@ export class DialogDiagnostic extends DiagnosticInfo {
   };
 }
 
-export class SkillDiagnostic extends DiagnosticInfo {
+export class SkillSettingDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.SKILL;
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(rootProjectId, projectId, id, location, diagnostic);
@@ -101,7 +102,13 @@ export class SkillDiagnostic extends DiagnosticInfo {
     this.dialogPath = diagnostic.path;
   }
   getUrl = () => {
-    return `/bot/${this.rootProjectId}/skills`;
+    const { rootProjectId, projectId, id } = this;
+
+    if (this.location === 'appsettings.json') {
+      return createBotSettingUrl(rootProjectId, projectId);
+    }
+
+    return convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, id);
   };
 }
 
@@ -113,7 +120,7 @@ export class SettingDiagnostic extends DiagnosticInfo {
     this.dialogPath = diagnostic.path;
   }
   getUrl = () => {
-    return `/settings/bot/${this.rootProjectId}/dialog-settings`;
+    return createBotSettingUrl(this.rootProjectId, this.projectId);
   };
 }
 
