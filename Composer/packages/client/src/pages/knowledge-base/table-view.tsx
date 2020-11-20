@@ -58,6 +58,7 @@ interface QnASectionItem extends QnASection {
   dialogId: string | undefined;
   used: boolean;
   usedIn: { id: string; displayName: string }[];
+  sectionId: string;
 }
 
 const createQnASectionItem = (fileId: string): QnASectionItem => {
@@ -74,12 +75,15 @@ const createQnASectionItem = (fileId: string): QnASectionItem => {
 };
 
 const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (props) => {
-  const { dialogId = '' } = props;
-  const projectId = props.skillId ?? props.projectId ?? '';
+  const { dialogId = '', projectId = '', skillId } = props;
+
+  const actualProjectId = skillId ?? projectId;
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
+  const locale = useRecoilValue(localeState(actualProjectId));
   const {
     removeQnAImport,
     removeQnAFile,
@@ -173,7 +177,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
 
       setQnASections(dialogSections);
     }
-  }, [qnaFiles, dialogId, projectId]);
+  }, [qnaFiles, dialogId, actualProjectId]);
 
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
@@ -183,7 +187,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
       sectionId,
       questionId,
       content,
-      projectId,
+      projectId: actualProjectId,
     });
   };
 
@@ -194,7 +198,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
       id: fileId,
       sectionId,
       content,
-      projectId,
+      projectId: actualProjectId,
     });
   };
 
@@ -205,7 +209,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
     removeQnAPairs({
       id: fileId,
       sectionId,
-      projectId,
+      projectId: actualProjectId,
     });
     // update expand status
     if (expandedIndex) {
@@ -222,7 +226,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
     if (!Question || !Answer) return;
     const createdQnAPair = qnaUtil.generateQnAPair(Question, Answer);
     setCreatQnAPairSettings({ groupKey: '', sectionIndex: -1 });
-    createQnAPairs({ id: fileId, content: createdQnAPair, projectId });
+    createQnAPairs({ id: fileId, content: createdQnAPair, projectId: actualProjectId });
   };
 
   const onCreateNewQnAPairsStart = (fileId: string | undefined) => {
@@ -249,7 +253,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
       id: fileId,
       sectionId,
       content: content || 'Add new question',
-      projectId,
+      projectId: actualProjectId,
     };
     createQnAQuestion(payload);
   };
@@ -257,9 +261,14 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   const onSubmitEditKB = async ({ name }: { name: string }) => {
     if (!editQnAFile) return;
     const newId = `${name}.source`;
-    await actions.renameQnAKB({ id: editQnAFile.id, name: newId, projectId });
+    await actions.renameQnAKB({ id: editQnAFile.id, name: newId, projectId: actualProjectId });
     if (!qnaFile) return;
-    await actions.updateQnAImport({ id: qnaFile.id, sourceId: editQnAFile.id, newSourceId: newId, projectId });
+    await actions.updateQnAImport({
+      id: qnaFile.id,
+      sourceId: editQnAFile.id,
+      newSourceId: newId,
+      projectId: actualProjectId,
+    });
     setEditQnAFile(undefined);
   };
 
@@ -338,7 +347,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                         name: formatMessage('Show code'),
                         iconProps: { iconName: 'CodeEdit' },
                         onClick: () => {
-                          navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/edit?C=${containerId}`);
+                          navigateTo(`${baseURL}knowledge-base/${dialogId}/edit?C=${containerId}`);
                         },
                       },
                       {
@@ -348,8 +357,8 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!qnaFile) return;
-                          await removeQnAImport({ id: qnaFile.id, sourceId: containerId, projectId });
-                          await removeQnAFile({ id: containerId, projectId });
+                          await removeQnAImport({ id: qnaFile.id, sourceId: containerId, projectId: actualProjectId });
+                          await removeQnAFile({ id: containerId, projectId: actualProjectId });
                         },
                       },
                     ] as IOverflowSetItemProps[]
@@ -625,7 +634,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                   <Link
                     key={id}
                     onClick={() => {
-                      navigateTo(`/bot/${projectId}/knowledge-base/${id}`);
+                      navigateTo(`${baseURL}knowledge-base/${id}`);
                     }}
                   >
                     {displayName}
@@ -767,7 +776,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             data-testid={'createKnowledgeBase'}
             text={formatMessage('Create new KB')}
             onClick={() => {
-              actions.createQnAFromUrlDialogBegin({ projectId });
+              actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId });
             }}
           />
         </div>

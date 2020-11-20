@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -11,7 +11,6 @@ import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
 
@@ -31,39 +30,6 @@ const LGPage: React.FC<RouteComponentProps<{
   const edit = /\/edit(\/)?$/.test(path);
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
-
-  const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
-      let url = `${baseURL}language-generation/${dialog.id}`;
-      if (edit) {
-        url += `/edit`;
-      }
-      return {
-        id: dialog.id,
-        name: dialog.displayName,
-        ariaLabel: formatMessage('language generation file'),
-        url,
-      };
-    });
-    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
-
-    if (mainDialogIndex > -1) {
-      const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
-      newDialogLinks.splice(0, 0, mainDialog);
-    }
-    let commonUrl = `${baseURL}language-generation/common`;
-    if (edit) {
-      commonUrl += '/edit';
-    }
-
-    newDialogLinks.splice(0, 0, {
-      id: 'common',
-      name: formatMessage('All'),
-      ariaLabel: formatMessage('all language generation files'),
-      url: commonUrl,
-    });
-    return newDialogLinks;
-  }, [dialogs, edit]);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -91,17 +57,18 @@ const LGPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      useNewTree
       data-testid="LGPage"
       mainRegionName={formatMessage('LG editor')}
-      navLinks={navLinks}
       navRegionName={formatMessage('LG Navigation Pane')}
+      pageMode={'language-generation'}
       title={formatMessage('Bot Responses')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit/*" projectId={projectId} />
+          <CodeEditor dialogId={dialogId} path="/edit/*" projectId={projectId} skillId={skillId} />
           <TableView dialogId={dialogId} path="/" projectId={projectId} />
         </Router>
       </Suspense>

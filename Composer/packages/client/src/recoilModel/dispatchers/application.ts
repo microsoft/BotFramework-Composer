@@ -10,7 +10,6 @@ import {
   announcementState,
   onboardingState,
   creationFlowStatusState,
-  currentModeState,
   PageMode,
   creationFlowTypeState,
   pageElementState,
@@ -77,10 +76,6 @@ export const applicationDispatcher = () => {
     set(announcementState, message);
   });
 
-  const setCurrentPageMode = useRecoilCallback(({ set }: CallbackInterface) => (mode: PageMode) => {
-    set(currentModeState, mode);
-  });
-
   const setPageElementState = useRecoilCallback(({ set }: CallbackInterface) => (mode: PageMode, settings: {}) => {
     set(pageElementState, (currentElementState) => ({
       ...currentElementState,
@@ -133,7 +128,6 @@ export const applicationDispatcher = () => {
     setCreationFlowStatus,
     setApplicationLevelError,
     setCreationFlowType,
-    setCurrentPageMode,
     setPageElementState,
   };
 };
