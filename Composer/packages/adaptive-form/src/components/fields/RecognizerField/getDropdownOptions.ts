@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { RecognizerSchema, FallbackRecognizerKey } from '@bfc/extension-client';
+import { RecognizerSchema, FallbackRecognizerKey, ShellApi, ShellData } from '@bfc/extension-client';
 
 import { recognizerOrderMap } from './defaultRecognizerOrder';
 import { mapRecognizerSchemaToDropdownOption } from './mappers';
 
-const getRankScore = (r: RecognizerSchema) => {
+const getRankScore = (r: RecognizerSchema, shellData: ShellData, shellApi: ShellApi) => {
   // Always put disabled recognizer behind. Handle 'disabled' before 'default'.
-  if (r.disabled) return Number.MAX_VALUE;
+  if ((typeof r.disabled === 'function' && r.disabled(shellData, shellApi)) || r.disabled) return Number.MAX_VALUE;
   // Always put default recognzier ahead.
   if (r.default) return -1;
   // Put fallback recognizer behind.
@@ -16,11 +16,11 @@ const getRankScore = (r: RecognizerSchema) => {
   return recognizerOrderMap[r.id] ?? Number.MAX_VALUE - 1;
 };
 
-export const getDropdownOptions = (recognizerConfigs: RecognizerSchema[]) => {
+export const getDropdownOptions = (recognizerConfigs: RecognizerSchema[], shellData: ShellData, shellApi: ShellApi) => {
   return recognizerConfigs
-    .filter((r) => !r.disabled)
+    .filter((r) => (typeof r.disabled === 'function' && !r.disabled(shellData, shellApi)) || !r.disabled)
     .sort((r1, r2) => {
-      return getRankScore(r1) - getRankScore(r2);
+      return getRankScore(r1, shellData, shellApi) - getRankScore(r2, shellData, shellApi);
     })
     .map(mapRecognizerSchemaToDropdownOption);
 };
