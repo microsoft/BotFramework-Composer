@@ -13,7 +13,6 @@ import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
-import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import {
   dispatcherState,
@@ -24,6 +23,7 @@ import {
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -331,7 +331,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const rollbackToVersion = useMemo(
     () => async (version) => {
-      const sensitiveSettings = settingsStorage.get(projectId);
+      const sensitiveSettings = getSensitiveProperties(settings);
       await rollbackToVersionDispatcher(projectId, selectedTarget, version.id, sensitiveSettings);
     },
     [projectId, selectedTarget]
@@ -344,7 +344,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         if (settings.qna && Object(settings.qna).subscriptionKey) {
           await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
         }
-        const sensitiveSettings = settingsStorage.get(projectId);
+        const sensitiveSettings = getSensitiveProperties(settings);
         await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date

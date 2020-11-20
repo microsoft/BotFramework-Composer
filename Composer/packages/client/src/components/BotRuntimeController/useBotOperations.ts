@@ -20,7 +20,12 @@ export function useBotOperations() {
     dispatcherState
   );
 
-  const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
+  const handleBotStart = async (
+    projectId: string,
+    config: IPublishConfig,
+    sensitiveSettings,
+    botBuildRequired: boolean
+  ) => {
     resetBotRuntimeError(projectId);
     setBotStatus(projectId, BotStatus.pending);
     if (botBuildRequired) {
@@ -36,20 +41,20 @@ export function useBotOperations() {
       }
     } else {
       // Regex recognizer
-      await botRuntimeOperations?.startBot(projectId);
+      await botRuntimeOperations?.startBot(projectId, sensitiveSettings);
     }
   };
 
   const startRootBot = async (skipBuild?: boolean) => {
     setProjectsToTrack([]);
     await updateSettingsForSkillsWithoutManifest();
-    const { projectId, configuration, buildRequired, status } = builderEssentials[0];
+    const { projectId, configuration, buildRequired, status, sensitiveSettings } = builderEssentials[0];
     if (status !== BotStatus.connected) {
       let isBuildRequired = buildRequired;
       if (skipBuild) {
         isBuildRequired = false;
       }
-      handleBotStart(projectId, configuration, isBuildRequired);
+      handleBotStart(projectId, configuration, sensitiveSettings, isBuildRequired);
     }
   };
 
@@ -72,8 +77,8 @@ export function useBotOperations() {
     setProjectsToTrack(trackProjects);
     for (const botBuildConfig of skillsBots) {
       if (botBuildConfig.status !== BotStatus.connected) {
-        const { projectId, configuration, buildRequired } = botBuildConfig;
-        await handleBotStart(projectId, configuration, buildRequired);
+        const { projectId, configuration, buildRequired, sensitiveSettings } = botBuildConfig;
+        await handleBotStart(projectId, configuration, sensitiveSettings, buildRequired);
       }
     }
   };
@@ -93,7 +98,7 @@ export function useBotOperations() {
         if (skipBuild) {
           isBuildRequired = false;
         }
-        handleBotStart(projectId, botData?.configuration, isBuildRequired);
+        handleBotStart(projectId, botData?.configuration, botData.sensitiveSettings, isBuildRequired);
       }
     }
   };
