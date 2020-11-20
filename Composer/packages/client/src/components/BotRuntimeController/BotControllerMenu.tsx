@@ -70,7 +70,7 @@ const tableColumns: IColumn[] = [
   },
 ];
 
-const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>((props, ref: any) => {
+const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>((props) => {
   const { items, target, onDismiss, hidden } = props;
   return (
     <Callout
@@ -82,7 +82,7 @@ const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>
       target={target}
       onDismiss={onDismiss}
     >
-      <div ref={ref}>
+      <div>
         <div css={styles.header}>
           <div css={styles.title}>{formatMessage('Local bot runtime manager')}</div>
           <p>{formatMessage('Start and stop local bot runtimes individually.')}</p>
