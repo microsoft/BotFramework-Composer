@@ -11,7 +11,6 @@ context('LG Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonBot Responses').click();
     // left nav tree
     cy.contains('TodoSample');
-    cy.contains('All');
 
     cy.findByTestId('showcode').as('switchButton');
 

@@ -7,9 +7,12 @@ import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
 import { LeftRightSplit } from '../components/Split/LeftRightSplit';
+import { navigateTo, buildURL } from '../utils/navigation';
+import { PageMode } from '../recoilModel';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
+import { ProjectTree } from './ProjectTree/ProjectTree';
 
 // -------------------- Styles -------------------- //
 
@@ -84,7 +87,6 @@ export const content = (shouldShowEditorError: boolean) => css`
 type IPageProps = {
   // TODO: add type
   toolbarItems: IToolbarItem[];
-  navLinks: INavTreeItem[];
   title: string;
   headerStyle?: SerializedStyles;
   navRegionName: string;
@@ -92,6 +94,9 @@ type IPageProps = {
   shouldShowEditorError?: boolean;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
+  useNewTree?: boolean;
+  navLinks?: INavTreeItem[];
+  pageMode: PageMode;
 };
 
 const Page: React.FC<IPageProps> = (props) => {
@@ -105,6 +110,8 @@ const Page: React.FC<IPageProps> = (props) => {
     mainRegionName,
     headerStyle = header,
     shouldShowEditorError = true,
+    useNewTree,
+    pageMode,
   } = props;
 
   return (
@@ -116,8 +123,24 @@ const Page: React.FC<IPageProps> = (props) => {
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
-            <NavTree navLinks={navLinks} regionName={navRegionName} />
+          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={pageMode}>
+            {useNewTree ? (
+              <ProjectTree
+                options={{
+                  showDelete: false,
+                  showTriggers: false,
+                  showDialogs: true,
+                  showRemote: false,
+                  showMenu: false,
+                  showErrors: false,
+                }}
+                onSelect={(link) => {
+                  navigateTo(buildURL(pageMode, link));
+                }}
+              />
+            ) : (
+              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+            )}
             <div
               aria-label={mainRegionName}
               css={content(shouldShowEditorError)}
