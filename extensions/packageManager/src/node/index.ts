@@ -10,6 +10,17 @@ import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 const API_ROOT = '/api';
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
+
+  const updateRecentlyUsed = (componentList, runtimeLanguage) => {
+    const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+    componentList.forEach((component) => {
+      if (!recentlyUsed.find((used) => used.name === component.name)) {
+        recentlyUsed.unshift({...component, language: runtimeLanguage });
+      }
+    });
+    composer.store.write('recentlyUsed', recentlyUsed);
+  }
+
   const LibraryController = {
     getLibrary: async function (req, res) {
       // read the list of sources from the config file.
@@ -38,7 +49,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           composer.log(err);
         }
       }
-      res.json(combined);
+
+      // add recently used
+      const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+
+      res.json({
+        available: combined,
+        recentlyUsed: recentlyUsed,
+      });
     },
     getComponents: async function (req, res) {
       const user = await composer.context.getUserFromRequest(req);
@@ -82,6 +100,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         });
       }
     },
+
     import: async function (req, res) {
       const user = await composer.context.getUserFromRequest(req);
       const projectId = req.params.projectId;
@@ -156,11 +175,20 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
+            const installedComponents = mergeResults.components.filter((c) => c.includesSchema || c.includesExports);
             if (mergeResults) {
               res.json({
                 success: true,
-                components: mergeResults.components.filter((c) => c.includesSchema || c.includesExports),
+                components: installedComponents,
               });
+
+              let runtimeLanguage = 'c#';
+              if (currentProject.settings.runtime.key === 'node-azurewebapp') {
+                runtimeLanguage = 'js';
+              }
+              updateRecentlyUsed(installedComponents, runtimeLanguage);
+
+
             } else {
               res.json({
                 success: false,
