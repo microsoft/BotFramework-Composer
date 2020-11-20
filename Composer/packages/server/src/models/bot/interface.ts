@@ -47,14 +47,15 @@ export interface ILuisStatusOperation {
 export interface IOrchestratorNLRList {
   version: string;
   default: string;
-  readonly models: {
-    [versionId: string]: {
+  readonly models: Record<
+    string,
+    {
       releaseDate: string;
       modelUri: string;
       description: string;
       minSDKVersion: string;
-    };
-  };
+    }
+  >;
 }
 
 export interface IOrchestratorProgress {
@@ -68,7 +69,7 @@ export interface IOrchestratorRecognizer extends BaseSchema {
 }
 
 export interface IOrchestratorBuildOutput {
-  outputs: [{ id: string; snapshot: Uint8Array; recognizer: { [recog: string]: BaseSchema } }];
+  outputs: [{ id: string; snapshot: Uint8Array; recognizer: Record<string, BaseSchema> }];
   settings: {
     orchestrator: {
       modelPath: string;
