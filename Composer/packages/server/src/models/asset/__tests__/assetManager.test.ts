@@ -6,6 +6,8 @@ import { ExtensionContext } from '@bfc/extension';
 
 import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
+import StorageService from '../../../services/storage';
+
 jest.mock('azure-storage', () => {
   return {};
 });
@@ -57,5 +59,38 @@ describe('assetManager', () => {
     } catch (error) {
       throw new Error(error);
     }
+  });
+
+  describe('copyRemoteProjectTemplateTo', () => {
+    const getStorageClientBackup = StorageService.getStorageClient;
+
+    afterAll(() => {
+      StorageService.getStorageClient = getStorageClientBackup;
+    });
+
+    it('should copy a template directory to a location', async () => {
+      const assetManager = new AssetManager();
+      (assetManager as any).copyTemplateDirTo = jest.fn().mockResolvedValue(undefined);
+      StorageService.getStorageClient = jest.fn().mockReturnValue({
+        exists: jest.fn().mockResolvedValue(false),
+      });
+      const mockLocRef = { path: '/path/to/bot', storageId: 'default' };
+      const location = await assetManager.copyRemoteProjectTemplateTo('tempDir', mockLocRef, undefined, undefined);
+
+      expect(location).toEqual(mockLocRef);
+    });
+
+    it('should throw if the destination directory already exists', async () => {
+      const assetManager = new AssetManager();
+      (assetManager as any).copyTemplateDirTo = jest.fn().mockResolvedValue(undefined);
+      StorageService.getStorageClient = jest.fn().mockReturnValue({
+        exists: jest.fn().mockResolvedValue(true),
+      });
+      const mockLocRef = { path: '/path/to/bot', storageId: 'default' };
+
+      expect(
+        async () => await assetManager.copyRemoteProjectTemplateTo('tempDir', mockLocRef, undefined, undefined)
+      ).rejects.toThrowError(new Error('already have this folder, please give another name'));
+    });
   });
 });
