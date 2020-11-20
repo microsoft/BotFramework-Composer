@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
+import { FeatureFlagMap } from '@botframework-composer/types';
 
 import { creationFeatureFlagReadMe } from '../constant';
-
-import { FeatureFlagMap } from '@botframework-composer/types';
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   VA_CREATION: {
