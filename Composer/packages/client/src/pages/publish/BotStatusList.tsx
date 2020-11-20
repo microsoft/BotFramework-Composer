@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { PublishTarget } from '@botframework-composer/types/lib/publish';
+import { PublishTarget } from '@bfc/shared';
 
 import { navigateTo } from '../../utils/navigation';
 
