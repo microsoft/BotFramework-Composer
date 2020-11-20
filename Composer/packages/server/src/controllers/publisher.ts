@@ -4,11 +4,11 @@
 import { join } from 'path';
 
 import merge from 'lodash/merge';
-import { ExtensionContext } from '@bfc/extension';
 import { defaultPublishConfig } from '@bfc/shared';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
+import { ExtensionContext } from '../models/extension/extensionContext';
 import { BotProjectService } from '../services/project';
 import { authService } from '../services/auth/auth';
 import AssetService from '../services/asset';
