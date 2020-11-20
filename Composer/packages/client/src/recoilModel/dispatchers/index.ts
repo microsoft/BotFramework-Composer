@@ -26,6 +26,7 @@ import { botProjectFileDispatcher } from './botProjectFile';
 import { zoomDispatcher } from './zoom';
 import { authDispatcher } from './auth';
 import { recognizerDispatcher } from './recognizers';
+import { serverSettingsDispatcher } from './serverSettings';
 
 const createDispatchers = () => {
   return {
@@ -54,6 +55,7 @@ const createDispatchers = () => {
     ...zoomDispatcher(),
     ...authDispatcher(),
     ...recognizerDispatcher(),
+    ...serverSettingsDispatcher(),
   };
 };
 

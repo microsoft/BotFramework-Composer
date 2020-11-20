@@ -1010,6 +1010,18 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
+  "msg_bf173fef": {
+    "message": "{ msg }"
+  },
+  "multi_choice_839b54bb": {
+    "message": "Multi-choice"
+  },
+  "multiple_wildcards_26f50b6c": {
+    "message": "multiple wildcards"
+  },
+  "must_be_an_expression_error_477cbda6": {
+    "message": "must be an expression: { error }"
+  },
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"
   },
@@ -1285,6 +1297,9 @@
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
+  },
+  "provisioning_1330aede": {
+    "message": "Provisioning ..."
   },
   "provisioning_summary_2be9422f": {
     "message": "Provisioning Summary"

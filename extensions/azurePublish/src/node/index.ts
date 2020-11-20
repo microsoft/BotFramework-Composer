@@ -5,9 +5,8 @@ import path from 'path';
 
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { JSONSchema7, ExtensionRegistration, PublishPlugin, PublishResponse, PublishResult, IBotProject } from '@bfc/extension';
 import { Debugger } from 'debug';
-
+import { IBotProject, PublishPlugin, JSONSchema7, IExtensionRegistration, PublishResponse, PublishResult } from '@botframework-composer/types';
 import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
@@ -54,7 +53,7 @@ interface ProvisionHistoryItem {
 }
 
 function publishResultFromStatus(procStatus: ProcessStatus): PublishResponse {
-  const { status, message, log, comment, time, projectId } = procStatus;
+  const { status, message, log, comment, time } = procStatus;
 
   return {
     status,
@@ -63,14 +62,14 @@ function publishResultFromStatus(procStatus: ProcessStatus): PublishResponse {
       log: log.map((item)=> `---\n${JSON.stringify(item, null, 2)}\n---\n`).join('\n'),
       comment,
       time,
-      id: projectId,
+      id: procStatus.id,
       status,
     }
   };
 }
 
 // Wrap the entire class definition in the export so the composer object can be available to it
-export default async (composer: ExtensionRegistration): Promise<void> => {
+export default async (composer: IExtensionRegistration): Promise<void> => {
   class AzurePublisher implements PublishPlugin<PublishConfig> {
     private historyFilePath: string;
     private publishHistories: Record<string, Record<string, PublishResult[]>>;
@@ -85,7 +84,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
     constructor(mode: string, name: string, description: string, bundleId: string) {
       this.publishHistories = {};
-      this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
+      this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
       }
@@ -98,7 +97,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       this.bundleId = bundleId;
     }
 
-    private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../publishBots`);
+    private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../../publishBots`);
 
     /*******************************************************************************************************************************/
     /* These methods generate all the necessary paths to various files  */
@@ -127,14 +126,14 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       }
     }
 
-    private history = async (botId: string, profileName: string) => {
+    private history = (botId: string, profileName: string): PublishResult[] => {
       if (this.publishHistories?.[botId]?.[profileName]) {
         return this.publishHistories[botId][profileName];
       }
       return [];
     };
 
-    private updateHistory = async (botId: string, profileName: string, newHistory: any) => {
+    private updateHistory = async (botId: string, profileName: string, newHistory: PublishResult) => {
       if (!this.publishHistories[botId]) {
         this.publishHistories[botId] = {};
       }
@@ -215,9 +214,13 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
      * @param resourcekey
      */
     private async cleanup(resourcekey: string) {
-      const projFolder = this.getRuntimeFolder(resourcekey);
-      await emptyDir(projFolder);
-      await rmdir(projFolder);
+      try{
+        const projFolder = this.getRuntimeFolder(resourcekey);
+        await emptyDir(projFolder);
+        await rmdir(projFolder);
+      } catch (error) {
+        this.logger('$O', error);
+      }
     }
 
 
@@ -247,9 +250,11 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         subId: subscriptionID, // deprecate - not used
-        logger: (msg: any) => {
-          this.logger(msg);
-          BackgroundProcessManager.updateProcess(jobId, 202, msg.message.replace(/\n$/, ''));
+        logger: (msg: any, ...args: any[]) => {
+          this.logger(msg, ...args);
+          if (msg?.message) {
+            BackgroundProcessManager.updateProcess(jobId, 202, msg.message.replace(/\n$/, ''));
+          }
         },
         accessToken: accessToken,
         projPath: this.getProjectFolder(resourcekey, this.mode),
@@ -266,7 +271,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       // get the latest status
       const status = BackgroundProcessManager.getStatus(jobId);
       // add it to the history
-      await this.updateHistory(botId, profileName, status);
+      await this.updateHistory(botId, profileName, publishResultFromStatus(status).result);
       // clean up the background process
       BackgroundProcessManager.removeProcess(jobId);
       // clean up post-deploy
@@ -307,7 +312,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           project.settings.runtime.customRuntime === true &&
           project.settings.runtime.path
         ) {
-          runtimeCodePath = project.settings.runtime.path;
+          runtimeCodePath = path.isAbsolute(project.settings.runtime.path) ? project.settings.runtime.path : path.resolve(project.dir, project.settings.runtime.path);
         }
 
         // Prepare the temporary project
@@ -338,10 +343,10 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           resourcekey,
           customizeConfiguration
         );
-      }catch(err){
-        this.logger(err);
+      } catch(err){
+        this.logger('%O', err);
         BackgroundProcessManager.updateProcess(jobId, 500, stringifyError(err));
-        await this.updateHistory(project.id, profileName, BackgroundProcessManager.getStatus(jobId));
+        await this.updateHistory(project.id, profileName, publishResultFromStatus(BackgroundProcessManager.getStatus(jobId)).result);
         BackgroundProcessManager.removeProcess(jobId);
         this.cleanup(resourcekey);
       }
@@ -350,7 +355,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
     /*******************************************************************************************************************************/
     /* These methods provision resources to azure async */
     /*******************************************************************************************************************************/
-    asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user) => {
+    asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user): Promise<void> => {
       const { subscription, name } = config;
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
@@ -455,14 +460,21 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
         this.asyncPublish(config, project, resourcekey, jobId);
       } catch (err) {
+        this.logger('%O', err);
         // can only can accessToken and settings missing. Because asyncPublish is not await.
         BackgroundProcessManager.updateProcess(jobId, 500, stringifyError(err));
-        await this.updateHistory(botId, profileName, BackgroundProcessManager.getStatus(jobId));
+        await this.updateHistory(botId, profileName, publishResultFromStatus(BackgroundProcessManager.getStatus(jobId)).result);
         BackgroundProcessManager.removeProcess(jobId);
         this.cleanup(resourcekey as string);
       }
 
       return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
+    };
+
+    getHistory = async(config: PublishConfig, project: IBotProject, user) => {
+      const profileName = config.profileName;
+      const botId = project.id;
+      return this.history(botId, profileName);
     };
 
     getStatus = async (config: PublishConfig, project: IBotProject, user) => {
@@ -482,7 +494,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         }
       }
       // if ACTIVE status is found, look for recent status in history
-      const current = await this.history(botId, profileName);
+      const current = this.history(botId, profileName);
       if (current.length > 0) {
         return {
           status: current[0].status,
@@ -497,12 +509,6 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         }
 
       };
-    };
-
-    public getHistory = async (config: PublishConfig, project: IBotProject, user) => {
-      const profileName = config.profileName;
-      const botId = project.id;
-      return await this.history(botId, profileName);
     };
 
     /**************************************************************************************************

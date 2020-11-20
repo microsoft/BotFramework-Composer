@@ -70,7 +70,7 @@ export const publisherDispatcher = () => {
 
   const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: PublishResult) => {
     if (data == null) return;
-    const { endpointURL, status, id } = data;
+    const { endpointURL, status } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
@@ -99,7 +99,7 @@ export const publisherDispatcher = () => {
         } else {
           // make sure this status payload represents the same item as item 0 (most of the time)
           // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
-          if (targetHistories.length && targetHistories[0].id === id) {
+          if (targetHistories.length && targetHistories[0].id === data.id) {
             targetHistories[0] = currentHistory;
           } else {
             targetHistories.unshift(currentHistory);

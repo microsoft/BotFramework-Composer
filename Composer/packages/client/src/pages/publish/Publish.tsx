@@ -10,6 +10,7 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget, PublishResult } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 // import { setAccessToken, setGraphToken } from '../../utils/auth';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
@@ -23,7 +24,6 @@ import {
   publishHistoryState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { PublishProfileDialog } from '../../constants';
 import { PluginAPI } from '../../plugins/api';

@@ -3,10 +3,10 @@
 
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
-import { ExtensionContext } from '@bfc/extension';
 import { remove } from 'fs-extra';
 import formatMessage from 'format-message';
 
+import { ExtensionContext } from '../models/extension/extensionContext';
 import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssetService from '../services/asset';

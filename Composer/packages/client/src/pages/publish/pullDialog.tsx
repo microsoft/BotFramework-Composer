@@ -30,7 +30,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
   const { onDismiss, projectId, selectedTarget } = props;
   const [status, setStatus] = useState<PullDialogStatus>('connecting');
   const [error, setError] = useState<string>('');
-  const { addNotification, reloadExistingProject } = useRecoilValue(dispatcherState);
+  const { addNotification, reloadProject } = useRecoilValue(dispatcherState);
   const botLocation = useRecoilValue(locationState(projectId));
 
   const pull = useCallback(() => {
@@ -56,7 +56,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
           });
           addNotification(notification);
           // reload the bot project to update the authoring canvas
-          reloadExistingProject(projectId);
+          reloadProject(projectId);
           onDismiss();
           return;
         } catch (e) {

@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
 const { resolve } = require('path');
-const TerserPlugin = require('terser-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = [
   {
@@ -55,10 +53,19 @@ module.exports = [
     mode: 'production',
     devtool: 'source-map',
     target: 'node',
+    node: {
+      __dirname: false,
+      __filename: false,
+      global: false,
+    },
     output: {
       path: resolve(__dirname, 'lib', 'node'),
       filename: 'index.js',
       libraryTarget: 'commonjs2',
+      /**
+       * Node files aren't being loaded by Webpack, so we want the source maps to point to the files on disk
+       */
+      devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     },
     module: {
       rules: [{ test: /\.tsx?$/, use: 'ts-loader', exclude: [/node_modules/] }],
