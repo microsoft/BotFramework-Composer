@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { ExtensionContext } from '@bfc/extension';
 
+import { ExtensionContext } from '../../../models/extension/extensionContext';
 import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
 import StorageService from '../../../services/storage';
@@ -12,8 +12,7 @@ jest.mock('azure-storage', () => {
   return {};
 });
 
-jest.mock('@bfc/extension', () => {
-  //const p = require('path');
+jest.mock('../../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
       extensions: {
