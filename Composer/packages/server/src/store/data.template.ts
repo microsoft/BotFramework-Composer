@@ -24,8 +24,6 @@ export default {
   projectLocationMap: {} as Record<string, BotProjectMetadata>,
   featureFlags: getDefaultFeatureFlags(),
   settings: {
-    telemetry: {
-      allowDataCollection: null,
-    },
+    telemetry: {},
   } as ServerSettings,
 };
