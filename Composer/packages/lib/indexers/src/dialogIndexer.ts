@@ -12,7 +12,6 @@ import {
   LgTemplateJsonPath,
   ReferredLuIntents,
   Diagnostic,
-  LuProviderType,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
