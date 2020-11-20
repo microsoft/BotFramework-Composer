@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, ShellApi } from '@bfc/extension-client';
+import { PluginConfig, ShellApi, ShellData } from '@bfc/extension-client';
 import { SDKKinds, DialogInfo } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -9,7 +9,13 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.OrchestratorRecognizer]: {
       recognizer: {
-        disabled: (shellAPI: ShellApi) => !shellAPI.isFeatureEnabled('ORCHESTRATOR'),
+        disabled: (shellData: ShellData, shellAPI: ShellApi) => {
+          const luProvider = shellData.currentDialog?.luProvider;
+          if (luProvider === SDKKinds.OrchestratorRecognizer) {
+            return false;
+          }
+          return !shellAPI.isFeatureEnabled('ORCHESTRATOR');
+        },
         displayName: () => formatMessage('Orchestrator Recognizer'),
         isSelected: (_, dialog: DialogInfo) => {
           return dialog.luProvider === SDKKinds.OrchestratorRecognizer;
