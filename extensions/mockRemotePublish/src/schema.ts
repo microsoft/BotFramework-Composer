@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@botframework-composer/types';
 
 const schema: JSONSchema7 = {
   type: 'object',
