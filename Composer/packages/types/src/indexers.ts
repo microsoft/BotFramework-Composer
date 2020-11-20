@@ -48,7 +48,7 @@ export type DialogSchemaFile = {
   content: any;
 };
 
-export type LuProviderType = SDKKinds.LuisRecognizer | SDKKinds.OrchestratorRecognizer | '';
+export type LuProviderType = SDKKinds.LuisRecognizer | SDKKinds.OrchestratorRecognizer;
 
 export type DialogInfo = {
   content: MicrosoftIDialog;
@@ -65,7 +65,7 @@ export type DialogInfo = {
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
   skills: string[];
-  luProvider: LuProviderType;
+  luProvider?: LuProviderType;
   isFormDialog: boolean;
 };
 

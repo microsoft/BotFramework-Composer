@@ -339,8 +339,8 @@ export function replaceDialogDiagnosticLabel(path?: string): string {
   return list.join(': ');
 }
 
-export const getLuProvider = (dialogId: string, recognizers: RecognizerFile[]): LuProviderType => {
-  let kind: LuProviderType = '';
+export const getLuProvider = (dialogId: string, recognizers: RecognizerFile[]) => {
+  let kind: LuProviderType | undefined = undefined;
   for (const {
     id,
     content: { $kind },

@@ -19,21 +19,20 @@ const templates = {
 
 export const recognizerDispatcher = () => {
   const updateRecognizer = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => (projectId: string, dialogId: string, kind: LuProviderType) => {
-      const recognizersLoadable = snapshot.getLoadable(recognizersSelectorFamily(projectId));
-      if (recognizersLoadable.state === 'hasValue') {
-        const updates = recognizersLoadable.contents.filter(
-          ({ id, content }) =>
-            id.split('.')[0] === dialogId && LuProviderRecognizer.includes(content.$kind) && content.$kind !== kind
-        );
+    ({ set, snapshot }: CallbackInterface) => async (projectId: string, dialogId: string, kind: LuProviderType) => {
+      const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
 
-        updates.forEach(({ id }) => {
-          set(recognizerState({ projectId, id }), {
-            id,
-            content: templates[kind](dialogId, id.replace('.lu.dialog', '')),
-          });
+      const updates = recognizers.filter(
+        ({ id, content }) =>
+          id.split('.')[0] === dialogId && LuProviderRecognizer.includes(content.$kind) && content.$kind !== kind
+      );
+
+      updates.forEach(({ id }) => {
+        set(recognizerState({ projectId, id }), {
+          id,
+          content: templates[kind](dialogId, id.replace('.lu.dialog', '')),
         });
-      }
+      });
     }
   );
 
