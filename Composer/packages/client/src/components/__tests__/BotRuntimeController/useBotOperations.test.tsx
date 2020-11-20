@@ -62,7 +62,22 @@ describe('useBotOperations', () => {
       result.current.startSingleBot(state.skillId);
     });
     expect(mocks.resetBotRuntimeError).toHaveBeenLastCalledWith(state.skillId);
-    expect(mocks.publishToTarget).toHaveBeenLastCalledWith(state.skillId, defaultPublishConfig, { comment: '' }, {});
+    expect(mocks.publishToTarget).toHaveBeenLastCalledWith(
+      state.skillId,
+      defaultPublishConfig,
+      { comment: '' },
+      {
+        MicrosoftAppPassword: '',
+        luis: {
+          authoringKey: '',
+          endpointKey: '',
+        },
+        qna: {
+          endpointKey: '',
+          subscriptionKey: '',
+        },
+      }
+    );
   });
 
   it('should stop a single bot', async () => {

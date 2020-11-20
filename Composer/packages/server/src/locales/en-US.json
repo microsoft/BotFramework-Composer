@@ -212,15 +212,6 @@
   "all_4321c3a1": {
     "message": "All"
   },
-  "all_language_generation_files_ef778f24": {
-    "message": "all language generation files"
-  },
-  "all_language_understanding_files_714b33eb": {
-    "message": "all language understanding files"
-  },
-  "all_qna_files_349d7fe1": {
-    "message": "all qna files"
-  },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
   },
@@ -572,6 +563,9 @@
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
   },
+  "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
+    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
+  },
   "composer_introduction_98a93701": {
     "message": "Composer introduction"
   },
@@ -749,12 +743,6 @@
   "create_kb_e78571ba": {
     "message": "Create KB"
   },
-  "create_kb_from_scratch_eddd037a": {
-    "message": "Create KB from scratch"
-  },
-  "create_kb_from_url_or_file_49ad6671": {
-    "message": "Create KB from URL or file"
-  },
   "create_knowledge_base_db6d66c4": {
     "message": "Create knowledge base"
   },
@@ -805,6 +793,12 @@
   },
   "cut_c8c92681": {
     "message": "Cut"
+  },
+  "data_collection_32efe1e7": {
+    "message": "Data collection"
+  },
+  "data_collection_7db2e237": {
+    "message": "Data Collection"
   },
   "data_loading_4c9bb9f6": {
     "message": "Data loading..."
@@ -1331,6 +1325,9 @@
   "handover_to_human_1a619574": {
     "message": "Handover to human"
   },
+  "help_us_improve_468828c5": {
+    "message": "Help us improve?"
+  },
   "here_s_what_we_know_4e9c1731": {
     "message": "Here’s what we know…"
   },
@@ -1499,14 +1496,8 @@
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
-  "language_generation_file_80c08efe": {
-    "message": "language generation file"
-  },
   "language_understanding_9ae3f1f6": {
     "message": "Language Understanding"
-  },
-  "language_understanding_file_a65abc2c": {
-    "message": "language understanding file"
   },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
@@ -1793,9 +1784,6 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
-  "msg_bf173fef": {
-    "message": "{ msg }"
-  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -1898,6 +1886,9 @@
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
   },
+  "not_now_97efd947": {
+    "message": "Not now"
+  },
   "not_yet_published_669e37b3": {
     "message": "Not yet published"
   },
@@ -1984,6 +1975,9 @@
   },
   "open_skills_page_for_configuration_details_a2a484ea": {
     "message": "Open Skills page for configuration details"
+  },
+  "open_start_bots_panel_f7f87200": {
+    "message": "Open start bots panel"
   },
   "optional_221bcc9d": {
     "message": "Optional"
@@ -2081,9 +2075,6 @@
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logo"
   },
-  "powervirtualagents_logo_11858924": {
-    "message": "PowerVirtualAgents Logo"
-  },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
   },
@@ -2107,6 +2098,9 @@
   },
   "privacy_button_b58e437": {
     "message": "Privacy button"
+  },
+  "privacy_statement_da69ebc6": {
+    "message": "Privacy statement"
   },
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
@@ -2165,12 +2159,6 @@
   "property_type_e38cf7e4": {
     "message": "Property Type"
   },
-  "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
-    "message": "Provide a brief description. It will appear on the publish history list."
-  },
-  "provisioning_1330aede": {
-    "message": "Provisioning ..."
-  },
   "provisioning_summary_2be9422f": {
     "message": "Provisioning Summary"
   },
@@ -2210,6 +2198,9 @@
   "publishing_d63a8f2d": {
     "message": "Publishing"
   },
+  "publishing_name_to_publishtarget_failed_8677b68d": {
+    "message": "Publishing { name } to { publishTarget } failed."
+  },
   "pull_from_selected_profile_b5c635ec": {
     "message": "Pull from selected profile"
   },
@@ -2218,9 +2209,6 @@
   },
   "qna_editor_9eb94b02": {
     "message": "QnA editor"
-  },
-  "qna_file_37705cb7": {
-    "message": "qna file"
   },
   "qna_intent_recognized_49c3d797": {
     "message": "QnA Intent recognized"
@@ -2435,9 +2423,6 @@
   "see_details_da74090e": {
     "message": "See Details"
   },
-  "see_log_73ce7d17": {
-    "message": "See log"
-  },
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
   },
@@ -2602,12 +2587,6 @@
   },
   "skip_this_step_to_add_questions_and_answers_manual_ed1b9f80": {
     "message": "Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. "
-  },
-  "something_happened_while_attempting_to_pull_e_952c7afe": {
-    "message": "Something happened while attempting to pull: { e }"
-  },
-  "something_went_wrong_d238c551": {
-    "message": "Something went wrong"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
@@ -3098,6 +3077,9 @@
   "view_kb_c382e495": {
     "message": "View KB"
   },
+  "view_log_6d51af5e": {
+    "message": "View log"
+  },
   "view_on_npm_2051324d": {
     "message": "View on npm"
   },
@@ -3188,6 +3170,9 @@
   "write_your_message_5d0f151b": {
     "message": "Write your message"
   },
+  "yes_collect_data_b79b7844": {
+    "message": "Yes, collect data"
+  },
   "yes_dde87d5": {
     "message": "Yes"
   },
@@ -3206,11 +3191,14 @@
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
     "message": "You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs."
   },
+  "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
+    "message": "You can turn data collection on or off at any time in the Application Settings."
+  },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "You do not have permission to save bots here"
   },
-  "you_have_status_published_name_to_publishtarget_b5cd3b59": {
-    "message": "You have { status } published { name } to { publishTarget }"
+  "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
+    "message": "You have successfully published { name } to { publishTarget }"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
     "message": "Your bot creation journey on Composer"

@@ -249,7 +249,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [botProjectData.length]);
 
   const rollbackToVersion = (version, item) => {
-    const sensitiveSettings = getSensitiveProperties(projectId, item.id);
+    const setting = botsettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
+    const sensitiveSettings = getSensitiveProperties(setting);
     rollbackToVersionDispatcher(item.id, item.publishTarget, version.id, sensitiveSettings);
   };
 
@@ -306,7 +307,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             if (setting.qna && Object(setting.qna).subscriptionKey) {
               await setQnASettings(botProjectId, Object(setting.qna).subscriptionKey);
             }
-            const sensitiveSettings = getSensitiveProperties(projectId, botProjectId);
+            const sensitiveSettings = getSensitiveProperties(setting);
             await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
 
             // update the target with a lastPublished date
