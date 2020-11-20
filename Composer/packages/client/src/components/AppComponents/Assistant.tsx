@@ -18,7 +18,7 @@ export const Assistant = () => {
   const onboarding = useRecoilValue(onboardingState);
   const renderAppUpdater = isElectron();
 
-  const renderDataCollectionDialog = telemetry?.allowDataCollection === null;
+  const renderDataCollectionDialog = typeof telemetry?.allowDataCollection === 'undefined';
   const renderOnboarding = !renderDataCollectionDialog && !onboarding.complete;
 
   return (
