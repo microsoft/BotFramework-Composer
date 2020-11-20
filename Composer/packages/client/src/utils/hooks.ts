@@ -6,7 +6,7 @@ import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
-import { FeatureFlagKey } from '@bfc/shared';
+import { FeatureFlagKey } from '@botframework-composer/types';
 
 import {
   designPageLocationState,

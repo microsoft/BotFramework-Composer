@@ -67,6 +67,7 @@
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
     "@microsoft/bf-generate-library": "^4.10.0-daily.20201112.185066",
     "@microsoft/bf-lu": "^4.11.0-rc.20201030.a9f9b96",
+    "@microsoft/bf-orchestrator": "^4.11.0-beta.20201111.10062c1",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
