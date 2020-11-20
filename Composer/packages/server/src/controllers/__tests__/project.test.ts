@@ -3,14 +3,14 @@
 
 import { Request } from 'express';
 import rimraf from 'rimraf';
-import { ExtensionContext } from '@bfc/extension';
 import * as msRest from '@azure/ms-rest-js';
 
+import { ExtensionContext } from '../../models/extension/extensionContext';
 import { BotProjectService } from '../../services/project';
 import { ProjectController } from '../../controllers/project';
 import { Path } from '../../utility/path';
 
-jest.mock('@bfc/extension', () => {
+jest.mock('../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
       extensions: {

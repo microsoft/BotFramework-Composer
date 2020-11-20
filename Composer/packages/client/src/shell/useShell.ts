@@ -6,6 +6,7 @@ import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo, SDKKinds } fr
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
+import httpClient from '../utils/httpUtil';
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
@@ -29,6 +30,8 @@ import {
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 import { skillsStateSelector } from '../recoilModel/selectors';
+import { navigateTo } from '../utils/navigation';
+import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -98,6 +101,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkillsDataInBotProjectFile: updateEndpointInBotProjectFile,
     updateZoomRate,
+    reloadProject,
+    setApplicationLevelError,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -219,9 +224,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
     undo,
     redo,
     commitChanges,
-    addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings,
-    announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
@@ -230,11 +232,20 @@ export function useShell(source: EventSource, projectId: string): Shell {
       updateEndpointInBotProjectFile(skillId, skillsData.skill, skillsData.selectedEndpointIndex);
     },
     updateFlowZoomRate,
+    reloadProject: () => reloadProject(projectId),
     ...lgApi,
     ...luApi,
     ...qnaApi,
     ...triggerApi,
     ...actionApi,
+
+    // application context
+    addCoachMarkRef: onboardingAddCoachMarkRef,
+    announce: setMessage,
+    navigateTo,
+    setApplicationLevelError,
+    updateUserSettings,
+    confirm: OpenConfirmModal,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
@@ -280,6 +291,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
             reason: formatMessage('You can only connect to a skill in the root bot.'),
           },
         ],
+    settings,
+    httpClient,
   };
 
   return {

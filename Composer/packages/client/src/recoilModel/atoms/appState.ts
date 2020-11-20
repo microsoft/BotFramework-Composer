@@ -254,3 +254,8 @@ export const showCreateDialogModalState = atom<boolean>({
   key: getFullyQualifiedKey('showCreateDialogModal'),
   default: false,
 });
+
+export const exportSkillModalInfoState = atom<undefined | string>({
+  key: getFullyQualifiedKey('exportSkillModalInfo'),
+  default: undefined,
+});

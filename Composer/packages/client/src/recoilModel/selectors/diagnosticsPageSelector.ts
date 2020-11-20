@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { BotIndexer } from '@bfc/indexers';
-import { BotAssets } from '@bfc/shared';
 import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
@@ -18,7 +17,7 @@ import {
   QnADiagnostic,
   BotDiagnostic,
   SettingDiagnostic,
-  SkillDiagnostic,
+  SkillSettingDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
@@ -38,17 +37,15 @@ import { formDialogSchemasSelectorFamily, rootBotProjectIdSelector } from './pro
 import { validateDialogsSelectorFamily } from './validatedDialogs';
 import { recognizersSelectorFamily } from './recognizers';
 
-export const diagnosticsSelector = selectorFamily({
-  key: 'diagnosticsSelector',
+export const botAssetsSelectFamily = selectorFamily({
+  key: 'botAssetsSelectFamily',
   get: (projectId: string) => ({ get }) => {
     const projectsMetaData = get(projectMetaDataState(projectId));
-    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
-    if (!projectsMetaData || projectsMetaData.isRemote) return [];
+    if (!projectsMetaData || projectsMetaData.isRemote) return null;
 
     const dialogs = get(validateDialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const lgFiles = get(lgFilesState(projectId));
-    const diagnostics = get(botDiagnosticsState(projectId));
     const setting = get(settingsState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
@@ -58,7 +55,7 @@ export const diagnosticsSelector = selectorFamily({
     const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
     const recognizers = get(recognizersSelectorFamily(projectId));
     const crossTrainConfig = get(crossTrainConfigState(projectId));
-    const botAssets: BotAssets = {
+    return {
       projectId,
       dialogs,
       luFiles,
@@ -73,27 +70,94 @@ export const diagnosticsSelector = selectorFamily({
       recognizers,
       crossTrainConfig,
     };
+  },
+});
 
+export const botDiagnosticsSelectorFamily = selectorFamily({
+  key: 'botDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const diagnostics = get(botDiagnosticsState(projectId));
     const diagnosticList: DiagnosticInfo[] = [];
+
     diagnostics.forEach((d) => {
       diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
     });
-    BotIndexer.validate(botAssets).forEach((d) => {
+
+    //manifest.json
+    //Manifest should exist
+    BotIndexer.checkManifest(botAssets).forEach((d) => {
       diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
     });
+
+    return diagnosticList;
+  },
+});
+
+/**
+ * Check bot skill & setting
+ * 1. used skill not existed in setting
+ * 2. appsettings.json Microsoft App Id or Skill Host Endpoint are empty
+ */
+export const skillSettingDiagnosticsSelectorFamily = selectorFamily({
+  key: 'skillDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const diagnosticList: DiagnosticInfo[] = [];
+
     const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
-      if (item.source.endsWith('.json')) {
-        diagnosticList.push(new SkillDiagnostic(rootProjectId, projectId, item.source, item.source, item));
-      } else {
-        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, item.source, item.source, item));
-      }
+      diagnosticList.push(new SkillSettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
+    return diagnosticList;
+  },
+});
+
+export const settingDiagnosticsSelectorFamily = selectorFamily({
+  key: 'settingDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const diagnosticList: DiagnosticInfo[] = [];
+
+    //1. Missing LUIS key
+    //2. Missing QnA Maker subscription key.
+    //appsettings.json
+    const settingDiagnostic = BotIndexer.checkSetting(botAssets);
+    settingDiagnostic.forEach((item) => {
+      diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
+    });
+
+    //Check bot settings & dialog
+    //files meet LUIS/QnA requirments.
+    //appsettings.json
     const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
 
     luisLocaleDiagnostics.forEach((item) => {
       diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
+
+    return diagnosticList;
+  },
+});
+
+export const dialogDiagnosticsSelectorFamily = selectorFamily({
+  key: 'dialogDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const diagnosticList: DiagnosticInfo[] = [];
+    const { dialogs } = botAssets;
 
     dialogs.forEach((dialog) => {
       dialog.diagnostics.forEach((diagnostic) => {
@@ -101,6 +165,21 @@ export const diagnosticsSelector = selectorFamily({
         diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialog.id, location, diagnostic));
       });
     });
+
+    return diagnosticList;
+  },
+});
+
+export const luDiagnosticsSelectorFamily = selectorFamily({
+  key: 'luDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const diagnosticList: DiagnosticInfo[] = [];
+    const { luFiles, dialogs } = botAssets;
+
     getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
       lufile.diagnostics.forEach((diagnostic) => {
         const location = `${lufile.id}.lu`;
@@ -109,6 +188,21 @@ export const diagnosticsSelector = selectorFamily({
         );
       });
     });
+
+    return diagnosticList;
+  },
+});
+
+export const lgDiagnosticsSelectorFamily = selectorFamily({
+  key: 'lgDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const { lgFiles, dialogs } = botAssets;
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const diagnosticList: DiagnosticInfo[] = [];
+
     lgFiles.forEach((lgFile) => {
       lgFile.diagnostics.forEach((diagnostic) => {
         const location = `${lgFile.id}.lg`;
@@ -117,14 +211,43 @@ export const diagnosticsSelector = selectorFamily({
         );
       });
     });
+
+    return diagnosticList;
+  },
+});
+
+export const qnaDiagnosticsSelectorFamily = selectorFamily({
+  key: 'qnaDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const { qnaFiles } = botAssets;
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const diagnosticList: DiagnosticInfo[] = [];
+
     qnaFiles.forEach((qnaFile) => {
       lodashGet(qnaFile, 'diagnostics', []).forEach((diagnostic) => {
         const location = `${qnaFile.id}.qna`;
         diagnosticList.push(new QnADiagnostic(rootProjectId, projectId, qnaFile.id, location, diagnostic));
       });
     });
+
     return diagnosticList;
   },
+});
+
+export const diagnosticsSelectorFamily = selectorFamily({
+  key: 'diagnosticsSelector',
+  get: (projectId: string) => ({ get }) => [
+    ...get(dialogDiagnosticsSelectorFamily(projectId)),
+    ...get(botDiagnosticsSelectorFamily(projectId)),
+    ...get(skillSettingDiagnosticsSelectorFamily(projectId)),
+    ...get(settingDiagnosticsSelectorFamily(projectId)),
+    ...get(luDiagnosticsSelectorFamily(projectId)),
+    ...get(lgDiagnosticsSelectorFamily(projectId)),
+    ...get(qnaDiagnosticsSelectorFamily(projectId)),
+  ],
 });
 
 export const allDiagnosticsSelectorFamily = selectorFamily({
@@ -134,7 +257,7 @@ export const allDiagnosticsSelectorFamily = selectorFamily({
     const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
       return [
         ...result,
-        ...get(diagnosticsSelector(id)).filter((diagnostic) => type === 'All' || diagnostic.severity === type),
+        ...get(diagnosticsSelectorFamily(id)).filter((diagnostic) => type === 'All' || diagnostic.severity === type),
       ];
     }, []);
     return result;
