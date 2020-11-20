@@ -139,7 +139,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
 
   const initializeQnASections = (qnaFiles, dialogId) => {
-    if (isEmpty(qnaFiles)) return;
+    if (isEmpty(qnaFiles)) return [];
 
     const allSections = qnaFiles
       .filter(({ id }) => id.endsWith('.source'))
