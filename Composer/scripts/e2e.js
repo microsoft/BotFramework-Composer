@@ -66,21 +66,6 @@ async function setup() {
     process.stderr.write('There was a problem setting up.\n');
     process.stderr.write(`Error:\n${err.message}\n`);
   }
-
-  try {
-    const userData = {
-      settings: {
-        telemetry: {
-          allowDataCollection: false,
-        }
-      }
-    };
-
-    fs.writeFileSync(process.env.COMPOSER_APP_DATA, JSON.stringify(userData, null, 2) + '\n');
-  } catch (error) {
-    process.stderr.write('There was a problem setting up.\n');
-    process.stderr.write(`Error:\n${error.message}\n`);
-  }
 }
 
 async function run() {
