@@ -149,8 +149,6 @@ type Props = {
   onBotRemoveSkill?: (skillId: string) => void;
   onDialogCreateTrigger?: (projectId: string, dialogId: string) => void;
   onDialogDeleteTrigger?: (projectId: string, dialogId: string, index: number) => void;
-  onDialogCreateQnAKBFromUrl?: (projectId: string, dialogId: string) => void;
-  onDialogCreateQnAKBFromScratch?: (projectId: string, dialogId: string) => void;
   defaultSelected?: Partial<TreeLink>;
   options?: {
     showTriggers?: boolean;
@@ -158,6 +156,7 @@ type Props = {
     showDelete?: boolean;
     showRemote?: boolean;
     showMenu?: boolean;
+    showQnAMenu?: boolean;
     showErrors?: boolean;
   };
 };
@@ -177,7 +176,6 @@ export const ProjectTree: React.FC<Props> = ({
   onBotExportZip = () => {},
   onBotRemoveSkill = () => {},
   onDialogCreateTrigger = () => {},
-  onDialogCreateQnAKBFromUrl = () => {},
   defaultSelected,
   options = {
     showDelete: true,
@@ -185,6 +183,7 @@ export const ProjectTree: React.FC<Props> = ({
     showTriggers: true,
     showRemote: true,
     showMenu: true,
+    showQnAMenu: true,
     showErrors: true,
   },
 }) => {
@@ -391,8 +390,7 @@ export const ProjectTree: React.FC<Props> = ({
         label: formatMessage('Add new knowledge base'),
         icon: 'Add',
         onClick: () => {
-          createQnAFromUrlDialogBegin({ projectId: skillId });
-          onDialogCreateQnAKBFromUrl(skillId, dialog.id);
+          createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
         },
       });
     }

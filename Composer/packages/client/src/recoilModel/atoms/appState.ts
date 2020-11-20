@@ -206,6 +206,11 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
+export const createQnAOnState = atom<{ projectId: string; dialogId: string }>({
+  key: getFullyQualifiedKey('createQnAOn'),
+  default: { projectId: '', dialogId: '' },
+});
+
 export const botProjectSpaceLoadedState = atom<boolean>({
   key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
   default: false,

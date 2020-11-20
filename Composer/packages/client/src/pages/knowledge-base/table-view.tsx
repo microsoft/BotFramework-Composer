@@ -776,7 +776,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             data-testid={'createKnowledgeBase'}
             text={formatMessage('Create new KB')}
             onClick={() => {
-              actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId });
+              actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId, dialogId });
             }}
           />
         </div>
