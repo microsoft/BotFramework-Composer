@@ -348,10 +348,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setBotStatusList(newBotStatusItems);
   };
 
-  useEffect(() => {
-    setCurrentPageMode('notifications');
-  }, []);
-
   return (
     <Fragment>
       {!publishDialogHidden && (

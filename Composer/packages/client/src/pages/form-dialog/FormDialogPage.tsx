@@ -116,7 +116,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   return (
     <>
       <Stack horizontal verticalFill>
-        <LeftRightSplit initialLeftGridWidth={320} minLeftPixels={320} minRightPixels={800}>
+        <LeftRightSplit initialLeftGridWidth={320} minLeftPixels={320} minRightPixels={800} pageMode={'forms'}>
           <FormDialogSchemaList
             items={formDialogSchemaIds}
             loading={formDialogGenerationProgressing}
