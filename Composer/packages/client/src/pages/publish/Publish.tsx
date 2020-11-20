@@ -378,6 +378,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             botPublishHistoryList={botPublishHistoryList}
             changePublishTarget={changePublishTarget}
             items={botStatusList}
+            projectId={projectId}
             updatePublishHistory={updatePublishHistory}
             updateSelectedBots={updateSelectedBots}
             onLogClick={onShowLog}

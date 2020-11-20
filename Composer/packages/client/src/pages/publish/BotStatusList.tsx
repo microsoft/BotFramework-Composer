@@ -29,6 +29,7 @@ export type IBotStatus = {
   comment?: string;
 };
 export type IBotStatusListProps = {
+  projectId: string;
   items: IBotStatus[];
   botPublishHistoryList: { projectId: string; publishHistory: IStatus[] }[];
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
@@ -39,6 +40,7 @@ export type IBotStatusListProps = {
 };
 export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const {
+    projectId,
     items,
     botPublishHistoryList,
     updatePublishHistory,
@@ -120,7 +122,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     const handleChangePublishTarget = (_, option?: IDropdownOption): void => {
       if (option) {
         if (option.key === 'manageProfiles') {
-          navigateTo(`/bot/${item.id}/botProjectsSettings/root`);
+          navigateTo(`/bot/${projectId}/botProjectsSettings/${item.id === projectId ? 'root' : item.id}`);
           return;
         }
         changePublishTarget(option.text, item);
