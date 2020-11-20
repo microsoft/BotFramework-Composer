@@ -94,7 +94,7 @@ export class DialogDiagnostic extends DiagnosticInfo {
   };
 }
 
-export class SkillDiagnostic extends DiagnosticInfo {
+export class SkillSettingDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.SKILL;
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(rootProjectId, projectId, id, location, diagnostic);

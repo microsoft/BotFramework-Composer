@@ -17,7 +17,7 @@ import {
   QnADiagnostic,
   BotDiagnostic,
   SettingDiagnostic,
-  SkillDiagnostic,
+  SkillSettingDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
@@ -102,7 +102,7 @@ export const botDiagnosticsSelectorFamily = selectorFamily({
  * 1. used skill not existed in setting
  * 2. appsettings.json Microsoft App Id or Skill Host Endpoint are empty
  */
-export const skillDiagnosticsSelectorFamily = selectorFamily({
+export const skillSettingDiagnosticsSelectorFamily = selectorFamily({
   key: 'skillDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
@@ -113,7 +113,7 @@ export const skillDiagnosticsSelectorFamily = selectorFamily({
 
     const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
-      diagnosticList.push(new SkillDiagnostic(rootProjectId, projectId, item.source, item.source, item));
+      diagnosticList.push(new SkillSettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
     return diagnosticList;
   },
@@ -237,12 +237,12 @@ export const qnaDiagnosticsSelectorFamily = selectorFamily({
   },
 });
 
-export const diagnosticsSelector = selectorFamily({
+export const diagnosticsSelectorFamily = selectorFamily({
   key: 'diagnosticsSelector',
   get: (projectId: string) => ({ get }) => [
     ...get(dialogDiagnosticsSelectorFamily(projectId)),
     ...get(botDiagnosticsSelectorFamily(projectId)),
-    ...get(skillDiagnosticsSelectorFamily(projectId)),
+    ...get(skillSettingDiagnosticsSelectorFamily(projectId)),
     ...get(settingDiagnosticsSelectorFamily(projectId)),
     ...get(luDiagnosticsSelectorFamily(projectId)),
     ...get(lgDiagnosticsSelectorFamily(projectId)),
@@ -257,7 +257,7 @@ export const allDiagnosticsSelectorFamily = selectorFamily({
     const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
       return [
         ...result,
-        ...get(diagnosticsSelector(id)).filter((diagnostic) => type === 'All' || diagnostic.severity === type),
+        ...get(diagnosticsSelectorFamily(id)).filter((diagnostic) => type === 'All' || diagnostic.severity === type),
       ];
     }, []);
     return result;
