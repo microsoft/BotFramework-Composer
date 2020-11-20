@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { Fragment, useCallback, Suspense, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -12,7 +12,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogsSelectorFamily, qnaFilesState, dispatcherState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 
 import TableView from './table-view';
@@ -35,7 +35,7 @@ const QnAPage: React.FC<RouteComponentProps<{
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
-  const [createOnDialogId, setCreateOnDialogId] = useState('');
+  const creatQnAOnInfo = useRecoilValue(createQnAOnState);
 
   const path = props.location?.pathname ?? '';
 
@@ -43,7 +43,6 @@ const QnAPage: React.FC<RouteComponentProps<{
   const isRoot = dialogId === 'all';
 
   useEffect(() => {
-    setCreateOnDialogId('');
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
       navigateTo(`${baseURL}knowledge-base/${dialogId}`);
@@ -87,26 +86,26 @@ const QnAPage: React.FC<RouteComponentProps<{
           <TableView path="/" projectId={projectId} />
         </Router>
         <CreateQnAModal
-          dialogId={createOnDialogId || dialogId}
-          projectId={actualProjectId}
+          dialogId={creatQnAOnInfo.dialogId}
+          projectId={creatQnAOnInfo.projectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId: actualProjectId });
+            actions.createQnAFromUrlDialogCancel({ projectId: creatQnAOnInfo.projectId });
           }}
           onSubmit={async ({ name, url, multiTurn = false }) => {
             if (url) {
               await actions.createQnAKBFromUrl({
-                id: `${createOnDialogId || dialogId}.${locale}`,
+                id: `${creatQnAOnInfo.dialogId}.${locale}`,
                 name,
                 url,
                 multiTurn,
-                projectId,
+                projectId: creatQnAOnInfo.projectId,
               });
             } else {
               await actions.createQnAKBFromScratch({
-                id: `${createOnDialogId || dialogId}.${locale}`,
+                id: `${creatQnAOnInfo.dialogId}.${locale}`,
                 name,
-                projectId,
+                projectId: creatQnAOnInfo.projectId,
               });
             }
           }}
