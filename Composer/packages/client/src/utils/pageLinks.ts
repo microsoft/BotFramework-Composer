@@ -74,7 +74,7 @@ export const topLinks = (
     {
       to: `/bot/${projectId}/botProjectsSettings`,
       iconName: 'BotProjectsSettings',
-      labelName: formatMessage('Bot Projects'),
+      labelName: formatMessage('Projects Settings'),
       exact: true,
       disabled: !botLoaded,
     },
@@ -115,7 +115,7 @@ export const bottomLinks = [
   {
     to: `/settings`,
     iconName: 'Settings',
-    labelName: formatMessage('Settings'),
+    labelName: formatMessage('Composer Settings'),
     exact: false,
     disabled: false,
   },
