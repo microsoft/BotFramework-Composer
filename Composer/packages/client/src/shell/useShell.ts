@@ -61,7 +61,6 @@ const stubDialog = (): DialogInfo => ({
   triggers: [],
   intentTriggers: [],
   skills: [],
-  luProvider: '',
   isFormDialog: false,
 });
 

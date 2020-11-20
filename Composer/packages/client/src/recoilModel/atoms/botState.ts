@@ -45,7 +45,6 @@ const emptyDialog: DialogInfo = {
   triggers: [],
   intentTriggers: [],
   skills: [],
-  luProvider: '',
   isFormDialog: false,
 };
 type dialogStateParams = { projectId: string; dialogId: string };
