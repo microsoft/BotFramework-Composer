@@ -177,7 +177,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
           recognizers = [...recognizers, ...preserveRecognizer(qnaMakeRecognizers, curRecognizers)];
         }
       });
-    if (recognizers.length != curRecognizers.length) {
+    if (!isEqual([...recognizers].sort(), [...curRecognizers].sort())) {
       setRecognizers(recognizers);
     }
   }, [dialogs, luFiles, qnaFiles]);
