@@ -30,8 +30,6 @@ import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
-import get from 'lodash/get';
-import set from 'lodash/set';
 
 import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
@@ -84,7 +82,6 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
-import settingsStorage from '../../../utils/dialogSettingStorage';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -153,12 +150,12 @@ export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjec
   const mergedSettings = cloneDeep(settings);
   if (localSetting) {
     for (const property of RootBotManagedProperties) {
-      const rootValue = get(localSetting, property, {}).root;
+      const rootValue = objectGet(localSetting, property, {}).root;
       if (projectId === rootBotProjectId) {
         objectSet(mergedSettings, property, rootValue ?? '');
       }
       if (projectId !== rootBotProjectId) {
-        const skillValue = get(localSetting, property, {})[projectId];
+        const skillValue = objectGet(localSetting, property, {})[projectId];
         objectSet(mergedSettings, property, skillValue ?? '');
       }
     }
@@ -166,19 +163,11 @@ export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjec
   return mergedSettings;
 };
 
-export const getSensitiveProperties = (projectId: string, rootBotProjectId: string) => {
-  const rootBotLocalStorage = settingsStorage.get(rootBotProjectId);
-  const skillBotLocalStorage = settingsStorage.get(projectId);
+export const getSensitiveProperties = (settings: DialogSetting) => {
   const sensitiveProperties = {};
   for (const property of SensitiveProperties) {
-    if (!RootBotManagedProperties.includes(property)) {
-      const value = get(skillBotLocalStorage, property, '');
-      set(sensitiveProperties, property, value);
-    } else {
-      const groupValue = get(rootBotLocalStorage, property, {});
-      const value = get(groupValue, projectId, '');
-      set(sensitiveProperties, property, value);
-    }
+    const value = objectGet(settings, property, '');
+    objectSet(sensitiveProperties, property, value);
   }
   return sensitiveProperties;
 };

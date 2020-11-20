@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { css } from '@emotion/core';
 import { IToolbarItem } from '@bfc/ui-shared';
 
@@ -18,6 +18,7 @@ import {
 } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { WarningInfo } from '../../components/BotRuntimeController/warningInfo';
 import { ErrorInfo } from '../../components/BotRuntimeController/errorInfo';
+import { exportSkillModalInfoState } from '../../recoilModel';
 
 import { DiagnosticList } from './DiagnosticList';
 import { DiagnosticFilter } from './DiagnosticFilter';
@@ -29,6 +30,7 @@ const iconPosition = css`
 
 const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
+  const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
   const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
   const warnings = useRecoilValue(allDiagnosticsSelectorFamily('Warning'));
@@ -49,6 +51,9 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
 
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigateTo(item.getUrl());
+    if (item.location === 'manifest.json') {
+      setExportSkillModalInfo(item.projectId);
+    }
   };
 
   const onRenderHeaderContent = () => {

@@ -12,17 +12,12 @@ import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, checkForPVASche
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { DialogDeleting } from '../../constants';
-import {
-  createSelectedPath,
-  deleteTrigger as DialogdeleteTrigger,
-  qnaMatcherKey,
-  getDialogData,
-} from '../../utils/dialogUtil';
+import { createSelectedPath, deleteTrigger as DialogdeleteTrigger, getDialogData } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -60,6 +55,7 @@ import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
+import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
@@ -174,6 +170,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createQnAFromUrlDialogBegin,
     createTrigger,
     deleteTrigger,
+    createQnATrigger,
     displayManifestModal,
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
@@ -187,8 +184,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
     undefined
   );
+  const creatQnAOnInfo = useRecoilValue(createQnAOnState);
   const [dialogModalInfo, setDialogModalInfo] = useState<undefined | string>(undefined);
-  const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | string>(undefined);
+  const [exportSkillModalInfo, setExportSkillModalInfo] = useRecoilState(exportSkillModalInfoState);
   const [skillManifestFile, setSkillManifestFile] = useState<undefined | SkillInfo>(undefined);
   const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
   const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
@@ -200,15 +198,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shell = useShell('DesignPage', skillId ?? rootProjectId);
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
   const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
-
-  const defaultQnATriggerData = {
-    $kind: qnaMatcherKey,
-    errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
-    event: '',
-    intent: '',
-    regEx: '',
-    triggerPhrases: '',
-  };
 
   useEffect(() => {
     if (!skillId) return;
@@ -488,7 +477,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           displayName: currentDialog?.displayName ?? '',
         }),
         onClick: () => {
-          createQnAFromUrlDialogBegin({ projectId });
+          if (!projectId || !dialogId) return;
+          createQnAFromUrlDialogBegin({ projectId, dialogId });
         },
       });
     }
@@ -719,8 +709,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, []);
 
   const handleCreateQnA = async (data) => {
-    if (!dialogId) return;
-    createTrigger(projectId, dialogId, defaultQnATriggerData);
+    const { projectId, dialogId } = creatQnAOnInfo;
+    if (!projectId || !dialogId) return;
+    createQnATrigger(projectId, dialogId);
 
     const { name, url, multiTurn } = data;
     if (url) {
@@ -884,9 +875,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }}
           />
         )}
-        {dialogId && (
-          <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
-        )}
+
+        <CreateQnAModal
+          dialogId={creatQnAOnInfo.dialogId}
+          projectId={creatQnAOnInfo.projectId}
+          qnaFiles={qnaFiles}
+          onSubmit={handleCreateQnA}
+        />
+
         {displaySkillManifest && (
           <DisplayManifestModal
             projectId={projectId}
