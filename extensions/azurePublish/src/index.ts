@@ -6,8 +6,7 @@ import path from 'path';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { IBotProject, PublishPlugin } from '@botframework-composer/types';
-import { JSONSchema7, ExtensionRegistration } from '@bfc/extension';
+import { IBotProject, PublishPlugin, JSONSchema7, IExtensionRegistration } from '@botframework-composer/types';
 import { Debugger } from 'debug';
 
 import { mergeDeep } from './mergeDeep';
@@ -37,7 +36,7 @@ interface PublishConfig {
 }
 
 // Wrap the entire class definition in the export so the composer object can be available to it
-export default async (composer: ExtensionRegistration): Promise<void> => {
+export default async (composer: IExtensionRegistration): Promise<void> => {
   class AzurePublisher implements PublishPlugin<PublishConfig> {
     private publishingBots: { [key: string]: any };
     private historyFilePath: string;
@@ -337,7 +336,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         project.settings.runtime.customRuntime === true &&
         project.settings.runtime.path
       ) {
-        runtimeCodePath = project.settings.runtime.path;
+        runtimeCodePath = path.isAbsolute(project.settings.runtime.path) ? project.settings.runtime.path : path.resolve(project.dir, project.settings.runtime.path);
       }
 
       try {

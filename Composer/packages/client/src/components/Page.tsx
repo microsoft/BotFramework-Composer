@@ -5,12 +5,12 @@
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 import { navigateTo, buildURL } from '../utils/navigation';
 import { PageMode } from '../recoilModel';
 
-import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
 
