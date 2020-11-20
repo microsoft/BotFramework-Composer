@@ -26,7 +26,7 @@ import { SUMMARY_ARROW_SPACE } from './constants';
 
 // -------------------- Styles -------------------- //
 
-const iconAndText = css`
+const projectTreeItemContainer = css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
@@ -37,16 +37,16 @@ const iconAndText = css`
   overflow: hidden;
   text-align: left;
   cursor: pointer;
-  width: 100%;
 
   label: ProjectTreeItemContainer;
 `;
 
-const content = css`
+const projectTreeItem = css`
   outline: none;
   display: flex;
   align-items: center;
   height: 24px;
+  padding-left: 4px;
 
   label: ProjectTreeItem;
 `;
@@ -81,12 +81,18 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, isBroken: boolean, isAnyMenuOpen: boolean, menuOpenHere: boolean) => css`
+const navItem = (
+  isActive: boolean,
+  isBroken: boolean,
+  padLeft: number,
+  isAnyMenuOpen: boolean,
+  menuOpenHere: boolean
+) => css`
   label: navItem;
-  min-width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
+  padding-left: ${padLeft}px;
   color: ${isActive ? NeutralColors.white : '#545454'};
   background: ${isActive ? '#0078d4' : menuOpenHere ? '#f2f2f2' : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
@@ -201,16 +207,17 @@ interface ITreeItemProps {
   link: TreeLink;
   isActive?: boolean;
   isSubItemActive?: boolean;
-  menu?: TreeMenuItem[];
   onSelect?: (link: TreeLink) => void;
   icon?: string;
   dialogName?: string;
-  showProps?: boolean;
   textWidth?: number;
   extraSpace?: number;
+  padLeft?: number;
   hasChildren?: boolean;
+  menu?: TreeMenuItem[];
   menuOpenCallback?: (boolean) => void;
   isMenuOpen?: boolean;
+  showErrors?: boolean;
 }
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -235,58 +242,80 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   };
 };
 
-const onRenderItem = (textWidth: number, isMenuOpen: boolean) => (item: IOverflowSetItemProps) => {
+const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
   const { diagnostics = [], projectId, skillId } = item;
-  const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
-  const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
 
-  const warningContent = warnings.map((diag) => diag.message).join(',');
+  let diagnosticIcons: JSX.Element | null = null;
+  let warningContent = '';
+  let errorContent = '';
 
-  const errorContent = errors.map((diag) => diag.message).join(',');
+  if (showErrors) {
+    const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
+    const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
 
-  const warningHTML = warnings.map((item) => {
-    let linkText = item.source;
-    if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
-      linkText = 'Create skill mainfest';
-    }
-    return (
-      <div key={item.message} css={diagnosticLink}>
-        <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
-        <span css={diagnosticLinkMessages} title={item.message}>
-          {item.message}
-        </span>
-        <Link>{linkText}</Link>
-      </div>
+    warningContent = warnings.map((diag) => diag.message).join(',');
+
+    errorContent = errors.map((diag) => diag.message).join(',');
+
+    const warningHTML = warnings.map((item) => {
+      let linkText = item.source;
+      if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
+        linkText = 'Create skill mainfest';
+      }
+      return (
+        <div key={item.message} css={diagnosticLink}>
+          <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
+          <span css={diagnosticLinkMessages} title={item.message}>
+            {item.message}
+          </span>
+          <Link>{linkText}</Link>
+        </div>
+      );
+    });
+
+    const errorHTML = errors.map((item) => {
+      let linkText = item.source;
+      if (item.source === 'appsettings.json') {
+        linkText = 'Fix in bot settings';
+      }
+      return (
+        <div key={item.message} css={diagnosticLink}>
+          <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
+          <span css={diagnosticLinkMessages} title={item.message}>
+            {item.message}
+          </span>
+          <Link onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}>{linkText}</Link>
+        </div>
+      );
+    });
+
+    diagnosticIcons = (
+      <React.Fragment>
+        {warnings.length ? (
+          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'WarningSolid'} style={warningIcon} />
+          </TooltipHost>
+        ) : undefined}
+        {errors.length ? (
+          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
+          </TooltipHost>
+        ) : undefined}
+      </React.Fragment>
     );
-  });
-
-  const errorHTML = errors.map((item) => {
-    let linkText = item.source;
-    if (item.source === 'appsettings.json') {
-      linkText = 'Fix in bot settings';
-    }
-    return (
-      <div key={item.message} css={diagnosticLink}>
-        <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
-        <span css={diagnosticLinkMessages} title={item.message}>
-          {item.message}
-        </span>
-        <Link onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}>{linkText}</Link>
-      </div>
-    );
-  });
+  }
 
   return (
     <div
       data-is-focusable
-      aria-label={`${item.displayName} ${warningContent ?? ''} ${errorContent ?? ''}`}
-      css={iconAndText}
+      aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
+      css={projectTreeItemContainer}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
       onFocus={item.onFocus}
     >
-      <div css={content} role="presentation" tabIndex={-1}>
+      <div css={projectTreeItem} role="presentation" tabIndex={-1}>
         {item.icon != null && (
           <Icon
             iconName={item.icon}
@@ -301,16 +330,7 @@ const onRenderItem = (textWidth: number, isMenuOpen: boolean) => (item: IOverflo
           />
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
-        {warnings.length ? (
-          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'WarningSolid'} style={warningIcon} />
-          </TooltipHost>
-        ) : undefined}
-        {errors.length ? (
-          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
-          </TooltipHost>
-        ) : undefined}
+        {diagnosticIcons}
       </div>
     </div>
   );
@@ -367,8 +387,10 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   hasChildren = false,
   menu = [],
   extraSpace = 0,
+  padLeft = 0,
   menuOpenCallback = () => {},
   isMenuOpen = false,
+  showErrors = true,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
 
@@ -383,7 +405,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(isActive, isBroken, isMenuOpen, thisItemSelected)}
+      css={navItem(isActive, isBroken, padLeft, isMenuOpen, thisItemSelected)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -413,7 +435,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, isMenuOpen)}
+        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, showErrors)}
         onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected)}
       />
     </div>

@@ -22,13 +22,17 @@ import { backIcon } from './styles';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
+  skillId?: string;
 }
 
 const lspServerPath = '/lu-language-server';
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { projectId = '', dialogId = '' } = props;
+  const { projectId = '', dialogId = '', skillId } = props;
+  const actualProjectId = skillId ?? projectId;
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+
   const actions = useRecoilValue(dispatcherState);
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
@@ -63,7 +67,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     if (!file || isEmpty(file) || content) return;
     const value = file.content;
     setContent(value);
-  }, [file, projectId]);
+  }, [file, actualProjectId]);
 
   const editorDidMount: EditorDidMount = (_getValue, qnaEditor) => {
     setQnAEditor(qnaEditor);
@@ -76,9 +80,9 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const onChangeContent = useMemo(
     () =>
       debounce((newContent: string) => {
-        actions.updateQnAFile({ id: targetFileId, content: newContent, projectId });
+        actions.updateQnAFile({ id: targetFileId, content: newContent, projectId: actualProjectId });
       }, 500),
-    [projectId]
+    [actualProjectId]
   );
 
   return (
@@ -90,7 +94,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           }}
           styles={backIcon}
           onClick={() => {
-            navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
+            navigateTo(`${baseURL}knowledge-base/${dialogId}`);
           }}
         >
           {searchContainerName}

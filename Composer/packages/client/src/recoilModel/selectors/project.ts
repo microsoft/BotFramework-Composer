@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { BotIndexer } from '@bfc/indexers';
-import { BotAssets, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
+import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
@@ -24,6 +24,7 @@ import {
   settingsState,
   dialogIdsState,
   dialogState,
+  schemasState,
 } from '../atoms';
 import { dialogsSelectorFamily, buildEssentialsSelector } from '../selectors';
 
@@ -88,6 +89,8 @@ export const botProjectSpaceSelector = selector({
       const botNameId = get(botNameIdentifierState(projectId));
       const setting = get(settingsState(projectId));
       const skillManifests = get(skillManifestsState(projectId));
+      const schemas = get(schemasState(projectId));
+      const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
 
       const diagnostics = BotIndexer.validate({ dialogs, setting, luFiles, lgFiles, qnaFiles, skillManifests });
 
@@ -102,6 +105,7 @@ export const botProjectSpaceSelector = selector({
         diagnostics,
         botNameId,
         buildEssentials,
+        isPvaSchema,
       };
     });
     return result;
