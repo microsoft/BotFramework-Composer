@@ -34,19 +34,12 @@ describe('server settings', () => {
   });
 
   it('should get user settings', async () => {
-    (Store.set as jest.Mock).mockReturnValue(null);
     const mockReq = {
       params: {},
       query: {},
       body: {},
     } as Request;
     await SettingsController.getUserSettings(mockReq, mockRes);
-    expect(mockRes.json).toHaveBeenCalledWith(
-      expect.objectContaining({
-        telemetry: expect.objectContaining({
-          allowDataCollection: null,
-        }),
-      })
-    );
+    expect(mockRes.json).toHaveBeenCalledWith(expect.objectContaining({ telemetry: {} }));
   });
 });
