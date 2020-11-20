@@ -11,7 +11,6 @@ context('LU Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
     // left nav tree
     cy.contains('__TestToDoBotWithLuisSample');
-    cy.contains('All');
 
     cy.findByTestId('showcode').should('not.exist');
 
@@ -29,11 +28,5 @@ context('LU Page', () => {
     // goto edit-mode
     cy.get('@switchButton').click();
     cy.findByTestId('LUPage').get('.monaco-editor').should('exist');
-
-    // back to all table view
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('All').click();
-    });
-    cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
   });
 });

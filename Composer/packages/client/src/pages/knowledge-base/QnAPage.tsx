@@ -4,17 +4,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { Fragment, useMemo, useCallback, Suspense, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
-import { dispatcherState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFilesState, dispatcherState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 
 import TableView from './table-view';
@@ -28,11 +26,12 @@ const QnAPage: React.FC<RouteComponentProps<{
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
 
+  const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
@@ -42,50 +41,6 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
-  const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
-      return {
-        id: dialog.id,
-        name: dialog.displayName,
-        ariaLabel: formatMessage('qna file'),
-        url: `${baseURL}knowledge-base/${dialog.id}`,
-        menuIconProps: {
-          iconName: 'Add',
-        },
-        menuItems: [
-          {
-            name: formatMessage('Create KB from scratch'),
-            key: 'Create KB from scratch',
-            onClick: () => {
-              setCreateOnDialogId(dialog.id);
-              actions.createQnAFromScratchDialogBegin({ projectId });
-            },
-          },
-          {
-            name: formatMessage('Create KB from URL or file'),
-            key: 'Create KB from URL or file',
-            onClick: () => {
-              setCreateOnDialogId(dialog.id);
-              actions.createQnAFromUrlDialogBegin({ projectId });
-            },
-          },
-        ],
-      };
-    });
-    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
-
-    if (mainDialogIndex > -1) {
-      const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
-      newDialogLinks.splice(0, 0, mainDialog);
-    }
-    newDialogLinks.splice(0, 0, {
-      id: 'all',
-      name: 'All',
-      ariaLabel: formatMessage('all qna files'),
-      url: `${baseURL}knowledge-base/all`,
-    });
-    return newDialogLinks;
-  }, [dialogs]);
 
   useEffect(() => {
     setCreateOnDialogId('');
@@ -93,7 +48,7 @@ const QnAPage: React.FC<RouteComponentProps<{
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
       navigateTo(`${baseURL}knowledge-base/${dialogId}`);
     }
-  }, [dialogId, dialogs, projectId]);
+  }, [dialogId, dialogs, actualProjectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
@@ -101,12 +56,8 @@ const QnAPage: React.FC<RouteComponentProps<{
       if (!edit) url += `/edit`;
       navigateTo(url);
     },
-    [dialogId, projectId, edit]
+    [dialogId, actualProjectId, edit]
   );
-
-  useEffect(() => {
-    actions.setCurrentPageMode('qna');
-  }, []);
 
   const onRenderHeaderContent = () => {
     if (!isRoot) {
@@ -121,25 +72,26 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      useNewTree
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
-      navLinks={navLinks}
       navRegionName={formatMessage('Qna Navigation Pane')}
+      pageMode={'knowledge-base'}
       title={formatMessage('QnA')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
-          <TableView dialogId={dialogId} path="/" projectId={projectId} />
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} skillId={skillId} />
+          <TableView path="/" projectId={projectId} />
         </Router>
         <CreateQnAModal
           dialogId={createOnDialogId || dialogId}
-          projectId={projectId}
+          projectId={actualProjectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId });
+            actions.createQnAFromUrlDialogCancel({ projectId: actualProjectId });
           }}
           onSubmit={async ({ name, url, multiTurn = false }) => {
             if (url) {

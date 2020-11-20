@@ -8,6 +8,7 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { css } from '@emotion/core';
+import { IToolbarItem } from '@bfc/ui-shared';
 
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
@@ -15,7 +16,6 @@ import {
   allDiagnosticsSelectorFamily,
   diagnosticNavLinksSelector,
 } from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { IToolbarItem } from '../../components/Toolbar';
 import { WarningInfo } from '../../components/BotRuntimeController/warningInfo';
 import { ErrorInfo } from '../../components/BotRuntimeController/errorInfo';
 
@@ -32,6 +32,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
   const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
   const warnings = useRecoilValue(allDiagnosticsSelectorFamily('Warning'));
+
   const { projectId = '', skillId } = props;
   const toolbarItems: IToolbarItem[] = [
     {
@@ -60,6 +61,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       mainRegionName={formatMessage('Diagnostic List')}
       navLinks={navLinks}
       navRegionName={formatMessage('Diagnostics Pane')}
+      pageMode={'diagnostics'}
       title={formatMessage('Diagnostics')}
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}

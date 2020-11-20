@@ -33,9 +33,10 @@ import {
 } from '../../recoilModel';
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
-interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
-  dialogId: string;
-  projectId: string;
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
+  projectId?: string;
+  skillId?: string;
+  dialogId?: string;
 }
 
 interface Intent {
@@ -48,13 +49,17 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId } = props;
+  const { dialogId, projectId, skillId } = props;
+
+  const actualProjectId = skillId ?? projectId ?? '';
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+
   const { updateLuIntent } = useRecoilValue(dispatcherState);
 
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
-  const settings = useRecoilValue(settingsState(projectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesState(actualProjectId));
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const settings = useRecoilValue(settingsState(actualProjectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
 
@@ -108,7 +113,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const dialogIntents = allIntents.filter((t) => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog, projectId]);
+  }, [luFiles, activeDialog, actualProjectId]);
 
   const handleIntentUpdate = useCallback(
     (fileId: string, intentName: string, intent: LuIntentSection) => {
@@ -116,7 +121,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         id: fileId,
         intentName,
         intent,
-        projectId,
+        projectId: actualProjectId,
       };
       updateLuIntent(payload);
     },
@@ -130,7 +135,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: defaultLangFile.id,
           intentName,
           intent,
-          projectId,
+          projectId: actualProjectId,
         };
         updateLuIntent(payload);
       }
@@ -145,7 +150,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: formatMessage('Edit'),
         onClick: () => {
           const { name, dialogId } = intents[index];
-          navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
+          navigateTo(`${baseURL}language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
         },
       },
     ];
@@ -307,7 +312,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               key={id}
               data-is-focusable
               aria-label={formatMessage(`link to where this LUIS intent is defined`)}
-              onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
+              onClick={() => navigateTo(`${baseURL}dialogs/${id}`)}
             >
               <Link>{id}</Link>
             </div>

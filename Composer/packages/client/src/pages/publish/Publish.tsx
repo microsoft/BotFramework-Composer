@@ -10,6 +10,7 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -22,7 +23,6 @@ import {
   publishHistoryState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';
@@ -49,7 +49,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     publishToTarget,
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
-    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const [addDialogHidden, setAddDialogHidden] = useState(true);
@@ -396,10 +395,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [settings.publishTargets, projectId, botName]
   );
 
-  useEffect(() => {
-    setCurrentPageMode('notifications');
-  }, []);
-
   return (
     <Fragment>
       <Dialog
@@ -437,7 +432,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={'publish'}>
           <div
             aria-label={formatMessage('Navigation panel')}
             css={projectContainer}
