@@ -5,22 +5,7 @@ import formatMessage from 'format-message';
 
 import { creationFeatureFlagReadMe } from '../constant';
 
-export type FeatureFlag = {
-  // Name to be displayed for this features toggle UI in app settings page
-  displayName: string;
-  // Description to be displayed for this features toggle UI in app settings page
-  description: string;
-  // Link used for learn more link
-  documentationLink?: string;
-  // Indicates whether or not the feature flag toggle will be visible to the user through the settings page UI
-  // Hidden feature flags are intended for features not ready for public preview
-  isHidden: boolean;
-  enabled: boolean;
-};
-
-export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE';
-
-export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
+import { FeatureFlagMap } from '@botframework-composer/types';
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   VA_CREATION: {
@@ -40,6 +25,14 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     description: formatMessage('Enable the new conversational core template built on the component model'),
     documentationLink: creationFeatureFlagReadMe,
     isHidden: true,
+    enabled: false,
+  },
+  ORCHESTRATOR: {
+    displayName: formatMessage('Orchestrator'),
+    description: formatMessage(
+      'Use as intent-only recognizer, typically for routing to skills or subsequent LUIS or QnAMaker processing or when entity extraction is not needed.'
+    ),
+    isHidden: false,
     enabled: false,
   },
 });
