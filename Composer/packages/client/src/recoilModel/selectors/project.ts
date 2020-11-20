@@ -45,12 +45,8 @@ export const localBotsDataSelector = selector({
   key: 'localBotsDataSelector',
   get: ({ get }) => {
     const botProjectIds = get(localBotsWithoutErrorsSelector);
-    return botProjectIds.map((projectId: string) => {
-      return {
-        projectId,
-        name: get(botDisplayNameState(projectId)),
-      };
-    });
+    const botProjectsWithoutError = get(botProjectSpaceSelector).filter((b) => botProjectIds.includes(b.projectId));
+    return botProjectsWithoutError;
   },
 });
 
