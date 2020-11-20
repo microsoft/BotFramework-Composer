@@ -67,6 +67,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     saveTemplateId,
     setCreationFlowType,
   } = useRecoilValue(dispatcherState);
+
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {

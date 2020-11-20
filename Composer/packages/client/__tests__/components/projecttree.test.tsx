@@ -62,16 +62,4 @@ describe('<ProjectTree/>', () => {
     fireEvent.click(node);
     expect(mockFileSelect).toHaveBeenCalledTimes(1);
   });
-
-  it('fires the onSelectAll event', async () => {
-    const mockOnSelected = jest.fn();
-    const { findByText } = renderWithRecoil(
-      <ProjectTree onSelect={() => {}} onSelectAllLink={mockOnSelected} />,
-      initRecoilState
-    );
-
-    const node = await findByText('All');
-    fireEvent.click(node);
-    expect(mockOnSelected).toHaveBeenCalledTimes(1);
-  });
 });
