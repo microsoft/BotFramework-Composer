@@ -49,7 +49,7 @@ export const useLinks = () => {
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const schemas = useRecoilValue(schemasState(projectId));
-  const openedDialogId = designPageLocation.dialogId || 'Main';
+  const openedDialogId = designPageLocation.dialogId;
   const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
