@@ -9,7 +9,7 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.OrchestratorRecognizer]: {
       recognizer: {
-        disabled: (shellAPI: ShellApi) => shellAPI.featureFlags('ORCHESTRATOR'),
+        disabled: (shellAPI: ShellApi) => !shellAPI.isFeatureEnabled('ORCHESTRATOR'),
         displayName: () => formatMessage('Orchestrator Recognizer'),
         isSelected: (_, dialog: DialogInfo) => {
           return dialog.luProvider === SDKKinds.OrchestratorRecognizer;

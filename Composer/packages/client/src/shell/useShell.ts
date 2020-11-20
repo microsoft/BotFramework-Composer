@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@botframework-composer/types';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo, FeatureFlagKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -236,7 +236,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     redo,
     commitChanges,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
-    featureFlags: (featureFlagKey: string): boolean => featureFlags?.[featureFlagKey]?.enabled ?? false,
+    isFeatureEnabled: (featureFlagKey: FeatureFlagKey): boolean => featureFlags?.[featureFlagKey]?.enabled ?? false,
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },

@@ -19,18 +19,18 @@ export * from '@bfc/indexers/lib/utils/luUtil';
  */
 export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], checkContent = true) {
   return luFiles.filter((file) => {
-    const idWithOutLocale = getBaseName(file.id);
+    const idWithoutLocale = getBaseName(file.id);
     const contentNotEmpty = (checkContent && !!file.content) || !checkContent;
-    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale && contentNotEmpty);
+    return dialogs.some((dialog) => dialog.luFile === idWithoutLocale && contentNotEmpty);
   });
 }
 
 export function getLuisBuildLuFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter((file) => {
-    const idWithOutLocale = getBaseName(file.id);
+    const idWithoutLocale = getBaseName(file.id);
     return dialogs.some(
       (dialog) =>
-        dialog.luFile === idWithOutLocale && dialog.luProvider !== SDKKinds.OrchestratorRecognizer && !file.empty
+        dialog.luFile === idWithoutLocale && dialog.luProvider !== SDKKinds.OrchestratorRecognizer && !file.empty
     );
   });
 }

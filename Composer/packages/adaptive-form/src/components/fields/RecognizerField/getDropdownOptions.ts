@@ -18,7 +18,7 @@ const getRankScore = (r: RecognizerSchema) => {
 
 export const getDropdownOptions = (recognizerConfigs: RecognizerSchema[], shellApi: ShellApi) => {
   return recognizerConfigs
-    .filter((r) => (typeof r.disabled === 'function' && r.disabled(shellApi)) || !r.disabled)
+    .filter((r) => (typeof r.disabled === 'function' && !r.disabled(shellApi)) || !r.disabled)
     .sort((r1, r2) => {
       return getRankScore(r1) - getRankScore(r2);
     })

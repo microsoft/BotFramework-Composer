@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FeatureFlagKey } from '@bfc/shared';
+import { FeatureFlagKey } from '@botframework-composer/types';
 import React, { Fragment } from 'react';
 
 import { useFeatureFlag } from '../utils/hooks';

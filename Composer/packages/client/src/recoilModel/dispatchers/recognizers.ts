@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 import { SDKKinds } from '@bfc/shared';
+import { LuProviderType } from '@botframework-composer/types';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { recognizerState } from '../atoms';
@@ -9,7 +10,6 @@ import { LuisRecognizerTemplate, OrchestratorRecognizerTemplate } from '../Recog
 
 import { recognizersSelectorFamily } from './../selectors/recognizers';
 
-export type RecognizerKindType = SDKKinds.OrchestratorRecognizer | SDKKinds.LuisRecognizer;
 const LuProviderRecognizer = [SDKKinds.OrchestratorRecognizer, SDKKinds.LuisRecognizer];
 
 const templates = {
@@ -19,7 +19,7 @@ const templates = {
 
 export const recognizerDispatcher = () => {
   const updateRecognizer = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => (projectId: string, dialogId: string, kind: RecognizerKindType) => {
+    ({ set, snapshot }: CallbackInterface) => (projectId: string, dialogId: string, kind: LuProviderType) => {
       const recognizersLoadable = snapshot.getLoadable(recognizersSelectorFamily(projectId));
       if (recognizersLoadable.state === 'hasValue') {
         const updates = recognizersLoadable.contents.filter(
