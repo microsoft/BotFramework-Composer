@@ -23,8 +23,7 @@ import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { getFocusPath } from '../../utils/navigation';
-import { navigateTo } from '../../utils/navigation';
+import { createDiagnosticsPageUrl, getFocusPath, navigateTo } from '../../utils/navigation';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
@@ -55,6 +54,7 @@ import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
+import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 
 import CreationModal from './creationModal';
@@ -255,7 +255,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           projectId: props.projectId,
           dialogId: props.dialogId,
         },
-        onClick: () => navTo(projectId, dialogId),
+        onClick: () => navTo(skillId ?? null, dialogId),
       });
       if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
@@ -266,7 +266,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             dialogId: props.dialogId,
             trigger: triggerIndex,
           },
-          onClick: () => navTo(projectId, dialogId, `${triggerIndex}`),
+          onClick: () => navTo(skillId ?? null, dialogId, `${triggerIndex}`),
         });
       }
 
@@ -331,6 +331,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       setBrokenSkillInfo(link);
     }
     const { skillId, dialogId, trigger, parentLink } = link;
+
     updateZoomRate({ currentRate: 1 });
     const breadcrumbArray: Array<BreadcrumbItem> = [];
     if (dialogId != null) {
@@ -485,6 +486,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   const toolbarItems: IToolbarItem[] = [
+    {
+      type: 'element',
+      element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
+      align: 'right',
+    },
     {
       type: 'dropdown',
       text: formatMessage('Add'),
