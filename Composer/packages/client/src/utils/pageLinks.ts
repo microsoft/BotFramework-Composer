@@ -25,58 +25,55 @@ export const topLinks = (
       to: '/home',
       iconName: 'Home',
       labelName: formatMessage('Home'),
-      exact: true,
       disabled: false,
     },
     {
       to: linkBase + `dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design'),
-      exact: false,
       disabled: !botLoaded,
+      match: /(bot\/[0-9.]+)$|(bot\/[0-9.]+\/skill\/[0-9.]+)$/,
     },
     {
       to: linkBase + `language-generation/${openedDialogId}`,
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
-      exact: false,
       disabled: !botLoaded,
+      match: /language-generation\/[a-zA-Z0-9_-]+$/,
     },
     {
       to: linkBase + `language-understanding/${openedDialogId}`,
       iconName: 'People',
       labelName: formatMessage('User Input'),
-      exact: false,
       disabled: !botLoaded,
+      match: /language-understanding\/[a-zA-Z0-9_-]+$/,
     },
     {
       to: linkBase + `knowledge-base/${openedDialogId}`,
       iconName: 'QnAIcon',
       labelName: formatMessage('QnA'),
-      exact: true,
       disabled: !botLoaded,
+      match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
     },
     {
       to: `/bot/${rootProjectId || projectId}/diagnostics`,
       iconName: 'Warning',
       labelName: formatMessage('Diagnostics'),
-      exact: true,
       disabled: !botLoaded,
-      match: 'diagnostics',
+      match: /diagnostics/,
     },
     {
       to: `/bot/${projectId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
-      exact: true,
       disabled: !botLoaded,
     },
     {
       to: `/bot/${projectId}/botProjectsSettings`,
       iconName: 'BotProjectsSettings',
       labelName: formatMessage('Project Settings'),
-      exact: true,
       disabled: !botLoaded,
+      match: /botProjectsSettings\/[0-9.]+$/,
     },
     ...(showFormDialog
       ? [
@@ -84,7 +81,6 @@ export const topLinks = (
             to: `/bot/${projectId}/forms`,
             iconName: 'Table',
             labelName: formatMessage('Forms (preview)'),
-            exact: false,
             disabled: !botLoaded,
           },
         ]
@@ -102,7 +98,6 @@ export const topLinks = (
         to: `/bot/${projectId}/plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
-        exact: true,
         disabled: !projectId,
       });
     });
@@ -116,7 +111,6 @@ export const bottomLinks = [
     to: `/settings`,
     iconName: 'Settings',
     labelName: formatMessage('Composer Settings'),
-    exact: false,
     disabled: false,
   },
 ];

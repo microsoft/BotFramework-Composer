@@ -147,7 +147,7 @@ export const Header = () => {
   useEffect(() => {
     // hide it on the /home page, but make sure not to hide on /bot/stuff/home in case someone names a dialog "home"
     setStartBotsWidgetVisible(!pathname.endsWith('/home') || pathname.includes('/bot/'));
-  }, [location]);
+  }, [pathname]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);

@@ -73,19 +73,17 @@ const icon = (active: boolean, disabled: boolean) =>
 
 /**
  * @param to The string URI to link to. Supports relative and absolute URIs.
- * @param exact The uri is exactly the same as the anchor’s href.
  * @param iconName The link's icon.
  * @param labelName The link's text.
  * @param disabled If true, the Link will be unavailable.
  */
 export interface INavItemProps {
   to: string;
-  exact: boolean;
   iconName: string;
   labelName: string;
   disabled: boolean;
   showTooltip: boolean;
-  match?: string;
+  match?: RegExp;
 }
 
 export const NavItem: React.FC<INavItemProps> = (props) => {
@@ -98,7 +96,7 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   const linkTo = useRouterCache(to);
 
-  const active = pathname.startsWith(to) || !!(match && pathname.indexOf(match) > -1);
+  const active = (pathname.startsWith(to) || match?.test(pathname)) ?? false;
 
   const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
