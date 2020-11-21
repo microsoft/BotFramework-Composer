@@ -14,7 +14,7 @@ context('Left Nav Bar', () => {
     cy.url().should('include', 'language-generation');
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
     cy.url().should('include', 'language-understanding');
-    cy.findByTestId('LeftNav-CommandBarButtonSettings').click();
+    cy.findByTestId('LeftNav-CommandBarButtonComposer Settings').click();
     cy.url().should('include', 'setting');
   });
 });
