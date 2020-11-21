@@ -113,6 +113,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateZoomRate,
     reloadProject,
     setApplicationLevelError,
+    updateRecognizer,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);

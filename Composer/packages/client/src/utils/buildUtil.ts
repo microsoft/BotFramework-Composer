@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, LuFile, SDKKinds } from '@bfc/shared';
+import { DialogInfo, LuFile, QnAFile, SDKKinds } from '@bfc/shared';
 
 import { LuisConfig, QnaConfig } from '../constants';
 
