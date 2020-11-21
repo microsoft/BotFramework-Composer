@@ -12,7 +12,7 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.visitPage('Bot Projects');
+    cy.visitPage('Project Settings');
     cy.findAllByTestId('rootLUISKey').type('12345678', { delay: 200 });
     cy.findAllByTestId('rootLUISRegion').type('westus', { delay: 200 });
     cy.visitPage('User Input');
