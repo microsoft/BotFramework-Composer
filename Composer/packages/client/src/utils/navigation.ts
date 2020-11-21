@@ -134,3 +134,12 @@ export function createBotSettingUrl(rootProjectId: string, activeProjectId: stri
 
   return url;
 }
+
+export function createDiagnosticsPageUrl(rootProjectId: string, activeProjectId?: string) {
+  let url = `/bot/${rootProjectId}`;
+  if (activeProjectId && rootProjectId !== activeProjectId) {
+    url = `${url}/skill/${activeProjectId}`;
+  }
+
+  return `${url}/diagnostics`;
+}
