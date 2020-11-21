@@ -16,9 +16,10 @@ import formatMessage from 'format-message';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
+import { ICalloutContentStyles, Callout } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
+import uniqueId from 'lodash/uniqueId';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE } from './constants';
@@ -134,7 +135,7 @@ export const diagnosticLink = css`
   align-content: start;
   p {
     margin: 2px 5px;
-    width: 300px;
+    max-width: 300px;
   }
 `;
 
@@ -152,10 +153,8 @@ export const overflowSet = (isBroken: boolean) => css`
 `;
 
 const statusIcon = {
-  width: '12px',
-  height: '18px',
-  fontSize: 11,
-  marginLeft: 6,
+  fontSize: 15,
+  paddingLeft: 8,
 };
 
 const warningIcon = {
@@ -194,6 +193,9 @@ const itemName = (nameWidth: number) => css`
   flex-shrink: 1;
 `;
 
+const calloutRootStyle = css`
+  padding: 11px;
+`;
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
@@ -235,10 +237,96 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   };
 };
 
+const DiagnosticIcons = (props: {
+  projectId: string;
+  skillId: string;
+  diagnostics: Diagnostic[];
+  onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
+}) => {
+  const [isErrorVisible, setIsErrorVisible] = useState(false);
+  const [isWarningVisible, setIsWarningVisible] = useState(false);
+  const { projectId, skillId, diagnostics, onErrorClick = () => {} } = props;
+  const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
+  const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
+  const warningsId = uniqueId('diagnosticWarningIcon');
+  const errorsId = uniqueId('diagnosticErrorIcon');
+  const toggleIsErrorVisible = () => {
+    setIsErrorVisible(!isErrorVisible);
+  };
+
+  const toggleIsWarningVisible = () => {
+    setIsWarningVisible(!isWarningVisible);
+  };
+
+  const WarningCallout = () => (
+    <Callout
+      directionalHint={DirectionalHint.bottomLeftEdge}
+      target={`#${warningsId}`}
+      onDismiss={toggleIsWarningVisible}
+    >
+      <div css={calloutRootStyle}>
+        {warnings.map((item) => {
+          let linkText = item.source;
+          if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
+            linkText = 'Create skill mainfest';
+          }
+          return (
+            <div key={item.message} css={diagnosticLink}>
+              <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
+              <p title={item.message}>
+                {item.message}
+                <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
+                  {linkText}
+                </Link>
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </Callout>
+  );
+
+  const ErrorCallout = () => (
+    <Callout directionalHint={DirectionalHint.bottomLeftEdge} target={`#${errorsId}`} onDismiss={toggleIsErrorVisible}>
+      <div css={calloutRootStyle}>
+        {errors.map((item) => {
+          let linkText = item.source;
+          if (item.source === 'appsettings.json') {
+            linkText = 'Fix in bot settings';
+          }
+          return (
+            <div key={item.message} css={diagnosticLink}>
+              <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
+              <p title={item.message}>
+                {item.message}
+                <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
+                  {linkText}
+                </Link>
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </Callout>
+  );
+
+  return (
+    <React.Fragment>
+      {!isEmpty(warnings) && (
+        <Icon iconName={'WarningSolid'} id={warningsId} style={warningIcon} onClick={toggleIsWarningVisible} />
+      )}
+      {!isEmpty(errors) && (
+        <Icon iconName={'StatusErrorFull'} id={errorsId} style={errorIcon} onClick={toggleIsErrorVisible} />
+      )}
+      {isErrorVisible && <ErrorCallout />}
+      {isWarningVisible && <WarningCallout />}
+    </React.Fragment>
+  );
+};
+
 const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
   const { diagnostics = [], projectId, skillId, onErrorClick } = item;
 
-  let diagnosticIcons: JSX.Element | null = null;
   let warningContent = '';
   let errorContent = '';
 
@@ -249,57 +337,6 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
     warningContent = warnings.map((diag) => diag.message).join(',');
 
     errorContent = errors.map((diag) => diag.message).join(',');
-
-    const warningHTML = warnings.map((item) => {
-      let linkText = item.source;
-      if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
-        linkText = 'Create skill mainfest';
-      }
-      return (
-        <div key={item.message} css={diagnosticLink}>
-          <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
-          <p title={item.message}>
-            {item.message}
-            <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
-              {linkText}
-            </Link>
-          </p>
-        </div>
-      );
-    });
-
-    const errorHTML = errors.map((item) => {
-      let linkText = item.source;
-      if (item.source === 'appsettings.json') {
-        linkText = 'Fix in bot settings';
-      }
-      return (
-        <div key={item.message} css={diagnosticLink}>
-          <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
-          <p title={item.message}>
-            {item.message}
-            <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
-              {linkText}
-            </Link>
-          </p>
-        </div>
-      );
-    });
-
-    diagnosticIcons = (
-      <React.Fragment>
-        {!isEmpty(warnings) && (
-          <TooltipHost closeDelay={1000} content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'WarningSolid'} style={warningIcon} />
-          </TooltipHost>
-        )}
-        {!isEmpty(errors) && (
-          <TooltipHost closeDelay={1000} content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
-          </TooltipHost>
-        )}
-      </React.Fragment>
-    );
   }
 
   return (
@@ -327,7 +364,14 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
           />
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
-        {diagnosticIcons}
+        {showErrors && (
+          <DiagnosticIcons
+            diagnostics={diagnostics}
+            projectId={projectId}
+            skillId={skillId}
+            onErrorClick={onErrorClick}
+          />
+        )}
       </div>
     </div>
   );
