@@ -267,7 +267,7 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
         </div>
       );
     });
-    //() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId)
+
     const errorHTML = errors.map((item) => {
       let linkText = item.source;
       if (item.source === 'appsettings.json') {

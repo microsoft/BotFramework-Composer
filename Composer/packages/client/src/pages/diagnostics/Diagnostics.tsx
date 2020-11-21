@@ -7,44 +7,28 @@ import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { css } from '@emotion/core';
 import { IToolbarItem } from '@bfc/ui-shared';
 
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import {
-  allDiagnosticsSelectorFamily,
-  diagnosticNavLinksSelector,
-} from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { WarningInfo } from '../../components/BotRuntimeController/warningInfo';
-import { ErrorInfo } from '../../components/BotRuntimeController/errorInfo';
+import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { exportSkillModalInfoState } from '../../recoilModel';
+import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 
 import { DiagnosticList } from './DiagnosticList';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
 
-const iconPosition = css`
-  padding-top: 6px;
-`;
-
 const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
-  const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
-  const warnings = useRecoilValue(allDiagnosticsSelectorFamily('Warning'));
 
   const { projectId = '', skillId } = props;
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'element',
-      element: (
-        <div css={iconPosition}>
-          <WarningInfo count={warnings.length} hidden={!warnings.length} onClick={() => {}} />
-          <ErrorInfo count={errors.length} hidden={!errors.length} onClick={() => {}} />
-        </div>
-      ),
+      element: <DiagnosticsHeader />,
       align: 'right',
     },
   ];
