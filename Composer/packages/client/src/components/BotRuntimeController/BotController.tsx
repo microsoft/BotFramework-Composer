@@ -62,12 +62,16 @@ const BotController: React.FC = () => {
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
 
+  const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
 
-  useClickOutside(isControllerHidden ? null : [botControllerMenuTarget], (event: React.MouseEvent<HTMLElement>) => {
-    hideController(true);
-    event.stopPropagation();
-  });
+  useClickOutside(
+    isControllerHidden ? null : [startPanelTarget, botControllerMenuTarget],
+    (event: React.MouseEvent<HTMLElement>) => {
+      hideController(true);
+      event.stopPropagation();
+    }
+  );
 
   useEffect(() => {
     if (projectCollection.length === 0 || errors.length) {
@@ -177,7 +181,12 @@ const BotController: React.FC = () => {
           />
         </div>
       </div>
-      <BotControllerMenu hidden={isControllerHidden} items={items} target={botControllerMenuTarget} />
+      <BotControllerMenu
+        ref={startPanelTarget}
+        hidden={isControllerHidden}
+        items={items}
+        target={botControllerMenuTarget}
+      />
     </React.Fragment>
   );
 };
