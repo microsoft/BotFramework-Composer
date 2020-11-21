@@ -360,7 +360,7 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
-    const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
+    const diagnostics: Diagnostic[] = notificationMap[skillId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
       displayName: dialog.displayName,
@@ -447,13 +447,15 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderTrigger = (item: any, dialog: DialogInfo, projectId: string, dialogLink: TreeLink): React.ReactNode => {
+    const skillId = projectId === rootProjectId ? undefined : projectId;
+    const diagnostics = notificationMap[skillId ?? projectId][dialog.id];
     const link: TreeLink = {
       projectId: rootProjectId,
-      skillId: projectId === rootProjectId ? undefined : projectId,
+      skillId,
       dialogId: dialog.id,
       trigger: item.index,
       displayName: item.displayName,
-      diagnostics: [],
+      diagnostics,
       isRoot: false,
       parentLink: dialogLink,
     };
