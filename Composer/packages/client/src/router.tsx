@@ -19,15 +19,14 @@ import {
   botOpeningState,
   pluginPagesSelector,
   botOpeningMessage,
-  localBotsDataSelector,
 } from './recoilModel';
-import { rootBotProjectIdSelector } from './recoilModel/selectors/project';
+import { localBotsDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
+import { botDisplayNameState, botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
-import { botProjectSpaceLoadedState, botDisplayNameState } from './recoilModel/atoms';
 import languageStorage from './utils/languageStorage';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
@@ -129,24 +128,18 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));
 
-  //initialize settings after bot projects loaded
   useEffect(() => {
     if (botProjectSpaceLoaded && rootBotProjectId && localBots) {
       for (let i = 0; i < localBots.length; i++) {
-        if (!localBots[i].isRemote) {
-          const id = localBots[i].projectId;
-          const setting = localBots[i].setting;
-          const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
-          setSettings(id, mergedSettings);
-        }
+        const id = localBots[i].projectId;
+        const setting = localBots[i].setting;
+        const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
+        setSettings(id, mergedSettings);
       }
-    }
-  }, [botProjectSpaceLoaded, rootBotProjectId]);
-
-  useEffect(() => {
-    if (botProjectSpaceLoadedState && rootBotProjectId && botName) {
       const storedLocale = languageStorage.get(botName)?.locale;
-      setLocale(storedLocale, rootBotProjectId);
+      if (storedLocale) {
+        setLocale(storedLocale, rootBotProjectId);
+      }
     }
   }, [botProjectSpaceLoaded, rootBotProjectId]);
 

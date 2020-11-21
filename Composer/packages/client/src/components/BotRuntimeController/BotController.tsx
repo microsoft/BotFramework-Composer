@@ -57,17 +57,21 @@ const BotController: React.FC = () => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
   const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
-  const [isControllerHidden, setControllerVisibility] = useState(true);
+  const [isControllerHidden, hideController] = useState(true);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
 
-  const target = useRef(null);
+  const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
 
-  useClickOutside(botControllerMenuTarget, () => {
-    setControllerVisibility(true);
-  });
+  useClickOutside(
+    isControllerHidden ? null : [startPanelTarget, botControllerMenuTarget],
+    (event: React.MouseEvent<HTMLElement>) => {
+      hideController(true);
+      event.stopPropagation();
+    }
+  );
 
   useEffect(() => {
     if (projectCollection.length === 0 || errors.length) {
@@ -91,9 +95,8 @@ const BotController: React.FC = () => {
     }
   };
 
-  const onSplitButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setControllerVisibility(!isControllerHidden);
-    event.stopPropagation();
+  const onSplitButtonClick = () => {
+    hideController(!isControllerHidden);
   };
 
   const buttonText = useMemo(() => {
@@ -115,7 +118,7 @@ const BotController: React.FC = () => {
       {projectCollection.map(({ projectId }) => {
         return <BotRuntimeStatus key={projectId} projectId={projectId} />;
       })}
-      <div ref={target} css={[startPanelsContainer]}>
+      <div ref={botControllerMenuTarget} css={[startPanelsContainer]}>
         <DefaultButton
           primary
           aria-roledescription={formatMessage('Bot Controller')}
@@ -178,7 +181,12 @@ const BotController: React.FC = () => {
           />
         </div>
       </div>
-      <BotControllerMenu ref={botControllerMenuTarget} hidden={isControllerHidden} items={items} target={target} />
+      <BotControllerMenu
+        ref={startPanelTarget}
+        hidden={isControllerHidden}
+        items={items}
+        target={botControllerMenuTarget}
+      />
     </React.Fragment>
   );
 };

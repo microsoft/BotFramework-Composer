@@ -71,7 +71,7 @@ export const topLinks = (
     {
       to: `/bot/${projectId}/botProjectsSettings`,
       iconName: 'BotProjectsSettings',
-      labelName: formatMessage('Projects Settings'),
+      labelName: formatMessage('Project Settings'),
       disabled: !botLoaded,
       match: /botProjectsSettings\/[0-9.]+$/,
     },
