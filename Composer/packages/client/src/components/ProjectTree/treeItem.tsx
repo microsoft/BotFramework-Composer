@@ -275,7 +275,13 @@ const DiagnosticIcons = (props: {
               <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
               <p title={item.message}>
                 {item.message}
-                <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
+                <Link
+                  styles={{ root: { marginLeft: '5px' } }}
+                  onClick={() => {
+                    toggleIsWarningVisible();
+                    onErrorClick(projectId, skillId, item);
+                  }}
+                >
                   {linkText}
                 </Link>
               </p>
@@ -299,7 +305,13 @@ const DiagnosticIcons = (props: {
               <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
               <p title={item.message}>
                 {item.message}
-                <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
+                <Link
+                  styles={{ root: { marginLeft: '5px' } }}
+                  onClick={() => {
+                    toggleIsErrorVisible();
+                    onErrorClick(projectId, skillId, item);
+                  }}
+                >
                   {linkText}
                 </Link>
               </p>
