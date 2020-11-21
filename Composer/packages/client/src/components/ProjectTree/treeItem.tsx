@@ -20,8 +20,6 @@ import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 
-import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
-
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE } from './constants';
 
