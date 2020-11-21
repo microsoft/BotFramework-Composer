@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, checkForPVASchema } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, checkForPVASchema, Diagnostic } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
@@ -23,7 +23,7 @@ import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { getFocusPath } from '../../utils/navigation';
+import { createBotSettingUrl, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
@@ -725,10 +725,27 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDialogModalInfo(projectId);
   };
 
-  const handleDisplayManifestModal = (skillId: string) => {
+  const handleDisplayManifestModal = (skillId: string, type: 'create' | 'edit') => {
+    if (type === 'create') {
+      setExportSkillModalInfo(skillId);
+      return;
+    }
+
     const skillNameIdentifier = skillsByProjectId[skillId];
     if (!skillNameIdentifier) return;
     displayManifestModal(skillNameIdentifier, skillId);
+  };
+
+  const handleErrorClick = (projectId: string, skillId: string, diagnostic: Diagnostic) => {
+    switch (diagnostic.source) {
+      case 'appsettings.json': {
+        navigateTo(createBotSettingUrl(projectId, skillId));
+        break;
+      }
+      case 'manifest.json': {
+        setExportSkillModalInfo(skillId || projectId);
+      }
+    }
   };
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
@@ -758,6 +775,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               setTriggerModalInfo({ projectId, dialogId });
             }}
             onDialogDeleteTrigger={handleDeleteTrigger}
+            onErrorClick={handleErrorClick}
             onSelect={handleSelect}
           />
           <div css={contentWrapper} role="main">

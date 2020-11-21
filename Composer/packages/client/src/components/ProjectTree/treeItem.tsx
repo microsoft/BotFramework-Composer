@@ -238,7 +238,7 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
 };
 
 const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
-  const { diagnostics = [], projectId, skillId } = item;
+  const { diagnostics = [], projectId, skillId, onErrorClick } = item;
 
   let diagnosticIcons: JSX.Element | null = null;
   let warningContent = '';
@@ -262,12 +262,14 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
           <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
           <p title={item.message}>
             {item.message}
-            <Link styles={{ root: { marginLeft: '5px' } }}>{linkText}</Link>
+            <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
+              {linkText}
+            </Link>
           </p>
         </div>
       );
     });
-
+    //() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId)
     const errorHTML = errors.map((item) => {
       let linkText = item.source;
       if (item.source === 'appsettings.json') {
@@ -278,10 +280,7 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
           <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
           <p title={item.message}>
             {item.message}
-            <Link
-              styles={{ root: { marginLeft: '5px' } }}
-              onClick={() => navigateTo(createBotSettingUrl(projectId, skillId ?? projectId))}
-            >
+            <Link styles={{ root: { marginLeft: '5px' } }} onClick={() => onErrorClick(projectId, skillId, item)}>
               {linkText}
             </Link>
           </p>
