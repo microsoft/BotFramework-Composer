@@ -264,6 +264,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedVersion(selectedVersion);
     setShowLog(true);
   };
+  const updateBotStatusList = (statusList: IBotStatus[]) => {
+    setBotStatusList(statusList);
+  };
   const updatePublishHistory = (publishHistories: IStatus[], botStatus: IBotStatus) => {
     const newPublishHistory = botPublishHistoryList.map((botPublishHistory) => {
       if (botPublishHistory.projectId === botStatus.id && botStatus.publishTarget) {
@@ -379,6 +382,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             changePublishTarget={changePublishTarget}
             items={botStatusList}
             projectId={projectId}
+            updateItems={updateBotStatusList}
             updatePublishHistory={updatePublishHistory}
             updateSelectedBots={updateSelectedBots}
             onLogClick={onShowLog}
