@@ -470,23 +470,20 @@ export class BotProject implements IBotProject {
 
   public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
     if (this.settings) {
-      const emptyFiles = {};
       const luFiles: FileInfo[] = [];
       luResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
-        if (f) {
+        if (f && !isEmpty) {
           luFiles.push(f);
-          emptyFiles[fileName] = isEmpty;
         }
       });
       const qnaFiles: FileInfo[] = [];
-      qnaResource.forEach(({ id, isEmpty }) => {
+      qnaResource.forEach(({ id }) => {
         const fileName = `${id}.qna`;
         const f = this.files.get(fileName);
         if (f) {
           qnaFiles.push(f);
-          emptyFiles[fileName] = isEmpty;
         }
       });
 

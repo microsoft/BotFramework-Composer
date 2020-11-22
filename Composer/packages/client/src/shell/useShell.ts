@@ -2,7 +2,15 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo, SDKKinds } from '@botframework-composer/types';
+import {
+  ShellApi,
+  ShellData,
+  Shell,
+  DialogSchemaFile,
+  DialogInfo,
+  FeatureFlagKey,
+  SDKKinds,
+} from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -27,6 +35,7 @@ import {
   luFilesState,
   rateInfoState,
   rootBotProjectIdSelector,
+  featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 import { skillsStateSelector } from '../recoilModel/selectors';
@@ -86,6 +95,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const featureFlags = useRecoilValue(featureFlagsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -103,6 +113,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateZoomRate,
     reloadProject,
     setApplicationLevelError,
+    updateRecognizer,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -202,6 +213,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         commitChanges();
       });
     },
+    updateRecognizer,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -225,6 +237,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     redo,
     commitChanges,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
+    isFeatureEnabled: (featureFlagKey: FeatureFlagKey): boolean => featureFlags?.[featureFlagKey]?.enabled ?? false,
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },

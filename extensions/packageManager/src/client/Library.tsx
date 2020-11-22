@@ -16,7 +16,6 @@ import { LibraryRef, LibraryList } from './libraryList';
 import { WorkingModal } from './workingModal';
 
 const DEFAULT_CATEGORY = formatMessage('Available');
-const RECENTLY_USED_KEY = 'recentlyUsedItems';
 
 const docsUrl = `https://aka.ms/composer-use-package-library`;
 
@@ -112,38 +111,10 @@ const Library: React.FC = () => {
     return (component.language === programmingLanguageSelection);
   }
 
-  /**
-   * This method will eventually be moved to the server, when we can store this list on disk via an extension mechanism.
-   * For now, we're doing it in the client, using LocalStorage.
-   * The goal is to capture a list of recently used components, and offer them up across projects
-   * @param componentList
-   */
-  const updateRecentlyUsed = (componentList) => {
-
-    componentList.forEach((component) => {
-      if (!recentlyUsed.find((used) => used.name === component.name)) {
-        recentlyUsed.unshift({...component, language: runtimeLanguage });
-      }
-    });
-
-    window.localStorage.setItem(RECENTLY_USED_KEY, JSON.stringify(recentlyUsed));
-    setRecentlyUsed(recentlyUsed);
-
-  }
-
   useEffect(() => {
 
 
     getLibraries();
-    const recent = window.localStorage.getItem(RECENTLY_USED_KEY);
-    if (recent) {
-      try {
-        const list = JSON.parse(recent);
-        setRecentlyUsed(list);
-      } catch(err) {
-        window.localStorage.removeItem(RECENTLY_USED_KEY);
-      }
-    }
 
     if (settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
@@ -263,8 +234,6 @@ const Library: React.FC = () => {
       } else {
         updateInstalledComponents(results.data.components);
 
-        updateRecentlyUsed(results.data.components);
-
         // reload modified content
         await reloadProject();
       }
@@ -281,7 +250,8 @@ const Library: React.FC = () => {
   const getLibraries = async () => {
     try {
       const response = await getLibraryAPI();
-      updateAvailableLibraries(response.data);
+      updateAvailableLibraries(response.data.available);
+      setRecentlyUsed(response.data.recentlyUsed);
     } catch (err) {
       setApplicationLevelError({
         status: err.response.status,
