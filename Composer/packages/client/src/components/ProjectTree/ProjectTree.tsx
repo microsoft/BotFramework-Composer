@@ -156,6 +156,7 @@ type Props = {
     showDelete?: boolean;
     showRemote?: boolean;
     showMenu?: boolean;
+    showQnAMenu?: boolean;
     showErrors?: boolean;
   };
 };
@@ -182,12 +183,16 @@ export const ProjectTree: React.FC<Props> = ({
     showTriggers: true,
     showRemote: true,
     showMenu: true,
+    showQnAMenu: true,
     showErrors: true,
   },
 }) => {
-  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    onboardingAddCoachMarkRef,
+    navigateToFormDialogSchema,
+    setPageElementState,
+    createQnAFromUrlDialogBegin,
+  } = useRecoilValue(dispatcherState);
   const treeRef = useRef<HTMLDivElement>(null);
 
   const pageElements = useRecoilValue(pageElementState).dialogs;
@@ -354,7 +359,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -379,6 +384,16 @@ export const ProjectTree: React.FC<Props> = ({
           },
         ]
       : [];
+
+    if (!isPvaSchema) {
+      menu.splice(1, 0, {
+        label: formatMessage('Add new knowledge base'),
+        icon: 'Add',
+        onClick: () => {
+          createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
+        },
+      });
+    }
 
     const isFormDialog = dialogIsFormDialog(dialog);
     const showEditSchema = formDialogSchemaExists(skillId, dialog);
@@ -594,7 +609,7 @@ export const ProjectTree: React.FC<Props> = ({
 
     if (options.showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
-        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0);
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
         const key = 'dialog-' + dialog.id;
         return (
           <ExpandableNode
@@ -610,7 +625,9 @@ export const ProjectTree: React.FC<Props> = ({
         );
       });
     } else {
-      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1).summaryElement);
+      return filteredDialogs.map(
+        (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
+      );
     }
   };
 

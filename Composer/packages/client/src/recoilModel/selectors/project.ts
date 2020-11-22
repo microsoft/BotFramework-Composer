@@ -47,18 +47,8 @@ export const localBotsDataSelector = selector({
   key: 'localBotsDataSelector',
   get: ({ get }) => {
     const botProjectIds = get(localBotsWithoutErrorsSelector);
-    return botProjectIds.map((projectId: string) => {
-      const publishHistory = get(publishHistoryState(projectId));
-      const publishTypes = get(publishTypesState(projectId));
-      const setting = get(settingsState(projectId));
-      return {
-        projectId,
-        name: get(botDisplayNameState(projectId)),
-        setting,
-        publishHistory,
-        publishTypes,
-      };
-    });
+    const botProjectsWithoutError = get(botProjectSpaceSelector).filter((b) => botProjectIds.includes(b.projectId));
+    return botProjectsWithoutError;
   },
 });
 
@@ -101,6 +91,8 @@ export const botProjectSpaceSelector = selector({
       const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
 
       const diagnostics = BotIndexer.validate({ dialogs, setting, luFiles, lgFiles, qnaFiles, skillManifests });
+      const publishHistory = get(publishHistoryState(projectId));
+      const publishTypes = get(publishTypesState(projectId));
 
       return {
         dialogs,
@@ -114,6 +106,8 @@ export const botProjectSpaceSelector = selector({
         diagnostics,
         buildEssentials,
         isPvaSchema,
+        publishHistory,
+        publishTypes,
       };
     });
     return result;

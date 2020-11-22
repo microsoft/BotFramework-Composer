@@ -70,7 +70,7 @@ const tableColumns: IColumn[] = [
   },
 ];
 
-const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>((props, ref: any) => {
+const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>((props, ref) => {
   const { items, target, onDismiss, hidden } = props;
   return (
     <Callout
