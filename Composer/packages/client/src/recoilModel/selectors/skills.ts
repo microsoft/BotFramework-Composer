@@ -12,6 +12,7 @@ import {
   projectMetaDataState,
   locationState,
   botProjectIdsState,
+  displaySkillManifestState,
 } from '../atoms';
 
 export const skillsProjectIdSelector = selector({
@@ -77,5 +78,17 @@ export const skillNameIdentifierByProjectIdSelector = selector({
       return result;
     }, {});
     return skills;
+  },
+});
+
+// Display manifest modal if return is projectId
+export const displayManifestModalOnProjectIdSelector = selector({
+  key: 'displayManifestModalOnProjectIdSelector',
+  get: ({ get }) => {
+    const botProjects = get(botProjectIdsState);
+    const displaySkillManifestOnProjects = botProjects.filter((projectId) => {
+      return get(displaySkillManifestState(projectId));
+    });
+    return displaySkillManifestOnProjects[0];
   },
 });
