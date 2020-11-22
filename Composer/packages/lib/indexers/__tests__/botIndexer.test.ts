@@ -22,12 +22,20 @@ const botAssets: BotAssets = {
   botProjectFile: {
     id: 'test',
     content: {
-      workspace: '',
       name: '',
-      skills: {},
+      skills: {
+        'Email-Skill': {
+          workspace: '',
+          remote: false,
+        },
+      },
     },
     lastModified: '',
   },
+  jsonSchemaFiles: [],
+  recognizers: [],
+  formDialogSchemas: [],
+  crossTrainConfig: {},
   dialogSchemas: [],
   qnaFiles: [],
   lgFiles: [],
@@ -49,7 +57,7 @@ const botAssets: BotAssets = {
   dialogs: [
     {
       luFile: 'a.lu',
-      skills: [`=settings.skill['Email-Skill'].endpointUrl`, `=settings.skill['Calendar-Skill'].endpointUrl`],
+      skills: ['Email-Skill', 'Calendar-Skill'],
     } as DialogInfo,
   ],
   setting: {
@@ -145,7 +153,7 @@ describe('checkSkillSetting', () => {
     const errors = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Error);
     const warnings = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Warning);
     expect(errors.length).toEqual(1);
-    expect(warnings.length).toEqual(1);
+    expect(warnings.length).toEqual(0);
   });
 });
 
