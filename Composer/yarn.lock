@@ -3166,6 +3166,11 @@
   resolved "https://registry.yarnpkg.com/@microsoft/recognizers-text-data-types-timex-expression/-/recognizers-text-data-types-timex-expression-1.1.4.tgz#623453ae65e8df212d8156f6a314675c30696c1d"
   integrity sha512-2vICaEJfV9EpaDKs5P1PLAEs+WpNqrtpkl7CLsmc5gKmxgpQtsojG4tk6km5JRKg1mYuLV5ZzJ/65oOEeyTMvQ==
 
+"@microsoft/recognizers-text-data-types-timex-expression@1.3.0":
+  version "1.3.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/recognizers-text-data-types-timex-expression/-/@microsoft/recognizers-text-data-types-timex-expression-1.3.0.tgz#fc5d586c826e478e8477b7fcb21e9e2830e81c67"
+  integrity sha1-/F1YbIJuR46Ed7f8sh6eKDDoHGc=
+
 "@monaco-editor/react@^3.1.0":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@monaco-editor/react/-/react-3.1.2.tgz#e2292f5b7905cbcd389d7fb06d886070fac68a23"
@@ -4652,10 +4657,29 @@ acorn@^7.4.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
   integrity sha1-4a1IbmxUUBY0xsOXxcEh2qODYHw=
 
-adaptive-expressions@4.12.0, adaptive-expressions@^4.11.0:
-  version "4.12.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.12.0.tgz#b35476c62b2e618beb2259c6a62c12236a3800ca"
-  integrity sha1-s1R2xisuYYvrIlnGpiwSI2o4AMo=
+adaptive-expressions@4.11.0-dev.20200929.ca9de94:
+  version "4.11.0-dev.20200929.ca9de94"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
+  integrity sha1-MFyEYufgwyn1WqjNKySWu4HCSQw=
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
+adaptive-expressions@4.12.0-dev-20201119.9afa93623c3e:
+  version "4.12.0-dev-20201119.9afa93623c3e"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/adaptive-expressions/-/adaptive-expressions-4.12.0-dev-20201119.9afa93623c3e.tgz#f06f585f124ba7e202a9520c4baf10cc41006eb5"
+  integrity sha1-8G9YXxJLp+ICqVIMS68QzEEAbrU=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
     "@types/atob-lite" "^2.0.0"
@@ -4666,25 +4690,6 @@ adaptive-expressions@4.12.0, adaptive-expressions@^4.11.0:
     atob-lite "^2.0.0"
     big-integer "^1.6.48"
     d3-format "^1.4.4"
-    jspath "^0.4.0"
-    lodash "^4.17.19"
-    lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
-
-adaptive-expressions@4.11.0-dev.20201010.6e4a99e:
-  version "4.11.0-dev.20201010.6e4a99e"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201010.6e4a99e.tgz#493292c1619ef243901e041849b9ed42af9fb6fd"
-  integrity sha1-STKSwWGe8kOQHgQYSbntQq+ftv0=
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob-lite" "^2.0.0"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.13"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.3"
-    atob-lite "^2.0.0"
-    big-integer "^1.6.48"
     jspath "^0.4.0"
     lodash "^4.17.19"
     lru-cache "^5.1.1"
@@ -5847,6 +5852,11 @@ boolean@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
+
+boolean@^3.0.1:
+  version "3.0.2"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/boolean/-/boolean-3.0.2.tgz#df1baa18b6a2b0e70840475e1d93ec8fe75b2570"
+  integrity sha1-3xuqGLaisOcIQEdeHZPsj+dbJXA=
 
 botbuilder-lg@4.12.0-dev-20201119.9afa93623c3e:
   version "4.12.0-dev-20201119.9afa93623c3e"
@@ -7881,6 +7891,11 @@ d3-format@1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.2.2.tgz#1a39c479c8a57fe5051b2e67a3bee27061a74e7a"
   integrity sha512-zH9CfF/3C8zUI47nsiKfD0+AGDEuM8LwBIP7pBVpyR4l/sKkZqITmMtxRp04rwBrlshIZ17XeFAaovN3++wzkw==
+
+d3-format@^1.4.4:
+  version "1.4.5"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/d3-format/-/d3-format-1.4.5.tgz#374f2ba1320e3717eb74a9356c67daee17a7edb4"
+  integrity sha1-N08roTIONxfrdKk1bGfa7hen7bQ=
 
 d3-geo@1:
   version "1.11.3"
