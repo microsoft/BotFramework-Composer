@@ -94,7 +94,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const isRootBot = rootBotProjectId === projectId;
 
   const userSettings = useRecoilValue(userSettingsState);
-  const clipboardActions = useRecoilValue(clipboardActionsState);
+  const clipboardActions = useRecoilValue(clipboardActionsState(projectId));
   const featureFlags = useRecoilValue(featureFlagsState);
   const {
     updateDialog,
@@ -221,7 +221,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
     onSelect: setVisualEditorSelection,
-    onCopy: setVisualEditorClipboard,
+    onCopy: (clipboardActions) => setVisualEditorClipboard(clipboardActions, projectId),
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
         createDialogBegin(

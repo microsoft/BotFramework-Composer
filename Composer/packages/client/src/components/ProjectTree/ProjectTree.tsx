@@ -316,7 +316,7 @@ export const ProjectTree: React.FC<Props> = ({
           {
             label: formatMessage('Settings'),
             onClick: () => {
-              navigateTo(createBotSettingUrl(bot.projectId, link.skillId));
+              navigateTo(createBotSettingUrl(link.projectId, link.skillId));
             },
           },
         ]
