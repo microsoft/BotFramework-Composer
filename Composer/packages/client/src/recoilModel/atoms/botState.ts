@@ -24,7 +24,7 @@ import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
-import { BreadcrumbItem, PublishType } from './../../recoilModel/types';
+import { PublishType } from './../../recoilModel/types';
 
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
@@ -45,6 +45,7 @@ const emptyDialog: DialogInfo = {
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isFormDialog: false,
 };
 type dialogStateParams = { projectId: string; dialogId: string };
 export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
@@ -154,7 +155,7 @@ export const recognizerIdsState = atomFamily<string[], string>({
 export const recognizerState = atomFamily<RecognizerFile, { projectId: string; id: string }>({
   key: getFullyQualifiedKey('recognizer'),
   default: () => {
-    return { id: '', content: {}, lastModified: '' };
+    return {} as RecognizerFile;
   },
 });
 
@@ -174,13 +175,6 @@ export const actionsSeedState = atomFamily<any, string>({
 
 export const skillManifestsState = atomFamily<any, string>({
   key: getFullyQualifiedKey('skillManifests'),
-  default: (id) => {
-    return [];
-  },
-});
-
-export const breadcrumbState = atomFamily<BreadcrumbItem[], string>({
-  key: getFullyQualifiedKey('breadcrumb'),
   default: (id) => {
     return [];
   },
@@ -294,11 +288,6 @@ export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
-  default: false,
-});
-
 export const showCreateQnAFromScratchDialogState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateQnAFromScratchDialog'),
   default: false,
@@ -364,4 +353,14 @@ export const botErrorState = atomFamily<any, string>({
 export const botNameIdentifierState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botNameIdentifier'),
   default: '',
+});
+
+export const canUndoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canUndoState'),
+  default: false,
+});
+
+export const canRedoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canRedoState'),
+  default: false,
 });

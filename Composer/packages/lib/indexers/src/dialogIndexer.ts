@@ -180,6 +180,7 @@ function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
+  const isFormDialog = has(content, 'schema'); // mark as form generated dialog;
   const diagnostics: Diagnostic[] = [];
   return {
     id,
@@ -194,6 +195,7 @@ function parse(id: string, content: any) {
     triggers: extractTriggers(content),
     intentTriggers: extractIntentTriggers(content),
     skills: extractReferredSkills(content),
+    isFormDialog,
   };
 }
 
@@ -210,7 +212,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
             throw new Error(formatMessage('a dialog file must have a name'));
           }
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
-          const dialog = {
+          const dialog: DialogInfo = {
             isRoot,
             displayName: isRoot ? `${botName}` : id,
             ...parse(id, dialogJson),

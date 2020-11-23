@@ -17,7 +17,7 @@ export interface BotProjectDeployConfig {
   projPath: string;
 
   // Logger
-  logger: (string) => any;
+  logger: (...args: any[]) => void;
 
   // Deploy file path, default is .deployment file
   deployFilePath?: string;

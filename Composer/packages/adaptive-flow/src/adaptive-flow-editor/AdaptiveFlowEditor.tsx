@@ -7,7 +7,7 @@ import createCache from '@emotion/cache';
 import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { DialogFactory, SchemaDefinitions } from '@bfc/shared';
+import { DialogFactory, MicrosoftIDialog, SchemaDefinitions } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowUISchema, FlowWidget } from '@bfc/extension-client';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
@@ -88,7 +88,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     dataCache.current = inputData;
   }
 
-  const data = dataCache.current;
+  const data = dataCache.current as MicrosoftIDialog;
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
@@ -131,6 +131,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
   };
 
+  const marqueeStyles = (_) => {
+    return {
+      root: {
+        width: '100%',
+        height: '100%',
+      },
+    };
+  };
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
@@ -144,9 +152,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >
-            <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
-              <SelectionContext.Provider value={selectionContext}>
-                <MarqueeSelection selection={selection}>
+            <SelectionContext.Provider value={selectionContext}>
+              <MarqueeSelection selection={selection} styles={marqueeStyles}>
+                <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
                   <div
                     className="flow-editor-container"
                     css={{
@@ -172,7 +180,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                         ElementWrapper: VisualEditorElementWrapper,
                       }}
                       sdkschema={schema?.definitions as SchemaDefinitions}
-                      uischema={{ ...schemaFromPlugins, ...customFlowSchema }}
+                      uischema={{ ...customFlowSchema, ...schemaFromPlugins }}
                       widgets={widgetsFromPlugins}
                       onEvent={(eventName, eventData) => {
                         divRef.current?.focus({ preventScroll: true });
@@ -180,9 +188,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                       }}
                     />
                   </div>
-                </MarqueeSelection>
-              </SelectionContext.Provider>
-            </ZoomZone>
+                </ZoomZone>
+              </MarqueeSelection>
+            </SelectionContext.Provider>
           </div>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>

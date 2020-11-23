@@ -112,6 +112,8 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
     onDuplicate,
   } = props;
 
+  // Indicates if the form in the card has been touched by the user.
+  const touchedRef = React.useRef(!!property.name);
   const { id: propertyId, array, kind, name, payload, required } = property;
 
   const rootElmRef = React.useRef<HTMLDivElement>();
@@ -128,6 +130,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
   const changeName = React.useCallback(
     (_: React.FormEvent<HTMLElement | HTMLInputElement>, value: string) => {
       onChangeName(value);
+      touchedRef.current = true;
     },
     [onChangeName]
   );
@@ -164,19 +167,24 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
     []
   );
 
+  /**
+   * Validates the property name only if the user has touched it.
+   */
   const validateName = React.useCallback(
     (value: string) =>
-      !value
-        ? formatMessage('Property name is required!')
-        : !nameRegex.test(value)
-        ? formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.')
+      touchedRef.current
+        ? !value
+          ? formatMessage('Property name is required!')
+          : !nameRegex.test(value)
+          ? formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.')
+          : ''
         : '',
-    []
+    [touchedRef.current]
   );
 
   return (
     <FocusZone>
-      <ContentRoot {...dragHandleProps} ref={rootElmRef} isValid={valid}>
+      <ContentRoot {...dragHandleProps} ref={rootElmRef} isValid={!touchedRef.current || valid}>
         <Stack horizontal tokens={{ childrenGap: 16 }} verticalAlign="center">
           <TextField
             aria-describedby={propertyNameTooltipId}

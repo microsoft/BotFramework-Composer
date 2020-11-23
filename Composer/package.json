@@ -47,7 +47,9 @@
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
+    "start:dev:electron": "concurrently  \"npm:start:client\" \"npm:start:electron\"",
     "start:client": "yarn workspace @bfc/client start",
+    "start:electron": "wait-on -t 300000 http://localhost:3000 && yarn workspace @bfc/electron-server start",
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
@@ -67,7 +69,7 @@
     "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
     "l10n:extractJson": "node scripts/l10n-extractJson.js",
     "l10n:transform": "node scripts/l10n-transform.js",
-    "l10n:babel": "babel ./packages --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/react,@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"packages/electron-server\",\"packages/**/__tests__\",\"packages/**/node_modules\",\"packages/**/build/**/*.js\"",
+    "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \"ts,.tsx,.jsx,.js\" --out-dir l10ntemp ./packages",
     "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas"
   },
   "husky": {
@@ -121,6 +123,7 @@
     "ts-loader": "7.0.4",
     "tslib": "^2.0.0",
     "typescript": "3.9.2",
+    "wait-on": "^5.2.0",
     "wsrun": "^5.2.0"
   }
 }
