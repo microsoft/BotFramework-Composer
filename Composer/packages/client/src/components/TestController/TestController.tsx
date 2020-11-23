@@ -31,7 +31,7 @@ import { navigateTo, openInEmulator } from '../../utils/navigation';
 import plugins from '../../plugins';
 import { useShell } from '../../shell/useShell';
 
-import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
+import { isBuildConfigComplete, isKeyRequired, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
@@ -181,25 +181,27 @@ export const TestControllerContent: React.FC<{ projectId: string }> = (props) =>
 
   async function handleStart() {
     dismissCallout();
-    const config = Object.assign(
-      {},
-      {
-        luis: settings.luis,
-        qna: settings.qna,
-      }
-    );
-    if (!isAbsHosted() && needsBuild(dialogs)) {
-      if (
-        botStatus === BotStatus.failed ||
-        botStatus === BotStatus.pending ||
-        !isBuildConfigComplete(config, dialogs, luFiles, qnaFiles)
-      ) {
-        openDialog();
-      } else {
-        await handleBuild(config);
-      }
+    const config = {
+      luis: { ...settings.luis },
+      qna: { ...settings.qna },
+    };
+
+    if (isAbsHosted() || !needsBuild(dialogs)) {
+      return await handleLoadBot();
+    }
+
+    if (!isKeyRequired(dialogs, luFiles, qnaFiles)) {
+      return await handleBuild(config);
+    }
+
+    if (
+      botStatus === BotStatus.failed ||
+      botStatus === BotStatus.pending ||
+      !isBuildConfigComplete(config, dialogs, luFiles, qnaFiles)
+    ) {
+      openDialog();
     } else {
-      await handleLoadBot();
+      await handleBuild(config);
     }
   }
 
