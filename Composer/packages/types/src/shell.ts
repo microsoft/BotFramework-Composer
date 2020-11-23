@@ -2,15 +2,29 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
-import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
+import { AxiosInstance } from 'axios';
+
+import type {
+  DialogInfo,
+  LuFile,
+  LgFile,
+  QnAFile,
+  LuIntentSection,
+  LgTemplate,
+  DialogSchemaFile,
+  LuProviderType,
+} from './indexers';
+import type { ILUFeaturesConfig, SkillSetting, UserSettings, DialogSetting } from './settings';
 import type { JSONSchema7 } from './schema';
 import { MicrosoftIDialog } from './sdk';
+import { FeatureFlagKey } from './featureFlags';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
 };
+
+export type HttpClient = AxiosInstance;
 
 export type ZoomInfo = {
   rateList: number[];
@@ -33,6 +47,7 @@ type UISchema = {
     menu?: any;
   };
 };
+
 export type BotSchemas = {
   default?: JSONSchema7;
   sdk?: any;
@@ -42,10 +57,13 @@ export type BotSchemas = {
 };
 
 export type ApplicationContextApi = {
-  navTo: (path: string, rest?: any) => void;
+  navigateTo: (to: string, opts?: { state?: any; replace?: boolean }) => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   announce: (message: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
+  isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
+  setApplicationLevelError: (err: any) => void;
+  confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
 };
 
 export type ApplicationContext = {
@@ -53,6 +71,8 @@ export type ApplicationContext = {
   hosted: boolean;
   userSettings: UserSettings;
   flowZoomRate: ZoomInfo;
+
+  httpClient: HttpClient;
 };
 
 export type LuContextApi = {
@@ -80,6 +100,8 @@ export type LgContextApi = {
 export type ProjectContextApi = {
   getDialog: (dialogId: string) => any;
   saveDialog: (dialogId: string, newDialogData: any) => any;
+  reloadProject: () => void;
+  navTo: (path: string) => void;
 
   updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
@@ -94,6 +116,7 @@ export type ProjectContextApi = {
   createQnATrigger: (id: string) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
+  updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
 
 export type ProjectContext = {
@@ -108,6 +131,7 @@ export type ProjectContext = {
   skills: any[];
   skillsSettings: Record<string, SkillSetting>;
   schemas: BotSchemas;
+  settings: DialogSetting;
 };
 
 export type ActionContextApi = {

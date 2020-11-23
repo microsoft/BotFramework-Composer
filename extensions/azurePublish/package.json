@@ -18,10 +18,8 @@
     "@azure/graph": "5.0.1",
     "@azure/ms-rest-browserauth": "0.1.4",
     "@azure/ms-rest-nodeauth": "3.0.3",
-    "@bfc/extension": "../../Composer/packages/extension",
     "@bfc/indexers": "../../Composer/packages/lib/indexers",
     "@bfc/shared": "../../Composer/packages/lib/shared",
-    "@botframework-composer/types": "0.0.1",
     "@microsoft/bf-lu": "4.11.0-dev.20201005.7e5e1b8",
     "@microsoft/bf-luis-cli": "^4.10.0-dev.20200721.8bb21ac",
     "adal-node": "0.2.1",
@@ -37,12 +35,14 @@
     "node-global-proxy": "^1.0.1"
   },
   "resolutions": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "bl": "^4.0.3"
   },
   "devDependencies": {
     "@types/archiver": "3.1.0",
     "@types/fs-extra": "8.1.0",
     "@types/request": "2.48.4",
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "@types/request-promise": "4.1.45",
     "ts-loader": "^8.0.9",
     "typescript": "^4.0.5",

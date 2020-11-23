@@ -11,8 +11,8 @@ import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
-import { PublishPlugin } from '@botframework-composer/types';
-import { ExtensionRegistration } from '@bfc/extension';
+import { PublishPlugin, IExtensionRegistration } from '@botframework-composer/types';
+
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
 const removeFile = promisify(fs.unlink);
@@ -42,9 +42,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   public description = 'Publish bot to local runtime';
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
-  private composer: ExtensionRegistration;
+  private composer: IExtensionRegistration;
 
-  constructor(composer: ExtensionRegistration) {
+  constructor(composer: IExtensionRegistration) {
     this.composer = composer;
   }
 
@@ -316,7 +316,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
-    const botDir = settings.runtime?.customRuntime === true ? settings.runtime.path : this.getBotRuntimeDir(botId);
+    let customerRuntimePath = settings.runtime.path;
+    if (customerRuntimePath && !path.isAbsolute(customerRuntimePath)) {
+      customerRuntimePath = path.resolve(project.dir, customerRuntimePath);
+    }
+    const botDir = settings.runtime?.customRuntime === true ? customerRuntimePath : this.getBotRuntimeDir(botId);
+
     const commandAndArgs =
       settings.runtime?.customRuntime === true
         ? settings.runtime.command.split(/\s+/)
@@ -524,7 +529,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 }
 
-export default async (composer: ExtensionRegistration): Promise<void> => {
+export default async (composer: IExtensionRegistration): Promise<void> => {
   const publisher = new LocalPublisher(composer);
   // register this publishing method with Composer
   await composer.addPublishMethod(publisher);

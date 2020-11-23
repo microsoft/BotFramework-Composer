@@ -1640,6 +1640,9 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
+  "msg_bf173fef": {
+    "message": "{ msg }"
+  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -1829,6 +1832,9 @@
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -1922,6 +1928,9 @@
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logo"
   },
+  "powervirtualagents_logo_11858924": {
+    "message": "PowerVirtualAgents Logo"
+  },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
   },
@@ -2005,6 +2014,9 @@
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
+  },
+  "provisioning_1330aede": {
+    "message": "Provisioning ..."
   },
   "provisioning_summary_2be9422f": {
     "message": "Provisioning Summary"
@@ -2359,6 +2371,12 @@
   },
   "skills_49cccd6a": {
     "message": "Skills"
+  },
+  "something_happened_while_attempting_to_pull_e_952c7afe": {
+    "message": "Something happened while attempting to pull: { e }"
+  },
+  "something_went_wrong_d238c551": {
+    "message": "Something went wrong"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"

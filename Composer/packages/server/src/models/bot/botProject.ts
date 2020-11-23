@@ -19,9 +19,10 @@ import {
   checkForPVASchema,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
-import { UserIdentity, ExtensionContext } from '@bfc/extension';
+import { UserIdentity } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
+import { ExtensionContext } from '../extension/extensionContext';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -477,23 +478,20 @@ export class BotProject implements IBotProject {
 
   public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
     if (this.settings) {
-      const emptyFiles = {};
       const luFiles: FileInfo[] = [];
       luResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
-        if (f) {
+        if (f && !isEmpty) {
           luFiles.push(f);
-          emptyFiles[fileName] = isEmpty;
         }
       });
       const qnaFiles: FileInfo[] = [];
-      qnaResource.forEach(({ id, isEmpty }) => {
+      qnaResource.forEach(({ id }) => {
         const fileName = `${id}.qna`;
         const f = this.files.get(fileName);
         if (f) {
           qnaFiles.push(f);
-          emptyFiles[fileName] = isEmpty;
         }
       });
 
@@ -899,7 +897,7 @@ export class BotProject implements IBotProject {
     try {
       const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
 
-      for (const [_, file] of files) {
+      for (const [, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
           return fileList;
         }

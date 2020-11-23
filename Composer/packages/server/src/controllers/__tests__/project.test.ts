@@ -3,14 +3,15 @@
 
 import { Request } from 'express';
 import rimraf from 'rimraf';
-import { ExtensionContext } from '@bfc/extension';
 import * as msRest from '@azure/ms-rest-js';
 
+import { ExtensionContext } from '../../models/extension/extensionContext';
 import { BotProjectService } from '../../services/project';
+import AssetService from '../../services/asset';
 import { ProjectController } from '../../controllers/project';
 import { Path } from '../../utility/path';
 
-jest.mock('@bfc/extension', () => {
+jest.mock('../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
       extensions: {
@@ -50,10 +51,12 @@ beforeEach(() => {
     status: jest.fn().mockReturnThis(),
     json: jest.fn().mockReturnThis(),
     send: jest.fn().mockReturnThis(),
+    sendStatus: jest.fn().mockReturnThis(),
   };
   mockRes.status.mockClear();
   mockRes.json.mockClear();
   mockRes.send.mockClear();
+  mockRes.sendStatus.mockClear();
 });
 
 beforeAll(async () => {
@@ -373,6 +376,7 @@ describe('publish luis files', () => {
         crossTrainConfig: {},
         luFiles: [],
       },
+      setTimeout: (msecs: number, callback: () => any): void => {},
     } as Request;
     await ProjectController.build(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalled();
@@ -393,5 +397,241 @@ describe('remove project', () => {
     } as Request;
     await ProjectController.removeProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('getting a project by alias', () => {
+  let getProjectByAliasBackup;
+  beforeEach(() => {
+    getProjectByAliasBackup = BotProjectService.getProjectByAlias;
+  });
+
+  afterEach(() => {
+    BotProjectService.getProjectByAlias = getProjectByAliasBackup;
+  });
+
+  it('should get a project by its alias if it exists', async () => {
+    const mockReq: any = {
+      params: {
+        alias: 'my-bot.alias',
+      },
+    };
+    const mockBotProject = {
+      id: 'botId',
+      dir: '/path/to/bot',
+      exists: jest.fn().mockResolvedValue(true),
+      name: 'my-bot',
+    };
+    BotProjectService.getProjectByAlias = jest.fn().mockResolvedValueOnce(mockBotProject);
+    await ProjectController.getProjectByAlias(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      location: mockBotProject.dir,
+      id: mockBotProject.id,
+      name: 'my-bot',
+    });
+  });
+
+  it('should return a 404 if no matching project is found for the alias', async () => {
+    const mockReq: any = {
+      params: {
+        alias: 'my-bot.non-existent-alias',
+      },
+    };
+    BotProjectService.getProjectByAlias = jest.fn().mockResolvedValueOnce(undefined);
+    await ProjectController.getProjectByAlias(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      message: 'No matching bot project found for alias my-bot.non-existent-alias',
+    });
+  });
+
+  it('should return a 400 if no alias is sent with the request', async () => {
+    const mockReq: any = {
+      params: {
+        alias: undefined,
+      },
+    };
+    await ProjectController.getProjectByAlias(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      message: 'Parameters not provided, requires "alias" parameter',
+    });
+  });
+
+  it('should return a 500 if an error is thrown', async () => {
+    const mockReq: any = {
+      params: {
+        alias: 'my-bot.alias',
+      },
+    };
+    const error = new Error('Something went wrong while getting the project by alias');
+    BotProjectService.getProjectByAlias = jest.fn().mockRejectedValueOnce(error);
+    await ProjectController.getProjectByAlias(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      message: error.message,
+    });
+  });
+});
+
+describe('Backing up a project', () => {
+  let getProjectByIdBackup;
+  let backupProjectBackup;
+  beforeEach(() => {
+    getProjectByIdBackup = BotProjectService.getProjectById;
+    backupProjectBackup = BotProjectService.backupProject;
+  });
+
+  afterEach(() => {
+    BotProjectService.getProjectById = getProjectByIdBackup;
+    BotProjectService.backupProject = backupProjectBackup;
+  });
+
+  it('should backup a project', async () => {
+    BotProjectService.getProjectById = jest.fn().mockResolvedValueOnce({});
+    BotProjectService.backupProject = jest.fn().mockResolvedValueOnce('/backup/path');
+    const mockReq: any = {
+      params: {
+        projectId: 'projectId',
+      },
+    };
+    await ProjectController.backupProject(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.json).toHaveBeenCalledWith({ path: '/backup/path' });
+  });
+
+  it('should return a 404 if it cannot find the specified project', async () => {
+    BotProjectService.getProjectById = jest.fn().mockResolvedValueOnce(undefined);
+    const mockReq: any = {
+      params: {
+        projectId: 'projectId',
+      },
+    };
+    await ProjectController.backupProject(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Could not find bot project with ID: projectId' });
+  });
+
+  it('should return a 500 if an error is thrown', async () => {
+    const error = 'Something went wrong while backing up.';
+    BotProjectService.getProjectById = jest.fn().mockResolvedValueOnce({});
+    BotProjectService.backupProject = jest.fn().mockRejectedValueOnce(new Error(error));
+    const mockReq: any = {
+      params: {
+        projectId: 'projectId',
+      },
+    };
+    await ProjectController.backupProject(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith(new Error(error));
+  });
+});
+
+describe('copying a template to an existing project', () => {
+  let getProjectByIdBackup;
+  let backupProjectBackup;
+  let setProjectLocationDataBackup;
+  let assetServiceManagerBackup;
+  beforeEach(() => {
+    getProjectByIdBackup = BotProjectService.getProjectById;
+    backupProjectBackup = BotProjectService.backupProject;
+    setProjectLocationDataBackup = BotProjectService.setProjectLocationData;
+    assetServiceManagerBackup = { ...AssetService.manager };
+  });
+
+  afterEach(() => {
+    BotProjectService.getProjectById = getProjectByIdBackup;
+    BotProjectService.backupProject = backupProjectBackup;
+    BotProjectService.setProjectLocationData = setProjectLocationDataBackup;
+    AssetService.manager = assetServiceManagerBackup;
+  });
+
+  it('should copy a template to an existing project', async () => {
+    const mockReq: any = {
+      body: {
+        eTag: 'someEtag',
+        templateDir: '/template/dir',
+      },
+      params: {
+        projectId: 'projectId',
+      },
+    };
+    const mockBotProject = {
+      fileStorage: {
+        rmrfDir: jest.fn().mockResolvedValue(undefined),
+      },
+    };
+    BotProjectService.getProjectById = jest.fn().mockResolvedValueOnce(mockBotProject);
+    BotProjectService.setProjectLocationData = jest.fn().mockReturnValue(undefined);
+    (AssetService.manager as any) = {
+      copyRemoteProjectTemplateTo: jest.fn().mockResolvedValue(undefined),
+    };
+    await ProjectController.copyTemplateToExistingProject(mockReq, mockRes);
+
+    expect(mockRes.sendStatus).toHaveBeenCalledWith(200);
+  });
+
+  it('should return a 400 if templateDir parameter is missing in request', async () => {
+    const mockReq: any = {
+      body: {
+        eTag: 'someEtag',
+        templateDir: undefined,
+      },
+      params: {
+        projectId: 'projectId',
+      },
+    };
+    await ProjectController.copyTemplateToExistingProject(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Missing parameters: templateDir required.' });
+  });
+
+  it('should return a 404 if no project is found with the specified id', async () => {
+    const mockReq: any = {
+      body: {
+        eTag: 'someEtag',
+        templateDir: '/template/dir',
+      },
+      params: {
+        projectId: 'nonExistentProjectId',
+      },
+    };
+    BotProjectService.getProjectById = jest.fn().mockResolvedValueOnce(undefined);
+    await ProjectController.copyTemplateToExistingProject(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Could not find bot project with ID: nonExistentProjectId' });
+  });
+
+  it('should return a 500 an error is thrown', async () => {
+    const mockReq: any = {
+      body: {
+        eTag: 'someEtag',
+        templateDir: '/template/dir',
+      },
+      params: {
+        projectId: 'nonExistentProjectId',
+      },
+    };
+    const error = new Error('Something went wrong while prepping for incoming template content.');
+    const mockBotProject = {
+      fileStorage: {
+        rmrfDir: jest.fn().mockRejectedValue(error),
+      },
+    };
+    BotProjectService.getProjectById = jest.fn().mockResolvedValueOnce(mockBotProject);
+    await ProjectController.copyTemplateToExistingProject(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith(error);
   });
 });
