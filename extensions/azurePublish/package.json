@@ -7,7 +7,7 @@
   "scripts": {
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
-    "build": "webpack"
+    "build": "yarn build:node && yarn build:ui"
   },
   "composer": {
     "enabled": true,

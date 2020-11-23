@@ -365,6 +365,9 @@
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
   },
+  "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
+    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
+  },
   "composer_introduction_98a93701": {
     "message": "Composer introduction"
   },
@@ -505,6 +508,12 @@
   },
   "cut_c8c92681": {
     "message": "Cut"
+  },
+  "data_collection_32efe1e7": {
+    "message": "Data collection"
+  },
+  "data_collection_7db2e237": {
+    "message": "Data Collection"
   },
   "data_loading_4c9bb9f6": {
     "message": "Data loading..."
@@ -788,6 +797,9 @@
   "greeting_message_ce77bbb2": {
     "message": "Greeting Message"
   },
+  "help_us_improve_468828c5": {
+    "message": "Help us improve?"
+  },
   "here_s_what_we_know_4e9c1731": {
     "message": "Here’s what we know…"
   },
@@ -1010,18 +1022,6 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
-  "msg_bf173fef": {
-    "message": "{ msg }"
-  },
-  "multi_choice_839b54bb": {
-    "message": "Multi-choice"
-  },
-  "multiple_wildcards_26f50b6c": {
-    "message": "multiple wildcards"
-  },
-  "must_be_an_expression_error_477cbda6": {
-    "message": "must be an expression: { error }"
-  },
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"
   },
@@ -1099,6 +1099,9 @@
   },
   "node_menu_e2aa8092": {
     "message": "Node menu"
+  },
+  "not_now_97efd947": {
+    "message": "Not now"
   },
   "not_yet_published_669e37b3": {
     "message": "Not yet published"
@@ -1253,6 +1256,9 @@
   "privacy_button_b58e437": {
     "message": "Privacy button"
   },
+  "privacy_statement_da69ebc6": {
+    "message": "Privacy statement"
+  },
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
   },
@@ -1297,9 +1303,6 @@
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
-  },
-  "provisioning_1330aede": {
-    "message": "Provisioning ..."
   },
   "provisioning_summary_2be9422f": {
     "message": "Provisioning Summary"
@@ -1970,6 +1973,9 @@
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"
   },
+  "yes_collect_data_b79b7844": {
+    "message": "Yes, collect data"
+  },
   "yes_dde87d5": {
     "message": "Yes"
   },
@@ -1981,6 +1987,9 @@
   },
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
     "message": "You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs."
+  },
+  "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
+    "message": "You can turn data collection on or off at any time in the Application Settings."
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "You do not have permission to save bots here"

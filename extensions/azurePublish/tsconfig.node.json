@@ -6,14 +6,15 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "./lib/node",
-    "rootDir": "./src/node",
+    "outDir": "./lib",
+    "rootDir": "./src",
     "types": [
       "node"
     ]
   },
   "include": [
-    "src/node/**/*"
+    "src/node/**/*",
+    "src/types/**/*"
   ],
   "exclude": [
     "node_modules"

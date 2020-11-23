@@ -459,16 +459,20 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         }
 
         this.asyncPublish(config, project, resourcekey, jobId);
+
+        return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
+
       } catch (err) {
         this.logger('%O', err);
         // can only can accessToken and settings missing. Because asyncPublish is not await.
         BackgroundProcessManager.updateProcess(jobId, 500, stringifyError(err));
-        await this.updateHistory(botId, profileName, publishResultFromStatus(BackgroundProcessManager.getStatus(jobId)).result);
+        const status = publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
+        await this.updateHistory(botId, profileName, status.result);
         BackgroundProcessManager.removeProcess(jobId);
         this.cleanup(resourcekey as string);
-      }
 
-      return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
+        return status;
+      }
     };
 
     getHistory = async(config: PublishConfig, project: IBotProject, user) => {

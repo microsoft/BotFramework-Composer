@@ -8,6 +8,7 @@ module.exports = [
   {
     entry: './src/ui/index.tsx',
     mode: 'production',
+    target: 'web',
     output: {
       filename: 'publish.js',
       path: resolve(__dirname, 'lib', 'ui'),
@@ -48,41 +49,36 @@ module.exports = [
       tls: 'empty',
     }
   },
-  {
-    entry: './src/node/index.ts',
-    mode: 'production',
-    devtool: 'source-map',
-    target: 'node',
-    node: {
-      __dirname: false,
-      __filename: false,
-      global: false,
-    },
-    output: {
-      path: resolve(__dirname, 'lib', 'node'),
-      filename: 'index.js',
-      libraryTarget: 'commonjs2',
-      /**
-       * Node files aren't being loaded by Webpack, so we want the source maps to point to the files on disk
-       */
-      devtoolModuleFilenameTemplate: '[absolute-resource-path]',
-    },
-    module: {
-      rules: [{ test: /\.tsx?$/, use: 'ts-loader', exclude: [/node_modules/] }],
-    },
-    resolve: {
-      extensions: ['.js', '.ts', '.tsx', '.json'],
-      mainFields: ['main'],
-    },
-    optimization:  {
-      minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            keep_fnames: /AbortSignal/,
-          },
-        }),
-      ],
-    }
-  }
+  // {
+  //   entry: './src/node/index.ts',
+  //   mode: 'production',
+  //   devtool: 'source-map',
+  //   target: 'node',
+  //   node: {
+  //     __dirname: false,
+  //     __filename: false,
+  //     global: false,
+  //   },
+  //   output: {
+  //     path: resolve(__dirname, 'lib', 'node'),
+  //     filename: 'index.js',
+  //     libraryTarget: 'commonjs2',
+  //   },
+  //   module: {
+  //     rules: [{ test: /\.tsx?$/, use: 'ts-loader', exclude: [/node_modules/] }],
+  //   },
+  //   resolve: {
+  //     extensions: ['.js', '.ts', '.tsx', '.json'],
+  //   },
+  //   optimization:  {
+  //     minimize: true,
+  //     minimizer: [
+  //       new TerserPlugin({
+  //         terserOptions: {
+  //           keep_fnames: /AbortSignal/,
+  //         },
+  //       }),
+  //     ],
+  //   }
+  // }
 ];
