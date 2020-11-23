@@ -141,7 +141,7 @@ export const diagnosticLink = css`
 
 export const overflowSet = (isBroken: boolean) => css`
   width: 100%;
-  height: 24px;
+  height: 100%;
   box-sizing: border-box;
   line-height: 24px;
   justify-content: space-between;
