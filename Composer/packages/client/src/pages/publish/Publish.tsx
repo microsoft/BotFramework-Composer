@@ -247,17 +247,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setBotStatusList(statusList);
   }, [botProjectData.length]);
 
-  const rollbackToVersion = (version, item) => {
+  const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
     const setting = botsettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
+    const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
     if (setting) {
       const sensitiveSettings = getSensitiveProperties(setting);
-      rollbackToVersionDispatcher(item.id, item.publishTarget, version.id, sensitiveSettings);
+      rollbackToVersionDispatcher(item.id, selectedTarget, version.id, sensitiveSettings);
     }
   };
 
   const onRollbackToVersion = (selectedVersion: IStatus, item: IBotStatus) => {
     item.publishTarget &&
-      isRollbackSupported(item.publishTarget, selectedVersion, item.publishTargets as PublishTarget[], item.id) &&
+      item.publishTargets &&
+      isRollbackSupported(item.publishTarget, selectedVersion, item.publishTargets, item.id) &&
       rollbackToVersion(selectedVersion, item);
   };
   const onShowLog = (selectedVersion) => {

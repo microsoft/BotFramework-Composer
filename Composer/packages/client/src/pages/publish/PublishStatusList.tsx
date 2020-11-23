@@ -3,13 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import {
-  DetailsList,
-  IColumn,
-  CheckboxVisibility,
-  IDetailsColumnStyleProps,
-  IDetailsColumnStyles,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, IColumn, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -19,7 +13,6 @@ import moment from 'moment';
 import { useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { IStyleFunctionOrObject } from 'office-ui-fabric-react/lib';
 
 import { listRoot, tableView, detailList } from './styles';
 
@@ -180,6 +173,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
         return (
           <ActionButton
             allowDisabledFocus
+            styles={{ root: { color: '#0078D4' } }}
             onClick={() => {
               onLogClick(item);
             }}
@@ -208,6 +202,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             onClick={() => {
               onRollbackClick(item);
             }}
+            styles={{ root: { color: '#0078D4' } }}
           >
             {formatMessage('Rollback')}
           </ActionButton>
