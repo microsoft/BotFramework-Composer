@@ -444,65 +444,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     },
   ];
 
-  const getMenuItems = () => {
-    const items = [
-      {
-        'data-testid': 'FlyoutNewDialog',
-        key: 'adddialog',
-        text: formatMessage('Add new dialog'),
-        onClick: () => {
-          const id = skillId ?? projectId;
-          createDialogBegin([], onCreateDialogComplete(id), id);
-        },
-      },
-      {
-        'data-testid': 'FlyoutNewTrigger',
-        key: 'addtrigger',
-        text: formatMessage(`Add new trigger on {displayName}`, {
-          displayName: currentDialog?.displayName ?? '',
-        }),
-        onClick: () => {
-          if (!projectId || !currentDialog) return;
-          openNewTriggerModal(projectId, currentDialog.id);
-        },
-      },
-    ];
-
-    // TODO: refactor when Composer can better model the PVA scenarios
-    if (schemas && !checkForPVASchema(schemas.sdk)) {
-      items.push({
-        'data-testid': 'AddNewKnowledgebase',
-        key: 'addKnowledge',
-        text: formatMessage(` Add new knowledge base on {displayName}`, {
-          displayName: currentDialog?.displayName ?? '',
-        }),
-        onClick: () => {
-          if (!projectId || !dialogId) return;
-          createQnAFromUrlDialogBegin({ projectId, dialogId });
-        },
-      });
-    }
-    return items;
-  };
-
   const toolbarItems: IToolbarItem[] = [
-    {
-      type: 'element',
-      element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
-      align: 'right',
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Add'),
-      align: 'left',
-      dataTestid: 'AddFlyout',
-      buttonProps: {
-        iconProps: { iconName: 'Add' },
-      },
-      menuProps: {
-        items: getMenuItems(),
-      },
-    },
     {
       type: 'dropdown',
       text: formatMessage('Edit'),
@@ -584,32 +526,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !showEnableBtn,
             onClick: () => {
               EditorAPI.Actions.EnableSelection();
-            },
-          },
-        ],
-      },
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Export'),
-      align: 'left',
-      buttonProps: {
-        iconProps: { iconName: 'OpenInNewWindow' },
-      },
-      menuProps: {
-        items: [
-          {
-            key: 'zipexport',
-            text: formatMessage('Export assets to .zip'),
-            onClick: () => {
-              exportToZip(projectId);
-            },
-          },
-          {
-            key: 'exportAsSkill',
-            text: formatMessage('Export as skill'),
-            onClick: () => {
-              setExportSkillModalInfo(projectId);
             },
           },
         ],
