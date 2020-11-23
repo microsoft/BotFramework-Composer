@@ -4,6 +4,7 @@
 import { IDiagnostic, IRange } from './diagnostic';
 import { IIntentTrigger } from './dialogUtils';
 import { MicrosoftIDialog } from './sdk';
+import { SDKKinds } from './schema';
 
 import { DialogSetting } from './index';
 
@@ -47,6 +48,8 @@ export type DialogSchemaFile = {
   content: any;
 };
 
+export type LuProviderType = SDKKinds.LuisRecognizer | SDKKinds.OrchestratorRecognizer;
+
 export type DialogInfo = {
   content: MicrosoftIDialog;
   diagnostics: IDiagnostic[];
@@ -62,6 +65,7 @@ export type DialogInfo = {
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
   skills: string[];
+  luProvider?: LuProviderType;
   isFormDialog: boolean;
 };
 
@@ -257,7 +261,10 @@ export type FormDialogSchemaTemplate = {
 
 export type RecognizerFile = {
   id: string;
-  content: any;
+  content: {
+    $kind: SDKKinds;
+    [key: string]: any;
+  };
 };
 
 export type CrosstrainConfig = {

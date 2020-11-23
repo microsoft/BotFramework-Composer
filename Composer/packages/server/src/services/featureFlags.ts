@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getDefaultFeatureFlags, FeatureFlagMap, FeatureFlagKey } from '@bfc/shared';
+import { getDefaultFeatureFlags } from '@bfc/shared';
+import { FeatureFlagMap, FeatureFlagKey } from '@botframework-composer/types';
 
 import { Store } from '../store/store';
 
