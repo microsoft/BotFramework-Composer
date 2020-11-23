@@ -53,6 +53,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     deleteLanguages,
     fetchProjectById,
   } = useRecoilValue(dispatcherState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const locale = useRecoilValue(localeState(projectId));
   const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
   const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));

@@ -333,7 +333,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   const curLocation = await snapshot.getPromise(locationState(projectId));
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
-
+  languageStorage.setLocale(botName, locale);
   try {
     schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
   } catch (err) {
