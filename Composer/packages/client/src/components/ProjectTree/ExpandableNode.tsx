@@ -21,8 +21,6 @@ const summaryStyle = css`
   display: flex;
   padding-left: 12px;
   padding-top: 6px;
-  outline: none;
-  border: none;
 `;
 
 const nodeStyle = (depth: number) => css`
