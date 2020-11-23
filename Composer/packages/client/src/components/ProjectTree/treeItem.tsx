@@ -149,8 +149,13 @@ export const overflowSet = (isBroken: boolean) => css`
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
   }
-  margin-top: 2px;
 `;
+
+const moreButtonContainer = {
+  root: {
+    lineHeight: '1',
+  },
+};
 
 const statusIcon = {
   fontSize: 15,
@@ -398,7 +403,7 @@ const onRenderOverflowButton = (
   return (overflowItems: IContextualMenuItem[] | undefined) => {
     if (overflowItems == null) return null;
     return (
-      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
+      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
         <IconButton
           ariaLabel={moreLabel}
           className="dialog-more-btn"
