@@ -5,8 +5,6 @@
 import { jsx } from '@emotion/core';
 import {
   DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
   IColumn,
   CheckboxVisibility,
   IDetailsColumnStyleProps,
@@ -65,9 +63,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       props.updateItems(newItems);
     }
   };
-  const colomnStyle: IStyleFunctionOrObject<IDetailsColumnStyleProps, IDetailsColumnStyles> = {
-    root: { display: 'flex', alignItems: 'center' },
-  };
   const columns = [
     {
       key: 'PublishTime',
@@ -79,7 +74,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isRowHeader: true,
       isResizable: true,
       data: 'string',
-      styles: colomnStyle,
       onRender: (item: IStatus) => {
         return <span>{moment(item.time).format('h:mm a')}</span>;
       },
@@ -94,7 +88,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 90,
       isRowHeader: true,
       isResizable: true,
-      styles: colomnStyle,
       onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: IStatus) => {
@@ -111,7 +104,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 40,
       isResizable: true,
       data: 'string',
-      styles: colomnStyle,
       onRender: (item: IStatus) => {
         if (item.status === 200) {
           return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
@@ -138,7 +130,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      styles: colomnStyle,
       onRender: (item: IStatus) => {
         return (
           <span>
@@ -170,7 +161,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      styles: colomnStyle,
       onRender: (item: IStatus) => {
         return <span>{item.comment}</span>;
       },
@@ -239,14 +229,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             isSortedDescending: currentSort.descending,
           }))}
           css={detailList}
-          getKey={(item) => item.id}
-          groupProps={{
-            showEmptyGroups: true,
-          }}
           items={items}
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.single}
-          setKey="none"
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {

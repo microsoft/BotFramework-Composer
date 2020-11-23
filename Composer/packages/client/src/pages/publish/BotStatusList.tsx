@@ -103,6 +103,21 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     if (!option) return null;
     return <div style={option.data && option.data.style}>{option.text}</div>;
   };
+  const onRenderStatus = (item: IBotStatus): JSX.Element | null => {
+    if (!item.status) {
+      return null;
+    } else if (item.status === 200) {
+      return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
+    } else if (item.status === 202) {
+      return (
+        <div style={{ display: 'flex' }}>
+          <Spinner size={SpinnerSize.small} />
+        </div>
+      );
+    } else {
+      return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
+    }
+  };
   const handleChangePublishTarget = (item: IBotStatus, option?: IDropdownOption): void => {
     if (option) {
       if (option.key === 'manageProfiles') {
@@ -120,9 +135,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       newShowHistoryBots = showHistoryBots.concat(item.id);
     }
     setShowHistoryBots(newShowHistoryBots);
-  };
-  const colomnStyle: IStyleFunctionOrObject<IDetailsColumnStyleProps, IDetailsColumnStyles> = {
-    root: { display: 'flex', alignItems: 'center' },
   };
   const columns = [
     {
@@ -191,17 +203,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        if (item.status === 200) {
-          return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
-        } else if (item.status === 202) {
-          return (
-            <div style={{ display: 'flex' }}>
-              <Spinner size={SpinnerSize.small} />
-            </div>
-          );
-        } else {
-          return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
-        }
+        return onRenderStatus(item);
       },
       isPadded: true,
     },
@@ -233,7 +235,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      styles: colomnStyle,
       onRender: (item: IBotStatus) => {
         return <span>{item.comment}</span>;
       },
@@ -250,11 +251,11 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      styles: colomnStyle,
       onRender: (item: IBotStatus) => {
         return (
           <IconButton
             iconProps={{ iconName: showHistoryBots.includes(item.id) ? 'ChevronDown' : 'ChevronRight' }}
+            styles={{ root: { float: 'right' } }}
             onClick={() => changeShowHistoryBots(item)}
           />
         );
