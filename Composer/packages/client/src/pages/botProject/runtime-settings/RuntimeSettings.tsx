@@ -22,6 +22,7 @@ import {
   botDisplayNameState,
   settingsState,
   isEjectRuntimeExistState,
+  locationState,
 } from '../../../recoilModel';
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -44,6 +45,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const ejectedRuntimeExists = useRecoilValue(isEjectRuntimeExistState(projectId));
+  const botLocation = useRecoilValue(locationState(projectId));
 
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
   const {
@@ -187,7 +189,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           errorMessage={formDataErrors.path}
           label={formatMessage('Runtime code location')}
           styles={name}
-          value={settings.runtime ? settings.runtime.path : ''}
+          value={settings.runtime ? `${botLocation}/${settings.runtime.path}` : ''}
           onChange={updateSetting('path')}
           onRenderLabel={onRenderLabel}
         />
