@@ -14,12 +14,11 @@ import { PublishTarget } from '@bfc/shared';
 import {
   CheckboxVisibility,
   DetailsList,
-  DetailsListLayoutMode,
   IColumn,
   IDetailsColumnStyleProps,
   IDetailsColumnStyles,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { IStyleFunctionOrObject, SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
+import { IStyleFunctionOrObject } from 'office-ui-fabric-react/lib/Utilities';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import { navigateTo } from '../../utils/navigation';
