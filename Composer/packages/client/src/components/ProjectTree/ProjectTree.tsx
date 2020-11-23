@@ -396,7 +396,7 @@ export const ProjectTree: React.FC<Props> = ({
         ]
       : [];
 
-    if (!isPvaSchema) {
+    if (!isPvaSchema && options.showMenu) {
       menu.splice(1, 0, {
         label: formatMessage('Add new knowledge base'),
         icon: 'Add',
