@@ -141,7 +141,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
         setLocale(storedLocale, rootBotProjectId);
       }
     }
-  }, [botProjectSpaceLoaded, rootBotProjectId]);
+  }, [botProjectSpaceLoaded, rootBotProjectId, botProjects]);
 
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {
