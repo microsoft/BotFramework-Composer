@@ -35,6 +35,12 @@ jest.mock('../../store/store', () => {
 
 jest.mock('azure-storage', () => {});
 
+jest.mock('fs-extra', () => ({
+  ensureDir: jest.fn().mockReturnValue(true),
+  existsSync: jest.fn().mockReturnValue(true),
+  remove: jest.fn().mockResolvedValue(undefined),
+}));
+
 const projPath = Path.resolve(__dirname, '../../__mocks__/samplebots/bot1');
 
 const saveAsDir = Path.resolve(__dirname, '../../__mocks__/samplebots/saveas');
@@ -73,5 +79,36 @@ describe('test BotProjectService', () => {
     const currentProject = await BotProjectService.getProjectById(currentProjectId);
     const targetProjectId = await BotProjectService.saveProjectAs(currentProject, location2);
     expect((await BotProjectService.getProjectById(targetProjectId)).dir).toBe(saveAsDir);
+  });
+
+  describe('backing up a project', () => {
+    const envBackup = { ...process.env };
+    const mockProject: any = {
+      cloneFiles: jest.fn().mockResolvedValue(undefined),
+      dir: '/bot/dir',
+      id: 'botId',
+    };
+
+    beforeAll(() => {
+      process.env.COMPOSER_BACKUP_DIR = '/path/to/backup';
+    });
+
+    afterAll(() => {
+      Object.assign(process.env, envBackup);
+    });
+
+    it('should backup a project', async () => {
+      const backupPath = await BotProjectService.backupProject(mockProject);
+
+      expect(backupPath.startsWith(Path.join(process.env.COMPOSER_BACKUP_DIR as string), mockProject));
+    });
+
+    it('should throw an error if something goes wrong', async () => {
+      const error = new Error('There was a project cloning the files.');
+      mockProject.cloneFiles.mockRejectedValueOnce(error);
+      expect(async () => await BotProjectService.backupProject(mockProject)).rejects.toThrowError(
+        new Error(`Failed to backup project ${mockProject.id}: ${error}`)
+      );
+    });
   });
 });
