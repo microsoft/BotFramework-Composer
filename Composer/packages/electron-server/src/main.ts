@@ -7,21 +7,21 @@ import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
 import { app, ipcMain } from 'electron';
 import { UpdateInfo } from 'electron-updater';
 import fixPath from 'fix-path';
-import { mkdirp } from 'fs-extra';
 import formatMessage from 'format-message';
+import { mkdirp } from 'fs-extra';
 
 import { initAppMenu } from './appMenu';
 import { AppUpdater } from './appUpdater';
+import { OneAuthService } from './auth/oneAuthService';
 import { composerProtocol } from './constants';
 import ElectronWindow from './electronWindow';
 import { initSplashScreen } from './splash/splashScreen';
 import { isDevelopment } from './utility/env';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
-import { loadLocale, getAppLocale, updateAppLocale } from './utility/locale';
+import { getAppLocale, loadLocale, updateAppLocale } from './utility/locale';
 import log from './utility/logger';
-import { isMac, isWindows } from './utility/platform';
+import { isLinux, isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
-import { OneAuthService } from './auth/oneAuthService';
 
 const env = log.extend('env');
 env('%O', process.env);
@@ -50,6 +50,10 @@ const getBaseUrl = () => {
 // set production flag
 if (app.isPackaged) {
   process.env.NODE_ENV = 'production';
+  // Windows and Mac use the window title as the app name, but some linux distributions use package name, this will fix that.
+  if (isLinux()) {
+    app.setName('Bot Framework Composer');
+  }
 }
 log(`${process.env.NODE_ENV} environment detected.`);
 
@@ -249,6 +253,7 @@ async function run() {
     const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
     const { startApp, updateStatus } = await initSplashScreen({
       getMainWindow,
+      icon: join(__dirname, '../resources/composerIcon_1024x1024.png'),
       color: 'rgb(0, 120, 212)',
       logo: `file://${microsoftLogoPath}`,
       productName: 'Bot Framework Composer',

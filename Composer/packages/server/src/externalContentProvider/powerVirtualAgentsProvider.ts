@@ -75,11 +75,14 @@ const getBaseUrl = () => {
   }
 };
 
-function prettyPrintError(err: string | any): string {
+function prettyPrintError(err: string | Error): string {
   if (typeof err === 'string') {
     return err;
   }
-  return JSON.stringify(err, null, 2);
+  if (err && err.message) {
+    return err.message;
+  }
+  return '';
 }
 
 export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVirtualAgentsMetadata> {
@@ -109,7 +112,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       // write the zip to disk
       if (result && result.body) {
         ensureDirSync(this.tempBotAssetsDir);
-        const zipPath = join(this.tempBotAssetsDir, `bot-assets-${Date.now()}.zip-}`);
+        const zipPath = join(this.tempBotAssetsDir, `bot-assets-${Date.now()}.zip`);
         const writeStream = createWriteStream(zipPath);
         await new Promise((resolve, reject) => {
           writeStream.once('finish', resolve);
