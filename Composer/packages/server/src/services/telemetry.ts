@@ -4,9 +4,10 @@
 import * as AppInsights from 'applicationinsights';
 import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes } from '@bfc/shared';
 
-import { SettingsService } from './settings';
 import { APPINSIGHTS_INSTRUMENTATIONKEY, piiProperties } from '../constants';
 import { useElectronContext } from '../utility/electronContext';
+
+import { SettingsService } from './settings';
 
 let client;
 if (APPINSIGHTS_INSTRUMENTATIONKEY) {
