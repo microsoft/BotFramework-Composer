@@ -3111,10 +3111,10 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20201112.185066":
-  version "4.10.0-daily.20201112.185066"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201112.185066.tgz#e86f3a5c0ec9d58db3ed55148d5ad41fecf4b095"
-  integrity sha1-6G86XA7J1Y2z7VUUjVrUH+z0sJU=
+"@microsoft/bf-generate-library@^4.10.0-daily.20201123.188303":
+  version "4.10.0-daily.20201123.188303"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201123.188303.tgz#92e763d4a1bab1657f84fc67a49d4b0ae02c178b"
+  integrity sha1-kudj1KG6sWV/hPxnpJ1LCuAsF4s=
   dependencies:
     "@microsoft/bf-lu" "^4.11.0"
     adaptive-expressions "^4.11.0"
@@ -5900,7 +5900,7 @@ binary@^0.3.0:
 
 bindings@1.2.1:
   version "1.2.1"
-  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
   integrity sha1-FK1hE4EtLTfXLme0ystLtyZQXxE=
 
 bl@^1.0.0, bl@^4.0.3:
@@ -14372,8 +14372,8 @@ mixin-object@^2.0.1:
 
 mkdirp-classic@^0.5.2, mkdirp-classic@^0.5.3:
   version "0.5.3"
-  resolved "https://registry.yarnpkg.com/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
-  integrity sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
+  integrity sha1-+hDJEVzG2IZb4iG6R+6b7XhgERM=
 
 mkdirp-then@^1.2.0:
   version "1.2.0"
@@ -19270,8 +19270,8 @@ tar-fs@^1.13.0:
 
 tar-fs@^2.0.0:
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-2.1.1.tgz#489a15ab85f1f0befabb370b7de4f9eb5cbe8784"
-  integrity sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tar-fs/-/tar-fs-2.1.1.tgz#489a15ab85f1f0befabb370b7de4f9eb5cbe8784"
+  integrity sha1-SJoVq4Xx8L76uzcLfeT561y+h4Q=
   dependencies:
     chownr "^1.1.1"
     mkdirp-classic "^0.5.2"
