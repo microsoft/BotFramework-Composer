@@ -338,12 +338,23 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       );
     }
   };
-  const changePublishTarget = (publishTarget, botStatus) => {
-    const newBotStatusItems = botStatusList.map((status) => {
-      if (status.id === botStatus.id) {
-        status.publishTarget = publishTarget;
+  const changePublishTarget = (publishTarget, currentBotStatus) => {
+    const newBotStatusItems = botStatusList.map((botStatus) => {
+      if (currentBotStatus.id === botStatus.id) {
+        botStatus.publishTarget = publishTarget;
+        const botPublishHistory = botPublishHistoryList.find(
+          (publishHistory) => publishHistory.projectId === botStatus.id
+        )?.publishHistory[publishTarget];
+        if (botPublishHistory && botPublishHistory.length > 0) {
+          botStatus.status = botPublishHistory[0].status;
+          botStatus.comment = botPublishHistory[0].comment;
+          botStatus.message = botPublishHistory[0].message;
+          botStatus.time = botPublishHistory[0].time;
+        } else {
+          botStatus = { ...botStatus, status: undefined, comment: '', message: '', time: '' };
+        }
       }
-      return status;
+      return botStatus;
     });
     setBotStatusList(newBotStatusItems);
   };

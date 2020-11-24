@@ -226,6 +226,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           }))}
           css={detailList}
           items={items}
+          styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {

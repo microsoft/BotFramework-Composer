@@ -82,7 +82,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     item.publishTargets &&
       item.publishTargets.forEach((target, index) => {
         options.push({
-          key: index,
+          key: target.name,
           text: target.name,
         });
       });
@@ -186,7 +186,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        return <span>{moment(item.time).format('MM-DD-YYYY')}</span>;
+        return <span>{item.time ? moment(item.time).format('MM-DD-YYYY') : null}</span>;
       },
       isPadded: true,
     },
@@ -306,6 +306,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
           }))}
           css={detailList}
           items={items}
+          styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {
