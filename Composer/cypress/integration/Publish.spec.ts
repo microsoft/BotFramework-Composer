@@ -43,7 +43,7 @@ context('Publish Page', () => {
   });
   it('can publish in publish page', () => {
     // status list exist
-    cy.contains('Time');
+    cy.contains('Bot');
     cy.contains('Date');
     cy.findByTestId('Publish').findByTestId('publish-status-list').should('exist');
   });
