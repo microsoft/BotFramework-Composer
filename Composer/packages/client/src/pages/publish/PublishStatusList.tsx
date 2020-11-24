@@ -15,6 +15,7 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
 import { listRoot, tableView, detailList } from './styles';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 export interface IStatusListProps {
   items: IStatus[];
@@ -60,7 +61,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishTime',
       name: formatMessage('Time'),
-      className: 'publishtime',
+      className: 'publishTime',
       fieldName: 'time',
       minWidth: 70,
       maxWidth: 90,
@@ -75,7 +76,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishDate',
       name: formatMessage('Date'),
-      className: 'publishdate',
+      className: 'publishDate',
       fieldName: 'date',
       minWidth: 70,
       maxWidth: 90,
@@ -91,7 +92,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishStatus',
       name: formatMessage('Status'),
-      className: 'publishstatus',
+      className: 'publishStatus',
       fieldName: 'status',
       minWidth: 40,
       maxWidth: 40,
@@ -99,7 +100,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       data: 'string',
       onRender: (item: IStatus) => {
         if (item.status === 200) {
-          return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
+          return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
         } else if (item.status === 202) {
           return (
             <div style={{ display: 'flex' }}>
@@ -107,7 +108,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             </div>
           );
         } else {
-          return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
+          return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
         }
       },
       isPadded: true,
@@ -115,7 +116,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishMessage',
       name: formatMessage('Message'),
-      className: 'publishmessage',
+      className: 'publishMessage',
       fieldName: 'message',
       minWidth: 150,
       maxWidth: 300,
@@ -187,7 +188,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishRollback',
       name: '',
-      className: 'publishrollback',
+      className: 'publishRollback',
       fieldName: 'publishRollback',
       minWidth: 70,
       maxWidth: 90,

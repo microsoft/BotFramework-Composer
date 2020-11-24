@@ -45,15 +45,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
-  const botsettingList: { projectId: string; setting: DialogSetting }[] = [];
+  const botSettingList: { projectId: string; setting: DialogSetting }[] = [];
   const statusList: IBotStatus[] = [];
   const botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[] = [];
-  const publishHistoyList: { projectId: string; publishHistory: IStatus[] }[] = [];
+  const publishHistoryList: { projectId: string; publishHistory: IStatus[] }[] = [];
   const publishTargetsList: { projectId: string; publishTargets: PublishTarget[] }[] = [];
   const [hasGetPublishHistory, setHasGetPublishHistory] = useState<boolean>(false);
   botProjectData.forEach((bot) => {
     const botProjectId = bot.projectId;
-    botsettingList.push({
+    botSettingList.push({
       projectId: botProjectId,
       setting: bot.setting,
     });
@@ -62,7 +62,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       publishTypes: bot.publishTypes,
     });
     const publishHistory = bot.publishHistory;
-    publishHistoyList.push({
+    publishHistoryList.push({
       projectId: botProjectId,
       publishHistory,
     });
@@ -93,7 +93,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
     { projectId: string; publishHistory: IStatus[] }[]
-  >(publishHistoyList);
+  >(publishHistoryList);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [pullDialogHidden, setPullDialogHidden] = useState(true);
@@ -111,9 +111,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     if (version.id && version.status === 200 && target) {
       const publishTypes = botPublishTypesList.find((type) => type.projectId === projectId)?.publishTypes;
       const type = publishTypes?.filter((t) => t.name === target.type)[0];
-      if (type?.features?.rollback) {
-        return true;
-      }
+      return !!type?.features?.rollback;
     }
     return false;
   };
@@ -138,7 +136,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       element: (
         <ActionButton
           data-testid="publishPage-Toolbar-Publish"
-          disabled={selectedBots.length > 0 ? false : true}
+          disabled={selectedBots.length === 0}
           onClick={() => setPublishDialogHidden(false)}
         >
           <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -229,8 +227,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     // init publishHistoryList
-    if (publishHistoyList.length > 0) {
-      setBotPublishHistoryList(publishHistoyList);
+    if (publishHistoryList.length > 0) {
+      setBotPublishHistoryList(publishHistoryList);
     }
     // get the latest publishHistory when publish bots.
     if (!hasGetPublishHistory) {
@@ -248,7 +246,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [botProjectData.length]);
 
   const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
-    const setting = botsettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
+    const setting = botSettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
     const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
     if (setting) {
       const sensitiveSettings = getSensitiveProperties(setting);
@@ -303,33 +301,29 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification(notification);
 
     // publish to remote
-    if (items.length > 0) {
-      for (const bot of items) {
-        if (bot.publishTarget && bot.publishTargets) {
-          const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
-          const botProjectId = bot.id;
-          const setting = botsettingList.find((botsetting) => botsetting.projectId === bot.id)?.setting;
-          if (setting && setting.publishTargets) {
-            if (setting.qna && Object(setting.qna).subscriptionKey) {
-              await setQnASettings(botProjectId, Object(setting.qna).subscriptionKey);
+    for (const bot of items) {
+      if (bot.publishTarget && bot.publishTargets) {
+        const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
+        const botProjectId = bot.id;
+        const setting = botSettingList.find((botsetting) => botsetting.projectId === bot.id)?.setting;
+        if (setting && setting.publishTargets) {
+          await setQnASettings(botProjectId, setting?.qna?.subscriptionKey);
+          const sensitiveSettings = getSensitiveProperties(setting);
+          await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
+
+          // update the target with a lastPublished date
+          const updatedPublishTargets = setting.publishTargets.map((profile) => {
+            if (profile.name === selectedTarget?.name) {
+              return {
+                ...profile,
+                lastPublished: new Date(),
+              };
+            } else {
+              return profile;
             }
-            const sensitiveSettings = getSensitiveProperties(setting);
-            await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
+          });
 
-            // update the target with a lastPublished date
-            const updatedPublishTargets = setting.publishTargets.map((profile) => {
-              if (profile.name === selectedTarget?.name) {
-                return {
-                  ...profile,
-                  lastPublished: new Date(),
-                };
-              } else {
-                return profile;
-              }
-            });
-
-            await setPublishTargets(updatedPublishTargets, botProjectId);
-          }
+          await setPublishTargets(updatedPublishTargets, botProjectId);
         }
       }
       setBotStatusList(
@@ -375,7 +369,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{formatMessage('Publish Your bots')}</h1>
+        <h1 css={HeaderText}>{formatMessage('Publish your bots')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">

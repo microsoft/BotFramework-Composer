@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
@@ -6,27 +7,20 @@ import moment from 'moment';
 import formatMessage from 'format-message';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import React, { useState } from 'react';
-import { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishTarget } from '@bfc/shared';
-import {
-  CheckboxVisibility,
-  DetailsList,
-  IColumn,
-  IDetailsColumnStyleProps,
-  IDetailsColumnStyles,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { IStyleFunctionOrObject } from 'office-ui-fabric-react/lib/Utilities';
+import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import { navigateTo } from '../../utils/navigation';
 
 import { IStatus, PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
+import { SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/styling';
 
-// Licensed under the MIT License.
 export type IBotStatus = {
   id: string;
   name: string;
@@ -75,7 +69,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const changeSelected = (item: IBotStatus, isChecked?: boolean) => {
     let newSelectedBots: IBotStatus[];
     if (isChecked) {
-      newSelectedBots = selectedBots.concat(item);
+      newSelectedBots = [...selectedBots, item];
     } else {
       newSelectedBots = selectedBots.filter((bot) => bot.id !== item.id);
     }
@@ -86,9 +80,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const publishTargetOptions = (item: IBotStatus): IDropdownOption[] => {
     const options: IDropdownOption[] = [];
     item.publishTargets &&
-      item.publishTargets.forEach((target) => {
+      item.publishTargets.forEach((target, index) => {
         options.push({
-          key: target.name,
+          key: index,
           text: target.name,
         });
       });
@@ -107,7 +101,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     if (!item.status) {
       return null;
     } else if (item.status === 200) {
-      return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
+      return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
     } else if (item.status === 202) {
       return (
         <div style={{ display: 'flex' }}>
@@ -115,7 +109,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
         </div>
       );
     } else {
-      return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
+      return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
     }
   };
   const handleChangePublishTarget = (item: IBotStatus, option?: IDropdownOption): void => {
@@ -132,15 +126,15 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     if (showHistoryBots.includes(item.id)) {
       newShowHistoryBots = showHistoryBots.filter((id) => id !== item.id);
     } else {
-      newShowHistoryBots = showHistoryBots.concat(item.id);
+      newShowHistoryBots = [...showHistoryBots, item.id];
     }
     setShowHistoryBots(newShowHistoryBots);
   };
   const columns = [
     {
       key: 'Bot',
-      name: formatMessage('name'),
-      className: 'publishname',
+      name: formatMessage('Bot'),
+      className: 'publishName',
       fieldName: 'name',
       minWidth: 114,
       maxWidth: 134,
@@ -156,7 +150,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     {
       key: 'PublishTarget',
       name: formatMessage('Publish target'),
-      className: 'publishtarget',
+      className: 'publishTarget',
       fieldName: 'target',
       minWidth: 114,
       maxWidth: 134,
@@ -180,7 +174,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     {
       key: 'PublishDate',
       name: formatMessage('Date'),
-      className: 'publishdate',
+      className: 'publishDate',
       fieldName: 'date',
       minWidth: 114,
       maxWidth: 134,
@@ -195,7 +189,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     {
       key: 'PublishStatus',
       name: formatMessage('Status'),
-      className: 'publishstatus',
+      className: 'publishStatus',
       fieldName: 'status',
       minWidth: 114,
       maxWidth: 134,
@@ -210,7 +204,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     {
       key: 'PublishMessage',
       name: formatMessage('Message'),
-      className: 'publishmessage',
+      className: 'publishMessage',
       fieldName: 'message',
       minWidth: 150,
       maxWidth: 300,
@@ -243,7 +237,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     {
       key: 'ShowPublishHistory',
       name: formatMessage(''),
-      className: 'showhistory',
+      className: 'showHistory',
       fieldName: 'showHistory',
       minWidth: 150,
       maxWidth: 300,
@@ -282,7 +276,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             Publish history
           </div>
           {publishStatusList.length === 0 ? (
-            <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+            <div style={{ fontSize: FontSizes.small, margin: '20px 0 0 50px' }}>No publish history</div>
           ) : (
             <PublishStatusList
               items={publishStatusList}
