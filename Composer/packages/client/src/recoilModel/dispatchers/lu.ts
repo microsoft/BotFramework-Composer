@@ -261,6 +261,7 @@ export const luDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
+
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return luFiles;
       try {
