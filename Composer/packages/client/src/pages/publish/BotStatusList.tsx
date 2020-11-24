@@ -34,7 +34,7 @@ export type IBotStatus = {
 export type IBotStatusListProps = {
   projectId: string;
   items: IBotStatus[];
-  botPublishHistoryList: { projectId: string; publishHistory: IStatus[] }[];
+  botPublishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[];
   updateItems: (items: IBotStatus[]) => void;
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;

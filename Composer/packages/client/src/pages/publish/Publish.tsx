@@ -48,7 +48,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const botSettingList: { projectId: string; setting: DialogSetting }[] = [];
   const statusList: IBotStatus[] = [];
   const botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[] = [];
-  const publishHistoryList: { projectId: string; publishHistory: IStatus[] }[] = [];
+  const publishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[] = [];
   const publishTargetsList: { projectId: string; publishTargets: PublishTarget[] }[] = [];
   const [hasGetPublishHistory, setHasGetPublishHistory] = useState<boolean>(false);
   botProjectData.forEach((bot) => {
@@ -92,7 +92,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
-    { projectId: string; publishHistory: IStatus[] }[]
+    { projectId: string; publishHistory: { [key: string]: IStatus[] } }[]
   >(publishHistoryList);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
@@ -227,7 +227,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     // init publishHistoryList
-    if (publishHistoryList.length > 0) {
+    if (Object.keys(publishHistoryList).length > 0) {
       setBotPublishHistoryList(publishHistoryList);
     }
     // get the latest publishHistory when publish bots.
