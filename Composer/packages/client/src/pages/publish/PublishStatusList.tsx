@@ -3,30 +3,25 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-  IColumn,
-  IGroup,
-  CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, IColumn, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
-import { useMemo, useState, useEffect } from 'react';
+import { useState } from 'react';
 import formatMessage from 'format-message';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { listRoot, tableView, detailList } from './styles';
 
 export interface IStatusListProps {
   items: IStatus[];
-  groups: IGroup[];
-  onItemClick: (item: IStatus | null) => void;
+  isRollbackSupported: boolean;
+  onLogClick: (item: IStatus) => void;
+  onRollbackClick: (item: IStatus) => void;
   updateItems: (items: IStatus[]) => void;
 }
 
@@ -54,16 +49,12 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
-  const { items, onItemClick, groups } = props;
-  const [selectIndex, setSelectedIndex] = useState<number>();
+  const { items, isRollbackSupported, onLogClick, onRollbackClick } = props;
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
       column.isSortedDescending = !column.isSortedDescending;
-      let newItems: IStatus[] = [];
-      for (const group of groups) {
-        newItems = newItems.concat(items.slice(group.startIndex, group.startIndex + group.count).reverse());
-      }
+      const newItems: IStatus[] = items.reverse();
       props.updateItems(newItems);
     }
   };
@@ -71,7 +62,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishTime',
       name: formatMessage('Time'),
-      className: 'publishtime',
+      className: 'publishTime',
       fieldName: 'time',
       minWidth: 70,
       maxWidth: 90,
@@ -86,7 +77,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishDate',
       name: formatMessage('Date'),
-      className: 'publishdate',
+      className: 'publishDate',
       fieldName: 'date',
       minWidth: 70,
       maxWidth: 90,
@@ -102,7 +93,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishStatus',
       name: formatMessage('Status'),
-      className: 'publishstatus',
+      className: 'publishStatus',
       fieldName: 'status',
       minWidth: 40,
       maxWidth: 40,
@@ -110,7 +101,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       data: 'string',
       onRender: (item: IStatus) => {
         if (item.status === 200) {
-          return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
+          return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
         } else if (item.status === 202) {
           return (
             <div style={{ display: 'flex' }}>
@@ -118,7 +109,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             </div>
           );
         } else {
-          return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
+          return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
         }
       },
       isPadded: true,
@@ -126,7 +117,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     {
       key: 'PublishMessage',
       name: formatMessage('Message'),
-      className: 'publishmessage',
+      className: 'publishMessage',
       fieldName: 'message',
       minWidth: 150,
       maxWidth: 300,
@@ -170,30 +161,59 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       },
       isPadded: true,
     },
-  ];
-  const selection = useMemo(() => {
-    return new Selection({
-      onSelectionChanged: () => {
-        const selectedIndexs = selection.getSelectedIndices();
-        if (selectedIndexs.length > 0) {
-          setSelectedIndex(selectedIndexs[0]);
-        }
+    {
+      key: 'PublishLog',
+      name: '',
+      className: 'publishLog',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      isCollapsible: true,
+      isMultiline: true,
+      data: 'string',
+      onRender: (item: IStatus) => {
+        return (
+          <ActionButton
+            allowDisabledFocus
+            styles={{ root: { color: '#0078D4' } }}
+            onClick={() => {
+              onLogClick(item);
+            }}
+          >
+            {formatMessage('View log')}
+          </ActionButton>
+        );
       },
-    });
-  }, [items, groups]);
-
-  useEffect(() => {
-    // init the selected publish status after switch to another target
-    setSelectedIndex(undefined);
-  }, [groups]);
-
-  useEffect(() => {
-    if (items && typeof selectIndex === 'number' && items.length > selectIndex) {
-      onItemClick(items[selectIndex]);
-    } else {
-      onItemClick(null);
-    }
-  }, [selectIndex, items]);
+      isPadded: true,
+    },
+    {
+      key: 'PublishRollback',
+      name: '',
+      className: 'publishRollback',
+      fieldName: 'publishRollback',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      isCollapsible: true,
+      isMultiline: true,
+      data: 'string',
+      onRender: (item: IStatus) => {
+        return (
+          <ActionButton
+            allowDisabledFocus
+            disabled={!(isRollbackSupported && item.status === 200)}
+            styles={{ root: { color: '#0078D4' } }}
+            onClick={() => {
+              onRollbackClick(item);
+            }}
+          >
+            {formatMessage('Rollback')}
+          </ActionButton>
+        );
+      },
+      isPadded: true,
+    },
+  ];
 
   return (
     <div css={listRoot} data-testid={'publish-status-list'}>
@@ -207,19 +227,8 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             isSortedDescending: currentSort.descending,
           }))}
           css={detailList}
-          getKey={(item) => item.id}
-          groupProps={{
-            showEmptyGroups: true,
-          }}
-          groups={groups}
           items={items}
-          layoutMode={DetailsListLayoutMode.justified}
-          selection={selection}
-          selectionMode={SelectionMode.single}
-          setKey="none"
-          onActiveItemChanged={(item, index) => {
-            setSelectedIndex(index);
-          }}
+          styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {
