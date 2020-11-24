@@ -11,6 +11,7 @@ import { MainContainer } from './components/AppComponents/MainContainer';
 import { userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { dispatcherState } from './recoilModel/DispatcherWrapper';
+import { useInitializeLogger } from './telemetry/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -27,6 +28,8 @@ export const App: React.FC = () => {
     fetchFeatureFlags();
     fetchServerSettings();
   }, []);
+
+  useInitializeLogger();
 
   return (
     <Fragment key={appLocale}>
