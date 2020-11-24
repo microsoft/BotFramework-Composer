@@ -21,7 +21,7 @@ const GENERATEDFOLDER = 'generated';
 const SETTINGS = 'settings';
 const INTERRUPTION = 'interruption';
 const SAMPLE_SIZE_CONFIGURATION = 2;
-const CrossTrainConfigName = 'cross-train.config';
+const CrossTrainConfigName = 'cross-train.config.json';
 
 export type SingleConfig = {
   rootDialog: boolean;
