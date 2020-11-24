@@ -9,16 +9,16 @@ import {
   publishTypesState,
   publishHistoryState,
   currentProjectIdState,
+  botProjectIdsState,
 } from '../../../src/recoilModel';
-import { CreatePublishTarget } from '../../../src/pages/publish/createPublishTarget';
-import { PublishStatusList } from '../../../src/pages/publish/publishStatusList';
-import { TargetList } from '../../../src/pages/publish/targetList';
 import Publish from '../../../src/pages/publish/Publish';
-import { PublishDialog } from '../../../src/pages/publish/publishDialog';
+import { PublishDialog } from '../../../src/pages/publish/PublishDialog';
+import { BotStatusList } from '../../../src/pages/publish/BotStatusList';
 
-const state = {
-  projectId: 'test',
-  botName: 'test',
+const projectIds = ['rootTest', 'skillTest'];
+const rootState = {
+  projectId: 'rootTest',
+  botName: 'rootTest',
   settings: {
     defaultLanguage: 'en-us',
     languages: ['en-us', 'fr-fr'],
@@ -52,69 +52,118 @@ const state = {
   ],
   publishHistory: {},
 };
-
+const skillState = {
+  projectId: 'skillTest',
+  botName: 'skillTest',
+  settings: {
+    defaultLanguage: 'en-us',
+    languages: ['en-us', 'fr-fr'],
+    publishTargets: [
+      {
+        name: 'profile2',
+        type: 'azurewebapp',
+        configuration: '{}',
+      },
+    ],
+  },
+  publishTypes: [
+    {
+      name: 'azurePublish',
+      description: 'azure publish',
+      instructions: 'plugin instruction',
+      extensionId: 'azurePublish',
+      schema: {
+        default: {
+          test: 'test',
+        },
+      },
+      features: {
+        history: true,
+        publish: true,
+        status: true,
+        rollback: true,
+        pull: true,
+      },
+    },
+  ],
+  publishHistory: {},
+};
 const initRecoilState = ({ set }) => {
-  set(currentProjectIdState, state.projectId);
-  set(botDisplayNameState(state.projectId), state.botName);
-  set(publishTypesState(state.projectId), state.publishTypes);
-  set(publishHistoryState(state.projectId), state.publishHistory);
-  set(settingsState(state.projectId), state.settings);
+  set(currentProjectIdState, rootState.projectId);
+  set(botProjectIdsState, projectIds);
+  set(botDisplayNameState(rootState.projectId), rootState.botName);
+  set(publishTypesState(rootState.projectId), rootState.publishTypes);
+  set(publishHistoryState(rootState.projectId), rootState.publishHistory);
+  set(settingsState(rootState.projectId), rootState.settings);
+  set(botDisplayNameState(skillState.projectId), skillState.botName);
+  set(publishTypesState(skillState.projectId), skillState.publishTypes);
+  set(publishHistoryState(skillState.projectId), skillState.publishHistory);
+  set(settingsState(skillState.projectId), skillState.settings);
 };
 
 describe('publish page', () => {
   it('should render status list in publish page', () => {
     const { getByText } = renderWithRecoil(
-      <PublishStatusList groups={[]} items={[]} updateItems={jest.fn()} onItemClick={jest.fn()} />,
+      <BotStatusList
+        botPublishHistoryList={[]}
+        botPublishTypesList={[]}
+        changePublishTarget={jest.fn()}
+        items={[]}
+        projectId={rootState.projectId}
+        updateItems={jest.fn()}
+        updatePublishHistory={jest.fn()}
+        updateSelectedBots={jest.fn()}
+        onLogClick={jest.fn()}
+        onRollbackClick={jest.fn()}
+      />,
       initRecoilState
     );
-    getByText('Time');
+    getByText('Bot');
     getByText('Date');
     getByText('Status');
   });
 
-  it('should render target list in publish page', () => {
-    const { getByText } = renderWithRecoil(
-      <TargetList
-        list={state.settings.publishTargets}
-        selectedTarget={'all'}
-        onDelete={jest.fn()}
-        onEdit={jest.fn()}
-        onSelect={jest.fn()}
-      />,
-      initRecoilState
-    );
-    getByText('profile1');
-  });
-
-  it('should render create profile dialog in publish page', () => {
-    const { getByText } = renderWithRecoil(
-      <CreatePublishTarget
-        closeDialog={jest.fn()}
-        current={null}
-        targets={state.settings.publishTargets}
-        types={state.publishTypes}
-        updateSettings={jest.fn()}
-      />,
-      initRecoilState
-    );
-    getByText('Name');
-    getByText('Publish Destination Type');
-    getByText('Publish Configuration');
-  });
-
   it('should render publish dialog when click publish', () => {
+    const selectedBots = [
+      {
+        id: 'rootTest',
+        name: 'rootTest',
+        publishTarget: 'profile1',
+        publishTargets: [
+          {
+            name: 'profile1',
+            type: 'azurewebapp',
+            configuration: '{}',
+          },
+        ],
+      },
+      {
+        id: 'skillTest',
+        name: 'skillTest',
+        publishTarget: 'profile2',
+        publishTargets: [
+          {
+            name: 'profile2',
+            type: 'azurewebapp',
+            configuration: '{}',
+          },
+        ],
+      },
+    ];
     const { getByText } = renderWithRecoil(
-      <PublishDialog target={state.settings.publishTargets[0]} onDismiss={jest.fn()} onSubmit={jest.fn()} />,
+      <PublishDialog items={selectedBots} onDismiss={jest.fn()} onSubmit={jest.fn()} />,
       initRecoilState
     );
     getByText('Publish');
     getByText('You are about to publish your bot to the profile below. Do you want to proceed?');
-    getByText('profile1');
+    getByText('Bot');
+    getByText('Publish target');
+    getByText('Comments');
   });
 
-  it('should include add button and publish button in publish page', () => {
+  it('should include publish button and pull button in publish page', () => {
     const { getByText } = renderWithRecoil(<Publish />, initRecoilState);
-    getByText('Add new profile');
-    getByText('Publish to selected profile');
+    getByText('Publish selected bots');
+    getByText('Pull from selected profile');
   });
 });

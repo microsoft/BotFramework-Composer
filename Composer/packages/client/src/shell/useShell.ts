@@ -94,7 +94,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const isRootBot = rootBotProjectId === projectId;
 
   const userSettings = useRecoilValue(userSettingsState);
-  const clipboardActions = useRecoilValue(clipboardActionsState);
+  const clipboardActions = useRecoilValue(clipboardActionsState(projectId));
   const featureFlags = useRecoilValue(featureFlagsState);
   const {
     updateDialog,
@@ -221,7 +221,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
     onSelect: setVisualEditorSelection,
-    onCopy: setVisualEditorClipboard,
+    onCopy: (clipboardActions) => setVisualEditorClipboard(clipboardActions, projectId),
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
         createDialogBegin(
@@ -261,10 +261,15 @@ export function useShell(source: EventSource, projectId: string): Shell {
     confirm: OpenConfirmModal,
   };
 
-  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
-    dialogs,
-    dialogId,
-  ]) as DialogInfo;
+  const currentDialog = useMemo(() => {
+    let result: any = dialogs.find((d) => d.id === dialogId) ?? dialogs.find((dialog) => dialog.isRoot);
+    if (!result) {
+      // Should not hit here as the seed content should atleast be the root dialog if no current dialog
+      result = stubDialog();
+    }
+    return result;
+  }, [dialogs, dialogId]);
+
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')

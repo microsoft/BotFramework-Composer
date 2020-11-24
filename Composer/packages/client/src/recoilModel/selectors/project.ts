@@ -22,6 +22,8 @@ import {
   jsonSchemaFilesState,
   projectMetaDataState,
   settingsState,
+  publishHistoryState,
+  publishTypesState,
   dialogIdsState,
   dialogState,
   schemasState,
@@ -109,6 +111,8 @@ export const botProjectSpaceSelector = selector({
       };
 
       const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+      const publishHistory = get(publishHistoryState(projectId));
+      const publishTypes = get(publishTypesState(projectId));
 
       return {
         dialogs,
@@ -118,10 +122,12 @@ export const botProjectSpaceSelector = selector({
         ...metaData,
         setting,
         error: botError,
-        diagnostics,
         botNameId,
+        diagnostics,
         buildEssentials,
         isPvaSchema,
+        publishHistory,
+        publishTypes,
       };
     });
     return result;
