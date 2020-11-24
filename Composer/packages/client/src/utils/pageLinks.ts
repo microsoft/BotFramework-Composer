@@ -69,11 +69,11 @@ export const topLinks = (
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/botProjectsSettings`,
+      to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
       iconName: 'BotProjectsSettings',
       labelName: formatMessage('Project Settings'),
       disabled: !botLoaded,
-      match: /\/[0-9.]+\/(skill\/)?botProjectsSettings$/,
+      match: /botProjectsSettings/,
     },
     ...(showFormDialog
       ? [
