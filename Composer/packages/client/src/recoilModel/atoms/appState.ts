@@ -102,7 +102,7 @@ export const onboardingState = atom<{
   },
 });
 
-export const clipboardActionsState = atom<any[]>({
+export const clipboardActionsState = atomFamily<any[], string>({
   key: getFullyQualifiedKey('clipboardActions'),
   default: [],
 });

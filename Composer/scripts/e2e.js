@@ -54,7 +54,7 @@ Wait for the server to come up and then start cypress.
   console.log(msg);
 
   // wait for a second so that users can see value of ENV variables.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 2000);
   });
 }
@@ -69,7 +69,7 @@ async function setup() {
 }
 
 async function run() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const startCommand = isDev ? 'start:dev' : 'start';
     const server = spawn('yarn', [startCommand], { cwd: path.resolve(rootDir), stdio: 'inherit' });
 
@@ -77,9 +77,9 @@ async function run() {
       resolve();
     });
 
-    const cleanupServer = code => server.kill(code);
+    const cleanupServer = (code) => server.kill(code);
 
-    ['beforeExit', 'SIGINT'].forEach(evt => {
+    ['beforeExit', 'SIGINT'].forEach((evt) => {
       process.on(evt, cleanupServer);
     });
   });
@@ -91,9 +91,6 @@ function cleanup() {
 
 console.clear();
 
-processArgs()
-  .then(setup)
-  .then(run)
-  .then(cleanup);
+processArgs().then(setup).then(run).then(cleanup);
 
 process.on('SIGINT', cleanup);
