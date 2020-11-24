@@ -70,8 +70,15 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      if (currentProject.settings?.runtime?.customRuntime && currentProject.settings?.runtime?.path) {
-        const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+
+
+      let runtimePath = currentProject.settings?.runtime?.path;
+      if (runtimePath && !path.isAbsolute(runtimePath)) {
+        runtimePath = path.resolve(currentProject.dir, runtimePath)
+      }
+
+      if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
+        const manifestFile = runtime.identifyManifest(runtimePath);
 
         const dryrun = new SchemaMerger(
           [manifestFile],
@@ -117,16 +124,21 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      if (packageName && currentProject.settings?.runtime?.path) {
+      let runtimePath = currentProject.settings?.runtime?.path;
+      if (runtimePath && !path.isAbsolute(runtimePath)) {
+        runtimePath = path.resolve(currentProject.dir, runtimePath)
+      }
+
+      if (packageName && runtimePath) {
         try {
           // Call the runtime's component install mechanism.
           const installOutput = await runtime.installComponent(
-            currentProject.settings?.runtime?.path || '',
+            runtimePath,
             packageName,
             version
           );
 
-          const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+          const manifestFile = runtime.identifyManifest(runtimePath);
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
@@ -198,7 +210,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Error in import', { message: err.message });
           try {
-            await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
+            await runtime.uninstallComponent(runtimePath, packageName);
           } catch (err) {
             composer.log('Error uninstalling', err);
           }
@@ -206,12 +218,12 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           if (packageName.match(/.*\/.*/)) {
             const [user, realPackageName] = packageName.split(/\//);
             if (!user.match(/^@/)) {
-              await runtime.uninstallComponent(currentProject.settings.runtime.path, realPackageName);
+              await runtime.uninstallComponent(runtimePath, realPackageName);
             }
           }
           res.status(500).json({ success: false, message: err.message });
         }
-      } else if (!currentProject.settings?.runtime?.path) {
+      } else if (!runtimePath) {
         res.status(500).json({ message: 'Please eject your runtime before installing a package.' });
       } else {
         res.status(500).json({ message: 'Please specify a package name or git url to import.' });
@@ -229,13 +241,18 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
+      let runtimePath = currentProject.settings?.runtime?.path;
+      if (runtimePath && !path.isAbsolute(runtimePath)) {
+        runtimePath = path.resolve(currentProject.dir, runtimePath)
+      }
+
       // get URL or package name
       const packageName = req.body.package;
-      if (packageName && currentProject.settings?.runtime?.path) {
+      if (packageName && runtimePath) {
         try {
-          const output = await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
+          const output = await runtime.uninstallComponent(runtimePath, packageName);
 
-          const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+          const manifestFile = runtime.identifyManifest(runtimePath);
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
