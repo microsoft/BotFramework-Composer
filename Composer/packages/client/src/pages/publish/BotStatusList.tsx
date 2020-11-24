@@ -13,14 +13,14 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishTarget } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/styling';
 
 import { navigateTo } from '../../utils/navigation';
+import { PublishType } from '../../recoilModel/types';
 
 import { IStatus, PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes } from '@uifabric/styling';
-import { PublishType } from '../../recoilModel/types';
 
 export type IBotStatus = {
   id: string;
@@ -36,7 +36,7 @@ export type IBotStatusListProps = {
   projectId: string;
   items: IBotStatus[];
   botPublishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[];
-  botPublishTypesList: { projectId: string; publishTypes: { [key: string]: PublishType[] } }[];
+  botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[];
   updateItems: (items: IBotStatus[]) => void;
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
@@ -243,7 +243,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     },
     {
       key: 'ShowPublishHistory',
-      name: formatMessage(''),
+      name: '',
       className: 'showHistory',
       fieldName: 'showHistory',
       minWidth: 150,
@@ -273,7 +273,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     const publishType = botPublishTypesList
       .find((type) => type.projectId === item.id)
       ?.publishTypes?.filter((t) => t.name === target?.type)[0];
-    const isRollbackSupported = target && !!publishType?.features?.rollback;
+    const isRollbackSupported = !!target && !!publishType?.features?.rollback;
     const handleRollbackClick = (selectedVersion) => {
       onRollbackClick(selectedVersion, item);
     };

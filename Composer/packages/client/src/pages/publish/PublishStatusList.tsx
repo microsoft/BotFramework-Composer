@@ -13,9 +13,9 @@ import moment from 'moment';
 import { useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { listRoot, tableView, detailList } from './styles';
-import { SharedColors } from '@uifabric/fluent-theme';
 
 export interface IStatusListProps {
   items: IStatus[];
@@ -202,10 +202,10 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           <ActionButton
             allowDisabledFocus
             disabled={!(isRollbackSupported && item.status === 200)}
+            styles={{ root: { color: '#0078D4' } }}
             onClick={() => {
               onRollbackClick(item);
             }}
-            styles={{ root: { color: '#0078D4' } }}
           >
             {formatMessage('Rollback')}
           </ActionButton>
