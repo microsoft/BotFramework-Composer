@@ -224,6 +224,10 @@ export const ProjectTree: React.FC<Props> = ({
 
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
+  const createSubtree = useCallback(() => {
+    return projectCollection.map(createBotSubtree);
+  }, [projectCollection]);
+
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
     return <LoadingSpinner />;
@@ -312,7 +316,7 @@ export const ProjectTree: React.FC<Props> = ({
           {
             label: formatMessage('Settings'),
             onClick: () => {
-              navigateTo(createBotSettingUrl(bot.projectId, link.skillId));
+              navigateTo(createBotSettingUrl(link.projectId, link.skillId));
             },
           },
         ]
@@ -658,7 +662,7 @@ export const ProjectTree: React.FC<Props> = ({
     }
   };
 
-  const projectTree = projectCollection.map(createBotSubtree);
+  const projectTree = createSubtree();
 
   return (
     <div
