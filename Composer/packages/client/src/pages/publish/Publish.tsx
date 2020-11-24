@@ -307,7 +307,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         const botProjectId = bot.id;
         const setting = botSettingList.find((botsetting) => botsetting.projectId === bot.id)?.setting;
         if (setting && setting.publishTargets) {
-          await setQnASettings(botProjectId, setting?.qna?.subscriptionKey);
+          setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
           const sensitiveSettings = getSensitiveProperties(setting);
           await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
 
