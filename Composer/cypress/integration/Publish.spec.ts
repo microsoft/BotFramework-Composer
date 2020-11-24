@@ -41,10 +41,24 @@ context('Publish Page', () => {
     cy.visit('/home');
     cy.createBot('EchoBot');
   });
-  it('can publish in publish page', () => {
-    // status list exist
+  it('can add profile and publish in publish page', () => {
+    // click left nav button
+    cy.findByTestId('LeftNav-CommandBarButtonPublish').click();
+    cy.findByText('__TestEchoBot');
+
+    // TODO: Check if the added publishing target exists in the publish page
     cy.contains('Bot');
-    cy.contains('Publish target');
-    cy.findByTestId('Publish').findByTestId('bot-status-list').should('exist');
+    cy.contains('Date');
+    cy.visitPage('Project Settings');
+    cy.findByText('Add new publish profile').click();
+    cy.findByText('Add a publish profile').should('exist');
+    cy.findAllByPlaceholderText('My Publish Profile').first().type('testProfile');
+    cy.findByText('Choose One').click();
+    cy.findByText('azure publish').click();
+    // save profile
+    cy.findByText('Save').click();
+
+    cy.findByTestId('LeftNav-CommandBarButtonPublish').click();
+    cy.findByText('testProfile');
   });
 });
