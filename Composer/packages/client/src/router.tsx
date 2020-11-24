@@ -121,7 +121,7 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const { fetchProjectById, setSettings, setLocale, setCurrentProjectId } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
   const localBots = useRecoilValue(localBotsDataSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
