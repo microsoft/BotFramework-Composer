@@ -98,6 +98,50 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     });
   };
 
+  const toolbarItems: IToolbarItem[] = [
+    {
+      type: 'dropdown',
+      text: formatMessage('Edit'),
+      align: 'left',
+      dataTestid: 'EditFlyout',
+      buttonProps: {
+        iconProps: { iconName: 'Edit' },
+      },
+      menuProps: {
+        items: [
+          {
+            key: 'edit.deleteBot',
+            text: formatMessage('Delete Bot'),
+            onClick: openDeleteBotModal,
+          },
+          {
+            key: 'edit.deleteLanguage',
+            text: formatMessage('Delete language'),
+            onClick: () => {
+              delLanguageDialogBegin(projectId, () => {});
+            },
+          },
+        ],
+      },
+    },
+
+    {
+      type: 'action',
+      text: formatMessage('Add language'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'CirclePlus',
+        },
+        onClick: () => {
+          addLanguageDialogBegin(projectId, () => {});
+        },
+      },
+      align: 'left',
+      dataTestid: 'AddLanguageFlyout',
+      disabled: false,
+    },
+  ];
+
   const title = useMemo(() => {
     const page = links.find((l) => location.pathname.includes(l.url));
     if (page) {
@@ -121,7 +165,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
       navRegionName={formatMessage('Settings menu')}
       pageMode={'settings'}
       title={title}
-      toolbarItems={[]}
+      toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <AddLanguageModal
