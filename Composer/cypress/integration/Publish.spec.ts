@@ -46,7 +46,6 @@ context('Publish Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonPublish').click();
     cy.findByText('__TestEchoBot');
 
-    // TODO: Check if the added publishing target exists in the publish page
     cy.contains('Bot');
     cy.contains('Date');
     cy.visitPage('Project Settings');
