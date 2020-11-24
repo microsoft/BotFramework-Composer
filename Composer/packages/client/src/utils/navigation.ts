@@ -124,15 +124,12 @@ export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
 }
 
 export function createBotSettingUrl(rootProjectId: string, activeProjectId?: string) {
-  let url = '';
-  const base = `/bot/${rootProjectId}/botProjectsSettings`;
-  if (!activeProjectId || rootProjectId === activeProjectId) {
-    url = `${base}/root`;
-  } else {
-    url = `${base}/${activeProjectId}`;
+  let url = `/bot/${rootProjectId}`;
+  if (activeProjectId && rootProjectId !== activeProjectId) {
+    url = `${url}/skill/${activeProjectId}`;
   }
 
-  return url;
+  return `${url}/botProjectsSettings`;
 }
 
 export function createDiagnosticsPageUrl(rootProjectId: string, activeProjectId?: string) {
