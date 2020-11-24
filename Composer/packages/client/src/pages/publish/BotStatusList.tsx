@@ -115,7 +115,11 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const handleChangePublishTarget = (item: IBotStatus, option?: IDropdownOption): void => {
     if (option) {
       if (option.key === 'manageProfiles') {
-        navigateTo(`/bot/${projectId}/botProjectsSettings/${item.id === projectId ? 'root' : item.id}`);
+        const url =
+          item.id === projectId
+            ? `/bot/${projectId}/botProjectsSettings`
+            : `bot/${projectId}/skill/${item.id}/botProjectsSettings`;
+        navigateTo(url);
         return;
       }
       changePublishTarget(option.text, item);
