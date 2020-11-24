@@ -150,11 +150,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   }, [props.projectId]);
 
   useEffect(() => {
-    if (props.skillId) {
-      setCurrentProjectId(props.skillId);
-    } else {
-      setCurrentProjectId(projectId);
-    }
+    setCurrentProjectId(props.skillId ?? props.projectId ?? '');
   }, [props.projectId, props.skillId]);
 
   useEffect(() => {
