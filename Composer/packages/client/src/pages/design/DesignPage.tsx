@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, checkForPVASchema, Diagnostic } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
@@ -167,7 +167,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateZoomRate,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
-    createQnAFromUrlDialogBegin,
     createTrigger,
     deleteTrigger,
     createQnATrigger,
@@ -467,21 +466,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         },
       },
     ];
-
-    // TODO: refactor when Composer can better model the PVA scenarios
-    if (schemas && !checkForPVASchema(schemas.sdk)) {
-      items.push({
-        'data-testid': 'AddNewKnowledgebase',
-        key: 'addKnowledge',
-        text: formatMessage(` Add new knowledge base on {displayName}`, {
-          displayName: currentDialog?.displayName ?? '',
-        }),
-        onClick: () => {
-          if (!projectId || !dialogId) return;
-          createQnAFromUrlDialogBegin({ projectId, dialogId });
-        },
-      });
-    }
     return items;
   };
 
@@ -584,32 +568,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !showEnableBtn,
             onClick: () => {
               EditorAPI.Actions.EnableSelection();
-            },
-          },
-        ],
-      },
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Export'),
-      align: 'left',
-      buttonProps: {
-        iconProps: { iconName: 'OpenInNewWindow' },
-      },
-      menuProps: {
-        items: [
-          {
-            key: 'zipexport',
-            text: formatMessage('Export assets to .zip'),
-            onClick: () => {
-              exportToZip(projectId);
-            },
-          },
-          {
-            key: 'exportAsSkill',
-            text: formatMessage('Export as skill'),
-            onClick: () => {
-              setExportSkillModalInfo(projectId);
             },
           },
         ],
