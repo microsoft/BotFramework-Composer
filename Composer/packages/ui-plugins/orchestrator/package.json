@@ -1,0 +1,41 @@
+{
+  "name": "@bfc/ui-plugin-orchestrator",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Botframework Composer plugin that adds orchestrator recognizer.",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "tsc --watch --preserveWatchOutput",
+    "build": "tsc --build ./tsconfig.build.json",
+    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "prepare": "yarn build"
+  },
+  "keywords": [
+    "botframework",
+    "composer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension-client": "*",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension-client": "*",
+    "@types/react": "16.9.23",
+    "@types/react-dom": "16.9.5",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "dependencies": {
+    "@bfc/shared": "*",
+    "@bfc/indexers": "*",
+    "@emotion/core": "^10.0.27"
+  }
+}

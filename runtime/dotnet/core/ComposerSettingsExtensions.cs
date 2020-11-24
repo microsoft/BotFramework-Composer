@@ -55,6 +55,13 @@ namespace Microsoft.BotFramework.Composer.Core
                 builder.AddJsonFile(qnaSettingsFile.FullName, optional: false, reloadOnChange: true);
             }
 
+            var orchestratorSettingsPath = Path.GetFullPath(Path.Combine(botRoot, "generated", "orchestrator.settings.json"));
+            var orchestratorSettingsFile = new FileInfo(orchestratorSettingsPath);
+            if (orchestratorSettingsFile.Exists)
+            {
+                builder.AddJsonFile(orchestratorSettingsFile.FullName, optional: false, reloadOnChange: true);
+            }
+
             return builder;
         }
     }

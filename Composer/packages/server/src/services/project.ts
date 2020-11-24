@@ -20,13 +20,13 @@ import { Path } from './../utility/path';
 const MAX_RECENT_BOTS = 7;
 
 /** Metadata stored by Composer and associated by internal bot project id */
-type BotProjectMetadata = {
+export type BotProjectMetadata = {
   alias?: string;
   eTag?: string;
   path: string;
 };
 
-type BotProjectLocationMap = Record<string, BotProjectMetadata>;
+export type BotProjectLocationMap = Record<string, BotProjectMetadata>;
 
 /** Converts old bot project location maps to the new shape */
 function fixOldBotProjectMapEntries(
@@ -54,7 +54,7 @@ export class BotProjectService {
 
   private static initialize() {
     if (!BotProjectService.recentBotProjects || BotProjectService.recentBotProjects.length === 0) {
-      BotProjectService.recentBotProjects = Store.get('recentBotProjects');
+      BotProjectService.recentBotProjects = Store.get('recentBotProjects', []);
     }
 
     if (!BotProjectService.projectLocationMap || Object.keys(BotProjectService.projectLocationMap).length === 0) {
