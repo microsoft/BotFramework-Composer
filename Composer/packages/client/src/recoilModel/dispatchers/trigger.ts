@@ -128,24 +128,28 @@ export const triggerDispatcher = () => {
       try {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
+        const locale = await snapshot.getPromise(localeState(projectId));
+        const luFiles = await snapshot.getPromise(luFilesState(projectId));
+        const luFile = luFiles.find((file) => file.id === `${dialogId}.${locale}`);
 
         const { removeLuIntent, removeLgTemplates } = dispatcher;
 
         if (trigger.$kind === SDKKinds.OnIntent) {
           const intentName = trigger.intent as string;
-          removeLuIntent({ id: dialogId, intentName, projectId });
+          luFile && removeLuIntent({ id: luFile.id, intentName, projectId });
         }
 
         // Clean action resources
         const actions = trigger.actions as BaseSchema[];
         if (!actions || !Array.isArray(actions)) return;
 
-        deleteActions(
-          actions,
-          (templateNames: string[]) => removeLgTemplates({ id: dialogId, templateNames, projectId }),
-          (intentNames: string[]) =>
-            Promise.all(intentNames.map((intentName) => removeLuIntent({ id: dialogId, intentName, projectId })))
-        );
+        luFile &&
+          deleteActions(
+            actions,
+            (templateNames: string[]) => removeLgTemplates({ id: dialogId, templateNames, projectId }),
+            (intentNames: string[]) =>
+              Promise.all(intentNames.map((intentName) => removeLuIntent({ id: luFile.id, intentName, projectId })))
+          );
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
