@@ -16,6 +16,7 @@ import {
   LgFile,
   QnAFile,
   BotProjectFile,
+  SDKKinds,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 
@@ -52,18 +53,19 @@ const checkSetting = (assets: {
 
   let useLUIS = false;
   let useQnA = false;
-  dialogs.forEach((item) => {
-    const luFileName = item.luFile;
+  dialogs.forEach((dialogItem) => {
+    const luFileName = dialogItem.luFile;
     if (luFileName) {
       const luFileId = luFileName.replace(/\.lu$/, '');
       luFiles
         .filter(({ id }) => getBaseName(id) === luFileId)
         .forEach((item) => {
-          if (!item.empty) useLUIS = true;
+          if (!item.empty && (dialogItem.luProvider !== undefined || dialogItem.luProvider === SDKKinds.LuisRecognizer))
+            useLUIS = true;
         });
     }
 
-    const qnaFileName = item.qnaFile;
+    const qnaFileName = dialogItem.qnaFile;
     if (qnaFileName) {
       const qnaFileId = qnaFileName.replace(/\.qna$/, '').replace(/\.lu$/, '');
       qnaFiles

@@ -28,7 +28,7 @@ import {
   dialogState,
   schemasState,
 } from '../atoms';
-import { dialogsSelectorFamily, buildEssentialsSelector } from '../selectors';
+import { dialogsSelectorFamily, buildEssentialsSelector, validateDialogsSelectorFamily } from '../selectors';
 
 // Actions
 export const localBotsWithoutErrorsSelector = selector({
@@ -76,7 +76,7 @@ export const botProjectSpaceSelector = selector({
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
-      const dialogs = get(dialogsSelectorFamily(projectId));
+      const dialogs = get(validateDialogsSelectorFamily(projectId));
       const luFiles = get(luFilesState(projectId));
       const lgFiles = get(lgFilesState(projectId));
       const qnaFiles = get(qnaFilesState(projectId));
