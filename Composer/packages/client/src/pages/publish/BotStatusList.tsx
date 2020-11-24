@@ -303,7 +303,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     );
   };
   return (
-    <div css={listRoot} data-testid={'publish-status-list'}>
+    <div css={listRoot} data-testid={'bot-status-list'}>
       <div css={tableView}>
         <DetailsList
           isHeaderVisible
