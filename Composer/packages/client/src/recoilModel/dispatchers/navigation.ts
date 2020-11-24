@@ -6,6 +6,7 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { PromptTab } from '@bfc/shared';
 
+import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
 import { dialogsSelectorFamily, rootBotProjectIdSelector } from '../selectors';
 
@@ -22,6 +23,7 @@ export const navigationDispatcher = () => {
       } else if (selected) {
         focusPath = dialogId + '#.' + selected;
       }
+      set(currentProjectIdState, projectId);
       set(focusPathState(projectId), focusPath);
       set(designPageLocationState(projectId), {
         dialogId,
@@ -42,6 +44,8 @@ export const navigationDispatcher = () => {
       if (rootBotProjectId == null) return;
 
       const projectId = skillId ?? rootBotProjectId;
+
+      set(currentProjectIdState, projectId);
 
       const currentUri =
         trigger == null
@@ -68,6 +72,8 @@ export const navigationDispatcher = () => {
       if (rootBotProjectId == null) return;
 
       const projectId = skillId ?? rootBotProjectId;
+
+      set(currentProjectIdState, projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
 
       // target dialogId, projectId maybe empty string  ""
@@ -95,6 +101,7 @@ export const navigationDispatcher = () => {
       focusPath: string,
       fragment: string
     ) => {
+      set(currentProjectIdState, skillId ?? projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
       const { dialogId, selected } = designPageLocation;
 
@@ -138,6 +145,8 @@ export const navigationDispatcher = () => {
       selectPath: string,
       focusPath: string
     ) => {
+      set(currentProjectIdState, projectId);
+
       const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId)?.content;
       const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog, selectPath);

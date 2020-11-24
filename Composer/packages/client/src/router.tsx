@@ -150,14 +150,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   }, [props.projectId]);
 
   useEffect(() => {
-    if (props.skillId) {
-      setCurrentProjectId(props.skillId);
-    } else {
-      setCurrentProjectId(projectId);
-    }
-  }, [props.projectId, props.skillId]);
-
-  useEffect(() => {
     const schemaError = schemas?.diagnostics ?? [];
     if (schemaError.length !== 0) {
       const title = formatMessage('Error Processing Schema');

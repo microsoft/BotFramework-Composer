@@ -19,7 +19,7 @@ const rootDir = path.resolve(__dirname, '..');
 
 process.env.COMPOSER_BOTS_FOLDER = path.resolve(rootDir, 'cypress/__test_bots__');
 process.env.COMPOSER_APP_DATA = path.resolve(rootDir, 'cypress/__e2e_data.json');
-let isDev = true;
+let isDev = false;
 
 async function processArgs() {
   const args = process.argv.slice(2);

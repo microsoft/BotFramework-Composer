@@ -69,7 +69,7 @@ export const topLinks = (
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${rootProjectId}/botProjectsSettings`,
+      to: `/bot/${projectId}/botProjectsSettings`,
       iconName: 'BotProjectsSettings',
       labelName: formatMessage('Project Settings'),
       disabled: !botLoaded,
