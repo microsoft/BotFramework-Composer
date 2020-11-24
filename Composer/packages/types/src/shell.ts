@@ -4,10 +4,20 @@
 
 import { AxiosInstance } from 'axios';
 
-import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
+import type {
+  DialogInfo,
+  LuFile,
+  LgFile,
+  QnAFile,
+  LuIntentSection,
+  LgTemplate,
+  DialogSchemaFile,
+  LuProviderType,
+} from './indexers';
 import type { ILUFeaturesConfig, SkillSetting, UserSettings, DialogSetting } from './settings';
 import type { JSONSchema7 } from './schema';
 import { MicrosoftIDialog } from './sdk';
+import { FeatureFlagKey } from './featureFlags';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
@@ -51,6 +61,7 @@ export type ApplicationContextApi = {
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   announce: (message: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
+  isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
 };
@@ -105,6 +116,7 @@ export type ProjectContextApi = {
   createQnATrigger: (id: string) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
+  updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
 
 export type ProjectContext = {

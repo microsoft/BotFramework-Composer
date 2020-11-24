@@ -443,7 +443,7 @@ export const ProjectTree: React.FC<Props> = ({
         `}
         role="grid"
       >
-        <TreeItem showProps isSubItemActive={false} link={link} textWidth={leftSplitWidth - TREE_PADDING} />
+        <TreeItem hasChildren showProps isSubItemActive={false} link={link} textWidth={leftSplitWidth - TREE_PADDING} />
       </span>
     );
   };

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@botframework-composer/types';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo, FeatureFlagKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -27,6 +27,7 @@ import {
   luFilesState,
   rateInfoState,
   rootBotProjectIdSelector,
+  featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 import httpClient from '../utils/httpUtil';
@@ -82,9 +83,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
-
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const featureFlags = useRecoilValue(featureFlagsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -101,6 +102,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkill,
     updateZoomRate,
+    updateRecognizer,
     reloadProject,
     setApplicationLevelError,
   } = useRecoilValue(dispatcherState);
@@ -202,6 +204,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         commitChanges();
       });
     },
+    updateRecognizer,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -232,6 +235,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     redo,
     commitChanges,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
+    isFeatureEnabled: (featureFlagKey: FeatureFlagKey): boolean => featureFlags?.[featureFlagKey]?.enabled ?? false,
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
