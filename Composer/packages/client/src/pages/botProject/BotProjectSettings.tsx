@@ -19,7 +19,7 @@ import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';
 import { settingsState, userSettingsState, schemasState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-import { navigateTo } from '../../utils/navigation';
+import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
@@ -57,17 +57,18 @@ const mainContentHeader = css`
 // -------------------- BotProjectSettings -------------------- //
 
 const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
+  const { projectId = '', skillId } = props;
   const botProjects = useRecoilValue(localBotsDataSelector);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
-  const projectId = (props['*'] === 'root' ? rootBotProjectId : props['*']) || '';
-  const schemas = useRecoilValue(schemasState(projectId));
-  const botProject = botProjects.find((b) => b.projectId === projectId);
+  const currentProjectId = skillId ?? projectId;
+  const schemas = useRecoilValue(schemasState(currentProjectId));
+  const botProject = botProjects.find((b) => b.projectId === currentProjectId);
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
-  const settings = useRecoilValue(settingsState(projectId));
-  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
+  const settings = useRecoilValue(settingsState(currentProjectId));
+  const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
 
   const [isAdvancedSettingsEnabled, setAdvancedSettingsEnabled] = useState<boolean>(false);
 
@@ -80,9 +81,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
         id: b.projectId,
         name: b.name,
         ariaLabel: formatMessage('bot'),
-        url: b.isRootBot
-          ? `/bot/${rootBotProjectId}/botProjectsSettings/root`
-          : `/bot/${rootBotProjectId}/botProjectsSettings/${b.projectId}`,
+        url: createBotSettingUrl(rootBotProjectId ?? '', b.projectId),
         isRootBot: b.isRootBot,
       };
     });
@@ -102,7 +101,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   };
 
   const saveChangeResult = (result: DialogSetting) => {
-    setSettings(projectId, result);
+    setSettings(currentProjectId, result);
   };
 
   const handleChange = (result: any) => {
@@ -113,7 +112,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   };
 
   if (!botProject) {
-    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings/root`);
+    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings`);
     return null;
   }
 
@@ -149,13 +148,13 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
             <JsonEditor
               key={'settingsjson'}
               editorSettings={userSettings.codeEditor}
-              id={projectId}
+              id={currentProjectId}
               schema={schemas.sdk.content}
               value={mergedSettings}
               onChange={handleChange}
             />
           ) : (
-            <BotProjectSettingsTableView projectId={projectId} />
+            <BotProjectSettingsTableView projectId={currentProjectId} />
           )}
         </div>
       </Suspense>

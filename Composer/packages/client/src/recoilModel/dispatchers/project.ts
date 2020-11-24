@@ -493,6 +493,10 @@ export const projectDispatcher = () => {
     }
   );
 
+  const setCurrentProjectId = useRecoilCallback(({ set }: CallbackInterface) => async (projectId: string) => {
+    set(currentProjectIdState, projectId);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -512,5 +516,6 @@ export const projectDispatcher = () => {
     replaceSkillInBotProject,
     reloadProject,
     updateCreationMessage,
+    setCurrentProjectId,
   };
 };

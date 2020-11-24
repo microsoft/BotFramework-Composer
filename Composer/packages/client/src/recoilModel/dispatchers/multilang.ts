@@ -69,7 +69,7 @@ export const multilangDispatcher = () => {
             const skillBotProjectId = botProjects[i].projectId;
             const settings = await snapshot.getPromise(settingsState(skillBotProjectId));
             const languages = settings.languages;
-            const defaultLang = settings.defaultLang;
+            const defaultLang = settings.defaultLanguage;
             if (!languages.includes(locale)) {
               addLanguages({
                 languages: [locale],

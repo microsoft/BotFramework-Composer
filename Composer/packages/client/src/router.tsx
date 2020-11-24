@@ -61,15 +61,23 @@ const Routes = (props) => {
           />
           <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
-          <Redirect noThrow from="/bot/:projectId/botProjectsSettings" to="/bot/:projectId/botProjectsSettings/root" />
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
+          <ProjectRouter path="/bot/:projectId/skill/:skillId">
+            <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/:dialogId/*" />
+            <BotProjectSettings path="botProjectsSettings" />
+            <Diagnostics path="diagnostics" />
+            <DesignPage path="*" />
+          </ProjectRouter>
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <Publish path="publish/:targetName" />
-            <BotProjectSettings path="botProjectsSettings/*" />
+            <BotProjectSettings path="botProjectsSettings" />
             <FormDialogPage path="forms/:schemaId/*" />
             <FormDialogPage path="forms/*" />
             <DesignPage path="*" />
@@ -82,14 +90,6 @@ const Routes = (props) => {
                 pluginId={page.id}
               />
             ))}
-          </ProjectRouter>
-          <ProjectRouter path="/bot/:projectId/skill/:skillId">
-            <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/:dialogId/*" />
-            <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/:dialogId/*" />
-            <Diagnostics path="diagnostics" />
-            <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
@@ -141,7 +141,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
         setLocale(storedLocale, rootBotProjectId);
       }
     }
-  }, [botProjectSpaceLoaded, rootBotProjectId]);
+  }, [botProjectSpaceLoaded, rootBotProjectId, botProjects]);
 
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {
