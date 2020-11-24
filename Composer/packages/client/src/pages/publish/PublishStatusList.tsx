@@ -19,6 +19,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 export interface IStatusListProps {
   items: IStatus[];
+  isRollbackSupported: boolean;
   onLogClick: (item: IStatus) => void;
   onRollbackClick: (item: IStatus) => void;
   updateItems: (items: IStatus[]) => void;
@@ -48,7 +49,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
-  const { items, onLogClick, onRollbackClick } = props;
+  const { items, isRollbackSupported, onLogClick, onRollbackClick } = props;
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
@@ -200,6 +201,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
         return (
           <ActionButton
             allowDisabledFocus
+            disabled={!(isRollbackSupported && item.status === 200)}
             onClick={() => {
               onRollbackClick(item);
             }}

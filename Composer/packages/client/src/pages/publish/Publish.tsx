@@ -25,7 +25,7 @@ import { BotStatusList, IBotStatus } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
 
-const getPublishStatusInterval = 10000;
+const publishStatusInterval = 10000;
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectData = useRecoilValue(localBotsDataSelector);
@@ -101,21 +101,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   // items to show in the list
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
 
-  const isRollbackSupported = (
-    targetName: string,
-    version: IStatus,
-    publishTargets: PublishTarget[],
-    projectId: string
-  ): boolean => {
-    const target = publishTargets.find((publishTarget) => publishTarget.name === targetName);
-    if (version.id && version.status === 200 && target) {
-      const publishTypes = botPublishTypesList.find((type) => type.projectId === projectId)?.publishTypes;
-      const type = publishTypes?.filter((t) => t.name === target.type)[0];
-      return !!type?.features?.rollback;
-    }
-    return false;
-  };
-
   const isPullSupported = useMemo(() => {
     return !!selectedBots.find((bot) => {
       const publishTypes = botPublishTypesList.find((types) => types.projectId === bot.id)?.publishTypes;
@@ -169,7 +154,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
       setTimeout(async () => {
         getPublishStatus(botProjectId, target);
-      }, getPublishStatusInterval);
+      }, publishStatusInterval);
     }
   };
 
@@ -245,6 +230,18 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setBotStatusList(statusList);
   }, [botProjectData.length]);
 
+  useEffect(() => {
+    setSelectedBots(
+      selectedBots.map((selectedBot) => {
+        const bot = botStatusList.find((botStatus) => botStatus.id === selectedBot.id);
+        if (bot) {
+          selectedBot = { ...bot, comment: '', message: '', status: undefined, time: '' };
+        }
+        return selectedBot;
+      })
+    );
+  }, [botStatusList]);
+
   const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
     const setting = botSettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
     const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
@@ -255,10 +252,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const onRollbackToVersion = (selectedVersion: IStatus, item: IBotStatus) => {
-    item.publishTarget &&
-      item.publishTargets &&
-      isRollbackSupported(item.publishTarget, selectedVersion, item.publishTargets, item.id) &&
-      rollbackToVersion(selectedVersion, item);
+    item.publishTarget && item.publishTargets && rollbackToVersion(selectedVersion, item);
   };
   const onShowLog = (selectedVersion) => {
     setSelectedVersion(selectedVersion);
@@ -386,6 +380,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <BotStatusList
             botPublishHistoryList={botPublishHistoryList}
+            botPublishTypesList={botPublishTypesList}
             changePublishTarget={changePublishTarget}
             items={botStatusList}
             projectId={projectId}

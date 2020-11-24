@@ -20,6 +20,7 @@ import { IStatus, PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
+import { PublishType } from '../../recoilModel/types';
 
 export type IBotStatus = {
   id: string;
@@ -35,6 +36,7 @@ export type IBotStatusListProps = {
   projectId: string;
   items: IBotStatus[];
   botPublishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[];
+  botPublishTypesList: { projectId: string; publishTypes: { [key: string]: PublishType[] } }[];
   updateItems: (items: IBotStatus[]) => void;
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
@@ -48,6 +50,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     projectId,
     items,
     botPublishHistoryList,
+    botPublishTypesList,
     updateItems,
     updatePublishHistory,
     changePublishTarget,
@@ -266,6 +269,11 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     const publishStatusList: IStatus[] = item.publishTarget
       ? botPublishHistoryList.find((list) => list.projectId === item.id)?.publishHistory[item.publishTarget] || []
       : [];
+    const target = item.publishTargets?.find((target) => target.name === item.publishTarget);
+    const publishType = botPublishTypesList
+      .find((type) => type.projectId === item.id)
+      ?.publishTypes?.filter((t) => t.name === target?.type)[0];
+    const isRollbackSupported = target && !!publishType?.features?.rollback;
     const handleRollbackClick = (selectedVersion) => {
       onRollbackClick(selectedVersion, item);
     };
@@ -283,6 +291,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             <div style={{ fontSize: FontSizes.small, margin: '20px 0 0 50px' }}>No publish history</div>
           ) : (
             <PublishStatusList
+              isRollbackSupported={isRollbackSupported}
               items={publishStatusList}
               updateItems={hanldeUpdatePublishHistory}
               onLogClick={onLogClick}
