@@ -27,6 +27,7 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { isLUISMandatory, isQnAKeyMandatory } from '../../utils/dialogValidator';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -101,6 +102,7 @@ const errorTextStyle = css`
 
 type RootBotExternalServiceProps = {
   projectId: string;
+  hash?: string;
 };
 
 const onRenderLabel = (props) => {
@@ -125,7 +127,7 @@ const errorElement = (errorText: string) => {
 };
 
 export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, hash = '' } = props;
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
 
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
@@ -154,6 +156,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
 
+  const luisKeyFieldRef = React.useRef<HTMLInputElement>(null);
+  const qnaKeyFieldRef = React.useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
@@ -178,6 +182,15 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   useEffect(() => {
     setLocalRootLuisKey(rootLuisKey);
   }, [rootLuisKey]);
+
+  useEffect(() => {
+    if (luisKeyFieldRef.current && hash === 'luisKey') {
+      luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (qnaKeyFieldRef.current && hash === 'qnaKey') {
+      qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [hash]);
 
   const handleRootLUISKeyOnChange = (e, value) => {
     if (value) {
@@ -262,6 +275,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           aria-labelledby={'LUIS key'}
           data-testId={'rootLUISKey'}
           errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
+          id={'luisKey'}
           label={formatMessage('LUIS key')}
           placeholder={'Enter LUIS key'}
           required={isLUISKeyNeeded}
@@ -287,6 +301,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           aria-labelledby={'QnA Maker Subscription key'}
           data-testId={'QnASubscriptionKey'}
           errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
+          id={'qnaKey'}
           label={formatMessage('QnA Maker Subscription key')}
           placeholder={'Enter QnA Maker Subscription key'}
           required={isQnAKeyNeeded}

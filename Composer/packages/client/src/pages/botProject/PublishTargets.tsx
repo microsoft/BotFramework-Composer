@@ -94,10 +94,11 @@ const publishTargetsEditButton = css`
 
 type PublishTargetsProps = {
   projectId: string;
+  hash?: string;
 };
 
 export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, hash = '' } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
@@ -116,6 +117,8 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [editDialogHidden, setEditDialogHidden] = useState(true);
+
+  const publishTargetsRef = React.useRef<HTMLInputElement>(null);
 
   const onEdit = useCallback(
     async (index: number, item: PublishTarget) => {
@@ -191,10 +194,16 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     }
   }, [projectId]);
 
+  useEffect(() => {
+    if (publishTargetsRef.current && hash === '#addNewPublishProfile') {
+      publishTargetsRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
   return (
     <Fragment>
       <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={titleStyle}>
-        <div css={publishTargetsContainer}>
+        <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
           <div css={publishTargetsHeader}>
             <div css={publishTargetsHeaderText}>{formatMessage('Name')} </div>
             <div css={publishTargetsHeaderText}>{formatMessage('Type')} </div>

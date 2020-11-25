@@ -26,22 +26,29 @@ const container = css`
   height: 100%;
 `;
 
+const publishTargetsWrap = (isLastComponent) => css`
+  margin-bottom: ${isLastComponent ? '120px' : 0};
+`;
+
 // -------------------- BotProjectSettingsTableView -------------------- //
 
-export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { projectId = '' } = props;
+export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{ projectId: string; hash: string }>> = (
+  props
+) => {
+  const { projectId = '', hash = '' } = props;
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
-
   return (
     <div css={container}>
       {isRootBot && <SkillHostEndPoint projectId={projectId} />}
       <AppIdAndPassword projectId={projectId} />
-      <ExternalService projectId={projectId} />
+      <ExternalService hash={hash} projectId={projectId} />
       <BotLanguage projectId={projectId} />
       <RuntimeSettings projectId={projectId} />
-      <PublishTargets projectId={projectId} />
+      <div css={publishTargetsWrap(!isRootBot)}>
+        <PublishTargets hash={hash} projectId={projectId} />
+      </div>
       {isRootBot && <DeleteBotButton projectId={projectId} />}
     </div>
   );

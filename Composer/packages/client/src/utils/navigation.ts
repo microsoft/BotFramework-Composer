@@ -123,13 +123,16 @@ export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
   return `${baseURL}${pageMode}/${dialogId ?? 'all'}`;
 }
 
-export function createBotSettingUrl(rootProjectId: string, activeProjectId?: string) {
+export function createBotSettingUrl(rootProjectId: string, activeProjectId?: string, hash?: string) {
   let url = `/bot/${rootProjectId}`;
   if (activeProjectId && rootProjectId !== activeProjectId) {
     url = `${url}/skill/${activeProjectId}`;
   }
-
-  return `${url}/botProjectsSettings`;
+  url = `${url}/botProjectsSettings`;
+  if (hash) {
+    url = `${url}/${hash}`;
+  }
+  return url;
 }
 
 export function createDiagnosticsPageUrl(rootProjectId: string, activeProjectId?: string) {
