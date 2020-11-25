@@ -230,18 +230,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setBotStatusList(statusList);
   }, [botProjectData.length]);
 
-  useEffect(() => {
-    setSelectedBots(
-      selectedBots.map((selectedBot) => {
-        const bot = botStatusList.find((botStatus) => botStatus.id === selectedBot.id);
-        if (bot) {
-          selectedBot = { ...bot, comment: '', message: '', status: undefined, time: '' };
-        }
-        return selectedBot;
-      })
-    );
-  }, [botStatusList]);
-
   const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
     const setting = botSettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
     const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
@@ -351,6 +339,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       return botStatus;
     });
     setBotStatusList(newBotStatusItems);
+    setSelectedBots(
+      selectedBots.map((selectedBot) => {
+        const bot = newBotStatusItems.find((botStatus) => botStatus.id === selectedBot.id);
+        if (bot) {
+          selectedBot = { ...bot, comment: '', message: '', status: undefined, time: '' };
+        }
+        return selectedBot;
+      })
+    );
   };
 
   return (
