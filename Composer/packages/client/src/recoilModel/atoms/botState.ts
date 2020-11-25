@@ -19,7 +19,7 @@ import {
   RecognizerFile,
   Skill,
 } from '@bfc/shared';
-import { atomFamily } from 'recoil';
+import { atom, atomFamily } from 'recoil';
 
 import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
@@ -226,9 +226,9 @@ export const onAddSkillDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const displaySkillManifestState = atomFamily<any, string>({
+export const displaySkillManifestState = atom({
   key: getFullyQualifiedKey('displaySkillManifest'),
-  default: undefined,
+  default: '',
 });
 
 export const showAddLanguageModalState = atomFamily<boolean, string>({

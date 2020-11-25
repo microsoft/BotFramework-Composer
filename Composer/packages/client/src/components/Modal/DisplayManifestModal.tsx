@@ -16,7 +16,7 @@ import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 import { useRecoilValue } from 'recoil';
 
-import { skillNameIdentifierByProjectIdSelector, skillsStateSelector, userSettingsState } from '../../recoilModel';
+import { skillsStateSelector, userSettingsState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -53,23 +53,21 @@ const dragOptions: IDragOptions = {
 interface DisplayManifestModalProps {
   isDraggable?: boolean;
   isModeless?: boolean;
-  skillNameIdentifier?: string | null;
+  skillNameIdentifier: string;
   onDismiss: () => void;
-  projectId: string;
 }
 
 export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   isDraggable = true,
   isModeless = true,
-  projectId,
+  skillNameIdentifier,
   onDismiss,
 }) => {
   const skills = useRecoilValue(skillsStateSelector);
   const userSettings = useRecoilValue(userSettingsState);
-  const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
-  const skillNameIdentifier = skillsByProjectId[projectId];
   useEffect(() => onDismiss, []);
 
+  console.log();
   const selectedSkill = useMemo(() => {
     if (skillNameIdentifier) {
       return skills[skillNameIdentifier];

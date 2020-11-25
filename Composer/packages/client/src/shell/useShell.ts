@@ -236,7 +236,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     undo,
     redo,
     commitChanges,
-    displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
+    displayManifestModal: (skillId) => displayManifestModal(skillId),
     isFeatureEnabled: (featureFlagKey: FeatureFlagKey): boolean => featureFlags?.[featureFlagKey]?.enabled ?? false,
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);

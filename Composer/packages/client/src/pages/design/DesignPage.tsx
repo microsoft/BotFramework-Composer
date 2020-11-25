@@ -44,7 +44,7 @@ import {
   skillNameIdentifierByProjectIdSelector,
   SkillInfo,
   projectMetaDataState,
-  displayManifestModalOnProjectIdSelector,
+  displaySkillManifestState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -133,7 +133,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);
-  const displaySkillManifestOnProjectId = useRecoilValue(displayManifestModalOnProjectIdSelector);
+  const displaySkillManifestNameIdentifier = useRecoilValue(displaySkillManifestState);
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useBotOperations();
@@ -697,7 +697,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
     const skillNameIdentifier = skillsByProjectId[skillId];
     if (!skillNameIdentifier) return;
-    displayManifestModal(skillNameIdentifier, skillId);
+    displayManifestModal(skillNameIdentifier);
   };
 
   const handleErrorClick = (projectId: string, skillId: string, diagnostic: Diagnostic) => {
@@ -864,10 +864,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onSubmit={handleCreateQnA}
         />
 
-        {displaySkillManifestOnProjectId && (
+        {displaySkillManifestNameIdentifier && (
           <DisplayManifestModal
-            projectId={displaySkillManifestOnProjectId}
-            onDismiss={() => dismissManifestModal(displaySkillManifestOnProjectId)}
+            skillNameIdentifier={displaySkillManifestNameIdentifier}
+            onDismiss={() => dismissManifestModal()}
           />
         )}
         {brokenSkillInfo && (
