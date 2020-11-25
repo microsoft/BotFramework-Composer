@@ -60,7 +60,7 @@ const checkSetting = (assets: {
       luFiles
         .filter(({ id }) => getBaseName(id) === luFileId)
         .forEach((item) => {
-          if (!item.empty && (dialogItem.luProvider !== undefined || dialogItem.luProvider === SDKKinds.LuisRecognizer))
+          if (!item.empty && (dialogItem.luProvider === undefined || dialogItem.luProvider === SDKKinds.LuisRecognizer))
             useLUIS = true;
         });
     }
