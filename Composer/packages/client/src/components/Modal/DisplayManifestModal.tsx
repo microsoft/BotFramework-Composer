@@ -67,7 +67,6 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   const userSettings = useRecoilValue(userSettingsState);
   useEffect(() => onDismiss, []);
 
-  console.log();
   const selectedSkill = useMemo(() => {
     if (skillNameIdentifier) {
       return skills[skillNameIdentifier];
