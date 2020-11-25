@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog, SDKKinds } from '@bfc/types';
+import { SDKKinds } from '@botframework-composer/types';
 
 import { walkIfCondition } from './walkIfCondition';
 import { walkSwitchCondition } from './walkSwitchCondition';
@@ -16,7 +16,7 @@ const WalkerMap: { [$kind: string]: (input, visitor: AdaptiveActionVisitor) => v
   [SDKKinds.EditActions]: walkActionWithChildren,
 };
 
-export const walkAdaptiveAction = (input, visit: (action: MicrosoftIDialog) => void): void => {
+export const walkAdaptiveAction = (input, visit: AdaptiveActionVisitor): void => {
   if (typeof input === 'string') {
     visit(input);
     return;

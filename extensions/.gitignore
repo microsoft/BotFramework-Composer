@@ -1,0 +1,4 @@
+.build-cache.json
+**/lib
+**/dist
+**/node_modules

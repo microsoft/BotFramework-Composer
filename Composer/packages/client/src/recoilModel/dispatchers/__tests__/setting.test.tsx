@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { settingsState, currentProjectIdState, skillsState } from '../../atoms';
@@ -49,6 +49,7 @@ const settings = {
     environment: 'composer',
   },
   publishTargets: [],
+  importedLibraries: [],
   qna: {
     knowledgebaseid: '',
     endpointKey: '',
@@ -63,6 +64,7 @@ const settings = {
     customRuntime: false,
     path: '',
     command: '',
+    key: '',
   },
   downsampling: {
     maxImbalanceRatio: 10,

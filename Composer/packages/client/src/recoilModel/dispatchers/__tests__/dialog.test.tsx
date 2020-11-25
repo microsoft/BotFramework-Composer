@@ -3,12 +3,11 @@
 
 import { useRecoilValue } from 'recoil';
 import test from '@bfc/indexers';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
-  dialogsState,
   lgFilesState,
   luFilesState,
   schemasState,
@@ -18,6 +17,7 @@ import {
   showCreateDialogModalState,
   qnaFilesState,
 } from '../../atoms';
+import { dialogsSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
@@ -45,6 +45,12 @@ jest.mock('@bfc/indexers', () => {
         content,
       }),
     },
+    qnaIndexer: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
     lgUtil: {
       parse: (id, content) => ({
         id,
@@ -52,6 +58,12 @@ jest.mock('@bfc/indexers', () => {
       }),
     },
     luUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
+    qnaUtil: {
       parse: (id, content) => ({
         id,
         content,
@@ -93,7 +105,7 @@ describe('dialog dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const dialogs = useRecoilValue(dialogsState(projectId));
+      const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
       const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
       const luFiles = useRecoilValue(luFilesState(projectId));
       const lgFiles = useRecoilValue(lgFilesState(projectId));
@@ -118,10 +130,11 @@ describe('dialog dispatcher', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
-        { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
+        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
+        { recoilState: luFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
+        { recoilState: qnaFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
         { recoilState: schemasState(projectId), initialValue: { sdk: { content: '' } } },
       ],
       dispatcher: {
@@ -137,16 +150,17 @@ describe('dialog dispatcher', () => {
 
   it('removes a dialog file', async () => {
     await act(async () => {
-      await dispatcher.createDialog({ id: '1', content: 'abcde', projectId });
+      await dispatcher.createDialog({ id: '3', content: 'abcde', projectId });
     });
     await act(async () => {
-      await dispatcher.removeDialog('1', projectId);
+      await dispatcher.removeDialog('3', projectId);
     });
 
-    expect(renderedComponent.current.dialogs).toEqual([{ id: '2' }]);
-    expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '2' }]);
-    expect(renderedComponent.current.lgFiles).toEqual([{ id: '2' }]);
-    expect(renderedComponent.current.luFiles).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.dialogs).toEqual([{ id: '1' }, { id: '2' }]);
+    expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '1' }, { id: '2' }]);
+    expect(renderedComponent.current.lgFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
+    expect(renderedComponent.current.luFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
+    expect(renderedComponent.current.qnaFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
   });
 
   it('updates a dialog file', async () => {

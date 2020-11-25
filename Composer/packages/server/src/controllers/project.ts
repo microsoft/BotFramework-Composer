@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
-
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
-import { ExtensionContext } from '@bfc/extension';
+import { remove } from 'fs-extra';
+import formatMessage from 'format-message';
 
+import { ExtensionContext } from '../models/extension/extensionContext';
 import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssetService from '../services/asset';
@@ -14,48 +14,52 @@ import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
+import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
+import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl, locale } = req.body;
+  const {
+    name,
+    description,
+    storageId,
+    location,
+    schemaUrl,
+    locale,
+    preserveRoot,
+    templateDir,
+    eTag,
+    alias,
+  } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
   }
 
-  // default the path to the default folder.
-  let path = settings.botsFolder;
-  // however, if path is specified as part of post body, use that one.
-  // this allows developer to specify a custom home for their bot.
-  if (location) {
-    // validate that this path exists
-    // prettier-ignore
-    if (fs.existsSync(location)) { // lgtm [js/path-injection]
-      path = location;
-    }
-  }
-
-  const locationRef: LocationRef = {
-    storageId,
-    path: Path.resolve(path, name),
-  };
-
-  log('Attempting to create project at %s', path);
+  const locationRef = getLocationRef(location, storageId, name);
 
   try {
+    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
+    const createFromRemoteTemplate = !!templateDir;
+
     await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
+    const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
+
     const id = await BotProjectService.openProject(newProjRef, user);
+    // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
+    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
-    await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    if (!createFromRemoteTemplate) {
+      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    }
 
     if (currentProject !== undefined) {
-      await currentProject.updateBotInfo(name, description);
-      if (schemaUrl) {
+      await currentProject.updateBotInfo(name, description, preserveRoot);
+      if (schemaUrl && !createFromRemoteTemplate) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
       await currentProject.init();
@@ -98,6 +102,33 @@ async function getProjectById(req: Request, res: Response) {
   }
 }
 
+async function getProjectByAlias(req: Request, res: Response) {
+  const alias = req.params.alias;
+  if (!alias) {
+    res.status(400).json({
+      message: 'Parameters not provided, requires "alias" parameter',
+    });
+    return;
+  }
+
+  const user = await ExtensionContext.getUserFromRequest(req);
+  try {
+    const currentProject = await BotProjectService.getProjectByAlias(alias, user);
+
+    if (currentProject !== undefined && (await currentProject.exists())) {
+      res.status(200).json({ location: currentProject.dir, id: currentProject.id, name: currentProject.name });
+    } else {
+      res.status(404).json({
+        message: `No matching bot project found for alias ${alias}`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 async function removeProject(req: Request, res: Response) {
   const projectId = req.params.projectId;
   if (!projectId) {
@@ -129,10 +160,11 @@ async function openProject(req: Request, res: Response) {
     return;
   }
   const user = await ExtensionContext.getUserFromRequest(req);
+  const path = process.platform === 'win32' ? req.body.path.replace(/^\//, '') : req.body.path;
 
   const location: LocationRef = {
     storageId: req.body.storageId,
-    path: req.body.path,
+    path,
   };
 
   try {
@@ -287,7 +319,7 @@ async function getSkill(req: Request, res: Response) {
 
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
-  currentProject.exportToZip((archive: Archiver) => {
+  currentProject.exportToZip(null, (archive: Archiver) => {
     archive.on('error', (err) => {
       res.status(500).send({ error: err.message });
     });
@@ -323,16 +355,20 @@ async function build(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
 
+  // Disable Express' built in 2 minute timeout for requests. Otherwise, large models may fail to build.
+  req.setTimeout(0, () => {
+    throw new Error('LUIS publish process timed out.');
+  });
+
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const { luisConfig, qnaConfig, luFiles, qnaFiles, crossTrainConfig } = req.body;
+      const { luisConfig, qnaConfig, luFiles, qnaFiles } = req.body;
       const files = await currentProject.buildFiles({
         luisConfig,
         qnaConfig,
-        luFileIds: luFiles,
-        qnaFileIds: qnaFiles,
-        crossTrainConfig,
+        luResource: luFiles,
+        qnaResource: qnaFiles,
       });
       res.status(200).json(files);
     } catch (error) {
@@ -367,7 +403,7 @@ async function checkBoilerplateVersion(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const latestVersion = AssetService.manager.getBoilerplateCurrentVersion();
+    const latestVersion = await AssetService.manager.getBoilerplateCurrentVersion();
     const currentVersion = await AssetService.manager.getBoilerplateVersionFromProject(currentProject);
     const updateRequired =
       (latestVersion && currentVersion && latestVersion > currentVersion) || // versions are present in both locations, latest is newer
@@ -406,6 +442,138 @@ async function updateBoilerplate(req: Request, res: Response) {
   }
 }
 
+async function backupProject(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      const backupPath = await BotProjectService.backupProject(project);
+      res.status(200).json({ path: backupPath });
+    } catch (e) {
+      log('Failed to backup project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
+/** WARNING: This operation is destructive. Please call backupProject() before calling this method. */
+async function copyTemplateToExistingProject(req: Request, res: Response) {
+  const { eTag, templateDir } = req.body;
+  if (!templateDir) {
+    return res.status(400).json({
+      message: 'Missing parameters: templateDir required.',
+    });
+  }
+
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      log('Cleaning up bot content at %s before copying template content over.', project.dir);
+      await project.fileStorage.rmrfDir(project.dir);
+      const locationRef: LocationRef = {
+        storageId: 'default',
+        path: project.dir,
+      };
+      log('Copying content from template at %s to %s', templateDir, project.dir);
+      await AssetService.manager.copyRemoteProjectTemplateTo(
+        templateDir,
+        locationRef,
+        user,
+        undefined // TODO: re-enable once we figure out path issue project.settings?.defaultLanguage || 'en-us'
+      );
+      log('Copied template content successfully.');
+      // clean up the temporary template directory -- fire and forget
+      remove(templateDir);
+      log('Updating etag.');
+      BotProjectService.setProjectLocationData(projectId, { eTag });
+
+      res.sendStatus(200);
+    } catch (e) {
+      log('Failed to copy template content to existing project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
+function createProjectV2(req: Request, res: Response) {
+  const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Creating Bot Project');
+  createProjectAsync(req, jobId);
+  res.status(202).json({
+    jobId: jobId,
+  });
+}
+async function createProjectAsync(req: Request, jobId: string) {
+  let { templateId } = req.body;
+  const {
+    name,
+    description,
+    storageId,
+    location,
+    schemaUrl,
+    locale,
+    preserveRoot,
+    templateDir,
+    eTag,
+    alias,
+  } = req.body;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  if (templateId === '') {
+    templateId = 'EmptyBot';
+  }
+
+  const locationRef = getLocationRef(location, storageId, name);
+  try {
+    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
+    const createFromRemoteTemplate = !!templateDir;
+
+    await BotProjectService.cleanProject(locationRef);
+    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
+    const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
+
+    const id = await BotProjectService.openProject(newProjRef, user);
+    // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
+    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
+    const currentProject = await BotProjectService.getProjectById(id, user);
+
+    // inject shared content into every new project.  this comes from assets/shared
+    if (!createFromRemoteTemplate) {
+      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    }
+
+    if (currentProject !== undefined) {
+      await ejectAndMerge(currentProject, jobId);
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
+      await currentProject.updateBotInfo(name, description, preserveRoot);
+      if (schemaUrl && !createFromRemoteTemplate) {
+        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      }
+      await currentProject.init();
+
+      const project = currentProject.getProject();
+      log('Project created successfully.');
+      BackgroundProcessManager.updateProcess(jobId, 200, 'Created Successfully', {
+        id,
+        ...project,
+      });
+    }
+  } catch (err) {
+    BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err);
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -419,9 +587,13 @@ export const ProjectController = {
   exportProject,
   saveProjectAs,
   createProject,
+  createProjectV2,
   getAllProjects,
   getRecentProjects,
   updateBoilerplate,
   checkBoilerplateVersion,
   generateProjectId,
+  getProjectByAlias,
+  backupProject,
+  copyTemplateToExistingProject,
 };

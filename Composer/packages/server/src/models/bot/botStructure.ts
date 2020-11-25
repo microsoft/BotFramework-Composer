@@ -11,6 +11,7 @@ const BotStructureTemplate = {
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
   qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
+  sourceQnA: 'knowledge-base/source/${FILENAME}.source.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
@@ -22,17 +23,43 @@ const BotStructureTemplate = {
     lg: 'dialogs/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
     qna: 'dialogs/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
+    sourceQnA: 'dialogs/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
+    recognizer: 'dialogs/${DIALOGNAME}/recognizers/${RECOGNIZERNAME}',
   },
   formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
   botProject: '${BOTNAME}.botproj',
+  recognizer: 'recognizers/${RECOGNIZERNAME}',
+  crossTrainConfig: 'settings/${CROSSTRAINCONFIGNAME}',
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
   str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
 
+// parse QnA source file name: [dialogId].[fileId].source.qna, ignore locale for now.
+// [fileId].source.qna would store to bot root folder.
+const parseSourceFileName = (name: string, locale: string) => {
+  const fileType = FileExtensions.SourceQnA;
+  const id = Path.basename(name, fileType);
+
+  let dialogId = '',
+    fileId = '';
+
+  if (id.includes('.')) {
+    [dialogId, fileId] = id.split('.');
+  } else {
+    fileId = id;
+  }
+
+  return { fileId, dialogId, fileType, locale };
+};
+
+// parse file name: [fileId].[locale].[fileType]
 export const parseFileName = (name: string, defaultLocale: string) => {
+  if (name.endsWith(FileExtensions.SourceQnA)) {
+    return parseSourceFileName(name, defaultLocale);
+  }
   const fileType = Path.extname(name);
   const id = Path.basename(name, fileType);
 
@@ -43,15 +70,55 @@ export const parseFileName = (name: string, defaultLocale: string) => {
     fileId = id.slice(0, index);
     locale = id.slice(index + 1);
   }
-  return { fileId, locale, fileType };
+  const dialogId = fileId;
+  return { dialogId, fileId, locale, fileType };
 };
 
-// only
-export const defaultFilePath = (botName: string, defaultLocale: string, filename: string): string => {
-  const { fileId, locale, fileType } = parseFileName(filename, defaultLocale);
+export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
+export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config.json');
+
+export const defaultFilePath = (
+  botName: string,
+  defaultLocale: string,
+  filename: string,
+  options: {
+    endpoint?: string; // <endpoint>/<file-path>
+    rootDialogId?: string;
+  }
+): string => {
   const BOTNAME = botName.toLowerCase();
   const CommonFileId = 'common';
+
+  const { endpoint = '', rootDialogId = '' } = options;
+  const { fileId, locale, fileType, dialogId } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
+
+  // now recognizer extension is .lu.dialog or .qna.dialog
+  if (isRecognizer(filename)) {
+    const dialogId = filename.split('.')[0];
+    const isRoot = filename.startsWith(botName) || (rootDialogId && filename.startsWith(rootDialogId));
+    if (endpoint) {
+      return templateInterpolate(Path.join(endpoint, BotStructureTemplate.recognizer), {
+        RECOGNIZERNAME: filename,
+      });
+    } else if (isRoot) {
+      return templateInterpolate(BotStructureTemplate.recognizer, {
+        RECOGNIZERNAME: filename,
+      });
+    } else {
+      return templateInterpolate(BotStructureTemplate.dialogs.recognizer, {
+        RECOGNIZERNAME: filename,
+        DIALOGNAME: dialogId,
+      });
+    }
+  }
+
+  //crossTrain config's file name is cross-train.config
+  if (isCrossTrainConfig(filename)) {
+    return templateInterpolate(BotStructureTemplate.crossTrainConfig, {
+      CROSSTRAINCONFIGNAME: filename,
+    });
+  }
 
   // 1. Even appsettings.json hit FileExtensions.Manifest, but it never use this do created.
   // 2. When export bot as a skill, name is `EchoBot-4-2-1-preview-1-manifest.json`
@@ -74,10 +141,50 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
     });
   }
 
-  const DIALOGNAME = fileId;
+  const DIALOGNAME = dialogId;
   const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
+  if (fileType === FileExtensions.SourceQnA) {
+    if (endpoint) {
+      return templateInterpolate(Path.join(endpoint, BotStructureTemplate.sourceQnA), {
+        FILENAME: fileId,
+        DIALOGNAME,
+      });
+    }
+    const TemplatePath =
+      isRootFile || !dialogId ? BotStructureTemplate.sourceQnA : BotStructureTemplate.dialogs.sourceQnA;
+    return templateInterpolate(TemplatePath, {
+      FILENAME: fileId,
+      DIALOGNAME,
+    });
+  }
+
   let TemplatePath = '';
+
+  if (endpoint) {
+    switch (fileType) {
+      case FileExtensions.Dialog:
+        TemplatePath = BotStructureTemplate.entry;
+        break;
+      case FileExtensions.Lg:
+        TemplatePath = BotStructureTemplate.lg;
+        break;
+      case FileExtensions.Lu:
+        TemplatePath = BotStructureTemplate.lu;
+        break;
+      case FileExtensions.Qna:
+        TemplatePath = BotStructureTemplate.qna;
+        break;
+      case FileExtensions.DialogSchema:
+        TemplatePath = BotStructureTemplate.dialogSchema;
+    }
+    return templateInterpolate(Path.join(endpoint, TemplatePath), {
+      BOTNAME: fileId,
+      DIALOGNAME,
+      LOCALE,
+    });
+  }
+
   if (fileType === FileExtensions.Dialog) {
     TemplatePath = isRootFile ? BotStructureTemplate.entry : BotStructureTemplate.dialogs.entry;
   } else if (fileType === FileExtensions.Lg) {
@@ -101,15 +208,19 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
 };
 
 // when create/saveAs bot, serialize entry dialog/lg/lu
-export const serializeFiles = async (fileStorage, rootPath, botName) => {
+export const serializeFiles = async (fileStorage, rootPath, botName, preserveRoot = false) => {
   const entryPatterns = [
-    templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   ];
+
+  if (!preserveRoot) {
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }));
+  }
+
   for (const pattern of entryPatterns) {
     const paths = await fileStorage.glob(pattern, rootPath);
     for (const filePath of paths.sort()) {

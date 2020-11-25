@@ -258,10 +258,10 @@ const InternalDemoApp = () => {
             allowUndo
             editorId={selectedItemId}
             schema={selectedItem}
-            schemaExtension=".form-dialog"
+            schemaExtension=".form"
             templates={templates}
             // eslint-disable-next-line no-console
-            onGenerateDialog={(schema) => console.log(schema)}
+            onGenerateDialog={() => {}}
             onSchemaUpdated={onUpdateItem}
           />
         </Stack>

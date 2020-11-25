@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
+import { ExtensionMetadata } from '@botframework-composer/types';
+
+import { ExtensionManager } from '../services/extensionManager';
 
 interface AddExtensionRequest extends Request {
   body: {
@@ -124,14 +126,21 @@ export async function getBundleForView(req: ExtensionViewBundleRequest, res: Res
   const extension = ExtensionManager.find(id);
 
   if (extension) {
-    const bundle = ExtensionManager.getBundle(id, bundleId);
-    if (bundle) {
-      res.sendFile(bundle);
-      return;
+    try {
+      const bundle = ExtensionManager.getBundle(id, bundleId);
+      if (bundle) {
+        res.sendFile(bundle);
+        return;
+      }
+    } catch (err) {
+      if (err.message && err.message.includes('not found')) {
+        res.status(404).json({ error: 'bundle not found' });
+        return;
+      }
     }
   }
 
-  res.status(404).json({ error: 'extension or bundle not found' });
+  res.status(404).json({ error: 'extension not found' });
 }
 
 export async function performExtensionFetch(req: ExtensionFetchRequest, res: Response) {

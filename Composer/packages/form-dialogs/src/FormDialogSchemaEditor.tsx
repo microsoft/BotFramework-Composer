@@ -32,13 +32,17 @@ export type FormDialogSchemaEditorProps = {
    */
   templates?: string[];
   /**
+   * Indicates of caller is running generation logic.
+   */
+  isGenerating?: boolean;
+  /**
    * Callback for when the json schema update is updated.
    */
   onSchemaUpdated: (id: string, content: string) => void;
   /**
    * Callback for generating dialog using current valid form dialog schema.
    */
-  onGenerateDialog: (formDialogSchemaJson: string) => void;
+  onGenerateDialog: (schemaId: string) => void;
 };
 
 const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditorProps) => {
@@ -47,6 +51,7 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
     schema,
     templates = [],
     schemaExtension = '.schema',
+    isGenerating = false,
     onSchemaUpdated,
     onGenerateDialog,
     allowUndo = false,
@@ -64,8 +69,8 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
   }, [editorId]);
 
   const startOver = React.useCallback(() => {
-    reset({ name: editorId });
-  }, [reset, editorId]);
+    reset({ name: schema.id });
+  }, [reset, editorId, schema]);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
     const content = await snapshot.getPromise(formDialogSchemaJsonSelector);
@@ -80,6 +85,7 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
       <FormDialogPropertiesEditor
         key={editorId}
         allowUndo={allowUndo}
+        isGenerating={isGenerating}
         schemaExtension={schemaExtension}
         onGenerateDialog={onGenerateDialog}
         onReset={startOver}

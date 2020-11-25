@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 import { DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/adaptive-flow-editor/renderers/EdgeMenu';

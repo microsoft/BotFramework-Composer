@@ -3,14 +3,14 @@
 
 import React from 'react';
 
+import LUPage from '../../../src/pages/language-understanding/LUPage';
 import TableView from '../../../src/pages/language-understanding/table-view';
 import CodeEditor from '../../../src/pages/language-understanding/code-editor';
 import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
-  dialogsState,
+  dialogsSelectorFamily,
   luFilesState,
-  lgFilesState,
   settingsState,
   schemasState,
   currentProjectIdState,
@@ -22,17 +22,23 @@ const initialContent = `
 - hello
 `;
 
+const initialIntents = [
+  {
+    Name: 'Greeting',
+    Body: '- hello',
+  },
+];
+
 const state = {
   projectId: 'test',
-  dialogs: [{ id: '1' }, { id: '2' }],
-  locale: 'en-us',
-  lgFiles: [
-    { id: 'a.en-us', content: initialContent },
-    { id: 'a.fr-fr', content: initialContent },
+  dialogs: [
+    { id: '1', content: '', skills: [] },
+    { id: '2', content: '', skills: [] },
   ],
+  locale: 'en-us',
   luFiles: [
-    { id: 'a.en-us', content: initialContent },
-    { id: 'a.fr-fr', content: initialContent },
+    { id: 'a.en-us', content: initialContent, templates: initialIntents, diagnostics: [] },
+    { id: 'a.fr-fr', content: initialContent, templates: initialIntents, diagnostics: [] },
   ],
   settings: {
     defaultLanguage: 'en-us',
@@ -43,9 +49,8 @@ const state = {
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
-  set(dialogsState(state.projectId), state.dialogs);
+  set(dialogsSelectorFamily(state.projectId), state.dialogs);
   set(luFilesState(state.projectId), state.luFiles);
-  set(lgFilesState(state.projectId), state.lgFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
 };
@@ -62,5 +67,9 @@ describe('LU page all up view', () => {
 
   it('should render lu page code editor', () => {
     renderWithRecoil(<CodeEditor dialogId={'a'} projectId={state.projectId} />, initRecoilState);
+  });
+
+  it('should render lu page', () => {
+    renderWithRecoil(<LUPage dialogId={'a'} projectId={state.projectId} />, initRecoilState);
   });
 });

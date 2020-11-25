@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useContext } from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 import { DialogFactory } from '@bfc/shared';
 
 import { NodeRendererContext } from '../../../src/adaptive-flow-editor/contexts/NodeRendererContext';

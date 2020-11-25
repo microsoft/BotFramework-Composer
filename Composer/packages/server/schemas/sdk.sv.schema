@@ -1,0 +1,5048 @@
+{
+  "title": "Komponentvarianter",
+  "description": "Dessa är alla de varianter som kan skapas av inläsaren.",
+  "definitions": {
+    "Microsoft.ActivityTemplate": {
+      "title": "Microsoft activity template",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "Mall",
+          "description": "Språkgeneratormall att användas för att skapa aktiviteten"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.AdaptiveDialog": {
+      "title": "Adaptive dialog",
+      "description": "Flexibel, datadriven dialog som kan anpassas till konversationen.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt dialog-ID."
+        },
+        "autoEndDialog": {
+          "title": "Avsluta dialogruta automatiskt",
+          "description": "Om värdet anges som sant avslutas dialogrutan automatiskt när det inte finns några ytterligare åtgärder. Om värdet anges som falskt, så kom ihåg att manuellt avsluta dialogrutan med instruktionen EndDialog."
+        },
+        "defaultResultProperty": {
+          "title": "Standardresultategenskap",
+          "description": "Värde som kommer att skickas tillbaka till den överordnade dialogen."
+        },
+        "recognizer": {
+          "title": "Identifieringsobjekt",
+          "description": "Indataidentifieringsobjekt som tolkar användarindata till avsikt och entiteter."
+        },
+        "generator": {
+          "title": "Language generator",
+          "description": "Språkgenerator som genererar robotsvar."
+        },
+        "selector": {
+          "title": "Väljare",
+          "description": "Princip för att avgöra vilken utlösare som körs. Standard är en väljare för bästa matchning (valfritt)."
+        },
+        "triggers": {
+          "description": "Lista med utlösare som definierats för den här dialogen.",
+          "title": "Utlösare",
+          "items": {
+            "title": "Händelseutlösare",
+            "description": "Händelseutlösare för händelsehantering."
+          }
+        },
+        "schema": {
+          "title": "Schema",
+          "description": "Schema att fylla i.",
+          "anyOf": {
+            "0": {
+              "title": "Core schema meta-schema"
+            },
+            "1": {
+              "title": "Referens till JSON-schema",
+              "description": "Referens till JSON-schemats .dialog-fil."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.AgeEntityRecognizer": {
+      "title": "Age entity recognizer",
+      "description": "Identifieringsobjekt som identifierar ålder.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.Ask": {
+      "title": "Send activity to ask a question",
+      "description": "Detta är en åtgärd som skickar en aktivitet till användaren när ett svar förväntas",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "expectedProperties": {
+          "title": "Expected properties",
+          "description": "Egenskaper som förväntas från användaren.",
+          "items": {
+            "title": "Namn",
+            "description": "Egenskapens namn"
+          }
+        },
+        "defaultOperation": {
+          "title": "Default operation",
+          "description": "Anger den standardåtgärd som kommer att användas när ingen åtgärd känns igen i svaret på den här frågan."
+        },
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "activity": {
+          "title": "Aktivitet",
+          "description": "Aktivitet att skicka."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "Indatadialogruta för bifogad fil",
+      "description": "Samla in information – Fråga efter en fil eller avbildning.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Standardvärde",
+          "description": "Property kommer att ställas in på objektet eller resultatet av det här uttrycket när max antal inmatningar har överskridits.",
+          "oneOf": {
+            "0": {
+              "title": "Objekt",
+              "description": "Objekt för bifogad fil."
+            }
+          }
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Property kommer att ställas in på objektet eller resultatet av det här uttrycket, såvida det inte utvärderas till null.",
+          "oneOf": {
+            "0": {
+              "title": "Objekt",
+              "description": "Objekt för bifogad fil."
+            }
+          }
+        },
+        "outputFormat": {
+          "title": "Utdataformat",
+          "description": "Utdataformat för bifogad fil.",
+          "oneOf": {
+            "0": {
+              "title": "Standardformat",
+              "description": "Standardutdataformat."
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "prompt": {
+          "title": "Initial prompt",
+          "description": "Meddelande att skicka för att samla in information."
+        },
+        "unrecognizedPrompt": {
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "validations": {
+          "title": "Verifieringsuttryck",
+          "description": "Uttryck för att verifiera användarindata.",
+          "items": {
+            "title": "Villkor",
+            "description": "Uttryck som måste uppfyllas för att indata ska betraktas som giltiga"
+          }
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra insamlad information. Indata hoppas över om egenskapen har ett värde (om inte \"Fråga alltid\" är sant)."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "allowInterruptions": {
+          "title": "Tillåt avbrott",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.BeginDialog": {
+      "title": "Starta en dialogruta",
+      "description": "Starta en annan dialogruta.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "Dialogruta"
+            }
+          },
+          "title": "Namn på dialogruta",
+          "description": "Namn på dialogrutan som ska anropas."
+        },
+        "options": {
+          "title": "Alternativ",
+          "description": "Ett eller flera alternativ som skickas till den dialogruta som anropas.",
+          "additionalProperties": {
+            "title": "Alternativ",
+            "description": "Alternativ för dialog."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Om värdet är inställt på falskt kan dialogrutan som anropas bearbeta den aktuella aktiviteten."
+        },
+        "resultProperty": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra alla värden som returneras av den dialogruta som anropas."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.BeginSkill": {
+      "title": "Påbörja en färdighet",
+      "description": "Starta en fjärrfärdighet.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för färdighetsdialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Om värdet är falskt startas färdigheten med aktiviteten i den aktuella turkontexten i stället för aktiviteten i aktivitetsegenskapen."
+        },
+        "resultProperty": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra alla värden som returneras av den dialogruta som anropas."
+        },
+        "botId": {
+          "title": "Robot-ID för färdighetsvärd",
+          "description": "Det Microsoft App-ID som kommer att anropa färdigheten."
+        },
+        "skillHostEndpoint": {
+          "title": "Färdighetsvärd",
+          "description": "Motringningsadress för färdighetsvärddatorn."
+        },
+        "connectionName": {
+          "title": "OAuth connection name (SSO)",
+          "description": "Namnet på OAuth-anslutningen som skulle användas för att genomföra enkel inloggning med en färdighet."
+        },
+        "skillAppId": {
+          "title": "Skill App Id",
+          "description": "Färdighetens Microsoft App-ID."
+        },
+        "skillEndpoint": {
+          "title": "Färdighetsslutpunkt ",
+          "description": "Färdighetens slutpunkt /API/messages."
+        },
+        "activity": {
+          "title": "Aktivitet",
+          "description": "Den aktivitet som ska skickas till färdigheten."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "Ett booleskt uttryck som anger om det överordnade objektet ska tillåtas att avbryta färdigheten."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.BreakLoop": {
+      "title": "Break loop",
+      "description": "Stoppa den här loopen",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CancelAllDialogs": {
+      "title": "Avbryt alla dialogrutor",
+      "description": "Avbryt alla aktiva dialogrutor. Alla dialogrutor i dialogrutekedjan behöver en utlösare för att fånga in den händelse som konfigurerats i den här åtgärden.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Om värdet är inställt på falskt, uppmanas anroparens dialogruta att bearbeta den aktuella aktiviteten."
+        },
+        "eventName": {
+          "title": "Händelsenamn",
+          "description": "Namn på händelsen som ska genereras."
+        },
+        "eventValue": {
+          "title": "Händelsevärde",
+          "description": "Värde att generera med händelsen (valfritt)."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CancelDialog": {
+      "title": "Avbryt alla dialogrutor",
+      "description": "Avbryt alla aktiva dialogrutor. Alla dialogrutor i dialogrutekedjan behöver en utlösare för att fånga in den händelse som konfigurerats i den här åtgärden.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Om värdet är inställt på falskt, uppmanas anroparens dialogruta att bearbeta den aktuella aktiviteten."
+        },
+        "eventName": {
+          "title": "Händelsenamn",
+          "description": "Namn på händelsen som ska genereras."
+        },
+        "eventValue": {
+          "title": "Händelsevärde",
+          "description": "Värde att generera med händelsen (valfritt)."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChannelMentionEntityRecognizer": {
+      "title": "Channel mention entity recognizer",
+      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChoiceInput": {
+      "title": "Dialogruta för valindata",
+      "description": "Samla in information – Välj i en lista med alternativ",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Standardvärde",
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Property ställs in på värdet för det här uttrycket såvida det inte utvärderas till null."
+        },
+        "outputFormat": {
+          "title": "Utdataformat",
+          "description": "Anger önskat utdataformat (antingen värde eller index i alternativ).",
+          "oneOf": {
+            "0": {
+              "title": "Standard",
+              "description": "Standardutdataformat."
+            }
+          }
+        },
+        "choices": {
+          "title": "Matris med alternativ",
+          "description": "Alternativ att välja bland.",
+          "oneOf": {
+            "0": {
+              "title": "Enkla val",
+              "description": "Enkla val att välja bland.",
+              "items": {
+                "0": {
+                  "title": "Enkelt val",
+                  "description": "Ett alternativ för utvalda indata."
+                }
+              }
+            },
+            "1": {
+              "title": "Strukturerade val",
+              "description": "Alternativ som tillåter fullständig kontroll.",
+              "items": {
+                "0": {
+                  "title": "Strukturerat val",
+                  "description": "Strukturerat val att välja från.",
+                  "properties": {
+                    "value": {
+                      "title": "Värde",
+                      "description": "Värde att returnera när det här valet har gjorts."
+                    },
+                    "action": {
+                      "title": "Åtgärd",
+                      "description": "Kortåtgärd för valet."
+                    },
+                    "synonyms": {
+                      "title": "Synonymer",
+                      "description": "Lista över synonymer som ska identifieras utöver värdet (valfritt).",
+                      "items": {
+                        "title": "Synonym",
+                        "description": "Synonym för värde."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "defaultLocale": {
+          "title": "Standard för nationella inställningar",
+          "description": "De nationella inställningar som ska användas för att parsa bekräftelseval om ingen information om detta skickas från anroparen."
+        },
+        "style": {
+          "title": "Listformat",
+          "description": "Konfigurerar ListStyle till att styra hur val ska återges.",
+          "oneOf": {
+            "0": {
+              "title": "Listformat",
+              "description": "Standardlistformat."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Utvalda alternativ",
+          "description": "Anger de alternativ som ska användas för att styra hur alternativen kombineras.",
+          "oneOf": {
+            "0": {
+              "title": "Objekt",
+              "description": "Utvalt alternativobjekt.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "Infogad avgränsare",
+                  "description": "Tecken som används för att avgränsa enskilda val när det finns fler än två alternativ"
+                },
+                "inlineOr": {
+                  "title": "Infogad eller",
+                  "description": "Avgränsare infogad mellan alternativen när det bara finns två alternativ"
+                },
+                "inlineOrMore": {
+                  "title": "Infogad eller mer",
+                  "description": "Avgränsare infogad mellan de två senaste alternativen när det finns mer än två alternativ."
+                },
+                "includeNumbers": {
+                  "title": "Inkludera siffror",
+                  "description": "Om värdet är sant kommer listformaten \"inline\" och \"list\" att föregås av ett index."
+                }
+              }
+            }
+          }
+        },
+        "recognizerOptions": {
+          "title": "Alternativ för identifieringsobjekt",
+          "description": "Anger hur alternativ ska identifieras i svaret",
+          "oneOf": {
+            "0": {
+              "title": "Objekt",
+              "description": "Alternativ för identifieringsobjekt.",
+              "properties": {
+                "noValue": {
+                  "title": "Inget värde",
+                  "description": "Om värdet är sant genomsöks värdefältet INTE"
+                },
+                "noAction": {
+                  "title": "Ingen åtgärd",
+                  "description": "Om värdet är sant genomsöks INTE fältet action.title"
+                },
+                "recognizeNumbers": {
+                  "title": "Identifiera tal",
+                  "description": "Om värdet är sant används talidentifieringsobjektet för att identifiera ett indexsvar (1, 2, 3...) till prompten."
+                },
+                "recognizeOrdinals": {
+                  "title": "Identifiera ordningstal",
+                  "description": "Om värdet är sant kommer talidentifieringsobjektet att användas för att tolka ordningstalssvar (första/andra/...) till prompten."
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "prompt": {
+          "title": "Initial prompt",
+          "description": "Meddelande att skicka för att samla in information."
+        },
+        "unrecognizedPrompt": {
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "validations": {
+          "title": "Verifieringsuttryck",
+          "description": "Uttryck för att verifiera användarindata.",
+          "items": {
+            "title": "Villkor",
+            "description": "Uttryck som måste uppfyllas för att indata ska betraktas som giltiga"
+          }
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra insamlad information. Indata hoppas över om egenskapen har ett värde (om inte \"Fråga alltid\" är sant)."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "allowInterruptions": {
+          "title": "Tillåt avbrott",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ConditionalSelector": {
+      "title": "Conditional trigger selector",
+      "description": "Använd en regelväljare baserad på ett villkor",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Uttryck att utvärdera"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ConfirmInput": {
+      "title": "Bekräfta dialogruta för indata",
+      "description": "Samla in information – Fråga efter bekräftelse (ja eller nej).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "outputFormat": {
+          "title": "Utdataformat",
+          "description": "Valfritt uttryck att använda för att formatera utdata."
+        },
+        "defaultLocale": {
+          "title": "Standard för nationella inställningar",
+          "description": "Standardspråk eller ett uttryck som anger de nationella inställningar som ska användas som standard om de inte hittas i aktiviteten."
+        },
+        "style": {
+          "title": "Listformat",
+          "description": "Konfigurerar ListStyle till att styra hur val ska återges.",
+          "oneOf": {
+            "0": {
+              "title": "Standardformat",
+              "description": "Standardformat för återgivningsval."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Choice options",
+          "description": "Utvalda alternativ eller uttryck som tillhandahåller utvalda alternativ för att kontrollera alternativ för användaren.",
+          "oneOf": {
+            "0": {
+              "title": "Utvalda alternativ",
+              "description": "Utvalda alternativ.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "Infogad avgränsare",
+                  "description": "Text som ska avgränsa enskilda alternativ när det finns mer än två alternativ"
+                },
+                "inlineOr": {
+                  "title": "Infogad eller",
+                  "description": "Text som ska infogas mellan alternativen när det bara finns två alternativ"
+                },
+                "inlineOrMore": {
+                  "title": "Infogad eller mer",
+                  "description": "Text som ska infogas mellan de sista två alternativen när det finns mer än två alternativ."
+                },
+                "includeNumbers": {
+                  "title": "Inkludera siffror",
+                  "description": "Om värdet är sant, så kommer listalternativen att föregås av alternativets index."
+                }
+              }
+            }
+          }
+        },
+        "defaultValue": {
+          "title": "Standardvärde",
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Property ställs in på värdet för det här uttrycket såvida det inte utvärderas till null."
+        },
+        "confirmChoices": {
+          "title": "Matris med utvalda objekt",
+          "description": "Matris med enkla eller strukturerade alternativ.",
+          "oneOf": {
+            "0": {
+              "title": "Enkla val",
+              "description": "Enkla val att bekräfta från.",
+              "items": {
+                "0": {
+                  "title": "Enkelt val",
+                  "description": "Enkelt val att bekräfta."
+                }
+              }
+            },
+            "1": {
+              "title": "Strukturerade val",
+              "description": "Strukturerade val för bekräftelser.",
+              "items": {
+                "0": {
+                  "title": "Val",
+                  "description": "Val att bekräfta.",
+                  "properties": {
+                    "value": {
+                      "title": "Värde",
+                      "description": "Värde att returnera när det här valet har gjorts."
+                    },
+                    "action": {
+                      "title": "Åtgärd",
+                      "description": "Kortåtgärd för valet."
+                    },
+                    "synonyms": {
+                      "title": "Synonymer",
+                      "description": "Lista över synonymer som ska identifieras utöver värdet (valfritt).",
+                      "items": {
+                        "title": "Synonym",
+                        "description": "Synonym för val."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "prompt": {
+          "title": "Initial prompt",
+          "description": "Meddelande att skicka för att samla in information."
+        },
+        "unrecognizedPrompt": {
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "validations": {
+          "title": "Verifieringsuttryck",
+          "description": "Uttryck för att verifiera användarindata.",
+          "items": {
+            "title": "Villkor",
+            "description": "Uttryck som måste uppfyllas för att indata ska betraktas som giltiga"
+          }
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra insamlad information. Indata hoppas över om egenskapen har ett värde (om inte \"Fråga alltid\" är sant)."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "allowInterruptions": {
+          "title": "Tillåt avbrott",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ConfirmationEntityRecognizer": {
+      "title": "Confirmation entity recognizer",
+      "description": "Identifieringsobjekt som identifierar bekräftelsealternativ (Ja/Nej).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueConversationLater": {
+      "title": "Continue conversation later (Queue)",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "date": {
+          "title": "Date",
+          "description": "Date in the future as a ISO string when the conversation should continue."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueLoop": {
+      "title": "Continue loop",
+      "description": "Sluta köra den här mallen och fortsätt med nästa iteration av loopen.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CrossTrainedRecognizerSet": {
+      "title": "Cross-trained recognizer set",
+      "description": "Identifieringsobjekt för att välja mellan korstränade identifieringsobjekt.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt unikt ID som används med RecognizerSet."
+        },
+        "recognizers": {
+          "title": "Identifieringsobjekt",
+          "description": "Lista över identifieringsobjekt som definierats för den här uppsättningen."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CurrencyEntityRecognizer": {
+      "title": "Currency entity recognizer",
+      "description": "Identifieringsobjekt som identifierar valuta.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DateTimeEntityRecognizer": {
+      "title": "Date and time entity recognizer",
+      "description": "Identifieringsobjekt som identifierar datum-och tidsfragment.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DateTimeInput": {
+      "title": "Indatadialogruta för datum/tid",
+      "description": "Samla in information – Fråga efter datum och/eller tid",
+      "defaultLocale": {
+        "title": "Standard för nationella inställningar",
+        "description": "Standardinställning för nationella inställningar."
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Default date",
+          "description": "Property kommer att ställas in på värdet eller resultatet av uttrycket när max antal inmatningar har överskridits."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Property kommer att ställas in på värdet eller resultatet av uttrycket, såvida det inte utvärderas till null."
+        },
+        "outputFormat": {
+          "title": "Utdataformat",
+          "description": "Uttryck att användas för formatering av utdata."
+        },
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "prompt": {
+          "title": "Initial prompt",
+          "description": "Meddelande att skicka för att samla in information."
+        },
+        "unrecognizedPrompt": {
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "validations": {
+          "title": "Verifieringsuttryck",
+          "description": "Uttryck för att verifiera användarindata.",
+          "items": {
+            "title": "Villkor",
+            "description": "Uttryck som måste uppfyllas för att indata ska betraktas som giltiga"
+          }
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra insamlad information. Indata hoppas över om egenskapen har ett värde (om inte \"Fråga alltid\" är sant)."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "allowInterruptions": {
+          "title": "Tillåt avbrott",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DebugBreak": {
+      "title": "Avbrott i felsökningsprogram",
+      "description": "Om ett felsökningsprogram har bifogats, så avbryt körningen vid den här tidpunkten i konversationen.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DeleteActivity": {
+      "title": "Ta bort aktivitet",
+      "description": "Ta bort en aktivitet som tidigare har skickats.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "activityId": {
+          "title": "ActivityId",
+          "description": "uttryck till ett activityId som ska tas bort"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DeleteProperties": {
+      "title": "Ta bort egenskaper",
+      "description": "Ta bort flera egenskaper och alla värden som de rymmer.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "properties": {
+          "title": "Egenskaper",
+          "description": "Egenskaper att ta bort.",
+          "items": {
+            "title": "Egenskap",
+            "description": "Egenskap att ta bort."
+          }
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DeleteProperty": {
+      "title": "Delete property",
+      "description": "Ta bort en egenskap och valfritt värde som den rymmer.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap att ta bort."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DimensionEntityRecognizer": {
+      "title": "Dimension entity recognizer",
+      "description": "Identifieringsobjekt som identifierar dimension.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EditActions": {
+      "title": "Redigera åtgärder.",
+      "description": "Redigera den aktuella listan med åtgärder.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "changeType": {
+          "title": "Ändringstyp",
+          "description": "Typ av ändring som ska gälla för de aktuella åtgärderna.",
+          "oneOf": {
+            "0": {
+              "title": "Standardändring",
+              "description": "Standardändringstyper."
+            }
+          }
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Åtgärder att använda."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EditArray": {
+      "title": "Redigera matris",
+      "description": "Ändra en matris i minnet",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "changeType": {
+          "title": "Ändringstyp",
+          "description": "Typ av ändring av matrisen i minnet.",
+          "oneOf": {
+            "0": {
+              "title": "Change type",
+              "description": "Standardändringstyp."
+            }
+          }
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "itemsProperty": {
+          "title": "Objektegenskap",
+          "description": "Egenskapen som innehåller den matris som ska uppdateras."
+        },
+        "resultProperty": {
+          "title": "Result property",
+          "description": "Egenskap som lagrar den här åtgärdens resultat."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Nytt värde eller uttryck."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EmailEntityRecognizer": {
+      "title": "Email entity recognizer",
+      "description": "Identifieringsobjekt som identifierar e-post.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EmitEvent": {
+      "title": "Generera en anpassad händelse",
+      "description": "Generera en händelse. Fånga in den här händelsen med en utlösare.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "eventName": {
+          "title": "Händelsenamn",
+          "description": "Namn på händelsen som ska genereras.",
+          "oneOf": {
+            "0": {
+              "title": "Inbyggd händelse",
+              "description": "Standardhändelsetyp."
+            },
+            "1": {
+              "title": "Anpassad händelse",
+              "description": "Anpassad händelsetyp"
+            }
+          }
+        },
+        "eventValue": {
+          "title": "Händelsevärde",
+          "description": "Värde att generera med händelsen (valfritt)."
+        },
+        "bubbleEvent": {
+          "title": "Händelseredigering uppåt av händelse",
+          "description": "Om värdet är sant skickas händelsen till överordnade dialogrutor."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EndDialog": {
+      "title": "Avsluta dialogruta",
+      "description": "Avsluta den här dialogrutan.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Resultatvärdet som returneras till den överordnade dialogrutan."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EndTurn": {
+      "title": "Avsluta tur",
+      "description": "Avsluta den aktuella turen utan att avsluta dialogen.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.FirstSelector": {
+      "title": "First trigger selector",
+      "description": "Väljare för första sanna regeln",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.Foreach": {
+      "title": "För varje objekt",
+      "description": "Kör åtgärder för varje objekt i en mängd.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "itemsProperty": {
+          "title": "Objektegenskap",
+          "description": "Egenskap som innehåller matrisen."
+        },
+        "index": {
+          "title": "Indexegenskap",
+          "description": "Egenskapen som innehåller objektets index."
+        },
+        "value": {
+          "title": "Värdeegenskap",
+          "description": "Egenskapen som innehåller objektets värde."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Åtgärder som ska utföras för varje objekt. Använd $foreach.value när du vill ha åtkomst till respektive objekts värde. Använd $foreach.index när du vill ha åtkomst till respektive objekts index."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ForeachPage": {
+      "title": "För varje sida",
+      "description": "Kör åtgärder på varje sida (objektmängd) i en matris.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "itemsProperty": {
+          "title": "Objektegenskap",
+          "description": "Egenskap som innehåller matrisen."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Åtgärder som ska köras för varje sida. Använd $foreach.page när du vill öppna varje sida."
+        },
+        "pageIndex": {
+          "title": "Indexegenskap",
+          "description": "Egenskapen som innehåller sidans index."
+        },
+        "page": {
+          "title": "Sidegenskap",
+          "description": "Egenskapen som innehåller sidans värde."
+        },
+        "pageSize": {
+          "title": "Sidstorlek",
+          "description": "Antal objekt på varje sida."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GetActivityMembers": {
+      "title": "Get activity members",
+      "description": "Hämta de medlemmar som deltar i en aktivitet. (Endast BotFrameworkAdapter)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap (namngiven plats för att lagra information)."
+        },
+        "activityId": {
+          "title": "Activity Id",
+          "description": "Aktivitets-ID eller ett uttryck för att hämta medlemmarna med ett activityId. Om inget anges används det aktuella aktivitets-ID:t."
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GetConversationMembers": {
+      "title": "Get conversation members",
+      "description": "Hämta de medlemmar som deltar i en konversation. (Endast BotFrameworkAdapter)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap (namngiven plats för att lagra information)."
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GotoAction": {
+      "title": "Go to action",
+      "description": "Gå till en åtgärd efter ID.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "actionId": {
+          "title": "Åtgärds-ID",
+          "description": "Åtgärds-ID för att köra nästa"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GuidEntityRecognizer": {
+      "title": "Guid entity recognizer",
+      "description": "Identifieringsobjekt som identifierar GUID.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.HashtagEntityRecognizer": {
+      "title": "Hashtag entity recognizer",
+      "description": "Identifieringsobjekt som identifierar hashtaggar.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.HttpRequest": {
+      "title": "HTTP-begäran",
+      "description": "Gör HTTP-begäran.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "method": {
+          "title": "HTTP-metod",
+          "description": "HTTP-metod att använda."
+        },
+        "url": {
+          "title": "URL",
+          "description": "URL att anropa (stöder databindning)."
+        },
+        "body": {
+          "title": "Brödtext",
+          "description": "Text att inkludera i HTTP-anrop (stöder databindning)."
+        },
+        "resultProperty": {
+          "title": "Resultategenskap",
+          "description": "En egenskap för att lagra resultatet av den här åtgärden. Resultatet kan innehålla vilken som helst av de fyra egenskaperna från HTTP-svaret: statusCode, reasonPhrase, content och headers. Om innehållet är JSON blir det ett deserialiserat objekt. Dessa värden kan du t. ex. nå via .innehåll."
+        },
+        "contentType": {
+          "title": "Innehållstyp",
+          "description": "Brödtextens innehållsmediatyp."
+        },
+        "headers": {
+          "title": "Rubriker",
+          "description": "Ett eller flera huvuden att inkludera i begäran (stöder databindning)."
+        },
+        "responseType": {
+          "title": "Svarstyp",
+          "description": "Definierar typen av HTTP-svar. Anropar automatiskt åtgärden \"Skicka ett svar\" om det är inställt på Aktivitet eller Aktiviteter.",
+          "oneOf": {
+            "0": {
+              "title": "Standardsvar",
+              "description": "Standardsvarstyp."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.IActivityTemplate": {
+      "title": "Microsoft ActivityTemplates",
+      "description": "ActivityTemplate-komponenter kan vara strängmallar, aktiviteter eller en implementeringar av ActivityTemplate",
+      "oneOf": {
+        "1": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation",
+              "properties": {
+                "isGroup": {
+                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "title": "isGroup"
+                },
+                "conversationType": {
+                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "title": "conversationType"
+                },
+                "id": {
+                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                  "title": "id"
+                },
+                "name": {
+                  "description": "Display friendly name",
+                  "title": "name"
+                },
+                "aadObjectId": {
+                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "title": "aadObjectId"
+                },
+                "role": {
+                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                  "title": "role"
+                }
+              }
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded",
+              "items": {
+                "description": "Channel account information needed to route a message",
+                "title": "ChannelAccount",
+                "properties": {
+                  "id": {
+                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                    "title": "id"
+                  },
+                  "name": {
+                    "description": "Display friendly name",
+                    "title": "name"
+                  },
+                  "aadObjectId": {
+                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "title": "aadObjectId"
+                  },
+                  "role": {
+                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                    "title": "role"
+                  }
+                }
+              }
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded",
+              "items": {
+                "description": "Message reaction object",
+                "title": "MessageReaction",
+                "properties": {
+                  "type": {
+                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions",
+              "properties": {
+                "to": {
+                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+                  "title": "to",
+                  "items": {
+                    "title": "Id",
+                    "description": "Id of recipient."
+                  }
+                },
+                "actions": {
+                  "description": "Actions that can be shown to the user",
+                  "title": "actions",
+                  "items": {
+                    "description": "A clickable action",
+                    "title": "CardAction",
+                    "properties": {
+                      "type": {
+                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "type"
+                      },
+                      "title": {
+                        "description": "Text description which appears on the button",
+                        "title": "title"
+                      },
+                      "image": {
+                        "description": "Image URL which will appear on the button, next to text label",
+                        "title": "image"
+                      },
+                      "text": {
+                        "description": "Text for this action",
+                        "title": "text"
+                      },
+                      "displayText": {
+                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "title": "displayText"
+                      },
+                      "value": {
+                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+                        "title": "value"
+                      },
+                      "channelData": {
+                        "description": "Channel-specific data associated with this action",
+                        "title": "channelData"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments",
+              "items": {
+                "description": "An attachment within an activity",
+                "title": "Attachment",
+                "properties": {
+                  "contentType": {
+                    "description": "mimetype/Contenttype for the file",
+                    "title": "contentType"
+                  },
+                  "contentUrl": {
+                    "description": "Content Url",
+                    "title": "contentUrl"
+                  },
+                  "content": {
+                    "description": "Embedded content",
+                    "title": "content"
+                  },
+                  "name": {
+                    "description": "(OPTIONAL) The name of the attachment",
+                    "title": "name"
+                  },
+                  "thumbnailUrl": {
+                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "title": "thumbnailUrl"
+                  }
+                }
+              }
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities",
+              "items": {
+                "description": "Metadata object pertaining to an activity",
+                "title": "Entity",
+                "properties": {
+                  "type": {
+                    "description": "Type of this entity (RFC 3987 IRI)",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo",
+              "properties": {
+                "activityId": {
+                  "description": "(Optional) ID of the activity to refer to",
+                  "title": "activityId"
+                },
+                "user": {
+                  "description": "(Optional) User participating in this conversation",
+                  "title": "user"
+                },
+                "bot": {
+                  "description": "Bot participating in this conversation",
+                  "title": "bot"
+                },
+                "conversation": {
+                  "description": "Conversation reference",
+                  "title": "conversation"
+                },
+                "channelId": {
+                  "description": "Channel ID",
+                  "title": "channelId"
+                },
+                "serviceUrl": {
+                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "title": "serviceUrl"
+                }
+              }
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights",
+              "items": {
+                "description": "Refers to a substring of content within another field",
+                "title": "TextHighlight",
+                "properties": {
+                  "text": {
+                    "description": "Defines the snippet of text to highlight",
+                    "title": "text"
+                  },
+                  "occurrence": {
+                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+                    "title": "occurrence"
+                  }
+                }
+              }
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction",
+              "properties": {
+                "id": {
+                  "description": "ID of this action",
+                  "title": "id"
+                },
+                "entities": {
+                  "description": "Entities associated with this action",
+                  "title": "entities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Microsoft.IDialog": {
+      "title": "Microsoft dialogs",
+      "description": "Komponenter som härleds från dialogruta"
+    },
+    "Microsoft.IEntityRecognizer": {
+      "title": "Entity recognizers",
+      "description": "Komponenter som härleds från EntityRecognizer.",
+      "oneOf": {
+        "0": {
+          "title": "Referens till Microsoft.IEntityRecognizer",
+          "description": "Referens till .dialog-filen för Microsoft.IEntityRecognizer."
+        }
+      }
+    },
+    "Microsoft.ILanguageGenerator": {
+      "title": "Microsoft LanguageGenerator",
+      "description": "Komponenter som härleds från LanguageGenerator-klassen"
+    },
+    "Microsoft.IRecognizer": {
+      "title": "Microsoft recognizer",
+      "description": "Komponenter som härleds från identifieringsobjektsklassen"
+    },
+    "Microsoft.ITextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "Komponenter som härleds från TextTemplate-klassen"
+    },
+    "Microsoft.ITrigger": {
+      "title": "Microsoft-utlösare",
+      "description": "Komponenter som härleds från OnCondition-klassen.",
+      "oneOf": {
+        "0": {
+          "title": "Referens till Microsoft.ITrigger",
+          "description": "Referens till .dialog-filen för Microsoft.ITrigger."
+        }
+      }
+    },
+    "Microsoft.ITriggerSelector": {
+      "title": "Väljare",
+      "description": "Komponenter som härleds från TriggerSelector-klassen.",
+      "oneOf": {
+        "0": {
+          "title": "Referens till Microsoft.ITriggerSelector",
+          "description": "Referens till .dialog-filen för Microsoft.ITriggerSelector."
+        }
+      }
+    },
+    "Microsoft.IfCondition": {
+      "title": "Om-villkor",
+      "description": "Dubbelriktad gren som konversationsflödet som baseras på ett villkor.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Uttryck att utvärdera."
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Åtgärder som ska köras om villkoret är sant."
+        },
+        "elseActions": {
+          "title": "Annars",
+          "description": "Åtgärder som ska köras om villkoret är falskt."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.InputDialog": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "prompt": {
+          "title": "Initial prompt",
+          "description": "Meddelande att skicka för att samla in information."
+        },
+        "unrecognizedPrompt": {
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "validations": {
+          "title": "Verifieringsuttryck",
+          "description": "Uttryck för att verifiera användarindata.",
+          "items": {
+            "title": "Villkor",
+            "description": "Uttryck som måste uppfyllas för att indata ska betraktas som giltiga"
+          }
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra insamlad information. Indata hoppas över om egenskapen har ett värde (om inte \"Fråga alltid\" är sant)."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "allowInterruptions": {
+          "title": "Tillåt avbrott",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.IpEntityRecognizer": {
+      "title": "IP entity recognizer",
+      "description": "Identifieringsobjekt som identifierar Internet-IP-mönster (som 192.1.1.1).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.LanguagePolicy": {
+      "title": "Language policy",
+      "description": "Detta representerar en principmappning för sökningar efter nationella inställningar att användas som språk",
+      "additionalProperties": {
+        "title": "Princip per nationella inställningar",
+        "description": "Språkprincip per nationella inställningar.",
+        "items": {
+          "title": "Nationella inställningar",
+          "description": "Nationella inställningar som sv-se."
+        }
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.LogAction": {
+      "title": "Logga till konsol",
+      "description": "Logga ett meddelande till värdprogrammet. Skicka en TraceActivity till Bot Framework Emulator (valfritt).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "text": {
+          "title": "Text",
+          "description": "Information att logga."
+        },
+        "label": {
+          "title": "Etikett",
+          "description": "Etikett för spårningsaktiviteten (används för att identifiera den i en lista över spårningsaktiviteter.)"
+        },
+        "traceActivity": {
+          "title": "Send trace activity",
+          "description": "Om värdet är sant skickas en TraceActivity automatiskt (vy i Bot Framework Emulator)."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.LuisRecognizer": {
+      "title": "LUIS-identifieringsobjekt",
+      "description": "LUIS-identifieringsobjekt.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
+        },
+        "applicationId": {
+          "title": "LUIS application id",
+          "description": "Program-ID för din modell från LUIS-tjänsten."
+        },
+        "version": {
+          "title": "LUIS version",
+          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+        },
+        "endpoint": {
+          "title": "LUIS endpoint",
+          "description": "Slutpunkt att använda med LUIS-tjänster som https://westus.api.cognitive.microsoft.com."
+        },
+        "endpointKey": {
+          "title": "LUIS-förutsägelsenyckel",
+          "description": "LUIS-förutsägelsenyckel som används för att anropa slutpunkten."
+        },
+        "externalEntityRecognizer": {
+          "title": "External entity recognizer",
+          "description": "Entiteter som känns igen av det här identifieringsobjektet skickas som externa entiteter till LUIS."
+        },
+        "dynamicLists": {
+          "title": "Dynamiska listor",
+          "description": "Körningsdefinierade entitetslistor.",
+          "items": {
+            "title": "Entitetslista",
+            "description": "Listor med kanoniska värden och synonymer för en entitet.",
+            "properties": {
+              "entity": {
+                "title": "Entitet",
+                "description": "Entitet som ska utökas med en dynamisk lista."
+              },
+              "list": {
+                "title": "Dynamisk lista",
+                "description": "Lista med kanoniska former och synonymer.",
+                "items": {
+                  "title": "Listpost",
+                  "description": "Kanoniskt formulär och synonymer.",
+                  "properties": {
+                    "canonicalForm": {
+                      "title": "Kanoniskt formulär",
+                      "description": "Lösning om någon synonym matchar."
+                    },
+                    "synonyms": {
+                      "title": "Synonymer",
+                      "description": "Lista med synonymer för ett kanoniskt formulär.",
+                      "items": {
+                        "title": "Synonym",
+                        "description": "Synonym för kanoniskt formulär."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "predictionOptions": {
+          "title": "Förutsägelsealternativ",
+          "description": "Alternativ för att kontrollera LUIS-förutsägelsebeteende.",
+          "properties": {
+            "includeAllIntents": {
+              "title": "Inkludera alla avsikter",
+              "description": "Sant för alla avsikter, falskt endast för toppavsikten."
+            },
+            "includeInstanceData": {
+              "title": "Inkludera $instance",
+              "description": "Sant om du vill inkludera $instance-metadata i LUIS-svaret."
+            },
+            "log": {
+              "title": "Logga talindata",
+              "description": "Sant om du vill logga talindata i LUIS-tjänsten."
+            },
+            "preferExternalEntities": {
+              "title": "Prefer external entities",
+              "description": "Sant om du föredrar externa entiteter framför dem som genererats av LUIS-modeller."
+            },
+            "slot": {
+              "title": "Fack",
+              "description": "Fack att använda för att prata med en LUIS-tjänst som produktion eller mellanlagring."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.MentionEntityRecognizer": {
+      "title": "Mentions entity recognizer",
+      "description": "Identifieringsobjekt som identifierar @Mentions",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.MostSpecificSelector": {
+      "title": "Most specific trigger selector",
+      "description": "Välj de mest specifika sanna händelserna med en valfri ytterligare väljare",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.MultiLanguageRecognizer": {
+      "title": "Flerspråkigt identifieringsobjekt",
+      "description": "Konfigurera ett identifieringsobjekt per språk och ange språkåterställningsprincipen.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
+        },
+        "languagePolicy": {
+          "title": "Språkprincip",
+          "description": "Definierar grundspråk att testa som användarindataspråk."
+        },
+        "recognizers": {
+          "title": "Identifieringsobjekt",
+          "description": "Språkkarta -> Identifieringsobjekt"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.NumberEntityRecognizer": {
+      "title": "Number entity recognizer",
+      "description": "Identifieringsobjekt som identifierar tal.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.NumberInput": {
+      "title": "Dialogruta för nummerindata",
+      "description": "Samla in information – Fråga efter ett nummer.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Standardvärde",
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Property ställs in på värdet för det här uttrycket såvida det inte utvärderas till null."
+        },
+        "outputFormat": {
+          "title": "Utdataformat",
+          "description": "Uttryck för att formatera talutdata."
+        },
+        "defaultLocale": {
+          "title": "Standard för nationella inställningar",
+          "description": "Standardspråk som ska användas om det inte finns några tillgängliga nationella inställningar."
+        },
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "prompt": {
+          "title": "Initial prompt",
+          "description": "Meddelande att skicka för att samla in information."
+        },
+        "unrecognizedPrompt": {
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "validations": {
+          "title": "Verifieringsuttryck",
+          "description": "Uttryck för att verifiera användarindata.",
+          "items": {
+            "title": "Villkor",
+            "description": "Uttryck som måste uppfyllas för att indata ska betraktas som giltiga"
+          }
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra insamlad information. Indata hoppas över om egenskapen har ett värde (om inte \"Fråga alltid\" är sant)."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "allowInterruptions": {
+          "title": "Tillåt avbrott",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.NumberRangeEntityRecognizer": {
+      "title": "Number range entity recognizer",
+      "description": "Identifieringsobjekt som identifierar talintervall (exempelvis 2 till 5).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuthInput-dialogruta",
+      "description": "Samla in inloggningsinformation.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "connectionName": {
+          "title": "Anslutningsnamn",
+          "description": "Anslutningsnamnet som konfigurerats i Azure Web App Bot OAuth-inställningarna."
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "text": {
+          "title": "Text",
+          "description": "Text som visas på OAuth-inloggningskortet."
+        },
+        "title": {
+          "title": "Rubrik",
+          "description": "Rubrik som visas på OAuth-inloggningskortet."
+        },
+        "timeout": {
+          "title": "Tidsgräns",
+          "description": "Timeout-inställning för OAuth-inloggningskortet."
+        },
+        "property": {
+          "title": "Tokenegenskap",
+          "description": "Egenskap som lagrar OAuth-tokenresultatet."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande att skicka om användarsvaret är ogiltigt."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "defaultValue": {
+          "title": "Standardvärde",
+          "description": "Uttryck för att undersöka varje tur i konversationen som ett möjligt värde till egenskapen."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnActivity": {
+      "title": "Vid aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottande av en generisk aktivitet.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "type": {
+          "title": "Aktivitetstyp",
+          "description": "Activity.Type att matcha"
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnAssignEntity": {
+      "title": "Om entitetstilldelning",
+      "description": "Åtgärder som ska vidtas när en egenskap ska tilldelas en entitet.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap som ska anges när entiteten har valts."
+        },
+        "entity": {
+          "title": "Entitet",
+          "description": "Entitet placeras i egenskap"
+        },
+        "operation": {
+          "title": "Åtgärd",
+          "description": "Åtgärd för att tilldela entitet."
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnBeginDialog": {
+      "title": "I dialogrutan Starta",
+      "description": "Åtgärder som ska genomföras när den här dialogen startar.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnCancelDialog": {
+      "title": "I dialogrutan Avbryt",
+      "description": "Åtgärder som ska genomföras för händelsen Avbryt dialogruta.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnChooseEntity": {
+      "title": "Att välja entitet",
+      "description": "Åtgärder som ska utföras när ett enhetsvärde måste matchas.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "Egenskap som ska konfigureras",
+          "description": "Egenskap som ska anges när entiteten har valts."
+        },
+        "entity": {
+          "title": "Tvetydig entitet",
+          "description": "Tvetydig entitet"
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnChooseIntent": {
+      "title": "Vid tvetydig avsikt",
+      "description": "Åtgärder som ska genomföras när en avsikt är tvetydig.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "intents": {
+          "title": "Avsikter",
+          "description": "Avsikter som måste finnas i ChooseIntent-resultatet för att det här villkoret ska kunna utlösas.",
+          "items": {
+            "title": "Avsikt",
+            "description": "Avsiktsnamn att utlösas av."
+          }
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnChooseProperty": {
+      "title": "Att välja egenskap",
+      "description": "Åtgärder som ska vidtas när det finns flera möjliga mappningar av entiteter till egenskaper.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "entity": {
+          "title": "Entitet tilldelas",
+          "description": "Entitet tilldelas till egenskapsval"
+        },
+        "properties": {
+          "title": "Möjliga egenskaper",
+          "description": "Egenskaper att välja mellan.",
+          "items": {
+            "title": "Egenskapsnamn",
+            "description": "Möjlig egenskap att välja."
+          }
+        },
+        "entities": {
+          "title": "Entiteter",
+          "description": "Tvetydiga entitetsnamn.",
+          "items": {
+            "title": "Entitetsnamn",
+            "description": "Entitetsnamn att välja mellan."
+          }
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnCondition": {
+      "title": "På ett villkor",
+      "description": "Åtgärder som ska genomföras när det angivna villkoret är sant.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnContinueConversation": {
+      "title": "On continue conversation",
+      "description": "Åtgärder som ska genomföras när en konversation startas igen från en ContinueConversationLater-åtgärd.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "Om ConversationUpdate-aktiviteten",
+      "description": "Åtgärder som ska genomföras efter en aktivitet med typen ConversationUpdate.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnDialogEvent": {
+      "title": "Om dialogrutehändelse",
+      "description": "Åtgärder som ska genomföras när en specifik dialoghändelse inträffar.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "event": {
+          "title": "Namn på dialogrutehändelse",
+          "description": "Namn på dialoghändelse."
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnEndOfActions": {
+      "title": "Vid slut på åtgärder",
+      "description": "Åtgärder som ska vidtas när det inte finns några fler åtgärder i den aktuella dialogen.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+      "title": "Om EndOfConversation-aktivitet",
+      "description": "Åtgärder som ska genomföras efter en aktivitet med typen EndOfConversation.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnError": {
+      "title": "On error",
+      "description": "Åtgärd att utföra när en feldialogruta visas.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnEventActivity": {
+      "title": "Om händelseaktivitet",
+      "description": "Åtgärder som ska genomföras efter mottagandet av en aktivitet med typen Event.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnHandoffActivity": {
+      "title": "Om överlämningsaktivitet",
+      "description": "Åtgärder som ska genomföras efter en aktivitet med typen HandOff.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+      "title": "On InstallationUpdate activity",
+      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condition",
+          "description": "Condition (expression)."
+        },
+        "actions": {
+          "title": "Actions",
+          "description": "Sequence of actions to execute."
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+        },
+        "runOnce": {
+          "title": "Run Once",
+          "description": "True if rule should run once per unique conditions"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnIntent": {
+      "title": "Om avsiktsigenkänning",
+      "description": "Åtgärder som ska genomföras när den angivna avsikten har identifierats.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "intent": {
+          "title": "Avsikt",
+          "description": "Avsiktsnamn."
+        },
+        "entities": {
+          "title": "Entiteter",
+          "description": "Obligatoriska entiteter.",
+          "items": {
+            "title": "Entitet",
+            "description": "Entitet som måste vara närvarande."
+          }
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnInvokeActivity": {
+      "title": "Om anropsaktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen Invoke.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageActivity": {
+      "title": "Om meddelandeaktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen Message. Åsidosätter avsiktsutlösaren.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+      "title": "Om MessageDelete-aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen MessageDelete.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+      "title": "Om MessageReaction-aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen MessageReaction.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+      "title": "Om MessageUpdate-aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen MessageUpdate.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnQnAMatch": {
+      "title": "On QnAMaker match",
+      "description": "Åtgärder som ska genomföras när en matchning från QnAMaker påträffas.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "Om RepromptDialog",
+      "description": "Åtgärder att genomföras när händelsen RepromptDialog inträffar.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnTypingActivity": {
+      "title": "Vid skrivaktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen Typing.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "Vid okänd avsikt",
+      "description": "Åtgärd att utföra när användarindata inte kan identifieras eller om ingen av utlösarna av avsiktsigenkänning matchar en känd avsikt.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Villkor",
+          "description": "Villkor (uttryck)."
+        },
+        "actions": {
+          "title": "Åtgärder",
+          "description": "Sekvens med åtgärder som ska köras."
+        },
+        "priority": {
+          "title": "Prioritet",
+          "description": "Prioritet för utlösare med 0 som det högsta och < 0 ignoreras."
+        },
+        "runOnce": {
+          "title": "Kör en gång",
+          "description": "Sant om regeln ska köras en gång per unikt villkor"
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OrdinalEntityRecognizer": {
+      "title": "Ordinal entity recognizer",
+      "description": "Identifieringsobjekt som identifierar ordningstal (exempel: första, andra, tredje).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.PercentageEntityRecognizer": {
+      "title": "Percentage entity recognizer",
+      "description": "Identifieringsobjekt som identifierar procentandelar.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.PhoneNumberEntityRecognizer": {
+      "title": "Phone number entity recognizer",
+      "description": "Identifieringsobjekt som identifierar telefonnummer.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.QnAMakerDialog": {
+      "title": "QnAMaker dialog",
+      "description": "Dialogruta som använder QnAMAker-kunskapsbasen för att besvara frågor.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "knowledgeBaseId": {
+          "title": "KnowledgeBase-ID",
+          "description": "KnowledgeBase-ID för din QnA Maker-KnowledgeBase."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "Slutpunktsnyckel för QnA Maker KB."
+        },
+        "hostname": {
+          "title": "Värddatornamn",
+          "description": "Värddatornamn för din QnA Maker-tjänst."
+        },
+        "noAnswer": {
+          "title": "Återställningssvar",
+          "description": "Standardsvar att returnera när inget hittades i kunskapsbasen."
+        },
+        "threshold": {
+          "title": "Tröskelvärde",
+          "description": "Tröskelvärde för att filtrera resultat."
+        },
+        "activeLearningCardTitle": {
+          "title": "Kortubrik för aktiv inlärning",
+          "description": "Rubrik för kort för aktiva utbildningsförslag."
+        },
+        "cardNoMatchText": {
+          "title": "Kort – ingen matchningstext",
+          "description": "Text utan matchningsalternativ."
+        },
+        "cardNoMatchResponse": {
+          "title": "Kort – inget matchningssvar",
+          "description": "Anpassat svar när inget matchningsalternativ har valts."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "Metadatafilter som ska användas när QnA Maker KB anropas.",
+          "items": {
+            "title": "Metadatafilter",
+            "description": "Metadatafilter.",
+            "properties": {
+              "name": {
+                "title": "Namn",
+                "description": "Namn på filteregenskap."
+              },
+              "value": {
+                "title": "Värde",
+                "description": "Värde att filtrera på."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "Överst",
+          "description": "Det antal svar du vill hämta."
+        },
+        "isTest": {
+          "title": "IsTest",
+          "description": "Sant om du pekar på Testmiljö, i annat fall falskt."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "Rankningsberäknaretyp.",
+          "oneOf": {
+            "0": {
+              "title": "Standardrankningsberäknare",
+              "description": "Typer av standardrankningsberäknare."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.QnAMakerRecognizer": {
+      "title": "QnAMaker recognizer",
+      "description": "Identifieringsobjekt för att generera QnAMatch-avsikter från en kunskapsbas.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt unikt ID som används med RecognizerSet."
+        },
+        "knowledgeBaseId": {
+          "title": "KnowledgeBase-ID",
+          "description": "Knowledge base Id of your QnA Maker knowledge base."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "Slutpunktsnyckel för QnA Maker KB."
+        },
+        "hostname": {
+          "title": "Värddatornamn",
+          "description": "Värddatornamn för din QnA Maker-tjänst."
+        },
+        "threshold": {
+          "title": "Tröskelvärde",
+          "description": "Tröskelvärde för att filtrera resultat."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "Metadatafilter som ska användas när QnA Maker KB anropas.",
+          "items": {
+            "title": "Metadatafilter",
+            "description": "Metadatafilter som ska användas vid frågor till QnA Maker KB.",
+            "properties": {
+              "name": {
+                "title": "Namn",
+                "description": "Namn att filtrera efter."
+              },
+              "value": {
+                "title": "Värde",
+                "description": "Värde för att begränsa filtret."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "Överst",
+          "description": "Det antal svar du vill hämta."
+        },
+        "isTest": {
+          "title": "Use test environment",
+          "description": "Sant om du pekar på Testmiljö, i annat fall falskt."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "Rankningsberäknaretyp.",
+          "oneOf": {
+            "0": {
+              "title": "Typ av rankningsberäknare",
+              "description": "Rankningsberäknaretyp."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+            }
+          }
+        },
+        "includeDialogNameInMetadata": {
+          "title": "Include dialog name",
+          "description": "Om värdet är inställt på falskt skickas inte dialognamnet till QnAMaker. (default) är sant"
+        },
+        "metadata": {
+          "title": "Metadatafilter",
+          "description": "Metadatafilter som ska användas när QnA Maker KB anropas.",
+          "items": {
+            "title": "Metadatafilter",
+            "description": "Det metadataegenskaper som ska användas när QnA Maker KB anropas.",
+            "properties": {
+              "name": {
+                "title": "Namn",
+                "description": "Namn på det värde som ska testas."
+              },
+              "value": {
+                "title": "Värde",
+                "description": "Värde att filtrera mot."
+              }
+            }
+          }
+        },
+        "context": {
+          "title": "QnA request context",
+          "description": "Sammanhang som ska användas för rankning."
+        },
+        "qnaId": {
+          "title": "QnA Id",
+          "description": "Ett tal eller uttryck som är det QnAId som ska skickas till QnAMaker-API:et."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RandomSelector": {
+      "title": "Slumpmässig regelväljare",
+      "description": "Välj den mest specifika sanna regeln.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "seed": {
+          "title": "Slumpmässigt startvärde",
+          "description": "Slumpmässigt startvärde för att starta slumptalsgenerering."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RecognizerSet": {
+      "title": "Recognizer set",
+      "description": "Skapar unionen av avsikter och entiteter för identifieringsobjekten i uppsättningen.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
+        },
+        "recognizers": {
+          "title": "Identifieringsobjekt",
+          "description": "Lista över identifieringsobjekt som definierats för den här uppsättningen."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RegexEntityRecognizer": {
+      "title": "Regex entity recognizer",
+      "description": "Identifieringsobjekt som identifierar mönster för indata baserade på regex.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "name": {
+          "title": "Namn",
+          "description": "Namn på entiteten"
+        },
+        "pattern": {
+          "title": "Mönster",
+          "description": "Mönster uttryckt som reguljärt uttryck."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RegexRecognizer": {
+      "title": "Regex-identifieringsobjekt",
+      "description": "Använd reguljära uttryck när du ska tolka avsikter och entiteter från användarindata.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
+        },
+        "intents": {
+          "title": "RegEx-mönster till avsikter",
+          "description": "Mönstermängd som ska matcha en avsikt.",
+          "items": {
+            "title": "Mönster",
+            "description": "Avsikt och regexmönster.",
+            "properties": {
+              "intent": {
+                "title": "Avsikt",
+                "description": "Avsiktens namn."
+              },
+              "pattern": {
+                "title": "Mönster",
+                "description": "Mönster för reguljärt uttryck."
+              }
+            }
+          }
+        },
+        "entities": {
+          "title": "Entitetsidentifieringsobjekt",
+          "description": "Mängd med entitetsidentifieringsobjekt att använda."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RepeatDialog": {
+      "title": "Upprepa dialog",
+      "description": "Upprepa aktuell dialog.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "allowLoop": {
+          "title": "AllowLoop",
+          "description": "Valfritt villkor som, om det är sant, tillåter loop av den upprepande dialogen."
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "options": {
+          "title": "Alternativ",
+          "description": "Ett eller flera alternativ som skickas till den dialogruta som anropas.",
+          "additionalProperties": {
+            "title": "Alternativ",
+            "description": "Alternativ för upprepande dialog."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Om värdet är inställt på falskt kan dialogrutan som anropas bearbeta den aktuella aktiviteten."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ReplaceDialog": {
+      "title": "Ersätt dialog",
+      "description": "Ersätt aktuell dialog med en annan dialog.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "Dialogruta"
+            }
+          },
+          "title": "Namn på dialogruta",
+          "description": "Namn på dialogrutan som ska anropas."
+        },
+        "options": {
+          "title": "Alternativ",
+          "description": "Ett eller flera alternativ som skickas till den dialogruta som anropas.",
+          "additionalProperties": {
+            "title": "Alternativ",
+            "description": "Alternativ för att ersättande dialog."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Om värdet är inställt på falskt kan dialogrutan som anropas bearbeta den aktuella aktiviteten."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ResourceMultiLanguageGenerator": {
+      "title": "Resource multi-language generator",
+      "description": "MultiLanguage-generator som är bunden till resursen med resurs-ID.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt generator-ID."
+        },
+        "resourceId": {
+          "title": "Resurs-ID",
+          "description": "Resurs som är rotspråksgenerator.  Andra generatorer med samma namn och språksuffix kommer att läsas in i den här generatorn och användas baserat på språkprincipen."
+        },
+        "languagePolicy": {
+          "title": "Language policy",
+          "description": "Ange en alternativ språkprincip för den här generatorn. Om du inte anger den används den globala språkprincipen."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SendActivity": {
+      "title": "Skicka en aktivitet",
+      "description": "Svara med en aktivitet.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "activity": {
+          "title": "Aktivitet",
+          "description": "Aktivitet att skicka."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SetProperties": {
+      "title": "Konfigurera egenskap",
+      "description": "Ange ett eller flera egenskapsvärden.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "assignments": {
+          "title": "Tilldelningar",
+          "description": "Egenskapsvärdetilldelningar som ska konfigureras.",
+          "items": {
+            "title": "Tilldelning",
+            "description": "Egenskapstilldelning.",
+            "properties": {
+              "property": {
+                "title": "Egenskap",
+                "description": "Egenskap (namngiven plats för att lagra information)."
+              },
+              "value": {
+                "title": "Värde",
+                "description": "Nytt värde eller uttryck."
+              }
+            }
+          }
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SetProperty": {
+      "title": "Konfigurera egenskap",
+      "description": "Ange en egenskap för ett värde.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap (namngiven plats för att lagra information)."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Nytt värde eller uttryck."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SignOutUser": {
+      "title": "Sign out user",
+      "description": "Registrera en användare som loggats in tidigare med OAuthInput.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "userId": {
+          "title": "UserId",
+          "description": "Uttryck till en användare för att logga ut. Standardinställningen är user.id."
+        },
+        "connectionName": {
+          "title": "Connection name",
+          "description": "Anslutningsnamn som användes med OAuthInput för att logga en användare."
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.StaticActivityTemplate": {
+      "title": "Microsoft static activity template",
+      "description": "Detta låter dig definiera ett statiskt aktivitetsobjekt",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "activity": {
+          "title": "Aktivitet",
+          "description": "En statisk aktivitet att använda."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SwitchCondition": {
+      "title": "Växlingsvillkor",
+      "description": "Kör olika åtgärder baserat på en egenskaps värde.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "condition": {
+          "title": "Villkor",
+          "description": "Egenskap som ska utvärderas."
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "cases": {
+          "title": "Fall",
+          "description": "Åtgärder för varje möjligt villkor.",
+          "items": {
+            "title": "Fall",
+            "description": "Fall och åtgärder.",
+            "properties": {
+              "value": {
+                "title": "Värde",
+                "description": "Det värde som villkoret ska jämföras med."
+              },
+              "actions": {
+                "title": "Åtgärder",
+                "description": "Åtgärder att köra."
+              }
+            }
+          }
+        },
+        "default": {
+          "title": "Standardinställning",
+          "description": "Åtgärder som ska utföras om inget av fallen uppfyller villkoret."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TelemetryTrackEvent": {
+      "title": "Telemetry - track event",
+      "description": "Spåra en anpassad händelse med hjälp av den registrerade telemetriklienten.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "eventName": {
+          "title": "Event name",
+          "description": "Namnet på den händelse som ska spåras."
+        },
+        "properties": {
+          "title": "Egenskaper",
+          "description": "En eller flera egenskaper att bifoga till händelsen som spåras."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TemperatureEntityRecognizer": {
+      "title": "Temperature recognizer",
+      "description": "Identifieringsobjekt som identifierar temperaturer.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TemplateEngineLanguageGenerator": {
+      "title": "Template multi-language generator",
+      "description": "Mallgenerator som endast tillåter infogad utvärdering av mallar.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt generator-ID."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TextInput": {
+      "title": "Dialogrutan för textinmatning",
+      "description": "Mängdinformation – Fråga efter ett ord eller en mening.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Standardvärde",
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Property ställs in på värdet för det här uttrycket såvida det inte utvärderas till null."
+        },
+        "outputFormat": {
+          "title": "Utdataformat",
+          "description": "Uttryck för att formatera utdata."
+        },
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "prompt": {
+          "title": "Initial prompt",
+          "description": "Meddelande att skicka för att samla in information."
+        },
+        "unrecognizedPrompt": {
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "invalidPrompt": {
+          "title": "Ogiltig prompt",
+          "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
+        },
+        "defaultValueResponse": {
+          "title": "Standardvärdesvar",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
+        },
+        "maxTurnCount": {
+          "title": "Max antal inmatningar",
+          "description": "Maximalt antal återställningsförsök att samla in information."
+        },
+        "validations": {
+          "title": "Verifieringsuttryck",
+          "description": "Uttryck för att verifiera användarindata.",
+          "items": {
+            "title": "Villkor",
+            "description": "Uttryck som måste uppfyllas för att indata ska betraktas som giltiga"
+          }
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Egenskap för att lagra insamlad information. Indata hoppas över om egenskapen har ett värde (om inte \"Fråga alltid\" är sant)."
+        },
+        "alwaysPrompt": {
+          "title": "Fråga alltid",
+          "description": "Samla in information även om den angivna egenskapen inte är tom."
+        },
+        "allowInterruptions": {
+          "title": "Tillåt avbrott",
+          "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "Använd LG-mallar för att skapa text",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "Mall",
+          "description": "Språkgeneratormall att utvärdera för att skapa texten."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ThrowException": {
+      "title": "Throw an exception",
+      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "errorValue": {
+          "title": "Error value",
+          "description": "Error value to throw."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TraceActivity": {
+      "title": "Skicka en TraceActivity",
+      "description": "Skicka en spårningsaktivitet till transkriptionsloggaren och/eller Bot Framework Emulator.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "name": {
+          "title": "Namn",
+          "description": "Namn på spårningsaktiviteten"
+        },
+        "label": {
+          "title": "Etikett",
+          "description": "Etikett för spårningsaktiviteten (används för att identifiera den i en lista över spårningsaktiviteter.)"
+        },
+        "valueType": {
+          "title": "Värdetyp",
+          "description": "Värdetyp"
+        },
+        "value": {
+          "title": "Värde",
+          "description": "Egenskapen som innehåller det värde som ska skickas som spårningsaktivitet."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TrueSelector": {
+      "title": "True trigger selector",
+      "description": "Väljare för alla sanna händelser",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.UpdateActivity": {
+      "title": "Update an activity",
+      "description": "Svara med en aktivitet.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Valfritt ID för dialogrutan"
+        },
+        "disabled": {
+          "title": "Inaktiverat",
+          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+        },
+        "activityId": {
+          "title": "Aktivitets-ID",
+          "description": "Ett stränguttryck med det aktivitets-ID som ska uppdateras."
+        },
+        "activity": {
+          "title": "Aktivitet",
+          "description": "Aktivitet att skicka."
+        },
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.UrlEntityRecognizer": {
+      "title": "Url recognizer",
+      "description": "Identifieringsobjekt som identifierar URL:er.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "arrayExpression": {
+      "title": "Matris eller uttryck",
+      "description": "Matris eller uttryck att utvärdera.",
+      "oneOf": {
+        "0": {
+          "title": "Matris",
+          "description": "Matriskonstant."
+        }
+      }
+    },
+    "booleanExpression": {
+      "title": "Booleskt värde eller uttryck",
+      "description": "Boolesk konstant eller uttryck att utvärdera.",
+      "oneOf": {
+        "0": {
+          "title": "Booleskt",
+          "description": "Boolesk konstant."
+        }
+      }
+    },
+    "component": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "Verktygsegenskap",
+          "description": "Öppen egenskap för verktyg."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Variant av dialogruteobjekt",
+          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+        },
+        "$designer": {
+          "title": "Designerinformation",
+          "description": "Extra information för Bot Framework Composer."
+        }
+      }
+    },
+    "condition": {
+      "title": "Booleskt villkor",
+      "description": "Boolesk konstant eller uttryck att utvärdera.",
+      "oneOf": {
+        "1": {
+          "title": "Booleskt",
+          "description": "Booleskt värde."
+        }
+      }
+    },
+    "equalsExpression": {
+      "title": "Uttryck",
+      "description": "Uttryck som börjar med =."
+    },
+    "expression": {
+      "title": "Uttryck",
+      "description": "Uttryck att utvärdera."
+    },
+    "integerExpression": {
+      "title": "Heltal eller uttryck",
+      "description": "Heltalskonstant eller uttryck att utvärdera.",
+      "oneOf": {
+        "0": {
+          "title": "Heltal",
+          "description": "Heltalskonstant."
+        }
+      }
+    },
+    "numberExpression": {
+      "title": "Nummer eller uttryck",
+      "description": "Nummerkonstant eller uttryck att utvärdera.",
+      "oneOf": {
+        "0": {
+          "title": "Nummer",
+          "description": "Nummerkonstant."
+        }
+      }
+    },
+    "objectExpression": {
+      "title": "Objekt eller uttryck",
+      "description": "Objekt eller uttryck att utvärdera.",
+      "oneOf": {
+        "0": {
+          "title": "Objekt",
+          "description": "Objektkonstant."
+        }
+      }
+    },
+    "role": {
+      "title": "$role",
+      "description": "Definierar rollen som spelas i dialogschemat från [expression|interface|implements($kind)|extends($kind)]."
+    },
+    "stringExpression": {
+      "title": "Sträng eller uttryck",
+      "description": "Interpolerad sträng eller uttryck att utvärdera.",
+      "oneOf": {
+        "0": {
+          "title": "Sträng",
+          "description": "Interpolerad sträng"
+        }
+      }
+    },
+    "valueExpression": {
+      "title": "Valfritt eller uttryck",
+      "description": "En valfri konstant eller uttryck att utvärdera.",
+      "oneOf": {
+        "0": {
+          "title": "Objekt",
+          "description": "Objektkonstant."
+        },
+        "1": {
+          "title": "Matris",
+          "description": "Matriskonstant."
+        },
+        "2": {
+          "title": "Sträng",
+          "description": "Interpolerad sträng."
+        },
+        "3": {
+          "title": "Booleskt",
+          "description": "Boolesk konstant"
+        },
+        "4": {
+          "title": "Nummer",
+          "description": "Nummerkonstant."
+        }
+      }
+    }
+  }
+}

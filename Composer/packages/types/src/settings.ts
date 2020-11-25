@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import type { PublishTarget } from './publish';
+
+export interface LibraryRef {
+  name: string;
+  version: string;
+  lastImported: Date;
+  location: string;
+}
 
 export type CodeEditorSettings = {
   lineNumbers: boolean;
@@ -37,11 +43,13 @@ export type DialogSetting = {
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
+    key: string;
     customRuntime: boolean;
     path: string;
     command: string;
   };
   defaultLanguage: string;
+  importedLibraries: LibraryRef[];
   languages: string[];
   skill?: {
     [skillName: string]: SkillSetting;

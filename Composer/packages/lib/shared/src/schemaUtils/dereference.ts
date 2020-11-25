@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SchemaDefinitions, DefinitionCache, JSONSchema7 } from '@bfc/types';
+import { SchemaDefinitions, DefinitionCache, JSONSchema7 } from '@botframework-composer/types';
 
 import { getRef } from './getRef';
 import { CIRCULAR_REFS, isCircular } from './circular';

@@ -7,6 +7,7 @@ import React from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -15,15 +16,17 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 
+import { TreeLink, TreeMenuItem } from './ProjectTree';
+import { SUMMARY_ARROW_SPACE } from './constants';
+
 // -------------------- Styles -------------------- //
-const indent = 16;
-const itemText = (depth: number) => css`
+
+const iconAndText = css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: ${depth * indent}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -38,19 +41,14 @@ const content = css`
   outline: none;
   display: flex;
   align-items: center;
+  height: 24px;
 
   label: ProjectTreeItem;
 `;
 
-const leftIndent = css`
-  height: 100%;
-  width: ${indent}px;
-`;
-
 const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
-    marginTop: '-7px',
-    width: '100px',
+    marginTop: '-1px',
   },
 };
 
@@ -64,7 +62,7 @@ const menuStyle: Partial<IContextualMenuStyles> = {
 const moreButton = (isActive: boolean): IButtonStyles => {
   return {
     root: {
-      padding: '0 4px',
+      padding: '4px 4px 0 4px',
       alignSelf: 'stretch',
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
@@ -77,14 +75,20 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
-  width: 100%;
+const navItem = (isActive: boolean) => css`
+  label: navItem;
+  min-width: 100%;
   position: relative;
-  height: 36px;
+  height: 24px;
   font-size: 12px;
-  color: #545454;
-  background: ${isActive && !isSubItemActive ? '#f2f2f2' : 'transparent'};
+  color: ${isActive ? '#ffffff' : '#545454'};
+  background: ${isActive ? '#0078d4' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   &:hover {
     color: #545454;
     background: #f2f2f2;
@@ -93,6 +97,7 @@ const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
       visibility: visible;
     }
   }
+
   &:focus {
     outline: none;
     .ms-Fabric--isFocusVisible &::after {
@@ -113,58 +118,90 @@ const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
 export const overflowSet = css`
   width: 100%;
   height: 100%;
-  padding-left: 12px;
-  padding-right: 12px;
   box-sizing: border-box;
-  line-height: 36px;
+  line-height: 24px;
   justify-content: space-between;
   display: flex;
-  justify-content: space-between;
+  margin-top: 2px;
 `;
 
-const warningIcon = {
-  marginRight: 5,
-  color: '#BE880A',
-  fontSize: 9,
+const statusIcon = {
+  width: '12px',
+  height: '18px',
+  fontSize: 11,
+  marginLeft: 6,
 };
+
+const warningIcon = {
+  ...statusIcon,
+  color: '#BE880A',
+};
+
+const errorIcon = {
+  ...statusIcon,
+  color: '#CC3F3F',
+};
+
+const itemName = (nameWidth: number) => css`
+  max-width: ${nameWidth}px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+`;
 
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
-  link: any;
-  isActive: boolean;
+  link: TreeLink;
+  isActive?: boolean;
   isSubItemActive?: boolean;
-  depth: number | undefined;
-  onDelete: (id: string) => void;
-  onSelect: (id: string) => void;
+  menu?: TreeMenuItem[];
+  onSelect?: (link: TreeLink) => void;
+  icon?: string;
+  dialogName?: string;
+  showProps?: boolean;
+  textWidth?: number;
+  extraSpace?: number;
+  hasChildren?: boolean;
 }
 
-const onRenderItem = (item: IOverflowSetItemProps) => {
-  const warningContent = formatMessage(
-    'This trigger type is not supported by the RegEx recognizer and will not be fired.'
-  );
+const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
+  if (item.label === '') {
+    return {
+      key: 'divider',
+      itemType: ContextualMenuItemType.Divider,
+    };
+  }
+  return {
+    key: item.label,
+    ariaLabel: item.label,
+    text: item.label,
+    iconProps: { iconName: item.icon },
+    onClick: () => {
+      item.onClick?.(link);
+    },
+  };
+};
+
+const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
+  const { warningContent, errorContent } = item;
   return (
     <div
       data-is-focusable
-      css={itemText(item.depth)}
+      aria-label={`${item.displayName} ${warningContent ?? ''} ${errorContent ?? ''}`}
+      css={iconAndText}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
       onFocus={item.onFocus}
     >
-      <div css={content} tabIndex={-1}>
-        {item.warningContent ? (
-          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'Warning'} style={warningIcon} />
-          </TooltipHost>
-        ) : (
-          <div css={leftIndent} />
-        )}
-        {item.depth !== 0 && (
+      <div css={content} role="presentation" tabIndex={-1}>
+        {item.icon != null && (
           <Icon
-            iconName="Flow"
+            iconName={item.icon}
             styles={{
               root: {
+                width: '12px',
                 marginRight: '8px',
                 outline: 'none',
               },
@@ -172,17 +209,27 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
             tabIndex={-1}
           />
         )}
-        {item.displayName}
+        <span css={itemName(textWidth)}>{item.displayName}</span>
+        {item.errorContent && (
+          <TooltipHost content={item.errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'WarningSolid'} style={warningIcon} />
+          </TooltipHost>
+        )}
+        {item.warningContent && (
+          <TooltipHost content={item.warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
+          </TooltipHost>
+        )}
       </div>
     </div>
   );
 };
 
-const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
+const onRenderOverflowButton = (isActive: boolean) => {
   const moreLabel = formatMessage('Actions');
-  const showIcon = !isRoot;
-  return (overflowItems) => {
-    return showIcon ? (
+  return (overflowItems: IContextualMenuItem[] | undefined) => {
+    if (overflowItems == null) return null;
+    return (
       <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
         <IconButton
           ariaLabel={moreLabel}
@@ -200,50 +247,63 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
           }}
         />
       </TooltipHost>
-    ) : null;
+    );
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
+export const TreeItem: React.FC<ITreeItemProps> = ({
+  link,
+  isActive = false,
+  icon,
+  dialogName,
+  onSelect,
+  textWidth = 100,
+  hasChildren = false,
+  menu = [],
+  extraSpace = 0,
+}) => {
+  const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
+
+  const overflowMenu = menu.map(renderTreeMenuItem(link));
+
+  const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
+  const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   return (
     <div
-      css={navItem(isActive, !!isSubItemActive)}
-      role="presentation"
+      aria-label={a11yLabel}
+      css={navItem(isActive)}
+      data-testid={a11yLabel}
+      role="gridcell"
+      tabIndex={0}
       onClick={() => {
-        onSelect(link.id);
+        onSelect?.(link);
       }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
-          onSelect(link.id);
+          onSelect?.(link);
         }
       }}
     >
+      <div style={{ minWidth: `${spacerWidth}px` }}></div>
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
         doNotContainWithinFocusZone
         css={overflowSet}
-        data-testid={`DialogTreeItem${link.id}`}
+        data-testid={linkString}
         items={[
           {
-            key: link.id,
-            depth,
+            key: linkString,
+            icon,
             ...link,
           },
         ]}
-        overflowItems={[
-          {
-            key: 'delete',
-            name: formatMessage('Delete'),
-            onClick: () => onDelete(link.id),
-          },
-        ]}
+        overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
+        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace)}
+        onRenderOverflowButton={onRenderOverflowButton(!!isActive)}
       />
     </div>
   );

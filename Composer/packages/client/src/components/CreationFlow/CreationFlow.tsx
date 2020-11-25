@@ -14,18 +14,17 @@ import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  templateProjectsState,
   storagesState,
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
+  filteredTemplatesSelector,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
-import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
-import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
+import { ImportModal } from '../ImportModal/ImportModal';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -48,11 +47,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createNewBot,
     saveProjectAs,
     fetchProjectById,
+    createNewBotV2,
   } = useRecoilValue(dispatcherState);
 
+  const templateProjects = useRecoilValue(filteredTemplatesSelector);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
@@ -122,27 +122,24 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       schemaUrl: formData.schemaUrl,
       appLocale,
       qnaKbUrls,
+      templateDir: formData.templateDir,
+      eTag: formData.eTag,
+      urlSuffix: formData.urlSuffix,
+      alias: formData.alias,
+      preserveRoot: formData.preserveRoot,
     };
-    createNewBot(newBotData);
+    if (templateId === 'conversationalcore') {
+      createNewBotV2(newBotData);
+    } else {
+      createNewBot(newBotData);
+    }
   };
 
   const handleSaveAs = (formData) => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (urls: string[]) => {
-    saveTemplateId(QnABotTemplateId);
-    handleDismiss();
-    handleCreateNew(formData, QnABotTemplateId, urls);
-  };
-
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
-    // If selected template is qnaSample then route to QNA import modal
-    if (templateId === 'QnASample') {
-      setFormData(formData);
-      navigate(`./QnASample/importQnA`);
-      return;
-    }
     // If selected template is vaCore then route to VA Customization modal
     if (templateId === 'va-core') {
       setFormData(formData);
@@ -166,7 +163,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (data) => {
+  const handleCreateNext = async (data: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`./create/${data}`);
   };
@@ -207,18 +204,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             onDismiss={handleDismiss}
             onOpen={openBot}
           />
-          <ImportQnAFromUrlModal
-            dialogId={formData.name.toLowerCase()}
-            path="create/QnASample/importQnA"
-            onDismiss={handleDismiss}
-            onSubmit={handleCreateQnA}
-          />
           <VirtualAssistantCreationModal
             formData={formData}
             handleCreateNew={handleCreateNew}
             path="create/vaCore/*"
             onDismiss={handleDismiss}
           />
+          <ImportModal path="import" />
         </Router>
       </EditorExtension>
     </Fragment>

@@ -1,0 +1,5048 @@
+{
+  "title": "Tipos de componente",
+  "description": "Estes são todos os tipos que podem ser criados pelo carregador.",
+  "definitions": {
+    "Microsoft.ActivityTemplate": {
+      "title": "Microsoft activity template",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "Modelo",
+          "description": "Modelo do Gerador de Idiomas a ser usado para criar a atividade"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.AdaptiveDialog": {
+      "title": "Adaptive dialog",
+      "description": "Diálogo flexível e controlado por dados que pode se adaptar à conversa.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo."
+        },
+        "autoEndDialog": {
+          "title": "Encerramento automático do diálogo",
+          "description": "Se esta opção estiver definida como true, o diálogo será encerrado automaticamente quando não houver nenhuma ação adicional. Se definida como false, lembre-se de encerrar o diálogo manualmente usando a ação EndDialog."
+        },
+        "defaultResultProperty": {
+          "title": "Propriedade de resultado padrão",
+          "description": "Valor que será retornado ao diálogo pai."
+        },
+        "recognizer": {
+          "title": "Reconhecedor",
+          "description": "Reconhecedor de entrada que interpreta a entrada de usuário como intenções e entidades."
+        },
+        "generator": {
+          "title": "Language generator",
+          "description": "Gerador de idiomas que gera as respostas do bot."
+        },
+        "selector": {
+          "title": "Seletor",
+          "description": "Política para determinar qual gatilho é executado. O padrão é um seletor de 'melhor correspondência' (opcional)."
+        },
+        "triggers": {
+          "description": "Lista de gatilhos definidos para este diálogo.",
+          "title": "Gatilhos",
+          "items": {
+            "title": "Gatilhos de evento",
+            "description": "Gatilhos de evento para manipulação de eventos."
+          }
+        },
+        "schema": {
+          "title": "Esquema",
+          "description": "Esquema a ser preenchido.",
+          "anyOf": {
+            "0": {
+              "title": "Core schema meta-schema"
+            },
+            "1": {
+              "title": "Referência ao esquema JSON",
+              "description": "Referência ao arquivo .dialog do esquema JSON."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.AgeEntityRecognizer": {
+      "title": "Age entity recognizer",
+      "description": "Reconhecedor que reconhece a idade.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.Ask": {
+      "title": "Send activity to ask a question",
+      "description": "Esta é uma ação que envia uma atividade ao usuário quando uma resposta é esperada",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "expectedProperties": {
+          "title": "Expected properties",
+          "description": "Propriedades esperadas do usuário.",
+          "items": {
+            "title": "Nome",
+            "description": "Nome da propriedade"
+          }
+        },
+        "defaultOperation": {
+          "title": "Default operation",
+          "description": "Define a operação padrão que será usada quando nenhuma operação for reconhecida na resposta a esta Pergunta."
+        },
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "activity": {
+          "title": "Atividade",
+          "description": "Atividade a ser enviada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "Diálogo de entrada de anexo",
+      "description": "Coletar informações – Solicitar um arquivo ou uma imagem.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Valor padrão",
+          "description": "'Property' será definida como o objeto ou o resultado desta expressão quando o número máximo de rodadas for excedido.",
+          "oneOf": {
+            "0": {
+              "title": "Objeto",
+              "description": "Objeto de anexo."
+            }
+          }
+        },
+        "value": {
+          "title": "Valor",
+          "description": "'Property' será definida como o objeto ou o resultado desta expressão, a menos que ela seja avaliada como nula.",
+          "oneOf": {
+            "0": {
+              "title": "Objeto",
+              "description": "Objeto de anexo."
+            }
+          }
+        },
+        "outputFormat": {
+          "title": "Formato de saída",
+          "description": "Formato de saída do anexo.",
+          "oneOf": {
+            "0": {
+              "title": "Formato padrão",
+              "description": "Formatos de saída padrão."
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "prompt": {
+          "title": "Prompt inicial",
+          "description": "Mensagem a ser enviada para coletar informações."
+        },
+        "unrecognizedPrompt": {
+          "title": "Prompt não reconhecido",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada quando a entrada de usuário não atender a nenhuma expressão de validação."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas ",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "validations": {
+          "title": "Expressões de validação",
+          "description": "Expressão para validar a entrada de usuário.",
+          "items": {
+            "title": "Condição",
+            "description": "Expressão que precisa ser atendida para que a entrada seja considerada válida"
+          }
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar as informações coletadas. A entrada será ignorada se a propriedade tiver um valor (a menos que 'Sempre perguntar' seja true)."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "allowInterruptions": {
+          "title": "Permitir Interrupções",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.BeginDialog": {
+      "title": "Iniciar um diálogo",
+      "description": "Iniciar outro diálogo.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "Diálogo"
+            }
+          },
+          "title": "Nome do diálogo",
+          "description": "Nome do diálogo a ser chamado."
+        },
+        "options": {
+          "title": "Opções",
+          "description": "Uma ou mais opções que são passadas para o diálogo chamado.",
+          "additionalProperties": {
+            "title": "Opções",
+            "description": "Opções do diálogo."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Quando esta opção está definida como false, o diálogo chamado pode processar a atividade atual."
+        },
+        "resultProperty": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar qualquer valor retornado pelo diálogo chamado."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.BeginSkill": {
+      "title": "Iniciar uma habilidade",
+      "description": "Iniciar uma habilidade remota.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo de habilidade"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Quando esta opção estiver definida como false, a habilidade será iniciada usando a atividade no contexto da rodada atual em vez da atividade na propriedade Atividade."
+        },
+        "resultProperty": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar qualquer valor retornado pelo diálogo chamado."
+        },
+        "botId": {
+          "title": "ID do bot de host da habilidade",
+          "description": "A ID do Aplicativo da Microsoft que chamará a habilidade."
+        },
+        "skillHostEndpoint": {
+          "title": "Host da habilidade",
+          "description": "A URL de retorno de chamada do host da habilidade."
+        },
+        "connectionName": {
+          "title": "OAuth connection name (SSO)",
+          "description": "O Nome da Conexão OAuth que seria usado para executar o Logon Único com uma habilidade."
+        },
+        "skillAppId": {
+          "title": "Skill App Id",
+          "description": "A ID do Aplicativo da Microsoft da habilidade."
+        },
+        "skillEndpoint": {
+          "title": "Ponto de extremidade da habilidade ",
+          "description": "O ponto de extremidade /api/messages da habilidade."
+        },
+        "activity": {
+          "title": "Atividade",
+          "description": "A atividade a ser enviada à habilidade."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a habilidade."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.BreakLoop": {
+      "title": "Break loop",
+      "description": "Parar de executar este loop",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CancelAllDialogs": {
+      "title": "Cancelar todos os diálogos",
+      "description": "Cancelar todos os diálogos ativos. Todos os diálogos da cadeia de diálogos precisarão de um gatilho para capturar o evento configurado nesta ação.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Quando esta opção está definida como false, o diálogo do chamador é informado que deve processar a atividade atual."
+        },
+        "eventName": {
+          "title": "Nome do evento",
+          "description": "Nome do evento a ser emitido."
+        },
+        "eventValue": {
+          "title": "Valor do evento",
+          "description": "Valor a ser emitido com o evento (opcional)."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CancelDialog": {
+      "title": "Cancelar todos os diálogos",
+      "description": "Cancelar todos os diálogos ativos. Todos os diálogos da cadeia de diálogos precisarão de um gatilho para capturar o evento configurado nesta ação.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Quando esta opção está definida como false, o diálogo do chamador é informado que deve processar a atividade atual."
+        },
+        "eventName": {
+          "title": "Nome do evento",
+          "description": "Nome do evento a ser emitido."
+        },
+        "eventValue": {
+          "title": "Valor do evento",
+          "description": "Valor a ser emitido com o evento (opcional)."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChannelMentionEntityRecognizer": {
+      "title": "Channel mention entity recognizer",
+      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChoiceInput": {
+      "title": "Diálogo de entrada da escolha",
+      "description": "Coletar informações – Escolher em uma lista de opções",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Valor padrão",
+          "description": "'Property' será definida como o valor desta expressão quando o número máximo de rodadas for excedido."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "'Property' será definida como o valor desta expressão, a menos que ela seja avaliada como nula."
+        },
+        "outputFormat": {
+          "title": "Formato de saída",
+          "description": "Define o formato de saída da opção desejada (valor ou índice nas opções).",
+          "oneOf": {
+            "0": {
+              "title": "Padrão",
+              "description": "Formato de saída padrão."
+            }
+          }
+        },
+        "choices": {
+          "title": "Matriz de opções",
+          "description": "Opções para escolha.",
+          "oneOf": {
+            "0": {
+              "title": "Opções simples",
+              "description": "Opções simples para escolha.",
+              "items": {
+                "0": {
+                  "title": "Opção simples",
+                  "description": "Uma opção para a entrada da escolha."
+                }
+              }
+            },
+            "1": {
+              "title": "Opções estruturadas",
+              "description": "Opções que permitem o controle total.",
+              "items": {
+                "0": {
+                  "title": "Opção estruturada",
+                  "description": "Opção estruturada para escolha.",
+                  "properties": {
+                    "value": {
+                      "title": "Valor",
+                      "description": "Valor a ser retornado quando esta opção é selecionada."
+                    },
+                    "action": {
+                      "title": "Ação",
+                      "description": "Ação do cartão para a opção escolhida."
+                    },
+                    "synonyms": {
+                      "title": "Sinônimos",
+                      "description": "Lista de sinônimos a serem reconhecidos além do valor (opcional).",
+                      "items": {
+                        "title": "Sinônimo",
+                        "description": "O sinônimo do valor."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "defaultLocale": {
+          "title": "Localidade padrão",
+          "description": "A localidade padrão a ser usada para analisar as opções de confirmação quando não há nenhuma opção passada pelo chamador."
+        },
+        "style": {
+          "title": "Estilo de lista",
+          "description": "Define o ListStyle para controlar como as opções são renderizadas.",
+          "oneOf": {
+            "0": {
+              "title": "Estilo de lista",
+              "description": "Estilo de lista padrão."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Opções de escolha",
+          "description": "Define as opções de escolha usadas para controlar como as opções são combinadas.",
+          "oneOf": {
+            "0": {
+              "title": "Objeto",
+              "description": "Objeto de opções de escolha.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "Separador embutido",
+                  "description": "Caractere usado para separar as opções individuais quando há mais de duas opções"
+                },
+                "inlineOr": {
+                  "title": "Ou embutido",
+                  "description": "Separador inserido entre as opções quando há apenas duas opções"
+                },
+                "inlineOrMore": {
+                  "title": "Ou mais embutido",
+                  "description": "Separador inserido entre as duas últimas opções quando há mais de duas opções."
+                },
+                "includeNumbers": {
+                  "title": "Incluir números",
+                  "description": "Se esta configuração for true, os estilos de lista 'inline' e 'list' serão prefixados com o índice da opção."
+                }
+              }
+            }
+          }
+        },
+        "recognizerOptions": {
+          "title": "Opções do reconhecedor",
+          "description": "Define como reconhecer as opções na resposta",
+          "oneOf": {
+            "0": {
+              "title": "Objeto",
+              "description": "Opções para o reconhecedor.",
+              "properties": {
+                "noValue": {
+                  "title": "Nenhum valor",
+                  "description": "Se esta opção for true, o campo de valor das opções NÃO será pesquisado"
+                },
+                "noAction": {
+                  "title": "Nenhuma ação",
+                  "description": "Se esta opção for true, o campo action.title das opções NÃO será pesquisado"
+                },
+                "recognizeNumbers": {
+                  "title": "Reconhecer números",
+                  "description": "Se esta opção for true, o reconhecedor de números será usado para reconhecer uma resposta de índice (1, 2, 3...) para o prompt."
+                },
+                "recognizeOrdinals": {
+                  "title": "Reconhecer ordinais",
+                  "description": "Se esta opção for true, o reconhecedor de ordinais será usado para reconhecer uma resposta ordinal (first/second/...) para o prompt."
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "prompt": {
+          "title": "Prompt inicial",
+          "description": "Mensagem a ser enviada para coletar informações."
+        },
+        "unrecognizedPrompt": {
+          "title": "Prompt não reconhecido",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada quando a entrada de usuário não atender a nenhuma expressão de validação."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "validations": {
+          "title": "Expressões de validação",
+          "description": "Expressão para validar a entrada de usuário.",
+          "items": {
+            "title": "Condição",
+            "description": "Expressão que precisa ser atendida para que a entrada seja considerada válida"
+          }
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar as informações coletadas. A entrada será ignorada se a propriedade tiver um valor (a menos que 'Sempre perguntar' seja true)."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "allowInterruptions": {
+          "title": "Permitir Interrupções",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ConditionalSelector": {
+      "title": "Conditional trigger selector",
+      "description": "Usar um seletor de regra com base em uma condição",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Expressão a ser avaliada"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ConfirmInput": {
+      "title": "Diálogo de confirmação de entrada",
+      "description": "Coletar informações – Solicitar confirmação (sim ou não).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "outputFormat": {
+          "title": "Formato de saída",
+          "description": "Expressão opcional a ser usada para formatar a saída."
+        },
+        "defaultLocale": {
+          "title": "Localidade padrão",
+          "description": "A Localidade padrão ou uma expressão que fornece a localidade padrão a ser usada como padrão se ela não for encontrada na atividade."
+        },
+        "style": {
+          "title": "Estilo de lista",
+          "description": "Define o ListStyle para controlar como as opções são renderizadas.",
+          "oneOf": {
+            "0": {
+              "title": "Estilo padrão",
+              "description": "Estilo padrão para renderizar opções."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Choice options",
+          "description": "Opções de Escolha ou expressão que fornece Opções de Escolha para controlar as opções de exibição para o usuário.",
+          "oneOf": {
+            "0": {
+              "title": "Opções de escolha",
+              "description": "Opções de escolha.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "Separador embutido",
+                  "description": "Texto para separar as opções individuais quando houver mais de duas opções"
+                },
+                "inlineOr": {
+                  "title": "Ou embutido",
+                  "description": "Texto a ser inserido entre as opções quando houver apenas duas opções"
+                },
+                "inlineOrMore": {
+                  "title": "Ou mais embutido",
+                  "description": "Texto a ser inserido entre as duas últimas opções quando houver mais de duas opções."
+                },
+                "includeNumbers": {
+                  "title": "Incluir números",
+                  "description": "Se esta opção for true, os estilos de lista embutido e lista serão prefixados com o índice da opção."
+                }
+              }
+            }
+          }
+        },
+        "defaultValue": {
+          "title": "Valor padrão",
+          "description": "'Property' será definida como o valor desta expressão quando o número máximo de rodadas for excedido."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "'Property' será definida como o valor desta expressão, a menos que ela seja avaliada como nula."
+        },
+        "confirmChoices": {
+          "title": "Matriz de objetos de opção",
+          "description": "Matriz de opções simples ou estruturadas.",
+          "oneOf": {
+            "0": {
+              "title": "Opções simples",
+              "description": "Opções simples para confirmação.",
+              "items": {
+                "0": {
+                  "title": "Opção simples",
+                  "description": "Opção simples para confirmação."
+                }
+              }
+            },
+            "1": {
+              "title": "Opções estruturadas",
+              "description": "Opções estruturadas para confirmações.",
+              "items": {
+                "0": {
+                  "title": "Opção",
+                  "description": "Opção a ser confirmada.",
+                  "properties": {
+                    "value": {
+                      "title": "Valor",
+                      "description": "Valor a ser retornado quando esta opção é selecionada."
+                    },
+                    "action": {
+                      "title": "Ação",
+                      "description": "Ação do cartão para a opção escolhida."
+                    },
+                    "synonyms": {
+                      "title": "Sinônimos",
+                      "description": "Lista de sinônimos a serem reconhecidos além do valor (opcional).",
+                      "items": {
+                        "title": "Sinônimo",
+                        "description": "Sinônimo para escolha."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "prompt": {
+          "title": "Prompt inicial",
+          "description": "Mensagem a ser enviada para coletar informações."
+        },
+        "unrecognizedPrompt": {
+          "title": "Prompt não reconhecido",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada quando a entrada de usuário não atender a nenhuma expressão de validação."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "validations": {
+          "title": "Expressões de validação",
+          "description": "Expressão para validar a entrada de usuário.",
+          "items": {
+            "title": "Condição",
+            "description": "Expressão que precisa ser atendida para que a entrada seja considerada válida"
+          }
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar as informações coletadas. A entrada será ignorada se a propriedade tiver um valor (a menos que 'Sempre perguntar' seja true)."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "allowInterruptions": {
+          "title": "Permitir Interrupções",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ConfirmationEntityRecognizer": {
+      "title": "Confirmation entity recognizer",
+      "description": "Reconhecedor que reconhece as opções de confirmação (sim/não).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueConversationLater": {
+      "title": "Continue conversation later (Queue)",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "date": {
+          "title": "Date",
+          "description": "Date in the future as a ISO string when the conversation should continue."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueLoop": {
+      "title": "Continue loop",
+      "description": "Interromper a execução deste modelo e continuar com a próxima iteração do loop.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CrossTrainedRecognizerSet": {
+      "title": "Cross-trained recognizer set",
+      "description": "Reconhecedor para selecionar entre os reconhecedores com treinamento cruzado.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID exclusiva opcional usada com RecognizerSet."
+        },
+        "recognizers": {
+          "title": "Reconhecedores",
+          "description": "Lista de Reconhecedores definidos para este conjunto."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.CurrencyEntityRecognizer": {
+      "title": "Currency entity recognizer",
+      "description": "Reconhecedor que reconhece a moeda.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DateTimeEntityRecognizer": {
+      "title": "Date and time entity recognizer",
+      "description": "Reconhecedor que reconhece datas e fragmentos de tempo.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DateTimeInput": {
+      "title": "Diálogo de entrada de data/hora",
+      "description": "Coletar informações – Solicitar data e/ou hora",
+      "defaultLocale": {
+        "title": "Localidade padrão",
+        "description": "Localidade padrão."
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Default date",
+          "description": "'Property' será definida como o valor ou o resultado desta expressão quando o número máximo de rodadas for excedido."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "'Property' será definida como o valor ou o resultado desta expressão, a menos que ela seja avaliada como nula."
+        },
+        "outputFormat": {
+          "title": "Formato de saída",
+          "description": "Expressão a ser usada para formatar a saída."
+        },
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "prompt": {
+          "title": "Prompt inicial",
+          "description": "Mensagem a ser enviada para coletar informações."
+        },
+        "unrecognizedPrompt": {
+          "title": "Prompt não reconhecido",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada quando a entrada de usuário não atender a nenhuma expressão de validação."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas ",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "validations": {
+          "title": "Expressões de validação",
+          "description": "Expressão para validar a entrada de usuário.",
+          "items": {
+            "title": "Condição",
+            "description": "Expressão que precisa ser atendida para que a entrada seja considerada válida"
+          }
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar as informações coletadas. A entrada será ignorada se a propriedade tiver um valor (a menos que 'Sempre perguntar' seja true)."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "allowInterruptions": {
+          "title": "Permitir Interrupções",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DebugBreak": {
+      "title": "Interrupção do depurador",
+      "description": "Se o depurador estiver anexado, interromper a execução neste ponto da conversa.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DeleteActivity": {
+      "title": "Excluir a Atividade",
+      "description": "Excluir uma atividade que foi enviada anteriormente.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "activityId": {
+          "title": "ActivityId",
+          "description": "expressão para uma activityId a ser excluída"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DeleteProperties": {
+      "title": "Excluir as Propriedades",
+      "description": "Excluir várias propriedades e qualquer valor que elas contenham.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "properties": {
+          "title": "Propriedades",
+          "description": "Propriedades a serem excluídas.",
+          "items": {
+            "title": "Propriedade",
+            "description": "Propriedade a ser excluída."
+          }
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DeleteProperty": {
+      "title": "Delete property",
+      "description": "Excluir uma propriedade e qualquer valor que ela contenha.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade a ser excluída."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.DimensionEntityRecognizer": {
+      "title": "Dimension entity recognizer",
+      "description": "Reconhecedor que reconhece a dimensão.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EditActions": {
+      "title": "Editar as ações.",
+      "description": "Editar a lista atual de ações.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "changeType": {
+          "title": "Tipo de alteração",
+          "description": "Tipo de alteração a ser aplicada às ações atuais.",
+          "oneOf": {
+            "0": {
+              "title": "Alteração padrão",
+              "description": "Tipos de alterações padrão."
+            }
+          }
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Ações a serem aplicadas."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EditArray": {
+      "title": "Editar a matriz",
+      "description": "Modificar uma matriz na memória",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "changeType": {
+          "title": "Tipo de alteração",
+          "description": "Tipo de alteração na matriz na memória.",
+          "oneOf": {
+            "0": {
+              "title": "Change type",
+              "description": "Tipo de alteração padrão."
+            }
+          }
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "itemsProperty": {
+          "title": "Propriedade items",
+          "description": "Propriedade que contém a matriz a ser atualizada."
+        },
+        "resultProperty": {
+          "title": "Result property",
+          "description": "Propriedade para armazenar o resultado desta ação."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "Novo valor ou expressão."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EmailEntityRecognizer": {
+      "title": "Email entity recognizer",
+      "description": "Reconhecedor que reconhece emails.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EmitEvent": {
+      "title": "Emitir um evento personalizado",
+      "description": "Emitir um evento. Capture este evento com um gatilho.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "eventName": {
+          "title": "Nome do evento",
+          "description": "Nome do evento a ser emitido.",
+          "oneOf": {
+            "0": {
+              "title": "Evento interno",
+              "description": "Tipo de evento padrão."
+            },
+            "1": {
+              "title": "Evento personalizado",
+              "description": "Tipo de evento personalizado"
+            }
+          }
+        },
+        "eventValue": {
+          "title": "Valor do evento",
+          "description": "Valor a ser emitido com o evento (opcional)."
+        },
+        "bubbleEvent": {
+          "title": "Evento de bolha",
+          "description": "Se esta opção for true, este evento será passado para os diálogos pai."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EndDialog": {
+      "title": "Encerrar o diálogo",
+      "description": "Encerrar este diálogo.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "Valor de resultado retornado ao diálogo pai."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.EndTurn": {
+      "title": "Encerrar a rodada",
+      "description": "Encerrar a rodada atual sem encerrar o diálogo.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.FirstSelector": {
+      "title": "First trigger selector",
+      "description": "Seletor da primeira regra true",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.Foreach": {
+      "title": "Para cada item",
+      "description": "Executar ações em cada item em uma coleção.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "itemsProperty": {
+          "title": "Propriedade items",
+          "description": "Propriedade que contém a matriz."
+        },
+        "index": {
+          "title": "Propriedade do índice",
+          "description": "Propriedade que contém o índice do item."
+        },
+        "value": {
+          "title": "Propriedade de valor",
+          "description": "Propriedade que contém o valor do item."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Ações a serem executadas para cada item. Use '$foreach.value' para acessar o valor de cada item. Use '$foreach.index' para acessar o índice de cada item."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ForeachPage": {
+      "title": "Para cada página",
+      "description": "Executar as ações em cada página (coleção de itens) em uma matriz.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "itemsProperty": {
+          "title": "Propriedade items",
+          "description": "Propriedade que contém a matriz."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Ações a serem executadas para cada página. Use '$foreach.page' para acessar cada página."
+        },
+        "pageIndex": {
+          "title": "Propriedade do índice",
+          "description": "Propriedade que contém o índice da página."
+        },
+        "page": {
+          "title": "Propriedade de página",
+          "description": "Propriedade que contém o valor da página."
+        },
+        "pageSize": {
+          "title": "Tamanho da página",
+          "description": "Número de itens em cada página."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GetActivityMembers": {
+      "title": "Get activity members",
+      "description": "Obter os membros que estão participando de uma atividade. (Somente o BotFrameworkAdapter)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade (localização nomeada para armazenar informações)."
+        },
+        "activityId": {
+          "title": "Activity Id",
+          "description": "ID da atividade ou expressão para uma activityId a ser usada para obter os membros. Se nenhuma das opções for definida, a ID da atividade atual será usada."
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GetConversationMembers": {
+      "title": "Get conversation members",
+      "description": "Obter os membros que estão participando de uma conversa. (Somente o BotFrameworkAdapter)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade (localização nomeada para armazenar informações)."
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GotoAction": {
+      "title": "Go to action",
+      "description": "Acessar uma ação por ID.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "actionId": {
+          "title": "ID da Ação",
+          "description": "ID da próxima ação a ser executada"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.GuidEntityRecognizer": {
+      "title": "Guid entity recognizer",
+      "description": "Reconhecedor que reconhece GUIDs.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.HashtagEntityRecognizer": {
+      "title": "Hashtag entity recognizer",
+      "description": "Reconhecedor que reconhece Hashtags.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.HttpRequest": {
+      "title": "Solicitação HTTP",
+      "description": "Fazer uma solicitação HTTP.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "method": {
+          "title": "Método HTTP",
+          "description": "Método HTTP a ser usado."
+        },
+        "url": {
+          "title": "URL",
+          "description": "URL a ser chamada (dá suporte para associação de dados)."
+        },
+        "body": {
+          "title": "Corpo",
+          "description": "Corpo a ser incluído na chamada HTTP (dá suporte para associação de dados)."
+        },
+        "resultProperty": {
+          "title": "Propriedade de resultado",
+          "description": "Uma propriedade para armazenar o resultado desta ação. O resultado pode incluir uma das quatro propriedades da resposta HTTP: statusCode, reasonPhrase, content e headers. Se o conteúdo for JSON, ela será um objeto desserializado. Os valores podem ser acessados por meio de .content, por exemplo."
+        },
+        "contentType": {
+          "title": "Tipo de conteúdo",
+          "description": "Tipo de mídia do conteúdo do corpo."
+        },
+        "headers": {
+          "title": "Cabeçalhos",
+          "description": "Um ou mais cabeçalhos a serem incluídos na solicitação (dá suporte para associação de dados)."
+        },
+        "responseType": {
+          "title": "Tipo de resposta",
+          "description": "Define o tipo de resposta HTTP. Esta opção chama automaticamente a ação 'Enviar uma resposta quando está definida como 'Atividade' ou 'Atividades'.",
+          "oneOf": {
+            "0": {
+              "title": "Resposta padrão",
+              "description": "Tipo de resposta padrão."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.IActivityTemplate": {
+      "title": "ActivityTemplates da Microsoft",
+      "description": "Componentes que são um ActivityTemplate, ou seja, um modelo de cadeia de caracteres, uma atividade ou uma implementação de ActivityTemplate",
+      "oneOf": {
+        "1": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation",
+              "properties": {
+                "isGroup": {
+                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "title": "isGroup"
+                },
+                "conversationType": {
+                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "title": "conversationType"
+                },
+                "id": {
+                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                  "title": "id"
+                },
+                "name": {
+                  "description": "Display friendly name",
+                  "title": "name"
+                },
+                "aadObjectId": {
+                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "title": "aadObjectId"
+                },
+                "role": {
+                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                  "title": "role"
+                }
+              }
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded",
+              "items": {
+                "description": "Channel account information needed to route a message",
+                "title": "ChannelAccount",
+                "properties": {
+                  "id": {
+                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                    "title": "id"
+                  },
+                  "name": {
+                    "description": "Display friendly name",
+                    "title": "name"
+                  },
+                  "aadObjectId": {
+                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "title": "aadObjectId"
+                  },
+                  "role": {
+                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                    "title": "role"
+                  }
+                }
+              }
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded",
+              "items": {
+                "description": "Message reaction object",
+                "title": "MessageReaction",
+                "properties": {
+                  "type": {
+                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions",
+              "properties": {
+                "to": {
+                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+                  "title": "to",
+                  "items": {
+                    "title": "Id",
+                    "description": "Id of recipient."
+                  }
+                },
+                "actions": {
+                  "description": "Actions that can be shown to the user",
+                  "title": "actions",
+                  "items": {
+                    "description": "A clickable action",
+                    "title": "CardAction",
+                    "properties": {
+                      "type": {
+                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "type"
+                      },
+                      "title": {
+                        "description": "Text description which appears on the button",
+                        "title": "title"
+                      },
+                      "image": {
+                        "description": "Image URL which will appear on the button, next to text label",
+                        "title": "image"
+                      },
+                      "text": {
+                        "description": "Text for this action",
+                        "title": "text"
+                      },
+                      "displayText": {
+                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "title": "displayText"
+                      },
+                      "value": {
+                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+                        "title": "value"
+                      },
+                      "channelData": {
+                        "description": "Channel-specific data associated with this action",
+                        "title": "channelData"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments",
+              "items": {
+                "description": "An attachment within an activity",
+                "title": "Attachment",
+                "properties": {
+                  "contentType": {
+                    "description": "mimetype/Contenttype for the file",
+                    "title": "contentType"
+                  },
+                  "contentUrl": {
+                    "description": "Content Url",
+                    "title": "contentUrl"
+                  },
+                  "content": {
+                    "description": "Embedded content",
+                    "title": "content"
+                  },
+                  "name": {
+                    "description": "(OPTIONAL) The name of the attachment",
+                    "title": "name"
+                  },
+                  "thumbnailUrl": {
+                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "title": "thumbnailUrl"
+                  }
+                }
+              }
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities",
+              "items": {
+                "description": "Metadata object pertaining to an activity",
+                "title": "Entity",
+                "properties": {
+                  "type": {
+                    "description": "Type of this entity (RFC 3987 IRI)",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo",
+              "properties": {
+                "activityId": {
+                  "description": "(Optional) ID of the activity to refer to",
+                  "title": "activityId"
+                },
+                "user": {
+                  "description": "(Optional) User participating in this conversation",
+                  "title": "user"
+                },
+                "bot": {
+                  "description": "Bot participating in this conversation",
+                  "title": "bot"
+                },
+                "conversation": {
+                  "description": "Conversation reference",
+                  "title": "conversation"
+                },
+                "channelId": {
+                  "description": "Channel ID",
+                  "title": "channelId"
+                },
+                "serviceUrl": {
+                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "title": "serviceUrl"
+                }
+              }
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights",
+              "items": {
+                "description": "Refers to a substring of content within another field",
+                "title": "TextHighlight",
+                "properties": {
+                  "text": {
+                    "description": "Defines the snippet of text to highlight",
+                    "title": "text"
+                  },
+                  "occurrence": {
+                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+                    "title": "occurrence"
+                  }
+                }
+              }
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction",
+              "properties": {
+                "id": {
+                  "description": "ID of this action",
+                  "title": "id"
+                },
+                "entities": {
+                  "description": "Entities associated with this action",
+                  "title": "entities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Microsoft.IDialog": {
+      "title": "Microsoft dialogs",
+      "description": "Componentes derivados de Diálogo"
+    },
+    "Microsoft.IEntityRecognizer": {
+      "title": "Entity recognizers",
+      "description": "Componentes derivados de EntityRecognizer.",
+      "oneOf": {
+        "0": {
+          "title": "Referência a Microsoft.IEntityRecognizer",
+          "description": "Referência ao arquivo .dialog de Microsoft.IEntityRecognizer."
+        }
+      }
+    },
+    "Microsoft.ILanguageGenerator": {
+      "title": "LanguageGenerator da Microsoft",
+      "description": "Componentes derivados da classe LanguageGenerator"
+    },
+    "Microsoft.IRecognizer": {
+      "title": "Microsoft recognizer",
+      "description": "Componentes derivados da classe Reconhecedor"
+    },
+    "Microsoft.ITextTemplate": {
+      "title": "TextTemplate da Microsoft",
+      "description": "Componentes derivados da classe TextTemplate"
+    },
+    "Microsoft.ITrigger": {
+      "title": "Gatilhos da Microsoft",
+      "description": "Componentes derivados da classe OnCondition.",
+      "oneOf": {
+        "0": {
+          "title": "Referência a Microsoft.ITrigger",
+          "description": "Referência ao arquivo .dialog de Microsoft.ITrigger."
+        }
+      }
+    },
+    "Microsoft.ITriggerSelector": {
+      "title": "Seletores",
+      "description": "Componentes derivados da classe TriggerSelector.",
+      "oneOf": {
+        "0": {
+          "title": "Referência a Microsoft.ITriggerSelector",
+          "description": "Referência ao arquivo .dialog de Microsoft.ITriggerSelector."
+        }
+      }
+    },
+    "Microsoft.IfCondition": {
+      "title": "Condição if",
+      "description": "Branch bidirecional do fluxo de conversa com base em uma condição.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Expressão a ser avaliada."
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Ações a serem executadas se a condição for true."
+        },
+        "elseActions": {
+          "title": "Else",
+          "description": "Ações a serem executadas se a condição for false."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.InputDialog": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "prompt": {
+          "title": "Prompt inicial",
+          "description": "Mensagem a ser enviada para coletar informações."
+        },
+        "unrecognizedPrompt": {
+          "title": "Prompt não reconhecido",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada quando a entrada de usuário não atender a nenhuma expressão de validação."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "validations": {
+          "title": "Expressões de validação",
+          "description": "Expressão para validar a entrada de usuário.",
+          "items": {
+            "title": "Condição",
+            "description": "Expressão que precisa ser atendida para que a entrada seja considerada válida"
+          }
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar as informações coletadas. A entrada será ignorada se a propriedade tiver um valor (a menos que 'Sempre perguntar' seja true)."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "allowInterruptions": {
+          "title": "Permitir Interrupções",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.IpEntityRecognizer": {
+      "title": "IP entity recognizer",
+      "description": "Reconhecedor que reconhece os padrões de IP da Internet (como 192.1.1.1).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.LanguagePolicy": {
+      "title": "Language policy",
+      "description": "Representa um mapa de política para as pesquisas de localidades a serem usadas para o idioma",
+      "additionalProperties": {
+        "title": "Política por localidade",
+        "description": "Política de idioma por localidade.",
+        "items": {
+          "title": "Localidade",
+          "description": "Localidade, como en-us."
+        }
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.LogAction": {
+      "title": "Registrar no console",
+      "description": "Registrar uma mensagem no aplicativo host. Enviar uma TraceActivity para o Bot Framework Emulator (opcional).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "text": {
+          "title": "Texto",
+          "description": "Informações a serem registradas."
+        },
+        "label": {
+          "title": "Rótulo",
+          "description": "Rótulo da atividade de rastreamento (usado para identificá-la em uma lista de atividades de rastreamento.)"
+        },
+        "traceActivity": {
+          "title": "Send trace activity",
+          "description": "Quando é true, esta opção envia automaticamente uma TraceActivity (exibição no Bot Framework Emulator)."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.LuisRecognizer": {
+      "title": "Reconhecedor do LUIS",
+      "description": "Reconhecedor do LUIS.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID exclusiva opcional usada com RecognizerSet. Os outros reconhecedores devem retornar a intenção 'DeferToRecognizer_{Id}' ao cruzar dados de treinamento para esse reconhecedor."
+        },
+        "applicationId": {
+          "title": "LUIS application id",
+          "description": "ID do aplicativo do seu modelo do serviço LUIS."
+        },
+        "version": {
+          "title": "LUIS version",
+          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+        },
+        "endpoint": {
+          "title": "LUIS endpoint",
+          "description": "Ponto de extremidade a ser usado para o serviço LUIS, como https://westus.api.cognitive.microsoft.com."
+        },
+        "endpointKey": {
+          "title": "Chave de previsão do LUIS",
+          "description": "Chave de previsão do LUIS usada para chamar o ponto de extremidade."
+        },
+        "externalEntityRecognizer": {
+          "title": "External entity recognizer",
+          "description": "As entidades reconhecidas por este reconhecedor serão passadas para o LUIS como entidades externas."
+        },
+        "dynamicLists": {
+          "title": "Listas dinâmicas",
+          "description": "Listas de entidades definidas no runtime.",
+          "items": {
+            "title": "Lista de entidades",
+            "description": "Listas de valores canônicos e sinônimos para uma entidade.",
+            "properties": {
+              "entity": {
+                "title": "Entidade",
+                "description": "Entidade a ser estendida com uma lista dinâmica."
+              },
+              "list": {
+                "title": "Lista dinâmica",
+                "description": "Lista contendo formas canônicas e sinônimos.",
+                "items": {
+                  "title": "Entrada da lista",
+                  "description": "Forma canônica e synonynms.",
+                  "properties": {
+                    "canonicalForm": {
+                      "title": "Forma canônica",
+                      "description": "Resolução se algum sinônimo corresponder."
+                    },
+                    "synonyms": {
+                      "title": "Sinônimos",
+                      "description": "Lista de sinônimos de uma forma canônica.",
+                      "items": {
+                        "title": "Sinônimo",
+                        "description": "Sinônimo da forma canônica."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "predictionOptions": {
+          "title": "Opções de previsão",
+          "description": "Opções para controlar o comportamento de previsão do LUIS.",
+          "properties": {
+            "includeAllIntents": {
+              "title": "Incluir todas as intenções",
+              "description": "True para todas as intenções. False apenas para a primeira intenção."
+            },
+            "includeInstanceData": {
+              "title": "Incluir $instance",
+              "description": "True para incluir os metadados $instance na resposta do LUIS."
+            },
+            "log": {
+              "title": "Registrar os enunciados",
+              "description": "True para registrar os enunciados no serviço LUIS."
+            },
+            "preferExternalEntities": {
+              "title": "Prefer external entities",
+              "description": "True para preferir entidades externas para as geradas pelos modelos do LUIS."
+            },
+            "slot": {
+              "title": "Slot",
+              "description": "O slot a ser usado para conversar com o serviço LUIS, como de produção ou de preparo."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.MentionEntityRecognizer": {
+      "title": "Mentions entity recognizer",
+      "description": "Reconhecedor que reconhece @Menções",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.MostSpecificSelector": {
+      "title": "Most specific trigger selector",
+      "description": "Selecionar os eventos true mais específicos com o seletor adicional opcional",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.MultiLanguageRecognizer": {
+      "title": "Reconhecedor de vários idiomas",
+      "description": "Configurar um reconhecedor por idioma e especificar a política de fallback de idioma.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID exclusiva opcional usada com RecognizerSet. Os outros reconhecedores devem retornar a intenção 'DeferToRecognizer_{Id}' ao cruzar dados de treinamento para esse reconhecedor."
+        },
+        "languagePolicy": {
+          "title": "Política de idioma",
+          "description": "Define os idiomas de fallback a serem tentados por idioma de entrada de usuário."
+        },
+        "recognizers": {
+          "title": "Reconhecedores",
+          "description": "Mapa de idiomas -> Reconhecedor"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.NumberEntityRecognizer": {
+      "title": "Number entity recognizer",
+      "description": "Reconhecedor que reconhece números.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.NumberInput": {
+      "title": "Diálogo de entrada de número",
+      "description": "Coletar informações – Solicitar um número.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Valor padrão",
+          "description": "'Property' será definida como o valor desta expressão quando o número máximo de rodadas for excedido."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "'Property' será definida como o valor desta expressão, a menos que ela seja avaliada como nula."
+        },
+        "outputFormat": {
+          "title": "Formato de saída",
+          "description": "Expressão para formatar a saída de número."
+        },
+        "defaultLocale": {
+          "title": "Localidade padrão",
+          "description": "Localidade padrão a ser usada quando não houver nenhuma localidade disponível."
+        },
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "prompt": {
+          "title": "Prompt inicial",
+          "description": "Mensagem a ser enviada para coletar informações."
+        },
+        "unrecognizedPrompt": {
+          "title": "Prompt não reconhecido",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada quando a entrada de usuário não atender a nenhuma expressão de validação."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas ",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "validations": {
+          "title": "Expressões de validação",
+          "description": "Expressão para validar a entrada de usuário.",
+          "items": {
+            "title": "Condição",
+            "description": "Expressão que precisa ser atendida para que a entrada seja considerada válida"
+          }
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar as informações coletadas. A entrada será ignorada se a propriedade tiver um valor (a menos que 'Sempre perguntar' seja true)."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "allowInterruptions": {
+          "title": "Permitir Interrupções",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.NumberRangeEntityRecognizer": {
+      "title": "Number range entity recognizer",
+      "description": "Reconhecedor que reconhece intervalos de números (Exemplo: de 2 a 5).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OAuthInput": {
+      "title": "Diálogo OAuthInput",
+      "description": "Coletar informações de logon.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "connectionName": {
+          "title": "Nome da conexão",
+          "description": "O nome da conexão definido nas configurações do OAuth do Bot de Aplicativo Web do Azure."
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "text": {
+          "title": "Texto",
+          "description": "Texto exibido no cartão de entrada do OAuth."
+        },
+        "title": {
+          "title": "Título",
+          "description": "Título mostrado no cartão de entrada do OAuth."
+        },
+        "timeout": {
+          "title": "Tempo limite",
+          "description": "Configuração de tempo limite do cartão de entrada do OAuth."
+        },
+        "property": {
+          "title": "Propriedade do token",
+          "description": "Propriedade para armazenar o resultado do token OAuth."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada se a resposta do usuário for inválida."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas ",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "defaultValue": {
+          "title": "Valor padrão",
+          "description": "Expressão a ser examinada a cada rodada da conversa como um possível valor para a propriedade."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnActivity": {
+      "title": "Na atividade",
+      "description": "Ações a serem executadas no recebimento de uma atividade genérica.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "type": {
+          "title": "Tipo de atividade",
+          "description": "O Activity.Type a ser correspondido"
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnAssignEntity": {
+      "title": "Na atribuição da entidade",
+      "description": "Ações a serem executadas quando uma entidade deve ser atribuída a uma propriedade.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade que será definida após a seleção da entidade."
+        },
+        "entity": {
+          "title": "Entidade",
+          "description": "Entidade sendo colocada na propriedade"
+        },
+        "operation": {
+          "title": "Operação",
+          "description": "Operação para atribuir a entidade."
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnBeginDialog": {
+      "title": "No início do diálogo",
+      "description": "Ações a serem executadas quando este diálogo for iniciado.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnCancelDialog": {
+      "title": "No cancelamento do diálogo",
+      "description": "Ações a serem executadas no evento de cancelamento de diálogo.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnChooseEntity": {
+      "title": "Na escolha da entidade",
+      "description": "Ações a serem executadas quando um valor de entidade precisa ser resolvido.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "Propriedade a ser definida",
+          "description": "Propriedade que será definida após a seleção da entidade."
+        },
+        "entity": {
+          "title": "Entidade ambígua",
+          "description": "Entidade ambígua"
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnChooseIntent": {
+      "title": "Em caso de intenção ambígua",
+      "description": "Ações a serem executadas quando uma intenção for ambígua.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "intents": {
+          "title": "Intenções",
+          "description": "Intenções que precisam estar no resultado de ChooseIntent para que esta condição seja disparada.",
+          "items": {
+            "title": "Intenção",
+            "description": "Nome da intenção a ser disparada."
+          }
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnChooseProperty": {
+      "title": "Na escolha da propriedade",
+      "description": "Ações a serem executadas quando há vários mapeamentos possíveis de entidades para propriedades.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "entity": {
+          "title": "Entidade que está sendo atribuída",
+          "description": "Entidade que está sendo atribuída à opção de propriedade"
+        },
+        "properties": {
+          "title": "Propriedades possíveis",
+          "description": "Propriedades a serem escolhidas.",
+          "items": {
+            "title": "Nome da propriedade",
+            "description": "Propriedade possível a ser escolhida."
+          }
+        },
+        "entities": {
+          "title": "Entidades",
+          "description": "Nomes de entidade ambíguos.",
+          "items": {
+            "title": "Nome da entidade",
+            "description": "Nome da entidade que está sendo escolhida."
+          }
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnCondition": {
+      "title": "Na condição",
+      "description": "Ações a serem executadas quando a condição especificada for true.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnContinueConversation": {
+      "title": "On continue conversation",
+      "description": "Ações a serem executadas quando uma conversa for iniciada novamente por meio de uma ação ContinueConversationLater.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "Na atividade ConversationUpdate",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'ConversationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnDialogEvent": {
+      "title": "No evento de diálogo",
+      "description": "Ações a serem executadas quando ocorrer um evento de diálogo específico.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "event": {
+          "title": "Nome do evento de diálogo",
+          "description": "O nome do evento de diálogo."
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnEndOfActions": {
+      "title": "No final das ações",
+      "description": "Ações a serem executadas quando não há mais nenhuma ação no diálogo atual.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+      "title": "Na atividade EndOfConversation",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'EndOfConversation'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnError": {
+      "title": "On error",
+      "description": "Ação a ser executada quando ocorrer um evento de diálogo 'Erro'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnEventActivity": {
+      "title": "Na atividade de Evento",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'Evento'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnHandoffActivity": {
+      "title": "Na atividade de Entrega",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'HandOff'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+      "title": "On InstallationUpdate activity",
+      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condition",
+          "description": "Condition (expression)."
+        },
+        "actions": {
+          "title": "Actions",
+          "description": "Sequence of actions to execute."
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+        },
+        "runOnce": {
+          "title": "Run Once",
+          "description": "True if rule should run once per unique conditions"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnIntent": {
+      "title": "No reconhecimento da intenção",
+      "description": "Ações a serem executadas quando a intenção especificada for reconhecida.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "intent": {
+          "title": "Intenção",
+          "description": "Nome da intenção."
+        },
+        "entities": {
+          "title": "Entidades",
+          "description": "Entidades necessárias.",
+          "items": {
+            "title": "Entidade",
+            "description": "Entidade que precisa estar presente."
+          }
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnInvokeActivity": {
+      "title": "Na atividade Invocar",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'Invocar'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageActivity": {
+      "title": "Na atividade de Mensagem",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'Mensagem'. Substitui o gatilho de Intenção.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+      "title": "Na atividade de MessageDelete",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'MessageDelete'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+      "title": "Na atividade de MessageReaction",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'MessageReaction'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+      "title": "Na atividade de MessageUpdate",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'MessageUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnQnAMatch": {
+      "title": "On QnAMaker match",
+      "description": "Ações a serem executadas quando uma correspondência do QnA Maker for encontrada.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "No RepromptDialog",
+      "description": "Ações a serem executadas quando ocorrer o evento 'RepromptDialog'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnTypingActivity": {
+      "title": "Na atividade de Digitação",
+      "description": "Ações a serem executadas no recebimento de uma atividade com o tipo 'Digitação'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "Em caso de intenção desconhecida",
+      "description": "Ação a ser executada quando a entrada de usuário não for reconhecida ou quando nenhum dos gatilhos 'no reconhecimento da intenção' corresponder à intenção reconhecida.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condição",
+          "description": "Condição (expressão)."
+        },
+        "actions": {
+          "title": "Ações",
+          "description": "Sequência de ações a serem executadas."
+        },
+        "priority": {
+          "title": "Prioridade",
+          "description": "A prioridade do gatilho: 0 é a mais alta e < 0 indica ignorada."
+        },
+        "runOnce": {
+          "title": "Executar Uma Vez",
+          "description": "True se a regra deve ser executada uma vez por condições exclusivas"
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OrdinalEntityRecognizer": {
+      "title": "Ordinal entity recognizer",
+      "description": "Reconhecedor que reconhece ordinais (exemplo: primeiro, segundo, 3º).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.PercentageEntityRecognizer": {
+      "title": "Percentage entity recognizer",
+      "description": "Reconhecedor que reconhece percentuais.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.PhoneNumberEntityRecognizer": {
+      "title": "Phone number entity recognizer",
+      "description": "Reconhecedor que reconhece números de telefone.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.QnAMakerDialog": {
+      "title": "QnAMaker dialog",
+      "description": "Diálogo que usa a base de dados de conhecimento do QnA Maker para responder perguntas.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "knowledgeBaseId": {
+          "title": "ID da Base de dados de conhecimento",
+          "description": "ID da sua Base de dados de conhecimento do QnA Maker."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "Chave de ponto de extremidade da base de dados de conhecimento do QnA Maker."
+        },
+        "hostname": {
+          "title": "Nome do host",
+          "description": "Nome do host do serviço QnA Maker."
+        },
+        "noAnswer": {
+          "title": "Resposta de fallback",
+          "description": "Resposta padrão a ser retornada quando não é encontrada nenhuma outra na base de dados de conhecimento."
+        },
+        "threshold": {
+          "title": "Limite",
+          "description": "Pontuação limite para filtrar os resultados."
+        },
+        "activeLearningCardTitle": {
+          "title": "Título do cartão de aprendizado ativo",
+          "description": "Título do cartão de sugestões de aprendizado ativo."
+        },
+        "cardNoMatchText": {
+          "title": "Texto da opção sem correspondência do cartão",
+          "description": "Texto da opção sem correspondência."
+        },
+        "cardNoMatchResponse": {
+          "title": "Resposta sem correspondência do cartão",
+          "description": "Resposta personalizada quando não é selecionada nenhuma opção de correspondência."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "Filtros de metadados a serem usados ao chamar a base de dados de conhecimento do QnA Maker.",
+          "items": {
+            "title": "Filtro de metadados",
+            "description": "Filtro de metadados.",
+            "properties": {
+              "name": {
+                "title": "Nome",
+                "description": "Nome da propriedade de filtro."
+              },
+              "value": {
+                "title": "Valor",
+                "description": "Valor a ser usado para o filtro."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "Superior",
+          "description": "O número de respostas que você deseja recuperar."
+        },
+        "isTest": {
+          "title": "IsTest",
+          "description": "True, se estiver apontando para o ambiente de Teste. Caso contrário, false."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "Tipo de Classificador.",
+          "oneOf": {
+            "0": {
+              "title": "Classificador padrão",
+              "description": "Tipos de classificador padrão."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.QnAMakerRecognizer": {
+      "title": "QnAMaker recognizer",
+      "description": "Reconhecedor para gerar intenções de QnAMatch usando uma base de dados de conhecimento.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID exclusiva opcional usada com RecognizerSet."
+        },
+        "knowledgeBaseId": {
+          "title": "ID da Base de dados de conhecimento",
+          "description": "Knowledge base Id of your QnA Maker knowledge base."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "Chave de ponto de extremidade da base de dados de conhecimento do QnA Maker."
+        },
+        "hostname": {
+          "title": "Nome do host",
+          "description": "Nome do host do serviço QnA Maker."
+        },
+        "threshold": {
+          "title": "Limite",
+          "description": "Pontuação limite para filtrar os resultados."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "Filtros de metadados a serem usados ao chamar a base de dados de conhecimento do QnA Maker.",
+          "items": {
+            "title": "Filtros de metadados",
+            "description": "Filtros de metadados a serem usados ao consultar a base de dados de conhecimento do QnA Maker.",
+            "properties": {
+              "name": {
+                "title": "Nome",
+                "description": "Nome a ser usado para o filtro."
+              },
+              "value": {
+                "title": "Valor",
+                "description": "Valor para restringir filtro."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "Superior",
+          "description": "O número de respostas que você deseja recuperar."
+        },
+        "isTest": {
+          "title": "Use test environment",
+          "description": "True, se estiver apontando para o ambiente de Teste. Caso contrário, false."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "Tipo de Classificador.",
+          "oneOf": {
+            "0": {
+              "title": "Tipo de classificador",
+              "description": "Tipo de Classificador."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+            }
+          }
+        },
+        "includeDialogNameInMetadata": {
+          "title": "Include dialog name",
+          "description": "Quando esta opção estiver definida como false, o nome do diálogo não será passado para o QnA Maker. O (padrão) é true"
+        },
+        "metadata": {
+          "title": "Filtros de metadados",
+          "description": "Filtros de metadados a serem usados ao chamar a base de dados de conhecimento do QnA Maker.",
+          "items": {
+            "title": "Filtro de metadados",
+            "description": "Filtro de metadados a ser usado ao chamar a base de dados de conhecimento do QnA Maker.",
+            "properties": {
+              "name": {
+                "title": "Nome",
+                "description": "Nome do valor a ser testado."
+              },
+              "value": {
+                "title": "Valor",
+                "description": "Valor a ser usado para o filtro."
+              }
+            }
+          }
+        },
+        "context": {
+          "title": "QnA request context",
+          "description": "Contexto a ser usado para classificação."
+        },
+        "qnaId": {
+          "title": "QnA Id",
+          "description": "Um número ou uma expressão que é a QnAId a ser passada para a API do QnA Maker."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RandomSelector": {
+      "title": "Seletor de regra aleatória",
+      "description": "Selecionar a regra true mais específica.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "seed": {
+          "title": "Semente aleatória",
+          "description": "Semente aleatória para iniciar a geração de números aleatórios."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RecognizerSet": {
+      "title": "Recognizer set",
+      "description": "Cria a união entre as intenções e as entidades dos reconhecedores no conjunto.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID exclusiva opcional usada com RecognizerSet. Os outros reconhecedores devem retornar a intenção 'DeferToRecognizer_{Id}' ao cruzar dados de treinamento para esse reconhecedor."
+        },
+        "recognizers": {
+          "title": "Reconhecedores",
+          "description": "Lista de Reconhecedores definidos para este conjunto."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RegexEntityRecognizer": {
+      "title": "Regex entity recognizer",
+      "description": "Reconhecedor que reconhece os padrões de entrada com base em regex.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "name": {
+          "title": "Nome",
+          "description": "O nome da entidade"
+        },
+        "pattern": {
+          "title": "Padrão",
+          "description": "Padrão expresso como uma expressão regular."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RegexRecognizer": {
+      "title": "Reconhecedor de regex",
+      "description": "Usar expressões regulares para reconhecer intenções e entidades na entrada de usuário.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID exclusiva opcional usada com RecognizerSet. Os outros reconhecedores devem retornar a intenção 'DeferToRecognizer_{Id}' ao cruzar dados de treinamento para esse reconhecedor."
+        },
+        "intents": {
+          "title": "Padrões de RegEx para intenções",
+          "description": "Coleção de padrões a serem correspondidos para uma intenção.",
+          "items": {
+            "title": "Padrão",
+            "description": "Intenção e padrão de regex.",
+            "properties": {
+              "intent": {
+                "title": "Intenção",
+                "description": "O nome da intenção."
+              },
+              "pattern": {
+                "title": "Padrão",
+                "description": "O padrão de expressão regular."
+              }
+            }
+          }
+        },
+        "entities": {
+          "title": "Reconhecedores de entidade",
+          "description": "Coleção de reconhecedores de entidade a serem usados."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.RepeatDialog": {
+      "title": "Repetir o diálogo",
+      "description": "Repetir o diálogo atual.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "allowLoop": {
+          "title": "AllowLoop",
+          "description": "Condição opcional que, quando for true, permitirá o loop do diálogo repetido."
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "options": {
+          "title": "Opções",
+          "description": "Uma ou mais opções que são passadas para o diálogo chamado.",
+          "additionalProperties": {
+            "title": "Opções",
+            "description": "Opções da repetição do diálogo."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Quando esta opção está definida como false, o diálogo chamado pode processar a atividade atual."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ReplaceDialog": {
+      "title": "Substituir o diálogo",
+      "description": "Substituir o diálogo atual por outro diálogo.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "Diálogo"
+            }
+          },
+          "title": "Nome do diálogo",
+          "description": "Nome do diálogo a ser chamado."
+        },
+        "options": {
+          "title": "Opções",
+          "description": "Uma ou mais opções que são passadas para o diálogo chamado.",
+          "additionalProperties": {
+            "title": "Opções",
+            "description": "Opções para substituir o diálogo."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Quando esta opção está definida como false, o diálogo chamado pode processar a atividade atual."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ResourceMultiLanguageGenerator": {
+      "title": "Resource multi-language generator",
+      "description": "O Gerador Multilíngue associado ao recurso pela ID do recurso.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID do gerador opcional."
+        },
+        "resourceId": {
+          "title": "ID do Recurso",
+          "description": "Recurso que é o gerador de idioma raiz. Outros geradores com os mesmos nome e sufixo de idioma serão carregados neste gerador e usados com base na Política de Idioma."
+        },
+        "languagePolicy": {
+          "title": "Language policy",
+          "description": "Defina a política de idioma alternativo deste gerador. Se ela não for definida, a política de idioma global será usada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SendActivity": {
+      "title": "Enviar uma atividade",
+      "description": "Responder com uma atividade.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "activity": {
+          "title": "Atividade",
+          "description": "Atividade a ser enviada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SetProperties": {
+      "title": "Definir a propriedade",
+      "description": "Defina um ou mais valores de propriedade.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "assignments": {
+          "title": "Atribuições",
+          "description": "Atribuições de valor da propriedade a serem definidas.",
+          "items": {
+            "title": "Atribuição",
+            "description": "Atribuição de propriedade.",
+            "properties": {
+              "property": {
+                "title": "Propriedade",
+                "description": "Propriedade (localização nomeada para armazenar informações)."
+              },
+              "value": {
+                "title": "Valor",
+                "description": "Novo valor ou expressão."
+              }
+            }
+          }
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SetProperty": {
+      "title": "Definir a propriedade",
+      "description": "Defina a propriedade para um valor.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade (localização nomeada para armazenar informações)."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "Novo valor ou expressão."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SignOutUser": {
+      "title": "Sign out user",
+      "description": "Causar a saída de um usuário que já tenha entrado usando OAuthInput.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "userId": {
+          "title": "UserId",
+          "description": "Expressão para que um usuário saia. O padrão é user.id."
+        },
+        "connectionName": {
+          "title": "Connection name",
+          "description": "Nome da conexão usado com OAuthInput para que um usuário entrasse."
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.StaticActivityTemplate": {
+      "title": "Microsoft static activity template",
+      "description": "Isso permite que você defina um objeto de Atividade estática",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "activity": {
+          "title": "Atividade",
+          "description": "Uma Atividade estática a ser usada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.SwitchCondition": {
+      "title": "Condição de switch",
+      "description": "Executar ações diferentes com base no valor de uma propriedade.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "condition": {
+          "title": "Condição",
+          "description": "Propriedade a ser avaliada."
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "cases": {
+          "title": "Casos",
+          "description": "Ações para cada condição possível.",
+          "items": {
+            "title": "Caso",
+            "description": "Caso e ações.",
+            "properties": {
+              "value": {
+                "title": "Valor",
+                "description": "O valor com o qual a condição deve ser comparada."
+              },
+              "actions": {
+                "title": "Ações",
+                "description": "Ações a serem executadas."
+              }
+            }
+          }
+        },
+        "default": {
+          "title": "Padrão",
+          "description": "Ações a serem executadas se nenhum dos casos atender à condição."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TelemetryTrackEvent": {
+      "title": "Telemetry - track event",
+      "description": "Acompanhar um evento personalizado usando o Cliente de Telemetria registrado.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "eventName": {
+          "title": "Event name",
+          "description": "O nome do evento a ser rastreado."
+        },
+        "properties": {
+          "title": "Propriedades",
+          "description": "Uma ou mais propriedades a serem anexadas ao evento que está sendo rastreado."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TemperatureEntityRecognizer": {
+      "title": "Temperature recognizer",
+      "description": "Reconhecedor que reconhece temperaturas.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TemplateEngineLanguageGenerator": {
+      "title": "Template multi-language generator",
+      "description": "Gerador de Modelo que permite somente a avaliação embutida de modelos.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID do gerador opcional."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TextInput": {
+      "title": "Diálogo de entrada de texto",
+      "description": "Informações da coleção – Solicitar uma palavra ou frase.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Valor padrão",
+          "description": "'Property' será definida como o valor desta expressão quando o número máximo de rodadas for excedido."
+        },
+        "value": {
+          "title": "Valor",
+          "description": "'Property' será definida como o valor desta expressão, a menos que ela seja avaliada como nula."
+        },
+        "outputFormat": {
+          "title": "Formato de saída",
+          "description": "Expressão para formatar a saída."
+        },
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "prompt": {
+          "title": "Prompt inicial",
+          "description": "Mensagem a ser enviada para coletar informações."
+        },
+        "unrecognizedPrompt": {
+          "title": "Prompt não reconhecido",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor."
+        },
+        "invalidPrompt": {
+          "title": "Prompt inválido",
+          "description": "Mensagem a ser enviada quando a entrada de usuário não atender a nenhuma expressão de validação."
+        },
+        "defaultValueResponse": {
+          "title": "Resposta de valor padrão",
+          "description": "Mensagem a ser enviada quando o número máximo de rodadas (se especificado) for excedido e o valor padrão estiver selecionado como o valor"
+        },
+        "maxTurnCount": {
+          "title": "Número máximo de rodadas",
+          "description": "Número máximo de tentativas de perguntar novamente para coletar informações."
+        },
+        "validations": {
+          "title": "Expressões de validação",
+          "description": "Expressão para validar a entrada de usuário.",
+          "items": {
+            "title": "Condição",
+            "description": "Expressão que precisa ser atendida para que a entrada seja considerada válida"
+          }
+        },
+        "property": {
+          "title": "Propriedade",
+          "description": "Propriedade para armazenar as informações coletadas. A entrada será ignorada se a propriedade tiver um valor (a menos que 'Sempre perguntar' seja true)."
+        },
+        "alwaysPrompt": {
+          "title": "Sempre perguntar",
+          "description": "Coletar informações mesmo que a 'property' especificada não esteja vazia."
+        },
+        "allowInterruptions": {
+          "title": "Permitir Interrupções",
+          "description": "Uma expressão booliana que determina se o pai deve ter permissão para interromper a entrada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TextTemplate": {
+      "title": "TextTemplate da Microsoft",
+      "description": "Usar Modelos de LG para criar texto",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "Modelo",
+          "description": "Modelo do Gerador de Idioma a ser avaliado para criar o texto."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ThrowException": {
+      "title": "Throw an exception",
+      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "errorValue": {
+          "title": "Error value",
+          "description": "Error value to throw."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TraceActivity": {
+      "title": "Enviar uma TraceActivity",
+      "description": "Enviar uma atividade de rastreamento ao agente de transcrição e/ou ao Bot Framework Emulator.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "name": {
+          "title": "Nome",
+          "description": "Nome da atividade de rastreamento"
+        },
+        "label": {
+          "title": "Rótulo",
+          "description": "Rótulo da atividade de rastreamento (usado para identificá-la em uma lista de atividades de rastreamento.)"
+        },
+        "valueType": {
+          "title": "Tipo de valor",
+          "description": "Tipo de valor"
+        },
+        "value": {
+          "title": "Valor",
+          "description": "Propriedade que contém o valor a ser enviado como a atividade de rastreamento."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TrueSelector": {
+      "title": "True trigger selector",
+      "description": "Seletor de todos os eventos true",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.UpdateActivity": {
+      "title": "Update an activity",
+      "description": "Responder com uma atividade.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ID opcional do diálogo"
+        },
+        "disabled": {
+          "title": "Desabilitado",
+          "description": "Condição opcional que, se for true, desabilitará esta ação."
+        },
+        "activityId": {
+          "title": "ID da Atividade",
+          "description": "Uma expressão de cadeia de caracteres com a ID da atividade a ser atualizada."
+        },
+        "activity": {
+          "title": "Atividade",
+          "description": "Atividade a ser enviada."
+        },
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.UrlEntityRecognizer": {
+      "title": "Url recognizer",
+      "description": "Reconhecedor que reconhece URLs.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "arrayExpression": {
+      "title": "Matriz ou expressão",
+      "description": "Matriz ou expressão a ser avaliada.",
+      "oneOf": {
+        "0": {
+          "title": "Matriz",
+          "description": "Constante de matriz."
+        }
+      }
+    },
+    "booleanExpression": {
+      "title": "Booliano ou expressão",
+      "description": "Constante ou expressão booliana a ser avaliada.",
+      "oneOf": {
+        "0": {
+          "title": "Booliano",
+          "description": "Constante booliana."
+        }
+      }
+    },
+    "component": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "Propriedade das ferramentas",
+          "description": "Propriedade em aberto para as ferramentas."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Tipo de objeto de diálogo",
+          "description": "Define as propriedades válidas do componente que você está configurando (de um arquivo .schema de diálogo)"
+        },
+        "$designer": {
+          "title": "Informações do designer",
+          "description": "Informações adicionais do Bot Framework Composer."
+        }
+      }
+    },
+    "condition": {
+      "title": "Condição booliana",
+      "description": "Constante ou expressão booliana a ser avaliada.",
+      "oneOf": {
+        "1": {
+          "title": "Booliano",
+          "description": "Valor booliano."
+        }
+      }
+    },
+    "equalsExpression": {
+      "title": "Expressão",
+      "description": "Expressão que começa com =."
+    },
+    "expression": {
+      "title": "Expressão",
+      "description": "Expressão a ser avaliada."
+    },
+    "integerExpression": {
+      "title": "Inteiro ou expressão",
+      "description": "Constante inteira ou expressão a ser avaliada.",
+      "oneOf": {
+        "0": {
+          "title": "Inteiro",
+          "description": "Constante inteira."
+        }
+      }
+    },
+    "numberExpression": {
+      "title": "Número ou expressão",
+      "description": "Constante numérica ou expressão a ser avaliada.",
+      "oneOf": {
+        "0": {
+          "title": "Número",
+          "description": "Constante numérica."
+        }
+      }
+    },
+    "objectExpression": {
+      "title": "Objeto ou expressão",
+      "description": "Objeto ou expressão a ser avaliada.",
+      "oneOf": {
+        "0": {
+          "title": "Objeto",
+          "description": "Constante de objeto."
+        }
+      }
+    },
+    "role": {
+      "title": "$role",
+      "description": "Define a função executada no esquema de diálogo de [expression|interface|implements($kind)|extends($kind)]."
+    },
+    "stringExpression": {
+      "title": "Cadeia de caracteres ou expressão",
+      "description": "Cadeia de caracteres interpolada ou expressão a ser avaliada.",
+      "oneOf": {
+        "0": {
+          "title": "Cadeia de caracteres",
+          "description": "Cadeia de caracteres interpolada"
+        }
+      }
+    },
+    "valueExpression": {
+      "title": "Qualquer ou expressão",
+      "description": "Qualquer constante ou expressão a ser avaliada.",
+      "oneOf": {
+        "0": {
+          "title": "Objeto",
+          "description": "Constante de objeto."
+        },
+        "1": {
+          "title": "Matriz",
+          "description": "Constante de matriz."
+        },
+        "2": {
+          "title": "Cadeia de caracteres",
+          "description": "Cadeia de caracteres interpolada."
+        },
+        "3": {
+          "title": "Booliano",
+          "description": "Constante booliana"
+        },
+        "4": {
+          "title": "Número",
+          "description": "Constante numérica."
+        }
+      }
+    }
+  }
+}

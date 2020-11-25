@@ -1,0 +1,125 @@
+{
+  "about_70c18bba": {
+    "message": "Névjegy"
+  },
+  "actual_zoom_211ec99": {
+    "message": "Tényleges nagyítás/kicsinyítés"
+  },
+  "bring_all_to_front_207a7ad1": {
+    "message": "Legyen az összes előtérben"
+  },
+  "check_for_updates_12a70061": {
+    "message": "Frissítések keresése"
+  },
+  "close_d634289d": {
+    "message": "Bezárás"
+  },
+  "close_window_4bdc79d7": {
+    "message": "Ablak bezárása"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "Composer a GitHubon"
+  },
+  "copy_9748f9f": {
+    "message": "Másolás"
+  },
+  "cut_c8c92681": {
+    "message": "Kivágás"
+  },
+  "delete_a6efa79d": {
+    "message": "Törlés"
+  },
+  "documentation_d82f6eec": {
+    "message": "Dokumentáció"
+  },
+  "edit_c5fbea07": {
+    "message": "Szerkesztés"
+  },
+  "exit_d0c7b013": {
+    "message": "Kilépés"
+  },
+  "file_c851020d": {
+    "message": "Fájl"
+  },
+  "help_4c4968b1": {
+    "message": "Súgó"
+  },
+  "hide_bot_framework_composer_eeba3ea8": {
+    "message": "A Bot Framework Composer elrejtése"
+  },
+  "hide_others_4204b552": {
+    "message": "Egyebek elrejtése"
+  },
+  "initializing_4e34f7d": {
+    "message": "Inicializálás..."
+  },
+  "learn_more_about_bot_framework_2daca065": {
+    "message": "További tudnivalók a Bot Frameworkről"
+  },
+  "minimize_4f999e30": {
+    "message": "Kis méret"
+  },
+  "paste_5963d1c1": {
+    "message": "Beillesztés"
+  },
+  "privacy_statement_58986965": {
+    "message": "Adatvédelmi nyilatkozat"
+  },
+  "quit_bot_framework_composer_455ceb74": {
+    "message": "Kilépés a Bot Framework Composerből"
+  },
+  "redo_363c58b7": {
+    "message": "Mégis"
+  },
+  "report_an_issue_f33f3ba5": {
+    "message": "Probléma bejelentése"
+  },
+  "select_all_cf7e0248": {
+    "message": "Az összes kijelölése"
+  },
+  "services_ccd7bca0": {
+    "message": "Szolgáltatások"
+  },
+  "show_all_ae37d610": {
+    "message": "Az összes megjelenítése"
+  },
+  "speech_16063aed": {
+    "message": "Beszéd"
+  },
+  "start_speaking_f8d406ff": {
+    "message": "Beszéd indítása"
+  },
+  "starting_server_721c37fd": {
+    "message": "Kiszolgáló indítása..."
+  },
+  "stop_speaking_7b4b9834": {
+    "message": "Beszéd leállítása"
+  },
+  "toggle_developer_tools_d2ef8ea7": {
+    "message": "Fejlesztői eszközök be- és kikapcsolása"
+  },
+  "toggle_full_screen_272a0c5": {
+    "message": "Teljes képernyő be- és kikapcsolása"
+  },
+  "undo_a7be8fef": {
+    "message": "Visszavonás"
+  },
+  "view_ba339f93": {
+    "message": "Nézet"
+  },
+  "view_license_720d341a": {
+    "message": "Licenc megtekintése"
+  },
+  "window_171922c7": {
+    "message": "Ablak"
+  },
+  "zoom_f3e54d69": {
+    "message": "Nagyítás/kicsinyítés"
+  },
+  "zoom_in_a781ccc7": {
+    "message": "Nagyítás"
+  },
+  "zoom_out_dc7d60d2": {
+    "message": "Kicsinyítés"
+  }
+}

@@ -15,7 +15,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { SDKKinds } from '@bfc/shared';
+import { SDKKinds, RegexRecognizer, checkForPVASchema } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
@@ -35,10 +35,10 @@ import {
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
-import { userSettingsState } from '../../recoilModel/atoms';
+import { schemasState, userSettingsState } from '../../recoilModel/atoms';
 import { nameRegex } from '../../constants';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
-import { validateDialogSelectorFamily } from '../../recoilModel';
+import { validateDialogsSelectorFamily } from '../../recoilModel';
 // -------------------- Styles -------------------- //
 
 const styles = {
@@ -95,7 +95,7 @@ const optionRow = {
 export const warningIcon = {
   marginLeft: 5,
   color: '#BE880A',
-  fontSize: 5,
+  fontSize: 12,
 };
 
 // -------------------- Validation Helpers -------------------- //
@@ -209,12 +209,13 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
-  const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
+  const regexIntents = (dialogFile?.content?.recognizer as RegexRecognizer)?.intents ?? [];
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
     $kind: intentTypeKey,
@@ -227,13 +228,20 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const [selectedType, setSelectedType] = useState(intentTypeKey);
   const showIntentName = selectedType === intentTypeKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
-  const showTriggerPhrase = selectedType === intentTypeKey && isLUISnQnA;
+  const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
   const showEventDropDown = selectedType === eventTypeKey;
   const showActivityDropDown = selectedType === activityTypeKey;
   const showCustomEvent = selectedType === customEventKey;
   const eventTypes: IComboBoxOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
-  const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+  let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+
+  if (schemas && checkForPVASchema(schemas.sdk)) {
+    triggerTypeOptions = triggerTypeOptions.filter(
+      (elem) =>
+        elem.text.indexOf('QnA Intent recognized') == -1 && elem.text.indexOf('Duplicated intents recognized') == -1
+    );
+  }
 
   if (isRegEx) {
     const qnaMatcherOption = triggerTypeOptions.find((t) => t.key === qnaMatcherKey);
@@ -268,7 +276,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     e.preventDefault();
 
     //If still have some errors here, it is a bug.
-    const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+    const errors = validateForm(selectedType, formData, isRegEx, regexIntents as any);
     if (shouldDisable(errors)) {
       setFormData({ ...formData, errors });
       return;
@@ -334,7 +342,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
-  const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+  const errors = validateForm(selectedType, formData, isRegEx, regexIntents as any);
   const disable = shouldDisable(errors);
 
   return (

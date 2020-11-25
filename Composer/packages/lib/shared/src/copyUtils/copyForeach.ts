@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Foreach, ForeachPage } from '@bfc/types';
+import { Foreach, ForeachPage } from '@botframework-composer/types';
 
 import { ExternalApi } from './ExternalApi';
 import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';

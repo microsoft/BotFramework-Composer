@@ -130,6 +130,10 @@ export const DialogCreationCopy = {
       'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
     ),
   },
+  IMPORT_BOT_PROJECT: {
+    title: formatMessage('Import your bot to new project'),
+    subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+  },
 };
 
 export const DialogDeleting = {
@@ -213,8 +217,3 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 export const triggerNotSupportedWarning = formatMessage(
   'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
 );
-
-export const knowledgeBaseSourceUrl =
-  'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/content-types';
-
-export const QnAMakerLearningUrl = 'https://azure.microsoft.com/en-us/pricing/details/cognitive-services/qna-maker/';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { act, fireEvent, getByLabelText, getByTestId, getByText } from '@bfc/test-utils';
+import { act, fireEvent, getByLabelText, getByTestId, getByText } from '@botframework-composer/test-utils';
 import { Skill } from '@bfc/shared';
 
 import httpClient from '../../src//utils/httpUtil';
@@ -17,8 +17,6 @@ import { currentProjectIdState, settingsState, skillsState } from '../../src/rec
 import Skills from '../../src/pages/skills';
 
 jest.mock('../../src//utils/httpUtil');
-
-jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
 const skills: Skill[] = [
   {

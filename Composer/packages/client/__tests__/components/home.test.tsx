@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent, render } from '@bfc/test-utils';
-import { ProjectTemplate } from '@bfc/shared';
+import { fireEvent, render } from '@botframework-composer/test-utils';
+import { Toolbar } from '@bfc/ui-shared';
+import { BotTemplate } from '@bfc/shared';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
 import { renderWithRecoil } from '../testUtils';
-import { Toolbar } from '../../src/components/Toolbar';
+
 describe('<Home/>', () => {
   it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [
@@ -32,7 +33,7 @@ describe('<Home/>', () => {
     const templates = [
       { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot' },
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot' },
-    ] as ProjectTemplate[];
+    ] as BotTemplate[];
     const onClickTemplate = jest.fn((item) => item);
     const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);
     expect(container).toHaveTextContent('Echo Bot');

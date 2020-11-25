@@ -9,6 +9,7 @@ import {
   DialogInfo,
   DialogFactory,
   ITriggerCondition,
+  RecognizerFile,
 } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
@@ -17,6 +18,7 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import formatMessage from 'format-message';
 
+import { LuProviderType } from './../../../types/src/indexers';
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
 
@@ -95,9 +97,8 @@ function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: Dialo
 
 export function updateIntentTrigger(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
-  const trigger = (dialogCopy.content?.triggers ?? []).find(
-    (t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName
-  );
+  const triggers = dialogCopy.content?.triggers as ITriggerCondition[];
+  const trigger = (triggers ?? []).find((t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName);
 
   if (trigger) {
     trigger.intent = newIntentName;
@@ -337,3 +338,18 @@ export function replaceDialogDiagnosticLabel(path?: string): string {
   });
   return list.join(': ');
 }
+
+export const getLuProvider = (dialogId: string, recognizers: RecognizerFile[]) => {
+  let kind: LuProviderType | undefined = undefined;
+  for (const {
+    id,
+    content: { $kind },
+  } of recognizers) {
+    if (id.split('.')[0] === dialogId) {
+      if ($kind === SDKKinds.OrchestratorRecognizer) return $kind;
+      if ($kind === SDKKinds.LuisRecognizer) kind = $kind;
+    }
+  }
+
+  return kind;
+};

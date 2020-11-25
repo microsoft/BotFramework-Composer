@@ -4,7 +4,7 @@
 import storage from './storage';
 
 const KEY = 'OnboardingState';
-const DEFAULT_STATE = { complete: false };
+const DEFAULT_STATE = { complete: process.env.NODE_ENV !== 'production' };
 
 interface IOnboardingState {
   complete: boolean;

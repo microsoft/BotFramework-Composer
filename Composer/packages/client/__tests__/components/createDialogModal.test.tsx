@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent, act, waitFor } from '@bfc/test-utils';
+import { fireEvent, act, waitFor } from '@botframework-composer/test-utils';
 
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
 import { renderWithRecoil } from '../testUtils';

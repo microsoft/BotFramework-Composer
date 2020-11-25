@@ -2,43 +2,90 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@botframework-composer/test-utils';
 
-import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { renderWithRecoil } from '../testUtils';
+import { SAMPLE_DIALOG, SAMPLE_DIALOG_2 } from '../mocks/sampleDialog';
+import {
+  dialogsSelectorFamily,
+  currentProjectIdState,
+  botProjectIdsState,
+  projectMetaDataState,
+  schemasState,
+  botProjectFileState,
+} from '../../src/recoilModel';
+
+const projectId = '12345.6789';
+const projectId2 = '56789.1234';
+const dialogs = [SAMPLE_DIALOG];
+
+const initRecoilState = ({ set }) => {
+  set(currentProjectIdState, projectId);
+  set(botProjectIdsState, [projectId]);
+  set(dialogsSelectorFamily(projectId), dialogs);
+  set(schemasState(projectId), { sdk: { content: {} } });
+  set(projectMetaDataState(projectId), { isRootBot: true });
+  set(botProjectFileState(projectId), { foo: 'bar' });
+};
+
+const initRecoilStateMulti = ({ set }) => {
+  set(currentProjectIdState, projectId);
+  set(botProjectIdsState, [projectId, projectId2]);
+  set(dialogsSelectorFamily(projectId), dialogs);
+  set(dialogsSelectorFamily(projectId2), [SAMPLE_DIALOG, SAMPLE_DIALOG_2]);
+  set(schemasState(projectId), { sdk: { content: {} } });
+  set(schemasState(projectId2), { sdk: { content: {} } });
+  set(projectMetaDataState(projectId), { isRootBot: true });
+  set(botProjectFileState(projectId), { foo: 'bar' });
+};
 
 describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
     const { findByText } = renderWithRecoil(
-      <ProjectTree
-        dialogId="ToDoBot"
-        dialogs={dialogs as any}
-        selected=""
-        onDeleteDialog={() => {}}
-        onDeleteTrigger={() => {}}
-        onSelect={() => {}}
-      />
+      <ProjectTree onDeleteDialog={() => {}} onDeleteTrigger={() => {}} onSelect={() => {}} />,
+      initRecoilState
     );
 
-    await findByText('ToDoBot');
+    await findByText('EchoBot-1');
+  });
+
+  it('should render the projecttree with multiple bots', async () => {
+    const { findAllByText, findByText } = renderWithRecoil(
+      <ProjectTree onDeleteDialog={() => {}} onDeleteTrigger={() => {}} onSelect={() => {}} />,
+      initRecoilStateMulti
+    );
+
+    await findAllByText('EchoBot-1');
+    await findByText('EchoBot-1b');
   });
 
   it('should handle project tree item click', async () => {
     const mockFileSelect = jest.fn(() => null);
-    const { findByText } = renderWithRecoil(
-      <ProjectTree
-        dialogId="ToDoBot"
-        dialogs={dialogs as any}
-        selected=""
-        onDeleteDialog={() => {}}
-        onDeleteTrigger={() => {}}
-        onSelect={mockFileSelect}
-      />
+    const component = renderWithRecoil(
+      <ProjectTree onDeleteDialog={() => {}} onDeleteTrigger={() => {}} onSelect={mockFileSelect} />,
+      initRecoilState
     );
 
-    const node = await findByText('addtodo');
+    const node = await component.findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
     expect(mockFileSelect).toHaveBeenCalledTimes(1);
+  });
+
+  it('fires the onSelectAll event', async () => {
+    const mockOnSelected = jest.fn();
+    const { findByText } = renderWithRecoil(
+      <ProjectTree
+        onDeleteDialog={() => {}}
+        onDeleteTrigger={() => {}}
+        onSelect={() => {}}
+        onSelectAllLink={mockOnSelected}
+      />,
+      initRecoilState
+    );
+
+    const node = await findByText('All');
+    fireEvent.click(node);
+    expect(mockOnSelected).toHaveBeenCalledTimes(1);
   });
 });

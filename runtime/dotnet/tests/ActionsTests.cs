@@ -21,7 +21,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\plugins\samples\assets\projects");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\extensions\samples\assets\projects");
 
         private static string getFolderPath(string path)
         {
@@ -196,6 +196,9 @@ namespace Tests
             .Send("Why?")
                 .AssertReply("To get to the other side!")
             .Send("future")
+                .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}13 - QnAMaker", Environment.NewLine)).Send("11")
+                .AssertReply("Hello luhan, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.")
+            .Send("future")
                 .AssertReply("Seeing into your future...")
                 .AssertReply("I see great things in your future!")
                 .AssertReply("Potentially a successful demo")
@@ -226,7 +229,7 @@ namespace Tests
             resourceExplorer.AddFolder(folderPath);
             adapter
                 .UseStorage(storage)
-                .UseBotState(userState, convoState)               
+                .UseBotState(userState, convoState)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("actionssample.dialog");
@@ -245,4 +248,4 @@ namespace Tests
         }
     }
 }
-  
+

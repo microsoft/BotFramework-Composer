@@ -27,12 +27,6 @@ context('breadcrumb', () => {
     // Should path = main dialog at first render
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
 
-    // Click on AddToDo dialog
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('addtodo').click();
-    });
-    hasBreadcrumbItems(cy, ['Addtodo']);
-
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestTodoSample').click();
@@ -41,13 +35,12 @@ context('breadcrumb', () => {
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
-  it('can show event name in breadcrumb', () => {
+  it('can show dialog and trigger name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('addtodo').click();
-      cy.findByText('Dialog started').click();
+      cy.findByTestId('addtodo_Dialog started').click();
     });
 
-    hasBreadcrumbItems(cy, ['Addtodo', 'Dialog started']);
+    hasBreadcrumbItems(cy, ['addtodo', 'Dialog started']);
   });
 
   it('can show action name in breadcrumb', () => {

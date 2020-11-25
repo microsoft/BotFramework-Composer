@@ -1,0 +1,125 @@
+{
+  "about_70c18bba": {
+    "message": "О программе"
+  },
+  "actual_zoom_211ec99": {
+    "message": "Фактическое увеличение"
+  },
+  "bring_all_to_front_207a7ad1": {
+    "message": "Переместить все на передний план"
+  },
+  "check_for_updates_12a70061": {
+    "message": "Проверить обновления"
+  },
+  "close_d634289d": {
+    "message": "Закрыть"
+  },
+  "close_window_4bdc79d7": {
+    "message": "Закрыть окно"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "Composer на сайте GitHub"
+  },
+  "copy_9748f9f": {
+    "message": "Копировать"
+  },
+  "cut_c8c92681": {
+    "message": "Вырезать"
+  },
+  "delete_a6efa79d": {
+    "message": "Удалить"
+  },
+  "documentation_d82f6eec": {
+    "message": "Документация"
+  },
+  "edit_c5fbea07": {
+    "message": "Изменить"
+  },
+  "exit_d0c7b013": {
+    "message": "Выход"
+  },
+  "file_c851020d": {
+    "message": "Файл"
+  },
+  "help_4c4968b1": {
+    "message": "Справка"
+  },
+  "hide_bot_framework_composer_eeba3ea8": {
+    "message": "Скрыть Bot Framework Composer"
+  },
+  "hide_others_4204b552": {
+    "message": "Скрыть другие"
+  },
+  "initializing_4e34f7d": {
+    "message": "Выполняется инициализация..."
+  },
+  "learn_more_about_bot_framework_2daca065": {
+    "message": "Дополнительные сведения о Bot Framework"
+  },
+  "minimize_4f999e30": {
+    "message": "Свернуть"
+  },
+  "paste_5963d1c1": {
+    "message": "Вставить"
+  },
+  "privacy_statement_58986965": {
+    "message": "Заявление о конфиденциальности"
+  },
+  "quit_bot_framework_composer_455ceb74": {
+    "message": "Завершить работу Bot Framework Composer"
+  },
+  "redo_363c58b7": {
+    "message": "Вернуть"
+  },
+  "report_an_issue_f33f3ba5": {
+    "message": "Сообщить о проблеме"
+  },
+  "select_all_cf7e0248": {
+    "message": "Выбрать все"
+  },
+  "services_ccd7bca0": {
+    "message": "Службы"
+  },
+  "show_all_ae37d610": {
+    "message": "Показать все"
+  },
+  "speech_16063aed": {
+    "message": "Речь"
+  },
+  "start_speaking_f8d406ff": {
+    "message": "Начать проговаривание"
+  },
+  "starting_server_721c37fd": {
+    "message": "Выполняется запуск сервера..."
+  },
+  "stop_speaking_7b4b9834": {
+    "message": "Остановить проговаривание"
+  },
+  "toggle_developer_tools_d2ef8ea7": {
+    "message": "Переключить средства разработчика"
+  },
+  "toggle_full_screen_272a0c5": {
+    "message": "Полноэкранный режим"
+  },
+  "undo_a7be8fef": {
+    "message": "Отменить"
+  },
+  "view_ba339f93": {
+    "message": "Вид"
+  },
+  "view_license_720d341a": {
+    "message": "Просмотр лицензии"
+  },
+  "window_171922c7": {
+    "message": "Окно"
+  },
+  "zoom_f3e54d69": {
+    "message": "Масштаб"
+  },
+  "zoom_in_a781ccc7": {
+    "message": "Увеличить"
+  },
+  "zoom_out_dc7d60d2": {
+    "message": "Уменьшить"
+  }
+}

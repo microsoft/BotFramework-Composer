@@ -1,23 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import get from 'lodash/get';
 import { getEditorAPI } from '@bfc/shared';
 
-export const useElectronFeatures = (
-  actionSelected: boolean,
-  flowFocused: boolean,
-  canUndo: boolean,
-  canRedo: boolean
-) => {
-  // Sync selection state to Electron main process
-  useEffect(() => {
+export const useElectronFeatures = (actionSelected: boolean, canUndo: boolean, canRedo: boolean) => {
+  const flowEditorFocused = useRef(false);
+
+  const sendStatus = () => {
     if (!window.__IS_ELECTRON__) return;
     if (!window.ipcRenderer || typeof window.ipcRenderer.send !== 'function') return;
+    window.ipcRenderer.send('composer-state-change', {
+      actionSelected,
+      flowFocused: flowEditorFocused.current,
+      canUndo,
+      canRedo,
+    });
+  };
 
-    window.ipcRenderer.send('composer-state-change', { actionSelected, flowFocused, canUndo, canRedo });
-  }, [actionSelected, flowFocused, canUndo, canRedo]);
+  const onFocusFlowEditor = () => {
+    flowEditorFocused.current = true;
+    sendStatus();
+  };
+
+  const onBlurFlowEditor = () => {
+    flowEditorFocused.current = false;
+    sendStatus();
+  };
+
+  // Sync selection state to Electron main process
+  useEffect(() => {
+    sendStatus();
+  }, [actionSelected, canUndo, canRedo]);
 
   // Subscribe Electron app menu events (copy/cut/del/undo/redo)
   useEffect(() => {
@@ -41,4 +56,9 @@ export const useElectronFeatures = (
       }
     });
   }, []);
+
+  return {
+    onFocusFlowEditor,
+    onBlurFlowEditor,
+  };
 };

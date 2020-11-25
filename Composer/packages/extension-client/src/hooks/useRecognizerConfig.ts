@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import { MicrosoftIRecognizer, SDKKinds } from '@bfc/types';
+import { MicrosoftIRecognizer, SDKKinds, DialogInfo } from '@botframework-composer/types';
 import get from 'lodash/get';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
@@ -33,10 +33,14 @@ const getFallbackRecognizer = (recognizers: RecognizerSchema[]) => {
   return recognizers.find((r) => r.id === FallbackRecognizerKey);
 };
 
-const findRecognizerByValue = (recognizers: RecognizerSchema[], recognizerValue?: MicrosoftIRecognizer) => {
+const findRecognizerByValue = (
+  recognizers: RecognizerSchema[],
+  dialog: DialogInfo,
+  recognizerValue?: MicrosoftIRecognizer
+) => {
   const matchedRecognizer = recognizers.find((r) => {
     if (typeof r.isSelected === 'function') {
-      return r.isSelected(recognizerValue);
+      return r.isSelected(recognizerValue, dialog);
     }
     return r.id === get(recognizerValue, '$kind');
   });
@@ -76,8 +80,9 @@ export function useRecognizerConfig(): RecognizerSchemaConfig {
   const defaultRecognizer = getDefaultRecognizer(recognizers);
   const fallbackRecognizer = getFallbackRecognizer(recognizers);
 
-  const currentRecognizerValue = shellData.currentDialog?.content?.recognizer;
-  const currentRecognizer = findRecognizerByValue(recognizers, currentRecognizerValue) ?? fallbackRecognizer;
+  const currentRecognizerValue = shellData.currentDialog?.content?.recognizer as MicrosoftIRecognizer;
+  const currentRecognizer =
+    findRecognizerByValue(recognizers, shellData.currentDialog, currentRecognizerValue) ?? fallbackRecognizer;
 
   return {
     recognizers,

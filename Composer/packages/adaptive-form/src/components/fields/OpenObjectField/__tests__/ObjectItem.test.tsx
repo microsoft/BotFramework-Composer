@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, getByText, waitFor } from '@bfc/test-utils';
+import { render, fireEvent, getByText, waitFor } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
 
 import { ObjectItem } from '../ObjectItem';

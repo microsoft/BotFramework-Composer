@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "sourceMap": true,
+    "strict": true
+  },
+  "include": [
+    "src/**/*",
+    "testing"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}

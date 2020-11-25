@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC, Fragment } from 'react';
 import get from 'lodash/get';
-import { FlowEditorWidgetMap, FlowUISchema } from '@bfc/extension-client';
+import { FlowEditorWidgetMap, FlowUISchema, SchemaDefinitions } from '@bfc/extension-client';
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
 import { RendererContext, DefaultRenderers, RendererContextData } from '../contexts/RendererContext';
@@ -30,10 +30,14 @@ export interface AdaptiveDialogProps {
   onEvent: EditorEventHandler;
 
   /** UI schema to define how to render a sdk $kind */
-  schema: FlowUISchema;
+  uischema: FlowUISchema;
 
   /** All available widgets to render a node */
   widgets: FlowEditorWidgetMap;
+
+  /** SDK schema to define the data model of a sdk $kind */
+  sdkschema?: SchemaDefinitions;
+
   renderers?: Partial<RendererContextData>;
 }
 
@@ -42,7 +46,8 @@ export const AdaptiveDialog: FC<AdaptiveDialogProps> = ({
   dialogData,
   activeTrigger,
   onEvent,
-  schema = builtinSchema,
+  sdkschema,
+  uischema = builtinSchema,
   widgets = builtinWidgets,
   renderers = {},
 }): JSX.Element => {
@@ -55,7 +60,8 @@ export const AdaptiveDialog: FC<AdaptiveDialogProps> = ({
     <SchemaContext.Provider
       value={{
         widgets: { ...builtinWidgets, ...widgets },
-        schemaProvider: new WidgetSchemaProvider(builtinSchema, schema),
+        schemaProvider: new WidgetSchemaProvider(builtinSchema, uischema),
+        sdkschema,
       }}
     >
       <RendererContext.Provider

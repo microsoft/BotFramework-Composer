@@ -4,13 +4,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useEffect } from 'react';
-import { FieldProps, useShellApi } from '@bfc/extension-client';
-import { DialogInfo, RegexRecognizer } from '@bfc/shared';
+import { FieldProps, useShellApi, MicrosoftIDialog } from '@bfc/extension-client';
+import { RegexRecognizer } from '@bfc/shared';
 
 import { StringField } from './StringField';
 
-function getRegexIntentPattern(currentDialog: DialogInfo, intent: string): string {
-  const recognizer = currentDialog.content.recognizer as RegexRecognizer;
+function getRegexIntentPattern(dialogContent: MicrosoftIDialog, intent: string): string {
+  const recognizer = dialogContent.recognizer as RegexRecognizer;
   let pattern = '';
 
   if (!recognizer) {
@@ -26,14 +26,14 @@ function getRegexIntentPattern(currentDialog: DialogInfo, intent: string): strin
 
 const RegexIntentField: React.FC<FieldProps> = ({ value: intentName, ...rest }) => {
   const { currentDialog, shellApi } = useShellApi();
-  const [localValue, setLocalValue] = useState(getRegexIntentPattern(currentDialog, intentName));
+  const [localValue, setLocalValue] = useState(getRegexIntentPattern(currentDialog?.content, intentName));
 
   // if the intent name changes or intent names in the regex patterns
   // we need to reset the local value
   useEffect(() => {
-    const pattern = getRegexIntentPattern(currentDialog, intentName);
+    const pattern = getRegexIntentPattern(currentDialog?.content, intentName);
     setLocalValue(pattern);
-  }, [intentName, currentDialog.content.recognizer?.intents.map((i) => i.intent)]);
+  }, [intentName, currentDialog?.content]);
 
   const handleIntentChange = (pattern?: string) => {
     setLocalValue(pattern ?? '');

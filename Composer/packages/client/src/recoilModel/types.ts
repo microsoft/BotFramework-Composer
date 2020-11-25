@@ -5,7 +5,7 @@ import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
-import { CardProps } from './../components/NotificationCard';
+import { CardProps } from './../components/Notifications/NotificationCard';
 
 export interface StateError {
   status?: number;
@@ -30,12 +30,14 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
+  extensionId: string;
   bundleId?: string;
   instructions?: string;
   schema?: JSONSchema7;
   features: {
     history: boolean;
     publish: boolean;
+    pull: boolean;
     rollback: boolean;
     status: boolean;
   };
@@ -75,12 +77,6 @@ export interface AppUpdateState {
   version?: string;
 }
 
-export interface BreadcrumbItem {
-  dialogId: string;
-  selected: string;
-  focused: string;
-}
-
 export type dialogPayload = {
   id: string;
   content: any;
@@ -92,7 +88,7 @@ export type DesignPageLocationPayload = {
   dialogId: string;
   selected: string;
   focused: string;
-  breadcrumb: BreadcrumbItem[];
+  breadcrumb: string[];
   promptTab?: string;
 };
 
@@ -109,11 +105,5 @@ export type BoilerplateVersion = {
   currentVersion?: string;
   updateRequired?: boolean;
 };
-
-export enum QnAAllUpViewStatus {
-  Loading,
-  Success,
-  Failed,
-}
 
 export type Notification = CardProps & { id: string };

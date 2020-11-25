@@ -1,0 +1,356 @@
+{
+  "Microsoft.AdaptiveDialog": {
+    "form": {
+      "description": "Настраивает управляемый данными диалог с использованием коллекции событий и действий.",
+      "label": "Адаптивный диалог",
+      "properties": {
+        "recognizer": {
+          "description": "Чтобы понять, что говорит пользователь, вашему диалогу требуется \"распознаватель\", включающий примеры слов и предложений, которые могут применять пользователи.",
+          "label": "Распознавание речи"
+        }
+      }
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Отправьте ответ, чтобы задать вопрос",
+      "subtitle": "Действие вопроса"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Подсказка для файла или вложения",
+      "subtitle": "Входные данные вложения"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Предложение с множественным выбором",
+      "subtitle": "Входные данные для варианта выбора"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Подсказка для подтверждения",
+      "subtitle": "Подтверждение ввода"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Подсказка для даты или времени",
+      "subtitle": "Ввод даты и времени"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Подсказка для числа",
+      "subtitle": "Ввод числа"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Вход OAuth",
+      "subtitle": "Входные данные OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Подсказка для текста",
+      "subtitle": "Ввод текста"
+    }
+  },
+  "Microsoft.BeginDialog": {
+    "form": {
+      "label": "Начать новый диалог",
+      "subtitle": "Начало диалога"
+    }
+  },
+  "Microsoft.BeginSkill": {
+    "form": {
+      "label": "Соединить с навыком",
+      "subtitle": "Диалог навыков"
+    }
+  },
+  "Microsoft.BreakLoop": {
+    "form": {
+      "label": "Выйти из цикла",
+      "subtitle": "Выйти из цикла"
+    }
+  },
+  "Microsoft.CancelAllDialogs": {
+    "form": {
+      "label": "Отменить все активные диалоги",
+      "subtitle": "Отмена всех диалогов"
+    }
+  },
+  "Microsoft.ContinueLoop": {
+    "form": {
+      "label": "Продолжить цикл",
+      "subtitle": "Продолжить цикл"
+    }
+  },
+  "Microsoft.DebugBreak": {
+    "form": {
+      "label": "Режим отладки"
+    }
+  },
+  "Microsoft.DeleteProperties": {
+    "form": {
+      "label": "Удалить свойства",
+      "subtitle": "Удаление свойств"
+    }
+  },
+  "Microsoft.DeleteProperty": {
+    "form": {
+      "label": "Удалить свойство",
+      "subtitle": "Удаление свойства"
+    }
+  },
+  "Microsoft.EditActions": {
+    "form": {
+      "label": "Изменить активный диалог",
+      "subtitle": "Действия изменения"
+    }
+  },
+  "Microsoft.EditArray": {
+    "form": {
+      "label": "Изменить свойство массива",
+      "subtitle": "Изменение массива"
+    }
+  },
+  "Microsoft.EmitEvent": {
+    "form": {
+      "label": "Выдача пользовательского события",
+      "subtitle": "Выдача события"
+    }
+  },
+  "Microsoft.EndDialog": {
+    "form": {
+      "label": "Завершить этот диалог",
+      "subtitle": "Завершение диалога"
+    }
+  },
+  "Microsoft.EndTurn": {
+    "form": {
+      "label": "Завершить этап",
+      "subtitle": "Завершение этапа"
+    }
+  },
+  "Microsoft.Foreach": {
+    "form": {
+      "label": "Цикл: для каждого элемента",
+      "subtitle": "Для каждой"
+    }
+  },
+  "Microsoft.ForeachPage": {
+    "form": {
+      "label": "Цикл: для каждой страницы (несколько элементов)",
+      "subtitle": "Для каждой страницы"
+    }
+  },
+  "Microsoft.HttpRequest": {
+    "form": {
+      "label": "Отправить HTTP-запрос",
+      "subtitle": "HTTP-запрос"
+    }
+  },
+  "Microsoft.IfCondition": {
+    "form": {
+      "label": "Ветвь: If/Else",
+      "subtitle": "Условие If"
+    }
+  },
+  "Microsoft.LogAction": {
+    "form": {
+      "label": "Вход в консоль",
+      "subtitle": "Действие журнала"
+    }
+  },
+  "Microsoft.RepeatDialog": {
+    "form": {
+      "label": "Повторить этот диалог",
+      "subtitle": "Повтор диалога"
+    }
+  },
+  "Microsoft.ReplaceDialog": {
+    "form": {
+      "label": "Заменить этот диалог",
+      "subtitle": "Замена диалога"
+    }
+  },
+  "Microsoft.SendActivity": {
+    "form": {
+      "label": "Отправить ответ",
+      "subtitle": "Отправка действия"
+    }
+  },
+  "Microsoft.SetProperties": {
+    "form": {
+      "label": "Задать свойства",
+      "subtitle": "Задание свойств"
+    }
+  },
+  "Microsoft.SetProperty": {
+    "form": {
+      "label": "Задать свойство",
+      "subtitle": "Задание свойства"
+    }
+  },
+  "Microsoft.SignOutUser": {
+    "form": {
+      "label": "Выйти из учетной записи",
+      "subtitle": "Выход для пользователя"
+    }
+  },
+  "Microsoft.SwitchCondition": {
+    "form": {
+      "label": "Ветвь: Switch (несколько параметров)",
+      "subtitle": "Условие Switch"
+    }
+  },
+  "Microsoft.ThrowException": {
+    "form": {
+      "label": "Вызвать исключение ",
+      "subtitle": "Вызвать исключение "
+    }
+  },
+  "Microsoft.TraceActivity": {
+    "form": {
+      "label": "Выдать событие трассировки",
+      "subtitle": "Действие трассировки"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "Действия",
+      "subtitle": "Действие принято"
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "Обработка условия при назначении сущности",
+      "subtitle": "Действие EntityAssigned"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "Диалог начат",
+      "subtitle": "Событие начала диалога"
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "Диалог отменен",
+      "subtitle": "Событие отмены диалога"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "Обработка условия",
+      "subtitle": "Условие"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "Обработка событий, создаваемых, когда пользователь начинает беседу с ботом.",
+      "label": "Приветствие",
+      "subtitle": "Действие ConversationUpdate"
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "События диалога",
+      "subtitle": "Событие диалога"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "Обработка условия при завершении действий",
+      "subtitle": "Действие EndOfActions"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "Беседа завершена",
+      "subtitle": "Действие EndOfConversation"
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "Произошла ошибка",
+      "subtitle": "Событие ошибки"
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "Событие получено",
+      "subtitle": "Действие события"
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "Передать человеку",
+      "subtitle": "Действие передачи"
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "Установка обновлена",
+      "subtitle": "Действие обновления установки"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "Намерение распознано",
+      "subtitle": "Намерение распознано"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "Вызвана беседа",
+      "subtitle": "Действие вызова"
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "Сообщение получено",
+      "subtitle": "Действие получения сообщения"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "Сообщение удалено",
+      "subtitle": "Действие удаления сообщения"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "Реакция на сообщение",
+      "subtitle": "Действие реакции на сообщение"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "Сообщение обновлено",
+      "subtitle": "Действие обновления сообщения"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "Повторная подсказка для ввода",
+      "subtitle": "Событие повторной подсказки диалога"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "Пользователь осуществляет ввод",
+      "subtitle": "Действие ввода"
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "Неизвестное намерение",
+      "subtitle": "Распознано неизвестное намерение"
+    }
+  }
+}

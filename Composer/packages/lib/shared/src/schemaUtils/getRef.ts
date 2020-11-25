@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import formatMessage from 'format-message';
-import { SchemaDefinitions, DefinitionCache, JSONSchema7 } from '@bfc/types';
+import { SchemaDefinitions, DefinitionCache, JSONSchema7 } from '@botframework-composer/types';
 
 import { isCircular } from './circular';
 import { dereference } from './dereference';

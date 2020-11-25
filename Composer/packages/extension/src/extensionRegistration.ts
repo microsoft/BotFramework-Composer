@@ -1,29 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
-import { PublishPlugin, RuntimeTemplate, BotTemplate } from '@bfc/types';
+import {
+  PublishPlugin,
+  RuntimeTemplate,
+  BotTemplate,
+  IExtensionContext,
+  UserIdentity,
+  IBotProject,
+  IExtensionRegistration,
+} from '@botframework-composer/types';
+import { PassportStatic } from 'passport';
 
-import logger from './logger';
-import { ExtensionContext } from './extensionContext';
+import log from './logger';
+import { Store } from './storage/store';
 
-const log = logger.extend('extension-registration');
-
-export class ExtensionRegistration {
-  public context: typeof ExtensionContext;
+export class ExtensionRegistration implements IExtensionRegistration {
   private _name: string;
   private _description: string;
   private _log: Debugger;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _store: Store<any> | null = null;
 
-  constructor(context: typeof ExtensionContext, name: string, description: string) {
-    this.context = context;
+  constructor(public context: IExtensionContext, name: string, description: string, private dataDir: string) {
     this._name = name;
     this._description = description;
     this._log = log.extend(name);
   }
 
-  public get passport() {
+  public get passport(): PassportStatic {
     return this.context.passport;
   }
 
@@ -43,9 +52,19 @@ export class ExtensionRegistration {
     return this._log;
   }
 
+  public get store() {
+    if (this._store === null) {
+      const storePath = path.join(this.dataDir, `${this.name}.json`);
+      this._store = new Store(storePath, {}, this.log);
+    }
+
+    return this._store;
+  }
+
   /**************************************************************************************
    * Storage related features
    *************************************************************************************/
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async useStorage(customStorageClass: any) {
     if (!this.context.extensions.storage.customStorageClass) {
       this.context.extensions.storage.customStorageClass = customStorageClass;
@@ -58,12 +77,17 @@ export class ExtensionRegistration {
    * Publish related features
    *************************************************************************************/
   public async addPublishMethod(plugin: PublishPlugin) {
-    log('registering publish method', this.name);
-    this.context.extensions.publish[plugin.customName || this.name] = {
+    if (this.context.extensions.publish[plugin.name]) {
+      throw new Error(`Duplicate publish method. Cannot register publish method with name ${plugin.name}.`);
+    }
+
+    log('registering publish method', plugin.name);
+    this.context.extensions.publish[plugin.name] = {
       plugin: {
-        name: plugin.customName || this.name,
-        description: plugin.customDescription || this.description,
+        name: plugin.name,
+        description: plugin.description || this.description,
         instructions: plugin.instructions,
+        extensionId: this.name,
         bundleId: plugin.bundleId,
         schema: plugin.schema,
       },
@@ -106,6 +130,10 @@ export class ExtensionRegistration {
    *************************************************************************************/
   public getRuntime(type: string | undefined): RuntimeTemplate {
     return this.context.getRuntime(type);
+  }
+
+  public async getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject> {
+    return this.context.getProjectById(projectId, user);
   }
 
   /**************************************************************************************

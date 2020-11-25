@@ -7,3 +7,4 @@ export * from './formSchema';
 export * from './flowSchema';
 export * from './menuSchema';
 export * from './recognizerSchema';
+export * from './pluginType';

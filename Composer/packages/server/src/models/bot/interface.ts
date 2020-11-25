@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+import { BaseSchema, ILuisConfig, IQnAConfig } from '@bfc/shared';
 
-import { ICrossTrainConfig } from './builder';
+export type Resource = { id: string; isEmpty: boolean };
 
 export interface LocationRef {
   storageId: string;
@@ -13,9 +13,8 @@ export interface LocationRef {
 export interface IBuildConfig {
   luisConfig: ILuisConfig;
   qnaConfig: IQnAConfig;
-  luFileIds: string[];
-  qnaFileIds: string[];
-  crossTrainConfig: ICrossTrainConfig;
+  luResource: Resource[];
+  qnaResource: Resource[];
 }
 
 export interface ILuisSettings {
@@ -43,4 +42,38 @@ export interface IOperationLUFile {
 
 export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
+}
+
+export interface IOrchestratorNLRList {
+  version: string;
+  default: string;
+  readonly models: Record<
+    string,
+    {
+      releaseDate: string;
+      modelUri: string;
+      description: string;
+      minSDKVersion: string;
+    }
+  >;
+}
+
+export interface IOrchestratorProgress {
+  (status: string): void;
+}
+
+export interface IOrchestratorRecognizer extends BaseSchema {
+  modelPath: string;
+  snapshotPath: string;
+  entityRecognizers: any[];
+}
+
+export interface IOrchestratorBuildOutput {
+  outputs: [{ id: string; snapshot: Uint8Array; recognizer: Record<string, BaseSchema> }];
+  settings: {
+    orchestrator: {
+      modelPath: string;
+      snapshots: Map<string, string>;
+    };
+  };
 }

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { FC, ComponentClass } from 'react';
-import { BaseSchema, SDKKinds } from '@bfc/types';
+import { BaseSchema, JSONSchema7, SDKKinds } from '@botframework-composer/types';
 
 export type FlowEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
 export enum FlowSchemaBuiltinKeys {
@@ -25,9 +25,18 @@ export type WidgetComponent<T extends WidgetContainerProps> = FC<T> | ComponentC
 export type WidgetEventHandler = (eventName: string, eventData?: any) => void;
 
 export interface WidgetContainerProps {
+  /** The uniq id of current schema data. Usually a json path. */
   id: string;
+
+  /** Declarative json with a $kind field. */
   data: BaseSchema;
+
+  /** Declarative json's schema from bot-builder sdk. */
+  adaptiveSchema: JSONSchema7;
+
+  /** UI events handler */
   onEvent: WidgetEventHandler;
+
   [propKey: string]: any;
 }
 

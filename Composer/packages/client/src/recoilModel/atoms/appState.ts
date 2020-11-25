@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ServerSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 
 import {
   StorageFolder,
@@ -30,6 +31,18 @@ export type CurrentUser = {
   sessionExpired: boolean;
 };
 
+export type PageMode =
+  | 'home'
+  | 'design'
+  | 'lg'
+  | 'lu'
+  | 'qna'
+  | 'notifications'
+  | 'publish'
+  | 'skills'
+  | 'settings'
+  | 'about';
+
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
 };
@@ -40,7 +53,7 @@ export const recentProjectsState = atom<any[]>({
   default: [],
 });
 
-export const templateProjectsState = atom<ProjectTemplate[]>({
+export const templateProjectsState = atom<BotTemplate[]>({
   key: getFullyQualifiedKey('templateProjects'),
   default: [],
 });
@@ -99,6 +112,11 @@ export const runtimeTemplatesState = atom<RuntimeTemplate[]>({
 export const userSettingsState = atom<UserSettings>({
   key: getFullyQualifiedKey('userSettings'),
   default: getUserSettings(),
+});
+
+export const featureFlagsState = atom<FeatureFlagMap>({
+  key: getFullyQualifiedKey('featureFlag'),
+  default: {} as FeatureFlagMap,
 });
 
 export const announcementState = atom<string>({
@@ -180,6 +198,11 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
+export const currentModeState = atom<PageMode>({
+  key: getFullyQualifiedKey('currentMode'),
+  default: 'home',
+});
+
 export const botProjectSpaceLoadedState = atom<boolean>({
   key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
   default: false,
@@ -188,4 +211,38 @@ export const botProjectSpaceLoadedState = atom<boolean>({
 export const botOpeningState = atom<boolean>({
   key: getFullyQualifiedKey('botOpeningState'),
   default: false,
+});
+
+export const botOpeningMessage = atom({
+  key: getFullyQualifiedKey('botOpeningMessage'),
+  default: formatMessage('Loading'),
+});
+
+export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({
+  key: getFullyQualifiedKey('formDialogLibraryTemplates'),
+  default: [],
+});
+
+export const formDialogGenerationProgressingState = atom({
+  key: getFullyQualifiedKey('formDialogGenerationProgressing'),
+  default: false,
+});
+
+export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any } }>({
+  key: getFullyQualifiedKey('pageElement'),
+  default: {
+    design: {},
+    lg: {},
+    lu: {},
+    qna: {},
+  },
+});
+
+export const ServerSettingsState = atom<ServerSettings>({
+  key: getFullyQualifiedKey('serverSettings'),
+  default: {
+    telemetry: {
+      allowDataCollection: false,
+    },
+  },
 });
