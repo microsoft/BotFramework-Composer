@@ -108,7 +108,7 @@ export const skillDispatcher = () => {
   });
 
   const dismissManifestModal = useRecoilCallback(({ set }: CallbackInterface) => () => {
-    set(displaySkillManifestState, '');
+    set(displaySkillManifestState, undefined);
   });
 
   return {

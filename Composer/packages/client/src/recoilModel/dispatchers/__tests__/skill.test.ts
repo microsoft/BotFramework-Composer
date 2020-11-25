@@ -12,7 +12,6 @@ import {
   onAddSkillDialogCompleteState,
   settingsState,
   showAddSkillDialogModalState,
-  displaySkillManifestState,
   botProjectFileState,
   botNameIdentifierState,
   locationState,
@@ -20,7 +19,7 @@ import {
   botDisplayNameState,
 } from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
-import { botEndpointsState, botProjectIdsState, currentProjectIdState } from '../../atoms';
+import { botEndpointsState, botProjectIdsState, currentProjectIdState, displaySkillManifestState } from '../../atoms';
 import { Dispatcher } from '..';
 import { skillsStateSelector } from '../../selectors';
 
@@ -111,7 +110,7 @@ describe('skill dispatcher', () => {
         { recoilState: onAddSkillDialogCompleteState(projectId), initialValue: { func: undefined } },
         { recoilState: settingsState(projectId), initialValue: {} },
         { recoilState: showAddSkillDialogModalState(projectId), initialValue: false },
-        { recoilState: displaySkillManifestState, initialValue: '' },
+        { recoilState: displaySkillManifestState, initialValue: undefined },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: botProjectIdsState, initialValue: [projectId, ...skillIds] },
         { recoilState: settingsState(projectId), initialValue: {} },
