@@ -39,7 +39,7 @@ export function validateDialog(
         allChecks.forEach((func) => {
           const result = func(path, value, value.$kind, schema.definitions[value.$kind], settings, lgFiles, luFiles);
           if (result) {
-            diagnostics.splice(0, 0, ...result);
+            diagnostics.push(...result);
           }
         });
       }

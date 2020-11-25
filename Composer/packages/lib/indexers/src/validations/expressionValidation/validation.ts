@@ -15,7 +15,7 @@ const BUILT_IN_FUNCTION_ERROR = formatMessage("it's not a built-in function or a
 
 const expressionErrorMessage = (error: string) => formatMessage('must be an expression: {error}', { error });
 const builtInFunctionErrorMessage = (error: string) =>
-  formatMessage(`{error} Please add unknow functions to setting's customFunctions field.`, {
+  formatMessage(`{error} Please add unknown functions to setting's customFunctions field.`, {
     error,
   });
 const customFunctionErrorMessage = (func: string) =>
