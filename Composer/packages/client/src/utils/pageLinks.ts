@@ -63,7 +63,7 @@ export const topLinks = (
       match: /diagnostics/,
     },
     {
-      to: `/bot/${projectId}/publish`,
+      to: `/bot/${rootProjectId || projectId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
       disabled: !botLoaded,
