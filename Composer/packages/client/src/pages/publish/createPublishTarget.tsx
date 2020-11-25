@@ -51,7 +51,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const currentUser = useRecoilValue(currentUserState);
   // const graphToken = useRecoilValue(grahpTokenState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const { provisionToTarget, getAccessToken, getGraphToken } = useRecoilValue(dispatcherState);
+  const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
@@ -132,10 +132,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       console.log(config);
       props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
     };
-    PluginAPI.auth.getCurrentUser = () => {
-      return currentUser;
-    };
-  }, [projectId, name, targetType, currentUser]);
+  }, [projectId, name, targetType]);
 
   const submit = useMemo(
     () => (_e) => {
@@ -203,11 +200,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
                 disabled={nextDisabled}
                 text={formatMessage('Next')}
                 onClick={async () => {
-                  // get accessToken
-                  await getAccessToken();
                   setPage(PageTypes.ConfigProvision);
-                  // graph token only used when provision, so can get it later
-                  getGraphToken();
                 }}
               />
             </DialogFooter>

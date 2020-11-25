@@ -3,7 +3,6 @@
 
 import { AuthParameters } from '@botframework-composer/types';
 
-import { getAccessTokenInCache, getGraphTokenInCache } from '../utils/auth';
 import { AuthClient } from '../utils/authClient';
 
 interface IAPI {
@@ -17,14 +16,7 @@ interface PublishConfig {
   [key: string]: any;
 }
 
-interface TokenPair {
-  access_token: string | null;
-  graph_token: string | null;
-}
-
 interface AuthAPI {
-  getAccessTokensFromStorage: () => TokenPair;
-  getCurrentUser?: () => any;
   getAccessToken: (options: AuthParameters) => Promise<string>; // returns an access token
 }
 
@@ -51,16 +43,6 @@ class API implements IAPI {
       getAccessToken: (params: AuthParameters) => {
         return AuthClient.getAccessToken(params);
       },
-      // TODO: deprecate this when we are using real login
-      getAccessTokensFromStorage: () => {
-        return {
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          access_token: getAccessTokenInCache(),
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          graph_token: getGraphTokenInCache(),
-        };
-      },
-      getCurrentUser: undefined,
     };
     this.publish = {
       setConfigIsValid: undefined,

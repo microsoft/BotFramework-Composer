@@ -229,3 +229,24 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 export const triggerNotSupportedWarning = formatMessage(
   'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
 );
+
+export const authConfig = {
+  // for web login
+  clientId: 'dbfa1f3b-403c-4bef-83be-3767eead7af0',
+  scopes: [
+    'https://management.core.windows.net/user_impersonation',
+    'https://graph.microsoft.com/Application.ReadWrite.All',
+  ],
+  tenantId: '79ee0e7f-fc67-425a-a1d6-de8faaeb626b',
+  redirectUrl: `http://localhost:3000/oauth`,
+  clientSecret: '1PZov0~I7p~GVZIum1-_nOIT31-u~6aHC4',
+};
+
+export const armScopes = {
+  scopes: ['https://management.core.windows.net/user_impersonation'],
+  targetResource: 'https://management.core.windows.net/',
+};
+export const graphScopes = {
+  scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
+  targetResource: 'https://graph.microsoft.com/',
+};

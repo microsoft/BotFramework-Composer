@@ -17,16 +17,3 @@ export function login(params: AuthParameters): Promise<string> {
 export function getAccessToken(params: AuthParameters): Promise<string> {
   return window[ComposerGlobalName].getAccessToken(params);
 }
-
-/** Return an access token held in the localstorage.
- * TODO: deprecate this when we have azure login working
- */
-export function getAccessTokensFromStorage(): { access_token: string; graph_token: string } {
-  return window[ComposerGlobalName].getAccessTokensFromStorage();
-}
-/**
- * Return the current user info, like name, email and so on.
- */
-export function getCurrentUser() {
-  return window[ComposerGlobalName].getCurrentUser();
-}

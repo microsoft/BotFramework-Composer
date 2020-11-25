@@ -6,8 +6,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
-import { BotProjectDeployConfig } from './botProjectDeployConfig';
-import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { LuisAndQnaPublish } from './luisAndQnA';
 import archiver = require('archiver');
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';

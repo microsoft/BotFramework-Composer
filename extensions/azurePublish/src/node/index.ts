@@ -11,10 +11,12 @@ import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import { BotProjectProvision } from './provision';
-import { BackgroundProcessManager, ProcessStatus } from './backgroundProcessManager';
+import { BackgroundProcessManager } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
 import schema from './schema';
 import { stringifyError, AzurePublishErrors, createCustomizeError } from './utils/errorHandler';
+import { ProcessStatus } from './types';
+import { authConfig, ResourcesItem } from '../types';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
 // set to TRUE for history to be saved to disk
@@ -422,7 +424,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /**************************************************************************************************
      * plugin methods for publish
      *************************************************************************************************/
-    publish = async (config: PublishConfig, project: IBotProject, metadata, user) => {
+    publish = async (config: PublishConfig, project: IBotProject, metadata, user, getAccessToken) => {
       const {
         // these are provided by Composer
         profileName, // the name of the publishing profile "My Azure Prod Slot"
@@ -431,7 +433,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         name,
         environment,
         settings,
-        accessToken,
       } = config;
 
       // get the bot id from the project
@@ -450,6 +451,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const resourcekey = md5([project.name, name, environment].join());
 
       try {
+        // authenticate with azure
+        const accessToken = config.accessToken || await getAccessToken(authConfig.arm);
+
         // test creds, if not valid, return 500
         if (!accessToken) {
           throw new Error('Required field `accessToken` is missing from publishing profile.');
@@ -458,7 +462,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           throw new Error('Required field `settings` is missing from publishing profile.');
         }
 
-        this.asyncPublish(config, project, resourcekey, jobId);
+        this.asyncPublish({...config, accessToken: accessToken}, project, resourcekey, jobId);
 
         return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
 
@@ -518,13 +522,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /**************************************************************************************************
      * plugin methods for provision
      *************************************************************************************************/
-    provision = async (config: ProvisionConfig, project: IBotProject, user) => {
+    provision = async (config: any, project: IBotProject, user, getAccessToken): Promise<ProcessStatus> => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
+      console.log(config);
+      // authenticate
+      // const accessToken = config.accessToken || await getAccessToken(authConfig.arm);
+      // const graphToken = config.graphToken || await getAccessToken(authConfig.graph);
+
+      // const configWithToken: ProvisionConfig = {...config, graphToken, accessToken };
       this.asyncProvision(jobId, config, project, user);
       return BackgroundProcessManager.getStatus(jobId);
     };
 
-    getProvisionStatus = async (processName: string, project: IBotProject, user, jobId = '') => {
+    getProvisionStatus = async (processName: string, project: IBotProject, user, jobId = ''): Promise<ProcessStatus> => {
       const botId = project.id;
       // get status by Job ID first.
       if (jobId) {
@@ -541,8 +551,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
     };
 
-    getResources = async (project: IBotProject, user) => {
-      const recommendedResources = [];
+    getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
+      const recommendedResources:ResourcesItem[] = [];
 
       // add in the ALWAYS REQUIRED options
 
