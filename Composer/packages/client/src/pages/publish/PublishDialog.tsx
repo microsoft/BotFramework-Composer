@@ -23,9 +23,10 @@ export const PublishDialog = (props) => {
       fieldName: 'name',
       minWidth: 70,
       maxWidth: 90,
+      isMultiline: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        return <div css={{ alignItems: 'center', display: 'flex', height: '32px' }}>{item.name}</div>;
+        return <span>{item.name}</span>;
       },
       isPadded: true,
     },
@@ -36,21 +37,10 @@ export const PublishDialog = (props) => {
       fieldName: 'publishTarget',
       minWidth: 70,
       maxWidth: 90,
+      isMultiline: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        return (
-          <div
-            css={{
-              backgroundColor: '#DDF3DB',
-              alignItems: 'center',
-              display: 'flex',
-              height: '32px',
-              paddingLeft: '8px',
-            }}
-          >
-            {item.publishTarget}
-          </div>
-        );
+        return <span>{item.publishTarget}</span>;
       },
       isPadded: true,
     },
@@ -111,7 +101,12 @@ export const PublishDialog = (props) => {
       }}
     >
       <Fragment>
-        <DetailsList checkboxVisibility={CheckboxVisibility.hidden} columns={columns} items={showItems} />
+        <DetailsList
+          checkboxVisibility={CheckboxVisibility.hidden}
+          columns={columns}
+          items={showItems}
+          styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
+        />
 
         <DialogFooter>
           <DefaultButton
