@@ -106,10 +106,10 @@ export const PublishDialog = (props) => {
     >
       <Fragment>
         <DetailsList
-          styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={columns}
           items={showItems}
+          styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
         />
 
         <DialogFooter>
