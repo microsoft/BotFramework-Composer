@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, checkForPVASchema } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
@@ -23,8 +23,7 @@ import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { getFocusPath } from '../../utils/navigation';
-import { navigateTo } from '../../utils/navigation';
+import { createDiagnosticsPageUrl, getFocusPath, navigateTo, createBotSettingUrl } from '../../utils/navigation';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
@@ -34,7 +33,6 @@ import {
   userSettingsState,
   dispatcherState,
   schemasState,
-  displaySkillManifestState,
   validateDialogsSelectorFamily,
   focusPathState,
   showCreateDialogModalState,
@@ -46,6 +44,7 @@ import {
   skillNameIdentifierByProjectIdSelector,
   SkillInfo,
   projectMetaDataState,
+  displayManifestModalOnProjectIdSelector,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -55,6 +54,7 @@ import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
+import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 
 import CreationModal from './creationModal';
@@ -133,7 +133,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);
-  const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
+  const displaySkillManifestOnProjectId = useRecoilValue(displayManifestModalOnProjectIdSelector);
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useBotOperations();
@@ -167,7 +167,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateZoomRate,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
-    createQnAFromUrlDialogBegin,
     createTrigger,
     deleteTrigger,
     createQnATrigger,
@@ -255,7 +254,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           projectId: props.projectId,
           dialogId: props.dialogId,
         },
-        onClick: () => navTo(projectId, dialogId),
+        onClick: () => navTo(skillId ?? null, dialogId),
       });
       if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
@@ -266,7 +265,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             dialogId: props.dialogId,
             trigger: triggerIndex,
           },
-          onClick: () => navTo(projectId, dialogId, `${triggerIndex}`),
+          onClick: () => navTo(skillId ?? null, dialogId, `${triggerIndex}`),
         });
       }
 
@@ -331,6 +330,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       setBrokenSkillInfo(link);
     }
     const { skillId, dialogId, trigger, parentLink } = link;
+
     updateZoomRate({ currentRate: 1 });
     const breadcrumbArray: Array<BreadcrumbItem> = [];
     if (dialogId != null) {
@@ -466,25 +466,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         },
       },
     ];
-
-    // TODO: refactor when Composer can better model the PVA scenarios
-    if (schemas && !checkForPVASchema(schemas.sdk)) {
-      items.push({
-        'data-testid': 'AddNewKnowledgebase',
-        key: 'addKnowledge',
-        text: formatMessage(` Add new knowledge base on {displayName}`, {
-          displayName: currentDialog?.displayName ?? '',
-        }),
-        onClick: () => {
-          if (!projectId || !dialogId) return;
-          createQnAFromUrlDialogBegin({ projectId, dialogId });
-        },
-      });
-    }
     return items;
   };
 
   const toolbarItems: IToolbarItem[] = [
+    {
+      type: 'element',
+      element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
+      align: 'right',
+    },
     {
       type: 'dropdown',
       text: formatMessage('Add'),
@@ -578,32 +568,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !showEnableBtn,
             onClick: () => {
               EditorAPI.Actions.EnableSelection();
-            },
-          },
-        ],
-      },
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Export'),
-      align: 'left',
-      buttonProps: {
-        iconProps: { iconName: 'OpenInNewWindow' },
-      },
-      menuProps: {
-        items: [
-          {
-            key: 'zipexport',
-            text: formatMessage('Export assets to .zip'),
-            onClick: () => {
-              exportToZip(projectId);
-            },
-          },
-          {
-            key: 'exportAsSkill',
-            text: formatMessage('Export as skill'),
-            onClick: () => {
-              setExportSkillModalInfo(projectId);
             },
           },
         ],
@@ -725,10 +689,27 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDialogModalInfo(projectId);
   };
 
-  const handleDisplayManifestModal = (skillId: string) => {
+  const handleDisplayManifestModal = (skillId: string, type: 'create' | 'edit') => {
+    if (type === 'create') {
+      setExportSkillModalInfo(skillId);
+      return;
+    }
+
     const skillNameIdentifier = skillsByProjectId[skillId];
     if (!skillNameIdentifier) return;
-    displayManifestModal(skillNameIdentifier, projectId);
+    displayManifestModal(skillNameIdentifier, skillId);
+  };
+
+  const handleErrorClick = (projectId: string, skillId: string, diagnostic: Diagnostic) => {
+    switch (diagnostic.source) {
+      case 'appsettings.json': {
+        navigateTo(createBotSettingUrl(projectId, skillId));
+        break;
+      }
+      case 'manifest.json': {
+        setExportSkillModalInfo(skillId || projectId);
+      }
+    }
   };
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
@@ -758,6 +739,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               setTriggerModalInfo({ projectId, dialogId });
             }}
             onDialogDeleteTrigger={handleDeleteTrigger}
+            onErrorClick={handleErrorClick}
             onSelect={handleSelect}
           />
           <div css={contentWrapper} role="main">
@@ -882,11 +864,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onSubmit={handleCreateQnA}
         />
 
-        {displaySkillManifest && (
+        {displaySkillManifestOnProjectId && (
           <DisplayManifestModal
-            projectId={projectId}
-            skillNameIdentifier={displaySkillManifest}
-            onDismiss={() => dismissManifestModal(projectId)}
+            projectId={displaySkillManifestOnProjectId}
+            onDismiss={() => dismissManifestModal(displaySkillManifestOnProjectId)}
           />
         )}
         {brokenSkillInfo && (

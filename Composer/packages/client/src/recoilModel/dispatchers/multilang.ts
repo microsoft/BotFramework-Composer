@@ -20,6 +20,7 @@ import {
   onDelLanguageDialogCompleteState,
   showDelLanguageModalState,
   botDisplayNameState,
+  qnaFilesState,
 } from './../atoms/botState';
 
 const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: string[]): any[] => {
@@ -68,7 +69,7 @@ export const multilangDispatcher = () => {
             const skillBotProjectId = botProjects[i].projectId;
             const settings = await snapshot.getPromise(settingsState(skillBotProjectId));
             const languages = settings.languages;
-            const defaultLang = settings.defaultLang;
+            const defaultLang = settings.defaultLanguage;
             if (!languages.includes(locale)) {
               addLanguages({
                 languages: [locale],
@@ -90,12 +91,14 @@ export const multilangDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const prevlgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const prevluFiles = await snapshot.getPromise(luFilesState(projectId));
+      const prevQnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
       const prevSettings = await snapshot.getPromise(settingsState(projectId));
       const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
       const lgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
       const luFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
+      const qnaFiles = copyLanguageResources(prevQnaFiles, defaultLang, languages);
 
       const settings: any = cloneDeep(prevSettings);
       if (Array.isArray(settings.languages)) {
@@ -112,6 +115,8 @@ export const multilangDispatcher = () => {
 
       set(lgFilesState(projectId), [...prevlgFiles, ...lgFiles]);
       set(luFilesState(projectId), [...prevluFiles, ...luFiles]);
+      set(qnaFilesState(projectId), [...prevQnaFiles, ...qnaFiles]);
+
       set(settingsState(projectId), settings);
 
       if (typeof onAddLanguageDialogComplete === 'function') {

@@ -22,11 +22,13 @@ import {
   jsonSchemaFilesState,
   projectMetaDataState,
   settingsState,
+  publishHistoryState,
+  publishTypesState,
   dialogIdsState,
   dialogState,
   schemasState,
 } from '../atoms';
-import { dialogsSelectorFamily, buildEssentialsSelector } from '../selectors';
+import { dialogsSelectorFamily, buildEssentialsSelector, validateDialogsSelectorFamily } from '../selectors';
 
 // Actions
 export const localBotsWithoutErrorsSelector = selector({
@@ -73,11 +75,13 @@ export const botProjectSpaceSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      const dialogs = get(dialogsSelectorFamily(projectId));
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+      const dialogs = get(validateDialogsSelectorFamily(projectId));
       const luFiles = get(luFilesState(projectId));
       const lgFiles = get(lgFilesState(projectId));
       const qnaFiles = get(qnaFilesState(projectId));
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+      const botProjectFile = get(botProjectFileState(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
       const buildEssentials = get(buildEssentialsSelector(projectId));
@@ -85,10 +89,30 @@ export const botProjectSpaceSelector = selector({
       const botNameId = get(botNameIdentifierState(projectId));
       const setting = get(settingsState(projectId));
       const skillManifests = get(skillManifestsState(projectId));
+      const dialogSchemas = get(dialogSchemasState(projectId));
+      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
       const schemas = get(schemasState(projectId));
       const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
 
-      const diagnostics = BotIndexer.validate({ dialogs, setting, luFiles, lgFiles, qnaFiles, skillManifests });
+      const botAssets: BotAssets = {
+        projectId,
+        dialogs,
+        luFiles,
+        qnaFiles,
+        lgFiles,
+        skillManifests,
+        setting,
+        dialogSchemas,
+        formDialogSchemas,
+        botProjectFile,
+        jsonSchemaFiles,
+        recognizers: [],
+        crossTrainConfig: {},
+      };
+
+      const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+      const publishHistory = get(publishHistoryState(projectId));
+      const publishTypes = get(publishTypesState(projectId));
 
       return {
         dialogs,
@@ -98,10 +122,12 @@ export const botProjectSpaceSelector = selector({
         ...metaData,
         setting,
         error: botError,
-        diagnostics,
         botNameId,
+        diagnostics,
         buildEssentials,
         isPvaSchema,
+        publishHistory,
+        publishTypes,
       };
     });
     return result;
@@ -139,6 +165,7 @@ export const botProjectDiagnosticsSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(dialogsSelectorFamily(projectId));
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
       const luFiles = get(luFilesState(projectId));
@@ -164,7 +191,7 @@ export const botProjectDiagnosticsSelector = selector({
         recognizers: [],
         crossTrainConfig: {},
       };
-      return BotIndexer.validate(botAssets);
+      return BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
     });
     return result;
   },

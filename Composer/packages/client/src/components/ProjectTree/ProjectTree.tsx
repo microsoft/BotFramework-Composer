@@ -24,7 +24,7 @@ import {
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { navigateTo } from '../../utils/navigation';
+import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { BotStatus } from '../../constants';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
@@ -99,6 +99,7 @@ export type TreeLink = {
   dialogId?: string;
   trigger?: number;
   parentLink?: TreeLink;
+  onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
 };
 
 export type TreeMenuItem = {
@@ -144,11 +145,12 @@ type Props = {
   onBotCreateDialog?: (projectId: string) => void;
   onBotStart?: (projectId: string) => void;
   onBotStop?: (projectId: string) => void;
-  onBotEditManifest?: (projectId: string) => void;
+  onBotEditManifest?: (projectId: string, type: 'create' | 'edit') => void;
   onBotExportZip?: (projectId: string) => void;
   onBotRemoveSkill?: (skillId: string) => void;
   onDialogCreateTrigger?: (projectId: string, dialogId: string) => void;
   onDialogDeleteTrigger?: (projectId: string, dialogId: string, index: number) => void;
+  onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
   defaultSelected?: Partial<TreeLink>;
   options?: {
     showTriggers?: boolean;
@@ -176,6 +178,7 @@ export const ProjectTree: React.FC<Props> = ({
   onBotExportZip = () => {},
   onBotRemoveSkill = () => {},
   onDialogCreateTrigger = () => {},
+  onErrorClick = () => {},
   defaultSelected,
   options = {
     showDelete: true,
@@ -220,6 +223,10 @@ export const ProjectTree: React.FC<Props> = ({
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
 
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
+
+  const createSubtree = useCallback(() => {
+    return projectCollection.map(createBotSubtree);
+  }, [projectCollection]);
 
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
@@ -276,6 +283,7 @@ export const ProjectTree: React.FC<Props> = ({
       isRoot: true,
       bot,
       diagnostics: bot.diagnostics,
+      onErrorClick: onErrorClick,
     };
     const isRunning = bot.buildEssentials.status === BotStatus.connected;
 
@@ -308,7 +316,7 @@ export const ProjectTree: React.FC<Props> = ({
           {
             label: formatMessage('Settings'),
             onClick: () => {
-              navigateTo('/settings');
+              navigateTo(createBotSettingUrl(link.projectId, link.skillId));
             },
           },
         ]
@@ -321,7 +329,10 @@ export const ProjectTree: React.FC<Props> = ({
         {
           label: formatMessage('Create/edit skill manifest'),
           onClick: () => {
-            onBotEditManifest(bot.projectId);
+            onBotEditManifest(
+              bot.projectId,
+              bot.diagnostics.filter((d) => d.source === 'manifest.json').length ? 'create' : 'edit'
+            );
           },
         },
         {
@@ -436,7 +447,7 @@ export const ProjectTree: React.FC<Props> = ({
             menu={menu}
             menuOpenCallback={setMenuOpen}
             padLeft={depth * LEVEL_PADDING}
-            showErrors={options.showErrors}
+            showErrors={false}
             textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />
@@ -651,7 +662,7 @@ export const ProjectTree: React.FC<Props> = ({
     }
   };
 
-  const projectTree = projectCollection.map(createBotSubtree);
+  const projectTree = createSubtree();
 
   return (
     <div

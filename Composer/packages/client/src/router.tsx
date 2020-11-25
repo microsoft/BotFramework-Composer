@@ -19,15 +19,14 @@ import {
   botOpeningState,
   pluginPagesSelector,
   botOpeningMessage,
-  localBotsDataSelector,
 } from './recoilModel';
-import { rootBotProjectIdSelector } from './recoilModel/selectors/project';
+import { localBotsDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
+import { botDisplayNameState, botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
-import { botProjectSpaceLoadedState, botDisplayNameState } from './recoilModel/atoms';
 import languageStorage from './utils/languageStorage';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
@@ -62,15 +61,23 @@ const Routes = (props) => {
           />
           <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
-          <Redirect noThrow from="/bot/:projectId/botProjectsSettings" to="/bot/:projectId/botProjectsSettings/root" />
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
+          <ProjectRouter path="/bot/:projectId/skill/:skillId">
+            <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/:dialogId/*" />
+            <BotProjectSettings path="botProjectsSettings" />
+            <Diagnostics path="diagnostics" />
+            <DesignPage path="*" />
+          </ProjectRouter>
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <Publish path="publish/:targetName" />
-            <BotProjectSettings path="botProjectsSettings/*" />
+            <BotProjectSettings path="botProjectsSettings" />
             <FormDialogPage path="forms/:schemaId/*" />
             <FormDialogPage path="forms/*" />
             <DesignPage path="*" />
@@ -83,14 +90,6 @@ const Routes = (props) => {
                 pluginId={page.id}
               />
             ))}
-          </ProjectRouter>
-          <ProjectRouter path="/bot/:projectId/skill/:skillId">
-            <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/:dialogId/*" />
-            <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/:dialogId/*" />
-            <Diagnostics path="diagnostics" />
-            <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
@@ -129,26 +128,20 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));
 
-  //initialize settings after bot projects loaded
   useEffect(() => {
     if (botProjectSpaceLoaded && rootBotProjectId && localBots) {
       for (let i = 0; i < localBots.length; i++) {
-        if (!localBots[i].isRemote) {
-          const id = localBots[i].projectId;
-          const setting = localBots[i].setting;
-          const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
-          setSettings(id, mergedSettings);
-        }
+        const id = localBots[i].projectId;
+        const setting = localBots[i].setting;
+        const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
+        setSettings(id, mergedSettings);
+      }
+      const storedLocale = languageStorage.get(botName)?.locale;
+      if (storedLocale) {
+        setLocale(storedLocale, rootBotProjectId);
       }
     }
-  }, [botProjectSpaceLoaded, rootBotProjectId]);
-
-  useEffect(() => {
-    if (botProjectSpaceLoadedState && rootBotProjectId && botName) {
-      const storedLocale = languageStorage.get(botName)?.locale;
-      setLocale(storedLocale, rootBotProjectId);
-    }
-  }, [botProjectSpaceLoaded, rootBotProjectId]);
+  }, [botProjectSpaceLoaded, rootBotProjectId, botProjects]);
 
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {

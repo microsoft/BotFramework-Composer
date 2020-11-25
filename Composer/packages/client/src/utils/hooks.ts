@@ -49,7 +49,7 @@ export const useLinks = () => {
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const schemas = useRecoilValue(schemasState(projectId));
-  const openedDialogId = designPageLocation.dialogId || 'Main';
+  const openedDialogId = designPageLocation.dialogId;
   const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
@@ -118,14 +118,20 @@ export function useInterval(callback: Function, delay: number | null) {
   }, [delay]);
 }
 
-export function useClickOutside(ref: MutableRefObject<HTMLElement | null>, callback: Function) {
+export function useClickOutside(targetRefs: MutableRefObject<HTMLElement | null>[] | null, callback: Function) {
   const savedCallback: MutableRefObject<Function | undefined> = useRef();
 
-  const handleEvent = (e) => {
-    if (ref?.current && !ref.current.contains(e.target)) {
-      if (isFunction(callback)) {
-        callback();
-      }
+  const isClickInsideTargets = (currentClickTarget: Node) => {
+    const isClickedInside = targetRefs?.find((ref) => {
+      const result = currentClickTarget && ref?.current?.contains(currentClickTarget);
+      return !!result;
+    });
+    return isClickedInside;
+  };
+
+  const handleEvent = (e: MouseEvent) => {
+    if (targetRefs && e.target !== null && isFunction(callback) && !isClickInsideTargets(e.target as Node)) {
+      callback(e);
     }
   };
 
@@ -136,12 +142,10 @@ export function useClickOutside(ref: MutableRefObject<HTMLElement | null>, callb
   useEffect(() => {
     document.addEventListener('click', handleEvent);
     document.addEventListener('mousedown', handleEvent);
-    document.addEventListener('touchstart', handleEvent);
 
     return () => {
       document.removeEventListener('click', handleEvent);
       document.removeEventListener('mousedown', handleEvent);
-      document.removeEventListener('touchstart', handleEvent);
     };
-  }, [ref, callback]);
+  }, [targetRefs, callback]);
 }

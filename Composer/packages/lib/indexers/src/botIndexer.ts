@@ -10,15 +10,15 @@ import {
   DiagnosticSeverity,
   LuFile,
   getSkillNameFromSetting,
-  fetchFromSettings,
   SkillManifestFile,
   DialogInfo,
   DialogSetting,
   LgFile,
   QnAFile,
+  BotProjectFile,
+  SDKKinds,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
-import map from 'lodash/map';
 
 import { getBaseName, getLocale } from './utils/help';
 
@@ -53,18 +53,19 @@ const checkSetting = (assets: {
 
   let useLUIS = false;
   let useQnA = false;
-  dialogs.forEach((item) => {
-    const luFileName = item.luFile;
+  dialogs.forEach((dialogItem) => {
+    const luFileName = dialogItem.luFile;
     if (luFileName) {
       const luFileId = luFileName.replace(/\.lu$/, '');
       luFiles
         .filter(({ id }) => getBaseName(id) === luFileId)
         .forEach((item) => {
-          if (!item.empty) useLUIS = true;
+          if (!item.empty && (dialogItem.luProvider !== undefined || dialogItem.luProvider === SDKKinds.LuisRecognizer))
+            useLUIS = true;
         });
     }
 
-    const qnaFileName = item.qnaFile;
+    const qnaFileName = dialogItem.qnaFile;
     if (qnaFileName) {
       const qnaFileId = qnaFileName.replace(/\.qna$/, '').replace(/\.lu$/, '');
       qnaFiles
@@ -116,22 +117,16 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
 
 /**
  * Check bot skill & setting
- * 1. used skill not existed in setting
- * 2. appsettings.json Microsoft App Id or Skill Host Endpoint are empty
+ * 1. used skill not existed in *.botproj
  */
-const checkSkillSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
-  const {
-    setting: { skill = {}, botId, skillHostEndpoint },
-    dialogs,
-  } = assets;
+const checkSkillSetting = (assets: { dialogs: DialogInfo[]; botProjectFile: BotProjectFile }): Diagnostic[] => {
+  const { botProjectFile, dialogs } = assets;
   const diagnostics: Diagnostic[] = [];
-
-  let skillUsed = false;
+  const skillNames = Object.keys(botProjectFile.content?.skills || {});
   dialogs.forEach((dialog) => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
-      const endpointUrlCollection = map(skill, ({ endpointUrl }) => endpointUrl);
-      if (!endpointUrlCollection.includes(fetchFromSettings(skillId, assets.setting))) {
+      if (!skillNames.includes(skillId)) {
         const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
           new Diagnostic(
@@ -142,19 +137,7 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetti
         );
       }
     });
-    if (dialog.skills.length) skillUsed = true;
   });
-
-  // use skill require fill bot endpoint in skill page.
-  if (skillUsed && (!botId || !skillHostEndpoint)) {
-    diagnostics.push(
-      new Diagnostic(
-        'appsettings.json Microsoft App Id or Skill Host Endpoint are empty',
-        'appsettings.json',
-        DiagnosticSeverity.Warning
-      )
-    );
-  }
 
   return diagnostics;
 };
@@ -166,8 +149,14 @@ const validate = (assets: {
   qnaFiles: QnAFile[];
   setting: DialogSetting;
   skillManifests: SkillManifestFile[];
+  botProjectFile: BotProjectFile;
+  isRemote?: boolean;
+  isRootBot?: boolean;
 }): Diagnostic[] => {
-  return [...checkManifest(assets), ...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
+  if (assets.isRemote) return [];
+  const settingDiagnostics = [...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
+  if (assets.isRootBot) return settingDiagnostics;
+  return [...checkManifest(assets), ...settingDiagnostics];
 };
 
 const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {

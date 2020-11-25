@@ -149,7 +149,7 @@ export const recognizerIdsState = atomFamily<string[], string>({
 export const recognizerState = atomFamily<RecognizerFile, { projectId: string; id: string }>({
   key: getFullyQualifiedKey('recognizer'),
   default: () => {
-    return { id: '', content: {}, lastModified: '' };
+    return {} as RecognizerFile;
   },
 });
 

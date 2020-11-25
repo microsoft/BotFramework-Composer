@@ -18,3 +18,4 @@ export * from './settings';
 export * from './shell';
 export * from './telemetry';
 export * from './user';
+export * from './featureFlags';
