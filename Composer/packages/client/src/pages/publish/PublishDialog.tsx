@@ -23,9 +23,7 @@ export const PublishDialog = (props) => {
       fieldName: 'name',
       minWidth: 70,
       maxWidth: 90,
-      isResizable: true,
       isMultiline: true,
-      isCollapsible: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return <span>{item.name}</span>;
@@ -39,9 +37,7 @@ export const PublishDialog = (props) => {
       fieldName: 'publishTarget',
       minWidth: 70,
       maxWidth: 90,
-      isResizable: true,
       isMultiline: true,
-      isCollapsible: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return <span>{item.publishTarget}</span>;
