@@ -19,7 +19,7 @@ import { dispatcherState } from '../../recoilModel';
 // -------------------- Styles -------------------- //
 
 const marginBottom = css`
-  margin-bottom: 20px;
+  margin-bottom: 140px;
 `;
 
 const deleteBotText = css`

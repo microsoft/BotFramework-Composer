@@ -79,7 +79,7 @@ const checkSetting = (assets: {
   // if use LUIS, check LUIS authoringKey key
   if (useLUIS) {
     if (!get(setting, 'luis.authoringKey')) {
-      diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error));
+      diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error, '#luisKey'));
     }
   }
 
@@ -87,7 +87,7 @@ const checkSetting = (assets: {
   if (useQnA) {
     if (!get(setting, 'qna.subscriptionKey')) {
       diagnostics.push(
-        new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error)
+        new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error, '#qnaKey')
       );
     }
   }
