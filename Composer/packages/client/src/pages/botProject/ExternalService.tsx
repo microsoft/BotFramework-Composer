@@ -14,16 +14,16 @@ import { SkillBotExternalService } from './SkillBotExternalService';
 // -------------------- ExternalService -------------------- //
 type ExternalServiceProps = {
   projectId: string;
-  hash?: string;
+  scrollToSectionId?: string;
 };
 
 export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
-  const { projectId, hash = '' } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const isRootBot = rootBotProjectId === projectId;
   return isRootBot ? (
-    <RootBotExternalService hash={hash} projectId={projectId} />
+    <RootBotExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
   ) : (
-    <SkillBotExternalService hash={hash} projectId={projectId} />
+    <SkillBotExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
   );
 };

@@ -41,11 +41,11 @@ const externalServiceContainerStyle = css`
 
 type SkillBotExternalServiceProps = {
   projectId: string;
-  hash?: string;
+  scrollToSectionId?: string;
 };
 
 export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (props) => {
-  const { projectId, hash = '' } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
@@ -70,14 +70,15 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
 
   const luisKeyFieldRef = React.useRef<HTMLInputElement>(null);
   const qnaKeyFieldRef = React.useRef<HTMLInputElement>(null);
+
   useEffect(() => {
-    if (luisKeyFieldRef.current && hash === 'luisKey') {
+    if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
       luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-    if (qnaKeyFieldRef.current && hash === 'qnaKey') {
+    if (qnaKeyFieldRef.current && scrollToSectionId === '#qnaKey') {
       qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [hash]);
+  }, [scrollToSectionId]);
 
   const handleSkillQnAKeyOnBlur = (key: string) => {
     if (key) {

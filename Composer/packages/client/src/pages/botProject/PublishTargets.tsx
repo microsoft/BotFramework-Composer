@@ -94,11 +94,11 @@ const publishTargetsEditButton = css`
 
 type PublishTargetsProps = {
   projectId: string;
-  hash?: string;
+  scrollToSectionId?: string;
 };
 
 export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
-  const { projectId, hash = '' } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
@@ -118,7 +118,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [editDialogHidden, setEditDialogHidden] = useState(true);
 
-  const publishTargetsRef = React.useRef<HTMLInputElement>(null);
+  const publishTargetsRef = React.useRef<HTMLDivElement>(null);
 
   const onEdit = useCallback(
     async (index: number, item: PublishTarget) => {
@@ -195,10 +195,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   }, [projectId]);
 
   useEffect(() => {
-    if (publishTargetsRef.current && hash === '#addNewPublishProfile') {
+    if (publishTargetsRef.current && scrollToSectionId === '#addNewPublishProfile') {
       publishTargetsRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  });
+  }, [scrollToSectionId]);
 
   return (
     <Fragment>

@@ -102,7 +102,7 @@ const errorTextStyle = css`
 
 type RootBotExternalServiceProps = {
   projectId: string;
-  hash?: string;
+  scrollToSectionId?: string;
 };
 
 const onRenderLabel = (props) => {
@@ -127,7 +127,7 @@ const errorElement = (errorText: string) => {
 };
 
 export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (props) => {
-  const { projectId, hash = '' } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
 
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
@@ -158,6 +158,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const luisKeyFieldRef = React.useRef<HTMLInputElement>(null);
   const qnaKeyFieldRef = React.useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
@@ -184,13 +185,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   }, [rootLuisKey]);
 
   useEffect(() => {
-    if (luisKeyFieldRef.current && hash === 'luisKey') {
+    if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
       luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-    if (qnaKeyFieldRef.current && hash === 'qnaKey') {
+    if (qnaKeyFieldRef.current && scrollToSectionId === '#qnaKey') {
       qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [hash]);
+  }, [scrollToSectionId]);
 
   const handleRootLUISKeyOnChange = (e, value) => {
     if (value) {
