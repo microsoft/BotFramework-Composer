@@ -380,7 +380,7 @@ export const AzureProvisionDialog: React.FC = () => {
           />: null}
         </form>
       )}
-      {choice.key === 'create' && !subscriptionOption && <Spinner label="Loading" />}
+      {choice.key === 'create' && subscriptionOption.length < 1 && <Spinner label="Loading" />}
       {choice.key === 'import' && (
         <div style={{ width: '60%', marginTop: '10px', height: '100%' }}>
           <div>Publish Configuration</div>
@@ -480,7 +480,7 @@ export const AzureProvisionDialog: React.FC = () => {
               disabled={isDisAble}
               text={'Done'}
               onClick={async () => {
-                const selectedResources = enabledResources.concat(requireResources);
+                const selectedResources = requireResources.concat(enabledResources);
                 await onSubmit({
                   subscription: currentSubscription,
                   hostname: currentHostName,
