@@ -462,7 +462,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           throw new Error('Required field `settings` is missing from publishing profile.');
         }
 
-        this.asyncPublish({...config, accessToken: accessToken}, project, resourcekey, jobId);
+        this.asyncPublish({...config, accessToken}, project, resourcekey, jobId);
 
         return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
 
@@ -524,12 +524,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
      *************************************************************************************************/
     provision = async (config: any, project: IBotProject, user, getAccessToken): Promise<ProcessStatus> => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
-      console.log(config);
-      // authenticate
-      // const accessToken = config.accessToken || await getAccessToken(authConfig.arm);
-      // const graphToken = config.graphToken || await getAccessToken(authConfig.graph);
 
-      // const configWithToken: ProvisionConfig = {...config, graphToken, accessToken };
       this.asyncProvision(jobId, config, project, user);
       return BackgroundProcessManager.getStatus(jobId);
     };

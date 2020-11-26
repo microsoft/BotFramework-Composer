@@ -97,8 +97,12 @@ export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
 
 const MAX_WAIT = 1000 * 60 * 2; // 2 minutes
 
-export async function loginPopup(loginUrl: string): Promise<string | null> {
+export async function loginPopup(): Promise<string | null> {
+  const windowLoc = window.location;
+
   return new Promise((resolve) => {
+    const loginUrl = BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
+
     /**
      * window.innerWidth displays browser window"s height and width excluding toolbars
      */
@@ -117,6 +121,8 @@ export async function loginPopup(loginUrl: string): Promise<string | null> {
 
     // if popups are blocked, use a redirect flow
     if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+      windowLoc.replace(loginUrl);
+
       resolve(null);
       return;
     }
@@ -133,17 +139,18 @@ export async function loginPopup(loginUrl: string): Promise<string | null> {
     const popupTimer = setInterval(() => {
       try {
         if (popup) {
-          const { access_token, error } = querystring.parse(popup.location.hash);
-          if (access_token) {
-            console.log(access_token);
-            popup.close();
-            clearInterval(popupTimer);
-            const token = Array.isArray(access_token) ? access_token[0] : access_token;
-            storage.set(USER_TOKEN_STORAGE_KEY, token);
-            resolve(token);
-          } else if (error) {
-            console.error(error);
-            resolve(null);
+          if (popup.location.href.includes(windowLoc.hostname)) {
+            const { access_token, error } = querystring.parse(popup.location.hash);
+
+            if (access_token) {
+              popup.close();
+              clearInterval(popupTimer);
+              const token = Array.isArray(access_token) ? access_token[0] : access_token;
+              storage.set(USER_TOKEN_STORAGE_KEY, token);
+              resolve(token);
+            } else if (error) {
+              resolve(null);
+            }
           }
         } else {
           // clear the interval if there is no popup to inspect.
@@ -152,11 +159,6 @@ export async function loginPopup(loginUrl: string): Promise<string | null> {
         }
       } catch (e) {
         // Ignore the cross-domain errors thrown by trying to access a window not on our domain
-        console.error(e);
-        // clear the interval if there is no popup to inspect.
-        clearInterval(popupTimer);
-        resolve(null);
-        popup?.close();
       }
 
       // wait for MAX_WAIT and then clean up -- maybe user stalled?

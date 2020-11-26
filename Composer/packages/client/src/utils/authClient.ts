@@ -39,13 +39,13 @@ const msal = new UserAgentApplication({
   },
 });
 
-function setInSessionStorage(key: string, value: string) {
-  sessionStorage.setItem(key, value);
-}
+// function setInSessionStorage(key: string, value: string) {
+//   sessionStorage.setItem(key, value);
+// }
 
-function getInSessionStorage(key: string) {
-  return sessionStorage.getItem(key);
-}
+// function getInSessionStorage(key: string) {
+//   return sessionStorage.getItem(key);
+// }
 
 async function getAccessToken(options: AuthParameters): Promise<string> {
   const { clientId = '', targetResource = '', scopes = [] } = options;
@@ -68,7 +68,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
 
       const result = await fetch(url, { method: 'GET', headers: { 'X-CSRF-Token': __csrf__ } });
       const { accessToken = '' } = await result.json();
-      setInSessionStorage(targetResource ? targetResource : JSON.stringify(scopes), accessToken);
+      // setInSessionStorage(targetResource ? targetResource : JSON.stringify(scopes), accessToken);
       return accessToken;
     } catch (e) {
       // error handling
@@ -109,7 +109,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
         return '';
       }
     }
-    setInSessionStorage(targetResource ? targetResource : JSON.stringify(scopes), token);
+    // setInSessionStorage(targetResource ? targetResource : JSON.stringify(scopes), token);
     return token;
   }
 }

@@ -5901,14 +5901,18 @@ binary@^0.3.0:
 
 bindings@1.2.1:
   version "1.2.1"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
-=======
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
->>>>>>> origin/main
   integrity sha1-FK1hE4EtLTfXLme0ystLtyZQXxE=
 
-bl@^1.0.0, bl@^4.0.3:
+bl@^1.0.0:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/bl/-/bl-1.2.3.tgz#1e8dd80142eac80d7158c9dccc047fb620e035e7"
+  integrity sha512-pvcNpa0UU69UT341rO6AYy4FVAIkUHuZXRIWbq+zHnsVcRzDDjIAhGuuYoi0d//cwIwtt4pkpKycWEfjdV+vww==
+  dependencies:
+    readable-stream "^2.3.5"
+    safe-buffer "^5.1.1"
+
+bl@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/bl/-/bl-4.0.3.tgz#12d6287adc29080e22a705e5764b2a9522cdc489"
   integrity sha512-fs4G6/Hu4/EE+F75J8DuN/0IpQqNjAdC7aEQv7Qt8MHGUH7Ckv2MwTEEeN9QehD0pfIDkMI1bkHYkKy7xHyKIg==
@@ -11259,11 +11263,7 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==
 
-<<<<<<< HEAD
 graceful-fs@^4.1.15, graceful-fs@^4.1.4, graceful-fs@^4.2.3, graceful-fs@^4.2.4:
-=======
-graceful-fs@^4.1.4, graceful-fs@^4.2.3, graceful-fs@^4.2.4:
->>>>>>> origin/main
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
   integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
@@ -14467,13 +14467,8 @@ mixin-object@^2.0.1:
 
 mkdirp-classic@^0.5.2, mkdirp-classic@^0.5.3:
   version "0.5.3"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
-  integrity sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==
-=======
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
   integrity sha1-+hDJEVzG2IZb4iG6R+6b7XhgERM=
->>>>>>> origin/main
 
 mkdirp-then@^1.2.0:
   version "1.2.0"
@@ -14598,13 +14593,6 @@ ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
-
-msal@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/msal/-/msal-1.4.0.tgz#7e6e053a8cd3fd5b693e2f9504737f0c2b1219d4"
-  integrity sha512-NTxMFQh6t5g2QWMlvZTWTxL1bmcqiCv0cs2lxTHhUbWEuxWCfvaVRZfjxN8i+T0VltVVGaVIdML8QEoBnlbaSw==
-  dependencies:
-    tslib "^1.9.3"
 
 msal@^1.4.4:
   version "1.4.4"
@@ -17432,7 +17420,7 @@ readable-stream@1.1.x:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-readable-stream@^2.1.5, readable-stream@^2.3.0:
+readable-stream@^2.1.5, readable-stream@^2.3.0, readable-stream@^2.3.5:
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
   integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
@@ -19449,13 +19437,8 @@ tar-fs@^1.13.0:
 
 tar-fs@^2.0.0:
   version "2.1.1"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-2.1.1.tgz#489a15ab85f1f0befabb370b7de4f9eb5cbe8784"
-  integrity sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==
-=======
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tar-fs/-/tar-fs-2.1.1.tgz#489a15ab85f1f0befabb370b7de4f9eb5cbe8784"
   integrity sha1-SJoVq4Xx8L76uzcLfeT561y+h4Q=
->>>>>>> origin/main
   dependencies:
     chownr "^1.1.1"
     mkdirp-classic "^0.5.2"

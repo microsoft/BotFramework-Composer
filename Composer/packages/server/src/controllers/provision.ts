@@ -33,10 +33,8 @@ export const ProvisionController = {
     }
   },
   provision: async (req: Request, res) => {
-    console.log(req.headers);
     const accessToken = req.headers.authorization?.substring('Bearer '.length);
     const graphToken = req.headers.graphtoken;
-    console.log(graphToken);
     const user = await ExtensionContext.getUserFromRequest(req);
     const type = req.params.type; // type is webapp or functions
     const projectId = req.params.projectId;
