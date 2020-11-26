@@ -94,6 +94,7 @@ type TextFieldWithCustomButtonProps = {
   onBlur?: (value) => void;
   onChange?: (e, value) => void;
   required: boolean;
+  id?: string;
 };
 
 const errorElement = (errorText: string) => {
@@ -129,6 +130,7 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
     buttonText,
     onBlur,
     errorMessage,
+    id = '',
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const textFieldComponentRef = useRef<ITextField>(null);
@@ -151,6 +153,7 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
         <TextField
           disabled
           errorMessage={required ? errorElement(errorMessage) : ''}
+          id={id}
           label={label}
           placeholder={placeholderOnDisable}
           required={required}
@@ -162,6 +165,7 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
           aria-labelledby={ariaLabelledby}
           componentRef={textFieldComponentRef}
           disabled={isDisabled}
+          id={id}
           label={label}
           placeholder={placeholder}
           required={required}

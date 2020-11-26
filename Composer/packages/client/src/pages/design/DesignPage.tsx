@@ -703,7 +703,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const handleErrorClick = (projectId: string, skillId: string, diagnostic: Diagnostic) => {
     switch (diagnostic.source) {
       case 'appsettings.json': {
-        navigateTo(createBotSettingUrl(projectId, skillId));
+        navigateTo(createBotSettingUrl(projectId, skillId, diagnostic.path));
         break;
       }
       case 'manifest.json': {
