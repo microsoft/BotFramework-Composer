@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -41,10 +41,11 @@ const externalServiceContainerStyle = css`
 
 type SkillBotExternalServiceProps = {
   projectId: string;
+  scrollToSectionId?: string;
 };
 
 export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
@@ -66,6 +67,18 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
   const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
+
+  const luisKeyFieldRef = React.useRef<HTMLInputElement>(null);
+  const qnaKeyFieldRef = React.useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
+      luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (qnaKeyFieldRef.current && scrollToSectionId === '#qnaKey') {
+      qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scrollToSectionId]);
 
   const handleSkillQnAKeyOnBlur = (key: string) => {
     if (key) {
@@ -111,6 +124,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           ariaLabelledby={'LUIS key'}
           buttonText={formatMessage('Use custom LUIS key')}
           errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS key is empty') : ''}
+          id={'luisKey'}
           label={formatMessage('LUIS key')}
           placeholder={'Enter LUIS key'}
           placeholderOnDisable={"<---- Same as root bot's LUIS key ---->"}
@@ -133,6 +147,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           ariaLabelledby={'QnA Maker Subscription key'}
           buttonText={formatMessage('Use custom QnA Maker Subscription key')}
           errorMessage={!rootqnaKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
+          id={'qnaKey'}
           label={formatMessage('QnA Maker Subscription key')}
           placeholder={'Enter QnA Maker Subscription key'}
           placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}

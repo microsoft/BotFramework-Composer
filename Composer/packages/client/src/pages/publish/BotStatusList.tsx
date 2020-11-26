@@ -120,8 +120,8 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       if (option.key === 'manageProfiles') {
         const url =
           item.id === projectId
-            ? `/bot/${projectId}/botProjectsSettings`
-            : `bot/${projectId}/skill/${item.id}/botProjectsSettings`;
+            ? `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`
+            : `bot/${projectId}/skill/${item.id}/botProjectsSettings/#addNewPublishProfile`;
         navigateTo(url);
         return;
       }
