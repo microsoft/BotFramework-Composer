@@ -9,6 +9,10 @@ export const DefaultFlowSchema: FlowUISchema = {
     widget: 'ActionCard',
     body: '=action.activity',
   },
+  [SDKKinds.Ask]: {
+    widget: 'ActionCard',
+    body: '=action.activity',
+  },
   [SDKKinds.AttachmentInput]: {
     widget: 'ActionCard',
     body: '=action.prompt',
