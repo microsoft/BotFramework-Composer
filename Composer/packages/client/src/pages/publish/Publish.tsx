@@ -252,7 +252,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const updatePublishHistory = (publishHistories: IStatus[], botStatus: IBotStatus) => {
     const newPublishHistory = botPublishHistoryList.map((botPublishHistory) => {
       if (botPublishHistory.projectId === botStatus.id && botStatus.publishTarget) {
-        botPublishHistory.publishHistory[botStatus.publishTarget] = publishHistories;
+        botPublishHistory.publishHistory = {
+          ...botPublishHistory.publishHistory,
+          [botStatus.publishTarget]: publishHistories,
+        };
       }
       return botPublishHistory;
     });
