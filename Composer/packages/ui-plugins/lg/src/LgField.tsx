@@ -45,7 +45,12 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   const lgTemplateRef = LgTemplateRef.parse(value);
   const lgName = lgTemplateRef ? lgTemplateRef.name : new LgMetaData(lgType, designerId || '').toString();
-  const lgFileId = `${currentDialog.lgFile}.${locale}`;
+
+  const relatedLgFile = lgFiles.find(
+    (file) => file.templates.find((template) => template.name === lgName) !== undefined
+  );
+
+  const lgFileId = relatedLgFile ? relatedLgFile.id : `${currentDialog.lgFile}.${locale}`;
   const lgFile = lgFiles && lgFiles.find((file) => file.id === lgFileId);
 
   const updateLgTemplate = useCallback(
