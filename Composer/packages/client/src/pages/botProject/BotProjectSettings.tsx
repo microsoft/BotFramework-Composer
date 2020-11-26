@@ -154,7 +154,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               onChange={handleChange}
             />
           ) : (
-            <BotProjectSettingsTableView projectId={currentProjectId} />
+            <BotProjectSettingsTableView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
           )}
         </div>
       </Suspense>
