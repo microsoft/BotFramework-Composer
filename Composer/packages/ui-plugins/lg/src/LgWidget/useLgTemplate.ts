@@ -19,5 +19,5 @@ export const useLgTemplate = (str?: string) => {
   if (!templateId) return str || '';
 
   const lgTemplate = queryLgTemplate(templateId, lgFileId, lgFiles);
-  return lgTemplate ? lgTemplate.body : '';
+  return lgTemplate?.body ?? str ?? '';
 };
