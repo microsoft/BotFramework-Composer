@@ -8,7 +8,7 @@ import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { LuisAndQnaPublish } from './luisAndQnA';
+import { build, publishLuisToPrediction } from './luisAndQnA';
 import archiver = require('archiver');
 
 export class BotProjectDeploy {
@@ -58,18 +58,19 @@ export class BotProjectDeploy {
       if (!language) {
         language = 'en-us';
       }
-      const publisher = new LuisAndQnaPublish({ logger: this.logger, projPath: this.projPath });
+
+      build(project, this.projPath, settings);
 
       // this function returns an object that contains the luis APP ids mapping
       // each dialog to its matching app.
-      const { luisAppIds, qnaConfig } = await publisher.publishLuisAndQna(
+      const { luisAppIds, qnaConfig } = await publishLuisToPrediction(
         name,
         environment,
         this.accessToken,
-        language,
         settings.luis,
-        settings.qna,
-        luisResource
+        luisResource,
+        this.projPath,
+        this.logger
       );
 
       // amend luis settings with newly generated values

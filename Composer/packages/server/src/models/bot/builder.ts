@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { pathExists, writeFile } from 'fs-extra';
+import { pathExists, writeFile, copy } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
@@ -51,6 +51,7 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
   private _locale: string;
+  private containOrchestrator = false;
 
   private luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -67,6 +68,12 @@ export class Builder {
     this._locale = locale;
   }
 
+  public set rootDir(path: string) {
+    this.botDir = path;
+    this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
+    this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERRUPTION);
+  }
+
   public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) => {
     try {
       await this.createGeneratedDir();
@@ -76,7 +83,11 @@ export class Builder {
 
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
       const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
-
+      if (orchestratorBuildFiles.length) {
+        this.containOrchestrator = true;
+      } else {
+        this.containOrchestrator = false;
+      }
       await this.runLuBuild(luBuildFiles);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles);
@@ -217,6 +228,25 @@ export class Builder {
       }));
 
     return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, null, fullEmbedding);
+  }
+
+  public async copyModelPathToBot() {
+    if (this.containOrchestrator) {
+      const nlrList = await this.runOrchestratorNlrList();
+      const defaultNLR = nlrList.default;
+      const folderName = defaultNLR.replace('.onnx', '');
+      const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
+      const destDir = Path.resolve(this.generatedFolderPath, folderName);
+      await copy(modelPath, destDir);
+      await this.updateOrchestratorSetting(folderName);
+    }
+  }
+
+  private async updateOrchestratorSetting(dirName: string) {
+    const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
+    const content = JSON.parse(await this.storage.readFile(settingPath));
+    content.orchestrator.ModelPath = './ComposerDialogs/generated/' + dirName;
+    await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
   }
 
   private async createGeneratedDir() {
