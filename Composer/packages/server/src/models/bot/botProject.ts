@@ -481,7 +481,7 @@ export class BotProject implements IBotProject {
       luResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
-        if (f && !isEmpty) {
+        if (f) {
           luFiles.push(f);
         }
       });
