@@ -3,8 +3,9 @@
 The following documentation walks developers thorough feature flag usage and creation in Composer. There is also guidance on when to use certain feature flag types as well as how to toggle hidden and visible feature flags in different environments.
 
 ## Feature Flag Creation
-- Go to ~\Composer\packages\lib\shared\src\featureFlagUtils\index.ts
+- Go to ~\Composer\packages\types\src\featureFlags.ts
     - Add a feature flag key to FeatureFlagKeys
+- Go to ~\Composer\packages\lib\shared\src\featureFlagUtils\index.ts
     - Add a feature flag object that uses that key to getDefaultFeatureFlags function.
         - Add displayName and description values for your feature flag, these will appear in the UI where the user can toggle the feature on or off.
         - Indicate whether you want your feature flag to be hidden or not
