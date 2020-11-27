@@ -115,7 +115,6 @@ export const getResources = async (
 
 export const getDeployLocations = async (token: string, subscriptionId: string) => {
   try {
-    console.log(token);
     const result = await axios.get(
       `https://management.azure.com/subscriptions/${subscriptionId}/locations?api-version=2019-10-01`,
       {
@@ -270,7 +269,7 @@ export const CheckWebAppNameAvailability = async (
     const credentials = new TokenCredentials(token);
     const webSiteManagementClient = new WebSiteManagementClient(credentials, subscriptionId);
     const getCheckNameAvailabilityResult = await webSiteManagementClient.checkNameAvailability(
-      name,
+      webAppName,
       'Microsoft.Web/sites'
     );
     if (getCheckNameAvailabilityResult._response.status >= 300) {

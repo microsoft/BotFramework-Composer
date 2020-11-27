@@ -43,7 +43,7 @@ import {
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
 import jwtDecode from 'jwt-decode';
-import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview, getLuisAuthoringRegions, getLuisPredictionRegions } from './api';
+import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview, getLuisAuthoringRegions, CheckWebAppNameAvailability } from './api';
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
@@ -171,7 +171,6 @@ export const AzureProvisionDialog: React.FC = () => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
     getAccessToken(authConfig.arm).then((token)=> {
       setToken(token);
-      console.log('accessToken', token);
       // decode token
       const decoded = decodeToken(token);
       setCurrentUser({
@@ -226,18 +225,42 @@ export const AzureProvisionDialog: React.FC = () => {
     [subscriptions]
   );
 
+  const checkNameAvailability = useMemo(()=>(newName: string)=>{
+    if(currentSubscription){
+      // get preview list
+      const names = getPreview(newName);
+      let app = '';
+      if(publishType.includes('Function')) {
+        app = names.find(item=>item.key.includes('Function')).name;
+      } else {
+        app = names.find(item=>item.key === 'webApp').name;
+      }
+      // check app name whether exist or not
+      CheckWebAppNameAvailability(token, app, currentSubscription.subscriptionId).then(value=>{
+        console.log(value);
+        if(!value.nameAvailable){
+          setErrorHostName(value.message);
+        } else {
+          setErrorHostName('');
+        }
+      });
+    } else {
+      setErrorHostName('');
+    }
+  }, [publishType, currentSubscription, token]);
+
   const newResourceGroup = useMemo(
     () => (e, newName) => {
+      setHostName(newName);
       // validate existed or not
       const existed = resourceGroups.find((t) => t.name === newName);
       if (existed) {
         setErrorHostName('this resource group already exist');
       } else {
-        setErrorHostName('');
-        setHostName(newName);
+        checkNameAvailability(newName);
       }
     },
-    [resourceGroups]
+    [resourceGroups, checkNameAvailability]
   );
 
   const updateCurrentLocation = useMemo(
@@ -254,7 +277,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const updateLuisLocation = useMemo(
     () => (_e, option?: IDropdownOption) => {
       const location = luisLocations.find((t) => t === option?.key);
-      console.log(location);
       if (location) {
         setCurrentLuisLocation(location);
       }
@@ -268,6 +290,11 @@ export const AzureProvisionDialog: React.FC = () => {
       getResourceGroups(token, currentSubscription.subscriptionId).then(setResourceGroups);
       getDeployLocations(token, currentSubscription.subscriptionId).then(setDeployLocations);
       setLuisLocations(getLuisAuthoringRegions());
+
+      if(currentHostName){
+        // check its hostname availability
+        checkNameAvailability(currentHostName);
+      }
     }
   }, [currentSubscription]);
 
@@ -313,7 +340,6 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSubmit = useMemo(
     () => async (options) => {
-      console.log(options);
       // call back to the main Composer API to begin this process...
       startProvision(options);
       // TODO: close window
