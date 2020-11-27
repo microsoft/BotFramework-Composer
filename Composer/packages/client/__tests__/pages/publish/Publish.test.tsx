@@ -47,6 +47,7 @@ const state = {
         status: true,
         rollback: true,
         pull: true,
+        provision: true,
       },
     },
   ],
@@ -94,6 +95,7 @@ describe('publish page', () => {
         targets={state.settings.publishTargets}
         types={state.publishTypes}
         updateSettings={jest.fn()}
+        setDialogProps={() => {}}
       />,
       initRecoilState
     );
