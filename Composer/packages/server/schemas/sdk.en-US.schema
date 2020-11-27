@@ -5308,7 +5308,7 @@
                     "description": "Participant Id or expression to a participantId to use to get the participant information. Default value is the current turn.activity.from.aadObjectId."
                 },
                 "tenantId": {
-                    "title": "Tenant Id",
+                    "title": "Tenant id",
                     "description": "Tenant Id or expression to a tenantId to use to get the participant information. Default value is the current $turn.activity.channelData.tenant.id."
                 },
                 "disabled": {
@@ -6385,6 +6385,118 @@
                 }
             }
         },
+        "Teams.OnTeamsMessagingExtensionBotMessagePreviewEdit": {
+            "title": "On teams messaging extension preview edit submit action",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/submitAction' and activity.value.botMessagePreviewAction == 'edit'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnTeamsMessagingExtensionBotMessagePreviewSend": {
+            "title": "On teams messaging extension preview send submit action",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/submitAction' and activity.value.botMessagePreviewAction == 'send'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.SendAppBasedLinkQueryResponse": {
+            "title": "Send query link response",
+            "description": "Query link requests have activity.name='composeExtension/queryLink'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "activity": {
+                    "title": "Activity",
+                    "description": "Expession for an Attachment template of Hero Card or Thumbnail Card to send. Attachment is required."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
         "Teams.SendMessageToTeamsChannel": {
             "title": "Send a message to a teams channel",
             "description": "The resulting ConversationReference and ActivityId can be stored for later use.",
@@ -6429,9 +6541,101 @@
                 }
             }
         },
+        "Teams.SendMessagingExtensionActionResponse": {
+            "title": "Send messaging extension action response",
+            "description": "Send an action response containing a card for a messaging extension request.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "title": {
+                    "title": "Title",
+                    "description": "Title of the Task Module Response."
+                },
+                "height": {
+                    "title": "Height",
+                    "description": "Height of the Task Module Response."
+                },
+                "width": {
+                    "title": "Width",
+                    "description": "Width of the Task Module Response."
+                },
+                "activity": {
+                    "title": "Activity",
+                    "description": "Expession for an Attachment template of Hero Card or Adaptive Card to send. Attachment is required."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.SendMessagingExtensionAttachmentsResponse": {
+            "title": "Send messaging extensions attachments response",
+            "description": "Send a response containing attachments to a messaging extension request.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "attachments": {
+                    "title": "Attachments",
+                    "description": "Expession for Attachments template of Cards or Adaptive Cards to send. Minimum of one Attachment is required."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
         "Teams.SendMessagingExtensionAuthResponse": {
             "title": "Send messaging extension auth response",
-            "description": "Send a response to a messaging extensin requiring auth. If the user is signed in, the dialog will end setting the TokenResponse in the specified property.",
+            "description": "If the user is signed in, the dialog will end setting the TokenResponse in the specified property.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6473,9 +6677,9 @@
                 }
             }
         },
-        "Teams.SendMessagingExtensionQueryLinkResponse": {
-            "title": "Send query link response",
-            "description": "Query link requests have activity.name='composeExtension/queryLink'.",
+        "Teams.SendMessagingExtensionBotMessagePreviewResponse": {
+            "title": "Send a bot message preview response",
+            "description": "Send a bot message preview response to a messaging extension request.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6497,7 +6701,87 @@
                 },
                 "activity": {
                     "title": "Activity",
-                    "description": "Expession for an Attachment template of Hero Card or Thumbnail Card to send. Attachment is required."
+                    "description": "Expession for an Attachment template of Hero Card or Adaptive Card to send. Attachment is required."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.SendMessagingExtensionConfigQuerySettingUrlResponse": {
+            "title": "Send query link response",
+            "description": "Query link requests have activity.name='composeExtension/queryLink'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "configUrl": {
+                    "title": "Configuration url",
+                    "description": "Url to use for the configuration page path."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "description": "Optional condition which if true will disable this action."
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.SendMessagingExtensionMessageResponse": {
+            "title": "Send messaging extension message response",
+            "description": "Send a message response to a messaging extension request.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "description": "Optional id for the dialog"
+                },
+                "cacheType": {
+                    "title": "Cache type",
+                    "description": "Optional type of cache: 'cache' or 'no_cache'."
+                },
+                "cacheDuration": {
+                    "title": "Cache duration",
+                    "description": "Optional duration in seconds of the result in the cache."
+                },
+                "message": {
+                    "title": "Message",
+                    "description": "The response message to send."
                 },
                 "disabled": {
                     "title": "Disabled",

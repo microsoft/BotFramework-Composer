@@ -35,8 +35,8 @@
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A subscription key is created when you create a QnA Maker resource."
   },
-  "a_valid_url_should_start_with_http_or_https_327b1a30": {
-    "message": "A valid URL should start with http:// or https://"
+  "a_valid_url_should_start_with_http_or_https_d24b3591": {
+    "message": "A valid url should start with http:// or https://"
   },
   "about_70c18bba": {
     "message": "About"
@@ -542,6 +542,9 @@
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
   },
+  "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
+    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
+  },
   "composer_introduction_98a93701": {
     "message": "Composer introduction"
   },
@@ -640,6 +643,9 @@
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
+  },
+  "could_not_init_plugin_1f1c29cd": {
+    "message": "Could not init plugin"
   },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
@@ -760,6 +766,12 @@
   },
   "cut_c8c92681": {
     "message": "Cut"
+  },
+  "data_collection_32efe1e7": {
+    "message": "Data collection"
+  },
+  "data_collection_7db2e237": {
+    "message": "Data Collection"
   },
   "data_loading_4c9bb9f6": {
     "message": "Data loading..."
@@ -1256,6 +1268,9 @@
   "handover_to_human_1a619574": {
     "message": "Handover to human"
   },
+  "help_us_improve_468828c5": {
+    "message": "Help us improve?"
+  },
   "here_s_what_we_know_4e9c1731": {
     "message": "Here’s what we know…"
   },
@@ -1300,9 +1315,6 @@
   },
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "If this problem persists, please file an issue on"
-  },
-  "if_turned_on_then_externally_stored_templates_will_3f487651": {
-    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
@@ -1679,9 +1691,6 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
-  "msg_bf173fef": {
-    "message": "{ msg }"
-  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -1790,6 +1799,9 @@
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
   },
+  "not_now_97efd947": {
+    "message": "Not now"
+  },
   "not_yet_published_669e37b3": {
     "message": "Not yet published"
   },
@@ -1873,9 +1885,6 @@
   },
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
-  },
-  "open_skills_page_for_configuration_details_a2a484ea": {
-    "message": "Open Skills page for configuration details"
   },
   "optional_221bcc9d": {
     "message": "Optional"
@@ -1994,6 +2003,9 @@
   "privacy_button_b58e437": {
     "message": "Privacy button"
   },
+  "privacy_statement_da69ebc6": {
+    "message": "Privacy statement"
+  },
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
   },
@@ -2053,9 +2065,6 @@
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
-  },
-  "provisioning_1330aede": {
-    "message": "Provisioning ..."
   },
   "provisioning_summary_2be9422f": {
     "message": "Provisioning Summary"
@@ -2167,9 +2176,6 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
-  },
-  "remote_templates_a23c242d": {
-    "message": "Remote templates"
   },
   "remove_f47dc62a": {
     "message": "Remove"
@@ -2449,9 +2455,6 @@
   },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
-  },
-  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
@@ -2996,6 +2999,9 @@
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"
   },
+  "yes_collect_data_b79b7844": {
+    "message": "Yes, collect data"
+  },
   "yes_dde87d5": {
     "message": "Yes"
   },
@@ -3013,6 +3019,9 @@
   },
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
     "message": "You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs."
+  },
+  "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
+    "message": "You can turn data collection on or off at any time in the Application Settings."
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "You do not have permission to save bots here"

@@ -159,12 +159,21 @@ export enum SDKKinds {
   OnTeamRenamed = 'Teams.OnTeamRenamed',
   OnTeamRestored = 'Teams.OnTeamRestored',
   OnTeamUnarchived = 'Teams.OnTeamUnarchived',
-  SendMessagingExtensionAuthResponse = 'Teams.SendMessagingExtensionAuthResponse',
-  SendMessagingExtensionQueryLinkResponse = 'Teams.SendMessagingExtensionQueryLinkResponse',
+  OnMessagingExtensionBotMessagePreviewEdit = 'Teams.OnMessagingExtensionBotMessagePreviewEdit',
+  OnMessagingExtensionBotMessagePreviewSend = 'Teams.OnMessagingExtensionBotMessagePreviewSend',
+  SendAppBasedLinkQueryResponse = 'Teams.SendAppBasedLinkQueryResponse',
   SendMessageToTeamsChannel = 'Teams.SendMessageToTeamsChannel',
-  SendTaskModuleUrlResponse = 'Teams.SendTaskModuleUrlResponse',
-  SendTaskModuleCardResponse = 'Teams.SendTaskModuleCardResponse',
+  SendMessagingExtensionActionResponse = 'Teams.SendMessagingExtensionActionResponse',
+  SendMessagingExtensionAttachmentsResponse = 'Teams.SendMessagingExtensionAttachmentsResponse',
+  SendMessagingExtensionAuthResponse = 'Teams.SendMessagingExtensionAuthResponse',
+  SendMessagingExtensionBotMessagePreviewResponse = 'Teams.SendMessagingExtensionBotMessagePreviewResponse',
+  SendMessagingExtensionConfigQuerySettingUrlResponse = 'Teams.SendMessagingExtensionConfigQuerySettingUrlResponse',
+  SendMessagingExtensionMessageResponse = 'Teams.SendMessagingExtensionMessageResponse',
   SendTaskModuleMessageResponse = 'Teams.SendTaskModuleMessageResponse',
+  SendTaskModuleCardResponse = 'Teams.SendTaskModuleCardResponse',
+  SendTaskModuleUrlResponse = 'Teams.SendTaskModuleUrlResponse',
+
+  //SendMessagingExtensionSelectItemResponse
 }
 
 export enum SDKRoles {

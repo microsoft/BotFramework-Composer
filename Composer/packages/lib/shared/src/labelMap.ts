@@ -348,4 +348,10 @@ export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } =
   [SDKKinds.OnTeamRenamed]: {
     title: formatMessage('Team renamed'),
   },
+  [SDKKinds.OnMessagingExtensionBotMessagePreviewEdit]: {
+    title: formatMessage('Bot message preview edit'),
+  },
+  [SDKKinds.OnMessagingExtensionBotMessagePreviewSend]: {
+    title: formatMessage('Bot message preview send'),
+  },
 });
