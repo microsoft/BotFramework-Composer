@@ -6,7 +6,6 @@ import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { defaultPublishConfig, PublishResult } from '@bfc/shared';
 
-import { getAccessTokenInCache } from '../../utils/auth';
 import {
   publishTypesState,
   botStatusState,
@@ -17,9 +16,10 @@ import {
 } from '../atoms/botState';
 import { botEndpointsState } from '../atoms';
 
-import { BotStatus, Text } from './../../constants';
+import { armScopes, BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
+import { AuthClient } from '../../utils/authClient';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -124,11 +124,10 @@ export const publisherDispatcher = () => {
   const publishToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, metadata, sensitiveSettings) => {
       try {
-        const token = getAccessTokenInCache();
+        const token = await AuthClient.getAccessToken(armScopes);
         const response = await httpClient.post(
           `/publish/${projectId}/publish/${target.name}`,
           {
-            accessToken: token,
             metadata,
             sensitiveSettings,
           },

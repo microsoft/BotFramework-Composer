@@ -9,7 +9,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import {
   currentProjectId,
-  getAccessTokensFromStorage,
+  getAccessToken,
   startProvision,
   closeDialog,
   onBack,
@@ -17,12 +17,11 @@ import {
   setTitle,
   getSchema,
   getType,
-  getCurrentUser,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
-import { ResourcesItem, LuisAuthoringSupportLocation, LuisPublishSupportLocation } from '../types';
+import { ResourcesItem, authConfig, LuisAuthoringSupportLocation, LuisPublishSupportLocation } from '../types';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -43,7 +42,7 @@ import {
   SelectionMode,
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
-
+import jwtDecode from 'jwt-decode';
 import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview, getLuisAuthoringRegions, getLuisPredictionRegions } from './api';
 
 const choiceOptions: IChoiceGroupOption[] = [
@@ -78,6 +77,16 @@ function onRenderDetailsHeader(props, defaultRender) {
       })}
     </Sticky>
   );
+}
+
+function decodeToken(token: string) {
+  let decoded = {} as any;
+  try {
+    decoded = jwtDecode(token);
+  } catch (err) {
+    console.error(err);
+  }
+  return decoded;
 }
 
 export const AzureProvisionDialog: React.FC = () => {
@@ -160,14 +169,27 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
-    const { access_token, graph_token } = getAccessTokensFromStorage();
-    const user = getCurrentUser();
-    setToken(access_token);
-    setGraphToken(graph_token);
-    setCurrentUser(user);
-    getSubscriptions(access_token).then(setSubscriptions);
-    getResources();
+    getAccessToken(authConfig.arm).then((token)=> {
+      setToken(token);
+      console.log('accessToken', token);
+      // decode token
+      const decoded = decodeToken(token);
+      setCurrentUser({
+        token: token,
+        email: decoded.upn,
+        name: decoded.name,
+        expiration: (decoded.exp || 0) * 1000, // convert to ms,
+        sessionExpired: false,
+      });
+    });
   }, []);
+
+  useEffect(()=> {
+    if(token){
+      getSubscriptions(token).then(setSubscriptions);
+      getResources();
+    }
+  },[token])
 
   const getResources = async () => {
     try {
@@ -358,7 +380,7 @@ export const AzureProvisionDialog: React.FC = () => {
           />: null}
         </form>
       )}
-      {choice.key === 'create' && subscriptionOption?.length < 1 && <Spinner label="Loading" />}
+      {choice.key === 'create' && !subscriptionOption && <Spinner label="Loading" />}
       {choice.key === 'import' && (
         <div style={{ width: '60%', marginTop: '10px', height: '100%' }}>
           <div>Publish Configuration</div>

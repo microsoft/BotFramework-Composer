@@ -9,7 +9,7 @@ import * as rp from 'request-promise';
 import { ILuisConfig, FileInfo, IQnAConfig } from '@botframework-composer/types';
 
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
-import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { BotProjectDeployLoggerType } from './types';
 import { luImportResolverGenerator } from '@bfc/shared/lib/luBuildResolver';
 import { createCustomizeError, AzurePublishErrors, stringifyError, isCustomizeError } from './utils/errorHandler';
 

@@ -4,7 +4,7 @@
 import { TokenCredentials } from '@azure/ms-rest-js';
 import * as rp from 'request-promise';
 
-import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { BotProjectDeployLoggerType } from './types';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
 import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
 import { AzureResourceTypes } from './resourceTypes';

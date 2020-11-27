@@ -12,7 +12,6 @@ import { PublishTarget, PublishResult } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
-// import { setAccessToken, setGraphToken } from '../../utils/auth';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -24,6 +23,8 @@ import {
   publishHistoryState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
+// import { AuthClient } from '../../utils/authClient';
+
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { PublishProfileDialog } from '../../constants';
 import { PluginAPI } from '../../plugins/api';
@@ -34,7 +35,7 @@ import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSe
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList } from './publishStatusList';
 import { PullDialog } from './pullDialog';
-
+// import {armScopes} from '../../constants';
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const selectedTargetName = props.targetName;
   const { projectId = '' } = props;
@@ -53,7 +54,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
     setCurrentPageMode,
-    getAccessToken,
   } = useRecoilValue(dispatcherState);
 
   const [dialogHidden, setDialogHidden] = useState(true);
@@ -119,7 +119,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         },
         onClick: async () => {
           // get accessToken
-          await getAccessToken();
+          // await AuthClient.getAccessToken(armScopes);
           setPublishDialogHidden(false);
         },
       },
@@ -407,20 +407,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     },
     [settings.publishTargets, projectId, botName]
   );
-
-  // const updateAccessToken = useMemo(
-  //   () => (e, token) => {
-  //     setAccessToken(token);
-  //   },
-  //   []
-  // );
-
-  // const updateGraphToken = useMemo(
-  //   () => (e, token) => {
-  //     setGraphToken(token);
-  //   },
-  //   []
-  // );
 
   useEffect(() => {
     setCurrentPageMode('notifications');

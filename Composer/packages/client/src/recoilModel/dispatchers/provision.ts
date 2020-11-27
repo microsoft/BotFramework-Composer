@@ -5,11 +5,12 @@ import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { provisionStatusState, settingsState } from '../atoms/botState';
-import { getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
 import { addNotificationInternal, createNotification, updateNotificationInternal } from './notification';
 import httpClient from './../../utils/httpUtil';
+import { armScopes, graphScopes } from './../../constants';
+import { AuthClient } from '../../utils/authClient';
 
 export const provisionDispatcher = () => {
   const getProvisionPendingNotification = (value: string): CardProps => {
@@ -37,14 +38,12 @@ export const provisionDispatcher = () => {
   const provisionToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (config: any, type: string, projectId: string) => {
       try {
-        const token = getAccessTokenInCache();
-        const result = await httpClient.post(
-          `/provision/${projectId}/${type}`,
-          { ...config, accessToken: token, graphToken: getGraphTokenInCache() },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const arm = await AuthClient.getAccessToken(armScopes);
+        const graph = await AuthClient.getAccessToken(graphScopes);
+        console.log('graph token is: ', graph);
+        const result = await httpClient.post(`/provision/${projectId}/${type}`, config, {
+          headers: { Authorization: `Bearer ${arm}`, graphtoken: graph },
+        });
         console.log(result.data);
         const notification = createNotification(getProvisionPendingNotification(result.data.message));
         addNotificationInternal(callbackHelpers, notification);

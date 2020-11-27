@@ -24,7 +24,6 @@ import { extensionsDispatcher } from './extensions';
 import { formDialogsDispatcher } from './formDialogs';
 import { botProjectFileDispatcher } from './botProjectFile';
 import { zoomDispatcher } from './zoom';
-import { authDispatcher } from './auth';
 import { recognizerDispatcher } from './recognizers';
 import { serverSettingsDispatcher } from './serverSettings';
 
@@ -53,7 +52,6 @@ const createDispatchers = () => {
     ...formDialogsDispatcher(),
     ...botProjectFileDispatcher(),
     ...zoomDispatcher(),
-    ...authDispatcher(),
     ...recognizerDispatcher(),
     ...serverSettingsDispatcher(),
   };

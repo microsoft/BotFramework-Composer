@@ -10,7 +10,7 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
 import { SearchManagementClient } from '@azure/arm-search';
 
-import { BotProjectDeployLoggerType } from '../botProjectLoggerType';
+import { BotProjectDeployLoggerType } from '../types';
 
 import {
   AzureResourceManangerConfig,

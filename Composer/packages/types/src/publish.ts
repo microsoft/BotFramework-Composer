@@ -23,6 +23,18 @@ export type PublishResult = {
   } | null;
 };
 
+export type ProcessStatus = {
+  id: string; // unique id
+  projectId: string; // reference to projectId that this process is for
+  processName: string; // name used to pull this process if jobId is not known
+  time: Date; // contains start time
+  status: number; // contains http status code
+  message: string; // contains latest message
+  log: string[]; // contains all messages
+  comment?: string; // contains user supplied comment about process
+  config?: any; // contains provision result
+};
+
 export type PublishResponse = {
   status: number;
   result: PublishResult;
@@ -75,7 +87,31 @@ export type PublishPlugin<Config = any> = {
     user?: UserIdentity,
     getAccessToken?: GetAccessToken
   ) => Promise<PullResponse>;
-
+  provision?: (
+    config: Config,
+    project: IBotProject,
+    user?: UserIdentity,
+    getAccessToken?: GetAccessToken
+  ) => Promise<ProcessStatus>;
+  getProvisionStatus?: (
+    target: string,
+    project: IBotProject,
+    user?: UserIdentity,
+    jobId?: string
+  ) => Promise<ProcessStatus>;
+  getResources?: (
+    project: IBotProject,
+    user?: UserIdentity
+  ) => Promise<
+    {
+      description: string;
+      text: string;
+      tier: string;
+      group: string;
+      key: string;
+      required: boolean;
+    }[]
+  >;
   // other properties
   schema?: JSONSchema7;
   instructions?: string;

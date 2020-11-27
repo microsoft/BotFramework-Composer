@@ -30,7 +30,6 @@ async function getAccessToken(req: GetAccessTokenRequest, res: Response) {
   const parsedScopes: string[] = JSON.parse(scopes);
 
   const accessToken = await authService.getAccessToken({ clientId, targetResource, scopes: parsedScopes });
-
   res.status(200).json({
     accessToken,
   });

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { join } from 'path';
+import { Request } from 'express';
 
 import merge from 'lodash/merge';
 import { defaultPublishConfig, PublishResult } from '@bfc/shared';
@@ -42,15 +43,17 @@ export const PublishController = {
               status: typeof methods.getStatus === 'function',
               rollback: typeof methods.rollback === 'function',
               pull: typeof methods.pull === 'function',
+              provision: typeof methods.provision === 'function',
+              getProvisionStatus: typeof methods.getProvisionStatus === 'function',
             },
           };
         })
     );
   },
-  publish: async (req, res) => {
+  publish: async (req: Request, res) => {
     const target = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
-    const { metadata, sensitiveSettings, accessToken } = req.body;
+    const { metadata, sensitiveSettings } = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -62,6 +65,9 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
 
+    // get token from header
+    const accessToken = req.headers.authorization?.substring('Bearer '.length);
+    log('access token get from header: %s', accessToken);
     if (profile && extensionImplementsMethod(extensionName, 'publish')) {
       // append config from client(like sensitive settings)
       const configuration = {
