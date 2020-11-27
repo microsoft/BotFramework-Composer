@@ -174,6 +174,10 @@ export const DefaultMenuSchema: MenuUISchema = {
     submenu: [SubmenuNames.PropertyManagement],
   },
   // Teams options
+  [SDKKinds.SendMessageToTeamsChannel]: {
+    label: formatMessage('Message to Teams channel'),
+    submenu: [SubmenuNames.TeamsActions],
+  },
   [SDKKinds.GetMeetingParticipant]: {
     label: formatMessage('Get meeting participant information'),
     submenu: [SubmenuNames.TeamsActions],
@@ -202,16 +206,12 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Get Team member'),
     submenu: [SubmenuNames.TeamsActions],
   },
-  [SDKKinds.SendMessageToTeamsChannel]: {
-    label: formatMessage('Message to Teams channel'),
-    submenu: [SubmenuNames.TeamsResponses],
-  },
   [SDKKinds.SendMessagingExtensionAuthResponse]: {
     label: formatMessage('Messaging extension auth response'),
     submenu: [SubmenuNames.TeamsResponses],
   },
-  [SDKKinds.SendMessagingExtensionQueryLinkResponse]: {
-    label: formatMessage('Query link response'),
+  [SDKKinds.SendAppBasedLinkQueryResponse]: {
+    label: formatMessage('Link unfurling response'),
     submenu: [SubmenuNames.TeamsResponses],
   },
   [SDKKinds.SendTaskModuleCardResponse]: {
@@ -224,6 +224,26 @@ export const DefaultMenuSchema: MenuUISchema = {
   },
   [SDKKinds.SendTaskModuleMessageResponse]: {
     label: formatMessage('Task module message response'),
+    submenu: [SubmenuNames.TeamsResponses],
+  },
+  [SDKKinds.SendMessagingExtensionActionResponse]: {
+    label: formatMessage('Messaging extension action response'),
+    submenu: [SubmenuNames.TeamsResponses],
+  },
+  [SDKKinds.SendMessagingExtensionAttachmentsResponse]: {
+    label: formatMessage('Messaging extension attachments response'),
+    submenu: [SubmenuNames.TeamsResponses],
+  },
+  [SDKKinds.SendMessagingExtensionBotMessagePreviewResponse]: {
+    label: formatMessage('Messaging extension BotMessagePreview response'),
+    submenu: [SubmenuNames.TeamsResponses],
+  },
+  [SDKKinds.SendMessagingExtensionConfigQuerySettingUrlResponse]: {
+    label: formatMessage('Messaging extension config url response'),
+    submenu: [SubmenuNames.TeamsResponses],
+  },
+  [SDKKinds.SendMessagingExtensionMessageResponse]: {
+    label: formatMessage('Messaging extension message response'),
     submenu: [SubmenuNames.TeamsResponses],
   },
 };
