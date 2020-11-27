@@ -85,7 +85,6 @@ import { setRootBotSettingState } from '../setting';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
-import { getAbsolutePath } from '../../../utils/fileUtil';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
