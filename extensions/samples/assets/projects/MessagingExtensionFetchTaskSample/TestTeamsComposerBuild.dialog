@@ -1,0 +1,174 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "433224",
+    "description": "",
+    "name": "TestTeamsComposerBuild"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "821845"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "y5dc4V"
+          },
+          "condition": "=turn.activity.value.submitLocation == \"messagingExtensionSubmit\"",
+          "actions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "HcigCm"
+              },
+              "activity": "${SendActivity_HcigCm()}"
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "4OVpsL"
+              },
+              "activity": "${SendActivity_4OVpsL()}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "${SendActivity_Welcome()}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnAppBasedLinkQuery",
+      "$designer": {
+        "id": "9YUSiT"
+      },
+      "actions": [
+        {
+          "$kind": "Teams.SendAppBasedLinkQueryResponse",
+          "$designer": {
+            "id": "aq8YDo"
+          },
+          "card": "${Teams.SendAppBasedLinkQueryResponse_Activity_aq8YDo()}",
+          "top": 3,
+          "cardNoMatchResponse": "Thanks for the feedback.",
+          "cardNoMatchText": "None of the above."
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnMessagingExtensionFetchTask",
+      "$designer": {
+        "id": "L0cGIy"
+      },
+      "actions": [
+        {
+          "$kind": "Teams.SendMessagingExtensionActionResponse",
+          "$designer": {
+            "id": "JuOqk3"
+          },
+          "card": "${Teams.SendMessagingExtensionActionResponse_Activity_JuOqk3()}",
+          "title": "Create a survey :)",
+          "height": 450,
+          "width": 475
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnMessagingExtensionSubmitAction",
+      "$designer": {
+        "id": "JI2r3M"
+      },
+      "actions": [
+        {
+          "$kind": "Teams.SendMessagingExtensionBotMessagePreviewResponse",
+          "$designer": {
+            "id": "nYDpmC"
+          },
+          "card": "${Teams.SendMessagingExtensionBotMessagePreviewResponse_Activity_nYDpmC()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnMessagingExtensionBotMessagePreviewEdit",
+      "$designer": {
+        "id": "ZDmhg0"
+      },
+      "actions": [
+        {
+          "$kind": "Teams.SendMessagingExtensionActionResponse",
+          "$designer": {
+            "id": "BilaIQ"
+          },
+          "card": "${Teams.SendMessagingExtensionActionResponse_Activity_BilaIQ()}",
+          "title": "Editing! now. :)"
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnMessagingExtensionBotMessagePreviewSend",
+      "$designer": {
+        "id": "h9LR8U"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "bxSp9c"
+          },
+          "activity": "${SendActivity_bxSp9c()}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "nfVkYb"
+          },
+          "activity": "${SendActivity_nfVkYb()}"
+        }
+      ]
+    }
+  ],
+  "generator": "TestTeamsComposerBuild.lg",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "id": "TestTeamsComposerBuild",
+  "recognizer": "TestTeamsComposerBuild.lu.qna"
+}

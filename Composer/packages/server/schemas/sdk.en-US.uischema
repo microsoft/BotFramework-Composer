@@ -365,10 +365,76 @@
             "subtitle": "Gets members for a team conversation."
         }
     },
+    "Teams.OnAppBasedLinkQuery": {
+        "form": {
+            "label": "Teams app based link query",
+            "subtitle": "Invoke activity.name='composeExtension/queryLink'"
+        }
+    },
+    "Teams.OnCardAction": {
+        "form": {
+            "label": "Teams card action invoke",
+            "subtitle": "Invoke activity with no activity.name"
+        }
+    },
+    "Teams.OnMessagingExtensionBotMessagePreviewEdit": {
+        "form": {
+            "label": "Teams messaging extension preview edit submit action",
+            "subtitle": "Invoke with activity.value.botMessagePreviewAction == 'edit'"
+        }
+    },
+    "Teams.OnMessagingExtensionBotMessagePreviewSend": {
+        "form": {
+            "label": "Teams messaging extension preview send submit action",
+            "subtitle": "Invoke with activity.value.botMessagePreviewAction == 'send'"
+        }
+    },
+    "Teams.OnMessagingExtensionCardButtonClicked": {
+        "form": {
+            "label": "Teams messaging extension card button clicked",
+            "subtitle": "Invoke activity.name='composeExtension/onCardButtonClicked'"
+        }
+    },
+    "Teams.OnMessagingExtensionConfigurationQuerySettingUrl": {
+        "form": {
+            "label": "Teams messaging extension configuration query setting url",
+            "subtitle": "Invoke activity.name='composeExtension/querySettingUrl'"
+        }
+    },
+    "Teams.OnMessagingExtensionConfigurationSetting": {
+        "form": {
+            "label": "Teams messaging extension configuration setting",
+            "subtitle": "Invoke activity.name='composeExtension/setting'"
+        }
+    },
     "Teams.OnMessagingExtensionFetchTask": {
         "form": {
             "label": "Teams messaging extension fetch task",
             "subtitle": "Invoke activity.name='composeExtension/fetchTask'"
+        }
+    },
+    "Teams.OnMessagingExtensionQuery": {
+        "form": {
+            "label": "Teams messaging extension query",
+            "subtitle": "Invoke activity.name='composeExtension/query'"
+        }
+    },
+    "Teams.OnMessagingExtensionSelectItem": {
+        "form": {
+            "label": "Teams messaging extension select item",
+            "subtitle": "Invoke activity.name='composeExtension/selectItem'"
+        }
+    },
+    "Teams.OnMessagingExtensionSubmitAction": {
+        "form": {
+            "label": "Teams messaging extension submit action",
+            "subtitle": "Invoke activity.name='composeExtension/submitAction'"
+        }
+    },
+    "Teams.OnO365ConnectorCardAction": {
+        "form": {
+            "label": "Teams O365 connector card action",
+            "subtitle": "Invoke activity.name='actionableMessage/executeAction'"
         }
     },
     "Teams.OnTaskModuleFetch": {
@@ -397,14 +463,14 @@
     },
     "Teams.SendMessagingExtensionActionResponse": {
         "form": {
-            "label": "Send a messaging extension action response",
-            "subtitle": "Send an action response containing a card for a messaging extension request."
+            "label": "Messaging extension action response",
+            "subtitle": "Send a response for a messaging extension request."
         }
     },
     "Teams.SendMessagingExtensionAttachmentsResponse": {
         "form": {
-            "label": "Send messaging extensions attachments response",
-            "subtitle": "Send a response containing attachments to a messaging extension request."
+            "label": "Send messaging extensions attachment(s) response",
+            "subtitle": "Send an invoke response containing one or more attachments to a messaging extension request."
         }
     },
     "Teams.SendMessagingExtensionAuthResponse": {

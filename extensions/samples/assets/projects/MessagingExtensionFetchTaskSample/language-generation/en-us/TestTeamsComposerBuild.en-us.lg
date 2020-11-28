@@ -1,0 +1,49 @@
+[import](common.lg)
+
+# SendActivity_Welcome
+- ${WelcomeUser()}
+
+# Teams.SendAppBasedLinkQueryResponse_Activity_aq8YDo()
+[ThumbnailCard
+   title = Thumbnail Card
+   text = https://work3.botframework.com/
+   image = https://raw.githubusercontent.com/microsoft/botframework-sdk/master/icon.png
+]
+
+
+# FetchTaskCard()
+[Activity
+    Attachments = ${json({"actions": [{"data": {"submitLocation": "messagingExtensionFetchTask"}, "title": "Submit", "type": "Action.Submit"}], "body": [{"text": "This is an Adaptive Card within a Messaging Extension", "type": "TextBlock", "weight": "bolder"},{ "type": "TextBlock", "text": "Enter text for Question:" },{"id": "Question","placeholder": "Question text here", "type": "Input.Text", "value": ""},{ "type": "TextBlock", "text": "Options for Question:" },{ "type": "TextBlock", "text": "Is Multi-Select:" }, {"choices": [{ "title": "True", "value": "true" }, { "title": "False", "value": "false" }],"id": "MultiSelect","isMultiSelect": false,"style": "expanded","type": "Input.ChoiceSet","value": "false"},{"id": "Option1","placeholder": "Option 1 here","type": "Input.Text","value": ""},{"id": "Option2","placeholder": "Option 2 here","type": "Input.Text","value": ""},{"id": "Option3","placeholder": "Option 3 here","type": "Input.Text","value": ""}],"type": "AdaptiveCard","version": "1.0"})}
+]
+
+# Teams.SendMessagingExtensionActionResponse_Activity_JuOqk3()
+- ${FetchTaskCard()}
+
+
+# SubmitCardResponse()
+[Activity     
+     Attachments = ${SubmitCardJson()}
+]
+
+# SubmitCardJson()
+- ${json({"actions": [{ "type": "Action.Submit", "title": "Submit", "data": { "submitLocation": "messagingExtensionSubmit" } }],"body": [{ "text": "Adaptive Card from Messaging Extension", "type": "TextBlock", "weight": "bolder" },{ "text": turn.activity.value.data.question, "type": "TextBlock", "id": "Question" },{ "id": "Answer", "placeholder": "Answer here...", "type": "Input.Text" },{"choices": [{ "title": turn.activity.value.data.option1, "value": turn.activity.value.data.option1 },{ "title": turn.activity.value.data.option2, "value": turn.activity.value.data.option2 },{ "title": turn.activity.value.data.option3, "value": turn.activity.value.data.option3 }],"id": "Choices","isMultiSelect": turn.activity.value.data.multiSelect,"style": "expanded","type": "Input.ChoiceSet"}],"type": "AdaptiveCard","version": "1.0"})}
+
+# SendActivity_bxSp9c()
+[Activity
+    Attachments = ${ActivityAttachment(turn.activity.value.botActivityPreview[0].attachments[0].content, 'adaptiveCard')}
+]
+
+# SendActivity_nfVkYb()
+[Activity     
+     type = invokeResponse
+	 value = ${{Status: 200, Body: {}}}
+]
+# Teams.SendMessagingExtensionActionResponse_Activity_BilaIQ()
+- ${FetchTaskCard()}
+# SendActivity_HcigCm()
+- You chose: ${turn.activity.value.choices} with answer: ${turn.activity.value.answer}
+# SendActivity_4OVpsL()
+- You said '${turn.activity.text}'
+
+# Teams.SendMessagingExtensionBotMessagePreviewResponse_Activity_nYDpmC()
+- ${SubmitCardResponse()}

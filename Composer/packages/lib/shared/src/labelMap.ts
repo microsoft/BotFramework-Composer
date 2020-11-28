@@ -262,11 +262,11 @@ export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } =
     description:
       'Handle the event fired when an Invoke activity is recieved with activity.name == "composeExtension/queryLink".',
   },
-  [SDKKinds.OnFileConsent]: {
+  /*[SDKKinds.OnFileConsent]: {
     title: formatMessage('File consent'),
     description:
       'Handle the event fired when an Invoke activity is recieved with activity.name == "fileConsent/invoke".',
-  },
+  },*/
   [SDKKinds.OnCardAction]: {
     title: formatMessage('Card action'),
     description: 'Handle the event fired when an Invoke activity is received with no activity.name.',
