@@ -1,0 +1,70 @@
+[import](common.lg)
+
+# SendActivity_Welcome
+- ${WelcomeUser()}
+
+# SendActivity_003038
+- You said '${turn.activity.text}'
+
+# ShowHeroCard()
+[HeroCard
+    title = Welcome!
+    subTitle = Try one of these options:
+    buttons = ${[postbackButton(), messageBackButton(), invokeHelpButton(), helpTaskModuleFetchButton(), surveyTaskModuleFetch(), videoTaskModuleFetch()]}     
+]
+
+# postbackButton()
+- ${cardActionTemplate('Post Back', 'Post Back Text', 'postBack', json({buttonId: "postbackButton"}))}
+
+# messageBackButton()
+- ${cardActionTemplate('Message Back', 'Message Back Text', 'messageBack', json({buttonId: "messagebackbutton"}))}
+
+# invokeHelpButton()
+- ${cardActionTemplate('Invoke Help', 'Help', 'invoke', json({buttonId: "HelpButton"}))}
+
+# helpTaskModuleFetchButton()
+- ${cardActionTemplate('Invoke task/fetch Help', 'HelpFetch', 'invoke', json({type: "task/fetch", buttonId: "HelpFetch"}))}
+
+# surveyTaskModuleFetch()
+- ${cardActionTemplate('Invoke Survey', 'Survey', 'invoke', json({type: "task/fetch", buttonId: "Survey"}))}
+
+# videoTaskModuleFetch()
+- ${cardActionTemplate('YouTube', 'YouTube', 'invoke', json({type: "task/fetch", buttonId: "YouTube"}))}
+
+# cardActionTemplate(title, text, type, value)
+[CardAction
+    Type = ${type}
+    Title = ${title}
+    Text = ${text}
+    Value = ${value}
+]
+
+# ShowHelpCard()
+[Activity
+    Attachments = ${json(HelpJson())}
+]
+
+# HelpJson()
+- {"type": "AdaptiveCard","body": [{"type": "TextBlock","text": "The Bot Framework has a extensive documentation, a large community, and multiple ways to find help building your bot!","wrap": true},{"type": "TextBlock","size": "Medium","weight": "Bolder","text": "Try one of these:"}],"actions": [{"type": "Action.OpenUrl","title": "Bot Framework","url":"https://docs.microsoft.com/en-us/azure/bot-service/index-bf-sdk"},{"type": "Action.OpenUrl","title": "Teams","url": "https://docs.microsoft.com/en-us/microsoftteams/platform/bots/what-are-bots"},{"type": "Action.OpenUrl","title": "Additional Resources","url": "https://docs.microsoft.com/en-us/azure/bot-service/bot-service-resources-links-help"}],"$schema": "http://adaptivecards.io/schemas/adaptive-card.json","version": "1.2"}
+
+# ShowSurveyCard()
+[Activity
+    Attachments = ${json(SurveyJson())}
+]
+
+# SurveyJson()
+- {"type": "AdaptiveCard","actions": [{"type": "Action.Submit","title": "I'm ready","data": {"userChoice": 1}},{"type": "Action.Submit","title": "No Thanks","data": {"userChoice": 0}}],"body": [{"type": "TextBlock","text": "Would you like to take the survey about cats or dogs?"},{"type": "ColumnSet","columns": [{"type": "Column","width": "auto","items": [{"type": "Input.ChoiceSet","id":"SurveyType", "choices": [{"title": "Cats","value": "Cat"},{"title": "Dogs","value": "Dog"}],"placeholder": "Placeholder text","style": "expanded"}]},{"type": "Column","width": "stretch","items": [{"type": "Image","url": "http://adaptivecards.io/content/cats/1.png","size": "Medium","horizontalAlignment": "Center"}]}],"separator": true}],"version": "1.2","$schema": "http://adaptivecards.io/schemas/adaptive-card.json"}
+
+# SendActivity_0L1Xk6()
+- ${ShowHeroCard()}
+# SendActivity_13ERpe()
+- ${ShowHelpCard()}
+# SendActivity_qRPX9h()
+[Activity     
+     type = invokeResponse
+	 value = ${{Status: 200, Body: {}}}
+]
+# Teams.SendTaskModuleCardResponse_Card_AqMZas()
+- ${ShowHelpCard()}
+# Teams.SendTaskModuleCardResponse_Card_Ak4bEP()
+- ${ShowSurveyCard()}

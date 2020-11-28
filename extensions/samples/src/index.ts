@@ -14,30 +14,35 @@ const samplesRegitry = {
     tags: ['Basic'],
     support: ['C#', 'JS'],
   },
+  TaskModuleSample: {
+    name: 'Task Module',
+    description: 'A sample bot demonstrates Task Modules',
+    index: 1,
+  },
   MessagingExtensionFetchTaskSample: {
     name: 'Messaging Extension Fetch Task',
     description: 'A sample bot demonstrates a Fetch Task Messaging Extension',
-    index: 1,
+    index: 2,
   },
   EchoBot: {
     name: 'Echo Bot',
     description: 'A bot that echoes and responds with whatever message the user entered',
-    index: 2,
+    index: 3,
   },
   EmptyBot: {
     name: 'Empty Bot',
     description: 'A basic bot template that is ready for your creativity',
-    index: 3,
+    index: 4,
   },
   TodoSample: {
     name: 'Simple Todo',
     description: 'A sample bot that allows you to add, list, and remove to do items.',
-    index: 4,
+    index: 5,
   },
   ToDoBotWithLuisSample: {
     name: 'Todo with LUIS',
     description: 'A sample bot that allows you to add, list, and remove to do items using Language Understanding',
-    index: 5,
+    index: 6,
   },
   RespondingWithCardsSample: {
     name: 'Responding with Cards',

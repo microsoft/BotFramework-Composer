@@ -1,0 +1,194 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "433224",
+    "description": "",
+    "name": "TaskModule"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "821845"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "003038"
+          },
+          "activity": "${SendActivity_003038()}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "0L1Xk6"
+          },
+          "activity": "${SendActivity_0L1Xk6()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "${SendActivity_Welcome()}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnTaskModuleFetch",
+      "$designer": {
+        "id": "a7y65i"
+      },
+      "condition": "=turn.activity.value.data.buttonId == \"Survey\"",
+      "actions": [
+        {
+          "$kind": "Teams.SendTaskModuleCardResponse",
+          "$designer": {
+            "id": "Ak4bEP"
+          },
+          "card": "${Teams.SendTaskModuleCardResponse_Card_Ak4bEP()}",
+          "title": "Would you like to take a survey?",
+          "height": 200,
+          "width": 500
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnTaskModuleFetch",
+      "$designer": {
+        "id": "hZ6Roc"
+      },
+      "condition": "=turn.activity.value.data.buttonId == \"HelpFetch\"",
+      "actions": [
+        {
+          "$kind": "Teams.GetMember",
+          "$designer": {
+            "id": "8CmS4q"
+          },
+          "property": "dialog.memberInfo"
+        },
+        {
+          "$kind": "Teams.SendTaskModuleCardResponse",
+          "$designer": {
+            "id": "AqMZas"
+          },
+          "card": "${Teams.SendTaskModuleCardResponse_Card_AqMZas()}",
+          "title": "Help is near ${user.memberInfo.givenName}",
+          "height": 200,
+          "width": 500
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnTaskModuleFetch",
+      "$designer": {
+        "id": "9rtchJ"
+      },
+      "actions": [
+        {
+          "$kind": "Teams.SendTaskModuleUrlResponse",
+          "$designer": {
+            "id": "Od4PLi"
+          },
+          "url": "https://www.youtube.com/watch?v=r9WQPSaLnaU",
+          "title": "Youtube Video",
+          "height": 600,
+          "width": 800
+        }
+      ],
+      "condition": "=turn.activity.value.data.buttonId == \"YouTube\""
+    },
+    {
+      "$kind": "Teams.OnCardAction",
+      "$designer": {
+        "id": "tDLV47"
+      },
+      "condition": "=turn.activity.value.buttonId == \"HelpButton\"",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "13ERpe"
+          },
+          "activity": "${SendActivity_13ERpe()}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "qRPX9h"
+          },
+          "activity": "${SendActivity_qRPX9h()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Teams.OnTaskModuleSubmit",
+      "$designer": {
+        "id": "oIm6FM"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "5g5EsE"
+          },
+          "condition": "=exists(turn.activity.value.data.surveyType) && turn.activity.value.data.userChoice == 1",
+          "actions": [
+            {
+              "$kind": "Teams.SendTaskModuleMessageResponse",
+              "$designer": {
+                "id": "P6VcNS"
+              },
+              "message": "Sorry, we don't do ${turn.activity.value.data.surveyType} surveys."
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Teams.SendTaskModuleMessageResponse",
+              "$designer": {
+                "id": "lZbJv6"
+              },
+              "message": "Okay, have a nice day :)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "generator": "TaskModule.lg",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "id": "TaskModule",
+  "recognizer": "TaskModule.lu.qna"
+}
