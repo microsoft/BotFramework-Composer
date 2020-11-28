@@ -14,6 +14,7 @@ import RespondingWithCardsSample from './RespondingWithCardsSample.svg';
 import RespondingWithTextSample from './RespondingWithTextSample.svg';
 import ToDoBotWithLuisSample from './ToDoBotWithLuisSample.svg';
 import TodoSample from './TodoSample.svg';
+import MessagingExtensionFetchTaskSample from './MessagingExtensionFetchTaskSample.svg';
 
 export {
   ActionsSample,
@@ -29,4 +30,5 @@ export {
   RespondingWithTextSample,
   ToDoBotWithLuisSample,
   TodoSample,
+  MessagingExtensionFetchTaskSample,
 };

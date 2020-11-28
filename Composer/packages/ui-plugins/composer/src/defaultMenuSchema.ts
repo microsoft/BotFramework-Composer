@@ -175,7 +175,7 @@ export const DefaultMenuSchema: MenuUISchema = {
   },
   // Teams options
   [SDKKinds.SendMessageToTeamsChannel]: {
-    label: formatMessage('Message to Teams channel'),
+    label: formatMessage('Send a Message to Teams channel'),
     submenu: [SubmenuNames.TeamsActions],
   },
   [SDKKinds.GetMeetingParticipant]: {

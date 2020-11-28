@@ -4319,7 +4319,7 @@
                 }
             }
         },
-        "Microsoft.TelemetryTrackEvent": {
+        "Microsoft.TelemetryTrackEventAction": {
             "title": "Telemetry - track event",
             "description": "Track a custom event using the registered Telemetry Client.",
             "patternProperties": {
@@ -5558,7 +5558,7 @@
             }
         },
         "Teams.OnAppBasedLinkQuery": {
-            "title": "OnTeamsAppBasedLinkQuery",
+            "title": "On app based link query",
             "description": "Actions triggered when a Teams activity is received with activity.name == 'composeExtension/queryLink'.",
             "patternProperties": {
                 "^\\$": {
@@ -5776,6 +5776,78 @@
         "Teams.OnFileConsent": {
             "title": "On Teams file consent",
             "description": "Actions triggered when a Teams InvokeActivity is received with activity.name == 'fileConsent/invoke'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnMessagingExtensionBotMessagePreviewEdit": {
+            "title": "On teams messaging extension preview edit submit action",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/submitAction' and activity.value.botMessagePreviewAction == 'edit'.",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "Tooling property",
+                    "description": "Open ended property for tooling."
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "Condition",
+                    "description": "Condition (expression)."
+                },
+                "actions": {
+                    "title": "Actions",
+                    "description": "Sequence of actions to execute."
+                },
+                "priority": {
+                    "title": "Priority",
+                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+                },
+                "runOnce": {
+                    "title": "Run Once",
+                    "description": "True if rule should run once per unique conditions"
+                },
+                "$kind": {
+                    "title": "Kind of dialog object",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+                },
+                "$designer": {
+                    "title": "Designer information",
+                    "description": "Extra information for the Bot Framework Composer."
+                }
+            }
+        },
+        "Teams.OnMessagingExtensionBotMessagePreviewSend": {
+            "title": "On teams messaging extension preview send submit action",
+            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/submitAction' and activity.value.botMessagePreviewAction == 'send'.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6385,78 +6457,6 @@
                 }
             }
         },
-        "Teams.OnTeamsMessagingExtensionBotMessagePreviewEdit": {
-            "title": "On teams messaging extension preview edit submit action",
-            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/submitAction' and activity.value.botMessagePreviewAction == 'edit'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
-        "Teams.OnTeamsMessagingExtensionBotMessagePreviewSend": {
-            "title": "On teams messaging extension preview send submit action",
-            "description": "Actions triggered when a Teams InvokeActivity is received with activity.name='composeExtension/submitAction' and activity.value.botMessagePreviewAction == 'send'.",
-            "patternProperties": {
-                "^\\$": {
-                    "title": "Tooling property",
-                    "description": "Open ended property for tooling."
-                }
-            },
-            "properties": {
-                "condition": {
-                    "title": "Condition",
-                    "description": "Condition (expression)."
-                },
-                "actions": {
-                    "title": "Actions",
-                    "description": "Sequence of actions to execute."
-                },
-                "priority": {
-                    "title": "Priority",
-                    "description": "Priority for trigger with 0 being the highest and < 0 ignored."
-                },
-                "runOnce": {
-                    "title": "Run Once",
-                    "description": "True if rule should run once per unique conditions"
-                },
-                "$kind": {
-                    "title": "Kind of dialog object",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
-                },
-                "$designer": {
-                    "title": "Designer information",
-                    "description": "Extra information for the Bot Framework Composer."
-                }
-            }
-        },
         "Teams.SendAppBasedLinkQueryResponse": {
             "title": "Send query link response",
             "description": "Query link requests have activity.name='composeExtension/queryLink'.",
@@ -6479,8 +6479,8 @@
                     "title": "Cache duration",
                     "description": "Optional duration in seconds of the result in the cache."
                 },
-                "activity": {
-                    "title": "Activity",
+                "card": {
+                    "title": "Card",
                     "description": "Expession for an Attachment template of Hero Card or Thumbnail Card to send. Attachment is required."
                 },
                 "disabled": {
@@ -6542,8 +6542,8 @@
             }
         },
         "Teams.SendMessagingExtensionActionResponse": {
-            "title": "Send messaging extension action response",
-            "description": "Send an action response containing a card for a messaging extension request.",
+            "title": "Messaging extension action response",
+            "description": "Send an task action response containing a card.",
             "patternProperties": {
                 "^\\$": {
                     "title": "Tooling property",
@@ -6565,7 +6565,7 @@
                 },
                 "title": {
                     "title": "Title",
-                    "description": "Title of the Task Module Response."
+                    "description": "Title of the Action Response."
                 },
                 "height": {
                     "title": "Height",
@@ -6575,8 +6575,8 @@
                     "title": "Width",
                     "description": "Width of the Task Module Response."
                 },
-                "activity": {
-                    "title": "Activity",
+                "card": {
+                    "title": "Card",
                     "description": "Expession for an Attachment template of Hero Card or Adaptive Card to send. Attachment is required."
                 },
                 "disabled": {
@@ -6594,7 +6594,7 @@
             }
         },
         "Teams.SendMessagingExtensionAttachmentsResponse": {
-            "title": "Send messaging extensions attachments response",
+            "title": "Messaging extensions attachments response",
             "description": "Send a response containing attachments to a messaging extension request.",
             "patternProperties": {
                 "^\\$": {
@@ -6614,6 +6614,16 @@
                 "cacheDuration": {
                     "title": "Cache duration",
                     "description": "Optional duration in seconds of the result in the cache."
+                },
+                "attachmentLayout": {
+                    "title": "Attachment layout",
+                    "description": "Defines the type of attachment layout. Either 'grid' or 'list'.",
+                    "oneOf": {
+                        "0": {
+                            "title": "Layout type",
+                            "description": "Layout type of 'grid' or 'list'."
+                        }
+                    }
                 },
                 "attachments": {
                     "title": "Attachments",
@@ -6699,8 +6709,8 @@
                     "title": "Cache duration",
                     "description": "Optional duration in seconds of the result in the cache."
                 },
-                "activity": {
-                    "title": "Activity",
+                "card": {
+                    "title": "Card",
                     "description": "Expession for an Attachment template of Hero Card or Adaptive Card to send. Attachment is required."
                 },
                 "disabled": {
@@ -6831,8 +6841,8 @@
                     "title": "Width",
                     "description": "Width of the Task Module Response."
                 },
-                "activity": {
-                    "title": "Activity",
+                "card": {
+                    "title": "Card",
                     "description": "Expession for an Attachment template of Hero Card or Adaptive Card to send. Attachment is required."
                 },
                 "disabled": {
