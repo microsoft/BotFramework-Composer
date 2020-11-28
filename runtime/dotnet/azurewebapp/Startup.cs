@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.AI.Orchestrator;
 using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
@@ -142,7 +141,8 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
-            ComponentRegistration.Add(new OrchestratorComponentRegistration());
+
+            // ComponentRegistration.Add(new OrchestratorComponentRegistration());
             ComponentRegistration.Add(new TeamsComponentRegistration());
 
             // This is for custom action component registration.
