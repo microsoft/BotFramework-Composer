@@ -103,12 +103,12 @@ export const skillDispatcher = () => {
     }
   );
 
-  const displayManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (id: string, projectId: string) => {
-    set(displaySkillManifestState(projectId), id);
+  const displayManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (id: string) => {
+    set(displaySkillManifestState, id);
   });
 
-  const dismissManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (projectId: string) => {
-    set(displaySkillManifestState(projectId), undefined);
+  const dismissManifestModal = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    set(displaySkillManifestState, undefined);
   });
 
   return {

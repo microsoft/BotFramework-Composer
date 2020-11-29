@@ -12,7 +12,6 @@ import {
   onAddSkillDialogCompleteState,
   settingsState,
   showAddSkillDialogModalState,
-  displaySkillManifestState,
   botProjectFileState,
   botNameIdentifierState,
   locationState,
@@ -20,7 +19,7 @@ import {
   botDisplayNameState,
 } from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
-import { botEndpointsState, botProjectIdsState, currentProjectIdState } from '../../atoms';
+import { botEndpointsState, botProjectIdsState, currentProjectIdState, displaySkillManifestState } from '../../atoms';
 import { Dispatcher } from '..';
 import { skillsStateSelector } from '../../selectors';
 
@@ -71,7 +70,7 @@ describe('skill dispatcher', () => {
       const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState(projectId));
       const settings = useRecoilValue(settingsState(projectId));
       const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-      const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
+      const displaySkillManifest = useRecoilValue(displaySkillManifestState);
       const skills = useRecoilValue(skillsStateSelector);
       const [botEndpoints, setBotEndpoints] = useRecoilState(botEndpointsState);
       const currentDispatcher = useRecoilValue(dispatcherState);
@@ -111,7 +110,7 @@ describe('skill dispatcher', () => {
         { recoilState: onAddSkillDialogCompleteState(projectId), initialValue: { func: undefined } },
         { recoilState: settingsState(projectId), initialValue: {} },
         { recoilState: showAddSkillDialogModalState(projectId), initialValue: false },
-        { recoilState: displaySkillManifestState(projectId), initialValue: undefined },
+        { recoilState: displaySkillManifestState, initialValue: undefined },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: botProjectIdsState, initialValue: [projectId, ...skillIds] },
         { recoilState: settingsState(projectId), initialValue: {} },
@@ -171,14 +170,14 @@ describe('skill dispatcher', () => {
 
   it('displayManifestModal', async () => {
     await act(async () => {
-      dispatcher.displayManifestModal('foo', projectId);
+      dispatcher.displayManifestModal('foo');
     });
     expect(renderedComponent.current.displaySkillManifest).toEqual('foo');
   });
 
   it('dismissManifestModal', async () => {
     await act(async () => {
-      dispatcher.dismissManifestModal(projectId);
+      dispatcher.dismissManifestModal();
     });
     expect(renderedComponent.current.displaySkillManifest).toBeUndefined();
   });
