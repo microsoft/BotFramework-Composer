@@ -264,3 +264,8 @@ export const exportSkillModalInfoState = atom<undefined | string>({
   key: getFullyQualifiedKey('exportSkillModalInfo'),
   default: undefined,
 });
+
+export const displaySkillManifestState = atom<undefined | string>({
+  key: getFullyQualifiedKey('displaySkillManifest'),
+  default: undefined,
+});
