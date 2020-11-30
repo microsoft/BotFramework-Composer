@@ -21,14 +21,15 @@ const { log } = require('./common');
  */
 
 let packageName = null;
+const packageVersion = '1.14.0';
 
 switch (process.platform) {
   case 'darwin':
-    packageName = 'oneauth-mac';
+    packageName = `oneauth-mac@${packageVersion}`;
     log.info('Mac detected. Using %s package.', packageName);
     break;
   case 'win32':
-    packageName = 'oneauth-win64';
+    packageName = `oneauth-win64@${packageVersion}`;
     log.info('Windows detected. Using %s package.', packageName);
     break;
   default:
