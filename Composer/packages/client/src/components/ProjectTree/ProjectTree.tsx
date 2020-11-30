@@ -70,6 +70,12 @@ const tree = css`
   label: tree;
 `;
 
+const headerCSS = (label: string) => css`
+  margin-top: -6px;
+  width: 100%;
+  label: ${label};
+`;
+
 // -------------------- Helper functions -------------------- //
 
 const getTriggerIndex = (trigger: ITrigger, dialog: DialogInfo): number => {
@@ -347,16 +353,7 @@ export const ProjectTree: React.FC<Props> = ({
     }
 
     return (
-      <span
-        key={bot.name}
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-          label: bot-header;
-        `}
-        data-testid={`BotHeader-${bot.name}`}
-        role="grid"
-      >
+      <span key={bot.name} css={headerCSS('bot-header')} data-testid={`BotHeader-${bot.name}`} role="grid">
         <TreeItem
           hasChildren={!bot.isRemote}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
@@ -434,11 +431,7 @@ export const ProjectTree: React.FC<Props> = ({
         <span
           key={dialog.id}
           ref={dialog.isRoot ? addMainDialogRef : null}
-          css={css`
-            margin-top: -6px;
-            width: 100%;
-            label: dialog-header;
-          `}
+          css={headerCSS('dialog-header')}
           data-testid={`DialogHeader-${dialog.displayName}`}
           role="grid"
         >
@@ -472,17 +465,7 @@ export const ProjectTree: React.FC<Props> = ({
     };
 
     return (
-      <span
-        key={'common'}
-        ref={null}
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-          label: dialog-header;
-        `}
-        data-testid={`DialogHeader-Common`}
-        role="grid"
-      >
+      <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`} role="grid">
         <TreeItem
           hasChildren
           icon={icons.DIALOG}
@@ -578,14 +561,7 @@ export const ProjectTree: React.FC<Props> = ({
       projectId,
     };
     return (
-      <span
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-          label: trigger-group-header;
-        `}
-        role="grid"
-      >
+      <span css={headerCSS('trigger-group-header')} role="grid">
         <TreeItem
           isMenuOpen={isMenuOpen}
           isSubItemActive={false}
