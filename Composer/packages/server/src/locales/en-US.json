@@ -161,14 +161,11 @@
   "add_new_answer_9de3808e": {
     "message": "Add new answer"
   },
-  "add_new_dialog_25f12c9": {
-    "message": "Add new dialog"
-  },
   "add_new_extension_19b82b77": {
     "message": "Add new extension"
   },
-  "add_new_knowledge_base_on_displayname_7f44609c": {
-    "message": " Add new knowledge base on { displayName }"
+  "add_new_knowledge_base_1a3afed3": {
+    "message": "Add new knowledge base"
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
@@ -178,9 +175,6 @@
   },
   "add_new_question_85612b7f": {
     "message": "Add new question"
-  },
-  "add_new_trigger_on_displayname_2aaf6e4c": {
-    "message": "Add new trigger on { displayName }"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Add new validation rule here"
@@ -235,9 +229,6 @@
   },
   "app_id_password_424f613a": {
     "message": "App Id / Password"
-  },
-  "append_choices_35c45a2d": {
-    "message": "Append choices"
   },
   "application_language_87691b6": {
     "message": "Application Language"
@@ -427,9 +418,6 @@
   },
   "bot_language_active_7cf9dc78": {
     "message": "Bot language (active)"
-  },
-  "bot_language_ffb95294": {
-    "message": "Bot Language"
   },
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
@@ -1172,15 +1160,6 @@
   "expected_responses_intent_intentname_44b051c": {
     "message": "Expected responses (intent: #{ intentName })"
   },
-  "export_as_skill_764cf284": {
-    "message": "Export as skill"
-  },
-  "export_assets_to_zip_d2d798ab": {
-    "message": "Export assets to .zip"
-  },
-  "export_de71cd8e": {
-    "message": "Export"
-  },
   "export_this_bot_as_zip_c4bfddf2": {
     "message": "Export this bot as .zip"
   },
@@ -1208,8 +1187,8 @@
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. "
   },
-  "extracting_qna_pairs_from_url_b0331bba": {
-    "message": "Extracting QNA pairs from { url }"
+  "extracting_qna_pairs_from_urls_eaed1b1c": {
+    "message": "Extracting QNA pairs from { urls }"
   },
   "fallback_text_e5ff1cb7": {
     "message": "Fallback Text"
@@ -1222,9 +1201,6 @@
   },
   "field_set_6e7d7f67": {
     "message": "Field Set"
-  },
-  "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
-    "message": "fields must be either all strings or all fieldset objects"
   },
   "file_name_8fd421ff": {
     "message": "File name"
@@ -1267,9 +1243,6 @@
   },
   "form_wide_operations_1c1a73eb": {
     "message": "form-wide operations"
-  },
-  "forms_380ab2ae": {
-    "message": "Forms"
   },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "fromTemplateName does not exist"
@@ -1372,6 +1345,9 @@
   },
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "If this problem persists, please file an issue on"
+  },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
@@ -1622,9 +1598,6 @@
   "lu_editor_d09fb2b0": {
     "message": "LU editor"
   },
-  "lu_file_already_exist_7f118089": {
-    "message": "lu file already exist"
-  },
   "lu_file_id_not_found_8732d33e": {
     "message": "LU file { id } not found"
   },
@@ -1645,9 +1618,6 @@
   },
   "luis_key_ae69c27e": {
     "message": "LUIS key"
-  },
-  "luis_key_is_needed_dbf217d0": {
-    "message": "LUIS Key is needed"
   },
   "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
     "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
@@ -1730,20 +1700,8 @@
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft App Id"
   },
-  "microsoft_app_id_is_needed_cb028999": {
-    "message": "Microsoft App Id is needed"
-  },
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft App Password"
-  },
-  "microsoft_app_password_is_needed_715de73": {
-    "message": "Microsoft App Password is needed"
-  },
-  "microsoft_appid_39d357b9": {
-    "message": "Microsoft AppId"
-  },
-  "microsoft_password_23f3ecfb": {
-    "message": "Microsoft Password"
   },
   "minimap_beb3be27": {
     "message": "Minimap"
@@ -1973,9 +1931,6 @@
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
-  "open_skills_page_for_configuration_details_a2a484ea": {
-    "message": "Open Skills page for configuration details"
-  },
   "open_start_bots_panel_f7f87200": {
     "message": "Open start bots panel"
   },
@@ -2186,8 +2141,8 @@
   "publish_targets_8afc4467": {
     "message": "Publish targets"
   },
-  "publish_your_bots_ecea2561": {
-    "message": "Publish Your bots"
+  "publish_your_bots_6e1ba7c2": {
+    "message": "Publish your bots"
   },
   "published_4bb5209e": {
     "message": "Published"
@@ -2212,9 +2167,6 @@
   },
   "qna_intent_recognized_49c3d797": {
     "message": "QnA Intent recognized"
-  },
-  "qna_key_is_needed_ab7c2263": {
-    "message": "QnA Key is needed"
   },
   "qna_maker_azure_search_service_88a403db": {
     "message": "QnA Maker Azure Search Service"
@@ -2282,9 +2234,6 @@
   "regular_expression_855557bf": {
     "message": "Regular Expression"
   },
-  "regular_expression_recognizer_44664557": {
-    "message": "Regular expression recognizer"
-  },
   "release_1af20f26": {
     "message": "Release: "
   },
@@ -2296,6 +2245,9 @@
   },
   "remote_skill_f9074d76": {
     "message": "Remote Skill."
+  },
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
   },
   "remove_f47dc62a": {
     "message": "Remove"
@@ -2609,11 +2561,11 @@
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
   },
-  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
-  },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
@@ -2807,9 +2759,6 @@
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "This language will be copied and used as the basis (and fallback language) for the translation."
   },
-  "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
-    "message": "This operation cannot be completed. The skill is already part of the Bot Project"
-  },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
   },
@@ -2929,9 +2878,6 @@
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"
-  },
-  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
-    "message": "Unable to determine recognizer type from data: { value }"
   },
   "undo_a7be8fef": {
     "message": "Undo"
