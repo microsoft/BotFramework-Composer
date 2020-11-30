@@ -51,7 +51,9 @@ export const createQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getPromise(localeState(projectId));
+  //const locale = await snapshot.getPromise(localeState(projectId));
+  //To do: support other languages
+  const locale = 'en-us';
   const { languages } = await snapshot.getPromise(settingsState(projectId));
   const createdQnaId = `${id}.${locale}`;
   const createdQnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
@@ -146,7 +148,9 @@ export const removeKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   let qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getPromise(localeState(projectId));
+  // const locale = await snapshot.getPromise(localeState(projectId));
+  //To do: support other languages on qna
+  const locale = 'en-us';
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
