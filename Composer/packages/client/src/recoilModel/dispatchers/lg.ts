@@ -7,6 +7,7 @@ import differenceBy from 'lodash/differenceBy';
 import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
+import { dispatcherState } from '../DispatcherWrapper';
 
 import { setError } from './shared';
 import LgWorker from './../parsers/lgWorker';
@@ -64,20 +65,10 @@ export const updateLgFileState = async (projectId: string, lgFiles: LgFile[], up
     }
   }
 
-  const newLgFiles = lgFiles.map((file) => {
+  return lgFiles.map((file) => {
     const changedFile = changes.find(({ id }) => id === file.id);
     return changedFile ? changedFile : file;
   });
-
-  if (dialogId !== 'common') return newLgFiles;
-
-  // if changes happen on common.lg, re-parse all.
-  const reparsedNewLgFiles: LgFile[] = [];
-  for (const file of newLgFiles) {
-    const reparsedFile = (await LgWorker.parse(projectId, file.id, file.content, newLgFiles)) as LgFile;
-    reparsedNewLgFiles.push(reparsedFile);
-  }
-  return reparsedNewLgFiles;
 };
 
 // when do create, passed id do not carried with locale
@@ -177,6 +168,11 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
         set(lgFilesState(projectId), updatedFiles);
+        // if changes happen on common.lg, async re-parse all.
+        if (getBaseName(id) === 'common') {
+          const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
+          reparseAllLgFiles({ projectId });
+        }
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -208,8 +204,6 @@ export const lgDispatcher = () => {
         return;
       }
 
-      let newLgFiles: LgFile[] = [];
-
       try {
         if (template.name !== templateName) {
           // name change, need update cross multi locale file.
@@ -226,9 +220,11 @@ export const lgDispatcher = () => {
             changes.push(updatedFile);
           }
 
-          newLgFiles = lgFiles.map((file) => {
-            const changedFile = changes.find(({ id }) => id === file.id);
-            return changedFile ? changedFile : file;
+          set(lgFilesState(projectId), (lgFiles) => {
+            return lgFiles.map((file) => {
+              const changedFile = changes.find(({ id }) => id === file.id);
+              return changedFile ? changedFile : file;
+            });
           });
         } else {
           // body change, only update current locale file
@@ -240,8 +236,10 @@ export const lgDispatcher = () => {
             lgFiles
           )) as LgFile;
 
-          newLgFiles = lgFiles.map((file) => {
-            return file.id === id ? updatedFile : file;
+          set(lgFilesState(projectId), (lgFiles) => {
+            return lgFiles.map((file) => {
+              return file.id === id ? updatedFile : file;
+            });
           });
         }
       } catch (error) {
@@ -249,18 +247,11 @@ export const lgDispatcher = () => {
         return;
       }
 
-      if (getBaseName(lgFile.id) !== 'common') {
-        set(lgFilesState(projectId), newLgFiles);
-        return;
+      // if changes happen on common.lg, async re-parse all.
+      if (getBaseName(id) === 'common') {
+        const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
+        reparseAllLgFiles({ projectId });
       }
-
-      // if changes happen on common.lg, re-parse all.
-      const reparsedNewLgFiles: LgFile[] = [];
-      for (const file of newLgFiles) {
-        const reparsedFile = (await LgWorker.parse(projectId, file.id, file.content, newLgFiles)) as LgFile;
-        reparsedNewLgFiles.push(reparsedFile);
-      }
-      set(lgFilesState(projectId), reparsedNewLgFiles);
     }
   );
 
@@ -390,6 +381,23 @@ export const lgDispatcher = () => {
     }
   );
 
+  const reparseAllLgFiles = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
+      try {
+        const { set, snapshot } = callbackHelpers;
+        const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+        const reparsedLgFiles: LgFile[] = [];
+        for (const file of lgFiles) {
+          const reparsedFile = (await LgWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
+          reparsedLgFiles.push(reparsedFile);
+        }
+        set(lgFilesState(projectId), reparsedLgFiles);
+      } catch (error) {
+        setError(callbackHelpers, error);
+      }
+    }
+  );
+
   return {
     updateLgFile,
     createLgFile,
@@ -400,5 +408,6 @@ export const lgDispatcher = () => {
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
+    reparseAllLgFiles,
   };
 };
