@@ -8,6 +8,7 @@ import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathemati
 import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
+import keys from 'lodash/keys';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -26,6 +27,7 @@ const SETTINGS = 'settings';
 const INTERRUPTION = 'interruption';
 const SAMPLE_SIZE_CONFIGURATION = 2;
 const CrossTrainConfigName = 'cross-train.config.json';
+const MODLE = 'model';
 
 export type SingleConfig = {
   rootDialog: boolean;
@@ -236,16 +238,21 @@ export class Builder {
       const defaultNLR = nlrList.default;
       const folderName = defaultNLR.replace('.onnx', '');
       const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
-      const destDir = Path.resolve(this.generatedFolderPath, folderName);
+      const destDir = Path.resolve(Path.join(this.botDir, MODLE), folderName);
       await copy(modelPath, destDir);
       await this.updateOrchestratorSetting(folderName);
     }
   }
 
   private async updateOrchestratorSetting(dirName: string) {
+    const runtimeRootPath = './ComposerDialogs';
     const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
     const content = JSON.parse(await this.storage.readFile(settingPath));
-    content.orchestrator.ModelPath = './ComposerDialogs/generated/' + dirName;
+    content.orchestrator.ModelPath = `${runtimeRootPath}/${MODLE}/${dirName}`;
+    keys(content.orchestrator.snapshots).forEach((key) => {
+      const values = content.orchestrator.snapshots[key].split('ComposerDialogs');
+      content.orchestrator.snapshots[key] = `${runtimeRootPath}${values[1]}`;
+    });
     await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
   }
 
