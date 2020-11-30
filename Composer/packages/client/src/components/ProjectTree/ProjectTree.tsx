@@ -352,6 +352,7 @@ export const ProjectTree: React.FC<Props> = ({
           width: 100%;
           label: bot-header;
         `}
+        data-testid={`BotHeader-${bot.name}`}
         role="grid"
       >
         <TreeItem
@@ -436,6 +437,7 @@ export const ProjectTree: React.FC<Props> = ({
             width: 100%;
             label: dialog-header;
           `}
+          data-testid={`DialogHeader-${dialog.displayName}`}
           role="grid"
         >
           <TreeItem
