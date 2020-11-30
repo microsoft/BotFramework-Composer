@@ -165,13 +165,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
      * @param resourcekey
      */
     private async cleanup(resourcekey: string) {
-      // try {
-      //   const projFolder = this.getRuntimeFolder(resourcekey);
-      //   await emptyDir(projFolder);
-      //   await rmdir(projFolder);
-      // } catch (error) {
-      //   this.logger('$O', error);
-      // }
+      try {
+        const projFolder = this.getRuntimeFolder(resourcekey);
+        await emptyDir(projFolder);
+        await rmdir(projFolder);
+      } catch (error) {
+        this.logger('$O', error);
+      }
     }
 
     /**
