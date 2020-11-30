@@ -54,7 +54,7 @@ export const generateTriggerOptionTree = (
 
   const groups = Object.values(triggerUIOptions)
     .map((options) => options && options.submenu)
-    .filter((submenu) => !!submenu)
+    .filter(Boolean)
     .reduce((result, submenu) => {
       const name = getGroupKey(submenu);
       if (!result[name]) result[name] = new TriggerOptionGroupNode(name, '', '');
