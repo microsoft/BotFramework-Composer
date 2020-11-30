@@ -11,7 +11,7 @@ export const appInsightsLogger = (): TelemetryLogger => {
   const flush = async () => {
     if (eventPool.length) {
       try {
-        const events = eventPool.splice(0, 20);
+        const events = eventPool.splice(0, eventPool.length);
         await httpClient.post('/telemetry/events', { events });
       } catch (error) {
         // Swallow error to avoid crashing the app while sending telemetry
