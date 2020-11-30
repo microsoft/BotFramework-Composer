@@ -461,6 +461,44 @@ export const ProjectTree: React.FC<Props> = ({
     };
   };
 
+  const renderCommonDialogHeader = (skillId: string, depth: number) => {
+    const dialogLink: TreeLink = {
+      dialogId: 'common',
+      displayName: formatMessage('Common'),
+      isRoot: false,
+      diagnostics: [],
+      projectId: rootProjectId,
+      skillId: skillId === rootProjectId ? undefined : skillId,
+    };
+
+    return (
+      <span
+        key={'common'}
+        ref={null}
+        css={css`
+          margin-top: -6px;
+          width: 100%;
+          label: dialog-header;
+        `}
+        data-testid={`DialogHeader-Common`}
+        role="grid"
+      >
+        <TreeItem
+          hasChildren
+          icon={icons.DIALOG}
+          isActive={doesLinkMatch(dialogLink, selectedLink)}
+          isMenuOpen={isMenuOpen}
+          link={dialogLink}
+          menuOpenCallback={setMenuOpen}
+          padLeft={depth * LEVEL_PADDING}
+          showErrors={false}
+          textWidth={leftSplitWidth - TREE_PADDING}
+          onSelect={handleOnSelect}
+        />
+      </span>
+    );
+  };
+
   const renderTrigger = (item: any, dialog: DialogInfo, projectId: string, dialogLink: TreeLink): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
@@ -640,9 +678,13 @@ export const ProjectTree: React.FC<Props> = ({
         );
       });
     } else {
-      return filteredDialogs.map(
-        (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
-      );
+      const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
+      return [
+        ...commonLink,
+        ...filteredDialogs.map(
+          (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
+        ),
+      ];
     }
   };
 
