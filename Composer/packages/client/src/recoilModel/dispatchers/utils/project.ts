@@ -609,7 +609,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         if (!skill.remote && skill.workspace) {
           const rootBotPath = location;
           const skillPath = skill.workspace;
-          const absoluteSkillPath = path.resolve(rootBotPath, skillPath);
+          const absoluteSkillPath = path.join(rootBotPath, skillPath);
           skillPromise = openLocalSkill(callbackHelpers, absoluteSkillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
           skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
@@ -715,7 +715,7 @@ export const checkIfBotExistsInBotProjectFile = async (
       }
     } else {
       if (workspace) {
-        const absolutePathOfSkill = path.resolve(rootBotLocation, workspace);
+        const absolutePathOfSkill = path.join(rootBotLocation, workspace);
         if (pathOrManifest === absolutePathOfSkill) {
           return true;
         }
