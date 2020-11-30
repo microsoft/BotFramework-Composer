@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@botframework-composer/types';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo, FeatureFlagKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -27,8 +27,12 @@ import {
   luFilesState,
   rateInfoState,
   rootBotProjectIdSelector,
+  featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
+import httpClient from '../utils/httpUtil';
+import { navigateTo } from '../utils/navigation';
+import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -79,9 +83,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
-
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const featureFlags = useRecoilValue(featureFlagsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -98,6 +102,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkill,
     updateZoomRate,
+    updateRecognizer,
+    reloadProject,
+    setApplicationLevelError,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -197,6 +204,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         commitChanges();
       });
     },
+    updateRecognizer,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -226,20 +234,27 @@ export function useShell(source: EventSource, projectId: string): Shell {
     undo,
     redo,
     commitChanges,
-    addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings,
-    announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
+    isFeatureEnabled: (featureFlagKey: FeatureFlagKey): boolean => featureFlags?.[featureFlagKey]?.enabled ?? false,
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
     updateFlowZoomRate,
+    reloadProject: () => reloadProject(projectId),
     ...lgApi,
     ...luApi,
     ...qnaApi,
     ...triggerApi,
     ...actionApi,
+
+    // application context
+    addCoachMarkRef: onboardingAddCoachMarkRef,
+    announce: setMessage,
+    navigateTo,
+    setApplicationLevelError,
+    updateUserSettings,
+    confirm: OpenConfirmModal,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
@@ -277,6 +292,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     skills,
     skillsSettings: settings.skill || {},
     flowZoomRate,
+    settings,
+    httpClient,
   };
 
   return {

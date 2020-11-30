@@ -44,8 +44,8 @@
   },
   "main": "lib/node/index.js",
   "dependencies": {
-    "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "@fluentui/react": "^7.145.0",
     "emotion": "^10.0.27",
     "react": "^16.13.0",

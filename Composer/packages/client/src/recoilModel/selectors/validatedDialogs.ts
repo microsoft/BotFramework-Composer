@@ -4,7 +4,18 @@
 import { selectorFamily } from 'recoil';
 import { validateDialog } from '@bfc/indexers';
 
-import { botProjectIdsState, dialogIdsState, schemasState, lgFilesState, luFilesState, dialogState } from '../atoms';
+import {
+  botProjectIdsState,
+  dialogIdsState,
+  schemasState,
+  lgFilesState,
+  luFilesState,
+  dialogState,
+  settingsState,
+} from '../atoms';
+import { getLuProvider } from '../../utils/dialogUtil';
+
+import { recognizersSelectorFamily } from './recognizers';
 
 type validateDialogSelectorFamilyParams = { projectId: string; dialogId: string };
 const validateDialogSelectorFamily = selectorFamily({
@@ -14,8 +25,14 @@ const validateDialogSelectorFamily = selectorFamily({
     const schemas = get(schemasState(projectId));
     const lgFiles = get(lgFilesState(projectId));
     const luFiles = get(luFilesState(projectId));
-
-    return { ...dialog, diagnostics: validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles) };
+    const settings = get(settingsState(projectId));
+    const recognizers = get(recognizersSelectorFamily(projectId));
+    const luProvider = getLuProvider(dialogId, recognizers);
+    return {
+      ...dialog,
+      diagnostics: validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles),
+      luProvider,
+    };
   },
 });
 
