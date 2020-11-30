@@ -52,9 +52,9 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   const { items, isRollbackSupported, onLogClick, onRollbackClick } = props;
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    if (column.isSorted) {
+    if (column.isSorted && items) {
       column.isSortedDescending = !column.isSortedDescending;
-      const newItems: IStatus[] = items.reverse();
+      const newItems: IStatus[] = items.slice().reverse();
       props.updateItems(newItems);
     }
   };

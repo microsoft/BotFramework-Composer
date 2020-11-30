@@ -226,11 +226,6 @@ export const onAddSkillDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const displaySkillManifestState = atomFamily<any, string>({
-  key: getFullyQualifiedKey('displaySkillManifest'),
-  default: undefined,
-});
-
 export const showAddLanguageModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showAddLanguageModal'),
   default: false,
