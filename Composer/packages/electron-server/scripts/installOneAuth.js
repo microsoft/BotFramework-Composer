@@ -25,11 +25,11 @@ const packageVersion = '1.14.0';
 
 switch (process.platform) {
   case 'darwin':
-    packageName = `oneauth-mac@${packageVersion}`;
+    packageName = 'oneauth-mac';
     log.info('Mac detected. Using %s package.', packageName);
     break;
   case 'win32':
-    packageName = `oneauth-win64@${packageVersion}`;
+    packageName = 'oneauth-win64';
     log.info('Windows detected. Using %s package.', packageName);
     break;
   default:
@@ -55,7 +55,7 @@ async function downloadPackage() {
   log.info('Starting download.');
   await ensureDir(outDir);
   try {
-    execSync(`cd ${outDir} && npm pack ${packageName}`, { encoding: 'utf-8' });
+    execSync(`cd ${outDir} && npm pack ${packageName}@${packageVersion}`, { encoding: 'utf-8' });
   } catch (err) {
     process.exit(1);
     return;
