@@ -7,7 +7,7 @@
     "clean": "rimraf lib"
   },
   "composer": {
-    "enabled": false,
+    "enabled": true,
     "bundles": [
       {
         "id": "publish",

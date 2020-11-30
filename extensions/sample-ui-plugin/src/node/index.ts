@@ -27,6 +27,24 @@ function initialize(registration: IExtensionRegistration) {
 
   registration.store.replace({ some: 'data' });
   registration.log('Reading from store:\n%O', registration.store.readAll());
+
+  registration.context.on('project:opened', async (project) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        registration.log('project:opened %O', project.id);
+        resolve();
+      }, 2000);
+    });
+  });
+
+  registration.context.on('project:created', async (project) => {
+    const lg = `
+# my_func
+- hello
+- world
+    `;
+    project.updateFile('common.lg', lg);
+  });
 }
 
 async function getStatus(config, project, user) {

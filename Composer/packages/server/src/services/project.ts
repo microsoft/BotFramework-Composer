@@ -13,6 +13,7 @@ import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
 import log from '../logger';
+import { ExtensionContext } from '../models/extension/extensionContext';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
@@ -258,6 +259,7 @@ export class BotProjectService {
       project.id = projectId;
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
+      await ExtensionContext.emit('project:opened', project);
       return project;
     }
   };
