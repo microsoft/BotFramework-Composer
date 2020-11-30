@@ -121,5 +121,7 @@ export const getFileNameFromPath = (param: string, ext: string | undefined = und
 };
 
 export const getAbsolutePath = (basePath: string, relativePath: string) => {
+  // note: in windows, path.resolve result will prefix with /
+  // https://github.com/jinder/path/issues/18
   return path.resolve(basePath, relativePath);
 };
