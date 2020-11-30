@@ -5,6 +5,7 @@ import { SDKKinds } from '@botframework-composer/types';
 
 export interface TriggerUIOption {
   label: string;
+  order?: number;
   submenu?: TriggerSubmenuInfo | string | false;
 }
 
