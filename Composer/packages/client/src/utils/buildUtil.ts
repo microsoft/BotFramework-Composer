@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, LuFile } from '@bfc/shared';
+import { DialogInfo, LuFile, QnAFile } from '@bfc/shared';
 
 import { LuisConfig, QnaConfig } from '../constants';
 
-import { getReferredLuFiles } from './luUtil';
+import { getLuisBuildLuFiles } from './luUtil';
 import { getReferredQnaFiles } from './qnaUtil';
 import { getBaseName } from './fileUtil';
 
@@ -45,7 +45,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[],
 
 export function isBuildConfigComplete(config, dialogs, luFiles, qnaFiles) {
   let complete = true;
-  if (getReferredLuFiles(luFiles, dialogs).length > 0) {
+  if (getLuisBuildLuFiles(luFiles, dialogs).length > 0) {
     if (Object.values(LuisConfig).some((luisConfigKey) => config.luis[luisConfigKey] === '')) {
       complete = false;
     }
@@ -58,9 +58,11 @@ export function isBuildConfigComplete(config, dialogs, luFiles, qnaFiles) {
   return complete;
 }
 
+export function isKeyRequired(dialogs: DialogInfo[], luFiles: LuFile[], qnaFiles: QnAFile[]) {
+  return getLuisBuildLuFiles(luFiles, dialogs).length || getReferredQnaFiles(qnaFiles, dialogs).length;
+}
+
 // return true if dialogs have one with default recognizer.
 export function needsBuild(dialogs) {
   return dialogs.some((dialog) => typeof dialog.content.recognizer === 'string');
 }
-
-export function createRecognizerTypeMap(dialogs: DialogInfo[]) {}

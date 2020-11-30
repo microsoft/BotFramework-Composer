@@ -3,9 +3,14 @@
 
 import { RequestHandler } from 'express-serve-static-core';
 import { JSONSchema7 } from 'json-schema';
+import { Express } from 'express';
+import { PassportStatic } from 'passport';
 
 import { PublishPlugin } from './publish';
 import { RuntimeTemplate, BotTemplate } from './runtime';
+import { BotProjectService } from './project';
+import { UserIdentity } from './user';
+import { IBotProject } from './server';
 
 export type ExtensionPublishContribution = {
   bundleId: string;
@@ -108,4 +113,17 @@ export type ExtensionCollection = {
   runtimeTemplates: RuntimeTemplate[];
   botTemplates: BotTemplate[];
   baseTemplates: BotTemplate[];
+};
+
+export type IExtensionContext = {
+  loginUri: string;
+  extensions: ExtensionCollection;
+  passport: PassportStatic;
+  webserver: Express | undefined;
+  botProjectService: BotProjectService;
+  useExpress(webserver: Express): void;
+  getRuntimeByProject(project: IBotProject): RuntimeTemplate;
+  getRuntime(type: string | undefined): RuntimeTemplate;
+  getUserFromRequest(req: any): Promise<UserIdentity | undefined>;
+  getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject>;
 };

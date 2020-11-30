@@ -16,11 +16,11 @@ const isValidFile = (file: string) => {
   return fileBlacklist.filter((badFile) => badFile === file).length === 0;
 };
 class StorageService {
-  private STORE_KEY = 'storageConnections';
+  private STORE_KEY = 'storageConnections' as const;
   private storageConnections: StorageConnection[] = [];
 
   constructor() {
-    this.storageConnections = Store.get(this.STORE_KEY);
+    this.storageConnections = Store.get(this.STORE_KEY, []);
     this.ensureDefaultBotFoldersExist();
   }
 

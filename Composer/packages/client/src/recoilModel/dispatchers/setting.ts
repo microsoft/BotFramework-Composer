@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, DialogSetting, PublishTarget, Skill } from '@bfc/shared';
+import { SensitiveProperties, DialogSetting, PublishTarget, Skill, LibraryRef } from '@bfc/shared';
 import { skillIndexer } from '@bfc/indexers';
 import get from 'lodash/get';
 import has from 'lodash/has';
@@ -91,6 +91,15 @@ export const settingsDispatcher = () => {
     }
   );
 
+  const setImportedLibraries = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (projectId: string, importedLibraries: LibraryRef[]) => {
+      set(settingsState(projectId), (currentSettingsState) => ({
+        ...currentSettingsState,
+        importedLibraries,
+      }));
+    }
+  );
+
   const setRuntimeField = useRecoilCallback(
     ({ set }: CallbackInterface) => async (projectId: string, field: string, newValue: boolean) => {
       set(settingsState(projectId), (currentValue) => ({
@@ -134,6 +143,7 @@ export const settingsDispatcher = () => {
     setRuntimeSettings,
     setPublishTargets,
     setRuntimeField,
+    setImportedLibraries,
     setCustomRuntime,
     setQnASettings,
   };

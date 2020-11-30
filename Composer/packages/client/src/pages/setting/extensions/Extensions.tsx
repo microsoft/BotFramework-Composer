@@ -21,8 +21,8 @@ import formatMessage from 'format-message';
 import { useRecoilValue, selector } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
-import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
 import { dispatcherState, extensionsState } from '../../../recoilModel';
 
 import { InstallExtensionDialog } from './InstallExtensionDialog';
