@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ContextualMenu, DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
 import React, { useCallback, useMemo } from 'react';
 import { builtInFunctionsGrouping, getBuiltInFunctionInsertText } from '@bfc/built-in-functions';
 
@@ -48,6 +48,7 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
         calloutProps={{
           onLayerMounted: onLayerMounted,
         }}
+        directionalHint={DirectionalHint.bottomLeftEdge}
         hidden={false}
         items={menuItems}
         shouldFocusOnMount={false}
