@@ -71,33 +71,34 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
 
     const getKey = (x: TriggerOptionTreeNode) => (x instanceof TriggerOptionLeafNode ? x.$kind : x.label);
 
+    // Render every group node as a dropdown until meet a leaf node.
     for (let i = 0; i < treePath.length; i++) {
       const currentNode: TriggerOptionTreeNode = treePath[i];
-      if (currentNode instanceof TriggerOptionGroupNode) {
-        const nextNode = treePath[i + 1];
-        const selectedKey = nextNode ? getKey(nextNode) : '';
-        const dropdown = (
-          <Dropdown
-            data-testid={currentNode.label}
-            label={currentNode.prompt}
-            options={currentNode.children.map((x) => {
-              return {
-                key: getKey(x),
-                text: x.label,
-                node: x,
-              };
-            })}
-            placeholder={currentNode.placeholder}
-            selectedKey={selectedKey}
-            styles={dropdownStyles}
-            onChange={(e, opt: any) => {
-              onClickNode(opt.node);
-            }}
-            onRenderOption={renderDropdownOption}
-          />
-        );
-        dropdownList.push(dropdown);
-      }
+      if (!(currentNode instanceof TriggerOptionGroupNode)) break;
+
+      const nextNode = treePath[i + 1];
+      const selectedKey = nextNode ? getKey(nextNode) : '';
+      const dropdown = (
+        <Dropdown
+          data-testid={currentNode.label}
+          label={currentNode.prompt}
+          options={currentNode.children.map((x) => {
+            return {
+              key: getKey(x),
+              text: x.label,
+              node: x,
+            };
+          })}
+          placeholder={currentNode.placeholder}
+          selectedKey={selectedKey}
+          styles={dropdownStyles}
+          onChange={(e, opt: any) => {
+            onClickNode(opt.node);
+          }}
+          onRenderOption={renderDropdownOption}
+        />
+      );
+      dropdownList.push(dropdown);
     }
 
     return dropdownList;
