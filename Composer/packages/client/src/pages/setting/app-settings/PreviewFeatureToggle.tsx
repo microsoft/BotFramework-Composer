@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
-import { FeatureFlag, FeatureFlagKey } from '@bfc/shared';
+import { FeatureFlag, FeatureFlagKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState, featureFlagsState } from '../../../recoilModel';

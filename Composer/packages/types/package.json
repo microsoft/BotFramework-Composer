@@ -16,6 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "@types/express": "^4.16.1",
+    "@types/passport": "^1.0.4",
+    "axios": "^0.21.0",
     "json-schema": "^0.2.5"
   },
   "devDependencies": {
