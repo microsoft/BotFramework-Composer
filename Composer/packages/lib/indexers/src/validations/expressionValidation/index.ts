@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIDialog, Diagnostic, LgFile, LuFile } from '@bfc/shared';
+import { MicrosoftIDialog, Diagnostic, LgFile, DialogSetting } from '@bfc/shared';
 import { SchemaDefinitions } from '@bfc/shared/lib/schemaUtils/types';
 
 import { extractOptionByKey } from '../../utils/lgUtil';
@@ -36,11 +36,11 @@ export const validateExpressions: ValidateFunc = (
   value: MicrosoftIDialog,
   type: string,
   schema: SchemaDefinitions,
-  lgFiles: LgFile[],
-  luFiles: LuFile[]
+  settings: DialogSetting,
+  lgFiles: LgFile[]
 ) => {
   const expressions = searchExpressions(path, value, type, schema);
-  const customFunctions = searchLgCustomFunction(lgFiles);
+  const customFunctions = searchLgCustomFunction(lgFiles).concat(settings.customizedFunctions);
 
   const diagnostics = expressions.reduce((diagnostics: Diagnostic[], expression) => {
     const diagnostic = validate(expression, customFunctions);
