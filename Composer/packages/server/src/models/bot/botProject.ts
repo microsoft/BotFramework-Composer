@@ -184,7 +184,7 @@ export class BotProject implements IBotProject {
   };
 
   public getProject = () => {
-    return {
+    const project = {
       botName: this.name,
       files: Array.from(this.files.values()),
       location: this.dir,
@@ -193,6 +193,7 @@ export class BotProject implements IBotProject {
       settings: this.settings,
       filesWithoutRecognizers: Array.from(this.files.values()).filter(({ name }) => !isRecognizer(name)),
     };
+    return project;
   };
 
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {

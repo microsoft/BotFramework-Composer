@@ -119,6 +119,10 @@ export type ExtensionCollection = {
   baseTemplates: BotTemplate[];
 };
 
+export type ComposerEvent = 'project:opened' | 'project:created';
+
+type ProjectEventListener = (project: IBotProject) => Promise<void> | void;
+
 export type IExtensionContext = {
   loginUri: string;
   extensions: ExtensionCollection;
@@ -130,4 +134,10 @@ export type IExtensionContext = {
   getRuntime(type: string | undefined): RuntimeTemplate;
   getUserFromRequest(req: any): Promise<UserIdentity | undefined>;
   getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject>;
+
+  on(event: 'project:opened', listener: ProjectEventListener): void;
+  on(event: 'project:created', listener: ProjectEventListener): void;
+  on(event: ComposerEvent, listener: (...args: any[]) => void | Promise<void>): void;
+
+  emit(event: ComposerEvent, ...args: any[]): void;
 };

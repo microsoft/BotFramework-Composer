@@ -62,6 +62,7 @@ async function createProject(req: Request, res: Response) {
       if (schemaUrl && !createFromRemoteTemplate) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
+      await ExtensionContext.emit('project:created', currentProject);
       await currentProject.init();
 
       const project = currentProject.getProject();

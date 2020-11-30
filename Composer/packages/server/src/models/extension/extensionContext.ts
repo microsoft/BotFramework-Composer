@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// import { EventEmitter } from 'events';
+
 import passport from 'passport';
 import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
@@ -11,15 +13,40 @@ import {
   RuntimeTemplate,
   IBotProject,
   IExtensionContext,
+  ComposerEvent,
 } from '@botframework-composer/types';
 
 import { BotProjectService } from '../../services/project';
 
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
+type Listener = (...args: any[]) => Promise<void> | void;
+class AsyncEventEmitter {
+  private listeners: Map<string, Listener[]> = new Map();
+
+  public addListener(event: string, listener: Listener) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, []);
+    }
+
+    this.listeners.get(event)?.push(listener);
+  }
+
+  public on(event: string, listener: Listener) {
+    this.addListener(event, listener);
+  }
+
+  public async emit(event: string, ...args: any[]) {
+    const listeners = this.listeners.get(event) ?? [];
+
+    await Promise.all(listeners.map((l) => l(...args)));
+  }
+}
+
 class ExtensionContext implements IExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
+  private _emitter = new AsyncEventEmitter();
   public loginUri = '/login';
 
   public extensions: ExtensionCollection;
@@ -106,6 +133,14 @@ class ExtensionContext implements IExtensionContext {
     } else {
       throw new Error('No BotProjectService available');
     }
+  }
+
+  public on(event: ComposerEvent, listener: (...args: any[]) => void | Promise<void>) {
+    this._emitter.addListener(event, listener);
+  }
+
+  public async emit(event: ComposerEvent, ...args: any[]) {
+    await this._emitter.emit(event, ...args);
   }
 }
 
