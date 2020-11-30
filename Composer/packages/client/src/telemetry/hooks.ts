@@ -5,7 +5,7 @@ import { LogData } from '@bfc/shared';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { currentModeState, currentProjectIdState, ServerSettingsState } from '../recoilModel';
+import { currentModeState, currentProjectIdState, userSettingsState } from '../recoilModel';
 
 import { getEventLogger } from './getEventLogger';
 import { createLogger, initializeLogger } from './telemetryLogger';
@@ -14,7 +14,7 @@ export const useInitializeLogger = () => {
   const [, forceRender] = useState({});
   const projectId = useRecoilValue(currentProjectIdState);
   const page = useRecoilValue(currentModeState);
-  const { telemetry } = useRecoilValue(ServerSettingsState);
+  const { telemetry } = useRecoilValue(userSettingsState);
 
   useEffect(() => {
     initializeLogger(createLogger(telemetry), () => ({

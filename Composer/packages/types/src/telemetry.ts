@@ -1,9 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export type TelemetrySettings = {
-  allowDataCollection?: boolean;
-};
+import { TelemetrySettings } from './settings';
 
 export type ServerSettings = Partial<{ telemetry: TelemetrySettings }>;
 

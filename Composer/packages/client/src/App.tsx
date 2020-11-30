@@ -17,7 +17,7 @@ initializeIcons(undefined, { disableWarnings: true });
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
-  const { fetchExtensions, fetchFeatureFlags, fetchServerSettings } = useRecoilValue(dispatcherState);
+  const { fetchExtensions, fetchFeatureFlags } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     loadLocale(appLocale);
@@ -26,7 +26,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     fetchExtensions();
     fetchFeatureFlags();
-    fetchServerSettings();
   }, []);
 
   useInitializeLogger();
