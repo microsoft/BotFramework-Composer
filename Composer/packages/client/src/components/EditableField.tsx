@@ -171,8 +171,12 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     fieldRef.current?.blur();
   };
 
+  // single line, press Enter to submit
+  // multipe line, press Enter to submit, Shift+Enter get a new line,
   const handleOnKeyDown = (e) => {
-    if (e.key === 'Enter' && expanded) {
+    const enterOnField = e.key === 'Enter' && hasFocus;
+    const multilineEnter = multiline ? !e.shiftKey : true;
+    if (enterOnField && multilineEnter) {
       handleCommit();
     }
     if (e.key === 'Escape') {
