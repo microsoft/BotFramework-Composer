@@ -60,6 +60,13 @@ export class ElectronAuthProvider extends AuthProvider {
     }
   }
 
+  logOut(): void {
+    const { logOut } = this.electronContext;
+    logOut();
+    // clean all the cache tokens from the same user
+    this.tokenCache = {};
+  }
+
   private get electronContext() {
     if (!this._electronContext) {
       this._electronContext = useElectronContext();

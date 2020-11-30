@@ -40,6 +40,10 @@ class AuthService {
     return this.provider.getAccessToken(params);
   }
 
+  logOut() {
+    this.provider.logOut();
+  }
+
   get csrfToken(): string {
     return this._csrfToken;
   }

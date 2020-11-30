@@ -10,6 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import {
   currentProjectId,
   getAccessToken,
+  logOut,
   startProvision,
   closeDialog,
   onBack,
@@ -37,6 +38,7 @@ import {
   TooltipHost,
   Spinner,
   Persona,
+  IPersonaProps,
   PersonaSize,
   Selection,
   SelectionMode,
@@ -363,6 +365,20 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
+  const onRenderSecondaryText= useMemo(
+    ()=>(props: IPersonaProps)=>{
+      return <div onClick={async()=>{
+        //clean token and currentUser
+        setToken(null);
+        setCurrentUser(null);
+        logOut();
+        closeDialog();
+      }}
+      style={{color:'blue', cursor: 'pointer'}}>{props.secondaryText}</div>;
+    },
+    []
+  );
+
   const isDisAble = useMemo(() => {
     return !currentSubscription || !currentHostName || errorHostName !== '';
   }, [currentSubscription, currentHostName, errorHostName]);
@@ -471,7 +487,7 @@ export const AzureProvisionDialog: React.FC = () => {
     if (page === PageTypes.ConfigProvision) {
       return (
         <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
-          {currentUser? <Persona size={PersonaSize.size32} text={currentUser.name} />: null}
+          {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'log out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
           <div>
             <DefaultButton text={'Back'} onClick={onBack} style={{margin: '0 4px'}} />
             {choice.key === 'create' ? (
@@ -492,7 +508,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else {
       return (
         <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
-          {currentUser? <Persona size={PersonaSize.size32} text={currentUser.name} />: null}
+          {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'log out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
           <div>
             <DefaultButton
               text={'Back'}

@@ -18,6 +18,7 @@ interface PublishConfig {
 
 interface AuthAPI {
   getAccessToken: (options: AuthParameters) => Promise<string>; // returns an access token
+  logOut: () => Promise<void>;
 }
 
 interface PublishAPI {
@@ -42,6 +43,9 @@ class API implements IAPI {
     this.auth = {
       getAccessToken: (params: AuthParameters) => {
         return AuthClient.getAccessToken(params);
+      },
+      logOut: () => {
+        return AuthClient.logOut();
       },
     };
     this.publish = {

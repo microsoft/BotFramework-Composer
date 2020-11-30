@@ -7,6 +7,7 @@ export type ElectronContext = {
   getAccessToken: (
     params: ElectronAuthParameters
   ) => Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
+  logOut: () => void;
 };
 
 let context;

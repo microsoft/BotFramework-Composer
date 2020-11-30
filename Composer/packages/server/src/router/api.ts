@@ -104,6 +104,8 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 
 // authentication from client
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
+router.get('/auth/logOut', AuthController.logOut);
+
 // FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);

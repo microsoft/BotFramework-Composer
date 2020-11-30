@@ -35,6 +35,16 @@ async function getAccessToken(req: GetAccessTokenRequest, res: Response) {
   });
 }
 
+async function logOut(req, res) {
+  try {
+    authService.logOut();
+  } catch {
+    res.status(500);
+  }
+  res.status(200);
+}
+
 export const AuthController = {
   getAccessToken,
+  logOut,
 };

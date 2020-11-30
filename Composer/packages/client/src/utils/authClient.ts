@@ -39,14 +39,6 @@ const msal = new UserAgentApplication({
   },
 });
 
-// function setInSessionStorage(key: string, value: string) {
-//   sessionStorage.setItem(key, value);
-// }
-
-// function getInSessionStorage(key: string) {
-//   return sessionStorage.getItem(key);
-// }
-
 async function getAccessToken(options: AuthParameters): Promise<string> {
   const { clientId = '', targetResource = '', scopes = [] } = options;
   if (isElectron()) {
@@ -68,7 +60,6 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
 
       const result = await fetch(url, { method: 'GET', headers: { 'X-CSRF-Token': __csrf__ } });
       const { accessToken = '' } = await result.json();
-      // setInSessionStorage(targetResource ? targetResource : JSON.stringify(scopes), accessToken);
       return accessToken;
     } catch (e) {
       // error handling
@@ -109,11 +100,29 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
         return '';
       }
     }
-    // setInSessionStorage(targetResource ? targetResource : JSON.stringify(scopes), token);
     return token;
+  }
+}
+
+async function logOut() {
+  if (isElectron()) {
+    try {
+      let url = '/api/auth/logOut';
+      await fetch(url, { method: 'GET' });
+    } catch (e) {
+      // error handling
+      console.error('Can not log out');
+    }
+  } else {
+    // msal logout
+    const acc = msal.getAccount();
+    if (acc) {
+      msal.logout();
+    }
   }
 }
 
 export const AuthClient = {
   getAccessToken,
+  logOut,
 };

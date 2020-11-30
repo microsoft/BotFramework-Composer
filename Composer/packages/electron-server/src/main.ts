@@ -150,6 +150,7 @@ async function loadServer() {
   const { start } = await import('@bfc/server');
   serverPort = await start({
     getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
+    logOut: OneAuthService.signOut.bind(OneAuthService),
   });
   log(`Server started at port: ${serverPort}`);
 }
