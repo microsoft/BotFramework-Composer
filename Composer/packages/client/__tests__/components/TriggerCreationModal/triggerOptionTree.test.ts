@@ -9,24 +9,19 @@ import {
   TriggerOptionGroupNode,
 } from '../../../src/components/TriggerCreationModal/TriggerOptionTree';
 
-const labelAlphabeticalCompareFn = (opt1, opt2) => (opt1.label < opt2.label ? -1 : 1);
-
 describe('generateTriggerOptionTree()', () => {
   it('can generate one layer tree.', () => {
     const simpleTriggerUIOptions: TriggerUISchema = {
       [SDKKinds.OnIntent]: {
         label: '1.OnIntent',
+        order: 1,
       },
       [SDKKinds.OnInvokeActivity]: {
         label: '2.OnInvokeActivity',
+        order: 2,
       },
     };
-    const tree = generateTriggerOptionTree(
-      simpleTriggerUIOptions,
-      'Select a trigger',
-      'Which trigger?',
-      labelAlphabeticalCompareFn
-    );
+    const tree = generateTriggerOptionTree(simpleTriggerUIOptions, 'Select a trigger', 'Which trigger?');
 
     expect(tree.prompt).toEqual('Select a trigger');
     expect(tree.placeholder).toEqual('Which trigger?');
@@ -45,9 +40,11 @@ describe('generateTriggerOptionTree()', () => {
     const advancedTriggerUIOptions: TriggerUISchema = {
       [SDKKinds.OnIntent]: {
         label: '1.OnIntent',
+        order: 1,
       },
       [SDKKinds.OnTypingActivity]: {
         label: '2.1.OnTypingActivity',
+        order: 2.1,
         submenu: {
           label: '2.Activities',
           prompt: 'Select an activity trigger',
@@ -56,19 +53,16 @@ describe('generateTriggerOptionTree()', () => {
       },
       [SDKKinds.OnEventActivity]: {
         label: '2.2OnEventActivity',
+        order: 2.2,
         submenu: '2.Activities',
       },
       [SDKKinds.OnInvokeActivity]: {
         label: '2.3OnInvokeActivity',
+        order: 2.3,
         submenu: '2.Activities',
       },
     };
-    const tree = generateTriggerOptionTree(
-      advancedTriggerUIOptions,
-      'Select a trigger',
-      'Which trigger?',
-      labelAlphabeticalCompareFn
-    );
+    const tree = generateTriggerOptionTree(advancedTriggerUIOptions, 'Select a trigger', 'Which trigger?');
 
     expect(tree.children.length).toEqual(2);
 

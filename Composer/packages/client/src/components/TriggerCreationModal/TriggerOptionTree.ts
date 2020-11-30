@@ -1,23 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TriggerUISchema } from '@bfc/extension-client';
-
-import { TriggerUIOption } from './schema/TriggerOption';
+import { TriggerUISchema, TriggerUIOption } from '@bfc/extension-client';
 
 export class TriggerOptionLeafNode {
   label: string;
+  order: number;
   $kind: string;
   parent: TriggerOptionGroupNode | null = null;
 
-  constructor(label: string, $kind: string) {
+  constructor(label: string, $kind: string, order?: number) {
     this.label = label;
     this.$kind = $kind;
+    this.order = order ?? Number.MAX_SAFE_INTEGER;
   }
 }
 
 export class TriggerOptionGroupNode {
   label: string;
+  order: number;
   /** Title of a dropdown. 'Which activity type?' */
   prompt?: string;
   /** Placeholder of a dropdown input. 'Select an activity type' */
@@ -29,6 +30,7 @@ export class TriggerOptionGroupNode {
     this.label = label;
     this.prompt = prompt;
     this.placeholder = placeholder;
+    this.order = Number.MAX_SAFE_INTEGER;
   }
 }
 
@@ -41,14 +43,13 @@ const getGroupKey = (submenu) => (typeof submenu === 'object' ? submenu.label : 
 export const generateTriggerOptionTree = (
   triggerUIOptions: TriggerUISchema,
   rootPrompt: string,
-  rootPlaceHolder: string,
-  optionCompareFn?: (a: TriggerOptionTreeNode, b: TriggerOptionTreeNode) => number
+  rootPlaceHolder: string
 ): TriggerOptionTree => {
   const root = new TriggerOptionGroupNode('triggerTypeDropDown', rootPrompt, rootPlaceHolder);
 
   const leafNodeList = Object.entries(triggerUIOptions)
     .filter(([, options]) => options && !options.submenu)
-    .map(([$kind, options]) => new TriggerOptionLeafNode(options?.label ?? '', $kind));
+    .map(([$kind, options]) => new TriggerOptionLeafNode(options?.label ?? '', $kind, options?.order));
   root.children.push(...leafNodeList);
   leafNodeList.forEach((leaf) => (leaf.parent = root));
 
@@ -70,20 +71,21 @@ export const generateTriggerOptionTree = (
   Object.entries(triggerUIOptions)
     .filter(([, options]) => options && options.submenu)
     .forEach(([$kind, options]) => {
-      const { label, submenu } = options as TriggerUIOption;
-      const node = new TriggerOptionLeafNode(label, $kind);
+      const { label, submenu, order } = options as TriggerUIOption;
+      const node = new TriggerOptionLeafNode(label, $kind, order);
+
       const groupName = getGroupKey(submenu);
       const groupParent = groups[groupName];
+
       groupParent.children.push(node);
       node.parent = groupParent;
+      groupParent.order = Math.min(groupParent.order, order ?? Number.MAX_SAFE_INTEGER);
     });
   root.children.push(...Object.values(groups));
 
   // sort tree nodes
-  if (optionCompareFn) {
-    root.children.sort(optionCompareFn);
-    Object.values(groups).forEach((x) => x.children.sort(optionCompareFn));
-  }
+  root.children.sort((a, b) => a.order - b.order);
+  Object.values(groups).forEach((x) => x.children.sort((a, b) => a.order - b.order));
 
   return root;
 };
