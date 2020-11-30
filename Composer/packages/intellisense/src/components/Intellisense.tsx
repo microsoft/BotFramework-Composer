@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import { useLanguageServer } from '../hooks/useLanguageServer';
-import { checkIsOutside } from '../utils/uiUtils';
 
 import { CompletionList } from './CompletionList';
 
@@ -43,6 +43,10 @@ export const Intellisense = React.memo(
       completionListOverrideRefs,
     } = props;
 
+    if (false) {
+      console.log(onBlur, completionListOverrideRefs);
+    }
+
     const [textFieldValue, setTextFieldValue] = React.useState(value);
     const [showCompletionList, setShowCompletionList] = React.useState(false);
     const [selectedCompletionItem, setSelectedCompletionItem] = React.useState(0);
@@ -78,6 +82,7 @@ export const Intellisense = React.memo(
       }
     }, [completionItems]);
 
+    /*
     // Closes the list of completion items if user clicks away from component or presses "Escape"
     React.useEffect(() => {
       const outsideClickHandler = (event: MouseEvent) => {
@@ -119,6 +124,8 @@ export const Intellisense = React.memo(
       };
     }, [focused, onBlur, completionListOverrideRefs]);
 
+
+    */
     // When textField value is changed
     const onValueChanged = (newValue: string) => {
       setTextFieldValue(newValue);
@@ -193,19 +200,32 @@ export const Intellisense = React.memo(
     };
 
     return (
-      <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
-        {children({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField })}
+      <ClickAwayListener
+        onClickAway={() => {
+          console.log('away', id, value);
+        }}
+      >
+        <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
+          {children({
+            textFieldValue,
+            focused,
+            onValueChanged,
+            onKeyDownTextField,
+            onKeyUpTextField,
+            onClickTextField,
+          })}
 
-        {completionListOverride || showCompletionList ? (
-          <CompletionList
-            ref={completionListRef}
-            completionItems={completionItems}
-            selectedItem={selectedCompletionItem}
-            onClickCompletionItem={onClickCompletionItem}
-            completionListOverride={completionListOverride}
-          />
-        ) : null}
-      </div>
+          {completionListOverride || showCompletionList ? (
+            <CompletionList
+              ref={completionListRef}
+              completionItems={completionItems}
+              selectedItem={selectedCompletionItem}
+              onClickCompletionItem={onClickCompletionItem}
+              completionListOverride={completionListOverride}
+            />
+          ) : null}
+        </div>
+      </ClickAwayListener>
     );
   }
 );
