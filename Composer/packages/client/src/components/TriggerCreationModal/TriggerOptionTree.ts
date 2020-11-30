@@ -47,15 +47,25 @@ export const generateTriggerOptionTree = (
 ): TriggerOptionTree => {
   const root = new TriggerOptionGroupNode('triggerTypeDropDown', rootPrompt, rootPlaceHolder);
 
-  const leafNodeList = Object.entries(triggerUIOptions)
-    .filter(([, options]) => options && !options.submenu)
-    .map(([$kind, options]) => new TriggerOptionLeafNode(options?.label ?? '', $kind, options?.order));
+  const allOptionEntries = Object.entries(triggerUIOptions).filter(([, option]) => Boolean(option)) as [
+    string,
+    TriggerUIOption
+  ][];
+  const leafEntries = allOptionEntries.filter(([, options]) => !options.submenu);
+  const nonLeafEntries = allOptionEntries.filter(([, options]) => options.submenu);
+
+  // Build leaf nodes whose depth = 1.
+  const leafNodeList = leafEntries.map(
+    ([$kind, options]) => new TriggerOptionLeafNode(options?.label ?? '', $kind, options?.order)
+  );
+
+  // Insert depth 1 leaf nodes to tree.
   root.children.push(...leafNodeList);
   leafNodeList.forEach((leaf) => (leaf.parent = root));
 
-  const groups = Object.values(triggerUIOptions)
-    .map((options) => options && options.submenu)
-    .filter(Boolean)
+  // Build group nodes.
+  const groups = nonLeafEntries
+    .map(([, options]) => options.submenu)
     .reduce((result, submenu) => {
       const name = getGroupKey(submenu);
       if (!result[name]) result[name] = new TriggerOptionGroupNode(name, '', '');
@@ -68,22 +78,24 @@ export const generateTriggerOptionTree = (
       return result;
     }, {} as { [key: string]: TriggerOptionGroupNode });
 
-  Object.entries(triggerUIOptions)
-    .filter(([, options]) => options && options.submenu)
-    .forEach(([$kind, options]) => {
-      const { label, submenu, order } = options as TriggerUIOption;
-      const node = new TriggerOptionLeafNode(label, $kind, order);
-
-      const groupName = getGroupKey(submenu);
-      const groupParent = groups[groupName];
-
-      groupParent.children.push(node);
-      node.parent = groupParent;
-      groupParent.order = Math.min(groupParent.order, order ?? Number.MAX_SAFE_INTEGER);
-    });
+  // Insert depth 1 group nodes to tree.
   root.children.push(...Object.values(groups));
 
-  // sort tree nodes
+  // Build other leaf nodes whose depth = 2 and mount to related group node
+  nonLeafEntries.forEach(([$kind, options]) => {
+    const { label, submenu, order } = options;
+    const node = new TriggerOptionLeafNode(label, $kind, order);
+
+    const groupName = getGroupKey(submenu);
+    const groupParent = groups[groupName];
+
+    groupParent.children.push(node);
+    node.parent = groupParent;
+    // Apply minimum child node order to group node for sorting.
+    groupParent.order = Math.min(groupParent.order, order ?? Number.MAX_SAFE_INTEGER);
+  });
+
+  // Sort by node's 'order'.
   root.children.sort((a, b) => a.order - b.order);
   Object.values(groups).forEach((x) => x.children.sort((a, b) => a.order - b.order));
 
