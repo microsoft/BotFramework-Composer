@@ -5,7 +5,6 @@
 import { Expression, ReturnType } from 'adaptive-expressions';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
-import startsWith from 'lodash/startsWith';
 
 import { ExpressionProperty } from './types';
 
@@ -14,10 +13,9 @@ const RETURNTYPE_NOT_MATCH = formatMessage('the return type does not match');
 const BUILT_IN_FUNCTION_ERROR = formatMessage("it's not a built-in function or a custom function.");
 
 const expressionErrorMessage = (error: string) => formatMessage('must be an expression: {error}', { error });
-
-const customFunctionErrorMessage = (func: string) =>
-  formatMessage(`Error: {func} does not have an evaluator, it's not a built-in function or a custom function`, {
-    func,
+const builtInFunctionErrorMessage = (error: string) =>
+  formatMessage(`{error} Please add unknown functions to setting's customFunctions field.`, {
+    error,
   });
 
 //bitwise operation
@@ -78,21 +76,33 @@ const checkReturnType = (returnType: number, types: number[]): string => {
   return types.some((type) => type & returnType) ? '' : RETURNTYPE_NOT_MATCH;
 };
 
+//string match or * match
+const checkCustomFunctions = (currentFunction: string, customFunction: string) => {
+  //.* or * => #
+  let customReg = customFunction.replace(/\.\*|\*/g, '#');
+  //. => [.]
+  customReg = customReg.replace(/\./g, '[.]');
+  //# => .*
+  // a.b.* => a[.]b.*
+  customReg = customReg.replace(/#/g, '.*');
+  // eslint-disable-next-line security/detect-non-literal-regexp
+  const reg = new RegExp(`^${customReg}$`);
+  return reg.test(currentFunction);
+};
+
 const filterCustomFunctionError = (error: string, CustomFunctions: string[]): string => {
-  let errorMessage = expressionErrorMessage(error);
-
   //Now all customFunctions is from lg file content.
-  if (CustomFunctions.some((item) => startsWith(error, customFunctionErrorMessage(item)))) {
-    errorMessage = '';
-  }
-
-  //Todo: if the custom functions are defined in runtime, use the field from settings to filter
-  // settings.customFunctions.some();
+  //If the custom functions are defined in runtime, use the field from settings to filter
   if (error.endsWith(BUILT_IN_FUNCTION_ERROR)) {
-    errorMessage = '';
+    const currentFunction = error.split(' ')[0];
+    if (CustomFunctions.some((item) => checkCustomFunctions(currentFunction, item))) {
+      return '';
+    }
+
+    return builtInFunctionErrorMessage(error);
   }
 
-  return errorMessage;
+  return expressionErrorMessage(error);
 };
 
 export const validate = (expression: ExpressionProperty, customFunctions: string[]): Diagnostic | null => {

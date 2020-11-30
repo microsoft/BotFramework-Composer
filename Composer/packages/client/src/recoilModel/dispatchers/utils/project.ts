@@ -144,19 +144,23 @@ export const navigateToBot = (
   callbackHelpers: CallbackInterface,
   projectId: string,
   mainDialog: string,
-  qnaKbUrls?: string[],
-  templateId?: string
+  urlSuffix?: string
 ) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    if (urlSuffix) {
+      // deep link was provided to creation flow (base64 encoded to make query string parsing easier)
+      urlSuffix = atob(urlSuffix);
+      url = `/bot/${projectId}/${urlSuffix}`;
+    }
     navigateTo(url);
   }
 };
 
-export const loadProjectData = (response) => {
-  const { files, botName, settings, skills: skillContent, id: projectId } = response.data;
+export const loadProjectData = (data) => {
+  const { files, botName, settings, skills: skillContent, id: projectId } = data;
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -168,7 +172,7 @@ export const loadProjectData = (response) => {
 
   return {
     botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
-    projectData: response.data,
+    projectData: data,
     error: undefined,
   };
 };
@@ -179,7 +183,7 @@ export const fetchProjectDataByPath = async (
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.put(`/projects/open`, { path, storageId });
-    const projectData = loadProjectData(response);
+    const projectData = loadProjectData(response.data);
     return projectData;
   } catch (ex) {
     return {
@@ -193,7 +197,7 @@ export const fetchProjectDataByPath = async (
 export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const projectData = loadProjectData(response);
+    const projectData = loadProjectData(response.data);
     return projectData;
   } catch (ex) {
     return {
@@ -296,7 +300,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     if (dialog.isRoot) {
       mainDialog = dialog.id;
     }
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
     set(dialogState({ projectId, dialogId: dialog.id }), dialog);
     dialogIds.push(dialog.id);
   });
@@ -408,7 +412,11 @@ export const createNewBotFromTemplate = async (
   description: string,
   location: string,
   schemaUrl?: string,
-  locale?: string
+  locale?: string,
+  templateDir?: string,
+  eTag?: string,
+  alias?: string,
+  preserveRoot?: boolean
 ) => {
   const { set } = callbackHelpers;
   const response = await httpClient.post(`/projects`, {
@@ -419,8 +427,12 @@ export const createNewBotFromTemplate = async (
     location,
     schemaUrl,
     locale,
+    templateDir,
+    eTag,
+    alias,
+    preserveRoot,
   });
-  const { botFiles, projectData } = loadProjectData(response);
+  const { botFiles, projectData } = loadProjectData(response.data);
   const projectId = response.data.id;
   if (settingStorage.get(projectId)) {
     settingStorage.remove(projectId);
@@ -435,6 +447,35 @@ export const createNewBotFromTemplate = async (
   }
 
   return { projectId, mainDialog };
+};
+
+export const createNewBotFromTemplateV2 = async (
+  callbackHelpers,
+  templateId: string,
+  name: string,
+  description: string,
+  location: string,
+  schemaUrl?: string,
+  locale?: string,
+  templateDir?: string,
+  eTag?: string,
+  alias?: string,
+  preserveRoot?: boolean
+) => {
+  const jobId = await httpClient.post(`/v2/projects`, {
+    storageId: 'default',
+    templateId,
+    name,
+    description,
+    location,
+    schemaUrl,
+    locale,
+    templateDir,
+    eTag,
+    alias,
+    preserveRoot,
+  });
+  return jobId;
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
@@ -545,7 +586,7 @@ export const saveProject = async (callbackHelpers, oldProjectData) => {
     description,
     location,
   });
-  const data = loadProjectData(response);
+  const data = loadProjectData(response.data);
   if (data.error) {
     throw data.error;
   }

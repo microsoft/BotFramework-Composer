@@ -212,7 +212,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
             throw new Error(formatMessage('a dialog file must have a name'));
           }
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
-          const dialog = {
+          const dialog: DialogInfo = {
             isRoot,
             displayName: isRoot ? `${botName}` : id,
             ...parse(id, dialogJson),

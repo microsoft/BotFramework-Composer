@@ -10,6 +10,7 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -22,7 +23,6 @@ import {
   publishHistoryState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';
@@ -30,6 +30,7 @@ import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
+import { PullDialog } from './pullDialog';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const selectedTargetName = props.targetName;
@@ -56,6 +57,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
+  const [pullDialogHidden, setPullDialogHidden] = useState(true);
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<IStatus[]>([]);
@@ -89,13 +91,23 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const isPublishDisable = useMemo(() => {
     // if current profile is already publishing, set disable to true
     if (selectedTargetName && selectedTargetName !== 'all') {
-      if (thisPublishHistory?.length >= 0) {
-        return thisPublishHistory[0]?.status === 202;
-      }
+      if (thisPublishHistory?.length > 0) {
+        return thisPublishHistory[0].status === 202;
+      } else return false;
     } else {
       return selectedTargetName === 'all';
     }
   }, [selectedTargetName, thisPublishHistory]);
+
+  const isPullSupported = useMemo(() => {
+    if (selectedTarget) {
+      const type = publishTypes?.find((t) => t.name === selectedTarget.type);
+      if (type?.features?.pull) {
+        return true;
+      }
+    }
+    return false;
+  }, [projectId, publishTypes, selectedTarget]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -123,6 +135,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Publish',
       disabled: isPublishDisable,
+    },
+    {
+      type: 'action',
+      text: formatMessage('Pull from selected profile'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'CloudDownload',
+        },
+        onClick: () => setPullDialogHidden(false),
+      },
+      align: 'left',
+      dataTestid: 'publishPage-Toolbar-Pull',
+      disabled: !isPullSupported,
     },
     {
       type: 'action',
@@ -414,6 +439,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           onSubmit={publish}
         />
       )}
+      {!pullDialogHidden && (
+        <PullDialog projectId={projectId} selectedTarget={selectedTarget} onDismiss={() => setPullDialogHidden(true)} />
+      )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
@@ -482,7 +510,7 @@ const LogDialog = (props) => {
     <Dialog
       dialogContentProps={logDialogProps}
       hidden={false}
-      minWidth={450}
+      minWidth={700}
       modalProps={{ isBlocking: true }}
       onDismiss={props.onDismiss}
     >

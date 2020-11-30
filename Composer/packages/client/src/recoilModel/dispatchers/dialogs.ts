@@ -3,13 +3,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dialogIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo, checkForPVASchema } from '@bfc/shared';
 
 import {
   lgFilesState,
   luFilesState,
   dialogIdsState,
   schemasState,
+  settingsState,
   onCreateDialogCompleteState,
   actionsSeedState,
   showCreateDialogModalState,
@@ -84,14 +85,18 @@ export const dialogsDispatcher = () => {
     const schemas = await snapshot.getPromise(schemasState(projectId));
     const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
     const luFiles = await snapshot.getPromise(luFilesState(projectId));
+    const settings = await snapshot.getPromise(settingsState(projectId));
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
     if (typeof dialog.content === 'object') {
       dialog.content.id = id;
     }
     await createLgFileState(callbackHelpers, { id, content: '', projectId });
     await createLuFileState(callbackHelpers, { id, content: '', projectId });
-    await createQnAFileState(callbackHelpers, { id, content: '', projectId });
+
+    if (!checkForPVASchema(schemas.sdk)) {
+      await createQnAFileState(callbackHelpers, { id, content: '', projectId });
+    }
 
     set(dialogState({ projectId, dialogId: dialog.id }), dialog);
     set(dialogIdsState(projectId), (dialogsIds) => [...dialogsIds, dialog.id]);

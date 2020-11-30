@@ -4,5 +4,5 @@
 module.exports = {
   presets: ['@babel/react', ['@babel/typescript', { allowNamespaces: true }]],
   plugins: ['@babel/plugin-proposal-class-properties'],
-  ignore: ['**/__tests__', 'node_modules/**', 'build/**/*.js', 'dist/**'],
+  ignore: ['**/__tests__', '**/node_modules', '**/build', '**/dist', '**/scripts'],
 };

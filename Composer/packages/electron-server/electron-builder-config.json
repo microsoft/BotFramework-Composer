@@ -14,7 +14,8 @@
     "build/assets",
     "build/templates",
     "resources/composerIcon_1024x1024.png",
-    "resources/ms_logo.svg"
+    "resources/ms_logo.svg",
+    "**/node_modules/orchestrator-core/**/*"
   ],
   "files": [
     "build",

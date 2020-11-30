@@ -17,8 +17,9 @@ import { IntellisenseServer } from '@bfc/intellisense-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
 import chalk from 'chalk';
-import { ExtensionContext, ExtensionManager } from '@bfc/extension';
 
+import { ExtensionManager } from './services/extensionManager';
+import { ExtensionContext } from './models/extension/extensionContext';
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
@@ -57,6 +58,8 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../../extensions'));
   // Composer/.composer/extensions
   setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer/extensions'));
+  setEnvDefault('COMPOSER_TEMP_DIR', path.resolve(__dirname, '../../../.composer/temp'));
+  setEnvDefault('COMPOSER_BACKUP_DIR', path.resolve(__dirname, '../../../.composer/backup'));
   await ExtensionManager.loadAll();
 
   const { login, authorize } = getAuthProvider();
@@ -122,7 +125,10 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   });
 
   app.get(`${BASEURL}/plugin-host.html`, (req, res) => {
-    res.render(path.resolve(clientDirectory, 'plugin-host.ejs'), { __nonce__: req.__nonce__ });
+    res.render(path.resolve(clientDirectory, 'plugin-host.ejs'), {
+      __nonce__: req.__nonce__,
+      __csrf__: authService.csrfToken,
+    });
   });
 
   app.get('*', (req, res) => {
