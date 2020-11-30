@@ -17,13 +17,17 @@ describe('Application Insights Logger', () => {
     eventLogger.flush();
 
     expect(httpClient.post).toBeCalledWith(
-      '/telemetry/event',
+      '/telemetry/events',
       expect.objectContaining({
-        type: TelemetryEventTypes.TrackEvent,
-        name: 'TestEvent',
-        properties: {
-          value: '1',
-        },
+        events: expect.arrayContaining([
+          expect.objectContaining({
+            type: TelemetryEventTypes.TrackEvent,
+            name: 'TestEvent',
+            properties: {
+              value: '1',
+            },
+          }),
+        ]),
       })
     );
   });
@@ -36,14 +40,18 @@ describe('Application Insights Logger', () => {
     eventLogger.flush();
 
     expect(httpClient.post).toBeCalledWith(
-      '/telemetry/event',
+      '/telemetry/events',
       expect.objectContaining({
-        type: TelemetryEventTypes.PageView,
-        name: 'TestEvent',
-        url: 'https://composer',
-        properties: {
-          value: '1',
-        },
+        events: expect.arrayContaining([
+          expect.objectContaining({
+            type: TelemetryEventTypes.PageView,
+            name: 'TestEvent',
+            url: 'https://composer',
+            properties: {
+              value: '1',
+            },
+          }),
+        ]),
       })
     );
   });

@@ -1,25 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LogData, TelemetryLogger, TelemetryEventTypes } from '@bfc/shared';
+import { LogData, TelemetryLogger, TelemetryEventTypes, TelemetryEvent } from '@bfc/shared';
 
 import httpClient from '../utils/httpUtil';
 
-type Event = {
-  type: TelemetryEventTypes;
-  name: string;
-  url?: string;
-  properties?: LogData;
-};
-
 export const appInsightsLogger = (): TelemetryLogger => {
-  const events: Event[] = [];
+  const eventPool: TelemetryEvent[] = [];
 
-  const shift = async () => {
-    const event = events.shift();
-    if (event) {
+  const flush = async () => {
+    if (eventPool.length) {
       try {
-        await httpClient.post('/telemetry/event', event);
+        const events = eventPool.splice(0, 20);
+        await httpClient.post('/telemetry/events', { events });
       } catch (error) {
         // Swallow error to avoid crashing the app while sending telemetry
       }
@@ -27,21 +20,15 @@ export const appInsightsLogger = (): TelemetryLogger => {
   };
 
   setInterval(() => {
-    shift();
+    flush();
   }, 5000);
 
   const logEvent = (name: string, properties?: LogData) => {
-    events.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
+    eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
   };
 
   const logPageView = (name: string, url: string, properties?: LogData) => {
-    events.push({ type: TelemetryEventTypes.PageView, name, url, properties });
-  };
-
-  const flush = () => {
-    while (events.length) {
-      shift();
-    }
+    eventPool.push({ type: TelemetryEventTypes.PageView, name, url, properties });
   };
 
   return {

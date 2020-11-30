@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { useCallback, useEffect, useState } from 'react';
 import { LogData } from '@bfc/shared';
-import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { currentModeState, currentProjectIdState, userSettingsState } from '../recoilModel';
@@ -27,6 +27,16 @@ export const useInitializeLogger = () => {
 
     forceRender({});
   }, [telemetry, page, projectId]);
+
+  const handleBeforeUnload = useCallback(() => {
+    const eventLogger = getEventLogger();
+    eventLogger.flush();
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 };
 
 export const useEventLogger = (properties?: LogData | (() => LogData)) => {

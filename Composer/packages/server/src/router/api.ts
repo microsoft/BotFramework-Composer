@@ -114,7 +114,7 @@ router.get('/settings', SettingsController.getUserSettings);
 router.post('/settings', SettingsController.updateUserSettings);
 
 // Telemetry
-router.post('/telemetry/event', TelemetryController.track);
+router.post('/telemetry/events', TelemetryController.track);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

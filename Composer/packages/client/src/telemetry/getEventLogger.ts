@@ -29,5 +29,6 @@ export const getEventLogger = (properties?: LogData | (() => LogData)): Telemetr
   return {
     log,
     pageView,
+    flush: logger.flush,
   };
 };

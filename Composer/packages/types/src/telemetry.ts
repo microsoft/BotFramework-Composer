@@ -18,6 +18,13 @@ export enum TelemetryEventTypes {
   PageView = 'PageView',
 }
 
+export type TelemetryEvent = {
+  type: TelemetryEventTypes;
+  name: string;
+  url?: string;
+  properties?: LogData;
+};
+
 type SessionEvents = {
   SessionStarted: { resolution: string; pva: boolean };
   SessionEnded: undefined;
@@ -89,4 +96,6 @@ export type TelemetryEventLogger = {
     url: string,
     ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
   ) => void;
+
+  flush: () => void;
 };

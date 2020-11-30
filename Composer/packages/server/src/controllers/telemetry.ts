@@ -7,8 +7,8 @@ import { TelemetryService } from '../services/telemetry';
 
 async function track(req: Request, res: Response) {
   try {
-    const { type, name, properties, url } = req.body;
-    TelemetryService.track(type, name, properties, url);
+    const { events } = req.body;
+    TelemetryService.track(events);
     return res.sendStatus(200);
   } catch (err) {
     return res.status(500).json({

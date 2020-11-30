@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as AppInsights from 'applicationinsights';
-import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes } from '@bfc/shared';
+import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEvent } from '@bfc/shared';
 
 import { APPINSIGHTS_INSTRUMENTATIONKEY, piiProperties } from '../constants';
 import { useElectronContext } from '../utility/electronContext';
@@ -47,19 +47,21 @@ if (APPINSIGHTS_INSTRUMENTATIONKEY) {
   client = AppInsights.defaultClient;
 }
 
-const track = (type: TelemetryEventTypes, name: string, properties: Record<string, string> = {}, url?: string) => {
-  if (name) {
-    try {
-      switch (type) {
-        case TelemetryEventTypes.TrackEvent:
-          client?.trackEvent({ name, properties });
-          break;
-        case TelemetryEventTypes.PageView:
-          client?.trackPageView({ name, url, properties });
-          break;
+const track = (events: TelemetryEvent[]) => {
+  for (const { type, name, properties = {}, url } of events) {
+    if (name) {
+      try {
+        switch (type) {
+          case TelemetryEventTypes.TrackEvent:
+            client?.trackEvent({ name, properties });
+            break;
+          case TelemetryEventTypes.PageView:
+            client?.trackPageView({ name, url, properties });
+            break;
+        }
+      } catch (error) {
+        // swallow the exception on a failed attempt to collect usage data
       }
-    } catch (error) {
-      // swallow the exception on a failed attempt to collect usage data
     }
   }
 };
@@ -69,7 +71,7 @@ const trackEvent = <TN extends TelemetryEventName>(
   ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
 ) => {
   const [properties = {}] = args;
-  track(TelemetryEventTypes.TrackEvent, name, properties);
+  track([{ type: TelemetryEventTypes.TrackEvent, name, properties }]);
 };
 
 export const TelemetryService = {
