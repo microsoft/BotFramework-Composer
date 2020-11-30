@@ -11,6 +11,7 @@
     "start": "tsc --watch --preserveWatchOutput",
     "build": "tsc --build ./tsconfig.build.json",
     "lint": "eslint --quiet src",
+    "test": "jest",
     "prepare": "yarn build"
   },
   "keywords": [
@@ -20,24 +21,21 @@
   "author": "zeye@microsoft.com",
   "license": "MIT",
   "peerDependencies": {
-    "@bfc/adaptive-form": "*",
-    "@emotion/core": "^10.0.27",
-    "@emotion/styled": "^10.0.27",
-    "@bfc/extension-client": "*",
+    "@uifabric/fluent-theme": "^7.1.4",
+    "format-message": "^6.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
+  "dependencies": {
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
+    "office-ui-fabric-react": "7.71.0"
+  },
   "devDependencies": {
-    "@bfc/adaptive-form": "*",
-    "@bfc/extension-client": "*",
     "@botframework-composer/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "react": "16.13.1",
     "react-dom": "16.13.1"
-  },
-  "dependencies": {
-    "@bfc/shared": "*",
-    "@bfc/indexers": "*"
   }
 }
