@@ -33,7 +33,7 @@ describe('<TriggerCreationModal/>', () => {
 
   function renderComponent() {
     return renderWithRecoil(
-      <EditorExtension projectId={''} plugins={pluginsStub} shell={{ api: {} as any, data: {} as any }}>
+      <EditorExtension plugins={pluginsStub} projectId={''} shell={{ api: {} as any, data: {} as any }}>
         <TriggerCreationModal
           isOpen
           dialogId={'todobot'}
