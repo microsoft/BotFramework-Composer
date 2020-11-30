@@ -443,49 +443,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     },
   ];
 
-  const getMenuItems = () => {
-    const items = [
-      {
-        'data-testid': 'FlyoutNewDialog',
-        key: 'adddialog',
-        text: formatMessage('Add new dialog'),
-        onClick: () => {
-          const id = skillId ?? projectId;
-          createDialogBegin([], onCreateDialogComplete(id), id);
-        },
-      },
-      {
-        'data-testid': 'FlyoutNewTrigger',
-        key: 'addtrigger',
-        text: formatMessage(`Add new trigger on {displayName}`, {
-          displayName: currentDialog?.displayName ?? '',
-        }),
-        onClick: () => {
-          if (!projectId || !currentDialog) return;
-          openNewTriggerModal(projectId, currentDialog.id);
-        },
-      },
-    ];
-    return items;
-  };
-
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'element',
       element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
       align: 'right',
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Add'),
-      align: 'left',
-      dataTestid: 'AddFlyout',
-      buttonProps: {
-        iconProps: { iconName: 'Add' },
-      },
-      menuProps: {
-        items: getMenuItems(),
-      },
     },
     {
       type: 'dropdown',

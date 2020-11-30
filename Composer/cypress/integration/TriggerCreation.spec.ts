@@ -9,12 +9,15 @@ context('Creating a new trigger', () => {
 
   it('can create different kinds of triggers ', () => {
     cy.visitPage('Design');
+    cy.findByTestId('DialogHeader-__TestEmptyBot').click();
     cy.findByTestId('recognizerTypeDropdown').click();
     cy.findByText('Regular expression recognizer').click();
 
     //onintent trigger
-    cy.findByTestId('AddFlyout').click();
-    cy.findByTestId('FlyoutNewTrigger').click();
+    cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
+      cy.findByTestId('dialogMoreButton').click({ force: true });
+    });
+    cy.findAllByText('Add a trigger').click();
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Intent recognized"]').click();
     cy.findByTestId('TriggerName').type('myTrigger1');
@@ -23,8 +26,10 @@ context('Creating a new trigger', () => {
     cy.findAllByText('myTrigger1').should('exist');
 
     //on Dialog Event trigger
-    cy.findByTestId('AddFlyout').click();
-    cy.findByTestId('FlyoutNewTrigger').click();
+    cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
+      cy.findByTestId('dialogMoreButton').click({ force: true });
+    });
+    cy.findAllByText('Add a trigger').click();
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Dialog events"]').click();
     cy.findByTestId('eventTypeDropDown').click();
@@ -33,8 +38,10 @@ context('Creating a new trigger', () => {
     cy.findAllByText('Begin dialog event').should('exist');
 
     // custom event
-    cy.findByTestId('AddFlyout').click();
-    cy.findByTestId('FlyoutNewTrigger').click();
+    cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
+      cy.findByTestId('dialogMoreButton').click({ force: true });
+    });
+    cy.findAllByText('Add a trigger').click();
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Custom events"]').click();
     cy.findByTestId('CustomEventName').type('myCustomEvent');
@@ -42,8 +49,10 @@ context('Creating a new trigger', () => {
     cy.findAllByText('myCustomEvent').should('exist');
 
     //on activity trigger
-    cy.findByTestId('AddFlyout').click();
-    cy.findByTestId('FlyoutNewTrigger').click();
+    cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
+      cy.findByTestId('dialogMoreButton').click({ force: true });
+    });
+    cy.findAllByText('Add a trigger').click();
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Activities"]').click();
     cy.findByTestId('activityTypeDropDown').click();
