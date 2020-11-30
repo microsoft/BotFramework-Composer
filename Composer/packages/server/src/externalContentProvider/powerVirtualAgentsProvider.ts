@@ -75,11 +75,14 @@ const getBaseUrl = () => {
   }
 };
 
-function prettyPrintError(err: string | any): string {
+function prettyPrintError(err: string | Error): string {
   if (typeof err === 'string') {
     return err;
   }
-  return JSON.stringify(err, null, 2);
+  if (err && err.message) {
+    return err.message;
+  }
+  return '';
 }
 
 export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVirtualAgentsMetadata> {

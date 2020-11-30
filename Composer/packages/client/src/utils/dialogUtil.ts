@@ -1,11 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { conceptLabels as conceptLabelsFn, SDKKinds, DialogInfo, DialogFactory, ITriggerCondition } from '@bfc/shared';
+import {
+  conceptLabels as conceptLabelsFn,
+  SDKKinds,
+  DialogInfo,
+  DialogFactory,
+  ITriggerCondition,
+  RecognizerFile,
+} from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 
+import { LuProviderType } from './../../../types/src/indexers';
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
 
@@ -256,3 +264,18 @@ export function replaceDialogDiagnosticLabel(path?: string): string {
   });
   return list.join(': ');
 }
+
+export const getLuProvider = (dialogId: string, recognizers: RecognizerFile[]) => {
+  let kind: LuProviderType | undefined = undefined;
+  for (const {
+    id,
+    content: { $kind },
+  } of recognizers) {
+    if (id.split('.')[0] === dialogId) {
+      if ($kind === SDKKinds.OrchestratorRecognizer) return $kind;
+      if ($kind === SDKKinds.LuisRecognizer) kind = $kind;
+    }
+  }
+
+  return kind;
+};

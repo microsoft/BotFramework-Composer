@@ -180,7 +180,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                         ElementWrapper: VisualEditorElementWrapper,
                       }}
                       sdkschema={schema?.definitions as SchemaDefinitions}
-                      uischema={{ ...schemaFromPlugins, ...customFlowSchema }}
+                      uischema={{ ...customFlowSchema, ...schemaFromPlugins }}
                       widgets={widgetsFromPlugins}
                       onEvent={(eventName, eventData) => {
                         divRef.current?.focus({ preventScroll: true });

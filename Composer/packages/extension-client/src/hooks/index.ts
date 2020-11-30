@@ -6,5 +6,8 @@ export * from './useFormConfig';
 export * from './useMenuConfig';
 export * from './useTriggerConfig';
 export * from './useRecognizerConfig';
-export * from './useProjectApi';
 export * from './useShellApi';
+
+export * from './useApplicationApi';
+export * from './useProjectApi';
+export * from './useHttpClient';

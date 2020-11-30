@@ -11,6 +11,7 @@ import prompts from '@bfc/ui-plugin-prompts';
 import schemaEditor from '@bfc/ui-plugin-dialog-schema-editor';
 import selectDialog from '@bfc/ui-plugin-select-dialog';
 import selectSkillDialog from '@bfc/ui-plugin-select-skill-dialog';
+import orchestrator from '@bfc/ui-plugin-orchestrator';
 import lg from '@bfc/ui-plugin-lg';
 import lu from '@bfc/ui-plugin-luis';
 import crossTrained from '@bfc/ui-plugin-cross-trained';
@@ -43,6 +44,7 @@ export default mergePluginConfigs(
   selectSkillDialog,
   lg,
   lu,
+  orchestrator,
   crossTrained,
   schemaEditor
 );
