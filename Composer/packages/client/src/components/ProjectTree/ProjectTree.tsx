@@ -160,6 +160,7 @@ type Props = {
     showMenu?: boolean;
     showQnAMenu?: boolean;
     showErrors?: boolean;
+    showCommonLinks?: boolean;
   };
 };
 
@@ -188,6 +189,7 @@ export const ProjectTree: React.FC<Props> = ({
     showMenu: true,
     showQnAMenu: true,
     showErrors: true,
+    showCommonLinks: false,
   },
 }) => {
   const {
@@ -365,7 +367,7 @@ export const ProjectTree: React.FC<Props> = ({
           menuOpenCallback={setMenuOpen}
           showErrors={options.showErrors}
           textWidth={leftSplitWidth - TREE_PADDING}
-          onSelect={handleOnSelect}
+          onSelect={options.showCommonLinks ? undefined : handleOnSelect}
         />
       </span>
     );
