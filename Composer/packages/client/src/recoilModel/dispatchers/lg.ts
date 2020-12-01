@@ -11,6 +11,7 @@ import { dispatcherState } from '../DispatcherWrapper';
 
 import { setError } from './shared';
 import LgWorker from './../parsers/lgWorker';
+import LgDiagnosticWorker from './../parsers/lgDiagnosticWorker';
 import { lgFilesState, localeState, settingsState } from './../atoms/botState';
 
 const templateIsNotEmpty = ({ name, body }) => {
@@ -165,8 +166,10 @@ export const lgDispatcher = () => {
       try {
         const { set, snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
-        const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
-        const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
+        const updatedFile = (await LgDiagnosticWorker.parse(projectId, id, content, lgFiles)) as LgFile;
+        // parsing can take a long time, fetch latest lgFiles from concurrency change.
+        const latestLgFiles = await snapshot.getPromise(lgFilesState(projectId));
+        const updatedFiles = await updateLgFileState(projectId, latestLgFiles, updatedFile);
         set(lgFilesState(projectId), updatedFiles);
         // if changes happen on common.lg, async re-parse all.
         if (getBaseName(id) === 'common') {
@@ -388,8 +391,8 @@ export const lgDispatcher = () => {
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const reparsedLgFiles: LgFile[] = [];
         for (const file of lgFiles) {
-          const reparsedFile = (await LgWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
-          reparsedLgFiles.push(reparsedFile);
+          const reparsedFile = (await LgDiagnosticWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
+          reparsedLgFiles.push({ ...file, diagnostics: reparsedFile.diagnostics });
         }
         set(lgFilesState(projectId), reparsedLgFiles);
       } catch (error) {
