@@ -34,6 +34,7 @@ const Notifications = React.lazy(() => import('./pages/notifications/Notificatio
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
+const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
 const Routes = (props) => {
@@ -87,6 +88,7 @@ const Routes = (props) => {
           </ProjectRouter>
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
+          <BotCreationFlowRouterV2 path="v2/projects/*" />
           <BotCreationFlowRouter path="home" />
           <NotFound default />
         </Router>
