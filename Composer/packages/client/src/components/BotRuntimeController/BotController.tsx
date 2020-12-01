@@ -18,7 +18,7 @@ import {
   allDiagnosticsSelectorFamily,
 } from '../../recoilModel';
 import { BotStatus } from '../../constants';
-import { useClickOutside } from '../../utils/hooks';
+import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -61,12 +61,13 @@ const BotController: React.FC = () => {
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
+  const [isErrorCalloutOpen, setErrorCalloutVisibility] = useState(false);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
 
-  useClickOutside(
-    isControllerHidden ? null : [startPanelTarget, botControllerMenuTarget],
+  useClickOutsideOutsideTarget(
+    isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
     (event: React.MouseEvent<HTMLElement>) => {
       hideController(true);
       event.stopPropagation();
@@ -81,9 +82,10 @@ const BotController: React.FC = () => {
     setDisableOnStartBotsWidget(false);
   }, [projectCollection, errors]);
 
-  const running = useMemo(() => !projectCollection.every(({ status }) => status === BotStatus.inactive), [
-    projectCollection,
-  ]);
+  const running = useMemo(
+    () => !projectCollection.every(({ status }) => status === BotStatus.inactive || status === BotStatus.failed),
+    [projectCollection]
+  );
 
   const { startAllBots, stopAllBots } = useBotOperations();
 
@@ -110,8 +112,16 @@ const BotController: React.FC = () => {
   }, [runningBots, running]);
 
   const items = useMemo<IContextualMenuItem[]>(() => {
-    return projectCollection.map(({ name: displayName, projectId }) => ({ key: projectId, displayName, projectId }));
-  }, [projectCollection]);
+    return projectCollection.map(({ name: displayName, projectId }) => ({
+      key: projectId,
+      displayName,
+      projectId,
+      setErrorCalloutVisibility: (isVisible: boolean) => {
+        setErrorCalloutVisibility(isVisible);
+      },
+      isErrorCalloutOpen,
+    }));
+  }, [projectCollection, isErrorCalloutOpen]);
 
   return (
     <React.Fragment>
@@ -153,7 +163,7 @@ const BotController: React.FC = () => {
           }}
           onClick={handleClick}
         >
-          <span>{buttonText}</span>
+          {buttonText}
         </DefaultButton>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton

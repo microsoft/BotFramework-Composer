@@ -22,22 +22,27 @@ const botStatusContainer = css`
 
 type BotStatusIndicatorProps = {
   projectId: string;
+  setErrorCalloutVisibility: (isVisible: boolean) => void;
+  isErrorCalloutOpen: boolean;
 };
 
-export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectId }) => {
+export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
+  projectId,
+  setErrorCalloutVisibility,
+  isErrorCalloutOpen,
+}) => {
   const botStatus = useRecoilValue(botStatusState(projectId));
   const botActionRef = useRef(null);
   const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
-  const [calloutVisible, setErrorCallout] = useState(false);
   const { startSingleBot } = useBotOperations();
   const [botStatusStyle, setBotStatusStyle] = useState({});
 
   function dismissErrorDialog() {
-    setErrorCallout(false);
+    setErrorCalloutVisibility(false);
   }
 
   function openErrorDialog() {
-    setErrorCallout(true);
+    setErrorCalloutVisibility(true);
   }
 
   const onTryStartAgain = () => {
@@ -85,7 +90,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
       <ErrorCallout
         error={botLoadErrorMsg}
         target={botActionRef.current}
-        visible={calloutVisible}
+        visible={isErrorCalloutOpen}
         onDismiss={dismissErrorDialog}
         onTry={onTryStartAgain}
       />

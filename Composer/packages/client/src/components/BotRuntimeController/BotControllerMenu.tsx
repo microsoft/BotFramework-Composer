@@ -55,8 +55,19 @@ const tableColumns: IColumn[] = [
     name: formatMessage('Status'),
     minWidth: 150,
     isRowHeader: true,
-    onRender: (item: { displayName: string; projectId: string }) => {
-      return <BotStatusIndicator projectId={item.projectId} />;
+    onRender: (item: {
+      displayName: string;
+      projectId: string;
+      setErrorCalloutVisibility: (isVisible: boolean) => void;
+      isErrorCalloutOpen: boolean;
+    }) => {
+      return (
+        <BotStatusIndicator
+          isErrorCalloutOpen={item.isErrorCalloutOpen}
+          projectId={item.projectId}
+          setErrorCalloutVisibility={item.setErrorCalloutVisibility}
+        />
+      );
     },
   },
   {
