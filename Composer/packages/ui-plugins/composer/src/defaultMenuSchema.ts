@@ -171,4 +171,16 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Delete activity'),
     submenu: [SubmenuNames.PropertyManagement],
   },
+  [SDKKinds.GetActivityMembers]: {
+    label: formatMessage('Get activity members'),
+    submenu: [SubmenuNames.PropertyManagement],
+  },
+  [SDKKinds.GetConversationMembers]: {
+    label: formatMessage('Get conversation members'),
+    submenu: [SubmenuNames.PropertyManagement],
+  },
+  [SDKKinds.ThrowException]: {
+    label: formatMessage('Throw exception'),
+    submenu: [SubmenuNames.Debugging],
+  },
 };
