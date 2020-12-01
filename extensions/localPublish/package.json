@@ -19,6 +19,7 @@
     "lodash": "^4.17.20",
     "path": "^0.12.7",
     "rimraf": "^3.0.2",
+    "tcp-port-used": "^1.0.1",
     "uuid": "^7.0.1"
   },
   "resolutions": {
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^14.11.8",
+    "@types/tcp-port-used": "1.0.0",
     "ts-loader": "^8.0.9",
     "typescript": "^4.0.5",
     "@types/lodash": "^4.14.162",
