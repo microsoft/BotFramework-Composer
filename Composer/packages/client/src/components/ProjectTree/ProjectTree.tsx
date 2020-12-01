@@ -423,7 +423,8 @@ export const ProjectTree: React.FC<Props> = ({
       menu.push({
         label: formatMessage('Edit schema'),
         icon: 'Edit',
-        onClick: (link) => navigateToFormDialogSchema({ projectId: link.skillId, schemaId: link.dialogName }),
+        onClick: (link) =>
+          navigateToFormDialogSchema({ projectId: link.skillId ?? link.projectId, schemaId: link.dialogId }),
       });
     }
 
@@ -547,6 +548,7 @@ export const ProjectTree: React.FC<Props> = ({
         role="grid"
       >
         <TreeItem
+          hasChildren
           isMenuOpen={isMenuOpen}
           isSubItemActive={false}
           link={link}
