@@ -16,7 +16,7 @@ export const Intellisense = React.memo(
     id: string;
     value?: any;
     focused?: boolean;
-    completionListOverrideRefs?: HTMLDivElement[];
+    completionListOverrideContainerElements?: HTMLDivElement[];
     completionListOverrideResolver?: (value: any) => JSX.Element | null;
     onChange: (newValue: string) => void;
     onBlur?: (id: string) => void;
@@ -40,7 +40,7 @@ export const Intellisense = React.memo(
       onChange,
       onBlur,
       children,
-      completionListOverrideRefs,
+      completionListOverrideContainerElements,
     } = props;
 
     const [textFieldValue, setTextFieldValue] = React.useState(value);
@@ -92,7 +92,10 @@ export const Intellisense = React.memo(
           shouldBlur = false;
         }
 
-        if (completionListOverrideRefs && completionListOverrideRefs.some((item) => !checkIsOutside(x, y, item))) {
+        if (
+          completionListOverrideContainerElements &&
+          completionListOverrideContainerElements.some((item) => !checkIsOutside(x, y, item))
+        ) {
           shouldBlur = false;
         }
 
@@ -117,7 +120,7 @@ export const Intellisense = React.memo(
         document.body.removeEventListener('click', outsideClickHandler);
         document.body.removeEventListener('keydown', keydownHandler);
       };
-    }, [focused, onBlur, completionListOverrideRefs]);
+    }, [focused, onBlur, completionListOverrideContainerElements]);
 
     // When textField value is changed
     const onValueChanged = (newValue: string) => {

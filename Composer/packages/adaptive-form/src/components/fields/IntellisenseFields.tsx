@@ -59,14 +59,14 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
-  const [expressionsListMenuRef, setExpressionsListMenuRef] = useState<HTMLDivElement[]>([]);
+  const [expressionsListContainerElements, setExpressionsListContainerElements] = useState<HTMLDivElement[]>([]);
 
   const completionListOverrideResolver = (value: string) => {
     return value === '=' ? (
       <ExpressionsListMenu
         onExpressionSelected={(expression: string) => onChange(expression)}
         onMenuMount={(refs) => {
-          setExpressionsListMenuRef(refs);
+          setExpressionsListContainerElements(refs);
         }}
       />
     ) : null;
@@ -74,7 +74,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
 
   return (
     <Intellisense
-      completionListOverrideRefs={expressionsListMenuRef}
+      completionListOverrideContainerElements={expressionsListContainerElements}
       completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}

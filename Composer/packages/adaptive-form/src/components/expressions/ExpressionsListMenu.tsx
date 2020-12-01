@@ -43,7 +43,7 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
   );
 
   return (
-    <div ref={containerRef} id="ExpressionsListMenu">
+    <div ref={containerRef}>
       <ContextualMenu
         calloutProps={{
           onLayerMounted: onLayerMounted,

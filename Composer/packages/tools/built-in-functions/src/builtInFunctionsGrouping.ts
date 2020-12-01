@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// This is the grouping of adaptive expression functions by type as seen on:
+// https://docs.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0
+
 export const builtInFunctionsGrouping = [
   {
     key: 'string',
