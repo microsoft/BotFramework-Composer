@@ -94,7 +94,6 @@ export class Builder {
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles);
     } catch (error) {
-      console.log(error);
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
   };
