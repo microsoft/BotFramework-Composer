@@ -92,15 +92,17 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             return settings?.SkillConfiguration?.IsSkill == true;
         }
 
-        public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s, TelemetryInitializerMiddleware telemetryInitializerMiddleware)
+        public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s)
         {
-            var adapter = IsSkill(settings) ? new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>()) : new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
-
+            var adapter = IsSkill(settings)
+                ? new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>())
+                : new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+            
             adapter
               .UseStorage(storage)
               .UseBotState(userState, conversationState)
               .Use(new RegisterClassMiddleware<IConfiguration>(Configuration))
-              .Use(telemetryInitializerMiddleware);
+              .Use(s.GetService<TelemetryInitializerMiddleware>());
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
@@ -188,7 +190,8 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
             resourceExplorer.RegisterType<OnQnAMatch>("Microsoft.OnQnAMatch");
 
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
+            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>(s =>
+                GetBotAdapter(storage, settings, userState, conversationState, s));
 
             var removeRecipientMention = settings?.Feature?.RemoveRecipientMention ?? false;
 
