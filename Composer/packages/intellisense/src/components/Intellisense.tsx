@@ -22,6 +22,7 @@ export const Intellisense = React.memo(
     children: (renderProps: {
       textFieldValue: any;
       focused?: boolean;
+      cursorPosition?: number;
       onValueChanged: (newValue: any) => void;
       onKeyDownTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
       onKeyUpTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -132,6 +133,7 @@ export const Intellisense = React.memo(
             selectedSuggestion +
             textFieldValue.substr(range.end.character);
           onValueChanged(newValue);
+          setCursorPosition(range.start.character + selectedSuggestion.length);
         } else {
           onValueChanged(selectedSuggestion);
         }
@@ -188,7 +190,15 @@ export const Intellisense = React.memo(
 
     return (
       <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
-        {children({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField })}
+        {children({
+          textFieldValue,
+          focused,
+          cursorPosition,
+          onValueChanged,
+          onKeyDownTextField,
+          onKeyUpTextField,
+          onClickTextField,
+        })}
 
         {completionListOverride || showCompletionList ? (
           <CompletionList
