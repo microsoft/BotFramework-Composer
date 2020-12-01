@@ -79,7 +79,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) =>
 
   return (
     <div css={headerWrapper}>
-      <p css={headerText}>
+      <div css={headerText}>
         <OverflowSet
           doNotContainWithinFocusZone
           css={overflowSet(true)}
@@ -98,7 +98,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) =>
           }}
           onRenderOverflowButton={onRenderOverflowButton(true)}
         />
-      </p>
+      </div>
     </div>
   );
 };
