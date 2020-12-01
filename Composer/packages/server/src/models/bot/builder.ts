@@ -27,7 +27,7 @@ const SETTINGS = 'settings';
 const INTERRUPTION = 'interruption';
 const SAMPLE_SIZE_CONFIGURATION = 2;
 const CrossTrainConfigName = 'cross-train.config.json';
-const MODLE = 'model';
+const MODEL = 'model';
 
 export type SingleConfig = {
   rootDialog: boolean;
@@ -238,7 +238,7 @@ export class Builder {
       const defaultNLR = nlrList.default;
       const folderName = defaultNLR.replace('.onnx', '');
       const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
-      const destDir = Path.resolve(Path.join(this.botDir, MODLE), folderName);
+      const destDir = Path.resolve(Path.join(this.botDir, MODEL), folderName);
       await copy(modelPath, destDir);
       await this.updateOrchestratorSetting(folderName);
     }
@@ -248,7 +248,7 @@ export class Builder {
     const runtimeRootPath = './ComposerDialogs';
     const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
     const content = JSON.parse(await this.storage.readFile(settingPath));
-    content.orchestrator.ModelPath = `${runtimeRootPath}/${MODLE}/${dirName}`;
+    content.orchestrator.ModelPath = `${runtimeRootPath}/${MODEL}/${dirName}`;
     keys(content.orchestrator.snapshots).forEach((key) => {
       const values = content.orchestrator.snapshots[key].split('ComposerDialogs');
       content.orchestrator.snapshots[key] = `${runtimeRootPath}${values[1]}`;
