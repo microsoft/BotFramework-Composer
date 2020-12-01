@@ -71,7 +71,7 @@ const settings = {
     maxUtteranceAllowed: 15000,
   },
   skill: {},
-  customizedFunctions: [],
+  customFunctions: [],
 };
 
 describe('setting dispatcher', () => {

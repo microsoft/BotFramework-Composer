@@ -47,6 +47,7 @@ export const defaultMenuOrder = [
   'Sign out user',
   // submenu - debugging options
   'Log to console',
+  'Throw exception',
   'Emit a trace event',
 ];
 
