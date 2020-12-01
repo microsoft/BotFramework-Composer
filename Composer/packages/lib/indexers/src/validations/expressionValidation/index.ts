@@ -40,7 +40,7 @@ export const validateExpressions: ValidateFunc = (
   lgFiles: LgFile[]
 ) => {
   const expressions = searchExpressions(path, value, type, schema);
-  const customFunctions = searchLgCustomFunction(lgFiles).concat(settings.customizedFunctions);
+  const customFunctions = searchLgCustomFunction(lgFiles).concat(settings.customFunctions);
 
   const diagnostics = expressions.reduce((diagnostics: Diagnostic[], expression) => {
     const diagnostic = validate(expression, customFunctions);
