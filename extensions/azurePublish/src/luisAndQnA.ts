@@ -101,10 +101,8 @@ export async function publishLuisToPrediction(
       const response = await rp.get(getAccountUri, options);
 
       // this should include an array of account info objects
-      console.log(response);
       accountList = JSON.parse(response);
     } catch (err) {
-      console.log(err);
       // handle the token invalid
       const error = JSON.parse(err.error);
       if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {

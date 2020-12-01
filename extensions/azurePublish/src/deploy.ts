@@ -59,7 +59,16 @@ export class BotProjectDeploy {
         language = 'en-us';
       }
 
-      build(project, this.projPath, settings);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: "Building the bot's resources ...",
+      });
+      await build(project, this.projPath, settings);
+
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'Build Success!',
+      });
 
       // this function returns an object that contains the luis APP ids mapping
       // each dialog to its matching app.
