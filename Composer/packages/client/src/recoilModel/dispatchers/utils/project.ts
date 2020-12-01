@@ -348,7 +348,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     if (dialog.isRoot) {
       mainDialog = dialog.id;
     }
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
     set(dialogState({ projectId, dialogId: dialog.id }), dialog);
     dialogIds.push(dialog.id);
   });

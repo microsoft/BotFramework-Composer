@@ -278,6 +278,30 @@ export default async (composer: any): Promise<void> => {
         // used to read bot project template from source (bundled in plugin)
         const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
+        const schemaDstPath = path.join(project.dir, 'schemas');
+        const schemaSrcPath = path.join(sourcePath, 'schemas');
+        const customSchemaExists = fs.existsSync(schemaDstPath);
+        const pathsToExclude: Set<string> = new Set();
+        if (customSchemaExists) {
+          const sdkExcludePath = await localDisk.glob('sdk.schema', schemaSrcPath);
+          if (sdkExcludePath.length > 0) {
+            pathsToExclude.add(path.join(schemaSrcPath, sdkExcludePath[0]));
+          }
+        }
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
+        const schemaFolderInRuntime = path.join(destPath, 'schemas');
+        await removeDirAndFiles(schemaFolderInRuntime);
+        // install dev dependencies in production, make sure typescript is installed
+        const { stderr: initErr } = await execAsync('npm install && npm install --only=dev', {
+          cwd: destPath,
+        });
+        if (initErr) {
+          composer.log(initErr);
+        }
+        const { stderr: initErr2 } = await execAsync('npm run build', { cwd: destPath });
+        if (initErr2) {
+          throw new Error(initErr2);
+        }
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);
