@@ -49,8 +49,8 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
           cursorPosition={cursorPosition}
           focused={focused}
           id={id}
-          value={textFieldValue} // onBlur managed by Intellisense
-          onBlur={noop}
+          value={textFieldValue}
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -91,8 +91,8 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
           cursorPosition={cursorPosition}
           focused={focused}
           id={id}
-          value={textFieldValue} // onBlur managed by Intellisense
-          onBlur={noop}
+          value={textFieldValue}
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
