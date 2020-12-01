@@ -133,10 +133,10 @@ However, the packages that we care about should contain one or more of the follo
 
 ### Package LG files
 
-1. Open your bot project and find the `language-generation` folder that contains the LG files you want to share.
+1. Open your bot project and find the `language-generation` folder that contains the LG files you want to share. These LG files are usually inside the `en-us` subfolder of the `language-generation` folder.
 2. Create a new folder outside the bot project folder with the name of your new package. For example, `cool-lgs`.
 3. Inside this new folder, create a subfolder called `exported`.
-4. Copy the LG files you want to share from the original `language-generation` folder into the new `exported` folder.
+4. Copy the entire `en-us` folder that contains the LG files you want to share from the original `language-generation` folder into the new `exported` folder.
 5. Follow the instructions ([NuGet](#for-nuget) |[NPM](#for-npm)) below to publish the package to NuGet and/or NPM.
 
 ### Package a custom action
