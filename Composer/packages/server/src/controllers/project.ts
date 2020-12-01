@@ -515,6 +515,7 @@ function createProjectV2(req: Request, res: Response) {
     jobId: jobId,
   });
 }
+
 async function createProjectAsync(req: Request, jobId: string) {
   let { templateId } = req.body;
   const {
