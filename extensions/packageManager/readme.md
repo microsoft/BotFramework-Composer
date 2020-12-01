@@ -1,6 +1,4 @@
-# Package manager
-
-## About Package manager
+# About Package manager
 
 Much of modern software development relies on the ability to reuse and build upon existing code. Composer's Package manager feature allows you to find and install packages of prebuilt features for use in your bots.
 
@@ -10,13 +8,13 @@ From the Package manager interface, you can view a list of currently available p
 
 To install and manage these packages, Composer uses the native package management tools and files available for supported programming languages - NuGet for C# projects and NPM for JavaScript projects. Since installed packages add features to the bot and can contain programming language specific content, an ejected runtime is required.
 
-## About packages
+# About packages
 
 Bot Framework components are the same type of software packages found on popular package registries like NuGet and NPM. In fact, Composer uses these tools internally to host, install and manage packages.
 
 Each package can contain one or more component parts for bots to use, including customizable dialogs, lg templates, and custom actions. When a package is installed, the assets it contains are copied into the project so they can be used by the bot, and customized in Composer. The source and version of each installed package is tracked so imported assets can be updated if a new version is released.
 
-### Supported features by Bot Framework Packages
+## Supported features by Bot Framework Packages
 
 | Feature | Supported
 |-- |--
@@ -27,13 +25,13 @@ Each package can contain one or more component parts for bots to use, including 
 | Middleware | Coming soon
 | Adapters | Coming soon
 
-### Add a package that contains dialogs
+## Add a package that contains dialogs
 
 When you add a package that contains dialog files, they will be copied into your bot. Using Composer, you can customize the content of these files. These files behave like any other dialog created in Composer. They are located in a special `imported/` subfolder.
 
 However, any changes you make to these files will be lost or overwritten if you choose to remove or update the source package.
 
-### Add a package that contains LG files
+## Add a package that contains LG files
 
 When you add a package that contains a "standalone" LG file, it will be copied into your bot -- but it will not appear in the **Bot Responses** interface. In order to use the newly imported file, you must write an import statement into the `common.lg` file.
 
@@ -43,7 +41,7 @@ For example, if a package contains an LG file called `grammar.lg`, it would be n
 [import](grammar.lg)
 ```
 
-### Add a package that contains custom actions
+## Add a package that contains custom actions
 
 When you add a package that contains a custom action, it will be installed into the bot's runtime code, and the JSON schema that describes the action will be merged into the bot's main schema file.
 
@@ -69,11 +67,11 @@ These steps are:
 1. Add `import { MyNewCustomActionComponentRegistration } from 'MyNewCustomAction';`
 2. Add `ComponentRegistration.add(new MyNewCustomActionComponentRegistration());` after the other calls to `ComponentRegistration`.
 
-## Install packages
+# Install packages
 
 There are two ways to install a package into a bot: via the Package manager feature in Composer, or via the command line tools. Both processes have the same outcome and compatible with one another, so you can choose the method best suited to your task. Make sure you have an ejected runtime before installing the packages.
 
-### With the Package manager interface
+## With the Package manager interface
 
 In the main Package manager interface, there is a list of available packages broken into categories. Compatible packages can be installed into a bot by clicking the "Install" button.
 
@@ -83,7 +81,7 @@ Since Composer supports multiple programming languages, make sure that the progr
 
 Composer may experience problems importing new packages - for example, a package may contain an incompatible or conflicting asset. If a problem occurs, Composer will ask for confirmation before taking any destructive action such as overwriting an existing file.
 
-### From the command line
+## From the command line
 
 To install packages from the command line, use the normal package installation tool for your bot's programming language:
 
@@ -113,7 +111,7 @@ bf dialog:merge [package.json or .csproj] --import dialogs/imported --output sch
 
 The output of the CLI tool will include a list of the files that were added, deleted or updated. Note that **changes to existing files will be overwritten if newer versions are found in a package.**
 
-## Build your own packages
+# Build your own packages
 
 The packages used by Composer are native packages, and the process of building one is the same as it would be for any software component published to NPM or NuGet.
 
@@ -123,7 +121,7 @@ However, the packages that we care about should contain one or more of the follo
 * an `exported` folder containing one or more sets of dialog files
 * an `exported` folder containing one or more sets of LG files
 
-### Package dialogs
+## Package dialogs
 
 1. Open your bot project and find the `dialogs` folder. The files for each dialog are contained in a named sub-folder here. Identify the dialogs you want to share. Please note that you should not package the main dialog.
 2. Create a new folder outside the bot project folder with the name of your new package. For example, `cool-dialogs`.
@@ -131,7 +129,7 @@ However, the packages that we care about should contain one or more of the follo
 4. Copy the dialogs you want to share from the original `dialogs` folder into the new `exported` folder.
 5. Follow the instructions ([NuGet](#for-nuget) |[NPM](#for-npm)) below to publish the package to NuGet and/or NPM.
 
-### Package LG files
+## Package LG files
 
 1. Open your bot project and find the `language-generation` folder that contains the LG files you want to share. These LG files are usually inside the `en-us` subfolder of the `language-generation` folder.
 2. Create a new folder outside the bot project folder with the name of your new package. For example, `cool-lgs`.
@@ -139,13 +137,13 @@ However, the packages that we care about should contain one or more of the follo
 4. Copy the entire `en-us` folder that contains the LG files you want to share from the original `language-generation` folder into the new `exported` folder.
 5. Follow the instructions ([NuGet](#for-nuget) |[NPM](#for-npm)) below to publish the package to NuGet and/or NPM.
 
-### Package a custom action
+## Package a custom action
 
 1. <a href="https://docs.microsoft.com/en-us/composer/how-to-add-custom-action">Follow these steps</a> to create the code and schema for your custom action. Both the code and schema files are required to create the package.
 2. Optionally add additional dialogs to the bundle using the instructions below.
 3. Follow the instructions ([NuGet](#for-nuget) |[NPM](#for-npm)) below to publish the package to NuGet and/or NPM.
 
-### For NuGet
+## For NuGet
 
 In the parent folder containing the `exported` folder, make sure there is a `.csproj` file with the name of the package that contains at least the following items. This will configure your project to be published as a NuGet package containing the exported files.
 
@@ -178,7 +176,7 @@ TODO: What else should go in this?  Keywords, homepage link,etc?
 </Project>
 ```
 
-### For NPM
+## For NPM
 
 In the parent folder containing the `exported` folder, make sure there is a `package.json` file. You can create one by running the command: `npm init`
 
