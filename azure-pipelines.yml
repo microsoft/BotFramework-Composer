@@ -24,13 +24,13 @@ jobs:
         displayName: "Use Node 12.13.0"
         inputs:
           versionSpec: 12.13.0
-      - task: Cache@2
-        inputs:
-          key: yarn | $(Agent.OS) | Composer/yarn.lock
-          path: $(YARN_CACHE_FOLDER)
-          restoreKeys: |
-            yarn | $(Agent.OS)
-        displayName: Cache Yarn packages
+      # - task: Cache@2
+      #   inputs:
+      #     key: yarn | $(Agent.OS) | Composer/yarn.lock
+      #     path: $(YARN_CACHE_FOLDER)
+      #     restoreKeys: |
+      #       yarn | $(Agent.OS)
+      #   displayName: Cache Yarn packages
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
