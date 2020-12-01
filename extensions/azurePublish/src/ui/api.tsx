@@ -62,6 +62,7 @@ export const getResourceGroups = async (token: string, subscriptionId: string): 
     }
     return resourceGroupsResult._response.parsedBody;
   } catch (err) {
+    console.log(err)
     logger({
       status: AzureAPIStatus.ERROR,
       message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
