@@ -182,7 +182,7 @@ export const lgDispatcher = () => {
         //set content first
         set(lgFilesState(projectId), (lgFiles) => {
           const index = lgFiles.findIndex((file) => file.id === id);
-          if (index === -1) {
+          if (index !== -1) {
             const cloned = [...lgFiles];
             cloned[index] = { ...cloned[index], content };
             return cloned;
@@ -192,14 +192,10 @@ export const lgDispatcher = () => {
 
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
-        // parsing can take a long time, fetch latest lgFiles from concurrency change.
-        const latestLgFiles = await snapshot.getPromise(lgFilesState(projectId));
-        const updatedFiles = await updateLgFileState(projectId, latestLgFiles, updatedFile);
+        const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
 
         //check file content, drop the expired parse result.
-        set(lgFilesState(projectId), () => {
-          return updateLgFiles(updatedFiles);
-        });
+        set(lgFilesState(projectId), updateLgFiles(updatedFiles, id));
 
         // if changes happen on common.lg, async re-parse all.
         if (getBaseName(id) === 'common') {
