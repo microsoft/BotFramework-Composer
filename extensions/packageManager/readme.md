@@ -1,4 +1,4 @@
-# About Package manager
+# Package manager
 
 Much of modern software development relies on the ability to reuse and build upon existing code. Composer's Package manager feature allows you to find and install packages of prebuilt features for use in your bots.
 
@@ -8,7 +8,7 @@ From the Package manager interface, you can view a list of currently available p
 
 To install and manage these packages, Composer uses the native package management tools and files available for supported programming languages - NuGet for C# projects and NPM for JavaScript projects. Since installed packages add features to the bot and can contain programming language specific content, an ejected runtime is required.
 
-# About packages
+# Packages
 
 Bot Framework components are the same type of software packages found on popular package registries like NuGet and NPM. In fact, Composer uses these tools internally to host, install and manage packages.
 
