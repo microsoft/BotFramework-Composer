@@ -2,57 +2,29 @@
 // Licensed under the MIT License.
 
 import { AuthParameters } from '@botframework-composer/types';
-import { isElectron } from './electronUtil';
-import { Logger, UserAgentApplication, LogLevel } from 'msal';
 import { authConfig } from '../constants';
+import {
+  getTokenFromCache,
+  createPopupWindow,
+  monitorWindowForQueryParam,
+  createHidenIframe,
+  getIdTokenUrl,
+  getAccessTokenUrl,
+  isTokenExpired,
+} from './auth';
+import { isElectron } from './electronUtil';
+import storage from './storage';
 
-const msal = new UserAgentApplication({
-  auth: {
-    authority: `https://login.microsoftonline.com/${authConfig.tenantId}/`,
-    clientId: authConfig.clientId,
-    redirectUri: authConfig.redirectUrl,
-  },
-  cache: {
-    storeAuthStateInCookie: false,
-  },
-  system: {
-    logger: new Logger((level, message, containsPii) => {
-      if (containsPii) {
-        return;
-      }
-      switch (level) {
-        case LogLevel.Error:
-          console.error(message);
-          return;
-        case LogLevel.Info:
-          console.info(message);
-          return;
-        case LogLevel.Verbose:
-          console.debug(message);
-          return;
-        case LogLevel.Warning:
-          console.warn(message);
-          return;
-      }
-    }),
-    loadFrameTimeout: 10000,
-  },
-});
+let idToken = getTokenFromCache('id_token');
 
 async function getAccessToken(options: AuthParameters): Promise<string> {
-  const { clientId = '', targetResource = '', scopes = [] } = options;
-  if (isElectron()) {
-    try {
+  const { targetResource = '', scopes = [] } = options;
+  try {
+    if (isElectron()) {
       const { __csrf__ = '' } = window;
 
       let url = '/api/auth/getAccessToken?';
       const params = new URLSearchParams();
-      if (clientId) {
-        params.append('clientId', clientId);
-      }
-      if (scopes.length) {
-        params.append('scopes', JSON.stringify(scopes));
-      }
       if (targetResource) {
         params.append('targetResource', targetResource);
       }
@@ -61,46 +33,45 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
       const result = await fetch(url, { method: 'GET', headers: { 'X-CSRF-Token': __csrf__ } });
       const { accessToken = '' } = await result.json();
       return accessToken;
-    } catch (e) {
-      // error handling
-      console.error('Did not receive an access token back from the server: ', e);
+    } else {
+      // get access token from cache
+      const key = authConfig.clientId + JSON.stringify(scopes);
+      console.log(key);
+      let token = getTokenFromCache(key);
+      if (token && !isTokenExpired(token)) {
+        return token;
+      }
+
+      // get id token
+      if (!idToken || isTokenExpired(idToken)) {
+        // pop up window
+        const popup = createPopupWindow(getIdTokenUrl(options));
+        if (popup) {
+          idToken = await monitorWindowForQueryParam(popup, 'id_token');
+          storage.set('idToken', idToken || '');
+          console.log('idtoken', idToken);
+        }
+      }
+
+      // use id token to get access token
+      if (typeof idToken === 'string') {
+        const notDisplayFrame = createHidenIframe(getAccessTokenUrl(options, idToken));
+        token =
+          notDisplayFrame.contentWindow &&
+          (await monitorWindowForQueryParam(notDisplayFrame.contentWindow, 'access_token'));
+        console.log('access', token);
+        notDisplayFrame.remove();
+        // update cache
+        storage.set(key, token);
+        return token || '';
+      }
+
       return '';
     }
-  } else {
-    // User not logged in, perform an interactive login
-    const currentRequest = {
-      scopes: options.scopes || authConfig.scopes,
-    };
-    let token = '';
-    if (msal.getAccount()) {
-      // If the user is already logged in, get the token silently.
-      try {
-        // User logged in means we can do silent token acquisition with the
-        // requested scopes
-        const tokenInfo = await msal.acquireTokenSilent(currentRequest);
-        token = tokenInfo.accessToken;
-      } catch (e) {
-        // If token acquisition fails, we fallback to interactive login.
-        await msal.loginPopup(currentRequest);
-        const tokenInfo = await msal.acquireTokenPopup(currentRequest);
-        token = tokenInfo.accessToken;
-      }
-    } else {
-      try {
-        // Interactive login should get us an id_token
-        await msal.loginPopup({ scopes: authConfig.scopes });
-
-        console.log('start to acquire');
-        // Get the token with the specifically requested scopes
-        const tokenInfo = await msal.acquireTokenPopup(currentRequest);
-        console.log(tokenInfo);
-        token = tokenInfo.accessToken;
-      } catch (e) {
-        console.error('Error encountered during log in: ', e);
-        return '';
-      }
-    }
-    return token;
+  } catch (e) {
+    // error handling
+    console.error('Did not receive an access token back from the server: ', e);
+    return '';
   }
 }
 
@@ -115,10 +86,6 @@ async function logOut() {
     }
   } else {
     // msal logout
-    const acc = msal.getAccount();
-    if (acc) {
-      msal.logout();
-    }
   }
 }
 

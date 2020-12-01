@@ -250,3 +250,5 @@ export const graphScopes = {
   scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
   targetResource: 'https://graph.microsoft.com/',
 };
+
+export const authUrl = `https://login.microsoftonline.com/${authConfig.tenantId}/oauth2/v2.0/authorize`;
