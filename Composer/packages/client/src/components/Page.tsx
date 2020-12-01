@@ -132,8 +132,9 @@ const Page: React.FC<IPageProps> = (props) => {
                   showDialogs: true,
                   showRemote: false,
                   showMenu: false,
-                  showQnAMenu: title === 'QnA' ? true : false,
+                  showQnAMenu: title === 'QnA',
                   showErrors: false,
+                  showCommonLinks: true,
                 }}
                 onSelect={(link) => {
                   navigateTo(buildURL(pageMode, link));

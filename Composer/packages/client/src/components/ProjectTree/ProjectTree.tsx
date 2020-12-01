@@ -70,6 +70,12 @@ const tree = css`
   label: tree;
 `;
 
+const headerCSS = (label: string) => css`
+  margin-top: -6px;
+  width: 100%;
+  label: ${label};
+`;
+
 // -------------------- Helper functions -------------------- //
 
 const getTriggerIndex = (trigger: ITrigger, dialog: DialogInfo): number => {
@@ -160,6 +166,7 @@ type Props = {
     showMenu?: boolean;
     showQnAMenu?: boolean;
     showErrors?: boolean;
+    showCommonLinks?: boolean;
   };
 };
 
@@ -188,6 +195,7 @@ export const ProjectTree: React.FC<Props> = ({
     showMenu: true,
     showQnAMenu: true,
     showErrors: true,
+    showCommonLinks: false,
   },
 }) => {
   const {
@@ -345,16 +353,7 @@ export const ProjectTree: React.FC<Props> = ({
     }
 
     return (
-      <span
-        key={bot.name}
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-          label: bot-header;
-        `}
-        data-testid={`BotHeader-${bot.name}`}
-        role="grid"
-      >
+      <span key={bot.name} css={headerCSS('bot-header')} data-testid={`BotHeader-${bot.name}`} role="grid">
         <TreeItem
           hasChildren={!bot.isRemote}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
@@ -365,7 +364,7 @@ export const ProjectTree: React.FC<Props> = ({
           menuOpenCallback={setMenuOpen}
           showErrors={options.showErrors}
           textWidth={leftSplitWidth - TREE_PADDING}
-          onSelect={handleOnSelect}
+          onSelect={options.showCommonLinks ? undefined : handleOnSelect}
         />
       </span>
     );
@@ -433,11 +432,7 @@ export const ProjectTree: React.FC<Props> = ({
         <span
           key={dialog.id}
           ref={dialog.isRoot ? addMainDialogRef : null}
-          css={css`
-            margin-top: -6px;
-            width: 100%;
-            label: dialog-header;
-          `}
+          css={headerCSS('dialog-header')}
           data-testid={`DialogHeader-${dialog.displayName}`}
           role="grid"
         >
@@ -458,6 +453,34 @@ export const ProjectTree: React.FC<Props> = ({
       ),
       dialogLink,
     };
+  };
+
+  const renderCommonDialogHeader = (skillId: string, depth: number) => {
+    const dialogLink: TreeLink = {
+      dialogId: 'common',
+      displayName: formatMessage('Common'),
+      isRoot: false,
+      diagnostics: [],
+      projectId: rootProjectId,
+      skillId: skillId === rootProjectId ? undefined : skillId,
+    };
+
+    return (
+      <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`} role="grid">
+        <TreeItem
+          hasChildren
+          icon={icons.DIALOG}
+          isActive={doesLinkMatch(dialogLink, selectedLink)}
+          isMenuOpen={isMenuOpen}
+          link={dialogLink}
+          menuOpenCallback={setMenuOpen}
+          padLeft={depth * LEVEL_PADDING}
+          showErrors={false}
+          textWidth={leftSplitWidth - TREE_PADDING}
+          onSelect={handleOnSelect}
+        />
+      </span>
+    );
   };
 
   const renderTrigger = (item: any, dialog: DialogInfo, projectId: string, dialogLink: TreeLink): React.ReactNode => {
@@ -539,14 +562,7 @@ export const ProjectTree: React.FC<Props> = ({
       projectId,
     };
     return (
-      <span
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-          label: trigger-group-header;
-        `}
-        role="grid"
-      >
+      <span css={headerCSS('trigger-group-header')} role="grid">
         <TreeItem
           hasChildren
           isMenuOpen={isMenuOpen}
@@ -640,9 +656,13 @@ export const ProjectTree: React.FC<Props> = ({
         );
       });
     } else {
-      return filteredDialogs.map(
-        (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
-      );
+      const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
+      return [
+        ...commonLink,
+        ...filteredDialogs.map(
+          (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
+        ),
+      ];
     }
   };
 
