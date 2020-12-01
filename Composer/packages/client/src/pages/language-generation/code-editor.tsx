@@ -101,7 +101,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           },
         };
         updateLgTemplateDispatcher(payload);
-      }, 2000),
+      }, 500),
     [file, template, projectId]
   );
 
@@ -116,7 +116,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           content,
         };
         updateLgFileDispatcher(payload);
-      }, 2000),
+      }, 500),
     [file, projectId]
   );
 

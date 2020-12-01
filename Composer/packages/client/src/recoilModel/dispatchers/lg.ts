@@ -21,9 +21,16 @@ const templateIsNotEmpty = ({ name, body }) => {
 // fill other locale lgFile new added template with '- '
 const initialBody = '- ';
 
-const updateLgFiles = (targets: LgFile[]) => {
+const updateLgFiles = (targets: LgFile[], targetId?: string) => {
   const changes = targets;
+  const id = targetId;
   return (lgFiles: LgFile[]) => {
+    if (targetId) {
+      const currentFile = lgFiles.find((file) => file.id === id);
+      const targetFile = changes.find((file) => file.id === id);
+      if (currentFile?.content !== targetFile?.content) return lgFiles;
+    }
+
     return lgFiles.map((file) => {
       const changedFile = changes.find(({ id }) => id === file.id);
       return changedFile ?? file;
@@ -172,12 +179,28 @@ export const lgDispatcher = () => {
     }) => {
       try {
         const { set, snapshot } = callbackHelpers;
+        //set content first
+        set(lgFilesState(projectId), (lgFiles) => {
+          const index = lgFiles.findIndex((file) => file.id === id);
+          if (index === -1) {
+            const cloned = [...lgFiles];
+            cloned[index] = { ...cloned[index], content };
+            return cloned;
+          }
+          return lgFiles;
+        });
+
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
         // parsing can take a long time, fetch latest lgFiles from concurrency change.
         const latestLgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const updatedFiles = await updateLgFileState(projectId, latestLgFiles, updatedFile);
-        set(lgFilesState(projectId), updateLgFiles(updatedFiles));
+
+        //check file content, drop the expired parse result.
+        set(lgFilesState(projectId), () => {
+          return updateLgFiles(updatedFiles);
+        });
+
         // if changes happen on common.lg, async re-parse all.
         if (getBaseName(id) === 'common') {
           const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
