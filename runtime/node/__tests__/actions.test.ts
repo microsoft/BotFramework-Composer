@@ -1,12 +1,10 @@
 import * as path from 'path';
+import { ConversationState, MemoryStorage, TestAdapter, TurnContext, useBotState, UserState } from 'botbuilder';
 import { ResourceExplorer } from 'botbuilder-dialogs-declarative';
-import { AdaptiveDialogComponentRegistration } from 'botbuilder-dialogs-adaptive';
-import { TestAdapter, ConversationState, MemoryStorage, UserState } from 'botbuilder';
+import { ActivityTypes, Activity, ChannelAccount } from 'botframework-schema';
 import { ComposerBot } from '../src/shared/composerBot';
 import { SkillConversationIdFactory } from '../src/shared/skillConversationIdFactory';
 import * as helpers from '../src/shared/helpers';
-import { ActivityTypes, Activity, ChannelAccount } from 'botframework-schema';
-import { TurnContext } from 'botbuilder-core';
 
 const samplesDirectory = path.resolve(__dirname, '../../../extensions/samples/assets/projects', 'ActionsSample');
 
@@ -43,7 +41,6 @@ const getSettings = jest.spyOn(helpers, 'getSettings').mockImplementation((root:
 
 beforeAll(() => {
   resourceExplorer.addFolders(samplesDirectory, ['runtime'], false);
-  resourceExplorer.addComponent(new AdaptiveDialogComponentRegistration(resourceExplorer));
   adapter = new TestAdapter(
     async (context: TurnContext): Promise<any> => {
       // Route activity to bot.
@@ -60,6 +57,8 @@ beforeEach(() => {
   // Create shared user state and conversation state instances.
   const userState = new UserState(memoryStorage);
   const conversationState = new ConversationState(memoryStorage);
+  useBotState(adapter, userState, conversationState);
+
   // Create shared skill conversation id factory instance.
   const skillConversationIdFactory = new SkillConversationIdFactory();
   bot = new ComposerBot(userState, conversationState, skillConversationIdFactory);
@@ -232,6 +231,13 @@ describe('test runtime used ActionsSample', () => {
       basicActiivty,
       true
     );
+    const memoryStorage = new MemoryStorage();
+
+    // Create shared user state and conversation state instances.
+    const userState = new UserState(memoryStorage);
+    const conversationState = new ConversationState(memoryStorage);
+    useBotState(adapter, userState, conversationState);
+
     await adapter
       .send(conversationUpdateActivity)
       .assertReply(
