@@ -146,6 +146,7 @@ export type ActionContextApi = {
 
 export type DialogEditingContextApi = {
   saveData: <T = any>(newData: T, updatePath?: string, callback?: () => void | Promise<void>) => Promise<void>;
+  onOpenDialog: (dialogId: string) => Promise<void>;
   onFocusSteps: (stepIds: string[], focusedTab?: string) => Promise<void>;
   onFocusEvent: (eventId: string) => Promise<void>;
   onSelect: (ids: string[]) => void;
