@@ -94,6 +94,7 @@ export class Builder {
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles);
     } catch (error) {
+      console.log(error);
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
   };
@@ -407,8 +408,7 @@ export class Builder {
     });
 
     if (qnaContents) {
-      const subscriptionKeyEndpoint =
-        config.endpoint ?? `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+      const subscriptionKeyEndpoint = `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
 
       const buildResult = await this.qnaBuilder.build(qnaContents, config.subscriptionKey, config.botName, {
         endpoint: subscriptionKeyEndpoint,
