@@ -156,6 +156,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     await navTo(projectId, path, rest);
   }
 
+  async function openDialog(dialogId: string) {
+    await navTo(projectId, dialogId, '"beginDialog"');
+  }
+
   async function focusEvent(subPath) {
     if (rootBotProjectId == null) return;
     await selectTo(projectId, dialogId, subPath);
@@ -218,6 +222,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
+    onOpenDialog: openDialog,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
     onSelect: setVisualEditorSelection,

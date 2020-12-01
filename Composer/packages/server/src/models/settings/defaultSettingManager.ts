@@ -13,7 +13,13 @@ import log from '../../logger';
 import { FileSettingManager } from './fileSettingManager';
 const debug = log.extend('default-settings-manager');
 
-const newSettingsValuePath = ['downsampling', 'luis.endpoint', 'luis.authoringEndpoint', 'skillConfiguration'];
+const newSettingsValuePath = [
+  'downsampling',
+  'luis.endpoint',
+  'luis.authoringEndpoint',
+  'skillConfiguration',
+  'customFunctions',
+];
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string, user?: UserIdentity) {
@@ -91,6 +97,7 @@ export class DefaultSettingManager extends FileSettingManager {
       skill: {},
       defaultLanguage: 'en-us',
       languages: ['en-us'],
+      customFunctions: [],
       importedLibraries: [],
     };
   };
@@ -109,7 +116,6 @@ export class DefaultSettingManager extends FileSettingManager {
     if (updateFile) {
       this.set(result);
     }
-
     return result;
   }
 

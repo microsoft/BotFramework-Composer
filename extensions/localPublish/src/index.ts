@@ -16,7 +16,7 @@ import killPort from 'kill-port';
 import map from 'lodash/map';
 import range from 'lodash/range';
 import getPort from 'get-port';
-
+import * as tcpPortUsed from 'tcp-port-used';
 
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
@@ -43,7 +43,6 @@ interface PublishConfig {
 const isWin = process.platform === 'win32';
 
 const localhostRegex = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
-
 
 const isLocalhostUrl = (matchUrl: string) => {
   return localhostRegex.test(matchUrl);
@@ -94,7 +93,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           'azurewebapp'
         );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
-        const runtimePath =  path.isAbsolute(project.settings.runtime.path)? project.settings.runtime.path: path.resolve(project.dataDir, project.settings.runtime.path);
+        const runtimePath = path.isAbsolute(project.settings.runtime.path)
+          ? project.settings.runtime.path
+          : path.resolve(project.dataDir, project.settings.runtime.path);
         await runtime.build(runtimePath, project);
         await runtime.setSkillManifest(
           project.settings.runtime.path,
@@ -360,9 +361,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
         // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
         skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
-
       }
-      config = this.getConfig(settings, skillHostEndpoint)
+      config = this.getConfig(settings, skillHostEndpoint);
       let spawnProcess;
       try {
         spawnProcess = spawn(
@@ -375,15 +375,26 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           }
         );
         this.composer.log('Started process %d', spawnProcess.pid);
-        this.setBotStatus(botId, {
-          process: spawnProcess,
-          port: port,
-          status: 202,
-          result: { message: 'Runtime process started. Waiting for communication from runtime' },
-        });
-        const processLog = this.composer.log.extend(spawnProcess.pid);
-        this.addListeners(spawnProcess, botId, processLog);
-        resolve();
+        // check if the port if ready for connecting, issue: https://github.com/microsoft/BotFramework-Composer/issues/3728
+        // retry every 500ms, timeout 10min
+        const retryTime = 500;
+        const timeOutTime = 600000;
+        tcpPortUsed.waitUntilUsedOnHost(port, '0.0.0.0', retryTime, timeOutTime).then(
+          () => {
+            this.setBotStatus(botId, {
+              process: spawnProcess,
+              port: port,
+              status: 200,
+              result: { message: 'Runtime started' },
+            });
+            const processLog = this.composer.log.extend(spawnProcess.pid);
+            this.addListeners(spawnProcess, botId, processLog);
+            resolve();
+          },
+          (err) => {
+            reject(`Bot on localhost:${port} not working, error message: ${err.message}`);
+          }
+        );
       } catch (err) {
         reject(err);
         throw err;
@@ -406,7 +417,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push(config.qna.endpointKey);
     }
 
-    if(skillHostEndpointUrl) {
+    if (skillHostEndpointUrl) {
       configList.push('--SkillHostEndpoint');
       configList.push(skillHostEndpointUrl);
     }
@@ -432,10 +443,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
-        if(!erroutput && LocalPublisher.runningBots[botId].status === 202) {
+        if (!erroutput && LocalPublisher.runningBots[botId].status === 202) {
           this.setBotStatus(botId, {
             status: 200,
-            result: { message: 'Runtime has started'},
+            result: { message: 'Runtime has started' },
           });
         }
         logger('%s', data.toString());
