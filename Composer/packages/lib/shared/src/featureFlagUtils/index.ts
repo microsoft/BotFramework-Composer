@@ -5,12 +5,6 @@ import formatMessage from 'format-message';
 import { FeatureFlagMap } from '@botframework-composer/types';
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
-  VA_CREATION: {
-    displayName: formatMessage('VA Creation'),
-    description: formatMessage('VA template made available in new bot flow.'),
-    isHidden: true,
-    enabled: false,
-  },
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
     description: formatMessage('Show form dialog editor in the canvas'),
