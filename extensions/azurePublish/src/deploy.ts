@@ -72,7 +72,7 @@ export class BotProjectDeploy {
 
       // this function returns an object that contains the luis APP ids mapping
       // each dialog to its matching app.
-      const { luisAppIds, qnaConfig } = await publishLuisToPrediction(
+      const luisAppIds = await publishLuisToPrediction(
         name,
         environment,
         this.accessToken,
@@ -81,6 +81,8 @@ export class BotProjectDeploy {
         this.projPath,
         this.logger
       );
+
+      const qnaConfig = await project.builder.getQnaConfig();
 
       // amend luis settings with newly generated values
       settings.luis = {

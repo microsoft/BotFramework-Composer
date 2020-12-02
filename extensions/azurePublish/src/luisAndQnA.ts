@@ -94,7 +94,6 @@ export async function publishLuisToPrediction(
       // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be313cec181ae720aa2b26c
       // This returns a list of azure account information objects with AzureSubscriptionID, ResourceGroup, AccountName for each.
       const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
-      console.log(getAccountUri);
       const options = {
         headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
       } as rp.RequestPromiseOptions;
