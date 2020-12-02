@@ -145,6 +145,13 @@ const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
   return mergedSettings;
 };
 
+const mergeLuisName = (settings: DialogSetting, botName: string) => {
+  const mergedSettings = cloneDeep(settings);
+  const luisName = objectGet(mergedSettings, 'luis.name', '') || botName;
+  objectSet(mergedSettings, 'luis.name', luisName);
+  return mergedSettings;
+};
+
 export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjectId, settings: DialogSetting) => {
   const localSetting = settingStorage.get(rootBotProjectId);
   const mergedSettings = cloneDeep(settings);
@@ -172,8 +179,9 @@ export const getSensitiveProperties = (settings: DialogSetting) => {
   return sensitiveProperties;
 };
 
-export const getMergedSettings = (projectId, settings): DialogSetting => {
-  const mergedSettings = mergeLocalStorage(projectId, settings);
+export const getMergedSettings = (projectId, settings, botName): DialogSetting => {
+  let mergedSettings = mergeLocalStorage(projectId, settings);
+  mergedSettings = mergeLuisName(mergedSettings, botName);
   if (Array.isArray(mergedSettings.skill)) {
     const skillsArr = mergedSettings.skill.map((skillData) => ({ ...skillData }));
     mergedSettings.skill = convertSkillsToDictionary(skillsArr);
@@ -210,7 +218,7 @@ export const navigateToSkillBot = (rootProjectId: string, skillId: string, mainD
 
 export const loadProjectData = (data) => {
   const { files, botName, settings, id: projectId } = data;
-  const mergedSettings = getMergedSettings(projectId, settings);
+  const mergedSettings = getMergedSettings(projectId, settings, botName);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
