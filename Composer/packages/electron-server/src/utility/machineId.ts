@@ -15,7 +15,7 @@ export const persistedFilePath = path.join(app.getPath('userData'), 'persisted.j
 
 export async function getMachineId(): Promise<string> {
   if (!existsSync(persistedFilePath)) {
-    const machineId = (await getMacMachineId()) || uuid.generateUuid();
+    const machineId = (await getMacMachineId()) || uuid();
     const telemetrySettings = { machineId };
 
     writeJsonFileSync(persistedFilePath, telemetrySettings);
