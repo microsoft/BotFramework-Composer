@@ -130,6 +130,7 @@ const BotController: React.FC = () => {
         <DefaultButton
           primary
           aria-roledescription={formatMessage('Bot Controller')}
+          ariaDescription={buttonText}
           disabled={disableStartBots}
           iconProps={{
             iconName: running ? 'CircleStopSolid' : 'Play',
