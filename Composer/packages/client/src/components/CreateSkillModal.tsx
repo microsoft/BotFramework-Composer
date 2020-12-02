@@ -13,9 +13,11 @@ import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { addSkillDialog } from '../constants';
+import { addSkillDialog as addSkillDialogFn } from '../constants';
 import httpClient from '../utils/httpUtil';
 import { skillsStateSelector } from '../recoilModel';
+
+const addSkillDialog = addSkillDialogFn();
 
 export interface SkillFormDataErrors {
   endpoint?: string;

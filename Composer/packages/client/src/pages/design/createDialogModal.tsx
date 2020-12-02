@@ -11,12 +11,14 @@ import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extensi
 import { DialogFactory, SDKKinds, DialogUtils } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { DialogCreationCopy } from '../../constants';
+import { DialogCreationCopy as dialogCopyFn } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { actionsSeedState, schemasState, validateDialogsSelectorFamily } from '../../recoilModel';
 
 import { name, description, styles as wizardStyles } from './styles';
+
+const DialogCreationCopy = dialogCopyFn();
 
 interface DialogFormData {
   name: string;
