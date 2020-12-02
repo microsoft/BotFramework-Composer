@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Link, Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
@@ -24,7 +24,7 @@ const docsUrl = `https://aka.ms/composer-use-package-library`;
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
-  const { settings, projectId, reloadProject } = useProjectApi();
+  const { settings, projectId, reloadProject, projectCollection } = useProjectApi();
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
@@ -111,8 +111,11 @@ const Library: React.FC = () => {
     return (component.language === programmingLanguageSelection);
   }
 
-  useEffect(() => {
+  const createSubtree = useCallback(() => {
+    console.log('MY PROJECT COLLECTION', projectCollection);
+  }, [projectCollection]);
 
+  useEffect(() => {
 
     getLibraries();
 

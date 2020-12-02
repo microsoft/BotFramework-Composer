@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { AxiosInstance } from 'axios';
-
+import { Diagnostic } from '@bfc/shared';
 import type {
   DialogInfo,
   LuFile,
@@ -128,9 +128,22 @@ export type ProjectContextApi = {
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
 
+export type BotInProject = {
+  dialogs: DialogInfo[];
+  projectId: string;
+  name: string;
+  isRemote: boolean;
+  isRootBot: boolean;
+  diagnostics: Diagnostic[];
+  error: { [key: string]: any };
+  buildEssentials: { [key: string]: any };
+  isPvaSchema: boolean;
+};
+
 export type ProjectContext = {
   botName: string;
   projectId: string;
+  projectCollection: BotInProject[];
   dialogs: DialogInfo[];
   dialogSchemas: DialogSchemaFile[];
   lgFiles: LgFile[];
