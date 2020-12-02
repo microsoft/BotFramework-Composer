@@ -17,7 +17,7 @@ import { WorkingModal } from './workingModal';
 
 const DEFAULT_CATEGORY = formatMessage('Available');
 
-const docsUrl = `https://aka.ms/composer-use-package-library`;
+const docsUrl = `https://aka.ms/composer-package-manager-readme`;
 
 
 
