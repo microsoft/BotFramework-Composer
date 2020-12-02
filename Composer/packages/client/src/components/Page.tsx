@@ -97,6 +97,7 @@ type IPageProps = {
   useNewTree?: boolean;
   navLinks?: INavTreeItem[];
   pageMode: PageMode;
+  showCommonLinks?: boolean;
 };
 
 const Page: React.FC<IPageProps> = (props) => {
@@ -112,6 +113,7 @@ const Page: React.FC<IPageProps> = (props) => {
     shouldShowEditorError = true,
     useNewTree,
     pageMode,
+    showCommonLinks = false,
   } = props;
 
   return (
@@ -134,7 +136,7 @@ const Page: React.FC<IPageProps> = (props) => {
                   showMenu: false,
                   showQnAMenu: title === 'QnA',
                   showErrors: false,
-                  showCommonLinks: true,
+                  showCommonLinks,
                 }}
                 onSelect={(link) => {
                   navigateTo(buildURL(pageMode, link));
