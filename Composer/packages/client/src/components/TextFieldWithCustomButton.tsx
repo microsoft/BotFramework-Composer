@@ -4,38 +4,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useEffect } from 'react';
-import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { TextField, ITextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { NeutralColors } from '@uifabric/fluent-theme';
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
-
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.size12};
-  margin-right: 5px;
-`;
 
 const disabledTextFieldStyle = {
   root: {
@@ -93,6 +69,7 @@ type TextFieldWithCustomButtonProps = {
   value: string;
   onBlur?: (value) => void;
   onChange?: (e, value) => void;
+  onRenderLabel?: IRenderFunction<ITextFieldProps>;
   required: boolean;
   id?: string;
 };
@@ -107,15 +84,8 @@ const errorElement = (errorText: string) => {
   );
 };
 
-const onRenderLabel = (props) => {
-  return (
-    <div css={labelContainer}>
-      <div css={customerLabel}> {props.label} </div>
-      <TooltipHost content={props.label}>
-        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
+const defaultRenderLabel = (props, defaultRender) => {
+  return defaultRender(props);
 };
 
 export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps> = (props) => {
@@ -131,6 +101,7 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
     onBlur,
     errorMessage,
     id = '',
+    onRenderLabel = defaultRenderLabel,
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const textFieldComponentRef = useRef<ITextField>(null);

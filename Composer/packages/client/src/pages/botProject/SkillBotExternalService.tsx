@@ -2,13 +2,17 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@uifabric/fluent-theme';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { isLUISMandatory, isQnAKeyMandatory } from '../../utils/dialogValidator';
 import {
@@ -17,6 +21,7 @@ import {
   luFilesState,
   qnaFilesState,
   validateDialogsSelectorFamily,
+  botDisplayNameState,
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -37,6 +42,30 @@ const externalServiceContainerStyle = css`
   flex-direction: column;
 `;
 
+const labelContainer = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const customerLabel = css`
+  font-size: ${FontSizes.small};
+  margin-right: 5px;
+`;
+
+const unknownIconStyle = (required) => {
+  return {
+    root: {
+      selectors: {
+        '&::before': {
+          content: required ? " '*'" : '',
+          color: SharedColors.red10,
+          paddingRight: 3,
+        },
+      },
+    },
+  };
+};
+
 // -------------------- ExternalService -------------------- //
 
 type SkillBotExternalServiceProps = {
@@ -50,8 +79,11 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
+  const botName = useRecoilValue(botDisplayNameState(projectId));
+  const skillLuisName = get(settings, 'luis.name', '') || botName;
+  const [localSkillLuisName, setLocalSkillLuisName] = useState<string>(skillLuisName ?? '');
 
+  const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
   const skillLuisKey = groupLUISAuthoringKey[projectId];
@@ -65,11 +97,12 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+
   const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
   const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
 
-  const luisKeyFieldRef = React.useRef<HTMLInputElement>(null);
-  const qnaKeyFieldRef = React.useRef<HTMLInputElement>(null);
+  const luisKeyFieldRef = useRef<HTMLInputElement>(null);
+  const qnaKeyFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
@@ -79,6 +112,32 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [scrollToSectionId]);
+
+  useEffect(() => {
+    setLocalSkillLuisName(skillLuisName);
+  }, [projectId]);
+
+  const onRenderLabel = (props) => {
+    return (
+      <div css={labelContainer}>
+        <div css={customerLabel}> {props.label} </div>
+        <TooltipHost content={props.label}>
+          <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
+        </TooltipHost>
+      </div>
+    );
+  };
+
+  const handleSkillLUISNameOnChange = (e, value) => {
+    setLocalSkillLuisName(value);
+  };
+
+  const handleSkillLUISNameOnBlur = () => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, name: localSkillLuisName },
+    });
+  };
 
   const handleSkillQnAKeyOnBlur = (key: string) => {
     if (key) {
@@ -120,6 +179,18 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   return (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
+        <TextField
+          aria-labelledby={'LUIS name'}
+          data-testId={'skillLUISName'}
+          id={'luisName'}
+          label={formatMessage('LUIS name')}
+          placeholder={'Enter LUIS name'}
+          styles={{ root: { marginBottom: 10 } }}
+          value={localSkillLuisName}
+          onBlur={handleSkillLUISNameOnBlur}
+          onChange={handleSkillLUISNameOnChange}
+          onRenderLabel={onRenderLabel}
+        />
         <TextFieldWithCustomButton
           ariaLabelledby={'LUIS key'}
           buttonText={formatMessage('Use custom LUIS key')}
@@ -131,6 +202,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           required={isLUISKeyNeeded}
           value={skillLuisKey}
           onBlur={handleLUISKeyOnBlur}
+          onRenderLabel={onRenderLabel}
         />
         <TextFieldWithCustomButton
           ariaLabelledby={'LUIS region'}
@@ -142,6 +214,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           required={isLUISKeyNeeded}
           value={skillLuisRegion}
           onBlur={handleLUISRegionOnBlur}
+          onRenderLabel={onRenderLabel}
         />
         <TextFieldWithCustomButton
           ariaLabelledby={'QnA Maker Subscription key'}
@@ -154,6 +227,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           required={isQnAKeyNeeded}
           value={skillqnaKey}
           onBlur={handleSkillQnAKeyOnBlur}
+          onRenderLabel={onRenderLabel}
         />
       </div>
     </CollapsableWrapper>
