@@ -6,182 +6,68 @@ import { promisify } from 'util';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
-import { ILuisConfig, FileInfo, IQnAConfig } from '@botframework-composer/types';
+import { ILuisConfig, FileInfo, IQnAConfig, IBotProject } from '@botframework-composer/types';
 
-import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { luImportResolverGenerator } from '@bfc/shared/lib/luBuildResolver';
 
-const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
-const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
-const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 const readdir: any = promisify(fs.readdir);
 
-export interface PublishConfig {
-  // Logger
-  logger: (string) => any;
-  projPath: string;
-  [key: string]: any;
+const botPath = (projPath: string) => path.join(projPath, 'ComposerDialogs')
+
+type QnaConfigType = {
+  subscriptionKey: string;
+  qnaRegion: string | 'westus';
+};
+
+type Resources = {
+  luResources: string[];
+  qnaResources: string[];
 }
 
-const INTERRUPTION = 'interruption';
+type BuildSettingType = {
+  luis: ILuisConfig,
+  qna: QnaConfigType
+} & Resources
 
-export class LuisAndQnaPublish {
-  private logger: (string) => any;
-  private remoteBotPath: string;
-  private generatedFolder: string;
-  private interruptionFolderPath: string;
-  private crossTrainConfig: ICrossTrainConfig;
-
-  constructor(config: PublishConfig) {
-    this.logger = config.logger;
-    // path to the ready to deploy generated folder
-    this.remoteBotPath = path.join(config.projPath, 'ComposerDialogs');
-    this.generatedFolder = path.join(this.remoteBotPath, 'generated');
-    this.interruptionFolderPath = path.join(this.generatedFolder, INTERRUPTION);
-
-    // Cross Train config
-    this.crossTrainConfig = {
-      rootIds: [],
-      triggerRules: {},
-      intentName: '_Interruption',
-      verbose: true,
-      botName: '',
-    };
-  }
-
-  /*******************************************************************************************************************************/
-  /* This section has to do with publishing LU files to LUIS
-  /*******************************************************************************************************************************/
-
-  /**
-   * return an array of all the files in a given directory
-   * @param dir
-   */
-  private async getFiles(dir: string): Promise<string[]> {
-    const dirents = await readdir(dir, { withFileTypes: true });
-    const files = await Promise.all(
-      dirents.map((dirent) => {
-        const res = path.resolve(dir, dirent.name);
-        return dirent.isDirectory() ? this.getFiles(res) : res;
-      })
-    );
-    return Array.prototype.concat(...files);
-  }
-
-  /**
-   * Helper function to get the appropriate account out of a list of accounts
-   * @param accounts
-   * @param filter
-   */
-  private getAccount(accounts: any, filter: string) {
-    for (const account of accounts) {
-      if (account.AccountName === filter) {
-        return account;
-      }
+function getAccount(accounts: any, filter: string) {
+  for (const account of accounts) {
+    if (account.AccountName === filter) {
+      return account;
     }
   }
+}
 
-  private notEmptyModel(file: string) {
-    return fs.readFileSync(file).length > 0;
-  }
+/**
+* return an array of all the files in a given directory
+* @param dir
+*/
+async function getFiles(dir: string): Promise<string[]> {
+  const dirents = await readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    dirents.map((dirent) => {
+      const res = path.resolve(dir, dirent.name);
+      return dirent.isDirectory() ? getFiles(res) : res;
+    })
+  );
+  return Array.prototype.concat(...files);
+}
 
-  private async createGeneratedDir() {
-    if (!(await fs.pathExists(this.generatedFolder))) {
-      await fs.mkdir(this.generatedFolder);
-    }
-  }
-
-  private async setCrossTrainConfig(botName: string, dialogFiles: string[], luFiles: string[]) {
-    const dialogs: { [key: string]: any }[] = [];
-    for (const dialog of dialogFiles) {
-      dialogs.push({
-        id: dialog.substring(dialog.lastIndexOf('\\') + 1, dialog.length),
-        isRoot: dialog.indexOf(path.join(this.remoteBotPath, 'dialogs')) === -1,
-        content: fs.readJSONSync(dialog),
-      });
-    }
-    const luFileInfos: FileInfo[] = luFiles.map((luFile) => {
-      const fileStats = fs.statSync(luFile);
-      return {
-        name: luFile.substring(luFile.lastIndexOf('\\') + 1),
-        content: fs.readFileSync(luFile, 'utf-8'),
-        lastModified: fileStats.mtime.toString(),
-        path: luFile,
-        relativePath: luFile.substring(luFile.lastIndexOf(this.remoteBotPath) + 1),
-      };
-    });
-    this.crossTrainConfig = createCrossTrainConfig(dialogs, luFileInfos);
-  }
-  private async writeCrossTrainFiles(crossTrainResult) {
-    if (!(await fs.pathExists(this.interruptionFolderPath))) {
-      await fs.mkdir(this.interruptionFolderPath);
-    }
-
-    await Promise.all(
-      [...crossTrainResult.keys()].map(async (key: string) => {
-        const fileName = path.basename(key);
-        const newFileId = path.join(this.interruptionFolderPath, fileName);
-        await fs.writeFile(newFileId, crossTrainResult.get(key).Content);
-      })
-    );
-  }
-
-  private async crossTrain(luFiles: string[], qnaFiles: string[]) {
-    const luContents: { [key: string]: any }[] = [];
-    const qnaContents: { [key: string]: any }[] = [];
-    for (const luFile of luFiles) {
-      luContents.push({
-        content: fs.readFileSync(luFile, { encoding: 'utf-8' }),
-        name: path.basename(luFile),
-        id: path.basename(luFile),
-        path: luFile,
-      });
-    }
-    for (const qnaFile of qnaFiles) {
-      qnaContents.push({
-        content: fs.readFileSync(qnaFile, { encoding: 'utf-8' }),
-        name: path.basename(qnaFile),
-        id: path.basename(qnaFile),
-        path: qnaFile,
-      });
-    }
-    const importResolver = luImportResolverGenerator([...qnaContents, ...luContents] as FileInfo[]);
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, importResolver);
-
-    await this.writeCrossTrainFiles(result.luResult);
-    await this.writeCrossTrainFiles(result.qnaResult);
-  }
-
-  private async cleanCrossTrain() {
-    fs.rmdirSync(this.interruptionFolderPath, { recursive: true });
-  }
-  private async getInterruptionFiles() {
-    const files = await this.getFiles(this.interruptionFolderPath);
-    const interruptionLuFiles: string[] = [];
-    const interruptionQnaFiles: string[] = [];
-    files.forEach((file) => {
-      if (file.endsWith('qna')) {
-        interruptionQnaFiles.push(file);
-      } else if (file.endsWith('lu')) {
-        interruptionLuFiles.push(file);
-      }
-    });
-    return { interruptionLuFiles, interruptionQnaFiles };
-  }
-
-  private async publishLuis(
-    name: string,
-    environment: string,
-    accessToken: string,
-    language: string,
-    luisSettings: ILuisConfig,
-    interruptionLuFiles: string[],
-    luisResource?: string
+export async function publishLuisToPrediction(
+  name: string,
+  environment: string,
+  accessToken: string,
+  luisSettings: ILuisConfig,
+  luisResource: string,
+  path: string,
+  logger
   ) {
-    const { authoringKey: luisAuthoringKey, endpoint: luisEndpoint } = luisSettings;
+    let { authoringKey: luisAuthoringKey, endpoint: luisEndpoint, authoringRegion: luisAuthoringRegion } = luisSettings;
 
-    this.logger({
+    if (!luisSettings.endpoint) {
+      luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+    }
+
+    logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'start publish luis',
     });
@@ -189,7 +75,7 @@ export class LuisAndQnaPublish {
     // Find any files that contain the name 'luis.settings' in them
     // These are generated by the LuBuild process and placed in the generated folder
     // These contain dialog-to-luis app id mapping
-    const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
+    const luisConfigFiles = (await getFiles(botPath(path))).filter((filename) =>
       filename.includes('luis.settings')
     );
     const luisAppIds: any = {};
@@ -228,13 +114,13 @@ export class LuisAndQnaPublish {
     }
     // Extract the accoutn object that matches the expected resource name.
     // This is the name that would appear in the azure portal associated with the luis endpoint key.
-    const account = this.getAccount(accountList, luisResource ? luisResource : `${name}-${environment}-luis`);
+    const account = getAccount(accountList, luisResource ? luisResource : `${name}-${environment}-luis`);
 
     // Assign the appropriate account to each of the applicable LUIS apps for this bot.
     // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be32228e8473de116325515
     for (const dialogKey in luisAppIds) {
       const luisAppId = luisAppIds[dialogKey].appId;
-      this.logger({
+      logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: `Assigning to luis app id: ${luisAppId}`,
       });
@@ -249,209 +135,46 @@ export class LuisAndQnaPublish {
 
       // TODO: Add some error handling on this API call. As it is, errors will just throw by default and be caught by the catch all try/catch in the deploy method
 
-      this.logger({
+      logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: response,
       });
     }
 
     // The process has now completed.
-    this.logger({
+    logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Luis Publish Success! ...',
     });
 
     // return the new settings that need to be added to the main settings file.
     return luisAppIds;
-  }
+}
 
-  // Run through the lubuild process
-  // This happens in the build folder, NOT in the original source folder
-  private async buildLuis(
-    name: string,
-    environment: string,
-    language: string,
-    luisSettings: ILuisConfig,
-    interruptionLuFiles: string[]
-  ) {
-    const { authoringKey: luisAuthoringKey, authoringRegion: luisAuthoringRegion } = luisSettings;
+export async function build(project: IBotProject, path: string, settings: BuildSettingType) {
+  const {luResources, qnaResources, luis: luisConfig, qna: qnaConfig} = settings;
 
-    // Instantiate the LuBuild object from the LU parsing library
-    // This object is responsible for parsing the LU files and sending them to LUIS
-    const builder = new luBuild.Builder((msg) =>
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: msg,
-      })
-    );
+  const {builder, files} = project;
 
-    // Pass in the list of the non-empty LU files we got above...
-    const loadResult = await builder.loadContents(
-      interruptionLuFiles,
-      language || 'en-us',
-      environment || '',
-      luisAuthoringRegion || ''
-    );
-
-    // set the default endpoint
-    if (!luisSettings.endpoint) {
-      luisSettings.endpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+  const luFiles: FileInfo[] = [];
+  luResources.forEach((id) => {
+    const fileName = `${id}.lu`;
+    const f = files.get(fileName);
+    if (f) {
+      luFiles.push(f);
     }
-
-    // if not specified, set the authoring endpoint
-    if (!luisSettings.authoringEndpoint) {
-      luisSettings.authoringEndpoint = luisSettings.endpoint;
+  });
+  const qnaFiles: FileInfo[] = [];
+  qnaResources.forEach((id) => {
+    const fileName = `${id}.qna`;
+    const f = files.get(fileName);
+    if (f) {
+      qnaFiles.push(f);
     }
+  });
 
-    // Perform the Lubuild process
-    // This will create new luis apps for each of the luis models represented in the LU files
-    const buildResult = await builder.build(
-      loadResult.luContents,
-      loadResult.recognizers,
-      luisAuthoringKey,
-      luisSettings.authoringEndpoint,
-      name,
-      environment,
-      language,
-      true,
-      false,
-      loadResult.multiRecognizers,
-      loadResult.settings,
-      loadResult.crosstrainedRecognizers,
-      'crosstrained'
-    );
-
-    // Write the generated files to the generated folder
-    await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
-
-    this.logger({
-      status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: `lubuild succeed`,
-    });
-  }
-
-  private async buildQna(
-    name: string,
-    environment: string,
-    language: string,
-    qnaSettings: IQnAConfig,
-    interruptionQnaFiles: string[]
-  ) {
-    // eslint-disable-next-line prefer-const
-    let { subscriptionKey } = qnaSettings;
-    const authoringRegion = 'westus';
-    // publishing luis
-    const builder = new qnaBuild.Builder((msg) =>
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: msg,
-      })
-    );
-
-    const loadResult = await builder.loadContents(
-      interruptionQnaFiles,
-      name,
-      environment || '',
-      authoringRegion || '',
-      language || ''
-    );
-
-    const endpoint = `https://${authoringRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
-
-    const buildResult = await builder.build(
-      loadResult.qnaContents,
-      loadResult.recognizers,
-      subscriptionKey,
-      endpoint,
-      name,
-      environment,
-      language,
-      loadResult.multiRecognizers,
-      loadResult.settings,
-      loadResult.crosstrainedRecognizers,
-      'crosstrained'
-    );
-    await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
-
-    this.logger({
-      status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: `qnabuild succeed`,
-    });
-
-    // Find any files that contain the name 'qnamaker.settings' in them
-    // These are generated by the LuBuild process and placed in the generated folder
-    // These contain dialog-to-luis app id mapping
-    const qnaConfigFile = (await this.getFiles(this.remoteBotPath)).find((filename) =>
-      filename.includes('qnamaker.settings')
-    );
-    const qna: any = {};
-
-    // Read the qna settings
-    if (qnaConfigFile) {
-      const qnaConfig = await fs.readJson(qnaConfigFile);
-      const endpointKey = await builder.getEndpointKeys(subscriptionKey, endpoint);
-      Object.assign(qna, qnaConfig.qna, { endpointKey: endpointKey.primaryEndpointKey });
-    }
-    return qna;
-  }
-
-  // Run through the build process
-  // This happens in the build folder, NOT in the original source folder
-  public async publishLuisAndQna(
-    name: string,
-    environment: string,
-    accessToken: string,
-    language: string,
-    luisSettings: ILuisConfig,
-    qnaSettings: IQnAConfig,
-    luisResource?: string
-  ) {
-    const { authoringKey, authoringRegion } = luisSettings;
-    const { subscriptionKey } = qnaSettings;
-    const botFiles = await this.getFiles(this.remoteBotPath);
-    const luFiles = botFiles.filter((name) => {
-      return name.endsWith('.lu');
-    });
-    const qnaFiles = botFiles.filter((name) => {
-      return name.endsWith('.qna');
-    });
-
-    // check content
-    const notEmptyLuFiles = luFiles.some((name) => this.notEmptyModel(name));
-    const notEmptyQnaFiles = qnaFiles.some((name) => this.notEmptyModel(name));
-
-    if (notEmptyLuFiles && !(authoringKey && authoringRegion)) {
-      throw Error('Should have luis authoringKey and authoringRegion when lu file not empty');
-    }
-    if (notEmptyQnaFiles && !subscriptionKey) {
-      throw Error('Should have qna subscriptionKey when qna file not empty');
-    }
-    const dialogFiles = botFiles.filter((name) => {
-      return name.endsWith('.dialog') && this.notEmptyModel(name);
-    });
-
-    await this.setCrossTrainConfig(name, dialogFiles, luFiles);
-    await this.createGeneratedDir();
-    await this.crossTrain(luFiles, qnaFiles);
-    const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-
-    await this.buildLuis(name, environment, language, luisSettings, interruptionLuFiles);
-    let luisAppIds = {};
-    // publish luis only when Lu files not empty
-    if (notEmptyLuFiles) {
-      luisAppIds = await this.publishLuis(
-        name,
-        environment,
-        accessToken,
-        language,
-        luisSettings,
-        interruptionLuFiles,
-        luisResource
-      );
-    }
-
-    const qnaConfig = await this.buildQna(name, environment, language, qnaSettings, interruptionQnaFiles);
-    await this.cleanCrossTrain();
-    return { luisAppIds, qnaConfig };
-  }
+  builder.rootDir = botPath(path);
+  builder.setBuildConfig( {...luisConfig, ...qnaConfig},  project.settings.downsampling );
+  await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[]);
+  await builder.copyModelPathToBot();
 }
