@@ -65,11 +65,9 @@ const tableColumns: IColumn[] = [
       displayName: string;
       projectId: string;
       setGlobalErrorCalloutVisibility: (isVisible: boolean) => void;
-      isErrorCalloutOpen: boolean;
     }) => {
       return (
         <BotStatusIndicator
-          isErrorCalloutOpen={item.isErrorCalloutOpen}
           projectId={item.projectId}
           setGlobalErrorCalloutVisibility={item.setGlobalErrorCalloutVisibility}
         />

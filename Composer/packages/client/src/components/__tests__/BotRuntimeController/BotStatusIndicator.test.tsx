@@ -32,7 +32,7 @@ describe('<BotStatusIndicator />', () => {
 
   it('should render the Local Bot Runtime with publishing status', async () => {
     const { findAllByText } = renderWithRecoil(
-      <BotStatusIndicator isErrorCalloutOpen={false} projectId={projectId} setErrorCalloutVisibility={jest.fn()} />,
+      <BotStatusIndicator projectId={projectId} setGlobalErrorCalloutVisibility={jest.fn()} />,
       ({ set }) => {
         set(botStatusState(projectId), BotStatus.publishing);
       }
@@ -43,7 +43,7 @@ describe('<BotStatusIndicator />', () => {
 
   it('should show error if bot start failed', async () => {
     const { findByText } = renderWithRecoil(
-      <BotStatusIndicator isErrorCalloutOpen={false} projectId={projectId} setErrorCalloutVisibility={jest.fn()} />,
+      <BotStatusIndicator projectId={projectId} setGlobalErrorCalloutVisibility={jest.fn()} />,
       ({ set }) => {
         set(botStatusState(projectId), BotStatus.failed);
         set(botRuntimeErrorState(projectId), {
