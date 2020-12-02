@@ -494,6 +494,7 @@ export class BotProject implements IBotProject {
         }
       });
 
+      this.builder.rootDir = this.dir;
       this.builder.setBuildConfig(
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
         this.settings.downsampling
