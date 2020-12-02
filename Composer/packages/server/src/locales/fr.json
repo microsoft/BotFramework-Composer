@@ -2865,7 +2865,7 @@
     "message": "Vous pouvez gérer toutes les réponses de bot ici. Utilisez les modèles de manière appropriée pour créer une logique de réponse sophistiquée basée sur vos propres besoins."
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
-    "message": "Vous n''''êtes pas autorisé à enregistrer les bots ici"
+    "message": "Vous n''êtes pas autorisé à enregistrer les bots ici"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
     "message": "Parcours de création de votre bot sur Composer"
