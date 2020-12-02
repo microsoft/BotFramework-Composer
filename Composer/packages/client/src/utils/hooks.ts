@@ -118,7 +118,10 @@ export function useInterval(callback: Function, delay: number | null) {
   }, [delay]);
 }
 
-export function useClickOutside(targetRefs: MutableRefObject<HTMLElement | null>[] | null, callback: Function) {
+export function useClickOutsideOutsideTarget(
+  targetRefs: MutableRefObject<HTMLElement | null>[] | null,
+  callback: Function
+) {
   const savedCallback: MutableRefObject<Function | undefined> = useRef();
 
   const isClickInsideTargets = (currentClickTarget: Node) => {

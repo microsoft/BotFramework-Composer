@@ -13,7 +13,7 @@ jest.mock('../../../utils/httpUtil');
 
 const mockStart = jest.fn();
 const mockStop = jest.fn();
-const pollingInterval = 3000;
+const pollingInterval = 1500;
 
 jest.mock('../../BotRuntimeController/useBotOperations', () => {
   return {

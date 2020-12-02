@@ -77,7 +77,7 @@ import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../selectors';
+import { rootBotProjectIdSelector } from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
@@ -113,11 +113,9 @@ export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => 
   const { snapshot, reset } = callbackHelpers;
   reset(botProjectSpaceLoadedState);
   const projectIds = await snapshot.getPromise(botProjectIdsState);
-  const runtimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
   reset(botProjectIdsState);
   for (const projectId of projectIds) {
-    await runtimeOperations?.stopBot(projectId);
     resetBotStates(callbackHelpers, projectId);
   }
   const workers = [lgWorker, luWorker, qnaWorker];
