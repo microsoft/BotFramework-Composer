@@ -278,10 +278,23 @@ export default async (composer: any): Promise<void> => {
         // used to read bot project template from source (bundled in plugin)
         const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
-        return path.relative(project.dir, destPath);;
-      } else {
-        throw new Error(`Runtime already exists at ${destPath}`);
+        const schemaDstPath = path.join(project.dir, 'schemas');
+        const schemaSrcPath = path.join(sourcePath, 'schemas');
+        const customSchemaExists = fs.existsSync(schemaDstPath);
+        const pathsToExclude: Set<string> = new Set();
+        if (customSchemaExists) {
+          const sdkExcludePath = await localDisk.glob('sdk.schema', schemaSrcPath);
+          if (sdkExcludePath.length > 0) {
+            pathsToExclude.add(path.join(schemaSrcPath, sdkExcludePath[0]));
+          }
+        }
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
+        const schemaFolderInRuntime = path.join(destPath, 'schemas');
+        await removeDirAndFiles(schemaFolderInRuntime);
+
+        return path.relative(project.dir, destPath);
       }
+      throw new Error(`Runtime already exists at ${destPath}`);
     },
     setSkillManifest: async (
       dstRuntimePath: string,

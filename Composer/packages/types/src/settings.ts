@@ -56,6 +56,7 @@ export type DialogSetting = {
   };
   botId?: string;
   skillHostEndpoint?: string;
+  customFunctions: string[];
   [key: string]: any;
 };
 
