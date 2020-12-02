@@ -18,7 +18,7 @@ const newSettingsValuePath = [
   'luis.endpoint',
   'luis.authoringEndpoint',
   'skillConfiguration',
-  'customizedFunctions',
+  'customFunctions',
 ];
 
 export class DefaultSettingManager extends FileSettingManager {
@@ -96,7 +96,7 @@ export class DefaultSettingManager extends FileSettingManager {
       skill: {},
       defaultLanguage: 'en-us',
       languages: ['en-us'],
-      customizedFunctions: [],
+      customFunctions: [],
       importedLibraries: [],
     };
   };
