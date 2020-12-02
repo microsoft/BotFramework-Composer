@@ -36,9 +36,18 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
       onBlur={props.onBlur}
       onChange={onChange}
     >
-      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
+      {({
+        textFieldValue,
+        focused,
+        cursorPosition,
+        onValueChanged,
+        onKeyDownTextField,
+        onKeyUpTextField,
+        onClickTextField,
+      }) => (
         <StringField
           {...props}
+          cursorPosition={cursorPosition}
           focused={focused}
           id={id}
           value={textFieldValue}
@@ -84,9 +93,18 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
       onBlur={props.onBlur}
       onChange={onChange}
     >
-      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
+      {({
+        textFieldValue,
+        focused,
+        cursorPosition,
+        onValueChanged,
+        onKeyDownTextField,
+        onKeyUpTextField,
+        onClickTextField,
+      }) => (
         <StringField
           {...props}
+          cursorPosition={cursorPosition}
           focused={focused}
           id={id}
           value={textFieldValue}
