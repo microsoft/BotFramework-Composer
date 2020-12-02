@@ -18,8 +18,8 @@ import {
   qnaFilesState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
-import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
 import { botEndpointsState } from '../atoms';
+import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
 
 import { BotStatus, Text } from './../../constants';
