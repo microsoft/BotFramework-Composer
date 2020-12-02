@@ -3111,12 +3111,12 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20201123.188303":
-  version "4.10.0-daily.20201123.188303"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201123.188303.tgz#92e763d4a1bab1657f84fc67a49d4b0ae02c178b"
-  integrity sha1-kudj1KG6sWV/hPxnpJ1LCuAsF4s=
+"@microsoft/bf-generate-library@^4.10.0-daily.20201202.190604":
+  version "4.10.0-daily.20201202.190604"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201202.190604.tgz#92bf560aeb4e9a22332965738fed229b881b2b81"
+  integrity sha1-kr9WCutOmiIzKWVzj+0im4gbK4E=
   dependencies:
-    "@microsoft/bf-lu" "^4.11.0"
+    "@microsoft/bf-lu" rc
     adaptive-expressions "^4.11.0"
     ajv "^6.9.1"
     botbuilder-lg "^4.11.0-rc0"
@@ -3128,28 +3128,6 @@
     openapi-types "^1.3.5"
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
-
-"@microsoft/bf-lu@^4.11.0":
-  version "4.11.0"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0.tgz#23ffd0f5b53456da675bd0dd9b210c3a3b6c818e"
-  integrity sha1-I//Q9bU0VtpnW9DdmyEMOjtsgY4=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.19"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^2.0.3"
 
 "@microsoft/bf-lu@^4.11.0-rc.20201030.a9f9b96":
   version "4.11.0-rc.20201030.a9f9b96"
@@ -3182,6 +3160,28 @@
     "@azure/ms-rest-azure-js" "2.0.1"
     "@types/node-fetch" "~2.5.5"
     antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
+"@microsoft/bf-lu@rc":
+  version "4.11.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.1.tgz#b5e65d519b4e801c7254ff2df0dac4b74b80b7db"
+  integrity sha1-teZdUZtOgBxyVP8t8NrEt0uAt9s=
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "~4.8.0"
     chalk "2.4.1"
     console-stream "^0.1.1"
     deep-equal "^1.0.1"
@@ -5030,6 +5030,11 @@ antlr4@^4.7.2:
   version "4.7.2"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/antlr4/-/antlr4-4.7.2.tgz#9d0b5987bb63660de658055ee9149141b4d9b462"
   integrity sha1-nQtZh7tjZg3mWAVe6RSRQbTZtGI=
+
+antlr4@~4.8.0:
+  version "4.8.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/antlr4/-/antlr4-4.8.0.tgz#f938ec171be7fc2855cd3a533e87647185b32b6a"
+  integrity sha1-+TjsFxvn/ChVzTpTPodkcYWzK2o=
 
 antlr4ts@0.5.0-alpha.3:
   version "0.5.0-alpha.3"

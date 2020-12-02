@@ -18,7 +18,7 @@ import {
   allDiagnosticsSelectorFamily,
 } from '../../recoilModel';
 import { BotStatus } from '../../constants';
-import { useClickOutside } from '../../utils/hooks';
+import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -27,7 +27,8 @@ import { BotRuntimeStatus } from './BotRuntimeStatus';
 const iconSectionContainer = css`
   display: flex;
   align-items: flex-end;
-  flex-direction: 'row';
+  flex-direction: row;
+  background: #3393dd;
 
   :before {
     content: '';
@@ -61,12 +62,13 @@ const BotController: React.FC = () => {
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
+  const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
 
-  useClickOutside(
-    isControllerHidden ? null : [startPanelTarget, botControllerMenuTarget],
+  useClickOutsideOutsideTarget(
+    isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
     (event: React.MouseEvent<HTMLElement>) => {
       hideController(true);
       event.stopPropagation();
@@ -81,9 +83,10 @@ const BotController: React.FC = () => {
     setDisableOnStartBotsWidget(false);
   }, [projectCollection, errors]);
 
-  const running = useMemo(() => !projectCollection.every(({ status }) => status === BotStatus.inactive), [
-    projectCollection,
-  ]);
+  const running = useMemo(
+    () => !projectCollection.every(({ status }) => status === BotStatus.inactive || status === BotStatus.failed),
+    [projectCollection]
+  );
 
   const { startAllBots, stopAllBots } = useBotOperations();
 
@@ -110,7 +113,12 @@ const BotController: React.FC = () => {
   }, [runningBots, running]);
 
   const items = useMemo<IContextualMenuItem[]>(() => {
-    return projectCollection.map(({ name: displayName, projectId }) => ({ key: projectId, displayName, projectId }));
+    return projectCollection.map(({ name: displayName, projectId }) => ({
+      key: projectId,
+      displayName,
+      projectId,
+      setGlobalErrorCalloutVisibility,
+    }));
   }, [projectCollection]);
 
   return (
@@ -122,6 +130,7 @@ const BotController: React.FC = () => {
         <DefaultButton
           primary
           aria-roledescription={formatMessage('Bot Controller')}
+          ariaDescription={buttonText}
           disabled={disableStartBots}
           iconProps={{
             iconName: running ? 'CircleStopSolid' : 'Play',
@@ -134,26 +143,31 @@ const BotController: React.FC = () => {
           menuAs={() => null}
           styles={{
             root: {
-              backgroundColor: '#3393DD',
+              backgroundColor: '#3393dd',
               display: 'flex',
               alignItems: 'center',
-              minWidth: '200px',
+              minWidth: '212px',
+              height: '36px',
               flexDirection: 'row',
+              padding: '0 4px',
+              border: 'none',
+              width: '100%',
             },
             rootHovered: {
               background: transparentBackground,
             },
             rootDisabled: {
               opacity: 0.6,
-              backgroundColor: '#3393DD',
+              backgroundColor: '#3393dd',
               color: `${NeutralColors.white}`,
               border: 'none',
               font: '62px',
             },
           }}
+          title={buttonText}
           onClick={handleClick}
         >
-          <span>{buttonText}</span>
+          {buttonText}
         </DefaultButton>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
@@ -165,6 +179,7 @@ const BotController: React.FC = () => {
             styles={{
               root: {
                 color: NeutralColors.white,
+                height: '36px',
                 background: isControllerHidden ? '#3393DD' : transparentBackground,
                 selectors: {
                   ':disabled .ms-Button-icon': {

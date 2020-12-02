@@ -80,6 +80,7 @@ export enum BotStatus {
   reloading = 'loading',
   pending = 'pending',
   failed = 'failed',
+  stopping = 'stopping',
 }
 
 export enum CreationFlowStatus {
@@ -109,6 +110,7 @@ export const BotStatusesCopy = {
   loading: formatMessage('Building'),
   queued: formatMessage('Queued'),
   reloading: formatMessage('Starting'),
+  stopping: formatMessage('Stopping'),
 };
 
 export const DialogCreationCopy = {

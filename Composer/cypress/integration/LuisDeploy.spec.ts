@@ -24,7 +24,7 @@ context('Luis Deploy', () => {
       status: 400,
       response: 'fixture:luPublish/failure',
     });
-    cy.findByText(/^Start all bots/).click();
+    cy.findByTitle(/^Start all bots/).click();
     cy.findByTitle('Open start bots panel').click();
     cy.findByText('See Details').click();
 
@@ -35,6 +35,6 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/success',
     });
     cy.findByText('Try again').click();
-    cy.findByText(/^Stop all bots/).click();
+    cy.findByTitle(/^Stop all bots/).click();
   });
 });
