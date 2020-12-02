@@ -8,6 +8,7 @@ import {
   Shell,
   DialogSchemaFile,
   DialogInfo,
+  BotInProject,
   FeatureFlagKey,
   SDKKinds,
 } from '@botframework-composer/types';
@@ -20,6 +21,7 @@ import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
 import {
   dispatcherState,
+  botProjectSpaceSelector,
   userSettingsState,
   settingsState,
   clipboardActionsState,
@@ -92,6 +94,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const flowZoomRate = useRecoilValue(rateInfoState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const isRootBot = rootBotProjectId === projectId;
+  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
+    ...bot,
+    hasWarnings: false,
+  }));
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState(projectId));
@@ -285,6 +291,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     locale,
     botName,
     projectId,
+    projectCollection,
     dialogs,
     dialogSchemas,
     dialogId,

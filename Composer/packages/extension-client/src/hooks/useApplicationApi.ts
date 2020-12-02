@@ -14,6 +14,7 @@ const APPLICATION_KEYS = [
   'data.hosted',
   'data.userSettings',
   'data.flowZoomRate',
+  'data.projectCollection',
 
   'api.navigateTo',
   'api.updateUserSettings',
