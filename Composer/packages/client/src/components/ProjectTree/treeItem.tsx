@@ -397,7 +397,8 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
 const onRenderOverflowButton = (
   isActive: boolean,
   menuOpenCallback: (boolean) => void,
-  setThisItemSelected: (boolean) => void
+  setThisItemSelected: (boolean) => void,
+  onTreeItemSelected: () => void
 ) => {
   const moreLabel = formatMessage('Actions');
   return (overflowItems: IContextualMenuItem[] | undefined) => {
@@ -416,6 +417,7 @@ const onRenderOverflowButton = (
             onMenuOpened: () => {
               setThisItemSelected(true);
               menuOpenCallback(true);
+              onTreeItemSelected();
             },
             onMenuDismissed: () => {
               setThisItemSelected(false);
@@ -460,6 +462,8 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const isBroken = !!link.bot?.error;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
+  const onTreeItemSelected = () => onSelect?.(link);
+
   return (
     <div
       aria-label={a11yLabel}
@@ -494,7 +498,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, showErrors)}
-        onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected)}
+        onRenderOverflowButton={onRenderOverflowButton(
+          !!isActive,
+          menuOpenCallback,
+          setThisItemSelected,
+          onTreeItemSelected
+        )}
       />
     </div>
   );

@@ -10,7 +10,7 @@ import { BotAssets } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
 
-import { dialogsSelectorFamily } from './selectors';
+import { currentLocalBotSelector, dialogsSelectorFamily } from './selectors';
 import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
 import createDispatchers, { Dispatcher } from './dispatchers';
@@ -102,14 +102,15 @@ export const DispatcherWrapper = ({ children }) => {
   const botProjects = useRecoilValue(localBotsWithoutErrorsSelector);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
-    const botsForFilePersistence = await snapshot.getPromise(localBotsWithoutErrorsSelector);
-    for (const projectId of botsForFilePersistence) {
-      const assets = await getBotAssets(projectId, snapshot);
-      const previousAssets = await getBotAssets(projectId, previousSnapshot);
-      const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-      if (!isEmpty(filePersistence)) {
-        filePersistence.notify(assets, previousAssets);
-      }
+    const currentLocalBotId = await snapshot.getPromise(currentLocalBotSelector);
+
+    if (!currentLocalBotId) return;
+
+    const assets = await getBotAssets(currentLocalBotId, snapshot);
+    const previousAssets = await getBotAssets(currentLocalBotId, previousSnapshot);
+    const filePersistence = await snapshot.getPromise(filePersistenceState(currentLocalBotId));
+    if (!isEmpty(filePersistence)) {
+      filePersistence.notify(assets, previousAssets);
     }
   });
 

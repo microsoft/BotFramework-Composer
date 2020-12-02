@@ -30,6 +30,8 @@ import {
 } from '../atoms';
 import { dialogsSelectorFamily, buildEssentialsSelector, validateDialogsSelectorFamily } from '../selectors';
 
+import { currentProjectIdState } from './../atoms/appState';
+
 // Actions
 export const localBotsWithoutErrorsSelector = selector({
   key: 'localBotsWithoutErrorsSelector',
@@ -209,5 +211,18 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
       });
       return result;
     }, {});
+  },
+});
+
+export const currentLocalBotSelector = selector({
+  key: 'currentLocalBotSelector',
+  get: ({ get }) => {
+    const currentProjectId = get(currentProjectIdState);
+
+    if (!currentProjectId) return currentProjectId;
+
+    const { isRemote } = get(projectMetaDataState(currentProjectId));
+    const botError = get(botErrorState(currentProjectId));
+    return !isRemote && !botError ? currentProjectId : '';
   },
 });
