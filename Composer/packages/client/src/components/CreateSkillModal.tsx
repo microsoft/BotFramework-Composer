@@ -14,9 +14,11 @@ import debounce from 'lodash/debounce';
 import { SkillSetting } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { addSkillDialog } from '../constants';
+import { addSkillDialog as addSkillDialogFn } from '../constants';
 import httpClient from '../utils/httpUtil';
 import { skillsState } from '../recoilModel';
+
+const addSkillDialog = addSkillDialogFn();
 
 export interface SkillFormDataErrors {
   endpoint?: string;

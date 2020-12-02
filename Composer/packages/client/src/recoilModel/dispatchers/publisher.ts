@@ -20,13 +20,14 @@ import { botEndpointsState } from '../atoms';
 import { dialogsSelectorFamily } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
 
-import { BotStatus, Text } from './../../constants';
+import { BotStatus, Text as textFn } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
 const PUBLISH_FAILED = 500;
+const Text = textFn();
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {

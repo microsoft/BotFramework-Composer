@@ -25,7 +25,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { DialogCreationCopy as dialogFn, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -53,6 +53,8 @@ const listHeader = css`
   margin-top: 10px;
   margin-bottom: 0;
 `;
+
+const DialogCreationCopy = dialogFn();
 
 const rowDetails = (disabled) => {
   return {

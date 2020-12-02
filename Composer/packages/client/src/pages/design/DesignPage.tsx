@@ -17,7 +17,7 @@ import { useRecoilValue } from 'recoil';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
-import { DialogDeleting } from '../../constants';
+import { DialogDeleting as dialogFn } from '../../constants';
 import { createSelectedPath, deleteTrigger, TriggerFormData, getDialogData } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
@@ -76,6 +76,8 @@ const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
 const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
+
+const DialogDeleting = dialogFn();
 
 function onRenderContent(subTitle, style) {
   return (

@@ -9,7 +9,7 @@ export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
 
-export const Tips = {
+export const Tips = () => ({
   PROJECT_NAME: formatMessage(
     `Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)`
   ),
@@ -23,14 +23,14 @@ export const Tips = {
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default: en-us)`
   ),
-};
+});
 
 export const Links = {
   LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
   QNA: 'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/azure-resources#keys-in-qna-maker',
 };
 
-export const Text = {
+export const Text = () => ({
   DEPLOY: formatMessage(`Your bot is using LUIS and QNA for natural language understanding.`),
   LUISDEPLOY: formatMessage(
     `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
@@ -42,7 +42,7 @@ export const Text = {
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
   DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
-};
+});
 
 export enum LuisConfig {
   STORAGE_KEY = 'luisConfig',
@@ -97,7 +97,7 @@ export const Steps = {
   NONE: 'NONE',
 };
 
-export const DialogCreationCopy = {
+export const DialogCreationCopy = () => ({
   CREATE_NEW_BOT: {
     title: formatMessage('Create bot from template or scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
@@ -134,18 +134,18 @@ export const DialogCreationCopy = {
     title: formatMessage('Import your bot to new project'),
     subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
   },
-};
+});
 
-export const DialogDeleting = {
+export const DialogDeleting = () => ({
   NO_LINKED_TITLE: formatMessage('This will delete the Dialog and its contents. Do you wish to continue?'),
   TITLE: formatMessage('Warning!'),
   CONTENT: formatMessage(
     `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
   ),
   CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
-};
+});
 
-export const MultiLanguagesDialog = {
+export const MultiLanguagesDialog = () => ({
   ADD_DIALOG: {
     title: formatMessage('Copy content for translation'),
     subText: formatMessage(
@@ -166,9 +166,9 @@ export const MultiLanguagesDialog = {
       `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
     ),
   },
-};
+});
 
-export const addSkillDialog = {
+export const addSkillDialog = () => ({
   SKILL_MANIFEST_FORM: {
     title: formatMessage('Add a skill'),
     subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
@@ -177,7 +177,7 @@ export const addSkillDialog = {
     title: formatMessage('Edit a skill'),
     subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
   },
-};
+});
 
 export const SupportedFileTypes = [
   'accdb',
@@ -214,6 +214,7 @@ export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
-export const triggerNotSupportedWarning = formatMessage(
-  'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
-);
+export const triggerNotSupportedWarning = () =>
+  formatMessage(
+    'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
+  );
