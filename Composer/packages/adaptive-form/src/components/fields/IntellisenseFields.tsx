@@ -3,10 +3,11 @@
 
 import { FieldProps } from '@bfc/extension-client';
 import { Intellisense } from '@bfc/intellisense';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
-import { ExpressionSwitchWindow } from '../ExpressionSwitchWindow';
+import { ExpressionSwitchWindow } from '../expressions/ExpressionSwitchWindow';
+import { ExpressionsListMenu } from '../expressions/ExpressionsListMenu';
 
 import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
@@ -35,9 +36,18 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
       onBlur={props.onBlur}
       onChange={onChange}
     >
-      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
+      {({
+        textFieldValue,
+        focused,
+        cursorPosition,
+        onValueChanged,
+        onKeyDownTextField,
+        onKeyUpTextField,
+        onClickTextField,
+      }) => (
         <StringField
           {...props}
+          cursorPosition={cursorPosition}
           focused={focused}
           id={id}
           value={textFieldValue}
@@ -58,8 +68,23 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
+  const [expressionsListContainerElements, setExpressionsListContainerElements] = useState<HTMLDivElement[]>([]);
+
+  const completionListOverrideResolver = (value: string) => {
+    return value === '=' ? (
+      <ExpressionsListMenu
+        onExpressionSelected={(expression: string) => onChange(expression)}
+        onMenuMount={(refs) => {
+          setExpressionsListContainerElements(refs);
+        }}
+      />
+    ) : null;
+  };
+
   return (
     <Intellisense
+      completionListOverrideContainerElements={expressionsListContainerElements}
+      completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
@@ -68,9 +93,18 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
       onBlur={props.onBlur}
       onChange={onChange}
     >
-      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
+      {({
+        textFieldValue,
+        focused,
+        cursorPosition,
+        onValueChanged,
+        onKeyDownTextField,
+        onKeyUpTextField,
+        onClickTextField,
+      }) => (
         <StringField
           {...props}
+          cursorPosition={cursorPosition}
           focused={focused}
           id={id}
           value={textFieldValue}
