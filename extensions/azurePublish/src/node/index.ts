@@ -251,7 +251,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
-        subId: subscriptionID, // deprecate - not used
         logger: (msg: any, ...args: any[]) => {
           this.logger(msg, ...args);
           if (msg?.message) {

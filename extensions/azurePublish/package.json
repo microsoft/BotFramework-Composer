@@ -8,7 +8,9 @@
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
     "build": "yarn build:node && yarn build:ui",
-    "test": "jest"
+    "test": "yarn test:ui && yarn test:node",
+    "test:ui": "jest --config jest.config.ui.js",
+    "test:node": "jest --config jest.config.node.js"
   },
   "jest": {
     "testEnvironment": "node"

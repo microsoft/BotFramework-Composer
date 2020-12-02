@@ -121,7 +121,13 @@ describe('provision api', () => {
     it('get preview list api should work properly', async () => {
         const hostname = 'test_hostname';
         const result = getPreview(hostname);
+        // return list won't be empty
         expect(result.length).toBeTruthy();
+        // test list structure
+        const firstObj = result[0];
+        expect(firstObj.name).toBeDefined();
+        expect(firstObj.key).toBeDefined();
+        expect(firstObj.icon).toBeDefined();
     });
 
     it('get luis authoring regions should work properly', async () => {

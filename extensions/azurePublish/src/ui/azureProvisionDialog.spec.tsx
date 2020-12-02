@@ -8,11 +8,18 @@ import { AzureProvisionDialog } from './azureProvisionDialog';
 jest.mock('@bfc/extension-client', () => {
   return {
     getType: () => 'azurePublish',
-    getAccessToken: () => 'accessToken',
+    getAccessToken: async() => 'accessToken',
     setTitle: (title) => null,
-    getAccessTokensFromStorage: () => { return { access_token: 'accessToken', graph_token: 'graphToken' } },
     getCurrentUser: () => 'testUser',
     currentProjectId: () => 'testId',
+
+  // logOut,
+  // startProvision,
+  // closeDialog,
+  // onBack,
+  // savePublishConfig,
+  // setTitle,
+  // getSchema,
   };
 });
 jest.mock('./api', () => {

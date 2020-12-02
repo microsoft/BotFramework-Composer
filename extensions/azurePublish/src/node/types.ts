@@ -25,8 +25,6 @@ export enum BotProjectRuntimeType {
 }
 
 export interface BotProjectDeployConfig {
-  // Subscription Id of Azure Account
-  subId: string;
 
   // access token to access azure
   accessToken: string;

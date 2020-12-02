@@ -30,7 +30,6 @@ export const getSubscriptions = async (token: string): Promise<Array<Subscriptio
       });
       return [];
     }
-    console.log('successfully loaded subscriptions');
     return subscriptionsResult._response.parsedBody;
   } catch (err) {
     logger({
@@ -62,7 +61,6 @@ export const getResourceGroups = async (token: string, subscriptionId: string): 
     }
     return resourceGroupsResult._response.parsedBody;
   } catch (err) {
-    console.log(err)
     logger({
       status: AzureAPIStatus.ERROR,
       message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
@@ -122,10 +120,8 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log(result.data);
     return result.data.value;
   } catch (error) {
-    console.log(error.response.data);
     // popup window to login
     if (error.response.data.redirectUri) {
       // await loginPopup();
@@ -373,11 +369,13 @@ export const CheckCognitiveResourceSku = async (
  */
 export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
   try {
-    console.log('Get resources for ', type);
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
     return result.data as ResourcesItem[];
   } catch (error) {
-    console.error(error);
+    logger({
+      status: AzureAPIStatus.ERROR,
+      message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    });
     throw error;
   }
 };

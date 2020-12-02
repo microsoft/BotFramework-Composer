@@ -82,13 +82,12 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 function decodeToken(token: string) {
-  let decoded = {} as any;
   try {
-    decoded = jwtDecode(token);
+    return jwtDecode<any>(token);
   } catch (err) {
     console.error(err);
+    return null;
   }
-  return decoded;
 }
 
 export const AzureProvisionDialog: React.FC = () => {
@@ -175,13 +174,15 @@ export const AzureProvisionDialog: React.FC = () => {
       setToken(token);
       // decode token
       const decoded = decodeToken(token);
-      setCurrentUser({
-        token: token,
-        email: decoded.upn,
-        name: decoded.name,
-        expiration: (decoded.exp || 0) * 1000, // convert to ms,
-        sessionExpired: false,
-      });
+      if(decoded){
+        setCurrentUser({
+          token: token,
+          email: decoded.upn,
+          name: decoded.name,
+          expiration: (decoded.exp || 0) * 1000, // convert to ms,
+          sessionExpired: false,
+        });
+      }
     });
   }, []);
 
