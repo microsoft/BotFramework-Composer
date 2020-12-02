@@ -27,7 +27,8 @@ import { BotRuntimeStatus } from './BotRuntimeStatus';
 const iconSectionContainer = css`
   display: flex;
   align-items: flex-end;
-  flex-direction: 'row';
+  flex-direction: row;
+  background: #3393dd;
 
   :before {
     content: '';
@@ -61,7 +62,7 @@ const BotController: React.FC = () => {
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
-  const [isErrorCalloutOpen, setErrorCalloutVisibility] = useState(false);
+  const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -116,12 +117,9 @@ const BotController: React.FC = () => {
       key: projectId,
       displayName,
       projectId,
-      setErrorCalloutVisibility: (isVisible: boolean) => {
-        setErrorCalloutVisibility(isVisible);
-      },
-      isErrorCalloutOpen,
+      setGlobalErrorCalloutVisibility,
     }));
-  }, [projectCollection, isErrorCalloutOpen]);
+  }, [projectCollection]);
 
   return (
     <React.Fragment>
@@ -132,6 +130,7 @@ const BotController: React.FC = () => {
         <DefaultButton
           primary
           aria-roledescription={formatMessage('Bot Controller')}
+          ariaDescription={buttonText}
           disabled={disableStartBots}
           iconProps={{
             iconName: running ? 'CircleStopSolid' : 'Play',
@@ -144,23 +143,28 @@ const BotController: React.FC = () => {
           menuAs={() => null}
           styles={{
             root: {
-              backgroundColor: '#3393DD',
+              backgroundColor: '#3393dd',
               display: 'flex',
               alignItems: 'center',
-              minWidth: '200px',
+              minWidth: '212px',
+              height: '36px',
               flexDirection: 'row',
+              padding: '0 4px',
+              border: 'none',
+              width: '100%',
             },
             rootHovered: {
               background: transparentBackground,
             },
             rootDisabled: {
               opacity: 0.6,
-              backgroundColor: '#3393DD',
+              backgroundColor: '#3393dd',
               color: `${NeutralColors.white}`,
               border: 'none',
               font: '62px',
             },
           }}
+          title={buttonText}
           onClick={handleClick}
         >
           {buttonText}
@@ -175,6 +179,7 @@ const BotController: React.FC = () => {
             styles={{
               root: {
                 color: NeutralColors.white,
+                height: '36px',
                 background: isControllerHidden ? '#3393DD' : transparentBackground,
                 selectors: {
                   ':disabled .ms-Button-icon': {

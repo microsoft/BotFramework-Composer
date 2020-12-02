@@ -22,27 +22,29 @@ const botStatusContainer = css`
 
 type BotStatusIndicatorProps = {
   projectId: string;
-  setErrorCalloutVisibility: (isVisible: boolean) => void;
+  setGlobalErrorCalloutVisibility: (isVisible: boolean) => void;
   isErrorCalloutOpen: boolean;
 };
 
 export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
   projectId,
-  setErrorCalloutVisibility,
-  isErrorCalloutOpen,
+  setGlobalErrorCalloutVisibility,
 }) => {
   const botStatus = useRecoilValue(botStatusState(projectId));
   const botActionRef = useRef(null);
-  const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
+  const botRuntimeErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
   const { startSingleBot } = useBotOperations();
   const [botStatusStyle, setBotStatusStyle] = useState({});
+  const [isCurrentCalloutVisible, setCurrentCalloutVisibility] = useState(false);
 
   function dismissErrorDialog() {
-    setErrorCalloutVisibility(false);
+    setCurrentCalloutVisibility(false);
+    setGlobalErrorCalloutVisibility(false);
   }
 
   function openErrorDialog() {
-    setErrorCalloutVisibility(true);
+    setCurrentCalloutVisibility(true);
+    setGlobalErrorCalloutVisibility(true);
   }
 
   const onTryStartAgain = () => {
@@ -72,7 +74,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
       <span aria-live={'assertive'} style={botStatusStyle}>
         {botStatusText}
       </span>
-      {botLoadErrorMsg?.message && (
+      {botRuntimeErrorMsg?.message && (
         <ActionButton
           styles={{
             root: {
@@ -88,9 +90,9 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
         </ActionButton>
       )}
       <ErrorCallout
-        error={botLoadErrorMsg}
+        error={botRuntimeErrorMsg}
         target={botActionRef.current}
-        visible={isErrorCalloutOpen}
+        visible={isCurrentCalloutVisible}
         onDismiss={dismissErrorDialog}
         onTry={onTryStartAgain}
       />

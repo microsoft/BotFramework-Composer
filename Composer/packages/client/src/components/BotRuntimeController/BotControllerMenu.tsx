@@ -20,6 +20,10 @@ const styles = {
   container: css`
     max-height: 500px;
     overflow: auto;
+
+    .ms-DetailsHeader {
+      padding: 0;
+    }
   `,
   header: css`
     margin: 18px 18px 0 18px;
@@ -47,6 +51,7 @@ const tableColumns: IColumn[] = [
     name: formatMessage('Bot'),
     minWidth: 150,
     maxWidth: 150,
+    isResizable: true,
     fieldName: 'displayName',
     isRowHeader: true,
   },
@@ -54,18 +59,19 @@ const tableColumns: IColumn[] = [
     key: 'status',
     name: formatMessage('Status'),
     minWidth: 150,
+    maxWidth: 150,
     isRowHeader: true,
     onRender: (item: {
       displayName: string;
       projectId: string;
-      setErrorCalloutVisibility: (isVisible: boolean) => void;
+      setGlobalErrorCalloutVisibility: (isVisible: boolean) => void;
       isErrorCalloutOpen: boolean;
     }) => {
       return (
         <BotStatusIndicator
           isErrorCalloutOpen={item.isErrorCalloutOpen}
           projectId={item.projectId}
-          setErrorCalloutVisibility={item.setErrorCalloutVisibility}
+          setGlobalErrorCalloutVisibility={item.setGlobalErrorCalloutVisibility}
         />
       );
     },
@@ -73,7 +79,8 @@ const tableColumns: IColumn[] = [
   {
     key: 'emulator',
     name: '',
-    minWidth: 200,
+    minWidth: 150,
+    maxWidth: 150,
     isRowHeader: true,
     onRender: ({ projectId }) => {
       return <OpenEmulatorButton projectId={projectId} />;
