@@ -13,8 +13,12 @@ import {
   botLoadErrorState,
   isEjectRuntimeExistState,
   filePersistenceState,
+  luFilesState,
+  qnaFilesState,
 } from '../atoms/botState';
 import { botEndpointsState } from '../atoms';
+import { dialogsSelectorFamily } from '../selectors';
+import * as luUtil from '../../utils/luUtil';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -121,10 +125,24 @@ export const publisherDispatcher = () => {
   });
 
   const publishToTarget = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, metadata, sensitiveSettings) => {
+    (callbackHelpers: CallbackInterface) => async (
+      projectId: string,
+      target: any,
+      metadata: any,
+      sensitiveSettings
+    ) => {
       try {
+        const { snapshot } = callbackHelpers;
+        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+        const luFiles = await snapshot.getPromise(luFilesState(projectId));
+        const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+        const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
-          metadata,
+          metadata: {
+            ...metadata,
+            luResources: referredLuFiles.map((file) => file.id),
+            qnaResources: qnaFiles.map((file) => file.id),
+          },
           sensitiveSettings,
         });
         await publishSuccess(callbackHelpers, projectId, response.data, target);
