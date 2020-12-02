@@ -94,7 +94,9 @@ export default async (composer: any): Promise<void> => {
       try {
         const configuration = JSON.parse(profile.configuration);
         const runtimeIdentifier = configuration.runtimeIdentifier;
-        let buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`;
+
+        // set to win-x64 default
+        let buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r win-x64`;
         if (runtimeIdentifier) {
           // if runtime identifier set, make dotnet runtime to self contained, default runtime identifier is win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
           buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${runtimeIdentifier}`;
