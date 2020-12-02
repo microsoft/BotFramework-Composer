@@ -21,6 +21,7 @@ import {
   luFilesState,
   qnaFilesState,
   validateDialogsSelectorFamily,
+  botDisplayNameState,
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -145,8 +146,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
   const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
+
+  const rootLuisName = get(settings, 'luis.name', '') || botName;
 
   const [luisKeyErrorMsg, setLuisKeyErrorMsg] = useState<string>('');
   const [luisRegionErrorMsg, setLuisRegionErrorMsg] = useState<string>('');
@@ -155,6 +159,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
+  const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
 
   const luisKeyFieldRef = React.useRef<HTMLInputElement>(null);
   const qnaKeyFieldRef = React.useRef<HTMLInputElement>(null);
@@ -192,6 +197,17 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [scrollToSectionId]);
+
+  const handleRootLUISNameOnChange = (e, value) => {
+    setLocalRootLuisName(value);
+  };
+
+  const handleRootLUISNameOnBlur = () => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, name: localRootLuisName },
+    });
+  };
 
   const handleRootLUISKeyOnChange = (e, value) => {
     if (value) {
@@ -273,6 +289,17 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextField
+          aria-labelledby={'LUIS name'}
+          data-testId={'rootLUISName'}
+          id={'luisName'}
+          label={formatMessage('LUIS name')}
+          placeholder={'Enter LUIS name'}
+          value={localRootLuisName}
+          onBlur={handleRootLUISNameOnBlur}
+          onChange={handleRootLUISNameOnChange}
+          onRenderLabel={onRenderLabel}
+        />
+        <TextField
           aria-labelledby={'LUIS key'}
           data-testId={'rootLUISKey'}
           errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
@@ -280,7 +307,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           label={formatMessage('LUIS key')}
           placeholder={'Enter LUIS key'}
           required={isLUISKeyNeeded}
-          styles={customError}
+          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
           value={localRootLuisKey}
           onBlur={handleRootLuisKeyOnBlur}
           onChange={handleRootLUISKeyOnChange}
