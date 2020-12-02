@@ -65,7 +65,7 @@
     "@botframework-composer/types": "*",
     "@microsoft/bf-dialog": "4.11.0-dev.20201025.69cf2b9",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
-    "@microsoft/bf-generate-library": "^4.10.0-daily.20201123.188303",
+    "@microsoft/bf-generate-library": "^4.10.0-daily.20201202.190604",
     "@microsoft/bf-lu": "^4.11.0-rc.20201030.a9f9b96",
     "@microsoft/bf-orchestrator": "^4.11.0-beta.20201111.10062c1",
     "archiver": "^5.0.2",
