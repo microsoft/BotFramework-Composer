@@ -41,6 +41,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     uiOptions,
     required,
     focused,
+    cursorPosition,
   } = props;
 
   const textFieldRef = React.createRef<ITextField>();
@@ -49,7 +50,13 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     if (focused && textFieldRef.current) {
       textFieldRef.current.focus();
     }
-  }, [focused, textFieldRef.current]);
+  }, [focused, textFieldRef.current, value]);
+
+  useEffect(() => {
+    if (cursorPosition !== undefined && cursorPosition > -1 && textFieldRef.current) {
+      textFieldRef.current.setSelectionRange(cursorPosition, cursorPosition);
+    }
+  }, [cursorPosition]);
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (typeof onFocus === 'function') {
