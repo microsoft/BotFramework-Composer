@@ -35,6 +35,6 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/success',
     });
     cy.findByText('Try again').click();
-    cy.findByTitle(/^Stop all bots/).click();
+    cy.findByTitle(/^Starting bots../);
   });
 });
