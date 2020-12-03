@@ -246,12 +246,16 @@ export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const projectMetaDataState = atomFamily<{ isRootBot: boolean; isRemote: boolean }, string>({
+export const projectMetaDataState = atomFamily<
+  { isRootBot: boolean; isRemote: boolean; lastReloadedFromServer: number | undefined },
+  string
+>({
   key: getFullyQualifiedKey('projectsMetaDataState'),
   default: () => {
     return {
       isRootBot: false,
       isRemote: false,
+      lastReloadedFromServer: undefined,
     };
   },
 });

@@ -395,6 +395,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
+
   return mainDialog;
 };
 
@@ -428,6 +429,7 @@ export const openRemoteSkill = async (
   set(projectMetaDataState(projectId), {
     isRootBot: false,
     isRemote: true,
+    lastReloadedFromServer: Date.now(),
   });
 
   //TODO: open remote url 404. isRemote set to false?
@@ -464,6 +466,7 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   set(projectMetaDataState(projectData.id), {
     isRootBot: false,
     isRemote: false,
+    lastReloadedFromServer: Date.now(),
   });
   set(botNameIdentifierState(projectData.id), botNameIdentifier);
 

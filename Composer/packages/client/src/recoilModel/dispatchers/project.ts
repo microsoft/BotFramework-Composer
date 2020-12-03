@@ -182,6 +182,7 @@ export const projectDispatcher = () => {
         set(projectMetaDataState(projectId), {
           isRemote: false,
           isRootBot: false,
+          lastReloadedFromServer: Date.now(),
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
@@ -207,6 +208,7 @@ export const projectDispatcher = () => {
         set(projectMetaDataState(projectId), {
           isRootBot: true,
           isRemote: false,
+          lastReloadedFromServer: Date.now(),
         });
         projectIdCache.set(projectId);
 
@@ -245,6 +247,7 @@ export const projectDispatcher = () => {
       set(projectMetaDataState(projectId), {
         isRootBot: true,
         isRemote: false,
+        lastReloadedFromServer: Date.now(),
       });
       projectIdCache.set(projectId);
     } catch (ex) {
@@ -293,6 +296,7 @@ export const projectDispatcher = () => {
       set(projectMetaDataState(projectId), {
         isRootBot: true,
         isRemote: false,
+        lastReloadedFromServer: Date.now(),
       });
       projectIdCache.set(projectId);
       navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
@@ -365,6 +369,7 @@ export const projectDispatcher = () => {
         set(projectMetaDataState(projectId), {
           isRootBot: true,
           isRemote: false,
+          lastReloadedFromServer: Date.now(),
         });
         projectIdCache.set(projectId);
         navigateToBot(callbackHelpers, projectId, mainDialog);
@@ -468,6 +473,7 @@ export const projectDispatcher = () => {
             callbackHelpers.set(projectMetaDataState(projectId), {
               isRootBot: true,
               isRemote: false,
+              lastReloadedFromServer: Date.now(),
             });
             projectIdCache.set(projectId);
             navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
