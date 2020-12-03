@@ -57,6 +57,7 @@ const LGPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      showCommonLinks
       useNewTree
       data-testid="LGPage"
       mainRegionName={formatMessage('LG editor')}
