@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
+import { BotIndexer } from '@bfc/indexers';
+import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
@@ -13,21 +14,41 @@ import {
   botProjectIdsState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  luFilesState,
+  lgFilesState,
+  qnaFilesState,
+  skillManifestsState,
+  dialogSchemasState,
   jsonSchemaFilesState,
   projectMetaDataState,
+  settingsState,
+  publishHistoryState,
+  publishTypesState,
+  dialogIdsState,
+  dialogState,
+  schemasState,
 } from '../atoms';
-import { dialogsSelectorFamily } from '../selectors';
+import { dialogsSelectorFamily, buildEssentialsSelector, validateDialogsSelectorFamily } from '../selectors';
 
 // Actions
-export const botsForFilePersistenceSelector = selector({
-  key: 'botsForFilePersistenceSelector',
+export const localBotsWithoutErrorsSelector = selector({
+  key: 'localBotsWithoutErrorsSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectIdsState);
     return botProjectIds.filter((projectId: string) => {
       const { isRemote } = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      return !botError && !isRemote;
+      return !isRemote && !botError;
     });
+  },
+});
+
+export const localBotsDataSelector = selector({
+  key: 'localBotsDataSelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+    const botProjectsWithoutError = get(botProjectSpaceSelector).filter((b) => botProjectIds.includes(b.projectId));
+    return botProjectsWithoutError;
   },
 });
 
@@ -54,13 +75,60 @@ export const botProjectSpaceSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      const dialogs = get(dialogsSelectorFamily(projectId));
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+      const dialogs = get(validateDialogsSelectorFamily(projectId));
+      const luFiles = get(luFilesState(projectId));
+      const lgFiles = get(lgFilesState(projectId));
+      const qnaFiles = get(qnaFilesState(projectId));
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+      const botProjectFile = get(botProjectFileState(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
+      const buildEssentials = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      return { dialogs, formDialogSchemas, projectId, name, ...metaData, error: botError, botNameId };
+      const setting = get(settingsState(projectId));
+      const skillManifests = get(skillManifestsState(projectId));
+      const dialogSchemas = get(dialogSchemasState(projectId));
+      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
+      const schemas = get(schemasState(projectId));
+      const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
+
+      const botAssets: BotAssets = {
+        projectId,
+        dialogs,
+        luFiles,
+        qnaFiles,
+        lgFiles,
+        skillManifests,
+        setting,
+        dialogSchemas,
+        formDialogSchemas,
+        botProjectFile,
+        jsonSchemaFiles,
+        recognizers: [],
+        crossTrainConfig: {},
+      };
+
+      const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+      const publishHistory = get(publishHistoryState(projectId));
+      const publishTypes = get(publishTypesState(projectId));
+
+      return {
+        dialogs,
+        formDialogSchemas,
+        projectId,
+        name,
+        ...metaData,
+        setting,
+        error: botError,
+        botNameId,
+        diagnostics,
+        buildEssentials,
+        isPvaSchema,
+        publishHistory,
+        publishTypes,
+      };
     });
     return result;
   },
@@ -89,5 +157,57 @@ export const jsonSchemaFilesByProjectIdSelector = selector({
       result[projectId] = get(jsonSchemaFilesState(projectId));
     });
     return result;
+  },
+});
+
+export const botProjectDiagnosticsSelector = selector({
+  key: 'botProjectDiagnosticsSelector',
+  get: ({ get }) => {
+    const botProjects = get(botProjectIdsState);
+    const result = botProjects.map((projectId: string) => {
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+      const dialogs = get(dialogsSelectorFamily(projectId));
+      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+      const luFiles = get(luFilesState(projectId));
+      const lgFiles = get(lgFilesState(projectId));
+      const setting = get(settingsState(projectId));
+      const skillManifests = get(skillManifestsState(projectId));
+      const dialogSchemas = get(dialogSchemasState(projectId));
+      const qnaFiles = get(qnaFilesState(projectId));
+      const botProjectFile = get(botProjectFileState(projectId));
+      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
+      const botAssets: BotAssets = {
+        projectId,
+        dialogs,
+        luFiles,
+        qnaFiles,
+        lgFiles,
+        skillManifests,
+        setting,
+        dialogSchemas,
+        formDialogSchemas,
+        botProjectFile,
+        jsonSchemaFiles,
+        recognizers: [],
+        crossTrainConfig: {},
+      };
+      return BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+    });
+    return result;
+  },
+});
+
+export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] }>({
+  key: 'projectDialogsMap',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+
+    return projectIds.reduce((result, projectId) => {
+      const dialogIds = get(dialogIdsState(projectId));
+      result[projectId] = dialogIds.map((dialogId) => {
+        return get(dialogState({ projectId, dialogId }));
+      });
+      return result;
+    }, {});
   },
 });

@@ -8655,7 +8655,7 @@
     "defaultLanguage": "en-us",
     "languages": ["en-us"],
     "luis": {
-      "name": "",
+      "name": "EmptyBot-1",
       "authoringKey": "",
       "authoringEndpoint": "",
       "endpointKey": "",

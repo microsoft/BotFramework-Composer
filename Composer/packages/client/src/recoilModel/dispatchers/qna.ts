@@ -15,6 +15,7 @@ import {
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
 } from '../atoms/botState';
+import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
@@ -202,10 +203,13 @@ export const qnaDispatcher = () => {
     ({ set }: CallbackInterface) => async ({
       onComplete,
       projectId,
+      dialogId,
     }: {
       onComplete?: () => void;
       projectId: string;
+      dialogId: string;
     }) => {
+      set(createQnAOnState, { projectId, dialogId });
       set(showCreateQnAFromUrlDialogState(projectId), true);
       set(onCreateQnAFromUrlDialogCompleteState(projectId), { func: onComplete });
     }
@@ -213,6 +217,7 @@ export const qnaDispatcher = () => {
 
   const createQnAFromUrlDialogCancel = useRecoilCallback(
     ({ set }: CallbackInterface) => ({ projectId }: { projectId: string }) => {
+      set(createQnAOnState, { projectId: '', dialogId: '' });
       set(showCreateQnAFromUrlDialogState(projectId), false);
       set(onCreateQnAFromUrlDialogCompleteState(projectId), { func: undefined });
     }
@@ -222,10 +227,13 @@ export const qnaDispatcher = () => {
     ({ set }: CallbackInterface) => async ({
       onComplete,
       projectId,
+      dialogId,
     }: {
       onComplete?: () => void;
       projectId: string;
+      dialogId: string;
     }) => {
+      set(createQnAOnState, { projectId, dialogId });
       set(showCreateQnAFromScratchDialogState(projectId), true);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: onComplete });
     }
@@ -233,6 +241,7 @@ export const qnaDispatcher = () => {
 
   const createQnAFromScratchDialogCancel = useRecoilCallback(
     ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
+      set(createQnAOnState, { projectId: '', dialogId: '' });
       set(showCreateQnAFromScratchDialogState(projectId), false);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: undefined });
     }

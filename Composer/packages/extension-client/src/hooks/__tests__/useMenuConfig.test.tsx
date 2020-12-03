@@ -42,7 +42,7 @@ describe('useMenuConfig', () => {
   it('returns a map of sdk kinds to their menu config', () => {
     const { result } = renderHook(() => useMenuConfig(), { wrapper });
 
-    expect(result.current).toEqual({
+    expect(result.current.menuSchema).toEqual({
       foo: 'foo menu config',
       bar: 'bar menu config',
     });
