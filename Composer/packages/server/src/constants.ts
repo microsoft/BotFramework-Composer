@@ -14,3 +14,7 @@ export enum ClaimNames {
   name = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
   expiration = 'exp',
 }
+
+export const APPINSIGHTS_INSTRUMENTATIONKEY = process.env.APPINSIGHTS_INSTRUMENTATIONKEY;
+
+export const piiProperties = ['sessionId', 'userId', 'projectId'];

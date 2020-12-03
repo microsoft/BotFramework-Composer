@@ -4,6 +4,7 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import jwtDecode from 'jwt-decode';
+import pick from 'lodash/pick';
 
 import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appState';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
@@ -11,6 +12,9 @@ import storage from '../../utils/storage';
 import { loadLocale } from '../../utils/fileUtil';
 import { UserSettingsPayload } from '../types';
 import { isElectron } from '../../utils/electronUtil';
+import httpClient from '../../utils/httpUtil';
+
+import { logMessage } from './shared';
 
 enum ClaimNames {
   upn = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn',
@@ -72,7 +76,8 @@ export const userDispatcher = () => {
   });
 
   const updateUserSettings = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (settings: Partial<UserSettingsPayload>) => {
+    (callbackHelpers: CallbackInterface) => async (settings: Partial<UserSettingsPayload>) => {
+      const { set } = callbackHelpers;
       if (settings.appLocale != null) {
         await loadLocale(settings.appLocale);
       }
@@ -90,6 +95,11 @@ export const userDispatcher = () => {
           }
         }
         storage.set('userSettings', newSettings);
+
+        // push telemetry settings to the server
+        httpClient.post('/settings', { settings: pick(newSettings, ['telemetry']) }).catch((error) => {
+          logMessage(callbackHelpers, `Error updating server settings: ${error}`);
+        });
 
         if (isElectron()) {
           // push the settings to the electron main process
