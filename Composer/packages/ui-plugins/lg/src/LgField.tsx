@@ -10,6 +10,8 @@ import { FieldLabel, useFormData } from '@bfc/adaptive-form';
 import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 
+import { locateLgTemplatePosition } from './locateLgTemplatePosition';
+
 const lspServerPath = '/lg-language-server';
 
 const tryGetLgMetaDataType = (lgText: string): string | null => {
@@ -45,8 +47,12 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   const lgTemplateRef = LgTemplateRef.parse(value);
   const lgName = lgTemplateRef ? lgTemplateRef.name : new LgMetaData(lgType, designerId || '').toString();
-  const lgFileId = `${currentDialog.lgFile}.${locale}`;
-  const lgFile = lgFiles && lgFiles.find((file) => file.id === lgFileId);
+
+  const relatedLgFile = locateLgTemplatePosition(lgFiles, lgName, locale);
+
+  const fallbackLgFileId = `${currentDialog.lgFile}.${locale}`;
+  const lgFile = relatedLgFile ?? lgFiles.find((f) => f.id === fallbackLgFileId);
+  const lgFileId = lgFile?.id ?? fallbackLgFileId;
 
   const updateLgTemplate = useCallback(
     async (body: string) => {

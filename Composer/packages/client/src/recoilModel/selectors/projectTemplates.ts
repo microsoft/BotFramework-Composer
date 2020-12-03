@@ -13,12 +13,6 @@ export const filteredTemplatesSelector = selector({
     const featureFlags = get(featureFlagsState);
 
     let filteredTemplates = [...templates];
-    if (!featureFlags?.VA_CREATION?.enabled) {
-      const vaTemplateIndex = filteredTemplates.findIndex((template) => template.id === 'va-core');
-      if (vaTemplateIndex !== -1) {
-        filteredTemplates.splice(vaTemplateIndex, 1);
-      }
-    }
     if (!featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled) {
       filteredTemplates = filteredTemplates.filter((template: BotTemplate) => {
         if (template.path) {
