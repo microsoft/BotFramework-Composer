@@ -35,10 +35,11 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   projectId?: string;
   skillId?: string;
   dialogId?: string;
+  lgFileId?: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId } = props;
+  const { dialogId, projectId, skillId, lgFileId } = props;
 
   const actualProjectId = skillId ?? projectId ?? '';
 
@@ -52,8 +53,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const { languages, defaultLanguage } = settings;
 
-  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
