@@ -25,9 +25,9 @@ import {
   getQnaPendingNotification,
 } from '../../utils/notifications';
 import httpClient from '../../utils/httpUtil';
+import { rootBotProjectIdSelector } from '../selectors';
 
 import { addNotificationInternal, deleteNotificationInternal, createNotification } from './notification';
-import { rootBotProjectIdSelector } from '../selectors';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
