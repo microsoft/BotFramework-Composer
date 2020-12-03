@@ -12,6 +12,7 @@ import {
   LgTemplateJsonPath,
   ReferredLuIntents,
   Diagnostic,
+  getSkillNameFromSetting,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -157,7 +158,12 @@ function extractReferredDialogs(dialog): string[] {
   return uniq(dialogs);
 }
 
-// find out all skill
+//
+/**
+ * find out all used skill from dialog
+ *  skillEndpoint: "=settings.skill['oneNoteSync'].endpointUrl"
+ */
+
 function extractReferredSkills(dialog): string[] {
   const skills: string[] = [];
   /**    *
@@ -168,7 +174,8 @@ function extractReferredSkills(dialog): string[] {
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
     if (has(value, '$kind') && value.$kind === SDKKinds.BeginSkill) {
-      skills.push(value.skillEndpoint);
+      const skillName = getSkillNameFromSetting(value.skillEndpoint);
+      if (skillName) skills.push(skillName);
     }
     return false;
   };

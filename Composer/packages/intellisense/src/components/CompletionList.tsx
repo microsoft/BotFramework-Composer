@@ -11,7 +11,7 @@ import { CompletionElement } from './CompletionElement';
 const styles = {
   completionList: css`
     position: absolute;
-    top: 32;
+    top: 32px;
     left: 0;
     max-height: 300px;
     width: 100%;

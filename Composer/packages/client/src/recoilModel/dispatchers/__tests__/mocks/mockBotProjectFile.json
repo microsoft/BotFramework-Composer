@@ -1,16 +1,15 @@
 {
   "$schema": "",
   "name": "TesterBot",
-  "workspace": "file:///Users/tester/Desktop/LoadedBotProject/TesterBot",
   "skills": {
     "todoSkill": {
-      "workspace": "file:///Users/tester/Desktop/LoadedBotProject/Todo-Skill",
+      "workspace": "../Todo-Skill",
       "manifest": "Todo-Skill-2-1-preview-1-manifest",
       "remote": false,
       "endpointName": "default"
     },
     "googleKeepSync": {
-      "workspace": "file:///Users/tester/Desktop/LoadedBotProject/GoogleKeepSync",
+      "workspace": "../GoogleKeepSync",
       "remote": false
     }
   }

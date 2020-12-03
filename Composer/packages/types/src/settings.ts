@@ -29,8 +29,6 @@ export type AppUpdaterSettings = {
 };
 
 export type SkillSetting = {
-  name: string;
-  manifestUrl: string;
   msAppId: string;
   endpointUrl: string;
 };
@@ -56,6 +54,7 @@ export type DialogSetting = {
   };
   botId?: string;
   skillHostEndpoint?: string;
+  customFunctions: string[];
   [key: string]: any;
 };
 

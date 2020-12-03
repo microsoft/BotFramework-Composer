@@ -1,10 +1,8 @@
 import * as path from 'path';
+import { ConversationState, MemoryStorage, TestAdapter, TurnContext, useBotState, UserState } from 'botbuilder';
 import { ResourceExplorer } from 'botbuilder-dialogs-declarative';
-import { AdaptiveDialogComponentRegistration } from 'botbuilder-dialogs-adaptive';
-import { TestAdapter, ConversationState, MemoryStorage, UserState } from 'botbuilder';
-import { ComposerBot } from '../src/shared/composerBot';
 import { ActivityTypes, Activity, ChannelAccount } from 'botframework-schema';
-import { TurnContext } from 'botbuilder-core';
+import { ComposerBot } from '../src/shared/composerBot';
 import { SkillConversationIdFactory } from '../src/shared/skillConversationIdFactory';
 import * as helpers from '../src/shared/helpers';
 
@@ -35,7 +33,6 @@ let bot: ComposerBot;
 let adapter: TestAdapter;
 beforeAll(() => {
   resourceExplorer.addFolders(samplesDirectory, ['runtime'], false);
-  resourceExplorer.addComponent(new AdaptiveDialogComponentRegistration(resourceExplorer));
   adapter = new TestAdapter(
     async (context: TurnContext): Promise<any> => {
       // Route activity to bot.
@@ -49,6 +46,8 @@ beforeAll(() => {
   // Create shared user state and conversation state instances.
   const userState = new UserState(memoryStorage);
   const conversationState = new ConversationState(memoryStorage);
+  useBotState(adapter, userState, conversationState);
+
   // Create shared skill conversation id factory instance.
   const skillConversationIdFactory = new SkillConversationIdFactory();
   bot = new ComposerBot(userState, conversationState, skillConversationIdFactory);

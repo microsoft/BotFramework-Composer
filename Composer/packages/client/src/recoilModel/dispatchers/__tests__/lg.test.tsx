@@ -38,7 +38,7 @@ jest.mock('../../parsers/lgWorker', () => {
 });
 const lgFiles = [
   {
-    id: 'common.en-us',
+    id: 'a.en-us',
     content: `\r\n# Hello\r\n-hi`,
     templates: [{ name: 'Hello', body: '-hi', parameters: [] }],
     diagnostics: [],
@@ -87,7 +87,7 @@ describe('Lg dispatcher', () => {
   it('should create a lg template', async () => {
     await act(async () => {
       await dispatcher.createLgTemplate({
-        id: 'common.en-us',
+        id: 'a.en-us',
         template: getLgTemplate('Test', '-add'),
         projectId,
       });
@@ -98,7 +98,7 @@ describe('Lg dispatcher', () => {
 
   it('should update a lg file', async () => {
     await act(async () => {
-      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test`, projectId });
+      await dispatcher.updateLgFile({ id: 'a.en-us', content: `test`, projectId });
     });
 
     expect(renderedComponent.current.lgFiles[0].content).toBe(`test`);
@@ -107,7 +107,7 @@ describe('Lg dispatcher', () => {
   it('should update a lg template', async () => {
     await act(async () => {
       await dispatcher.updateLgTemplate({
-        id: 'common.en-us',
+        id: 'a.en-us',
         templateName: 'Hello',
         template: getLgTemplate('Hello', '-TemplateValue'),
         projectId,
@@ -120,7 +120,7 @@ describe('Lg dispatcher', () => {
   it('should remove a lg template', async () => {
     await act(async () => {
       await dispatcher.removeLgTemplate({
-        id: 'common.en-us',
+        id: 'a.en-us',
         templateName: 'Hello',
         projectId,
       });
@@ -132,7 +132,7 @@ describe('Lg dispatcher', () => {
   it('should remove lg templates', async () => {
     await act(async () => {
       await dispatcher.removeLgTemplates({
-        id: 'common.en-us',
+        id: 'a.en-us',
         templateNames: ['Hello'],
         projectId,
       });
