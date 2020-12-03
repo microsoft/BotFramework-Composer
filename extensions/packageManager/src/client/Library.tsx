@@ -14,6 +14,7 @@ import { ContentHeaderStyle, HeaderText } from './styles';
 import { ImportDialog } from './importDialog';
 import { LibraryRef, LibraryList } from './libraryList';
 import { WorkingModal } from './workingModal';
+import { ProjectList } from './projectList/ProjectList';
 
 const DEFAULT_CATEGORY = formatMessage('Available');
 
@@ -346,6 +347,25 @@ const Library: React.FC = () => {
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
+        <ProjectList
+          defaultSelected={{
+            projectId: 'fakeId1',
+            displayName: 'Local Test Project',
+          }}
+          projectCollection={[
+            {
+              projectId: 'fakeId1',
+              name: 'Local Test Project',
+              isRemote: false
+            },
+            {
+              projectId: 'fakeId2',
+              name: 'Remote Test Project',
+              isRemote: true
+            }
+          ]}
+          onSelect={(link) => console.log(link.projectId)}
+        />
         <p>{strings.description} <Link href={docsUrl} target="_new">{strings.descriptionLink }</Link></p>
       </div>
       {!ejectedRuntime && (
