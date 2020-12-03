@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { DialogInfo, DialogSchemaFile, ITrigger, SDKKinds, SkillManifest, LuFile, QnAFile } from '@bfc/shared';
+import { DialogInfo, DialogSchemaFile, ITrigger, SDKKinds, SkillManifestFile, LuFile, QnAFile } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension-client';
 
 import { Activities, Activity, activityHandlerMap, ActivityTypes, DispatchModels } from './constants';
@@ -13,7 +13,7 @@ export const isSupportedTrigger = ({ type }: ITrigger) => Object.keys(activityHa
 
 export const generateSkillManifest = (
   schema: JSONSchema7,
-  skillManifest: Partial<SkillManifest>,
+  skillManifest: Partial<SkillManifestFile>,
   dialogs: DialogInfo[],
   dialogSchemas: DialogSchemaFile[],
   luFiles: LuFile[],

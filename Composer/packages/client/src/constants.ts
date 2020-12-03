@@ -72,13 +72,15 @@ export const OpenStatus = {
 };
 
 export enum BotStatus {
+  queued = 'queued',
   connected = 'connected',
-  unConnected = 'unConnected',
+  inactive = 'inactive',
   publishing = 'publishing',
   published = 'published',
   reloading = 'loading',
   pending = 'pending',
   failed = 'failed',
+  stopping = 'stopping',
 }
 
 export enum CreationFlowStatus {
@@ -90,6 +92,8 @@ export enum CreationFlowStatus {
   CLOSE = 'Close',
 }
 
+export type CreationFlowType = 'Bot' | 'Skill';
+
 export const Steps = {
   CREATE: 'CREATE',
   DEFINE: 'DEFINE',
@@ -97,10 +101,26 @@ export const Steps = {
   NONE: 'NONE',
 };
 
+export const BotStatusesCopy = {
+  connected: formatMessage('Running'),
+  publishing: formatMessage('Building'),
+  published: formatMessage('Starting'),
+  inactive: formatMessage('Inactive'),
+  failed: formatMessage('Failed to start'),
+  loading: formatMessage('Building'),
+  queued: formatMessage('Queued'),
+  reloading: formatMessage('Starting'),
+  stopping: formatMessage('Stopping'),
+};
+
 export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create bot from template or scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+  },
+  CREATE_NEW_SKILLBOT: {
+    title: formatMessage('Create a skill in your bot'),
+    subText: '',
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),
@@ -177,6 +197,13 @@ export const addSkillDialog = {
     title: formatMessage('Edit a skill'),
     subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
   },
+};
+
+export const repairSkillDialog = (name: string) => {
+  return {
+    title: formatMessage('Link to this skill has been broken'),
+    subText: formatMessage('{name} cannot be found at the location.', { name }),
+  };
 };
 
 export const SupportedFileTypes = [
