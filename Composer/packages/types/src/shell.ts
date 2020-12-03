@@ -81,6 +81,7 @@ export type ApplicationContext = {
   // TODO: remove
   schemas: BotSchemas;
   flowZoomRate: ZoomInfo;
+  projectCollection: BotInProject[];
 
   httpClient: HttpClient;
 };
@@ -143,7 +144,6 @@ export type BotInProject = {
 export type ProjectContext = {
   botName: string;
   projectId: string;
-  projectCollection: BotInProject[];
   dialogs: DialogInfo[];
   dialogSchemas: DialogSchemaFile[];
   lgFiles: LgFile[];
