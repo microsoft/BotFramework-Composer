@@ -14,42 +14,44 @@ export default class AppInsightsClient {
   public static logEvent(name: string, properties: LogData) {
     this.startInterval();
     this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
+    if (this._eventPool.length >= BATCH_SIZE) {
+      this.drain();
+    }
   }
 
   public static logPageView(name: string, url: string, properties: LogData) {
     this.startInterval();
     this._eventPool.push({ type: TelemetryEventTypes.PageView, name, properties, url });
+    if (this._eventPool.length >= BATCH_SIZE) {
+      this.drain();
+    }
   }
 
   public static drain() {
-    if (this._intervalId !== null) {
-      clearInterval(this._intervalId);
-      this._intervalId = null;
-    }
-
-    const batches = chunk(this._eventPool, BATCH_SIZE);
-    Promise.all(batches.map(this.postEvents));
-  }
-
-  private static async flush() {
-    if (this._eventPool.length) {
-      const events = this._eventPool.splice(0, BATCH_SIZE);
-      await this.postEvents(events);
-    }
+    const events = this._eventPool.splice(0, this._eventPool.length);
+    const batches = chunk(events, BATCH_SIZE);
+    return Promise.all(batches.map(this.postEvents));
   }
 
   private static async postEvents(events: TelemetryEvent[]) {
     try {
-      await httpClient.post('/telemetry/events', { events });
+      if (events.length) {
+        await httpClient.post('/telemetry/events', { events });
+      }
     } catch (error) {
-      // Swallow error to avoid crashing the app while sending telemetry
+      this._eventPool.unshift(...events);
     }
   }
 
   private static startInterval() {
     if (!this._intervalId) {
       this._intervalId = setInterval(() => {
-        this.flush();
+        if (this._eventPool.length === 0 && this._intervalId !== null) {
+          clearInterval(this._intervalId);
+          this._intervalId = null;
+          return;
+        }
+        this.drain();
       }, 10000);
     }
   }

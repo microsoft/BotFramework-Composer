@@ -7,7 +7,7 @@ import AppInsightsClient from './AppInsightsClient';
 import ConsoleClient from './ConsoleClient';
 
 export default class TelemetryClient {
-  private static _getProperties?: () => LogData;
+  private static _additionalProperties?: () => LogData;
   private static _telemetrySettings?: TelemetrySettings;
 
   public static setup(telemetrySettings: TelemetrySettings, additionalProperties: LogData | (() => LogData)) {
@@ -15,7 +15,7 @@ export default class TelemetryClient {
       this.client?.drain();
     }
 
-    this._getProperties =
+    this._additionalProperties =
       typeof additionalProperties === 'function' ? additionalProperties : () => additionalProperties;
     this._telemetrySettings = telemetrySettings;
   }
@@ -25,7 +25,7 @@ export default class TelemetryClient {
     ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
   ) {
     const [properties] = args;
-    this.client?.logEvent(eventName, { ...this._getProperties?.(), ...properties });
+    this.client?.logEvent(eventName, { ...this.sharedProperties, ...properties });
   }
 
   public static pageView<TN extends TelemetryEventName>(
@@ -34,11 +34,11 @@ export default class TelemetryClient {
     ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
   ) {
     const [properties] = args;
-    this.client?.logPageView(eventName, url, { ...this._getProperties?.(), ...properties });
+    this.client?.logPageView(eventName, url, { ...this.sharedProperties, ...properties });
   }
 
   public static drain() {
-    this.client?.drain();
+    return this.client?.drain();
   }
 
   private static get client() {
@@ -49,5 +49,14 @@ export default class TelemetryClient {
         return ConsoleClient;
       }
     }
+  }
+
+  private static get sharedProperties(): Record<string, unknown> {
+    return {
+      ...this._additionalProperties?.(),
+      timestamp: Date.now(),
+      composerVersion: process.env.COMPOSER_VERSION || 'unknown',
+      sdkPackageVersion: process.env.SDK_PACKAGE_VERSION || 'unknown',
+    };
   }
 }

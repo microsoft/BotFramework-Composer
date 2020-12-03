@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LogData } from '../../../types/src';
+import { LogData } from '@botframework-composer/types';
 
 export default class ConsoleClient {
   public static logEvent(name: string, properties: LogData) {
