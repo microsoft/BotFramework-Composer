@@ -14,7 +14,7 @@ export type PublishResult = {
   eTag?: string;
   log?: string;
   id?: string;
-  time?: Date;
+  time?: string;
   endpointURL?: string;
   status?: number;
   action?: {

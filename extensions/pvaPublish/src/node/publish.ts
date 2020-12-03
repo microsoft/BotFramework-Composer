@@ -303,7 +303,7 @@ const xformJobToResult = (job: PVAPublishJob): PublishResult => {
     id: job.operationId, // what is this used for in Composer?
     log: (job.diagnostics || []).map((diag) => `---\n${JSON.stringify(diag, null, 2)}\n---\n`).join('\n'),
     message: getUserFriendlyMessage(job),
-    time: new Date(job.lastUpdateTimeUtc),
+    time: job.lastUpdateTimeUtc,
     status: getStatusFromJobState(job.state),
     action: getAction(job),
   };

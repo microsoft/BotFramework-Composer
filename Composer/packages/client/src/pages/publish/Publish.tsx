@@ -201,7 +201,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             item.status = latestPublishItem.status;
             item.comment = latestPublishItem.comment;
             item.message = latestPublishItem.message;
-            item.time = latestPublishItem.time?.toUTCString();
+            item.time = latestPublishItem.time;
           }
           return item;
         })
@@ -219,7 +219,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         botStatus.status = botPublishHistory[0].status;
         botStatus.comment = botPublishHistory[0].comment;
         botStatus.message = botPublishHistory[0].message;
-        botStatus.time = botPublishHistory[0].time?.toUTCString();
+        botStatus.time = botPublishHistory[0].time;
       } else {
         botStatus = { ...botStatus, status: undefined, comment: '', message: '', time: '' };
       }

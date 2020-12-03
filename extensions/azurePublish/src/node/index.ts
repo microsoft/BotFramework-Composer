@@ -63,7 +63,7 @@ function publishResultFromStatus(procStatus: ProcessStatus): PublishResponse {
       message,
       log: log.map((item)=> `---\n${JSON.stringify(item, null, 2)}\n---\n`).join('\n'),
       comment,
-      time,
+      time: time.toString(),
       id: procStatus.id,
       status,
     }
