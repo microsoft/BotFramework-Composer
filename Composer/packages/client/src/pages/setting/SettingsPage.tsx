@@ -6,8 +6,6 @@ import { jsx, css } from '@emotion/core';
 import { useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
 
 import {
@@ -18,8 +16,6 @@ import {
   settingsState,
   currentProjectIdState,
 } from '../../recoilModel';
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
