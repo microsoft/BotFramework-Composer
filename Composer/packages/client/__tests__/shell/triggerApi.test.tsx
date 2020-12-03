@@ -45,12 +45,9 @@ const state = {
 };
 
 describe('use triggerApi hooks', () => {
-  let selectToMock, updateDialogMock, createLgTemplatesMock, createLuIntentMock, result;
+  let createTriggerMock, result;
   beforeEach(() => {
-    selectToMock = jest.fn();
-    updateDialogMock = jest.fn();
-    createLgTemplatesMock = jest.fn();
-    createLuIntentMock = jest.fn();
+    createTriggerMock = jest.fn();
 
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
@@ -61,10 +58,7 @@ describe('use triggerApi hooks', () => {
       set(schemasState(state.projectId), state.schemas);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
-        selectTo: selectToMock,
-        updateDialog: updateDialogMock,
-        createLgTemplates: createLgTemplatesMock,
-        createLuIntent: createLuIntentMock,
+        createTrigger: createTriggerMock,
       }));
     };
 
@@ -89,9 +83,7 @@ describe('use triggerApi hooks', () => {
       triggerPhrases: '',
     };
     await result.current.createTrigger(dialogId, formData);
-    expect(createLgTemplatesMock).toBeCalledTimes(1);
-    expect(updateDialogMock).toBeCalledTimes(1);
-    expect(createLgTemplatesMock).toBeCalledTimes(1);
-    expect(updateDialogMock).toBeCalledTimes(1);
+    const arg = [state.projectId, dialogId, formData, true];
+    expect(createTriggerMock).toBeCalledWith(...arg);
   });
 });
