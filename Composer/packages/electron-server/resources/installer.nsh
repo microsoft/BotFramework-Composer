@@ -20,7 +20,7 @@
 
 !macro InstallVCRedist_64bit
   ${If} ${RunningX64}
-    ; Check if 64-bit Visual Studio 2015-2019 redistributable is already installed
+    ; Check if a recent 64-bit Visual Studio 2015-2019 redistributable is already installed
     ReadRegStr $R0 HKCR "Installer\Dependencies\VC,redist.x64,amd64,14.25,bundle" "Version"
     IfErrors 0 VCRedistAlreadyInstalled
     ReadRegStr $R0 HKCR "Installer\Dependencies\VC,redist.x64,amd64,14.26,bundle" "Version"
@@ -38,6 +38,5 @@
     ExecWait "$TEMP\BotFrameworkComposer-setup\vc_redist.x64.exe /quiet /norestart"
 
 VCRedistAlreadyInstalled:
-    ;nothing to do here
-    ${EndIf}
+  ${EndIf}
 !macroend
