@@ -147,12 +147,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       disabled: !isPullSupported,
     },
   ];
-  const getUpdatedStatus = (target, botProjectId) => {
+  const getUpdatedStatus = (target, botProjectId, jobId) => {
     if (target) {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
       setTimeout(async () => {
-        getPublishStatus(botProjectId, target);
+        getPublishStatus(botProjectId, target, jobId);
       }, publishStatusInterval);
     }
   };
@@ -171,7 +171,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           )?.publishHistory[bot.publishTarget];
           if (botPublishHistory && botPublishHistory.length > 0) {
             if (botPublishHistory[0].status === 202) {
-              getUpdatedStatus(selectedTarget, botProjectId);
+              getUpdatedStatus(selectedTarget, botProjectId, botPublishHistory[0].id);
             } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
               bot.status = botPublishHistory[0].status;
               if (showNotifications[bot.id]) {

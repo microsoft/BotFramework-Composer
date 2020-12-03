@@ -1214,6 +1214,7 @@
   dependencies:
     "@emotion/core" "^10.0.27"
     "@monaco-editor/react" "^3.1.0"
+    "@uifabric/fluent-theme" "^7.1.4"
     json-schema-defaults "^0.4.0"
     lodash "^4.17.19"
     monaco-editor "^0.19.0"
@@ -1381,6 +1382,17 @@
   dependencies:
     tslib "^1.10.0"
 
+"@fluentui/react-compose@^0.19.12":
+  version "0.19.12"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@fluentui/react-compose/-/@fluentui/react-compose-0.19.12.tgz#405dfc19b4ae2b5f1c86bf7091ac15a205978206"
+  integrity sha1-QF38GbSuK18chr9wkawVogWXggY=
+  dependencies:
+    "@types/classnames" "^2.2.9"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/utilities" "^7.33.2"
+    classnames "^2.2.6"
+    tslib "^1.10.0"
+
 "@fluentui/react-focus@^7.16.16":
   version "7.16.16"
   resolved "https://registry.yarnpkg.com/@fluentui/react-focus/-/react-focus-7.16.16.tgz#eb765f42a5e3fca1284f891a2ec714112f0133fc"
@@ -1391,6 +1403,43 @@
     "@uifabric/set-version" "^7.0.23"
     "@uifabric/styling" "^7.16.16"
     "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
+"@fluentui/react-focus@^7.16.19":
+  version "7.16.19"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@fluentui/react-focus/-/@fluentui/react-focus-7.16.19.tgz#7e7be46b6a7c004b61c360f61a275004abdb0f93"
+  integrity sha1-fnvka2p8AEthw2D2GidQBKvbD5M=
+  dependencies:
+    "@fluentui/keyboard-key" "^0.2.12"
+    "@fluentui/react-theme-provider" "^0.18.0"
+    "@uifabric/merge-styles" "^7.19.1"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/styling" "^7.16.18"
+    "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
+"@fluentui/react-stylesheets@^0.2.4":
+  version "0.2.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@fluentui/react-stylesheets/-/@fluentui/react-stylesheets-0.2.4.tgz#65cc6136f84ff3fd3d1c9188bed0a34b9573f589"
+  integrity sha1-ZcxhNvhP8/09HJGIvtCjS5Vz9Yk=
+  dependencies:
+    "@uifabric/set-version" "^7.0.23"
+    tslib "^1.10.0"
+
+"@fluentui/react-theme-provider@^0.18.0":
+  version "0.18.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@fluentui/react-theme-provider/-/@fluentui/react-theme-provider-0.18.0.tgz#72fc1809a2b0720bdb66b9ff7d0505e69e036308"
+  integrity sha1-cvwYCaKwcgvbZrn/fQUF5p4DYwg=
+  dependencies:
+    "@fluentui/react-compose" "^0.19.12"
+    "@fluentui/react-stylesheets" "^0.2.4"
+    "@fluentui/react-window-provider" "^1.0.1"
+    "@fluentui/theme" "^1.7.0"
+    "@uifabric/merge-styles" "^7.19.1"
+    "@uifabric/react-hooks" "^7.13.9"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/utilities" "^7.33.2"
+    classnames "^2.2.6"
     tslib "^1.10.0"
 
 "@fluentui/react-window-provider@^1.0.1":
@@ -1405,6 +1454,16 @@
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@fluentui/theme/-/theme-1.5.4.tgz#0a4f1c93ba755271388e038d97e4f5797b798f7b"
   integrity sha512-f89jKHET6/f4Z+BzKzs1YXA3mAsBBIDSOtc5ZXfNwYcKPJ0ZqKYtplRz668LcvHdz1ysMR0XxtA0Y5eNUXyLxw==
+  dependencies:
+    "@uifabric/merge-styles" "^7.19.1"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
+"@fluentui/theme@^1.7.0":
+  version "1.7.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@fluentui/theme/-/@fluentui/theme-1.7.0.tgz#822adcc4b0c9cc057984b4ada21c30856907a8e6"
+  integrity sha1-gircxLDJzAV5hLStohwwhWkHqOY=
   dependencies:
     "@uifabric/merge-styles" "^7.19.1"
     "@uifabric/set-version" "^7.0.23"
@@ -1597,28 +1656,6 @@
     "@types/node" "*"
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
-
-"@microsoft/bf-lu@4.11.0-dev.20201005.7e5e1b8":
-  version "4.11.0-dev.20201005.7e5e1b8"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201005.7e5e1b8.tgz#62f9a37bb8340456e41853e179f2941dab9dfc87"
-  integrity sha1-Yvmje7g0BFbkGFPhefKUHaud/Ic=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.19"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^1.10.0"
 
 "@microsoft/bf-lu@^4.11.0-rc.20201030.a9f9b96":
   version "4.11.0"
@@ -1816,6 +1853,11 @@
   version "0.12.2"
   resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.2.tgz#f65d3d6389e01eeb458bd54dc8f52b95a9463bc8"
   integrity sha512-6ckxMjBBD8URvjB6J3NcnuAn5Pkl7t3TizAg+xdlzzQGSPSmBcXf8KoIH0ua/i+tio+ZRUHEXp0HEmvaR4kt0w==
+
+"@types/classnames@^2.2.9":
+  version "2.2.11"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/classnames/-/@types/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
+  integrity sha1-JSHMhvadFcW5BmTkgp2EVmBSwc8=
 
 "@types/connect@*":
   version "3.4.33"
@@ -2140,17 +2182,17 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uifabric/fluent-theme@^7.3.29":
-  version "7.3.35"
-  resolved "https://registry.yarnpkg.com/@uifabric/fluent-theme/-/fluent-theme-7.3.35.tgz#5cff9d570bc5bd127ff649045e1792c8cf3bab61"
-  integrity sha512-lCn9ngdPJam4VK8rTpK6D9JtKezQo3W5S775VL5WKKYFEj0WCPlGUZsDAsIe4SiHvjChLMIWqsaOlV6Vxb57sg==
+"@uifabric/fluent-theme@^7.1.4":
+  version "7.3.47"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@uifabric/fluent-theme/-/@uifabric/fluent-theme-7.3.47.tgz#127734c2539c6295b3b607eeccae7922dbb069d6"
+  integrity sha1-Enc0wlOcYpWztgfuzK55ItuwadY=
   dependencies:
-    "@fluentui/theme" "^1.5.4"
+    "@fluentui/theme" "^1.7.0"
     "@uifabric/merge-styles" "^7.19.1"
     "@uifabric/set-version" "^7.0.23"
-    "@uifabric/styling" "^7.16.16"
-    "@uifabric/variants" "^7.2.29"
-    office-ui-fabric-react "^7.149.2"
+    "@uifabric/styling" "^7.16.18"
+    "@uifabric/variants" "^7.2.31"
+    office-ui-fabric-react "^7.153.3"
     tslib "^1.10.0"
 
 "@uifabric/foundation@^7.9.17":
@@ -2164,6 +2206,17 @@
     "@uifabric/utilities" "^7.33.2"
     tslib "^1.10.0"
 
+"@uifabric/foundation@^7.9.20":
+  version "7.9.20"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@uifabric/foundation/-/@uifabric/foundation-7.9.20.tgz#993b6d762fd6c6ee878a3ae6a229795c260a1e7c"
+  integrity sha1-mTttdi/Wxu6Hijrmoil5XCYKHnw=
+  dependencies:
+    "@uifabric/merge-styles" "^7.19.1"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/styling" "^7.16.18"
+    "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
 "@uifabric/icons@^7.5.15":
   version "7.5.15"
   resolved "https://registry.yarnpkg.com/@uifabric/icons/-/icons-7.5.15.tgz#e39c7d2bbbf44c64278b7557d29b0fd444e99fc6"
@@ -2171,6 +2224,15 @@
   dependencies:
     "@uifabric/set-version" "^7.0.23"
     "@uifabric/styling" "^7.16.16"
+    tslib "^1.10.0"
+
+"@uifabric/icons@^7.5.17":
+  version "7.5.17"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@uifabric/icons/-/@uifabric/icons-7.5.17.tgz#8a24d1716f5d71b9caa83fa828142bc3fc408c04"
+  integrity sha1-iiTRcW9dcbnKqD+oKBQrw/xAjAQ=
+  dependencies:
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/styling" "^7.16.18"
     tslib "^1.10.0"
 
 "@uifabric/merge-styles@^7.19.1":
@@ -2210,6 +2272,18 @@
     "@uifabric/utilities" "^7.33.2"
     tslib "^1.10.0"
 
+"@uifabric/styling@^7.16.18":
+  version "7.16.18"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@uifabric/styling/-/@uifabric/styling-7.16.18.tgz#e3bcf130f4360ba5dfe078616498164f0423dbdc"
+  integrity sha1-47zxMPQ2C6Xf4HhhZJgWTwQj29w=
+  dependencies:
+    "@fluentui/theme" "^1.7.0"
+    "@microsoft/load-themed-styles" "^1.10.26"
+    "@uifabric/merge-styles" "^7.19.1"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
 "@uifabric/utilities@^7.33.2":
   version "7.33.2"
   resolved "https://registry.yarnpkg.com/@uifabric/utilities/-/utilities-7.33.2.tgz#426f9a8d1f9f7738e65abe4a9e36b65583476d81"
@@ -2221,12 +2295,12 @@
     prop-types "^15.7.2"
     tslib "^1.10.0"
 
-"@uifabric/variants@^7.2.29":
-  version "7.2.29"
-  resolved "https://registry.yarnpkg.com/@uifabric/variants/-/variants-7.2.29.tgz#69f3b385e8bb2b6ccacdb67c4999486772300401"
-  integrity sha512-Cmigkbi47gbCYu8mHdegaUDWtuqOb0hxkJagJhYJIoDwFj2cngBGcld3GcYpYM1RtTMl8enyoRrAYcWy+/nP2w==
+"@uifabric/variants@^7.2.31":
+  version "7.2.31"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@uifabric/variants/-/@uifabric/variants-7.2.31.tgz#2546617fca07004d2df852967536a548f8fff7b7"
+  integrity sha1-JUZhf8oHAE0t+FKWdTalSPj/97c=
   dependencies:
-    "@fluentui/theme" "^1.5.4"
+    "@fluentui/theme" "^1.7.0"
     "@uifabric/set-version" "^7.0.23"
     tslib "^1.10.0"
 
@@ -3318,6 +3392,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+classnames@^2.2.6:
+  version "2.2.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha1-Q5Nb/90pHzJtrQogUwmzjQD2UM4=
 
 clean-css@^4.2.3:
   version "4.2.3"
@@ -6453,7 +6532,7 @@ object.pick@^1.3.0:
   dependencies:
     isobject "^3.0.1"
 
-office-ui-fabric-react@^7.145.0, office-ui-fabric-react@^7.149.2:
+office-ui-fabric-react@^7.145.0:
   version "7.149.2"
   resolved "https://registry.yarnpkg.com/office-ui-fabric-react/-/office-ui-fabric-react-7.149.2.tgz#1d446b79370f6448ce6ce1817644db057bf56bc9"
   integrity sha512-1wH+AR4lWrKEAsWBTVInY81y5fRqvKbRRJihY1wA8ft8rgnoDUSe62WnDtEdodAU1gGMttMo//5J6edjhVmNig==
@@ -6468,6 +6547,25 @@ office-ui-fabric-react@^7.145.0, office-ui-fabric-react@^7.149.2:
     "@uifabric/react-hooks" "^7.13.9"
     "@uifabric/set-version" "^7.0.23"
     "@uifabric/styling" "^7.16.16"
+    "@uifabric/utilities" "^7.33.2"
+    prop-types "^15.7.2"
+    tslib "^1.10.0"
+
+office-ui-fabric-react@^7.153.3:
+  version "7.153.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/office-ui-fabric-react/-/office-ui-fabric-react-7.153.3.tgz#29c1393f93c15e70f1d5468913c7ef1249ab747b"
+  integrity sha1-KcE5P5PBXnDx1UaJE8fvEkmrdHs=
+  dependencies:
+    "@fluentui/date-time-utilities" "^7.9.0"
+    "@fluentui/react-focus" "^7.16.19"
+    "@fluentui/react-window-provider" "^1.0.1"
+    "@microsoft/load-themed-styles" "^1.10.26"
+    "@uifabric/foundation" "^7.9.20"
+    "@uifabric/icons" "^7.5.17"
+    "@uifabric/merge-styles" "^7.19.1"
+    "@uifabric/react-hooks" "^7.13.9"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/styling" "^7.16.18"
     "@uifabric/utilities" "^7.33.2"
     prop-types "^15.7.2"
     tslib "^1.10.0"

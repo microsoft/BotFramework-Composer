@@ -21,7 +21,7 @@ import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
 
-import { label, separator, defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from './styles';
+import { label, separator, defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../publish/styles';
 
 interface CreatePublishTargetProps {
   closeDialog: () => void;
@@ -132,6 +132,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       console.log(config);
       props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
     };
+    PluginAPI.publish.setTitle = (value) => setDialogProps(value);
   }, [projectId, name, targetType]);
 
   const submit = useMemo(

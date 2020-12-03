@@ -18,7 +18,6 @@ jest.mock('@bfc/extension-client', () => {
   // closeDialog,
   // onBack,
   // savePublishConfig,
-  // setTitle,
   // getSchema,
   };
 });

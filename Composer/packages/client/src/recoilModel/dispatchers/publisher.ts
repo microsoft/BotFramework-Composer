@@ -101,7 +101,7 @@ export const publisherDispatcher = () => {
   ) => {
     if (data == null) return;
     const { set, snapshot } = callbackHelpers;
-    const { endpointURL, status, id } = data;
+    const { endpointURL, status } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
