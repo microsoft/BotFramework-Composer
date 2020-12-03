@@ -11,7 +11,7 @@ import { getBaseName, getExtension } from '../utils/fileUtil';
 
 import * as luUtil from './../utils/luUtil';
 import * as buildUtil from './../utils/buildUtil';
-import { crossTrainConfigState, luFilesState, qnaFilesState, settingsState } from './atoms';
+import { crossTrainConfigState, luFilesState, qnaFilesState, settingsState, projectMetaDataState } from './atoms';
 import { dialogsSelectorFamily } from './selectors';
 import { recognizersSelectorFamily } from './selectors/recognizers';
 
@@ -146,9 +146,12 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
+  const { lastReloadedFromServer } = useRecoilValue(projectMetaDataState(projectId));
+
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
 
   useEffect(() => {
+    console.log('********* RECOGNIZERS UPDATED AND REUPDATING UPDATES');
     let recognizers: RecognizerFile[] = [];
     dialogs
       .filter((dialog) => isCrossTrainedRecognizerSet(dialog) || isLuisRecognizer(dialog))
@@ -179,7 +182,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
     if (!isEqual([...recognizers].sort(), [...curRecognizers].sort())) {
       setRecognizers(recognizers);
     }
-  }, [dialogs, luFiles, qnaFiles]);
+  }, [dialogs, luFiles, qnaFiles, lastReloadedFromServer]);
 
   useEffect(() => {
     try {
