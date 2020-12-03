@@ -22,18 +22,16 @@ export default class TelemetryClient {
 
   public static log<TN extends TelemetryEventName>(
     eventName: TN,
-    ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
   ) {
-    const [properties] = args;
     this.client?.logEvent(eventName, { ...this.sharedProperties, ...properties });
   }
 
   public static pageView<TN extends TelemetryEventName>(
     eventName: TN,
     url: string,
-    ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
   ) {
-    const [properties] = args;
     this.client?.logPageView(eventName, url, { ...this.sharedProperties, ...properties });
   }
 
