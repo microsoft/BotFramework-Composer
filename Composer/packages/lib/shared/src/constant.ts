@@ -3,11 +3,14 @@
 
 export const SensitiveProperties = [
   'MicrosoftAppPassword',
-  'luis.authoringKey',
   'luis.endpointKey',
-  'qna.subscriptionKey',
   'qna.endpointKey',
+  'luis.authoringKey',
+  'qna.subscriptionKey',
 ];
+
+export const RootBotManagedProperties = ['luis.authoringKey', 'luis.authoringRegion', 'qna.subscriptionKey'];
+
 export const FieldNames = {
   Events: 'triggers',
   Actions: 'actions',

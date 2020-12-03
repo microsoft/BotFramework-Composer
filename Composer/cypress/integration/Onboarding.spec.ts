@@ -7,7 +7,7 @@ context('Onboarding', () => {
     cy.createBot('TodoSample', 'Onboarding');
     cy.visitPage('Design');
     //enable onboarding setting
-    cy.visitPage('Settings');
+    cy.visitPage('Composer Settings');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('Application Settings').click();
     });

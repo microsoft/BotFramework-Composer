@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -65,13 +65,10 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowStatus,
     onboardingAddCoachMarkRef,
     saveTemplateId,
-    setCurrentPageMode,
+    setCreationFlowType,
   } = useRecoilValue(dispatcherState);
-  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
-  useEffect(() => {
-    setCurrentPageMode('home');
-  }, []);
+  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
@@ -98,6 +95,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           iconName: 'CirclePlus',
         },
         onClick: () => {
+          setCreationFlowType('Bot');
           setCreationFlowStatus(CreationFlowStatus.NEW);
           navigate(`projects/create`);
         },

@@ -34,8 +34,6 @@ export type AppUpdaterSettings = {
 };
 
 export type SkillSetting = {
-  name: string;
-  manifestUrl: string;
   msAppId: string;
   endpointUrl: string;
 };

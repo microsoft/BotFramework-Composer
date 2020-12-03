@@ -45,14 +45,13 @@ export const navigationDispatcher = () => {
 
       const projectId = skillId ?? rootBotProjectId;
 
-      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       set(currentProjectIdState, projectId);
 
       const currentUri =
         trigger == null
           ? convertPathToUrl(rootBotProjectId, skillId, dialogId)
           : convertPathToUrl(rootBotProjectId, skillId, dialogId, `selected=triggers[${trigger}]`);
-      if (checkUrl(currentUri, rootBotProjectId, projectId, designPageLocation)) return;
+
       set(designPageLocationState(projectId), {
         dialogId: dialogId ?? '',
         selected: trigger ?? '',
