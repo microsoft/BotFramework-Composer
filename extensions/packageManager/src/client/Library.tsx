@@ -24,8 +24,8 @@ const docsUrl = `https://aka.ms/composer-use-package-library`;
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
-  const { settings, projectId, reloadProject, projectCollection } = useProjectApi();
-  const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
+  const { settings, projectId, reloadProject } = useProjectApi();
+  const { setApplicationLevelError, navigateTo, confirm, projectCollection } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[]>([]);
@@ -116,6 +116,8 @@ const Library: React.FC = () => {
   }, [projectCollection]);
 
   useEffect(() => {
+
+    console.log('MY PROJECT COLLECTION', projectCollection);
 
     getLibraries();
 
