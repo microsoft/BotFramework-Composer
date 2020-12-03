@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render } from '@botframework-composer/test-utils';
-import { DialogGroup } from '@bfc/shared';
+import { DialogGroup, SDKKinds } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/adaptive-flow-editor/renderers/EdgeMenu';
 import { createActionMenu } from '../../../src/adaptive-flow-editor/renderers/EdgeMenu/createSchemaMenu';
@@ -16,17 +16,42 @@ describe('<EdgeMenu>', () => {
 });
 
 describe('createActionMenu()', () => {
+  fit('Should disable an action kind if its included in forceDisabledActions', () => {
+    const menuItems = createActionMenu(
+      () => null,
+      { isSelfHosted: false, enablePaste: true },
+      [
+        {
+          kind: SDKKinds.BeginSkill,
+          reason: 'Cannot call a skill from another skill',
+        },
+      ],
+      {
+        [SDKKinds.BeginDialog]: {
+          label: 'Begin skill',
+          submenu: [SDKKinds.BeginSkill],
+        },
+      }
+    );
+    const sdkBeginSkill = menuItems.find((item) => item.key === SDKKinds.BeginSkill);
+
+    expect(sdkBeginSkill).toBeDefined();
+    if (sdkBeginSkill) {
+      expect(sdkBeginSkill.disabled).toBeTruthy();
+    }
+  });
+
   it('options.enablePaste should control Paste button state.', () => {
-    const menuItems1 = createActionMenu(() => null, { isSelfHosted: false, enablePaste: true });
+    const menuItems1 = createActionMenu(() => null, { isSelfHosted: false, enablePaste: true }, []);
     expect(menuItems1.findIndex((x) => x.key === 'Paste')).toEqual(0);
     expect(menuItems1[0].disabled).toBeFalsy();
 
-    const menuItems2 = createActionMenu(() => null, { isSelfHosted: false, enablePaste: false });
+    const menuItems2 = createActionMenu(() => null, { isSelfHosted: false, enablePaste: false }, []);
     expect(menuItems2[0].disabled).toBeTruthy();
   });
 
   it('should return builtin $kinds.', () => {
-    const menuItemsHosted = createActionMenu(() => null, { isSelfHosted: true, enablePaste: true });
+    const menuItemsHosted = createActionMenu(() => null, { isSelfHosted: true, enablePaste: true }, []);
     expect(menuItemsHosted.findIndex((x) => x.key === DialogGroup.RESPONSE)).toBeTruthy();
   });
 
@@ -34,6 +59,7 @@ describe('createActionMenu()', () => {
     const menuItemsWithoutCustomActions = createActionMenu(
       () => null,
       { isSelfHosted: false, enablePaste: false },
+      [],
       {},
       []
     );
@@ -46,6 +72,7 @@ describe('createActionMenu()', () => {
     const withCustomActions = createActionMenu(
       () => null,
       { isSelfHosted: false, enablePaste: false },
+      [],
       {},
       customActions
     );
