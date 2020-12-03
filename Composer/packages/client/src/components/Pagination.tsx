@@ -40,8 +40,8 @@ export interface IPaginationProps {
 
 const createDropdownOption = (pageCount: number) => {
   return range(pageCount).map((_, i) => ({
-    key: `page ${i}`,
-    text: `${i}`,
+    key: `page ${i + 1}`,
+    text: `${i + 1}`,
   }));
 };
 
@@ -88,7 +88,7 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
         ariaLabel={formatMessage('Page number')}
         options={createDropdownOption(pageCount)}
         placeholder={formatMessage('Select options')}
-        selectedKey={`page${index + 1}`}
+        selectedKey={`page ${index + 1}`}
         styles={dropdownStyles}
         onChange={handlePageSelected}
       />

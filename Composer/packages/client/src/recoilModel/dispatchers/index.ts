@@ -11,6 +11,7 @@ import { exportDispatcher } from './export';
 import { lgDispatcher } from './lg';
 import { luDispatcher } from './lu';
 import { qnaDispatcher } from './qna';
+import { triggerDispatcher } from './trigger';
 import { builderDispatcher } from './builder';
 import { navigationDispatcher } from './navigation';
 import { publisherDispatcher } from './publisher';
@@ -38,6 +39,7 @@ const createDispatchers = () => {
     ...lgDispatcher(),
     ...luDispatcher(),
     ...qnaDispatcher(),
+    ...triggerDispatcher(),
     ...builderDispatcher(),
     ...navigationDispatcher(),
     ...publisherDispatcher(),

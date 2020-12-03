@@ -1,16 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
-import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
+import React, { FormEvent } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import { getSkillNameFromSetting, Skill } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/components/Link/Link';
-
-import { ComboBoxField } from './ComboBoxField';
-
-const ADD_DIALOG = 'ADD_DIALOG';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { FieldLabel } from '@bfc/adaptive-form';
 
 const referBySettings = (skillName: string, property: string) => {
   return `=settings.skill['${skillName}'].${property}`;
@@ -23,64 +20,50 @@ export const settingReferences = (skillName: string) => ({
 
 export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
   const { value, onChange } = props;
-  const { shellApi, skills = [] } = useShellApi();
-  const { addSkillDialog, displayManifestModal } = shellApi;
-  const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
-  const skillId = getSkillNameFromSetting(value?.skillEndpoint);
-  const { content, manifestUrl, name } = skills.find(({ id }) => id === skillId) || ({} as Skill);
+  const { shellApi, skills } = useShellApi();
+  const { displayManifestModal } = shellApi;
 
-  const options: IComboBoxOption[] = skills.map(({ id, name }) => ({
-    key: name,
-    text: name,
-    data: settingReferences(id),
-    isSelected: id === skillId,
-  }));
+  const skillNameIdentifier = getSkillNameFromSetting(value?.skillEndpoint);
+  const { manifest, name }: Skill = skills[skillNameIdentifier] || {};
 
-  options.push(
-    {
-      key: 'separator',
-      itemType: SelectableOptionMenuItemType.Divider,
-      text: '',
-    },
-    { key: ADD_DIALOG, text: formatMessage('Add a new Skill Dialog') }
-  );
-
-  if (comboboxTitle) {
-    options.push({ key: 'customTitle', text: comboboxTitle });
+  const options: IDropdownOption[] = [];
+  for (const key in skills) {
+    const skill = skills[key];
+    const option = {
+      key: key,
+      text: skill.name,
+      data: settingReferences(key),
+      isSelected: key === skillNameIdentifier,
+    };
+    options.push(option);
   }
 
-  const handleChange = (_, option: IComboBoxOption) => {
+  const handleChange = (event: FormEvent<HTMLDivElement>, option?: IDropdownOption | undefined) => {
     if (option) {
-      if (option.key === ADD_DIALOG) {
-        setComboboxTitle(formatMessage('Add a new Skill Dialog'));
-        addSkillDialog().then((skill) => {
-          if (skill?.manifestUrl && skill?.name) {
-            onChange({ ...value, ...settingReferences(skill.name) });
-          }
-          setComboboxTitle(null);
-        });
-      } else {
-        onChange({ ...value, ...option.data });
-      }
+      onChange({ ...value, ...option.data });
     }
   };
 
   return (
     <React.Fragment>
-      <ComboBoxField
-        comboboxTitle={comboboxTitle}
+      <FieldLabel
+        required
         description={formatMessage('Name of skill dialog to call')}
-        id={'SkillDialogName'}
+        id={'SkillDialogNameField'}
         label={formatMessage('Skill Dialog Name')}
+      />
+      <Dropdown
+        disabled={Object.keys(skills).length === 0}
+        id={'SkillDialogName'}
         options={options}
-        value={skillId}
+        selectedKey={skillNameIdentifier}
         onChange={handleChange}
       />
       <Link
-        disabled={!content || !name}
+        disabled={!skillNameIdentifier || !manifest || !name}
         styles={{ root: { fontSize: '12px', paddingTop: '4px' } }}
-        onClick={() => manifestUrl && displayManifestModal(manifestUrl)}
+        onClick={() => manifest && displayManifestModal(skillNameIdentifier)}
       >
         {formatMessage('Show skill manifest')}
       </Link>

@@ -10,7 +10,7 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { notificationsSelector } from '../../recoilModel/selectors/notificationsSelector';
+import { notificationsSelector } from '../../recoilModel/selectors/notifications';
 import { dispatcherState } from '../../recoilModel';
 
 import { NotificationPanel } from './NotificationPanel';
