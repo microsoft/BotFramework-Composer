@@ -325,7 +325,7 @@ const Library: React.FC = () => {
   };
 
   const navigateToEject = (evt: any): void => {
-    navigateTo(`/settings/bot/${projectId}/runtime`);
+    navigateTo(`/bot/${projectId}/botProjectsSettings/#runtimeSettings`);
   };
 
   return (
@@ -377,7 +377,7 @@ const Library: React.FC = () => {
               </Dropdown>
             </section>
             <LibraryList
-                disabled={!ejectedRuntime || runtimeLanguage != programmingLanguageSelection}
+                disabled={!ejectedRuntime || runtimeLanguage !== programmingLanguageSelection}
                 groups={groups}
                 install={install}
                 isInstalled={isInstalled}
