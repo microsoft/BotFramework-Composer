@@ -111,7 +111,7 @@ describe('dialog dispatcher', () => {
       const lgFiles = useRecoilValue(lgFilesState(projectId));
       const actionsSeed = useRecoilValue(actionsSeedState(projectId));
       const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState(projectId));
-      const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
+      const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
       const qnaFiles = useRecoilValue(qnaFilesState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 

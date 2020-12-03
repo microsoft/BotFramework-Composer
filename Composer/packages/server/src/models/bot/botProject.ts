@@ -14,7 +14,6 @@ import {
   IBotProject,
   DialogSetting,
   FileExtensions,
-  Skill,
   DialogUtils,
   checkForPVASchema,
 } from '@bfc/shared';
@@ -37,7 +36,6 @@ import { isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { retrieveSkillManifests } from './skillManager';
 import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
@@ -66,7 +64,6 @@ export class BotProject implements IBotProject {
   public defaultUISchema: {
     [key: string]: string;
   };
-  public skills: Skill[] = [];
   public diagnostics: Diagnostic[] = [];
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
@@ -183,9 +180,6 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillManifests, diagnostics } = await retrieveSkillManifests(this.settings?.skill);
-    this.skills = skillManifests;
-    this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
   };
 
@@ -195,7 +189,6 @@ export class BotProject implements IBotProject {
       files: Array.from(this.files.values()),
       location: this.dir,
       schemas: this.getSchemas(),
-      skills: this.skills,
       diagnostics: this.diagnostics,
       settings: this.settings,
       filesWithoutRecognizers: Array.from(this.files.values()).filter(({ name }) => !isRecognizer(name)),
@@ -481,7 +474,7 @@ export class BotProject implements IBotProject {
       luResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
-        if (f) {
+        if (f && !isEmpty) {
           luFiles.push(f);
         }
       });

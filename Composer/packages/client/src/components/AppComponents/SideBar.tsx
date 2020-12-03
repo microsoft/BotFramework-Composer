@@ -92,9 +92,9 @@ export const SideBar = () => {
               <NavItem
                 key={'NavLeftBar' + index}
                 disabled={link.disabled}
-                exact={link.exact}
                 iconName={link.iconName}
                 labelName={link.labelName}
+                match={link.match}
                 showTooltip={showTooltips(link)}
                 to={mapNavItemTo(link.to)}
               />
@@ -109,7 +109,6 @@ export const SideBar = () => {
             <NavItem
               key={'NavLeftBar' + index}
               disabled={link.disabled}
-              exact={link.exact}
               iconName={link.iconName}
               labelName={link.labelName}
               showTooltip={showTooltips(link)}

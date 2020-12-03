@@ -107,7 +107,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         });
       }
     },
-
     import: async function (req, res) {
       const user = await composer.context.getUserFromRequest(req);
       const projectId = req.params.projectId;

@@ -100,7 +100,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     openProject(botFolder);
   };
 
-  const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
+  const handleCreateNew = async (formData, templateId: string) => {
     const newBotData = {
       templateId: templateId || '',
       name: formData.name,
@@ -108,7 +108,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       location: formData.location,
       schemaUrl: formData.schemaUrl,
       appLocale,
-      qnaKbUrls,
       templateDir: formData.templateDir,
       eTag: formData.eTag,
       urlSuffix: formData.urlSuffix,

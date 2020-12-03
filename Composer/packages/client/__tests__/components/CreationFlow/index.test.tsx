@@ -87,7 +87,6 @@ describe('<CreationFlow/>', () => {
       description: '',
       location: expectedLocation,
       name: 'EchoBot-1',
-      qnaKbUrls: undefined,
       schemaUrl: '',
       templateId: 'EchoBot',
     });

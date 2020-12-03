@@ -24,14 +24,17 @@ const lspServerPath = '/lg-language-server';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
+  skillId?: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { dialogId, projectId } = props;
+  const { dialogId, projectId, skillId } = props;
+  const actualProjectId = skillId ?? projectId;
+
   const userSettings = useRecoilValue(userSettingsState);
-  const locale = useRecoilValue(localeState(projectId));
-  const lgFiles = useRecoilValue(lgFilesState(projectId));
-  const settings = useRecoilValue(settingsState(projectId));
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
+  const settings = useRecoilValue(settingsState(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
 
@@ -92,7 +95,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         const { name, parameters } = template;
         const payload = {
           id: file.id,
-          projectId,
+          projectId: actualProjectId,
           templateName: name,
           template: {
             name,
@@ -102,7 +105,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         };
         updateLgTemplateDispatcher(payload);
       }, 500),
-    [file, template, projectId]
+    [file, template, actualProjectId]
   );
 
   const updateLgFile = useMemo(
@@ -112,12 +115,12 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         const { id } = file;
         const payload = {
           id,
-          projectId,
+          projectId: actualProjectId,
           content,
         };
         updateLgFileDispatcher(payload);
       }, 500),
-    [file, projectId]
+    [file, actualProjectId]
   );
 
   const onChange = useCallback(
@@ -134,7 +137,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         updateLgFile(value);
       }
     },
-    [file, template, projectId]
+    [file, template, actualProjectId]
   );
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
@@ -142,7 +145,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   };
 
   const lgOption = {
-    projectId,
+    projectId: actualProjectId,
     fileId: file?.id || dialogId,
     templateId: template?.name,
   };
@@ -193,7 +196,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           left={currentLanguageFileEditor}
           locale={locale}
           right={defaultLanguageFileEditor}
-          onLanguageChange={(locale) => setLocale(locale, projectId)}
+          onLanguageChange={(locale) => setLocale(locale, actualProjectId)}
         ></DiffCodeEditor>
       )}
     </Fragment>

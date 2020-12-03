@@ -27,11 +27,16 @@ const addIconProps = {
   styles: { root: { fontSize: '12px' } },
 };
 
-function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
+function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger, isRemoteSkill) {
   return (
     <div css={middleTriggerContainer}>
       <div css={middleTriggerElements}>
-        {isTriggerEmpty ? (
+        {isRemoteSkill ? (
+          <React.Fragment>
+            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
+            {formatMessage('Remote skill')}
+          </React.Fragment>
+        ) : isTriggerEmpty ? (
           <React.Fragment>
             {formatMessage(`This dialog has no trigger yet.`)}
             <ActionButton
@@ -58,12 +63,13 @@ interface VisualEditorProps {
   openNewTriggerModal: () => void;
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  isRemoteSkill?: boolean;
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { ...shellData } = useShellApi();
   const { projectId, currentDialog } = shellData;
-  const { openNewTriggerModal, onFocus, onBlur } = props;
+  const { openNewTriggerModal, onFocus, onBlur, isRemoteSkill } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
@@ -75,6 +81,8 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
 
   const formConfig = useFormConfig();
   const overridedSDKSchema = useMemo(() => {
+    if (!dialogId) return {};
+
     const sdkSchema = cloneDeep(schemas.sdk?.content ?? {});
     const sdkDefinitions = sdkSchema.definitions;
 
@@ -90,7 +98,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
 
   useEffect(() => {
     const dialog = dialogs.find((d) => d.id === dialogId);
-    const visible = get(dialog, 'triggers', []).length === 0;
+    const visible = dialog ? get(dialog, 'triggers', []).length === 0 : false;
     setTriggerButtonVisibility(visible);
   }, [dialogs, dialogId]);
 
@@ -102,14 +110,16 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <VisualDesigner
-          data={currentDialog.content ?? {}}
-          schema={overridedSDKSchema}
-          onBlur={onBlur}
-          onFocus={onFocus}
-        />
+        {!isRemoteSkill ? (
+          <VisualDesigner
+            data={currentDialog.content ?? {}}
+            schema={overridedSDKSchema}
+            onBlur={onBlur}
+            onFocus={onFocus}
+          />
+        ) : null}
       </div>
-      {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
+      {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal, isRemoteSkill)}
     </React.Fragment>
   );
 };
