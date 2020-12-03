@@ -11,7 +11,7 @@ import { MainContainer } from './components/AppComponents/MainContainer';
 import { userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { dispatcherState } from './recoilModel/DispatcherWrapper';
-import { useInitializeLogger } from './telemetry/hooks';
+import { useInitializeLogger } from './telemetry/useInitializeLogger';
 
 initializeIcons(undefined, { disableWarnings: true });
 

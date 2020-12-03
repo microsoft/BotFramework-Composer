@@ -8,9 +8,9 @@ export type ServerSettings = Partial<{ telemetry: TelemetrySettings }>;
 export type LogData = Record<string, unknown>;
 
 export type TelemetryLogger = {
-  logEvent: (name: string, properties?: LogData) => void;
+  logEvent: (name: string, properties: LogData) => void;
   logPageView: (name: string, url: string, properties: LogData) => void;
-  flush: () => void;
+  drain?: () => void;
 };
 
 export enum TelemetryEventTypes {
@@ -84,18 +84,3 @@ export type TelemetryEvents = BotProjectEvents &
   QnaEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
-
-export type TelemetryEventLogger = {
-  log: <TN extends TelemetryEventName>(
-    eventName: TN,
-    ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
-  ) => void;
-
-  pageView: <TN extends TelemetryEventName>(
-    eventName: TN,
-    url: string,
-    ...args: TelemetryEvents[TN] extends undefined ? [never?] : [TelemetryEvents[TN]]
-  ) => void;
-
-  flush: () => void;
-};
