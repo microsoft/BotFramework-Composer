@@ -27,6 +27,7 @@ import {
 import httpClient from '../../utils/httpUtil';
 
 import { addNotificationInternal, deleteNotificationInternal, createNotification } from './notification';
+import { rootBotProjectIdSelector } from '../selectors';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
@@ -347,9 +348,14 @@ export const qnaDispatcher = () => {
         const content = response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content, projectId });
+        const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
         const notification = createNotification(
           getQnaSuccessNotification(() => {
-            navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+            navigateTo(
+              rootBotProjectId === projectId
+                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+            );
             deleteNotificationInternal(callbackHelpers, notification.id);
           })
         );
@@ -402,10 +408,14 @@ ${response.data}
         projectId,
       });
       await createQnAFromScratchDialogSuccess({ projectId });
-
+      const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
       const notification = createNotification(
         getQnaSuccessNotification(() => {
-          navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+          navigateTo(
+            rootBotProjectId === projectId
+              ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+              : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+          );
           deleteNotificationInternal(callbackHelpers, notification.id);
         })
       );
