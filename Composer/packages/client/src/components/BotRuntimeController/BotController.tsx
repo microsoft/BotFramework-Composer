@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { css } from '@emotion/core';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import {
   buildConfigurationSelector,
@@ -50,6 +51,15 @@ const disabledStyle = css`
 const startPanelsContainer = css`
   display: flex;
   flex-direction: 'row';
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 const transparentBackground = 'rgba(255, 255, 255, 0.5)';
@@ -63,6 +73,7 @@ const BotController: React.FC = () => {
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
   const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
+  const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -83,8 +94,21 @@ const BotController: React.FC = () => {
     setDisableOnStartBotsWidget(false);
   }, [projectCollection, errors]);
 
-  const running = useMemo(
-    () => !projectCollection.every(({ status }) => status === BotStatus.inactive || status === BotStatus.failed),
+  const running = useMemo(() => projectCollection.find(({ status }) => status === BotStatus.connected), [
+    projectCollection,
+  ]);
+
+  const botsStarting = useMemo(
+    () =>
+      !!projectCollection.find(({ status }) => {
+        return (
+          status === BotStatus.publishing ||
+          status === BotStatus.published ||
+          status == BotStatus.pending ||
+          status == BotStatus.queued ||
+          status == BotStatus.reloading
+        );
+      }),
     [projectCollection]
   );
 
@@ -103,14 +127,25 @@ const BotController: React.FC = () => {
   };
 
   const buttonText = useMemo(() => {
+    if (botsStarting) {
+      setStatusIconClass(undefined);
+      return formatMessage('Starting bots.. ({running}/{total} running)', {
+        running: runningBots.projectIds.length,
+        total: runningBots.totalBots,
+      });
+    }
+
     if (running) {
+      setStatusIconClass('CircleStopSolid');
       return formatMessage('Stop all bots ({running}/{total} running)', {
         running: runningBots.projectIds.length,
         total: runningBots.totalBots,
       });
     }
+
+    setStatusIconClass('Play');
     return formatMessage('Start all bots');
-  }, [runningBots, running]);
+  }, [runningBots, running, botsStarting]);
 
   const items = useMemo<IContextualMenuItem[]>(() => {
     return projectCollection.map(({ name: displayName, projectId }) => ({
@@ -131,9 +166,9 @@ const BotController: React.FC = () => {
           primary
           aria-roledescription={formatMessage('Bot Controller')}
           ariaDescription={buttonText}
-          disabled={disableStartBots}
+          disabled={disableStartBots || botsStarting}
           iconProps={{
-            iconName: running ? 'CircleStopSolid' : 'Play',
+            iconName: statusIconClass,
             styles: {
               root: {
                 color: `${NeutralColors.white}`,
@@ -146,10 +181,10 @@ const BotController: React.FC = () => {
               backgroundColor: '#3393dd',
               display: 'flex',
               alignItems: 'center',
-              minWidth: '212px',
+              minWidth: '229px',
               height: '36px',
               flexDirection: 'row',
-              padding: '0 4px',
+              padding: '0 7px',
               border: 'none',
               width: '100%',
             },
@@ -167,7 +202,17 @@ const BotController: React.FC = () => {
           title={buttonText}
           onClick={handleClick}
         >
-          {buttonText}
+          {botsStarting && (
+            <Spinner
+              size={SpinnerSize.small}
+              styles={{
+                root: {
+                  marginRight: '5px',
+                },
+              }}
+            />
+          )}
+          <span style={{ margin: '0 0 2px 5px' }}>{buttonText}</span>
         </DefaultButton>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
