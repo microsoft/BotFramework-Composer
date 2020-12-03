@@ -16,7 +16,7 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { MultiLanguagesDialog as dialogFn } from '../../constants';
+import { MultiLanguagesDialog } from '../../constants';
 
 import { ILanguageFormData } from './types';
 import { classNames } from './styles';
@@ -30,8 +30,6 @@ export interface IAddLanguageModalProps {
   onSubmit: (formData: ILanguageFormData) => void;
   onDismiss: () => void;
 }
-
-const MultiLanguagesDialog = dialogFn();
 
 const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
   const { languages: currentLanguages, locale, defaultLanguage, isOpen } = props;

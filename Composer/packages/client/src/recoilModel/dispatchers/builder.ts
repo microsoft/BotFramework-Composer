@@ -6,14 +6,12 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
-import { Text as textFn, BotStatus } from '../../constants';
+import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { luFilesState, qnaFilesState, botStatusState, botRuntimeErrorState } from '../atoms';
 import { dialogsSelectorFamily } from '../selectors';
-
-const Text = textFn();
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
