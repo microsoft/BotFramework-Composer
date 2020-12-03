@@ -17,19 +17,24 @@ export async function getNugetTemplates(): Promise<BotTemplateV2[]> {
     //     }
     //   });
     // }
-    const query = 'conversationalCore';
-    const res = await fetch(`https://azuresearch-usnc.nuget.org/query?q=${query}`);
+    const query = 'Preview.Bot.Component.ConversationalCore';
+    // TODO use index route?
+    const res = await fetch(`https://azuresearch-usnc.nuget.org/query?q=${query}&prerelease=true`);
     const data = await res.json();
 
     if (Array.isArray(data.data) && data.totalHits > 0) {
       const result: BotTemplateV2[] = data.data.map((entry) => {
+        // TODO replace with naming convention
+        const id =
+          (entry.id as string).toLowerCase().indexOf('conversationalcore') !== -1 ? 'conversationalcore' : entry.id;
         return {
-          id: entry.id,
+          id: id,
           name: entry.title,
           description: entry.description,
           package: {
             packageName: entry.id,
             packageSource: 'nuget',
+            packageVersion: entry.version,
           },
         } as BotTemplateV2;
       });

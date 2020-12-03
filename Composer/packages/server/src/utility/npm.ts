@@ -15,7 +15,7 @@ const streamPipeline = promisify(require('stream').pipeline);
 const log = logger.extend('extension-manager:npm');
 
 export async function getNpmTemplates(): Promise<BotTemplateV2[]> {
-  const publicNpmTemplatePackages = await search('', ['bot.framework.template.component']);
+  const publicNpmTemplatePackages = await search('', ['bot']);
   const templates: BotTemplateV2[] = publicNpmTemplatePackages.map((value) => {
     return {
       id: value.id,
