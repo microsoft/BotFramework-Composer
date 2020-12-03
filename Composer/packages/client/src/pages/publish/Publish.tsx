@@ -11,6 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogSetting, PublishTarget } from '@bfc/shared';
+import isEqual from 'lodash/isEqual';
 
 import { dispatcherState, localBotsDataSelector } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
@@ -50,7 +51,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[] = [];
   const publishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[] = [];
   const publishTargetsList: { projectId: string; publishTargets: PublishTarget[] }[] = [];
-  const [hasGetPublishHistory, setHasGetPublishHistory] = useState<boolean>(false);
   botProjectData.forEach((bot) => {
     const botProjectId = bot.projectId;
     botSettingList.push({
@@ -159,46 +159,54 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const [pendingNotification, setPendingNotification] = useState<Notification>();
+  const [previousBotPublishHistoryList, setPreviousBotPublishHistoryList] = useState(botPublishHistoryList);
   // check history to see if a 202 is found
   useEffect(() => {
     // most recent item is a 202, which means we should poll for updates...
     selectedBots.forEach((bot) => {
-      if (bot.publishTarget && bot.publishTargets) {
-        const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
-        const botProjectId = bot.id;
-        if (selectedTarget) {
-          const botPublishHistory = botPublishHistoryList.find(
-            (publishHistory) => publishHistory.projectId === botProjectId
-          )?.publishHistory[bot.publishTarget];
-          if (botPublishHistory && botPublishHistory.length > 0) {
-            if (botPublishHistory[0].status === 202) {
-              getUpdatedStatus(selectedTarget, botProjectId);
-            } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
-              bot.status = botPublishHistory[0].status;
-              if (showNotifications[bot.id]) {
-                pendingNotification && deleteNotification(pendingNotification.id);
-                addNotification(createNotification(getPublishedNotificationCardProps(bot)));
-                setShowNotifications({ ...showNotifications, [botProjectId]: false });
-              }
-            } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
-              // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
-              // we still poll for the results IF we see that a publish has happened previously
-              getPublishStatus(botProjectId, selectedTarget);
-            }
-            setBotStatusList(
-              botStatusList.map((item) => {
-                if (item.id === botProjectId) {
-                  item.status = botPublishHistory[0].status;
-                  item.comment = botPublishHistory[0].comment;
-                  item.message = botPublishHistory[0].message;
-                  item.time = botPublishHistory[0].time;
-                }
-                return item;
-              })
-            );
+      if (!(bot.publishTarget && bot.publishTargets)) {
+        return;
+      }
+      const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
+      const botProjectId = bot.id;
+      if (!selectedTarget) return;
+      const botPublishHistory = botPublishHistoryList.find(
+        (publishHistory) => publishHistory.projectId === botProjectId
+      )?.publishHistory[bot.publishTarget];
+      const previousBotPublishHistory = previousBotPublishHistoryList.find(
+        (publishHistory) => publishHistory.projectId === botProjectId
+      )?.publishHistory[bot.publishTarget];
+      if (!botPublishHistory || botPublishHistory.length === 0) {
+        return;
+      }
+      const latestPublishItem = botPublishHistory[0];
+      if (latestPublishItem.status === 202) {
+        getUpdatedStatus(selectedTarget, botProjectId);
+      } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
+        if (!isEqual(previousBotPublishHistory, botPublishHistory)) {
+          bot.status = latestPublishItem.status;
+          if (showNotifications[bot.id]) {
+            pendingNotification && deleteNotification(pendingNotification.id);
+            addNotification(createNotification(getPublishedNotificationCardProps(bot)));
+            setShowNotifications({ ...showNotifications, [botProjectId]: false });
           }
         }
+      } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
+        // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
+        // we still poll for the results IF we see that a publish has happened previously
+        getPublishStatus(botProjectId, selectedTarget);
       }
+      setBotStatusList(
+        botStatusList.map((item) => {
+          if (item.id === botProjectId) {
+            item.status = latestPublishItem.status;
+            item.comment = latestPublishItem.comment;
+            item.message = latestPublishItem.message;
+            item.time = latestPublishItem.time;
+          }
+          return item;
+        })
+      );
     });
   }, [botPublishHistoryList, selectedBots]);
 
@@ -211,23 +219,18 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [projectId]);
 
   useEffect(() => {
-    // init publishHistoryList
-    if (Object.keys(publishHistoryList).length > 0) {
+    // init bot status list for the botProjectData is empty array when first mounted
+    if (!isEqual(botStatusList, statusList)) {
+      setBotStatusList(statusList);
       setBotPublishHistoryList(publishHistoryList);
-    }
-    // get the latest publishHistory when publish bots.
-    if (!hasGetPublishHistory) {
-      publishTargetsList.forEach((botTargets) => {
-        botTargets.publishTargets.forEach((target) => {
-          getPublishHistory(botTargets.projectId, target);
-        });
-      });
-      setHasGetPublishHistory(true);
     }
   }, [botProjectData]);
   useEffect(() => {
-    // init bot status list for the botProjectData is empty array when first mounted
-    setBotStatusList(statusList);
+    publishTargetsList.forEach((botTargets) => {
+      botTargets.publishTargets.forEach((target) => {
+        getPublishHistory(botTargets.projectId, target);
+      });
+    });
   }, [botProjectData.length]);
 
   const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
@@ -274,6 +277,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedBots(bots);
   };
   const publish = async (items: IBotStatus[]) => {
+    setPreviousBotPublishHistoryList(botPublishHistoryList);
     // notifications
     setShowNotifications(
       items.reduce((accumulator, item) => {
