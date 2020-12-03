@@ -9,7 +9,7 @@ import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { css } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import {
@@ -29,7 +29,7 @@ const iconSectionContainer = css`
   display: flex;
   align-items: flex-end;
   flex-direction: row;
-  background: #3393dd;
+  background: ${CommunicationColors.tint10};
 
   :before {
     content: '';
@@ -168,13 +168,14 @@ const BotController: React.FC = () => {
           menuAs={() => null}
           styles={{
             root: {
-              backgroundColor: '#3393dd',
+              backgroundColor: CommunicationColors.tint10,
               display: 'flex',
               alignItems: 'center',
               minWidth: '229px',
               height: '36px',
               flexDirection: 'row',
               padding: '0 7px',
+              border: `1px solid ${CommunicationColors.tint10}`,
               width: '100%',
             },
             rootHovered: {
@@ -182,7 +183,7 @@ const BotController: React.FC = () => {
             },
             rootDisabled: {
               opacity: 0.6,
-              backgroundColor: '#3393dd',
+              backgroundColor: CommunicationColors.tint10,
               color: `${NeutralColors.white}`,
               border: 'none',
               font: '62px',
@@ -214,11 +215,11 @@ const BotController: React.FC = () => {
               root: {
                 color: NeutralColors.white,
                 height: '36px',
-                background: isControllerHidden ? '#3393DD' : transparentBackground,
+                background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
                 selectors: {
                   ':disabled .ms-Button-icon': {
                     opacity: 0.6,
-                    backgroundColor: '#3393DD',
+                    backgroundColor: CommunicationColors.tint10,
                     color: `${NeutralColors.white}`,
                   },
                 },
