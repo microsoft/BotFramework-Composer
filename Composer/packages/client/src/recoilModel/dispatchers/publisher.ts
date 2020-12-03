@@ -4,35 +4,56 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig, isSkillHostUpdateRequired } from '@bfc/shared';
 
 import {
   publishTypesState,
   botStatusState,
   publishHistoryState,
-  botLoadErrorState,
+  botRuntimeErrorState,
   isEjectRuntimeExistState,
   filePersistenceState,
+  settingsState,
   luFilesState,
   qnaFilesState,
 } from '../atoms/botState';
+import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
-import { dialogsSelectorFamily } from '../selectors';
+import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
+import { setRootBotSettingState } from './setting';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
 const PUBLISH_FAILED = 500;
 
+const missingDotnetVersionError = {
+  message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
+  linkAfterMessage: {
+    text: formatMessage('Learn more.'),
+    url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
+  },
+  link: {
+    text: formatMessage('Install Microsoft .NET Core SDK'),
+    url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
+  },
+};
+
+const checkIfDotnetVersionMissing = (err: any) => {
+  return /(Command failed: dotnet build)| (Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
+    err.message as string
+  );
+};
+
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
-      set(botLoadErrorState(projectId), { ...error, title });
+      set(botRuntimeErrorState(projectId), { ...error, title });
     }
     // prepend the latest publish results to the history
 
@@ -71,13 +92,27 @@ export const publisherDispatcher = () => {
     });
   };
 
-  const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {
+  const updatePublishStatus = async (callbackHelpers: CallbackInterface, projectId: string, target: any, data: any) => {
     if (data == null) return;
+    const { set, snapshot } = callbackHelpers;
     const { endpointURL, status, id } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
+        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+        if (rootBotId === projectId) {
+          // Update the skill host endpoint
+          const settings = await snapshot.getPromise(settingsState(projectId));
+          if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
+            // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+            const updatedSettings = {
+              ...settings,
+              skillHostEndpoint: endpointURL + '/api/skills',
+            };
+            setRootBotSettingState(callbackHelpers, projectId, updatedSettings);
+          }
+        }
         set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({
           ...botEndpoints,
@@ -87,7 +122,11 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.reloading);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botLoadErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
+        if (checkIfDotnetVersionMissing(data)) {
+          set(botRuntimeErrorState(projectId), { title: Text.DOTNETFAILURE, ...missingDotnetVersionError });
+          return;
+        }
+        set(botRuntimeErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
       }
     }
 
@@ -148,24 +187,8 @@ export const publisherDispatcher = () => {
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
-        if (
-          /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
-            err.response?.data?.message as string
-          )
-        ) {
-          const error = {
-            message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
-            linkAfterMessage: {
-              text: formatMessage('Learn more.'),
-              url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
-            },
-            link: {
-              text: formatMessage('Install Microsoft .NET Core SDK'),
-              url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
-            },
-          };
-
-          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, error, target, projectId);
+        if (checkIfDotnetVersionMissing(err?.response?.data)) {
+          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, missingDotnetVersionError, target, projectId);
         } else {
           await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
         }
@@ -226,16 +249,46 @@ export const publisherDispatcher = () => {
   // only support local publish
   const stopPublishBot = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
+        const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
+        if (currentBotStatus !== BotStatus.failed) {
+          set(botStatusState(projectId), BotStatus.stopping);
+        }
+
         await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
-        set(botStatusState(projectId), BotStatus.unConnected);
+
+        if (currentBotStatus !== BotStatus.failed) {
+          set(botStatusState(projectId), BotStatus.inactive);
+        }
       } catch (err) {
         setError(callbackHelpers, err);
         logMessage(callbackHelpers, err.message);
       }
     }
   );
+
+  const resetBotRuntimeError = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { reset } = callbackHelpers;
+    reset(botRuntimeErrorState(projectId));
+  });
+
+  const openBotInEmulator = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { snapshot } = callbackHelpers;
+    const botEndpoints = await snapshot.getPromise(botEndpointsState);
+    const settings = await snapshot.getPromise(settingsState(projectId));
+    try {
+      openInEmulator(
+        botEndpoints[projectId] || 'http://localhost:3979/api/messages',
+        settings.MicrosoftAppId && settings.MicrosoftAppPassword
+          ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+          : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+      );
+    } catch (err) {
+      setError(callbackHelpers, err);
+      logMessage(callbackHelpers, err.message);
+    }
+  });
 
   return {
     getPublishTargetTypes,
@@ -245,5 +298,7 @@ export const publisherDispatcher = () => {
     getPublishStatus,
     getPublishHistory,
     setEjectRuntimeExist,
+    openBotInEmulator,
+    resetBotRuntimeError,
   };
 };

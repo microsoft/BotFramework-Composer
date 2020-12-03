@@ -16,7 +16,7 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import { CreationFlowStatus, AppUpdaterStatus } from '../../constants';
+import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
 
 export type BotProject = {
   readonly id: string;
@@ -31,17 +31,20 @@ export type CurrentUser = {
   sessionExpired: boolean;
 };
 
+// These values should align with the paths in the app's router
 export type PageMode =
-  | 'home'
-  | 'design'
-  | 'lg'
-  | 'lu'
-  | 'qna'
-  | 'notifications'
+  | 'dialogs' // used for the design page
+  | 'language-understanding'
+  | 'language-generation'
+  | 'knowledge-base'
   | 'publish'
-  | 'skills'
+  | 'botProjectsSettings'
+  | 'forms'
+  | 'diagnostics'
   | 'settings'
-  | 'about';
+  | 'projects'
+  | 'home'
+  | 'botProjectsSettings';
 
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
@@ -99,7 +102,7 @@ export const onboardingState = atom<{
   },
 });
 
-export const clipboardActionsState = atom<any[]>({
+export const clipboardActionsState = atomFamily<any[], string>({
   key: getFullyQualifiedKey('clipboardActions'),
   default: [],
 });
@@ -136,6 +139,11 @@ export const appUpdateState = atom<AppUpdateState>({
 export const creationFlowStatusState = atom<CreationFlowStatus>({
   key: getFullyQualifiedKey('creationFlowStatus'),
   default: CreationFlowStatus.CLOSE,
+});
+
+export const creationFlowTypeState = atom<CreationFlowType>({
+  key: getFullyQualifiedKey('creationFlowTpye'),
+  default: 'Bot',
 });
 
 export const logEntryListState = atom<string[]>({
@@ -198,9 +206,9 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
-export const currentModeState = atom<PageMode>({
-  key: getFullyQualifiedKey('currentMode'),
-  default: 'home',
+export const createQnAOnState = atom<{ projectId: string; dialogId: string }>({
+  key: getFullyQualifiedKey('createQnAOn'),
+  default: { projectId: '', dialogId: '' },
 });
 
 export const botProjectSpaceLoadedState = atom<boolean>({
@@ -231,10 +239,10 @@ export const formDialogGenerationProgressingState = atom({
 export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any } }>({
   key: getFullyQualifiedKey('pageElement'),
   default: {
-    design: {},
-    lg: {},
-    lu: {},
-    qna: {},
+    dialogs: {},
+    'language-generation': {},
+    'language-understanding': {},
+    'knowledge-base': {},
   },
 });
 
@@ -245,4 +253,19 @@ export const ServerSettingsState = atom<ServerSettings>({
       allowDataCollection: false,
     },
   },
+});
+
+export const showCreateDialogModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showCreateDialogModal'),
+  default: false,
+});
+
+export const exportSkillModalInfoState = atom<undefined | string>({
+  key: getFullyQualifiedKey('exportSkillModalInfo'),
+  default: undefined,
+});
+
+export const displaySkillManifestState = atom<undefined | string>({
+  key: getFullyQualifiedKey('displaySkillManifest'),
+  default: undefined,
 });

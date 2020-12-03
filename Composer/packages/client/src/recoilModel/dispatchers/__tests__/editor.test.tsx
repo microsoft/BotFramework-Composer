@@ -15,7 +15,7 @@ describe('Editor dispatcher', () => {
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const [visualEditorState, setVisualEditorState] = useRecoilState(visualEditorSelectionState);
-      const [clipboardState, setClipboardActionsState] = useRecoilState(clipboardActionsState);
+      const [clipboardState, setClipboardActionsState] = useRecoilState(clipboardActionsState('test'));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -30,7 +30,7 @@ describe('Editor dispatcher', () => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: visualEditorSelectionState, initialValue: [{ action1: 'initialVisualEditorValue' }] },
-        { recoilState: clipboardActionsState, initialValue: [{ action1: 'initialClipboardVal' }] },
+        { recoilState: clipboardActionsState('test'), initialValue: [{ action1: 'initialClipboardVal' }] },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -45,7 +45,7 @@ describe('Editor dispatcher', () => {
 
   it('should set clipboard state correctly', () => {
     act(() => {
-      dispatcher.setVisualEditorClipboard([{ action2: 'updatedVal' }]);
+      dispatcher.setVisualEditorClipboard([{ action2: 'updatedVal' }], 'test');
     });
     expect(renderedComponent.current.clipboardState).toEqual([{ action2: 'updatedVal' }]);
   });

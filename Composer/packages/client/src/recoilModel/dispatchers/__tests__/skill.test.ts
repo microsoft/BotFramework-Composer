@@ -1,23 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRecoilValue } from 'recoil';
+import { selectorFamily, useRecoilState, useRecoilValue } from 'recoil';
 import { act } from '@botframework-composer/test-utils/lib/hooks';
-import { Skill } from '@bfc/shared';
 
 import { skillDispatcher } from '../skill';
+import { botProjectFileDispatcher } from '../botProjectFile';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   skillManifestsState,
   onAddSkillDialogCompleteState,
-  skillsState,
   settingsState,
   showAddSkillDialogModalState,
-  displaySkillManifestState,
+  botProjectFileState,
+  botNameIdentifierState,
+  locationState,
+  projectMetaDataState,
+  botDisplayNameState,
 } from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
-import { currentProjectIdState } from '../../atoms';
+import { botEndpointsState, botProjectIdsState, currentProjectIdState, displaySkillManifestState } from '../../atoms';
 import { Dispatcher } from '..';
+import { skillsStateSelector } from '../../selectors';
+
+import mockBotProjectFileData from './mocks/mockBotProjectFile.json';
 
 jest.mock('../../../utils/httpUtil', () => {
   return {
@@ -33,23 +39,28 @@ jest.mock('../../../utils/httpUtil', () => {
 
 const mockDialogComplete = jest.fn();
 const projectId = '42345.23432';
-
-const makeTestSkill: (number) => Skill = (n) => ({
-  id: 'id' + n,
-  manifestUrl: 'url' + n,
-  name: 'skill' + n,
-  description: 'test skill' + n,
-  endpointUrl: 'url',
-  endpoints: [{ test: 'foo' }],
-  msAppId: 'ID',
-  content: {
-    description: 'test skill' + n,
-    endpoints: [{ test: 'foo' }],
-  },
-});
+const skillIds = ['1234.123', '234.234'];
 
 describe('skill dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
+
+  const skillsDataSelector = selectorFamily({
+    key: 'skillSelector-skill',
+    get: (skillId: string) => ({ get }) => {
+      return {
+        skillNameIdentifier: get(botNameIdentifierState(skillId)),
+        location: get(locationState(skillId)),
+      };
+    },
+    set: (skillId: string) => ({ set }, stateUpdater: any) => {
+      const { botNameIdentifier, location, displayName, settings } = stateUpdater;
+      set(botNameIdentifierState(skillId), botNameIdentifier);
+      set(locationState(skillId), location);
+      set(settingsState(skillId), settings);
+      set(botDisplayNameState(skillId), displayName);
+    },
+  });
+
   beforeEach(() => {
     mockDialogComplete.mockClear();
 
@@ -57,22 +68,33 @@ describe('skill dispatcher', () => {
       const projectId = useRecoilValue(currentProjectIdState);
       const skillManifests = useRecoilValue(skillManifestsState(projectId));
       const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState(projectId));
-      const skills: Skill[] = useRecoilValue(skillsState(projectId));
       const settings = useRecoilValue(settingsState(projectId));
       const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-      const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
-
+      const displaySkillManifest = useRecoilValue(displaySkillManifestState);
+      const skills = useRecoilValue(skillsStateSelector);
+      const [botEndpoints, setBotEndpoints] = useRecoilState(botEndpointsState);
       const currentDispatcher = useRecoilValue(dispatcherState);
+
+      const [todoSkillData, setTodoSkillData] = useRecoilState(skillsDataSelector(skillIds[0]));
+      const [googleKeepData, setGoogleKeepData] = useRecoilState(skillsDataSelector(skillIds[1]));
 
       return {
         projectId,
         skillManifests,
         onAddSkillDialogComplete,
-        skills,
         settings,
         showAddSkillDialogModal,
         displaySkillManifest,
         currentDispatcher,
+        skills,
+        botEndpoints,
+        todoSkillData,
+        googleKeepData,
+        setters: {
+          setBotEndpoints,
+          setTodoSkillData,
+          setGoogleKeepData,
+        },
       };
     };
 
@@ -86,19 +108,30 @@ describe('skill dispatcher', () => {
           ],
         },
         { recoilState: onAddSkillDialogCompleteState(projectId), initialValue: { func: undefined } },
-        {
-          recoilState: skillsState(projectId),
-          initialValue: [makeTestSkill(1), makeTestSkill(2)],
-        },
         { recoilState: settingsState(projectId), initialValue: {} },
         { recoilState: showAddSkillDialogModalState(projectId), initialValue: false },
-        { recoilState: displaySkillManifestState(projectId), initialValue: undefined },
+        { recoilState: displaySkillManifestState, initialValue: undefined },
         { recoilState: currentProjectIdState, initialValue: projectId },
+        { recoilState: botProjectIdsState, initialValue: [projectId, ...skillIds] },
+        { recoilState: settingsState(projectId), initialValue: {} },
+        {
+          recoilState: botProjectFileState(projectId),
+          initialValue: {
+            content: mockBotProjectFileData,
+          },
+        },
+        {
+          recoilState: projectMetaDataState(projectId),
+          initialValue: {
+            isRootBot: true,
+          },
+        },
       ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
           skillDispatcher,
+          botProjectFileDispatcher,
         },
       },
     });
@@ -135,72 +168,56 @@ describe('skill dispatcher', () => {
     ]);
   });
 
-  it('addsSkill', async () => {
-    await act(async () => {
-      dispatcher.addSkill(projectId, makeTestSkill(3));
-    });
-    expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-    expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
-    expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(3));
-  });
-
-  it('updateSkill', async () => {
-    await act(async () => {
-      dispatcher.updateSkill(projectId, 'id1', {
-        msAppId: 'test',
-        manifestUrl: 'test',
-        endpointUrl: 'test',
-        name: 'test',
-      });
-    });
-
-    expect(renderedComponent.current.skills[0]).toEqual(
-      expect.objectContaining({
-        id: 'id1',
-        content: {},
-        name: 'test',
-        msAppId: 'test',
-        manifestUrl: 'test',
-        endpointUrl: 'test',
-        endpoints: [],
-      })
-    );
-  });
-
-  it('removeSkill', async () => {
-    await act(async () => {
-      dispatcher.removeSkill(projectId, makeTestSkill(1).id);
-    });
-    expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
-  });
-
-  it('addSkillDialogBegin', async () => {
-    await act(async () => {
-      dispatcher.addSkillDialogBegin(mockDialogComplete, projectId);
-    });
-    expect(renderedComponent.current.showAddSkillDialogModal).toBe(true);
-    expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(mockDialogComplete);
-  });
-
-  it('addSkillDialogCancel', async () => {
-    await act(async () => {
-      dispatcher.addSkillDialogCancel(projectId);
-    });
-    expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-    expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(undefined);
-  });
-
   it('displayManifestModal', async () => {
     await act(async () => {
-      dispatcher.displayManifestModal('foo', projectId);
+      dispatcher.displayManifestModal('foo');
     });
     expect(renderedComponent.current.displaySkillManifest).toEqual('foo');
   });
 
   it('dismissManifestModal', async () => {
     await act(async () => {
-      dispatcher.dismissManifestModal(projectId);
+      dispatcher.dismissManifestModal();
     });
     expect(renderedComponent.current.displaySkillManifest).toBeUndefined();
+  });
+
+  fit('should update setting.skill on local skills with "Composer Local" chosen as endpoint', async () => {
+    await act(async () => {
+      const botEndpoints = {};
+      botEndpoints[`${skillIds[0]}`] = 'http://localhost:3978/api/messages';
+      botEndpoints[`${skillIds[1]}`] = 'http://localhost:3979/api/messages';
+      renderedComponent.current.setters.setBotEndpoints(botEndpoints);
+      renderedComponent.current.setters.setTodoSkillData({
+        location: '/Users/tester/Desktop/LoadedBotProject/Todo-Skill',
+        botNameIdentifier: 'todoSkill',
+        settings: {
+          MicrosoftAppId: 'abc-defg-3431-sdfd',
+        },
+        displayName: 'todo-skill',
+      });
+
+      renderedComponent.current.setters.setGoogleKeepData({
+        location: '/Users/tester/Desktop/LoadedBotProject/GoogleKeep-Skill',
+        botNameIdentifier: 'googleKeepSync',
+        settings: {
+          MicrosoftAppId: '1231-1231-1231-1231',
+        },
+        displayName: 'google-keep',
+      });
+    });
+
+    await act(async () => {
+      dispatcher.updateSettingsForSkillsWithoutManifest();
+    });
+    // Only skills with no endpoint name in BotProject file use the Local Composer endpoint
+    expect(renderedComponent.current.settings).toEqual({
+      skill: {
+        googleKeepSync: {
+          endpointUrl: 'http://localhost:3979/api/messages',
+          msAppId: '1231-1231-1231-1231',
+        },
+      },
+    });
   });
 });
