@@ -306,7 +306,7 @@ describe('Bot Project File dispatcher', () => {
     expect(renderedComponent.current.botProjectFile.content.skills.googleSkill.manifest).toBe('googleKeepManifest');
   });
 
-  fit('should update endpoint in BotProject file', async () => {
+  it('should update endpoint in BotProject file', async () => {
     await act(async () => {
       renderedComponent.current.setters.setSettings({
         ...renderedComponent.current.settings,
