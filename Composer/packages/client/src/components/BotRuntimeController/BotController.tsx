@@ -175,7 +175,6 @@ const BotController: React.FC = () => {
               height: '36px',
               flexDirection: 'row',
               padding: '0 7px',
-              border: 'none',
               width: '100%',
             },
             rootHovered: {
