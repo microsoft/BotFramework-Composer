@@ -181,7 +181,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       <div css={externalServiceContainerStyle}>
         <TextField
           aria-labelledby={'LUIS name'}
-          data-testId={'skillLUISName'}
+          data-testid={'skillLUISName'}
           id={'luisName'}
           label={formatMessage('LUIS name')}
           placeholder={'Enter LUIS name'}

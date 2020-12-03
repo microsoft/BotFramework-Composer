@@ -290,7 +290,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       <div css={externalServiceContainerStyle}>
         <TextField
           aria-labelledby={'LUIS name'}
-          data-testId={'rootLUISName'}
+          data-testid={'rootLUISName'}
           id={'luisName'}
           label={formatMessage('LUIS name')}
           placeholder={'Enter LUIS name'}
@@ -301,7 +301,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <TextField
           aria-labelledby={'LUIS key'}
-          data-testId={'rootLUISKey'}
+          data-testid={'rootLUISKey'}
           errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
           id={'luisKey'}
           label={formatMessage('LUIS key')}
@@ -327,7 +327,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <TextField
           aria-labelledby={'QnA Maker Subscription key'}
-          data-testId={'QnASubscriptionKey'}
+          data-testid={'QnASubscriptionKey'}
           errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
           id={'qnaKey'}
           label={formatMessage('QnA Maker Subscription key')}
