@@ -31,6 +31,24 @@ const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
 const PUBLISH_FAILED = 500;
 
+const missingDotnetVersionError = {
+  message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
+  linkAfterMessage: {
+    text: formatMessage('Learn more.'),
+    url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
+  },
+  link: {
+    text: formatMessage('Install Microsoft .NET Core SDK'),
+    url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
+  },
+};
+
+const checkIfDotnetVersionMissing = (err: any) => {
+  return /(Command failed: dotnet build)| (Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
+    err.message as string
+  );
+};
+
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
     if (target.name === defaultPublishConfig.name) {
@@ -104,6 +122,10 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.reloading);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
+        if (checkIfDotnetVersionMissing(data)) {
+          set(botRuntimeErrorState(projectId), { title: Text.DOTNETFAILURE, ...missingDotnetVersionError });
+          return;
+        }
         set(botRuntimeErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
       }
     }
@@ -165,24 +187,8 @@ export const publisherDispatcher = () => {
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
-        if (
-          /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
-            err.response?.data?.message as string
-          )
-        ) {
-          const error = {
-            message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
-            linkAfterMessage: {
-              text: formatMessage('Learn more.'),
-              url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
-            },
-            link: {
-              text: formatMessage('Install Microsoft .NET Core SDK'),
-              url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
-            },
-          };
-
-          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, error, target, projectId);
+        if (checkIfDotnetVersionMissing(err?.response?.data)) {
+          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, missingDotnetVersionError, target, projectId);
         } else {
           await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
         }
@@ -245,8 +251,13 @@ export const publisherDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
       const { set, snapshot } = callbackHelpers;
       try {
-        await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
         const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
+        if (currentBotStatus !== BotStatus.failed) {
+          set(botStatusState(projectId), BotStatus.stopping);
+        }
+
+        await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
+
         if (currentBotStatus !== BotStatus.failed) {
           set(botStatusState(projectId), BotStatus.inactive);
         }

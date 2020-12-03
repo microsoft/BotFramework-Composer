@@ -12,7 +12,7 @@ import { useInterval } from '../../utils/hooks';
 
 import { useBotOperations } from './useBotOperations';
 
-const pollingInterval = 3000;
+const pollingInterval = 1500;
 
 export type BotRuntimeStatusProps = {
   projectId: string;
