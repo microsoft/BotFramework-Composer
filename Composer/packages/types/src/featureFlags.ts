@@ -12,6 +12,6 @@ export type FeatureFlag = {
   enabled: boolean;
 };
 
-export type FeatureFlagKey = 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE' | 'ORCHESTRATOR';
+export type FeatureFlagKey = 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE' | 'ORCHESTRATOR' | 'PACKAGE_MANAGER';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
