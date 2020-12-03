@@ -235,7 +235,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       <DialogWrapper
         dialogType={DialogTypes.Customer}
         isOpen={!dialogHidden}
-        minWidth={'fit-content'}
+        minWidth={800}
         title={dialogProps.title}
         onDismiss={() => setDialogHidden(true)}
       >
