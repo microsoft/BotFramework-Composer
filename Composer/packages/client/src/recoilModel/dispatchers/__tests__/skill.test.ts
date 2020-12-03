@@ -182,7 +182,7 @@ describe('skill dispatcher', () => {
     expect(renderedComponent.current.displaySkillManifest).toBeUndefined();
   });
 
-  fit('should update setting.skill on local skills with "Composer Local" chosen as endpoint', async () => {
+  it('should update setting.skill on local skills with "Composer Local" chosen as endpoint', async () => {
     await act(async () => {
       const botEndpoints = {};
       botEndpoints[`${skillIds[0]}`] = 'http://localhost:3978/api/messages';

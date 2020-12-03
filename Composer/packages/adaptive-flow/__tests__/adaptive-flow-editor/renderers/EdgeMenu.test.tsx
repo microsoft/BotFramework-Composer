@@ -16,7 +16,7 @@ describe('<EdgeMenu>', () => {
 });
 
 describe('createActionMenu()', () => {
-  fit('Should disable an action kind if its included in forceDisabledActions', () => {
+  it('Should disable an action kind if its included in forceDisabledActions', () => {
     const menuItems = createActionMenu(
       () => null,
       { isSelfHosted: false, enablePaste: true },
