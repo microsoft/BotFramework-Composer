@@ -52,7 +52,7 @@ export default class AppInsightsClient {
           return;
         }
         this.drain();
-      }, 10000);
+      }, 2000);
     }
   }
 }
