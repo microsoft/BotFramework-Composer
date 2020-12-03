@@ -59,7 +59,7 @@ const Library: React.FC = () => {
     removeConfirmationPrompt: formatMessage(
         'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
     ),
-    requireEject: formatMessage('To install components, this project must have an ejected runtime. Please navigate to the runtime settings page.'),
+    requireEject: formatMessage('To install components, this project must have an ejected runtime. Please navigate to the project settings page, custom runtime section.'),
     ejectRuntime: formatMessage('Eject Runtime'),
     noComponentsInstalled: formatMessage('No packages installed'),
     noComponentsFound: formatMessage('No packages found. Check extension configuration.'),
