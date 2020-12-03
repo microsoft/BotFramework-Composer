@@ -100,6 +100,14 @@ if (Test-Path $zipPath) {
 $publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp3.1')
 dotnet publish -c release -o $publishFolder -v q --self-contained true -r $runtimeIdentifier > $logFile
 
+if($?) {
+	Write-Host "dotnet publish success!"
+}
+else {
+	Write-Host "dotnet publish fail!"
+	break
+}
+
 # Copy bot files to running folder
 $remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
@@ -160,11 +168,24 @@ if ($luisAuthoringKey -or $qnaSubscriptionKey) {
 	if ($luisAuthoringKey) {
 		bf sampler:sampling --in generated\interruption --out generated\interruption --force
 	}
+
+	if($?) {
+		Write-Host "bf luis:cross-train, sampler:sampling success!"
+	}
+	else {
+		Write-Host "bf luis:cross-train, sampler:sampling fail!"
+		break
+	}
 }
 
 # if luis enabled
 if ($luisAuthoringKey) {
 	Set-Location -Path $remoteBotPath
+
+	$files = Get-ChildItem -Path generated\interruption
+	if ($files.Count -eq 0) {
+		Write-Host 'Warning: have luis authoring key but lubuild input is empty!'
+	}
 
 	# execute lubuild
 	bf luis:build --in generated\interruption --authoringKey $luisAuthoringKey --botName $name --out generated --suffix $environment --force --log --defaultCulture $language
@@ -265,6 +286,13 @@ if ($luisAuthoringKey) {
 # if qna enabled
 if ($qnaSubscriptionKey) {
 	Set-Location -Path $remoteBotPath
+
+	$files = Get-ChildItem -Path generated\interruption
+	if ($files.Count -eq 0) {
+		Write-Host 'Warning: have qna subscription key but qna build input is empty!'
+	}
+
+
 	bf qnamaker:build --in generated\interruption --subscriptionKey $qnaSubscriptionKey --botName $name --out generated --suffix $environment --force --log --defaultCulture $language
 	if ($?) {
 		Write-Host "qna build succeeded"
