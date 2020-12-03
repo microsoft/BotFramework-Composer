@@ -16,6 +16,7 @@ import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';
 
 import { QnAIcon } from './QnAIcon';
+import { BotProjectsSettingsIcon } from './BotProjectsSettingsIcon';
 // -------------------- Styles -------------------- //
 
 const link = (active: boolean, disabled: boolean) => css`
@@ -72,39 +73,49 @@ const icon = (active: boolean, disabled: boolean) =>
 
 /**
  * @param to The string URI to link to. Supports relative and absolute URIs.
- * @param exact The uri is exactly the same as the anchor’s href.
  * @param iconName The link's icon.
  * @param labelName The link's text.
  * @param disabled If true, the Link will be unavailable.
  */
 export interface INavItemProps {
   to: string;
-  exact: boolean;
   iconName: string;
   labelName: string;
   disabled: boolean;
   showTooltip: boolean;
+  match?: RegExp;
 }
 
 export const NavItem: React.FC<INavItemProps> = (props) => {
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
-  const { to, iconName, labelName, disabled, showTooltip } = props;
+  const { to, iconName, labelName, disabled, showTooltip, match } = props;
   const {
     location: { pathname },
   } = useLocation();
 
   const linkTo = useRouterCache(to);
 
-  const active = pathname.startsWith(to);
+  const active = (pathname.startsWith(to) || match?.test(pathname)) ?? false;
 
   const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
-  const iconElement =
-    iconName === 'QnAIcon' ? (
-      <QnAIcon active={active} disabled={disabled} />
-    ) : (
-      <Icon iconName={iconName} styles={icon(active, disabled)} />
-    );
+
+  const getIcon = (iconName: string) => {
+    let navIcon;
+    switch (iconName) {
+      case 'QnAIcon':
+        navIcon = <QnAIcon active={active} disabled={disabled} />;
+        break;
+      case 'BotProjectsSettings':
+        navIcon = <BotProjectsSettingsIcon active={active} disabled={disabled} />;
+        break;
+      default:
+        navIcon = <Icon iconName={iconName} styles={icon(active, disabled)} />;
+    }
+    return navIcon;
+  };
+
+  const iconElement = getIcon(iconName);
   const activeArea = (
     <div
       aria-disabled={disabled}

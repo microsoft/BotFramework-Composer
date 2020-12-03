@@ -16,6 +16,13 @@ export function renderWithRecoil(subject, initRecoilState: (mutableSnapshot: Mut
   );
 }
 
+export function renderWithRecoilAndCustomDispatchers(
+  subject,
+  initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop
+) {
+  return render(<RecoilRoot initializeState={initRecoilState}>{subject}</RecoilRoot>);
+}
+
 export function wrapWithRecoil(subject, initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop) {
   return (
     <RecoilRoot initializeState={initRecoilState}>

@@ -173,7 +173,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     private init = async (project: any, srcTemplate: string, resourcekey: string, runtime: any) => {
       try {
         // point to the declarative assets (possibly in remote storage)
-        const botFiles = project.getProject().filesWithoutRecognizers;
+        const botFiles = project.getProject().files;
         const botFolder = this.getBotFolder(resourcekey, this.mode);
         const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
@@ -298,6 +298,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         defaultLanguage,
         settings,
         accessToken,
+        luResources,
+        qnaResources,
       } = config;
       try{
           // get the appropriate runtime template which contains methods to build and configure the runtime
@@ -323,7 +325,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // Merge all the settings
         // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
         // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-        const mergedSettings = mergeDeep(fullSettings, settings);
+        const mergedSettings = mergeDeep(fullSettings, settings,{luResources, qnaResources});
 
         // Prepare parameters and then perform the actual deployment action
         const customizeConfiguration: DeployResources = {
@@ -434,6 +436,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         settings,
       } = config;
 
+      const {luResources, qnaResources} = metadata;
+
       // get the bot id from the project
       const botId = project.id;
 
@@ -461,7 +465,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           throw new Error('Required field `settings` is missing from publishing profile.');
         }
 
-        this.asyncPublish({...config, accessToken}, project, resourcekey, jobId);
+        this.asyncPublish({...config, accessToken, luResources, qnaResources}, project, resourcekey, jobId);
 
         return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
 

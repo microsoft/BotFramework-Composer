@@ -10,7 +10,7 @@ import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, botStatusState, botLoadErrorState } from '../atoms';
+import { luFilesState, qnaFilesState, botStatusState, botRuntimeErrorState } from '../atoms';
 import { dialogsSelectorFamily } from '../selectors';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
@@ -20,9 +20,9 @@ const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (
+      projectId: string,
       luisConfig: ILuisConfig,
-      qnaConfig: IQnAConfig,
-      projectId: string
+      qnaConfig: IQnAConfig
     ) => {
       const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
@@ -42,7 +42,7 @@ export const builderDispatcher = () => {
         { title: Text.LUISDEPLOYFAILURE, message: '' }
       );
       if (errorMsg.message) {
-        set(botLoadErrorState(projectId), errorMsg);
+        set(botRuntimeErrorState(projectId), errorMsg);
         set(botStatusState(projectId), BotStatus.failed);
         return;
       }
@@ -59,7 +59,7 @@ export const builderDispatcher = () => {
         set(botStatusState(projectId), BotStatus.published);
       } catch (err) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botLoadErrorState(projectId), {
+        set(botRuntimeErrorState(projectId), {
           title: Text.LUISDEPLOYFAILURE,
           message: err.response?.data?.message || err.message,
         });

@@ -58,9 +58,10 @@ export class Diagnostic implements IDiagnostic {
    */
   code?: string;
 
-  constructor(message: string, source: string, severity?: DiagnosticSeverity) {
+  constructor(message: string, source: string, severity?: DiagnosticSeverity, path?: string) {
     this.message = message;
     this.source = source;
     this.severity = severity ? severity : DiagnosticSeverity.Error;
+    this.path = path;
   }
 }

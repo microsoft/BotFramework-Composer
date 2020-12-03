@@ -34,8 +34,6 @@
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/ui-plugin-select-skill-dialog": "*",
-    "@bfc/ui-plugin-va-creation": "*",
-    "@bfc/ui-shared": "*",
     "@botframework-composer/types": "*",
     "@emotion/core": "^10.0.27",
     "@reach/router": "^1.2.1",
