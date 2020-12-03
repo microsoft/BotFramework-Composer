@@ -239,6 +239,13 @@ export const qnaDispatcher = () => {
     }
   );
 
+  const createQnAFromScratchDialogBack = useRecoilCallback(
+    ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
+      set(showCreateQnAFromScratchDialogState(projectId), false);
+      set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: undefined });
+    }
+  );
+
   const createQnAFromScratchDialogCancel = useRecoilCallback(
     ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
       set(createQnAOnState, { projectId: '', dialogId: '' });
@@ -662,6 +669,7 @@ ${response.data}
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromScratchDialogBegin,
+    createQnAFromScratchDialogBack,
     createQnAFromScratchDialogCancel,
     createQnAFromUrlDialogBegin,
     createQnAFromUrlDialogCancel,
