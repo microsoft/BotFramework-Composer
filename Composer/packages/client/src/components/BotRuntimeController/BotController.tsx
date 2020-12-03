@@ -94,11 +94,11 @@ const BotController: React.FC = () => {
     setDisableOnStartBotsWidget(false);
   }, [projectCollection, errors]);
 
-  const running = useMemo(() => projectCollection.find(({ status }) => status === BotStatus.connected), [
+  const botStartComplete = useMemo(() => projectCollection.find(({ status }) => status === BotStatus.connected), [
     projectCollection,
   ]);
 
-  const botsStarting = useMemo(
+  const areBotsStarting = useMemo(
     () =>
       !!projectCollection.find(({ status }) => {
         return (
@@ -115,7 +115,7 @@ const BotController: React.FC = () => {
   const { startAllBots, stopAllBots } = useBotOperations();
 
   const handleClick = () => {
-    if (!running) {
+    if (!botStartComplete) {
       startAllBots();
     } else {
       stopAllBots();
@@ -127,7 +127,7 @@ const BotController: React.FC = () => {
   };
 
   const buttonText = useMemo(() => {
-    if (botsStarting) {
+    if (areBotsStarting) {
       setStatusIconClass(undefined);
       return formatMessage('Starting bots.. ({running}/{total} running)', {
         running: runningBots.projectIds.length,
@@ -135,7 +135,7 @@ const BotController: React.FC = () => {
       });
     }
 
-    if (running) {
+    if (botStartComplete) {
       setStatusIconClass('CircleStopSolid');
       return formatMessage('Stop all bots ({running}/{total} running)', {
         running: runningBots.projectIds.length,
@@ -145,7 +145,7 @@ const BotController: React.FC = () => {
 
     setStatusIconClass('Play');
     return formatMessage('Start all bots');
-  }, [runningBots, running, botsStarting]);
+  }, [runningBots, botStartComplete, areBotsStarting]);
 
   const items = useMemo<IContextualMenuItem[]>(() => {
     return projectCollection.map(({ name: displayName, projectId }) => ({
@@ -166,7 +166,7 @@ const BotController: React.FC = () => {
           primary
           aria-roledescription={formatMessage('Bot Controller')}
           ariaDescription={buttonText}
-          disabled={disableStartBots || botsStarting}
+          disabled={disableStartBots || areBotsStarting}
           iconProps={{
             iconName: statusIconClass,
             styles: {
@@ -202,7 +202,7 @@ const BotController: React.FC = () => {
           title={buttonText}
           onClick={handleClick}
         >
-          {botsStarting && (
+          {areBotsStarting && (
             <Spinner
               size={SpinnerSize.small}
               styles={{
