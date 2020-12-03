@@ -49,8 +49,6 @@ type BotInProject = {
   projectId: string;
   name: string;
   isRemote: boolean;
-  isRootBot: boolean;
-  error: { [key: string]: any };
 };
 
 type Props = {
@@ -66,7 +64,7 @@ export const ProjectList: React.FC<Props> = ({
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
 
-  const [selectedLink, setSelectedLink] = useState<Partial<ListLink> | undefined>(defaultSelected);
+  const [selectedLink, setSelectedLink] = useState<ListLink | undefined>(defaultSelected);
 
   useEffect(() => {
     setSelectedLink(defaultSelected);
@@ -94,7 +92,7 @@ export const ProjectList: React.FC<Props> = ({
       <span key={bot.name} css={headerCSS('bot-header')} data-testid={`BotHeader-${bot.name}`} role="grid">
         <ListItem
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
-          isActive={link === selectedLink}
+          isActive={link.projectId === selectedLink.projectId}
           link={link}
           onSelect={handleOnSelect}
         />

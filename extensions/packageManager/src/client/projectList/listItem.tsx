@@ -83,6 +83,8 @@ export const ListItem: React.FC<Props> = ({
   padLeft = 0,
 }) => {
 
+
+  console.log(link, isActive);
   const linkString = `${link.projectId}_ListItem`;
 
   return (
