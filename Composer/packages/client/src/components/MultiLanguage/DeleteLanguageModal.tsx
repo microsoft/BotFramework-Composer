@@ -14,7 +14,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { MultiLanguagesDialog } from '../../constants';
+import { MultiLanguagesDialog as dialogFn } from '../../constants';
 
 import { ILanguageFormData } from './types';
 import { classNames } from './styles';
@@ -28,6 +28,8 @@ export interface IDeleteLanguageModalProps {
   onSubmit: (formData: ILanguageFormData) => void;
   onDismiss: () => void;
 }
+
+const MultiLanguagesDialog = dialogFn();
 
 const DeleteLanguageModal: React.FC<IDeleteLanguageModalProps> = (props) => {
   const { languages: currentLanguages, locale, defaultLanguage, isOpen } = props;

@@ -18,11 +18,14 @@ import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { Text, Tips, Links, nameRegex } from '../../constants';
+import { Text as textFn, Tips as tipsFn, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { getLuisBuildLuFiles } from '../../utils/luUtil';
 import { luFilesState, qnaFilesState, validateDialogsSelectorFamily } from '../../recoilModel';
+
+const Text = textFn();
+const Tips = tipsFn();
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`

@@ -22,7 +22,7 @@ import { botEndpointsState } from '../atoms';
 import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
 
-import { BotStatus, Text } from './../../constants';
+import { BotStatus, Text as textFn } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
 import { setRootBotSettingState } from './setting';
@@ -30,6 +30,7 @@ import { setRootBotSettingState } from './setting';
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
 const PUBLISH_FAILED = 500;
+const Text = textFn();
 
 const missingDotnetVersionError = {
   message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),

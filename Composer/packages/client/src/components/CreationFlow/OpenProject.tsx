@@ -11,7 +11,7 @@ import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { StorageFolder } from '../../recoilModel/types';
-import { DialogCreationCopy } from '../../constants';
+import { DialogCreationCopy as dialogFn } from '../../constants';
 
 import { LocationSelectContent } from './LocationSelectContent';
 interface OpenProjectProps extends RouteComponentProps<{}> {
@@ -20,6 +20,8 @@ interface OpenProjectProps extends RouteComponentProps<{}> {
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onDismiss: () => void;
 }
+
+const DialogCreationCopy = dialogFn();
 
 export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   const { onOpen, onDismiss, onCurrentPathUpdate, focusedStorageFolder } = props;
