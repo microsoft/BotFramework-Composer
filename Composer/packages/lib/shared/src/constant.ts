@@ -176,5 +176,3 @@ export const LgTemplateSamples = {
     };
   },
 };
-
-export const creationFeatureFlagReadMe = 'https://aka.ms/AAabzf9';

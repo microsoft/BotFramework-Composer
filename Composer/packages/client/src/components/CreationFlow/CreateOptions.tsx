@@ -20,7 +20,7 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate, creationFeatureFlagReadMe } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
@@ -268,7 +268,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   const choiceGroupTitle = creationFlowType === 'Skill' ? '' : formatMessage('Choose how to create your bot');
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
-
+  // TODO: remove banner UI when REMOTE_TEMPLATE_CREATION_EXPERIENCE is removed
   return (
     <Fragment>
       <DialogWrapper isOpen {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
@@ -277,7 +277,7 @@ export function CreateOptions(props: CreateOptionsProps) {
         {featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled && (
           <MessageBar className={bannerClass}>
             {formatMessage('Conversational Core preview template is available since you have that feature turned on.')}
-            <Link href={creationFeatureFlagReadMe} target="_blank">
+            <Link href="https://aka.ms/AAabzf9" target="_blank">
               {formatMessage('Learn More.')}
             </Link>
           </MessageBar>

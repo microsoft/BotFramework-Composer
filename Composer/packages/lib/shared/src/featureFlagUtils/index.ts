@@ -4,8 +4,6 @@
 import formatMessage from 'format-message';
 import { FeatureFlagMap } from '@botframework-composer/types';
 
-import { creationFeatureFlagReadMe } from '../constant';
-
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
@@ -16,7 +14,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
     displayName: formatMessage('Conversational Core Template'),
     description: formatMessage('Enable the new conversational core template built on the component model'),
-    documentationLink: creationFeatureFlagReadMe,
+    documentationLink: 'https://aka.ms/AAabzf9',
     isHidden: true,
     enabled: false,
   },
