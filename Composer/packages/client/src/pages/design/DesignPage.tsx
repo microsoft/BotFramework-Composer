@@ -428,7 +428,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     },
     {
       key: 'OpenSkill',
-      label: formatMessage('Open a new skill'),
+      label: formatMessage('Open an existing skill'),
       onClick: () => {
         setCreationFlowType('Skill');
         setCreationFlowStatus(CreationFlowStatus.OPEN);
