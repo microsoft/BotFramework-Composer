@@ -56,8 +56,6 @@ const listHeader = css`
   margin-bottom: 0;
 `;
 
-const DialogCreationCopy = dialogFn();
-
 const rowDetails = (disabled) => {
   return {
     root: {
