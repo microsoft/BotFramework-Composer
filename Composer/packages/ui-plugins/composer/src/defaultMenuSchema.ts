@@ -46,6 +46,10 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Date or time'),
     submenu: [SubmenuNames.AskQuestion],
   },
+  [SDKKinds.Ask]: {
+    label: formatMessage('Ask Activity'),
+    submenu: [SubmenuNames.AskQuestion],
+  },
   // OAuthInput appears twice
   [SDKKinds.OAuthInput]: [
     {

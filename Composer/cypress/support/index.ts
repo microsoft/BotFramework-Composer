@@ -6,16 +6,15 @@ import axios from 'axios';
 import './commands';
 
 beforeEach(() => {
-
   cy.exec('yarn test:integration:clean');
   window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true }));
   window.sessionStorage.setItem('composer:ProjectIdCache', '');
   cy.request('post', '/api/settings', {
     settings: {
       telemetry: {
-        allowDataCollection: false
-      }
-    }
+        allowDataCollection: false,
+      },
+    },
   });
 });
 

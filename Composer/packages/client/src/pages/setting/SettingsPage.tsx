@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
@@ -19,7 +19,6 @@ import {
   settingsState,
   currentProjectIdState,
 } from '../../recoilModel';
-import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
@@ -30,12 +29,20 @@ import { useProjectIdCache } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';
 
+const header = css`
+  padding: 5px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  justify-content: space-between;
+  label: PageHeader;
+`;
+
 const getProjectLink = (path: string, id?: string) => {
   return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
 };
 
 const SettingPage: React.FC<RouteComponentProps> = () => {
-  const projectId = useRecoilValue(currentProjectIdState);
   const {
     deleteBot: deleteBotProject,
     addLanguageDialogBegin,
@@ -45,8 +52,8 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     addLanguages,
     deleteLanguages,
     fetchProjectById,
-    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const locale = useRecoilValue(localeState(projectId));
   const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
   const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
@@ -59,7 +66,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   // use cached projectId do fetch.
   const cachedProjectId = useProjectIdCache();
   useEffect(() => {
-    setCurrentPageMode('settings');
     if (!projectId && cachedProjectId) {
       fetchProjectById(cachedProjectId);
     }
@@ -74,15 +80,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   };
 
   const links: INavTreeItem[] = [
-    {
-      id: 'dialog-settings',
-      name: settingLabels.botSettings,
-      url: getProjectLink('dialog-settings', projectId),
-      disabled: !projectId,
-    },
     { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
-    { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
-    { id: 'extensions', name: settingLabels.extensions, url: getProjectLink('extensions') },
     { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
   ];
 
@@ -217,12 +215,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
       dataTestid: 'AddLanguageFlyout',
       disabled: false,
     },
-
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
   ];
 
   const title = useMemo(() => {
@@ -234,13 +226,22 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     return settingLabels.appSettings;
   }, [location.pathname]);
 
+  const onRenderHeaderContent = () => {
+    return formatMessage(
+      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'
+    );
+  };
+
   return (
     <Page
+      headerStyle={header}
       mainRegionName={formatMessage('Settings editor')}
       navLinks={links}
       navRegionName={formatMessage('Settings menu')}
+      pageMode={'settings'}
       title={title}
       toolbarItems={toolbarItems}
+      onRenderHeaderContent={onRenderHeaderContent}
     >
       <AddLanguageModal
         defaultLanguage={defaultLanguage}
