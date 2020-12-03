@@ -39,6 +39,29 @@ const config: PluginConfig = {
         },
       },
     },
+    [SDKKinds.Ask]: {
+      flow: {
+        widget: 'ActionCard',
+        header: {
+          widget: 'ActionHeader',
+          icon: 'MessageBot',
+          colors: {
+            theme: Colors.BlueMagenta20,
+            icon: Colors.BlueMagenta30,
+          },
+        },
+        body: {
+          widget: 'LgWidget',
+          field: 'activity',
+        },
+        footer: {
+          widget: 'PropertyDescription',
+          property: '=action.defaultOperation',
+          description: '= Default operation',
+        },
+        hideFooter: '=!action.defaultOperation',
+      },
+    },
     [SDKKinds.UpdateActivity]: {
       flow: {
         widget: 'ActionCard',
