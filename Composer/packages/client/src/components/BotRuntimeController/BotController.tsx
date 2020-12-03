@@ -50,16 +50,6 @@ const disabledStyle = css`
 
 const startPanelsContainer = css`
   display: flex;
-  flex-direction: 'row';
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
 
 const transparentBackground = 'rgba(255, 255, 255, 0.5)';
