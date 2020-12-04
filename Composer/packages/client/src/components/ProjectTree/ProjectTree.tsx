@@ -295,61 +295,55 @@ export const ProjectTree: React.FC<Props> = ({
     };
     const isRunning = bot.buildEssentials.status === BotStatus.connected;
 
-    const menu = options.showMenu
-      ? [
-          {
-            label: formatMessage('Add a dialog'),
-            icon: 'Add',
-            onClick: () => {
-              onBotCreateDialog(bot.projectId);
-            },
-          },
-          {
-            label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
-            icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
-            onClick: () => {
-              isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
-            },
-          },
-          {
-            label: '',
-            onClick: () => {},
-          },
-          {
-            label: formatMessage('Export this bot as .zip'),
-            onClick: () => {
-              onBotExportZip(bot.projectId);
-            },
-          },
-          {
-            label: formatMessage('Settings'),
-            onClick: () => {
-              navigateTo(createBotSettingUrl(link.projectId, link.skillId));
-            },
-          },
-        ]
-      : [];
-
-    if (!bot.isRootBot && options.showMenu) {
-      menu.splice(
-        3,
-        0,
-        {
-          label: formatMessage('Create/edit skill manifest'),
-          onClick: () => {
-            onBotEditManifest(
-              bot.projectId,
-              bot.diagnostics.filter((d) => d.source === 'manifest.json').length ? 'create' : 'edit'
-            );
-          },
+    const menu = [
+      {
+        label: formatMessage('Add a dialog'),
+        icon: 'Add',
+        onClick: () => {
+          onBotCreateDialog(bot.projectId);
         },
-        {
-          label: formatMessage('Remove this skill from project'),
-          onClick: () => {
-            onBotRemoveSkill(bot.projectId);
-          },
-        }
-      );
+      },
+      {
+        label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
+        icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
+        onClick: () => {
+          isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
+        },
+      },
+      {
+        label: '',
+        onClick: () => {},
+      },
+      {
+        label: formatMessage('Create/edit skill manifest'),
+        onClick: () => {
+          onBotEditManifest(
+            bot.projectId,
+            bot.diagnostics.filter((d) => d.source === 'manifest.json').length ? 'create' : 'edit'
+          );
+        },
+      },
+      {
+        label: formatMessage('Export this bot as .zip'),
+        onClick: () => {
+          onBotExportZip(bot.projectId);
+        },
+      },
+      {
+        label: formatMessage('Settings'),
+        onClick: () => {
+          navigateTo(createBotSettingUrl(link.projectId, link.skillId));
+        },
+      },
+    ];
+
+    if (!bot.isRootBot) {
+      menu.splice(3, 0, {
+        label: formatMessage('Remove this skill from project'),
+        onClick: () => {
+          onBotRemoveSkill(bot.projectId);
+        },
+      });
     }
 
     return (
@@ -360,7 +354,7 @@ export const ProjectTree: React.FC<Props> = ({
           isActive={doesLinkMatch(link, selectedLink)}
           isMenuOpen={isMenuOpen}
           link={link}
-          menu={menu}
+          menu={options.showMenu ? menu : []}
           menuOpenCallback={setMenuOpen}
           showErrors={options.showErrors}
           textWidth={leftSplitWidth - TREE_PADDING}
@@ -380,30 +374,30 @@ export const ProjectTree: React.FC<Props> = ({
       projectId: rootProjectId,
       skillId: skillId === rootProjectId ? undefined : skillId,
     };
-    const menu: any[] = options.showMenu
-      ? [
-          {
-            label: formatMessage('Add a trigger'),
-            icon: 'Add',
-            onClick: () => {
-              onDialogCreateTrigger(skillId, dialog.id);
-            },
-          },
-          {
-            label: '',
-            onClick: () => {},
-          },
-        ]
-      : [];
-
-    if (!isPvaSchema) {
-      menu.splice(1, 0, {
-        label: formatMessage('Add new knowledge base'),
+    const menu: any[] = [
+      {
+        label: formatMessage('Add a trigger'),
         icon: 'Add',
         onClick: () => {
-          createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
+          onDialogCreateTrigger(skillId, dialog.id);
         },
-      });
+      },
+      {
+        label: '',
+        onClick: () => {},
+      },
+    ];
+
+    const QnAMenuItem = {
+      label: formatMessage('Add new knowledge base'),
+      icon: 'Add',
+      onClick: () => {
+        createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
+      },
+    };
+
+    if (!isPvaSchema) {
+      menu.splice(1, 0, QnAMenuItem);
     }
 
     const isFormDialog = dialogIsFormDialog(dialog);
@@ -442,7 +436,7 @@ export const ProjectTree: React.FC<Props> = ({
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
             link={dialogLink}
-            menu={menu}
+            menu={options.showMenu ? menu : options.showQnAMenu ? [QnAMenuItem] : []}
             menuOpenCallback={setMenuOpen}
             padLeft={depth * LEVEL_PADDING}
             showErrors={false}

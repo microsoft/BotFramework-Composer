@@ -4,22 +4,30 @@
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 
-import { lgImportResolverGenerator } from '@bfc/shared';
-import { ResolverResource } from '@bfc/shared';
+import { lgImportResolverGenerator, LgFile, ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
-import { lgIndexer } from '@bfc/indexers';
+import { lgUtil } from '@bfc/indexers';
 
 const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
   id: string;
+  type: 'parse' | 'updateTemplate';
   error?: any;
   payload?: any;
 }
 
 class LgParserWithoutWorker {
-  public async parseText(content: string, id: string, resources: ResolverResource[]) {
-    const lgImportResolver = lgImportResolverGenerator(resources, '.lg');
-    return lgIndexer.parse(content, id, lgImportResolver);
+  public async parse(id: string, content: string, lgFiles: ResolverResource[]): Promise<LgFile> {
+    return lgUtil.parse(id, content, lgFiles);
+  }
+  public async updateTemplate(
+    lgFile: LgFile,
+    templateName: string,
+    template: { name?: string; parameters?: string[]; body?: string },
+    lgFiles: ResolverResource[]
+  ): Promise<LgFile> {
+    const lgImportResolver = lgImportResolverGenerator(lgFiles, '.lg');
+    return lgUtil.updateTemplate(lgFile, templateName, template, lgImportResolver);
   }
 }
 
@@ -32,9 +40,24 @@ class LgParserWithWorker {
     LgParserWithWorker.worker.on('message', this.handleMsg.bind(this));
   }
 
-  public async parseText(content: string, id: string, resources: ResolverResource[]): Promise<any> {
+  public async parse(id: string, content: string, lgFiles: ResolverResource[]): Promise<LgFile> {
     const msgId = uniqueId();
-    const msg = { id: msgId, payload: { content, id, resources } };
+    const msg = { id: msgId, type: 'parse', payload: { id, content, lgFiles } };
+    return new Promise((resolve, reject) => {
+      this.resolves[msgId] = resolve;
+      this.rejects[msgId] = reject;
+      LgParserWithWorker.worker.send(msg);
+    });
+  }
+
+  public async updateTemplate(
+    lgFile: LgFile,
+    templateName: string,
+    template: { name?: string; parameters?: string[]; body?: string },
+    lgFiles: ResolverResource[]
+  ): Promise<LgFile> {
+    const msgId = uniqueId();
+    const msg = { id: msgId, type: 'updateTemplate', payload: { lgFile, templateName, template, lgFiles } };
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
