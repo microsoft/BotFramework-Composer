@@ -3,6 +3,7 @@
 
 context('ToDo Bot', () => {
   before(() => {
+    window.localStorage.setItem('composer:userSettings', JSON.stringify({ telemetry: { allowDataCollection: false } }));
     cy.visit('/home');
     cy.createBot('TodoSample');
     cy.findByTestId('WelcomeModalCloseIcon').click();
