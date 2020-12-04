@@ -37,6 +37,7 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   projectId?: string;
   skillId?: string;
   dialogId?: string;
+  luFileId?: string;
 }
 
 interface Intent {
@@ -49,7 +50,7 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId } = props;
+  const { dialogId, projectId, skillId, luFileId } = props;
 
   const actualProjectId = skillId ?? projectId ?? '';
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
@@ -65,8 +66,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
-  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
@@ -109,11 +115,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
     if (!activeDialog) {
       setIntents(allIntents);
+    } else if (luFileId && file) {
+      const luIntents: Intent[] = [];
+      get(file, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
+        const state = getIntentState(file);
+        luIntents.push({
+          name,
+          phrases,
+          fileId: file.id,
+          dialogId: activeDialog?.id || '',
+          used: !!activeDialog && activeDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+          state,
+        });
+      });
+      setIntents(luIntents);
     } else {
       const dialogIntents = allIntents.filter((t) => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog, actualProjectId]);
+  }, [luFiles, activeDialog, actualProjectId, luFileId]);
 
   const handleIntentUpdate = useCallback(
     (fileId: string, intentName: string, intent: LuIntentSection) => {
@@ -125,7 +145,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
       updateLuIntent(payload);
     },
-    [intents, projectId]
+    [actualProjectId]
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -140,7 +160,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLuIntent(payload);
       }
     },
-    [intents, file, projectId]
+    [defaultLangFile, actualProjectId]
   );
 
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {

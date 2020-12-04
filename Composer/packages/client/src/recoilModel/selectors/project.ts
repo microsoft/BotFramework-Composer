@@ -6,6 +6,7 @@ import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaF
 import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
+import { LanguageFileImport } from '../../../../types/src';
 import {
   botDisplayNameState,
   botErrorState,
@@ -28,7 +29,13 @@ import {
   dialogState,
   schemasState,
 } from '../atoms';
-import { dialogsSelectorFamily, buildEssentialsSelector, validateDialogsSelectorFamily } from '../selectors';
+import {
+  dialogsSelectorFamily,
+  buildEssentialsSelector,
+  validateDialogsSelectorFamily,
+  lgImportsSelectorFamily,
+  luImportsSelectorFamily,
+} from '../selectors';
 
 // Actions
 export const localBotsWithoutErrorsSelector = selector({
@@ -110,6 +117,18 @@ export const botProjectSpaceSelector = selector({
         crossTrainConfig: {},
       };
 
+      const lgImports: Record<string, LanguageFileImport[]> = {};
+
+      dialogs.forEach((d) => {
+        lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+      });
+
+      const luImports: Record<string, LanguageFileImport[]> = {};
+
+      dialogs.forEach((d) => {
+        luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+      });
+
       const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
       const publishHistory = get(publishHistoryState(projectId));
       const publishTypes = get(publishTypesState(projectId));
@@ -128,6 +147,8 @@ export const botProjectSpaceSelector = selector({
         isPvaSchema,
         publishHistory,
         publishTypes,
+        lgImports,
+        luImports,
       };
     });
     return result;

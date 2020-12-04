@@ -23,6 +23,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
   skillId?: string;
+  luFileId?: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
@@ -33,7 +34,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-  const { dialogId, projectId, skillId } = props;
+  const { dialogId, projectId, skillId, luFileId } = props;
   const actualProjectId = skillId ?? projectId;
 
   const luFiles = useRecoilValue(luFilesState(actualProjectId));
@@ -42,8 +43,13 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   const { languages, defaultLanguage } = settings;
 
-  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const diagnostics = get(file, 'diagnostics', []);
   const [luEditor, setLuEditor] = useState<any>(null);
