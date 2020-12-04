@@ -98,6 +98,9 @@ type IPageProps = {
   navLinks?: INavTreeItem[];
   pageMode: PageMode;
   showCommonLinks?: boolean;
+  projectId?: string;
+  skillId?: string;
+  dialogId?: string;
 };
 
 const Page: React.FC<IPageProps> = (props) => {
@@ -114,6 +117,9 @@ const Page: React.FC<IPageProps> = (props) => {
     useNewTree,
     pageMode,
     showCommonLinks = false,
+    projectId,
+    skillId,
+    dialogId,
   } = props;
 
   return (
@@ -128,6 +134,11 @@ const Page: React.FC<IPageProps> = (props) => {
           <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={pageMode}>
             {useNewTree ? (
               <ProjectTree
+                defaultSelected={{
+                  projectId,
+                  skillId,
+                  dialogId,
+                }}
                 options={{
                   showDelete: false,
                   showTriggers: false,
