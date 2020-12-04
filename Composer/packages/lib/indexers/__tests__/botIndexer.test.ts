@@ -11,43 +11,53 @@ import {
   ILUFeaturesConfig,
   IQnAConfig,
   SkillSetting,
+  QnAFile,
 } from '@bfc/shared';
 
 import { BotIndexer } from '../src/botIndexer';
-const { checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotIndexer;
+const { checkManifest, checkSetting, checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotIndexer;
 
 const botAssets: BotAssets = {
   projectId: 'test',
   botProjectFile: {
     id: 'test',
     content: {
-      workspace: '',
       name: '',
-      skills: {},
+      skills: {
+        'Email-Skill': {
+          workspace: '',
+          remote: false,
+        },
+      },
     },
     lastModified: '',
   },
+  jsonSchemaFiles: [],
+  recognizers: [],
+  formDialogSchemas: [],
+  crossTrainConfig: {},
   dialogSchemas: [],
   qnaFiles: [],
   lgFiles: [],
-  qnaFiles: [],
-  dialogSchemas: [],
   luFiles: [
     {
       id: 'a.en-us',
+      empty: false,
     } as LuFile,
     {
       id: 'a.zh-cn',
+      empty: true,
     } as LuFile,
     {
       id: 'a.ar',
+      empty: true,
     } as LuFile,
   ],
   skillManifests: [],
   dialogs: [
     {
       luFile: 'a.lu',
-      skills: [`=settings.skill['Email-Skill'].endpointUrl`, `=settings.skill['Calendar-Skill'].endpointUrl`],
+      skills: ['Email-Skill', 'Calendar-Skill'],
     } as DialogInfo,
   ],
   setting: {
@@ -70,6 +80,63 @@ const botAssets: BotAssets = {
   } as DialogSetting,
 };
 
+describe('check manifest', () => {
+  it('manifest file should exist', () => {
+    const diagnostics = checkManifest(botAssets);
+    expect(diagnostics.length).toEqual(1);
+  });
+});
+
+describe('check LUIS & QnA key', () => {
+  it('LUIS authoringKey should exist in setting', () => {
+    const diagnostics = checkSetting(botAssets);
+    expect(diagnostics.length).toEqual(1);
+  });
+
+  it('LUIS authoringKey should exist in setting', () => {
+    const mergedSettings = {
+      ...botAssets.setting,
+      luis: { authoringKey: '4d210acc6d794d71a2a3450*****2fb7', endpointKey: '' } as ILuisConfig,
+    };
+    const diagnostics = checkSetting({ ...botAssets, setting: mergedSettings });
+    expect(diagnostics.length).toEqual(0);
+  });
+
+  it('QnA subscriptionKey should exist in setting, when qna file is not empty', () => {
+    const botAssets2 = {
+      ...botAssets,
+      dialogs: [
+        {
+          luFile: 'a.lu',
+          qnaFile: 'a.lu.qna',
+        } as DialogInfo,
+      ],
+      qnaFiles: [
+        {
+          id: 'a.en-us',
+          empty: false,
+        } as QnAFile,
+      ],
+    };
+    const diagnostics = checkSetting(botAssets2);
+    expect(diagnostics.length).toEqual(2);
+  });
+
+  it('QnA subscriptionKey should exist in setting, when qna file is empty', () => {
+    const botAssets2 = {
+      ...botAssets,
+      dialogs: [
+        {
+          luFile: 'a.lu',
+          qnaFile: 'a.lu.qna',
+        } as DialogInfo,
+      ],
+    };
+    const diagnostics = checkSetting(botAssets2);
+    expect(diagnostics.length).toEqual(1);
+  });
+});
+
 describe('checkLUISLocales', () => {
   it('should check luis not supported locales', () => {
     const diagnostics = checkLUISLocales(botAssets);
@@ -86,7 +153,7 @@ describe('checkSkillSetting', () => {
     const errors = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Error);
     const warnings = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Warning);
     expect(errors.length).toEqual(1);
-    expect(warnings.length).toEqual(1);
+    expect(warnings.length).toEqual(0);
   });
 });
 

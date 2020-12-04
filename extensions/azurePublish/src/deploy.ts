@@ -8,14 +8,14 @@ import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { LuisAndQnaPublish } from './luisAndQnA';
+import { build, publishLuisToPrediction } from './luisAndQnA';
 import archiver = require('archiver');
 
 export class BotProjectDeploy {
   private accessToken: string;
   private projPath: string;
   private zipPath: string;
-  private logger: (string) => any;
+  private logger: (...args: any[]) => void;
   private runtime: any;
 
   constructor(config: BotProjectDeployConfig) {
@@ -58,19 +58,31 @@ export class BotProjectDeploy {
       if (!language) {
         language = 'en-us';
       }
-      const publisher = new LuisAndQnaPublish({ logger: this.logger, projPath: this.projPath });
+
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: "Building the bot's resources ...",
+      });
+      await build(project, this.projPath, settings);
+
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'Build Success!',
+      });
 
       // this function returns an object that contains the luis APP ids mapping
       // each dialog to its matching app.
-      const { luisAppIds, qnaConfig } = await publisher.publishLuisAndQna(
+      const luisAppIds = await publishLuisToPrediction(
         name,
         environment,
         this.accessToken,
-        language,
         settings.luis,
-        settings.qna,
-        luisResource
+        luisResource,
+        this.projPath,
+        this.logger
       );
+
+      const qnaConfig = await project.builder.getQnaConfig();
 
       // amend luis settings with newly generated values
       settings.luis = {
@@ -149,19 +161,27 @@ export class BotProjectDeploy {
     const publishEndpoint = `https://${
       hostname ? hostname : name + '-' + env
     }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
+    fileReadStream.on('error', function (err) {
+      this.logger('%O', err);
+      throw err;
+    });
+
     try {
       const response = await rp.post({
         uri: publishEndpoint,
         auth: {
           bearer: token,
         },
-        body: fs.createReadStream(zipPath),
+        body: fileReadStream,
       });
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: response,
       });
     } catch (err) {
+      // close file read stream
+      fileReadStream.close();
       if (err.statusCode === 403) {
         throw new Error(
           `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`

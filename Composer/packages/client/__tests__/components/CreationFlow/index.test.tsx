@@ -5,9 +5,15 @@ import * as React from 'react';
 import { render, fireEvent, act } from '@botframework-composer/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 import { RecoilRoot } from 'recoil';
+import { getDefaultFeatureFlags } from '@bfc/shared';
 
 import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
-import { focusedStorageFolderState, creationFlowStatusState, dispatcherState } from '../../../src/recoilModel';
+import {
+  focusedStorageFolderState,
+  creationFlowStatusState,
+  dispatcherState,
+  featureFlagsState,
+} from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
 
 describe('<CreationFlow/>', () => {
@@ -24,9 +30,10 @@ describe('<CreationFlow/>', () => {
       setCreationFlowStatus: jest.fn(),
       navTo: jest.fn(),
       saveTemplateId: jest.fn(),
+      setCurrentPageMode: jest.fn(),
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
-
+    set(featureFlagsState, getDefaultFeatureFlags());
     set(focusedStorageFolderState, {
       name: 'Desktop',
       parent: '/test-folder',
@@ -81,7 +88,6 @@ describe('<CreationFlow/>', () => {
       description: '',
       location: expectedLocation,
       name: 'EchoBot-1',
-      qnaKbUrls: undefined,
       schemaUrl: '',
       templateId: 'EchoBot',
     });

@@ -4,6 +4,7 @@
 import { promisify } from 'util';
 import fs from 'fs';
 
+import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import {
@@ -13,13 +14,14 @@ import {
   IBotProject,
   DialogSetting,
   FileExtensions,
-  Skill,
   DialogUtils,
+  checkForPVASchema,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
-import { UserIdentity, ExtensionContext } from '@bfc/extension';
+import { UserIdentity } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
+import { ExtensionContext } from '../extension/extensionContext';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -34,7 +36,6 @@ import { isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { retrieveSkillManifests } from './skillManager';
 import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
@@ -54,6 +55,7 @@ export class BotProject implements IBotProject {
   public name: string;
   public dir: string;
   public dataDir: string;
+  public eTag?: string;
   public fileStorage: IFileStorage;
   public builder: Builder;
   public defaultSDKSchema: {
@@ -62,18 +64,18 @@ export class BotProject implements IBotProject {
   public defaultUISchema: {
     [key: string]: string;
   };
-  public skills: Skill[] = [];
   public diagnostics: Diagnostic[] = [];
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
 
   private files = new Map<string, FileInfo>();
 
-  constructor(ref: LocationRef, user?: UserIdentity) {
+  constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we switch to posix style after here
     this.dataDir = this.dir;
     this.name = Path.basename(this.dir);
+    this.eTag = eTag;
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
     this.defaultUISchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.uischema'), 'utf-8'));
@@ -94,10 +96,16 @@ export class BotProject implements IBotProject {
     return files;
   }
 
+  public get rootDialogId() {
+    const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
+
+    return Path.basename(mainDialogFile?.name ?? '', '.dialog');
+  }
+
   public get formDialogSchemaFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
-      if (file.name.endsWith('.form-dialog')) {
+      if (file.name.endsWith(FileExtensions.FormDialogSchema)) {
         files.push(file);
       }
     });
@@ -172,9 +180,6 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillManifests, diagnostics } = await retrieveSkillManifests(this.settings?.skill);
-    this.skills = skillManifests;
-    this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
   };
 
@@ -184,9 +189,9 @@ export class BotProject implements IBotProject {
       files: Array.from(this.files.values()),
       location: this.dir,
       schemas: this.getSchemas(),
-      skills: this.skills,
       diagnostics: this.diagnostics,
       settings: this.settings,
+      filesWithoutRecognizers: Array.from(this.files.values()).filter(({ name }) => !isRecognizer(name)),
     };
   };
 
@@ -196,6 +201,15 @@ export class BotProject implements IBotProject {
 
   public getEnvSettings = async (obfuscate: boolean) => {
     const settings = await this.settingManager.get(obfuscate);
+
+    // Resolve relative path for custom runtime if the path is relative
+    if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
+      const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
+      if (fs.existsSync(absolutePath)) {
+        settings.runtime.path = absolutePath;
+        await this.updateEnvSettings(settings);
+      }
+    }
 
     // fix old bot have no language settings
     if (!settings?.defaultLanguage) {
@@ -238,9 +252,9 @@ export class BotProject implements IBotProject {
     this.settings = config;
   };
 
-  public exportToZip = (cb) => {
+  public exportToZip = (exclusions, cb) => {
     try {
-      this.fileStorage.zip(this.dataDir, cb);
+      this.fileStorage.zip(this.dataDir, exclusions, cb);
     } catch (e) {
       debug('error zipping assets', e);
     }
@@ -350,24 +364,20 @@ export class BotProject implements IBotProject {
   public updateBotInfo = async (name: string, description: string, preserveRoot = false) => {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
-    const botName = name.trim().toLowerCase();
+
+    const botName = name.trim();
+
     const { relativePath } = mainDialogFile;
     const content = JSON.parse(mainDialogFile.content);
-    if (!content.$designer) return;
-    const oldDesigner = content.$designer;
-    let newDesigner;
-    if (oldDesigner && oldDesigner.id) {
-      newDesigner = {
-        ...oldDesigner,
-        name,
-        description,
-      };
-    } else {
-      newDesigner = getNewDesigner(name, description);
-    }
-    content.$designer = newDesigner;
-    content.id = name;
-    const updatedContent = autofixReferInDialog(botName, JSON.stringify(content, null, 2));
+
+    const { $designer } = content;
+
+    content.$designer = $designer?.id ? { ...$designer, name, description } : getNewDesigner(botName, description);
+
+    content.id = preserveRoot ? Path.basename(mainDialogFile.name, '.dialog') : botName;
+
+    const updatedContent = autofixReferInDialog(content.id, JSON.stringify(content, null, 2));
+
     await this._updateFile(relativePath, updatedContent);
 
     for (const botProjectFile of this.botProjectFiles) {
@@ -434,7 +444,14 @@ export class BotProject implements IBotProject {
     this._validateFileContent(name, content);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(botName, defaultLocale, filename);
+
+    // find created file belong to which dialog, all resources should be writed to <dialog>/
+    const dialogId = name.split('.')[0];
+    const dialogFile = this.files.get(`${dialogId}.dialog`);
+    const endpoint = dialogFile ? Path.dirname(dialogFile.relativePath) : '';
+    const rootDialogId = this.rootDialogId;
+
+    const relativePath = defaultFilePath(botName, defaultLocale, filename, { endpoint, rootDialogId });
     const file = this.files.get(filename);
     if (file) {
       throw new Error(`${filename} dialog already exist`);
@@ -453,26 +470,24 @@ export class BotProject implements IBotProject {
 
   public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
     if (this.settings) {
-      const emptyFiles = {};
       const luFiles: FileInfo[] = [];
       luResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
-        if (f) {
+        if (f && !isEmpty) {
           luFiles.push(f);
-          emptyFiles[fileName] = isEmpty;
         }
       });
       const qnaFiles: FileInfo[] = [];
-      qnaResource.forEach(({ id, isEmpty }) => {
+      qnaResource.forEach(({ id }) => {
         const fileName = `${id}.qna`;
         const f = this.files.get(fileName);
         if (f) {
           qnaFiles.push(f);
-          emptyFiles[fileName] = isEmpty;
         }
       });
 
+      this.builder.rootDir = this.dir;
       this.builder.setBuildConfig(
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
         this.settings.downsampling
@@ -499,7 +514,7 @@ export class BotProject implements IBotProject {
 
   public copyTo = async (locationRef: LocationRef, user?: UserIdentity) => {
     const newProjRef = await this.cloneFiles(locationRef);
-    return new BotProject(newProjRef, user);
+    return new BotProject(newProjRef, user, this.eTag || '');
   };
 
   public async exists(): Promise<boolean> {
@@ -533,10 +548,10 @@ export class BotProject implements IBotProject {
 
   public async generateDialog(name: string, templateDirs?: string[]) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
+    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`, {});
     const schemaPath = Path.resolve(this.dir, relativePath);
 
-    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`);
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`, {});
     const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     const feedback = (type: FeedbackType, message: string): void => {
@@ -544,11 +559,22 @@ export class BotProject implements IBotProject {
       console.log(`${type} - ${message}`);
     };
 
+    // fix casing for case-sensitive schema paths
+    const schemaLocale = defaultLocale
+      .replace(/en-us/i, 'en-US')
+      .replace(/en-us-pseudo/i, 'en-US-pseudo')
+      .replace(/zh-hans/i, 'zh-Hans')
+      .replace(/zh-hant/i, 'zh-Hant')
+      .replace(/pt-br/i, 'pt-BR')
+      .replace(/pt-pt/i, 'pt-PT');
+
+    const metaSchema = `https://raw.githubusercontent.com/microsoft/BotFramework-Composer/main/Composer/packages/server/schemas/sdk.${schemaLocale}.schema`;
+
     const generateParams = {
       schemaPath,
       prefix: name,
       outDir,
-      metaSchema: undefined,
+      metaSchema: metaSchema,
       allLocales: undefined,
       templateDirs: templateDirs || [],
       force: false,
@@ -583,13 +609,18 @@ export class BotProject implements IBotProject {
 
   public async deleteFormDialog(dialogId: string) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`);
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`, {});
     const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     // I check that the path is longer 3 to avoid deleting a drive and all its contents.
     if (dirToDelete.length > 3 && this.fileStorage.exists(dirToDelete)) {
       this.fileStorage.rmrfDir(dirToDelete);
     }
+  }
+
+  public updateETag(eTag: string): void {
+    this.eTag = eTag;
+    // also update the bot project map
   }
 
   private async removeLocalRuntimeData(projectId) {
@@ -729,7 +760,7 @@ export class BotProject implements IBotProject {
     const patterns = [
       '**/*.dialog',
       '**/*.dialog.schema',
-      '**/*.form-dialog',
+      '**/*.form',
       '**/*.lg',
       '**/*.lu',
       '**/*.qna',
@@ -750,7 +781,14 @@ export class BotProject implements IBotProject {
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/appsettings.json)'],
+        [
+          pattern,
+          '!(generated/**)',
+          '!(runtime/**)',
+          '!(scripts/**)',
+          '!(settings/appsettings.json)',
+          '!(**/luconfig.json)',
+        ],
         root
       );
 
@@ -788,11 +826,25 @@ export class BotProject implements IBotProject {
 
   // migration: create qna files for old bots
   private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
+    // flowing migration scripts depends on files;
+    this.files = new Map<string, FileInfo>([...files]);
+    const schemas = await this.getSchemas();
+    if (checkForPVASchema(schemas.sdk)) return new Map<string, FileInfo>();
+
     const dialogFiles: FileInfo[] = [];
     const qnaFiles: FileInfo[] = [];
     files.forEach((file) => {
       if (file.name.endsWith('.dialog')) {
-        dialogFiles.push(file);
+        try {
+          // filter form dialog generated file.
+          const dialogJson = JSON.parse(file.content);
+          const isFormDialog = has(dialogJson, 'schema');
+          if (!isFormDialog) {
+            dialogFiles.push(file);
+          }
+        } catch (_e) {
+          // ignore
+        }
       }
       if (file.name.endsWith('.qna')) {
         qnaFiles.push(file);
@@ -829,7 +881,7 @@ export class BotProject implements IBotProject {
     try {
       const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
 
-      for (const [_, file] of files) {
+      for (const [, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
           return fileList;
         }

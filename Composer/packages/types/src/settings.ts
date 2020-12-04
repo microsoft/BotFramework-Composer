@@ -1,12 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import type { PublishTarget } from './publish';
+
+export interface LibraryRef {
+  name: string;
+  version: string;
+  lastImported: Date;
+  location: string;
+}
 
 export type CodeEditorSettings = {
   lineNumbers: boolean;
   wordWrap: boolean;
   minimap: boolean;
+};
+
+export type TelemetrySettings = {
+  allowDataCollection?: boolean;
 };
 
 export type UserSettings = {
@@ -15,6 +25,7 @@ export type UserSettings = {
   propertyEditorWidth: number;
   dialogNavWidth: number;
   appLocale: string;
+  telemetry: TelemetrySettings;
 };
 
 export type AppUpdaterSettings = {
@@ -23,8 +34,6 @@ export type AppUpdaterSettings = {
 };
 
 export type SkillSetting = {
-  name: string;
-  manifestUrl: string;
   msAppId: string;
   endpointUrl: string;
 };
@@ -37,17 +46,20 @@ export type DialogSetting = {
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
+    key: string;
     customRuntime: boolean;
     path: string;
     command: string;
   };
   defaultLanguage: string;
+  importedLibraries: LibraryRef[];
   languages: string[];
   skill?: {
     [skillName: string]: SkillSetting;
   };
   botId?: string;
   skillHostEndpoint?: string;
+  customFunctions: string[];
   [key: string]: any;
 };
 

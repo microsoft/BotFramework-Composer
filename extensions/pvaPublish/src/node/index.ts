@@ -1,21 +1,20 @@
-import { ExtensionRegistration } from '@bfc/extension';
+import { IExtensionRegistration } from '@botframework-composer/types';
 
-import { getStatus, history, publish } from './publish';
+import { getStatus, history, publish, pull } from './publish';
 import { setLogger } from './logger';
 
-function initialize(registration: ExtensionRegistration) {
+function initialize(registration: IExtensionRegistration) {
   setLogger(registration.log);
   const extension = {
     name: 'pva-publish-composer',
     description: 'Publish bot to Power Virtual Agents (Preview)',
     bundleId: 'publish',
-    history,
+    getHistory: history,
     getStatus,
     publish,
-    // TODO: add 'pull' once ready,
+    pull,
   };
 
-  // @ts-expect-error (TODO: remove once auth is integrated and added to publish method signature)
   registration.addPublishMethod(extension);
 }
 

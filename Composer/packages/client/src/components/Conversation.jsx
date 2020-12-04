@@ -10,7 +10,6 @@ const container = css`
   width: 100%;
   background-color: #ffffff;
   height: 100%;
-  overflow: auto;
   position: relative;
 `;
 

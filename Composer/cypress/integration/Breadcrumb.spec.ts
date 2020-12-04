@@ -8,7 +8,7 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
   });
 
@@ -29,18 +29,18 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
 
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
-  it('can show event name in breadcrumb', () => {
+  it('can show dialog and trigger name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByTestId('addtodo_Dialog started').click();
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample', 'Dialog started']);
+    hasBreadcrumbItems(cy, ['addtodo', 'Dialog started']);
   });
 
   it('can show action name in breadcrumb', () => {

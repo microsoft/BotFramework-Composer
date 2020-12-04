@@ -91,7 +91,7 @@ export async function loadLocale(locale: string) {
   const data = resp?.data;
   if (data == null || typeof data === 'string') {
     // this is an invalid locale, so don't set anything
-    console.error('Tried to read an invalid locale');
+    console.log('Tried to read an invalid locale');
     return null;
   } else {
     // We don't care about the return value except in our unit tests
@@ -121,5 +121,7 @@ export const getFileNameFromPath = (param: string, ext: string | undefined = und
 };
 
 export const getAbsolutePath = (basePath: string, relativePath: string) => {
+  // note: in windows, path.resolve result will prefix with /
+  // https://github.com/jinder/path/issues/18
   return path.resolve(basePath, relativePath);
 };

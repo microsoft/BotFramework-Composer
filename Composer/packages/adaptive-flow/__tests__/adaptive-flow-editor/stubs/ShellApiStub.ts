@@ -10,8 +10,10 @@ const fnPromise = () => Promise.resolve({} as any);
 export const ShellApiStub: ShellApi = {
   getDialog: fn,
   saveDialog: fn,
-  saveData: fn,
+  saveData: fnPromise,
   navTo: fn,
+  onOpenDialog: fnPromise,
+  createQnATrigger: fn,
   onFocusSteps: fn,
   onFocusEvent: fn,
   onSelect: fn,

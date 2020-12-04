@@ -3,11 +3,11 @@
 
 import * as path from 'path';
 
-import { ExtensionContext } from '@bfc/extension';
 import { expandPropertyDefinition, schemas } from '@microsoft/bf-generate-library';
 import { Request, Response } from 'express';
 import * as fs from 'fs-extra';
 
+import { ExtensionContext } from '../models/extension/extensionContext';
 import { BotProjectService } from '../services/project';
 
 // If we are in electron, the env variable has the asar.unpacked path to the templates
@@ -85,9 +85,19 @@ const deleteDialog = async (req: Request, res: Response) => {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    await currentProject.deleteFormDialog(dialogId);
-    const updatedProject = await BotProjectService.getProjectById(projectId, user);
-    res.status(200).json({ id: projectId, ...updatedProject.getProject() });
+    try {
+      const rootDialogId = currentProject.rootDialogId;
+      if (rootDialogId === dialogId) {
+        throw new Error('root dialog is not allowed to delete');
+      }
+      await currentProject.deleteFormDialog(dialogId);
+      const updatedProject = await BotProjectService.getProjectById(projectId, user);
+      res.status(200).json({ id: projectId, ...updatedProject.getProject() });
+    } catch (e) {
+      res.status(400).json({
+        message: e.message,
+      });
+    }
   } else {
     res.status(404).json({
       message: `Could not delete form dialog. Project ${projectId} not found.`,

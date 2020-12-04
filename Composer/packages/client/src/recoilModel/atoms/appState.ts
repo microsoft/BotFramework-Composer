@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FormDialogSchemaTemplate, FeatureFlagMap, ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -15,7 +15,7 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import { CreationFlowStatus, AppUpdaterStatus } from '../../constants';
+import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
 
 export type BotProject = {
   readonly id: string;
@@ -30,17 +30,20 @@ export type CurrentUser = {
   sessionExpired: boolean;
 };
 
+// These values should align with the paths in the app's router
 export type PageMode =
-  | 'home'
-  | 'design'
-  | 'lg'
-  | 'lu'
-  | 'qna'
-  | 'notifications'
+  | 'dialogs' // used for the design page
+  | 'language-understanding'
+  | 'language-generation'
+  | 'knowledge-base'
   | 'publish'
-  | 'skills'
+  | 'botProjectsSettings'
+  | 'forms'
+  | 'diagnostics'
   | 'settings'
-  | 'about';
+  | 'projects'
+  | 'home'
+  | 'botProjectsSettings';
 
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
@@ -52,7 +55,7 @@ export const recentProjectsState = atom<any[]>({
   default: [],
 });
 
-export const templateProjectsState = atom<ProjectTemplate[]>({
+export const templateProjectsState = atom<BotTemplate[]>({
   key: getFullyQualifiedKey('templateProjects'),
   default: [],
 });
@@ -98,7 +101,7 @@ export const onboardingState = atom<{
   },
 });
 
-export const clipboardActionsState = atom<any[]>({
+export const clipboardActionsState = atomFamily<any[], string>({
   key: getFullyQualifiedKey('clipboardActions'),
   default: [],
 });
@@ -135,6 +138,11 @@ export const appUpdateState = atom<AppUpdateState>({
 export const creationFlowStatusState = atom<CreationFlowStatus>({
   key: getFullyQualifiedKey('creationFlowStatus'),
   default: CreationFlowStatus.CLOSE,
+});
+
+export const creationFlowTypeState = atom<CreationFlowType>({
+  key: getFullyQualifiedKey('creationFlowTpye'),
+  default: 'Bot',
 });
 
 export const logEntryListState = atom<string[]>({
@@ -197,9 +205,9 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
-export const currentModeState = atom<PageMode>({
-  key: getFullyQualifiedKey('currentMode'),
-  default: 'home',
+export const createQnAOnState = atom<{ projectId: string; dialogId: string }>({
+  key: getFullyQualifiedKey('createQnAOn'),
+  default: { projectId: '', dialogId: '' },
 });
 
 export const botProjectSpaceLoadedState = atom<boolean>({
@@ -212,6 +220,11 @@ export const botOpeningState = atom<boolean>({
   default: false,
 });
 
+export const botOpeningMessage = atom<string | undefined>({
+  key: getFullyQualifiedKey('botOpeningMessage'),
+  default: undefined,
+});
+
 export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({
   key: getFullyQualifiedKey('formDialogLibraryTemplates'),
   default: [],
@@ -220,4 +233,29 @@ export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>(
 export const formDialogGenerationProgressingState = atom({
   key: getFullyQualifiedKey('formDialogGenerationProgressing'),
   default: false,
+});
+
+export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any } }>({
+  key: getFullyQualifiedKey('pageElement'),
+  default: {
+    dialogs: {},
+    'language-generation': {},
+    'language-understanding': {},
+    'knowledge-base': {},
+  },
+});
+
+export const showCreateDialogModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showCreateDialogModal'),
+  default: false,
+});
+
+export const exportSkillModalInfoState = atom<undefined | string>({
+  key: getFullyQualifiedKey('exportSkillModalInfo'),
+  default: undefined,
+});
+
+export const displaySkillManifestState = atom<undefined | string>({
+  key: getFullyQualifiedKey('displaySkillManifest'),
+  default: undefined,
 });

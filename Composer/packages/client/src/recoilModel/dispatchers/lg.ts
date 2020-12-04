@@ -7,6 +7,7 @@ import differenceBy from 'lodash/differenceBy';
 import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
+import { dispatcherState } from '../DispatcherWrapper';
 
 import { setError } from './shared';
 import LgWorker from './../parsers/lgWorker';
@@ -167,6 +168,11 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
         set(lgFilesState(projectId), updatedFiles);
+        // if changes happen on common.lg, async re-parse all.
+        if (getBaseName(id) === 'common') {
+          const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
+          reparseAllLgFiles({ projectId });
+        }
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -238,6 +244,13 @@ export const lgDispatcher = () => {
         }
       } catch (error) {
         setError(callbackHelpers, error);
+        return;
+      }
+
+      // if changes happen on common.lg, async re-parse all.
+      if (getBaseName(id) === 'common') {
+        const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
+        reparseAllLgFiles({ projectId });
       }
     }
   );
@@ -368,6 +381,23 @@ export const lgDispatcher = () => {
     }
   );
 
+  const reparseAllLgFiles = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
+      try {
+        const { set, snapshot } = callbackHelpers;
+        const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+        const reparsedLgFiles: LgFile[] = [];
+        for (const file of lgFiles) {
+          const reparsedFile = (await LgWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
+          reparsedLgFiles.push(reparsedFile);
+        }
+        set(lgFilesState(projectId), reparsedLgFiles);
+      } catch (error) {
+        setError(callbackHelpers, error);
+      }
+    }
+  );
+
   return {
     updateLgFile,
     createLgFile,
@@ -378,5 +408,6 @@ export const lgDispatcher = () => {
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
+    reparseAllLgFiles,
   };
 };

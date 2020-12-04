@@ -5,6 +5,7 @@ import './commands';
 
 beforeEach(() => {
   cy.exec('yarn test:integration:clean');
+  window.localStorage.setItem('composer:userSettings', JSON.stringify({ telemetry: { allowDataCollection: false } }));
   window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true }));
   window.sessionStorage.setItem('composer:ProjectIdCache', '');
 });

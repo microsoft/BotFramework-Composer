@@ -4,7 +4,7 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
-import { FeatureFlagKey, FeatureFlagMap } from '@bfc/shared';
+import { FeatureFlagMap, FeatureFlagKey } from '@botframework-composer/types';
 
 import httpClient from '../../utils/httpUtil';
 import {

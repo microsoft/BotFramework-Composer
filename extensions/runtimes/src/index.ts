@@ -39,6 +39,32 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('FINISHED BUILDING!');
     },
+    installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `dotnet add package ${packageName}${version ? ' --version=' + version : ''}`,
+        {
+          cwd: path.join(runtimePath, 'azurewebapp'),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    uninstallComponent: async (runtimePath: string, packageName: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(`dotnet remove package ${packageName}`, {
+        cwd: path.join(runtimePath, 'azurewebapp'),
+      });
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    identifyManifest: (runtimePath: string): string => {
+      return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
+    },
     run: async (project: any, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
     },
@@ -129,7 +155,7 @@ export default async (composer: any): Promise<void> => {
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
         const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/Schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
-        return destPath;
+        return path.relative(project.dir, destPath);
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
@@ -166,11 +192,14 @@ export default async (composer: any): Promise<void> => {
       // install dev dependencies in production, make sure typescript is installed
       const { stderr: installErr } = await execAsync('npm install && npm install --only=dev', {
         cwd: runtimePath,
+        timeout: 120000,
       });
       if (installErr) {
         // in order to not throw warning, we just log all warning and error message
-        composer.log(installErr);
+        composer.log(`npm install timeout, ${installErr}`);
       }
+
+      // runtime build need typescript
       const { stderr: install2Err } = await execAsync('npm run build', {
         cwd: runtimePath,
       });
@@ -178,6 +207,35 @@ export default async (composer: any): Promise<void> => {
         throw new Error(install2Err);
       }
       composer.log('BUILD COMPLETE');
+    },
+    installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `npm install --loglevel=error --save ${packageName}${version ? '@' + version : ''}`,
+        {
+          cwd: path.join(runtimePath),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    uninstallComponent: async (runtimePath: string, packageName: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `npm uninstall --loglevel=error --save ${packageName}`,
+        {
+          cwd: path.join(runtimePath),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    identifyManifest: (runtimePath: string): string => {
+      return path.join(runtimePath, 'package.json');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff
@@ -220,6 +278,19 @@ export default async (composer: any): Promise<void> => {
         // used to read bot project template from source (bundled in plugin)
         const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
+        const schemaDstPath = path.join(project.dir, 'schemas');
+        const schemaSrcPath = path.join(sourcePath, 'schemas');
+        const customSchemaExists = fs.existsSync(schemaDstPath);
+        const pathsToExclude: Set<string> = new Set();
+        if (customSchemaExists) {
+          const sdkExcludePath = await localDisk.glob('sdk.schema', schemaSrcPath);
+          if (sdkExcludePath.length > 0) {
+            pathsToExclude.add(path.join(schemaSrcPath, sdkExcludePath[0]));
+          }
+        }
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
+        const schemaFolderInRuntime = path.join(destPath, 'schemas');
+        await removeDirAndFiles(schemaFolderInRuntime);
         // install dev dependencies in production, make sure typescript is installed
         const { stderr: initErr } = await execAsync('npm install && npm install --only=dev', {
           cwd: destPath,

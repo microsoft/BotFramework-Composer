@@ -15,7 +15,7 @@ context('Creating a new bot', () => {
     cy.findByTestId('NextStepButton').click();
     cy.enterTextAndSubmit('NewDialogName', '__TestNewProject', 'SubmitNewBotBtn');
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestNewProject').should('exist');
+      cy.findAllByText('__TestNewProject').should('exist');
     });
   });
 
@@ -25,7 +25,7 @@ context('Creating a new bot', () => {
     cy.findByTestId('NextStepButton').click();
     cy.enterTextAndSubmit('NewDialogName', '__TestNewProject2', 'SubmitNewBotBtn');
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestNewProject2').should('exist');
+      cy.findAllByText('__TestNewProject2').should('exist');
       cy.findByText('addtodo').should('exist');
       cy.findByText('cleartodos').should('exist');
       cy.findByText('deletetodo').should('exist');

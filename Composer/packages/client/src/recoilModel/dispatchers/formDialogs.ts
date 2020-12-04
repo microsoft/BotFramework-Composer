@@ -23,6 +23,8 @@ export const formDialogsDispatcher = () => {
     });
 
     set(formDialogSchemaState({ projectId, schemaId: id }), { id, content: JSON.stringify({}, null, 4) });
+
+    navigate(`/bot/${projectId}/forms/${id}`);
   });
 
   const updateFormDialogSchema = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content, projectId }) =>
@@ -75,7 +77,7 @@ export const formDialogsDispatcher = () => {
         const response = await httpClient.post(`/formDialogs/${projectId}/generate`, {
           name: schemaId,
         });
-        await reloadProject(callbackHelpers, response);
+        await reloadProject(response.data.id);
       } catch (error) {
         set(applicationErrorState, {
           message: error.message,
@@ -99,8 +101,8 @@ export const formDialogsDispatcher = () => {
           return;
         }
 
-        const response = await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
-        await reloadProject(callbackHelpers, response);
+        await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
+        await reloadProject(projectId);
       } catch (error) {
         set(applicationErrorState, {
           message: error.message,

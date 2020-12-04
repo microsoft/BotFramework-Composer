@@ -3,24 +3,103 @@
 /**
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
-
+import get from 'lodash/get';
 import {
-  BotAssets,
-  BotInfo,
   LUISLocales,
   Diagnostic,
   DiagnosticSeverity,
   LuFile,
   getSkillNameFromSetting,
-  fetchFromSettings,
+  SkillManifestFile,
+  DialogInfo,
+  DialogSetting,
+  LgFile,
+  QnAFile,
+  BotProjectFile,
+  SDKKinds,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
-import map from 'lodash/map';
 
-import { getLocale } from './utils/help';
+import { getBaseName, getLocale } from './utils/help';
 
-// Verify bot settings, files meet LUIS/QnA requirments.
-const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
+/**
+ * Check skill manifest.json.
+ * 1. Manifest should exist
+ */
+const checkManifest = (assets: { skillManifests: SkillManifestFile[] }): Diagnostic[] => {
+  const { skillManifests } = assets;
+
+  const diagnostics: Diagnostic[] = [];
+  if (skillManifests.length === 0) {
+    diagnostics.push(new Diagnostic('Missing skill manifest', 'manifest.json', DiagnosticSeverity.Warning));
+  }
+  return diagnostics;
+};
+
+/**
+ * Check skill appsettings.json.
+ * 1. Missing LUIS key
+ * 2. Missing QnA Maker subscription key.
+ */
+const checkSetting = (assets: {
+  dialogs: DialogInfo[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  qnaFiles: QnAFile[];
+  setting: DialogSetting;
+}): Diagnostic[] => {
+  const { dialogs, setting, luFiles, qnaFiles } = assets;
+  const diagnostics: Diagnostic[] = [];
+
+  let useLUIS = false;
+  let useQnA = false;
+  dialogs.forEach((dialogItem) => {
+    const luFileName = dialogItem.luFile;
+    if (luFileName) {
+      const luFileId = luFileName.replace(/\.lu$/, '');
+      luFiles
+        .filter(({ id }) => getBaseName(id) === luFileId)
+        .forEach((item) => {
+          if (!item.empty && (dialogItem.luProvider === undefined || dialogItem.luProvider === SDKKinds.LuisRecognizer))
+            useLUIS = true;
+        });
+    }
+
+    const qnaFileName = dialogItem.qnaFile;
+    if (qnaFileName) {
+      const qnaFileId = qnaFileName.replace(/\.qna$/, '').replace(/\.lu$/, '');
+      qnaFiles
+        .filter(({ id }) => getBaseName(id) === qnaFileId)
+        .forEach((item) => {
+          if (!item.empty) useQnA = true;
+        });
+    }
+  });
+
+  // if use LUIS, check LUIS authoringKey key
+  if (useLUIS) {
+    if (!get(setting, 'luis.authoringKey')) {
+      diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error, '#luisKey'));
+    }
+  }
+
+  // if use QnA, check QnA subscriptionKey
+  if (useQnA) {
+    if (!get(setting, 'qna.subscriptionKey')) {
+      diagnostics.push(
+        new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error, '#qnaKey')
+      );
+    }
+  }
+
+  return diagnostics;
+};
+
+/**
+ * Check bot settings & dialog
+ * files meet LUIS/QnA requirments.
+ */
+const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
   const {
     dialogs,
     setting: { languages },
@@ -36,20 +115,18 @@ const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
   });
 };
 
-// Verify bot skill setting.
-const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
-  const {
-    setting: { skill = {}, botId, skillHostEndpoint },
-    dialogs,
-  } = assets;
+/**
+ * Check bot skill & setting
+ * 1. used skill not existed in *.botproj
+ */
+const checkSkillSetting = (assets: { dialogs: DialogInfo[]; botProjectFile: BotProjectFile }): Diagnostic[] => {
+  const { botProjectFile, dialogs } = assets;
   const diagnostics: Diagnostic[] = [];
-
-  let skillUsed = false;
+  const skillNames = Object.keys(botProjectFile.content?.skills || {});
   dialogs.forEach((dialog) => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
-      const endpointUrlCollection = map(skill, ({ endpointUrl }) => endpointUrl);
-      if (!endpointUrlCollection.includes(fetchFromSettings(skillId, assets.setting))) {
+      if (!skillNames.includes(skillId)) {
         const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
           new Diagnostic(
@@ -60,32 +137,26 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
         );
       }
     });
-    if (dialog.skills.length) skillUsed = true;
   });
-
-  // use skill require fill bot endpoint in skill page.
-  if (skillUsed && (!botId || !skillHostEndpoint)) {
-    diagnostics.push(
-      new Diagnostic(
-        'appsettings.json Microsoft App Id or Skill Host Endpoint are empty',
-        'appsettings.json',
-        DiagnosticSeverity.Warning
-      )
-    );
-  }
 
   return diagnostics;
 };
 
-const index = (name: string, assets: BotAssets): BotInfo => {
-  const diagnostics: Diagnostic[] = [];
-  diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
-
-  return {
-    name,
-    assets,
-    diagnostics,
-  };
+const validate = (assets: {
+  dialogs: DialogInfo[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  qnaFiles: QnAFile[];
+  setting: DialogSetting;
+  skillManifests: SkillManifestFile[];
+  botProjectFile: BotProjectFile;
+  isRemote?: boolean;
+  isRootBot?: boolean;
+}): Diagnostic[] => {
+  if (assets.isRemote) return [];
+  const settingDiagnostics = [...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
+  if (assets.isRootBot) return settingDiagnostics;
+  return [...checkManifest(assets), ...settingDiagnostics];
 };
 
 const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
@@ -96,7 +167,9 @@ const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
 };
 
 export const BotIndexer = {
-  index,
+  validate,
+  checkManifest,
+  checkSetting,
   checkLUISLocales,
   checkSkillSetting,
   filterLUISFilesToPublish,
