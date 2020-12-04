@@ -368,14 +368,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onRenderSecondaryText= useMemo(
     ()=>(props: IPersonaProps)=>{
-      return <div onClick={async()=>{
-        //clean token and currentUser
-        setToken(null);
-        setCurrentUser(null);
-        logOut();
-        closeDialog();
-      }}
-      style={{color:'blue', cursor: 'pointer'}}>{props.secondaryText}</div>;
+      return <div onClick={()=>{ closeDialog(); logOut();}} style={{color:'blue', cursor: 'pointer'}}>{props.secondaryText}</div>;
     },
     []
   );

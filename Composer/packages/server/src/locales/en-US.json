@@ -116,9 +116,6 @@
   "add_custom_runtime_6b73dc44": {
     "message": "Add custom runtime"
   },
-  "add_language_75dee49e": {
-    "message": "Add language"
-  },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Add multiple comma-separated synonyms"
   },
@@ -178,9 +175,6 @@
   },
   "app_id_password_424f613a": {
     "message": "App Id / Password"
-  },
-  "application_language_87691b6": {
-    "message": "Application Language"
   },
   "application_language_f100f3e0": {
     "message": "Application language"
@@ -395,6 +389,9 @@
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
     "message": "Connecting to <b>{ targetName }</b> to import bot content..."
   },
+  "conversational_core_preview_template_is_available__ba9b43b8": {
+    "message": "Conversational Core preview template is available since you have that feature turned on."
+  },
   "copy_9748f9f": {
     "message": "Copy"
   },
@@ -529,9 +526,6 @@
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
-  },
-  "delete_language_1527609d": {
-    "message": "Delete language"
   },
   "delete_this_bot_fb78e519": {
     "message": "Delete this bot"
@@ -869,6 +863,9 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "Last modified time is { time }"
   },
+  "learn_more_14816ec": {
+    "message": "Learn More."
+  },
   "learn_more_a79a7918": {
     "message": "Learn more"
   },
@@ -1148,8 +1145,8 @@
   "onboarding_8407871c": {
     "message": "Onboarding"
   },
-  "open_a_new_skill_6828c95c": {
-    "message": "Open a new skill"
+  "open_an_existing_skill_fbd87273": {
+    "message": "Open an existing skill"
   },
   "open_e0beb7b9": {
     "message": "Open"
@@ -1645,6 +1642,9 @@
   },
   "start_typing_kind_or_b0c305da": {
     "message": "Start typing { kind } or"
+  },
+  "starting_bots_running_total_running_45302684": {
+    "message": "Starting bots.. ({ running }/{ total } running)"
   },
   "state_is_state_a2b8943": {
     "message": "State is { state }"

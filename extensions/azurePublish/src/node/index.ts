@@ -22,7 +22,7 @@ import { authConfig, ResourcesItem } from '../types';
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
-const ProvisionLog = `provison.${process.env.NODE_ENV === 'production'? 'production': 'development'}.log`;
+const ProvisionLog = `provision.${process.env.NODE_ENV === 'production'? 'production': 'development'}.log`;
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
 interface DeployResources {
@@ -379,7 +379,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // cast this into the right form for a publish profile
         const publishProfile = {
           name: config.hostname,
-          environment: '',
+          environment: 'composer',
+          hostname: config.hostname,
+          luisResource: `${config.hostname}-luis`,
+          runtimeIdentifier: 'win-x64',
           settings: {
             applicationInsights: {
               InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
@@ -395,7 +398,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             },
             MicrosoftAppId: provisionResults.appId,
             MicrosoftAppPassword: provisionResults.appPassword,
-            hostname: config.hostname,
           },
         };
 
@@ -432,7 +434,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
         // these are specific to the azure publish profile shape
         name,
-        environment,
+        environment = 'composer',
         settings,
       } = config;
 

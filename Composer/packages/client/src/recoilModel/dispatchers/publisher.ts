@@ -177,7 +177,11 @@ export const publisherDispatcher = () => {
       sensitiveSettings
     ) => {
       try {
-        const token = await AuthClient.getAccessToken(armScopes);
+        let token = '';
+        if (target.type !== defaultPublishConfig.type) {
+          token = await AuthClient.getAccessToken(armScopes);
+        }
+
         const { snapshot } = callbackHelpers;
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const luFiles = await snapshot.getPromise(luFilesState(projectId));

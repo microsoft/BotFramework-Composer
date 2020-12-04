@@ -17,7 +17,7 @@ context('Creating a new trigger', () => {
     cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click();
+    cy.findAllByText('Add a trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Intent recognized"]').click();
     cy.findByTestId('TriggerName').type('myTrigger1');
@@ -29,7 +29,7 @@ context('Creating a new trigger', () => {
     cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click();
+    cy.findAllByText('Add a trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Dialog events"]').click();
     cy.findByTestId('eventTypeDropDown').click();
@@ -41,7 +41,7 @@ context('Creating a new trigger', () => {
     cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click();
+    cy.findAllByText('Add a trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Custom events"]').click();
     cy.findByTestId('CustomEventName').type('myCustomEvent');
@@ -52,7 +52,7 @@ context('Creating a new trigger', () => {
     cy.findByTestId('DialogHeader-__TestEmptyBot').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click();
+    cy.findAllByText('Add a trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Activities"]').click();
     cy.findByTestId('activityTypeDropDown').click();
