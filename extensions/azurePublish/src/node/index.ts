@@ -382,6 +382,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           environment: 'composer',
           hostname: config.hostname,
           luisResource: `${config.hostname}-luis`,
+          runtimeIdentifier: 'win-x64',
           settings: {
             applicationInsights: {
               InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
