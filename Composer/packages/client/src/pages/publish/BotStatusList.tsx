@@ -37,6 +37,7 @@ export type IBotStatusListProps = {
   items: IBotStatus[];
   botPublishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[];
   botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[];
+  publishDisabled: boolean;
   updateItems: (items: IBotStatus[]) => void;
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
@@ -51,6 +52,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     items,
     botPublishHistoryList,
     botPublishTypesList,
+    publishDisabled,
     updateItems,
     updatePublishHistory,
     changePublishTarget,
@@ -150,7 +152,13 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       onColumnClick: sortByName,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        return <Checkbox label={item.name} onChange={(_, isChecked) => changeSelected(item, isChecked)} />;
+        return (
+          <Checkbox
+            disabled={publishDisabled}
+            label={item.name}
+            onChange={(_, isChecked) => changeSelected(item, isChecked)}
+          />
+        );
       },
       isPadded: true,
     },
