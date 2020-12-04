@@ -9,7 +9,7 @@ import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
-import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
@@ -56,7 +56,7 @@ const botName = css`
   font-size: 16px;
   color: #fff;
   border-radius: 19px;
-  background: #3393dd;
+  background: ${CommunicationColors.tint10};
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
