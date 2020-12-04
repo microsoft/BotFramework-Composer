@@ -153,7 +153,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             data-testid="visualdesigner-container"
           >
             <SelectionContext.Provider value={selectionContext}>
-              <MarqueeSelection selection={selection} styles={marqueeStyles}>
+              <MarqueeSelection isDraggingConstrainedToRoot selection={selection} styles={marqueeStyles}>
                 <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
                   <div
                     className="flow-editor-container"
@@ -180,7 +180,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                         ElementWrapper: VisualEditorElementWrapper,
                       }}
                       sdkschema={schema?.definitions as SchemaDefinitions}
-                      uischema={{ ...schemaFromPlugins, ...customFlowSchema }}
+                      uischema={{ ...customFlowSchema, ...schemaFromPlugins }}
                       widgets={widgetsFromPlugins}
                       onEvent={(eventName, eventData) => {
                         divRef.current?.focus({ preventScroll: true });

@@ -7,9 +7,11 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { clipboardActionsState, visualEditorSelectionState } from '../atoms/appState';
 
 export const editorDispatcher = () => {
-  const setVisualEditorClipboard = useRecoilCallback(({ set }: CallbackInterface) => (clipboardActions: any[]) => {
-    set(clipboardActionsState, [...clipboardActions]);
-  });
+  const setVisualEditorClipboard = useRecoilCallback(
+    ({ set }: CallbackInterface) => (clipboardActions: any[], projectId: string) => {
+      set(clipboardActionsState(projectId), [...clipboardActions]);
+    }
+  );
 
   const setVisualEditorSelection = useRecoilCallback(({ set }: CallbackInterface) => (selection: string[]) => {
     set(visualEditorSelectionState, [...selection]);

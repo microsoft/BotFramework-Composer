@@ -11,6 +11,7 @@ import { exportDispatcher } from './export';
 import { lgDispatcher } from './lg';
 import { luDispatcher } from './lu';
 import { qnaDispatcher } from './qna';
+import { triggerDispatcher } from './trigger';
 import { builderDispatcher } from './builder';
 import { navigationDispatcher } from './navigation';
 import { publisherDispatcher } from './publisher';
@@ -24,7 +25,6 @@ import { formDialogsDispatcher } from './formDialogs';
 import { botProjectFileDispatcher } from './botProjectFile';
 import { zoomDispatcher } from './zoom';
 import { recognizerDispatcher } from './recognizers';
-import { serverSettingsDispatcher } from './serverSettings';
 
 const createDispatchers = () => {
   return {
@@ -38,6 +38,7 @@ const createDispatchers = () => {
     ...lgDispatcher(),
     ...luDispatcher(),
     ...qnaDispatcher(),
+    ...triggerDispatcher(),
     ...builderDispatcher(),
     ...navigationDispatcher(),
     ...publisherDispatcher(),
@@ -51,7 +52,6 @@ const createDispatchers = () => {
     ...botProjectFileDispatcher(),
     ...zoomDispatcher(),
     ...recognizerDispatcher(),
-    ...serverSettingsDispatcher(),
   };
 };
 

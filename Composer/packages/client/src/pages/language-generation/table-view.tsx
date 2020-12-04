@@ -31,26 +31,35 @@ import {
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 
-interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
-  dialogId: string;
-  projectId: string;
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
+  projectId?: string;
+  skillId?: string;
+  dialogId?: string;
+  lgFileId?: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId } = props;
+  const { dialogId, projectId, skillId, lgFileId } = props;
 
-  const lgFiles = useRecoilValue(lgFilesState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
-  const settings = useRecoilValue(settingsState(projectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const actualProjectId = skillId ?? projectId ?? '';
+
+  const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const settings = useRecoilValue(settingsState(actualProjectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
   );
 
   const { languages, defaultLanguage } = settings;
 
-  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
@@ -63,22 +72,23 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (!file || isEmpty(file)) return;
 
     setTemplates(file.templates);
-  }, [file, activeDialog, projectId]);
+  }, [file, activeDialog, actualProjectId]);
 
   const moreLabel = formatMessage('Actions');
 
   const onClickEdit = useCallback(
     (name: string) => {
-      navigateTo(`/bot/${projectId}/language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
+      const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+      navigateTo(`${baseURL}language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
     },
-    [dialogId, projectId]
+    [dialogId, projectId, skillId]
   );
 
   const onCreateNewTemplate = useCallback(() => {
     if (file) {
       const newName = lgUtil.increaseNameUtilNotExist(file.templates, 'TemplateName');
       const payload = {
-        projectId,
+        projectId: actualProjectId,
         id: file.id,
         template: {
           name: newName,
@@ -86,9 +96,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         } as LgTemplate,
       };
       createLgTemplate(payload);
-      //setFocusedIndex(file.templates.length);
     }
-  }, [file]);
+  }, [file, actualProjectId]);
 
   const onRemoveTemplate = useCallback(
     (name) => {
@@ -96,13 +105,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
         const payload = {
           id: file.id,
           templateName: name,
-          projectId,
+          projectId: actualProjectId,
         };
         removeLgTemplate(payload);
-        //setFocusedIndex(file.templates.findIndex((item) => item.name === name));
       }
     },
-    [file]
+    [file, actualProjectId]
   );
 
   const onCopyTemplate = useCallback(
@@ -113,13 +121,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: file.id,
           fromTemplateName: name,
           toTemplateName: resolvedName,
-          projectId,
+          projectId: actualProjectId,
         };
         copyLgTemplate(payload);
-        //setFocusedIndex(file.templates.length);
       }
     },
-    [file]
+    [file, actualProjectId]
   );
 
   const handleTemplateUpdate = useCallback(
@@ -129,12 +136,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: file.id,
           templateName,
           template,
-          projectId,
+          projectId: actualProjectId,
         };
         updateLgTemplate(payload);
       }
     },
-    [file]
+    [file, actualProjectId]
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -144,12 +151,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: defaultLangFile.id,
           templateName,
           template,
-          projectId,
+          projectId: actualProjectId,
         };
         updateLgTemplate(payload);
       }
     },
-    [defaultLangFile]
+    [defaultLangFile, actualProjectId]
   );
 
   const getTemplatesMoreButtons = useCallback(
@@ -182,7 +189,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       return buttons;
     },
-    [activeDialog, templates]
+    [activeDialog, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]
   );
 
   const getTableColums = useCallback((): IColumn[] => {
@@ -382,7 +389,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
 
     return tableColums;
-  }, [activeDialog, projectId]);
+  }, [
+    languages,
+    locale,
+    defaultLanguage,
+    handleTemplateUpdate,
+    handleTemplateUpdateDefaultLocale,
+    getTemplatesMoreButtons,
+    activeDialog,
+    actualProjectId,
+  ]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -427,7 +443,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       });
     }
     return templates;
-  }, [templates]);
+  }, [templates, defaultLangFile, locale, defaultLanguage]);
 
   return (
     <div className={'table-view'} data-testid={'table-view'}>

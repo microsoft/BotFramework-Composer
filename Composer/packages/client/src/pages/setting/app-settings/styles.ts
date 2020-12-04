@@ -8,6 +8,7 @@ import { FontWeights } from '@uifabric/styling';
 
 export const container = css`
   label: SettingsContainer;
+  width: 700px;
 `;
 
 export const section = css`
@@ -38,14 +39,15 @@ export const link: ILinkStyles = {
 
 export const settingsContainer = css`
   display: flex;
-  margin-left: 48px;
   border-top: 1px solid ${NeutralColors.gray20};
   padding: 20px 0px;
+  width: 100%;
 `;
 
 export const settingsContent = css`
   width: 245px;
-  margin: 0 32px;
+  margin-left: 32px;
+  margin-right: 300px;
   font-size: ${FontSizes.size14};
 `;
 
@@ -58,6 +60,22 @@ export const image = css`
   width: 86px;
 `;
 
+export const labelContainer = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const customerLabel = css`
+  font-size: ${FontSizes.size12};
+  margin-right: 5px;
+`;
+
+export const icon = {
+  root: {
+    fontSize: FontSizes.size12,
+  },
+};
+
 export const featureFlagGroupContainer = css`
   margin-left: 166px;
   font-size: ${FontSizes.size12};
@@ -69,6 +87,11 @@ export const featureFlagContainer = css`
 
 export const featureFlagTitle = css`
   font-weight: ${FontWeights.semibold};
+  margin-right: 5px;
+`;
+
+export const featureFlagDescription = css`
+  margin-left: 5px;
 `;
 
 export const noFeatureFlagText = css`

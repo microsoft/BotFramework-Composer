@@ -16,7 +16,7 @@ import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 import { useRecoilValue } from 'recoil';
 
-import { userSettingsState, skillsState } from '../../recoilModel';
+import { skillsStateSelector, userSettingsState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -53,24 +53,25 @@ const dragOptions: IDragOptions = {
 interface DisplayManifestModalProps {
   isDraggable?: boolean;
   isModeless?: boolean;
-  manifestId?: string | null;
+  skillNameIdentifier: string;
   onDismiss: () => void;
-  projectId: string;
 }
 
 export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   isDraggable = true,
   isModeless = true,
-  manifestId,
+  skillNameIdentifier,
   onDismiss,
-  projectId,
 }) => {
-  const skills = useRecoilValue(skillsState(projectId));
+  const skills = useRecoilValue(skillsStateSelector);
   const userSettings = useRecoilValue(userSettingsState);
-
   useEffect(() => onDismiss, []);
 
-  const selectedSkill = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === manifestId), [manifestId]);
+  const selectedSkill = useMemo(() => {
+    if (skillNameIdentifier) {
+      return skills[skillNameIdentifier];
+    }
+  }, [skillNameIdentifier, skills]);
 
   if (!selectedSkill) {
     return null;
@@ -98,7 +99,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
           height={'100%'}
           id={'modaljsonview'}
           options={{ readOnly: true }}
-          value={selectedSkill.content}
+          value={selectedSkill.manifest}
           onChange={() => {}}
         />
       </div>

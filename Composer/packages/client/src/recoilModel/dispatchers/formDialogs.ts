@@ -23,6 +23,8 @@ export const formDialogsDispatcher = () => {
     });
 
     set(formDialogSchemaState({ projectId, schemaId: id }), { id, content: JSON.stringify({}, null, 4) });
+
+    navigate(`/bot/${projectId}/forms/${id}`);
   });
 
   const updateFormDialogSchema = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content, projectId }) =>
@@ -110,9 +112,8 @@ export const formDialogsDispatcher = () => {
     }
   );
 
-  const navigateToGeneratedDialog = ({ projectId, skillId, schemaId }) => {
-    skillId = skillId || projectId;
-    navigate(`/bot/${projectId}/skill/${skillId}/dialogs/${schemaId}`);
+  const navigateToGeneratedDialog = ({ projectId, schemaId }) => {
+    navigate(`/bot/${projectId}/dialogs/${schemaId}`);
   };
 
   const navigateToFormDialogSchema = ({ projectId, schemaId }) => {

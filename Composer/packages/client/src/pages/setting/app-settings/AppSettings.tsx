@@ -13,7 +13,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../../utils/electronUtil';
-import { onboardingState, userSettingsState, dispatcherState, ServerSettingsState } from '../../../recoilModel';
+import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -28,8 +28,7 @@ const ElectronSettings = lazy(() =>
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
-  const { onboardingSetComplete, updateUserSettings, updateServerSettings } = useRecoilValue(dispatcherState);
-  const { telemetry } = useRecoilValue(ServerSettingsState);
+  const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
   const onOnboardingChange = useCallback(
@@ -49,8 +48,8 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     updateUserSettings({ appLocale });
   };
 
-  const handleDataCollectionChange = (allowDataCollection) => {
-    updateServerSettings({
+  const handleDataCollectionChange = (allowDataCollection: boolean) => {
+    updateUserSettings({
       telemetry: {
         allowDataCollection,
       },
@@ -59,29 +58,26 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
 
   const renderElectronSettings = isElectron();
 
-  // temporarily commented out until some translation issues are resolved post  Composer 1.2
-  // const languageOptions = [
-  //   { key: 'en-US', text: 'English (US)' },
-  //   { key: 'cs', text: 'Čeština‎ Czech' }, //Czech
-  //   { key: 'de', text: 'Deutsch‎' }, //German
-  //   { key: 'es', text: 'Español‎' }, //Spanish
-  //   { key: 'fr', text: 'Français‎' }, //French
-  //   { key: 'hu', text: 'Magyar‎' }, //Hungarian
-  //   { key: 'it', text: 'Italiano‎' }, //Italian
-  //   { key: 'ja', text: '日本語‎' }, //Japanese
-  //   { key: 'ko', text: '한국어‎' }, //Korean
-  //   { key: 'nl', text: 'Nederlands‎' }, //Dutch (Netherlands)
-  //   { key: 'pl', text: 'Polski‎' }, //Polish
-  //   { key: 'pt-BR', text: 'Português (Brasil)‎' }, //Portuguese (Brazil)
-  //   { key: 'pt-PT', text: 'Português (Portugal)‎' }, //Portuguese (Portugal)
-  //   { key: 'ru', text: 'Русский‎' }, //Russian
-  //   { key: 'sv', text: 'Svenska‎' }, //Swedish
-  //   { key: 'tr', text: 'Türkçe‎' }, //Turkish
-  //   { key: 'zh-Hans', text: '中文(简体)‎' }, //Chinese(Simplified)
-  //   { key: 'zh-Hant', text: '中文(繁體)' }, //Chinese(Traditional)
-  // ];
-
-  const languageOptions = [{ key: 'en-US', text: 'English (US)' }];
+  const languageOptions = [
+    { key: 'en-US', text: 'English (US)' },
+    { key: 'cs', text: 'Čeština‎ Czech' }, //Czech
+    { key: 'de', text: 'Deutsch‎' }, //German
+    { key: 'es', text: 'Español‎' }, //Spanish
+    { key: 'fr', text: 'Français‎' }, //French
+    { key: 'hu', text: 'Magyar‎' }, //Hungarian
+    { key: 'it', text: 'Italiano‎' }, //Italian
+    { key: 'ja', text: '日本語‎' }, //Japanese
+    { key: 'ko', text: '한국어‎' }, //Korean
+    { key: 'nl', text: 'Nederlands‎' }, //Dutch (Netherlands qw)
+    { key: 'pl', text: 'Polski‎' }, //Polish
+    { key: 'pt-BR', text: 'Português (Brasil)‎' }, //Portuguese (Brazil)
+    { key: 'pt-PT', text: 'Português (Portugal)‎' }, //Portuguese (Portugal)
+    { key: 'ru', text: 'Русский‎' }, //Russian
+    { key: 'sv', text: 'Svenska‎' }, //Swedish
+    { key: 'tr', text: 'Türkçe‎' }, //Turkish
+    { key: 'zh-Hans', text: '中文(简体)‎' }, //Chinese Simplified)
+    { key: 'zh-Hant', text: '中文(繁體)' }, //Chinese (Traditional)
+  ];
 
   if (process.env.NODE_ENV !== 'production') {
     languageOptions.push({
@@ -97,6 +93,16 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   return (
     <div css={container}>
       <section css={section}>
+        <section css={section}>
+          <h2>{formatMessage('Application Language settings')}</h2>
+          <SettingDropdown
+            description={formatMessage('This is the language used for Composer’s user interface.')}
+            options={languageOptions}
+            selected={userSettings.appLocale}
+            title={formatMessage('Application language')}
+            onChange={onLocaleChange}
+          />
+        </section>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle
           checked={!complete}
@@ -177,18 +183,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         />
       </section>
       <section css={section}>
-        <h2>{formatMessage('Application Language')}</h2>
-        <SettingDropdown
-          description={formatMessage('This is the language used for Composer’s user interface.')}
-          dropdownWidth={200}
-          image={images.language}
-          options={languageOptions}
-          selected={userSettings.appLocale}
-          title={formatMessage('Application language')}
-          onChange={onLocaleChange}
-        />
-      </section>
-      <section css={section}>
         <h2>{formatMessage('Application Updates')}</h2>
         <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
         <PreviewFeatureToggle />
@@ -196,7 +190,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('Data Collection')}</h2>
         <SettingToggle
-          checked={!!telemetry?.allowDataCollection}
+          checked={!!userSettings.telemetry.allowDataCollection}
           description={formatMessage(
             'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.'
           )}

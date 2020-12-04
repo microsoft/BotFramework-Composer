@@ -106,7 +106,7 @@ async function getProjectByAlias(req: Request, res: Response) {
   const alias = req.params.alias;
   if (!alias) {
     res.status(400).json({
-      message: 'parameters not provided, requires alias parameter',
+      message: 'Parameters not provided, requires "alias" parameter',
     });
     return;
   }
@@ -119,7 +119,7 @@ async function getProjectByAlias(req: Request, res: Response) {
       res.status(200).json({ location: currentProject.dir, id: currentProject.id, name: currentProject.name });
     } else {
       res.status(404).json({
-        message: 'No matching ',
+        message: `No matching bot project found for alias ${alias}`,
       });
     }
   } catch (error) {

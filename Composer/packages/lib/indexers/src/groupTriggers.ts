@@ -29,10 +29,15 @@ const getPropertyReferences = (content: any) => {
 
     // has condition : "<expresssion referencing properties>"
     if (content.condition) {
-      const expressionParser = new ExpressionParser();
-      const expression = expressionParser.parse(content.condition);
-      const references = expression.references().map((r) => (r.startsWith('$') ? r.substring(1) : r));
-      foundProperties.push(...references);
+      try {
+        const expressionParser = new ExpressionParser();
+        const expression = expressionParser.parse(content.condition);
+        const references = expression.references().map((r) => (r.startsWith('$') ? r.substring(1) : r));
+        foundProperties.push(...references);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(`Could not parse condition expression ${content.condition}. ${err}`);
+      }
     }
   }
 

@@ -10,6 +10,17 @@ import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 const API_ROOT = '/api';
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
+
+  const updateRecentlyUsed = (componentList, runtimeLanguage) => {
+    const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+    componentList.forEach((component) => {
+      if (!recentlyUsed.find((used) => used.name === component.name)) {
+        recentlyUsed.unshift({...component, language: runtimeLanguage });
+      }
+    });
+    composer.store.write('recentlyUsed', recentlyUsed);
+  }
+
   const LibraryController = {
     getLibrary: async function (req, res) {
       // read the list of sources from the config file.
@@ -18,7 +29,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // if no sources are in the config file, set the default list to our 1st party feed.
       if (!packageSources) {
         packageSources = [
-          `https://gist.githubusercontent.com/benbrown/b932bbbf8b7c1583bbfb0cc70f051c62/raw/botframework-composer-packages.json`,
+          `https://raw.githubusercontent.com/microsoft/botframework-components/main/experimental/feeds/components.json`,
         ];
         composer.store.write('sources', packageSources);
       }
@@ -38,7 +49,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           composer.log(err);
         }
       }
-      res.json(combined);
+
+      // add recently used
+      const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+
+      res.json({
+        available: combined,
+        recentlyUsed: recentlyUsed,
+      });
     },
     getComponents: async function (req, res) {
       const user = await composer.context.getUserFromRequest(req);
@@ -52,8 +70,15 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      if (currentProject.settings?.runtime?.customRuntime && currentProject.settings?.runtime?.path) {
-        const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+
+
+      let runtimePath = currentProject.settings?.runtime?.path;
+      if (runtimePath && !path.isAbsolute(runtimePath)) {
+        runtimePath = path.resolve(currentProject.dir, runtimePath)
+      }
+
+      if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
+        const manifestFile = runtime.identifyManifest(runtimePath);
 
         const dryrun = new SchemaMerger(
           [manifestFile],
@@ -99,16 +124,21 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      if (packageName && currentProject.settings?.runtime?.path) {
+      let runtimePath = currentProject.settings?.runtime?.path;
+      if (runtimePath && !path.isAbsolute(runtimePath)) {
+        runtimePath = path.resolve(currentProject.dir, runtimePath)
+      }
+
+      if (packageName && runtimePath) {
         try {
           // Call the runtime's component install mechanism.
           const installOutput = await runtime.installComponent(
-            currentProject.settings?.runtime?.path || '',
+            runtimePath,
             packageName,
             version
           );
 
-          const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+          const manifestFile = runtime.identifyManifest(runtimePath);
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
@@ -156,11 +186,20 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
+            const installedComponents = mergeResults.components.filter((c) => c.includesSchema || c.includesExports);
             if (mergeResults) {
               res.json({
                 success: true,
-                components: mergeResults.components.filter((c) => c.includesSchema || c.includesExports),
+                components: installedComponents,
               });
+
+              let runtimeLanguage = 'c#';
+              if (currentProject.settings.runtime.key === 'node-azurewebapp') {
+                runtimeLanguage = 'js';
+              }
+              updateRecentlyUsed(installedComponents, runtimeLanguage);
+
+
             } else {
               res.json({
                 success: false,
@@ -171,7 +210,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Error in import', { message: err.message });
           try {
-            await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
+            await runtime.uninstallComponent(runtimePath, packageName);
           } catch (err) {
             composer.log('Error uninstalling', err);
           }
@@ -179,12 +218,12 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           if (packageName.match(/.*\/.*/)) {
             const [user, realPackageName] = packageName.split(/\//);
             if (!user.match(/^@/)) {
-              await runtime.uninstallComponent(currentProject.settings.runtime.path, realPackageName);
+              await runtime.uninstallComponent(runtimePath, realPackageName);
             }
           }
           res.status(500).json({ success: false, message: err.message });
         }
-      } else if (!currentProject.settings?.runtime?.path) {
+      } else if (!runtimePath) {
         res.status(500).json({ message: 'Please eject your runtime before installing a package.' });
       } else {
         res.status(500).json({ message: 'Please specify a package name or git url to import.' });
@@ -202,13 +241,18 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
+      let runtimePath = currentProject.settings?.runtime?.path;
+      if (runtimePath && !path.isAbsolute(runtimePath)) {
+        runtimePath = path.resolve(currentProject.dir, runtimePath)
+      }
+
       // get URL or package name
       const packageName = req.body.package;
-      if (packageName && currentProject.settings?.runtime?.path) {
+      if (packageName && runtimePath) {
         try {
-          const output = await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
+          const output = await runtime.uninstallComponent(runtimePath, packageName);
 
-          const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+          const manifestFile = runtime.identifyManifest(runtimePath);
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(

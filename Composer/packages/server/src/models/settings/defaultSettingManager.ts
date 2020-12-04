@@ -13,7 +13,13 @@ import log from '../../logger';
 import { FileSettingManager } from './fileSettingManager';
 const debug = log.extend('default-settings-manager');
 
-const newSettingsValuePath = ['downsampling', 'luis.endpoint', 'luis.authoringEndpoint', 'skillConfiguration'];
+const newSettingsValuePath = [
+  'downsampling',
+  'luis.endpoint',
+  'luis.authoringEndpoint',
+  'skillConfiguration',
+  'customFunctions',
+];
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string, user?: UserIdentity) {
@@ -84,12 +90,14 @@ export class DefaultSettingManager extends FileSettingManager {
         maxUtteranceAllowed: 15000,
       },
       skillConfiguration: {
-        isSkill: false,
+        // TODO: Setting isSkill property to true for now. A runtime change is required to remove dependancy on isSkill prop #4501
+        isSkill: true,
         allowedCallers: ['*'],
       },
       skill: {},
       defaultLanguage: 'en-us',
       languages: ['en-us'],
+      customFunctions: [],
       importedLibraries: [],
     };
   };
@@ -108,7 +116,6 @@ export class DefaultSettingManager extends FileSettingManager {
     if (updateFile) {
       this.set(result);
     }
-
     return result;
   }
 
