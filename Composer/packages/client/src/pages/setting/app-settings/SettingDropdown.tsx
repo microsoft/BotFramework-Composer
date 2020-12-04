@@ -16,7 +16,6 @@ import * as styles from './styles';
 interface ISettingToggleProps {
   description: React.ReactChild;
   id?: string;
-  image: string;
   onChange: (key: string) => void;
   title: string;
   options: { key: string; text: string }[];

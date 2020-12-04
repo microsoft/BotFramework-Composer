@@ -36,6 +36,41 @@ const checkManifest = (assets: { skillManifests: SkillManifestFile[] }): Diagnos
   return diagnostics;
 };
 
+const shouldUseLuis = (dialogs: DialogInfo[], luFiles: LuFile[]): boolean => {
+  let useLUIS = false;
+  dialogs.forEach((dialogItem) => {
+    const luFileName = dialogItem.luFile;
+    if (luFileName) {
+      const luFileId = luFileName.replace(/\.lu$/, '');
+      luFiles
+        .filter(({ id }) => getBaseName(id) === luFileId)
+        .forEach((item) => {
+          if (!item.empty && (dialogItem.luProvider === undefined || dialogItem.luProvider === SDKKinds.LuisRecognizer))
+            useLUIS = true;
+        });
+    }
+  });
+  return useLUIS;
+};
+
+const shouldUseQnA = (dialogs: DialogInfo[], qnaFiles: QnAFile[]): boolean => {
+  let useQnA = false;
+  dialogs.forEach((dialogItem) => {
+    const qnaFileName = dialogItem.qnaFile;
+    if (qnaFileName) {
+      const qnaFileId = qnaFileName.replace(/\.qna$/, '').replace(/\.lu$/, '');
+      qnaFiles
+        .filter(({ id }) => getBaseName(id) === qnaFileId)
+        .forEach((item) => {
+          if (!item.empty) {
+            useQnA = true;
+          }
+        });
+    }
+  });
+  return useQnA;
+};
+
 /**
  * Check skill appsettings.json.
  * 1. Missing LUIS key
@@ -51,39 +86,26 @@ const checkSetting = (assets: {
   const { dialogs, setting, luFiles, qnaFiles } = assets;
   const diagnostics: Diagnostic[] = [];
 
-  let useLUIS = false;
-  let useQnA = false;
-  dialogs.forEach((dialogItem) => {
-    const luFileName = dialogItem.luFile;
-    if (luFileName) {
-      const luFileId = luFileName.replace(/\.lu$/, '');
-      luFiles
-        .filter(({ id }) => getBaseName(id) === luFileId)
-        .forEach((item) => {
-          if (!item.empty && (dialogItem.luProvider === undefined || dialogItem.luProvider === SDKKinds.LuisRecognizer))
-            useLUIS = true;
-        });
-    }
+  const useLUIS = shouldUseLuis(dialogs, luFiles);
+  const useQnA = shouldUseQnA(dialogs, qnaFiles);
 
-    const qnaFileName = dialogItem.qnaFile;
-    if (qnaFileName) {
-      const qnaFileId = qnaFileName.replace(/\.qna$/, '').replace(/\.lu$/, '');
-      qnaFiles
-        .filter(({ id }) => getBaseName(id) === qnaFileId)
-        .forEach((item) => {
-          if (!item.empty) useQnA = true;
-        });
-    }
-  });
-
-  // if use LUIS, check LUIS authoringKey key
+  // if use LUIS, check LUIS authoring key
   if (useLUIS) {
     if (!get(setting, 'luis.authoringKey')) {
       diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error, '#luisKey'));
     }
   }
 
-  // if use QnA, check QnA subscriptionKey
+  // if use LUIS, check LUIS authoring region
+  if (useLUIS) {
+    if (!get(setting, 'luis.authoringRegion')) {
+      diagnostics.push(
+        new Diagnostic('Missing LUIS region', 'appsettings.json', DiagnosticSeverity.Error, '#luisRegion')
+      );
+    }
+  }
+
+  // if use QnA, check QnA subscription key
   if (useQnA) {
     if (!get(setting, 'qna.subscriptionKey')) {
       diagnostics.push(
@@ -173,4 +195,6 @@ export const BotIndexer = {
   checkLUISLocales,
   checkSkillSetting,
   filterLUISFilesToPublish,
+  shouldUseLuis,
+  shouldUseQnA,
 };

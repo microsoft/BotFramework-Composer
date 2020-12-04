@@ -22,6 +22,7 @@ import { getAppLocale, loadLocale, updateAppLocale } from './utility/locale';
 import log from './utility/logger';
 import { isLinux, isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
+import { getMachineId } from './utility/machineId';
 
 const env = log.extend('env');
 env('%O', process.env);
@@ -141,6 +142,8 @@ async function loadServer() {
     process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR = join(unpackedDir, 'form-dialog-templates');
   }
 
+  const machineId = await getMachineId();
+
   // only create a new data directory if packaged electron app
   log('Creating app data directory...');
   await createAppDataDir();
@@ -151,6 +154,7 @@ async function loadServer() {
   serverPort = await start({
     getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
     logOut: OneAuthService.signOut.bind(OneAuthService),
+    machineId,
   });
   log(`Server started at port: ${serverPort}`);
 }
