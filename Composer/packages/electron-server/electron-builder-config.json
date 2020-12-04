@@ -110,5 +110,6 @@
     ]
   },
   "publish": null,
-  "remoteBuild": false
+  "remoteBuild": false,
+  "npmRebuild": false
 }
