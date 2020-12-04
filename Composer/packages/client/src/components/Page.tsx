@@ -143,6 +143,8 @@ const Page: React.FC<IPageProps> = (props) => {
                   showDelete: false,
                   showTriggers: false,
                   showDialogs: true,
+                  showLgImports: pageMode === 'language-generation',
+                  showLuImports: pageMode === 'language-understanding',
                   showRemote: false,
                   showMenu: false,
                   showQnAMenu: title === 'QnA',
