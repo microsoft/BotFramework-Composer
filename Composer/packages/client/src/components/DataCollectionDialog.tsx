@@ -11,10 +11,10 @@ import { useRecoilValue } from 'recoil';
 import { dispatcherState } from '../recoilModel';
 
 const DataCollectionDialog: React.FC = () => {
-  const { updateServerSettings } = useRecoilValue(dispatcherState);
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => () => {
-    updateServerSettings({
+    updateUserSettings({
       telemetry: {
         allowDataCollection,
       },

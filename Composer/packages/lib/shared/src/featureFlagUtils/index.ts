@@ -13,16 +13,18 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   },
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
-    description: formatMessage('Show form dialog editor in the canvas'),
+    description: formatMessage(
+      'Automatically generate dialogs that collect information from a user to manage conversations.'
+    ),
+    documentationLink: 'https://aka.ms/AAailpe',
     isHidden: false,
     enabled: false,
   },
   REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
-    displayName: formatMessage('Remote templates'),
-    description: formatMessage(
-      'If turned on then externally stored templates will be selectable in the new bot flow template list'
-    ),
-    isHidden: true,
+    displayName: formatMessage('Conversational Core Template'),
+    description: formatMessage('Enable the new conversational core template built on the component model'),
+    documentationLink: 'https://aka.ms/AAabzf9',
+    isHidden: false,
     enabled: false,
   },
   ORCHESTRATOR: {
