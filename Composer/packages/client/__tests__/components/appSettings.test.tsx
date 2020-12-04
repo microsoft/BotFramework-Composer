@@ -45,6 +45,7 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
         propertyEditorWidth: 400,
         dialogNavWidth: 180,
         appLocale: 'en-US',
+        telemetry: {},
       });
     });
     getByText('Auto update');
