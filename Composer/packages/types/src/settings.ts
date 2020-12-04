@@ -15,12 +15,17 @@ export type CodeEditorSettings = {
   minimap: boolean;
 };
 
+export type TelemetrySettings = {
+  allowDataCollection?: boolean;
+};
+
 export type UserSettings = {
   appUpdater: AppUpdaterSettings;
   codeEditor: CodeEditorSettings;
   propertyEditorWidth: number;
   dialogNavWidth: number;
   appLocale: string;
+  telemetry: TelemetrySettings;
 };
 
 export type AppUpdaterSettings = {
@@ -29,8 +34,6 @@ export type AppUpdaterSettings = {
 };
 
 export type SkillSetting = {
-  name: string;
-  manifestUrl: string;
   msAppId: string;
   endpointUrl: string;
 };

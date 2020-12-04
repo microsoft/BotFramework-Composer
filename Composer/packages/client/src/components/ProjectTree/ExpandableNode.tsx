@@ -24,6 +24,7 @@ const summaryStyle = css`
 `;
 
 const nodeStyle = (depth: number) => css`
+  margin-top: 2px;
   margin-left: ${depth * INDENT_PER_LEVEL}px;
 `;
 

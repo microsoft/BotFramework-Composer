@@ -5,6 +5,8 @@ import { navigate, NavigateOptions } from '@reach/router';
 
 import { DesignPageLocation } from '../recoilModel/types';
 import { BASEPATH } from '../constants';
+import { TreeLink } from '../components/ProjectTree/ProjectTree';
+import { PageMode } from '../recoilModel';
 
 import { parsePathToFocused } from './convertUtils/parsePathToFocused';
 import { parsePathToSelected } from './convertUtils/parsePathToSelected';
@@ -54,7 +56,6 @@ export function checkUrl(
 
 export interface NavigationState {
   breadcrumb?: string[];
-  qnaKbUrls?: string[];
 }
 
 export function convertPathToUrl(
@@ -113,3 +114,32 @@ export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; Micr
   }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
   document.body.appendChild(i);
 };
+
+export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
+  const { projectId, skillId, dialogId } = link;
+
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+
+  return `${baseURL}${pageMode}/${dialogId ?? 'all'}`;
+}
+
+export function createBotSettingUrl(rootProjectId: string, activeProjectId?: string, hash?: string) {
+  let url = `/bot/${rootProjectId}`;
+  if (activeProjectId && rootProjectId !== activeProjectId) {
+    url = `${url}/skill/${activeProjectId}`;
+  }
+  url = `${url}/botProjectsSettings`;
+  if (hash) {
+    url = `${url}/${hash}`;
+  }
+  return url;
+}
+
+export function createDiagnosticsPageUrl(rootProjectId: string, activeProjectId?: string) {
+  let url = `/bot/${rootProjectId}`;
+  if (activeProjectId && rootProjectId !== activeProjectId) {
+    url = `${url}/skill/${activeProjectId}`;
+  }
+
+  return `${url}/diagnostics`;
+}
