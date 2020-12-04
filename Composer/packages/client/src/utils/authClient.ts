@@ -11,11 +11,12 @@ import {
   getIdTokenUrl,
   getAccessTokenUrl,
   isTokenExpired,
+  cleanTokenFromCache,
 } from './auth';
 import { isElectron } from './electronUtil';
 import storage from './storage';
 
-let idToken = getTokenFromCache('id_token');
+let idToken = getTokenFromCache('idToken');
 
 async function getAccessToken(options: AuthParameters): Promise<string> {
   const { targetResource = '', scopes = [] } = options;
@@ -36,21 +37,27 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
     } else {
       // get access token from cache
       const key = authConfig.clientId + JSON.stringify(scopes);
-      console.log(key);
       let token = getTokenFromCache(key);
       if (token && !isTokenExpired(token)) {
         return token;
       }
 
       // get id token
-      if (!idToken || isTokenExpired(idToken)) {
-        // pop up window
+      if (!idToken) {
+        // pop up window if token not exist
         const popup = createPopupWindow(getIdTokenUrl(options));
         if (popup) {
           idToken = await monitorWindowForQueryParam(popup, 'id_token');
           storage.set('idToken', idToken || '');
           console.log('idtoken', idToken);
         }
+      } else if (isTokenExpired(idToken)) {
+        // refresh idToken
+        const notDisplayFrame = createHidenIframe(getIdTokenUrl(options));
+        idToken =
+          notDisplayFrame.contentWindow &&
+          (await monitorWindowForQueryParam(notDisplayFrame.contentWindow, 'id_token'));
+        storage.set('idToken', idToken || '');
       }
 
       // use id token to get access token
@@ -85,7 +92,9 @@ async function logOut() {
       console.error('Can not log out');
     }
   } else {
-    // msal logout
+    // clean token cache in storage
+    cleanTokenFromCache('idToken');
+    cleanTokenFromCache(authConfig.clientId);
   }
 }
 

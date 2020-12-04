@@ -175,6 +175,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           targets={(publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
           types={publishTypes}
           updateSettings={updatePublishTarget}
+          projectId={projectId}
         />
       );
       setDialogHidden(false);

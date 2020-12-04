@@ -264,6 +264,14 @@ export function getTokenFromCache(key: string) {
   return token;
 }
 
+// clean token by clientId with fuzzy matching or key
+export function cleanTokenFromCache(key: string) {
+  storage.remove(key);
+  const keys = Object.keys(storage.getAll());
+  const tokenKeys = keys.filter((item) => item.includes(key));
+  tokenKeys.forEach((item) => storage.remove(item));
+}
+
 export function getIdTokenUrl(options: AuthParameters) {
   const { clientId } = options;
   const scopes = authConfig.scopes;
