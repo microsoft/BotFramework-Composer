@@ -170,7 +170,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger,
     deleteTrigger,
     createQnATrigger,
-    displayManifestModal,
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
 
