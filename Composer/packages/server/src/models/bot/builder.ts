@@ -467,7 +467,7 @@ export class Builder {
       region: this.config.authoringRegion || '',
       qnaRegion: this.config.qnaRegion || this.config.authoringRegion || '',
       botName: this.config.name || '',
-      suffix: this.config.environment || '',
+      suffix: this.config.environment || 'composer',
       fallbackLocal: this.config.defaultLanguage || 'en-us',
       endpoint: this.config.endpoint || null,
       authoringEndpoint: this.config.authoringEndpoint || null,
