@@ -752,7 +752,9 @@ export const ProjectTree: React.FC<Props> = ({
           const lgImports = renderLgImports(dialog, projectId, dialogLink);
           const luImports = renderLuImports(dialog, projectId, dialogLink);
           const showExpanded =
-            (options.showLgImports && lgImports.length > 0) || (options.showLuImports && luImports.length > 0);
+            options.showTriggers ||
+            (options.showLgImports && lgImports.length > 0) ||
+            (options.showLuImports && luImports.length > 0);
           if (showExpanded) {
             return (
               <ExpandableNode
