@@ -233,6 +233,12 @@ export class AzureResourceMananger {
       const qnaMakerSearchName = `${config.name}-search`.toLowerCase().replace('_', '');
       const qnaMakerWebAppName = `${config.name}-qnahost`.toLowerCase().replace('_', '');
       const qnaMakerServiceName = `${config.name}-qna`;
+
+      // only support westus in qna
+      if(config.location !== 'westus'){
+        config.location = 'westus';
+      }
+
       // deploy search service
       const searchManagementClient = new SearchManagementClient(this.creds, this.subscriptionId);
       const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(config.resourceGroupName, qnaMakerSearchName, {
