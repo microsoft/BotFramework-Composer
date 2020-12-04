@@ -60,9 +60,12 @@ const LGPage: React.FC<RouteComponentProps<{
       showCommonLinks
       useNewTree
       data-testid="LGPage"
+      dialogId={dialogId}
       mainRegionName={formatMessage('LG editor')}
       navRegionName={formatMessage('LG Navigation Pane')}
       pageMode={'language-generation'}
+      projectId={projectId}
+      skillId={skillId}
       title={formatMessage('Bot Responses')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
