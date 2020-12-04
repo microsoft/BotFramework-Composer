@@ -162,7 +162,28 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [previousBotPublishHistoryList, setPreviousBotPublishHistoryList] = useState(botPublishHistoryList);
   // check history to see if a 202 is found
   useEffect(() => {
-    let publishFinished = true;
+    // set publishDisabled
+    setPublishDisabled(
+      selectedBots.some((bot) => {
+        if (!(bot.publishTarget && bot.publishTargets)) {
+          return false;
+        }
+        const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
+        const botProjectId = bot.id;
+        if (!selectedTarget) return false;
+        const botPublishHistory = botPublishHistoryList.find(
+          (publishHistory) => publishHistory.projectId === botProjectId
+        )?.publishHistory[bot.publishTarget];
+        if (!botPublishHistory || botPublishHistory.length === 0) {
+          return;
+        }
+        const latestPublishItem = botPublishHistory[0];
+        if (latestPublishItem.status === 202) {
+          return true;
+        }
+      })
+    );
+
     selectedBots.forEach((bot) => {
       if (!(bot.publishTarget && bot.publishTargets)) {
         return;
@@ -180,15 +201,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         return;
       }
       const latestPublishItem = botPublishHistory[0];
-      // most recent item is a 202, which means we should poll for updates...
-      if (latestPublishItem.status === 202) {
-        publishFinished = false;
-      } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
+      // stop polling if status is 200 or 500
+      if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
         const interval = statusIntervals.find((i) => i[bot.id]);
         if (interval) {
           clearInterval(interval[bot.id]);
           setStatusIntervals(statusIntervals.filter((i) => !i[botProjectId]));
         }
+        // show result notifications
         if (!isEqual(previousBotPublishHistory, botPublishHistory)) {
           bot.status = latestPublishItem.status;
           if (showNotifications[bot.id]) {
@@ -197,12 +217,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             setShowNotifications({ ...showNotifications, [botProjectId]: false });
           }
         }
-      } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
-        // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
-        // we still poll for the results IF we see that a publish has happened previously
-        getPublishStatus(botProjectId, selectedTarget);
       }
-      setPublishDisabled(!publishFinished);
       setBotStatusList(
         botStatusList.map((item) => {
           if (item.id === botProjectId) {
