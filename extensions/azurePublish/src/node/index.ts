@@ -379,7 +379,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // cast this into the right form for a publish profile
         const publishProfile = {
           name: config.hostname,
-          environment: '',
+          environment: 'composer',
+          hostname: config.hostname,
+          luisResource: `${config.hostname}-luis`,
           settings: {
             applicationInsights: {
               InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
@@ -395,7 +397,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             },
             MicrosoftAppId: provisionResults.appId,
             MicrosoftAppPassword: provisionResults.appPassword,
-            hostname: config.hostname,
           },
         };
 
