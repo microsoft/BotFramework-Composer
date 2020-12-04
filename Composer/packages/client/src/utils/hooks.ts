@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, MutableRefObject } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
-import { FeatureFlagKey } from '@botframework-composer/types';
+import { FeatureFlagKey } from '@bfc/shared';
+import isFunction from 'lodash/isFunction';
 
 import {
   designPageLocationState,
@@ -44,14 +45,15 @@ export const useFeatureFlag = (featureFlagKey: FeatureFlagKey): boolean => {
 
 export const useLinks = () => {
   const projectId = useRecoilValue(currentProjectIdState);
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const schemas = useRecoilValue(schemasState(projectId));
-  const openedDialogId = designPageLocation.dialogId || 'Main';
+  const openedDialogId = designPageLocation.dialogId;
   const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
-    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, schemas.sdk);
+    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, schemas.sdk, rootProjectId);
   }, [projectId, openedDialogId, pluginPages, showFormDialog]);
 
   return { topLinks: pageLinks, bottomLinks };
@@ -94,21 +96,59 @@ export const useProjectIdCache = () => {
   return projectId;
 };
 
-export const useInterval = (callback, delay) => {
-  const savedCallback = useRef<() => void>();
+export function useInterval(callback: Function, delay: number | null) {
+  const savedCallback: MutableRefObject<Function | undefined> = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      if (isFunction(savedCallback.current)) {
+        savedCallback.current();
+      }
+    }
+    if (delay != null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+
+export function useClickOutsideOutsideTarget(
+  targetRefs: MutableRefObject<HTMLElement | null>[] | null,
+  callback: Function
+) {
+  const savedCallback: MutableRefObject<Function | undefined> = useRef();
+
+  const isClickInsideTargets = (currentClickTarget: Node) => {
+    const isClickedInside = targetRefs?.find((ref) => {
+      const result = currentClickTarget && ref?.current?.contains(currentClickTarget);
+      return !!result;
+    });
+    return isClickedInside;
+  };
+
+  const handleEvent = (e: MouseEvent) => {
+    if (targetRefs && e.target !== null && isFunction(callback) && !isClickInsideTargets(e.target as Node)) {
+      callback(e);
+    }
+  };
 
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
   useEffect(() => {
-    if (delay !== null) {
-      const interval = setInterval(() => {
-        if (typeof savedCallback.current === 'function') {
-          savedCallback.current();
-        }
-      }, delay);
-      return () => clearInterval(interval);
-    }
-  }, [delay]);
-};
+    document.addEventListener('click', handleEvent);
+    document.addEventListener('mousedown', handleEvent);
+
+    return () => {
+      document.removeEventListener('click', handleEvent);
+      document.removeEventListener('mousedown', handleEvent);
+    };
+  }, [targetRefs, callback]);
+}

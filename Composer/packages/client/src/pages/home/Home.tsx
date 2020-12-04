@@ -65,10 +65,15 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
+  const {
+    openProject,
+    setCreationFlowStatus,
+    onboardingAddCoachMarkRef,
+    saveTemplateId,
+    setCreationFlowType,
+  } = useRecoilValue(dispatcherState);
+
   const featureFlags = useRecoilValue(featureFlagsState);
-  const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
-    dispatcherState
-  );
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
@@ -88,7 +93,9 @@ const Home: React.FC<RouteComponentProps> = () => {
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
   const onClickNewBot = () => {
+    setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
+    setCreationFlowType('Bot');
     featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
   };
 

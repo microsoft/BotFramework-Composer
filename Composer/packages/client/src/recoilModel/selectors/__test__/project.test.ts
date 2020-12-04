@@ -13,7 +13,7 @@ import {
   botProjectIdsState,
   projectMetaDataState,
 } from '../../atoms';
-import { botProjectSpaceSelector, botsForFilePersistenceSelector, rootBotProjectIdSelector } from '../project';
+import { botProjectSpaceSelector, rootBotProjectIdSelector, localBotsWithoutErrorsSelector } from '../project';
 
 const projectIds = ['123-a', '234-bc', '567-de'];
 
@@ -38,7 +38,7 @@ const projectDataSelector = selectorFamily({
 
 const useRecoilTestHook = () => {
   const [botProjectIds, setBotProjectIds] = useRecoilState(botProjectIdsState);
-  const botsForFilePersistence = useRecoilValue(botsForFilePersistenceSelector);
+  const botsForFilePersistence = useRecoilValue(localBotsWithoutErrorsSelector);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
   const rootBotDataSelector = useSetRecoilState(projectDataSelector(projectIds[0]));

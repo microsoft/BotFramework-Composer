@@ -13,7 +13,6 @@ export type FeatureFlag = {
 };
 
 export type FeatureFlagKey =
-  | 'VA_CREATION'
   | 'FORM_DIALOG'
   | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE'
   | 'ORCHESTRATOR'

@@ -21,6 +21,7 @@ const { log } = require('./common');
  */
 
 let packageName = null;
+const packageVersion = '1.14.0';
 
 switch (process.platform) {
   case 'darwin':
@@ -54,7 +55,7 @@ async function downloadPackage() {
   log.info('Starting download.');
   await ensureDir(outDir);
   try {
-    execSync(`cd ${outDir} && npm pack ${packageName}`, { encoding: 'utf-8' });
+    execSync(`cd ${outDir} && npm pack ${packageName}@${packageVersion}`, { encoding: 'utf-8' });
   } catch (err) {
     process.exit(1);
     return;

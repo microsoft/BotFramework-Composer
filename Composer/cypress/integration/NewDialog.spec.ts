@@ -9,8 +9,10 @@ context('Creating a new Dialog', () => {
   });
 
   it('can create a new dialog from project tree', () => {
-    cy.findByTestId('AddFlyout').click();
-    cy.findByTestId('FlyoutNewDialog').click();
+    cy.findByTestId('BotHeader-__TestTodoSample').within(() => {
+      cy.findByTestId('dialogMoreButton').click({ force: true });
+    });
+    cy.findAllByText('Add a dialog').click();
     cy.findByTestId('NewDialogName').type('{selectall}TestNewDialog2{enter}');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('TestNewDialog2').should('exist');

@@ -14,8 +14,9 @@ import type {
   DialogSchemaFile,
   LuProviderType,
 } from './indexers';
+import type { JSONSchema7, SDKKinds } from './schema';
+import { Skill } from './indexers';
 import type { ILUFeaturesConfig, SkillSetting, UserSettings, DialogSetting } from './settings';
-import type { JSONSchema7 } from './schema';
 import { MicrosoftIDialog } from './sdk';
 import { FeatureFlagKey } from './featureFlags';
 
@@ -56,6 +57,11 @@ export type BotSchemas = {
   diagnostics?: any[];
 };
 
+export type DisabledMenuActions = {
+  kind: SDKKinds;
+  reason: string;
+};
+
 export type ApplicationContextApi = {
   navigateTo: (to: string, opts?: { state?: any; replace?: boolean }) => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
@@ -70,6 +76,10 @@ export type ApplicationContext = {
   locale: string;
   hosted: boolean;
   userSettings: UserSettings;
+  skills: Record<string, Skill>;
+  skillsSettings: Record<string, SkillSetting>;
+  // TODO: remove
+  schemas: BotSchemas;
   flowZoomRate: ZoomInfo;
 
   httpClient: HttpClient;
@@ -109,13 +119,12 @@ export type ProjectContextApi = {
   updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
   commitChanges: () => void;
-  addSkillDialog: () => Promise<{ manifestUrl: string; name: string } | null>;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   createQnATrigger: (id: string) => void;
-  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
+  updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
 
@@ -128,9 +137,10 @@ export type ProjectContext = {
   luFiles: LuFile[];
   luFeatures: ILUFeaturesConfig;
   qnaFiles: QnAFile[];
-  skills: any[];
+  skills: Record<string, Skill>;
   skillsSettings: Record<string, SkillSetting>;
   schemas: BotSchemas;
+  forceDisabledActions: DisabledMenuActions[];
   settings: DialogSetting;
 };
 

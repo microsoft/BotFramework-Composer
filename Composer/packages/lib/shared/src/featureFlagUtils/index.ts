@@ -11,12 +11,6 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     isHidden: false,
     enabled: false,
   },
-  VA_CREATION: {
-    displayName: formatMessage('VA Creation'),
-    description: formatMessage('VA template made available in new bot flow.'),
-    isHidden: true,
-    enabled: false,
-  },
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
     description: formatMessage('Show form dialog editor in the canvas'),
