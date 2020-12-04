@@ -43,6 +43,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   } = useRecoilValue(dispatcherState);
 
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
+  const [publishDisabled, setPublishDisabled] = useState(false);
 
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
@@ -121,7 +122,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       element: (
         <ActionButton
           data-testid="publishPage-Toolbar-Publish"
-          disabled={selectedBots.length === 0}
+          disabled={publishDisabled || selectedBots.length === 0}
           onClick={() => setPublishDialogHidden(false)}
         >
           <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -162,7 +163,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [previousBotPublishHistoryList, setPreviousBotPublishHistoryList] = useState(botPublishHistoryList);
   // check history to see if a 202 is found
   useEffect(() => {
-    // most recent item is a 202, which means we should poll for updates...
+    let publishFinished = true;
     selectedBots.forEach((bot) => {
       if (!(bot.publishTarget && bot.publishTargets)) {
         return;
@@ -180,7 +181,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         return;
       }
       const latestPublishItem = botPublishHistory[0];
+      // most recent item is a 202, which means we should poll for updates...
       if (latestPublishItem.status === 202) {
+        publishFinished = false;
         getUpdatedStatus(selectedTarget, botProjectId);
       } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
         if (!isEqual(previousBotPublishHistory, botPublishHistory)) {
@@ -196,6 +199,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         // we still poll for the results IF we see that a publish has happened previously
         getPublishStatus(botProjectId, selectedTarget);
       }
+      setPublishDisabled(!publishFinished);
       setBotStatusList(
         botStatusList.map((item) => {
           if (item.id === botProjectId) {
@@ -322,6 +326,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedBots(bots);
   };
   const publish = async (items: IBotStatus[]) => {
+    setPublishDisabled(true);
     setPreviousBotPublishHistoryList(botPublishHistoryList);
     // notifications
     setShowNotifications(
@@ -416,6 +421,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             changePublishTarget={changePublishTarget}
             items={botStatusList}
             projectId={projectId}
+            publishDisabled={publishDisabled}
             updateItems={updateBotStatusList}
             updatePublishHistory={updatePublishHistory}
             updateSelectedBots={updateSelectedBots}
