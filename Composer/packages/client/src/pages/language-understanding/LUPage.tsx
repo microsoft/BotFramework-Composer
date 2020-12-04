@@ -55,13 +55,13 @@ const LUPage: React.FC<RouteComponentProps<{
   return (
     <Page
       useNewTree
-      projectId={projectId}
-      skillId={skillId}
-      dialogId={dialogId}
       data-testid="LUPage"
+      dialogId={dialogId}
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}
       pageMode={'language-understanding'}
+      projectId={projectId}
+      skillId={skillId}
       title={formatMessage('User Input')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
