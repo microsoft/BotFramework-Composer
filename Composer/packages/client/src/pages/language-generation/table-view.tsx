@@ -84,7 +84,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     [dialogId, projectId, skillId]
   );
 
-  const onCreateNewTemplate = useCallback(() => {
+  const onCreateNewTemplate = () => {
     if (file) {
       const newName = lgUtil.increaseNameUtilNotExist(file.templates, 'TemplateName');
       const payload = {
@@ -98,69 +98,57 @@ const TableView: React.FC<TableViewProps> = (props) => {
       createLgTemplate(payload);
       //setFocusedIndex(file.templates.length);
     }
-  }, [file]);
+  };
 
-  const onRemoveTemplate = useCallback(
-    (name) => {
-      if (file) {
-        const payload = {
-          id: file.id,
-          templateName: name,
-          projectId: actualProjectId,
-        };
-        removeLgTemplate(payload);
-        //setFocusedIndex(file.templates.findIndex((item) => item.name === name));
-      }
-    },
-    [file]
-  );
+  const onRemoveTemplate = (name) => {
+    if (file) {
+      const payload = {
+        id: file.id,
+        templateName: name,
+        projectId: actualProjectId,
+      };
+      removeLgTemplate(payload);
+      //setFocusedIndex(file.templates.findIndex((item) => item.name === name));
+    }
+  };
 
-  const onCopyTemplate = useCallback(
-    (name) => {
-      if (file) {
-        const resolvedName = lgUtil.increaseNameUtilNotExist(file.templates, `${name}_Copy`);
-        const payload = {
-          id: file.id,
-          fromTemplateName: name,
-          toTemplateName: resolvedName,
-          projectId: actualProjectId,
-        };
-        copyLgTemplate(payload);
-        //setFocusedIndex(file.templates.length);
-      }
-    },
-    [file]
-  );
+  const onCopyTemplate = (name) => {
+    if (file) {
+      const resolvedName = lgUtil.increaseNameUtilNotExist(file.templates, `${name}_Copy`);
+      const payload = {
+        id: file.id,
+        fromTemplateName: name,
+        toTemplateName: resolvedName,
+        projectId: actualProjectId,
+      };
+      copyLgTemplate(payload);
+      //setFocusedIndex(file.templates.length);
+    }
+  };
 
-  const handleTemplateUpdate = useCallback(
-    (templateName: string, template: LgTemplate) => {
-      if (file) {
-        const payload = {
-          id: file.id,
-          templateName,
-          template,
-          projectId: actualProjectId,
-        };
-        updateLgTemplate(payload);
-      }
-    },
-    [file]
-  );
+  const handleTemplateUpdate = (templateName: string, template: LgTemplate) => {
+    if (file) {
+      const payload = {
+        id: file.id,
+        templateName,
+        template,
+        projectId: actualProjectId,
+      };
+      updateLgTemplate(payload);
+    }
+  };
 
-  const handleTemplateUpdateDefaultLocale = useCallback(
-    (templateName: string, template: LgTemplate) => {
-      if (defaultLangFile) {
-        const payload = {
-          id: defaultLangFile.id,
-          templateName,
-          template,
-          projectId: actualProjectId,
-        };
-        updateLgTemplate(payload);
-      }
-    },
-    [defaultLangFile]
-  );
+  const handleTemplateUpdateDefaultLocale = (templateName: string, template: LgTemplate) => {
+    if (defaultLangFile) {
+      const payload = {
+        id: defaultLangFile.id,
+        templateName,
+        template,
+        projectId: actualProjectId,
+      };
+      updateLgTemplate(payload);
+    }
+  };
 
   const getTemplatesMoreButtons = useCallback(
     (item) => {
