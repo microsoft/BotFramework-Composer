@@ -471,10 +471,10 @@ export class BotProject implements IBotProject {
   public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
     if (this.settings) {
       const luFiles: FileInfo[] = [];
-      luResource.forEach(({ id, isEmpty }) => {
+      luResource.forEach(({ id }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
-        if (f && !isEmpty) {
+        if (f) {
           luFiles.push(f);
         }
       });
