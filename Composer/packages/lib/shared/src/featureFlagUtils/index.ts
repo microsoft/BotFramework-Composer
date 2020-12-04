@@ -7,7 +7,10 @@ import { FeatureFlagMap } from '@botframework-composer/types';
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
-    description: formatMessage('Show form dialog editor in the canvas'),
+    description: formatMessage(
+      'Automatically generate dialogs that collect information from a user to manage conversations.'
+    ),
+    documentationLink: 'https://aka.ms/AAailpe',
     isHidden: false,
     enabled: false,
   },
