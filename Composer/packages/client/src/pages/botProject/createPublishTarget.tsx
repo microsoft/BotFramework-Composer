@@ -16,7 +16,7 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import { PublishProfileDialog } from '../../constants';
 import { PublishType } from '../../recoilModel/types';
-import { userSettingsState, currentProjectIdState, currentUserState } from '../../recoilModel';
+import { userSettingsState, currentUserState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
@@ -30,6 +30,7 @@ interface CreatePublishTargetProps {
   types: PublishType[];
   setDialogProps: (value) => void;
   updateSettings: (name: string, type: string, configuration: string, editTarget: any) => Promise<void>;
+  projectId: string;
 }
 
 const PageTypes = {
@@ -39,7 +40,7 @@ const PageTypes = {
 };
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
-  const { current, setDialogProps } = props;
+  const { current, setDialogProps, projectId } = props;
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const [name, setName] = useState(current ? current.item.name : '');
   const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
@@ -50,7 +51,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const userSettings = useRecoilValue(userSettingsState);
   const currentUser = useRecoilValue(currentUserState);
   // const graphToken = useRecoilValue(grahpTokenState);
-  const projectId = useRecoilValue(currentProjectIdState);
   const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const targetTypes = useMemo(() => {
