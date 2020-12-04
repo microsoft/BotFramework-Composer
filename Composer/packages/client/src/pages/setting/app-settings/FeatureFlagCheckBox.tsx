@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -10,6 +10,12 @@ import formatMessage from 'format-message';
 import { FeatureFlagKey } from '@botframework-composer/types';
 
 import * as styles from './styles';
+
+const labelRoot = css`
+  font-size: 14px;
+  line-height: 20px;
+  margin-left: 4px;
+`;
 
 type FeatureFlagCheckBoxProps = {
   featureFlagKey: FeatureFlagKey;
@@ -21,11 +27,11 @@ type FeatureFlagCheckBoxProps = {
 };
 
 const renderLabel = (featureName: string, description: string, documentationLink?: string) => () => (
-  <span>
+  <span css={labelRoot}>
     <span css={styles.featureFlagTitle}>{`${featureName}.`}</span>
     {`${description}.`}
     {documentationLink && (
-      <Link ref={documentationLink} target="_blank">
+      <Link href={documentationLink} target="_blank">
         <span css={styles.featureFlagDescription}>{formatMessage('Learn More.')}</span>
       </Link>
     )}
@@ -37,11 +43,8 @@ export const FeatureFlagCheckBox: React.FC<FeatureFlagCheckBoxProps> = (props) =
     <Checkbox
       checked={props.enabled}
       css={styles.featureFlagContainer}
-      onChange={(e: any, checked?: boolean) => {
-        if (checked !== undefined) {
-          props.toggleFeatureFlag(props.featureFlagKey, checked);
-        }
-      }}
+      styles={{ label: { alignItems: 'flex-start' } }}
+      onChange={(_e, checked) => props.toggleFeatureFlag(props.featureFlagKey, !!checked)}
       onRenderLabel={renderLabel(props.featureFlagName, props.description, props.documentationLink)}
     />
   );
