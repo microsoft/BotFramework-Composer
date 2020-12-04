@@ -229,7 +229,7 @@ export class Builder {
         content: fi.content,
       }));
 
-    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, null, fullEmbedding);
+    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, '', null, fullEmbedding);
   }
 
   public async copyModelPathToBot() {

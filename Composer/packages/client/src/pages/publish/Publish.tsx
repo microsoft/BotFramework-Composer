@@ -43,6 +43,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   } = useRecoilValue(dispatcherState);
 
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
+  const [publishDisabled, setPublishDisabled] = useState(false);
 
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
@@ -121,13 +122,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       element: (
         <ActionButton
           data-testid="publishPage-Toolbar-Publish"
-          disabled={selectedBots.length === 0}
+          disabled={publishDisabled || selectedBots.length === 0}
           onClick={() => setPublishDialogHidden(false)}
         >
           <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M16 4.28906V15H5V0H11.7109L16 4.28906ZM12 4H14.2891L12 1.71094V4ZM15 14V5H11V1H6V14H15ZM0 5H4V6H0V5ZM1 7H4V8H1V7ZM2 9H4V10H2V9Z"
-              fill={selectedBots.length > 0 ? '#0078D4' : 'rgb(161, 159, 157)'}
+              fill={selectedBots.length > 0 && !publishDisabled ? '#0078D4' : 'rgb(161, 159, 157)'}
             />
           </svg>
           <span css={{ marginLeft: '8px' }}>{formatMessage('Publish selected bots')}</span>
@@ -148,21 +149,41 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       disabled: !isPullSupported,
     },
   ];
-  const getUpdatedStatus = (target, botProjectId) => {
-    if (target) {
-      // TODO: this should use a backoff mechanism to not overload the server with requests
-      // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
-      setTimeout(async () => {
-        getPublishStatus(botProjectId, target);
-      }, publishStatusInterval);
-    }
+  const [statusIntervals, setStatusIntervals] = useState<{ [key: string]: NodeJS.Timeout }[]>([]);
+  const getUpdatedStatus = (target, botProjectId): NodeJS.Timeout => {
+    // TODO: this should use a backoff mechanism to not overload the server with requests
+    // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
+    return setInterval(async () => {
+      getPublishStatus(botProjectId, target);
+    }, publishStatusInterval);
   };
 
   const [pendingNotification, setPendingNotification] = useState<Notification>();
   const [previousBotPublishHistoryList, setPreviousBotPublishHistoryList] = useState(botPublishHistoryList);
   // check history to see if a 202 is found
   useEffect(() => {
-    // most recent item is a 202, which means we should poll for updates...
+    // set publishDisabled
+    setPublishDisabled(
+      selectedBots.some((bot) => {
+        if (!(bot.publishTarget && bot.publishTargets)) {
+          return false;
+        }
+        const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
+        const botProjectId = bot.id;
+        if (!selectedTarget) return false;
+        const botPublishHistory = botPublishHistoryList.find(
+          (publishHistory) => publishHistory.projectId === botProjectId
+        )?.publishHistory[bot.publishTarget];
+        if (!botPublishHistory || botPublishHistory.length === 0) {
+          return;
+        }
+        const latestPublishItem = botPublishHistory[0];
+        if (latestPublishItem.status === 202) {
+          return true;
+        }
+      })
+    );
+
     selectedBots.forEach((bot) => {
       if (!(bot.publishTarget && bot.publishTargets)) {
         return;
@@ -180,9 +201,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         return;
       }
       const latestPublishItem = botPublishHistory[0];
-      if (latestPublishItem.status === 202) {
-        getUpdatedStatus(selectedTarget, botProjectId);
-      } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
+      // stop polling if status is 200 or 500
+      if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
+        const interval = statusIntervals.find((i) => i[bot.id]);
+        if (interval) {
+          clearInterval(interval[bot.id]);
+          setStatusIntervals(statusIntervals.filter((i) => !i[botProjectId]));
+        }
+        // show result notifications
         if (!isEqual(previousBotPublishHistory, botPublishHistory)) {
           bot.status = latestPublishItem.status;
           if (showNotifications[bot.id]) {
@@ -191,10 +217,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             setShowNotifications({ ...showNotifications, [botProjectId]: false });
           }
         }
-      } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
-        // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
-        // we still poll for the results IF we see that a publish has happened previously
-        getPublishStatus(botProjectId, selectedTarget);
       }
       setBotStatusList(
         botStatusList.map((item) => {
@@ -322,6 +344,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedBots(bots);
   };
   const publish = async (items: IBotStatus[]) => {
+    setPublishDisabled(true);
     setPreviousBotPublishHistoryList(botPublishHistoryList);
     // notifications
     setShowNotifications(
@@ -335,31 +358,35 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification(notification);
 
     // publish to remote
+    const intervals: { [key: string]: NodeJS.Timeout }[] = [];
     for (const bot of items) {
       if (bot.publishTarget && bot.publishTargets) {
         const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
         const botProjectId = bot.id;
         const setting = botSettingList.find((botsetting) => botsetting.projectId === bot.id)?.setting;
-        if (setting && setting.publishTargets) {
-          setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
-          const sensitiveSettings = getSensitiveProperties(setting);
-          await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
-
-          // update the target with a lastPublished date
-          const updatedPublishTargets = setting.publishTargets.map((profile) => {
-            if (profile.name === selectedTarget?.name) {
-              return {
-                ...profile,
-                lastPublished: new Date(),
-              };
-            } else {
-              return profile;
-            }
-          });
-
-          await setPublishTargets(updatedPublishTargets, botProjectId);
+        if (!(setting && setting.publishTargets)) {
+          return;
         }
+        setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
+        const sensitiveSettings = getSensitiveProperties(setting);
+        await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
+
+        // update the target with a lastPublished date
+        const updatedPublishTargets = setting.publishTargets.map((profile) => {
+          if (profile.name === selectedTarget?.name) {
+            return {
+              ...profile,
+              lastPublished: new Date(),
+            };
+          } else {
+            return profile;
+          }
+        });
+
+        await setPublishTargets(updatedPublishTargets, botProjectId);
+        intervals.push({ [botProjectId]: getUpdatedStatus(selectedTarget, botProjectId) });
       }
+      setStatusIntervals(intervals);
       setBotStatusList(
         botStatusList.map((bot) => {
           const item = items.find((i) => i.id === bot.id);
@@ -416,6 +443,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             changePublishTarget={changePublishTarget}
             items={botStatusList}
             projectId={projectId}
+            publishDisabled={publishDisabled}
             updateItems={updateBotStatusList}
             updatePublishHistory={updatePublishHistory}
             updateSelectedBots={updateSelectedBots}
