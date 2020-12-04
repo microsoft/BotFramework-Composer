@@ -133,14 +133,7 @@ export async function publishLuisToPrediction(
         json: true,
         headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
       } as rp.RequestPromiseOptions;
-      const response = await rp.post(luisAssignEndpoint, options);
-
-      // TODO: Add some error handling on this API call. As it is, errors will just throw by default and be caught by the catch all try/catch in the deploy method
-
-      logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response,
-      });
+      await rp.post(luisAssignEndpoint, options);
     }
 
     // The process has now completed.
