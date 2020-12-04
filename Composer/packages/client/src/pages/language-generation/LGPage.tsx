@@ -59,6 +59,9 @@ const LGPage: React.FC<RouteComponentProps<{
     <Page
       showCommonLinks
       useNewTree
+      projectId={projectId}
+      skillId={skillId}
+      dialogId={dialogId}
       data-testid="LGPage"
       mainRegionName={formatMessage('LG editor')}
       navRegionName={formatMessage('LG Navigation Pane')}

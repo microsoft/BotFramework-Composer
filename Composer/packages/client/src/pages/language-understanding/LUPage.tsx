@@ -55,6 +55,9 @@ const LUPage: React.FC<RouteComponentProps<{
   return (
     <Page
       useNewTree
+      projectId={projectId}
+      skillId={skillId}
+      dialogId={dialogId}
       data-testid="LUPage"
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}

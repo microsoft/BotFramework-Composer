@@ -72,6 +72,9 @@ const QnAPage: React.FC<RouteComponentProps<{
   return (
     <Page
       useNewTree
+      projectId={projectId}
+      skillId={skillId}
+      dialogId={dialogId}
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
       navRegionName={formatMessage('Qna Navigation Pane')}
