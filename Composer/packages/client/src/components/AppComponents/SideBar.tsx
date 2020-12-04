@@ -32,7 +32,7 @@ const globalNav = css`
 `;
 
 const sideBar = (isExpand: boolean) => css`
-  width: ${isExpand ? '175' : '48'}px;
+  width: ${isExpand ? '200' : '48'}px;
   background-color: ${NeutralColors.gray20};
   height: 100%;
   border-right: 1px solid ${NeutralColors.gray50};
