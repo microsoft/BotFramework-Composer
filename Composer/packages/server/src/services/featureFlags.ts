@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getDefaultFeatureFlags, FeatureFlagMap, FeatureFlagKey } from '@bfc/shared';
+import { getDefaultFeatureFlags } from '@bfc/shared';
+import { FeatureFlagMap, FeatureFlagKey } from '@botframework-composer/types';
 
 import { Store } from '../store/store';
 
@@ -31,6 +32,16 @@ export class FeatureFlagService {
     });
 
     let saveNeeded = false;
+
+    // check if a hidden feature flag is no longer hidden
+    defaultFeatureFlagKeys.forEach((key: string) => {
+      const currentFlag = FeatureFlagService.currentFeatureFlagMap[key];
+      const defaultFlag = FeatureFlagService.defaultFeatureFlags[key];
+      if (currentFlag.isHidden !== defaultFlag.isHidden) {
+        FeatureFlagService.currentFeatureFlagMap[key].isHidden = FeatureFlagService.defaultFeatureFlags[key].isHidden;
+        saveNeeded = true;
+      }
+    });
 
     // add any new keys defined in the defaults that aren't in current
     defaultFeatureFlagKeys

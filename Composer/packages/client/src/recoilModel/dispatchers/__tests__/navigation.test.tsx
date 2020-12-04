@@ -171,14 +171,6 @@ describe('navigation dispatcher', () => {
       expectNavTo(`/bot/${projectId}/dialogs/dialogId`);
       expect(mockConvertPathToUrl).toBeCalledWith(projectId, projectId, 'dialogId');
     });
-
-    it("doesn't navigate to a destination where we already are", async () => {
-      mockCheckUrl.mockReturnValue(true);
-      await act(async () => {
-        await dispatcher.navTo(projectId, 'dialogId');
-      });
-      expect(mockNavigateTo).not.toBeCalled();
-    });
   });
 
   describe('selectTo', () => {

@@ -19,6 +19,7 @@ import { useRecoilValue } from 'recoil';
 import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
+import { creationFlowTypeState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNotification';
 import { dispatcherState } from '../../recoilModel';
@@ -102,6 +103,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     createFolder,
     updateFolder,
   } = props;
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
   const getDefaultName = () => {
@@ -256,6 +258,13 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     updateField('location', location);
   }, [focusedStorageFolder]);
 
+  const dialogWrapperProps =
+    creationFlowType === 'Skill'
+      ? DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE
+      : isImported
+      ? DialogCreationCopy.IMPORT_BOT_PROJECT
+      : DialogCreationCopy.DEFINE_BOT_PROJECT;
+
   const locationSelectContent = useMemo(() => {
     return (
       <LocationSelectContent
@@ -267,11 +276,10 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       />
     );
   }, [focusedStorageFolder]);
-  const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
 
   return (
     <Fragment>
-      <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
+      <DialogWrapper isOpen {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
           <input style={{ display: 'none' }} type="submit" />
           <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>

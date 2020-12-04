@@ -64,8 +64,8 @@ export const assetTree = css`
 export const editorContainer = css`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  flex-grow: 4;
+  height: 0;
+  flex-grow: 1;
 `;
 
 export const editorWrapper = css`
