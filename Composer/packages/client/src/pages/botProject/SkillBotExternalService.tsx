@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import React, { useEffect, useState, useRef } from 'react';
 import { jsx } from '@emotion/core';
+import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
@@ -14,7 +15,6 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { isLUISMandatory, isQnAKeyMandatory } from '../../utils/dialogValidator';
 import {
   dispatcherState,
   settingsState,
@@ -98,15 +98,19 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
 
-  const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
-  const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
+  const isLUISKeyNeeded = BotIndexer.shouldUseLuis(dialogs, luFiles);
+  const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
 
-  const luisKeyFieldRef = useRef<HTMLInputElement>(null);
-  const qnaKeyFieldRef = useRef<HTMLInputElement>(null);
+  const luisKeyFieldRef = useRef<HTMLDivElement>(null);
+  const luisRegionFieldRef = useRef<HTMLDivElement>(null);
+  const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
       luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (luisRegionFieldRef.current && scrollToSectionId === '#luisRegion') {
+      luisRegionFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
     if (qnaKeyFieldRef.current && scrollToSectionId === '#qnaKey') {
       qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -181,7 +185,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       <div css={externalServiceContainerStyle}>
         <TextField
           aria-labelledby={'LUIS name'}
-          data-testId={'skillLUISName'}
+          data-testid={'skillLUISName'}
           id={'luisName'}
           label={formatMessage('LUIS name')}
           placeholder={'Enter LUIS name'}
@@ -191,44 +195,50 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           onChange={handleSkillLUISNameOnChange}
           onRenderLabel={onRenderLabel}
         />
-        <TextFieldWithCustomButton
-          ariaLabelledby={'LUIS key'}
-          buttonText={formatMessage('Use custom LUIS key')}
-          errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS key is empty') : ''}
-          id={'luisKey'}
-          label={formatMessage('LUIS key')}
-          placeholder={'Enter LUIS key'}
-          placeholderOnDisable={"<---- Same as root bot's LUIS key ---->"}
-          required={isLUISKeyNeeded}
-          value={skillLuisKey}
-          onBlur={handleLUISKeyOnBlur}
-          onRenderLabel={onRenderLabel}
-        />
-        <TextFieldWithCustomButton
-          ariaLabelledby={'LUIS region'}
-          buttonText={formatMessage('Use custom LUIS region')}
-          errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
-          label={formatMessage('LUIS region')}
-          placeholder={'Enter LUIS region'}
-          placeholderOnDisable={"<---- Same as root bot's LUIS region ---->"}
-          required={isLUISKeyNeeded}
-          value={skillLuisRegion}
-          onBlur={handleLUISRegionOnBlur}
-          onRenderLabel={onRenderLabel}
-        />
-        <TextFieldWithCustomButton
-          ariaLabelledby={'QnA Maker Subscription key'}
-          buttonText={formatMessage('Use custom QnA Maker Subscription key')}
-          errorMessage={!rootqnaKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
-          id={'qnaKey'}
-          label={formatMessage('QnA Maker Subscription key')}
-          placeholder={'Enter QnA Maker Subscription key'}
-          placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}
-          required={isQnAKeyNeeded}
-          value={skillqnaKey}
-          onBlur={handleSkillQnAKeyOnBlur}
-          onRenderLabel={onRenderLabel}
-        />
+        <div ref={luisKeyFieldRef}>
+          <TextFieldWithCustomButton
+            ariaLabelledby={'LUIS key'}
+            buttonText={formatMessage('Use custom LUIS key')}
+            errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS key is empty') : ''}
+            id={'luisKey'}
+            label={formatMessage('LUIS key')}
+            placeholder={'Enter LUIS key'}
+            placeholderOnDisable={"<---- Same as root bot's LUIS key ---->"}
+            required={isLUISKeyNeeded}
+            value={skillLuisKey}
+            onBlur={handleLUISKeyOnBlur}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
+        <div ref={luisRegionFieldRef}>
+          <TextFieldWithCustomButton
+            ariaLabelledby={'LUIS region'}
+            buttonText={formatMessage('Use custom LUIS region')}
+            errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
+            label={formatMessage('LUIS region')}
+            placeholder={'Enter LUIS region'}
+            placeholderOnDisable={"<---- Same as root bot's LUIS region ---->"}
+            required={isLUISKeyNeeded}
+            value={skillLuisRegion}
+            onBlur={handleLUISRegionOnBlur}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
+        <div ref={qnaKeyFieldRef}>
+          <TextFieldWithCustomButton
+            ariaLabelledby={'QnA Maker Subscription key'}
+            buttonText={formatMessage('Use custom QnA Maker Subscription key')}
+            errorMessage={!rootqnaKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
+            id={'qnaKey'}
+            label={formatMessage('QnA Maker Subscription key')}
+            placeholder={'Enter QnA Maker Subscription key'}
+            placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}
+            required={isQnAKeyNeeded}
+            value={skillqnaKey}
+            onBlur={handleSkillQnAKeyOnBlur}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
       </div>
     </CollapsableWrapper>
   );

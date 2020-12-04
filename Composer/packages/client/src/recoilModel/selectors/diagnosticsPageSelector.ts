@@ -89,9 +89,11 @@ export const botDiagnosticsSelectorFamily = selectorFamily({
 
     //manifest.json
     //Manifest should exist
-    BotIndexer.checkManifest(botAssets).forEach((d) => {
-      diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
-    });
+    if (rootProjectId !== projectId) {
+      BotIndexer.checkManifest(botAssets).forEach((d) => {
+        diagnosticList.push(new BotDiagnostic(rootProjectId, projectId, '', d.source, d));
+      });
+    }
 
     return diagnosticList;
   },
