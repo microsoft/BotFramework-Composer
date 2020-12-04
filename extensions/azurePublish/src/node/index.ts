@@ -434,7 +434,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
         // these are specific to the azure publish profile shape
         name,
-        environment,
+        environment = 'composer',
         settings,
       } = config;
 
