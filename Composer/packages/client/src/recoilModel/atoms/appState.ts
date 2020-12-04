@@ -4,7 +4,6 @@
 import { atom, atomFamily } from 'recoil';
 import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
-import formatMessage from 'format-message';
 
 import {
   StorageFolder,
@@ -221,9 +220,9 @@ export const botOpeningState = atom<boolean>({
   default: false,
 });
 
-export const botOpeningMessage = atom({
+export const botOpeningMessage = atom<string | undefined>({
   key: getFullyQualifiedKey('botOpeningMessage'),
-  default: formatMessage('Loading'),
+  default: undefined,
 });
 
 export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({
