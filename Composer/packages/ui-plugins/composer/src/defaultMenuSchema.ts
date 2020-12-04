@@ -46,6 +46,10 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Date or time'),
     submenu: [SubmenuNames.AskQuestion],
   },
+  [SDKKinds.Ask]: {
+    label: formatMessage('Ask Activity'),
+    submenu: [SubmenuNames.AskQuestion],
+  },
   // OAuthInput appears twice
   [SDKKinds.OAuthInput]: [
     {
@@ -170,5 +174,17 @@ export const DefaultMenuSchema: MenuUISchema = {
   [SDKKinds.DeleteActivity]: {
     label: formatMessage('Delete activity'),
     submenu: [SubmenuNames.PropertyManagement],
+  },
+  [SDKKinds.GetActivityMembers]: {
+    label: formatMessage('Get activity members'),
+    submenu: [SubmenuNames.PropertyManagement],
+  },
+  [SDKKinds.GetConversationMembers]: {
+    label: formatMessage('Get conversation members'),
+    submenu: [SubmenuNames.PropertyManagement],
+  },
+  [SDKKinds.ThrowException]: {
+    label: formatMessage('Throw exception'),
+    submenu: [SubmenuNames.Debugging],
   },
 };

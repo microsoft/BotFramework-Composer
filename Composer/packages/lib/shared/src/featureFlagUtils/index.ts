@@ -5,12 +5,6 @@ import formatMessage from 'format-message';
 import { FeatureFlagMap } from '@botframework-composer/types';
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
-  VA_CREATION: {
-    displayName: formatMessage('VA Creation'),
-    description: formatMessage('VA template made available in new bot flow.'),
-    isHidden: true,
-    enabled: false,
-  },
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
     description: formatMessage('Show form dialog editor in the canvas'),
@@ -18,11 +12,10 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     enabled: false,
   },
   REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
-    displayName: formatMessage('Remote templates'),
-    description: formatMessage(
-      'If turned on then externally stored templates will be selectable in the new bot flow template list'
-    ),
-    isHidden: true,
+    displayName: formatMessage('Conversational Core Template'),
+    description: formatMessage('Enable the new conversational core template built on the component model'),
+    documentationLink: 'https://aka.ms/AAabzf9',
+    isHidden: false,
     enabled: false,
   },
   ORCHESTRATOR: {

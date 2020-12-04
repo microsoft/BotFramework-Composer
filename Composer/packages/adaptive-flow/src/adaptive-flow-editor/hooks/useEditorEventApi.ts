@@ -46,10 +46,10 @@ export const useEditorEventApi = (
   const { selectedIds, setSelectedIds, selectableElements } = selectionContext;
 
   const {
+    onOpenDialog,
     onFocusSteps,
     onFocusEvent,
     onCopy: onClipboardChange,
-    navTo,
     saveData: onChange,
     undo,
     redo,
@@ -156,7 +156,7 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.OpenDialog:
         handler = ({ callee }) => {
-          navTo(callee);
+          onOpenDialog(callee);
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;

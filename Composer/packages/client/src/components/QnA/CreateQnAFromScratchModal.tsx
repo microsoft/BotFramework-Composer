@@ -77,7 +77,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
             styles={{ root: { float: 'left' } }}
             text={formatMessage('Back')}
             onClick={() => {
-              actions.createQnAFromScratchDialogCancel({ projectId });
+              actions.createQnAFromScratchDialogBack({ projectId });
             }}
           />
         )}

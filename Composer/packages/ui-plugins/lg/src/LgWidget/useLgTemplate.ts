@@ -1,23 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef, LgFile, LgTemplate } from '@bfc/shared';
+import { LgTemplateRef } from '@bfc/shared';
 import { useShellApi } from '@bfc/extension-client';
 
-export const queryLgTemplate = (templateId: string, lgFileId: string, lgFiles: LgFile[]): LgTemplate | undefined => {
-  return lgFiles.find(({ id }) => id === lgFileId)?.templates?.find(({ name }) => name === templateId);
-};
+import { locateLgTemplatePosition } from '../locateLgTemplatePosition';
 
-export const useLgTemplate = (str?: string) => {
-  const { currentDialog, lgFiles, locale } = useShellApi();
-  const lgFileId = `${currentDialog.lgFile}.${locale}`;
+export const useLgTemplate = (rawText = ''): string => {
+  const { lgFiles, locale } = useShellApi();
 
-  const lgTemplateRef = LgTemplateRef.parse(str || '');
+  const lgTemplateRef = LgTemplateRef.parse(rawText || '');
   const templateId = lgTemplateRef ? lgTemplateRef.name : '';
 
   // fallback to input string
-  if (!templateId) return str || '';
+  if (!templateId) return rawText;
 
-  const lgTemplate = queryLgTemplate(templateId, lgFileId, lgFiles);
-  return lgTemplate ? lgTemplate.body : '';
+  const relatedLgFile = locateLgTemplatePosition(lgFiles, templateId, locale);
+  if (!relatedLgFile) return rawText;
+
+  const lgTemplate = relatedLgFile.templates.find((t) => t.name === templateId);
+  if (!lgTemplate) return rawText;
+
+  return lgTemplate.body;
 };
