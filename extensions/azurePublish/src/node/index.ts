@@ -22,7 +22,7 @@ import { authConfig, ResourcesItem } from '../types';
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
-const ProvisionLog = `provison.${process.env.NODE_ENV === 'production'? 'production': 'development'}.log`;
+const ProvisionLog = `provision.${process.env.NODE_ENV === 'production'? 'production': 'development'}.log`;
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
 interface DeployResources {
