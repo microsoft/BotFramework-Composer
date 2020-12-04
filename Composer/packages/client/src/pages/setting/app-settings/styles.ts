@@ -87,6 +87,11 @@ export const featureFlagContainer = css`
 
 export const featureFlagTitle = css`
   font-weight: ${FontWeights.semibold};
+  margin-right: 5px;
+`;
+
+export const featureFlagDescription = css`
+  margin-left: 5px;
 `;
 
 export const noFeatureFlagText = css`
