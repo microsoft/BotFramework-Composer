@@ -293,11 +293,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-labelledby={'LUIS application name'}
+          aria-labelledby={formatMessage('LUIS application name')}
           data-testid={'rootLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('LUIS application name')}
-          placeholder={'Enter LUIS application name'}
+          placeholder={formatMessage('Enter LUIS application name')}
           value={localRootLuisName}
           onBlur={handleRootLUISNameOnBlur}
           onChange={handleRootLUISNameOnChange}
@@ -305,12 +305,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <div ref={luisKeyFieldRef}>
           <TextField
-            aria-labelledby={'LUIS key'}
+            aria-label={formatMessage('LUIS key')}
             data-testid={'rootLUISKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             id={'luisKey'}
             label={formatMessage('LUIS key')}
-            placeholder={'Enter LUIS key'}
+            placeholder={formatMessage('Enter LUIS key')}
             required={isLUISKeyNeeded}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
             value={localRootLuisKey}
@@ -321,12 +321,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={luisRegionFieldRef}>
           <TextField
-            aria-labelledby={'LUIS region'}
+            aria-label={formatMessage('LUIS region')}
             data-testid={'rootLUISRegion'}
             errorMessage={errorElement(luisRegionErrorMsg)}
             id={'luisRegion'}
             label={formatMessage('LUIS region')}
-            placeholder={'Enter LUIS region'}
+            placeholder={formatMessage('Enter LUIS region')}
             required={isLUISKeyNeeded}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
             value={localRootLuisRegion}
@@ -337,12 +337,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={qnaKeyFieldRef}>
           <TextField
-            aria-labelledby={'QnA Maker Subscription key'}
+            aria-label={formatMessage('QnA Maker Subscription key')}
             data-testid={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             id={'qnaKey'}
             label={formatMessage('QnA Maker Subscription key')}
-            placeholder={'Enter QnA Maker Subscription key'}
+            placeholder={formatMessage('Enter QnA Maker Subscription key')}
             required={isQnAKeyNeeded}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
             value={localRootQnAKey}
