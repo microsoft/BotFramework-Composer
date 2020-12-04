@@ -145,7 +145,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
       updateLuIntent(payload);
     },
-    [intents, projectId]
+    [actualProjectId]
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -160,7 +160,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLuIntent(payload);
       }
     },
-    [intents, file, projectId]
+    [defaultLangFile, actualProjectId]
   );
 
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
