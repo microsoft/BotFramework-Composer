@@ -13,7 +13,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../../utils/electronUtil';
-import { onboardingState, userSettingsState, dispatcherState, ServerSettingsState } from '../../../recoilModel';
+import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -28,8 +28,7 @@ const ElectronSettings = lazy(() =>
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
-  const { onboardingSetComplete, updateUserSettings, updateServerSettings } = useRecoilValue(dispatcherState);
-  const { telemetry } = useRecoilValue(ServerSettingsState);
+  const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
   const onOnboardingChange = useCallback(
@@ -49,8 +48,8 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     updateUserSettings({ appLocale });
   };
 
-  const handleDataCollectionChange = (allowDataCollection) => {
-    updateServerSettings({
+  const handleDataCollectionChange = (allowDataCollection: boolean) => {
+    updateUserSettings({
       telemetry: {
         allowDataCollection,
       },
@@ -204,7 +203,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('Data Collection')}</h2>
         <SettingToggle
-          checked={!!telemetry?.allowDataCollection}
+          checked={!!userSettings.telemetry.allowDataCollection}
           description={formatMessage(
             'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.'
           )}

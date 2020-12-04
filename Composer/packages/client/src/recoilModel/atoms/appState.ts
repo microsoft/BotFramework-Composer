@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ServerSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
@@ -243,15 +243,6 @@ export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any
     'language-generation': {},
     'language-understanding': {},
     'knowledge-base': {},
-  },
-});
-
-export const ServerSettingsState = atom<ServerSettings>({
-  key: getFullyQualifiedKey('serverSettings'),
-  default: {
-    telemetry: {
-      allowDataCollection: false,
-    },
   },
 });
 
