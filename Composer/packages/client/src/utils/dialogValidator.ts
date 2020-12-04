@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import get from 'lodash/get';
-import { DialogInfo, ITrigger, LuFile, QnAFile } from '@bfc/shared';
+import { DialogInfo, ITrigger } from '@bfc/shared';
 
 import { regexRecognizerKey, onChooseIntentKey, qnaMatcherKey } from '../utils/dialogUtil';
 import { triggerNotSupportedWarning } from '../constants';
-
-import { getBaseName } from './fileUtil';
 
 export const isRegExRecognizerType = (dialog: DialogInfo | undefined) => {
   if (!dialog) return false;
@@ -37,20 +35,4 @@ export const triggerNotSupported = (dialog: DialogInfo | undefined, trigger: ITr
     return triggerNotSupportedWarning;
   }
   return '';
-};
-
-export const isLUISMandatory = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
-  return dialogs.some((dialog) => {
-    const isDefault = isLUISnQnARecognizerType(dialog);
-    const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.id);
-    return !!(isDefault && luFile?.content);
-  });
-};
-
-export const isQnAKeyMandatory = (dialogs: DialogInfo[], qnaFiles: QnAFile[]) => {
-  return dialogs.some((dialog) => {
-    const isDefault = isLUISnQnARecognizerType(dialog);
-    const qnaFile = qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id);
-    return !!(isDefault && qnaFile?.content);
-  });
 };
