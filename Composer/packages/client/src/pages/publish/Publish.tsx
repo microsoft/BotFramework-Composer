@@ -149,14 +149,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       disabled: !isPullSupported,
     },
   ];
-  const getUpdatedStatus = (target, botProjectId) => {
-    if (target) {
-      // TODO: this should use a backoff mechanism to not overload the server with requests
-      // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
-      setTimeout(async () => {
-        getPublishStatus(botProjectId, target);
-      }, publishStatusInterval);
-    }
+  const [statusIntervals, setStatusIntervals] = useState<{ [key: string]: NodeJS.Timeout }[]>([]);
+  const getUpdatedStatus = (target, botProjectId): NodeJS.Timeout => {
+    // TODO: this should use a backoff mechanism to not overload the server with requests
+    // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
+    return setInterval(async () => {
+      getPublishStatus(botProjectId, target);
+    }, publishStatusInterval);
   };
 
   const [pendingNotification, setPendingNotification] = useState<Notification>();
@@ -184,8 +183,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // most recent item is a 202, which means we should poll for updates...
       if (latestPublishItem.status === 202) {
         publishFinished = false;
-        getUpdatedStatus(selectedTarget, botProjectId);
       } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
+        const interval = statusIntervals.find((i) => i[bot.id]);
+        if (interval) {
+          clearInterval(interval[bot.id]);
+          setStatusIntervals(statusIntervals.filter((i) => !i[botProjectId]));
+        }
         if (!isEqual(previousBotPublishHistory, botPublishHistory)) {
           bot.status = latestPublishItem.status;
           if (showNotifications[bot.id]) {
@@ -340,31 +343,35 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification(notification);
 
     // publish to remote
+    const intervals: { [key: string]: NodeJS.Timeout }[] = [];
     for (const bot of items) {
       if (bot.publishTarget && bot.publishTargets) {
         const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
         const botProjectId = bot.id;
         const setting = botSettingList.find((botsetting) => botsetting.projectId === bot.id)?.setting;
-        if (setting && setting.publishTargets) {
-          setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
-          const sensitiveSettings = getSensitiveProperties(setting);
-          await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
-
-          // update the target with a lastPublished date
-          const updatedPublishTargets = setting.publishTargets.map((profile) => {
-            if (profile.name === selectedTarget?.name) {
-              return {
-                ...profile,
-                lastPublished: new Date(),
-              };
-            } else {
-              return profile;
-            }
-          });
-
-          await setPublishTargets(updatedPublishTargets, botProjectId);
+        if (!(setting && setting.publishTargets)) {
+          return;
         }
+        setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
+        const sensitiveSettings = getSensitiveProperties(setting);
+        await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
+
+        // update the target with a lastPublished date
+        const updatedPublishTargets = setting.publishTargets.map((profile) => {
+          if (profile.name === selectedTarget?.name) {
+            return {
+              ...profile,
+              lastPublished: new Date(),
+            };
+          } else {
+            return profile;
+          }
+        });
+
+        await setPublishTargets(updatedPublishTargets, botProjectId);
+        intervals.push({ [botProjectId]: getUpdatedStatus(selectedTarget, botProjectId) });
       }
+      setStatusIntervals(intervals);
       setBotStatusList(
         botStatusList.map((bot) => {
           const item = items.find((i) => i.id === bot.id);
