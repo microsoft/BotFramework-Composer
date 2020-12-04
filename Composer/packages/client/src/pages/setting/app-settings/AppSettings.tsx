@@ -173,18 +173,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         />
       </section>
       <section css={section}>
-        <h2>{formatMessage('Application Language')}</h2>
-        <SettingDropdown
-          description={formatMessage('This is the language used for Composer’s user interface.')}
-          dropdownWidth={200}
-          image={images.language}
-          options={languageOptions}
-          selected={userSettings.appLocale}
-          title={formatMessage('Application language')}
-          onChange={onLocaleChange}
-        />
-      </section>
-      <section css={section}>
         <h2>{formatMessage('Application Updates')}</h2>
         <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
         <PreviewFeatureToggle />
