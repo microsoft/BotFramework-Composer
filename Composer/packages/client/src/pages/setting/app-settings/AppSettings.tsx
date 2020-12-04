@@ -97,7 +97,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           <h2>{formatMessage('Application Language settings')}</h2>
           <SettingDropdown
             description={formatMessage('This is the language used for Composer’s user interface.')}
-            image={images.language}
             options={languageOptions}
             selected={userSettings.appLocale}
             title={formatMessage('Application language')}
@@ -181,18 +180,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           image={images.wordWrap}
           title={formatMessage('Sentence wrap')}
           onToggle={onCodeEditorChange('wordWrap')}
-        />
-      </section>
-      <section css={section}>
-        <h2>{formatMessage('Application Language')}</h2>
-        <SettingDropdown
-          description={formatMessage('This is the language used for Composer’s user interface.')}
-          dropdownWidth={200}
-          image={images.language}
-          options={languageOptions}
-          selected={userSettings.appLocale}
-          title={formatMessage('Application language')}
-          onChange={onLocaleChange}
         />
       </section>
       <section css={section}>

@@ -10,19 +10,33 @@ export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 export const UNDO_LIMIT = 10;
 
 export const Tips = {
-  PROJECT_NAME: formatMessage(
-    `Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)`
-  ),
-  ENVIRONMENT: formatMessage(
-    `When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.`
-  ),
-  AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
-  SUBSCRIPTION_KEY: formatMessage('A subscription key is created when you create a QnA Maker resource.'),
-  AUTHORING_REGION: formatMessage('Authoring region to use (e.g. westus, westeurope, australiaeast)'),
-  QNA_REGION: formatMessage('Authoring region to use (westus)  (QnA maker resource location)'),
-  DEFAULT_LANGUAGE: formatMessage(
-    `Configures default language model to use if there is no culture code in the file name (Default: en-us)`
-  ),
+  get PROJECT_NAME() {
+    return formatMessage(
+      `Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)`
+    );
+  },
+  get ENVIRONMENT() {
+    return formatMessage(
+      `When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.`
+    );
+  },
+  get AUTHORING_KEY() {
+    return formatMessage('An authoring key is created automatically when you create a LUIS account.');
+  },
+  get SUBSCRIPTION_KEY() {
+    return formatMessage('A subscription key is created when you create a QnA Maker resource.');
+  },
+  get AUTHORING_REGION() {
+    return formatMessage('Authoring region to use (e.g. westus, westeurope, australiaeast)');
+  },
+  get QNA_REGION() {
+    return formatMessage('Authoring region to use (westus)  (QnA maker resource location)');
+  },
+  get DEFAULT_LANGUAGE() {
+    return formatMessage(
+      `Configures default language model to use if there is no culture code in the file name (Default: en-us)`
+    );
+  },
 };
 
 export const Links = {
@@ -31,17 +45,31 @@ export const Links = {
 };
 
 export const Text = {
-  DEPLOY: formatMessage(`Your bot is using LUIS and QNA for natural language understanding.`),
-  LUISDEPLOY: formatMessage(
-    `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
-  ),
-  QNADEPLOY: formatMessage(
-    `If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first.`
-  ),
-  LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
-  LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
-  CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
-  DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
+  get DEPLOY() {
+    return formatMessage(`Your bot is using LUIS and QNA for natural language understanding.`);
+  },
+  get LUISDEPLOY() {
+    return formatMessage(
+      `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
+    );
+  },
+  get QNADEPLOY() {
+    return formatMessage(
+      `If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first.`
+    );
+  },
+  get LUISDEPLOYSUCCESS() {
+    return formatMessage('Congratulations! Your model is successfully published.');
+  },
+  get LUISDEPLOYFAILURE() {
+    return formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.');
+  },
+  get CONNECTBOTFAILURE() {
+    return formatMessage('Sorry, something went wrong with connecting bot runtime');
+  },
+  get DOTNETFAILURE() {
+    return formatMessage('Composer needs .NET Core SDK');
+  },
 };
 
 export enum LuisConfig {
@@ -102,100 +130,152 @@ export const Steps = {
 };
 
 export const BotStatusesCopy = {
-  connected: formatMessage('Running'),
-  publishing: formatMessage('Building'),
-  published: formatMessage('Starting'),
-  inactive: formatMessage('Inactive'),
-  failed: formatMessage('Failed to start'),
-  loading: formatMessage('Building'),
-  queued: formatMessage('Queued'),
-  reloading: formatMessage('Starting'),
-  stopping: formatMessage('Stopping'),
+  get connected() {
+    return formatMessage('Running');
+  },
+  get publishing() {
+    return formatMessage('Building');
+  },
+  get published() {
+    return formatMessage('Starting');
+  },
+  get inactive() {
+    return formatMessage('Inactive');
+  },
+  get failed() {
+    return formatMessage('Failed to start');
+  },
+  get loading() {
+    return formatMessage('Building');
+  },
+  get queued() {
+    return formatMessage('Queued');
+  },
+  get reloading() {
+    return formatMessage('Starting');
+  },
+  get stopping() {
+    return formatMessage('Stopping');
+  },
 };
 
 export const DialogCreationCopy = {
-  CREATE_NEW_BOT: {
-    title: formatMessage('Create bot from template or scratch?'),
-    subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+  get CREATE_NEW_BOT() {
+    return {
+      title: formatMessage('Create bot from template or scratch?'),
+      subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+    };
   },
-  CREATE_NEW_SKILLBOT: {
-    title: formatMessage('Create a skill in your bot'),
-    subText: '',
+  get CREATE_NEW_SKILLBOT() {
+    return {
+      title: formatMessage('Create a skill in your bot'),
+      subText: '',
+    };
   },
-  DEFINE_CONVERSATION_OBJECTIVE: {
-    title: formatMessage('Define conversation objective'),
-    subText: formatMessage(
-      `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
-    ),
+  get DEFINE_CONVERSATION_OBJECTIVE() {
+    return {
+      title: formatMessage('Define conversation objective'),
+      subText: formatMessage(
+        `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
+      ),
+    };
   },
-  DEFINE_BOT_PROJECT: {
-    title: formatMessage('Create a bot project'),
-    subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+  get DEFINE_BOT_PROJECT() {
+    return {
+      title: formatMessage('Create a bot project'),
+      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+    };
   },
-  DEFINE_DIALOG: {
-    title: formatMessage('Create a dialog'),
-    subText: formatMessage(`Specify a name and description for your new dialog.`),
+  get DEFINE_DIALOG() {
+    return {
+      title: formatMessage('Create a dialog'),
+      subText: formatMessage(`Specify a name and description for your new dialog.`),
+    };
   },
-  SELECT_LOCATION: {
-    title: formatMessage('Select a Bot'),
-    subText: formatMessage('Which bot do you want to open?'),
+  get SELECT_LOCATION() {
+    return {
+      title: formatMessage('Select a Bot'),
+      subText: formatMessage('Which bot do you want to open?'),
+    };
   },
-  SELECT_DESTINATION: {
-    title: formatMessage('Set destination folder'),
-    subText: formatMessage('Choose a location for your new bot project.'),
+  get SELECT_DESTINATION() {
+    return {
+      title: formatMessage('Set destination folder'),
+      subText: formatMessage('Choose a location for your new bot project.'),
+    };
   },
-  IMPORT_QNA: {
-    title: formatMessage('Create New Knowledge Base'),
-    subText: formatMessage(
-      'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
-    ),
+  get IMPORT_QNA() {
+    return {
+      title: formatMessage('Create New Knowledge Base'),
+      subText: formatMessage(
+        'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
+      ),
+    };
   },
-  IMPORT_BOT_PROJECT: {
-    title: formatMessage('Import your bot to new project'),
-    subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+  get IMPORT_BOT_PROJECT() {
+    return {
+      title: formatMessage('Import your bot to new project'),
+      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+    };
   },
 };
 
 export const DialogDeleting = {
-  NO_LINKED_TITLE: formatMessage('This will delete the Dialog and its contents. Do you wish to continue?'),
-  TITLE: formatMessage('Warning!'),
-  CONTENT: formatMessage(
-    `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
-  ),
-  CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
+  get NO_LINKED_TITLE() {
+    return formatMessage('This will delete the Dialog and its contents. Do you wish to continue?');
+  },
+  get TITLE() {
+    return formatMessage('Warning!');
+  },
+  get CONTENT() {
+    return formatMessage(
+      `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
+    );
+  },
+  get CONFIRM_CONTENT() {
+    return formatMessage('Do you wish to continue?');
+  },
 };
 
 export const MultiLanguagesDialog = {
-  ADD_DIALOG: {
-    title: formatMessage('Copy content for translation'),
-    subText: formatMessage(
-      `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`
-    ),
-    selectDefaultLangTitle: formatMessage(
-      'This language will be copied and used as the basis (and fallback language) for the translation.'
-    ),
-    selectionTitle: formatMessage('To which language will you be translating your bot?'),
-    searchPlaceHolder: formatMessage('Search'),
-    whenDoneText: formatMessage(
-      'When done, switch to the newly created language and start the (manual) translation process.'
-    ),
+  get ADD_DIALOG() {
+    return {
+      title: formatMessage('Copy content for translation'),
+      subText: formatMessage(
+        `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`
+      ),
+      selectDefaultLangTitle: formatMessage(
+        'This language will be copied and used as the basis (and fallback language) for the translation.'
+      ),
+      selectionTitle: formatMessage('To which language will you be translating your bot?'),
+      searchPlaceHolder: formatMessage('Search'),
+      whenDoneText: formatMessage(
+        'When done, switch to the newly created language and start the (manual) translation process.'
+      ),
+    };
   },
-  DELETE_DIALOG: {
-    title: formatMessage('Select language to delete'),
-    subText: formatMessage(
-      `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
-    ),
+  get DELETE_DIALOG() {
+    return {
+      title: formatMessage('Select language to delete'),
+      subText: formatMessage(
+        `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
+      ),
+    };
   },
 };
 
 export const addSkillDialog = {
-  SKILL_MANIFEST_FORM: {
-    title: formatMessage('Add a skill'),
-    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  get SKILL_MANIFEST_FORM() {
+    return {
+      title: formatMessage('Add a skill'),
+      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+    };
   },
-  SKILL_MANIFEST_FORM_EDIT: {
-    title: formatMessage('Edit a skill'),
-    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  get SKILL_MANIFEST_FORM_EDIT() {
+    return {
+      title: formatMessage('Edit a skill'),
+      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+    };
   },
 };
 
@@ -241,6 +321,7 @@ export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
-export const triggerNotSupportedWarning = formatMessage(
-  'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
-);
+export const triggerNotSupportedWarning = () =>
+  formatMessage(
+    'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
+  );
