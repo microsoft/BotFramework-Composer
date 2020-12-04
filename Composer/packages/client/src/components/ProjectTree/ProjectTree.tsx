@@ -315,6 +315,15 @@ export const ProjectTree: React.FC<Props> = ({
         onClick: () => {},
       },
       {
+        label: formatMessage('Create/edit skill manifest'),
+        onClick: () => {
+          onBotEditManifest(
+            bot.projectId,
+            bot.diagnostics.filter((d) => d.source === 'manifest.json').length ? 'create' : 'edit'
+          );
+        },
+      },
+      {
         label: formatMessage('Export this bot as .zip'),
         onClick: () => {
           onBotExportZip(bot.projectId);
@@ -329,25 +338,12 @@ export const ProjectTree: React.FC<Props> = ({
     ];
 
     if (!bot.isRootBot) {
-      menu.splice(
-        3,
-        0,
-        {
-          label: formatMessage('Create/edit skill manifest'),
-          onClick: () => {
-            onBotEditManifest(
-              bot.projectId,
-              bot.diagnostics.filter((d) => d.source === 'manifest.json').length ? 'create' : 'edit'
-            );
-          },
+      menu.splice(3, 0, {
+        label: formatMessage('Remove this skill from project'),
+        onClick: () => {
+          onBotRemoveSkill(bot.projectId);
         },
-        {
-          label: formatMessage('Remove this skill from project'),
-          onClick: () => {
-            onBotRemoveSkill(bot.projectId);
-          },
-        }
-      );
+      });
     }
 
     return (
