@@ -741,30 +741,43 @@ export const ProjectTree: React.FC<Props> = ({
             (dialog) =>
               filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
           );
+    const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
 
     if (options.showTriggers || options.showLgImports || options.showLuImports) {
-      return filteredDialogs.map((dialog: DialogInfo) => {
-        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
-        const key = 'dialog-' + dialog.id;
-        return (
-          <ExpandableNode
-            key={key}
-            defaultState={getPageElement(key)}
-            depth={startDepth}
-            detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
-            summary={summaryElement}
-            onToggle={(newState) => setPageElement(key, newState)}
-          >
-            <div>
-              {options.showTriggers && renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}
-              {options.showLgImports && renderLgImports(dialog, projectId, dialogLink)}
-              {options.showLuImports && renderLuImports(dialog, projectId, dialogLink)}
-            </div>
-          </ExpandableNode>
-        );
-      });
+      return [
+        ...commonLink,
+        ...filteredDialogs.map((dialog: DialogInfo) => {
+          const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
+          const key = 'dialog-' + dialog.id;
+          const lgImports = renderLgImports(dialog, projectId, dialogLink);
+          const luImports = renderLuImports(dialog, projectId, dialogLink);
+          const showExpanded =
+            options.showTriggers ||
+            (options.showLgImports && lgImports.length > 0) ||
+            (options.showLuImports && luImports.length > 0);
+          if (showExpanded) {
+            return (
+              <ExpandableNode
+                key={key}
+                defaultState={getPageElement(key)}
+                depth={startDepth}
+                detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
+                summary={summaryElement}
+                onToggle={(newState) => setPageElement(key, newState)}
+              >
+                <div>
+                  {options.showTriggers && renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}
+                  {options.showLgImports && lgImports}
+                  {options.showLuImports && luImports}
+                </div>
+              </ExpandableNode>
+            );
+          } else {
+            return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
+          }
+        }),
+      ];
     } else {
-      const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
       return [
         ...commonLink,
         ...filteredDialogs.map(
