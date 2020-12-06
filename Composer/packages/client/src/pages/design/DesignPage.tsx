@@ -170,7 +170,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger,
     deleteTrigger,
     createQnATrigger,
-    displayManifestModal,
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
 
@@ -651,15 +650,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDialogModalInfo(projectId);
   };
 
-  const handleDisplayManifestModal = (skillId: string, type: 'create' | 'edit') => {
-    if (type === 'create') {
-      setExportSkillModalInfo(skillId);
-      return;
-    }
-
-    const skillNameIdentifier = skillsByProjectId[skillId];
-    if (!skillNameIdentifier) return;
-    displayManifestModal(skillNameIdentifier);
+  const handleDisplayManifestModal = (currentProjectId: string) => {
+    setExportSkillModalInfo(currentProjectId);
   };
 
   const handleErrorClick = (projectId: string, skillId: string, diagnostic: Diagnostic) => {
