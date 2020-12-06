@@ -157,7 +157,7 @@ type Props = {
   onBotCreateDialog?: (projectId: string) => void;
   onBotStart?: (projectId: string) => void;
   onBotStop?: (projectId: string) => void;
-  onBotEditManifest?: (projectId: string, type: 'create' | 'edit') => void;
+  onBotEditManifest?: (projectId: string) => void;
   onBotExportZip?: (projectId: string) => void;
   onBotRemoveSkill?: (skillId: string) => void;
   onDialogCreateTrigger?: (projectId: string, dialogId: string) => void;
@@ -341,10 +341,7 @@ export const ProjectTree: React.FC<Props> = ({
       {
         label: formatMessage('Create/edit skill manifest'),
         onClick: () => {
-          onBotEditManifest(
-            bot.projectId,
-            bot.diagnostics.filter((d) => d.source === 'manifest.json').length ? 'create' : 'edit'
-          );
+          onBotEditManifest(bot.projectId);
         },
       },
       {
