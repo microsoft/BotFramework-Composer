@@ -1925,8 +1925,8 @@
   "orchestrator_36e58231": {
     "message": "Orchestrator"
   },
-  "orchestrator_recognizer_8065b58a": {
-    "message": "Orchestrator Recognizer"
+  "orchestrator_recognizer_cf38b65a": {
+    "message": "Orchestrator recognizer"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "origin lg file not found in store"
@@ -2170,6 +2170,9 @@
   },
   "recent_bots_53585911": {
     "message": "Recent Bots"
+  },
+  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
+    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
   },
   "recognizer_type_dc591e16": {
     "message": "Recognizer Type"
@@ -2848,9 +2851,6 @@
   },
   "url_should_start_with_http_s_9ca55d94": {
     "message": "Url should start with http[s]://"
-  },
-  "use_as_intent_only_recognizer_typically_for_routin_1a7072ef": {
-    "message": "Use as intent-only recognizer, typically for routing to skills or subsequent LUIS or QnAMaker processing or when entity extraction is not needed."
   },
   "use_custom_luis_key_73f92d45": {
     "message": "Use custom LUIS key"
