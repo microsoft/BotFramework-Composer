@@ -34,7 +34,7 @@ const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'))
 const QnAPage = React.lazy(() => import('./pages/knowledge-base/QnAPage'));
 const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
-const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
+const BotProjectSettings = React.lazy(() => import('./pages/ProjectSettings/BotProjectSettings'));
 const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));

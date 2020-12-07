@@ -293,11 +293,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-labelledby={'LUIS name'}
-          data-testid={'rootLUISName'}
+          aria-labelledby={'LUIS application name'}
+          data-testid={'rootLUISApplicationName'}
           id={'luisName'}
-          label={formatMessage('LUIS name')}
-          placeholder={'Enter LUIS name'}
+          label={formatMessage('LUIS application name')}
+          placeholder={'Enter LUIS application name'}
           value={localRootLuisName}
           onBlur={handleRootLUISNameOnBlur}
           onChange={handleRootLUISNameOnChange}
