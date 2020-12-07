@@ -35,10 +35,11 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   projectId?: string;
   skillId?: string;
   dialogId?: string;
+  lgFileId?: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId } = props;
+  const { dialogId, projectId, skillId, lgFileId } = props;
 
   const actualProjectId = skillId ?? projectId ?? '';
 
@@ -52,8 +53,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const { languages, defaultLanguage } = settings;
 
-  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
@@ -90,9 +96,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         } as LgTemplate,
       };
       createLgTemplate(payload);
-      //setFocusedIndex(file.templates.length);
     }
-  }, [file]);
+  }, [file, actualProjectId]);
 
   const onRemoveTemplate = useCallback(
     (name) => {
@@ -103,10 +108,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
           projectId: actualProjectId,
         };
         removeLgTemplate(payload);
-        //setFocusedIndex(file.templates.findIndex((item) => item.name === name));
       }
     },
-    [file]
+    [file, actualProjectId]
   );
 
   const onCopyTemplate = useCallback(
@@ -120,10 +124,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
           projectId: actualProjectId,
         };
         copyLgTemplate(payload);
-        //setFocusedIndex(file.templates.length);
       }
     },
-    [file]
+    [file, actualProjectId]
   );
 
   const handleTemplateUpdate = useCallback(
@@ -138,7 +141,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLgTemplate(payload);
       }
     },
-    [file]
+    [file, actualProjectId]
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -153,7 +156,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLgTemplate(payload);
       }
     },
-    [defaultLangFile]
+    [defaultLangFile, actualProjectId]
   );
 
   const getTemplatesMoreButtons = useCallback(
@@ -186,7 +189,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       return buttons;
     },
-    [activeDialog, templates]
+    [activeDialog, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]
   );
 
   const getTableColums = useCallback((): IColumn[] => {
@@ -386,7 +389,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
 
     return tableColums;
-  }, [activeDialog, actualProjectId]);
+  }, [
+    languages,
+    locale,
+    defaultLanguage,
+    handleTemplateUpdate,
+    handleTemplateUpdateDefaultLocale,
+    getTemplatesMoreButtons,
+    activeDialog,
+    actualProjectId,
+  ]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -431,7 +443,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       });
     }
     return templates;
-  }, [templates]);
+  }, [templates, defaultLangFile, locale, defaultLanguage]);
 
   return (
     <div className={'table-view'} data-testid={'table-view'}>

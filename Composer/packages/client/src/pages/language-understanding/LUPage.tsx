@@ -20,8 +20,9 @@ const LUPage: React.FC<RouteComponentProps<{
   dialogId: string;
   projectId: string;
   skillId?: string;
+  luFileId?: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
+  const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
@@ -30,16 +31,17 @@ const LUPage: React.FC<RouteComponentProps<{
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
-    if (!activeDialog && dialogId !== 'all' && dialogs.length) {
+    if (!activeDialog && dialogId !== 'all' && dialogs.length && !luFileId) {
       navigateTo(buildURL('language-understanding', { projectId, skillId }));
     }
-  }, [dialogId, dialogs, projectId]);
+  }, [dialogId, dialogs, projectId, luFileId]);
 
   const onToggleEditMode = useCallback(() => {
     let url = buildURL('language-understanding', { projectId, skillId, dialogId });
+    if (luFileId) url += `/item/${luFileId}`;
     if (!edit) url += `/edit`;
     navigateTo(url);
-  }, [dialogId, projectId, edit]);
+  }, [dialogId, projectId, luFileId, edit]);
 
   const onRenderHeaderContent = () => {
     if (!isRoot) {
@@ -56,16 +58,19 @@ const LUPage: React.FC<RouteComponentProps<{
     <Page
       useNewTree
       data-testid="LUPage"
+      dialogId={dialogId}
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}
       pageMode={'language-understanding'}
+      projectId={projectId}
+      skillId={skillId}
       title={formatMessage('User Input')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} skillId={skillId} />
+          <CodeEditor dialogId={dialogId} luFileId={luFileId} path="/edit" projectId={projectId} skillId={skillId} />
           <TableView path="/" />
         </Router>
       </Suspense>
