@@ -3,7 +3,7 @@
 
 export enum FileExtensions {
   Dialog = '.dialog',
-  FormDialog = '.form-dialog',
+  FormDialogSchema = '.form',
   DialogSchema = '.schema',
   Lu = '.lu',
   QnA = '.qna',
@@ -11,4 +11,5 @@ export enum FileExtensions {
   Manifest = '.json',
   BotProjectSpace = '.botproj',
   Json = '.json',
+  CrossTrainConfig = '.config.json',
 }

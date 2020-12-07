@@ -3,16 +3,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dialogIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
+import { DialogInfo, checkForPVASchema } from '@bfc/shared';
 
 import {
-  dialogsState,
   lgFilesState,
   luFilesState,
+  dialogIdsState,
   schemasState,
+  settingsState,
   onCreateDialogCompleteState,
   actionsSeedState,
   showCreateDialogModalState,
-} from '../atoms/botState';
+  dialogState,
+} from '../atoms';
+import { dispatcherState } from '../DispatcherWrapper';
 
 import { createLgFileState, removeLgFileState } from './lg';
 import { createLuFileState, removeLuFileState } from './lu';
@@ -22,11 +26,21 @@ import { removeDialogSchema } from './dialogSchema';
 export const dialogsDispatcher = () => {
   const removeDialog = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (id: string, projectId: string) => {
-      const { set, snapshot } = callbackHelpers;
-      let dialogs = await snapshot.getPromise(dialogsState(projectId));
-      dialogs = dialogs.filter((dialog) => dialog.id !== id);
-      set(dialogsState(projectId), dialogs);
-      //remove dialog should remove all locales lu and lg files and the dialog schema file
+      const { set, reset, snapshot } = callbackHelpers;
+
+      const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId: id }));
+
+      // If the dialog is a generated form dialog, delete using form dialog dispatcher
+      if (dialog.content?.$schema) {
+        const { removeFormDialog } = await snapshot.getPromise(dispatcherState);
+        await removeFormDialog({ projectId, dialogId: id });
+        return;
+      }
+
+      reset(dialogState({ projectId, dialogId: id }));
+      set(dialogIdsState(projectId), (previousDialogIds) => previousDialogIds.filter((dialogId) => dialogId !== id));
+
+      //remove dialog should remove all locales lu, lg and qna files and the dialog schema file
       await removeLgFileState(callbackHelpers, { id, projectId });
       await removeLuFileState(callbackHelpers, { id, projectId });
       await removeQnAFileState(callbackHelpers, { id, projectId });
@@ -34,28 +48,27 @@ export const dialogsDispatcher = () => {
     }
   );
 
-  const updateDialog = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content, projectId }) => {
-    // migration: add id for dialog
-    if (typeof content === 'object' && !content.id) {
-      content.id = id;
+  const updateDialog = useRecoilCallback(
+    ({ snapshot, set }: CallbackInterface) => async ({ id, content, projectId }) => {
+      // migration: add id for dialog
+      if (typeof content === 'object' && !content.id) {
+        content.id = id;
+      }
+
+      const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
+
+      const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId: id }));
+      const newDialog: DialogInfo = { ...dialog, ...dialogIndexer.parse(dialog.id, fixedContent) };
+      set(dialogState({ projectId, dialogId: id }), newDialog);
     }
-    set(dialogsState(projectId), (dialogs) => {
-      return dialogs.map((dialog) => {
-        if (dialog.id === id) {
-          const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
-          return { ...dialog, ...dialogIndexer.parse(dialog.id, fixedContent) };
-        }
-        return dialog;
-      });
-    });
-  });
+  );
 
   const createDialogBegin = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (actions, onComplete, projectId: string) => {
       const { set } = callbackHelpers;
       set(actionsSeedState(projectId), actions);
       set(onCreateDialogCompleteState(projectId), { func: onComplete });
-      set(showCreateDialogModalState(projectId), true);
+      set(showCreateDialogModalState, true);
     }
   );
 
@@ -63,7 +76,7 @@ export const dialogsDispatcher = () => {
     const { set } = callbackHelpers;
     set(actionsSeedState(projectId), []);
     set(onCreateDialogCompleteState(projectId), { func: undefined });
-    set(showCreateDialogModalState(projectId), false);
+    set(showCreateDialogModalState, false);
   });
 
   const createDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content, projectId }) => {
@@ -72,18 +85,23 @@ export const dialogsDispatcher = () => {
     const schemas = await snapshot.getPromise(schemasState(projectId));
     const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
     const luFiles = await snapshot.getPromise(luFilesState(projectId));
+    const settings = await snapshot.getPromise(settingsState(projectId));
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
     if (typeof dialog.content === 'object') {
       dialog.content.id = id;
     }
     await createLgFileState(callbackHelpers, { id, content: '', projectId });
     await createLuFileState(callbackHelpers, { id, content: '', projectId });
-    await createQnAFileState(callbackHelpers, { id, content: '', projectId });
 
-    set(dialogsState(projectId), (dialogs) => [...dialogs, dialog]);
+    if (!checkForPVASchema(schemas.sdk)) {
+      await createQnAFileState(callbackHelpers, { id, content: '', projectId });
+    }
+
+    set(dialogState({ projectId, dialogId: dialog.id }), dialog);
+    set(dialogIdsState(projectId), (dialogsIds) => [...dialogsIds, dialog.id]);
     set(actionsSeedState(projectId), []);
-    set(showCreateDialogModalState(projectId), false);
+    set(showCreateDialogModalState, false);
     const onComplete = (await snapshot.getPromise(onCreateDialogCompleteState(projectId))).func;
     if (typeof onComplete === 'function') {
       setTimeout(() => onComplete(id));

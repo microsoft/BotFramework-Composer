@@ -12,10 +12,10 @@ import {
   settingsState,
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
-  showCreateQnAFromUrlDialogWithScratchState,
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
 } from '../atoms/botState';
+import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
@@ -25,8 +25,9 @@ import {
   getQnaPendingNotification,
 } from '../../utils/notifications';
 import httpClient from '../../utils/httpUtil';
+import { rootBotProjectIdSelector } from '../selectors';
 
-import { addNotificationInternal, deleteNotificationInternal, createNotifiction } from './notification';
+import { addNotificationInternal, deleteNotificationInternal, createNotification } from './notification';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
@@ -203,24 +204,21 @@ export const qnaDispatcher = () => {
     ({ set }: CallbackInterface) => async ({
       onComplete,
       projectId,
-      showFromScratch,
+      dialogId,
     }: {
       onComplete?: () => void;
-      showFromScratch: boolean;
       projectId: string;
+      dialogId: string;
     }) => {
+      set(createQnAOnState, { projectId, dialogId });
       set(showCreateQnAFromUrlDialogState(projectId), true);
-      if (showFromScratch) {
-        set(showCreateQnAFromUrlDialogWithScratchState(projectId), true);
-      } else {
-        set(showCreateQnAFromUrlDialogWithScratchState(projectId), false);
-      }
       set(onCreateQnAFromUrlDialogCompleteState(projectId), { func: onComplete });
     }
   );
 
   const createQnAFromUrlDialogCancel = useRecoilCallback(
     ({ set }: CallbackInterface) => ({ projectId }: { projectId: string }) => {
+      set(createQnAOnState, { projectId: '', dialogId: '' });
       set(showCreateQnAFromUrlDialogState(projectId), false);
       set(onCreateQnAFromUrlDialogCompleteState(projectId), { func: undefined });
     }
@@ -230,17 +228,28 @@ export const qnaDispatcher = () => {
     ({ set }: CallbackInterface) => async ({
       onComplete,
       projectId,
+      dialogId,
     }: {
       onComplete?: () => void;
       projectId: string;
+      dialogId: string;
     }) => {
+      set(createQnAOnState, { projectId, dialogId });
       set(showCreateQnAFromScratchDialogState(projectId), true);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: onComplete });
     }
   );
 
+  const createQnAFromScratchDialogBack = useRecoilCallback(
+    ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
+      set(showCreateQnAFromScratchDialogState(projectId), false);
+      set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: undefined });
+    }
+  );
+
   const createQnAFromScratchDialogCancel = useRecoilCallback(
     ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
+      set(createQnAOnState, { projectId: '', dialogId: '' });
       set(showCreateQnAFromScratchDialogState(projectId), false);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: undefined });
     }
@@ -328,7 +337,7 @@ export const qnaDispatcher = () => {
       projectId: string;
     }) => {
       await dismissCreateQnAModal({ projectId });
-      const notification = createNotifiction(getQnaPendingNotification(url));
+      const notification = createNotification(getQnaPendingNotification(url));
       addNotificationInternal(callbackHelpers, notification);
 
       let response;
@@ -339,9 +348,14 @@ export const qnaDispatcher = () => {
         const content = response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content, projectId });
-        const notification = createNotifiction(
+        const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
+        const notification = createNotification(
           getQnaSuccessNotification(() => {
-            navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+            navigateTo(
+              rootBotProjectId === projectId
+                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+            );
             deleteNotificationInternal(callbackHelpers, notification.id);
           })
         );
@@ -349,7 +363,7 @@ export const qnaDispatcher = () => {
       } catch (err) {
         addNotificationInternal(
           callbackHelpers,
-          createNotifiction(getQnaFailedNotification(err.response?.data?.message))
+          createNotification(getQnaFailedNotification(err.response?.data?.message))
         );
         createQnAFromUrlDialogCancel({ projectId });
         return;
@@ -394,10 +408,14 @@ ${response.data}
         projectId,
       });
       await createQnAFromScratchDialogSuccess({ projectId });
-
-      const notification = createNotifiction(
+      const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
+      const notification = createNotification(
         getQnaSuccessNotification(() => {
-          navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+          navigateTo(
+            rootBotProjectId === projectId
+              ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+              : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+          );
           deleteNotificationInternal(callbackHelpers, notification.id);
         })
       );
@@ -661,6 +679,7 @@ ${response.data}
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromScratchDialogBegin,
+    createQnAFromScratchDialogBack,
     createQnAFromScratchDialogCancel,
     createQnAFromUrlDialogBegin,
     createQnAFromUrlDialogCancel,

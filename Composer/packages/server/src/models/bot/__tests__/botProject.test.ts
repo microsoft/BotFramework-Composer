@@ -12,7 +12,6 @@ import { BotProject } from '../botProject';
 import { LocationRef } from '../interface';
 
 import { Resource } from './../interface';
-import { RecognizerTypes } from './../recognizer';
 
 jest.mock('azure-storage', () => {
   return {};
@@ -24,7 +23,6 @@ jest.mock('../../../services/asset', () => {
       botProjectFileTemplate: {
         $schema: '',
         name: '',
-        workspace: '',
         skills: {},
       },
     },
@@ -300,9 +298,7 @@ describe('buildFiles', () => {
       { id: 'b.en-us', isEmpty: false },
       { id: 'bot1.en-us', isEmpty: false },
     ];
-    const crossTrainConfig = {};
-    const recognizerTypes: RecognizerTypes = { a: 'DefaultRecognizer', b: 'DefaultRecognizer', c: 'DefaultRecognizer' };
-    await proj.buildFiles({ luisConfig, qnaConfig, luResource, qnaResource, crossTrainConfig, recognizerTypes });
+    await proj.buildFiles({ luisConfig, qnaConfig, luResource, qnaResource });
 
     try {
       if (fs.existsSync(path)) {
@@ -359,40 +355,45 @@ describe('dialog schema operations', () => {
 });
 
 describe('should validate the file name when create a new one', () => {
+  const error = new Error(
+    'Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter.'
+  );
+  const emptyError = new Error('The file name can not be empty');
+
   it('validate the empty dialog name', () => {
     expect(() => {
       proj.validateFileName('.dialog');
-    }).toThrowError('The file name can not be empty');
+    }).toThrowError(emptyError);
   });
 
   it('validate the illegal dialog name', async () => {
     expect(() => {
       proj.validateFileName('a.b.dialog');
-    }).toThrowError('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+    }).toThrowError(error);
   });
 
   it('validate the empty lu file name', () => {
     expect(() => {
       proj.validateFileName('.en-us.lu');
-    }).toThrowError('The file name can not be empty');
+    }).toThrowError(emptyError);
   });
 
   it('validate the illegal lu file name', async () => {
     expect(() => {
       proj.validateFileName('a.b.en-us.lu');
-    }).toThrowError('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+    }).toThrowError(error);
   });
 
   it('validate the empty lg file name', () => {
     expect(() => {
       proj.validateFileName('.en-us.lg');
-    }).toThrowError('The file name can not be empty');
+    }).toThrowError(emptyError);
   });
 
   it('validate the illegal lu file name', async () => {
     expect(() => {
       proj.validateFileName('a.b.en-us.lg');
-    }).toThrowError('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+    }).toThrowError(error);
   });
 });
 

@@ -11,20 +11,24 @@ import { MainContainer } from './components/AppComponents/MainContainer';
 import { userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { dispatcherState } from './recoilModel/DispatcherWrapper';
+import { useInitializeLogger } from './telemetry/useInitializeLogger';
 
 initializeIcons(undefined, { disableWarnings: true });
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
+  const { fetchExtensions, fetchFeatureFlags } = useRecoilValue(dispatcherState);
+
   useEffect(() => {
     loadLocale(appLocale);
   }, [appLocale]);
 
-  const { fetchExtensions } = useRecoilValue(dispatcherState);
-
   useEffect(() => {
     fetchExtensions();
+    fetchFeatureFlags();
   }, []);
+
+  useInitializeLogger();
 
   return (
     <Fragment key={appLocale}>

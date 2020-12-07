@@ -5,6 +5,7 @@ import {
   BotProjectFile,
   BotProjectSpace,
   BotSchemas,
+  CrosstrainConfig,
   Diagnostic,
   DialogInfo,
   DialogSchemaFile,
@@ -14,23 +15,50 @@ import {
   LgFile,
   LuFile,
   QnAFile,
+  SkillManifestFile,
+  RecognizerFile,
   Skill,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
-import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
+import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
-import { BreadcrumbItem, PublishType } from './../../recoilModel/types';
+import { PublishType } from './../../recoilModel/types';
 
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
 
-export const dialogsState = atomFamily<DialogInfo[], string>({
-  key: getFullyQualifiedKey('dialogs'),
-  default: (id) => {
+const emptyDialog: DialogInfo = {
+  content: { $kind: '' },
+  diagnostics: [],
+  displayName: '',
+  id: '',
+  isRoot: false,
+  lgFile: '',
+  lgTemplates: [],
+  luFile: '',
+  qnaFile: '',
+  referredLuIntents: [],
+  referredDialogs: [],
+  triggers: [],
+  intentTriggers: [],
+  skills: [],
+  isFormDialog: false,
+};
+type dialogStateParams = { projectId: string; dialogId: string };
+export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
+  key: getFullyQualifiedKey('dialog'),
+  default: () => {
+    return emptyDialog;
+  },
+});
+
+export const dialogIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('dialogIds'),
+  default: () => {
     return [];
   },
 });
@@ -79,7 +107,7 @@ export const localeState = atomFamily<string, string>({
 export const botStatusState = atomFamily<BotStatus, string>({
   key: getFullyQualifiedKey('botStatus'),
   default: (id) => {
-    return BotStatus.unConnected;
+    return BotStatus.inactive;
   },
 });
 
@@ -90,7 +118,7 @@ export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
   },
 });
 
-export const botLoadErrorState = atomFamily<BotLoadError, string>({
+export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };
@@ -111,10 +139,24 @@ export const luFilesState = atomFamily<LuFile[], string>({
   },
 });
 
-export const skillsState = atomFamily<Skill[], string>({
-  key: getFullyQualifiedKey('skills'),
+export const recognizerIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('recognizerIds'),
   default: (id) => {
     return [];
+  },
+});
+
+export const recognizerState = atomFamily<RecognizerFile, { projectId: string; id: string }>({
+  key: getFullyQualifiedKey('recognizer'),
+  default: () => {
+    return {} as RecognizerFile;
+  },
+});
+
+export const crossTrainConfigState = atomFamily<CrosstrainConfig, string>({
+  key: getFullyQualifiedKey('crossTrainConfig'),
+  default: () => {
+    return {};
   },
 });
 
@@ -125,24 +167,10 @@ export const actionsSeedState = atomFamily<any, string>({
   },
 });
 
-export const skillManifestsState = atomFamily<any, string>({
+export const skillManifestsState = atomFamily<SkillManifestFile[], string>({
   key: getFullyQualifiedKey('skillManifests'),
   default: (id) => {
     return [];
-  },
-});
-
-export const breadcrumbState = atomFamily<BreadcrumbItem[], string>({
-  key: getFullyQualifiedKey('breadcrumb'),
-  default: (id) => {
-    return [];
-  },
-});
-
-export const showCreateDialogModalState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateDialogModal'),
-  default: (id) => {
-    return false;
   },
 });
 
@@ -198,11 +226,6 @@ export const onAddSkillDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const displaySkillManifestState = atomFamily<any, string>({
-  key: getFullyQualifiedKey('displaySkillManifest'),
-  default: undefined,
-});
-
 export const showAddLanguageModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showAddLanguageModal'),
   default: false,
@@ -244,11 +267,6 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
 
 export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
-  default: false,
-});
-
-export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
   default: false,
 });
 
@@ -317,4 +335,27 @@ export const botErrorState = atomFamily<any, string>({
 export const botNameIdentifierState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botNameIdentifier'),
   default: '',
+});
+
+// TODO: Currently always setting to 0 as we dont support more than 1 manifest. This index would need to change based on the default manifest chosen in the future.
+export const currentSkillManifestIndexState = atomFamily<number, string>({
+  key: getFullyQualifiedKey('currentSkillManifestIndex'),
+  default: 0,
+});
+
+export const skillsState = atomFamily<Skill[], string>({
+  key: getFullyQualifiedKey('skills'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const canUndoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canUndoState'),
+  default: false,
+});
+
+export const canRedoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canRedoState'),
+  default: false,
 });

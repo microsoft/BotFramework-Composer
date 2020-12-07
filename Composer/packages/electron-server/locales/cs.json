@@ -1,0 +1,125 @@
+{
+  "about_70c18bba": {
+    "message": "O nástroji"
+  },
+  "actual_zoom_211ec99": {
+    "message": "Skutečné přiblížení"
+  },
+  "bring_all_to_front_207a7ad1": {
+    "message": "Přenést vše do popředí"
+  },
+  "check_for_updates_12a70061": {
+    "message": "Zkontrolovat aktualizace"
+  },
+  "close_d634289d": {
+    "message": "Zavřít"
+  },
+  "close_window_4bdc79d7": {
+    "message": "Zavřít okno"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "Composer na GitHubu"
+  },
+  "copy_9748f9f": {
+    "message": "Zkopírovat"
+  },
+  "cut_c8c92681": {
+    "message": "Vyjmout"
+  },
+  "delete_a6efa79d": {
+    "message": "Odstranit"
+  },
+  "documentation_d82f6eec": {
+    "message": "Dokumentace"
+  },
+  "edit_c5fbea07": {
+    "message": "Upravit"
+  },
+  "exit_d0c7b013": {
+    "message": "Ukončit"
+  },
+  "file_c851020d": {
+    "message": "Soubor"
+  },
+  "help_4c4968b1": {
+    "message": "Nápověda"
+  },
+  "hide_bot_framework_composer_eeba3ea8": {
+    "message": "Skrýt Bot Framework Composer"
+  },
+  "hide_others_4204b552": {
+    "message": "Skrýt ostatní"
+  },
+  "initializing_4e34f7d": {
+    "message": "Inicializace..."
+  },
+  "learn_more_about_bot_framework_2daca065": {
+    "message": "Další informace o Bot Frameworku"
+  },
+  "minimize_4f999e30": {
+    "message": "Minimalizovat"
+  },
+  "paste_5963d1c1": {
+    "message": "Vložit"
+  },
+  "privacy_statement_58986965": {
+    "message": "Prohlášení o zásadách ochrany osobních údajů"
+  },
+  "quit_bot_framework_composer_455ceb74": {
+    "message": "Ukončit Bot Framework Composer"
+  },
+  "redo_363c58b7": {
+    "message": "Zopakovat"
+  },
+  "report_an_issue_f33f3ba5": {
+    "message": "Nahlásit problém"
+  },
+  "select_all_cf7e0248": {
+    "message": "Vybrat vše"
+  },
+  "services_ccd7bca0": {
+    "message": "Služby"
+  },
+  "show_all_ae37d610": {
+    "message": "Zobrazit vše"
+  },
+  "speech_16063aed": {
+    "message": "Speech"
+  },
+  "start_speaking_f8d406ff": {
+    "message": "Začít předčítat"
+  },
+  "starting_server_721c37fd": {
+    "message": "Spouští se server..."
+  },
+  "stop_speaking_7b4b9834": {
+    "message": "Přestat předčítat"
+  },
+  "toggle_developer_tools_d2ef8ea7": {
+    "message": "Přepnout vývojářské nástroje"
+  },
+  "toggle_full_screen_272a0c5": {
+    "message": "Přepnout režim zobrazení na celou obrazovku"
+  },
+  "undo_a7be8fef": {
+    "message": "Zpět"
+  },
+  "view_ba339f93": {
+    "message": "Zobrazit"
+  },
+  "view_license_720d341a": {
+    "message": "Zobrazit licenci"
+  },
+  "window_171922c7": {
+    "message": "Okno"
+  },
+  "zoom_f3e54d69": {
+    "message": "Lupa"
+  },
+  "zoom_in_a781ccc7": {
+    "message": "Přiblížit"
+  },
+  "zoom_out_dc7d60d2": {
+    "message": "Oddálit"
+  }
+}

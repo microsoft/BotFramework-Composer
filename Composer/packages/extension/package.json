@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@botframework-composer/types": "*",
+    "@types/debug": "^4.1.5",
     "@types/passport": "^1.0.3",
     "debug": "^4.1.1",
     "express-serve-static-core": "0.1.1",

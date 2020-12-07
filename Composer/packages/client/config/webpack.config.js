@@ -22,10 +22,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
-new webpack.DefinePlugin({
-  'process.env.COMPOSER_ENABLE_FORMS': JSON.stringify(process.env.COMPOSER_ENABLE_FORMS),
-});
-
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
@@ -107,6 +103,7 @@ module.exports = function (webpackEnv) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: {
+      'plugin-host-preload': paths.pluginHostIndexJs,
       main: [
         // Include an alternative client for WebpackDevServer. A client's job is to
         // connect to WebpackDevServer by a socket and get notified about changes.
@@ -424,6 +421,24 @@ module.exports = function (webpackEnv) {
             filename: isEnvProduction ? 'index.ejs' : 'index.html',
             template: paths.appHtml,
             chunks: ['main'],
+          },
+          isEnvProduction
+            ? {
+                minify: {
+                  removeComments: true,
+                },
+              }
+            : undefined
+        )
+      ),
+      new HtmlWebpackPlugin(
+        Object.assign(
+          {},
+          {
+            inject: true,
+            filename: isEnvProduction ? 'plugin-host.ejs' : 'plugin-host.html',
+            template: paths.appHtml,
+            chunks: ['plugin-host-preload'],
           },
           isEnvProduction
             ? {

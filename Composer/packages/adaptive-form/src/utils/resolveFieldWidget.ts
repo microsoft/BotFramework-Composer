@@ -11,6 +11,7 @@ const IntellisenseNumberFieldWithIcon = WithTypeIcons(DefaultFields.Intellisense
 const NumberFieldWithIcon = WithTypeIcons(DefaultFields.NumberField);
 const BooleanFieldWithIcon = WithTypeIcons(DefaultFields.BooleanField);
 const JsonFieldWithIcon = WithTypeIcons(DefaultFields.JsonField);
+const SelectFieldWithIcon = WithTypeIcons(DefaultFields.SelectField);
 const IntellisenseJSONFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseJSONField);
 const IntellisenseExpressionFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseExpressionField);
 
@@ -58,12 +59,28 @@ export function resolveFieldWidget(params: {
       return { field: DefaultFields.OneOfField };
     }
 
-    if (expression && typeof value === 'string' && value.startsWith('=')) {
-      return { field: isOneOf ? DefaultFields.IntellisenseExpressionField : IntellisenseExpressionFieldWithIcon };
+    if (expression && typeof value === 'string') {
+      // The schema has two types of expressions: "equalsExpression" and "expression".
+      // "equalsExpression" inputs start with "=". For those we want to have access to the adaptive expressions built-in functions and have intellisense surface it, thus using IntellisenseExpressionField.
+      // "expression" inputs don't leverage the built-in functions. For those, we only want to show a regular text field (that could potentially leverage Intellisense for results other than built-in expression functions).
+      if (value.startsWith('=')) {
+        return { field: isOneOf ? DefaultFields.IntellisenseExpressionField : IntellisenseExpressionFieldWithIcon };
+      } else {
+        if (showIntellisense && isOneOf) {
+          return { field: DefaultFields.IntellisenseTextField };
+        } else if (showIntellisense && !isOneOf) {
+          return { field: IntellisenseTextFieldWithIcon };
+        } else if (!showIntellisense && !isOneOf) {
+          return { field: StringFieldWithIcon };
+        }
+        return {
+          field: DefaultFields.StringField,
+        };
+      }
     }
 
     if (Array.isArray(schema.enum)) {
-      return { field: DefaultFields.SelectField };
+      return { field: isOneOf ? DefaultFields.SelectField : SelectFieldWithIcon };
     }
 
     switch (schema.type) {
@@ -119,7 +136,7 @@ export function resolveFieldWidget(params: {
         return { field: DefaultFields.ArrayField };
       }
       case 'object':
-        if (schema.additionalProperties) {
+        if (typeof schema.additionalProperties === 'object') {
           return { field: DefaultFields.OpenObjectField };
         } else if (!schema.properties) {
           if (showIntellisense && isOneOf) {

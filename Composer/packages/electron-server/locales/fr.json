@@ -1,0 +1,125 @@
+{
+  "about_70c18bba": {
+    "message": "À propos de"
+  },
+  "actual_zoom_211ec99": {
+    "message": "Zoom réel"
+  },
+  "bring_all_to_front_207a7ad1": {
+    "message": "Tout mettre au premier plan"
+  },
+  "check_for_updates_12a70061": {
+    "message": "Rechercher des mises à jour"
+  },
+  "close_d634289d": {
+    "message": "Fermer"
+  },
+  "close_window_4bdc79d7": {
+    "message": "Fermer la fenêtre"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "Composer sur GitHub"
+  },
+  "copy_9748f9f": {
+    "message": "Copier"
+  },
+  "cut_c8c92681": {
+    "message": "Couper"
+  },
+  "delete_a6efa79d": {
+    "message": "Supprimer"
+  },
+  "documentation_d82f6eec": {
+    "message": "Documentation"
+  },
+  "edit_c5fbea07": {
+    "message": "Modifier"
+  },
+  "exit_d0c7b013": {
+    "message": "Quitter"
+  },
+  "file_c851020d": {
+    "message": "Fichier"
+  },
+  "help_4c4968b1": {
+    "message": "Aide"
+  },
+  "hide_bot_framework_composer_eeba3ea8": {
+    "message": "Masquer Bot Framework Composer"
+  },
+  "hide_others_4204b552": {
+    "message": "Masquer les autres"
+  },
+  "initializing_4e34f7d": {
+    "message": "Initialisation..."
+  },
+  "learn_more_about_bot_framework_2daca065": {
+    "message": "En savoir plus sur Bot Framework"
+  },
+  "minimize_4f999e30": {
+    "message": "Réduire"
+  },
+  "paste_5963d1c1": {
+    "message": "Coller"
+  },
+  "privacy_statement_58986965": {
+    "message": "Déclaration de confidentialité"
+  },
+  "quit_bot_framework_composer_455ceb74": {
+    "message": "Quitter Bot Framework Composer"
+  },
+  "redo_363c58b7": {
+    "message": "Rétablir"
+  },
+  "report_an_issue_f33f3ba5": {
+    "message": "Signaler un problème"
+  },
+  "select_all_cf7e0248": {
+    "message": "Tout sélectionner"
+  },
+  "services_ccd7bca0": {
+    "message": "Services"
+  },
+  "show_all_ae37d610": {
+    "message": "Tout afficher"
+  },
+  "speech_16063aed": {
+    "message": "Speech"
+  },
+  "start_speaking_f8d406ff": {
+    "message": "Commencer à parler"
+  },
+  "starting_server_721c37fd": {
+    "message": "Démarrage du serveur..."
+  },
+  "stop_speaking_7b4b9834": {
+    "message": "Arrêter de parler"
+  },
+  "toggle_developer_tools_d2ef8ea7": {
+    "message": "Activer/désactiver les outils de développement"
+  },
+  "toggle_full_screen_272a0c5": {
+    "message": "Activer/désactiver le plein écran"
+  },
+  "undo_a7be8fef": {
+    "message": "Annuler"
+  },
+  "view_ba339f93": {
+    "message": "Voir"
+  },
+  "view_license_720d341a": {
+    "message": "Voir la licence"
+  },
+  "window_171922c7": {
+    "message": "Fenêtre"
+  },
+  "zoom_f3e54d69": {
+    "message": "Zoom"
+  },
+  "zoom_in_a781ccc7": {
+    "message": "Zoom avant"
+  },
+  "zoom_out_dc7d60d2": {
+    "message": "Zoom arrière"
+  }
+}

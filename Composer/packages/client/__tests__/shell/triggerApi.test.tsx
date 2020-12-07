@@ -10,7 +10,7 @@ import {
   localeState,
   luFilesState,
   lgFilesState,
-  dialogsState,
+  dialogsSelectorFamily,
   schemasState,
   dispatcherState,
   currentProjectIdState,
@@ -45,26 +45,20 @@ const state = {
 };
 
 describe('use triggerApi hooks', () => {
-  let selectToMock, updateDialogMock, createLgTemplatesMock, createLuIntentMock, result;
+  let createTriggerMock, result;
   beforeEach(() => {
-    selectToMock = jest.fn();
-    updateDialogMock = jest.fn();
-    createLgTemplatesMock = jest.fn();
-    createLuIntentMock = jest.fn();
+    createTriggerMock = jest.fn();
 
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
       set(localeState(state.projectId), 'en-us');
       set(luFilesState(state.projectId), state.luFiles);
       set(lgFilesState(state.projectId), state.lgFiles);
-      set(dialogsState(state.projectId), state.dialogs);
+      set(dialogsSelectorFamily(state.projectId), state.dialogs);
       set(schemasState(state.projectId), state.schemas);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
-        selectTo: selectToMock,
-        updateDialog: updateDialogMock,
-        createLgTemplates: createLgTemplatesMock,
-        createLuIntent: createLuIntentMock,
+        createTrigger: createTriggerMock,
       }));
     };
 
@@ -89,9 +83,7 @@ describe('use triggerApi hooks', () => {
       triggerPhrases: '',
     };
     await result.current.createTrigger(dialogId, formData);
-    expect(createLgTemplatesMock).toBeCalledTimes(1);
-    expect(updateDialogMock).toBeCalledTimes(1);
-    expect(createLgTemplatesMock).toBeCalledTimes(1);
-    expect(updateDialogMock).toBeCalledTimes(1);
+    const arg = [state.projectId, dialogId, formData, true];
+    expect(createTriggerMock).toBeCalledWith(...arg);
   });
 });

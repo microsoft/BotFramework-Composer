@@ -3,6 +3,7 @@
 
 context('ToDo Bot', () => {
   before(() => {
+    window.localStorage.setItem('composer:userSettings', JSON.stringify({ telemetry: { allowDataCollection: false } }));
     cy.visit('/home');
     cy.createBot('TodoSample');
     cy.findByTestId('WelcomeModalCloseIcon').click();
@@ -11,16 +12,16 @@ context('ToDo Bot', () => {
 
   it('can open the main dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
     cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('__TestTodoSample').should('exist');
+      cy.findAllByDisplayValue('__TestTodoSample').should('exist');
     });
   });
 
   it('can open the AddToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('addtodo').click();
+      cy.findByTestId('addtodo_Dialog started').click();
     });
 
     cy.url().should('contain', 'addtodo');
@@ -28,7 +29,7 @@ context('ToDo Bot', () => {
 
   it('can open the ClearToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('cleartodos').click();
+      cy.findByTestId('cleartodos_Dialog started').click();
     });
 
     cy.url().should('contain', 'cleartodos');
@@ -36,7 +37,7 @@ context('ToDo Bot', () => {
 
   it('can open the DeleteToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('deletetodo').click();
+      cy.findByTestId('deletetodo_Dialog started').click();
     });
 
     cy.url().should('contain', 'deletetodo');
@@ -44,7 +45,7 @@ context('ToDo Bot', () => {
 
   it('can open the ShowToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('showtodos').click();
+      cy.findByTestId('showtodos_Dialog started').click();
     });
 
     cy.url().should('contain', 'showtodos');

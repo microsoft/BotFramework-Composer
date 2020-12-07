@@ -16,10 +16,10 @@ import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import {
   ArrayPropertyPayload,
   FormDialogProperty,
+  FormDialogPropertyKind,
   FormDialogPropertyPayload,
   IntegerPropertyPayload,
   NumberPropertyPayload,
-  FormDialogPropertyKind,
   StringPropertyPayload,
 } from 'src/atoms/types';
 import { FieldLabel } from 'src/components/common/FieldLabel';
@@ -27,6 +27,7 @@ import { NumberPropertyContent } from 'src/components/property/NumberPropertyCon
 import { PropertyTypeSelector } from 'src/components/property/PropertyTypeSelector';
 import { RequiredPriorityIndicator } from 'src/components/property/RequiredPriorityIndicator';
 import { StringPropertyContent } from 'src/components/property/StringPropertyContent';
+import { nameRegex } from 'src/utils/constants';
 
 const ContentRoot = styled.div(({ isValid }: { isValid: boolean }) => ({
   width: 720,
@@ -111,6 +112,8 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
     onDuplicate,
   } = props;
 
+  // Indicates if the form in the card has been touched by the user.
+  const touchedRef = React.useRef(!!property.name);
   const { id: propertyId, array, kind, name, payload, required } = property;
 
   const rootElmRef = React.useRef<HTMLDivElement>();
@@ -127,6 +130,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
   const changeName = React.useCallback(
     (_: React.FormEvent<HTMLElement | HTMLInputElement>, value: string) => {
       onChangeName(value);
+      touchedRef.current = true;
     },
     [onChangeName]
   );
@@ -163,18 +167,35 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
     []
   );
 
+  /**
+   * Validates the property name only if the user has touched it.
+   */
+  const validateName = React.useCallback(
+    (value: string) =>
+      touchedRef.current
+        ? !value
+          ? formatMessage('Property name is required!')
+          : !nameRegex.test(value)
+          ? formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.')
+          : ''
+        : '',
+    [touchedRef.current]
+  );
+
   return (
     <FocusZone>
-      <ContentRoot {...dragHandleProps} ref={rootElmRef} isValid={valid}>
+      <ContentRoot {...dragHandleProps} ref={rootElmRef} isValid={!touchedRef.current || valid}>
         <Stack horizontal tokens={{ childrenGap: 16 }} verticalAlign="center">
           <TextField
             aria-describedby={propertyNameTooltipId}
             autoComplete="off"
+            deferredValidationTime={300}
             label={formatMessage('Property name')}
             placeholder={formatMessage('Name of the property')}
             styles={{ root: { flex: 1 } }}
             value={name}
             onChange={changeName}
+            onGetErrorMessage={validateName}
             onRenderLabel={onRenderLabel(
               formatMessage(
                 `A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot's messages.`

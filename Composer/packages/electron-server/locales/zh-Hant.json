@@ -1,0 +1,125 @@
+{
+  "about_70c18bba": {
+    "message": "關於"
+  },
+  "actual_zoom_211ec99": {
+    "message": "實際縮放"
+  },
+  "bring_all_to_front_207a7ad1": {
+    "message": "全部提到最上層"
+  },
+  "check_for_updates_12a70061": {
+    "message": "檢查是否有更新"
+  },
+  "close_d634289d": {
+    "message": "關閉"
+  },
+  "close_window_4bdc79d7": {
+    "message": "關閉視窗"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "GitHub 上的 Composer"
+  },
+  "copy_9748f9f": {
+    "message": "複製"
+  },
+  "cut_c8c92681": {
+    "message": "剪下"
+  },
+  "delete_a6efa79d": {
+    "message": "刪除"
+  },
+  "documentation_d82f6eec": {
+    "message": "文件"
+  },
+  "edit_c5fbea07": {
+    "message": "編輯"
+  },
+  "exit_d0c7b013": {
+    "message": "結束"
+  },
+  "file_c851020d": {
+    "message": "檔案"
+  },
+  "help_4c4968b1": {
+    "message": "說明"
+  },
+  "hide_bot_framework_composer_eeba3ea8": {
+    "message": "隱藏 Bot Framework Composer"
+  },
+  "hide_others_4204b552": {
+    "message": "隱藏其他"
+  },
+  "initializing_4e34f7d": {
+    "message": "正在初始化..."
+  },
+  "learn_more_about_bot_framework_2daca065": {
+    "message": "深入了解 Bot Framework"
+  },
+  "minimize_4f999e30": {
+    "message": "最小化"
+  },
+  "paste_5963d1c1": {
+    "message": "貼上"
+  },
+  "privacy_statement_58986965": {
+    "message": "隱私權聲明"
+  },
+  "quit_bot_framework_composer_455ceb74": {
+    "message": "結束 Bot Framework Composer"
+  },
+  "redo_363c58b7": {
+    "message": "重做"
+  },
+  "report_an_issue_f33f3ba5": {
+    "message": "回報問題"
+  },
+  "select_all_cf7e0248": {
+    "message": "全選"
+  },
+  "services_ccd7bca0": {
+    "message": "服務"
+  },
+  "show_all_ae37d610": {
+    "message": "全部顯示"
+  },
+  "speech_16063aed": {
+    "message": "語音"
+  },
+  "start_speaking_f8d406ff": {
+    "message": "開始說話"
+  },
+  "starting_server_721c37fd": {
+    "message": "正在啟動伺服器..."
+  },
+  "stop_speaking_7b4b9834": {
+    "message": "停止說話"
+  },
+  "toggle_developer_tools_d2ef8ea7": {
+    "message": "切換開發人員工具"
+  },
+  "toggle_full_screen_272a0c5": {
+    "message": "切換全螢幕"
+  },
+  "undo_a7be8fef": {
+    "message": "恢復"
+  },
+  "view_ba339f93": {
+    "message": "檢視"
+  },
+  "view_license_720d341a": {
+    "message": "檢視授權"
+  },
+  "window_171922c7": {
+    "message": "視窗"
+  },
+  "zoom_f3e54d69": {
+    "message": "縮放"
+  },
+  "zoom_in_a781ccc7": {
+    "message": "放大"
+  },
+  "zoom_out_dc7d60d2": {
+    "message": "縮小"
+  }
+}

@@ -10,16 +10,11 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState } from '../../recoilModel';
-import {
-  recentProjectsState,
-  templateProjectsState,
-  templateIdState,
-  currentProjectIdState,
-} from '../../recoilModel/atoms/appState';
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
+import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
+import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -61,14 +56,19 @@ const tutorials = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const templateProjects = useRecoilValue(templateProjectsState);
   const projectId = useRecoilValue(currentProjectIdState);
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
-  const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    openProject,
+    setCreationFlowStatus,
+    onboardingAddCoachMarkRef,
+    saveTemplateId,
+    setCreationFlowType,
+  } = useRecoilValue(dispatcherState);
+
+  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
@@ -95,6 +95,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           iconName: 'CirclePlus',
         },
         onClick: () => {
+          setCreationFlowType('Bot');
           setCreationFlowStatus(CreationFlowStatus.NEW);
           navigate(`projects/create`);
         },
@@ -135,7 +136,6 @@ const Home: React.FC<RouteComponentProps> = () => {
       disabled: botName ? false : true,
     },
   ];
-
   return (
     <div css={home.outline}>
       <Toolbar toolbarItems={toolbarItems} />
@@ -242,7 +242,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
             )}
           </p>
-          <ExampleList examples={templateProjects} onClick={onClickTemplate} />
+          <ExampleList examples={filteredTemplates} onClick={onClickTemplate} />
         </div>
       </div>
     </div>

@@ -2,3 +2,4 @@ build/
 dist/
 locales/en-US-pseudo.json
 l10ntemp/
+oneauth-temp

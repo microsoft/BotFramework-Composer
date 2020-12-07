@@ -1,0 +1,5048 @@
+{
+  "title": "Összetevőtípusok",
+  "description": "A betöltő ilyen típusokat tud létrehozni.",
+  "definitions": {
+    "Microsoft.ActivityTemplate": {
+      "title": "Microsoft activity template",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "Sablon",
+          "description": "A tevékenység létrehozásához használandó nyelvgenerátor-sablon"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.AdaptiveDialog": {
+      "title": "Adaptive dialog",
+      "description": "Rugalmas, adatalapú párbeszéd, amely képes a beszélgetéshez alkalmazkodni.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális párbeszéd-azonosító."
+        },
+        "autoEndDialog": {
+          "title": "Párbeszéd automatikus befejezése",
+          "description": "Ha az értéke igaz, a párbeszéd automatikusan véget ér, ha nincs több művelet. Ha az értéke hamis, a párbeszédet manuálisan kell befejezni az EndDialog művelettel."
+        },
+        "defaultResultProperty": {
+          "title": "Alapértelmezett eredménytulajdonság",
+          "description": "A fölérendelt párbeszédnek visszaadandó érték."
+        },
+        "recognizer": {
+          "title": "Értelmező",
+          "description": "Bemenetértelmező, amely a felhasználói adatbevitelt szándékokká és entitásokká alakítja."
+        },
+        "generator": {
+          "title": "Language generator",
+          "description": "Nyelvgenerátor, amely robotválaszokat hoz létre."
+        },
+        "selector": {
+          "title": "Szelektor",
+          "description": "Szabályzat, amely meghatározza, hogy melyik trigger aktiválódjon. Az alapértelmezett beállítás a „legjobb egyezés” szelektor (opcionális)."
+        },
+        "triggers": {
+          "description": "A párbeszédhez meghatározott triggerek listája.",
+          "title": "Triggerek",
+          "items": {
+            "title": "Eseményindítók",
+            "description": "Eseményindítók események kezeléséhez."
+          }
+        },
+        "schema": {
+          "title": "Séma",
+          "description": "Kitöltendő séma.",
+          "anyOf": {
+            "0": {
+              "title": "Core schema meta-schema"
+            },
+            "1": {
+              "title": "Hivatkozás a JSON-sémára",
+              "description": "Hivatkozás a JSON-séma .dialog fájljára."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.AgeEntityRecognizer": {
+      "title": "Age entity recognizer",
+      "description": "Értelmező, amely felismeri a kort.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.Ask": {
+      "title": "Send activity to ask a question",
+      "description": "Ez a művelet egy tevékenységet küld a felhasználónak, amikor válaszra van szükség",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "expectedProperties": {
+          "title": "Expected properties",
+          "description": "A felhasználótól várt tulajdonságok.",
+          "items": {
+            "title": "Név",
+            "description": "A tulajdonság neve"
+          }
+        },
+        "defaultOperation": {
+          "title": "Default operation",
+          "description": "Megadja az alapértelmezett műveletet, amely akkor lesz használatban, ha nem lett felismerve semmilyen műveletet sem a kérdésre kapott válaszban."
+        },
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "activity": {
+          "title": "Tevékenység",
+          "description": "Küldendő tevékenység."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "Melléklet bemeneti párbeszédje",
+      "description": "Információgyűjtés – Egy fájl vagy kép bekérése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Alapértelmezett érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az objektuma vagy eredménye lesz beállítva, ha túllépték a próbálkozások maximális számát.",
+          "oneOf": {
+            "0": {
+              "title": "Objektum",
+              "description": "Mellékletobjektum."
+            }
+          }
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az objektuma vagy eredménye lesz beállítva, kivéve, ha nullértékű.",
+          "oneOf": {
+            "0": {
+              "title": "Objektum",
+              "description": "Mellékletobjektum."
+            }
+          }
+        },
+        "outputFormat": {
+          "title": "Kimeneti formátum",
+          "description": "Melléklet kimeneti formátuma.",
+          "oneOf": {
+            "0": {
+              "title": "Standard formátum",
+              "description": "Standard kimeneti formátumok."
+            }
+          }
+        },
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "prompt": {
+          "title": "Kezdeti adatkérés",
+          "description": "Információgyűjtési célból elküldött üzenet."
+        },
+        "unrecognizedPrompt": {
+          "title": "Nem felismerhető adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha a felhasználói adatbevitel nem felel meg az érvényesítési kifejezésnek."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "validations": {
+          "title": "Érvényesítési kifejezések",
+          "description": "Felhasználói adatbevitel érvényesítéséhez használt kifejezés.",
+          "items": {
+            "title": "Feltétel",
+            "description": "Az a kifejezés, amelyhez a bemenetnek meg kell felelnie ahhoz, hogy érvényesnek számítson"
+          }
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Az összegyűjtött információk tárolására szolgáló tulajdonság. Ha a tulajdonságnak van értéke, a bemenet ki lesz hagyva (kivéve, ha a „Mindig kérdezzen rá” értéke igaz)."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "allowInterruptions": {
+          "title": "Megszakítások engedélyezése",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.BeginDialog": {
+      "title": "Párbeszéd elkezdése",
+      "description": "Új párbeszéd elkezdése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "Párbeszéd"
+            }
+          },
+          "title": "Párbeszéd neve",
+          "description": "A meghívni kívánt párbeszéd neve."
+        },
+        "options": {
+          "title": "Beállítások",
+          "description": "Egy vagy több beállítás, amelyek át lesznek adva a meghívott párbeszédnek.",
+          "additionalProperties": {
+            "title": "Beállítások",
+            "description": "Párbeszéd beállításai."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Ha az érték hamis, a meghívott párbeszéd feldolgozhatja a jelenlegi tevékenységet."
+        },
+        "resultProperty": {
+          "title": "Tulajdonság",
+          "description": "Tulajdonság, amely a meghívott párbeszéd által visszaadott bármilyen értéket tárol."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.BeginSkill": {
+      "title": "Készség indítása",
+      "description": "Távoli készség indítása.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A készségpárbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Ha hamis, a készség a jelenlegi kör kontextusában lévő tevékenység használatával lesz elindítva, és nem a Tevékenység tulajdonságban megadott tevékenységgel."
+        },
+        "resultProperty": {
+          "title": "Tulajdonság",
+          "description": "Tulajdonság, amely a meghívott párbeszéd által visszaadott bármilyen értéket tárol."
+        },
+        "botId": {
+          "title": "Készség gazdarobot-azonosítója",
+          "description": "A készséget hívó Microsoft-alkalmazás azonosítója."
+        },
+        "skillHostEndpoint": {
+          "title": "Készség gazdagépe",
+          "description": "A készség gazdagépének visszahívási URL-címe."
+        },
+        "connectionName": {
+          "title": "OAuth connection name (SSO)",
+          "description": "Azon OAuth-kapcsolat neve, amely egy készséggel való egyszeri bejelentkezéshez van használatban."
+        },
+        "skillAppId": {
+          "title": "Skill App Id",
+          "description": "A készség Microsoft-alkalmazásazonosítója."
+        },
+        "skillEndpoint": {
+          "title": "Készség végpontja ",
+          "description": "A készség /api/messages végpontja."
+        },
+        "activity": {
+          "title": "Tevékenység",
+          "description": "A készségnek küldendő tevékenység."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a készség megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.BreakLoop": {
+      "title": "Break loop",
+      "description": "Ciklus végrehajtásának leállítása",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.CancelAllDialogs": {
+      "title": "Az összes párbeszéd megszakítása",
+      "description": "Az összes aktív párbeszéd megszakítása. A párbeszédlánc összes párbeszédjének szüksége lesz egy triggerre a műveletben konfigurált esemény rögzítéséhez.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Ha az érték hamis, a hívó párbeszéd azt az utasítást kapja, hogy dolgozza fel a jelenlegi tevékenységet."
+        },
+        "eventName": {
+          "title": "Eseménynév",
+          "description": "A továbbítandó esemény neve."
+        },
+        "eventValue": {
+          "title": "Esemény értéke",
+          "description": "Az eseménnyel együtt továbbítandó érték (opcionális)."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.CancelDialog": {
+      "title": "Az összes párbeszéd megszakítása",
+      "description": "Az összes aktív párbeszéd megszakítása. A párbeszédlánc összes párbeszédjének szüksége lesz egy triggerre a műveletben konfigurált esemény rögzítéséhez.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Ha az érték hamis, a hívó párbeszéd azt az utasítást kapja, hogy dolgozza fel a jelenlegi tevékenységet."
+        },
+        "eventName": {
+          "title": "Eseménynév",
+          "description": "A továbbítandó esemény neve."
+        },
+        "eventValue": {
+          "title": "Esemény értéke",
+          "description": "Az eseménnyel együtt továbbítandó érték (opcionális)."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ChannelMentionEntityRecognizer": {
+      "title": "Channel mention entity recognizer",
+      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChoiceInput": {
+      "title": "Lehetőségek bemeneti párbeszédje",
+      "description": "Információk gyűjtése – Választás egy listából",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Alapértelmezett érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, ha túllépték a próbálkozások maximális számát."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, kivéve, ha nullértékű."
+        },
+        "outputFormat": {
+          "title": "Kimeneti formátum",
+          "description": "Beállítja a kívánt lehetőség kimeneti formátumát (vagy érték, vagy indexelés a lehetőségek közé).",
+          "oneOf": {
+            "0": {
+              "title": "Standard",
+              "description": "Standard kimeneti formátum."
+            }
+          }
+        },
+        "choices": {
+          "title": "Lehetőségek tömbje",
+          "description": "Azon lehetőségek, melyek közül választani lehet.",
+          "oneOf": {
+            "0": {
+              "title": "Egyszerű lehetőségek",
+              "description": "Azon egyszerű lehetőségek, melyek közül választani lehet.",
+              "items": {
+                "0": {
+                  "title": "Egyszerű lehetőség",
+                  "description": "Egy lehetőség a választási bemenethez."
+                }
+              }
+            },
+            "1": {
+              "title": "Strukturált lehetőségek",
+              "description": "Teljes körű vezérlést lehetővé tevő lehetőségek.",
+              "items": {
+                "0": {
+                  "title": "Strukturált lehetőség",
+                  "description": "Azon strukturált lehetőségek, melyek közül választani lehet.",
+                  "properties": {
+                    "value": {
+                      "title": "Érték",
+                      "description": "A lehetőség kiválasztásakor visszaadandó érték."
+                    },
+                    "action": {
+                      "title": "Művelet",
+                      "description": "A lehetőséghez tartozó kártyaművelet."
+                    },
+                    "synonyms": {
+                      "title": "Szinonimák",
+                      "description": "Az értéken kívül felismerendő szinonimák listája (opcionális).",
+                      "items": {
+                        "title": "Szinonima",
+                        "description": "Érték szinonimája."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "defaultLocale": {
+          "title": "Alapértelmezett területi beállítás",
+          "description": "Az alapértelmezett területi beállítás, ahol a rendszer a megerősítési lehetőségeket keresi, ha a hívó nem ad át ilyet."
+        },
+        "style": {
+          "title": "Listastílus",
+          "description": "Beállítja a listastílust, amely szabályozza a lehetőségek megjelenítését.",
+          "oneOf": {
+            "0": {
+              "title": "Listastílus",
+              "description": "Standard listastílus."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Választási lehetőségek",
+          "description": "Beállítja azon választási lehetőségeket, amelyek a lehetőségek kombinálását szabályozzák.",
+          "oneOf": {
+            "0": {
+              "title": "Objektum",
+              "description": "Választási lehetőségek objektum.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "Beágyazott elválasztó",
+                  "description": "Az egyes lehetőségek elválasztásához használt karakter, ha több mint 2 lehetőség van"
+                },
+                "inlineOr": {
+                  "title": "Beágyazott vagy",
+                  "description": "A lehetőségek közé beszúrt elválasztó, ha csak 2 lehetőség van"
+                },
+                "inlineOrMore": {
+                  "title": "Beágyazott vagy több",
+                  "description": "Az utolsó 2 lehetőség közé beszúrt elválasztó, ha több mint 2 lehetőség van."
+                },
+                "includeNumbers": {
+                  "title": "Számokat kell tartalmaznia",
+                  "description": "Ha igaz, a „beágyazott” és „lista” listastílus a kiválasztott indexelő-előtaggal lesz ellátva."
+                }
+              }
+            }
+          }
+        },
+        "recognizerOptions": {
+          "title": "Értelmező beállításai",
+          "description": "Beállítja a válaszban található lehetőségek felismerésének módját",
+          "oneOf": {
+            "0": {
+              "title": "Objektum",
+              "description": "Értelmező beállításai.",
+              "properties": {
+                "noValue": {
+                  "title": "Nincs érték",
+                  "description": "Ha igaz, a keresés NEM érinti a lehetőségek érték mezőjét"
+                },
+                "noAction": {
+                  "title": "Nincs művelet",
+                  "description": "Ha igaz, a keresés NEM érinti a lehetőségek action.title mezőjét"
+                },
+                "recognizeNumbers": {
+                  "title": "Számok felismerése",
+                  "description": "Ha igaz, a számértelmező használatával lesznek felismerve a számválaszok (1,2,3...) az adatkérésben."
+                },
+                "recognizeOrdinals": {
+                  "title": "Sorszámok felismerése",
+                  "description": "Ha igaz, a sorszámértelmező használatával lesznek felismerve a sorszámválaszok (első/második/...) az adatkérésben."
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "prompt": {
+          "title": "Kezdeti adatkérés",
+          "description": "Információgyűjtési célból elküldött üzenet."
+        },
+        "unrecognizedPrompt": {
+          "title": "Nem felismerhető adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha a felhasználói adatbevitel nem felel meg az érvényesítési kifejezésnek."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "validations": {
+          "title": "Érvényesítési kifejezések",
+          "description": "Felhasználói adatbevitel érvényesítéséhez használt kifejezés.",
+          "items": {
+            "title": "Feltétel",
+            "description": "Az a kifejezés, amelyhez a bemenetnek meg kell felelnie ahhoz, hogy érvényesnek számítson"
+          }
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Az összegyűjtött információk tárolására szolgáló tulajdonság. Ha a tulajdonságnak van értéke, a bemenet ki lesz hagyva (kivéve, ha a „Mindig kérdezzen rá” értéke igaz)."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "allowInterruptions": {
+          "title": "Megszakítások engedélyezése",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ConditionalSelector": {
+      "title": "Conditional trigger selector",
+      "description": "Szabályválasztó használata egy feltétel alapján",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Kiértékelendő kifejezés"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ConfirmInput": {
+      "title": "Megerősítés bemeneti párbeszédje",
+      "description": "Információgyűjtés – Megerősítés kérése (igen vagy nem).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "outputFormat": {
+          "title": "Kimeneti formátum",
+          "description": "A kimenet formázására szolgáló opcionális kifejezés."
+        },
+        "defaultLocale": {
+          "title": "Alapértelmezett területi beállítás",
+          "description": "Az alapértelmezett területi beállítás, vagy egy kifejezés, amely megad egy alapértelmezettként használandó területi beállítást, ha a tevékenység nem tartalmaz ilyet."
+        },
+        "style": {
+          "title": "Listastílus",
+          "description": "Beállítja a listastílust, amely szabályozza a lehetőségek megjelenítését.",
+          "oneOf": {
+            "0": {
+              "title": "Standard stílus",
+              "description": "A lehetőségek megjelenítésének standard stílusa."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Choice options",
+          "description": "Választási lehetőségek vagy egy választási lehetőségeket megadó kifejezés, amely szabályozza, hogy milyen lehetőségek jelenjenek meg a felhasználónak.",
+          "oneOf": {
+            "0": {
+              "title": "Választási lehetőségek",
+              "description": "Választási lehetőségek.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "Beágyazott elválasztó",
+                  "description": "Az egyes lehetőségek elválasztásához használandó szöveg, ha több mint 2 lehetőség van"
+                },
+                "inlineOr": {
+                  "title": "Beágyazott vagy",
+                  "description": "A lehetőségek közé beszúrandó szöveg, ha csak 2 lehetőség van"
+                },
+                "inlineOrMore": {
+                  "title": "Beágyazott vagy több",
+                  "description": "Az utolsó 2 lehetőség közé beszúrandó szöveg, ha több mint 2 lehetőség van."
+                },
+                "includeNumbers": {
+                  "title": "Számokat kell tartalmaznia",
+                  "description": "Ha igaz, a „beágyazott” és „lista” stílus a kiválasztott indexelő-előtaggal lesz ellátva."
+                }
+              }
+            }
+          }
+        },
+        "defaultValue": {
+          "title": "Alapértelmezett érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, ha túllépték a próbálkozások maximális számát."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, kivéve, ha nullértékű."
+        },
+        "confirmChoices": {
+          "title": "Lehetőségobjektumok tömbje",
+          "description": "Egyszerű vagy strukturált lehetőségek tömbje.",
+          "oneOf": {
+            "0": {
+              "title": "Egyszerű lehetőségek",
+              "description": "Azon egyszerű lehetőségek, melyek közül valamelyiket meg kell erősíteni.",
+              "items": {
+                "0": {
+                  "title": "Egyszerű lehetőség",
+                  "description": "Megerősítendő egyszerű lehetőség."
+                }
+              }
+            },
+            "1": {
+              "title": "Strukturált lehetőségek",
+              "description": "Megerősítendő strukturált lehetőségek.",
+              "items": {
+                "0": {
+                  "title": "Választási lehetőség",
+                  "description": "Megerősítendő lehetőség.",
+                  "properties": {
+                    "value": {
+                      "title": "Érték",
+                      "description": "A lehetőség kiválasztásakor visszaadandó érték."
+                    },
+                    "action": {
+                      "title": "Művelet",
+                      "description": "A lehetőséghez tartozó kártyaművelet."
+                    },
+                    "synonyms": {
+                      "title": "Szinonimák",
+                      "description": "Az értéken kívül felismerendő szinonimák listája (opcionális).",
+                      "items": {
+                        "title": "Szinonima",
+                        "description": "A választás szinonimája."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "prompt": {
+          "title": "Kezdeti adatkérés",
+          "description": "Információgyűjtési célból elküldött üzenet."
+        },
+        "unrecognizedPrompt": {
+          "title": "Nem felismerhető adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha a felhasználói adatbevitel nem felel meg az érvényesítési kifejezésnek."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "validations": {
+          "title": "Érvényesítési kifejezések",
+          "description": "Felhasználói adatbevitel érvényesítéséhez használt kifejezés.",
+          "items": {
+            "title": "Feltétel",
+            "description": "Az a kifejezés, amelyhez a bemenetnek meg kell felelnie ahhoz, hogy érvényesnek számítson"
+          }
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Az összegyűjtött információk tárolására szolgáló tulajdonság. Ha a tulajdonságnak van értéke, a bemenet ki lesz hagyva (kivéve, ha a „Mindig kérdezzen rá” értéke igaz)."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "allowInterruptions": {
+          "title": "Megszakítások engedélyezése",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ConfirmationEntityRecognizer": {
+      "title": "Confirmation entity recognizer",
+      "description": "Értelmező, amely felismeri a megerősítési válaszlehetőségeket (igen/nem).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ContinueConversationLater": {
+      "title": "Continue conversation later (Queue)",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "date": {
+          "title": "Date",
+          "description": "Date in the future as a ISO string when the conversation should continue."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueLoop": {
+      "title": "Continue loop",
+      "description": "A sablon végrehajtásának leállítása, és folytatás a ciklus következő iterációjával.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.CrossTrainedRecognizerSet": {
+      "title": "Cross-trained recognizer set",
+      "description": "Értelmező a keresztbe képzett értelmezők közötti választáshoz.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális egyedi azonosító, amely a RecognizerSethez használható."
+        },
+        "recognizers": {
+          "title": "Értelmezők",
+          "description": "A készlethez meghatározott értelmezők listája."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.CurrencyEntityRecognizer": {
+      "title": "Currency entity recognizer",
+      "description": "A pénznemet értelmező értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.DateTimeEntityRecognizer": {
+      "title": "Date and time entity recognizer",
+      "description": "A dátumokat és időtöredékeket ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.DateTimeInput": {
+      "title": "Dátum/idő bemeneti párbeszédje",
+      "description": "Információgyűjtés – Dátum és/vagy idő bekérése",
+      "defaultLocale": {
+        "title": "Alapértelmezett területi beállítás",
+        "description": "Alapértelmezett területi beállítás."
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Default date",
+          "description": "A \"Property\" értéket a rendszer az értékre vagy a kifejezés eredményére állítja be, ha túllépik a próbálkozások maximális számát."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke vagy eredménye lesz beállítva, kivéve, ha nullértékű."
+        },
+        "outputFormat": {
+          "title": "Kimeneti formátum",
+          "description": "A kimenet formázásához használandó kifejezés."
+        },
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "prompt": {
+          "title": "Kezdeti adatkérés",
+          "description": "Információgyűjtési célból elküldött üzenet."
+        },
+        "unrecognizedPrompt": {
+          "title": "Nem felismerhető adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha a felhasználói adatbevitel nem felel meg az érvényesítési kifejezésnek."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "validations": {
+          "title": "Érvényesítési kifejezések",
+          "description": "Felhasználói adatbevitel érvényesítéséhez használt kifejezés.",
+          "items": {
+            "title": "Feltétel",
+            "description": "Az a kifejezés, amelyhez a bemenetnek meg kell felelnie ahhoz, hogy érvényesnek számítson"
+          }
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Az összegyűjtött információk tárolására szolgáló tulajdonság. Ha a tulajdonságnak van értéke, a bemenet ki lesz hagyva (kivéve, ha a „Mindig kérdezzen rá” értéke igaz)."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "allowInterruptions": {
+          "title": "Megszakítások engedélyezése",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.DebugBreak": {
+      "title": "Hibakereső töréspontja",
+      "description": "Ha csatolva van hibakereső, a beszélgetés e pontján leáll a végrehajtás.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.DeleteActivity": {
+      "title": "Tevékenység törlése",
+      "description": "Egy korábban elküldött tevékenység törlése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "activityId": {
+          "title": "Tevékenységazonosító",
+          "description": "kifejezés egy törlendő tevékenységazonosítóhoz"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.DeleteProperties": {
+      "title": "Tulajdonságok törlése",
+      "description": "Több tulajdonság és a hozzájuk tartozó értékek törlése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "properties": {
+          "title": "Tulajdonságok",
+          "description": "A törölni kívánt tulajdonságok.",
+          "items": {
+            "title": "Tulajdonság",
+            "description": "A törölni kívánt tulajdonság."
+          }
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.DeleteProperty": {
+      "title": "Delete property",
+      "description": "Egy tulajdonság és a hozzá tartozó értékek törlése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "A törölni kívánt tulajdonság."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.DimensionEntityRecognizer": {
+      "title": "Dimension entity recognizer",
+      "description": "A dimenziót ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.EditActions": {
+      "title": "Szerkesztési műveletek.",
+      "description": "Jelenlegi műveletlista szerkesztése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "changeType": {
+          "title": "Változás típusa",
+          "description": "A jelenlegi műveleteken elvégzendő módosítás típusa.",
+          "oneOf": {
+            "0": {
+              "title": "Standard módosítás",
+              "description": "Standard módosítási típusok."
+            }
+          }
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Alkalmazandó műveletek."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.EditArray": {
+      "title": "Tömb szerkesztése",
+      "description": "Egy tömb módosítása a memóriában",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "changeType": {
+          "title": "Változás típusa",
+          "description": "A memóriában található tömb módosításának típusa.",
+          "oneOf": {
+            "0": {
+              "title": "Change type",
+              "description": "Standard módosítási típus."
+            }
+          }
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "itemsProperty": {
+          "title": "Elemek tulajdonság",
+          "description": "A frissítendő tömböt tartalmazó tulajdonság."
+        },
+        "resultProperty": {
+          "title": "Result property",
+          "description": "A művelet eredményét tároló tulajdonság."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "Új érték vagy kifejezés."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.EmailEntityRecognizer": {
+      "title": "Email entity recognizer",
+      "description": "Az e-maileket ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.EmitEvent": {
+      "title": "Egyéni esemény továbbítása",
+      "description": "Egy esemény továbbítása. Esemény rögzítése egy triggerrel.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "eventName": {
+          "title": "Eseménynév",
+          "description": "A továbbítandó esemény neve.",
+          "oneOf": {
+            "0": {
+              "title": "Beépített esemény",
+              "description": "Standard eseménytípus."
+            },
+            "1": {
+              "title": "Egyéni esemény",
+              "description": "Egyéni eseménytípus"
+            }
+          }
+        },
+        "eventValue": {
+          "title": "Esemény értéke",
+          "description": "Az eseménnyel együtt továbbítandó érték (opcionális)."
+        },
+        "bubbleEvent": {
+          "title": "Buborékesemény",
+          "description": "Ha igaz, az esemény továbbítva lesz a fölérendelt párbeszédekbe."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.EndDialog": {
+      "title": "Párbeszéd bezárása",
+      "description": "A párbeszéd bezárása.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A fölérendelt párbeszédnek visszaadott eredményérték."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.EndTurn": {
+      "title": "Kör befejezése",
+      "description": "A jelenlegi kör befejezése a párbeszéd bezárása nélkül.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.FirstSelector": {
+      "title": "First trigger selector",
+      "description": "Az első igaz szabály szelektora",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.Foreach": {
+      "title": "Minden egyes elemhez",
+      "description": "Műveletek végrehajtása egy gyűjtemény minden elemén.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "itemsProperty": {
+          "title": "Elemek tulajdonság",
+          "description": "A tömböt tartalmazó tulajdonság."
+        },
+        "index": {
+          "title": "Index tulajdonság",
+          "description": "Az elem indexét tartalmazó tulajdonság."
+        },
+        "value": {
+          "title": "Érték tulajdonság",
+          "description": "Az elem értékét tartalmazó tulajdonság."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Az egyes elemeknél végrehajtandó műveletek. Az egyes elemek értéke a „$foreach.value” használatával érhető el. Az egyes elemek indexe a „$foreach.index” használatával érhető el."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ForeachPage": {
+      "title": "Minden egyes oldalhoz",
+      "description": "Műveletek végrehajtása minden oldalon (elemek gyűjteményén) egy tömbben.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "itemsProperty": {
+          "title": "Elemek tulajdonság",
+          "description": "A tömböt tartalmazó tulajdonság."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Az egyes oldalakon végrehajtandó műveletek. Az egyes oldalak a „$foreach.page” használatával érhetők el."
+        },
+        "pageIndex": {
+          "title": "Index tulajdonság",
+          "description": "Az oldal indexét tartalmazó tulajdonság."
+        },
+        "page": {
+          "title": "Oldal tulajdonság",
+          "description": "Az oldal értékét tartalmazó tulajdonság."
+        },
+        "pageSize": {
+          "title": "Oldalméret",
+          "description": "Az egyes oldalakon található elemek száma."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.GetActivityMembers": {
+      "title": "Get activity members",
+      "description": "Egy tevékenységben részt vevő tagok lekérése. (Csak BotFrameworkAdapter)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Tulajdonság (az információk tárolására szolgáló nevesített hely)."
+        },
+        "activityId": {
+          "title": "Activity Id",
+          "description": "A tagok lekéréséhez használandó tevékenységazonosító vagy tevékenységazonosító kifejezése. Ha nincs ilyen megadva, akkor a jelenlegi tevékenységazonosító lesz használatban."
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.GetConversationMembers": {
+      "title": "Get conversation members",
+      "description": "Egy beszélgetésben részt vevő tagok lekérése. (Csak BotFrameworkAdapter)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Tulajdonság (az információk tárolására szolgáló nevesített hely)."
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.GotoAction": {
+      "title": "Go to action",
+      "description": "Megnyit egy műveletet az azonosítója alapján.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "actionId": {
+          "title": "Műveletazonosító",
+          "description": "Következőként végrehajtandó művelet azonosítója"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.GuidEntityRecognizer": {
+      "title": "Guid entity recognizer",
+      "description": "GUID azonosítókat ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.HashtagEntityRecognizer": {
+      "title": "Hashtag entity recognizer",
+      "description": "A Hashtageket ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.HttpRequest": {
+      "title": "HTTP-kérelem",
+      "description": "HTTP-kérelem létrehozása.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "method": {
+          "title": "HTTP-metódus",
+          "description": "A használandó HTTP-metódus."
+        },
+        "url": {
+          "title": "URL-cím",
+          "description": "Meghívandó URL-cím (támogatja az adatkötést)."
+        },
+        "body": {
+          "title": "Törzs",
+          "description": "A HTTP-hívásba foglalandó törzs (támogatja az adatkötést)."
+        },
+        "resultProperty": {
+          "title": "Eredmény tulajdonság",
+          "description": "A művelet eredményét tároló tulajdonság. Az eredmény a HTTP-válaszban található 4 tulajdonság bármelyikét tartalmazhatja: statusCode, reasonPhrase, content és headers. Ha a tartalom JSON, akkor egy deszerializált objektum lesz. Az értékek például a .content használatával érhetők el."
+        },
+        "contentType": {
+          "title": "Tartalom típusa",
+          "description": "A törzs tartalmának médiatípusa."
+        },
+        "headers": {
+          "title": "Fejlécek",
+          "description": "A HTTP-hívásba foglalandó egy vagy több fejléc (támogatja az adatkötést)."
+        },
+        "responseType": {
+          "title": "Választípus",
+          "description": "Megadja a HTTP-válasz típusát. Automatikusan meghívja a „Válaszküldés” műveletet, ha a beállított érték „Tevékenység” vagy „Tevékenységek”.",
+          "oneOf": {
+            "0": {
+              "title": "Standard válasz",
+              "description": "Standard választípus."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.IActivityTemplate": {
+      "title": "Microsoft tevékenységsablonok",
+      "description": "Olyan összetevők, amelyek kategóriája tevékenységsablon (amely egy sztringsablon), egy tevékenység vagy egy tevékenységsablon implementálása",
+      "oneOf": {
+        "1": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation",
+              "properties": {
+                "isGroup": {
+                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "title": "isGroup"
+                },
+                "conversationType": {
+                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "title": "conversationType"
+                },
+                "id": {
+                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                  "title": "id"
+                },
+                "name": {
+                  "description": "Display friendly name",
+                  "title": "name"
+                },
+                "aadObjectId": {
+                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "title": "aadObjectId"
+                },
+                "role": {
+                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                  "title": "role"
+                }
+              }
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded",
+              "items": {
+                "description": "Channel account information needed to route a message",
+                "title": "ChannelAccount",
+                "properties": {
+                  "id": {
+                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                    "title": "id"
+                  },
+                  "name": {
+                    "description": "Display friendly name",
+                    "title": "name"
+                  },
+                  "aadObjectId": {
+                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "title": "aadObjectId"
+                  },
+                  "role": {
+                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                    "title": "role"
+                  }
+                }
+              }
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded",
+              "items": {
+                "description": "Message reaction object",
+                "title": "MessageReaction",
+                "properties": {
+                  "type": {
+                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions",
+              "properties": {
+                "to": {
+                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+                  "title": "to",
+                  "items": {
+                    "title": "Id",
+                    "description": "Id of recipient."
+                  }
+                },
+                "actions": {
+                  "description": "Actions that can be shown to the user",
+                  "title": "actions",
+                  "items": {
+                    "description": "A clickable action",
+                    "title": "CardAction",
+                    "properties": {
+                      "type": {
+                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "type"
+                      },
+                      "title": {
+                        "description": "Text description which appears on the button",
+                        "title": "title"
+                      },
+                      "image": {
+                        "description": "Image URL which will appear on the button, next to text label",
+                        "title": "image"
+                      },
+                      "text": {
+                        "description": "Text for this action",
+                        "title": "text"
+                      },
+                      "displayText": {
+                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "title": "displayText"
+                      },
+                      "value": {
+                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+                        "title": "value"
+                      },
+                      "channelData": {
+                        "description": "Channel-specific data associated with this action",
+                        "title": "channelData"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments",
+              "items": {
+                "description": "An attachment within an activity",
+                "title": "Attachment",
+                "properties": {
+                  "contentType": {
+                    "description": "mimetype/Contenttype for the file",
+                    "title": "contentType"
+                  },
+                  "contentUrl": {
+                    "description": "Content Url",
+                    "title": "contentUrl"
+                  },
+                  "content": {
+                    "description": "Embedded content",
+                    "title": "content"
+                  },
+                  "name": {
+                    "description": "(OPTIONAL) The name of the attachment",
+                    "title": "name"
+                  },
+                  "thumbnailUrl": {
+                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "title": "thumbnailUrl"
+                  }
+                }
+              }
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities",
+              "items": {
+                "description": "Metadata object pertaining to an activity",
+                "title": "Entity",
+                "properties": {
+                  "type": {
+                    "description": "Type of this entity (RFC 3987 IRI)",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo",
+              "properties": {
+                "activityId": {
+                  "description": "(Optional) ID of the activity to refer to",
+                  "title": "activityId"
+                },
+                "user": {
+                  "description": "(Optional) User participating in this conversation",
+                  "title": "user"
+                },
+                "bot": {
+                  "description": "Bot participating in this conversation",
+                  "title": "bot"
+                },
+                "conversation": {
+                  "description": "Conversation reference",
+                  "title": "conversation"
+                },
+                "channelId": {
+                  "description": "Channel ID",
+                  "title": "channelId"
+                },
+                "serviceUrl": {
+                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "title": "serviceUrl"
+                }
+              }
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights",
+              "items": {
+                "description": "Refers to a substring of content within another field",
+                "title": "TextHighlight",
+                "properties": {
+                  "text": {
+                    "description": "Defines the snippet of text to highlight",
+                    "title": "text"
+                  },
+                  "occurrence": {
+                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+                    "title": "occurrence"
+                  }
+                }
+              }
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction",
+              "properties": {
+                "id": {
+                  "description": "ID of this action",
+                  "title": "id"
+                },
+                "entities": {
+                  "description": "Entities associated with this action",
+                  "title": "entities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Microsoft.IDialog": {
+      "title": "Microsoft dialogs",
+      "description": "A párbeszédből származó összetevők"
+    },
+    "Microsoft.IEntityRecognizer": {
+      "title": "Entity recognizers",
+      "description": "Az EntityRecognizerből származó összetevők.",
+      "oneOf": {
+        "0": {
+          "title": "Hivatkozás a Microsoft.IEntityRecognizerre",
+          "description": "Hivatkozás a Microsoft.IEntityRecognizer .dialog fájljára."
+        }
+      }
+    },
+    "Microsoft.ILanguageGenerator": {
+      "title": "Microsoft nyelvgenerátor",
+      "description": "A LanguageGenerator osztályból származó összetevők"
+    },
+    "Microsoft.IRecognizer": {
+      "title": "Microsoft recognizer",
+      "description": "Recognizer osztályból származtatott összetevők"
+    },
+    "Microsoft.ITextTemplate": {
+      "title": "Microsoft szövegsablon",
+      "description": "A TextTemplate osztályból származó összetevők"
+    },
+    "Microsoft.ITrigger": {
+      "title": "Microsoft triggerek",
+      "description": "Az OnCondition osztályból származó összetevők.",
+      "oneOf": {
+        "0": {
+          "title": "Hivatkozás a Microsoft.ITriggerre",
+          "description": "Hivatkozás a Microsoft.ITrigger .dialog fájljára."
+        }
+      }
+    },
+    "Microsoft.ITriggerSelector": {
+      "title": "Szelektorok",
+      "description": "A TriggerSelector osztályból származó összetevők.",
+      "oneOf": {
+        "0": {
+          "title": "Hivatkozás a Microsoft.ITriggerSelectorra",
+          "description": "Hivatkozás a Microsoft.ITriggerSelector .dialog fájljára."
+        }
+      }
+    },
+    "Microsoft.IfCondition": {
+      "title": "Ha feltétel",
+      "description": "A beszélgetés kétirányú elágaztatása egy feltétel alapján.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Kiértékelendő kifejezés."
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "A feltétel teljesülése esetén végrehajtandó műveletek."
+        },
+        "elseActions": {
+          "title": "Egyébként",
+          "description": "A feltétel teljesülésének hiányakor végrehajtandó műveletek."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.InputDialog": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "prompt": {
+          "title": "Kezdeti adatkérés",
+          "description": "Információgyűjtési célból elküldött üzenet."
+        },
+        "unrecognizedPrompt": {
+          "title": "Nem felismerhető adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha a felhasználói adatbevitel nem felel meg az érvényesítési kifejezésnek."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "validations": {
+          "title": "Érvényesítési kifejezések",
+          "description": "Felhasználói adatbevitel érvényesítéséhez használt kifejezés.",
+          "items": {
+            "title": "Feltétel",
+            "description": "Az a kifejezés, amelyhez a bemenetnek meg kell felelnie ahhoz, hogy érvényesnek számítson"
+          }
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Az összegyűjtött információk tárolására szolgáló tulajdonság. Ha a tulajdonságnak van értéke, a bemenet ki lesz hagyva (kivéve, ha a „Mindig kérdezzen rá” értéke igaz)."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "allowInterruptions": {
+          "title": "Megszakítások engedélyezése",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.IpEntityRecognizer": {
+      "title": "IP entity recognizer",
+      "description": "Értelmező, amely értelmezi az internetes IP-mintákat (pl. 192.1.1.1).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.LanguagePolicy": {
+      "title": "Language policy",
+      "description": "Ez egy szabályzattérkép a nyelvhez használandó területi beállítások kereséséhez",
+      "additionalProperties": {
+        "title": "Területi beállításhoz tartozó szabályzat",
+        "description": "Területi beállításhoz tartozó nyelvi szabályzatok.",
+        "items": {
+          "title": "Területi beállítás",
+          "description": "Területi beállítás, pl. en-us."
+        }
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.LogAction": {
+      "title": "Naplózás konzolra",
+      "description": "Üzenet naplózása a gazdaalkalmazásba. Nyomkövetési tevékenység küldése a Bot Framework Emulatorba (nem kötelező).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "text": {
+          "title": "Szöveg",
+          "description": "Naplózandó információ."
+        },
+        "label": {
+          "title": "Címke",
+          "description": "A nyomkövetési tevékenység címkéje (amely azonosítja a tevékenységet a nyomkövetési tevékenységek listájában)."
+        },
+        "traceActivity": {
+          "title": "Send trace activity",
+          "description": "Ha igaz, automatikusan elküld egy nyomkövetési tevékenységet (megtekinthető a Bot Framework Emulatorban)."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.LuisRecognizer": {
+      "title": "LUIS-értelmező",
+      "description": "LUIS-értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális egyedi azonosító, amely a RecognizerSethez használható. A többi értelmezőnek a „DeferToRecognizer_{Id}” szándékot kell visszaadnia, amikor a betanításuk ennek az értelmezőnek az adataival történik."
+        },
+        "applicationId": {
+          "title": "LUIS application id",
+          "description": "A modell alkalmazásazonosítója a LUIS szolgáltatásból."
+        },
+        "version": {
+          "title": "LUIS version",
+          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+        },
+        "endpoint": {
+          "title": "LUIS endpoint",
+          "description": "A LUIS szolgáltatáshoz használandó végpont, pl. https://westus.api.cognitive.microsoft.com."
+        },
+        "endpointKey": {
+          "title": "LUIS előrejelzés-azonosító",
+          "description": "A végpont hívásához használt LUIS előrejelzés-azonosító."
+        },
+        "externalEntityRecognizer": {
+          "title": "External entity recognizer",
+          "description": "A értelmező által felismert entitások a LUIS-ként lesznek továbbítva külső entitásként."
+        },
+        "dynamicLists": {
+          "title": "Dinamikus listák",
+          "description": "A futtatókörnyezet által meghatározott entitáslisták.",
+          "items": {
+            "title": "Entitáslista",
+            "description": "Egy entitás kanonikus értékeinek és szinonimáinak listái.",
+            "properties": {
+              "entity": {
+                "title": "Entitás",
+                "description": "Egy dinamikus listával bővítendő entitás."
+              },
+              "list": {
+                "title": "Dinamikus lista",
+                "description": "Kanonikus formátumok és szinonimák listája.",
+                "items": {
+                  "title": "Listaelem",
+                  "description": "Kanonikus formátumok és szinonimák.",
+                  "properties": {
+                    "canonicalForm": {
+                      "title": "Kanonikus formátum",
+                      "description": "Feloldás egyező szinonima esetén."
+                    },
+                    "synonyms": {
+                      "title": "Szinonimák",
+                      "description": "Szinonimák listája kanonikus formátumhoz.",
+                      "items": {
+                        "title": "Szinonima",
+                        "description": "Szinonima kanonikus formátumhoz."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "predictionOptions": {
+          "title": "Előrejelzési lehetőségek",
+          "description": "A LUIS előrejelzési viselkedését szabályozó beállítások.",
+          "properties": {
+            "includeAllIntents": {
+              "title": "Minden szándék belefoglalása",
+              "description": "Ha igaz, minden szándékot felölel, ha hamis, csak a legelső szándékot."
+            },
+            "includeInstanceData": {
+              "title": "$instance belefoglalása",
+              "description": "Ha igaz, a LUIS-válasz tartalmazza az $instance metaadatait."
+            },
+            "log": {
+              "title": "Beszédelemek naplózása",
+              "description": "Ha igaz, a LUIS szolgáltatás naplózza a beszédelemeket."
+            },
+            "preferExternalEntities": {
+              "title": "Prefer external entities",
+              "description": "Ha igaz, a külső entitások lesznek előnyben részesítve a LUIS-modell által létrehozott entitásokkal szemben."
+            },
+            "slot": {
+              "title": "Üzembehelyezési pont",
+              "description": "A LUIS szolgáltatással való kommunikációhoz használatos üzembehelyezési pont (pl. éles vagy előkészítési)."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.MentionEntityRecognizer": {
+      "title": "Mentions entity recognizer",
+      "description": "A @Mentions értelmező felismeri",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.MostSpecificSelector": {
+      "title": "Most specific trigger selector",
+      "description": "A legkonkrétabb igaz események kiválasztása egy opcionális további szelektorral",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.MultiLanguageRecognizer": {
+      "title": "Többnyelvű értelmező",
+      "description": "Konfiguráljon egy értelmezőt egy nyelvre, és adja meg a nyelvi tartalék szabályzatot.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális egyedi azonosító, amely a RecognizerSethez használható. A többi értelmezőnek a „DeferToRecognizer_{Id}” szándékot kell visszaadnia, amikor a betanításuk ennek az értelmezőnek az adataival történik."
+        },
+        "languagePolicy": {
+          "title": "Nyelvi szabályzat",
+          "description": "Megadja, hogy a rendszer hány tartalék nyelvet próbáljon ki egy felhasználói adatbevitelben szereplő nyelvhez."
+        },
+        "recognizers": {
+          "title": "Értelmezők",
+          "description": "Nyelvi Térkép – > értelmező"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.NumberEntityRecognizer": {
+      "title": "Number entity recognizer",
+      "description": "A számokat értelmező értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.NumberInput": {
+      "title": "Szám bemeneti párbeszédje",
+      "description": "Információgyűjtés – Egy szám bekérése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Alapértelmezett érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, ha túllépték a próbálkozások maximális számát."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, kivéve, ha nullértékű."
+        },
+        "outputFormat": {
+          "title": "Kimeneti formátum",
+          "description": "A numerikus kimenet formázására szolgáló kifejezés."
+        },
+        "defaultLocale": {
+          "title": "Alapértelmezett területi beállítás",
+          "description": "Az alapértelmezetten használandó területi beállítás, ha nincs elérhető területi beállítás."
+        },
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "prompt": {
+          "title": "Kezdeti adatkérés",
+          "description": "Információgyűjtési célból elküldött üzenet."
+        },
+        "unrecognizedPrompt": {
+          "title": "Nem felismerhető adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha a felhasználói adatbevitel nem felel meg az érvényesítési kifejezésnek."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "validations": {
+          "title": "Érvényesítési kifejezések",
+          "description": "Felhasználói adatbevitel érvényesítéséhez használt kifejezés.",
+          "items": {
+            "title": "Feltétel",
+            "description": "Az a kifejezés, amelyhez a bemenetnek meg kell felelnie ahhoz, hogy érvényesnek számítson"
+          }
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Az összegyűjtött információk tárolására szolgáló tulajdonság. Ha a tulajdonságnak van értéke, a bemenet ki lesz hagyva (kivéve, ha a „Mindig kérdezzen rá” értéke igaz)."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "allowInterruptions": {
+          "title": "Megszakítások engedélyezése",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.NumberRangeEntityRecognizer": {
+      "title": "Number range entity recognizer",
+      "description": "Olyan értelmező, amely felismeri a számok tartományait (példa: 2 – 5).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuth bemeneti párbeszéd",
+      "description": "Bejelentkezési adatok gyűjtése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "connectionName": {
+          "title": "Kapcsolat neve",
+          "description": "Az Azure webalkalmazás-robot OAuth-beállításaiban megadott kapcsolatnév."
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "text": {
+          "title": "Szöveg",
+          "description": "A OAuth bejelentkezési kártyán megjelenő szöveg."
+        },
+        "title": {
+          "title": "Cím",
+          "description": "A OAuth bejelentkezési kártyájában látható cím."
+        },
+        "timeout": {
+          "title": "Időtúllépés",
+          "description": "A OAuth bejelentkezési kártya időtúllépési beállítása."
+        },
+        "property": {
+          "title": "Jogkivonat tulajdonság",
+          "description": "Az OAuth-jogkivonat eredményét tároló tulajdonság."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Az elküldendő üzenet, ha a felhasználó válasza érvénytelen."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "defaultValue": {
+          "title": "Alapértelmezett érték",
+          "description": "A beszélgetés minden egyes körében a tulajdonság lehetséges értékeként megvizsgálandó kifejezés."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnActivity": {
+      "title": "Tevékenységnél",
+      "description": "Egy általános tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "type": {
+          "title": "Tevékenység típusa",
+          "description": "A tevékenységtípus, amelynek egyeznie kell"
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnAssignEntity": {
+      "title": "Entitás hozzárendelésekor",
+      "description": "Egy entitás tulajdonsághoz rendelésekor elvégzendő műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Tulajdonság, amely az entitás kiválasztása után lesz beállítva."
+        },
+        "entity": {
+          "title": "Entitás",
+          "description": "Entitás beillesztése egy tulajdonságba"
+        },
+        "operation": {
+          "title": "Művelet",
+          "description": "Entitás hozzárendelésének művelete."
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnBeginDialog": {
+      "title": "Párbeszéd elkezdésekor",
+      "description": "A párbeszéd elkezdésekor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnCancelDialog": {
+      "title": "Párbeszéd megszakításakor",
+      "description": "A párbeszéd megszakításakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnChooseEntity": {
+      "title": "Entitás választásakor",
+      "description": "Végrehajtandó műveletek, amikor egy entitás értékét fel kell oldani.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "Beállítandó tulajdonság",
+          "description": "Tulajdonság, amely az entitás kiválasztása után lesz beállítva."
+        },
+        "entity": {
+          "title": "Nem egyértelmű entitás",
+          "description": "Nem egyértelmű entitás"
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnChooseIntent": {
+      "title": "Nem egyértelmű szándék esetén",
+      "description": "Nem egyértelmű szándék esetén végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "intents": {
+          "title": "Szándékok",
+          "description": "A szándékok, amelyeknek a ChooseIntent eredményben szerepelniük kell, hogy ez a feltétel aktiválódjon.",
+          "items": {
+            "title": "Szándék",
+            "description": "Az aktiválást kiváltó szándék neve."
+          }
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnChooseProperty": {
+      "title": "Tulajdonság választásakor",
+      "description": "Elvégzendő műveletek, ha az entitások többféleképpen rendelhetők hozzá a tulajdonságokhoz.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "entity": {
+          "title": "Hozzárendelendő entitás",
+          "description": "Entitás hozzárendelése egy tulajdonság-lehetőséghez"
+        },
+        "properties": {
+          "title": "Lehetséges tulajdonságok",
+          "description": "A tulajdonságok, amelyek közül választani kell.",
+          "items": {
+            "title": "Tulajdonság neve",
+            "description": "Lehetséges választható tulajdonság."
+          }
+        },
+        "entities": {
+          "title": "Entitások",
+          "description": "Nem egyértelmű entitásnevek.",
+          "items": {
+            "title": "Entitás neve",
+            "description": "Az entitásnevek, amelyek közül választani kell."
+          }
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnCondition": {
+      "title": "Feltétel teljesülésekor",
+      "description": "A megadott feltétel teljesülése esetén végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnContinueConversation": {
+      "title": "On continue conversation",
+      "description": "Végrehajtandó műveletek, amikor egy beszélgetés újraindul egy ContinueConversationLater művelet után.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "ConversationUpdate tevékenység esetén",
+      "description": "Egy „ConversationUpdate” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnDialogEvent": {
+      "title": "Párbeszédesemény esetén",
+      "description": "Egy adott párbeszédesemény bekövetkeztekor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "event": {
+          "title": "Párbeszédesemény neve",
+          "description": "Párbeszédesemény neve."
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnEndOfActions": {
+      "title": "Műveletek elfogyásakor",
+      "description": "Elvégzendő műveletek, amikor nincs több művelet a jelenlegi párbeszédben.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+      "title": "EndOfConversation tevékenység esetén",
+      "description": "Egy „EndOfConversation” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnError": {
+      "title": "On error",
+      "description": "Egy „Error” párbeszédesemény bekövetkeztekor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnEventActivity": {
+      "title": "Event tevékenység esetén",
+      "description": "Egy „Event” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnHandoffActivity": {
+      "title": "HandOff tevékenység esetén",
+      "description": "Egy „HandOff” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+      "title": "On InstallationUpdate activity",
+      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condition",
+          "description": "Condition (expression)."
+        },
+        "actions": {
+          "title": "Actions",
+          "description": "Sequence of actions to execute."
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+        },
+        "runOnce": {
+          "title": "Run Once",
+          "description": "True if rule should run once per unique conditions"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnIntent": {
+      "title": "Szándékfelismerés esetén",
+      "description": "A megadott szándék felismerése esetén végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "intent": {
+          "title": "Szándék",
+          "description": "A szándék neve."
+        },
+        "entities": {
+          "title": "Entitások",
+          "description": "Kötelező entitások.",
+          "items": {
+            "title": "Entitás",
+            "description": "Az entitás, amelynek jelen kell lennie."
+          }
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnInvokeActivity": {
+      "title": "Invoke tevékenység esetén",
+      "description": "Egy „Invoke” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnMessageActivity": {
+      "title": "Message tevékenység esetén",
+      "description": "Egy „Message” típusú tevékenység fogadásakor végrehajtandó műveletek. Felülbírálja a szándéktriggert.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+      "title": "MessageDelete tevékenység esetén",
+      "description": "Egy „MessageDelete” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+      "title": "MessageReaction tevékenység esetén",
+      "description": "Egy „MessageReaction” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+      "title": "MessageUpdate tevékenység esetén",
+      "description": "Egy „MessageUpdate” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnQnAMatch": {
+      "title": "On QnAMaker match",
+      "description": "Végrehajtandó műveletek, amikor a QnAMakerben egy egyezés található.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "RepromptDialog esetén",
+      "description": "Egy „RepromptDialog” esemény bekövetkeztekor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnTypingActivity": {
+      "title": "Typing tevékenység esetén",
+      "description": "Egy „Typing” típusú tevékenység fogadásakor végrehajtandó műveletek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "Ismeretlen szándék esetén",
+      "description": "Végrehajtandó műveletek, ha a felhasználói adatbevitel nem ismerhető fel, vagy a felismert szándék semelyik „szándékfelismerés esetén” triggerrel sem egyezik.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Feltétel",
+          "description": "Feltétel (kifejezés)."
+        },
+        "actions": {
+          "title": "Műveletek",
+          "description": "Végrehajtandó műveletek sorozata."
+        },
+        "priority": {
+          "title": "Prioritás",
+          "description": "A trigger prioritása – a 0 a legmagasabb, a < 0 figyelmen kívül hagyást jelent."
+        },
+        "runOnce": {
+          "title": "Futtatás egyszer",
+          "description": "Igaz, ha a szabálynak feltételenként egyszer kell futnia"
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.OrdinalEntityRecognizer": {
+      "title": "Ordinal entity recognizer",
+      "description": "A sorszámokat ismerő értelmező (példa: első, második, harmadik).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.PercentageEntityRecognizer": {
+      "title": "Percentage entity recognizer",
+      "description": "A százalékértékeket értelmező értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.PhoneNumberEntityRecognizer": {
+      "title": "Phone number entity recognizer",
+      "description": "A telefonszámokat ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.QnAMakerDialog": {
+      "title": "QnAMaker dialog",
+      "description": "Párbeszéd, amely egy QnAMaker-tudásbázist használ a kérdések megválaszolásához.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "knowledgeBaseId": {
+          "title": "Tudásbázis-azonosító",
+          "description": "A QnA Maker-tudásbázis azonosítója."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "A QnA Maker KB végpontkulcsa."
+        },
+        "hostname": {
+          "title": "Gazdagépnév",
+          "description": "A QnA Maker szolgáltatás gazdagépneve."
+        },
+        "noAnswer": {
+          "title": "Tartalék válasz",
+          "description": "Alapértelmezett visszaadandó válasz, ha nem található válasz a tudásbázisban."
+        },
+        "threshold": {
+          "title": "Küszöbérték",
+          "description": "Az eredmények szűréséhez használandó küszöbértékpontszám."
+        },
+        "activeLearningCardTitle": {
+          "title": "Aktív tanulási kártya címe",
+          "description": "Aktív tanulási javaslatok kártyájának címe."
+        },
+        "cardNoMatchText": {
+          "title": "Nem egyező szöveg kártyája",
+          "description": "Nem egyező lehetőség szövege."
+        },
+        "cardNoMatchResponse": {
+          "title": "Nem egyező válasz kártyája",
+          "description": "Egyéni válasz arra az esetre, ha egy nem egyező lehetőség lett kiválasztva."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "A QnA Maker KB meghívásakor használandó metaadatszűrők.",
+          "items": {
+            "title": "Metaadatszűrő",
+            "description": "Metaadatszűrő.",
+            "properties": {
+              "name": {
+                "title": "Név",
+                "description": "Szűrőtulajdonság neve."
+              },
+              "value": {
+                "title": "Érték",
+                "description": "A szűrés alapjául szolgáló érték."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "Első",
+          "description": "A lekérendő válaszok száma."
+        },
+        "isTest": {
+          "title": "IsTest",
+          "description": "Igaz, ha egy tesztkörnyezetre mutat, egyéb esetben hamis."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "A rangsoroló típusa.",
+          "oneOf": {
+            "0": {
+              "title": "Standard rangsoroló",
+              "description": "Standard rangsorolási típusok."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+            }
+          }
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.QnAMakerRecognizer": {
+      "title": "QnAMaker recognizer",
+      "description": "A QnAMatch-leképezések egy KB-ból történő generálásának értelmezője.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális egyedi azonosító, amely a RecognizerSethez használható."
+        },
+        "knowledgeBaseId": {
+          "title": "Tudásbázis-azonosító",
+          "description": "Knowledge base Id of your QnA Maker knowledge base."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "A QnA Maker KB végpontkulcsa."
+        },
+        "hostname": {
+          "title": "Gazdagépnév",
+          "description": "A QnA Maker szolgáltatás gazdagépneve."
+        },
+        "threshold": {
+          "title": "Küszöbérték",
+          "description": "Az eredmények szűréséhez használandó küszöbértékpontszám."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "A QnA Maker KB meghívásakor használandó metaadatszűrők.",
+          "items": {
+            "title": "Metaadatszűrők",
+            "description": "A QnA Maker KB lekérdezésekor használandó metaadatszűrők.",
+            "properties": {
+              "name": {
+                "title": "Név",
+                "description": "A szűrés alapjául szolgáló név."
+              },
+              "value": {
+                "title": "Érték",
+                "description": "A szűrőt korlátozó érték."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "Első",
+          "description": "A lekérendő válaszok száma."
+        },
+        "isTest": {
+          "title": "Use test environment",
+          "description": "Igaz, ha egy tesztkörnyezetre mutat, egyéb esetben hamis."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "A rangsoroló típusa.",
+          "oneOf": {
+            "0": {
+              "title": "Rangsoroló típusa",
+              "description": "A rangsoroló típusa."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+            }
+          }
+        },
+        "includeDialogNameInMetadata": {
+          "title": "Include dialog name",
+          "description": "Ha az érték hamis, a párbeszéd neve nem lesz átadva a QnAMakernek. (az alapértelmezett érték: igaz)"
+        },
+        "metadata": {
+          "title": "Metaadatszűrők",
+          "description": "A QnA Maker KB meghívásakor használandó metaadatszűrők.",
+          "items": {
+            "title": "Metaadatszűrő",
+            "description": "A QnA Maker KB meghívásakor használandó metaadatszűrő.",
+            "properties": {
+              "name": {
+                "title": "Név",
+                "description": "Vizsgálandó érték neve."
+              },
+              "value": {
+                "title": "Érték",
+                "description": "A szűrés alapjául szolgáló érték."
+              }
+            }
+          }
+        },
+        "context": {
+          "title": "QnA request context",
+          "description": "A rangsoroláshoz használandó kontextus."
+        },
+        "qnaId": {
+          "title": "QnA Id",
+          "description": "Egy szám vagy kifejezés, amely a QnAMaker API-nak átadandó QnAId azonosító."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.RandomSelector": {
+      "title": "Véletlenszerű szabály szelektora",
+      "description": "A legkonkrétabb igaz szabály kiválasztása.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "seed": {
+          "title": "Véletlenszám-kezdőérték",
+          "description": "Véletlenszám-kezdőérték a véletlenszám-generátor elindításához."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.RecognizerSet": {
+      "title": "Recognizer set",
+      "description": "A készletben lévő értelmezők és entitások egyesítésének létrehozása.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális egyedi azonosító, amely a RecognizerSethez használható. A többi értelmezőnek a „DeferToRecognizer_{Id}” szándékot kell visszaadnia, amikor a betanításuk ennek az értelmezőnek az adataival történik."
+        },
+        "recognizers": {
+          "title": "Értelmezők",
+          "description": "A készlethez meghatározott értelmezők listája."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.RegexEntityRecognizer": {
+      "title": "Regex entity recognizer",
+      "description": "Olyan értelmező, amely felismeri a bemeneti mintákat a regex alapján.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "name": {
+          "title": "Név",
+          "description": "Entitás neve"
+        },
+        "pattern": {
+          "title": "Mintázat",
+          "description": "Reguláris kifejezésként megadott minta."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.RegexRecognizer": {
+      "title": "Regex-értelmező",
+      "description": "Reguláris kifejezések használata a felhasználói adatbevitelben található szándékok és entitások felismeréséhez.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális egyedi azonosító, amely a RecognizerSethez használható. A többi értelmezőnek a „DeferToRecognizer_{Id}” szándékot kell visszaadnia, amikor a betanításuk ennek az értelmezőnek az adataival történik."
+        },
+        "intents": {
+          "title": "RegEx-minták szándékokhoz",
+          "description": "Egy szándék egyeztetendő mintáinak gyűjteménye.",
+          "items": {
+            "title": "Mintázat",
+            "description": "Szándék és regexminta.",
+            "properties": {
+              "intent": {
+                "title": "Szándék",
+                "description": "A szándék neve."
+              },
+              "pattern": {
+                "title": "Mintázat",
+                "description": "A reguláris kifejezés mintája."
+              }
+            }
+          }
+        },
+        "entities": {
+          "title": "Entitásértelmezők",
+          "description": "A használandó entitásértelmezők gyűjteménye."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.RepeatDialog": {
+      "title": "Párbeszéd ismétlése",
+      "description": "A jelenlegi párbeszéd megismétlése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "allowLoop": {
+          "title": "AllowLoop",
+          "description": "Opcionális feltétel, amely igaz érték esetén engedélyezi a megismételt párbeszéd ciklikus ismétlését."
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "options": {
+          "title": "Beállítások",
+          "description": "Egy vagy több beállítás, amelyek át lesznek adva a meghívott párbeszédnek.",
+          "additionalProperties": {
+            "title": "Beállítások",
+            "description": "Párbeszédismétlési beállítások."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Ha az érték hamis, a meghívott párbeszéd feldolgozhatja a jelenlegi tevékenységet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ReplaceDialog": {
+      "title": "Párbeszéd cseréje",
+      "description": "A jelenlegi párbeszéd cseréje egy másik párbeszédre.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "Párbeszéd"
+            }
+          },
+          "title": "Párbeszéd neve",
+          "description": "A meghívni kívánt párbeszéd neve."
+        },
+        "options": {
+          "title": "Beállítások",
+          "description": "Egy vagy több beállítás, amelyek át lesznek adva a meghívott párbeszédnek.",
+          "additionalProperties": {
+            "title": "Beállítások",
+            "description": "Párbeszédcsere-beállítások."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "Ha az érték hamis, a meghívott párbeszéd feldolgozhatja a jelenlegi tevékenységet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ResourceMultiLanguageGenerator": {
+      "title": "Resource multi-language generator",
+      "description": "MultiLanguage generátor, amely egy erőforrás-azonosítóval van egy erőforráshoz kötve.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális generátorazonosító."
+        },
+        "resourceId": {
+          "title": "Erőforrás-azonosító",
+          "description": "Erőforrás, amely a gyökérszintű nyelvgenerátor. A további, ugyanezzel a névvel és nyelvutótaggal rendelkező generátorok ebbe a generátorba lesznek betöltve, és a nyelvi szabályzat alapján lesznek használatban."
+        },
+        "languagePolicy": {
+          "title": "Language policy",
+          "description": "Másik nyelvi szabályzat beállítása ehhez a generátorhoz. Ha nincs beállítva, a rendszer a globális nyelvi szabályzatot használja."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.SendActivity": {
+      "title": "Tevékenység küldése",
+      "description": "Válaszadás egy tevékenységgel.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "activity": {
+          "title": "Tevékenység",
+          "description": "Küldendő tevékenység."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.SetProperties": {
+      "title": "Tulajdonság beállítása",
+      "description": "Egy vagy több tulajdonságérték beállítása.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "assignments": {
+          "title": "Hozzárendelések",
+          "description": "Beállítandó tulajdonságérték-hozzárendelések.",
+          "items": {
+            "title": "Hozzárendelés",
+            "description": "Tulajdonság-hozzárendelés.",
+            "properties": {
+              "property": {
+                "title": "Tulajdonság",
+                "description": "Tulajdonság (az információk tárolására szolgáló nevesített hely)."
+              },
+              "value": {
+                "title": "Érték",
+                "description": "Új érték vagy kifejezés."
+              }
+            }
+          }
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.SetProperty": {
+      "title": "Tulajdonság beállítása",
+      "description": "Tulajdonság beállítása egy értékre.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Tulajdonság (az információk tárolására szolgáló nevesített hely)."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "Új érték vagy kifejezés."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.SignOutUser": {
+      "title": "Sign out user",
+      "description": "Egy korábban az OAuthInput használatával bejelentkezett felhasználó kijelentkeztetése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "userId": {
+          "title": "UserId",
+          "description": "Egy kijelentkeztetendő felhasználót azonosító kifejezés. Az alapértelmezett érték: user.id."
+        },
+        "connectionName": {
+          "title": "Connection name",
+          "description": "A felhasználó bejelentkezéséhez használt OAuthInputhoz használt kapcsolat neve."
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.StaticActivityTemplate": {
+      "title": "Microsoft static activity template",
+      "description": "Ez lehetővé teszi egy statikus Activity objektum meghatározását",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "activity": {
+          "title": "Tevékenység",
+          "description": "Használandó statikus Activity."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.SwitchCondition": {
+      "title": "Kapcsolófeltétel",
+      "description": "Különböző műveletek végrehajtása egy tulajdonság értéke alapján.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "condition": {
+          "title": "Feltétel",
+          "description": "A kiértékelni kívánt tulajdonság."
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "cases": {
+          "title": "Esetek",
+          "description": "Műveletek az egyes lehetséges feltételekhez.",
+          "items": {
+            "title": "Eset",
+            "description": "Eset és műveletek.",
+            "properties": {
+              "value": {
+                "title": "Érték",
+                "description": "Az érték, amelyhez a feltételt viszonyítani kell."
+              },
+              "actions": {
+                "title": "Műveletek",
+                "description": "Végrehajtandó műveletek."
+              }
+            }
+          }
+        },
+        "default": {
+          "title": "Alapértelmezett",
+          "description": "A végrehajtandó műveletek, ha egyik eset sem felel meg a feltételnek."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.TelemetryTrackEvent": {
+      "title": "Telemetry - track event",
+      "description": "Egyéni esemény nyomon követése a regisztrált telemetriaügyféllel.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "eventName": {
+          "title": "Event name",
+          "description": "A nyomon követni kívánt esemény neve."
+        },
+        "properties": {
+          "title": "Tulajdonságok",
+          "description": "A nyomon követett eseményhez csatolni kívánt egy vagy több tulajdonság."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.TemperatureEntityRecognizer": {
+      "title": "Temperature recognizer",
+      "description": "A hőmérsékletet ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.TemplateEngineLanguageGenerator": {
+      "title": "Template multi-language generator",
+      "description": "Sablongenerátor, amely lehetővé teszi a sablonok beágyazott értékelését.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "Opcionális generátorazonosító."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.TextInput": {
+      "title": "Szöveg bemeneti párbeszédje",
+      "description": "Információgyűjtés – Egy szó vagy mondat bekérése.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Alapértelmezett érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, ha túllépték a próbálkozások maximális számát."
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A tulajdonsághoz ennek a kifejezésnek az értéke lesz beállítva, kivéve, ha nullértékű."
+        },
+        "outputFormat": {
+          "title": "Kimeneti formátum",
+          "description": "A kimenet formázására szolgáló kifejezés."
+        },
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "prompt": {
+          "title": "Kezdeti adatkérés",
+          "description": "Információgyűjtési célból elküldött üzenet."
+        },
+        "unrecognizedPrompt": {
+          "title": "Nem felismerhető adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "invalidPrompt": {
+          "title": "Érvénytelen adatkérés",
+          "description": "Üzenet, amely akkor lesz elküldve, ha a felhasználói adatbevitel nem felel meg az érvényesítési kifejezésnek."
+        },
+        "defaultValueResponse": {
+          "title": "Alapértelmezett érték válasz",
+          "description": "Üzenet, amely akkor lesz elküldve, ha túllépték a próbálkozások maximális számát (ha az meg van adva), és az alapértelmezett érték lesz kiválasztva értékként."
+        },
+        "maxTurnCount": {
+          "title": "Próbálkozások maximális száma",
+          "description": "Az információgyűjtési célú adatkérési kísérletek maximális száma."
+        },
+        "validations": {
+          "title": "Érvényesítési kifejezések",
+          "description": "Felhasználói adatbevitel érvényesítéséhez használt kifejezés.",
+          "items": {
+            "title": "Feltétel",
+            "description": "Az a kifejezés, amelyhez a bemenetnek meg kell felelnie ahhoz, hogy érvényesnek számítson"
+          }
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Az összegyűjtött információk tárolására szolgáló tulajdonság. Ha a tulajdonságnak van értéke, a bemenet ki lesz hagyva (kivéve, ha a „Mindig kérdezzen rá” értéke igaz)."
+        },
+        "alwaysPrompt": {
+          "title": "Mindig kérdezzen rá",
+          "description": "Információk gyűjtése akkor is, ha a megadott „tulajdonság” nem üres."
+        },
+        "allowInterruptions": {
+          "title": "Megszakítások engedélyezése",
+          "description": "Logikai érték, amely meghatározza, hogy a szülő számára engedélyezett-e a bemenet megszakítása."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.TextTemplate": {
+      "title": "Microsoft szövegsablon",
+      "description": "Szöveg létrehozása LG-sablonokkal",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "Sablon",
+          "description": "A szöveg létrehozásának értékelésére szolgáló nyelvgenerátor-sablon."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.ThrowException": {
+      "title": "Throw an exception",
+      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "errorValue": {
+          "title": "Error value",
+          "description": "Error value to throw."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TraceActivity": {
+      "title": "Nyomkövetési tevékenység küldése",
+      "description": "Nyomkövetési tevékenység küldése az átiratnaplózónak és/vagy a Bot Framework Emulatornek.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "name": {
+          "title": "Név",
+          "description": "A nyomkövetési tevékenység neve"
+        },
+        "label": {
+          "title": "Címke",
+          "description": "A nyomkövetési tevékenység címkéje (amely azonosítja a tevékenységet a nyomkövetési tevékenységek listájában)."
+        },
+        "valueType": {
+          "title": "Érték típusa",
+          "description": "Az érték típusa"
+        },
+        "value": {
+          "title": "Érték",
+          "description": "A nyomkövetési tevékenységként küldendő értéket tartalmazó tulajdonság."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.TrueSelector": {
+      "title": "True trigger selector",
+      "description": "Az összes igaz esemény szelektora",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.UpdateActivity": {
+      "title": "Update an activity",
+      "description": "Válaszadás egy tevékenységgel.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Azonosító",
+          "description": "A párbeszéd opcionális azonosítója"
+        },
+        "disabled": {
+          "title": "Letiltva",
+          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+        },
+        "activityId": {
+          "title": "Tevékenységazonosító",
+          "description": "A frissíteni kívánt tevékenységazonosítóval rendelkező sztringkifejezés."
+        },
+        "activity": {
+          "title": "Tevékenység",
+          "description": "Küldendő tevékenység."
+        },
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "Microsoft.UrlEntityRecognizer": {
+      "title": "Url recognizer",
+      "description": "Az URL-címeket ismerő értelmező.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "arrayExpression": {
+      "title": "Tömb vagy kifejezés",
+      "description": "Kiértékelendő tömb vagy kifejezés.",
+      "oneOf": {
+        "0": {
+          "title": "Tömb",
+          "description": "Tömbkonstans."
+        }
+      }
+    },
+    "booleanExpression": {
+      "title": "Logikai vagy kifejezés",
+      "description": "Kiértékelendő logikai konstans vagy kifejezés.",
+      "oneOf": {
+        "0": {
+          "title": "Logikai",
+          "description": "Logikai konstans."
+        }
+      }
+    },
+    "component": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "Beállítható tulajdonság",
+          "description": "Nyitott végű, beállítható tulajdonság."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Párbeszédobjektum fajtája",
+          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+        },
+        "$designer": {
+          "title": "Tervezői információ",
+          "description": "További információk a Bot Framework Composerhez."
+        }
+      }
+    },
+    "condition": {
+      "title": "Logikai feltétel",
+      "description": "Kiértékelendő logikai konstans vagy kifejezés.",
+      "oneOf": {
+        "1": {
+          "title": "Logikai",
+          "description": "Logikai érték."
+        }
+      }
+    },
+    "equalsExpression": {
+      "title": "Kifejezés",
+      "description": "= szimbólummal kezdődő kifejezés."
+    },
+    "expression": {
+      "title": "Kifejezés",
+      "description": "Kiértékelendő kifejezés."
+    },
+    "integerExpression": {
+      "title": "Egész szám vagy kifejezés",
+      "description": "Kiértékelendő egészszám-konstans vagy kifejezés.",
+      "oneOf": {
+        "0": {
+          "title": "Egész szám",
+          "description": "Egészszám-konstans."
+        }
+      }
+    },
+    "numberExpression": {
+      "title": "Szám vagy kifejezés",
+      "description": "Kiértékelendő számkonstans vagy kifejezés.",
+      "oneOf": {
+        "0": {
+          "title": "Szám",
+          "description": "Számkonstans."
+        }
+      }
+    },
+    "objectExpression": {
+      "title": "Objektum vagy kifejezés",
+      "description": "Kiértékelendő objektum vagy kifejezés.",
+      "oneOf": {
+        "0": {
+          "title": "Objektum",
+          "description": "Objektumkonstans."
+        }
+      }
+    },
+    "role": {
+      "title": "$role",
+      "description": "Meghatározza a párbeszédsémában betöltött szerepet ezek közül: [expression|interface|implements($kind)|extends($kind)]."
+    },
+    "stringExpression": {
+      "title": "Sztring vagy kifejezés",
+      "description": "Kiértékelendő interpolált sztring vagy kifejezés.",
+      "oneOf": {
+        "0": {
+          "title": "Sztring",
+          "description": "Interpolált sztring"
+        }
+      }
+    },
+    "valueExpression": {
+      "title": "Bármilyen érték vagy egy kifejezés",
+      "description": "Bármely kiértékelendő konstans vagy kifejezés.",
+      "oneOf": {
+        "0": {
+          "title": "Objektum",
+          "description": "Objektumkonstans."
+        },
+        "1": {
+          "title": "Tömb",
+          "description": "Tömbkonstans."
+        },
+        "2": {
+          "title": "Sztring",
+          "description": "Interpolált sztring."
+        },
+        "3": {
+          "title": "Logikai",
+          "description": "Logikai konstans"
+        },
+        "4": {
+          "title": "Szám",
+          "description": "Számkonstans."
+        }
+      }
+    }
+  }
+}

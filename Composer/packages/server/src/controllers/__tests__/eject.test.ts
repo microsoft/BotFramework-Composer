@@ -3,13 +3,13 @@
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { ExtensionContext } from '@bfc/extension';
 
+import { ExtensionContext } from '../../models/extension/extensionContext';
 import { BotProjectService } from '../../services/project';
 import { Path } from '../../utility/path';
 import { EjectController } from '../eject';
 
-jest.mock('@bfc/extension', () => {
+jest.mock('../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
       extensions: {
@@ -54,6 +54,9 @@ beforeAll(async () => {
     eject: jest.fn(),
     build: jest.fn(),
     run: jest.fn(),
+    installComponent: jest.fn(),
+    uninstallComponent: jest.fn(),
+    identifyManifest: jest.fn(),
     buildDeploy: jest.fn(),
     setSkillManifest: jest.fn(),
   });

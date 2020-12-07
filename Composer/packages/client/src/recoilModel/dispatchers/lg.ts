@@ -7,9 +7,11 @@ import differenceBy from 'lodash/differenceBy';
 import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
+import { dispatcherState } from '../DispatcherWrapper';
 
 import { setError } from './shared';
 import LgWorker from './../parsers/lgWorker';
+import LgDiagnosticWorker from './../parsers/lgDiagnosticWorker';
 import { lgFilesState, localeState, settingsState } from './../atoms/botState';
 
 const templateIsNotEmpty = ({ name, body }) => {
@@ -18,6 +20,23 @@ const templateIsNotEmpty = ({ name, body }) => {
 
 // fill other locale lgFile new added template with '- '
 const initialBody = '- ';
+
+const updateLgFiles = (targets: LgFile[], targetId?: string) => {
+  const changes = targets;
+  const id = targetId;
+  return (lgFiles: LgFile[]) => {
+    if (targetId) {
+      const currentFile = lgFiles.find((file) => file.id === id);
+      const targetFile = changes.find((file) => file.id === id);
+      if (currentFile?.content !== targetFile?.content) return lgFiles;
+    }
+
+    return lgFiles.map((file) => {
+      const changedFile = changes.find(({ id }) => id === file.id);
+      return changedFile ?? file;
+    });
+  };
+};
 
 export const updateLgFileState = async (projectId: string, lgFiles: LgFile[], updatedLgFile: LgFile) => {
   const { id } = updatedLgFile;
@@ -64,10 +83,7 @@ export const updateLgFileState = async (projectId: string, lgFiles: LgFile[], up
     }
   }
 
-  return lgFiles.map((file) => {
-    const changedFile = changes.find(({ id }) => id === file.id);
-    return changedFile ? changedFile : file;
-  });
+  return changes;
 };
 
 // when do create, passed id do not carried with locale
@@ -163,10 +179,29 @@ export const lgDispatcher = () => {
     }) => {
       try {
         const { set, snapshot } = callbackHelpers;
+        //set content first
+        set(lgFilesState(projectId), (lgFiles) => {
+          const index = lgFiles.findIndex((file) => file.id === id);
+          if (index !== -1) {
+            const cloned = [...lgFiles];
+            cloned[index] = { ...cloned[index], content };
+            return cloned;
+          }
+          return lgFiles;
+        });
+
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updatedFiles);
+
+        //check file content, drop the expired parse result.
+        set(lgFilesState(projectId), updateLgFiles(updatedFiles, id));
+
+        // if changes happen on common.lg, async re-parse all.
+        if (getBaseName(id) === 'common') {
+          const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
+          reparseAllLgFiles({ projectId });
+        }
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -238,6 +273,13 @@ export const lgDispatcher = () => {
         }
       } catch (error) {
         setError(callbackHelpers, error);
+        return;
+      }
+
+      // if changes happen on common.lg, async re-parse all.
+      if (getBaseName(id) === 'common') {
+        const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
+        reparseAllLgFiles({ projectId });
       }
     }
   );
@@ -257,7 +299,7 @@ export const lgDispatcher = () => {
       if (!lgFile) return lgFiles;
       const updatedFile = (await LgWorker.addTemplate(projectId, lgFile, template, lgFiles)) as LgFile;
       const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-      set(lgFilesState(projectId), updatedFiles);
+      set(lgFilesState(projectId), updateLgFiles(updatedFiles));
     }
   );
 
@@ -278,7 +320,7 @@ export const lgDispatcher = () => {
         if (!lgFile) return lgFiles;
         const updatedFile = (await LgWorker.addTemplates(projectId, lgFile, templates, lgFiles)) as LgFile;
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updatedFiles);
+        set(lgFilesState(projectId), updateLgFiles(updatedFiles));
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -303,7 +345,7 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
 
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updatedFiles);
+        set(lgFilesState(projectId), updateLgFiles(updatedFiles));
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -329,7 +371,7 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
 
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updatedFiles);
+        set(lgFilesState(projectId), updateLgFiles(updatedFiles));
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -368,6 +410,28 @@ export const lgDispatcher = () => {
     }
   );
 
+  const reparseAllLgFiles = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
+      try {
+        const { set, snapshot } = callbackHelpers;
+        const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+        const reparsedLgFiles: LgFile[] = [];
+        for (const file of lgFiles) {
+          const reparsedFile = (await LgDiagnosticWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
+          reparsedLgFiles.push({ ...file, diagnostics: reparsedFile.diagnostics });
+        }
+        set(lgFilesState(projectId), (lgFiles) => {
+          return lgFiles.map((file) => {
+            const changedFile = reparsedLgFiles.find(({ id }) => id === file.id);
+            return file.content === changedFile?.content ? changedFile : file;
+          });
+        });
+      } catch (error) {
+        setError(callbackHelpers, error);
+      }
+    }
+  );
+
   return {
     updateLgFile,
     createLgFile,
@@ -378,5 +442,6 @@ export const lgDispatcher = () => {
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
+    reparseAllLgFiles,
   };
 };

@@ -16,12 +16,14 @@ export const Intellisense = React.memo(
     id: string;
     value?: any;
     focused?: boolean;
+    completionListOverrideContainerElements?: HTMLDivElement[];
     completionListOverrideResolver?: (value: any) => JSX.Element | null;
     onChange: (newValue: string) => void;
     onBlur?: (id: string) => void;
     children: (renderProps: {
       textFieldValue: any;
       focused?: boolean;
+      cursorPosition?: number;
       onValueChanged: (newValue: any) => void;
       onKeyDownTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
       onKeyUpTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -39,6 +41,7 @@ export const Intellisense = React.memo(
       onChange,
       onBlur,
       children,
+      completionListOverrideContainerElements,
     } = props;
 
     const [textFieldValue, setTextFieldValue] = React.useState(value);
@@ -81,12 +84,19 @@ export const Intellisense = React.memo(
       const outsideClickHandler = (event: MouseEvent) => {
         const { x, y } = event;
 
-        let shouldBlur = true;
+        let shouldBlur = focused;
 
         if (mainContainerRef.current && !checkIsOutside(x, y, mainContainerRef.current)) {
           shouldBlur = false;
         }
         if (completionListRef.current && !checkIsOutside(x, y, completionListRef.current)) {
+          shouldBlur = false;
+        }
+
+        if (
+          completionListOverrideContainerElements &&
+          completionListOverrideContainerElements.some((item) => !checkIsOutside(x, y, item))
+        ) {
           shouldBlur = false;
         }
 
@@ -97,21 +107,21 @@ export const Intellisense = React.memo(
         }
       };
 
-      const keyupHandler = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
+      const keydownHandler = (event: KeyboardEvent) => {
+        if ((event.key === 'Escape' || event.key === 'Tab') && focused) {
           setShowCompletionList(false);
           onBlur && onBlur(id);
         }
       };
 
       document.body.addEventListener('click', outsideClickHandler);
-      document.body.addEventListener('keyup', keyupHandler);
+      document.body.addEventListener('keydown', keydownHandler);
 
       return () => {
         document.body.removeEventListener('click', outsideClickHandler);
-        document.body.removeEventListener('keyup', keyupHandler);
+        document.body.removeEventListener('keydown', keydownHandler);
       };
-    }, []);
+    }, [focused, onBlur, completionListOverrideContainerElements]);
 
     // When textField value is changed
     const onValueChanged = (newValue: string) => {
@@ -132,6 +142,7 @@ export const Intellisense = React.memo(
             selectedSuggestion +
             textFieldValue.substr(range.end.character);
           onValueChanged(newValue);
+          setCursorPosition(range.start.character + selectedSuggestion.length);
         } else {
           onValueChanged(selectedSuggestion);
         }
@@ -188,7 +199,15 @@ export const Intellisense = React.memo(
 
     return (
       <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
-        {children({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField })}
+        {children({
+          textFieldValue,
+          focused,
+          cursorPosition,
+          onValueChanged,
+          onKeyDownTextField,
+          onKeyUpTextField,
+          onClickTextField,
+        })}
 
         {completionListOverride || showCompletionList ? (
           <CompletionList

@@ -1,0 +1,5048 @@
+{
+  "title": "组件种类",
+  "description": "这些是可由加载程序创建的所有类型。",
+  "definitions": {
+    "Microsoft.ActivityTemplate": {
+      "title": "Microsoft activity template",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "模板",
+          "description": "用于创建活动的语言生成器模板"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.AdaptiveDialog": {
+      "title": "Adaptive dialog",
+      "description": "可适应对话的灵活的数据驱动对话。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选对话 ID。"
+        },
+        "autoEndDialog": {
+          "title": "自动结束对话",
+          "description": "如果设置为 true，则对话会在没有进一步操作时自动结束。如果设置为 false，请务必使用 EndDialog 操作手动结束对话。"
+        },
+        "defaultResultProperty": {
+          "title": "默认结果属性",
+          "description": "将被传回父对话的值。"
+        },
+        "recognizer": {
+          "title": "识别器",
+          "description": "将用户输入解释为意向和实体的输入识别器。"
+        },
+        "generator": {
+          "title": "Language generator",
+          "description": "生成机器人响应的语言生成器。"
+        },
+        "selector": {
+          "title": "选择器",
+          "description": "用于确定执行哪个触发器的策略。默认为“最佳匹配”选择器(可选)。"
+        },
+        "triggers": {
+          "description": "为此对话定义的触发器的列表。",
+          "title": "触发器",
+          "items": {
+            "title": "事件触发器",
+            "description": "用于处理事件的事件触发器。"
+          }
+        },
+        "schema": {
+          "title": "架构",
+          "description": "要填充的架构。",
+          "anyOf": {
+            "0": {
+              "title": "Core schema meta-schema"
+            },
+            "1": {
+              "title": "对 JSON 架构的引用",
+              "description": "对 JSON 架构 .dialog 文件的引用。"
+            }
+          }
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.AgeEntityRecognizer": {
+      "title": "Age entity recognizer",
+      "description": "用于识别年龄的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.Ask": {
+      "title": "Send activity to ask a question",
+      "description": "在需要响应时，此操作会向用户发送活动",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "expectedProperties": {
+          "title": "Expected properties",
+          "description": "需要从用户那里获得的属性。",
+          "items": {
+            "title": "名称",
+            "description": "属性名称"
+          }
+        },
+        "defaultOperation": {
+          "title": "Default operation",
+          "description": "设置在对此询问的响应中未识别任何操作时，将使用哪个默认操作。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "activity": {
+          "title": "活动",
+          "description": "要发送的活动。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "附件输入对话",
+      "description": "收集信息 - 要求提供文件或图像。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "默认值",
+          "description": "当超出最大轮次数时，“属性”将被设置为对象或此表达式的结果。",
+          "oneOf": {
+            "0": {
+              "title": "对象",
+              "description": "附件对象。"
+            }
+          }
+        },
+        "value": {
+          "title": "值",
+          "description": "“属性”将设置为对象或此表达式的结果，除非计算结果为 null。",
+          "oneOf": {
+            "0": {
+              "title": "对象",
+              "description": "附件对象。"
+            }
+          }
+        },
+        "outputFormat": {
+          "title": "输出格式",
+          "description": "附件输出格式。",
+          "oneOf": {
+            "0": {
+              "title": "标准格式",
+              "description": "标准输出格式。"
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "prompt": {
+          "title": "初始提示语",
+          "description": "要发送的用于收集信息的消息。"
+        },
+        "unrecognizedPrompt": {
+          "title": "无法识别的提示语",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "当用户输入不满足任何验证表达式时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "validations": {
+          "title": "验证表达式",
+          "description": "用于验证用户输入的表达式。",
+          "items": {
+            "title": "条件",
+            "description": "表达式，需要满足此表达式才能认为输入是有效的"
+          }
+        },
+        "property": {
+          "title": "属性",
+          "description": "用于存储所收集的信息的属性。如果属性有值，则跳过输入(除非“始终提示”为 true)。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "allowInterruptions": {
+          "title": "允许中断",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.BeginDialog": {
+      "title": "开始对话",
+      "description": "开始另一个对话。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "对话"
+            }
+          },
+          "title": "对话名称",
+          "description": "要调用的对话的名称。"
+        },
+        "options": {
+          "title": "选项",
+          "description": "一个或多个传递给被调用的对话的选项。",
+          "additionalProperties": {
+            "title": "选项",
+            "description": "对话选项。"
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "如果设置为 false，则被调用的对话可以处理当前活动。"
+        },
+        "resultProperty": {
+          "title": "属性",
+          "description": "用于存储被调用的对话返回的任何值的属性。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.BeginSkill": {
+      "title": "开始技能",
+      "description": "开始远程技能。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "技能对话的可选 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "设置为 false 时，将使用当前轮次上下文中的活动代替“活动”属性中的活动来启动技能。"
+        },
+        "resultProperty": {
+          "title": "属性",
+          "description": "用于存储被调用的对话返回的任何值的属性。"
+        },
+        "botId": {
+          "title": "技能主机机器人 ID",
+          "description": "将调用此技能的 Microsoft 应用 ID。"
+        },
+        "skillHostEndpoint": {
+          "title": "技能主机",
+          "description": "技能主机的回叫 URL。"
+        },
+        "connectionName": {
+          "title": "OAuth connection name (SSO)",
+          "description": "OAuth 连接名称，用于执行技能的单一登录。"
+        },
+        "skillAppId": {
+          "title": "Skill App Id",
+          "description": "用于技能的 Microsoft 应用 ID。"
+        },
+        "skillEndpoint": {
+          "title": "技能终结点",
+          "description": "技能的 /api/messages 终结点。"
+        },
+        "activity": {
+          "title": "活动",
+          "description": "要发送到技能的活动。"
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "用于确定是否允许父对象中断技能的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.BreakLoop": {
+      "title": "Break loop",
+      "description": "停止执行此循环",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.CancelAllDialogs": {
+      "title": "取消所有对话",
+      "description": "取消所有活动对话。对话链中的所有对话都需要一个触发器来捕获在此操作中配置的事件。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "如果设置为 false，则指示调用方对话应处理当前活动。"
+        },
+        "eventName": {
+          "title": "事件名称",
+          "description": "要发出的事件的名称。"
+        },
+        "eventValue": {
+          "title": "事件值",
+          "description": "要随事件一起发出的值(可选)。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.CancelDialog": {
+      "title": "取消所有对话",
+      "description": "取消所有活动对话。对话链中的所有对话都需要一个触发器来捕获在此操作中配置的事件。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "如果设置为 false，则指示调用方对话应处理当前活动。"
+        },
+        "eventName": {
+          "title": "事件名称",
+          "description": "要发出的事件的名称。"
+        },
+        "eventValue": {
+          "title": "事件值",
+          "description": "要随事件一起发出的值(可选)。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ChannelMentionEntityRecognizer": {
+      "title": "Channel mention entity recognizer",
+      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChoiceInput": {
+      "title": "选项输入对话",
+      "description": "收集信息 - 从选项列表中选择",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "默认值",
+          "description": "当超过最大轮次数时，\"property\" 被设置为此表达式的值。"
+        },
+        "value": {
+          "title": "值",
+          "description": "\"property\" 被设置为此表达式的值，除非计算结果为 null。"
+        },
+        "outputFormat": {
+          "title": "输出格式",
+          "description": "设置所需的选项输出格式(将值或索引设置为选项)。",
+          "oneOf": {
+            "0": {
+              "title": "标准",
+              "description": "标准输出格式。"
+            }
+          }
+        },
+        "choices": {
+          "title": "选项数组",
+          "description": "可供选择的选项。",
+          "oneOf": {
+            "0": {
+              "title": "简单选项",
+              "description": "可供选择的简单选项。",
+              "items": {
+                "0": {
+                  "title": "简单选项",
+                  "description": "选项输入的一个选项。"
+                }
+              }
+            },
+            "1": {
+              "title": "结构化选项",
+              "description": "允许完全控制的选项。",
+              "items": {
+                "0": {
+                  "title": "结构化选项",
+                  "description": "可供选择的结构化选项。",
+                  "properties": {
+                    "value": {
+                      "title": "值",
+                      "description": "在选择此选项时返回的值。"
+                    },
+                    "action": {
+                      "title": "操作",
+                      "description": "选项的卡操作。"
+                    },
+                    "synonyms": {
+                      "title": "同义词",
+                      "description": "除了值之外还要识别的同义词列表(可选)。",
+                      "items": {
+                        "title": "同义词",
+                        "description": "值的同义词。"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "defaultLocale": {
+          "title": "默认区域设置",
+          "description": "调用方未传递区域设置时用于分析确认选项的默认区域设置。"
+        },
+        "style": {
+          "title": "列表样式",
+          "description": "设置 ListStyle 来控制选项的呈现方式。",
+          "oneOf": {
+            "0": {
+              "title": "列表样式",
+              "description": "标准列表样式。"
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "选项",
+          "description": "设置用于控制选项组合方式的选项。",
+          "oneOf": {
+            "0": {
+              "title": "对象",
+              "description": "选项对象。",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "内联分隔符",
+                  "description": "当有超过 2 个选项时，用来分隔单个选项的字符"
+                },
+                "inlineOr": {
+                  "title": "内联或",
+                  "description": "只有 2 个选项时在选项之间插入的分隔符"
+                },
+                "inlineOrMore": {
+                  "title": "内联或更多",
+                  "description": "超过 2 个选项时在最后 2 个选项之间插入的分隔符。"
+                },
+                "includeNumbers": {
+                  "title": "包括数字",
+                  "description": "如果为 true，则“内联”和“列表”列表样式会以选项的索引作为前缀。"
+                }
+              }
+            }
+          }
+        },
+        "recognizerOptions": {
+          "title": "识别器选项",
+          "description": "设置如何识别响应中的选项",
+          "oneOf": {
+            "0": {
+              "title": "对象",
+              "description": "识别器选项。",
+              "properties": {
+                "noValue": {
+                  "title": "无值",
+                  "description": "如果为 true，则不会搜索选项值字段"
+                },
+                "noAction": {
+                  "title": "无操作",
+                  "description": "如果为 true，则不会搜索选项 action.title 字段"
+                },
+                "recognizeNumbers": {
+                  "title": "识别数字",
+                  "description": "如果为 true，则数字识别器会用于识别对提示语的索引响应(1、2、3...)。"
+                },
+                "recognizeOrdinals": {
+                  "title": "识别序数",
+                  "description": "如果为 true，则序号识别器会用于识别对提示语的序号响应(第一/第二/...)。"
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "prompt": {
+          "title": "初始提示语",
+          "description": "要发送的用于收集信息的消息。"
+        },
+        "unrecognizedPrompt": {
+          "title": "无法识别的提示语",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "当用户输入不满足任何验证表达式时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "validations": {
+          "title": "验证表达式",
+          "description": "用于验证用户输入的表达式。",
+          "items": {
+            "title": "条件",
+            "description": "表达式，需要满足此表达式才能认为输入是有效的"
+          }
+        },
+        "property": {
+          "title": "属性",
+          "description": "用于存储所收集的信息的属性。如果属性有值，则跳过输入(除非“始终提示”为 true)。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "allowInterruptions": {
+          "title": "允许中断",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ConditionalSelector": {
+      "title": "Conditional trigger selector",
+      "description": "使用基于条件的规则选择器",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "要计算的表达式"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ConfirmInput": {
+      "title": "确认输入对话",
+      "description": "收集信息 - 要求进行确认(“是”或“否”)。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "outputFormat": {
+          "title": "输出格式",
+          "description": "用于格式化输出的可选表达式。"
+        },
+        "defaultLocale": {
+          "title": "默认区域设置",
+          "description": "默认区域设置或表达式，如果在活动中找不到区域设置，它会提供默认区域设置作为默认设置。"
+        },
+        "style": {
+          "title": "列表样式",
+          "description": "设置 ListStyle 来控制选项的呈现方式。",
+          "oneOf": {
+            "0": {
+              "title": "标准样式",
+              "description": "用于呈现选项的标准样式。"
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Choice options",
+          "description": "选项或表达式，用于提供选项来控制向用户显示的选项。",
+          "oneOf": {
+            "0": {
+              "title": "选项",
+              "description": "选项。",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "内联分隔符",
+                  "description": "超过 2 个选项时用于分隔各选项的文本"
+                },
+                "inlineOr": {
+                  "title": "内联或",
+                  "description": "只有 2 个选项时在选项之间插入的文本"
+                },
+                "inlineOrMore": {
+                  "title": "内联或更多",
+                  "description": "超过 2 个选项时在最后 2 个选项之间插入的文本。"
+                },
+                "includeNumbers": {
+                  "title": "包括数字",
+                  "description": "如果为 true，则“内联”和“列表”列表样式选项会以选项的索引作为前缀。"
+                }
+              }
+            }
+          }
+        },
+        "defaultValue": {
+          "title": "默认值",
+          "description": "当超过最大轮次数时，\"property\" 被设置为此表达式的值。"
+        },
+        "value": {
+          "title": "值",
+          "description": "\"property\" 被设置为此表达式的值，除非计算结果为 null。"
+        },
+        "confirmChoices": {
+          "title": "选择对象数组",
+          "description": "简单选项或结构化选项的数组。",
+          "oneOf": {
+            "0": {
+              "title": "简单选项",
+              "description": "要从中进行确认的简单选项。",
+              "items": {
+                "0": {
+                  "title": "简单选项",
+                  "description": "要确认的简单选项。"
+                }
+              }
+            },
+            "1": {
+              "title": "结构化选项",
+              "description": "用于确认的结构化选项。",
+              "items": {
+                "0": {
+                  "title": "选项",
+                  "description": "要确认的选项。",
+                  "properties": {
+                    "value": {
+                      "title": "值",
+                      "description": "在选择此选项时返回的值。"
+                    },
+                    "action": {
+                      "title": "操作",
+                      "description": "选项的卡操作。"
+                    },
+                    "synonyms": {
+                      "title": "同义词",
+                      "description": "除了值之外还要识别的同义词列表(可选)。",
+                      "items": {
+                        "title": "同义词",
+                        "description": "供选择的同义词。"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "prompt": {
+          "title": "初始提示语",
+          "description": "要发送的用于收集信息的消息。"
+        },
+        "unrecognizedPrompt": {
+          "title": "无法识别的提示语",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "当用户输入不满足任何验证表达式时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "validations": {
+          "title": "验证表达式",
+          "description": "用于验证用户输入的表达式。",
+          "items": {
+            "title": "条件",
+            "description": "表达式，需要满足此表达式才能认为输入是有效的"
+          }
+        },
+        "property": {
+          "title": "属性",
+          "description": "用于存储所收集的信息的属性。如果属性有值，则跳过输入(除非“始终提示”为 true)。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "allowInterruptions": {
+          "title": "允许中断",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ConfirmationEntityRecognizer": {
+      "title": "Confirmation entity recognizer",
+      "description": "用于识别确认选项(是/否)的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ContinueConversationLater": {
+      "title": "Continue conversation later (Queue)",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "date": {
+          "title": "Date",
+          "description": "Date in the future as a ISO string when the conversation should continue."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueLoop": {
+      "title": "Continue loop",
+      "description": "停止执行此模板并继续循环的下一个迭代。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.CrossTrainedRecognizerSet": {
+      "title": "Cross-trained recognizer set",
+      "description": "用于在交叉定型识别器之间进行选择的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的用于 RecognizerSet 的唯一 ID。"
+        },
+        "recognizers": {
+          "title": "识别器",
+          "description": "为此集定义的识别器列表。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.CurrencyEntityRecognizer": {
+      "title": "Currency entity recognizer",
+      "description": "用于识别货币的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.DateTimeEntityRecognizer": {
+      "title": "Date and time entity recognizer",
+      "description": "用于识别日期和时间片段的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.DateTimeInput": {
+      "title": "日期/时间输入对话",
+      "description": "收集信息 - 要求提供日期和/或时间",
+      "defaultLocale": {
+        "title": "默认区域设置",
+        "description": "默认区域设置。"
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Default date",
+          "description": "当超出最大轮次数时，“属性”将被设置为值或表达式的结果。"
+        },
+        "value": {
+          "title": "值",
+          "description": "“属性”将被设置为值或表达式的结果，除非它的计算结果为 null。"
+        },
+        "outputFormat": {
+          "title": "输出格式",
+          "description": "用于格式化输出的表达式。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "prompt": {
+          "title": "初始提示语",
+          "description": "要发送的用于收集信息的消息。"
+        },
+        "unrecognizedPrompt": {
+          "title": "无法识别的提示语",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "当用户输入不满足任何验证表达式时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "validations": {
+          "title": "验证表达式",
+          "description": "用于验证用户输入的表达式。",
+          "items": {
+            "title": "条件",
+            "description": "表达式，需要满足此表达式才能认为输入是有效的"
+          }
+        },
+        "property": {
+          "title": "属性",
+          "description": "用于存储所收集的信息的属性。如果属性有值，则跳过输入(除非“始终提示”为 true)。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "allowInterruptions": {
+          "title": "允许中断",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.DebugBreak": {
+      "title": "调试器中断",
+      "description": "如果附加了调试器，则在对话中的这一时间点停止执行。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.DeleteActivity": {
+      "title": "删除活动",
+      "description": "删除先前发送的活动。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "activityId": {
+          "title": "ActivityId",
+          "description": "表示要删除的 activityId 的表达式"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.DeleteProperties": {
+      "title": "删除属性",
+      "description": "删除多个属性及其包含的任何值。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "properties": {
+          "title": "属性",
+          "description": "要删除的属性。",
+          "items": {
+            "title": "属性",
+            "description": "要删除的属性。"
+          }
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.DeleteProperty": {
+      "title": "Delete property",
+      "description": "删除一个属性及其包含的任何值。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "property": {
+          "title": "属性",
+          "description": "要删除的属性。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.DimensionEntityRecognizer": {
+      "title": "Dimension entity recognizer",
+      "description": "用于识别维度的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.EditActions": {
+      "title": "编辑操作。",
+      "description": "编辑当前的操作列表。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "changeType": {
+          "title": "更改类型",
+          "description": "要应用于当前操作的更改类型。",
+          "oneOf": {
+            "0": {
+              "title": "标准更改",
+              "description": "标准更改类型。"
+            }
+          }
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要应用的操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.EditArray": {
+      "title": "编辑数组",
+      "description": "修改内存中的数组",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "changeType": {
+          "title": "更改类型",
+          "description": "内存中数组的更改类型。",
+          "oneOf": {
+            "0": {
+              "title": "Change type",
+              "description": "标准更改类型。"
+            }
+          }
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "itemsProperty": {
+          "title": "项属性",
+          "description": "用于保留要更新的数组的属性。"
+        },
+        "resultProperty": {
+          "title": "Result property",
+          "description": "用于存储此操作结果的属性。"
+        },
+        "value": {
+          "title": "值",
+          "description": "新值或表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.EmailEntityRecognizer": {
+      "title": "Email entity recognizer",
+      "description": "用于识别电子邮件的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.EmitEvent": {
+      "title": "发出自定义事件",
+      "description": "发出事件。使用触发器捕获此事件。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "eventName": {
+          "title": "事件名称",
+          "description": "要发出的事件的名称。",
+          "oneOf": {
+            "0": {
+              "title": "内置事件",
+              "description": "标准事件类型。"
+            },
+            "1": {
+              "title": "自定义事件",
+              "description": "自定义事件类型"
+            }
+          }
+        },
+        "eventValue": {
+          "title": "事件值",
+          "description": "要随事件一起发出的值(可选)。"
+        },
+        "bubbleEvent": {
+          "title": "气泡事件",
+          "description": "如果为 true，则此事件传递给父对话。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.EndDialog": {
+      "title": "结束对话",
+      "description": "结束此对话。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "value": {
+          "title": "值",
+          "description": "返回到父对话的结果值。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.EndTurn": {
+      "title": "结束回合",
+      "description": "在不结束对话的情况下结束当前回合。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.FirstSelector": {
+      "title": "First trigger selector",
+      "description": "第一个真实规则的选择器",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.Foreach": {
+      "title": "对于每个项",
+      "description": "对集合中的每个项执行操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "itemsProperty": {
+          "title": "项属性",
+          "description": "用于保留数组的属性。"
+        },
+        "index": {
+          "title": "索引属性",
+          "description": "用于保留项索引的属性。"
+        },
+        "value": {
+          "title": "值属性",
+          "description": "用于保留项值的属性。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要对每个项执行的操作。使用 \"$foreach.value\" 可以访问每个项的值。使用 \"$foreach.index\" 可以访问每个项的索引。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ForeachPage": {
+      "title": "对于每个页面",
+      "description": "对数组中的每个页面(项集合)执行操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "itemsProperty": {
+          "title": "项属性",
+          "description": "用于保留数组的属性。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要对每个页面执行的操作。使用 \"$foreach.page\" 可以访问每个页面。"
+        },
+        "pageIndex": {
+          "title": "索引属性",
+          "description": "用于保留页索引的属性。"
+        },
+        "page": {
+          "title": "页属性",
+          "description": "用于保留页值的属性。"
+        },
+        "pageSize": {
+          "title": "页面大小",
+          "description": "每页中的项数。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.GetActivityMembers": {
+      "title": "Get activity members",
+      "description": "获取参与活动的成员。(仅限 BotFrameworkAdapter) ",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "property": {
+          "title": "属性",
+          "description": "属性(用于存储信息的已命名位置)。"
+        },
+        "activityId": {
+          "title": "Activity Id",
+          "description": "用于获取成员的活动 ID 或表示 activityId 的表达式。如果没有定义，则使用当前的活动 ID。"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.GetConversationMembers": {
+      "title": "Get conversation members",
+      "description": "获取参与对话的成员。(仅限 BotFrameworkAdapter) ",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "property": {
+          "title": "属性",
+          "description": "属性(用于存储信息的已命名位置)。"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.GotoAction": {
+      "title": "Go to action",
+      "description": "转到操作(按 ID)。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "actionId": {
+          "title": "操作 ID",
+          "description": "要执行的下一个操作的 ID"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.GuidEntityRecognizer": {
+      "title": "Guid entity recognizer",
+      "description": "用于识别 GUID 的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.HashtagEntityRecognizer": {
+      "title": "Hashtag entity recognizer",
+      "description": "用于识别井号标签的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.HttpRequest": {
+      "title": "HTTP 请求",
+      "description": "发出 HTTP 请求。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "method": {
+          "title": "HTTP 方法",
+          "description": "要使用的 HTTP 方法。"
+        },
+        "url": {
+          "title": "URL",
+          "description": "要调用的 URL (支持数据绑定)。"
+        },
+        "body": {
+          "title": "正文",
+          "description": "要包含在 HTTP 调用中的正文(支持数据绑定)。"
+        },
+        "resultProperty": {
+          "title": "结果属性",
+          "description": "用于存储此操作的结果的属性。结果可以包括来自 HTTP 响应的 4 个属性中的任何一个: statusCode、reasonPhrase、content 和 header。如果内容是 JSON，它将是反序列化对象。例如，可通过 .content 访问这些值。"
+        },
+        "contentType": {
+          "title": "内容类型",
+          "description": "正文的内容媒体类型。"
+        },
+        "headers": {
+          "title": "头",
+          "description": "要在请求中包含的一个或多个标头(支持数据绑定)。"
+        },
+        "responseType": {
+          "title": "响应类型",
+          "description": "定义 HTTP 响应的类型。如果设置为“一个活动”或“多个活动”，则自动调用“发送响应”操作。",
+          "oneOf": {
+            "0": {
+              "title": "标准响应",
+              "description": "标准响应类型。"
+            }
+          }
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.IActivityTemplate": {
+      "title": "Microsoft ActivityTemplates",
+      "description": "ActivityTemplate 组件，即字符串模板、活动或 ActivityTemplate 的实现",
+      "oneOf": {
+        "1": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation",
+              "properties": {
+                "isGroup": {
+                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "title": "isGroup"
+                },
+                "conversationType": {
+                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "title": "conversationType"
+                },
+                "id": {
+                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                  "title": "id"
+                },
+                "name": {
+                  "description": "Display friendly name",
+                  "title": "name"
+                },
+                "aadObjectId": {
+                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "title": "aadObjectId"
+                },
+                "role": {
+                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                  "title": "role"
+                }
+              }
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded",
+              "items": {
+                "description": "Channel account information needed to route a message",
+                "title": "ChannelAccount",
+                "properties": {
+                  "id": {
+                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                    "title": "id"
+                  },
+                  "name": {
+                    "description": "Display friendly name",
+                    "title": "name"
+                  },
+                  "aadObjectId": {
+                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "title": "aadObjectId"
+                  },
+                  "role": {
+                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                    "title": "role"
+                  }
+                }
+              }
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded",
+              "items": {
+                "description": "Message reaction object",
+                "title": "MessageReaction",
+                "properties": {
+                  "type": {
+                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions",
+              "properties": {
+                "to": {
+                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+                  "title": "to",
+                  "items": {
+                    "title": "Id",
+                    "description": "Id of recipient."
+                  }
+                },
+                "actions": {
+                  "description": "Actions that can be shown to the user",
+                  "title": "actions",
+                  "items": {
+                    "description": "A clickable action",
+                    "title": "CardAction",
+                    "properties": {
+                      "type": {
+                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "type"
+                      },
+                      "title": {
+                        "description": "Text description which appears on the button",
+                        "title": "title"
+                      },
+                      "image": {
+                        "description": "Image URL which will appear on the button, next to text label",
+                        "title": "image"
+                      },
+                      "text": {
+                        "description": "Text for this action",
+                        "title": "text"
+                      },
+                      "displayText": {
+                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "title": "displayText"
+                      },
+                      "value": {
+                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+                        "title": "value"
+                      },
+                      "channelData": {
+                        "description": "Channel-specific data associated with this action",
+                        "title": "channelData"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments",
+              "items": {
+                "description": "An attachment within an activity",
+                "title": "Attachment",
+                "properties": {
+                  "contentType": {
+                    "description": "mimetype/Contenttype for the file",
+                    "title": "contentType"
+                  },
+                  "contentUrl": {
+                    "description": "Content Url",
+                    "title": "contentUrl"
+                  },
+                  "content": {
+                    "description": "Embedded content",
+                    "title": "content"
+                  },
+                  "name": {
+                    "description": "(OPTIONAL) The name of the attachment",
+                    "title": "name"
+                  },
+                  "thumbnailUrl": {
+                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "title": "thumbnailUrl"
+                  }
+                }
+              }
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities",
+              "items": {
+                "description": "Metadata object pertaining to an activity",
+                "title": "Entity",
+                "properties": {
+                  "type": {
+                    "description": "Type of this entity (RFC 3987 IRI)",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo",
+              "properties": {
+                "activityId": {
+                  "description": "(Optional) ID of the activity to refer to",
+                  "title": "activityId"
+                },
+                "user": {
+                  "description": "(Optional) User participating in this conversation",
+                  "title": "user"
+                },
+                "bot": {
+                  "description": "Bot participating in this conversation",
+                  "title": "bot"
+                },
+                "conversation": {
+                  "description": "Conversation reference",
+                  "title": "conversation"
+                },
+                "channelId": {
+                  "description": "Channel ID",
+                  "title": "channelId"
+                },
+                "serviceUrl": {
+                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "title": "serviceUrl"
+                }
+              }
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights",
+              "items": {
+                "description": "Refers to a substring of content within another field",
+                "title": "TextHighlight",
+                "properties": {
+                  "text": {
+                    "description": "Defines the snippet of text to highlight",
+                    "title": "text"
+                  },
+                  "occurrence": {
+                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+                    "title": "occurrence"
+                  }
+                }
+              }
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction",
+              "properties": {
+                "id": {
+                  "description": "ID of this action",
+                  "title": "id"
+                },
+                "entities": {
+                  "description": "Entities associated with this action",
+                  "title": "entities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Microsoft.IDialog": {
+      "title": "Microsoft dialogs",
+      "description": "派生自 Dialog 的组件"
+    },
+    "Microsoft.IEntityRecognizer": {
+      "title": "Entity recognizers",
+      "description": "派生自 EntityRecognizer 的组件。",
+      "oneOf": {
+        "0": {
+          "title": "对 Microsoft.IEntityRecognizer 的引用",
+          "description": "对 Microsoft.IEntityRecognizer .dialog 文件的引用。"
+        }
+      }
+    },
+    "Microsoft.ILanguageGenerator": {
+      "title": "Microsoft LanguageGenerator",
+      "description": "派生自 LanguageGenerator 类的组件"
+    },
+    "Microsoft.IRecognizer": {
+      "title": "Microsoft recognizer",
+      "description": "派生自 Recognizer 类的组件"
+    },
+    "Microsoft.ITextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "派生自 TextTemplate 类的组件"
+    },
+    "Microsoft.ITrigger": {
+      "title": "Microsoft 触发器",
+      "description": "派生自 OnCondition 类的组件。",
+      "oneOf": {
+        "0": {
+          "title": "对 Microsoft.ITrigger 的引用",
+          "description": "对 Microsoft.ITrigger .dialog 文件的引用。"
+        }
+      }
+    },
+    "Microsoft.ITriggerSelector": {
+      "title": "选择器",
+      "description": "派生自 TriggerSelector 类的组件",
+      "oneOf": {
+        "0": {
+          "title": "对 Microsoft.ITriggerSelector 的引用",
+          "description": "对 Microsoft.ITriggerSelector .dialog 文件的引用。"
+        }
+      }
+    },
+    "Microsoft.IfCondition": {
+      "title": "If 条件",
+      "description": "基于某个条件对对话流进行双向分支。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "要计算的表达式。"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "条件为 true 时要执行的操作。"
+        },
+        "elseActions": {
+          "title": "Else",
+          "description": "条件为 false 时要执行的操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.InputDialog": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "prompt": {
+          "title": "初始提示语",
+          "description": "要发送的用于收集信息的消息。"
+        },
+        "unrecognizedPrompt": {
+          "title": "无法识别的提示语",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "当用户输入不满足任何验证表达式时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "validations": {
+          "title": "验证表达式",
+          "description": "用于验证用户输入的表达式。",
+          "items": {
+            "title": "条件",
+            "description": "表达式，需要满足此表达式才能认为输入是有效的"
+          }
+        },
+        "property": {
+          "title": "属性",
+          "description": "用于存储所收集的信息的属性。如果属性有值，则跳过输入(除非“始终提示”为 true)。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "allowInterruptions": {
+          "title": "允许中断",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.IpEntityRecognizer": {
+      "title": "IP entity recognizer",
+      "description": "用于识别 Internet IP 模式(如 192.1.1.1)的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.LanguagePolicy": {
+      "title": "Language policy",
+      "description": "这表示用于语言的区域设置查找的策略映射",
+      "additionalProperties": {
+        "title": "每区域设置策略",
+        "description": "每个区域设置的语言策略。",
+        "items": {
+          "title": "区域设置",
+          "description": "区域设置，如 en-us。"
+        }
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.LogAction": {
+      "title": "登录控制台",
+      "description": "将消息记录到主机应用程序。将 TraceActivity 发送到 Bot Framework Emulator (可选)。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "text": {
+          "title": "文本",
+          "description": "要记录的信息。"
+        },
+        "label": {
+          "title": "标签",
+          "description": "跟踪活动的标签(用于在跟踪活动列表中标识它)。"
+        },
+        "traceActivity": {
+          "title": "Send trace activity",
+          "description": "如果为 true，则自动发送 TraceActivity (Bot Framework Emulator 中的视图)。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.LuisRecognizer": {
+      "title": "LUIS 识别器",
+      "description": "LUIS 识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的用于 RecognizerSet 的唯一 ID。当为此识别器交叉训练数据时，其他识别器应返回 \"DeferToRecognizer_{Id}\" 意向。"
+        },
+        "applicationId": {
+          "title": "LUIS application id",
+          "description": "来自 LUIS 服务的模型的应用程序 ID。"
+        },
+        "version": {
+          "title": "LUIS version",
+          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+        },
+        "endpoint": {
+          "title": "LUIS endpoint",
+          "description": "要用于 LUIS 服务的终结点，如 https://westus.api.cognitive.microsoft.com。"
+        },
+        "endpointKey": {
+          "title": "LUIS 预测密钥",
+          "description": "用于调用终结点的 LUIS 预测密钥。"
+        },
+        "externalEntityRecognizer": {
+          "title": "External entity recognizer",
+          "description": "此识别器识别的实体将作为外部实体传递给 LUIS。"
+        },
+        "dynamicLists": {
+          "title": "动态列表",
+          "description": "运行时定义的实体列表。",
+          "items": {
+            "title": "实体列表",
+            "description": "实体的规范值和同义词的列表。",
+            "properties": {
+              "entity": {
+                "title": "实体",
+                "description": "要使用动态列表扩展的实体。"
+              },
+              "list": {
+                "title": "动态列表",
+                "description": "规范形式和同义词的列表。",
+                "items": {
+                  "title": "列表条目",
+                  "description": "规范形式和同义词。",
+                  "properties": {
+                    "canonicalForm": {
+                      "title": "规范形式",
+                      "description": "有任何同义词匹配项时的解析。"
+                    },
+                    "synonyms": {
+                      "title": "同义词",
+                      "description": "规范形式的同义词列表。",
+                      "items": {
+                        "title": "同义词",
+                        "description": "规范格式的同义词。"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "predictionOptions": {
+          "title": "预测选项",
+          "description": "用于控制 LUIS 预测行为的选项。",
+          "properties": {
+            "includeAllIntents": {
+              "title": "包括所有意向",
+              "description": "对于所有意向均为 true，仅在针对最高意向时为 false。"
+            },
+            "includeInstanceData": {
+              "title": "包括 $instance",
+              "description": "True 表示在 LUIS 响应中包含 $instance 元数据。"
+            },
+            "log": {
+              "title": "日志言语",
+              "description": "True 表示对 LUIS 服务记录言语。"
+            },
+            "preferExternalEntities": {
+              "title": "Prefer external entities",
+              "description": "True 表示首选外部实体，而不是 LUIS 模型生成的实体。"
+            },
+            "slot": {
+              "title": "槽",
+              "description": "用于与 LUIS 服务通信的槽(如生产或暂存)。"
+            }
+          }
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.MentionEntityRecognizer": {
+      "title": "Mentions entity recognizer",
+      "description": "用于识别 @提及的识别器",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.MostSpecificSelector": {
+      "title": "Most specific trigger selector",
+      "description": "使用可选附加选择器选择最具体的真实事件",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.MultiLanguageRecognizer": {
+      "title": "多语言识别器",
+      "description": "为每种语言配置一个识别器，并指定语言回退策略。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的用于 RecognizerSet 的唯一 ID。当为此识别器交叉训练数据时，其他识别器应返回 \"DeferToRecognizer_{Id}\" 意向。"
+        },
+        "languagePolicy": {
+          "title": "语言策略",
+          "description": "定义回退语言来尝试每用户输入语言。"
+        },
+        "recognizers": {
+          "title": "识别器",
+          "description": "语言映射 -> 识别器"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.NumberEntityRecognizer": {
+      "title": "Number entity recognizer",
+      "description": "用于识别数字的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.NumberInput": {
+      "title": "数字输入对话",
+      "description": "收集信息 - 要求提供数字。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "默认值",
+          "description": "当超过最大轮次数时，\"property\" 被设置为此表达式的值。"
+        },
+        "value": {
+          "title": "值",
+          "description": "\"property\" 被设置为此表达式的值，除非计算结果为 null。"
+        },
+        "outputFormat": {
+          "title": "输出格式",
+          "description": "用于格式化数字输出的表达式。"
+        },
+        "defaultLocale": {
+          "title": "默认区域设置",
+          "description": "在没有可用区域设置时使用的默认区域设置。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "prompt": {
+          "title": "初始提示语",
+          "description": "要发送的用于收集信息的消息。"
+        },
+        "unrecognizedPrompt": {
+          "title": "无法识别的提示语",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "当用户输入不满足任何验证表达式时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "validations": {
+          "title": "验证表达式",
+          "description": "用于验证用户输入的表达式。",
+          "items": {
+            "title": "条件",
+            "description": "表达式，需要满足此表达式才能认为输入是有效的"
+          }
+        },
+        "property": {
+          "title": "属性",
+          "description": "用于存储所收集的信息的属性。如果属性有值，则跳过输入(除非“始终提示”为 true)。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "allowInterruptions": {
+          "title": "允许中断",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.NumberRangeEntityRecognizer": {
+      "title": "Number range entity recognizer",
+      "description": "用于识别数字范围(例如: 2 到 5)的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuthInput 对话",
+      "description": "收集登录信息。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "connectionName": {
+          "title": "连接名称",
+          "description": "Azure Web 应用机器人 OAuth 设置中配置的连接名称。"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "text": {
+          "title": "文本",
+          "description": "在 OAuth 登录卡中显示的文本。"
+        },
+        "title": {
+          "title": "标题",
+          "description": "在 OAuth 登录卡中显示的标题。"
+        },
+        "timeout": {
+          "title": "超时",
+          "description": "OAuth 登录卡的超时设置。"
+        },
+        "property": {
+          "title": "令牌属性",
+          "description": "用于存储 OAuth 标记结果的属性。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "在用户响应无效时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "defaultValue": {
+          "title": "默认值",
+          "description": "要在对话的每个回合作为属性的可取值检查的表达式。"
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnActivity": {
+      "title": "在活动后",
+      "description": "在收到通用活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "type": {
+          "title": "活动类型",
+          "description": "要匹配的 Activity.Type"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnAssignEntity": {
+      "title": "在实体分配后",
+      "description": "在应将实体分配给属性时采取的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "属性",
+          "description": "将在选择实体后设置的属性。"
+        },
+        "entity": {
+          "title": "实体",
+          "description": "要放置到属性中的实体"
+        },
+        "operation": {
+          "title": "操作",
+          "description": "分配实体的操作。"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnBeginDialog": {
+      "title": "在开始对话后",
+      "description": "在此对话开始时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnCancelDialog": {
+      "title": "在取消对话后",
+      "description": "在取消对话事件后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnChooseEntity": {
+      "title": "在选择实体后",
+      "description": "在需要解析实体值时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "要设置的属性",
+          "description": "将在选择实体后设置的属性。"
+        },
+        "entity": {
+          "title": "不明确的实体",
+          "description": "不明确的实体"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnChooseIntent": {
+      "title": "在不明确意向后",
+      "description": "在意向不明确时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "intents": {
+          "title": "意向",
+          "description": "必须位于 ChooseIntent 结果中才能触发此条件的意向。",
+          "items": {
+            "title": "意向",
+            "description": "要作为触发依据的意向名称。"
+          }
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnChooseProperty": {
+      "title": "在选择属性后",
+      "description": "在实体到属性有多个可能的映射时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "entity": {
+          "title": "正在分配的实体",
+          "description": "正在分配给属性选项的实体"
+        },
+        "properties": {
+          "title": "可能的属性",
+          "description": "要在其中选择的属性。",
+          "items": {
+            "title": "属性名",
+            "description": "可以选择的属性。"
+          }
+        },
+        "entities": {
+          "title": "实体",
+          "description": "实体名称不明确。",
+          "items": {
+            "title": "实体名称",
+            "description": "要从中进行选择的实体名称。"
+          }
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnCondition": {
+      "title": "在条件后",
+      "description": "在指定的条件为 true 时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnContinueConversation": {
+      "title": "On continue conversation",
+      "description": "在通过 ContinueConversationLater 操作再次开始对话时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "在 ConversationUpdate 活动后",
+      "description": "在收到类型为 \"ConversationUpdate\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnDialogEvent": {
+      "title": "在对话事件后",
+      "description": "在发生特定对话事件时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "event": {
+          "title": "对话事件名称",
+          "description": "对话事件的名称。"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnEndOfActions": {
+      "title": "在操作结束后",
+      "description": "在当前对话中没有更多操作时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+      "title": "在 EndOfConversation 活动后",
+      "description": "在收到类型为 \"EndOfConversation\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnError": {
+      "title": "On error",
+      "description": "在发生“错误”对话事件时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnEventActivity": {
+      "title": "在 Event 活动后",
+      "description": "在收到类型为 \"Event\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnHandoffActivity": {
+      "title": "在 Handoff 活动后",
+      "description": "在收到类型为 \"HandOff\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+      "title": "On InstallationUpdate activity",
+      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condition",
+          "description": "Condition (expression)."
+        },
+        "actions": {
+          "title": "Actions",
+          "description": "Sequence of actions to execute."
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+        },
+        "runOnce": {
+          "title": "Run Once",
+          "description": "True if rule should run once per unique conditions"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnIntent": {
+      "title": "在意向识别后",
+      "description": "在识别到指定的意向时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "intent": {
+          "title": "意向",
+          "description": "意向的名称。"
+        },
+        "entities": {
+          "title": "实体",
+          "description": "必需的实体。",
+          "items": {
+            "title": "实体",
+            "description": "必须存在的实体。"
+          }
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnInvokeActivity": {
+      "title": "在 Invoke 活动后",
+      "description": "在收到类型为 \"Invoke\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnMessageActivity": {
+      "title": "在 Message 活动后",
+      "description": "在收到类型为 \"Message\" 的活动后执行的操作。替代意向触发器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+      "title": "在 MessageDelete 活动后",
+      "description": "在收到类型为 \"MessageDelete\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+      "title": "在 MessageReaction 活动后",
+      "description": "在收到类型为 \"MessageReaction\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+      "title": "在 MessageUpdate 活动后",
+      "description": "在收到类型为 \"MessageUpdate\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnQnAMatch": {
+      "title": "On QnAMaker match",
+      "description": "当找到来自 QnAMaker 的匹配项时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "在 RepromptDialog 后",
+      "description": "在发生 \"RepromptDialog\" 事件时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnTypingActivity": {
+      "title": "在 Typing 活动后",
+      "description": "在收到类型为 \"Typing\" 的活动后执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "在未知意向后",
+      "description": "在无法识别用户输入或“在识别意向后”触发器与已识别的意向不一致时执行的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件(表达式)。"
+        },
+        "actions": {
+          "title": "操作",
+          "description": "要执行的操作序列。"
+        },
+        "priority": {
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
+        },
+        "runOnce": {
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.OrdinalEntityRecognizer": {
+      "title": "Ordinal entity recognizer",
+      "description": "用于识别序数(例如: 第一、第二、第三)的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.PercentageEntityRecognizer": {
+      "title": "Percentage entity recognizer",
+      "description": "用于识别百分比的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.PhoneNumberEntityRecognizer": {
+      "title": "Phone number entity recognizer",
+      "description": "用于识别电话号码的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.QnAMakerDialog": {
+      "title": "QnAMaker dialog",
+      "description": "使用 QnAMAker 知识库来回答问题的对话。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "knowledgeBaseId": {
+          "title": "知识库 ID",
+          "description": "QnA Maker 知识库的知识库 ID。"
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "QnA Maker KB 的终结点密钥。"
+        },
+        "hostname": {
+          "title": "主机名",
+          "description": "QnA Maker 服务的主机名。"
+        },
+        "noAnswer": {
+          "title": "回退答案",
+          "description": "在 KB 中找不到答案时返回的默认答案。"
+        },
+        "threshold": {
+          "title": "阈值",
+          "description": "筛选结果的阈值分数。"
+        },
+        "activeLearningCardTitle": {
+          "title": "活动学习卡标题",
+          "description": "主动学习建议卡的标题。"
+        },
+        "cardNoMatchText": {
+          "title": "“卡无匹配”文本",
+          "description": "用于无匹配选项的文本。"
+        },
+        "cardNoMatchResponse": {
+          "title": "“卡无匹配”响应",
+          "description": "未选择匹配选项时的自定义响应。"
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "要在调用 QnA Maker KB 时使用的元数据筛选器。",
+          "items": {
+            "title": "元数据筛选器",
+            "description": "元数据筛选器。",
+            "properties": {
+              "name": {
+                "title": "名称",
+                "description": "筛选器属性的名称。"
+              },
+              "value": {
+                "title": "值",
+                "description": "要筛选的值。"
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "最高",
+          "description": "要检索的答案数。"
+        },
+        "isTest": {
+          "title": "IsTest",
+          "description": "如果指向测试环境，则为 true，否则为 false。"
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "排名程序类型。",
+          "oneOf": {
+            "0": {
+              "title": "标准排名程序",
+              "description": "标准排名程序类型。"
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+            }
+          }
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.QnAMakerRecognizer": {
+      "title": "QnAMaker recognizer",
+      "description": "用于从知识库生成 QnAMatch 意向的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的用于 RecognizerSet 的唯一 ID。"
+        },
+        "knowledgeBaseId": {
+          "title": "知识库 ID",
+          "description": "Knowledge base Id of your QnA Maker knowledge base."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "QnA Maker KB 的终结点密钥。"
+        },
+        "hostname": {
+          "title": "主机名",
+          "description": "QnA Maker 服务的主机名。"
+        },
+        "threshold": {
+          "title": "阈值",
+          "description": "筛选结果的阈值分数。"
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "要在调用 QnA Maker KB 时使用的元数据筛选器。",
+          "items": {
+            "title": "元数据筛选器",
+            "description": "在查询 QnA Maker KB 时使用的元数据筛选器。",
+            "properties": {
+              "name": {
+                "title": "名称",
+                "description": "要筛选的名称。"
+              },
+              "value": {
+                "title": "值",
+                "description": "用于限制筛选器的值。"
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "最高",
+          "description": "要检索的答案数。"
+        },
+        "isTest": {
+          "title": "Use test environment",
+          "description": "如果指向测试环境，则为 true，否则为 false。"
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "排名程序类型。",
+          "oneOf": {
+            "0": {
+              "title": "排名程序类型",
+              "description": "排名程序类型。"
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+            }
+          }
+        },
+        "includeDialogNameInMetadata": {
+          "title": "Include dialog name",
+          "description": "设置为 false 时，将不会向 QnAMaker 传递对话名称。(默认)为 true"
+        },
+        "metadata": {
+          "title": "元数据筛选器",
+          "description": "要在调用 QnA Maker KB 时使用的元数据筛选器。",
+          "items": {
+            "title": "元数据筛选器",
+            "description": "在调用 QnA Maker KB 时使用的元数据筛选器。",
+            "properties": {
+              "name": {
+                "title": "名称",
+                "description": "要测试的值的名称。"
+              },
+              "value": {
+                "title": "值",
+                "description": "要用作筛选依据的值。"
+              }
+            }
+          }
+        },
+        "context": {
+          "title": "QnA request context",
+          "description": "用于排名的上下文。"
+        },
+        "qnaId": {
+          "title": "QnA Id",
+          "description": "表示传递到 QnAMaker API 的 QnAId 的数字或表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.RandomSelector": {
+      "title": "随机规则选择器",
+      "description": "选择最具体的真实规则。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "seed": {
+          "title": "随机种子",
+          "description": "用于开始随机编号生成的随机种子。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.RecognizerSet": {
+      "title": "Recognizer set",
+      "description": "创建集中识别器的意向和实体的联合。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的用于 RecognizerSet 的唯一 ID。当为此识别器交叉训练数据时，其他识别器应返回 \"DeferToRecognizer_{Id}\" 意向。"
+        },
+        "recognizers": {
+          "title": "识别器",
+          "description": "为此集定义的识别器列表。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.RegexEntityRecognizer": {
+      "title": "Regex entity recognizer",
+      "description": "用于识别基于正则表达式的输入模式的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "name": {
+          "title": "名称",
+          "description": "实体名称"
+        },
+        "pattern": {
+          "title": "模式",
+          "description": "表示为正则表达式的模式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.RegexRecognizer": {
+      "title": "正则表达式识别器",
+      "description": "使用正则表达式从用户输入中识别意向和实体。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的用于 RecognizerSet 的唯一 ID。当为此识别器交叉训练数据时，其他识别器应返回 \"DeferToRecognizer_{Id}\" 意向。"
+        },
+        "intents": {
+          "title": "正则表达式模式到意向",
+          "description": "要为意向匹配的模式的集合。",
+          "items": {
+            "title": "模式",
+            "description": "意向和正则表达式模式。",
+            "properties": {
+              "intent": {
+                "title": "意向",
+                "description": "意向名称。"
+              },
+              "pattern": {
+                "title": "模式",
+                "description": "正则表达式模式。"
+              }
+            }
+          }
+        },
+        "entities": {
+          "title": "实体识别器",
+          "description": "要使用的实体识别器的集合。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.RepeatDialog": {
+      "title": "重复对话",
+      "description": "重复当前对话。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "allowLoop": {
+          "title": "AllowLoop",
+          "description": "可选条件，如果为 true，则允许重复对话循环。"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "options": {
+          "title": "选项",
+          "description": "一个或多个传递给被调用的对话的选项。",
+          "additionalProperties": {
+            "title": "选项",
+            "description": "用于重复对话的选项。"
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "如果设置为 false，则被调用的对话可以处理当前活动。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ReplaceDialog": {
+      "title": "替换对话",
+      "description": "将当前对话替换为另一个对话。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "对话"
+            }
+          },
+          "title": "对话名称",
+          "description": "要调用的对话的名称。"
+        },
+        "options": {
+          "title": "选项",
+          "description": "一个或多个传递给被调用的对话的选项。",
+          "additionalProperties": {
+            "title": "选项",
+            "description": "用于替换对话的选项。"
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "如果设置为 false，则被调用的对话可以处理当前活动。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ResourceMultiLanguageGenerator": {
+      "title": "Resource multi-language generator",
+      "description": "按资源 ID 绑定到资源的多语言生成器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的生成器 ID。"
+        },
+        "resourceId": {
+          "title": "资源 ID",
+          "description": "作为根语言生成器的资源。具有相同名称和语言后缀的其他生成器将被加载到此生成器，并会根据语言策略来使用。"
+        },
+        "languagePolicy": {
+          "title": "Language policy",
+          "description": "为此生成器设置备用语言策略。如果不设置，将使用全局语言策略。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.SendActivity": {
+      "title": "发送活动",
+      "description": "用活动来响应。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "activity": {
+          "title": "活动",
+          "description": "要发送的活动。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.SetProperties": {
+      "title": "设置属性",
+      "description": "设置一个或多个属性值。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "assignments": {
+          "title": "赋值",
+          "description": "要设置的属性值分配。",
+          "items": {
+            "title": "赋值",
+            "description": "属性赋值。",
+            "properties": {
+              "property": {
+                "title": "属性",
+                "description": "属性(用于存储信息的已命名位置)。"
+              },
+              "value": {
+                "title": "值",
+                "description": "新值或表达式。"
+              }
+            }
+          }
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.SetProperty": {
+      "title": "设置属性",
+      "description": "将属性设置为值。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "property": {
+          "title": "属性",
+          "description": "属性(用于存储信息的已命名位置)。"
+        },
+        "value": {
+          "title": "值",
+          "description": "新值或表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.SignOutUser": {
+      "title": "Sign out user",
+      "description": "将先前使用 OAuthInput 登录的用户注销。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "userId": {
+          "title": "UserId",
+          "description": "表示要注销的用户的表达式。默认值为 user.id。"
+        },
+        "connectionName": {
+          "title": "Connection name",
+          "description": "与 OAuthInput 一起用于登录用户的连接名称。"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.StaticActivityTemplate": {
+      "title": "Microsoft static activity template",
+      "description": "可用于定义静态 Activity 对象",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "activity": {
+          "title": "活动",
+          "description": "要使用的静态活动。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.SwitchCondition": {
+      "title": "切换条件",
+      "description": "根据属性的值执行不同的操作。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "要计算的属性。"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "cases": {
+          "title": "案例",
+          "description": "每个可能条件对应的操作。",
+          "items": {
+            "title": "案例",
+            "description": "情况和操作。",
+            "properties": {
+              "value": {
+                "title": "值",
+                "description": "要与条件进行比较的值。"
+              },
+              "actions": {
+                "title": "操作",
+                "description": "要执行的操作。"
+              }
+            }
+          }
+        },
+        "default": {
+          "title": "默认",
+          "description": "在任何情况都不满足条件时执行的操作。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.TelemetryTrackEvent": {
+      "title": "Telemetry - track event",
+      "description": "使用已注册的遥测客户端跟踪自定义事件。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "eventName": {
+          "title": "Event name",
+          "description": "要跟踪的事件的名称。"
+        },
+        "properties": {
+          "title": "属性",
+          "description": "附加到要跟踪的事件的一个或多个属性。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.TemperatureEntityRecognizer": {
+      "title": "Temperature recognizer",
+      "description": "用于识别温度的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.TemplateEngineLanguageGenerator": {
+      "title": "Template multi-language generator",
+      "description": "仅允许对模板进行内联计算的模板生成器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的生成器 ID。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.TextInput": {
+      "title": "文本输入对话",
+      "description": "收集信息 - 要求输入单词或句子。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "默认值",
+          "description": "当超过最大轮次数时，\"property\" 被设置为此表达式的值。"
+        },
+        "value": {
+          "title": "值",
+          "description": "\"property\" 被设置为此表达式的值，除非计算结果为 null。"
+        },
+        "outputFormat": {
+          "title": "输出格式",
+          "description": "用于格式化输出的表达式。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "prompt": {
+          "title": "初始提示语",
+          "description": "要发送的用于收集信息的消息。"
+        },
+        "unrecognizedPrompt": {
+          "title": "无法识别的提示语",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "invalidPrompt": {
+          "title": "无效提示语",
+          "description": "当用户输入不满足任何验证表达式时发送的消息。"
+        },
+        "defaultValueResponse": {
+          "title": "默认值响应",
+          "description": "当超过最大轮次数(如果已指定)且选择默认值作为值时发送的消息。"
+        },
+        "maxTurnCount": {
+          "title": "最大轮次数",
+          "description": "重新提示尝试收集信息的次数上限。"
+        },
+        "validations": {
+          "title": "验证表达式",
+          "description": "用于验证用户输入的表达式。",
+          "items": {
+            "title": "条件",
+            "description": "表达式，需要满足此表达式才能认为输入是有效的"
+          }
+        },
+        "property": {
+          "title": "属性",
+          "description": "用于存储所收集的信息的属性。如果属性有值，则跳过输入(除非“始终提示”为 true)。"
+        },
+        "alwaysPrompt": {
+          "title": "始终提示",
+          "description": "即使指定的 \"property\" 不是空的，也要收集信息。"
+        },
+        "allowInterruptions": {
+          "title": "允许中断",
+          "description": "用于确定是否允许父对象中断输入的布尔表达式。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.TextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "使用 LG 模板创建文本",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "模板",
+          "description": "用于计算以创建文本的语言生成器模板。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.ThrowException": {
+      "title": "Throw an exception",
+      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "errorValue": {
+          "title": "Error value",
+          "description": "Error value to throw."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TraceActivity": {
+      "title": "发送 TraceActivity",
+      "description": "将跟踪活动发送到脚本记录器和/或 Bot Framework Emulator。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "name": {
+          "title": "名称",
+          "description": "跟踪活动的名称"
+        },
+        "label": {
+          "title": "标签",
+          "description": "跟踪活动的标签(用于在跟踪活动列表中标识它)。"
+        },
+        "valueType": {
+          "title": "值类型",
+          "description": "值的类型"
+        },
+        "value": {
+          "title": "值",
+          "description": "保留要作为跟踪活动发送的值的属性。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.TrueSelector": {
+      "title": "True trigger selector",
+      "description": "所有真实事件的选择器",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.UpdateActivity": {
+      "title": "Update an activity",
+      "description": "用活动来响应。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "可选的对话 ID"
+        },
+        "disabled": {
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
+        },
+        "activityId": {
+          "title": "活动 ID",
+          "description": "包含要更新的活动 ID 的字符串表达式。"
+        },
+        "activity": {
+          "title": "活动",
+          "description": "要发送的活动。"
+        },
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "Microsoft.UrlEntityRecognizer": {
+      "title": "Url recognizer",
+      "description": "用于识别 URL 的识别器。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "arrayExpression": {
+      "title": "数组或表达式",
+      "description": "要计算的数组或表达式。",
+      "oneOf": {
+        "0": {
+          "title": "数组",
+          "description": "数组常量。"
+        }
+      }
+    },
+    "booleanExpression": {
+      "title": "布尔值或表达式",
+      "description": "要计算的布尔常量或表达式。",
+      "oneOf": {
+        "0": {
+          "title": "布尔",
+          "description": "布尔常量。"
+        }
+      }
+    },
+    "component": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
+        },
+        "$designer": {
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
+        }
+      }
+    },
+    "condition": {
+      "title": "布尔条件",
+      "description": "要计算的布尔常量或表达式。",
+      "oneOf": {
+        "1": {
+          "title": "布尔",
+          "description": "布尔值。"
+        }
+      }
+    },
+    "equalsExpression": {
+      "title": "表达式",
+      "description": "以 = 开头的表达式。"
+    },
+    "expression": {
+      "title": "表达式",
+      "description": "要计算的表达式。"
+    },
+    "integerExpression": {
+      "title": "整数或表达式",
+      "description": "要计算的整型常量或表达式。",
+      "oneOf": {
+        "0": {
+          "title": "整数",
+          "description": "整数常数。"
+        }
+      }
+    },
+    "numberExpression": {
+      "title": "数字或表达式",
+      "description": "要计算的数字常量或表达式。",
+      "oneOf": {
+        "0": {
+          "title": "数字",
+          "description": "数字常量。"
+        }
+      }
+    },
+    "objectExpression": {
+      "title": "对象或表达式",
+      "description": "要计算的对象或表达式。",
+      "oneOf": {
+        "0": {
+          "title": "对象",
+          "description": "对象常量。"
+        }
+      }
+    },
+    "role": {
+      "title": "$role",
+      "description": "从[expression|interface|implements($kind)|extends($kind)]定义对话架构中扮演的角色。"
+    },
+    "stringExpression": {
+      "title": "字符串或表达式",
+      "description": "要计算的内插字符串或表达式。",
+      "oneOf": {
+        "0": {
+          "title": "字符串",
+          "description": "内插字符串"
+        }
+      }
+    },
+    "valueExpression": {
+      "title": "任何值或表达式",
+      "description": "要计算的任何常量或表达式。",
+      "oneOf": {
+        "0": {
+          "title": "对象",
+          "description": "对象常量。"
+        },
+        "1": {
+          "title": "数组",
+          "description": "数组常量。"
+        },
+        "2": {
+          "title": "字符串",
+          "description": "内插字符串。"
+        },
+        "3": {
+          "title": "布尔",
+          "description": "布尔常量"
+        },
+        "4": {
+          "title": "数字",
+          "description": "数字常量。"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,2879 @@
+{
+  "0_bytes_a1e1cdb3": {
+    "message": "0 байт"
+  },
+  "5_minute_intro_7ea06d2b": {
+    "message": "5-минутное вступление"
+  },
+  "ErrorInfo_part1": {
+    "message": "Произошла ошибка в редакторе форм."
+  },
+  "ErrorInfo_part2": {
+    "message": "Вероятно, это вызвано неправильно сформированными данными или отсутствием функциональной возможности в Composer."
+  },
+  "ErrorInfo_part3": {
+    "message": "Попробуйте перейти к другому узлу в визуальном редакторе."
+  },
+  "a_dialog_file_must_have_a_name_123ff67d": {
+    "message": "файл диалога должен иметь имя"
+  },
+  "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
+    "message": "Диалог формы позволяет вашему боту собирать данные."
+  },
+  "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
+    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
+  },
+  "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
+    "message": "Мини-карта дает представление о вашем исходном коде для быстрого перехода и изучения кода."
+  },
+  "a_newer_version_of_the_provisioning_scripts_has_be_85d3ad94": {
+    "message": "Обнаружена более новая версия скриптов подготовки, и этот проект можно обновить до последней версии."
+  },
+  "a_profile_with_that_name_already_exists_7c559958": {
+    "message": "Профиль с таким именем уже существует."
+  },
+  "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
+    "message": "Свойство — это элемент данных, которые будет собирать ваш бот. Имя свойства — это имя, используемое в Composer; оно необязательно совпадает с текстом, который будет отображаться в сообщениях бота."
+  },
+  "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
+    "message": "Ключ подписки создается при создании ресурса QnA Maker."
+  },
+  "a_valid_url_should_start_with_http_or_https_327b1a30": {
+    "message": "A valid URL should start with http:// or https://"
+  },
+  "about_70c18bba": {
+    "message": "О программе"
+  },
+  "accepted_values_b4224bcd": {
+    "message": "Допустимые значения"
+  },
+  "accepts_multiple_values_73658f63": {
+    "message": "Принимает несколько значений"
+  },
+  "access_external_resources_7e37fe21": {
+    "message": "Доступ к внешним ресурсам"
+  },
+  "action_created_f80af9a0": {
+    "message": "Действие создано"
+  },
+  "action_deleted_a10c002b": {
+    "message": "Действие удалено"
+  },
+  "action_focused_400ee4af": {
+    "message": "Действие в фокусе"
+  },
+  "action_unfocused_18a2800e": {
+    "message": "Действие не в фокусе"
+  },
+  "actions_copied_2821ab27": {
+    "message": "Действия скопированы"
+  },
+  "actions_created_6c5acc11": {
+    "message": "Действия созданы"
+  },
+  "actions_cut_929f4c37": {
+    "message": "Действия вырезаны"
+  },
+  "actions_define_b_how_the_bot_responds_b_to_a_certa_890a71f4": {
+    "message": "Действия определяют, <b>как бот реагирует</b> на определенный триггер."
+  },
+  "actions_deleted_355c359a": {
+    "message": "Действия удалены"
+  },
+  "actions_disabled_c1accfb6": {
+    "message": "Действия отключены"
+  },
+  "actions_efcde10d": {
+    "message": "Действия"
+  },
+  "actions_enabled_8e9ec02d": {
+    "message": "Действия включены"
+  },
+  "actions_moved_d7777b29": {
+    "message": "Перемещенные действия"
+  },
+  "activities_125193f7": {
+    "message": "Действия"
+  },
+  "activity_13915493": {
+    "message": "Действие"
+  },
+  "activity_received_2f20fa9d": {
+    "message": "Действие принято"
+  },
+  "adaptive_dialog_61a05dde": {
+    "message": "Адаптивный диалог"
+  },
+  "add_8523c19b": {
+    "message": "Добавить"
+  },
+  "add_a_new_key_5c208c29": {
+    "message": "Добавить новый ключ"
+  },
+  "add_a_new_skill_dialog_aaaafa9c": {
+    "message": "Добавить новый диалог навыков"
+  },
+  "add_a_new_trigger_a82d3db8": {
+    "message": "Добавить новый триггер"
+  },
+  "add_a_new_value_24ca14ac": {
+    "message": "Добавить новое значение"
+  },
+  "add_a_publish_profile_fca2263a": {
+    "message": "Добавить профиль публикации"
+  },
+  "add_a_skill_46d2b71c": {
+    "message": "Добавить навык"
+  },
+  "add_a_welcome_message_9e1480b2": {
+    "message": "Добавить приветственное сообщение"
+  },
+  "add_alternative_phrasing_17e0304c": {
+    "message": "+ Добавить альтернативное выражение"
+  },
+  "add_an_intent_trigger_a9acc149": {
+    "message": "Добавить триггер намерения"
+  },
+  "add_custom_runtime_6b73dc44": {
+    "message": "Добавить настраиваемую среду выполнения"
+  },
+  "add_language_75dee49e": {
+    "message": "Добавить язык"
+  },
+  "add_multiple_comma_separated_synonyms_2639283f": {
+    "message": "Добавить несколько синонимов с разделителями-запятыми"
+  },
+  "add_new_answer_9de3808e": {
+    "message": "Добавить новый ответ"
+  },
+  "add_new_dialog_25f12c9": {
+    "message": "Добавить новый диалог"
+  },
+  "add_new_extension_19b82b77": {
+    "message": "Добавить новое расширение"
+  },
+  "add_new_knowledge_base_on_displayname_7f44609c": {
+    "message": " Добавить новую базу знаний в { displayName }"
+  },
+  "add_new_profile_47b225e6": {
+    "message": "Добавить новый профиль"
+  },
+  "add_new_propertyname_bedf7dc6": {
+    "message": "Добавить новое { propertyName }"
+  },
+  "add_new_question_85612b7f": {
+    "message": "Добавить новый вопрос"
+  },
+  "add_new_trigger_on_displayname_2aaf6e4c": {
+    "message": "Добавить новый триггер в { displayName }"
+  },
+  "add_new_validation_rule_here_eb675ccf": {
+    "message": "Добавить новое правило проверки"
+  },
+  "add_property_d381eba3": {
+    "message": "Добавить свойство"
+  },
+  "add_qna_pair_16c228f0": {
+    "message": "+ Добавить пару \"вопрос-ответ\""
+  },
+  "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
+    "message": "> добавление примеров фраз для активации этого намерения:\n> - расскажи мне о погоде\n> - какая сейчас погода в городе '{'city=Москва'}'\n\n> определения сущностей:\n> @ ml city"
+  },
+  "add_some_expected_user_responses_please_remind_me__31dc5c07": {
+    "message": "> добавление некоторых ожидаемых ответов пользователей:\n> - Напомни мне '{'itemTitle=купить молока'}'\n> - напомни мне '{'itemTitle'}'\n> - добавь '{'itemTitle'}' в мой список дел\n>\n> определения сущности:\n> @ ml itemTitle\n"
+  },
+  "add_welcome_message_49d9ded9": {
+    "message": "Добавить приветственное сообщение"
+  },
+  "advanced_events_2cbfa47d": {
+    "message": "Расширенные события"
+  },
+  "advanced_options_4dcc8385": {
+    "message": "Дополнительные параметры"
+  },
+  "all_4321c3a1": {
+    "message": "Все"
+  },
+  "all_language_generation_files_ef778f24": {
+    "message": "все файлы генерирования речи"
+  },
+  "all_language_understanding_files_714b33eb": {
+    "message": "все файлы распознавания речи"
+  },
+  "all_profiles_8321b1aa": {
+    "message": "Все профили"
+  },
+  "all_qna_files_349d7fe1": {
+    "message": "все файлы вопросов и ответов"
+  },
+  "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
+    "message": "Ключ разработки создается автоматически при создании учетной записи LUIS."
+  },
+  "answer_4620913f": {
+    "message": "Ответ"
+  },
+  "answer_is_content_c6af84ad": {
+    "message": "Ответ: { content }"
+  },
+  "answer_is_required_da652c05": {
+    "message": "Требуется ответ"
+  },
+  "any_constant_or_expression_to_evaluate_ba2017b1": {
+    "message": "Любая константа или выражение для вычисления."
+  },
+  "any_or_expression_acad7d37": {
+    "message": "Любое значение или выражение"
+  },
+  "any_string_f22dc2e1": {
+    "message": "любая строка"
+  },
+  "application_language_87691b6": {
+    "message": "Язык приложения"
+  },
+  "application_language_f100f3e0": {
+    "message": "Язык приложения"
+  },
+  "application_settings_39e840c6": {
+    "message": "Параметры приложения"
+  },
+  "application_updates_bdf5f8b6": {
+    "message": "Обновления приложения"
+  },
+  "apr_9_2020_3c8b47d7": {
+    "message": "9 апреля 2020 г."
+  },
+  "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
+    "message": "Вы действительно хотите завершить ознакомительный обзор продукта? Вы можете перезапустить обзор в параметрах адаптации."
+  },
+  "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
+    "message": "Вы действительно хотите удалить схему диалога формы \"{ id }\"?"
+  },
+  "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
+    "message": "Вы действительно хотите удалить \"{ propertyName }\"?"
+  },
+  "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
+    "message": "Вы действительно хотите начать сначала? Ваш прогресс будет утерян."
+  },
+  "are_you_sure_you_want_to_stop_current_runtime_and__a5f883b2": {
+    "message": "Вы действительно хотите остановить текущую среду выполнения и заменить ее?"
+  },
+  "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
+    "message": "Вы действительно хотите удалить эти расширения?"
+  },
+  "arm_template_bc8441bb": {
+    "message": "Шаблон ARM"
+  },
+  "array_643947ee": {
+    "message": "Массив"
+  },
+  "array_constant_8829b2ec": {
+    "message": "Константа массива."
+  },
+  "array_or_expression_c52b2ecc": {
+    "message": "Массив или выражение"
+  },
+  "array_or_expression_to_evaluate_87d9328b": {
+    "message": "Массив или выражение для вычисления."
+  },
+  "ask_a_question_92ef7e0c": {
+    "message": "Задайте вопрос"
+  },
+  "at_least_one_question_is_required_6f287e04": {
+    "message": "Требуется по меньшей мере один вопрос"
+  },
+  "attachment_input_e0ece49c": {
+    "message": "Входные данные вложения"
+  },
+  "australia_6a25c95b": {
+    "message": "Австралия"
+  },
+  "authoring_canvas_18802e39": {
+    "message": "Холст разработки"
+  },
+  "authoring_region_to_use_e_g_westus_westeurope_aust_d43d5245": {
+    "message": "Используемая область разработки (например, westus, westeurope, australiaeast)"
+  },
+  "authoring_region_to_use_westus_qna_maker_resource__4588c2f9": {
+    "message": "Используемая область разработки (westus) (расположение ресурса QnA Maker)"
+  },
+  "auto_update_86eb33b0": {
+    "message": "Автоматическое обновление"
+  },
+  "available_skills_95c114ac": {
+    "message": "Доступные навыки"
+  },
+  "azure_app_service_plan_a285fb06": {
+    "message": "План Службы приложений Azure"
+  },
+  "azure_application_insights_c80028e4": {
+    "message": "Azure Application Insights"
+  },
+  "azure_blob_storage_b5503630": {
+    "message": "Хранилище BLOB-объектов Azure"
+  },
+  "azure_bot_service_3afc983": {
+    "message": "Служба Azure Bot"
+  },
+  "azure_cosmos_db_a82b5d09": {
+    "message": "Azure Cosmos DB"
+  },
+  "back_2900f52a": {
+    "message": "Назад"
+  },
+  "basic_assistant_d23bde15": {
+    "message": "Базовый помощник"
+  },
+  "been_used_5daccdb2": {
+    "message": "Использовано"
+  },
+  "begin_a_new_dialog_60249bd8": {
+    "message": "Начать новый диалог"
+  },
+  "begin_a_remote_skill_dialog_93e47189": {
+    "message": "Начало диалога удаленного навыка."
+  },
+  "begin_dialog_12e2becf": {
+    "message": "Начало диалога"
+  },
+  "begin_dialog_event_285bc650": {
+    "message": "Событие начала диалога"
+  },
+  "begindialog_a5594562": {
+    "message": "BeginDialog"
+  },
+  "ben_brown_99c12d19": {
+    "message": "Бен Браун (Ben Brown)"
+  },
+  "boolean_6000988a": {
+    "message": "Логический"
+  },
+  "boolean_condition_b65450ca": {
+    "message": "Логическое условие"
+  },
+  "boolean_constant_7d3fcbf6": {
+    "message": "Логическая константа"
+  },
+  "boolean_constant_8d950af8": {
+    "message": "Логическая константа."
+  },
+  "boolean_constant_or_expression_to_evaluate_86d77849": {
+    "message": "Логическая константа или выражение для вычисления."
+  },
+  "boolean_field_602934c9": {
+    "message": "логическое поле"
+  },
+  "boolean_or_expression_6bd88208": {
+    "message": "Логическое значение или выражение"
+  },
+  "boolean_value_98d39ea1": {
+    "message": "Логическое значение."
+  },
+  "bot_7926b66d": {
+    "message": "Bot"
+  },
+  "bot_asks_5e9f0202": {
+    "message": "Вопросы бота"
+  },
+  "bot_configured_for_speech_66fc8e57": {
+    "message": "Бот, настроенный для речи"
+  },
+  "bot_configured_for_text_a67eca78": {
+    "message": "Бот, настроенный для текста"
+  },
+  "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
+    "message": "Bot Framework Composer позволяет разработчикам и междисциплинарным командам построить все виды диалогового взаимодействия, используя новейшие компоненты из Bot Framework — SDK, LG, LU и декларативные форматы файлов, без написания кода."
+  },
+  "bot_framework_composer_fae721be": {
+    "message": "Bot Framework Composer"
+  },
+  "bot_framework_composer_icon_gray_fa72d3d6": {
+    "message": "серый значок bot framework composer"
+  },
+  "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
+    "message": "Bot Framework Composer — это визуальный холст разработки для создания ботов и других типов диалоговых приложений с помощью стека технологии Microsoft Bot Framework. В Composer вы найдете все, что нужно, для создания современных процедур взаимодействия на основе бесед."
+  },
+  "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
+    "message": "Bot Framework Composer — это визуальный холст разработки с открытым кодом, позволяющий отдельным разработчикам и междисциплинарным командам создавать боты. Composer интегрирует LUIS и QnA Maker, а также позволяет обеспечить сложную композицию ответов бота с помощью генерирования речи."
+  },
+  "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
+    "message": "Bot Framework предоставляет наиболее полные возможности для создания диалоговых приложений."
+  },
+  "bot_language_6cf30c2": {
+    "message": "Язык бота"
+  },
+  "bot_language_active_7cf9dc78": {
+    "message": "Язык бота (активный)"
+  },
+  "bot_name_bbd0779d": {
+    "message": "Имя бота"
+  },
+  "bot_name_is_botname_a28c2d05": {
+    "message": "Имя бота: { botName }"
+  },
+  "bot_project_file_does_not_exist_a0864a2c": {
+    "message": "Файл проекта бота не существует."
+  },
+  "bot_responses_4617b4a2": {
+    "message": "Ответы бота"
+  },
+  "bot_responses_c4e63601": {
+    "message": "Ответы бота"
+  },
+  "bot_settings_3751e1b2": {
+    "message": "Параметры бота"
+  },
+  "bot_settings_ce2783e4": {
+    "message": "Параметры бота"
+  },
+  "bot_web_app_ca8b1468": {
+    "message": "Веб-приложение бота"
+  },
+  "branch_if_else_391e5681": {
+    "message": "Ветвь: If/else"
+  },
+  "branch_if_else_992cf9bf": {
+    "message": "Ветвь: If/Else"
+  },
+  "branch_if_else_f6a36f1d": {
+    "message": "Ветвь: if/else"
+  },
+  "branch_switch_multiple_options_95c6a326": {
+    "message": "Ветвь: Switch (несколько параметров)"
+  },
+  "break_out_of_loop_ab30157c": {
+    "message": "Выйти из цикла"
+  },
+  "build_your_first_bot_f9c3e427": {
+    "message": "Создание первого бота"
+  },
+  "bytes_74acea97": {
+    "message": "Байты"
+  },
+  "calculating_17b21be7": {
+    "message": "Выполняется вычисление…"
+  },
+  "cancel_all_active_dialogs_335b1623": {
+    "message": "Отменить все активные диалоги"
+  },
+  "cancel_all_dialogs_32144c45": {
+    "message": "Отмена всех диалогов"
+  },
+  "cancel_caeb1e68": {
+    "message": "Отмена"
+  },
+  "cancel_dialog_event_cc671dee": {
+    "message": "Событие отмены диалога"
+  },
+  "change_recognizer_3145b93d": {
+    "message": "Распознаватель исправлений"
+  },
+  "check_for_updates_and_install_them_automatically_50337340": {
+    "message": "Проверка наличия обновлений и их автоматическая установка."
+  },
+  "choice_input_f75a2353": {
+    "message": "Входные данные для варианта выбора"
+  },
+  "choice_name_fe8411f4": {
+    "message": "Имя варианта выбора"
+  },
+  "choose_a_location_for_your_new_bot_project_e979f2d5": {
+    "message": "Выберите расположение для нового проекта бота."
+  },
+  "choose_how_to_create_your_bot_a97f7b3e": {
+    "message": "Выберите вариант создания бота"
+  },
+  "choose_one_2c4277df": {
+    "message": "Выберите один вариант"
+  },
+  "choose_one_7feacdb6": {
+    "message": "Выберите один вариант:"
+  },
+  "choose_your_assistant_7ee96d89": {
+    "message": "Выберите помощник"
+  },
+  "chris_whitten_11df1f35": {
+    "message": "Крис Уиттен (Chris Whitten)"
+  },
+  "clear_all_da755751": {
+    "message": "Очистить все"
+  },
+  "click_on_the_b_add_b_button_in_the_toolbar_and_sel_4daf351a": {
+    "message": "Нажмите кнопку <b>Добавить</b> на панели инструментов и выберите <b>Добавить новый триггер</b>. В мастере <b>создания триггера</b> задайте в поле <b>Тип триггера</b> значение <i>Намерение распознано</i> и настройте <b>Имя триггера</b> и <b>Фразы-триггеры</b>. Затем добавьте действия в визуальном редакторе."
+  },
+  "click_the_b_add_b_button_in_the_toolbar_and_select_79001156": {
+    "message": "Нажмите кнопку <b>Добавить</b> на панели инструментов и выберите <b>Добавить новый триггер</b> в раскрывающемся меню."
+  },
+  "click_to_sort_by_file_type_1b0c9bd": {
+    "message": "Щелкните для сортировки по типу файла"
+  },
+  "close_d634289d": {
+    "message": "Закрыть"
+  },
+  "collapse_34080b4d": {
+    "message": "Свернуть"
+  },
+  "collapse_navigation_17228b95": {
+    "message": "Свернуть панель навигации"
+  },
+  "comment_7ef1428e": {
+    "message": "Комментарий"
+  },
+  "component_stacktrace_e24b1983": {
+    "message": "Трассировка стека для компонента:"
+  },
+  "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
+    "message": "Composer пока не может перевести ваш бот автоматически.\nЧтобы создать перевод вручную, Composer создаст копию содержимого бота с именем дополнительного языка. Это содержимое можно переводить, не затрагивая логику или процедуры исходного бота. Кроме того, можно переключаться между языками, чтобы убедиться в правильности перевода ответов."
+  },
+  "composer_introduction_98a93701": {
+    "message": "Знакомство с Composer"
+  },
+  "composer_is_up_to_date_9118257d": {
+    "message": "Composer находится в актуальном состоянии."
+  },
+  "composer_logo_ba2048a0": {
+    "message": "Логотип Composer"
+  },
+  "composer_needs_net_core_sdk_46e2a8ae": {
+    "message": "Composer требуется пакет SDK для .NET Core"
+  },
+  "composer_will_restart_88ee8dc3": {
+    "message": "Composer перезапустится."
+  },
+  "composer_will_update_the_next_time_you_close_the_a_d74264a1": {
+    "message": "Обновление Composer будет выполнено при следующем закрытии приложения."
+  },
+  "conditionalselector_ed2031f0": {
+    "message": "ConditionalSelector"
+  },
+  "configuration_summary_f9b92424": {
+    "message": "Сводка по конфигурации"
+  },
+  "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
+    "message": "Настройте Composer, чтобы запустить бот с использованием кода среды выполнения, доступный вам для настройки и управления."
+  },
+  "configured_with_enterprise_scenarios_calendar_who__e9e7e75a": {
+    "message": "Настроено с использованием корпоративных сценариев, календаря, бота \"Кто\", профессиональной беседы."
+  },
+  "configured_with_hospitality_scenarios_bing_search__f71c09c0": {
+    "message": "Настроено с использованием сценариев гостиничных и ресторанных услуг, Поиска Bing и отзывчивой беседы."
+  },
+  "configured_with_simple_conversational_capability_l_d42f128c": {
+    "message": "Настроено с использованием простых возможностей общения, таких как приветствие, беседа и т. п."
+  },
+  "configures_default_language_model_to_use_if_there__f09f1acd": {
+    "message": "Настраивает языковую модель по умолчанию, которая будет использоваться, если в имени файла не указан код языка и региональных параметров (по умолчанию: en-us)"
+  },
+  "confirm_6556b3a6": {
+    "message": "Подтвердить"
+  },
+  "confirm_choices_db8e99fb": {
+    "message": "Подтвердить варианты выбора"
+  },
+  "confirm_input_bf996e7a": {
+    "message": "Подтверждение ввода"
+  },
+  "confirmation_fec87d65": {
+    "message": "Подтверждение"
+  },
+  "confirmation_modal_must_have_a_title_b0816e0b": {
+    "message": "Модальное окно подтверждения должно иметь заголовок."
+  },
+  "congratulations_your_model_is_successfully_publish_52ebc297": {
+    "message": "Поздравляем! Ваша модель успешно опубликована."
+  },
+  "connect_to_a_new_skill_34d582ab": {
+    "message": "Соединить с новым навыком"
+  },
+  "connect_to_a_skill_53c9dff0": {
+    "message": "Соединить с навыком"
+  },
+  "connect_to_qna_knowledgebase_4b324132": {
+    "message": "Подключение к базе знаний вопросов и ответов"
+  },
+  "content_1440204b": {
+    "message": "Содержимое"
+  },
+  "continue_loop_22635585": {
+    "message": "Продолжить цикл"
+  },
+  "conversation_ended_a8bd37dd": {
+    "message": "Беседа завершена"
+  },
+  "conversation_invoked_e960884e": {
+    "message": "Вызвана беседа"
+  },
+  "conversationupdate_activity_9e94bff5": {
+    "message": "Действие ConversationUpdate"
+  },
+  "copy_9748f9f": {
+    "message": "Копировать"
+  },
+  "copy_content_for_translation_7affbcbb": {
+    "message": "Копировать содержимое для перевода"
+  },
+  "could_not_connect_to_storage_50411de0": {
+    "message": "Не удалось подключиться к хранилищу."
+  },
+  "couldn_t_complete_the_update_a337a359": {
+    "message": "Не удалось завершить обновление:"
+  },
+  "create_132b3be1": {
+    "message": "Создать"
+  },
+  "create_a_bot_project_73e6ce33": {
+    "message": "Создайте проект бота"
+  },
+  "create_a_condition_8686fd5": {
+    "message": "Создайте условие"
+  },
+  "create_a_dialog_9f6c8618": {
+    "message": "Создайте диалог"
+  },
+  "create_a_knowledge_base_from_scratch_or_import_kno_2eb38ac0": {
+    "message": "Создать базу знаний с нуля или импортировать знания из URL-адреса или PDF-файлов"
+  },
+  "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
+    "message": "Создайте имя проекта, которое будет использоваться для именования приложения: (projectname-environment-LUfilename)"
+  },
+  "create_a_new_bot_or_choose_from_virtual_assistant__7c1e6674": {
+    "message": "Создайте бот или выберите один из шаблонов виртуального помощника."
+  },
+  "create_a_new_dialog_21d84b82": {
+    "message": "Создать диалог"
+  },
+  "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
+    "message": "Создайте схему диалога формы, нажав кнопку \"+\" выше."
+  },
+  "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
+    "message": "Создайте манифест навыка или выберите тот, который хотите изменить"
+  },
+  "create_a_trigger_40e74743": {
+    "message": "Создайте триггер"
+  },
+  "create_bot_from_template_or_scratch_92f0fefa": {
+    "message": "Создать бот из шаблона или с нуля?"
+  },
+  "create_copy_to_translate_bot_content_efc872c": {
+    "message": "Создать копию для перевода содержимого бота"
+  },
+  "create_edit_skill_manifest_1c1b14fe": {
+    "message": "Создать или изменить манифест навыка"
+  },
+  "create_folder_error_38aa86f5": {
+    "message": "Ошибка при создании папки"
+  },
+  "create_form_dialog_bb98a4f2": {
+    "message": "Создать диалог формы"
+  },
+  "create_from_knowledge_base_qna_maker_7422486": {
+    "message": "Создать из базы знаний (QnA Maker)"
+  },
+  "create_from_qna_7aa9dcbb": {
+    "message": "Создать из вопросов и ответов"
+  },
+  "create_from_scratch_485c3045": {
+    "message": "Создать с нуля"
+  },
+  "create_from_template_87e12c94": {
+    "message": "Создать из шаблона"
+  },
+  "create_kb_e78571ba": {
+    "message": "Создать базу знаний"
+  },
+  "create_kb_from_scratch_eddd037a": {
+    "message": "Создать базу знаний с нуля"
+  },
+  "create_kb_from_url_or_file_49ad6671": {
+    "message": "Создать базу знаний из URL-адреса или файла"
+  },
+  "create_knowledge_base_from_scratch_afe4d2a2": {
+    "message": "Создать базу знаний с нуля"
+  },
+  "create_new_empty_bot_21cf0ea3": {
+    "message": "Создать пустой бот"
+  },
+  "create_new_folder_19d3faa4": {
+    "message": "Создать папку"
+  },
+  "create_new_kb_1c4f86a0": {
+    "message": "Создать базу знаний"
+  },
+  "create_new_knowledge_base_d15d6873": {
+    "message": "Создать базу знаний"
+  },
+  "create_new_knowledge_base_e14d07a5": {
+    "message": "Создать базу знаний"
+  },
+  "create_new_knowledge_base_from_scratch_638c4fd2": {
+    "message": "Создать базу знаний с нуля"
+  },
+  "create_or_edit_skill_manifest_8ad98da9": {
+    "message": "Создать или изменить манифест навыка"
+  },
+  "creating_your_knowledge_base_ef4f9872": {
+    "message": "Идет создание базы знаний"
+  },
+  "current_40c0812f": {
+    "message": " - Текущий"
+  },
+  "custom_actions_5d396747": {
+    "message": "Пользовательские действия"
+  },
+  "custom_events_d6f0e45b": {
+    "message": "Пользовательские события"
+  },
+  "custom_name_optional_60ee6a1a": {
+    "message": "Пользовательское имя (необязательно)"
+  },
+  "custom_recognizer_951bab90": {
+    "message": "Настраиваемый распознаватель"
+  },
+  "customize_your_assistant_e4038b74": {
+    "message": "Настройка помощника"
+  },
+  "cut_c8c92681": {
+    "message": "Вырезать"
+  },
+  "data_loading_4c9bb9f6": {
+    "message": "Идет загрузка данных..."
+  },
+  "date_ee500367": {
+    "message": "Дата"
+  },
+  "date_modified_18beced9": {
+    "message": "Дата изменения"
+  },
+  "date_modified_e1c8ac8f": {
+    "message": "Дата изменения"
+  },
+  "date_or_time_d30bcc7d": {
+    "message": "Дата или время"
+  },
+  "date_time_input_2416ffc1": {
+    "message": "Ввод даты и времени"
+  },
+  "debug_break_46cb5adb": {
+    "message": "Режим отладки"
+  },
+  "debug_break_870a75df": {
+    "message": "Режим отладки"
+  },
+  "debugging_options_20e2e9da": {
+    "message": "Параметры отладки"
+  },
+  "default_language_486a558d": {
+    "message": "Язык по умолчанию"
+  },
+  "default_language_b11c37db": {
+    "message": "Язык по умолчанию"
+  },
+  "default_recognizer_9c06c1a3": {
+    "message": "Распознаватель по умолчанию"
+  },
+  "define_by_value_type_3cd3d1a8": {
+    "message": "Определить по типу значения"
+  },
+  "define_conversation_objective_146d1cc6": {
+    "message": "Определить цель беседы"
+  },
+  "defined_in_475568fb": {
+    "message": "Определено в:"
+  },
+  "definition_not_found_for_defname_7194fd07": {
+    "message": "Не найдено определение для { defName }"
+  },
+  "delete_a6efa79d": {
+    "message": "Удалить"
+  },
+  "delete_a_property_f2d70f79": {
+    "message": "Удалить свойство"
+  },
+  "delete_activity_6d881872": {
+    "message": "Удалить действие"
+  },
+  "delete_bot_73586104": {
+    "message": "Удалить бот"
+  },
+  "delete_form_dialog_schema_892df4e8": {
+    "message": "Удалить схему диалога формы"
+  },
+  "delete_knowledge_base_66e3a7f1": {
+    "message": "Удалить базу знаний"
+  },
+  "delete_language_1527609d": {
+    "message": "Удалить язык"
+  },
+  "delete_properties_8bc77b42": {
+    "message": "Удаление свойств"
+  },
+  "delete_properties_c49a7892": {
+    "message": "Удалить свойства"
+  },
+  "delete_property_b3786fa0": {
+    "message": "Удаление свойства"
+  },
+  "deleting_dialogid_failed_1d7cc05a": {
+    "message": "Deleting \"{ dialogId }\" failed."
+  },
+  "describe_your_skill_88554792": {
+    "message": "Опишите свой навык"
+  },
+  "description_436c48d7": {
+    "message": "Описание"
+  },
+  "design_51b2812a": {
+    "message": "Конструктор"
+  },
+  "dialog_68ba69ba": {
+    "message": "(Диалог)"
+  },
+  "dialog_cancelled_767b512a": {
+    "message": "Диалог отменен"
+  },
+  "dialog_data_61d5539b": {
+    "message": "Данные диалога"
+  },
+  "dialog_dialogid_not_found_5e8214c3": {
+    "message": "диалог { dialogId } не найден"
+  },
+  "dialog_events_f1b2e2a0": {
+    "message": "События диалога"
+  },
+  "dialog_input_schema_c7864fbd": {
+    "message": "Входная схема диалога."
+  },
+  "dialog_interface_398bc493": {
+    "message": "Интерфейс диалога"
+  },
+  "dialog_management_2980578": {
+    "message": "Управление диалогом"
+  },
+  "dialog_opened_f6392b1": {
+    "message": "Диалог открыт"
+  },
+  "dialog_output_schema_acfe2186": {
+    "message": "Выходная схема диалога."
+  },
+  "dialog_started_912507c": {
+    "message": "Диалог начат"
+  },
+  "dialog_with_the_name_value_already_exists_62838518": {
+    "message": "Диалог с именем { value } уже существует."
+  },
+  "dialogfactory_missing_schema_5c3255c4": {
+    "message": "Отсутствует схема для DialogFactory."
+  },
+  "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
+    "message": "Найдено ботов: { dialogNum, plural,\n     =0 {отсутствуют}\n     =1 {один}\n  other {#}\n}.\n            { dialogNum, select,\n      0 {}\n  other {Нажмите клавишу СТРЕЛКА ВНИЗ для перемещения по результатам поиска}\n}"
+  },
+  "disable_a5c05db3": {
+    "message": "Отключить"
+  },
+  "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
+    "message": "Отображение линий, выходящих за пределы границ редактора по ширине на следующей строке."
+  },
+  "do_you_wish_to_continue_96469eaf": {
+    "message": "Продолжить?"
+  },
+  "does_not_exist_3a34b418": {
+    "message": "Не существует"
+  },
+  "done_1a4a010a": {
+    "message": "Готово!"
+  },
+  "done_54e3d4b6": {
+    "message": "Готово"
+  },
+  "download_now_and_install_when_you_close_composer_e241ed74": {
+    "message": "Скачать сейчас и установить при закрытии Composer."
+  },
+  "downloading_bb6fb34b": {
+    "message": "Выполняется скачивание…"
+  },
+  "duplicate_31cec192": {
+    "message": "Дублировать"
+  },
+  "duplicate_dialog_name_824f9fce": {
+    "message": "Повторяющееся имя диалога"
+  },
+  "duplicate_fields_9fd0d3c2": {
+    "message": "повторяющиеся поля"
+  },
+  "duplicate_name_d295a09d": {
+    "message": "Повторяющееся имя"
+  },
+  "duplicate_skill_manifest_url_74d85839": {
+    "message": "Повторяющийся URL-адрес манифеста навыка"
+  },
+  "duplicate_skill_name_d9f6eb8d": {
+    "message": "Повторяющееся имя навыка"
+  },
+  "duplicated_intents_recognized_d3908424": {
+    "message": "Распознаны повторяющиеся намерения"
+  },
+  "early_adopters_e8db7999": {
+    "message": "Ранние последователи"
+  },
+  "edit_a_publish_profile_30ebab3e": {
+    "message": "Изменение профиля публикации"
+  },
+  "edit_a_skill_5665d9ac": {
+    "message": "Изменить навык"
+  },
+  "edit_actions_b38e9fac": {
+    "message": "Действия изменения"
+  },
+  "edit_an_array_property_5d886011": {
+    "message": "Изменить свойство массива"
+  },
+  "edit_array_4ab37c8": {
+    "message": "Изменение массива"
+  },
+  "edit_c5fbea07": {
+    "message": "Изменить"
+  },
+  "edit_displayname_dialog_description_986a7d60": {
+    "message": "Изменить описание диалога { displayName }"
+  },
+  "edit_in_json_75d0d754": {
+    "message": "Изменить в JSON"
+  },
+  "edit_kb_name_5e2d8c5b": {
+    "message": "Изменить имя базы знаний"
+  },
+  "edit_property_dd6a1172": {
+    "message": "Изменить свойство"
+  },
+  "edit_schema_a2ab5695": {
+    "message": "Edit schema"
+  },
+  "edit_source_45af68b4": {
+    "message": "Изменить источник"
+  },
+  "ejecting_runtime_f6c90614": {
+    "message": "Выполняется извлечение среды выполнения..."
+  },
+  "emit_a_custom_event_78cf318b": {
+    "message": "Выдача пользовательского события"
+  },
+  "emit_a_telemetry_track_event_e2442842": {
+    "message": "Выдача события отслеживания телеметрии"
+  },
+  "emit_a_trace_event_f653ae84": {
+    "message": "Выдать событие трассировки"
+  },
+  "emit_event_32aa6583": {
+    "message": "Выдача события"
+  },
+  "empty_qna_icon_34c180c6": {
+    "message": "Пустой значок службы вопросов и ответов"
+  },
+  "enable_6f5d1328": {
+    "message": "Включить"
+  },
+  "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
+    "message": "Включение номеров строк, чтобы ссылаться на строки кода по номеру."
+  },
+  "enable_multi_turn_extraction_8a168892": {
+    "message": "Включить многоэтапное извлечение"
+  },
+  "enabled_ba7cab66": {
+    "message": "Включено"
+  },
+  "end_dialog_8f562a4c": {
+    "message": "Завершение диалога"
+  },
+  "end_this_dialog_3ed0d50b": {
+    "message": "Завершить этот диалог"
+  },
+  "end_turn_6ab71cea": {
+    "message": "Завершение этапа"
+  },
+  "end_turn_ca85b3d4": {
+    "message": "Завершить этап"
+  },
+  "endofconversation_activity_4aa21306": {
+    "message": "Действие EndOfConversation"
+  },
+  "english_us_1d884ccd": {
+    "message": "Английский (США)"
+  },
+  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
+    "message": "Введите URL-адрес манифеста, чтобы добавить новый навык для бота."
+  },
+  "enter_a_max_value_14e8ba52": {
+    "message": "Введите максимальное значение"
+  },
+  "enter_a_min_value_c3030813": {
+    "message": "Введите минимальное значение"
+  },
+  "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
+    "message": "Введите URL-адрес или перейдите к отправке файла "
+  },
+  "enterprise_assistant_434df551": {
+    "message": "Корпоративный помощник"
+  },
+  "entities_ef09392c": {
+    "message": "Сущности"
+  },
+  "environment_68aed6d3": {
+    "message": "Среда"
+  },
+  "equals_expression_47199f4e": {
+    "message": "Выражение \"равно\""
+  },
+  "error_98e81528": {
+    "message": "Ошибка"
+  },
+  "error_afac7133": {
+    "message": "Ошибка:"
+  },
+  "error_event_c079b608": {
+    "message": "Событие ошибки"
+  },
+  "error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980": {
+    "message": "Ошибка: у { func } нет средства оценки, это не встроенная или пользовательская функция"
+  },
+  "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
+    "message": "Ошибка в схеме пользовательского интерфейса для { title }: { errorMsg }\n{ options }"
+  },
+  "error_occured_ejecting_runtime_76bb48e7": {
+    "message": "Ошибка при извлечении среды выполнения."
+  },
+  "error_occurred_5549a6b4": {
+    "message": "Произошла ошибка"
+  },
+  "error_processing_schema_2c707cf3": {
+    "message": "Ошибка при обработке схемы"
+  },
+  "event_activity_2067a94b": {
+    "message": "Действие события"
+  },
+  "event_created_e9e05afc": {
+    "message": "Событие создано"
+  },
+  "event_focused_51e447f3": {
+    "message": "Событие в фокусе"
+  },
+  "event_received_457f99d6": {
+    "message": "Событие получено"
+  },
+  "events_cf7a8c50": {
+    "message": "События"
+  },
+  "example_bot_list_9be1d563": {
+    "message": "Пример списка ботов"
+  },
+  "examples_c435f08c": {
+    "message": "Примеры"
+  },
+  "existing_files_in_scripts_folder_will_be_overwritt_afa8d787": {
+    "message": "Существующие файлы в сценарии или папке будут перезаписаны. Вы действительно хотите продолжить?"
+  },
+  "expand_2f2fadbd": {
+    "message": "Развернуть"
+  },
+  "expand_navigation_20330d1d": {
+    "message": "Развернуть панель навигации"
+  },
+  "expected_responses_intent_intentname_44b051c": {
+    "message": "Ожидаемые ответы (намерение: #{ intentName })"
+  },
+  "export_as_skill_764cf284": {
+    "message": "Экспортировать как навык"
+  },
+  "export_assets_to_zip_d2d798ab": {
+    "message": "Экспорт ресурсов в ZIP-файл"
+  },
+  "export_de71cd8e": {
+    "message": "Экспортировать"
+  },
+  "expression_7f906a13": {
+    "message": "Выражение"
+  },
+  "expression_starting_with_a750efc8": {
+    "message": "Выражение, начинающееся с =."
+  },
+  "expression_to_evaluate_ce4095b1": {
+    "message": "Выражение для вычисления."
+  },
+  "extensions_7250a0bb": {
+    "message": "Расширения"
+  },
+  "external_resources_will_not_be_changed_c08b0009": {
+    "message": "Внешние ресурсы не будут изменены."
+  },
+  "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
+    "message": "Вы можете извлечь пары \"вопрос-ответ\" из часто задаваемых вопросов в Интернете, руководств по продуктам или других файлов. Поддерживаются форматы TSV, PDF, DOC, DOCX, XLSX, где вопросы и ответы расположены по очереди. Получите дополнительные сведения об источниках базы знаний. Пропустите этот шаг, чтобы добавить вопросы и ответы вручную после создания. Число источников и размер файлов, которые можно добавить, зависят от выбранного SKU службы вопросов и ответов. Получите дополнительные сведения об SKU для QnA Maker."
+  },
+  "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
+    "message": "Вы можете извлечь пары \"вопрос-ответ\" из часто задаваемых вопросов в Интернете, руководств по продуктам или других файлов. Поддерживаются форматы TSV, PDF, DOC, DOCX, XLSX, где вопросы и ответы расположены по очереди. "
+  },
+  "extracting_qna_pairs_from_url_b0331bba": {
+    "message": "Извлечение пар \"вопрос-ответ\" из { url }"
+  },
+  "fallback_text_e5ff1cb7": {
+    "message": "Резервный текст"
+  },
+  "false_2f39ee6d": {
+    "message": "false"
+  },
+  "false_eef8c169": {
+    "message": "False"
+  },
+  "field_set_6e7d7f67": {
+    "message": "Набор полей"
+  },
+  "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
+    "message": "все поля должны быть либо строками, либо объектами fieldset"
+  },
+  "file_name_8fd421ff": {
+    "message": "Имя файла"
+  },
+  "file_not_found_9eec054c": {
+    "message": "Файл не найден"
+  },
+  "file_or_attachment_5467e604": {
+    "message": "Файл или вложение"
+  },
+  "file_type_fd1ba7ee": {
+    "message": "Тип файла"
+  },
+  "filter_dialog_de3ce43f": {
+    "message": "Фильтрация диалога"
+  },
+  "firstselector_a3daca5d": {
+    "message": "FirstSelector"
+  },
+  "folder_foldername_already_exists_4a2260e9": {
+    "message": "папка { folderName } уже существует"
+  },
+  "for_each_def04c48": {
+    "message": "Для каждой"
+  },
+  "for_each_page_3b4d4b69": {
+    "message": "Для каждой страницы"
+  },
+  "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
+    "message": "Для свойств списка типов (или перечисления) бот принимает только определенные вами значения. После создания диалога можно указать синонимы для каждого значения."
+  },
+  "form_dialog_schema_actions_c9f1c26": {
+    "message": "Действия схемы диалога формы"
+  },
+  "form_editor_7c2b02f0": {
+    "message": "редактор форм"
+  },
+  "form_title_baf85c7e": {
+    "message": "заголовок формы"
+  },
+  "form_wide_operations_1c1a73eb": {
+    "message": "form-wide operations"
+  },
+  "forms_380ab2ae": {
+    "message": "Формы"
+  },
+  "fromtemplatename_does_not_exist_d429483c": {
+    "message": "fromTemplateName не существует"
+  },
+  "gb_7570760e": {
+    "message": "ГБ"
+  },
+  "general_24ac26a8": {
+    "message": "Общие"
+  },
+  "generate_44e33e72": {
+    "message": "Создать"
+  },
+  "generate_dialog_b80a85b2": {
+    "message": "Создать диалог"
+  },
+  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
+  },
+  "get_a_new_copy_of_the_runtime_code_84970bf": {
+    "message": "Получение новой копии кода среды выполнения"
+  },
+  "get_started_50c13c6c": {
+    "message": "Вы можете приступить к работе."
+  },
+  "getting_help_ab6811b0": {
+    "message": "Получение справки"
+  },
+  "getting_started_f45a7e87": {
+    "message": "Приступая к работе"
+  },
+  "give_your_bot_personality_multi_language_capabilit_f00c2c93": {
+    "message": "Задайте для своего бота индивидуальный стиль поведения, поддержку нескольких языков и многое другое; вы можете изменить все это позже в параметрах бота."
+  },
+  "go_to_qna_all_up_view_page_d475333d": {
+    "message": "Переход на страницу общего представления для службы вопросов и ответов."
+  },
+  "got_it_2c06b54a": {
+    "message": "Все понятно."
+  },
+  "greeting_f906f962": {
+    "message": "Приветствие"
+  },
+  "greeting_message_ce77bbb2": {
+    "message": "Приветственное сообщение"
+  },
+  "handle_a_condition_f32eb8d": {
+    "message": "Обработка условия"
+  },
+  "handoff_activity_14363a20": {
+    "message": "Действие передачи"
+  },
+  "handover_to_human_1a619574": {
+    "message": "Передать человеку"
+  },
+  "here_s_what_we_know_4e9c1731": {
+    "message": "Вот что нам известно..."
+  },
+  "hi_there_here_are_some_things_that_i_can_do_32909722": {
+    "message": "Привет! Вот несколько вещей, которые я могу делать."
+  },
+  "hide_code_5dcffa94": {
+    "message": "Скрыть код"
+  },
+  "home_351838cd": {
+    "message": "Главная"
+  },
+  "hospitality_assistant_c330e403": {
+    "message": "Помощник по гостиничным и ресторанным услугам"
+  },
+  "hosts_your_bot_application_9dd01ffc": {
+    "message": "Содержит приложение бота."
+  },
+  "hosts_your_qna_maker_knowledgebases_64713aee": {
+    "message": "Содержит базы знаний QnA Maker"
+  },
+  "http_request_79847109": {
+    "message": "HTTP-запрос"
+  },
+  "i_am_sorry_i_didn_t_understand_that_f86e307a": {
+    "message": "К сожалению, я это не понимаю"
+  },
+  "i_want_to_delete_this_bot_f81a4735": {
+    "message": "Я хочу удалить этот бот"
+  },
+  "icon_name_is_file_c80dacae": {
+    "message": "{ icon } имеет имя { file }"
+  },
+  "iconname_file_icon_29976c8e": {
+    "message": "Значок файла { iconName }"
+  },
+  "id_already_exists_please_enter_a_unique_file_name_174913a3": {
+    "message": "{ id } уже существует. Введите уникальное имя файла."
+  },
+  "if_condition_56c9be4a": {
+    "message": "Условие If"
+  },
+  "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
+    "message": "Если эта проблема сохраняется, зарегистрируйте ее в"
+  },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
+  },
+  "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
+    "message": "Если у вас уже есть учетная запись LUIS, укажите приведенные ниже сведения. Если у вас еще нет такой учетной записи, сначала создайте ее (бесплатно)."
+  },
+  "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
+    "message": "Если у вас уже есть учетная запись службы вопросов и ответов, укажите приведенные ниже сведения. Если у вас еще нет такой учетной записи, сначала создайте ее (бесплатно)."
+  },
+  "import_schema_75659c5f": {
+    "message": "Импортировать схему"
+  },
+  "in_production_5a70b8b4": {
+    "message": "В рабочей среде"
+  },
+  "in_test_63c32694": {
+    "message": "Проверяется"
+  },
+  "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
+    "message": "В мастере <b>Создать триггер</b> укажите тип триггера <i>Действия</i> в раскрывающемся списке. Затем задайте в поле <b>Тип действия</b> значение <i>Приветствие (действие ConversationUpdate)</i> и нажмите кнопку <b>Отправить</b>."
+  },
+  "input_1d1d9b8e": {
+    "message": "Ввод"
+  },
+  "install_microsoft_net_core_sdk_2de509f0": {
+    "message": "Установить пакет SDK для Microsoft .NET Core"
+  },
+  "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
+    "message": "Вы можете ежедневно устанавливать предварительные версии Composer, чтобы получить доступ к новейшим возможностям и опробовать их. <a>Дополнительные сведения</a>."
+  },
+  "install_the_update_and_restart_composer_fac30a61": {
+    "message": "Установите обновление и перезапустите Composer."
+  },
+  "integer_7f378275": {
+    "message": "целое число"
+  },
+  "integer_b08abbe9": {
+    "message": "Целое число"
+  },
+  "integer_constant_650191ba": {
+    "message": "Целочисленная константа."
+  },
+  "integer_constant_or_expression_to_evaluate_ec4a17da": {
+    "message": "Целочисленная константа или выражение для вычисления."
+  },
+  "integer_or_expression_107f60fb": {
+    "message": "Целое число или выражение"
+  },
+  "intent_2291200b": {
+    "message": "Намерение"
+  },
+  "intent_recognized_c3840853": {
+    "message": "Намерение распознано"
+  },
+  "intentname_is_missing_or_empty_e49db2f8": {
+    "message": "Значение intentName отсутствует или пусто"
+  },
+  "interpolated_string_c96053f2": {
+    "message": "Интерполированная строка."
+  },
+  "interpolated_string_e04923d3": {
+    "message": "Интерполированная строка"
+  },
+  "interpolated_string_or_expression_to_evaluate_ba0b0ba": {
+    "message": "Интерполированная строка или выражение для вычисления."
+  },
+  "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
+    "message": "Знакомство с ключевыми концепциями и элементами взаимодействия с пользователем для Composer."
+  },
+  "invoke_activity_87df4903": {
+    "message": "Действие вызова"
+  },
+  "is_missing_or_empty_a551462e": {
+    "message": "отсутствует или пуст"
+  },
+  "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
+    "message": "Это не встроенная или пользовательская функция."
+  },
+  "item_actions_22d0242": {
+    "message": "Действия элемента"
+  },
+  "item_actions_cd903bde": {
+    "message": "Действия элемента"
+  },
+  "item_added_f3910bed": {
+    "message": "добавлен элемент"
+  },
+  "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
+    "message": "Найдено схем: { itemCount, plural,\n     =0 {отсутствуют}\n     =1 {одна}\n  other {#}\n}.\n            { itemCount, select,\n      0 {}\n  other {Нажмите клавишу СТРЕЛКА ВНИЗ для перемещения по результатам поиска}\n}"
+  },
+  "jan_28_2020_8beb36dc": {
+    "message": "28 января 2020 г."
+  },
+  "kb_d9c53902": {
+    "message": "КБ"
+  },
+  "key_cannot_be_blank_dccc1b46": {
+    "message": "Ключ не может быть пустым"
+  },
+  "key_f2a919d5": {
+    "message": "Ключ"
+  },
+  "keys_must_be_unique_2028cef3": {
+    "message": "Ключи должны быть уникальными"
+  },
+  "knowledge_base_name_7d83bbe4": {
+    "message": "Имя базы знаний"
+  },
+  "knowledge_source_dd66f38f": {
+    "message": "Источник знаний"
+  },
+  "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
+    "message": "L{ startLine }:{ startCharacter } — L{ endLine }:{ endCharacter } "
+  },
+  "language_generation_1876f6d6": {
+    "message": "Генерирование речи"
+  },
+  "language_generation_file_80c08efe": {
+    "message": "файл генерирования речи"
+  },
+  "language_understanding_9ae3f1f6": {
+    "message": "Распознавание речи"
+  },
+  "language_understanding_file_a65abc2c": {
+    "message": "файл распознавания речи"
+  },
+  "languagepolicy_e754ad28": {
+    "message": "LanguagePolicy"
+  },
+  "last_modified_time_is_time_b1497d3": {
+    "message": "Время последнего изменения: { time }"
+  },
+  "learn_more_a79a7918": {
+    "message": "Дополнительные сведения"
+  },
+  "learn_more_about_knowledge_base_sources_24369b09": {
+    "message": "Дополнительные сведения об источниках базы знаний. "
+  },
+  "learn_more_about_title_d1d3edbe": {
+    "message": "Дополнительные сведения: { title }"
+  },
+  "learn_more_c08939e8": {
+    "message": "Дополнительные сведения."
+  },
+  "learn_the_basics_2d9ae7df": {
+    "message": "Знакомство с основами"
+  },
+  "leave_product_tour_49585718": {
+    "message": "Выйти из обзора продукта?"
+  },
+  "lg_editor_ee0184e6": {
+    "message": "Редактор LG"
+  },
+  "lg_file_already_exist_55195d20": {
+    "message": "файл LG уже существует"
+  },
+  "lg_file_id_not_found_6bd6869b": {
+    "message": "Файл LG { id } не найден"
+  },
+  "lg_language_client_7892c4c1": {
+    "message": "Клиент, использующий язык LG"
+  },
+  "lg_navigation_pane_97b15c3d": {
+    "message": "Область навигации LG"
+  },
+  "line_numbers_1bfa7fb": {
+    "message": "Номера строк"
+  },
+  "line_startline_startcharacter_line_endline_endchar_372bb2f4": {
+    "message": "строка { startLine }:{ startCharacter } — строка { endLine }:{ endCharacter }"
+  },
+  "link_to_where_this_luis_intent_is_defined_9be25fb7": {
+    "message": "ссылка на место, где определено это намерение LUIS"
+  },
+  "list_a034633b": {
+    "message": "список"
+  },
+  "list_count_values_33ea7088": {
+    "message": "список — число значений: { count }"
+  },
+  "list_view_e33843f0": {
+    "message": "Представление списка"
+  },
+  "load_form_dialog_schema_templates_error_6a348e76": {
+    "message": "Ошибка при загрузке шаблонов схемы диалога формы"
+  },
+  "loading_25990131": {
+    "message": "Идет загрузка..."
+  },
+  "loading_bde52856": {
+    "message": "Идет загрузка"
+  },
+  "location_e17bd402": {
+    "message": "Расположение"
+  },
+  "location_is_location_8c17b5de": {
+    "message": "Расположение: { location }"
+  },
+  "log_to_console_4fc23e34": {
+    "message": "Вход в консоль"
+  },
+  "login_6f3d6249": {
+    "message": "Вход"
+  },
+  "login_to_composer_eb42b41": {
+    "message": "Вход в Composer"
+  },
+  "loop_for_each_item_53eb7c5b": {
+    "message": "Цикл: для каждого элемента"
+  },
+  "loop_for_each_item_e09537ae": {
+    "message": "Цикл: для каждого элемента"
+  },
+  "loop_for_each_page_multiple_items_733e7f41": {
+    "message": "Цикл: для каждой страницы (несколько элементов)"
+  },
+  "looping_ddae56ff": {
+    "message": "Цикл"
+  },
+  "lu_editor_d09fb2b0": {
+    "message": "Редактор LU"
+  },
+  "lu_file_already_exist_7f118089": {
+    "message": "файл LU уже существует"
+  },
+  "lu_file_id_not_found_8732d33e": {
+    "message": "Файл LU { id } не найден"
+  },
+  "lu_language_client_bbffcd7b": {
+    "message": "Клиент, использующий язык LU"
+  },
+  "lu_navigation_pane_54dc5587": {
+    "message": "Область навигации LU"
+  },
+  "luis_add4bbe3": {
+    "message": "LUIS"
+  },
+  "luis_authoring_key_cfaba7dd": {
+    "message": "Ключ разработки LUIS:"
+  },
+  "luis_authoring_region_b142f97b": {
+    "message": "Область разработки LUIS"
+  },
+  "main_dialog_eed5c847": {
+    "message": "Главный диалог"
+  },
+  "make_a_copy_77d1233": {
+    "message": "Создать копию"
+  },
+  "manage_properties_c9fa4456": {
+    "message": "Управление свойствами"
+  },
+  "manifest_url_30824e88": {
+    "message": "URL-адрес манифеста"
+  },
+  "manifest_url_can_not_be_accessed_a7f147b2": {
+    "message": "Не удается обратиться по URL-адресу манифеста"
+  },
+  "manifest_version_1edc004a": {
+    "message": "Версия манифеста"
+  },
+  "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
+    "message": "Вручную добавьте пары вопрос-ответ для создания базы знаний"
+  },
+  "maximum_f0e8e5e4": {
+    "message": "Макс."
+  },
+  "mb_8f9f9e84": {
+    "message": "МБ"
+  },
+  "menu_items_2d66492c": {
+    "message": "Пункты меню"
+  },
+  "message_5c38209d": {
+    "message": "Сообщение"
+  },
+  "message_deleted_628eef3a": {
+    "message": "Сообщение удалено"
+  },
+  "message_deleted_activity_85dd8915": {
+    "message": "Действие удаления сообщения"
+  },
+  "message_reaction_3704d790": {
+    "message": "Реакция на сообщение"
+  },
+  "message_reaction_activity_379944e7": {
+    "message": "Действие реакции на сообщение"
+  },
+  "message_received_5abfe9a0": {
+    "message": "Сообщение получено"
+  },
+  "message_received_activity_1ff7c2a4": {
+    "message": "Действие получения сообщения"
+  },
+  "message_updated_4f2e37fe": {
+    "message": "Сообщение обновлено"
+  },
+  "message_updated_activity_4997737e": {
+    "message": "Действие обновления сообщения"
+  },
+  "microsoft_app_id_a7f3e591": {
+    "message": "Идентификатор приложения Майкрософт"
+  },
+  "microsoft_app_password_737ebc90": {
+    "message": "Пароль приложения Майкрософт"
+  },
+  "minimap_beb3be27": {
+    "message": "Мини-карта"
+  },
+  "minimum_f31b05ab": {
+    "message": "Мин."
+  },
+  "missing_definition_for_defname_33f2b594": {
+    "message": "Отсутствует определение для { defName }"
+  },
+  "missing_fields_1c88ab71": {
+    "message": "отсутствующие поля"
+  },
+  "modification_rejected_6a6e8322": {
+    "message": "Изменение отклонено"
+  },
+  "modify_active_dialog_edcf4a45": {
+    "message": "Изменить активный диалог"
+  },
+  "modify_this_dialog_3c38af24": {
+    "message": "Изменить этот диалог"
+  },
+  "more_options_e89670cf": {
+    "message": "Дополнительные параметры"
+  },
+  "mostspecificselector_2cf1a6ae": {
+    "message": "MostSpecificSelector"
+  },
+  "move_abf00365": {
+    "message": "Переместить"
+  },
+  "move_down_eaae3426": {
+    "message": "Вниз"
+  },
+  "move_up_b1c4d3a5": {
+    "message": "Вверх"
+  },
+  "msft_ignite_ai_show_e131edef": {
+    "message": "Мероприятие MSFT Ignite, посвященное ИИ"
+  },
+  "multi_choice_839b54bb": {
+    "message": "Множественный выбор"
+  },
+  "multiple_wildcards_26f50b6c": {
+    "message": "несколько подстановочных знаков"
+  },
+  "must_be_an_expression_error_477cbda6": {
+    "message": "должно быть выражением: { error }"
+  },
+  "must_have_a_name_d5c5c464": {
+    "message": "Требуется имя"
+  },
+  "my_publish_profile_2ed56828": {
+    "message": "Мой профиль публикации"
+  },
+  "name_1aed4a1b": {
+    "message": "Имя"
+  },
+  "name_and_save_your_skill_manifest_cfd672b7": {
+    "message": "Именование и сохранение манифеста навыка."
+  },
+  "name_cannot_include_special_characters_or_spaces_59a1950b": {
+    "message": "Имя не может содержать специальные знаки или пробелы"
+  },
+  "name_copy_55d27c1a": {
+    "message": "{ name }_копия"
+  },
+  "name_is_name_abc564f9": {
+    "message": "Имя: { name }"
+  },
+  "name_is_required_29d28f8d": {
+    "message": "Требуется { name }"
+  },
+  "name_of_skill_dialog_to_call_201707f3": {
+    "message": "Имя диалога навыков для вызова"
+  },
+  "name_of_the_property_f3cae657": {
+    "message": "Имя свойства"
+  },
+  "navigation_control_94f2649e": {
+    "message": "элемент навигации"
+  },
+  "navigation_pane_e587b73c": {
+    "message": "Область навигации"
+  },
+  "navigation_panel_530ae4ac": {
+    "message": "Панель навигации"
+  },
+  "navigation_path_8b299e64": {
+    "message": "Путь навигации"
+  },
+  "navigation_to_see_actions_3be545c9": {
+    "message": "навигация для просмотра действий"
+  },
+  "new_13daf639": {
+    "message": "Создать"
+  },
+  "new_template_49e6f0f2": {
+    "message": "Создать шаблон"
+  },
+  "new_trigger_331c811b": {
+    "message": "Новый триггер .."
+  },
+  "new_update_available_30534ea5": {
+    "message": "Доступно новое обновление"
+  },
+  "new_value_3c1ce474": {
+    "message": "Новое значение"
+  },
+  "newsectionplaceholdersectionname_5fc0d21": {
+    "message": "_NewSectionPlaceHolderSectionName"
+  },
+  "next_40e12421": {
+    "message": "Далее"
+  },
+  "no_editor_for_type_8b5593c5": {
+    "message": "Нет редактора для { type }"
+  },
+  "no_extensions_installed_4b925277": {
+    "message": "Расширения не установлены"
+  },
+  "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
+    "message": "Нет схемы диалога формы, соответствующей условиям фильтра."
+  },
+  "no_lu_file_with_name_id_fb21315d": {
+    "message": "Отсутствует файл LU с именем { id }"
+  },
+  "no_lu_or_qna_file_with_name_id_21cfe9dc": {
+    "message": "Отсутствует файл LU или файл вопросов и ответов с именем { id }"
+  },
+  "no_name_e082310e": {
+    "message": "[без имени]"
+  },
+  "no_search_results_1ba50423": {
+    "message": "Нет результатов поиска"
+  },
+  "no_updates_available_cecd904d": {
+    "message": "Нет доступных обновлений"
+  },
+  "no_wildcard_ff439e76": {
+    "message": "без подстановочного знака"
+  },
+  "node_menu_e2aa8092": {
+    "message": "Меню узла"
+  },
+  "not_a_single_template_e37f894": {
+    "message": "Не один шаблон"
+  },
+  "not_yet_published_669e37b3": {
+    "message": "Еще не опубликовано"
+  },
+  "notes_c42e0fd5": {
+    "message": "Примечания"
+  },
+  "notification_list_ee2abb6c": {
+    "message": "Список уведомлений"
+  },
+  "notification_message_msg_7d55d08e": {
+    "message": "Уведомление { msg }"
+  },
+  "notification_type_263c145d": {
+    "message": "Тип уведомления"
+  },
+  "notifications_cbfa7704": {
+    "message": "Уведомления"
+  },
+  "nov_12_2019_96ec5473": {
+    "message": "12 ноября 2019 г."
+  },
+  "number_a6dc44e": {
+    "message": "Число"
+  },
+  "number_constant_1938e96e": {
+    "message": "Числовая константа."
+  },
+  "number_constant_or_expression_to_evaluate_1098771": {
+    "message": "Числовая константа или выражение для вычисления."
+  },
+  "number_dc1c178": {
+    "message": "число"
+  },
+  "number_or_expression_55c7f9f": {
+    "message": "Число или выражение"
+  },
+  "oauth_login_b6aa9534": {
+    "message": "Вход OAuth"
+  },
+  "object_345070f6": {
+    "message": "Объект"
+  },
+  "object_constant_77052b91": {
+    "message": "Константа объекта."
+  },
+  "object_or_expression_89903fa1": {
+    "message": "Объект или выражение"
+  },
+  "object_or_expression_to_evaluate_699c8827": {
+    "message": "Объект или выражение для вычисления."
+  },
+  "off_5385ef3f": {
+    "message": "Откл."
+  },
+  "ok_c47544a2": {
+    "message": "ОК"
+  },
+  "ok_ff1b646a": {
+    "message": "ОК"
+  },
+  "okay_1772bbeb": {
+    "message": "ОК"
+  },
+  "on_8f7190e5": {
+    "message": "Вкл."
+  },
+  "onboarding_8407871c": {
+    "message": "Подключение"
+  },
+  "ondialogevents_types_3dc569b5": {
+    "message": "Типы OnDialogEvents"
+  },
+  "open_e0beb7b9": {
+    "message": "Открыть"
+  },
+  "open_inline_editor_a5aabcfa": {
+    "message": "Открыть встроенный редактор"
+  },
+  "open_notification_panel_5796edb3": {
+    "message": "Open notification panel"
+  },
+  "optional_221bcc9d": {
+    "message": "Необязательно"
+  },
+  "optional_db6daecb": {
+    "message": "необязательно"
+  },
+  "optional_properties_2c23c7c6": {
+    "message": "Необязательные свойства"
+  },
+  "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
+    "message": "Необязательный параметр. Задание максимального значения позволяет боту отклонить слишком большое значение и предложить пользователю ввести новое значение."
+  },
+  "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
+    "message": "Необязательный параметр. Задание минимального значения позволяет боту отклонить слишком маленькое значение и предложить пользователю ввести новое значение."
+  },
+  "or_4f7d4edb": {
+    "message": "Или: "
+  },
+  "origin_lg_file_not_found_in_store_d194cdbc": {
+    "message": "исходный файл LG не найден в хранилище"
+  },
+  "origin_lu_file_not_found_in_store_19e5cc8f": {
+    "message": "исходный файл LU не найден в хранилище"
+  },
+  "original_ce7b7e64": {
+    "message": " - Исходный"
+  },
+  "other_1c6d9c79": {
+    "message": "Другое"
+  },
+  "output_5023cf84": {
+    "message": "Вывод"
+  },
+  "page_number_cdee4179": {
+    "message": "Номер страницы"
+  },
+  "parse_failed_at_name_error_8f562bda": {
+    "message": "Сбой анализа в { name }: { error }"
+  },
+  "paste_5963d1c1": {
+    "message": "Вставить"
+  },
+  "personality_1381bf78": {
+    "message": "{ personality }"
+  },
+  "personality_cf47985f": {
+    "message": "Индивидуальность"
+  },
+  "personality_choice_3dfd8268": {
+    "message": "Выбор индивидуальности"
+  },
+  "please_add_at_least_minitems_endpoint_5439fd74": {
+    "message": "Добавьте конечную точку, удовлетворяющую следующим минимальным требованиям: { minItems }"
+  },
+  "please_enter_a_value_for_key_77cfc097": {
+    "message": "Введите значение для { key }"
+  },
+  "please_enter_an_event_name_a148275a": {
+    "message": "Введите имя события"
+  },
+  "please_input_a_manifest_url_d726edbf": {
+    "message": "Введите URL-адрес манифеста"
+  },
+  "please_input_regex_pattern_5cd659a2": {
+    "message": "Введите шаблон регулярного выражения"
+  },
+  "please_log_in_before_continuing_b6eace13": {
+    "message": "Прежде чем продолжить, выполните вход."
+  },
+  "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
+    "message": "Вернитесь в представление конструирования, чтобы начать ознакомительное обучение."
+  },
+  "please_select_a_event_type_200c4c9f": {
+    "message": "Выберите тип события"
+  },
+  "please_select_a_specific_qna_file_to_import_qna_d71d871": {
+    "message": "Выберите определенный файл вопросов и ответов для импорта"
+  },
+  "please_select_a_trigger_type_67417abb": {
+    "message": "Выберите тип триггера"
+  },
+  "please_select_a_valid_endpoint_bf608af1": {
+    "message": "Выберите допустимую конечную точку"
+  },
+  "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
+    "message": "Выберите версию схемы манифеста"
+  },
+  "please_select_an_activity_type_92f4a8a1": {
+    "message": "Выберите тип действия"
+  },
+  "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
+    "message": "нажмите клавишу ВВОД, чтобы добавить этот элемент, или клавишу TAB, чтобы перейти к следующему интерактивному элементу"
+  },
+  "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
+    "message": "нажмите клавишу ВВОД, чтобы добавить это имя и перейти к следующей строке, или клавишу TAB, чтобы перейти к полю значения"
+  },
+  "preview_features_e279bac5": {
+    "message": "Preview features"
+  },
+  "previous_bd2ac015": {
+    "message": "Назад"
+  },
+  "previous_folder_e7eeb306": {
+    "message": "предыдущая папка"
+  },
+  "privacy_290109ea": {
+    "message": "Конфиденциальность"
+  },
+  "privacy_button_b58e437": {
+    "message": "Кнопка сведений о конфиденциальности"
+  },
+  "progress_of_total_87de8616": {
+    "message": "{ progress }% от { total }"
+  },
+  "prompt_configurations_ab47cd3f": {
+    "message": "Конфигурации подсказок"
+  },
+  "prompt_for_a_date_5d2c689e": {
+    "message": "Подсказка для даты"
+  },
+  "prompt_for_a_date_or_a_time_d2df7f90": {
+    "message": "Подсказка для даты или времени"
+  },
+  "prompt_for_a_file_or_an_attachment_1bf18e7e": {
+    "message": "Подсказка для файла или вложения"
+  },
+  "prompt_for_a_number_84999edb": {
+    "message": "Подсказка для числа"
+  },
+  "prompt_for_attachment_727d4fac": {
+    "message": "Подсказка для вложения"
+  },
+  "prompt_for_confirmation_dc85565c": {
+    "message": "Подсказка для подтверждения"
+  },
+  "prompt_for_text_5c524f80": {
+    "message": "Подсказка для текста"
+  },
+  "prompt_with_multi_choice_f428542f": {
+    "message": "Предложение с множественным выбором"
+  },
+  "property_actions_9c1a20d9": {
+    "message": "Действия свойств"
+  },
+  "property_description_8d21ea2e": {
+    "message": "Описание свойства."
+  },
+  "property_editor_preferences_ad7a4b62": {
+    "message": "Настройки редактора свойств"
+  },
+  "property_has_error_s_please_fix_the_error_s_for_th_e994c143": {
+    "message": "Свойство содержит ошибки, исправьте их."
+  },
+  "property_name_914371f5": {
+    "message": "Имя свойства"
+  },
+  "property_name_is_required_5bc57d97": {
+    "message": "Property name is required!"
+  },
+  "property_title_f2b443b7": {
+    "message": "Заголовок свойства"
+  },
+  "property_type_95689fa5": {
+    "message": "Тип свойства."
+  },
+  "property_type_e38cf7e4": {
+    "message": "Тип свойства"
+  },
+  "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
+    "message": "Укажите краткое описание. Оно появится в списке журналов публикации."
+  },
+  "provisioning_summary_2be9422f": {
+    "message": "Сводка по подготовке"
+  },
+  "pseudo_1a319287": {
+    "message": "Псевдоэлемент"
+  },
+  "publish_5211dca3": {
+    "message": "Публикация"
+  },
+  "publish_configuration_d759a4e3": {
+    "message": "Опубликовать конфигурацию"
+  },
+  "publish_destination_type_5f8c200a": {
+    "message": "Тип назначения публикации"
+  },
+  "publish_models_9a36752a": {
+    "message": "Опубликовать модели"
+  },
+  "publish_profiles_cf8d307b": {
+    "message": "Профили публикации"
+  },
+  "publish_to_selected_profile_c0998a2": {
+    "message": "Опубликовать в выбранном профиле"
+  },
+  "published_4bb5209e": {
+    "message": "Опубликовано"
+  },
+  "publishing_d63a8f2d": {
+    "message": "Публикация"
+  },
+  "qna_28ee5e26": {
+    "message": "Вопросы и ответы"
+  },
+  "qna_editor_9eb94b02": {
+    "message": "Редактор вопросов и ответов"
+  },
+  "qna_file_37705cb7": {
+    "message": "файл вопросов и ответов"
+  },
+  "qna_intent_recognized_49c3d797": {
+    "message": "Намерение вопросов и ответов распознано"
+  },
+  "qna_maker_azure_search_service_88a403db": {
+    "message": "Служба Поиск Azure для QnA Maker"
+  },
+  "qna_maker_c313ed6e": {
+    "message": "QnA Maker"
+  },
+  "qna_maker_web_app_3da183bd": {
+    "message": "Веб-приложение QnA Maker"
+  },
+  "qna_navigation_pane_b79ebcbf": {
+    "message": "Область навигации службы вопросов и ответов"
+  },
+  "qna_region_5a864ef8": {
+    "message": "Регион службы вопросов и ответов"
+  },
+  "qna_subscription_key_ed72a47": {
+    "message": "Ключ подписки службы вопросов и ответов:"
+  },
+  "question_9121487": {
+    "message": "Вопрос"
+  },
+  "question_is_content_3952e657": {
+    "message": "Вопрос: { content }"
+  },
+  "question_is_empty_now_f0b5733e": {
+    "message": "Сейчас вопрос пуст"
+  },
+  "randomselector_4a5274f1": {
+    "message": "RandomSelector"
+  },
+  "range_selection_30caeea5": {
+    "message": "Выбор диапазона"
+  },
+  "re_prompt_for_input_c3b5b3ab": {
+    "message": "Повторная подсказка для ввода"
+  },
+  "recent_bots_53585911": {
+    "message": "Последние боты"
+  },
+  "recognizer_type_dc591e16": {
+    "message": "Тип распознавателя"
+  },
+  "recognizers_cefce9d1": {
+    "message": "Распознаватели"
+  },
+  "redo_363c58b7": {
+    "message": "Вернуть"
+  },
+  "redo_is_not_supported_b743e4dc": {
+    "message": "Возврат не поддерживается"
+  },
+  "refer_to_the_syntax_documentation_here_df8dc9b4": {
+    "message": "См. документацию по синтаксису."
+  },
+  "regex_intent_is_already_defined_df095c1f": {
+    "message": "Регулярное выражение { intent } уже определено"
+  },
+  "regular_expression_recognizer_44664557": {
+    "message": "Распознаватель регулярных выражений"
+  },
+  "release_1af20f26": {
+    "message": "Выпуск:"
+  },
+  "reloading_49d2f661": {
+    "message": "Выполняется перезагрузка"
+  },
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
+  },
+  "remove_f47dc62a": {
+    "message": "Удалить"
+  },
+  "remove_this_dialog_6146716c": {
+    "message": "Удалить этот диалог"
+  },
+  "remove_this_trigger_622d866d": {
+    "message": "Удалить этот триггер"
+  },
+  "repeat_this_dialog_83ca994e": {
+    "message": "Повторить этот диалог"
+  },
+  "replace_this_dialog_e304015e": {
+    "message": "Заменить этот диалог"
+  },
+  "reprompt_dialog_event_c42d2c33": {
+    "message": "Событие повторной подсказки диалога"
+  },
+  "required_5f7ef8c0": {
+    "message": "Обязательный"
+  },
+  "required_a6089a96": {
+    "message": "обязательно"
+  },
+  "required_properties_dfb0350d": {
+    "message": "Обязательные свойства"
+  },
+  "requiredtext_ff8f722f": {
+    "message": "{ requiredText }"
+  },
+  "requiredtext_priority_priority_4293288f": {
+    "message": "{ requiredText } | Приоритет: { priority }"
+  },
+  "resource_374a9df": {
+    "message": "Ресурс"
+  },
+  "response_is_response_3cd62f8f": {
+    "message": "Ответ: { response }"
+  },
+  "responses_12d6df1d": {
+    "message": "Ответы"
+  },
+  "restart_bot_34e36428": {
+    "message": "Перезапустить бот"
+  },
+  "review_and_generate_63dec712": {
+    "message": "Просмотреть и создать"
+  },
+  "rollback_26326307": {
+    "message": "Откат"
+  },
+  "runtime_already_exists_f181f5ec": {
+    "message": "Среда выполнения уже существует"
+  },
+  "runtime_code_location_4e94ee12": {
+    "message": "Расположение кода среды выполнения"
+  },
+  "runtime_config_a2904ff9": {
+    "message": "Конфигурация среды выполнения"
+  },
+  "sample_phrases_5d78fa35": {
+    "message": "Примеры фраз"
+  },
+  "sample_phrases_are_phrases_a966b47f": {
+    "message": "Примеры фраз: { phrases }"
+  },
+  "save_11a80ec3": {
+    "message": "Сохранить"
+  },
+  "save_as_9e0cf70b": {
+    "message": "Сохранить как"
+  },
+  "save_your_skill_manifest_63bf5f26": {
+    "message": "Сохраните манифест навыка"
+  },
+  "schema_24739a48": {
+    "message": "Схема"
+  },
+  "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
+    "message": "{ schemaId } не существует, выберите схему, чтобы изменить ее или создать новую"
+  },
+  "schemas_74566170": {
+    "message": "Схемы"
+  },
+  "scripts_successfully_updated_3a75d57f": {
+    "message": "Скрипты обновлены."
+  },
+  "sdk_runtime_packages_22d8ed1a": {
+    "message": "Пакеты среды выполнения SDK"
+  },
+  "search_280d00bd": {
+    "message": "Поиск"
+  },
+  "search_for_extensions_on_npm_c5ca65d9": {
+    "message": "Поиск расширений в npm"
+  },
+  "search_index_for_your_qna_maker_knowledgebases_22700ca7": {
+    "message": "Индекс поиска для ваших баз знаний QnA Maker."
+  },
+  "see_log_4b833bf7": {
+    "message": "Просмотр журнала"
+  },
+  "select_a_bot_e1c4dc2b": {
+    "message": "Выберите бот"
+  },
+  "select_a_trigger_on_the_left_a4b41558": {
+    "message": "Выберите триггер слева"
+  },
+  "select_all_f73344a8": {
+    "message": "Выбрать все"
+  },
+  "select_an_activity_type_c982fcbe": {
+    "message": "Выберите тип действия"
+  },
+  "select_an_event_type_3d7108f1": {
+    "message": "Выберите тип события"
+  },
+  "select_an_option_9f5dfb55": {
+    "message": "Выберите вариант"
+  },
+  "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
+    "message": "Выберите схему, чтобы изменить ее или создать новую"
+  },
+  "select_language_to_delete_d1662d3d": {
+    "message": "Выберите язык для удаления"
+  },
+  "select_manifest_version_4f5b1230": {
+    "message": "Выберите версию манифеста"
+  },
+  "select_options_9ee7b227": {
+    "message": "Выбор параметров"
+  },
+  "select_property_type_45c6e68e": {
+    "message": "Select property type"
+  },
+  "select_runtime_version_to_add_d63d383b": {
+    "message": "Выберите версию среды выполнения для добавления"
+  },
+  "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
+    "message": "Выберите язык, который бот сможет понять (данные, введенные пользователем) и на котором он сможет ответить (ответы бота).\n    Чтобы сделать этот бот доступным на других языках, нажмите кнопку \"Добавить\", чтобы создать копию языка по умолчанию, и выполните перевод содержимого на новый язык."
+  },
+  "select_which_dialogs_are_included_in_the_skill_man_281ef8c9": {
+    "message": "Выберите диалоги, включаемые в манифест навыка"
+  },
+  "select_which_tasks_this_skill_can_perform_172b0eae": {
+    "message": "Выберите задачи, которые может выполнять этот навык"
+  },
+  "selected_assistant_type_83d58f54": {
+    "message": "Выбранный тип помощника"
+  },
+  "selection_field_86d1dc94": {
+    "message": "поле выбора"
+  },
+  "selectors_2dcb3029": {
+    "message": "Селекторы"
+  },
+  "send_a_response_1a917d7e": {
+    "message": "Отправить ответ"
+  },
+  "send_an_http_request_aa32fd2": {
+    "message": "Отправить HTTP-запрос"
+  },
+  "send_messages_c48b239": {
+    "message": "Отправить сообщения"
+  },
+  "sentence_wrap_930c8ced": {
+    "message": "Перенос предложений"
+  },
+  "session_expired_12aaf414": {
+    "message": "Срок действия сеанса истек"
+  },
+  "set_a_property_4258d8d7": {
+    "message": "Задать свойство"
+  },
+  "set_destination_folder_f76e0259": {
+    "message": "Задать конечную папку"
+  },
+  "set_properties_7415af3c": {
+    "message": "Задать свойства"
+  },
+  "set_up_your_bot_75009578": {
+    "message": "Настройка бота"
+  },
+  "settings_5aa0fd0c": {
+    "message": "Параметры"
+  },
+  "settings_contains_detailed_information_about_your__54aa601d": {
+    "message": "Параметры содержат подробную информацию о вашем боте. Из соображений безопасности по умолчанию они скрыты. Чтобы протестировать бот или опубликовать его в Azure, возможно, потребуется указать эти параметры."
+  },
+  "settings_editor_b5246933": {
+    "message": "Редактор параметров"
+  },
+  "settings_menu_c99ecc6d": {
+    "message": "Меню \"Параметры\""
+  },
+  "show_all_notifications_55bf7858": {
+    "message": "Показать все уведомления"
+  },
+  "show_code_f3e9d1cc": {
+    "message": "Показать код"
+  },
+  "show_form_dialog_90aad050": {
+    "message": "Show Form Dialog"
+  },
+  "show_form_dialog_editor_in_the_canvas_140492b2": {
+    "message": "Show form dialog editor in the canvas"
+  },
+  "show_keys_3072a5b8": {
+    "message": "Показать ключи"
+  },
+  "show_skill_manifest_5d0abde1": {
+    "message": "Показать манифест навыка"
+  },
+  "sign_out_user_6845d640": {
+    "message": "Выйти из учетной записи"
+  },
+  "skill_dialog_name_1bbf0eff": {
+    "message": "Имя диалога навыков"
+  },
+  "skill_endpoint_b563491e": {
+    "message": "Конечная точка навыка"
+  },
+  "skill_endpoints_e4e3d8c1": {
+    "message": "Конечные точки навыка"
+  },
+  "skill_host_endpoint_b1088d0": {
+    "message": "Конечная точка узла навыка"
+  },
+  "skill_manifest_endpoint_is_configured_improperly_e083731d": {
+    "message": "Конечная точка манифеста навыка настроена неправильно"
+  },
+  "skillname_manifest_ef3d9fed": {
+    "message": "Манифест { skillName }"
+  },
+  "skills_49cccd6a": {
+    "message": "Навыки"
+  },
+  "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
+    "message": "К сожалению, произошла ошибка при подключении среды выполнения бота"
+  },
+  "sorry_something_went_wrong_with_publishing_try_aga_306a48f5": {
+    "message": "К сожалению, при публикации возникли проблемы. Повторите попытку или завершите эту задачу."
+  },
+  "sorted_a_to_z_915b2ed3": {
+    "message": "Отсортировано в алфавитном порядке."
+  },
+  "sorted_z_to_a_722f1567": {
+    "message": "Отсортировано в обратном алфавитном порядке."
+  },
+  "spaces_and_special_characters_are_not_allowed_20d47684": {
+    "message": "Пробелы и специальные знаки недопустимы."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
+    "message": "Пробелы и специальные знаки недопустимы. Используйте буквы, цифры, дефисы (-) и знаки подчеркивания (_)."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
+  },
+  "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
+    "message": "Укажите имя и описание нового диалога."
+  },
+  "specify_a_name_description_and_location_for_your_n_667f1438": {
+    "message": "Укажите имя, описание и расположение для нового проекта бота."
+  },
+  "speech_16063aed": {
+    "message": "Речь"
+  },
+  "start_bot_25ecad14": {
+    "message": "Запустить бот"
+  },
+  "start_bot_failed_d75647d5": {
+    "message": "Сбой при запуске бота"
+  },
+  "start_command_a085f2ec": {
+    "message": "Команда запуска"
+  },
+  "start_typing_kind_or_b0c305da": {
+    "message": "Start typing { kind } or"
+  },
+  "state_is_state_a2b8943": {
+    "message": "Состояние: { state }"
+  },
+  "status_e7fdbe06": {
+    "message": "Состояние"
+  },
+  "step_of_setlength_43c73821": {
+    "message": "{ step } из { setLength }"
+  },
+  "string_24369b3": {
+    "message": "Строка"
+  },
+  "string_field_db491570": {
+    "message": "строковое поле"
+  },
+  "string_or_expression_c441b45c": {
+    "message": "Строка или выражение"
+  },
+  "submit_a3cc6859": {
+    "message": "Отправить"
+  },
+  "subscription_keys_for_language_understanding_cogni_105e039f": {
+    "message": "Ключи подписки для службы Cognitive Services Распознавание речи."
+  },
+  "subscription_keys_for_qna_maker_cognitive_service__91da99a4": {
+    "message": "Ключи подписки для службы Cognitive Services QnA Maker, которая обеспечивает выбранную вами индивидуальность бота."
+  },
+  "summary_24ad7681": {
+    "message": "Сводка"
+  },
+  "synonyms_optional_afe5cdb1": {
+    "message": "Синонимы (необязательно)"
+  },
+  "tb_149f379c": {
+    "message": "ТБ"
+  },
+  "templatename_is_missing_or_empty_23e6b06e": {
+    "message": "Значение templateName отсутствует или пустое"
+  },
+  "terms_of_use_6542769b": {
+    "message": "Условия использования"
+  },
+  "test_in_emulator_b1b3c278": {
+    "message": "Тест в Emulator"
+  },
+  "test_your_bot_3cd1f4bb": {
+    "message": "Протестируйте бот"
+  },
+  "text_7f4593da": {
+    "message": "Текст"
+  },
+  "the_api_messages_endpoint_for_the_skill_f318dc63": {
+    "message": "Конечная точка /api/messages для навыка."
+  },
+  "the_azure_bot_service_resource_stores_configuratio_b7b4e73d": {
+    "message": "Ресурс Службы Azure Bot хранит сведения о конфигурации, позволяющие получить доступ к вашему виртуальному помощнику в поддерживаемых каналах и обеспечить проверку подлинности OAuth."
+  },
+  "the_callback_url_for_the_skill_host_e20e1012": {
+    "message": "URL-адрес обратного вызова для узла навыка."
+  },
+  "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
+    "message": "Диалог, который вы пытались удалить, сейчас используется в указанных ниже диалогах. Если не предпринять дополнительных действий, его удаление приведет к неправильной работе бота."
+  },
+  "the_file_name_can_not_be_empty_cbdbe9c8": {
+    "message": "The file name can not be empty"
+  },
+  "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
+    "message": "К боту будут применены следующие настройки"
+  },
+  "the_following_lufile_s_are_invalid_c61ea748": {
+    "message": "Следующие файлы LU недопустимы: \n"
+  },
+  "the_following_will_be_provisioned_to_enable_your_b_6c52fdac": {
+    "message": "Для включения бота будет подготовлено следующее"
+  },
+  "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
+    "message": "Главный диалог будет называться по имени вашего бота. Это корень и точка входа бота."
+  },
+  "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
+    "message": "Манифест можно редактировать и уточнять вручную по мере необходимости."
+  },
+  "the_microsoft_app_id_that_will_be_calling_the_skil_955424de": {
+    "message": "Идентификатор приложения Майкрософт, который будет вызывать навык."
+  },
+  "the_microsoft_app_password_that_will_be_calling_th_acf9e1ea": {
+    "message": "Пароль приложения Майкрософт, который будет вызывать навык."
+  },
+  "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
+    "message": "Не удается найти искомую страницу."
+  },
+  "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
+    "message": "Тип свойства определяет ожидаемые входные данные. Он может представлять собой список (или перечисление) определенных значений или формат данных, например дату, адрес электронной почты, номер или строку."
+  },
+  "the_return_type_does_not_match_2ae72548": {
+    "message": "тип возвращаемого значения не соответствует"
+  },
+  "the_root_bot_is_not_a_bot_project_d1495cf6": {
+    "message": "Корневой бот не является проектом бота"
+  },
+  "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
+    "message": "Приветственное сообщение активировано событием <i>ConversationUpdate</i>. Чтобы добавить новый триггер <i>ConversationUpdate</i>, сделайте следующее:"
+  },
+  "there_are_no_kind_properties_e299287e": {
+    "message": "Нет свойств { kind }."
+  },
+  "there_are_no_notifications_e81eab8d": {
+    "message": "There are no notifications."
+  },
+  "there_was_an_error_74ed3c58": {
+    "message": "Произошла ошибка"
+  },
+  "there_was_error_creating_your_kb_53b31ff3": {
+    "message": "При создании базы знаний произошла ошибка"
+  },
+  "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
+    "message": "В этих примерах представлены все рекомендации и вспомогательные компоненты, выявленные нами в ходе создания возможностей диалогового взаимодействия."
+  },
+  "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
+    "message": "Эти задачи будут использоваться для создания манифеста и описания возможностей этого навыка для тех людей, которые захотят им воспользоваться."
+  },
+  "this_bot_has_errors_72fb40d5": {
+    "message": "Для этого бота имеются ошибки"
+  },
+  "this_bot_has_warnings_b6735e2e": {
+    "message": "Для этого бота имеются предупреждения"
+  },
+  "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
+    "message": "Настраивает управляемый данными диалог с использованием коллекции событий и действий."
+  },
+  "this_dialog_has_no_trigger_yet_d1f1d173": {
+    "message": "Этот диалог еще не активирован."
+  },
+  "this_is_a_botname_notification_c8a391c7": {
+    "message": "This is a { botName } notification"
+  },
+  "this_is_a_required_field_acb9837e": {
+    "message": "Это обязательное поле."
+  },
+  "this_is_a_severity_notification_9beabb58": {
+    "message": "Это уведомление следующего уровня: { severity }"
+  },
+  "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
+    "message": "Это язык, используемый для пользовательского интерфейса в Composer."
+  },
+  "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
+    "message": "Этот язык будет скопирован и использован в качестве основы (и базового языка) для перевода."
+  },
+  "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
+    "message": "Невозможно завершить эту операцию. Навык уже является частью проекта бота."
+  },
+  "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
+    "message": "Этот параметр позволяет пользователям задать несколько значений для этого свойства."
+  },
+  "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
+    "message": "Распознаватель регулярных выражений не поддерживает этот тип триггера. Чтобы обеспечить активацию триггера, измените тип распознавателя."
+  },
+  "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
+    "message": "Эта версия содержимого устарела, и последнее изменение было отклонено. Содержимое будет автоматически обновлено."
+  },
+  "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
+    "message": "Это приведет к удалению диалога и его содержимого. Вы хотите продолжить?"
+  },
+  "this_will_delete_the_profile_do_you_wish_to_contin_61b54894": {
+    "message": "Профиль будет удален. Вы хотите продолжить?"
+  },
+  "this_will_open_your_emulator_application_if_you_do_ba277151": {
+    "message": "Это приведет к открытию приложения Emulator. Если вы еще не установили Bot Framework Emulator, можете скачать его <a>здесь</a>."
+  },
+  "time_2b5aac58": {
+    "message": "Время"
+  },
+  "tip_8f74cd0": {
+    "message": "совет"
+  },
+  "tips_80d0da2b": {
+    "message": "советы"
+  },
+  "title_ee03d132": {
+    "message": "Заголовок"
+  },
+  "title_msg_ee91458d": {
+    "message": "{ title }. { msg }"
+  },
+  "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
+    "message": "Чтобы настроить приветственное сообщение, выберите действие <i>Отправить ответ</i> в визуальном редакторе. После этого в редакторе форм справа можно изменить приветственное сообщение бота в поле <b>Генерирование речи</b>."
+  },
+  "to_learn_more_about_the_lg_file_format_read_the_do_ef6e083d": {
+    "message": "> Для получения дополнительных сведений о формате файла LG ознакомьтесь с документацией по адресу\n> { lgHelp }"
+  },
+  "to_learn_more_about_the_lu_file_format_read_the_do_cac5ffc9": {
+    "message": "> Для получения дополнительных сведений о формате файла LU ознакомьтесь с документацией по адресу\n> { LU_HELP }"
+  },
+  "to_learn_more_about_the_qna_file_format_read_the_d_1ce18259": {
+    "message": "> Для получения дополнительных сведений о формате файла вопросов и ответов ознакомьтесь с документацией по адресу\n> { QNA_HELP }"
+  },
+  "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
+    "message": "Чтобы сделать ваш бот доступным другим пользователям в виде навыка, необходимо создать манифест."
+  },
+  "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
+    "message": "Чтобы запустить этот бот, Composer требуется пакет SDK для .NET Core."
+  },
+  "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
+    "message": "Чтобы понять, что говорит пользователь, вашему диалогу требуется \"распознаватель\", включающий примеры слов и предложений, которые могут применять пользователи."
+  },
+  "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
+    "message": "Чтобы понять, что говорит пользователь, вашему диалогу требуется распознаватель \"IRecognizer\", включающий примеры слов и предложений, которые могут применять пользователи."
+  },
+  "to_which_language_will_you_be_translating_your_bot_77219d69": {
+    "message": "На какой язык будет выполняться перевод бота?"
+  },
+  "toggle_extension_e41de2d2": {
+    "message": "Переключить расширение"
+  },
+  "toggle_show_all_61f19d77": {
+    "message": "Переключить \"Показать все\""
+  },
+  "toolbar_bafd4228": {
+    "message": "панель инструментов"
+  },
+  "total_mb_531a3721": {
+    "message": "{ total } МБ"
+  },
+  "trigger_phrases_f6754fa": {
+    "message": "Фразы-триггеры"
+  },
+  "trigger_phrases_intent_intentname_a1b62148": {
+    "message": "Фразы-триггеры (намерение: #{ intentName })"
+  },
+  "triggers_connect_intents_with_bot_responses_think__fdfc97ea": {
+    "message": "Триггеры соединяют намерения с ответами бота. Рассматривайте триггер как одну из возможностей бота. Таким образом, бот представляет собой коллекцию триггеров. Чтобы добавить новый триггер, нажмите кнопку <b>Добавить</b> на панели инструментов и выберите <b>Добавить новый триггер</b> в раскрывающемся меню."
+  },
+  "true_1900d7ae": {
+    "message": "true"
+  },
+  "true_b9327890": {
+    "message": "True"
+  },
+  "trueselector_40702dda": {
+    "message": "TrueSelector"
+  },
+  "try_again_ad656c3c": {
+    "message": "Повторить попытку"
+  },
+  "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
+    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
+  },
+  "type_a_name_that_describes_this_content_d1a910b6": {
+    "message": "Введите имя, описывающее это содержимое"
+  },
+  "type_and_press_enter_33a2905d": {
+    "message": "Введите текст и нажмите клавишу ВВОД"
+  },
+  "type_c8106334": {
+    "message": "Тип"
+  },
+  "type_could_not_be_loaded_65ebaf86": {
+    "message": "Не удалось загрузить { type }"
+  },
+  "type_dialog_name_14a50769": {
+    "message": "Введите имя диалога"
+  },
+  "type_form_dialog_schema_name_b767985c": {
+    "message": "Введите имя схемы диалога формы"
+  },
+  "typing_activity_6b634ae": {
+    "message": "Действие ввода"
+  },
+  "undo_a7be8fef": {
+    "message": "Отменить"
+  },
+  "undo_is_not_supported_ecd6f9fc": {
+    "message": "Отмена не поддерживается"
+  },
+  "uninstall_8730233": {
+    "message": "Удалить"
+  },
+  "unknown_47a3b725": {
+    "message": "Unknown"
+  },
+  "unknown_intent_44b962ba": {
+    "message": "Неизвестное намерение"
+  },
+  "unknown_intent_recognized_1953f9be": {
+    "message": "Распознано неизвестное намерение"
+  },
+  "unknown_state_23f73afb": {
+    "message": "Неизвестное состояние"
+  },
+  "unused_8d193e3": {
+    "message": "Не используется"
+  },
+  "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
+    "message": "Обновить действие, отправленное ранее во время беседы"
+  },
+  "update_activity_2b05e6c6": {
+    "message": "Обновить действие"
+  },
+  "update_available_b637d767": {
+    "message": "Доступно обновление"
+  },
+  "update_complete_c5163fbf": {
+    "message": "Обновление завершено"
+  },
+  "update_failed_2c87428c": {
+    "message": "Сбой обновления"
+  },
+  "update_folder_name_error_24563bf6": {
+    "message": "Ошибка при изменении имени папки"
+  },
+  "update_in_progress_f65e6b29": {
+    "message": "Выполнение обновления"
+  },
+  "update_scripts_a3a483e": {
+    "message": "Обновить скрипты"
+  },
+  "update_scripts_c58771a2": {
+    "message": "Обновить скрипты"
+  },
+  "updating_scripts_e17a5722": {
+    "message": "Выполняется обновление скриптов... "
+  },
+  "url_8c4ff7d2": {
+    "message": "URL-адрес"
+  },
+  "url_should_start_with_http_s_9ca55d94": {
+    "message": "URL-адрес должен начинаться с http[s]://"
+  },
+  "use_custom_runtime_d7d323fd": {
+    "message": "Использовать настраиваемую среду выполнения"
+  },
+  "used_3d895705": {
+    "message": "Использовано"
+  },
+  "used_in_126529e5": {
+    "message": "Используется в"
+  },
+  "used_to_capture_conversation_and_application_telem_cae2c2a4": {
+    "message": "Используется для захвата телеметрии приложения и беседы."
+  },
+  "used_to_host_your_bot_web_app_and_qna_maker_web_ap_514dc11b": {
+    "message": "Используется для размещения веб-приложения бота и веб-приложения QnA Maker."
+  },
+  "used_to_store_conversation_state_11f348bd": {
+    "message": "Используется для хранения состояния беседы."
+  },
+  "used_to_store_conversation_transcripts_d80440ab": {
+    "message": "Используется для хранения расшифровок бесед."
+  },
+  "user_input_673e4a89": {
+    "message": "Данные, введенные пользователем"
+  },
+  "user_input_a6ff658d": {
+    "message": "Данные, введенные пользователем"
+  },
+  "user_is_typing_790cb502": {
+    "message": "Пользователь осуществляет ввод"
+  },
+  "va_creation_6babf7db": {
+    "message": "VA Creation"
+  },
+  "va_template_made_available_in_new_bot_flow_5f85baa4": {
+    "message": "VA template made available in new bot flow."
+  },
+  "validating_35b79a96": {
+    "message": "Выполняется проверка..."
+  },
+  "validation_b10c677c": {
+    "message": "Проверка"
+  },
+  "validation_rules_efd3144d": {
+    "message": "Правила проверки"
+  },
+  "value_d842f16d": {
+    "message": "Значение"
+  },
+  "version_5599c321": {
+    "message": "Версия"
+  },
+  "version_version_a051e218": {
+    "message": "Версия { version }"
+  },
+  "video_tutorials_79eb26ca": {
+    "message": "Видеоучебники:"
+  },
+  "view_ba339f93": {
+    "message": "Вид"
+  },
+  "view_dialog_f5151228": {
+    "message": "Просмотреть диалог"
+  },
+  "view_kb_c382e495": {
+    "message": "Просмотреть базу знаний"
+  },
+  "view_on_npm_2051324d": {
+    "message": "Просмотреть в npm"
+  },
+  "vishwac_sena_45910bf0": {
+    "message": "Вишвак Сена (Vishwac Sena)"
+  },
+  "visual_editor_216472d": {
+    "message": "Визуальный редактор"
+  },
+  "warning_53c98b03": {
+    "message": "Предупреждение!"
+  },
+  "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
+    "message": "Предупреждение! Действие, которое вы собираетесь предпринять, не может быть отменено. В случае продолжения вы удалите этот бот и все связанные файлы в папке проекта бота."
+  },
+  "we_have_created_a_sample_bot_to_help_you_get_start_95a58922": {
+    "message": "Мы создали пример бота, который поможет вам начать работу с Composer. Щелкните здесь, чтобы открыть этот бот."
+  },
+  "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
+    "message": "Необходимо определить конечные точки для навыка, чтобы другие боты могли взаимодействовать с ним."
+  },
+  "weather_bot_c38920cd": {
+    "message": "Бот прогноза погоды"
+  },
+  "welcome_73d18b4d": {
+    "message": "Добро пожаловать!"
+  },
+  "welcome_dd4e7151": {
+    "message": "Добро пожаловать"
+  },
+  "westeurope_cabf9688": {
+    "message": "westeurope"
+  },
+  "westus_dc50d800": {
+    "message": "westus"
+  },
+  "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
+    "message": "Что может сделать пользователь через эту беседу? Например, ЗабронироватьСтолик, ЗаказатьКофе и т. п."
+  },
+  "what_is_the_name_of_the_custom_event_b28a7b3": {
+    "message": "Как называется это пользовательское событие?"
+  },
+  "what_is_the_name_of_this_trigger_2642266e": {
+    "message": "Укажите имя этого триггера"
+  },
+  "what_is_the_name_of_this_trigger_luis_17b60a23": {
+    "message": "Укажите имя этого триггера (LUIS)"
+  },
+  "what_is_the_name_of_this_trigger_regex_f77376d7": {
+    "message": "Укажите имя этого триггера (регулярное выражение)"
+  },
+  "what_is_the_name_of_your_bot_a571c565": {
+    "message": "Как называется ваш бот?"
+  },
+  "what_is_the_type_of_this_trigger_d2701744": {
+    "message": "К какому типу относится этот триггер?"
+  },
+  "what_will_your_virtual_assistant_say_if_it_does_no_972dd9ab": {
+    "message": "Что скажет ваш виртуальный помощник, если он не понимает пользователя?"
+  },
+  "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
+    "message": "Что ваш бот говорит пользователю. Это шаблон, используемый для создания исходящего сообщения. Он может включать правила генерирования речи, свойства из памяти и другие функции.\n\nНапример, чтобы определить варианты, выбираемые случайным образом, введите:\n- здравствуйте\n- привет"
+  },
+  "what_your_bot_says_to_the_user_visit_a_target_blan_7735479": {
+    "message": "Что ваш бот говорит пользователю. Для получения справки по возможностям обратитесь к <a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\">документации</a>."
+  },
+  "when_deleting_a_language_only_the_content_will_be__8f7f8dee": {
+    "message": "При удалении языка будет удалено только соответствующее содержимое. Процедуры и логика беседы и диалога останутся функциональными."
+  },
+  "when_done_switch_to_the_newly_created_language_and_862b7dd9": {
+    "message": "После этого переключитесь на вновь созданный язык и запустите процесс перевода (вручную)."
+  },
+  "when_multiple_people_are_working_with_models_you_w_32b48099": {
+    "message": "Когда модели используются несколькими людьми, требуется возможность работать с моделями независимо друг от друга и с привязкой к системе управления версиями."
+  },
+  "which_activity_type_18333457": {
+    "message": "Какой тип действия?"
+  },
+  "which_bot_do_you_want_to_open_974bb1e5": {
+    "message": "Какой бот вы хотите открыть?"
+  },
+  "which_event_6e655d2b": {
+    "message": "Какое событие?"
+  },
+  "write_an_expression_8773ea5c": {
+    "message": "Write an expression"
+  },
+  "yes_dde87d5": {
+    "message": "Да"
+  },
+  "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
+    "message": "У вас уже есть база знаний с таким именем. Выберите другое имя и повторите попытку."
+  },
+  "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
+    "message": "Вы собираетесь опубликовать бот в указанном ниже профиле. Вы хотите продолжить?"
+  },
+  "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
+    "message": "Вы можете создать бот с нуля, используя Composer, или начать с шаблона."
+  },
+  "you_can_define_and_manage_b_intents_b_here_each_in_721b8a0c": {
+    "message": "Здесь можно определить <b>намерения</b> и управлять ими. Каждое из них описывает конкретное намерение пользователя посредством речевых фрагментов (то есть высказываний пользователя). <b>Намерения часто являются триггерами бота.</b>"
+  },
+  "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
+    "message": "Здесь можно управлять всеми ответами бота. Активно используйте шаблоны для создания сложной логики ответов, отвечающей вашим потребностям."
+  },
+  "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
+    "message": "У вас нет разрешения на сохранение ботов здесь"
+  },
+  "your_bot_creation_journey_on_composer_131c1a8b": {
+    "message": "Обзор создания бота в Composer"
+  },
+  "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
+    "message": "Ваш бот использует LUIS и службу вопросов и ответов для распознавания естественного языка."
+  },
+  "your_knowledge_base_is_ready_6ecc1871": {
+    "message": "Ваша база знаний готова."
+  }
+}

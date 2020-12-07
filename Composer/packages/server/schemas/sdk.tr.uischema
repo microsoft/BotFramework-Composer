@@ -1,0 +1,356 @@
+{
+  "Microsoft.AdaptiveDialog": {
+    "form": {
+      "description": "Bu, bir olaylar ve eylemler koleksiyonu aracılığıyla veri temelli bir iletişim kutusunu yapılandırır.",
+      "label": "Uyarlamalı diyalog",
+      "properties": {
+        "recognizer": {
+          "description": "Kullanıcının söylediklerinin anlaşılması için iletişim kutunuz, kullanıcıların kullanabileceği örnek sözcükleri ve tümceleri içeren bir \"Recognizer\" öğesine ihtiyaç duyar.",
+          "label": "Language Understanding"
+        }
+      }
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Soru sormak için bir yanıt gönderin",
+      "subtitle": "Soru Sorma Etkinliği"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Dosya veya ek iste",
+      "subtitle": "Ek Girişi"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Çoklu seçimli istem",
+      "subtitle": "Seçim Girişi"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Onay iste",
+      "subtitle": "Girişi Onayla"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Tarih veya saat iste",
+      "subtitle": "Tarih Saat Girişi"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Sayı iste",
+      "subtitle": "Sayı Girişi"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth oturum açma",
+      "subtitle": "OAuth Girişi"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Metin iste",
+      "subtitle": "Metin Girişi"
+    }
+  },
+  "Microsoft.BeginDialog": {
+    "form": {
+      "label": "Yeni iletişim kutusu başlat",
+      "subtitle": "İletişim Kutusu Başlat"
+    }
+  },
+  "Microsoft.BeginSkill": {
+    "form": {
+      "label": "Yeteneğe bağlan",
+      "subtitle": "Yetenek İletişim Kutusu"
+    }
+  },
+  "Microsoft.BreakLoop": {
+    "form": {
+      "label": "Döngüden çık",
+      "subtitle": "Döngüden çık"
+    }
+  },
+  "Microsoft.CancelAllDialogs": {
+    "form": {
+      "label": "Tüm etkin iletişim kutularını iptal et",
+      "subtitle": "Tüm İletişim Kutularını İptal Et"
+    }
+  },
+  "Microsoft.ContinueLoop": {
+    "form": {
+      "label": "Döngüye devam et",
+      "subtitle": "Döngüye devam et"
+    }
+  },
+  "Microsoft.DebugBreak": {
+    "form": {
+      "label": "Hata Ayıklama Kesmesi"
+    }
+  },
+  "Microsoft.DeleteProperties": {
+    "form": {
+      "label": "Özellikleri sil",
+      "subtitle": "Özellikleri Sil"
+    }
+  },
+  "Microsoft.DeleteProperty": {
+    "form": {
+      "label": "Özelliği sil",
+      "subtitle": "Özelliği Sil"
+    }
+  },
+  "Microsoft.EditActions": {
+    "form": {
+      "label": "Etkin iletişim kutusunu değiştir",
+      "subtitle": "Eylemleri Düzenle"
+    }
+  },
+  "Microsoft.EditArray": {
+    "form": {
+      "label": "Dizi özelliğini düzenle",
+      "subtitle": "Diziyi Düzenle"
+    }
+  },
+  "Microsoft.EmitEvent": {
+    "form": {
+      "label": "Özel bir olay göster",
+      "subtitle": "Olay Göster"
+    }
+  },
+  "Microsoft.EndDialog": {
+    "form": {
+      "label": "Bu iletişim kutusunu sonlandır",
+      "subtitle": "İletişim Kutusunu Sonlandır"
+    }
+  },
+  "Microsoft.EndTurn": {
+    "form": {
+      "label": "Dönüşü sonlandır",
+      "subtitle": "Dönüşü Sonlandır"
+    }
+  },
+  "Microsoft.Foreach": {
+    "form": {
+      "label": "Döngü: Her öğe için",
+      "subtitle": "Her Biri İçin"
+    }
+  },
+  "Microsoft.ForeachPage": {
+    "form": {
+      "label": "Döngü: Her sayfa için (birden çok öğe)",
+      "subtitle": "Her Sayfa İçin"
+    }
+  },
+  "Microsoft.HttpRequest": {
+    "form": {
+      "label": "HTTP isteği gönder",
+      "subtitle": "HTTP İsteği"
+    }
+  },
+  "Microsoft.IfCondition": {
+    "form": {
+      "label": "Dal: If/Else",
+      "subtitle": "If Koşulu"
+    }
+  },
+  "Microsoft.LogAction": {
+    "form": {
+      "label": "Konsola kaydet",
+      "subtitle": "Eylemi Günlüğe Kaydet"
+    }
+  },
+  "Microsoft.RepeatDialog": {
+    "form": {
+      "label": "Bu iletişim kutusunu yinele",
+      "subtitle": "İletişim Kutusunu Yinele"
+    }
+  },
+  "Microsoft.ReplaceDialog": {
+    "form": {
+      "label": "Bu iletişim kutusunu değiştir",
+      "subtitle": "İletişim Kutusunu Değiştir"
+    }
+  },
+  "Microsoft.SendActivity": {
+    "form": {
+      "label": "Yanıt gönder",
+      "subtitle": "Gönderme Etkinliği"
+    }
+  },
+  "Microsoft.SetProperties": {
+    "form": {
+      "label": "Özellikleri ayarla",
+      "subtitle": "Özellikleri Ayarla"
+    }
+  },
+  "Microsoft.SetProperty": {
+    "form": {
+      "label": "Özellik ayarla",
+      "subtitle": "Özelliği Ayarla"
+    }
+  },
+  "Microsoft.SignOutUser": {
+    "form": {
+      "label": "Kullanıcının oturumunu kapat",
+      "subtitle": "Kullanıcının Oturumunu Kapat"
+    }
+  },
+  "Microsoft.SwitchCondition": {
+    "form": {
+      "label": "Dal: Switch (birden çok seçenek)",
+      "subtitle": "Switch Koşulu"
+    }
+  },
+  "Microsoft.ThrowException": {
+    "form": {
+      "label": "Özel durum oluşturun",
+      "subtitle": "Özel durum oluşturun"
+    }
+  },
+  "Microsoft.TraceActivity": {
+    "form": {
+      "label": "İzleme olayı göster",
+      "subtitle": "İzleme Etkinliği"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "Etkinlikler",
+      "subtitle": "Etkinlik alındı"
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "Varlık atandığında koşulu işle",
+      "subtitle": "EntityAssigned etkinliği"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "İletişim kutusu başlatıldı",
+      "subtitle": "İletişim kutusu olayı başlat"
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "İletişim kutusu iptal edildi",
+      "subtitle": "İletişim kutusu olayını iptal et"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "Koşul işle",
+      "subtitle": "Koşul"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "Bir kullanıcı bot ile yeni bir konuşmaya başladığında tetiklenen olayları işleyin.",
+      "label": "Karşılama",
+      "subtitle": "ConversationUpdate etkinliği"
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "İletişim kutusu olayları",
+      "subtitle": "İletişim kutusu olayı"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "Eylemler bittiğinde koşulu işle",
+      "subtitle": "EndOfActions etkinliği"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "Konuşma sona erdi",
+      "subtitle": "EndOfConversation etkinliği"
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "Hata oluştu",
+      "subtitle": "Hata olayı"
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "Olay alındı",
+      "subtitle": "Olay etkinliği"
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "Kişiye devret",
+      "subtitle": "İletim etkinliği"
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "Yükleme güncelleştirildi",
+      "subtitle": "Güncelleştirilmiş yükleme etkinliği"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "Amaç tanındı",
+      "subtitle": "Amaç tanındı"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "Konuşma çağrıldı",
+      "subtitle": "Çağırma etkinliği"
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "İleti alındı",
+      "subtitle": "İleti alındı etkinliği"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "İleti silindi",
+      "subtitle": "İleti silindi etkinliği"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "İleti tepkisi",
+      "subtitle": "İleti tepkisi etkinliği"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "İleti güncelleştirildi",
+      "subtitle": "İleti güncelleştirdi etkinliği"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "Girişi yeniden iste",
+      "subtitle": "Yeniden isteme iletişim kutusu olayı"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "Kullanıcı yazıyor",
+      "subtitle": "Yazma etkinliği"
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "Bilinmeyen amaç",
+      "subtitle": "Bilinmeyen amaç tanındı"
+    }
+  }
+}

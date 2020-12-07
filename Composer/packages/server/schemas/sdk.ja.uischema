@@ -1,0 +1,356 @@
+{
+  "Microsoft.AdaptiveDialog": {
+    "form": {
+      "description": "これにより、イベントとアクションのコレクションを使用してデータドリブン ダイアログが構成されます。",
+      "label": "適応型ダイアログ",
+      "properties": {
+        "recognizer": {
+          "description": "ユーザーが話す内容を理解するため、ダイアログには \"認識エンジン\" が必要です。これには、ユーザーが使用する可能性のあるサンプルの単語と文が含まれます。",
+          "label": "言語理解"
+        }
+      }
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "質問をするための応答を送信する",
+      "subtitle": "Ask アクティビティ"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "ファイルまたは添付ファイルの入力を求めるプロンプト",
+      "subtitle": "添付ファイルの入力"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "複数選択のプロンプト",
+      "subtitle": "選択肢の入力"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "確認を求めるプロンプト",
+      "subtitle": "入力の確認"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "日付または時刻の入力を求めるプロンプト",
+      "subtitle": "日付/時刻の入力"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "数値の入力を求めるプロンプト",
+      "subtitle": "数値入力"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth ログイン",
+      "subtitle": "OAuth 入力"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "テキストの入力を求めるプロンプト",
+      "subtitle": "テキスト入力"
+    }
+  },
+  "Microsoft.BeginDialog": {
+    "form": {
+      "label": "新しいダイアログの開始",
+      "subtitle": "ダイアログの開始"
+    }
+  },
+  "Microsoft.BeginSkill": {
+    "form": {
+      "label": "スキルへの接続",
+      "subtitle": "スキル ダイアログ"
+    }
+  },
+  "Microsoft.BreakLoop": {
+    "form": {
+      "label": "ループの中断",
+      "subtitle": "ループの中断"
+    }
+  },
+  "Microsoft.CancelAllDialogs": {
+    "form": {
+      "label": "すべてのアクティブなダイアログを取り消す",
+      "subtitle": "すべてのダイアログを取り消す"
+    }
+  },
+  "Microsoft.ContinueLoop": {
+    "form": {
+      "label": "ループの続行",
+      "subtitle": "ループの続行"
+    }
+  },
+  "Microsoft.DebugBreak": {
+    "form": {
+      "label": "デバッグ中断"
+    }
+  },
+  "Microsoft.DeleteProperties": {
+    "form": {
+      "label": "プロパティの削除",
+      "subtitle": "プロパティの削除"
+    }
+  },
+  "Microsoft.DeleteProperty": {
+    "form": {
+      "label": "プロパティの削除",
+      "subtitle": "プロパティの削除"
+    }
+  },
+  "Microsoft.EditActions": {
+    "form": {
+      "label": "アクティブ ダイアログの変更",
+      "subtitle": "アクションの編集"
+    }
+  },
+  "Microsoft.EditArray": {
+    "form": {
+      "label": "配列プロパティの編集",
+      "subtitle": "配列の編集"
+    }
+  },
+  "Microsoft.EmitEvent": {
+    "form": {
+      "label": "カスタム イベントの生成",
+      "subtitle": "イベントの生成"
+    }
+  },
+  "Microsoft.EndDialog": {
+    "form": {
+      "label": "このダイアログを終了します",
+      "subtitle": "ダイアログの終了"
+    }
+  },
+  "Microsoft.EndTurn": {
+    "form": {
+      "label": "ターンの終了",
+      "subtitle": "ターンの終了"
+    }
+  },
+  "Microsoft.Foreach": {
+    "form": {
+      "label": "ループ: 項目ごと",
+      "subtitle": "それぞれ"
+    }
+  },
+  "Microsoft.ForeachPage": {
+    "form": {
+      "label": "ループ: ページごと (複数の項目)",
+      "subtitle": "ページごと"
+    }
+  },
+  "Microsoft.HttpRequest": {
+    "form": {
+      "label": "HTTP 要求の送信",
+      "subtitle": "HTTP 要求"
+    }
+  },
+  "Microsoft.IfCondition": {
+    "form": {
+      "label": "分岐: If/Else",
+      "subtitle": "if 条件"
+    }
+  },
+  "Microsoft.LogAction": {
+    "form": {
+      "label": "コンソールにログを作成",
+      "subtitle": "アクションのログ"
+    }
+  },
+  "Microsoft.RepeatDialog": {
+    "form": {
+      "label": "このダイアログを繰り返す",
+      "subtitle": "ダイアログの繰り返し"
+    }
+  },
+  "Microsoft.ReplaceDialog": {
+    "form": {
+      "label": "このダイアログを置換する",
+      "subtitle": "ダイアログの置換"
+    }
+  },
+  "Microsoft.SendActivity": {
+    "form": {
+      "label": "応答の送信",
+      "subtitle": "アクティビティの送信"
+    }
+  },
+  "Microsoft.SetProperties": {
+    "form": {
+      "label": "プロパティの設定",
+      "subtitle": "プロパティの設定"
+    }
+  },
+  "Microsoft.SetProperty": {
+    "form": {
+      "label": "プロパティの設定",
+      "subtitle": "プロパティの設定"
+    }
+  },
+  "Microsoft.SignOutUser": {
+    "form": {
+      "label": "ユーザーのサインアウト",
+      "subtitle": "ユーザーのサインアウト"
+    }
+  },
+  "Microsoft.SwitchCondition": {
+    "form": {
+      "label": "分岐: スイッチ (複数のオプション)",
+      "subtitle": "条件の切り替え"
+    }
+  },
+  "Microsoft.ThrowException": {
+    "form": {
+      "label": "例外のスロー ",
+      "subtitle": "例外のスロー "
+    }
+  },
+  "Microsoft.TraceActivity": {
+    "form": {
+      "label": "トレース イベントの生成",
+      "subtitle": "アクティビティのトレース"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "アクティビティ",
+      "subtitle": "アクティビティを受信しました"
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "エンティティが割り当てられたときに条件を処理する",
+      "subtitle": "EntityAssigned アクティビティ"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "ダイアログが開始しました",
+      "subtitle": "ダイアログの開始イベント"
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "ダイアログが取り消されました",
+      "subtitle": "ダイアログ イベントを取り消す"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "条件の処理",
+      "subtitle": "条件"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "ユーザーがボットとの新しい会話を開始したときに発生するイベントを処理します。",
+      "label": "案内",
+      "subtitle": "ConversationUpdate アクティビティ"
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "ダイアログ イベント",
+      "subtitle": "ダイアログ イベント"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "アクションが終了したときに条件を処理する",
+      "subtitle": "EndOfActions アクティビティ"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "会話が終了しました",
+      "subtitle": "EndOfConversation アクティビティ"
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "エラーが発生しました",
+      "subtitle": "エラー イベント"
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "イベントを受信しました",
+      "subtitle": "イベント アクティビティ"
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "人間への引き渡し",
+      "subtitle": "ハンドオフ アクティビティ"
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "インストールの更新済み",
+      "subtitle": "インストールの更新済みアクティビティ"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "インテントが認識されました",
+      "subtitle": "インテントが認識されました"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "会話が呼び出されました",
+      "subtitle": "アクティビティの呼び出し"
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "メッセージを受信しました",
+      "subtitle": "メッセージの受信アクティビティ"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "メッセージが削除されました",
+      "subtitle": "メッセージの削除アクティビティ"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "メッセージの応答",
+      "subtitle": "メッセージの応答アクティビティ"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "メッセージが更新されました",
+      "subtitle": "メッセージの更新アクティビティ"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "入力を再確認する",
+      "subtitle": "ダイアログ イベントを再確認する"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "ユーザーが入力中",
+      "subtitle": "入力アクティビティ"
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "不明なインテント",
+      "subtitle": "認識された不明なインテント"
+    }
+  }
+}

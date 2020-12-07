@@ -1,0 +1,125 @@
+{
+  "about_70c18bba": {
+    "message": "关于"
+  },
+  "actual_zoom_211ec99": {
+    "message": "实际缩放"
+  },
+  "bring_all_to_front_207a7ad1": {
+    "message": "全部置于顶层"
+  },
+  "check_for_updates_12a70061": {
+    "message": "检查是否有更新"
+  },
+  "close_d634289d": {
+    "message": "关闭"
+  },
+  "close_window_4bdc79d7": {
+    "message": "关闭窗口"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "GitHub 上的 Composer"
+  },
+  "copy_9748f9f": {
+    "message": "复制"
+  },
+  "cut_c8c92681": {
+    "message": "剪切"
+  },
+  "delete_a6efa79d": {
+    "message": "删除"
+  },
+  "documentation_d82f6eec": {
+    "message": "文档"
+  },
+  "edit_c5fbea07": {
+    "message": "编辑"
+  },
+  "exit_d0c7b013": {
+    "message": "退出"
+  },
+  "file_c851020d": {
+    "message": "文件"
+  },
+  "help_4c4968b1": {
+    "message": "帮助"
+  },
+  "hide_bot_framework_composer_eeba3ea8": {
+    "message": "隐藏 Bot Framework Composer"
+  },
+  "hide_others_4204b552": {
+    "message": "隐藏其他"
+  },
+  "initializing_4e34f7d": {
+    "message": "正在初始化..."
+  },
+  "learn_more_about_bot_framework_2daca065": {
+    "message": "详细了解 Bot Framework"
+  },
+  "minimize_4f999e30": {
+    "message": "最小化"
+  },
+  "paste_5963d1c1": {
+    "message": "粘贴"
+  },
+  "privacy_statement_58986965": {
+    "message": "隐私声明"
+  },
+  "quit_bot_framework_composer_455ceb74": {
+    "message": "退出 Bot Framework Composer"
+  },
+  "redo_363c58b7": {
+    "message": "重做"
+  },
+  "report_an_issue_f33f3ba5": {
+    "message": "报告问题"
+  },
+  "select_all_cf7e0248": {
+    "message": "全选"
+  },
+  "services_ccd7bca0": {
+    "message": "服务"
+  },
+  "show_all_ae37d610": {
+    "message": "全部显示"
+  },
+  "speech_16063aed": {
+    "message": "语音"
+  },
+  "start_speaking_f8d406ff": {
+    "message": "开始说话"
+  },
+  "starting_server_721c37fd": {
+    "message": "正在启动服务器..."
+  },
+  "stop_speaking_7b4b9834": {
+    "message": "结束说话"
+  },
+  "toggle_developer_tools_d2ef8ea7": {
+    "message": "切换开发人员工具"
+  },
+  "toggle_full_screen_272a0c5": {
+    "message": "切换全屏"
+  },
+  "undo_a7be8fef": {
+    "message": "撤消"
+  },
+  "view_ba339f93": {
+    "message": "查看"
+  },
+  "view_license_720d341a": {
+    "message": "查看许可证"
+  },
+  "window_171922c7": {
+    "message": "窗口"
+  },
+  "zoom_f3e54d69": {
+    "message": "缩放"
+  },
+  "zoom_in_a781ccc7": {
+    "message": "放大"
+  },
+  "zoom_out_dc7d60d2": {
+    "message": "缩小"
+  }
+}

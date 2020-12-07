@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ExtensionRegistration } from '@bfc/extension';
+import { IExtensionRegistration } from '@botframework-composer/types';
 
 // this will be called by composer
-function initialize(registration: ExtensionRegistration) {
+function initialize(registration: IExtensionRegistration) {
   const plugin1 = {
     name: 'samplePublishPlugin1',
     description: 'Publish using custom UI',
@@ -21,6 +21,12 @@ function initialize(registration: ExtensionRegistration) {
   };
   registration.addPublishMethod(plugin1);
   registration.addPublishMethod(plugin2);
+
+  // test reading and writing data
+  registration.log('Reading from store:\n%O', registration.store.readAll());
+
+  registration.store.replace({ some: 'data' });
+  registration.log('Reading from store:\n%O', registration.store.readAll());
 }
 
 async function getStatus(config, project, user) {

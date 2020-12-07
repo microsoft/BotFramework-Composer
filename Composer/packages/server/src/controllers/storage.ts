@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionContext } from '@bfc/extension';
 
+import { ExtensionContext } from '../models/extension/extensionContext';
 import StorageService from '../services/storage';
 import { Path } from '../utility/path';
 

@@ -37,11 +37,17 @@ export type BotTemplate = {
   name: string;
   description: string;
   /* absolute path */
-  path: string;
+  path?: string;
   /* tags for further grouping and search secenario */
   tags?: string[];
   /* list of supported runtime versions */
   support?: string[];
+  package?: {
+    packageName: string;
+    packageSource: string;
+    packageVersion: string;
+  };
+  index?: number;
 };
 
 export type RuntimeTemplate = {
@@ -52,6 +58,12 @@ export type RuntimeTemplate = {
   build: (runtimePath: string, project: IBotProject) => Promise<void>;
 
   run: (project: IBotProject, localDisk?: any) => Promise<void>;
+
+  installComponent: (runtimePath: string, componentName: string, version: string) => Promise<string>;
+
+  uninstallComponent: (runtimePath: string, componentName: string) => Promise<string>;
+
+  identifyManifest: (runtimePath: string) => string;
 
   /** build for deploy method */
   buildDeploy: (

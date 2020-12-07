@@ -1,47 +1,155 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selector, selectorFamily } from 'recoil';
+import { BotIndexer } from '@bfc/indexers';
+import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
-import { FormDialogSchema } from '@bfc/shared';
+import { selector, selectorFamily } from 'recoil';
 
+import { LanguageFileImport } from '../../../../types/src';
 import {
-  botErrorState,
   botDisplayNameState,
+  botErrorState,
+  botNameIdentifierState,
   botProjectFileState,
   botProjectIdsState,
-  dialogsState,
-  projectMetaDataState,
-  botNameIdentifierState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  luFilesState,
+  lgFilesState,
+  qnaFilesState,
+  skillManifestsState,
+  dialogSchemasState,
+  jsonSchemaFilesState,
+  projectMetaDataState,
+  settingsState,
+  publishHistoryState,
+  publishTypesState,
+  dialogIdsState,
+  dialogState,
+  schemasState,
 } from '../atoms';
+import {
+  dialogsSelectorFamily,
+  buildEssentialsSelector,
+  validateDialogsSelectorFamily,
+  lgImportsSelectorFamily,
+  luImportsSelectorFamily,
+} from '../selectors';
 
 // Actions
-export const botsForFilePersistenceSelector = selector({
-  key: 'botsForFilePersistenceSelector',
+export const localBotsWithoutErrorsSelector = selector({
+  key: 'localBotsWithoutErrorsSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectIdsState);
     return botProjectIds.filter((projectId: string) => {
       const { isRemote } = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      return !botError && !isRemote;
+      return !isRemote && !botError;
     });
   },
 });
 
-// TODO: This selector would be modfied and leveraged by the project tree
+export const localBotsDataSelector = selector({
+  key: 'localBotsDataSelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+    const botProjectsWithoutError = get(botProjectSpaceSelector).filter((b) => botProjectIds.includes(b.projectId));
+    return botProjectsWithoutError;
+  },
+});
+
+export const formDialogSchemasSelectorFamily = selectorFamily<FormDialogSchema[], string>({
+  key: 'formDialogSchemasSelector',
+  get: (projectId: string) => ({ get }) => {
+    const formDialogSchemaIds = get(formDialogSchemaIdsState(projectId));
+    return formDialogSchemaIds.map((schemaId) => get(formDialogSchemaState({ projectId, schemaId })));
+  },
+});
+
+// Given a form dialog schema, indicates if the dialog exist for it (aka is generated)
+export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { projectId: string; schemaId: string }>({
+  key: 'formDialogSchemasSelector',
+  get: ({ projectId, schemaId }) => ({ get }) => {
+    const dialogs = get(dialogsSelectorFamily(projectId));
+    return !!dialogs.find((d) => d.id === schemaId);
+  },
+});
+
+// TODO: This selector would be modified and leveraged by the project tree
 export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      const dialogs = get(dialogsState(projectId));
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+      const dialogs = get(validateDialogsSelectorFamily(projectId));
+      const luFiles = get(luFilesState(projectId));
+      const lgFiles = get(lgFilesState(projectId));
+      const qnaFiles = get(qnaFilesState(projectId));
+      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+      const botProjectFile = get(botProjectFileState(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
+      const buildEssentials = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
+      const setting = get(settingsState(projectId));
+      const skillManifests = get(skillManifestsState(projectId));
+      const dialogSchemas = get(dialogSchemasState(projectId));
+      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
+      const schemas = get(schemasState(projectId));
+      const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
+
+      const botAssets: BotAssets = {
+        projectId,
+        dialogs,
+        luFiles,
+        qnaFiles,
+        lgFiles,
+        skillManifests,
+        setting,
+        dialogSchemas,
+        formDialogSchemas,
+        botProjectFile,
+        jsonSchemaFiles,
+        recognizers: [],
+        crossTrainConfig: {},
+      };
+
+      const lgImports: Record<string, LanguageFileImport[]> = {};
+
+      dialogs.forEach((d) => {
+        lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+      });
+
+      const luImports: Record<string, LanguageFileImport[]> = {};
+
+      dialogs.forEach((d) => {
+        luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+      });
+
+      const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+      const publishHistory = get(publishHistoryState(projectId));
+      const publishTypes = get(publishTypesState(projectId));
+
+      return {
+        dialogs,
+        formDialogSchemas,
+        projectId,
+        name,
+        ...metaData,
+        setting,
+        error: botError,
+        botNameId,
+        diagnostics,
+        buildEssentials,
+        isPvaSchema,
+        publishHistory,
+        publishTypes,
+        lgImports,
+        luImports,
+      };
     });
     return result;
   },
@@ -61,18 +169,66 @@ export const rootBotProjectIdSelector = selector({
   },
 });
 
-export const formDialogSchemasSelectorFamily = selectorFamily<FormDialogSchema[], string>({
-  key: 'formDialogSchemasSelector',
-  get: (projectId: string) => ({ get }) => {
-    const formDialogSchemaIds = get(formDialogSchemaIdsState(projectId));
-    return formDialogSchemaIds.map((schemaId) => get(formDialogSchemaState({ projectId, schemaId })));
+export const jsonSchemaFilesByProjectIdSelector = selector({
+  key: 'jsonSchemaFilesByProjectIdSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const result: Record<string, JsonSchemaFile[]> = {};
+    projectIds.forEach((projectId) => {
+      result[projectId] = get(jsonSchemaFilesState(projectId));
+    });
+    return result;
   },
 });
 
-export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { projectId: string; schemaId: string }>({
-  key: 'formDialogSchemasSelector',
-  get: ({ projectId, schemaId }: { projectId: string; schemaId: string }) => ({ get }) => {
-    const dialogs = get(dialogsState(projectId));
-    return !!dialogs.find((d) => d.id === schemaId);
+export const botProjectDiagnosticsSelector = selector({
+  key: 'botProjectDiagnosticsSelector',
+  get: ({ get }) => {
+    const botProjects = get(botProjectIdsState);
+    const result = botProjects.map((projectId: string) => {
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+      const dialogs = get(dialogsSelectorFamily(projectId));
+      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+      const luFiles = get(luFilesState(projectId));
+      const lgFiles = get(lgFilesState(projectId));
+      const setting = get(settingsState(projectId));
+      const skillManifests = get(skillManifestsState(projectId));
+      const dialogSchemas = get(dialogSchemasState(projectId));
+      const qnaFiles = get(qnaFilesState(projectId));
+      const botProjectFile = get(botProjectFileState(projectId));
+      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
+      const botAssets: BotAssets = {
+        projectId,
+        dialogs,
+        luFiles,
+        qnaFiles,
+        lgFiles,
+        skillManifests,
+        setting,
+        dialogSchemas,
+        formDialogSchemas,
+        botProjectFile,
+        jsonSchemaFiles,
+        recognizers: [],
+        crossTrainConfig: {},
+      };
+      return BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+    });
+    return result;
+  },
+});
+
+export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] }>({
+  key: 'projectDialogsMap',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+
+    return projectIds.reduce((result, projectId) => {
+      const dialogIds = get(dialogIdsState(projectId));
+      result[projectId] = dialogIds.map((dialogId) => {
+        return get(dialogState({ projectId, dialogId }));
+      });
+      return result;
+    }, {});
   },
 });

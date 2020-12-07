@@ -24,14 +24,14 @@ jobs:
         displayName: "Use Node 12.13.0"
         inputs:
           versionSpec: 12.13.0
-      - task: CacheBeta@1
-        inputs:
-          key: yarn | $(Agent.OS) | Composer/yarn.lock
-          path: $(YARN_CACHE_FOLDER)
-          restoreKeys: |
-            yarn | $(Agent.OS)
-        displayName: Cache Yarn packages
-      - task: CacheBeta@1
+      # - task: Cache@2
+      #   inputs:
+      #     key: yarn | $(Agent.OS) | Composer/yarn.lock
+      #     path: $(YARN_CACHE_FOLDER)
+      #     restoreKeys: |
+      #       yarn | $(Agent.OS)
+      #   displayName: Cache Yarn packages
+      - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
           key: cypress | $(Agent.OS) | Composer/yarn.lock
@@ -69,21 +69,18 @@ jobs:
   - job: security
     displayName: Security Analysis
     steps:
-    - task: UseDotNet@2
-      inputs:
-        version: '3.1.x'
-        packageType: runtime
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet build'
-      inputs:
-        projects: runtime/dotnet
-    - task: ComponentGovernanceComponentDetection@0
-      displayName: Component Detection
-      inputs:
-        scanType: 'Register'
-        verbosity: 'Verbose'
-        alertWarningLevel: 'High'
-        failOnAlert: true
-
-
-
+      - task: UseDotNet@2
+        inputs:
+          version: "3.1.x"
+          packageType: runtime
+      - task: DotNetCoreCLI@2
+        displayName: "dotnet build"
+        inputs:
+          projects: runtime/dotnet
+      - task: ComponentGovernanceComponentDetection@0
+        displayName: Component Detection
+        inputs:
+          scanType: "Register"
+          verbosity: "Verbose"
+          alertWarningLevel: "High"
+          failOnAlert: true

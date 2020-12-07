@@ -9,6 +9,10 @@ export const DefaultFlowSchema: FlowUISchema = {
     widget: 'ActionCard',
     body: '=action.activity',
   },
+  [SDKKinds.Ask]: {
+    widget: 'ActionCard',
+    body: '=action.activity',
+  },
   [SDKKinds.AttachmentInput]: {
     widget: 'ActionCard',
     body: '=action.prompt',
@@ -126,6 +130,27 @@ export const DefaultFlowSchema: FlowUISchema = {
     },
     body: '=action.activity',
   },
+  [SDKKinds.GetActivityMembers]: {
+    widget: 'ActionCard',
+    body: {
+      widget: 'PropertyDescription',
+      property: '=coalesce(action.activityId, "?")',
+      description: '= ActivityId',
+    },
+    footer: {
+      widget: 'PropertyDescription',
+      property: '=coalesce(action.property, "?")',
+      description: '= Result property',
+    },
+  },
+  [SDKKinds.GetConversationMembers]: {
+    widget: 'ActionCard',
+    footer: {
+      widget: 'PropertyDescription',
+      property: '=action.property',
+      description: '= Result property',
+    },
+  },
   [SDKKinds.CancelAllDialogs]: {
     widget: 'ActionCard',
     body: {
@@ -190,6 +215,14 @@ export const DefaultFlowSchema: FlowUISchema = {
       widget: 'PropertyDescription',
       property: '=coalesce(action.eventName, "?")',
       description: '(Event)',
+    },
+  },
+  [SDKKinds.ThrowException]: {
+    widget: 'ActionCard',
+    body: {
+      widget: 'PropertyDescription',
+      property: '=coalesce(action.errorValue, "?")',
+      description: '= ErrorValue',
     },
   },
 };

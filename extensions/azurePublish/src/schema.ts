@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@botframework-composer/types';
+
 const schema: JSONSchema7 = {
   type: 'object',
   properties: {
@@ -26,6 +27,11 @@ const schema: JSONSchema7 = {
     language: {
       type: 'string',
       title: 'Language for luis - default to en-us',
+    },
+    runtimeIdentifier: {
+      type: 'string',
+      title:
+        'Runtime identifier for hosting bot, default to win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog',
     },
     settings: {
       type: 'object',
@@ -108,6 +114,7 @@ const schema: JSONSchema7 = {
     accessToken: '<Access token from az account get-access-token>',
     name: '<unique name in your subscription>',
     environment: 'dev',
+    runtimeIdentifier: 'win-x64',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',

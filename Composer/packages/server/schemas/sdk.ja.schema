@@ -1,0 +1,5048 @@
+{
+  "title": "コンポーネントの種類",
+  "description": "これらはローダーで作成できるすべての種類です。",
+  "definitions": {
+    "Microsoft.ActivityTemplate": {
+      "title": "Microsoft activity template",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "テンプレート",
+          "description": "アクティビティを作成するために使用する言語ジェネレーター テンプレート"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.AdaptiveDialog": {
+      "title": "Adaptive dialog",
+      "description": "会話に適応できる、柔軟なデータドリブン ダイアログ。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "オプションのダイアログ ID。"
+        },
+        "autoEndDialog": {
+          "title": "ダイアログの自動終了",
+          "description": "true に設定した場合、それ以上のアクションがなくなるとダイアログは自動的に終了します。false に設定した場合は、忘れずに EndDialog アクションを使用して手動でダイアログを終了してください。"
+        },
+        "defaultResultProperty": {
+          "title": "既定の result プロパティ",
+          "description": "親ダイアログに返される値。"
+        },
+        "recognizer": {
+          "title": "認識エンジン",
+          "description": "ユーザーによる入力をインテントとエンティティに変換する入力認識エンジン。"
+        },
+        "generator": {
+          "title": "Language generator",
+          "description": "ボット応答を生成する言語ジェネレーター。"
+        },
+        "selector": {
+          "title": "セレクター",
+          "description": "実行されるトリガーを決定するポリシー。既定では、'best match' セレクター (省略可能) が指定されています。"
+        },
+        "triggers": {
+          "description": "このダイアログに定義されているトリガーのリスト。",
+          "title": "トリガー",
+          "items": {
+            "title": "イベント トリガー",
+            "description": "イベントを処理するためのイベント トリガー。"
+          }
+        },
+        "schema": {
+          "title": "スキーマ",
+          "description": "入力するスキーマ。",
+          "anyOf": {
+            "0": {
+              "title": "Core schema meta-schema"
+            },
+            "1": {
+              "title": "JSON スキーマへの参照",
+              "description": "JSON スキーマ .dialog ファイルへの参照。"
+            }
+          }
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.AgeEntityRecognizer": {
+      "title": "Age entity recognizer",
+      "description": "年齢を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.Ask": {
+      "title": "Send activity to ask a question",
+      "description": "これは、応答が要求されるときにユーザーにアクティビティを送信するアクションです",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "expectedProperties": {
+          "title": "Expected properties",
+          "description": "ユーザーから予想されるプロパティ。",
+          "items": {
+            "title": "名前",
+            "description": "プロパティの名前"
+          }
+        },
+        "defaultOperation": {
+          "title": "Default operation",
+          "description": "この質問に対する応答で操作が認識されない場合に使用される既定の操作を設定します。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "activity": {
+          "title": "アクティビティ",
+          "description": "送信するアクティビティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "添付ファイルの入力ダイアログ",
+      "description": "情報の収集 - ファイルまたはイメージを要求します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "既定値",
+          "description": "[プロパティ] は、最大ターン数を超えると、オブジェクトまたはこの式の結果に設定されます。",
+          "oneOf": {
+            "0": {
+              "title": "オブジェクト",
+              "description": "添付オブジェクト。"
+            }
+          }
+        },
+        "value": {
+          "title": "値",
+          "description": "[プロパティ] は、null に評価される場合を除き、オブジェクトまたはこの式の結果に設定されます。",
+          "oneOf": {
+            "0": {
+              "title": "オブジェクト",
+              "description": "添付オブジェクトです。"
+            }
+          }
+        },
+        "outputFormat": {
+          "title": "出力形式",
+          "description": "添付ファイルの出力形式。",
+          "oneOf": {
+            "0": {
+              "title": "標準の形式",
+              "description": "標準の出力形式。"
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "prompt": {
+          "title": "最初のプロンプト",
+          "description": "情報を収集するために送信するメッセージ。"
+        },
+        "unrecognizedPrompt": {
+          "title": "認識されないプロンプト",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザーによる入力が検証式を満たしていないときに送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "validations": {
+          "title": "検証式",
+          "description": "ユーザーによる入力を検証する式。",
+          "items": {
+            "title": "条件",
+            "description": "入力が有効と見なされるために満たす必要がある式"
+          }
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "収集された情報を格納するプロパティ。プロパティに値がある場合、入力はスキップされます ([常にプロンプトを表示する] が true の場合を除く)。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "allowInterruptions": {
+          "title": "中断の許可",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.BeginDialog": {
+      "title": "ダイアログの開始",
+      "description": "別のダイアログを開始します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "ダイアログ"
+            }
+          },
+          "title": "ダイアログ名",
+          "description": "呼び出すダイアログの名前。"
+        },
+        "options": {
+          "title": "オプション",
+          "description": "呼び出されたダイアログに渡される 1 つ以上のオプション。",
+          "additionalProperties": {
+            "title": "オプション",
+            "description": "ダイアログのオプション。"
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false に設定すると、呼び出されたダイアログが現在のアクティビティを処理できます。"
+        },
+        "resultProperty": {
+          "title": "プロパティ",
+          "description": "呼び出されたダイアログによって返された値を格納するプロパティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.BeginSkill": {
+      "title": "スキルの開始",
+      "description": "リモートのスキルを開始します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "スキル ダイアログのオプションの ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false に設定すると、Activity プロパティのアクティビティではなく、現在のターン コンテキストのアクティビティを使用してスキルが開始されます。"
+        },
+        "resultProperty": {
+          "title": "プロパティ",
+          "description": "呼び出されたダイアログによって返された値を格納するプロパティ。"
+        },
+        "botId": {
+          "title": "スキル ホストのボット ID",
+          "description": "スキルを呼び出す Microsoft アプリ ID。"
+        },
+        "skillHostEndpoint": {
+          "title": "スキル ホスト",
+          "description": "スキル ホストのコールバック URL。"
+        },
+        "connectionName": {
+          "title": "OAuth connection name (SSO)",
+          "description": "スキルを使用してシングル サインオンを実行するために使用される OAuth 接続名。"
+        },
+        "skillAppId": {
+          "title": "Skill App Id",
+          "description": "スキルの Microsoft アプリ ID。"
+        },
+        "skillEndpoint": {
+          "title": "スキル エンドポイント",
+          "description": "スキルの /api/messages エンドポイント。"
+        },
+        "activity": {
+          "title": "アクティビティ",
+          "description": "スキルに送信するアクティビティ。"
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "親がスキルの中断を許可される必要があるかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.BreakLoop": {
+      "title": "Break loop",
+      "description": "このループの実行を停止します",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.CancelAllDialogs": {
+      "title": "すべてのダイアログを取り消す",
+      "description": "すべてのアクティブなダイアログを取り消します。ダイアログ チェーンのすべてのダイアログには、このアクションで構成されたイベントをキャプチャするためのトリガーが必要です。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false に設定すると、呼び出し元ダイアログに現在のアクティビティを処理する必要があると通知されます。"
+        },
+        "eventName": {
+          "title": "イベント名",
+          "description": "生成するイベントの名前。"
+        },
+        "eventValue": {
+          "title": "イベント値",
+          "description": "イベントを使用して生成する値 (省略可能)。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.CancelDialog": {
+      "title": "すべてのダイアログを取り消す",
+      "description": "すべてのアクティブなダイアログを取り消します。ダイアログ チェーンのすべてのダイアログには、このアクションで構成されたイベントをキャプチャするためのトリガーが必要です。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false に設定すると、呼び出し元ダイアログに現在のアクティビティを処理する必要があると通知されます。"
+        },
+        "eventName": {
+          "title": "イベント名",
+          "description": "生成するイベントの名前。"
+        },
+        "eventValue": {
+          "title": "イベント値",
+          "description": "イベントを使用して生成する値 (省略可能)。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ChannelMentionEntityRecognizer": {
+      "title": "Channel mention entity recognizer",
+      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChoiceInput": {
+      "title": "選択肢の入力ダイアログ",
+      "description": "情報の収集 - 選択肢のリストから選択します",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "既定値",
+          "description": "'Property' は、最大ターン数を超えた場合に、この式の値に設定されます。"
+        },
+        "value": {
+          "title": "値",
+          "description": "'Property' は、null に評価されない限り、この式の値に設定されます。"
+        },
+        "outputFormat": {
+          "title": "出力形式",
+          "description": "目的の選択肢の出力形式 (選択肢への値またはインデックスのいずれか) を設定します。",
+          "oneOf": {
+            "0": {
+              "title": "標準",
+              "description": "標準の出力形式。"
+            }
+          }
+        },
+        "choices": {
+          "title": "選択肢の配列",
+          "description": "選択元の選択肢。",
+          "oneOf": {
+            "0": {
+              "title": "単純な選択",
+              "description": "選択するための単純な選択肢。",
+              "items": {
+                "0": {
+                  "title": "単純な選択",
+                  "description": "選択肢の入力の 1 つの選択肢。"
+                }
+              }
+            },
+            "1": {
+              "title": "構造化された選択",
+              "description": "フル コントロールを許可する選択肢。",
+              "items": {
+                "0": {
+                  "title": "構造化された選択肢",
+                  "description": "選択元の構造化された選択肢。",
+                  "properties": {
+                    "value": {
+                      "title": "値",
+                      "description": "この選択項目が選択されたときに返される値。"
+                    },
+                    "action": {
+                      "title": "アクション",
+                      "description": "選択項目のカード アクション。"
+                    },
+                    "synonyms": {
+                      "title": "シノニム",
+                      "description": "値に加えて認識するシノニムの一覧 (省略可能)。",
+                      "items": {
+                        "title": "シノニム",
+                        "description": "値の類義語。"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "defaultLocale": {
+          "title": "デフォルトのロケール",
+          "description": "呼び出し元によって渡されたものが存在しない場合に、確認の選択肢を解析するために使用する既定のロケール。"
+        },
+        "style": {
+          "title": "リスト スタイル",
+          "description": "ListStyle を設定して選択肢の表示方法を制御します。",
+          "oneOf": {
+            "0": {
+              "title": "リスト スタイル",
+              "description": "標準のリスト スタイル。"
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "選択肢のオプション",
+          "description": "選択肢の組み合わせ方法を制御するために使用される選択肢オプションを設定します。",
+          "oneOf": {
+            "0": {
+              "title": "オブジェクト",
+              "description": "選択肢オプションのオブジェクト。",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "インライン区切り記号",
+                  "description": "選択肢が 2 つ以上ある場合に個々の選択肢を区別するために使用される文字"
+                },
+                "inlineOr": {
+                  "title": "インラインまたは",
+                  "description": "選択肢が 2 つしかない場合に、選択肢の間に挿入される区切り記号"
+                },
+                "inlineOrMore": {
+                  "title": "インラインまたはそれ以上",
+                  "description": "2 つより多くの選択肢がある場合に、直前の 2 つの選択肢の間に挿入される区切り記号。"
+                },
+                "includeNumbers": {
+                  "title": "数値を含める",
+                  "description": "true の場合、'inline' および 'list' リスト スタイルの前に選択されたインデックスが付けられます。"
+                }
+              }
+            }
+          }
+        },
+        "recognizerOptions": {
+          "title": "認識エンジンのオプション",
+          "description": "応答の選択肢を認識する方法を設定します",
+          "oneOf": {
+            "0": {
+              "title": "オブジェクト",
+              "description": "認識エンジンのオプション。",
+              "properties": {
+                "noValue": {
+                  "title": "値なし",
+                  "description": "true の場合、選択肢の値フィールドは検索されません"
+                },
+                "noAction": {
+                  "title": "アクションなし",
+                  "description": "true の場合、選択肢の action.title フィールドは検索されません"
+                },
+                "recognizeNumbers": {
+                  "title": "数値の認識",
+                  "description": "true の場合、プロンプトに対するインデックス応答 (1,2,3...) を認識するために数値認識エンジンが使用されます。"
+                },
+                "recognizeOrdinals": {
+                  "title": "序数の認識",
+                  "description": "true の場合、プロンプトに対する序数の応答 (1 番目/2 番目/...) を認識するために序数認識エンジンが使用されます。"
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "prompt": {
+          "title": "最初のプロンプト",
+          "description": "情報を収集するために送信するメッセージ。"
+        },
+        "unrecognizedPrompt": {
+          "title": "認識されないプロンプト",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザーによる入力が検証式を満たしていないときに送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "validations": {
+          "title": "検証式",
+          "description": "ユーザーによる入力を検証する式。",
+          "items": {
+            "title": "条件",
+            "description": "入力が有効と見なされるために満たす必要がある式"
+          }
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "収集された情報を格納するプロパティ。プロパティに値がある場合、入力はスキップされます ([常にプロンプトを表示する] が true の場合を除く)。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "allowInterruptions": {
+          "title": "中断の許可",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ConditionalSelector": {
+      "title": "Conditional trigger selector",
+      "description": "条件に基づいてルール セレクターを使用します",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "評価する式"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ConfirmInput": {
+      "title": "入力ダイアログの確認",
+      "description": "情報の収集 - 確認を求めます (はいまたはいいえ)。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "outputFormat": {
+          "title": "出力形式",
+          "description": "出力の書式設定に使用するオプションの式。"
+        },
+        "defaultLocale": {
+          "title": "デフォルトのロケール",
+          "description": "アクティビティに見つからない場合に規定として使用する既定のロケールを指定する既定のロケールまたは式。"
+        },
+        "style": {
+          "title": "リスト スタイル",
+          "description": "ListStyle を設定して選択肢の表示方法を制御します。",
+          "oneOf": {
+            "0": {
+              "title": "標準スタイル",
+              "description": "レンダリング オプションの標準スタイル。"
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Choice options",
+          "description": "ユーザーに対する表示の選択肢を制御するための選択肢オプション、または選択肢オプションを指定する式。",
+          "oneOf": {
+            "0": {
+              "title": "選択肢のオプション",
+              "description": "選択肢オプション。",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "インライン区切り記号",
+                  "description": "2 つより多くの選択肢がある場合に、個々の選択肢を区切るためのテキスト"
+                },
+                "inlineOr": {
+                  "title": "インラインまたは",
+                  "description": "選択肢が 2 つしかない場合に、選択肢の間に挿入されるテキスト"
+                },
+                "inlineOrMore": {
+                  "title": "インラインまたはそれ以上",
+                  "description": "2 つより多くの選択肢がある場合に、直前の 2 つの選択肢の間に挿入されるテキスト。"
+                },
+                "includeNumbers": {
+                  "title": "数値を含める",
+                  "description": "true の場合、インラインとリストのスタイルの選択肢の前に選択肢のインデックスが付けられます。"
+                }
+              }
+            }
+          }
+        },
+        "defaultValue": {
+          "title": "既定値",
+          "description": "'Property' は、最大ターン数を超えた場合に、この式の値に設定されます。"
+        },
+        "value": {
+          "title": "値",
+          "description": "'Property' は、null に評価されない限り、この式の値に設定されます。"
+        },
+        "confirmChoices": {
+          "title": "選択肢オブジェクトの配列",
+          "description": "単純または構造化された選択肢の配列。",
+          "oneOf": {
+            "0": {
+              "title": "単純な選択",
+              "description": "確認するための簡単な選択肢。",
+              "items": {
+                "0": {
+                  "title": "単純な選択",
+                  "description": "確認のための単純な選択肢。"
+                }
+              }
+            },
+            "1": {
+              "title": "構造化された選択",
+              "description": "確認のための構造化された選択肢。",
+              "items": {
+                "0": {
+                  "title": "選択肢",
+                  "description": "確認のために選択肢。",
+                  "properties": {
+                    "value": {
+                      "title": "値",
+                      "description": "この選択項目が選択されたときに返される値。"
+                    },
+                    "action": {
+                      "title": "アクション",
+                      "description": "選択項目のカード アクション。"
+                    },
+                    "synonyms": {
+                      "title": "シノニム",
+                      "description": "値に加えて認識するシノニムの一覧 (省略可能)。",
+                      "items": {
+                        "title": "シノニム",
+                        "description": "選択肢の類義語。"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "prompt": {
+          "title": "最初のプロンプト",
+          "description": "情報を収集するために送信するメッセージ。"
+        },
+        "unrecognizedPrompt": {
+          "title": "認識されないプロンプト",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザーによる入力が検証式を満たしていないときに送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "validations": {
+          "title": "検証式",
+          "description": "ユーザーによる入力を検証する式。",
+          "items": {
+            "title": "条件",
+            "description": "入力が有効と見なされるために満たす必要がある式"
+          }
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "収集された情報を格納するプロパティ。プロパティに値がある場合、入力はスキップされます ([常にプロンプトを表示する] が true の場合を除く)。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "allowInterruptions": {
+          "title": "中断の許可",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ConfirmationEntityRecognizer": {
+      "title": "Confirmation entity recognizer",
+      "description": "確認の選択肢 (はい/いいえ) を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ContinueConversationLater": {
+      "title": "Continue conversation later (Queue)",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "date": {
+          "title": "Date",
+          "description": "Date in the future as a ISO string when the conversation should continue."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueLoop": {
+      "title": "Continue loop",
+      "description": "このテンプレートの実行を停止し、ループの次の反復処理を続行します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.CrossTrainedRecognizerSet": {
+      "title": "Cross-trained recognizer set",
+      "description": "クロス トレーニングされた認識エンジンを選択するための認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet と一緒に使用するオプションの一意の ID。"
+        },
+        "recognizers": {
+          "title": "認識エンジン",
+          "description": "このセットに定義されている認識エンジンの一覧。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.CurrencyEntityRecognizer": {
+      "title": "Currency entity recognizer",
+      "description": "通貨を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.DateTimeEntityRecognizer": {
+      "title": "Date and time entity recognizer",
+      "description": "日付と時刻のフラグメントを認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.DateTimeInput": {
+      "title": "日付/時刻入力ダイアログ",
+      "description": "情報の収集 - 日付と時刻、またはそのいずれかを要求します",
+      "defaultLocale": {
+        "title": "デフォルトのロケール",
+        "description": "既定のロケール。"
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Default date",
+          "description": "[プロパティ] は、最大ターン数を超えると、式の値または結果に設定されます。"
+        },
+        "value": {
+          "title": "値",
+          "description": "[プロパティ] は、null に評価される場合を除き、式の値または結果に設定されます。"
+        },
+        "outputFormat": {
+          "title": "出力形式",
+          "description": "出力の書式設定に使用する式。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "prompt": {
+          "title": "最初のプロンプト",
+          "description": "情報を収集するために送信するメッセージ。"
+        },
+        "unrecognizedPrompt": {
+          "title": "認識されないプロンプト",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザーによる入力が検証式を満たしていないときに送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "validations": {
+          "title": "検証式",
+          "description": "ユーザーによる入力を検証する式。",
+          "items": {
+            "title": "条件",
+            "description": "入力が有効と見なされるために満たす必要がある式"
+          }
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "収集された情報を格納するプロパティ。プロパティに値がある場合、入力はスキップされます ([常にプロンプトを表示する] が true の場合を除く)。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "allowInterruptions": {
+          "title": "中断の許可",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.DebugBreak": {
+      "title": "デバッガー ブレーク",
+      "description": "デバッガーがアタッチされている場合、会話のこの時点で実行を停止します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.DeleteActivity": {
+      "title": "アクティビティの削除",
+      "description": "以前に送信されたアクティビティを削除します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "activityId": {
+          "title": "ActivityId",
+          "description": "削除する activityId への式"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.DeleteProperties": {
+      "title": "プロパティの削除",
+      "description": "複数のプロパティとそれが保持する値を削除します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "properties": {
+          "title": "プロパティ",
+          "description": "削除するプロパティ。",
+          "items": {
+            "title": "プロパティ",
+            "description": "削除するプロパティ。"
+          }
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.DeleteProperty": {
+      "title": "Delete property",
+      "description": "プロパティとそれが保持する値を削除します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "削除するプロパティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.DimensionEntityRecognizer": {
+      "title": "Dimension entity recognizer",
+      "description": "ディメンションを認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.EditActions": {
+      "title": "アクションを編集します。",
+      "description": "アクションの現在のリストを編集します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "changeType": {
+          "title": "変更の種類",
+          "description": "現在のアクションに適用する変更の種類。",
+          "oneOf": {
+            "0": {
+              "title": "標準の変更",
+              "description": "標準の変更の種類。"
+            }
+          }
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "適用するアクション。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.EditArray": {
+      "title": "配列の編集",
+      "description": "メモリ内の配列を変更します",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "changeType": {
+          "title": "変更の種類",
+          "description": "メモリ内の配列に対する変更の種類。",
+          "oneOf": {
+            "0": {
+              "title": "Change type",
+              "description": "標準の変更の種類。"
+            }
+          }
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "itemsProperty": {
+          "title": "項目のプロパティ",
+          "description": "更新する配列を保持するプロパティ。"
+        },
+        "resultProperty": {
+          "title": "Result property",
+          "description": "このアクションの結果を格納するためのプロパティ。"
+        },
+        "value": {
+          "title": "値",
+          "description": "新しい値または式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.EmailEntityRecognizer": {
+      "title": "Email entity recognizer",
+      "description": "電子メールを認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.EmitEvent": {
+      "title": "カスタム イベントの生成",
+      "description": "イベントを生成します。トリガーを使用してこのイベントをキャプチャします。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "eventName": {
+          "title": "イベント名",
+          "description": "生成するイベントの名前。",
+          "oneOf": {
+            "0": {
+              "title": "組み込みのイベント",
+              "description": "標準イベントの種類。"
+            },
+            "1": {
+              "title": "カスタム イベント",
+              "description": "カスタム イベントの種類"
+            }
+          }
+        },
+        "eventValue": {
+          "title": "イベント値",
+          "description": "イベントを使用して生成する値 (省略可能)。"
+        },
+        "bubbleEvent": {
+          "title": "バブル イベント",
+          "description": "true の場合、このイベントは親ダイアログに渡されます。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.EndDialog": {
+      "title": "ダイアログの終了",
+      "description": "このダイアログを終了します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "value": {
+          "title": "値",
+          "description": "親ダイアログに返される結果値。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.EndTurn": {
+      "title": "ターンの終了",
+      "description": "ダイアログを終了せずに現在のターンを終了します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.FirstSelector": {
+      "title": "First trigger selector",
+      "description": "最初の true のルールのセレクター",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.Foreach": {
+      "title": "各項目の",
+      "description": "コレクション内の各項目に対してアクションを実行します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "itemsProperty": {
+          "title": "項目のプロパティ",
+          "description": "配列を保持するプロパティ。"
+        },
+        "index": {
+          "title": "インデックス プロパティ",
+          "description": "項目のインデックスを保持するプロパティ。"
+        },
+        "value": {
+          "title": "Value プロパティ",
+          "description": "項目の値を保持するプロパティ。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "項目ごとに実行するアクション。各項目の値にアクセスするには、'$foreach.value' を使用します。各項目のインデックスにアクセスするには、'$foreach.index' を使用します。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ForeachPage": {
+      "title": "各ページの",
+      "description": "配列内の各ページ (項目のコレクション) に対してアクションを実行します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "itemsProperty": {
+          "title": "項目のプロパティ",
+          "description": "配列を保持するプロパティ。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "ページごとに実行するアクション。各ページにアクセスするには、'$foreach.page' を使用します。"
+        },
+        "pageIndex": {
+          "title": "インデックス プロパティ",
+          "description": "ページのインデックスを保持するプロパティ。"
+        },
+        "page": {
+          "title": "ページ プロパティ",
+          "description": "ページの値を保持するプロパティ。"
+        },
+        "pageSize": {
+          "title": "ページ サイズ",
+          "description": "各ページの項目数。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.GetActivityMembers": {
+      "title": "Get activity members",
+      "description": "アクティビティに参加しているメンバーを取得します。(BotFrameworkAdapter のみ)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "プロパティ (情報を格納する場所の名前)。"
+        },
+        "activityId": {
+          "title": "Activity Id",
+          "description": "メンバーを取得するために使用する、アクティビティ ID または activityId に対する式。何も定義されていない場合、現在のアクティビティ ID が使用されます。"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.GetConversationMembers": {
+      "title": "Get conversation members",
+      "description": "会話に参加しているメンバーを取得します。(BotFrameworkAdapter のみ)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "プロパティ (情報を格納する場所の名前)。"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.GotoAction": {
+      "title": "Go to action",
+      "description": "ID 順のアクションに移動します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "actionId": {
+          "title": "アクション ID",
+          "description": "次に実行するアクション ID"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.GuidEntityRecognizer": {
+      "title": "Guid entity recognizer",
+      "description": "GUID を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.HashtagEntityRecognizer": {
+      "title": "Hashtag entity recognizer",
+      "description": "ハッシュタグを認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.HttpRequest": {
+      "title": "HTTP 要求",
+      "description": "HTTP 要求を行います。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "method": {
+          "title": "HTTP メソッド",
+          "description": "使用する HTTP メソッド。"
+        },
+        "url": {
+          "title": "URL",
+          "description": "呼び出す URL (データ バインディングをサポート)。"
+        },
+        "body": {
+          "title": "本文",
+          "description": "HTTP 呼び出しに含める本文 (データ バインディングをサポート)。"
+        },
+        "resultProperty": {
+          "title": "結果プロパティ",
+          "description": "このアクションの結果を格納するプロパティ。この結果には、HTTP 応答からの 4 つのプロパティ (statusCode、reasonPhrase、content、および headers) のいずれかを含めることができます。コンテンツが JSON の場合、これは逆シリアル化オブジェクトになります。値には、たとえば .content を介してアクセスできます。"
+        },
+        "contentType": {
+          "title": "コンテンツの種類",
+          "description": "本文のコンテンツのメディアの種類。"
+        },
+        "headers": {
+          "title": "ヘッダー",
+          "description": "要求に含める 1 つ以上のヘッダー (データ バインディングをサポート)。"
+        },
+        "responseType": {
+          "title": "応答の種類",
+          "description": "HTTP 応答の種類を定義します。[アクティビティ] に設定されている場合、[応答の送信] アクションが自動的に呼び出されます。",
+          "oneOf": {
+            "0": {
+              "title": "標準応答",
+              "description": "標準応答の種類。"
+            }
+          }
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.IActivityTemplate": {
+      "title": "Microsoft ActivityTemplates",
+      "description": "ActivityTemplate であるコンポーネント (ActivityTemplate の文字列テンプレート、アクティビティ、または実装)",
+      "oneOf": {
+        "1": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation",
+              "properties": {
+                "isGroup": {
+                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "title": "isGroup"
+                },
+                "conversationType": {
+                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "title": "conversationType"
+                },
+                "id": {
+                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                  "title": "id"
+                },
+                "name": {
+                  "description": "Display friendly name",
+                  "title": "name"
+                },
+                "aadObjectId": {
+                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "title": "aadObjectId"
+                },
+                "role": {
+                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                  "title": "role"
+                }
+              }
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded",
+              "items": {
+                "description": "Channel account information needed to route a message",
+                "title": "ChannelAccount",
+                "properties": {
+                  "id": {
+                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                    "title": "id"
+                  },
+                  "name": {
+                    "description": "Display friendly name",
+                    "title": "name"
+                  },
+                  "aadObjectId": {
+                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "title": "aadObjectId"
+                  },
+                  "role": {
+                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                    "title": "role"
+                  }
+                }
+              }
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded",
+              "items": {
+                "description": "Message reaction object",
+                "title": "MessageReaction",
+                "properties": {
+                  "type": {
+                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions",
+              "properties": {
+                "to": {
+                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+                  "title": "to",
+                  "items": {
+                    "title": "Id",
+                    "description": "Id of recipient."
+                  }
+                },
+                "actions": {
+                  "description": "Actions that can be shown to the user",
+                  "title": "actions",
+                  "items": {
+                    "description": "A clickable action",
+                    "title": "CardAction",
+                    "properties": {
+                      "type": {
+                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "type"
+                      },
+                      "title": {
+                        "description": "Text description which appears on the button",
+                        "title": "title"
+                      },
+                      "image": {
+                        "description": "Image URL which will appear on the button, next to text label",
+                        "title": "image"
+                      },
+                      "text": {
+                        "description": "Text for this action",
+                        "title": "text"
+                      },
+                      "displayText": {
+                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "title": "displayText"
+                      },
+                      "value": {
+                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+                        "title": "value"
+                      },
+                      "channelData": {
+                        "description": "Channel-specific data associated with this action",
+                        "title": "channelData"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments",
+              "items": {
+                "description": "An attachment within an activity",
+                "title": "Attachment",
+                "properties": {
+                  "contentType": {
+                    "description": "mimetype/Contenttype for the file",
+                    "title": "contentType"
+                  },
+                  "contentUrl": {
+                    "description": "Content Url",
+                    "title": "contentUrl"
+                  },
+                  "content": {
+                    "description": "Embedded content",
+                    "title": "content"
+                  },
+                  "name": {
+                    "description": "(OPTIONAL) The name of the attachment",
+                    "title": "name"
+                  },
+                  "thumbnailUrl": {
+                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "title": "thumbnailUrl"
+                  }
+                }
+              }
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities",
+              "items": {
+                "description": "Metadata object pertaining to an activity",
+                "title": "Entity",
+                "properties": {
+                  "type": {
+                    "description": "Type of this entity (RFC 3987 IRI)",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo",
+              "properties": {
+                "activityId": {
+                  "description": "(Optional) ID of the activity to refer to",
+                  "title": "activityId"
+                },
+                "user": {
+                  "description": "(Optional) User participating in this conversation",
+                  "title": "user"
+                },
+                "bot": {
+                  "description": "Bot participating in this conversation",
+                  "title": "bot"
+                },
+                "conversation": {
+                  "description": "Conversation reference",
+                  "title": "conversation"
+                },
+                "channelId": {
+                  "description": "Channel ID",
+                  "title": "channelId"
+                },
+                "serviceUrl": {
+                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "title": "serviceUrl"
+                }
+              }
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights",
+              "items": {
+                "description": "Refers to a substring of content within another field",
+                "title": "TextHighlight",
+                "properties": {
+                  "text": {
+                    "description": "Defines the snippet of text to highlight",
+                    "title": "text"
+                  },
+                  "occurrence": {
+                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+                    "title": "occurrence"
+                  }
+                }
+              }
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction",
+              "properties": {
+                "id": {
+                  "description": "ID of this action",
+                  "title": "id"
+                },
+                "entities": {
+                  "description": "Entities associated with this action",
+                  "title": "entities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Microsoft.IDialog": {
+      "title": "Microsoft dialogs",
+      "description": "ダイアログから派生したコンポーネント"
+    },
+    "Microsoft.IEntityRecognizer": {
+      "title": "Entity recognizers",
+      "description": "EntityRecognizer から派生したコンポーネント。",
+      "oneOf": {
+        "0": {
+          "title": "Microsoft.IEntityRecognizer への参照",
+          "description": "Microsoft.IEntityRecognizer .dialog ファイルへの参照。"
+        }
+      }
+    },
+    "Microsoft.ILanguageGenerator": {
+      "title": "Microsoft LanguageGenerator",
+      "description": "LanguageGenerator クラスから派生したコンポーネント"
+    },
+    "Microsoft.IRecognizer": {
+      "title": "Microsoft recognizer",
+      "description": "Recognizer クラスから派生したコンポーネント"
+    },
+    "Microsoft.ITextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "TextTemplate クラスから派生したコンポーネント"
+    },
+    "Microsoft.ITrigger": {
+      "title": "Microsoft トリガー",
+      "description": "OnCondition クラスから派生したコンポーネント。",
+      "oneOf": {
+        "0": {
+          "title": "Microsoft.ITrigger への参照",
+          "description": "Microsoft.ITrigger .dialog ファイルへの参照。"
+        }
+      }
+    },
+    "Microsoft.ITriggerSelector": {
+      "title": "セレクター",
+      "description": "TriggerSelector クラスから派生したコンポーネント。",
+      "oneOf": {
+        "0": {
+          "title": "Microsoft.ITriggerSelector への参照",
+          "description": "Microsoft.ITriggerSelector .dialog ファイルへの参照。"
+        }
+      }
+    },
+    "Microsoft.IfCondition": {
+      "title": "if 条件",
+      "description": "条件に基づいて会話フローを双方向に分岐します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "評価する式。"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "条件が true の場合に実行するアクション。"
+        },
+        "elseActions": {
+          "title": "Else",
+          "description": "条件が false の場合に実行するアクション。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.InputDialog": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "prompt": {
+          "title": "最初のプロンプト",
+          "description": "情報を収集するために送信するメッセージ。"
+        },
+        "unrecognizedPrompt": {
+          "title": "認識されないプロンプト",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザーによる入力が検証式を満たしていないときに送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "validations": {
+          "title": "検証式",
+          "description": "ユーザーによる入力を検証する式。",
+          "items": {
+            "title": "条件",
+            "description": "入力が有効と見なされるために満たす必要がある式"
+          }
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "収集された情報を格納するプロパティ。プロパティに値がある場合、入力はスキップされます ([常にプロンプトを表示する] が true の場合を除く)。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "allowInterruptions": {
+          "title": "中断の許可",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.IpEntityRecognizer": {
+      "title": "IP entity recognizer",
+      "description": "インターネットの IP パターン (192.1.1.1 など) を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.LanguagePolicy": {
+      "title": "Language policy",
+      "description": "これは、言語用に使用するロケール検索のポリシー マップを表します",
+      "additionalProperties": {
+        "title": "ロケールごとのポリシー",
+        "description": "ロケールごとの言語ポリシー。",
+        "items": {
+          "title": "ロケール",
+          "description": "en-us などのロケール。"
+        }
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.LogAction": {
+      "title": "コンソールにログを作成",
+      "description": "ホスト アプリケーションへのメッセージをログに記録します。Bot Framework Emulator に TraceActivity を送信します (省略可能)。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "text": {
+          "title": "テキスト",
+          "description": "ログに記録する情報。"
+        },
+        "label": {
+          "title": "ラベル",
+          "description": "トレース アクティビティのラベル (トレース アクティビティの一覧で識別するために使用されます)。"
+        },
+        "traceActivity": {
+          "title": "Send trace activity",
+          "description": "true の場合、自動的に TraceActivity (Bot Framework Emulator のビュー) を送信します。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.LuisRecognizer": {
+      "title": "LUIS 認識エンジン",
+      "description": "LUIS 認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet と一緒に使用するオプションの一意の ID。この認識エンジンのデータをクロス トレーニングする場合、他の認識エンジンで  'DeferToRecognizer_{Id}' インテントを返す必要があります。"
+        },
+        "applicationId": {
+          "title": "LUIS application id",
+          "description": "LUIS サービスからのモデルのアプリケーション ID。"
+        },
+        "version": {
+          "title": "LUIS version",
+          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+        },
+        "endpoint": {
+          "title": "LUIS endpoint",
+          "description": "LUIS サービス (https://westus.api.cognitive.microsoft.com など) に使用するエンドポイント。"
+        },
+        "endpointKey": {
+          "title": "LUIS 予測キー",
+          "description": "エンドポイントの呼び出しに使用される LUIS 予測キー。"
+        },
+        "externalEntityRecognizer": {
+          "title": "External entity recognizer",
+          "description": "この認識エンジンで認識されるエンティティは、外部エンティティとして LUIS に渡されます。"
+        },
+        "dynamicLists": {
+          "title": "動的リスト",
+          "description": "ランタイム定義のエンティティ リスト。",
+          "items": {
+            "title": "エンティティ リスト",
+            "description": "エンティティの正規の値と類義語のリスト。",
+            "properties": {
+              "entity": {
+                "title": "エンティティ",
+                "description": "動的リストを使用して拡張するエンティティ。"
+              },
+              "list": {
+                "title": "動的リスト",
+                "description": "正規形式と類義語のリスト。",
+                "items": {
+                  "title": "リスト エントリ",
+                  "description": "正規形式と類義語。",
+                  "properties": {
+                    "canonicalForm": {
+                      "title": "正規形式",
+                      "description": "いずれかの類義語が一致する場合の解決。"
+                    },
+                    "synonyms": {
+                      "title": "シノニム",
+                      "description": "正規形式の同義語のリスト。",
+                      "items": {
+                        "title": "シノニム",
+                        "description": "正規形式の類義語。"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "predictionOptions": {
+          "title": "予測オプション",
+          "description": "LUIS 予測動作を制御するオプション。",
+          "properties": {
+            "includeAllIntents": {
+              "title": "すべてのインテントを含める",
+              "description": "すべてのインテントの場合は true、上位のインテントのみの場合は false。"
+            },
+            "includeInstanceData": {
+              "title": "$instance を含める",
+              "description": "LUIS 応答に $instance メタデータを含める場合は true。"
+            },
+            "log": {
+              "title": "発話のログ",
+              "description": "LUIS サービスで発話をログに記録する場合は true。"
+            },
+            "preferExternalEntities": {
+              "title": "Prefer external entities",
+              "description": "LUIS モデルで生成された外部エンティティを優先する場合は true。"
+            },
+            "slot": {
+              "title": "スロット",
+              "description": "LUIS サービス (運用やステージングなど) と通信するために使用するスロット。"
+            }
+          }
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.MentionEntityRecognizer": {
+      "title": "Mentions entity recognizer",
+      "description": "@Mentions を認識する認識エンジン",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.MostSpecificSelector": {
+      "title": "Most specific trigger selector",
+      "description": "オプションの追加のセレクターを使用して、最も固有な true イベントを選択します",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.MultiLanguageRecognizer": {
+      "title": "多言語認識エンジン",
+      "description": "言語ごとに 1 つの認識エンジンを構成し、言語フォールバック ポリシーを指定します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet と一緒に使用するオプションの一意の ID。この認識エンジンのデータをクロス トレーニングする場合、他の認識エンジンで  'DeferToRecognizer_{Id}' インテントを返す必要があります。"
+        },
+        "languagePolicy": {
+          "title": "言語ポリシー",
+          "description": "ユーザーによる入力言語ごとに試すためのフォールバック言語を定義します。"
+        },
+        "recognizers": {
+          "title": "認識エンジン",
+          "description": "言語 -> 認識エンジンのマップ"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.NumberEntityRecognizer": {
+      "title": "Number entity recognizer",
+      "description": "数値を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.NumberInput": {
+      "title": "数値入力ダイアログ",
+      "description": "情報の収集 - 数値を要求します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "既定値",
+          "description": "'Property' は、最大ターン数を超えた場合に、この式の値に設定されます。"
+        },
+        "value": {
+          "title": "値",
+          "description": "'Property' は、null に評価されない限り、この式の値に設定されます。"
+        },
+        "outputFormat": {
+          "title": "出力形式",
+          "description": "数値出力の書式を設定するための式。"
+        },
+        "defaultLocale": {
+          "title": "デフォルトのロケール",
+          "description": "使用できるロケールがない場合に使用される既定のロケール。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "prompt": {
+          "title": "最初のプロンプト",
+          "description": "情報を収集するために送信するメッセージ。"
+        },
+        "unrecognizedPrompt": {
+          "title": "認識されないプロンプト",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザーによる入力が検証式を満たしていないときに送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "validations": {
+          "title": "検証式",
+          "description": "ユーザーによる入力を検証する式。",
+          "items": {
+            "title": "条件",
+            "description": "入力が有効と見なされるために満たす必要がある式"
+          }
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "収集された情報を格納するプロパティ。プロパティに値がある場合、入力はスキップされます ([常にプロンプトを表示する] が true の場合を除く)。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "allowInterruptions": {
+          "title": "中断の許可",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.NumberRangeEntityRecognizer": {
+      "title": "Number range entity recognizer",
+      "description": "数値の範囲を認識する認識エンジン (例: 2 ～ 5)。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuthInput ダイアログ",
+      "description": "ログイン情報を収集します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "connectionName": {
+          "title": "接続名",
+          "description": "Azure Web アプリ ボットの OAuth 設定で構成された接続名。"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "text": {
+          "title": "テキスト",
+          "description": "OAuth サインイン カードに表示されるテキスト。"
+        },
+        "title": {
+          "title": "タイトル",
+          "description": "OAuth サインイン カードに示されているタイトル。"
+        },
+        "timeout": {
+          "title": "タイムアウト",
+          "description": "OAuth サインイン カードのタイムアウト設定。"
+        },
+        "property": {
+          "title": "トークンのプロパティ",
+          "description": "OAuth トークンの結果を格納するためのプロパティ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザー応答が無効である場合に送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "defaultValue": {
+          "title": "既定値",
+          "description": "プロパティに対する可能な値として、会話の各ターンについて調べる式。"
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnActivity": {
+      "title": "アクティビティで",
+      "description": "汎用アクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "type": {
+          "title": "アクティビティの種類",
+          "description": "照合する Activity.Type"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnAssignEntity": {
+      "title": "エンティティの割り当てで",
+      "description": "プロパティにエンティティを割り当てる必要があるときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "プロパティ",
+          "description": "エンティティが選択された後に設定されるプロパティ。"
+        },
+        "entity": {
+          "title": "エンティティ",
+          "description": "プロパティに格納されているエンティティ"
+        },
+        "operation": {
+          "title": "操作",
+          "description": "エンティティを割り当てる操作。"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnBeginDialog": {
+      "title": "ダイアログの開始で",
+      "description": "このダイアログを開始するときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnCancelDialog": {
+      "title": "ダイアログのキャンセルで",
+      "description": "ダイアログのキャンセル イベント時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnChooseEntity": {
+      "title": "エンティティの選択で",
+      "description": "エンティティ値を解決する必要があるときに実行されるアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "設定するプロパティ",
+          "description": "エンティティが選択された後に設定されるプロパティ。"
+        },
+        "entity": {
+          "title": "あいまいなエンティティ",
+          "description": "あいまいなエンティティ"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnChooseIntent": {
+      "title": "あいまいなインテントで",
+      "description": "インテントがあいまいな場合に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "intents": {
+          "title": "インテント",
+          "description": "この条件をトリガーするために ChooseIntent 結果に含まれている必要があるインテント。",
+          "items": {
+            "title": "意図",
+            "description": "トリガー対象のインテント名。"
+          }
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnChooseProperty": {
+      "title": "プロパティの選択で",
+      "description": "プロパティへのエンティティのマッピングが複数ある可能性がある場合に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "entity": {
+          "title": "割り当てられているエンティティ",
+          "description": "プロパティの選択肢に割り当てられているエンティティ"
+        },
+        "properties": {
+          "title": "使用可能なプロパティ",
+          "description": "選択されるプロパティ。",
+          "items": {
+            "title": "プロパティ名",
+            "description": "選択可能なプロパティ。"
+          }
+        },
+        "entities": {
+          "title": "エンティティ",
+          "description": "あいまいなエンティティ名です。",
+          "items": {
+            "title": "エンティティ名",
+            "description": "選択されているエンティティ名。"
+          }
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnCondition": {
+      "title": "条件で",
+      "description": "指定された条件が true の場合に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnContinueConversation": {
+      "title": "On continue conversation",
+      "description": "ContinueConversationLater アクションから会話が再開されたときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "ConversationUpdate アクティビティで",
+      "description": "種類が 'ConversationUpdate' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnDialogEvent": {
+      "title": "ダイアログ イベントで",
+      "description": "特定のダイアログ イベントが発生したときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "event": {
+          "title": "ダイアログ イベント名",
+          "description": "ダイアログ イベントの名前。"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnEndOfActions": {
+      "title": "アクションの最後で",
+      "description": "現在のダイアログにこれ以上アクションがないときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+      "title": "EndOfConversation アクティビティで",
+      "description": "種類が 'EndOfConversation' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnError": {
+      "title": "On error",
+      "description": "'Error' ダイアログ イベントが発生したときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnEventActivity": {
+      "title": "イベント アクティビティで",
+      "description": "種類が 'Event' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnHandoffActivity": {
+      "title": "ハンドオフ アクティビティ",
+      "description": "種類が 'HandOff' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+      "title": "On InstallationUpdate activity",
+      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condition",
+          "description": "Condition (expression)."
+        },
+        "actions": {
+          "title": "Actions",
+          "description": "Sequence of actions to execute."
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+        },
+        "runOnce": {
+          "title": "Run Once",
+          "description": "True if rule should run once per unique conditions"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnIntent": {
+      "title": "インテント認識で",
+      "description": "指定されたインテントが認識されたときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "intent": {
+          "title": "意図",
+          "description": "インテントの名前。"
+        },
+        "entities": {
+          "title": "エンティティ",
+          "description": "必須のエンティティ。",
+          "items": {
+            "title": "エンティティ",
+            "description": "存在する必要があるエンティティ。"
+          }
+        },
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnInvokeActivity": {
+      "title": "呼び出しアクティビティで",
+      "description": "種類が 'Invoke' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnMessageActivity": {
+      "title": "メッセージ アクティビティで",
+      "description": "種類が 'Message' のアクティビティの受信時に実行するアクション。インテント トリガーをオーバーライドします。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+      "title": "MessageDelete アクティビティで",
+      "description": "種類が 'MessageDelete' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+      "title": "MessageReaction アクティビティで",
+      "description": "種類が 'MessageReaction' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+      "title": "MessageUpdate アクティビティで",
+      "description": "種類が 'MessageUpdate' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnQnAMatch": {
+      "title": "On QnAMaker match",
+      "description": "QnAMaker からの一致が見つかった場合に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "RepromptDialog で",
+      "description": "'RepromptDialog' イベントが発生したときに実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnTypingActivity": {
+      "title": "入力アクティビティで",
+      "description": "種類が 'Typing' のアクティビティの受信時に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "不明なインテントで",
+      "description": "ユーザーの入力が認識されない場合、または認識されたインテントに一致する 'インテント認識で' トリガーがない場合に実行するアクション。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "条件",
+          "description": "条件 (式)。"
+        },
+        "actions": {
+          "title": "アクション",
+          "description": "実行するアクションのシーケンス。"
+        },
+        "priority": {
+          "title": "優先順位",
+          "description": "0 が最高値で 0 未満が無視されたトリガーの優先順位。"
+        },
+        "runOnce": {
+          "title": "一度だけ実行する",
+          "description": "一意の条件ごとにルールを 1 回実行する必要がある場合は True"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.OrdinalEntityRecognizer": {
+      "title": "Ordinal entity recognizer",
+      "description": "序数 (例: 1 番目、2 番目、3 番目) を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.PercentageEntityRecognizer": {
+      "title": "Percentage entity recognizer",
+      "description": "パーセンテージを認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.PhoneNumberEntityRecognizer": {
+      "title": "Phone number entity recognizer",
+      "description": "電話番号を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.QnAMakerDialog": {
+      "title": "QnAMaker dialog",
+      "description": "QnAMAker ナレッジ ベースを使用して質問に回答するダイアログ。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "knowledgeBaseId": {
+          "title": "ナレッジベース ID",
+          "description": "QnA Maker ナレッジベースのナレッジベース ID。"
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "QnA Maker KB のエンドポイント キー。"
+        },
+        "hostname": {
+          "title": "ホスト名",
+          "description": "QnA Maker サービスのホスト名。"
+        },
+        "noAnswer": {
+          "title": "フォールバック応答",
+          "description": "KB で何も見つからなかった場合に返される既定の応答。"
+        },
+        "threshold": {
+          "title": "しきい値",
+          "description": "結果をフィルター処理するためのしきい値スコア。"
+        },
+        "activeLearningCardTitle": {
+          "title": "アクティブ ラーニング カードのタイトル",
+          "description": "アクティブ ラーニングの候補カードのタイトル。"
+        },
+        "cardNoMatchText": {
+          "title": "カードがテキストに一致しない",
+          "description": "一致なしオプションのテキスト。"
+        },
+        "cardNoMatchResponse": {
+          "title": "カードが応答に一致しない",
+          "description": "一致なしオプションが選択されなかった場合のカスタム応答。"
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "QnA Maker KB を呼び出すときに使用するメタデータ フィルター。",
+          "items": {
+            "title": "メタデータ フィルター",
+            "description": "メタデータ フィルター。",
+            "properties": {
+              "name": {
+                "title": "名前",
+                "description": "フィルター プロパティの名前。"
+              },
+              "value": {
+                "title": "値",
+                "description": "フィルター対象の値。"
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "一番上",
+          "description": "取得する回答の数。"
+        },
+        "isTest": {
+          "title": "IsTest",
+          "description": "テスト環境を指す場合は True、それ以外の場合は false。"
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "ランカーの種類。",
+          "oneOf": {
+            "0": {
+              "title": "標準のランカー",
+              "description": "標準のランカーの種類。"
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+            }
+          }
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.QnAMakerRecognizer": {
+      "title": "QnAMaker recognizer",
+      "description": "KB から QnAMatch インテントを生成するための認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet と一緒に使用するオプションの一意の ID。"
+        },
+        "knowledgeBaseId": {
+          "title": "ナレッジベース ID",
+          "description": "Knowledge base Id of your QnA Maker knowledge base."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "QnA Maker KB のエンドポイント キー。"
+        },
+        "hostname": {
+          "title": "ホスト名",
+          "description": "QnA Maker サービスのホスト名。"
+        },
+        "threshold": {
+          "title": "しきい値",
+          "description": "結果をフィルター処理するためのしきい値スコア。"
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "QnA Maker KB を呼び出すときに使用するメタデータ フィルター。",
+          "items": {
+            "title": "メタデータ フィルター",
+            "description": "QnA Maker KB を照会するときに使用するメタデータ フィルター。",
+            "properties": {
+              "name": {
+                "title": "名前",
+                "description": "フィルター処理する名前。"
+              },
+              "value": {
+                "title": "値",
+                "description": "フィルターを制限する値。"
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "一番上",
+          "description": "取得する回答の数。"
+        },
+        "isTest": {
+          "title": "Use test environment",
+          "description": "テスト環境を指す場合は True、それ以外の場合は false。"
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "ランカーの種類。",
+          "oneOf": {
+            "0": {
+              "title": "ランカーの種類",
+              "description": "ランカーの種類。"
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+            }
+          }
+        },
+        "includeDialogNameInMetadata": {
+          "title": "Include dialog name",
+          "description": "false に設定すると、ダイアログ名は QnAMaker に渡されません。(既定) は true です"
+        },
+        "metadata": {
+          "title": "メタデータ フィルター",
+          "description": "QnA Maker KB を呼び出すときに使用するメタデータ フィルター。",
+          "items": {
+            "title": "メタデータ フィルター",
+            "description": "QnA Maker KB を呼び出すときに使用するメタデータ フィルター。",
+            "properties": {
+              "name": {
+                "title": "名前",
+                "description": "テストする値の名前。"
+              },
+              "value": {
+                "title": "値",
+                "description": "フィルター処理される値。"
+              }
+            }
+          }
+        },
+        "context": {
+          "title": "QnA request context",
+          "description": "ランク付けに使用するコンテキスト。"
+        },
+        "qnaId": {
+          "title": "QnA Id",
+          "description": "QnAMaker API に渡す QnAId である数値または式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.RandomSelector": {
+      "title": "ランダム ルール セレクター",
+      "description": "最も具体的な true のルールを選択します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "seed": {
+          "title": "ランダム シード",
+          "description": "乱数生成を開始するためのランダム シード。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.RecognizerSet": {
+      "title": "Recognizer set",
+      "description": "セット内の認識エンジンのインテントとエンティティの和集合を作成します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet と一緒に使用するオプションの一意の ID。この認識エンジンのデータをクロス トレーニングする場合、他の認識エンジンで  'DeferToRecognizer_{Id}' インテントを返す必要があります。"
+        },
+        "recognizers": {
+          "title": "認識エンジン",
+          "description": "このセットに定義されている認識エンジンの一覧。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.RegexEntityRecognizer": {
+      "title": "Regex entity recognizer",
+      "description": "正規表現に基づく入力のパターンを認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "name": {
+          "title": "名前",
+          "description": "エンティティの名前"
+        },
+        "pattern": {
+          "title": "パターン",
+          "description": "正規表現として表現されるパターン。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.RegexRecognizer": {
+      "title": "正規表現認識エンジン",
+      "description": "ユーザーによる入力のインテントとエンティティを認識するために、正規表現を使用します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet と一緒に使用するオプションの一意の ID。この認識エンジンのデータをクロス トレーニングする場合、他の認識エンジンで  'DeferToRecognizer_{Id}' インテントを返す必要があります。"
+        },
+        "intents": {
+          "title": "インテントの正規表現パターン",
+          "description": "インテントに合うパターンのコレクション。",
+          "items": {
+            "title": "パターン",
+            "description": "インテントと正規表現パターン。",
+            "properties": {
+              "intent": {
+                "title": "意図",
+                "description": "インテント名。"
+              },
+              "pattern": {
+                "title": "パターン",
+                "description": "正規表現のパターン。"
+              }
+            }
+          }
+        },
+        "entities": {
+          "title": "エンティティ認識エンジン",
+          "description": "使用するエンティティ認識エンジンのコレクション。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.RepeatDialog": {
+      "title": "ダイアログの繰り返し",
+      "description": "現在のダイアログを繰り返します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "allowLoop": {
+          "title": "AllowLoop",
+          "description": "true の場合に、繰り返されるダイアログのループを許可するオプションの条件。"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "options": {
+          "title": "オプション",
+          "description": "呼び出されたダイアログに渡される 1 つ以上のオプション。",
+          "additionalProperties": {
+            "title": "オプション",
+            "description": "ダイアログを繰り返すためのオプション。"
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false に設定すると、呼び出されたダイアログが現在のアクティビティを処理できます。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ReplaceDialog": {
+      "title": "ダイアログの置換",
+      "description": "現在のダイアログを別のダイアログに置き換えます。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "ダイアログ"
+            }
+          },
+          "title": "ダイアログ名",
+          "description": "呼び出すダイアログの名前。"
+        },
+        "options": {
+          "title": "オプション",
+          "description": "呼び出されたダイアログに渡される 1 つ以上のオプション。",
+          "additionalProperties": {
+            "title": "オプション",
+            "description": "ダイアログを置換するためのオプション。"
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false に設定すると、呼び出されたダイアログが現在のアクティビティを処理できます。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ResourceMultiLanguageGenerator": {
+      "title": "Resource multi-language generator",
+      "description": "リソース ID でリソースにバインドされている多言語ジェネレーター。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "オプションのジェネレーター ID。"
+        },
+        "resourceId": {
+          "title": "リソース ID",
+          "description": "ルート言語ジェネレーターであるリソース。 同じ名前と言語サフィックスを持つ他のジェネレーターがこのジェネレーターに読み込まれ、言語ポリシーに基づいて使用されます。"
+        },
+        "languagePolicy": {
+          "title": "Language policy",
+          "description": "このジェネレーターの代替言語ポリシーを設定します。設定されていない場合は、グローバル言語ポリシーが使用されます。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.SendActivity": {
+      "title": "アクティビティの送信",
+      "description": "アクティビティで応答します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "activity": {
+          "title": "アクティビティ",
+          "description": "送信するアクティビティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.SetProperties": {
+      "title": "プロパティの設定",
+      "description": "1 つ以上のプロパティ値を設定します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "assignments": {
+          "title": "割り当て",
+          "description": "設定するプロパティ値の割り当て。",
+          "items": {
+            "title": "割り当て",
+            "description": "プロパティの割り当て。",
+            "properties": {
+              "property": {
+                "title": "プロパティ",
+                "description": "プロパティ (情報を格納する場所の名前)。"
+              },
+              "value": {
+                "title": "値",
+                "description": "新しい値または式。"
+              }
+            }
+          }
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.SetProperty": {
+      "title": "プロパティの設定",
+      "description": "プロパティを値に設定します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "プロパティ (情報を格納する場所の名前)。"
+        },
+        "value": {
+          "title": "値",
+          "description": "新しい値または式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.SignOutUser": {
+      "title": "Sign out user",
+      "description": "OAuthInput を使用して既にログインしているユーザーをサインアウトします。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "userId": {
+          "title": "UserId",
+          "description": "サインアウトするユーザーへの式。既定値は user.id です。"
+        },
+        "connectionName": {
+          "title": "Connection name",
+          "description": "ユーザーをログインするために OAuthInput で使用された接続名。"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.StaticActivityTemplate": {
+      "title": "Microsoft static activity template",
+      "description": "静的なアクティビティ オブジェクトを定義できます。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "activity": {
+          "title": "アクティビティ",
+          "description": "使用する静的なアクティビティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.SwitchCondition": {
+      "title": "条件の切り替え",
+      "description": "プロパティの値に基づいて異なるアクションを実行します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "condition": {
+          "title": "条件",
+          "description": "評価するプロパティ。"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "cases": {
+          "title": "ケース",
+          "description": "考えられる条件ごとのアクション。",
+          "items": {
+            "title": "ケース",
+            "description": "ケースとアクション。",
+            "properties": {
+              "value": {
+                "title": "値",
+                "description": "条件の比較対象の値。"
+              },
+              "actions": {
+                "title": "アクション",
+                "description": "実行するアクション。"
+              }
+            }
+          }
+        },
+        "default": {
+          "title": "既定",
+          "description": "条件を満たしているケースがない場合に実行するアクション。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.TelemetryTrackEvent": {
+      "title": "Telemetry - track event",
+      "description": "登録されているテレメトリ クライアントを使用してカスタム イベントを追跡します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "eventName": {
+          "title": "Event name",
+          "description": "追跡するイベントの名前。"
+        },
+        "properties": {
+          "title": "プロパティ",
+          "description": "追跡中のイベントにアタッチする 1 つ以上のプロパティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.TemperatureEntityRecognizer": {
+      "title": "Temperature recognizer",
+      "description": "温度を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.TemplateEngineLanguageGenerator": {
+      "title": "Template multi-language generator",
+      "description": "テンプレートのインライン評価のみを許可するテンプレート ジェネレーター。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "オプションのジェネレーター ID。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.TextInput": {
+      "title": "テキスト入力ダイアログ",
+      "description": "コレクション情報 - 単語または文を要求します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "既定値",
+          "description": "'Property' は、最大ターン数を超えた場合に、この式の値に設定されます。"
+        },
+        "value": {
+          "title": "値",
+          "description": "'Property' は、null に評価されない限り、この式の値に設定されます。"
+        },
+        "outputFormat": {
+          "title": "出力形式",
+          "description": "出力の書式を設定するための式。"
+        },
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "prompt": {
+          "title": "最初のプロンプト",
+          "description": "情報を収集するために送信するメッセージ。"
+        },
+        "unrecognizedPrompt": {
+          "title": "認識されないプロンプト",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "invalidPrompt": {
+          "title": "無効なプロンプト",
+          "description": "ユーザーによる入力が検証式を満たしていないときに送信するメッセージ。"
+        },
+        "defaultValueResponse": {
+          "title": "既定値の応答",
+          "description": "最大ターン数 (指定されている場合) が超過し、既定値が値として選択されたときに送信するメッセージ。"
+        },
+        "maxTurnCount": {
+          "title": "最大ターン数",
+          "description": "情報を収集する再プロンプト試行回数の最大値。"
+        },
+        "validations": {
+          "title": "検証式",
+          "description": "ユーザーによる入力を検証する式。",
+          "items": {
+            "title": "条件",
+            "description": "入力が有効と見なされるために満たす必要がある式"
+          }
+        },
+        "property": {
+          "title": "プロパティ",
+          "description": "収集された情報を格納するプロパティ。プロパティに値がある場合、入力はスキップされます ([常にプロンプトを表示する] が true の場合を除く)。"
+        },
+        "alwaysPrompt": {
+          "title": "常にプロンプトを表示する",
+          "description": "指定された 'property' が空でない場合でも情報を収集します。"
+        },
+        "allowInterruptions": {
+          "title": "中断の許可",
+          "description": "入力の中断を親に許可するかどうかを決定するブール式。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.TextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "LG テンプレートを使用してテキストを作成します",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "テンプレート",
+          "description": "テキストを作成するために評価する言語ジェネレーター テンプレート。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.ThrowException": {
+      "title": "Throw an exception",
+      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "errorValue": {
+          "title": "Error value",
+          "description": "Error value to throw."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TraceActivity": {
+      "title": "TraceActivity の送信",
+      "description": "トレース アクティビティをトランスクリプト ロガーまたは Bot Framework Emulator に送信します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "name": {
+          "title": "名前",
+          "description": "トレース アクティビティの名前"
+        },
+        "label": {
+          "title": "ラベル",
+          "description": "トレース アクティビティのラベル (トレース アクティビティの一覧で識別するために使用されます)。"
+        },
+        "valueType": {
+          "title": "値の種類",
+          "description": "値の種類"
+        },
+        "value": {
+          "title": "値",
+          "description": "トレース アクティビティとして送信する値を保持するプロパティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.TrueSelector": {
+      "title": "True trigger selector",
+      "description": "すべての true のイベントのセレクター",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.UpdateActivity": {
+      "title": "Update an activity",
+      "description": "アクティビティで応答します。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
+        },
+        "disabled": {
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
+        },
+        "activityId": {
+          "title": "アクティビティ ID",
+          "description": "更新するアクティビティ ID を含む文字列式。"
+        },
+        "activity": {
+          "title": "アクティビティ",
+          "description": "送信するアクティビティ。"
+        },
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "Microsoft.UrlEntityRecognizer": {
+      "title": "Url recognizer",
+      "description": "URL を認識する認識エンジン。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "arrayExpression": {
+      "title": "配列または式",
+      "description": "評価する配列または式。",
+      "oneOf": {
+        "0": {
+          "title": "配列",
+          "description": "配列定数。"
+        }
+      }
+    },
+    "booleanExpression": {
+      "title": "ブール値または式",
+      "description": "評価するブール型定数または式。",
+      "oneOf": {
+        "0": {
+          "title": "ブール値",
+          "description": "ブール型定数。"
+        }
+      }
+    },
+    "component": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
+        },
+        "$designer": {
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
+        }
+      }
+    },
+    "condition": {
+      "title": "ブール値の条件",
+      "description": "評価するブール型定数または式。",
+      "oneOf": {
+        "1": {
+          "title": "ブール値",
+          "description": "ブール値。"
+        }
+      }
+    },
+    "equalsExpression": {
+      "title": "式",
+      "description": "= で始まる式。"
+    },
+    "expression": {
+      "title": "式",
+      "description": "評価する式。"
+    },
+    "integerExpression": {
+      "title": "整数または式",
+      "description": "評価する整数定数または式。",
+      "oneOf": {
+        "0": {
+          "title": "整数",
+          "description": "整数定数。"
+        }
+      }
+    },
+    "numberExpression": {
+      "title": "数値または式",
+      "description": "評価する数値定数または式。",
+      "oneOf": {
+        "0": {
+          "title": "数",
+          "description": "数値定数。"
+        }
+      }
+    },
+    "objectExpression": {
+      "title": "オブジェクトまたは式",
+      "description": "評価するオブジェクトまたは式。",
+      "oneOf": {
+        "0": {
+          "title": "オブジェクト",
+          "description": "オブジェクト定数。"
+        }
+      }
+    },
+    "role": {
+      "title": "$role",
+      "description": "[expression|interface|implements($kind)|extends($kind)] からのダイアログのスキーマで再生されるロールを定義します。"
+    },
+    "stringExpression": {
+      "title": "文字列または式",
+      "description": "評価される補間された文字列または式。",
+      "oneOf": {
+        "0": {
+          "title": "文字列",
+          "description": "補間された文字列"
+        }
+      }
+    },
+    "valueExpression": {
+      "title": "任意または式",
+      "description": "評価する任意の定数または式。",
+      "oneOf": {
+        "0": {
+          "title": "オブジェクト",
+          "description": "オブジェクト定数。"
+        },
+        "1": {
+          "title": "配列",
+          "description": "配列定数。"
+        },
+        "2": {
+          "title": "文字列",
+          "description": "補間された文字列。"
+        },
+        "3": {
+          "title": "ブール値",
+          "description": "ブール型定数"
+        },
+        "4": {
+          "title": "数",
+          "description": "数値定数。"
+        }
+      }
+    }
+  }
+}

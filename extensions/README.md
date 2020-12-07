@@ -15,13 +15,13 @@ to specific areas of the application, and must adhere to a set of interfaces and
 
 Extensions currently have access to the following functional areas:
 
-- Authentication and identity - extensions can provide a mechanism to gate access to the application, as well as mechanisms used to provide user identity.
-- Storage - extensions can override the built in filesystem storage with a new way to read, write and access bot projects.
-- Web server - extensions can add additional web routes to Composer's web server instance.
-- Publishing - extensions can add publishing mechanisms
-- Runtime Templates - extensions can provide a runtime template used when "ejecting" from Composer
-- Bot Project Templates - extensions can add items to the template list shown in the "new bot" flow
-- Boilerplate Content - extensions can provide content copied into all bot projects (such as a readme file or helper scripts)
+- [Authentication and identity](#authentication-and-identity) - extensions can provide a mechanism to gate access to the application, as well as mechanisms used to provide user identity.
+- [Storage](#storage) - extensions can override the built in filesystem storage with a new way to read, write and access bot projects.
+- [Web server](#web-server) - extensions can add additional web routes to Composer's web server instance.
+- [Publishing](#publishing) - extensions can add publishing mechanisms
+- [Runtime Templates](#runtime-templates) - extensions can provide a runtime template used when "ejecting" from Composer
+- [Bot Project Templates](#bot-project-templates) - extensions can add items to the template list shown in the "new bot" flow
+- [Boilerplate Content](#boilerplate-content) - extensions can provide content copied into all bot projects (such as a readme file or helper scripts)
 
 Combining these endpoints, it is possible to achieve scenarios such as:
 
@@ -43,12 +43,12 @@ Extension modules must come in one of the following forms:
 Currently, extensions can be loaded into Composer using 1 of 2 methods:
 
 - The extension is placed in the /extensions/ folder
-- The extension is loaded directly via changes to Composer code, using `ExtensionContext.loadPlugin(name, extension)`
+- The extension is installed via the extensions page
 
 The simplest form of a extension module is below:
 
 ```ts
-export default async (composer: any): Promise<void> => {
+export default async (composer: ExtensionRegistration): Promise<void> => {
   // call methods (see below) on the composer API
   // composer.useStorage(...);
   // composer.usePassportStrategy(...);
@@ -487,6 +487,8 @@ await composer.addBotTemplate({
   path: '/path/to/template'
 });
 ```
+
+### Boilerplate Content
 
 In addition, boilerplate material will also be added to every new bot project. Extensions can bundle additional content that will be copied into every project, regardless of which template is used.
 

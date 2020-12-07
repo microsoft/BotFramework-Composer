@@ -14,7 +14,7 @@ context('Saving As', () => {
     cy.findByText('Save as').click();
     cy.enterTextAndSubmit('NewDialogName', '__TestSaveAs', 'SubmitNewBotBtn');
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestSaveAs').should('exist');
+      cy.findAllByText('__TestSaveAs').should('exist');
     });
   });
 });

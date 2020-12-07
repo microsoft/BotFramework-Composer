@@ -1,0 +1,5048 @@
+{
+  "title": "구성 요소 종류",
+  "description": "로더가 만들 수 있는 모든 종류입니다.",
+  "definitions": {
+    "Microsoft.ActivityTemplate": {
+      "title": "Microsoft activity template",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "템플릿",
+          "description": "활동을 만드는 데 사용할 언어 생성기 템플릿입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.AdaptiveDialog": {
+      "title": "Adaptive dialog",
+      "description": "대화에 맞게 조정될 수 있는 유연한 데이터 기반 대화입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)입니다."
+        },
+        "autoEndDialog": {
+          "title": "대화 자동 종료",
+          "description": "true로 설정하면 더 이상 작업이 없는 경우 대화가 자동으로 종료됩니다. false로 설정한 경우에는 EndDialog 작업을 사용하여 대화를 수동으로 종료해야 합니다."
+        },
+        "defaultResultProperty": {
+          "title": "기본 결과 속성",
+          "description": "부모 대화에 다시 전달되는 값입니다."
+        },
+        "recognizer": {
+          "title": "인식기",
+          "description": "사용자 입력을 의도와 엔터티로 해석하는 입력 인식기입니다."
+        },
+        "generator": {
+          "title": "Language generator",
+          "description": "봇 응답을 생성하는 언어 생성기입니다."
+        },
+        "selector": {
+          "title": "선택기",
+          "description": "실행되는 트리거를 결정하는 정책입니다. 기본값은 '가장 일치하는 항목' 선택기입니다(선택 사항)."
+        },
+        "triggers": {
+          "description": "이 대화에 대해 정의된 트리거 목록입니다.",
+          "title": "트리거",
+          "items": {
+            "title": "이벤트 트리거",
+            "description": "이벤트 처리를 위한 이벤트 트리거입니다."
+          }
+        },
+        "schema": {
+          "title": "스키마",
+          "description": "채울 스키마입니다.",
+          "anyOf": {
+            "0": {
+              "title": "Core schema meta-schema"
+            },
+            "1": {
+              "title": "JSON 스키마에 대한 참조",
+              "description": "JSON 스키마 .dialog 파일에 대한 참조입니다."
+            }
+          }
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.AgeEntityRecognizer": {
+      "title": "Age entity recognizer",
+      "description": "연령을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.Ask": {
+      "title": "Send activity to ask a question",
+      "description": "응답이 필요한 경우 사용자에게 활동을 보내는 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "expectedProperties": {
+          "title": "Expected properties",
+          "description": "사용자가 지정해야 하는 속성입니다.",
+          "items": {
+            "title": "이름",
+            "description": "속성의 이름"
+          }
+        },
+        "defaultOperation": {
+          "title": "Default operation",
+          "description": "이 요청에 대한 응답에서 인식할 수 있는 작업이 없는 경우에 사용되는 기본 작업을 설정합니다."
+        },
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "activity": {
+          "title": "활동",
+          "description": "보낼 활동입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "첨부 파일 입력 대화",
+      "description": "정보 수집 - 파일 또는 이미지를 요청합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "기본값",
+          "description": "최대 턴 카운트를 초과한 경우 'Property'는 개체 또는 이 식의 결과로 설정됩니다.",
+          "oneOf": {
+            "0": {
+              "title": "개체",
+              "description": "첨부 파일 개체입니다."
+            }
+          }
+        },
+        "value": {
+          "title": "값",
+          "description": "Null로 평가되지 않는 경우 'Property'는 개체 또는 이 식의 결과로 설정됩니다.",
+          "oneOf": {
+            "0": {
+              "title": "개체",
+              "description": "첨부 파일 개체입니다."
+            }
+          }
+        },
+        "outputFormat": {
+          "title": "출력 형식",
+          "description": "첨부 파일 출력 형식입니다.",
+          "oneOf": {
+            "0": {
+              "title": "표준 형식",
+              "description": "표준 출력 형식입니다."
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "prompt": {
+          "title": "초기 프롬프트",
+          "description": "정보 수집을 위해 보낼 메시지입니다."
+        },
+        "unrecognizedPrompt": {
+          "title": "인식할 수 없는 프롬프트",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 입력이 유효성 검사 식에 적합하지 않은 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "validations": {
+          "title": "유효성 검사 식",
+          "description": "사용자 입력의 유효성을 검사할 식입니다.",
+          "items": {
+            "title": "조건",
+            "description": "입력이 유효한 것으로 간주되기 위해 충족해야 하는 식입니다."
+          }
+        },
+        "property": {
+          "title": "속성",
+          "description": "수집된 정보를 저장할 속성입니다. '항상 메시지 표시'가 true가 아닌 경우, 속성에 값이 있으면 입력을 건너뜁니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "allowInterruptions": {
+          "title": "중단 허용",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.BeginDialog": {
+      "title": "대화 시작",
+      "description": "다른 대화를 시작합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "대화"
+            }
+          },
+          "title": "대화 이름",
+          "description": "호출할 대화의 이름입니다."
+        },
+        "options": {
+          "title": "옵션",
+          "description": "호출되는 대화에 전달되는 하나 이상의 옵션입니다.",
+          "additionalProperties": {
+            "title": "옵션",
+            "description": "대화 옵션입니다."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false로 설정하면 호출된 대화에서 현재 활동을 처리할 수 있습니다."
+        },
+        "resultProperty": {
+          "title": "속성",
+          "description": "호출된 대화에서 반환된 값을 저장할 속성입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.BeginSkill": {
+      "title": "기술 시작",
+      "description": "원격 기술을 시작합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "기술 대화 ID(선택 사항)입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false로 설정하면 Activity 속성의 활동이 아니라 현재 차례 컨텍스트의 활동을 사용하여 기술이 시작됩니다."
+        },
+        "resultProperty": {
+          "title": "속성",
+          "description": "호출된 대화에서 반환된 값을 저장할 속성입니다."
+        },
+        "botId": {
+          "title": "기술 호스트 봇 ID",
+          "description": "기술을 호출할 Microsoft 앱 ID입니다."
+        },
+        "skillHostEndpoint": {
+          "title": "기술 호스트",
+          "description": "기술 호스트의 콜백 URL입니다."
+        },
+        "connectionName": {
+          "title": "OAuth connection name (SSO)",
+          "description": "기술로 Single SignOn을 수행하는 데 사용되는 OAuth 연결 이름입니다."
+        },
+        "skillAppId": {
+          "title": "Skill App Id",
+          "description": "기술의 Microsoft 앱 ID입니다."
+        },
+        "skillEndpoint": {
+          "title": "기술 엔드포인트 ",
+          "description": "기술의 /api/messages 엔드포인트입니다."
+        },
+        "activity": {
+          "title": "활동",
+          "description": "기술에 보낼 활동입니다."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "부모가 기술을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.BreakLoop": {
+      "title": "Break loop",
+      "description": "이 루프 실행을 중지합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.CancelAllDialogs": {
+      "title": "모든 대화 취소",
+      "description": "활성 대화를 모두 취소합니다. 이 작업에 구성된 이벤트를 캡처하려면 대화 체인의 모든 대화에 트리거가 필요합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false로 설정하면 호출자 대화에 현재 활동을 처리해야 한다는 지시가 전달됩니다."
+        },
+        "eventName": {
+          "title": "이벤트 이름",
+          "description": "내보낼 이벤트의 이름입니다."
+        },
+        "eventValue": {
+          "title": "이벤트 값",
+          "description": "이벤트와 함께 내보낼 값(선택 사항)입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.CancelDialog": {
+      "title": "모든 대화 취소",
+      "description": "활성 대화를 모두 취소합니다. 이 작업에 구성된 이벤트를 캡처하려면 대화 체인의 모든 대화에 트리거가 필요합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false로 설정하면 호출자 대화에 현재 활동을 처리해야 한다는 지시가 전달됩니다."
+        },
+        "eventName": {
+          "title": "이벤트 이름",
+          "description": "내보낼 이벤트의 이름입니다."
+        },
+        "eventValue": {
+          "title": "이벤트 값",
+          "description": "이벤트와 함께 내보낼 값(선택 사항)입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ChannelMentionEntityRecognizer": {
+      "title": "Channel mention entity recognizer",
+      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ChoiceInput": {
+      "title": "선택 항목 입력 대화",
+      "description": "정보 수집 - 선택 항목 목록에서 선택합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "기본값",
+          "description": "최대 턴 카운트를 초과한 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "Null로 평가되지 않는 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "outputFormat": {
+          "title": "출력 형식",
+          "description": "원하는 선택 항목 출력 형식(선택 항목의 값 또는 인덱스)을 설정합니다.",
+          "oneOf": {
+            "0": {
+              "title": "표준",
+              "description": "표준 출력 형식입니다."
+            }
+          }
+        },
+        "choices": {
+          "title": "선택 항목 배열",
+          "description": "선택할 수 있는 선택 항목입니다.",
+          "oneOf": {
+            "0": {
+              "title": "단순 선택 항목",
+              "description": "선택할 단순 선택 항목입니다.",
+              "items": {
+                "0": {
+                  "title": "단순 선택 항목",
+                  "description": "선택 항목 입력의 한 가지 선택 항목입니다."
+                }
+              }
+            },
+            "1": {
+              "title": "구조적 선택 항목",
+              "description": "모든 권한을 허용하는 선택 항목입니다.",
+              "items": {
+                "0": {
+                  "title": "구조적 선택 항목",
+                  "description": "선택할 구조적 선택 항목입니다.",
+                  "properties": {
+                    "value": {
+                      "title": "값",
+                      "description": "이 선택 항목이 선택된 경우 반환할 값입니다."
+                    },
+                    "action": {
+                      "title": "작업",
+                      "description": "선택 항목에 대한 카드 작업입니다."
+                    },
+                    "synonyms": {
+                      "title": "동의어",
+                      "description": "값과 함께 인식할 동의어 목록(선택 사항)입니다.",
+                      "items": {
+                        "title": "동의어",
+                        "description": "값의 동의어입니다."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "defaultLocale": {
+          "title": "기본 로캘",
+          "description": "호출자가 전달한 로캘이 없는 경우 확인 선택 항목을 구문 분석하는 데 사용할 기본 로캘입니다."
+        },
+        "style": {
+          "title": "목록 스타일",
+          "description": "선택 항목의 렌더링 방법을 제어하는 ListStyle을 설정합니다.",
+          "oneOf": {
+            "0": {
+              "title": "목록 스타일",
+              "description": "표준 목록 스타일입니다."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "선택 항목 옵션",
+          "description": "선택 항목의 결합 방법을 제어하는 데 사용되는 선택 항목 옵션을 설정합니다.",
+          "oneOf": {
+            "0": {
+              "title": "개체",
+              "description": "선택 항목 옵션 개체입니다.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "인라인 구분 기호",
+                  "description": "선택 항목이 3개 이상인 경우 개별 선택 항목을 구분하는 데 사용되는 문자입니다."
+                },
+                "inlineOr": {
+                  "title": "인라인 또는",
+                  "description": "선택 항목이 2개뿐인 경우 선택 항목 사이에 삽입되는 구분 기호입니다."
+                },
+                "inlineOrMore": {
+                  "title": "인라인 또는 추가",
+                  "description": "선택 항목이 3개 이상인 경우 마지막 두 선택 항목 사이에 삽입되는 구분 기호입니다."
+                },
+                "includeNumbers": {
+                  "title": "숫자 포함",
+                  "description": "true이면 선택 항목의 인덱스가 'inline' 및 'list' 목록 스타일에 접두사로 추가됩니다."
+                }
+              }
+            }
+          }
+        },
+        "recognizerOptions": {
+          "title": "인식기 옵션",
+          "description": "응답에서 선택 항목을 인식하는 방법을 설정합니다.",
+          "oneOf": {
+            "0": {
+              "title": "개체",
+              "description": "인식기 옵션입니다.",
+              "properties": {
+                "noValue": {
+                  "title": "값 없음",
+                  "description": "true이면 선택 항목 값 필드가 검색되지 않습니다."
+                },
+                "noAction": {
+                  "title": "작업 없음",
+                  "description": "true이면 선택 항목 action.title 필드가 검색되지 않습니다."
+                },
+                "recognizeNumbers": {
+                  "title": "숫자 인식",
+                  "description": "true이면 숫자 인식기를 사용하여 프롬프트에 대한 인덱스 응답(1,2,3...)을 인식합니다."
+                },
+                "recognizeOrdinals": {
+                  "title": "서수 인식",
+                  "description": "true이면 서수 인식기를 사용하여 프롬프트에 대한 서수 응답(첫 번째/두 번째/...)을 인식합니다."
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "prompt": {
+          "title": "초기 프롬프트",
+          "description": "정보 수집을 위해 보낼 메시지입니다."
+        },
+        "unrecognizedPrompt": {
+          "title": "인식할 수 없는 프롬프트",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 입력이 유효성 검사 식에 적합하지 않은 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "validations": {
+          "title": "유효성 검사 식",
+          "description": "사용자 입력의 유효성을 검사할 식입니다.",
+          "items": {
+            "title": "조건",
+            "description": "입력이 유효한 것으로 간주되기 위해 충족해야 하는 식입니다."
+          }
+        },
+        "property": {
+          "title": "속성",
+          "description": "수집된 정보를 저장할 속성입니다. '항상 메시지 표시'가 true가 아닌 경우, 속성에 값이 있으면 입력을 건너뜁니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "allowInterruptions": {
+          "title": "중단 허용",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ConditionalSelector": {
+      "title": "Conditional trigger selector",
+      "description": "조건에 따라 규칙 선택기를 사용합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "평가할 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ConfirmInput": {
+      "title": "입력 대화 확인",
+      "description": "정보 수집 - 확인(예 또는 아니요)을 요청합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "outputFormat": {
+          "title": "출력 형식",
+          "description": "출력 형식을 지정하는 데 사용할 식(선택 사항)입니다."
+        },
+        "defaultLocale": {
+          "title": "기본 로캘",
+          "description": "활동에 없는 경우에 기본값으로 사용할 기본 로캘을 제공하는 기본 로캘 또는 식입니다."
+        },
+        "style": {
+          "title": "목록 스타일",
+          "description": "선택 항목의 렌더링 방법을 제어하는 ListStyle을 설정합니다.",
+          "oneOf": {
+            "0": {
+              "title": "표준 스타일",
+              "description": "선택 항목을 렌더링할 표준 스타일입니다."
+            }
+          }
+        },
+        "choiceOptions": {
+          "title": "Choice options",
+          "description": "사용자에게 표시되는 선택 항목을 제어하기 위한 선택 항목 옵션 또는 선택 항목 옵션을 제공하는 식입니다.",
+          "oneOf": {
+            "0": {
+              "title": "선택 항목 옵션",
+              "description": "선택 항목 옵션입니다.",
+              "properties": {
+                "inlineSeparator": {
+                  "title": "인라인 구분 기호",
+                  "description": "선택 항목이 3개 이상인 경우 개별 선택 항목을 구분하는 텍스트입니다."
+                },
+                "inlineOr": {
+                  "title": "인라인 또는",
+                  "description": "선택 항목이 2개뿐인 경우 선택 항목 사이에 삽입되는 텍스트입니다."
+                },
+                "inlineOrMore": {
+                  "title": "인라인 또는 추가",
+                  "description": "선택 항목이 3개 이상인 경우 마지막 두 선택 항목 사이에 삽입되는 텍스트입니다."
+                },
+                "includeNumbers": {
+                  "title": "숫자 포함",
+                  "description": "true이면 선택 항목의 인덱스가 인라인 및 목록 스타일 선택 항목에 접두사로 추가됩니다."
+                }
+              }
+            }
+          }
+        },
+        "defaultValue": {
+          "title": "기본값",
+          "description": "최대 턴 카운트를 초과한 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "Null로 평가되지 않는 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "confirmChoices": {
+          "title": "선택 개체 배열",
+          "description": "단순 또는 구조적 선택 항목의 배열입니다.",
+          "oneOf": {
+            "0": {
+              "title": "단순 선택 항목",
+              "description": "확인할 단순 선택 항목입니다.",
+              "items": {
+                "0": {
+                  "title": "단순 선택 항목",
+                  "description": "확인할 단순 선택 항목입니다."
+                }
+              }
+            },
+            "1": {
+              "title": "구조적 선택 항목",
+              "description": "확인할 구조적 선택 항목입니다.",
+              "items": {
+                "0": {
+                  "title": "선택 항목",
+                  "description": "확인할 선택 항목입니다.",
+                  "properties": {
+                    "value": {
+                      "title": "값",
+                      "description": "이 선택 항목이 선택된 경우 반환할 값입니다."
+                    },
+                    "action": {
+                      "title": "작업",
+                      "description": "선택 항목에 대한 카드 작업입니다."
+                    },
+                    "synonyms": {
+                      "title": "동의어",
+                      "description": "값과 함께 인식할 동의어 목록(선택 사항)입니다.",
+                      "items": {
+                        "title": "동의어",
+                        "description": "선택 항목의 동의어입니다."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "prompt": {
+          "title": "초기 프롬프트",
+          "description": "정보 수집을 위해 보낼 메시지입니다."
+        },
+        "unrecognizedPrompt": {
+          "title": "인식할 수 없는 프롬프트",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 입력이 유효성 검사 식에 적합하지 않은 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "validations": {
+          "title": "유효성 검사 식",
+          "description": "사용자 입력의 유효성을 검사할 식입니다.",
+          "items": {
+            "title": "조건",
+            "description": "입력이 유효한 것으로 간주되기 위해 충족해야 하는 식입니다."
+          }
+        },
+        "property": {
+          "title": "속성",
+          "description": "수집된 정보를 저장할 속성입니다. '항상 메시지 표시'가 true가 아닌 경우, 속성에 값이 있으면 입력을 건너뜁니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "allowInterruptions": {
+          "title": "중단 허용",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ConfirmationEntityRecognizer": {
+      "title": "Confirmation entity recognizer",
+      "description": "확인 선택 항목(예/아니요)을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ContinueConversationLater": {
+      "title": "Continue conversation later (Queue)",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "date": {
+          "title": "Date",
+          "description": "Date in the future as a ISO string when the conversation should continue."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.ContinueLoop": {
+      "title": "Continue loop",
+      "description": "이 템플릿 실행을 중지하고 루프의 다음 반복을 계속합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.CrossTrainedRecognizerSet": {
+      "title": "Cross-trained recognizer set",
+      "description": "교차 학습된 인식기 중에서 선택하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet에서 사용 중인 고유 ID(선택 사항)입니다."
+        },
+        "recognizers": {
+          "title": "인식기",
+          "description": "이 세트에 대해 정의된 인식기 목록입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.CurrencyEntityRecognizer": {
+      "title": "Currency entity recognizer",
+      "description": "통화를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.DateTimeEntityRecognizer": {
+      "title": "Date and time entity recognizer",
+      "description": "날짜 및 시간 조각을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.DateTimeInput": {
+      "title": "날짜/시간 입력 대화",
+      "description": "정보 수집 - 날짜 및/또는 시간을 요청합니다.",
+      "defaultLocale": {
+        "title": "기본 로캘",
+        "description": "기본 로캘입니다."
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "Default date",
+          "description": "최대 턴 카운트를 초과한 경우 'Property'는 값 또는 식의 결과로 설정됩니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "Null로 평가되지 않는 경우 'Property'는 값 또는 식의 결과로 설정됩니다."
+        },
+        "outputFormat": {
+          "title": "출력 형식",
+          "description": "출력 형식 지정에 사용할 식입니다."
+        },
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "prompt": {
+          "title": "초기 프롬프트",
+          "description": "정보 수집을 위해 보낼 메시지입니다."
+        },
+        "unrecognizedPrompt": {
+          "title": "인식할 수 없는 프롬프트",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 입력이 유효성 검사 식에 적합하지 않은 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "validations": {
+          "title": "유효성 검사 식",
+          "description": "사용자 입력의 유효성을 검사할 식입니다.",
+          "items": {
+            "title": "조건",
+            "description": "입력이 유효한 것으로 간주되기 위해 충족해야 하는 식입니다."
+          }
+        },
+        "property": {
+          "title": "속성",
+          "description": "수집된 정보를 저장할 속성입니다. '항상 메시지 표시'가 true가 아닌 경우, 속성에 값이 있으면 입력을 건너뜁니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "allowInterruptions": {
+          "title": "중단 허용",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.DebugBreak": {
+      "title": "디버거 중단",
+      "description": "디버거가 연결된 경우 대화의 이 지점에서 실행을 중지합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.DeleteActivity": {
+      "title": "활동 삭제",
+      "description": "이전에 보낸 활동을 삭제합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "activityId": {
+          "title": "ActivityId",
+          "description": "삭제할 activityId로 평가되는 식입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.DeleteProperties": {
+      "title": "속성 삭제",
+      "description": "여러 속성과 속성에 포함된 모든 값을 삭제합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "properties": {
+          "title": "속성",
+          "description": "삭제할 속성입니다.",
+          "items": {
+            "title": "속성",
+            "description": "삭제할 속성입니다."
+          }
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.DeleteProperty": {
+      "title": "Delete property",
+      "description": "단일 속성과 속성에 포함된 모든 값을 삭제합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "property": {
+          "title": "속성",
+          "description": "삭제할 속성입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.DimensionEntityRecognizer": {
+      "title": "Dimension entity recognizer",
+      "description": "차원을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.EditActions": {
+      "title": "작업을 편집합니다.",
+      "description": "현재 작업 목록을 편집합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "changeType": {
+          "title": "변경 유형",
+          "description": "현재 작업에 적용할 변경 유형입니다.",
+          "oneOf": {
+            "0": {
+              "title": "표준 변경",
+              "description": "표준 변경 유형입니다."
+            }
+          }
+        },
+        "actions": {
+          "title": "작업",
+          "description": "적용할 작업입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.EditArray": {
+      "title": "배열 편집",
+      "description": "메모리의 배열을 수정합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "changeType": {
+          "title": "변경 유형",
+          "description": "메모리의 배열에 대한 변경 유형입니다.",
+          "oneOf": {
+            "0": {
+              "title": "Change type",
+              "description": "표준 변경 유형입니다."
+            }
+          }
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "itemsProperty": {
+          "title": "항목 속성",
+          "description": "업데이트할 배열을 포함하는 속성입니다."
+        },
+        "resultProperty": {
+          "title": "Result property",
+          "description": "이 작업의 결과를 저장할 속성입니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "새로운 값 또는 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.EmailEntityRecognizer": {
+      "title": "Email entity recognizer",
+      "description": "메일을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.EmitEvent": {
+      "title": "사용자 지정 이벤트 내보내기",
+      "description": "이벤트를 내보냅니다. 트리거를 사용하여 이 이벤트를 캡처합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "eventName": {
+          "title": "이벤트 이름",
+          "description": "내보낼 이벤트의 이름입니다.",
+          "oneOf": {
+            "0": {
+              "title": "기본 제공 이벤트",
+              "description": "표준 이벤트 유형입니다."
+            },
+            "1": {
+              "title": "사용자 지정 이벤트",
+              "description": "사용자 지정 이벤트 유형"
+            }
+          }
+        },
+        "eventValue": {
+          "title": "이벤트 값",
+          "description": "이벤트와 함께 내보낼 값(선택 사항)입니다."
+        },
+        "bubbleEvent": {
+          "title": "거품형 이벤트",
+          "description": "true이면 이 이벤트가 부모 대화에 전달됩니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.EndDialog": {
+      "title": "대화 종료",
+      "description": "이 대화를 종료합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "부모 대화에 반환되는 결과 값입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.EndTurn": {
+      "title": "차례 종료",
+      "description": "대화를 종료하지 않고 현재 차례를 종료합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.FirstSelector": {
+      "title": "First trigger selector",
+      "description": "첫 번째 true 규칙 선택기",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.Foreach": {
+      "title": "각 항목에 적용",
+      "description": "컬렉션의 각 항목에 대해 작업을 실행합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "itemsProperty": {
+          "title": "항목 속성",
+          "description": "배열을 포함하는 속성입니다."
+        },
+        "index": {
+          "title": "인덱스 속성",
+          "description": "항목의 인덱스를 포함하는 속성입니다."
+        },
+        "value": {
+          "title": "값 속성",
+          "description": "항목의 값을 포함하는 속성입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "각 항목에 대해 실행할 작업입니다. 각 항목의 값에 액세스하려면 '$foreach.value'를 사용합니다. 각 항목의 인덱스에 액세스하려면 '$foreach.index'를 사용합니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ForeachPage": {
+      "title": "각 페이지에 적용",
+      "description": "배열의 각 페이지(항목 컬렉션)에 대해 작업을 실행합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "itemsProperty": {
+          "title": "항목 속성",
+          "description": "배열을 포함하는 속성입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "각 페이지에 대해 실행할 작업입니다. 각 페이지에 액세스하려면 '$foreach.page'를 사용합니다."
+        },
+        "pageIndex": {
+          "title": "인덱스 속성",
+          "description": "페이지의 인덱스를 포함하는 속성입니다."
+        },
+        "page": {
+          "title": "페이지 속성",
+          "description": "페이지의 값을 포함하는 속성입니다."
+        },
+        "pageSize": {
+          "title": "페이지 크기",
+          "description": "각 페이지의 항목 수입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.GetActivityMembers": {
+      "title": "Get activity members",
+      "description": "활동에 참여 중인 멤버를 가져옵니다. (BotFrameworkAdapter만 해당)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "property": {
+          "title": "속성",
+          "description": "속성(정보를 저장하도록 명명된 위치)입니다."
+        },
+        "activityId": {
+          "title": "Activity Id",
+          "description": "멤버를 가져오는 데 사용할 활동 ID 또는 activityId로 평가되는 식입니다. ID를 정의하지 않으면 현재 활동 ID가 사용됩니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.GetConversationMembers": {
+      "title": "Get conversation members",
+      "description": "대화에 참여 중인 멤버를 가져옵니다. (BotFrameworkAdapter만 해당)",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "property": {
+          "title": "속성",
+          "description": "속성(정보를 저장하도록 명명된 위치)입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.GotoAction": {
+      "title": "Go to action",
+      "description": "ID로 지정된 작업으로 이동합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "actionId": {
+          "title": "작업 ID",
+          "description": "다음에 실행할 작업 ID입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.GuidEntityRecognizer": {
+      "title": "Guid entity recognizer",
+      "description": "GUID를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.HashtagEntityRecognizer": {
+      "title": "Hashtag entity recognizer",
+      "description": "해시태그를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.HttpRequest": {
+      "title": "HTTP 요청",
+      "description": "HTTP 요청을 합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "method": {
+          "title": "HTTP 메서드",
+          "description": "사용할 HTTP 메서드입니다."
+        },
+        "url": {
+          "title": "URL",
+          "description": "호출할 URL입니다(데이터 바인딩 지원)."
+        },
+        "body": {
+          "title": "본문",
+          "description": "HTTP 호출에 포함할 본문입니다(데이터 바인딩 지원)."
+        },
+        "resultProperty": {
+          "title": "결과 속성",
+          "description": "이 작업의 결과를 저장할 속성입니다. 결과에는 HTTP 응답의 속성 4개(statusCode, reasonPhrase, content, headers)가 포함될 수 있습니다. 콘텐츠가 JSON인 경우 역직렬화된 개체가 됩니다. 예를 통해 .content를 통해 값에 액세스할 수 있습니다."
+        },
+        "contentType": {
+          "title": "콘텐츠 형식",
+          "description": "본문의 콘텐츠 미디어 형식입니다."
+        },
+        "headers": {
+          "title": "헤더",
+          "description": "요청에 포함할 하나 이상의 헤더입니다(데이터 바인딩 지원)."
+        },
+        "responseType": {
+          "title": "응답 유형",
+          "description": "HTTP 응답의 형식을 정의합니다. '활동'(Activity) 또는 '활동'(Activities)으로 설정하면 '응답 보내기' 작업이 자동으로 호출됩니다.",
+          "oneOf": {
+            "0": {
+              "title": "표준 응답",
+              "description": "표준 응답 유형입니다."
+            }
+          }
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.IActivityTemplate": {
+      "title": "Microsoft ActivityTemplates",
+      "description": "문자열 템플릿인 ActivityTemplate, 활동 또는 ActivityTemplate 구현인 구성 요소입니다.",
+      "oneOf": {
+        "1": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation",
+              "properties": {
+                "isGroup": {
+                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "title": "isGroup"
+                },
+                "conversationType": {
+                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "title": "conversationType"
+                },
+                "id": {
+                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                  "title": "id"
+                },
+                "name": {
+                  "description": "Display friendly name",
+                  "title": "name"
+                },
+                "aadObjectId": {
+                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "title": "aadObjectId"
+                },
+                "role": {
+                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                  "title": "role"
+                }
+              }
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded",
+              "items": {
+                "description": "Channel account information needed to route a message",
+                "title": "ChannelAccount",
+                "properties": {
+                  "id": {
+                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                    "title": "id"
+                  },
+                  "name": {
+                    "description": "Display friendly name",
+                    "title": "name"
+                  },
+                  "aadObjectId": {
+                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "title": "aadObjectId"
+                  },
+                  "role": {
+                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                    "title": "role"
+                  }
+                }
+              }
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded",
+              "items": {
+                "description": "Message reaction object",
+                "title": "MessageReaction",
+                "properties": {
+                  "type": {
+                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions",
+              "properties": {
+                "to": {
+                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+                  "title": "to",
+                  "items": {
+                    "title": "Id",
+                    "description": "Id of recipient."
+                  }
+                },
+                "actions": {
+                  "description": "Actions that can be shown to the user",
+                  "title": "actions",
+                  "items": {
+                    "description": "A clickable action",
+                    "title": "CardAction",
+                    "properties": {
+                      "type": {
+                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "type"
+                      },
+                      "title": {
+                        "description": "Text description which appears on the button",
+                        "title": "title"
+                      },
+                      "image": {
+                        "description": "Image URL which will appear on the button, next to text label",
+                        "title": "image"
+                      },
+                      "text": {
+                        "description": "Text for this action",
+                        "title": "text"
+                      },
+                      "displayText": {
+                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "title": "displayText"
+                      },
+                      "value": {
+                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+                        "title": "value"
+                      },
+                      "channelData": {
+                        "description": "Channel-specific data associated with this action",
+                        "title": "channelData"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments",
+              "items": {
+                "description": "An attachment within an activity",
+                "title": "Attachment",
+                "properties": {
+                  "contentType": {
+                    "description": "mimetype/Contenttype for the file",
+                    "title": "contentType"
+                  },
+                  "contentUrl": {
+                    "description": "Content Url",
+                    "title": "contentUrl"
+                  },
+                  "content": {
+                    "description": "Embedded content",
+                    "title": "content"
+                  },
+                  "name": {
+                    "description": "(OPTIONAL) The name of the attachment",
+                    "title": "name"
+                  },
+                  "thumbnailUrl": {
+                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "title": "thumbnailUrl"
+                  }
+                }
+              }
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities",
+              "items": {
+                "description": "Metadata object pertaining to an activity",
+                "title": "Entity",
+                "properties": {
+                  "type": {
+                    "description": "Type of this entity (RFC 3987 IRI)",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo",
+              "properties": {
+                "activityId": {
+                  "description": "(Optional) ID of the activity to refer to",
+                  "title": "activityId"
+                },
+                "user": {
+                  "description": "(Optional) User participating in this conversation",
+                  "title": "user"
+                },
+                "bot": {
+                  "description": "Bot participating in this conversation",
+                  "title": "bot"
+                },
+                "conversation": {
+                  "description": "Conversation reference",
+                  "title": "conversation"
+                },
+                "channelId": {
+                  "description": "Channel ID",
+                  "title": "channelId"
+                },
+                "serviceUrl": {
+                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "title": "serviceUrl"
+                }
+              }
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights",
+              "items": {
+                "description": "Refers to a substring of content within another field",
+                "title": "TextHighlight",
+                "properties": {
+                  "text": {
+                    "description": "Defines the snippet of text to highlight",
+                    "title": "text"
+                  },
+                  "occurrence": {
+                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+                    "title": "occurrence"
+                  }
+                }
+              }
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction",
+              "properties": {
+                "id": {
+                  "description": "ID of this action",
+                  "title": "id"
+                },
+                "entities": {
+                  "description": "Entities associated with this action",
+                  "title": "entities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Microsoft.IDialog": {
+      "title": "Microsoft dialogs",
+      "description": "Dialog에서 파생된 구성 요소입니다."
+    },
+    "Microsoft.IEntityRecognizer": {
+      "title": "Entity recognizers",
+      "description": "EntityRecognizer에서 파생된 구성 요소입니다.",
+      "oneOf": {
+        "0": {
+          "title": "Microsoft.IEntityRecognizer에 대한 참조",
+          "description": "Microsoft.IEntityRecognizer .dialog 파일에 대한 참조입니다."
+        }
+      }
+    },
+    "Microsoft.ILanguageGenerator": {
+      "title": "Microsoft LanguageGenerator",
+      "description": "LanguageGenerator 클래스에서 파생된 구성 요소입니다."
+    },
+    "Microsoft.IRecognizer": {
+      "title": "Microsoft recognizer",
+      "description": "Recognizer 클래스에서 파생된 구성 요소입니다."
+    },
+    "Microsoft.ITextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "TextTemplate 클래스에서 파생된 구성 요소입니다."
+    },
+    "Microsoft.ITrigger": {
+      "title": "Microsoft 트리거",
+      "description": "OnCondition 클래스에서 파생된 구성 요소입니다.",
+      "oneOf": {
+        "0": {
+          "title": "Microsoft.ITrigger에 대한 참조",
+          "description": "Microsoft.ITrigger .dialog 파일에 대한 참조입니다."
+        }
+      }
+    },
+    "Microsoft.ITriggerSelector": {
+      "title": "선택기",
+      "description": "TriggerSelector 클래스에서 파생된 구성 요소입니다.",
+      "oneOf": {
+        "0": {
+          "title": "Microsoft.ITriggerSelector에 대한 참조",
+          "description": "Microsoft.ITriggerSelector .dialog 파일에 대한 참조입니다."
+        }
+      }
+    },
+    "Microsoft.IfCondition": {
+      "title": "If 조건",
+      "description": "조건에 따라 대화 흐름을 양방향으로 분기합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "condition": {
+          "title": "조건",
+          "description": "평가할 식입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "조건이 true인 경우에 실행할 작업입니다."
+        },
+        "elseActions": {
+          "title": "Else",
+          "description": "조건이 false인 경우에 실행할 작업입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.InputDialog": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "prompt": {
+          "title": "초기 프롬프트",
+          "description": "정보 수집을 위해 보낼 메시지입니다."
+        },
+        "unrecognizedPrompt": {
+          "title": "인식할 수 없는 프롬프트",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 입력이 유효성 검사 식에 적합하지 않은 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "validations": {
+          "title": "유효성 검사 식",
+          "description": "사용자 입력의 유효성을 검사할 식입니다.",
+          "items": {
+            "title": "조건",
+            "description": "입력이 유효한 것으로 간주되기 위해 충족해야 하는 식입니다."
+          }
+        },
+        "property": {
+          "title": "속성",
+          "description": "수집된 정보를 저장할 속성입니다. '항상 메시지 표시'가 true가 아닌 경우, 속성에 값이 있으면 입력을 건너뜁니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "allowInterruptions": {
+          "title": "중단 허용",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.IpEntityRecognizer": {
+      "title": "IP entity recognizer",
+      "description": "인터넷 IP 패턴(예: 192.1.1.1)을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.LanguagePolicy": {
+      "title": "Language policy",
+      "description": "언어에 사용할 로캘 조회용 정책 맵을 나타냅니다.",
+      "additionalProperties": {
+        "title": "로캘별 정책",
+        "description": "로캘별 언어 정책입니다.",
+        "items": {
+          "title": "로캘",
+          "description": "en-us 등의 로캘입니다."
+        }
+      },
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.LogAction": {
+      "title": "콘솔에 기록",
+      "description": "호스트 애플리케이션에 메시지를 로깅합니다. Bot Framework Emulator에 TraceActivity를 보냅니다(선택 사항).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "text": {
+          "title": "텍스트",
+          "description": "로깅할 정보입니다."
+        },
+        "label": {
+          "title": "레이블",
+          "description": "추적 활동 목록에서 추적 활동을 식별하는 데 사용되는 추적 활동 레이블입니다."
+        },
+        "traceActivity": {
+          "title": "Send trace activity",
+          "description": "true이면 TraceActivity를 자동으로 보냅니다(Bot Framework Emulator에서 보기)."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.LuisRecognizer": {
+      "title": "LUIS 인식기",
+      "description": "LUIS 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet에서 사용 중인 고유 ID(선택 사항)입니다. 이 인식기를 위해 데이터를 교차 학습하는 다른 인식기는 'DeferToRecognizer_{Id}' 의도를 반환해야 합니다."
+        },
+        "applicationId": {
+          "title": "LUIS application id",
+          "description": "LUIS 서비스에서 제공된 해당 모델의 애플리케이션 ID입니다."
+        },
+        "version": {
+          "title": "LUIS version",
+          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+        },
+        "endpoint": {
+          "title": "LUIS endpoint",
+          "description": "LUIS 서비스에 사용할 엔드포인트입니다(예: https://westus.api.cognitive.microsoft.com)."
+        },
+        "endpointKey": {
+          "title": "LUIS 예측 키",
+          "description": "엔드포인트를 호출하는 데 사용되는 LUIS 예측 키입니다."
+        },
+        "externalEntityRecognizer": {
+          "title": "External entity recognizer",
+          "description": "이 인식기를 통해 인식된 엔터티는 외부 엔터티로 LUIS에 전달됩니다."
+        },
+        "dynamicLists": {
+          "title": "동적 목록",
+          "description": "런타임에서 정의된 엔터티 목록입니다.",
+          "items": {
+            "title": "엔터티 목록",
+            "description": "엔터티의 정규 값 및 동의어 목록입니다.",
+            "properties": {
+              "entity": {
+                "title": "엔터티",
+                "description": "동적 목록으로 확장할 엔터티입니다."
+              },
+              "list": {
+                "title": "동적 목록",
+                "description": "정규 형식 및 동의어 목록입니다.",
+                "items": {
+                  "title": "목록 항목",
+                  "description": "정규 형식 및 동의어입니다.",
+                  "properties": {
+                    "canonicalForm": {
+                      "title": "정규 형식",
+                      "description": "동의어가 일치하는 경우의 해결 방법입니다."
+                    },
+                    "synonyms": {
+                      "title": "동의어",
+                      "description": "정규 형식의 동의어 목록입니다.",
+                      "items": {
+                        "title": "동의어",
+                        "description": "정규 형식의 동의어입니다."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "predictionOptions": {
+          "title": "예측 옵션",
+          "description": "LUIS 예측 동작을 제어하는 옵션입니다.",
+          "properties": {
+            "includeAllIntents": {
+              "title": "모든 의도 포함",
+              "description": "true이면 모든 의도에 적용되고, false이면 최상위 의도에만 적용됩니다."
+            },
+            "includeInstanceData": {
+              "title": "$instance 포함",
+              "description": "true이면 LUIS 응답에 $instance 메타데이터가 포함됩니다."
+            },
+            "log": {
+              "title": "발화 로깅",
+              "description": "true이면 LUIS 서비스에 대한 발화가 로깅됩니다."
+            },
+            "preferExternalEntities": {
+              "title": "Prefer external entities",
+              "description": "true이면 LUIS 모델에서 생성된 엔터티보다 외부 엔터티가 선호됩니다."
+            },
+            "slot": {
+              "title": "슬롯",
+              "description": "LUIS 서비스와 대화하는 데 사용할 슬롯(예: 프로덕션 또는 스테이징)입니다."
+            }
+          }
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.MentionEntityRecognizer": {
+      "title": "Mentions entity recognizer",
+      "description": "@Mentions를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.MostSpecificSelector": {
+      "title": "Most specific trigger selector",
+      "description": "선택 사항으로 제공되는 추가 선택기를 사용하여 가장 구체적인 true 이벤트를 선택합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.MultiLanguageRecognizer": {
+      "title": "다국어 인식기",
+      "description": "언어당 하나의 인식기를 구성하고 언어 대체 정책을 지정합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet에서 사용 중인 고유 ID(선택 사항)입니다. 이 인식기를 위해 데이터를 교차 학습하는 다른 인식기는 'DeferToRecognizer_{Id}' 의도를 반환해야 합니다."
+        },
+        "languagePolicy": {
+          "title": "언어 정책",
+          "description": "사용자 입력 언어별로 사용할 대체 언어를 정의합니다."
+        },
+        "recognizers": {
+          "title": "인식기",
+          "description": "언어 맵 > 인식기"
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.NumberEntityRecognizer": {
+      "title": "Number entity recognizer",
+      "description": "숫자를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.NumberInput": {
+      "title": "숫자 입력 대화",
+      "description": "정보 수집 - 숫자를 요청합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "기본값",
+          "description": "최대 턴 카운트를 초과한 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "Null로 평가되지 않는 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "outputFormat": {
+          "title": "출력 형식",
+          "description": "숫자 출력 형식을 지정할 식입니다."
+        },
+        "defaultLocale": {
+          "title": "기본 로캘",
+          "description": "사용 가능한 로캘이 없는 경우에 사용할 기본 로캘입니다."
+        },
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "prompt": {
+          "title": "초기 프롬프트",
+          "description": "정보 수집을 위해 보낼 메시지입니다."
+        },
+        "unrecognizedPrompt": {
+          "title": "인식할 수 없는 프롬프트",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 입력이 유효성 검사 식에 적합하지 않은 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "validations": {
+          "title": "유효성 검사 식",
+          "description": "사용자 입력의 유효성을 검사할 식입니다.",
+          "items": {
+            "title": "조건",
+            "description": "입력이 유효한 것으로 간주되기 위해 충족해야 하는 식입니다."
+          }
+        },
+        "property": {
+          "title": "속성",
+          "description": "수집된 정보를 저장할 속성입니다. '항상 메시지 표시'가 true가 아닌 경우, 속성에 값이 있으면 입력을 건너뜁니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "allowInterruptions": {
+          "title": "중단 허용",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.NumberRangeEntityRecognizer": {
+      "title": "Number range entity recognizer",
+      "description": "숫자 범위(예: 2~5)를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuthInput 대화",
+      "description": "로그인 정보를 수집합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "connectionName": {
+          "title": "연결 이름",
+          "description": "Azure 웹앱 봇 OAuth 설정에 구성된 연결 이름입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "text": {
+          "title": "텍스트",
+          "description": "OAuth 로그인 카드에 표시되는 텍스트입니다."
+        },
+        "title": {
+          "title": "제목",
+          "description": "OAuth 로그인 카드에 표시되는 제목입니다."
+        },
+        "timeout": {
+          "title": "시간 제한",
+          "description": "OAuth 로그인 카드의 시간 제한 설정입니다."
+        },
+        "property": {
+          "title": "토큰 속성",
+          "description": "OAuth 토큰 결과를 저장할 속성입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 응답이 잘못된 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "defaultValue": {
+          "title": "기본값",
+          "description": "가능한 속성 값으로 대화의 각 차례에 대해 검사할 식입니다."
+        },
+        "allowInterruptions": {
+          "title": "Allow interruptions",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnActivity": {
+      "title": "활동에서",
+      "description": "일반 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "type": {
+          "title": "활동 유형",
+          "description": "일치시킬 Activity.Type입니다."
+        },
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnAssignEntity": {
+      "title": "엔터티 할당 시",
+      "description": "엔터티를 속성에 할당해야 하는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "속성",
+          "description": "엔터티를 선택한 후에 설정되는 속성입니다."
+        },
+        "entity": {
+          "title": "엔터티",
+          "description": "속성에 추가되는 엔터티"
+        },
+        "operation": {
+          "title": "작업",
+          "description": "엔터티 할당 작업입니다."
+        },
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnBeginDialog": {
+      "title": "대화 시작 시",
+      "description": "이 대화가 시작되는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnCancelDialog": {
+      "title": "대화 취소 시",
+      "description": "대화 취소 이벤트가 발생하는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnChooseEntity": {
+      "title": "엔터티 선택 시",
+      "description": "엔터티 값을 확인해야 하는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "property": {
+          "title": "설정할 속성",
+          "description": "엔터티를 선택한 후에 설정되는 속성입니다."
+        },
+        "entity": {
+          "title": "모호한 엔터티",
+          "description": "모호한 엔터티"
+        },
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnChooseIntent": {
+      "title": "모호한 의도에서",
+      "description": "의도가 모호한 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "intents": {
+          "title": "의도",
+          "description": "이 조건이 트리거되기 위해 ChooseIntent 결과에 있어야 하는 의도입니다.",
+          "items": {
+            "title": "의도",
+            "description": "트리거할 의도 이름입니다."
+          }
+        },
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnChooseProperty": {
+      "title": "속성 선택 시",
+      "description": "엔터티를 속성에 여러 번 매핑할 수 있는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "entity": {
+          "title": "할당되는 엔터티",
+          "description": "속성 선택 항목에 할당되는 엔터티"
+        },
+        "properties": {
+          "title": "가능한 속성",
+          "description": "선택할 속성입니다.",
+          "items": {
+            "title": "속성 이름",
+            "description": "선택할 수 있는 속성입니다."
+          }
+        },
+        "entities": {
+          "title": "엔터티",
+          "description": "엔터티 이름이 모호합니다.",
+          "items": {
+            "title": "엔터티 이름",
+            "description": "선택되는 엔터티 이름입니다."
+          }
+        },
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnCondition": {
+      "title": "조건에서",
+      "description": "지정한 조건이 true인 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnContinueConversation": {
+      "title": "On continue conversation",
+      "description": "ContinueConversationLater 작업에서 대화가 다시 시작된 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "ConversationUpdate 활동에서",
+      "description": "'ConversationUpdate' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnDialogEvent": {
+      "title": "대화 이벤트에서",
+      "description": "특정 대화 이벤트가 발생하는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "event": {
+          "title": "대화 이벤트 이름",
+          "description": "대화 이벤트의 이름입니다."
+        },
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnEndOfActions": {
+      "title": "작업 종료 시",
+      "description": "현재 대화에 더 이상 작업이 없는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+      "title": "EndOfConversation 활동에서",
+      "description": "'EndOfConversation' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnError": {
+      "title": "On error",
+      "description": "'오류' 대화 이벤트가 발생하는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnEventActivity": {
+      "title": "이벤트 활동에서",
+      "description": "'Event' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnHandoffActivity": {
+      "title": "핸드오프 활동에서",
+      "description": "'HandOff' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+      "title": "On InstallationUpdate activity",
+      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condition",
+          "description": "Condition (expression)."
+        },
+        "actions": {
+          "title": "Actions",
+          "description": "Sequence of actions to execute."
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+        },
+        "runOnce": {
+          "title": "Run Once",
+          "description": "True if rule should run once per unique conditions"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.OnIntent": {
+      "title": "의도 인식 시",
+      "description": "지정한 의도를 인식할 수 있는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "intent": {
+          "title": "의도",
+          "description": "의도 이름입니다."
+        },
+        "entities": {
+          "title": "엔터티",
+          "description": "필수 엔터티입니다.",
+          "items": {
+            "title": "엔터티",
+            "description": "있어야 하는 엔터티입니다."
+          }
+        },
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnInvokeActivity": {
+      "title": "호출 활동에서",
+      "description": "'Invoke' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnMessageActivity": {
+      "title": "메시지 활동에서",
+      "description": "'Message' 유형의 활동을 받은 경우에 수행할 작업입니다. 의도 트리거를 재정의합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+      "title": "MessageDelete 활동에서",
+      "description": "'MessageDelete' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+      "title": "MessageReaction 활동에서",
+      "description": "'MessageReaction' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+      "title": "MessageUpdate 활동에서",
+      "description": "'MessageUpdate' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnQnAMatch": {
+      "title": "On QnAMaker match",
+      "description": "QnAMaker에서 일치하는 항목을 찾은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "RepromptDialog에서",
+      "description": "'RepromptDialog' 이벤트가 발생하는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnTypingActivity": {
+      "title": "Typing 활동에서",
+      "description": "'Typing' 유형의 활동을 받은 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "알 수 없는 의도에서",
+      "description": "사용자 입력을 인식할 수 없거나 인식된 의도와 일치하는 '의도 인식 시' 트리거가 없는 경우에 수행할 작업입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "조건",
+          "description": "조건(식)입니다."
+        },
+        "actions": {
+          "title": "작업",
+          "description": "실행할 작업 시퀀스입니다."
+        },
+        "priority": {
+          "title": "우선 순위",
+          "description": "0이 가장 높고 0 미만은 무시되는 트리거 우선 순위입니다."
+        },
+        "runOnce": {
+          "title": "한 번 실행",
+          "description": "고유한 조건별로 규칙을 한 번 실행해야 하는 경우 True입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.OrdinalEntityRecognizer": {
+      "title": "Ordinal entity recognizer",
+      "description": "서수(예: 첫 번째, 두 번째, 세 번째)를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.PercentageEntityRecognizer": {
+      "title": "Percentage entity recognizer",
+      "description": "백분율을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.PhoneNumberEntityRecognizer": {
+      "title": "Phone number entity recognizer",
+      "description": "전화번호를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.QnAMakerDialog": {
+      "title": "QnAMaker dialog",
+      "description": "QnAMAker 기술 자료를 사용하여 질문에 답변하는 대화입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "knowledgeBaseId": {
+          "title": "기술 자료 ID",
+          "description": "QnA Maker 기술 자료의 기술 자료 ID입니다."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "QnA Maker KB의 엔드포인트 키입니다."
+        },
+        "hostname": {
+          "title": "호스트 이름",
+          "description": "QnA Maker 서비스의 호스트 이름입니다."
+        },
+        "noAnswer": {
+          "title": "대체 답변",
+          "description": "KB에서 찾을 수 없는 경우에 반환할 기본 답변입니다."
+        },
+        "threshold": {
+          "title": "임계값",
+          "description": "결과를 필터링할 임계값 점수입니다."
+        },
+        "activeLearningCardTitle": {
+          "title": "활성 학습 카드 제목",
+          "description": "활성 학습 제안 카드의 제목입니다."
+        },
+        "cardNoMatchText": {
+          "title": "카드 일치하는 항목 없음 텍스트",
+          "description": "일치하는 항목 없음 옵션의 텍스트입니다."
+        },
+        "cardNoMatchResponse": {
+          "title": "카드 일치하는 항목 없음 응답",
+          "description": "일치하는 항목 없음 옵션을 선택한 경우의 사용자 지정 응답입니다."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "QnA Maker KB를 호출할 때 사용할 메타데이터 필터입니다.",
+          "items": {
+            "title": "메타데이터 필터",
+            "description": "메타데이터 필터입니다.",
+            "properties": {
+              "name": {
+                "title": "이름",
+                "description": "필터 속성의 이름입니다."
+              },
+              "value": {
+                "title": "값",
+                "description": "필터링할 값입니다."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "맨 위",
+          "description": "검색할 답변 수입니다."
+        },
+        "isTest": {
+          "title": "IsTest",
+          "description": "테스트 환경을 가리키는 경우 True이고, 가리키지 않으면 False입니다."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "순위매기기 유형입니다.",
+          "oneOf": {
+            "0": {
+              "title": "표준 순위매기기",
+              "description": "표준 순위매기기 유형입니다."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+            }
+          }
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.QnAMakerRecognizer": {
+      "title": "QnAMaker recognizer",
+      "description": "KB를 통해 QnAMatch 의도를 생성하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet에서 사용 중인 고유 ID(선택 사항)입니다."
+        },
+        "knowledgeBaseId": {
+          "title": "기술 자료 ID",
+          "description": "Knowledge base Id of your QnA Maker knowledge base."
+        },
+        "endpointKey": {
+          "title": "Endpoint key",
+          "description": "QnA Maker KB의 엔드포인트 키입니다."
+        },
+        "hostname": {
+          "title": "호스트 이름",
+          "description": "QnA Maker 서비스의 호스트 이름입니다."
+        },
+        "threshold": {
+          "title": "임계값",
+          "description": "결과를 필터링할 임계값 점수입니다."
+        },
+        "strictFilters": {
+          "title": "Strict filters",
+          "description": "QnA Maker KB를 호출할 때 사용할 메타데이터 필터입니다.",
+          "items": {
+            "title": "메타데이터 필터",
+            "description": "QnA Maker KB를 쿼리할 때 사용할 메타데이터 필터입니다.",
+            "properties": {
+              "name": {
+                "title": "이름",
+                "description": "필터링할 이름입니다."
+              },
+              "value": {
+                "title": "값",
+                "description": "필터를 제한할 값입니다."
+              }
+            }
+          }
+        },
+        "top": {
+          "title": "맨 위",
+          "description": "검색할 답변 수입니다."
+        },
+        "isTest": {
+          "title": "Use test environment",
+          "description": "테스트 환경을 가리키는 경우 True이고, 가리키지 않으면 False입니다."
+        },
+        "rankerType": {
+          "title": "Ranker type",
+          "description": "순위매기기 유형입니다.",
+          "oneOf": {
+            "0": {
+              "title": "순위매기기 유형",
+              "description": "순위매기기 유형입니다."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+            }
+          }
+        },
+        "includeDialogNameInMetadata": {
+          "title": "Include dialog name",
+          "description": "false로 설정하면 대화 이름이 QnAMaker에 전달되지 않습니다. (기본값)은 true입니다."
+        },
+        "metadata": {
+          "title": "메타데이터 필터",
+          "description": "QnA Maker KB를 호출할 때 사용할 메타데이터 필터입니다.",
+          "items": {
+            "title": "메타데이터 필터",
+            "description": "QnA Maker KB를 호출할 때 사용할 메타데이터 필터입니다.",
+            "properties": {
+              "name": {
+                "title": "이름",
+                "description": "테스트할 값의 이름입니다."
+              },
+              "value": {
+                "title": "값",
+                "description": "필터링할 값입니다."
+              }
+            }
+          }
+        },
+        "context": {
+          "title": "QnA request context",
+          "description": "순위에 사용할 컨텍스트입니다."
+        },
+        "qnaId": {
+          "title": "QnA Id",
+          "description": "QnAMaker API에 전달할 QnAId인 숫자 또는 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.RandomSelector": {
+      "title": "임의 규칙 선택기",
+      "description": "가장 구체적인 true 규칙을 선택합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "seed": {
+          "title": "임의 시드",
+          "description": "난수 생성을 시작할 임의 시드입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.RecognizerSet": {
+      "title": "Recognizer set",
+      "description": "세트에 포함된 인식기의 의도 및 엔터티 공용 구조체를 만듭니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet에서 사용 중인 고유 ID(선택 사항)입니다. 이 인식기를 위해 데이터를 교차 학습하는 다른 인식기는 'DeferToRecognizer_{Id}' 의도를 반환해야 합니다."
+        },
+        "recognizers": {
+          "title": "인식기",
+          "description": "이 세트에 대해 정의된 인식기 목록입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.RegexEntityRecognizer": {
+      "title": "Regex entity recognizer",
+      "description": "regex를 기준으로 입력 패턴을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "name": {
+          "title": "이름",
+          "description": "엔터티 이름입니다."
+        },
+        "pattern": {
+          "title": "패턴",
+          "description": "정규식으로 표시된 패턴입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.RegexRecognizer": {
+      "title": "Regex 인식기",
+      "description": "정규식을 사용하여 사용자 입력에서 의도와 엔터티를 인식합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "RecognizerSet에서 사용 중인 고유 ID(선택 사항)입니다. 이 인식기를 위해 데이터를 교차 학습하는 다른 인식기는 'DeferToRecognizer_{Id}' 의도를 반환해야 합니다."
+        },
+        "intents": {
+          "title": "의도에 대한 RegEx 패턴",
+          "description": "의도에 대해 일치시킬 패턴 컬렉션입니다.",
+          "items": {
+            "title": "패턴",
+            "description": "의도 및 regex 패턴입니다.",
+            "properties": {
+              "intent": {
+                "title": "의도",
+                "description": "의도 이름입니다."
+              },
+              "pattern": {
+                "title": "패턴",
+                "description": "정규식 패턴입니다."
+              }
+            }
+          }
+        },
+        "entities": {
+          "title": "엔터티 인식기",
+          "description": "사용할 엔터티 인식기 컬렉션입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.RepeatDialog": {
+      "title": "대화 반복",
+      "description": "현재 대화를 반복합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "allowLoop": {
+          "title": "AllowLoop",
+          "description": "true일 경우 반복 대화의 루프를 허용하는 조건(선택 사항)입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "options": {
+          "title": "옵션",
+          "description": "호출되는 대화에 전달되는 하나 이상의 옵션입니다.",
+          "additionalProperties": {
+            "title": "옵션",
+            "description": "반복 대화 옵션입니다."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false로 설정하면 호출된 대화에서 현재 활동을 처리할 수 있습니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ReplaceDialog": {
+      "title": "대화 바꾸기",
+      "description": "현재 대화를 다른 대화로 바꿉니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "dialog": {
+          "oneOf": {
+            "0": {
+              "title": "대화"
+            }
+          },
+          "title": "대화 이름",
+          "description": "호출할 대화의 이름입니다."
+        },
+        "options": {
+          "title": "옵션",
+          "description": "호출되는 대화에 전달되는 하나 이상의 옵션입니다.",
+          "additionalProperties": {
+            "title": "옵션",
+            "description": "대화 바꾸기 옵션입니다."
+          }
+        },
+        "activityProcessed": {
+          "title": "Activity processed",
+          "description": "false로 설정하면 호출된 대화에서 현재 활동을 처리할 수 있습니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ResourceMultiLanguageGenerator": {
+      "title": "Resource multi-language generator",
+      "description": "리소스 ID를 기준으로 리소스에 바인딩된 다국어 생성기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "생성기 ID(선택 사항)입니다."
+        },
+        "resourceId": {
+          "title": "리소스 ID",
+          "description": "루트 언어 생성기인 리소스입니다. 동일한 이름 및 언어 접미사가 있는 다른 생성기가 이 생성기에 로드되고 언어 정책에 따라 사용됩니다."
+        },
+        "languagePolicy": {
+          "title": "Language policy",
+          "description": "이 생성기에 대한 대체 언어 정책을 설정합니다. 설정하지 않으면 전역 언어 정책이 사용됩니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.SendActivity": {
+      "title": "활동 보내기",
+      "description": "활동으로 응답합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "activity": {
+          "title": "활동",
+          "description": "보낼 활동입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.SetProperties": {
+      "title": "속성 설정",
+      "description": "하나 이상의 속성 값을 설정합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "assignments": {
+          "title": "할당",
+          "description": "설정할 속성 값 할당입니다.",
+          "items": {
+            "title": "할당",
+            "description": "속성 할당입니다.",
+            "properties": {
+              "property": {
+                "title": "속성",
+                "description": "속성(정보를 저장하도록 명명된 위치)입니다."
+              },
+              "value": {
+                "title": "값",
+                "description": "새로운 값 또는 식입니다."
+              }
+            }
+          }
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.SetProperty": {
+      "title": "속성 설정",
+      "description": "속성을 값으로 설정합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "property": {
+          "title": "속성",
+          "description": "속성(정보를 저장하도록 명명된 위치)입니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "새로운 값 또는 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.SignOutUser": {
+      "title": "Sign out user",
+      "description": "이전에 OAuthInput을 사용하여 로그인한 사용자를 로그아웃합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "userId": {
+          "title": "UserId",
+          "description": "로그아웃할 사용자로 평가되는 식입니다. 기본값은 user.id입니다."
+        },
+        "connectionName": {
+          "title": "Connection name",
+          "description": "사용자를 로그인하기 위해 OAuthInput에 사용된 연결 이름입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.StaticActivityTemplate": {
+      "title": "Microsoft static activity template",
+      "description": "정적 활동 개체를 정의할 수 있습니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "activity": {
+          "title": "활동",
+          "description": "사용할 정적 활동입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.SwitchCondition": {
+      "title": "전환 조건",
+      "description": "속성 값에 따라 다른 작업을 실행합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "condition": {
+          "title": "조건",
+          "description": "평가할 속성입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "cases": {
+          "title": "케이스",
+          "description": "가능한 각 조건에 대한 작업입니다.",
+          "items": {
+            "title": "케이스",
+            "description": "케이스와 작업입니다.",
+            "properties": {
+              "value": {
+                "title": "값",
+                "description": "조건과 비교할 값입니다."
+              },
+              "actions": {
+                "title": "작업",
+                "description": "실행할 작업입니다."
+              }
+            }
+          }
+        },
+        "default": {
+          "title": "기본값",
+          "description": "조건에 맞는 케이스가 없는 경우에 실행할 작업입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.TelemetryTrackEvent": {
+      "title": "Telemetry - track event",
+      "description": "등록된 원격 분석 클라이언트를 사용하여 사용자 지정 이벤트를 추적합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "eventName": {
+          "title": "Event name",
+          "description": "추적할 이벤트의 이름입니다."
+        },
+        "properties": {
+          "title": "속성",
+          "description": "추적되는 이벤트에 연결할 하나 이상의 속성입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.TemperatureEntityRecognizer": {
+      "title": "Temperature recognizer",
+      "description": "온도를 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.TemplateEngineLanguageGenerator": {
+      "title": "Template multi-language generator",
+      "description": "템플릿 인라인 평가만 허용하는 템플릿 생성기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "생성기 ID(선택 사항)입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.TextInput": {
+      "title": "텍스트 입력 대화",
+      "description": "컬렉션 정보 - 단어 또는 문장을 요청합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "defaultValue": {
+          "title": "기본값",
+          "description": "최대 턴 카운트를 초과한 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "Null로 평가되지 않는 경우 'Property'는 이 식의 값으로 설정됩니다."
+        },
+        "outputFormat": {
+          "title": "출력 형식",
+          "description": "출력 형식을 지정할 식입니다."
+        },
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "prompt": {
+          "title": "초기 프롬프트",
+          "description": "정보 수집을 위해 보낼 메시지입니다."
+        },
+        "unrecognizedPrompt": {
+          "title": "인식할 수 없는 프롬프트",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "invalidPrompt": {
+          "title": "잘못된 프롬프트",
+          "description": "사용자 입력이 유효성 검사 식에 적합하지 않은 경우에 보낼 메시지입니다."
+        },
+        "defaultValueResponse": {
+          "title": "기본값 응답",
+          "description": "최대 턴 카운트(지정한 경우)가 초과되었으며 기본값이 값으로 선택된 경우에 보낼 메시지입니다."
+        },
+        "maxTurnCount": {
+          "title": "최대 턴 카운트",
+          "description": "정보 수집을 위해 메시지를 다시 표시하는 최대 횟수입니다."
+        },
+        "validations": {
+          "title": "유효성 검사 식",
+          "description": "사용자 입력의 유효성을 검사할 식입니다.",
+          "items": {
+            "title": "조건",
+            "description": "입력이 유효한 것으로 간주되기 위해 충족해야 하는 식입니다."
+          }
+        },
+        "property": {
+          "title": "속성",
+          "description": "수집된 정보를 저장할 속성입니다. '항상 메시지 표시'가 true가 아닌 경우, 속성에 값이 있으면 입력을 건너뜁니다."
+        },
+        "alwaysPrompt": {
+          "title": "항상 메시지 표시",
+          "description": "지정한 'property'가 비어 있지 않은 경우에도 정보를 수집합니다."
+        },
+        "allowInterruptions": {
+          "title": "중단 허용",
+          "description": "부모가 입력을 중단할 수 있는지 여부를 결정하는 부울 식입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.TextTemplate": {
+      "title": "Microsoft TextTemplate",
+      "description": "LG 템플릿을 사용하여 텍스트를 만듭니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "template": {
+          "title": "템플릿",
+          "description": "텍스트를 만들기 위해 평가할 언어 생성기 템플릿입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.ThrowException": {
+      "title": "Throw an exception",
+      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "errorValue": {
+          "title": "Error value",
+          "description": "Error value to throw."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "Microsoft.TraceActivity": {
+      "title": "TraceActivity 보내기",
+      "description": "대화 내용 로거 및/또는 Bot Framework Emulator에 추적 활동을 보냅니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "name": {
+          "title": "이름",
+          "description": "추적 활동의 이름입니다."
+        },
+        "label": {
+          "title": "레이블",
+          "description": "추적 활동 목록에서 추적 활동을 식별하는 데 사용되는 추적 활동 레이블입니다."
+        },
+        "valueType": {
+          "title": "값 형식",
+          "description": "값 형식입니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "추적 활동으로 보낼 값을 포함하는 속성입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.TrueSelector": {
+      "title": "True trigger selector",
+      "description": "모든 true 이벤트 선택기",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.UpdateActivity": {
+      "title": "Update an activity",
+      "description": "활동으로 응답합니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "activityId": {
+          "title": "활동 ID",
+          "description": "업데이트할 활동 ID가 포함된 문자열 식입니다."
+        },
+        "activity": {
+          "title": "활동",
+          "description": "보낼 활동입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "Microsoft.UrlEntityRecognizer": {
+      "title": "Url recognizer",
+      "description": "URL을 인식하는 인식기입니다.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "arrayExpression": {
+      "title": "배열 또는 식",
+      "description": "평가할 배열 또는 식입니다.",
+      "oneOf": {
+        "0": {
+          "title": "배열",
+          "description": "배열 상수입니다."
+        }
+      }
+    },
+    "booleanExpression": {
+      "title": "부울 또는 식",
+      "description": "평가할 부울 상수 또는 식입니다.",
+      "oneOf": {
+        "0": {
+          "title": "부울",
+          "description": "부울 상수입니다."
+        }
+      }
+    },
+    "component": {
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
+    "condition": {
+      "title": "부울 조건",
+      "description": "평가할 부울 상수 또는 식입니다.",
+      "oneOf": {
+        "1": {
+          "title": "부울",
+          "description": "부울 값입니다."
+        }
+      }
+    },
+    "equalsExpression": {
+      "title": "식",
+      "description": "=로 시작하는 식입니다."
+    },
+    "expression": {
+      "title": "식",
+      "description": "평가할 식입니다."
+    },
+    "integerExpression": {
+      "title": "정수 또는 식",
+      "description": "평가할 정수 상수 또는 식입니다.",
+      "oneOf": {
+        "0": {
+          "title": "정수",
+          "description": "정수 상수입니다."
+        }
+      }
+    },
+    "numberExpression": {
+      "title": "숫자 또는 식",
+      "description": "평가할 숫자 상수 또는 식입니다.",
+      "oneOf": {
+        "0": {
+          "title": "숫자",
+          "description": "숫자 상수입니다."
+        }
+      }
+    },
+    "objectExpression": {
+      "title": "개체 또는 식",
+      "description": "평가할 개체 또는 식입니다.",
+      "oneOf": {
+        "0": {
+          "title": "개체",
+          "description": "개체 상수입니다."
+        }
+      }
+    },
+    "role": {
+      "title": "$role",
+      "description": "[expression|interface|implements($kind)|extends($kind)]를 통해 대화 스키마에서 수행할 역할을 정의합니다."
+    },
+    "stringExpression": {
+      "title": "문자열 또는 식",
+      "description": "평가할 보간된 문자열 또는 식입니다.",
+      "oneOf": {
+        "0": {
+          "title": "문자열",
+          "description": "보간된 문자열"
+        }
+      }
+    },
+    "valueExpression": {
+      "title": "값 또는 식",
+      "description": "평가할 상수 또는 식입니다.",
+      "oneOf": {
+        "0": {
+          "title": "개체",
+          "description": "개체 상수입니다."
+        },
+        "1": {
+          "title": "배열",
+          "description": "배열 상수입니다."
+        },
+        "2": {
+          "title": "문자열",
+          "description": "보간된 문자열입니다."
+        },
+        "3": {
+          "title": "부울",
+          "description": "부울 상수"
+        },
+        "4": {
+          "title": "숫자",
+          "description": "숫자 상수입니다."
+        }
+      }
+    }
+  }
+}
