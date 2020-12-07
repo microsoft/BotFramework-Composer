@@ -46,6 +46,7 @@ window.ReactDOM = ReactDOM;
 window.ExtensionClient = ExtensionClient;
 window.Fabric = Fabric;
 window.Composer = {
+  __extensionId: '',
   __pluginType: '',
   render: (component: React.ReactElement) => {
     ReactDOM.render(component, document.getElementById('root'));
