@@ -60,7 +60,7 @@ export const formDialogsDispatcher = () => {
     } catch (ex) {
       set(formDialogErrorState, {
         ...ex,
-        message: formatMessage('Load form dialog schema templates Error'),
+        message: formatMessage('Fetching form dialog schema templates failed.'),
         kind: 'templateFetch',
       });
     }
