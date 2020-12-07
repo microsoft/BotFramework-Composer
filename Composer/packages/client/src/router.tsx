@@ -64,7 +64,12 @@ const Routes = (props) => {
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId/skill/:skillId">
             <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/all/*" />
+            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/all/*" />
+            <LGPage path="language-generation/common/*" />
+            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <BotProjectSettings path="botProjectsSettings" />
@@ -73,7 +78,11 @@ const Routes = (props) => {
           </ProjectRouter>
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/all/*" />
+            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/all/*" />
+            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <Publish path="publish/:targetName" />

@@ -21,7 +21,7 @@ const getTemplateDirs = async () => {
   if (templatesRootDir && templatesRootDir.length) {
     for (const dirName of await fs.readdir(templatesRootDir)) {
       const dir = path.join(templatesRootDir, dirName);
-      if ((await fs.lstat(dir)).isDirectory()) {
+      if ((await fs.lstat(dir)).isDirectory() && dir.endsWith('standard')) {
         // Add templates subdirectories as templates
         dirs.push(dir);
       }
