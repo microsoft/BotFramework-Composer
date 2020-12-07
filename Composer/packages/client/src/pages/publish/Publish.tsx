@@ -13,7 +13,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogSetting, PublishTarget } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 
-import { dispatcherState, localBotsDataSelector } from '../../recoilModel';
+import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification, PublishType } from '../../recoilModel/types';
@@ -27,32 +27,12 @@ import { getPendingNotificationCardProps, getPublishedNotificationCardProps } fr
 import { PullDialog } from './pullDialog';
 
 const publishStatusInterval = 10000;
-const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
-  const { projectId = '' } = props;
-  const botProjectData = useRecoilValue(localBotsDataSelector);
-  const {
-    getPublishHistory,
-    getPublishStatus,
-    getPublishTargetTypes,
-    setPublishTargets,
-    publishToTarget,
-    setQnASettings,
-    rollbackToVersion: rollbackToVersionDispatcher,
-    addNotification,
-    deleteNotification,
-  } = useRecoilValue(dispatcherState);
-
-  const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
-  const [publishDisabled, setPublishDisabled] = useState(false);
-
-  const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
-  // fill Settings, status, publishType, publish target for bot from botProjectMeta
+const generateComputedData = (botProjectData, botPublishHistoryList) => {
   const botSettingList: { projectId: string; setting: DialogSetting }[] = [];
   const statusList: IBotStatus[] = [];
   const botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[] = [];
   const publishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[] = [];
   const publishTargetsList: { projectId: string; publishTargets: PublishTarget[] }[] = [];
-
   botProjectData.forEach((bot) => {
     const botProjectId = bot.projectId;
     botSettingList.push({
@@ -91,6 +71,33 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
     statusList.push(botStatus);
   });
+  return { botSettingList, statusList, botPublishTypesList };
+};
+const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
+  const { projectId = '' } = props;
+  const botProjectData = useRecoilValue(localBotsDataSelector);
+  const publishHistoryList = useRecoilValue(localBotPublishHistorySelector);
+  const {
+    getPublishHistory,
+    getPublishStatus,
+    getPublishTargetTypes,
+    setPublishTargets,
+    publishToTarget,
+    setQnASettings,
+    rollbackToVersion: rollbackToVersionDispatcher,
+    addNotification,
+    deleteNotification,
+  } = useRecoilValue(dispatcherState);
+
+  const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
+  const [publishDisabled, setPublishDisabled] = useState(false);
+
+  const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
+  // fill Settings, status, publishType, publish target for bot from botProjectMeta, publishHistory
+  const { botSettingList, statusList, botPublishTypesList } = useMemo(() => {
+    return generateComputedData(botProjectData, publish);
+  }, [botProjectData, publishHistoryList]);
+
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
     { projectId: string; publishHistory: { [key: string]: IStatus[] } }[]
@@ -236,7 +243,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const newBotStatusItems: IBotStatus[] = [];
     botPublishHistoryList.forEach((publishHistoryList) => {
       let botStatus = botStatusList.find((status) => status.id === publishHistoryList.projectId);
-      if (!botStatus || !botStatus.publishTarget) return;
+      if (!botStatus) return;
+      if (!botStatus.publishTarget) {
+        newBotStatusItems.push(botStatus);
+        return;
+      }
       const botPublishHistory = publishHistoryList?.publishHistory[botStatus.publishTarget];
       if (botPublishHistory && botPublishHistory.length > 0) {
         botStatus.status = botPublishHistory[0].status;
