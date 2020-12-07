@@ -16,7 +16,7 @@ const config: PluginConfig = {
           }
           return !shellAPI.isFeatureEnabled('ORCHESTRATOR');
         },
-        displayName: () => formatMessage('Orchestrator Recognizer'),
+        displayName: () => formatMessage('Orchestrator recognizer'),
         isSelected: (_, dialog: DialogInfo) => {
           return dialog.luProvider === SDKKinds.OrchestratorRecognizer;
         },
