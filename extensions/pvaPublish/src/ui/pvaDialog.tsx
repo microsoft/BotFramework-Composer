@@ -29,8 +29,8 @@ const pvaBrandingHover = '#0A4A5C';
 const pvaBrandingClick = '#073845';
 
 type PVAPublishConfig = {
-  botId: string;
-  envId: string;
+  botId?: string;
+  envId?: string;
   tenantId: string;
   deleteMissingComponents: boolean;
 };
