@@ -9,8 +9,6 @@ import { CardProps } from '../../components/Notifications/NotificationCard';
 
 import { addNotificationInternal, createNotification, updateNotificationInternal } from './notification';
 import httpClient from './../../utils/httpUtil';
-import { armScopes, graphScopes } from './../../constants';
-import { AuthClient } from '../../utils/authClient';
 
 export const provisionDispatcher = () => {
   const getProvisionPendingNotification = (value: string): CardProps => {
@@ -36,13 +34,17 @@ export const provisionDispatcher = () => {
   };
 
   const provisionToTarget = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (config: any, type: string, projectId: string) => {
+    (callbackHelpers: CallbackInterface) => async (
+      config: any,
+      type: string,
+      projectId: string,
+      armToken: string = '',
+      graphToken: string = ''
+    ) => {
       try {
-        const arm = await AuthClient.getAccessToken(armScopes);
-        const graph = await AuthClient.getAccessToken(graphScopes);
-        console.log('graph token is: ', graph);
+        console.log('graph token is: ', graphToken);
         const result = await httpClient.post(`/provision/${projectId}/${type}`, config, {
-          headers: { Authorization: `Bearer ${arm}`, graphtoken: graph },
+          headers: { Authorization: `Bearer ${armToken}`, graphtoken: graphToken },
         });
         console.log(result.data);
         const notification = createNotification(getProvisionPendingNotification(result.data.message));

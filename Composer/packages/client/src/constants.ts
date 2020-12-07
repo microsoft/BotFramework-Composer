@@ -335,14 +335,13 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const authConfig = {
   // for web login
-  clientId: 'dbfa1f3b-403c-4bef-83be-3767eead7af0',
+  clientId: process.env.WEBLOGIN_CLIENTID,
   scopes: [
     'https://management.core.windows.net/user_impersonation',
     'https://graph.microsoft.com/Application.ReadWrite.All',
   ],
-  tenantId: '79ee0e7f-fc67-425a-a1d6-de8faaeb626b',
-  redirectUrl: `http://localhost:3000/oauth`,
-  clientSecret: '1PZov0~I7p~GVZIum1-_nOIT31-u~6aHC4',
+  tenantId: process.env.WEBLOGIN_TENANTID,
+  redirectUrl: process.env.WEBLOGIN_REDIRECTURL,
 };
 
 export const armScopes = {

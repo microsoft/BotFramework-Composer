@@ -74,7 +74,8 @@ function publishResultFromStatus(procStatus: ProcessStatus): PublishResponse {
 export default async (composer: IExtensionRegistration): Promise<void> => {
   class AzurePublisher implements PublishPlugin<PublishConfig> {
     private historyFilePath: string;
-    private publishHistories: Record<string, Record<string, PublishResult[]>>;
+    private publishHistories: Record<string, Record<string, PublishResult[]>>; // use botId profileName as key
+    private provisionHistories: Record<string, Record<string, ProcessStatus>>;
     private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
@@ -86,6 +87,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
     constructor(mode: string, name: string, description: string, bundleId: string) {
       this.publishHistories = {};
+      this.provisionHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
@@ -422,6 +424,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const provisionHistoryPath = path.resolve(project.dataDir, ProvisionLog);
         await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
       }
+      // add in history
+      this.addProvisionHistory(project.id, config.name, BackgroundProcessManager.getStatus(jobId));
+      BackgroundProcessManager.removeProcess(jobId);
     };
 
     /**************************************************************************************************
@@ -520,7 +525,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         result: {
           message: 'bot not published',
         }
-
       };
     };
 
@@ -544,11 +548,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         }
       } else {
         // If job id was not present or failed to resolve the status, use the pid and profileName
-        const status = BackgroundProcessManager.getStatusByName(project.id, processName);
+        const status = BackgroundProcessManager.getStatusByName(botId, processName);
         if (status) {
           return status;
         }
       }
+
+      // if ACTIVE status is found, look for recent status in history
+      return this.getProvisionHistory(botId, processName);
     };
 
     getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
@@ -615,6 +622,28 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       return recommendedResources;
+    };
+
+    private addProvisionHistory = (botId:string, profileName: string, newValue:ProcessStatus) => {
+      if(!this.provisionHistories[botId]){
+        this.provisionHistories[botId] = {};
+      }
+      this.provisionHistories[botId][profileName] = newValue;
+    }
+
+    private getProvisionHistory = (botId:string, profileName:string) => {
+      if (this.provisionHistories?.[botId]?.[profileName]) {
+        return this.provisionHistories[botId][profileName];
+      }
+      return {
+        id: '',
+        projectId: botId,
+        processName: profileName,
+        time: new Date(),
+        log:[],
+        status: 500,
+        message: 'not found',
+      } as ProcessStatus;
     };
   }
 

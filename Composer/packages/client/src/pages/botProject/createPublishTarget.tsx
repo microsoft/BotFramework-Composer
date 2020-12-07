@@ -14,7 +14,8 @@ import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
-import { PublishProfileDialog } from '../../constants';
+import { armScopes, graphScopes, PublishProfileDialog } from '../../constants';
+import { canThirdPartyLogin, getTokenFromCache, isTokenExpired } from '../../utils/auth';
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState, currentUserState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
@@ -22,6 +23,8 @@ import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
 
 import { label, separator, defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../publish/styles';
+import { AuthClient } from '../../utils/authClient';
+import { AuthDialog } from '../../components/Auth/AuthDialog';
 
 interface CreatePublishTargetProps {
   closeDialog: () => void;
@@ -47,6 +50,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [errorMessage, setErrorMsg] = useState('');
   const [pluginConfigIsValid, setPluginConfigIsValid] = useState(false);
   const [page, setPage] = useState(current ? PageTypes.EditProfile : PageTypes.AddProfile);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const userSettings = useRecoilValue(userSettingsState);
   const currentUser = useRecoilValue(currentUserState);
@@ -117,7 +121,17 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
       const fullConfig = { ...config, name: name, type: targetType };
       console.log(fullConfig);
-      provisionToTarget(fullConfig, config.type, projectId);
+      let arm, graph;
+      if (canThirdPartyLogin()) {
+        // login or get token implicit
+        arm = await AuthClient.getAccessToken(armScopes);
+        graph = await AuthClient.getAccessToken(graphScopes);
+      } else {
+        // get token from cache
+        arm = getTokenFromCache('accessToken');
+        graph = getTokenFromCache('graphToken');
+      }
+      provisionToTarget(fullConfig, config.type, projectId, arm, graph);
     };
     PluginAPI.publish.currentProjectId = () => {
       return projectId;
@@ -133,6 +147,15 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
     };
     PluginAPI.publish.setTitle = (value) => setDialogProps(value);
+    PluginAPI.publish.getTokenFromCache = () => {
+      return {
+        accessToken: getTokenFromCache('accessToken'),
+        graphToken: getTokenFromCache('graphToken'),
+      };
+    };
+    PluginAPI.publish.canThirdPartyLogin = () => {
+      return canThirdPartyLogin();
+    };
   }, [projectId, name, targetType]);
 
   const submit = useMemo(
@@ -201,6 +224,13 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
                 disabled={nextDisabled}
                 text={formatMessage('Next')}
                 onClick={async () => {
+                  if (
+                    !canThirdPartyLogin() &&
+                    (isTokenExpired(getTokenFromCache('accessToken')) ||
+                      isTokenExpired(getTokenFromCache('graphToken')))
+                  ) {
+                    setShowAuthDialog(true);
+                  }
                   setPage(PageTypes.ConfigProvision);
                 }}
               />
@@ -234,14 +264,39 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
               break;
           }
           return (
-            <div css={publishSurfaceStyles}>
-              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
-            </div>
+            <Fragment>
+              {showAuthDialog && (
+                <AuthDialog
+                  needGraph={true}
+                  onDismiss={() => {
+                    setShowAuthDialog(false);
+                  }}
+                />
+              )}
+              <div css={publishSurfaceStyles}>
+                <PluginHost
+                  bundleId={selectedType.bundleId}
+                  pluginName={selectedType.extensionId}
+                  pluginType="publish"
+                />
+              </div>
+            </Fragment>
           );
         }
     }
     return null;
-  }, [currentUser, config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit]);
+  }, [
+    currentUser,
+    config,
+    page,
+    FormInPage,
+    PageEditProfile,
+    nextDisabled,
+    saveDisabled,
+    selectedType,
+    showAuthDialog,
+    submit,
+  ]);
 
   return PageContent;
 };

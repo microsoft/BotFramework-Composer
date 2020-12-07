@@ -912,12 +912,12 @@ export class AzureResourceMananger {
         kind: 'bot',
       });
 
-      if (botResult._response.status >= 300) {
+      if (botResult?._response?.status >= 300) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: botResult._response.bodyAsText,
+          message: botResult._response?.bodyAsText,
         });
-        throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, botResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, botResult._response?.bodyAsText);
       }
 
     } catch (err) {
