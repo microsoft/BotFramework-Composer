@@ -76,7 +76,12 @@ export class Builder {
     this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERRUPTION);
   }
 
-  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) => {
+  public build = async (
+    luFiles: FileInfo[],
+    qnaFiles: FileInfo[],
+    allFiles: FileInfo[],
+    emptyFiles: { [key: string]: boolean }
+  ) => {
     try {
       await this.createGeneratedDir();
       //do cross train before publish
@@ -92,7 +97,7 @@ export class Builder {
       }
       await this.runLuBuild(luBuildFiles);
       await this.runQnaBuild(interruptionQnaFiles);
-      await this.runOrchestratorBuild(orchestratorBuildFiles);
+      await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
@@ -141,8 +146,8 @@ export class Builder {
    * 4) Generate settings file for runtime containing model and snapshot paths and place in /generated folder
    * @param luFiles LU Files needed to build snapshot data
    */
-  public runOrchestratorBuild = async (luFiles: FileInfo[]) => {
-    if (!luFiles.length) return;
+  public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
+    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
     const nlrList = await this.runOrchestratorNlrList();
     const defaultNLR = nlrList.default;

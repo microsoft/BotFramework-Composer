@@ -471,17 +471,20 @@ export class BotProject implements IBotProject {
   public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
     if (this.settings) {
       const luFiles: FileInfo[] = [];
-      luResource.forEach(({ id }) => {
+      const emptyFiles = {};
+      luResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
+        if (isEmpty) emptyFiles[fileName] = true;
         if (f) {
           luFiles.push(f);
         }
       });
       const qnaFiles: FileInfo[] = [];
-      qnaResource.forEach(({ id }) => {
+      qnaResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.qna`;
         const f = this.files.get(fileName);
+        if (isEmpty) emptyFiles[fileName] = true;
         if (f) {
           qnaFiles.push(f);
         }
@@ -492,7 +495,7 @@ export class BotProject implements IBotProject {
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
         this.settings.downsampling
       );
-      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
+      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[], emptyFiles);
     }
   };
 

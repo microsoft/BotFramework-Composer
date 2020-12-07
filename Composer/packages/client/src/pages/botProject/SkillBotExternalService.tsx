@@ -184,11 +184,11 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-labelledby={'LUIS name'}
-          data-testid={'skillLUISName'}
+          aria-labelledby={'LUIS application name'}
+          data-testid={'skillLUISApplicationName'}
           id={'luisName'}
-          label={formatMessage('LUIS name')}
-          placeholder={'Enter LUIS name'}
+          label={formatMessage('LUIS application name')}
+          placeholder={'Enter LUIS application name'}
           styles={{ root: { marginBottom: 10 } }}
           value={localSkillLuisName}
           onBlur={handleSkillLUISNameOnBlur}
