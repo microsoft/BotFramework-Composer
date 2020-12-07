@@ -26,7 +26,7 @@ import { BotStatusList, IBotStatus } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
 import { armScopes } from '../../constants';
-import { getTokenFromCache, canThirdPartyLogin, isTokenExpired } from '../../utils/auth';
+import { getTokenFromCache, isShowAuthDialog } from '../../utils/auth';
 import { AuthClient } from '../../utils/authClient';
 
 const publishStatusInterval = 10000;
@@ -129,7 +129,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           data-testid="publishPage-Toolbar-Publish"
           disabled={publishDisabled || selectedBots.length === 0}
           onClick={() => {
-            if (!canThirdPartyLogin() && isTokenExpired(getTokenFromCache('accessToken'))) {
+            if (isShowAuthDialog(false)) {
               setShowAuthDialog(true);
             } else {
               setPublishDialogHidden(false);
@@ -357,7 +357,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const publish = async (items: IBotStatus[]) => {
     // get token
     let token = '';
-    if (!canThirdPartyLogin()) {
+    if (isShowAuthDialog(false)) {
       token = getTokenFromCache('accessToken');
       console.log(token);
     } else {

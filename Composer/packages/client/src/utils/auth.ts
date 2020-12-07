@@ -316,9 +316,15 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
   return url;
 }
 
-export function canThirdPartyLogin(): boolean {
-  if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId && !isElectron()) {
-    return true;
+export function isShowAuthDialog(needGraph: boolean): boolean {
+  if (isElectron()) {
+    return false;
+  } else if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId) {
+    return isTokenExpired(getTokenFromCache('accessToken'))
+      ? true
+      : needGraph && isTokenExpired(getTokenFromCache('graphToken'))
+      ? true
+      : false;
   } else {
     return false;
   }

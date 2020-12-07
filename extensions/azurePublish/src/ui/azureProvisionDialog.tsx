@@ -19,7 +19,7 @@ import {
   getSchema,
   getType,
   getTokenFromCache,
-  canThirdPartyLogin,
+  isShowAuthDialog,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -172,7 +172,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
-    if(!canThirdPartyLogin()){
+    if(isShowAuthDialog(true)){
       const {accessToken} = getTokenFromCache();
       setToken(accessToken);
       // decode token

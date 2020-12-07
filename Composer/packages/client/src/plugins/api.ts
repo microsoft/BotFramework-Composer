@@ -34,7 +34,7 @@ interface PublishAPI {
   getType?: () => string;
   savePublishConfig?: (config: PublishConfig) => void;
   getTokenFromCache?: () => any;
-  canThirdPartyLogin?: () => boolean;
+  isShowAuthDialog?: (needGraph: boolean) => boolean;
 }
 
 class API implements IAPI {
@@ -62,7 +62,7 @@ class API implements IAPI {
       getSchema: undefined,
       savePublishConfig: undefined,
       getTokenFromCache: undefined,
-      canThirdPartyLogin: undefined,
+      isShowAuthDialog: undefined,
     };
   }
 }
