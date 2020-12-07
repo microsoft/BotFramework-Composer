@@ -7,6 +7,7 @@ import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import httpClient from '../../utils/httpUtil';
 import {
   applicationErrorState,
@@ -74,9 +75,11 @@ export const formDialogsDispatcher = () => {
           return;
         }
 
+        const generateStartTime = Date.now();
         const response = await httpClient.post(`/formDialogs/${projectId}/generate`, {
           name: schemaId,
         });
+        TelemetryClient.log('FormDialogGenerated', { durationMilliseconds: Date.now() - generateStartTime });
         await reloadProject(response.data.id);
       } catch (error) {
         set(applicationErrorState, {
