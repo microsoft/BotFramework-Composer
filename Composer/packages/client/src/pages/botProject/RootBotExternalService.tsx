@@ -295,7 +295,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-labelledby={formatMessage('LUIS application name')}
+          aria-label={formatMessage('LUIS application name')}
           data-testid={'rootLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('LUIS application name')}
