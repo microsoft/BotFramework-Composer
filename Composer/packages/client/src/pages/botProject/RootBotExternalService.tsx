@@ -8,6 +8,7 @@ import { mergeStyleSets } from '@uifabric/styling';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -28,6 +29,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { LUIS_REGIONS } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -235,10 +237,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
-  const handleRootLuisRegionOnChange = (e, value) => {
+  const handleRootLuisRegionOnChange = (e, value: IDropdownOption) => {
     if (value) {
       setLuisRegionErrorMsg('');
-      setLocalRootLuisRegion(value);
+      setLocalRootLuisRegion(value.text);
     } else {
       setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
       setLocalRootLuisRegion('');
@@ -320,16 +322,17 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           />
         </div>
         <div ref={luisRegionFieldRef}>
-          <TextField
+          <Dropdown
             aria-label={formatMessage('LUIS region')}
             data-testid={'rootLUISRegion'}
-            errorMessage={errorElement(luisRegionErrorMsg)}
+            errorMessage={luisRegionErrorMsg}
             id={'luisRegion'}
             label={formatMessage('LUIS region')}
+            options={LUIS_REGIONS}
             placeholder={formatMessage('Enter LUIS region')}
             required={isLUISKeyNeeded}
+            selectedKey={localRootLuisRegion}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-            value={localRootLuisRegion}
             onBlur={handleRootLuisRegionOnBlur}
             onChange={handleRootLuisRegionOnChange}
             onRenderLabel={onRenderLabel}

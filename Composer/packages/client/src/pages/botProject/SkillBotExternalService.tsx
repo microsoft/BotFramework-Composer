@@ -91,8 +91,8 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const rootLuisRegion = groupLUISRegion.root;
   const skillLuisRegion = groupLUISRegion[projectId];
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
-  const rootqnaKey = groupQnAKey.root;
-  const skillqnaKey = groupQnAKey[projectId];
+  const rootQnAKey = groupQnAKey.root;
+  const skillQnAKey = groupQnAKey[projectId];
 
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
@@ -147,7 +147,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
     if (key) {
       submitQnASubscripionKey(key);
     } else {
-      submitQnASubscripionKey(rootqnaKey);
+      submitQnASubscripionKey(rootQnAKey);
     }
   };
 
@@ -203,7 +203,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             id={'luisKey'}
             label={formatMessage('LUIS key')}
             placeholder={formatMessage('Enter LUIS key')}
-            placeholderOnDisable={formatMessage("<---- Same as root bot's LUIS key ---->")}
+            placeholderOnDisable={rootLuisKey}
             required={isLUISKeyNeeded}
             value={skillLuisKey}
             onBlur={handleLUISKeyOnBlur}
@@ -217,7 +217,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
             label={formatMessage('LUIS region')}
             placeholder={formatMessage('Enter LUIS region')}
-            placeholderOnDisable={formatMessage("<---- Same as root bot's LUIS region ---->")}
+            placeholderOnDisable={rootLuisRegion}
             required={isLUISKeyNeeded}
             value={skillLuisRegion}
             onBlur={handleLUISRegionOnBlur}
@@ -228,13 +228,13 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           <TextFieldWithCustomButton
             ariaLabel={formatMessage('QnA Maker Subscription key')}
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
-            errorMessage={!rootqnaKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
+            errorMessage={!rootQnAKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
             id={'qnaKey'}
             label={formatMessage('QnA Maker Subscription key')}
             placeholder={formatMessage('Enter QnA Maker Subscription key')}
-            placeholderOnDisable={formatMessage("<---- Same as root bot's QnA Maker Subscription key ---->")}
+            placeholderOnDisable={rootQnAKey}
             required={isQnAKeyNeeded}
-            value={skillqnaKey}
+            value={skillQnAKey}
             onBlur={handleSkillQnAKeyOnBlur}
             onRenderLabel={onRenderLabel}
           />
