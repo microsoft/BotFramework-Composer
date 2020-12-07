@@ -155,7 +155,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         );
       }
     }
-  }, [formDialogError, formDialogGenerationProgressing]);
+  }, [formDialogError, formDialogGenerationProgressing, schemaId]);
 
   const updateItem = React.useCallback(
     (id: string, content: string) => {
