@@ -9,7 +9,7 @@ import { RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus } from '../../constants';
+import { BotStatus, QnABotTemplateId } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -26,9 +26,11 @@ import {
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
+  createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
   projectMetaDataState,
+  showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 import { rootBotProjectIdSelector } from '../selectors';
@@ -469,6 +471,12 @@ export const projectDispatcher = () => {
               isRootBot: true,
               isRemote: false,
             });
+            // if create from QnATemplate, continue creation flow.
+            if (templateId === QnABotTemplateId) {
+              callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
+              callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
+            }
+
             projectIdCache.set(projectId);
             navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
             callbackHelpers.set(botOpeningMessage, '');
