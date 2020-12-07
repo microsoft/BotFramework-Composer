@@ -12,6 +12,7 @@ import storage from '../../utils/storage';
 export interface AuthDialogProps {
   needGraph: boolean;
   onDismiss: () => void;
+  next: () => void;
 }
 export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
   const [graphToken, setGraphToken] = useState('');
@@ -36,6 +37,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
         'To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below.'
       )}
       dialogType={DialogTypes.CreateFlow}
+      isBlocking={true}
     >
       <TextField
         onChange={(event, newValue) => {
@@ -69,6 +71,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
             // cache tokens
             storage.set('accessToken', accessToken);
             storage.set('graphToken', graphToken);
+            props.next();
           }}
         />
       </DialogFooter>

@@ -439,8 +439,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           needGraph={false}
           onDismiss={() => {
             setShowAuthDialog(false);
-            setPublishDialogHidden(false);
           }}
+          next={() => setPublishDialogHidden(false)}
         />
       )}
       {!publishDialogHidden && (

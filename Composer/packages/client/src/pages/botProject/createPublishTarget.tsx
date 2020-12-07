@@ -227,7 +227,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
                   if (isShowAuthDialog(true)) {
                     setShowAuthDialog(true);
                   }
-                  setPage(PageTypes.ConfigProvision);
                 }}
               />
             </DialogFooter>
@@ -261,14 +260,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
           }
           return (
             <Fragment>
-              {showAuthDialog && (
-                <AuthDialog
-                  needGraph={true}
-                  onDismiss={() => {
-                    setShowAuthDialog(false);
-                  }}
-                />
-              )}
               <div css={publishSurfaceStyles}>
                 <PluginHost
                   bundleId={selectedType.bundleId}
@@ -294,7 +285,22 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     submit,
   ]);
 
-  return PageContent;
+  return (
+    <Fragment>
+      {showAuthDialog && (
+        <AuthDialog
+          needGraph={true}
+          onDismiss={() => {
+            setShowAuthDialog(false);
+          }}
+          next={() => {
+            setPage(PageTypes.ConfigProvision);
+          }}
+        />
+      )}
+      {PageContent}
+    </Fragment>
+  );
 };
 
 export { CreatePublishTarget };
