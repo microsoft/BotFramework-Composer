@@ -13,6 +13,7 @@ import {
 } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import httpClient from '../utils/httpUtil';
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
@@ -40,7 +41,6 @@ import {
 import { undoFunctionState } from '../recoilModel/undo/history';
 import { skillsStateSelector } from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
-import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
