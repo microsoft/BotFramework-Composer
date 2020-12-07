@@ -128,6 +128,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // point to the declarative assets (possibly in remote storage)
       const botFiles = project.getProject().files;
       const botFolder = this.getBotFolder(resourcekey, this.mode);
+      const projectFolder = this.getProjectFolder(resourcekey, this.mode);
       const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
       // clean up from any previous deploys
@@ -157,7 +158,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
 
       // copy bot and runtime into projFolder
-      await copy(srcTemplate, runtimeFolder);
+      await copy(srcTemplate, projectFolder);
     };
 
     /**
@@ -496,6 +497,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     'Publish bot to Azure Functions (Preview)'
   );
 
+  const botRuntimeWebAppPublish = new AzurePublisher(
+    'botruntimewebapp',
+    'botRuntimeWebAppPublish',
+    'Publish bot to an Azure Web App using the Bot Framework Runtime (Preview)'
+  );
+
   await composer.addPublishMethod(azurePublish);
   await composer.addPublishMethod(azureFunctionsPublish);
+  await composer.addPublishMethod(botRuntimeWebAppPublish);
 };

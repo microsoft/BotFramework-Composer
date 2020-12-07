@@ -26,12 +26,12 @@ export default async (composer: any): Promise<void> => {
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
       // TODO: capture output of this and store it somewhere useful
-      const { stderr: initErr } = await execAsync('dotnet user-secrets init --project azurewebapp', {
+      /*const { stderr: initErr } = await execAsync('dotnet user-secrets init --project azurewebapp', {
         cwd: runtimePath,
       });
       if (initErr) {
         throw new Error(initErr);
-      }
+      }*/
       composer.log('Run dotnet build...');
       const { stderr: buildErr } = await execAsync('dotnet build', { cwd: runtimePath });
       if (buildErr) {
@@ -78,7 +78,10 @@ export default async (composer: any): Promise<void> => {
         csproj = 'Microsoft.BotFramework.Composer.WebApp.csproj';
       } else if (profile.type === 'azureFunctionsPublish') {
         csproj = 'Microsoft.BotFramework.Composer.Functions.csproj';
+      } else if (profile.type === 'botRuntimeWebAppPublish') {
+        csproj = path.join('EchoBot', 'EchoBot.csproj');
       }
+
       const publishFolder = path.join(runtimePath, 'bin', 'Release', 'netcoreapp3.1');
       const deployFilePath = path.join(runtimePath, '.deployment');
       const dotnetProjectPath = path.join(runtimePath, csproj);
@@ -169,6 +172,16 @@ export default async (composer: any): Promise<void> => {
       // update manifst into runtime wwwroot
       if (mode === 'azurewebapp') {
         const manifestDstDir = path.resolve(dstRuntimePath, 'azurewebapp', 'wwwroot', 'manifests');
+
+        if (await fs.pathExists(manifestDstDir)) {
+          await removeDirAndFiles(manifestDstDir);
+        }
+
+        if (await fs.pathExists(srcManifestDir)) {
+          await copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
+        }
+      } else if (mode === 'botruntimewebapp') {
+        const manifestDstDir = path.resolve(dstRuntimePath, 'EchoBot', 'wwwroot', 'manifests');
 
         if (await fs.pathExists(manifestDstDir)) {
           await removeDirAndFiles(manifestDstDir);
