@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
@@ -24,14 +24,25 @@ const titleStyle = css`
 
 type RuntimeSettingsProps = {
   projectId: string;
+  scrollToSectionId?: string;
 };
 
 export const RuntimeSettings: React.FC<RuntimeSettingsProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, scrollToSectionId } = props;
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current && scrollToSectionId === '#runtimeSettings') {
+      containerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scrollToSectionId]);
 
   return (
     <CollapsableWrapper title={formatMessage('Custom runtime')} titleStyle={titleStyle}>
-      <Runtime projectId={projectId} />
+      <div ref={containerRef}>
+        <Runtime projectId={projectId} />
+      </div>
     </CollapsableWrapper>
   );
 };
