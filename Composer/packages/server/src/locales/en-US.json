@@ -1034,11 +1034,11 @@
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
   },
+  "enter_luis_application_name_df312e75": {
+    "message": "Enter LUIS application name"
+  },
   "enter_luis_key_336f7ed7": {
     "message": "Enter LUIS key"
-  },
-  "enter_luis_name_6e8116ab": {
-    "message": "Enter LUIS name"
   },
   "enter_luis_region_2316eceb": {
     "message": "Enter LUIS region"
@@ -1571,9 +1571,6 @@
   "lu_file_id_not_found_8732d33e": {
     "message": "LU file { id } not found"
   },
-  "lu_file_is_empty_with_name_id_70dab20d": {
-    "message": "LU FILE IS EMPTY WITH NAME { id }"
-  },
   "lu_language_client_bbffcd7b": {
     "message": "LU Language Client"
   },
@@ -1582,6 +1579,9 @@
   },
   "luis_add4bbe3": {
     "message": "LUIS"
+  },
+  "luis_application_name_1530d3aa": {
+    "message": "LUIS application name"
   },
   "luis_authoring_key_cfaba7dd": {
     "message": "LUIS Authoring key:"
@@ -1594,9 +1594,6 @@
   },
   "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
     "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
-  },
-  "luis_name_873e1fd8": {
-    "message": "LUIS name"
   },
   "luis_region_9879d8de": {
     "message": "LUIS region"
@@ -2287,15 +2284,6 @@
   },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
-  },
-  "same_as_root_bot_s_luis_key_64271467": {
-    "message": "<---- Same as root bot''s LUIS key ---->"
-  },
-  "same_as_root_bot_s_luis_region_ede6183e": {
-    "message": "<---- Same as root bot''s LUIS region ---->"
-  },
-  "same_as_root_bot_s_qna_maker_subscription_key_7bad0ce9": {
-    "message": "<---- Same as root bot''s QnA Maker Subscription key ---->"
   },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
