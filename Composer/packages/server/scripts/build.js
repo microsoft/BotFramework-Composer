@@ -6,6 +6,7 @@ const path = require('path');
 function getBuildEnvironment() {
   return {
     QNA_SUBSCRIPTION_KEY: process.env.QNA_SUBSCRIPTION_KEY,
+    APPINSIGHTS_INSTRUMENTATIONKEY: process.env.APPINSIGHTS_INSTRUMENTATIONKEY,
   };
 }
 

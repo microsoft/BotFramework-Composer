@@ -647,6 +647,9 @@
   "conversation_invoked_e960884e": {
     "message": "Conversation invoked"
   },
+  "conversational_core_preview_template_is_available__ba9b43b8": {
+    "message": "Conversational Core preview template is available since you have that feature turned on."
+  },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate activity"
   },
@@ -1508,6 +1511,9 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "Last modified time is { time }"
   },
+  "learn_more_14816ec": {
+    "message": "Learn More."
+  },
   "learn_more_a79a7918": {
     "message": "Learn more"
   },
@@ -1534,6 +1540,9 @@
   },
   "learn_more_c08939e8": {
     "message": "Learn more."
+  },
+  "learn_more_ffb8910": {
+    "message": " Learn More."
   },
   "learn_the_basics_2d9ae7df": {
     "message": "Learn the basics"

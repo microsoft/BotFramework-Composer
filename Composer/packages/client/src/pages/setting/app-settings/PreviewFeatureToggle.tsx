@@ -29,6 +29,7 @@ export const PreviewFeatureToggle: React.FC = () => {
           <FeatureFlagCheckBox
             key={key}
             description={featureFlag.description}
+            documentationLink={featureFlag.documentationLink}
             enabled={featureFlag.enabled}
             featureFlagKey={key as FeatureFlagKey}
             featureFlagName={featureFlag.displayName}
