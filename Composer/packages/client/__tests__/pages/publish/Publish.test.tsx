@@ -110,6 +110,7 @@ describe('publish page', () => {
         changePublishTarget={jest.fn()}
         items={[]}
         projectId={rootState.projectId}
+        publishDisabled={false}
         updateItems={jest.fn()}
         updatePublishHistory={jest.fn()}
         updateSelectedBots={jest.fn()}
