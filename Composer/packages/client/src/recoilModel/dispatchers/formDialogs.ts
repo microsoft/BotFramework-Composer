@@ -10,7 +10,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import httpClient from '../../utils/httpUtil';
 import {
-  applicationErrorState,
+  formDialogErrorState,
   formDialogGenerationProgressingState,
   formDialogLibraryTemplatesState,
 } from '../atoms/appState';
@@ -40,7 +40,9 @@ export const formDialogsDispatcher = () => {
   });
 
   const loadFormDialogSchemaTemplates = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    const { set, snapshot } = callbackHelpers;
+    const { set, reset, snapshot } = callbackHelpers;
+    reset(formDialogErrorState);
+
     const templates = await snapshot.getPromise(formDialogLibraryTemplatesState);
     // If templates are already loaded, don't reload.
     if (templates.length) {
@@ -55,17 +57,20 @@ export const formDialogsDispatcher = () => {
       }));
 
       set(formDialogLibraryTemplatesState, templates);
-    } catch (error) {
-      set(applicationErrorState, {
-        message: error.message,
-        summary: formatMessage('Load form dialog schema templates Error'),
+    } catch (ex) {
+      set(formDialogErrorState, {
+        ...ex,
+        message: formatMessage('Fetching form dialog schema templates failed.'),
+        kind: 'templateFetch',
       });
     }
   });
 
   const generateFormDialog = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ projectId, schemaId }) => {
-      const { set, snapshot } = callbackHelpers;
+      const { set, reset, snapshot } = callbackHelpers;
+      reset(formDialogErrorState);
+
       const { reloadProject } = await snapshot.getPromise(dispatcherState);
       try {
         set(formDialogGenerationProgressingState, true);
@@ -81,10 +86,13 @@ export const formDialogsDispatcher = () => {
         });
         TelemetryClient.log('FormDialogGenerated', { durationMilliseconds: Date.now() - generateStartTime });
         await reloadProject(response.data.id);
-      } catch (error) {
-        set(applicationErrorState, {
-          message: error.message,
-          summary: formatMessage('Generating form dialog using "{ schemaId }" schema failed.', { schemaId }),
+      } catch (ex) {
+        set(formDialogErrorState, {
+          ...ex,
+          message: formatMessage('Generating form dialog using "{ schemaId }" schema failed. Please try again later.', {
+            schemaId,
+          }),
+          kind: 'generation',
         });
       } finally {
         set(formDialogGenerationProgressingState, false);
@@ -94,7 +102,8 @@ export const formDialogsDispatcher = () => {
 
   const removeFormDialog = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ projectId, dialogId }) => {
-      const { set, snapshot } = callbackHelpers;
+      const { set, reset, snapshot } = callbackHelpers;
+      reset(formDialogErrorState);
 
       const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId }));
       const { reloadProject } = await snapshot.getPromise(dispatcherState);
@@ -106,10 +115,11 @@ export const formDialogsDispatcher = () => {
 
         await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
         await reloadProject(projectId);
-      } catch (error) {
-        set(applicationErrorState, {
-          message: error.message,
-          summary: formatMessage('Deleting "{ dialogId }" failed.', { dialogId }),
+      } catch (ex) {
+        set(formDialogErrorState, {
+          ...ex,
+          message: formatMessage('Deleting "{ dialogId }" failed.', { dialogId }),
+          kind: 'deletion',
         });
       }
     }
