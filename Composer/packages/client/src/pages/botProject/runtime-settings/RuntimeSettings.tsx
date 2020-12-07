@@ -176,7 +176,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   };
 
   return botName ? (
-    <div css={runtimeSettingsStyle}>
+    <div css={runtimeSettingsStyle} id="runtimeSettings">
       {header()}
       {toggleOfCustomRuntime()}
       <div>
