@@ -379,6 +379,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         // retry every 500ms, timeout 10min
         const retryTime = 500;
         const timeOutTime = 600000;
+        const processLog = this.composer.log.extend(spawnProcess.pid);
+        this.addListeners(spawnProcess, botId, processLog);
+
         tcpPortUsed.waitUntilUsedOnHost(port, '0.0.0.0', retryTime, timeOutTime).then(
           () => {
             this.setBotStatus(botId, {
@@ -387,8 +390,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
               status: 200,
               result: { message: 'Runtime started' },
             });
-            const processLog = this.composer.log.extend(spawnProcess.pid);
-            this.addListeners(spawnProcess, botId, processLog);
             resolve();
           },
           (err) => {
@@ -443,12 +444,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
-        if (!erroutput && LocalPublisher.runningBots[botId].status === 202) {
-          this.setBotStatus(botId, {
-            status: 200,
-            result: { message: 'Runtime has started' },
-          });
-        }
         logger('%s', data.toString());
       });
 
