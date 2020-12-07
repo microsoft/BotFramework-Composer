@@ -4,7 +4,7 @@
 import React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 
-import { AppIdAndPassword } from '../../../src/pages/botProject/AppIdAndPassword';
+import { AppIdAndPassword } from '../../../src/pages/projectSetting/AppIdAndPassword';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import { settingsState, currentProjectIdState } from '../../../src/recoilModel';

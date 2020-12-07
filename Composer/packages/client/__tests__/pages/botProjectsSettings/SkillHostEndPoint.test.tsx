@@ -4,7 +4,7 @@
 import React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 
-import { SkillHostEndPoint } from '../../../src/pages/botProject/SkillHostEndPoint';
+import { SkillHostEndPoint } from '../../../src/pages/projectSetting/SkillHostEndPoint';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import { settingsState, currentProjectIdState } from '../../../src/recoilModel';

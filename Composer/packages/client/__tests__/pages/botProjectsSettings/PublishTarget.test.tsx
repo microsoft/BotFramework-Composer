@@ -5,7 +5,7 @@
 import React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 
-import { PublishTargets } from '../../../src/pages/botProject/PublishTargets';
+import { PublishTargets } from '../../../src/pages/projectSetting/PublishTargets';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState, publishTypesState } from '../../../src/recoilModel';
 const state = {

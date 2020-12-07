@@ -5,7 +5,7 @@
 import React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 
-import { DeleteBotButton } from '../../../src/pages/botProject/DeleteBotButton';
+import { DeleteBotButton } from '../../../src/pages/projectSetting/DeleteBotButton';
 import { renderWithRecoil } from '../../testUtils';
 
 const state = {

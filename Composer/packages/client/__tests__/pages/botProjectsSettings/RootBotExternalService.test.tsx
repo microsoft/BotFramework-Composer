@@ -4,7 +4,7 @@
 import React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 
-import { RootBotExternalService } from '../../../src/pages/botProject/RootBotExternalService';
+import { RootBotExternalService } from '../../../src/pages/projectSetting/RootBotExternalService';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import {

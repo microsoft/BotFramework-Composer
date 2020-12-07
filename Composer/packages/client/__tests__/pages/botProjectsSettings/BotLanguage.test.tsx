@@ -4,7 +4,7 @@
 import React from 'react';
 import { act, fireEvent, within } from '@botframework-composer/test-utils';
 
-import { BotLanguage } from '../../../src/pages/botProject/BotLanguage';
+import { BotLanguage } from '../../../src/pages/projectSetting/BotLanguage';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import { settingsState, currentProjectIdState } from '../../../src/recoilModel';
