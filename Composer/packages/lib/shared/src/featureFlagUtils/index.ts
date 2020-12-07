@@ -6,7 +6,7 @@ import { FeatureFlagMap } from '@botframework-composer/types';
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   FORM_DIALOG: {
-    displayName: formatMessage('Show Form Dialog'),
+    displayName: formatMessage('Form dialogs'),
     description: formatMessage(
       'Automatically generate dialogs that collect information from a user to manage conversations.'
     ),
