@@ -23,7 +23,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   },
   ORCHESTRATOR: {
     displayName: formatMessage('Orchestrator'),
-    description: formatMessage('Recognize an intent, and take action or route  to a skill, LUIS app, or QnAMaker KB'),
+    description: formatMessage('Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB'),
     documentationLink: 'https://aka.ms/bf-orchestrator',
     isHidden: false,
     enabled: false,
