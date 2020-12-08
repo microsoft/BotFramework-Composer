@@ -16,9 +16,9 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig } from '@bfc/shared';
-import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { Text, Tips, Links, nameRegex } from '../../constants';
+import { Text, Tips, Links, nameRegex, LUIS_REGIONS } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { getLuisBuildLuFiles } from '../../utils/luUtil';
@@ -78,21 +78,6 @@ const onRenderLabel = (info) => (props) => (
     </TooltipHost>
   </Stack>
 );
-
-const regionOptions: IDropdownOption[] = [
-  {
-    key: 'westus',
-    text: formatMessage('westus'),
-  },
-  {
-    key: 'westeurope',
-    text: formatMessage('westeurope'),
-  },
-  {
-    key: 'australia',
-    text: formatMessage('australia'),
-  },
-];
 
 interface IPublishDialogProps {
   botName: string;
@@ -258,7 +243,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
               <Dropdown
                 data-testid="regionDropdown"
                 label={formatMessage('Luis Authoring Region')}
-                options={regionOptions}
+                options={LUIS_REGIONS}
                 responsiveMode={ResponsiveMode.large}
                 selectedKey={formData.authoringRegion}
                 onChange={(_e, option) => {

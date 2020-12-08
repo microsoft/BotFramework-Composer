@@ -11,8 +11,8 @@ import { Button } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
 

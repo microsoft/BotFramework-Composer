@@ -70,6 +70,7 @@ import {
   skillManifestsState,
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
+  createQnAOnState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
@@ -511,6 +512,7 @@ export const createNewBotFromTemplate = async (
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   // if create from QnATemplate, continue creation flow.
   if (templateId === QnABotTemplateId) {
+    set(createQnAOnState, { projectId, dialogId: mainDialog });
     set(showCreateQnAFromUrlDialogState(projectId), true);
   }
 
