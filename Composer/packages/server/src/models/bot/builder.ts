@@ -469,7 +469,7 @@ export class Builder {
     return {
       authoringKey: this.config.authoringKey || '',
       subscriptionKey: this.config.subscriptionKey || '',
-      region: this.config.authoringRegion || '',
+      region: this.config.authoringRegion || this.config.region || 'westus',
       qnaRegion: this.config.qnaRegion || this.config.authoringRegion || '',
       botName: this.config.name || '',
       suffix: this.config.environment || 'composer',

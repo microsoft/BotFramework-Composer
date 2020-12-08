@@ -156,7 +156,7 @@ export async function publishLuisToPrediction(
 
           this.logger({
             status: BotProjectDeployLoggerType.DEPLOY_INFO,
-            message: response,
+            message: JSON.stringify(response, Object.getOwnPropertyNames(response)),
           });
           break;
         }
