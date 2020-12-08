@@ -100,7 +100,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
             data-testid={`knowledgeLocationTextField-url`}
             errorMessage={formErrors.url}
             label={formatMessage('Knowledge source')}
-            placeholder={formatMessage('Enter a URL or browse to upload a file ')}
+            placeholder={formatMessage('Enter a URL')}
             styles={textField}
             value={formData.url}
             onChange={(e, url = '') => updateField('url', url)}

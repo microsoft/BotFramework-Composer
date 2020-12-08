@@ -4,6 +4,8 @@ import { ChildProcess, spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
+import max from 'lodash/max';
+import portfinder from 'portfinder';
 
 import glob from 'globby';
 import rimraf from 'rimraf';
@@ -15,7 +17,6 @@ import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframew
 import killPort from 'kill-port';
 import map from 'lodash/map';
 import range from 'lodash/range';
-import getPort from 'get-port';
 import * as tcpPortUsed from 'tcp-port-used';
 
 const stat = promisify(fs.stat);
@@ -283,13 +284,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     await this.zipBot(dstPath, srcDir);
   };
 
-  private getAvailablePorts = (): number[] => {
-    const excludePorts = map(LocalPublisher.runningBots, 'port');
-    const portRanges = range(3979, 5000);
-    const filtered = portRanges.filter((current) => !excludePorts.includes(current));
-    return filtered;
-  };
-
   // start bot in current version
   private setBot = async (botId: string, version: string, settings: any, project: any) => {
     // get port, and stop previous bot if exist
@@ -302,7 +296,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         await this.stopBot(botId);
       }
       if (!port) {
-        port = await getPort({ port: this.getAvailablePorts() });
+        // Portfinder is the stablest amongst npm libraries for finding ports. https://github.com/http-party/node-portfinder/issues/61. It does not support supplying an array of ports to pick from as we can have a race conidtion when starting multiple bots at the same time. As a result, getting the max port number out of the range and starting the range from the max.
+        const maxPort = max(map(LocalPublisher.runningBots, 'port')) ?? 3979;
+        port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
       }
 
       // if not using custom runtime, update assets in tmp older
@@ -375,10 +371,20 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           }
         );
         this.composer.log('Started process %d', spawnProcess.pid);
+        this.setBotStatus(botId, {
+          process: spawnProcess,
+          port,
+          status: 202,
+          result: { message: 'Starting runtime' },
+        });
+
         // check if the port if ready for connecting, issue: https://github.com/microsoft/BotFramework-Composer/issues/3728
-        // retry every 500ms, timeout 10min
+        // retry every 500ms, timeout 2min
         const retryTime = 500;
-        const timeOutTime = 600000;
+        const timeOutTime = 120000;
+        const processLog = this.composer.log.extend(spawnProcess.pid);
+        this.addListeners(spawnProcess, botId, processLog);
+
         tcpPortUsed.waitUntilUsedOnHost(port, '0.0.0.0', retryTime, timeOutTime).then(
           () => {
             this.setBotStatus(botId, {
@@ -387,8 +393,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
               status: 200,
               result: { message: 'Runtime started' },
             });
-            const processLog = this.composer.log.extend(spawnProcess.pid);
-            this.addListeners(spawnProcess, botId, processLog);
             resolve();
           },
           (err) => {
@@ -443,12 +447,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
-        if (!erroutput && LocalPublisher.runningBots[botId].status === 202) {
-          this.setBotStatus(botId, {
-            status: 200,
-            result: { message: 'Runtime has started' },
-          });
-        }
         logger('%s', data.toString());
       });
 
