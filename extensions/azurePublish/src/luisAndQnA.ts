@@ -198,7 +198,7 @@ export async function publishLuisToPrediction(
 export async function build(project: IBotProject, path: string, settings: BuildSettingType) {
   const {luResources, qnaResources, luis: luisConfig, qna: qnaConfig} = settings;
 
-  const {builder, files} = project;
+  const {builder, files, name, id} = project;
 
   const luFiles: FileInfo[] = [];
   luResources.forEach((id) => {
@@ -219,6 +219,6 @@ export async function build(project: IBotProject, path: string, settings: BuildS
 
   builder.rootDir = botPath(path);
   builder.setBuildConfig( {...luisConfig, ...qnaConfig},  project.settings.downsampling );
-  await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[]);
+  await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[], name, id);
   await builder.copyModelPathToBot();
 }
