@@ -721,6 +721,10 @@ export const checkIfBotExistsInBotProjectFile = async (
   const rootBotLocation = await snapshot.getPromise(locationState(rootBotProjectId));
   const { content: botProjectFile } = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
 
+  if (rootBotLocation === pathOrManifest) {
+    return true;
+  }
+
   for (const uniqueSkillName in botProjectFile.skills) {
     const { manifest, workspace } = botProjectFile.skills[uniqueSkillName];
     if (remote) {

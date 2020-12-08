@@ -115,7 +115,7 @@ export const projectDispatcher = () => {
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
           throw new Error(
-            formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
+            formatMessage('This operation cannot be completed. The bot is already part of the Bot Project')
           );
         }
         const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
