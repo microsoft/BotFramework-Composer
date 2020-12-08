@@ -37,7 +37,7 @@ export class FeatureFlagService {
     defaultFeatureFlagKeys.forEach((key: string) => {
       const currentFlag = FeatureFlagService.currentFeatureFlagMap[key];
       const defaultFlag = FeatureFlagService.defaultFeatureFlags[key];
-      if (currentFlag.isHidden !== defaultFlag.isHidden) {
+      if (currentFlag && defaultFlag && currentFlag.isHidden !== defaultFlag.isHidden) {
         FeatureFlagService.currentFeatureFlagMap[key].isHidden = FeatureFlagService.defaultFeatureFlags[key].isHidden;
         saveNeeded = true;
       }
