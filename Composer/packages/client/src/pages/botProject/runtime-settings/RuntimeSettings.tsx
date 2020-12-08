@@ -14,6 +14,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import {
   dispatcherState,
@@ -23,7 +24,6 @@ import {
   settingsState,
   isEjectRuntimeExistState,
 } from '../../../recoilModel';
-import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 import { EjectModal } from './ejectModal';
