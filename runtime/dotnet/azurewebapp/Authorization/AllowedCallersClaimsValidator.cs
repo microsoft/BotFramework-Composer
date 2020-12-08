@@ -13,7 +13,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates.Authorization
 {
     public class AllowedCallersClaimsValidator : ClaimsValidator
     {
-        private readonly List<string> _allowedCallers;
+        private readonly List<string> _allowedCallers = new List<string>();
 
         public AllowedCallersClaimsValidator(BotSkillConfiguration settings)
         {
@@ -22,12 +22,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates.Authorization
             // To add a new parent bot, simply edit the AllowedCallers and add
             // the parent bot's Microsoft app ID to the list.
             // In this sample, we allow all callers if AllowedCallers contains an "*".
-            if (settings?.AllowedCallers == null || settings.AllowedCallers.Length == 0)
-            {
-                throw new ArgumentException($"skill.allowedCallers has to be defined, e.g. ['*'] or ['callerAppId']");
-            }
 
-            _allowedCallers = new List<string>(settings.AllowedCallers);
+            if (settings?.AllowedCallers != null)
+            {
+                _allowedCallers = new List<string>(settings.AllowedCallers);
+            }
         }
 
         public override Task ValidateClaimsAsync(IList<Claim> claims)
