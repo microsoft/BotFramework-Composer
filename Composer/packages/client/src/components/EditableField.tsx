@@ -36,6 +36,17 @@ const defaultContainerStyle = (hasFocus, hasErrors) => css`
 // turncat to show two line.
 const maxCharacterNumbers = 120;
 
+const isMultiLineText = (value?: string): boolean => {
+  if (!value) return false;
+  const valueTrimmed = value.trim();
+  return (
+    valueTrimmed.length > maxCharacterNumbers ||
+    valueTrimmed.includes('\r') ||
+    valueTrimmed.includes('\r\n') ||
+    valueTrimmed.includes('\n')
+  );
+};
+
 //------------------------
 type IconProps = {
   iconStyles?: Partial<IIconProps>;
@@ -122,13 +133,13 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   }, [value]);
 
   useEffect(() => {
-    if (formData.value.length > maxCharacterNumbers) {
+    if (isMultiLineText(formData.value)) {
       setMultiline(true);
       return;
     }
 
     if (expanded || hasFocus) {
-      if (formData.value.length > maxCharacterNumbers) {
+      if (isMultiLineText(formData.value)) {
         setMultiline(true);
       }
     }
@@ -142,7 +153,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   };
 
   const handleChange = (_e: any, newValue?: string) => {
-    if (newValue && newValue?.length > maxCharacterNumbers) setMultiline(true);
+    if (isMultiLineText(newValue)) setMultiline(true);
     updateField('value', newValue);
     setHasBeenEdited(true);
     onChange(newValue);
@@ -171,12 +182,13 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     fieldRef.current?.blur();
   };
 
-  // single line, press Enter to submit
-  // multipe line, press Enter to submit, Shift+Enter get a new line,
+  // press Enter to submit, Shift+Enter get a new line,
   const handleOnKeyDown = (e) => {
     const enterOnField = e.key === 'Enter' && hasFocus;
-    const multilineEnter = multiline ? !e.shiftKey : true;
-    if (enterOnField && multilineEnter) {
+    if (enterOnField && !multiline) {
+      setMultiline(true);
+    }
+    if (enterOnField && !e.shiftKey) {
       handleCommit();
     }
     if (e.key === 'Escape') {
