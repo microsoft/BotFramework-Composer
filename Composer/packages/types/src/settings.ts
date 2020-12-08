@@ -15,12 +15,17 @@ export type CodeEditorSettings = {
   minimap: boolean;
 };
 
+export type TelemetrySettings = {
+  allowDataCollection?: boolean;
+};
+
 export type UserSettings = {
   appUpdater: AppUpdaterSettings;
   codeEditor: CodeEditorSettings;
   propertyEditorWidth: number;
   dialogNavWidth: number;
   appLocale: string;
+  telemetry: TelemetrySettings;
 };
 
 export type AppUpdaterSettings = {

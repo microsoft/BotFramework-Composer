@@ -2,11 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { jsx } from '@emotion/core';
 import { mergeStyleSets } from '@uifabric/styling';
+import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -26,8 +28,8 @@ import {
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { isLUISMandatory, isQnAKeyMandatory } from '../../utils/dialogValidator';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { LUIS_REGIONS } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -147,8 +149,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
-  const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
-  const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
+  const isLUISKeyNeeded = BotIndexer.shouldUseLuis(dialogs, luFiles);
+  const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
 
   const rootLuisName = get(settings, 'luis.name', '') || botName;
 
@@ -161,8 +163,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
   const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
 
-  const luisKeyFieldRef = React.useRef<HTMLInputElement>(null);
-  const qnaKeyFieldRef = React.useRef<HTMLInputElement>(null);
+  const luisKeyFieldRef = useRef<HTMLDivElement>(null);
+  const luisRegionFieldRef = useRef<HTMLDivElement>(null);
+  const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!localRootLuisKey) {
@@ -192,6 +195,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   useEffect(() => {
     if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
       luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (luisRegionFieldRef.current && scrollToSectionId === '#luisRegion') {
+      luisRegionFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
     if (qnaKeyFieldRef.current && scrollToSectionId === '#qnaKey') {
       qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -231,10 +237,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
-  const handleRootLuisRegionOnChange = (e, value) => {
-    if (value) {
+  const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
+    if (value != null) {
       setLuisRegionErrorMsg('');
-      setLocalRootLuisRegion(value);
+      setLocalRootLuisRegion(value.key as string);
     } else {
       setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
       setLocalRootLuisRegion('');
@@ -289,56 +295,65 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-labelledby={'LUIS name'}
-          data-testId={'rootLUISName'}
+          aria-label={formatMessage('LUIS application name')}
+          data-testid={'rootLUISApplicationName'}
           id={'luisName'}
-          label={formatMessage('LUIS name')}
-          placeholder={'Enter LUIS name'}
+          label={formatMessage('LUIS application name')}
+          placeholder={formatMessage('Enter LUIS application name')}
           value={localRootLuisName}
           onBlur={handleRootLUISNameOnBlur}
           onChange={handleRootLUISNameOnChange}
           onRenderLabel={onRenderLabel}
         />
-        <TextField
-          aria-labelledby={'LUIS key'}
-          data-testId={'rootLUISKey'}
-          errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
-          id={'luisKey'}
-          label={formatMessage('LUIS key')}
-          placeholder={'Enter LUIS key'}
-          required={isLUISKeyNeeded}
-          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-          value={localRootLuisKey}
-          onBlur={handleRootLuisKeyOnBlur}
-          onChange={handleRootLUISKeyOnChange}
-          onRenderLabel={onRenderLabel}
-        />
-        <TextField
-          aria-labelledby={'LUIS region'}
-          data-testid={'rootLUISRegion'}
-          errorMessage={errorElement(luisRegionErrorMsg)}
-          label={formatMessage('LUIS region')}
-          placeholder={'Enter LUIS region'}
-          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-          value={localRootLuisRegion}
-          onBlur={handleRootLuisRegionOnBlur}
-          onChange={handleRootLuisRegionOnChange}
-          onRenderLabel={onRenderLabel}
-        />
-        <TextField
-          aria-labelledby={'QnA Maker Subscription key'}
-          data-testId={'QnASubscriptionKey'}
-          errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
-          id={'qnaKey'}
-          label={formatMessage('QnA Maker Subscription key')}
-          placeholder={'Enter QnA Maker Subscription key'}
-          required={isQnAKeyNeeded}
-          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-          value={localRootQnAKey}
-          onBlur={handleRootQnAKeyOnBlur}
-          onChange={handleRootQnAKeyOnChange}
-          onRenderLabel={onRenderLabel}
-        />
+        <div ref={luisKeyFieldRef}>
+          <TextField
+            aria-label={formatMessage('LUIS key')}
+            data-testid={'rootLUISKey'}
+            errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
+            id={'luisKey'}
+            label={formatMessage('LUIS key')}
+            placeholder={formatMessage('Enter LUIS key')}
+            required={isLUISKeyNeeded}
+            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            value={localRootLuisKey}
+            onBlur={handleRootLuisKeyOnBlur}
+            onChange={handleRootLUISKeyOnChange}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
+        <div ref={luisRegionFieldRef}>
+          <Dropdown
+            aria-label={formatMessage('LUIS region')}
+            data-testid={'rootLUISRegion'}
+            errorMessage={luisRegionErrorMsg}
+            id={'luisRegion'}
+            label={formatMessage('LUIS region')}
+            options={LUIS_REGIONS}
+            placeholder={formatMessage('Enter LUIS region')}
+            required={isLUISKeyNeeded}
+            selectedKey={localRootLuisRegion}
+            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            onBlur={handleRootLuisRegionOnBlur}
+            onChange={handleRootLuisRegionOnChange}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
+        <div ref={qnaKeyFieldRef}>
+          <TextField
+            aria-label={formatMessage('QnA Maker Subscription key')}
+            data-testid={'QnASubscriptionKey'}
+            errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
+            id={'qnaKey'}
+            label={formatMessage('QnA Maker Subscription key')}
+            placeholder={formatMessage('Enter QnA Maker Subscription key')}
+            required={isQnAKeyNeeded}
+            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            value={localRootQnAKey}
+            onBlur={handleRootQnAKeyOnBlur}
+            onChange={handleRootQnAKeyOnChange}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
       </div>
     </CollapsableWrapper>
   );

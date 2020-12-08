@@ -111,4 +111,17 @@ describe('<BotController />', () => {
 
     expect(mockStart).toHaveBeenCalled();
   });
+
+  it('should show that bots are starting', async () => {
+    const initRecoilState = ({ set }) => {
+      const projectIds = ['123a.234', '456a.234', '789a.234', '1323.sdf'];
+      set(botProjectIdsState, projectIds);
+      set(botStatusState(projectIds[0]), BotStatus.published);
+      set(botStatusState(projectIds[1]), BotStatus.publishing);
+      set(botStatusState(projectIds[2]), BotStatus.connected);
+      set(botStatusState(projectIds[3]), BotStatus.queued);
+    };
+    const { findByText } = renderWithRecoil(<BotController />, initRecoilState);
+    await findByText('Starting bots.. (1/4 running)');
+  });
 });

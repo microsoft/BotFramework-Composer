@@ -16,7 +16,7 @@ const config: PluginConfig = {
           }
           return !shellAPI.isFeatureEnabled('ORCHESTRATOR');
         },
-        displayName: () => formatMessage('Orchestrator Recognizer'),
+        displayName: () => formatMessage('Orchestrator recognizer'),
         isSelected: (_, dialog: DialogInfo) => {
           return dialog.luProvider === SDKKinds.OrchestratorRecognizer;
         },
@@ -28,10 +28,6 @@ const config: PluginConfig = {
 
           if (!qnaFile || !luFile) {
             alert(formatMessage(`NO LU OR QNA FILE WITH NAME { id }`, { id: currentDialog.id }));
-          }
-
-          if (luFile?.empty) {
-            alert(formatMessage(`LU FILE IS EMPTY WITH NAME { id }`, { id: currentDialog.id }));
           }
 
           shellApi.updateRecognizer(projectId, currentDialog.id, SDKKinds.OrchestratorRecognizer);

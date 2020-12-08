@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { DefaultPalette } from '@uifabric/styling';
 import formatMessage from 'format-message';
+import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import { CommandBarButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
@@ -19,7 +20,14 @@ import { formDialogSchemaDialogExistsSelector, formDialogSchemaState } from '../
 
 import { FormDialogSchemaListHeader } from './FormDialogSchemaListHeader';
 
-const isEmptyObject = (objStr: string) => objStr === '{}';
+const isEmptyObject = (objStr: string) => {
+  if (!objStr) {
+    return true;
+  }
+
+  const properties = get(JSON.parse(objStr), 'properties', undefined);
+  return !properties;
+};
 
 const Root = styled(Stack)<{
   loading: boolean;
@@ -214,7 +222,7 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = React.m
   const delayedSetQuery = debounce((newValue) => setQuery(newValue), 300);
 
   const filteredItems = React.useMemo(() => {
-    return items.filter((item) => item.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return query ? items.filter((item) => item.toLowerCase().indexOf(query.toLowerCase()) !== -1) : items;
   }, [query, items]);
 
   const onFilter = (_e?: React.ChangeEvent<HTMLInputElement>, newValue?: string): void => {

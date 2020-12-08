@@ -116,9 +116,17 @@ export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; Micr
 };
 
 export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
-  const { projectId, skillId, dialogId } = link;
+  const { projectId, skillId, dialogId, lgFileId, luFileId } = link;
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+
+  if (pageMode === 'language-generation' && lgFileId) {
+    return `${baseURL}${pageMode}/${dialogId ?? 'all'}/item/${lgFileId}`;
+  }
+
+  if (pageMode === 'language-understanding' && luFileId) {
+    return `${baseURL}${pageMode}/${dialogId ?? 'all'}/item/${luFileId}`;
+  }
 
   return `${baseURL}${pageMode}/${dialogId ?? 'all'}`;
 }

@@ -97,7 +97,7 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
   const initialValue = useMemo(() => {
     const designerName = formData.$designer?.name;
 
-    return designerName || uiLabel || schema.title;
+    return designerName ?? uiLabel ?? schema.title;
   }, [formData.$designer?.name, uiLabel, schema.title]);
 
   const getHelpLinkLabel = (): string => {

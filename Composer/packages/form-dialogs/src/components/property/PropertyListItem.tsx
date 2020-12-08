@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { OpenConfirmModal } from '@bfc/ui-shared';
 import styled from '@emotion/styled';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { useId } from '@uifabric/react-hooks';
@@ -14,7 +15,7 @@ import { Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd
 import { useRecoilValue } from 'recoil';
 import { activePropertyIdAtom, formDialogPropertyAtom, formDialogPropertyValidSelector } from 'src/atoms/appState';
 import { useHandlers } from 'src/atoms/handlers';
-import { FormDialogProperty, FormDialogPropertyPayload, FormDialogPropertyKind } from 'src/atoms/types';
+import { FormDialogProperty, FormDialogPropertyKind, FormDialogPropertyPayload } from 'src/atoms/types';
 import { getPropertyTypeDisplayName } from 'src/atoms/utils';
 import { FormDialogPropertyCard } from 'src/components/property/FormDialogPropertyCard';
 import { RequiredPriorityIndicator } from 'src/components/property/RequiredPriorityIndicator';
@@ -173,8 +174,14 @@ export const PropertyListItem = React.memo((props: Props) => {
     [activatePropertyId]
   );
 
-  const onRemove = React.useCallback(() => {
-    if (confirm(formatMessage('Are you sure you want to remove "{propertyName}"?', { propertyName: property.name }))) {
+  const onRemove = React.useCallback(async () => {
+    const res = await OpenConfirmModal(
+      formatMessage('Delete property?'),
+      property.name
+        ? formatMessage('Are you sure you want to remove "{propertyName}"?', { propertyName: property.name })
+        : formatMessage('Are you sure you want to remove this property?')
+    );
+    if (res) {
       removeProperty({ id: propertyId });
     }
   }, [removeProperty, propertyId]);
