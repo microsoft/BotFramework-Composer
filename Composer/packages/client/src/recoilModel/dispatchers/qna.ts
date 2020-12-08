@@ -8,7 +8,6 @@ import { qnaUtil } from '@bfc/indexers';
 import qnaWorker from '../parsers/qnaWorker';
 import {
   qnaFilesState,
-  localeState,
   settingsState,
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
@@ -34,6 +33,8 @@ export const updateQnAFileState = async (
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
+  //To do: support other languages on qna
+  id = `${getBaseName(id)}.en-us`;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
   const newQnAFiles = qnaFiles.map((file) => {
@@ -52,7 +53,9 @@ export const createQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getPromise(localeState(projectId));
+  //const locale = await snapshot.getPromise(localeState(projectId));
+  //To do: support other languages on qna
+  const locale = 'en-us';
   const { languages } = await snapshot.getPromise(settingsState(projectId));
   const createdQnaId = `${id}.${locale}`;
   const createdQnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
@@ -86,7 +89,9 @@ export const removeQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   let qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getPromise(localeState(projectId));
+  //const locale = await snapshot.getPromise(localeState(projectId));
+  //To do: support other languages on qna
+  const locale = 'en-us';
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -147,7 +152,9 @@ export const removeKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   let qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getPromise(localeState(projectId));
+  // const locale = await snapshot.getPromise(localeState(projectId));
+  //To do: support other languages on qna
+  const locale = 'en-us';
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -171,7 +178,9 @@ export const renameKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getPromise(localeState(projectId));
+  //const locale = await snapshot.getPromise(localeState(projectId));
+  //To do: support other languages
+  const locale = 'en-us';
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -336,6 +345,8 @@ export const qnaDispatcher = () => {
       multiTurn: boolean;
       projectId: string;
     }) => {
+      //To do: support other languages on qna
+      id = `${getBaseName(id)}.en-us`;
       await dismissCreateQnAModal({ projectId });
       const notification = createNotification(getQnaPendingNotification(url));
       addNotificationInternal(callbackHelpers, notification);
@@ -399,6 +410,8 @@ ${response.data}
       content?: string;
       projectId: string;
     }) => {
+      //To do: support other languages on qna
+      id = `${getBaseName(id)}.en-us`;
       await dismissCreateQnAModal({ projectId });
 
       await createKBFileState(callbackHelpers, {
