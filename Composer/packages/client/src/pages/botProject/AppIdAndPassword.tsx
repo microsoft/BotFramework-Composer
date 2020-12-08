@@ -122,10 +122,10 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
     <CollapsableWrapper title={formatMessage('App Id / Password')} titleStyle={titleStyle}>
       <div css={appIdAndPasswordStyle}>
         <TextField
-          aria-labelledby={'Microsoft App Id'}
+          aria-label={formatMessage('Microsoft App Id')}
           data-testid={'MicrosoftAppId'}
           label={formatMessage('Microsoft App Id')}
-          placeholder={'Enter Microsoft App Id'}
+          placeholder={formatMessage('Enter Microsoft App Id')}
           styles={customError}
           value={localMicrosoftAppId}
           onBlur={handleAppIdOnBlur}
@@ -133,10 +133,10 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           onRenderLabel={onRenderLabel}
         />
         <TextField
-          aria-labelledby={'Microsoft Password'}
+          aria-label={formatMessage('Microsoft App Password')}
           data-testid={'MicrosoftPassword'}
           label={formatMessage('Microsoft App Password')}
-          placeholder={'Enter Microsoft App Password'}
+          placeholder={formatMessage('Enter Microsoft App Password')}
           styles={mergeStyleSets({ root: { marginTop: 15 } }, customError)}
           value={localMicrosoftAppPassword}
           onBlur={handleAppPasswordOnBlur}
