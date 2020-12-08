@@ -157,7 +157,11 @@ export const storageDispatcher = () => {
 
   const fetchTemplatesV2 = useRecoilCallback(({ set }: CallbackInterface) => async (feedUrls?: string[]) => {
     try {
-      const response = await httpClient.post(`v2/assets/projectTemplates`, { feedUrls });
+      const response = await httpClient.post(`v2/assets/projectTemplates`, {
+        feedUrls: feedUrls,
+        getFirstPartyNuget: false,
+        getFirstPartyNpm: false,
+      });
 
       const data = response && response.data;
 
