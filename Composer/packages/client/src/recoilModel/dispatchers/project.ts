@@ -29,6 +29,7 @@ import {
   createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
+  locationState,
   projectMetaDataState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
@@ -202,9 +203,20 @@ export const projectDispatcher = () => {
 
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', navigate = true) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
+        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+
+        if (rootBotId) {
+          const rootBotLocation = await snapshot.getPromise(locationState(rootBotId));
+          // Reloading the same bot. No need to fetch resources again.
+          if (rootBotLocation === path) {
+            navigateToBot(callbackHelpers, rootBotId);
+            return;
+          }
+        }
+
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
 
