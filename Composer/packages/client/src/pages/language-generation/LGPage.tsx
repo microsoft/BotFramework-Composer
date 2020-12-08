@@ -63,6 +63,7 @@ const LGPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LGPage"
       dialogId={dialogId}
+      fileId={lgFileId}
       mainRegionName={formatMessage('LG editor')}
       navRegionName={formatMessage('LG Navigation Pane')}
       pageMode={'language-generation'}
