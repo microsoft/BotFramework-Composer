@@ -212,7 +212,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
       const latestPublishItem = botPublishHistory[0];
       // stop polling if status is 200 or 500
-      if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
+      if (latestPublishItem.status === 202) {
+        if (!statusIntervals.some((i) => i[bot.id])) {
+          setStatusIntervals([...statusIntervals, { [bot.id]: getUpdatedStatus(selectedTarget, bot.id) }]);
+        }
+      } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
         const interval = statusIntervals.find((i) => i[bot.id]);
         if (interval) {
           clearInterval(interval[bot.id]);
@@ -259,7 +263,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         return;
       }
       const target = botStatus.publishTargets.find((t) => t.name === botStatus.publishTarget);
-      getPublishHistory(botStatus.id, target);
+      getPublishHistory(botStatus.id, target).then(() => {
+        getPublishStatus(botStatus.id, target);
+      });
     });
   }, [botProjectData.length]);
 
