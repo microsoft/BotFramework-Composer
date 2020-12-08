@@ -240,7 +240,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
     if (value != null) {
       setLuisRegionErrorMsg('');
-      setLocalRootLuisRegion(value.text);
+      setLocalRootLuisRegion(value.key as string);
     } else {
       setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
       setLocalRootLuisRegion('');
