@@ -8,11 +8,13 @@ import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { checkForPVASchema } from '@bfc/shared';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
+import { schemasState } from '../recoilModel/atoms';
 import {
   dispatcherState,
   appUpdateState,
@@ -135,6 +137,7 @@ export const Header = () => {
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
   const settings = useRecoilValue(settingsState(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
@@ -202,7 +205,7 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {showStartBotsWidget && <BotController />}
+        {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && <BotController />}
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
