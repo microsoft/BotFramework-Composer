@@ -467,6 +467,8 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
     isRemote: false,
   });
   set(botNameIdentifierState(projectData.id), botNameIdentifier);
+  const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
+  set(botProjectFileState(projectData.id), currentBotProjectFileIndexed);
 
   return {
     projectId: projectData.id,

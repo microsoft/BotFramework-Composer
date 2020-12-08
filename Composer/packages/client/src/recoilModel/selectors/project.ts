@@ -50,6 +50,20 @@ export const localBotsWithoutErrorsSelector = selector({
   },
 });
 
+export const localBotPublishHistorySelector = selector({
+  key: 'localBotPublishHistorySelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+    const result = botProjectIds.map((projectId: string) => {
+      const publishHistory = get(publishHistoryState(projectId));
+      return {
+        projectId,
+        publishHistory,
+      };
+    });
+    return result;
+  },
+});
 export const localBotsDataSelector = selector({
   key: 'localBotsDataSelector',
   get: ({ get }) => {
@@ -130,7 +144,6 @@ export const botProjectSpaceSelector = selector({
       });
 
       const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
-      const publishHistory = get(publishHistoryState(projectId));
       const publishTypes = get(publishTypesState(projectId));
 
       return {
@@ -145,7 +158,6 @@ export const botProjectSpaceSelector = selector({
         diagnostics,
         buildEssentials,
         isPvaSchema,
-        publishHistory,
         publishTypes,
         lgImports,
         luImports,
