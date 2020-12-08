@@ -22,7 +22,7 @@ import { authConfig, ResourcesItem } from '../types';
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
-const ProvisionLog = `provision.${process.env.NODE_ENV === 'production'? 'production': 'development'}.log`;
+const getProvisionLogName = (name:string) => `provision.${name}.log`;
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
 interface DeployResources {
@@ -419,9 +419,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       } catch (error) {
         BackgroundProcessManager.updateProcess(jobId, 500,
         `${stringifyError(error)}
-        detail message can see ${ProvisionLog} in your bot folder`);
+        detail message can see ${getProvisionLogName(name)} in your bot folder`);
         // save provision history to log file.
-        const provisionHistoryPath = path.resolve(project.dataDir, ProvisionLog);
+        const provisionHistoryPath = path.resolve(project.dataDir, getProvisionLogName(name));
         await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
       }
       // add in history
