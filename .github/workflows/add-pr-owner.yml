@@ -1,0 +1,13 @@
+name: Add PR Owner
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  add-pr-owner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: a-b-r-o-w-n/add-pr-owner-action@v1
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"

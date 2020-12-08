@@ -322,7 +322,7 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
 };
 
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
-  const { snapshot, set } = callbackHelpers;
+  const { set } = callbackHelpers;
   const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
   const {
     dialogs,
@@ -337,7 +337,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     recognizers,
     crossTrainConfig,
   } = botFiles;
-  const curLocation = await snapshot.getPromise(locationState(projectId));
+
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   languageStorage.setLocale(botName, locale);
@@ -384,10 +384,8 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(botEnvironmentState(projectId), botEnvironment);
   set(botDisplayNameState(projectId), botName);
   set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
-  if (location !== curLocation) {
-    set(botStatusState(projectId), BotStatus.inactive);
-    set(locationState(projectId), location);
-  }
+  set(botStatusState(projectId), BotStatus.inactive);
+  set(locationState(projectId), location);
   set(schemasState(projectId), schemas);
   set(localeState(projectId), locale);
   set(botDiagnosticsState(projectId), diagnostics);
@@ -467,6 +465,8 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
     isRemote: false,
   });
   set(botNameIdentifierState(projectData.id), botNameIdentifier);
+  const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
+  set(botProjectFileState(projectData.id), currentBotProjectFileIndexed);
 
   return {
     projectId: projectData.id,
