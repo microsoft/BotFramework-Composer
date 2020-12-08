@@ -90,7 +90,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta, publishHistory
   const { botSettingList, statusList, botPublishTypesList } = useMemo(() => {
-    return generateComputedData(botProjectData, publish);
+    return generateComputedData(botProjectData, publishHistoryList);
   }, [botProjectData, publishHistoryList]);
 
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
