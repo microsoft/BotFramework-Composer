@@ -43,7 +43,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
         onChange={(event, newValue) => {
           newValue && setAccessToken(newValue);
         }}
-        defaultValue={formatMessage('Paste token here')}
+        placeholder={formatMessage('Paste token here')}
         label={formatMessage('Provide ARM token by running `az account get-access-token`')}
         multiline
         rows={4}
@@ -53,7 +53,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
           onChange={(event, newValue) => {
             newValue && setGraphToken(newValue);
           }}
-          defaultValue={formatMessage('Paste token here')}
+          placeholder={formatMessage('Paste token here')}
           label={formatMessage(
             'Provide graph token by running `az account get-access-token  --resource-type ms-graph`'
           )}
