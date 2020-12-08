@@ -93,15 +93,14 @@ describe('Root Bot External Service', () => {
     });
     const textField2 = getByTestId('rootLUISRegion');
     await act(async () => {
-      await fireEvent.change(textField2, {
-        target: { value: 'myRootLUISRegion' },
-      });
+      await fireEvent.focus(textField2);
+      await fireEvent.keyDown(textField2, { key: 'ArrowDown' });
       await fireEvent.blur(textField2);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
         authoringKey: '',
-        authoringRegion: 'myRootLUISRegion',
+        authoringRegion: 'westus',
       },
       qna: {
         subscriptionKey: '',

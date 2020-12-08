@@ -16,17 +16,15 @@ namespace Tests
     public class AllowedCallersClaimsValidationTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void WhenAllowedCallersIsNullThrowException()
+        public void AcceptNullAllowedCallersArray()
         {
-            var unused = new AllowedCallersClaimsValidator(new BotSkillConfiguration());
+            var validator = new AllowedCallersClaimsValidator(new BotSkillConfiguration());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void WhenAllowedCallersIsEmptyThrowException()
+        public void AcceptEmptyAllowedCallersArray()
         {
-            var unused = new AllowedCallersClaimsValidator(new BotSkillConfiguration()
+            var validator = new AllowedCallersClaimsValidator(new BotSkillConfiguration()
             {
                 AllowedCallers = new string[0]
             });
@@ -37,7 +35,7 @@ namespace Tests
         {
             var validator = new AllowedCallersClaimsValidator(new BotSkillConfiguration()
             {
-                AllowedCallers = new string[]{"*"}
+                AllowedCallers = new string[] { "*" }
             });
             var callerAppId = "BE3F9920-D42D-4D3A-9BDF-DBA62DAE3A00";
             var claims = CreateCallerClaims(callerAppId);
@@ -51,7 +49,7 @@ namespace Tests
             const string callerAppId = "BE3F9920-D42D-4D3A-9BDF-DBA62DAE3A00";
             var validator = new AllowedCallersClaimsValidator(new BotSkillConfiguration()
             {
-                AllowedCallers = new string[]{callerAppId}
+                AllowedCallers = new string[] { callerAppId }
             });
 
             var claims = CreateCallerClaims(callerAppId);
@@ -65,7 +63,7 @@ namespace Tests
             const string callerAppId = "BE3F9920-D42D-4D3A-9BDF-DBA62DAE3A00";
             var validator = new AllowedCallersClaimsValidator(new BotSkillConfiguration()
             {
-                AllowedCallers = new string[]{"anotherId", callerAppId}
+                AllowedCallers = new string[] { "anotherId", callerAppId }
             });
 
             var claims = CreateCallerClaims(callerAppId);
@@ -80,7 +78,7 @@ namespace Tests
             var callerAppId = "BE3F9920-D42D-4D3A-9BDF-DBA62DAE3A00";
             var validator = new AllowedCallersClaimsValidator(new BotSkillConfiguration()
             {
-                AllowedCallers = new string[]{callerAppId}
+                AllowedCallers = new string[] { callerAppId }
             });
 
             var claims = CreateCallerClaims("I'm not allowed");
@@ -90,7 +88,7 @@ namespace Tests
 
         private List<Claim> CreateCallerClaims(string appId)
         {
-            return  new List<Claim>()
+            return new List<Claim>()
             {
                 new Claim(AuthenticationConstants.AppIdClaim, appId),
                 new Claim(AuthenticationConstants.VersionClaim, "1.0"),
