@@ -17,7 +17,6 @@ import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframew
 import killPort from 'kill-port';
 import map from 'lodash/map';
 import range from 'lodash/range';
-import getPort from 'get-port';
 import * as tcpPortUsed from 'tcp-port-used';
 
 const stat = promisify(fs.stat);
