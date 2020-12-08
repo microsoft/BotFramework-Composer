@@ -52,7 +52,7 @@ const generateComputedData = (botProjectData, publishHistoryList) => {
       name: bot.name,
       publishTargets: [],
     };
-    const publishHistory = publishHistoryList.find((item) => item.projectId === bot.projectId);
+    const publishHistory = publishHistoryList.find((item) => item.projectId === bot.projectId)?.publishHistory;
     if (publishTargets.length > 0) {
       botStatus.publishTarget = publishTargets[0].name as string;
       botStatus.publishTargets = publishTargets;
