@@ -47,6 +47,6 @@ export function savePublishConfig(config): void {
 export function getTokenFromCache(): { accessToken: string; graphToken: string } {
   return window[ComposerGlobalName].getTokenFromCache();
 }
-export function isShowAuthDialog(needGraph: boolean): boolean {
-  return window[ComposerGlobalName].isShowAuthDialog(needGraph);
+export function isGetTokenFromUser(): boolean {
+  return window[ComposerGlobalName].isGetTokenFromUser();
 }

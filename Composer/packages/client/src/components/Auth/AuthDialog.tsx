@@ -8,6 +8,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useCallback, useState } from 'react';
 import storage from '../../utils/storage';
+import { isTokenExpired } from '../../utils/auth';
 
 export interface AuthDialogProps {
   needGraph: boolean;
@@ -17,12 +18,16 @@ export interface AuthDialogProps {
 export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
   const [graphToken, setGraphToken] = useState('');
   const [accessToken, setAccessToken] = useState('');
-
+  const [tokenError, setTokenError] = useState<string>('');
+  const [graphError, setGraphError] = useState<string>('');
   const isAble = useCallback(() => {
     if (!accessToken) {
       return false;
+    } else if (tokenError) {
+      return false;
     }
-    if (props.needGraph && !graphToken) {
+
+    if (props.needGraph && (!graphToken || graphError)) {
       return false;
     }
     return true;
@@ -42,7 +47,13 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
       <TextField
         onChange={(event, newValue) => {
           newValue && setAccessToken(newValue);
+          if (isTokenExpired(newValue || '')) {
+            setTokenError('Token Expire or token invalid');
+          } else {
+            setTokenError('');
+          }
         }}
+        errorMessage={tokenError}
         placeholder={formatMessage('Paste token here')}
         label={formatMessage('Provide ARM token by running `az account get-access-token`')}
         multiline
@@ -52,7 +63,13 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
         <TextField
           onChange={(event, newValue) => {
             newValue && setGraphToken(newValue);
+            if (isTokenExpired(newValue || '')) {
+              setGraphError('Token Expire or token invalid');
+            } else {
+              setGraphError('');
+            }
           }}
+          errorMessage={graphError}
           placeholder={formatMessage('Paste token here')}
           label={formatMessage(
             'Provide graph token by running `az account get-access-token  --resource-type ms-graph`'

@@ -35,6 +35,9 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
   },
+  "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
+    "message": "A schema, or form, is the list of properties your bot will collect."
+  },
   "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
     "message": "A skill bot that can be called from a host bot."
   },
@@ -244,6 +247,9 @@
   },
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "Are you sure you want to remove \"{ propertyName }\"?"
+  },
+  "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
+    "message": "Are you sure you want to remove this property?"
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "Are you sure you want to start over? Your progress will be lost."
@@ -581,6 +587,9 @@
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
     "message": "Connecting to <b>{ targetName }</b> to import bot content..."
   },
+  "continue_ac067716": {
+    "message": "Continue"
+  },
   "continue_loop_22635585": {
     "message": "Continue loop"
   },
@@ -704,6 +713,9 @@
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
   },
+  "create_profile_name_b85e8c2d": {
+    "message": "Create profile name"
+  },
   "creating_your_knowledge_base_ef4f9872": {
     "message": "Creating your knowledge base"
   },
@@ -797,8 +809,8 @@
   "delete_bot_73586104": {
     "message": "Delete Bot"
   },
-  "delete_form_dialog_schema_892df4e8": {
-    "message": "Delete form dialog schema"
+  "delete_form_dialog_schema_c8e28229": {
+    "message": "Delete form dialog schema?"
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
@@ -811,6 +823,9 @@
   },
   "delete_property_b3786fa0": {
     "message": "Delete Property"
+  },
+  "delete_property_da7646f6": {
+    "message": "Delete property?"
   },
   "delete_this_bot_fb78e519": {
     "message": "Delete this bot"
@@ -862,6 +877,12 @@
   },
   "dialog_events_f1b2e2a0": {
     "message": "Dialog events"
+  },
+  "dialog_generation_failed_3c73e599": {
+    "message": "Dialog generation failed."
+  },
+  "dialog_generation_was_successful_be280943": {
+    "message": "Dialog generation was successful."
   },
   "dialog_input_schema_c7864fbd": {
     "message": "Dialog input schema."
@@ -1121,6 +1142,9 @@
   "expected_responses_intent_intentname_44b051c": {
     "message": "Expected responses (intent: #{ intentName })"
   },
+  "export_json_2e2981f5": {
+    "message": "Export JSON"
+  },
   "export_this_bot_as_zip_c4bfddf2": {
     "message": "Export this bot as .zip"
   },
@@ -1160,6 +1184,9 @@
   "false_eef8c169": {
     "message": "False"
   },
+  "fetching_form_dialog_schema_templates_failed_44e2dd63": {
+    "message": "Fetching form dialog schema templates failed."
+  },
   "field_set_6e7d7f67": {
     "message": "Field Set"
   },
@@ -1196,8 +1223,14 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
+  "form_dialog_error_ba7c37fe": {
+    "message": "Form dialog error"
+  },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Form dialog schema actions"
+  },
+  "form_dialogs_4a1e22f9": {
+    "message": "Form dialogs"
   },
   "form_editor_7c2b02f0": {
     "message": "form editor"
@@ -1226,8 +1259,11 @@
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
+  },
+  "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
+    "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1466,6 +1502,9 @@
   "learn_more_about_title_d1d3edbe": {
     "message": "Learn more about { title }"
   },
+  "learn_more_about_your_property_schema_3a0a0890": {
+    "message": "Learn more about your property schema"
+  },
   "learn_more_c08939e8": {
     "message": "Learn more."
   },
@@ -1513,9 +1552,6 @@
   },
   "list_view_e33843f0": {
     "message": "List view"
-  },
-  "load_form_dialog_schema_templates_error_6a348e76": {
-    "message": "Load form dialog schema templates Error"
   },
   "loading_25990131": {
     "message": "Loading..."
@@ -1718,6 +1754,9 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
+  "msg_bf173fef": {
+    "message": "{ msg }"
+  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -1730,8 +1769,8 @@
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"
   },
-  "my_publish_profile_2ed56828": {
-    "message": "My Publish Profile"
+  "my_staging_environment_2b92d0aa": {
+    "message": "My Staging Environment"
   },
   "name_1aed4a1b": {
     "message": "Name"
@@ -1952,6 +1991,9 @@
   "paste_5963d1c1": {
     "message": "Paste"
   },
+  "paste_token_here_eccec7e4": {
+    "message": "Paste token here"
+  },
   "please_add_at_least_minitems_endpoint_5439fd74": {
     "message": "Please add at least { minItems } endpoint"
   },
@@ -2081,6 +2123,24 @@
   "property_type_e38cf7e4": {
     "message": "Property Type"
   },
+  "provide_access_tokens_8ead7563": {
+    "message": "Provide access tokens"
+  },
+  "provide_arm_token_by_running_az_account_get_access_e9d825a4": {
+    "message": "Provide ARM token by running `az account get-access-token`"
+  },
+  "provide_graph_token_by_running_az_account_get_acce_6d27a279": {
+    "message": "Provide graph token by running `az account get-access-token  --resource-type ms-graph`"
+  },
+  "provision_failure_983d3844": {
+    "message": "Provision failure"
+  },
+  "provision_success_d6a6e437": {
+    "message": "Provision success"
+  },
+  "provisioning_1330aede": {
+    "message": "Provisioning ..."
+  },
   "pseudo_1a319287": {
     "message": "Pseudo"
   },
@@ -2090,11 +2150,11 @@
   "publish_configuration_d759a4e3": {
     "message": "Publish Configuration"
   },
-  "publish_destination_type_5f8c200a": {
-    "message": "Publish Destination Type"
-  },
   "publish_models_9a36752a": {
     "message": "Publish models"
+  },
+  "publish_profile_informs_your_bot_where_to_use_reso_b5fc0308": {
+    "message": "Publish profile informs your bot where to use resources from. The resoruces you provision for your bot will live within this profile"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
@@ -2372,6 +2432,9 @@
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
   },
+  "select_your_publish_target_de531f7f": {
+    "message": "Select your publish target"
+  },
   "selection_field_86d1dc94": {
     "message": "selection field"
   },
@@ -2428,9 +2491,6 @@
   },
   "show_code_f3e9d1cc": {
     "message": "Show code"
-  },
-  "show_form_dialog_90aad050": {
-    "message": "Show Form Dialog"
   },
   "show_item_diagnostics_f6e902c7": {
     "message": "Show { item } Diagnostics"
@@ -2518,6 +2578,9 @@
   },
   "start_command_a085f2ec": {
     "message": "Start command"
+  },
+  "start_over_d7ce7a57": {
+    "message": "Start over?"
   },
   "start_typing_kind_or_b0c305da": {
     "message": "Start typing { kind } or"
@@ -2716,6 +2779,9 @@
   },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
+  },
+  "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
+    "message": "To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
@@ -3034,6 +3100,9 @@
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
+  },
+  "your_dialog_was_generated_successfully_61c13b73": {
+    "message": "Your dialog was generated successfully."
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"

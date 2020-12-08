@@ -330,6 +330,16 @@ export function isShowAuthDialog(needGraph: boolean): boolean {
   }
 }
 
+export function isGetTokenFromUser(): boolean {
+  if (isElectron()) {
+    return false;
+  } else if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 function generateNonce(): string {
   return randomBytes(32).toString('base64');
 }

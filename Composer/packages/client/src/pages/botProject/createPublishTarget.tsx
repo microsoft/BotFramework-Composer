@@ -15,7 +15,7 @@ import { PublishTarget } from '@bfc/shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import { armScopes, graphScopes, PublishProfileDialog } from '../../constants';
-import { isShowAuthDialog, getTokenFromCache } from '../../utils/auth';
+import { isShowAuthDialog, getTokenFromCache, isGetTokenFromUser } from '../../utils/auth';
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState, currentUserState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
@@ -122,7 +122,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       const fullConfig = { ...config, name: name, type: targetType };
       console.log(fullConfig);
       let arm, graph;
-      if (!isShowAuthDialog(true)) {
+      if (!isGetTokenFromUser()) {
         // login or get token implicit
         arm = await AuthClient.getAccessToken(armScopes);
         graph = await AuthClient.getAccessToken(graphScopes);
@@ -153,8 +153,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         graphToken: getTokenFromCache('graphToken'),
       };
     };
-    PluginAPI.publish.isShowAuthDialog = (needGraph: boolean) => {
-      return isShowAuthDialog(needGraph);
+    PluginAPI.publish.isGetTokenFromUser = () => {
+      return isGetTokenFromUser();
     };
   }, [projectId, name, targetType]);
 
@@ -226,6 +226,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
                 onClick={async () => {
                   if (isShowAuthDialog(true)) {
                     setShowAuthDialog(true);
+                  } else {
+                    setPage(PageTypes.ConfigProvision);
                   }
                 }}
               />

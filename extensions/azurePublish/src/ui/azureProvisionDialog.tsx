@@ -19,7 +19,7 @@ import {
   getSchema,
   getType,
   getTokenFromCache,
-  isShowAuthDialog,
+  isGetTokenFromUser,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -172,14 +172,16 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
-    if(isShowAuthDialog(true)){
-      const {accessToken} = getTokenFromCache();
+    if(isGetTokenFromUser()){
+      const { accessToken } = getTokenFromCache();
+      console.log(accessToken);
+
       setToken(accessToken);
       // decode token
-      const decoded = decodeToken(token);
+      const decoded = decodeToken(accessToken);
       if(decoded){
         setCurrentUser({
-          token: token,
+          token: accessToken,
           email: decoded.upn,
           name: decoded.name,
           expiration: (decoded.exp || 0) * 1000, // convert to ms,

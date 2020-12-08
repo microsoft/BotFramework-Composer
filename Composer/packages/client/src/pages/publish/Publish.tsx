@@ -26,7 +26,7 @@ import { BotStatusList, IBotStatus } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
 import { armScopes } from '../../constants';
-import { getTokenFromCache, isShowAuthDialog } from '../../utils/auth';
+import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
 import { AuthClient } from '../../utils/authClient';
 
 const publishStatusInterval = 10000;
@@ -357,7 +357,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const publish = async (items: IBotStatus[]) => {
     // get token
     let token = '';
-    if (isShowAuthDialog(false)) {
+    if (isGetTokenFromUser()) {
       token = getTokenFromCache('accessToken');
       console.log(token);
     } else {
