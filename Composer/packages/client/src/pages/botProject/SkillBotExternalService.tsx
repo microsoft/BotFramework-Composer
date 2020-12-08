@@ -229,7 +229,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             label={formatMessage('LUIS endpoint key')}
             placeholder={formatMessage('Enter LUIS endpoint key')}
             placeholderOnDisable={rootLuisEndpointKey}
-            required={isLUISKeyNeeded}
             value={skillLuisEndpointKey}
             onBlur={handleLUISEndpointKeyOnBlur}
             onRenderLabel={onRenderLabel}
