@@ -33,7 +33,7 @@ import {
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
-import { rootBotProjectIdSelector } from '../selectors';
+import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -63,9 +63,11 @@ export const projectDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectIdToRemove: string) => {
       try {
         const { set, snapshot } = callbackHelpers;
+
         const dispatcher = await snapshot.getPromise(dispatcherState);
         await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
         set(botProjectIdsState, (currentProjects) => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
@@ -75,6 +77,7 @@ export const projectDispatcher = () => {
         if (rootBotProjectId) {
           navigateToBot(callbackHelpers, rootBotProjectId, '');
         }
+        botRuntimeOperations?.stopBot(projectIdToRemove);
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
