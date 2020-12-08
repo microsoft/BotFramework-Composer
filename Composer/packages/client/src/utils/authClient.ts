@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 import { AuthParameters } from '@botframework-composer/types';
+
 import { authConfig } from '../constants';
+
 import {
   getTokenFromCache,
   createPopupWindow,
@@ -92,7 +94,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
 async function logOut() {
   if (isElectron()) {
     try {
-      let url = '/api/auth/logOut';
+      const url = '/api/auth/logOut';
       await fetch(url, { method: 'GET' });
     } catch (e) {
       // error handling

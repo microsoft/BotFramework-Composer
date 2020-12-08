@@ -174,7 +174,7 @@ export const publisherDispatcher = () => {
       target: any,
       metadata: any,
       sensitiveSettings,
-      token: string = ''
+      token = ''
     ) => {
       try {
         const { snapshot } = callbackHelpers;

@@ -38,8 +38,8 @@ export const provisionDispatcher = () => {
       config: any,
       type: string,
       projectId: string,
-      armToken: string = '',
-      graphToken: string = ''
+      armToken = '',
+      graphToken = ''
     ) => {
       try {
         console.log('graph token is: ', graphToken);

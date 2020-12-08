@@ -15,8 +15,9 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { CreatePublishTarget } from './createPublishTarget';
 import { PublishProfileDialog } from '../../constants';
+
+import { CreatePublishTarget } from './createPublishTarget';
 
 // -------------------- Styles -------------------- //
 
@@ -150,11 +151,11 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       <CreatePublishTarget
         closeDialog={() => setDialogHidden(true)}
         current={null}
+        projectId={projectId}
         setDialogProps={setDialogProps}
         targets={publishTargets || []}
         types={publishTypes}
         updateSettings={savePublishTarget}
-        projectId={projectId}
       />
     );
     setDialogHidden(false);
@@ -171,11 +172,11 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         <CreatePublishTarget
           closeDialog={() => setDialogHidden(true)}
           current={editTarget ? editTarget : null}
+          projectId={projectId}
           setDialogProps={setDialogProps}
           targets={(publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
           types={publishTypes}
           updateSettings={updatePublishTarget}
-          projectId={projectId}
         />
       );
       setDialogHidden(false);

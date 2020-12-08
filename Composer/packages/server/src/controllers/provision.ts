@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { Request } from 'express';
+
 import { ExtensionContext } from '../models/extension/extensionContext';
 import { authService } from '../services/auth/auth';
-
 import { BotProjectService } from '../services/project';
-import { Request } from 'express';
 export const ProvisionController = {
   getResources: async (req, res) => {
     const user = await ExtensionContext.getUserFromRequest(req);

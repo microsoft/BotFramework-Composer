@@ -19,15 +19,15 @@ import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification, PublishType } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
+import { armScopes } from '../../constants';
+import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
+import { AuthClient } from '../../utils/authClient';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { BotStatusList, IBotStatus } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
-import { armScopes } from '../../constants';
-import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
-import { AuthClient } from '../../utils/authClient';
 
 const publishStatusInterval = 10000;
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
@@ -437,10 +437,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       {showAuthDialog && (
         <AuthDialog
           needGraph={false}
+          next={() => setPublishDialogHidden(false)}
           onDismiss={() => {
             setShowAuthDialog(false);
           }}
-          next={() => setPublishDialogHidden(false)}
         />
       )}
       {!publishDialogHidden && (

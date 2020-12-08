@@ -21,7 +21,6 @@ import { userSettingsState, currentUserState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
-
 import { label, separator, defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../publish/styles';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -291,12 +290,12 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     <Fragment>
       {showAuthDialog && (
         <AuthDialog
-          needGraph={true}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
+          needGraph
           next={() => {
             setPage(PageTypes.ConfigProvision);
+          }}
+          onDismiss={() => {
+            setShowAuthDialog(false);
           }}
         />
       )}

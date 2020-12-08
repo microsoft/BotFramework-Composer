@@ -403,17 +403,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           },
         };
 
-        console.log(publishProfile);
-
-        // write this to the project settings. Browser need to refresh to get the update
-        // project.settings.publishTargets.push({
-        //   name: config.name,
-        //   type: 'azurePublish',
-        //   configuration: JSON.stringify(publishProfile),
-        //   lastPublished: null,
-        // });
-
-        // await project.updateDefaultSlotEnvSettings(project.settings);
+        this.logger(publishProfile);
 
         BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!', publishProfile);
       } catch (error) {

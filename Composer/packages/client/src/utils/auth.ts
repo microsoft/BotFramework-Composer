@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/camelcase */
+import { randomBytes } from 'crypto';
+
 import querystring from 'query-string';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -9,11 +11,10 @@ import formatMessage from 'format-message';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
 import { Dispatcher } from '../recoilModel/dispatchers';
+import { authConfig, authUrl } from '../constants';
 
 import storage from './storage';
 import httpClient from './httpUtil';
-import { authConfig, authUrl } from '../constants';
-import { randomBytes } from 'crypto';
 import { isElectron } from './electronUtil';
 
 export function isTokenExpired(token: string): boolean {

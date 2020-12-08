@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { join } from 'path';
-import { Request } from 'express';
 
+import { Request } from 'express';
 import merge from 'lodash/merge';
 import { defaultPublishConfig, PublishResult } from '@bfc/shared';
 import { ensureDirSync, remove } from 'fs-extra';
