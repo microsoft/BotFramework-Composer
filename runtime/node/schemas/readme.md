@@ -71,6 +71,8 @@ ComponentRegistration.add(new CustomActionComponentRegistration());
 
 - Run the command `npm run build` on the runtime to verify if it passes build after adding custom actions to it.
 
+- Rename the MultiplyDialog.schema.sample to MultiplyDialog.schema
+
 - Navigate to to the `schemas (bot/schemas)` folder. This folder contains a Powershell script and a bash script. Run either of these scripts `./update-schema.ps1` or `sh ./update-schema.sh`.
 
 - Validate that the partial schema (MultiplyDialog.schema inside customaction) has been appended to the default sdk.schema file to generate one single consolidated sdk.schema file.
