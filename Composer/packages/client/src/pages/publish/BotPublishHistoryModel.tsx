@@ -3,6 +3,15 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+/**
+ * Goals:
+ * 1. No abuse use of useEffect().
+ * 2. Background polling / Event source
+ * 3. One-way data flow -> refine the state design
+ * 4. Componentize
+ * 5. Variable names & code format
+ */
+
 // Server returned models
 export interface PublishRecord {
   botId: string;
