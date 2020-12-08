@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export * from './ListOverview';
-export * from './PropertyAssignment';
 export * from './DialogWrapper';
-export * from './Toolbar';
+export * from './ListOverview';
 export * from './LoadingSpinner';
+export * from './ConfirmDialog';
+export * from './PropertyAssignment';
+export * from './Toolbar';

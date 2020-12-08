@@ -106,7 +106,7 @@ dotnet add package [some package] --version=[some version]
 After running one of these commands, the package will be listed in the appropriate place, either the `package.json` or the `.csproj` file of the project. Now, use the Bot Framework CLI tool to extract any included dialog, lu and lg files, as well as to merge any new schema items. Run the following command:
 
 ```
-bf dialog:merge [package.json or .csproj] --import dialogs/imported --output schemas/sdk
+bf dialog:merge [package.json or .csproj] --imports ../dialogs/imported --output ../schemas/sdk
 ```
 
 The output of the CLI tool will include a list of the files that were added, deleted or updated. Note that **changes to existing files will be overwritten if newer versions are found in a package.**

@@ -2,18 +2,35 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
+import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon, IIconStyleProps, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { ISearchBoxProps, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
 
 const TitleBar = styled(Stack)({
   flex: 1,
   height: 45,
+});
+
+const helpIconStyles = classNamesFunction<IIconStyleProps, IIconStyles>()({
+  root: {
+    width: '16px',
+    minWidth: '16px',
+    height: '16px',
+    color: NeutralColors.gray160,
+    fontSize: FontSizes.size12,
+    marginBottom: '-2px',
+    paddingLeft: '4px',
+    paddingTop: '4px',
+  },
 });
 
 const Title = styled(Label)({});
@@ -61,6 +78,22 @@ export const FormDialogSchemaListHeader = (props: ListHeaFormDialogSchemaListHea
         ) : (
           <Title>
             {formatMessage('Schemas')}
+            <TooltipHost
+              content={
+                <span>
+                  <span>{formatMessage('A schema, or form, is the list of properties your bot will collect.')}</span>
+                  <Link
+                    href="https://aka.ms/AAailpe#creating-and-connecting-a-form-dialog"
+                    styles={{ root: { marginLeft: 4 } }}
+                    target="_blank"
+                  >
+                    {formatMessage('Learn more about your property schema')}
+                  </Link>
+                </span>
+              }
+            >
+              <Icon iconName="Unknown" styles={helpIconStyles} />
+            </TooltipHost>
             {loading && <LoadingIndicator />}
           </Title>
         )}
