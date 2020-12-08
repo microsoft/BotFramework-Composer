@@ -487,6 +487,7 @@ export const projectDispatcher = () => {
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
             } else {
               // failure
+              callbackHelpers.set(botOpeningState, false);
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
@@ -495,6 +496,7 @@ export const projectDispatcher = () => {
           clearInterval(timer);
           callbackHelpers.set(botProjectIdsState, []);
           handleProjectFailure(callbackHelpers, err);
+          callbackHelpers.set(botOpeningState, false);
           navigateTo('/home');
         }
       }, 5000);
