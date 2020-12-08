@@ -8,7 +8,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "node --max_old_space_size=4096 scripts/start.js",
     "build": "node --max_old_space_size=4096 scripts/build.js",
     "clean": "rimraf build",
     "test": "jest",

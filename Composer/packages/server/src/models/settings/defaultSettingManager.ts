@@ -92,7 +92,7 @@ export class DefaultSettingManager extends FileSettingManager {
       skillConfiguration: {
         // TODO: Setting isSkill property to true for now. A runtime change is required to remove dependancy on isSkill prop #4501
         isSkill: true,
-        allowedCallers: ['*'],
+        allowedCallers: [],
       },
       skill: {},
       defaultLanguage: 'en-us',

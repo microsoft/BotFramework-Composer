@@ -6,6 +6,7 @@ import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 import { FeatureFlagMap, FeatureFlagKey } from '@botframework-composer/types';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import httpClient from '../../utils/httpUtil';
 import {
   storagesState,
@@ -190,6 +191,8 @@ export const storageDispatcher = () => {
       });
       // update server
       await httpClient.post(`/featureFlags`, { featureFlags: newFeatureFlags });
+
+      TelemetryClient.log('FeatureFlagChanged', { featureFlag: featureName, enabled });
     }
   );
 
