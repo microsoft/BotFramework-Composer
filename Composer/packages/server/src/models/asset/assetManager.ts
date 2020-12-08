@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
-import path from 'path';
+import path, { join } from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -122,7 +122,8 @@ export class AssetManager {
     const isHostedTemplate = !templateSrcPath;
     if (isHostedTemplate) {
       // create empty temp directory on server for holding externally hosted template src
-      templateSrcPath = path.resolve(__dirname, '../../../temp');
+      const baseDir = process.env.COMPOSER_TEMP_DIR as string;
+      templateSrcPath = join(baseDir, 'feedBasedTemplates');
       if (fs.existsSync(templateSrcPath)) {
         await removeDirAndFiles(templateSrcPath);
       }
