@@ -57,6 +57,7 @@ type DesignerEvents = {
   AddNewSkillCompleted: undefined;
   UseCustomRuntimeToggle: undefined;
   NewTemplateAdded: undefined;
+  FormDialogGenerated: { durationMilliseconds: number };
 };
 
 type QnaEvents = {

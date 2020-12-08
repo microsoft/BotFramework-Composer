@@ -18,7 +18,8 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "react-beautiful-dnd": "^13.0.0"
+    "react-beautiful-dnd": "^13.0.0",
+    "@bfc/ui-shared": "*"
   },
   "peerDependencies": {
     "recoil": "^0.0.13",
