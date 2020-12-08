@@ -21,7 +21,7 @@ const config: PluginConfig = {
           const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
           if (!luFile) {
-            alert(formatMessage(`NO LU  FILE WITH NAME { id }`, { id: currentDialog.id }));
+            alert(formatMessage(`NO LU FILE WITH NAME { id }`, { id: currentDialog.id }));
           }
 
           if (!qnaFile && !checkForPVASchema(schemas.sdk)) {

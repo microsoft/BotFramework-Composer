@@ -13,7 +13,7 @@ Follow these steps to enable Forms (preview) in Composer:
 1. Install [Bot Framework Composer](https://docs.microsoft.com/composer/install-composer#build-composer-from-source) and run it.
 1. From the **Home** page, select **New** to create a new bot or open an existing bot. A bot needs to be open in order to use the Forms feature in Composer.
 1. Next, select **Settings** from the Composer menu, then **Application settings** in the navigation pane.
-1. In the **Preview features** section, select the **Show Form Dialog** checkbox.
+1. In the **Preview features** section, select the **Form dialogs** checkbox.
 
 You can now select **Forms (preview)** from the Composer menu.
 
@@ -62,9 +62,9 @@ When your schema is complete, generate a new dialog from it. Once your new dialo
 >
 > - **Missing**: Fires when the property value is missing. The bot sends a message to the user asking for a value and expects a response. The **Missing()** trigger is created only for required properties.
 > - **Help**: Fires when the bot is expecting a value for this property and user instead asks for help. The bot sends a message that describes the values acceptable for this property.
-> - **Clear**: Fires when the user asks to clear this property. The bot sends a confirmation message and deletes the property. 
-> - **Show**: Fires when the user asks to show this property. The bot sends a message that shows the property name and value. 
-> - **Change**: Fires when the user asks to change this property. The bot sends a message asking the user what value they like to use instead. 
+> - **Clear**: Fires when the user asks to clear this property. The bot sends a confirmation message and deletes the property.
+> - **Show**: Fires when the user asks to show this property. The bot sends a message that shows the property name and value.
+> - **Change**: Fires when the user asks to change this property. The bot sends a message asking the user what value they like to use instead.
 > - **Choose**: Fires when the user gives a value that is similar to multiple acceptable values. The bot sends a message asking the user to choose betweeen the possible value. The **Choose** trigger is created only for properties that have acceptable values that are similar.
 > - **Add**: Fires when the user specifies a property value, either when expected by the bot in response to a **Missing** trigger or unexpected by the bot. The bot sends a message confirming the value, if unexpected, and sets the property.
 > - **Remove**: Fires when the user asks to remove a value. The bot sends a message confirming the value and sets the property.

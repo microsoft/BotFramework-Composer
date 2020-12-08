@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -38,6 +39,21 @@ export const Tips = {
     );
   },
 };
+
+export const LUIS_REGIONS: IDropdownOption[] = [
+  {
+    key: 'westus',
+    text: formatMessage('westus'),
+  },
+  {
+    key: 'westeurope',
+    text: formatMessage('westeurope'),
+  },
+  {
+    key: 'australia',
+    text: formatMessage('australia'),
+  },
+];
 
 export const Links = {
   LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
