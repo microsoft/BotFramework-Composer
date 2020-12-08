@@ -6,9 +6,9 @@ import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEven
 
 import { APPINSIGHTS_INSTRUMENTATIONKEY, piiProperties } from '../constants';
 import { useElectronContext } from '../utility/electronContext';
+import { getBuildEnvironment } from '../models/utilities/parser';
 
 import { SettingsService } from './settings';
-import { getBuildEnvironment } from '../models/utilities/parser';
 
 const instrumentationKey = APPINSIGHTS_INSTRUMENTATIONKEY || getBuildEnvironment()?.APPINSIGHTS_INSTRUMENTATIONKEY;
 
