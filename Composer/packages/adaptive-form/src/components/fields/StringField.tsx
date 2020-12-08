@@ -54,7 +54,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
 
   useEffect(() => {
     if (cursorPosition !== undefined && cursorPosition > -1 && textFieldRef.current) {
-      textFieldRef.current.setSelectionRange(cursorPosition, cursorPosition);
+      textFieldRef.current.setSelectionRange(cursorPosition, textFieldRef.current.selectionEnd || cursorPosition);
     }
   }, [cursorPosition]);
 
