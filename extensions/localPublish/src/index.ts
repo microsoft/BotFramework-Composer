@@ -374,7 +374,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         this.composer.log('Started process %d', spawnProcess.pid);
         this.setBotStatus(botId, {
           process: spawnProcess,
-          port: port,
+          port,
           status: 202,
           result: { message: 'Starting runtime' },
         });
