@@ -23,7 +23,9 @@ const calloutContainer = css`
   padding: 10px;
 `;
 
-const calloutDescription = css``;
+const calloutDescription = css`
+  word-break: break-word;
+`;
 
 const calloutLink = css`
   margin-top: 24px;
