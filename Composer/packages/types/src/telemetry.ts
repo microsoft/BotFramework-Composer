@@ -57,6 +57,7 @@ type DesignerEvents = {
   AddNewSkillCompleted: undefined;
   UseCustomRuntimeToggle: undefined;
   NewTemplateAdded: undefined;
+  FormDialogGenerated: { durationMilliseconds: number };
 };
 
 type QnaEvents = {
@@ -74,6 +75,10 @@ type PublishingEvents = {
   PublishingProfileCompleted: undefined;
 };
 
+type AppSettingsEvents = {
+  FeatureFlagChanged: { featureFlag: string; enabled: boolean };
+};
+
 type OtherEvents = {};
 
 export type TelemetryEvents = BotProjectEvents &
@@ -81,6 +86,7 @@ export type TelemetryEvents = BotProjectEvents &
   OtherEvents &
   SessionEvents &
   PublishingEvents &
-  QnaEvents;
+  QnaEvents &
+  AppSettingsEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;

@@ -75,49 +75,68 @@ describe('Root Bot External Service', () => {
       <RootBotExternalService projectId={state.projectId} />,
       initRecoilState
     );
-    const textField1 = getByTestId('rootLUISKey');
+    const textFieldAuthoring = getByTestId('rootLUISAuthoringKey');
     await act(async () => {
-      await fireEvent.change(textField1, {
+      await fireEvent.change(textFieldAuthoring, {
         target: { value: 'myRootLUISKey' },
       });
-      await fireEvent.blur(textField1);
+      await fireEvent.blur(textFieldAuthoring);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
         authoringKey: 'myRootLUISKey',
         authoringRegion: '',
+        endpointKey: '',
       },
       qna: {
         subscriptionKey: '',
       },
     });
-    const textField2 = getByTestId('rootLUISRegion');
+    const textFieldEndpoint = getByTestId('rootLUISEndpointKey');
     await act(async () => {
-      await fireEvent.change(textField2, {
-        target: { value: 'myRootLUISRegion' },
+      await fireEvent.change(textFieldEndpoint, {
+        target: { value: 'myRootLUISEndpointKey' },
       });
-      await fireEvent.blur(textField2);
-    });
-    expect(setSettingsMock).toBeCalledWith('test', {
-      luis: {
-        authoringKey: '',
-        authoringRegion: 'myRootLUISRegion',
-      },
-      qna: {
-        subscriptionKey: '',
-      },
-    });
-    const textField3 = getByTestId('QnASubscriptionKey');
-    await act(async () => {
-      await fireEvent.change(textField3, {
-        target: { value: 'myQnASubscriptionKey' },
-      });
-      await fireEvent.blur(textField3);
+      await fireEvent.blur(textFieldEndpoint);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
         authoringKey: '',
         authoringRegion: '',
+        endpointKey: 'myRootLUISEndpointKey',
+      },
+      qna: {
+        subscriptionKey: '',
+      },
+    });
+    const regionDropdown = getByTestId('rootLUISRegion');
+    await act(async () => {
+      await fireEvent.focus(regionDropdown);
+      await fireEvent.keyDown(regionDropdown, { key: 'ArrowDown' });
+      await fireEvent.blur(regionDropdown);
+    });
+    expect(setSettingsMock).toBeCalledWith('test', {
+      luis: {
+        authoringKey: '',
+        authoringRegion: 'westus',
+        endpointKey: '',
+      },
+      qna: {
+        subscriptionKey: '',
+      },
+    });
+    const textFieldSubscription = getByTestId('QnASubscriptionKey');
+    await act(async () => {
+      await fireEvent.change(textFieldSubscription, {
+        target: { value: 'myQnASubscriptionKey' },
+      });
+      await fireEvent.blur(textFieldSubscription);
+    });
+    expect(setSettingsMock).toBeCalledWith('test', {
+      luis: {
+        authoringKey: '',
+        authoringRegion: '',
+        endpointKey: '',
       },
       qna: {
         subscriptionKey: 'myQnASubscriptionKey',

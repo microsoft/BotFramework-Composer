@@ -27,7 +27,7 @@ import { getPendingNotificationCardProps, getPublishedNotificationCardProps } fr
 import { PullDialog } from './pullDialog';
 
 const publishStatusInterval = 10000;
-const generateComputedData = (botProjectData, publishHistoryList) => {
+const generateComputedData = (botProjectData, publishHistoryList, currentBotPublishTargetList) => {
   const botSettingList: { projectId: string; setting: DialogSetting }[] = [];
   const statusList: IBotStatus[] = [];
   const botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[] = [];
@@ -54,7 +54,12 @@ const generateComputedData = (botProjectData, publishHistoryList) => {
     };
     const publishHistory = publishHistoryList.find((item) => item.projectId === bot.projectId)?.publishHistory;
     if (publishTargets.length > 0) {
-      botStatus.publishTarget = publishTargets[0].name as string;
+      const currentPublishTarget =
+        currentBotPublishTargetList &&
+        currentBotPublishTargetList.find((targetMap) => targetMap.projectId === botStatus.id);
+      botStatus.publishTarget = (currentPublishTarget && currentPublishTarget.publishTarget
+        ? currentPublishTarget.publishTarget
+        : publishTargets[0].name) as string;
       botStatus.publishTargets = publishTargets;
       if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
         const history = publishHistory[botStatus.publishTarget][0];
@@ -88,9 +93,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [publishDisabled, setPublishDisabled] = useState(false);
 
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
+  const [currentBotPublishTargetList, setCurrentBotPublishTargetList] = useState<
+    { projectId: string; publishTarget: string }[]
+  >([]);
   // fill Settings, status, publishType, publish target for bot from botProjectMeta, publishHistory
   const { botSettingList, statusList, botPublishTypesList } = useMemo(() => {
-    return generateComputedData(botProjectData, publishHistoryList);
+    return generateComputedData(botProjectData, publishHistoryList, currentBotPublishTargetList);
   }, [botProjectData, publishHistoryList]);
 
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
@@ -204,7 +212,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
       const latestPublishItem = botPublishHistory[0];
       // stop polling if status is 200 or 500
-      if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
+      if (latestPublishItem.status === 202) {
+        if (!statusIntervals.some((i) => i[bot.id])) {
+          setStatusIntervals([...statusIntervals, { [bot.id]: getUpdatedStatus(selectedTarget, bot.id) }]);
+        }
+      } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
         const interval = statusIntervals.find((i) => i[bot.id]);
         if (interval) {
           clearInterval(interval[bot.id]);
@@ -251,10 +263,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         return;
       }
       const target = botStatus.publishTargets.find((t) => t.name === botStatus.publishTarget);
-      getPublishHistory(botStatus.id, target);
+      getPublishHistory(botStatus.id, target).then(() => {
+        getPublishStatus(botStatus.id, target);
+      });
     });
   }, [botProjectData.length]);
 
+  useEffect(() => {
+    return () => {
+      Object.keys(statusIntervals).forEach((key) => {
+        clearInterval(statusIntervals[key]);
+      });
+    };
+  });
   const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
     const setting = botSettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
     const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
@@ -356,6 +377,22 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
   const changePublishTarget = (publishTarget, currentBotStatus) => {
     const target = currentBotStatus.publishTargets.find((t) => t.name === publishTarget);
+    if (currentBotPublishTargetList.some((targetMap) => targetMap.projectId === currentBotStatus.id)) {
+      setCurrentBotPublishTargetList(
+        currentBotPublishTargetList.map((targetMap) => {
+          if (targetMap.projectId === currentBotStatus.id) {
+            targetMap.publishTarget = publishTarget;
+          }
+          return targetMap;
+        })
+      );
+    } else {
+      setCurrentBotPublishTargetList([
+        ...currentBotPublishTargetList,
+        { projectId: currentBotStatus.id, publishTarget },
+      ]);
+    }
+
     getPublishHistory(currentBotStatus.id, target);
   };
 

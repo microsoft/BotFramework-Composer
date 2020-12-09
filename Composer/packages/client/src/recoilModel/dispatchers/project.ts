@@ -9,7 +9,7 @@ import { RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus } from '../../constants';
+import { BotStatus, QnABotTemplateId } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -26,12 +26,15 @@ import {
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
+  createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
+  locationState,
   projectMetaDataState,
+  showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
-import { rootBotProjectIdSelector } from '../selectors';
+import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -61,9 +64,11 @@ export const projectDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectIdToRemove: string) => {
       try {
         const { set, snapshot } = callbackHelpers;
+
         const dispatcher = await snapshot.getPromise(dispatcherState);
         await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
         set(botProjectIdsState, (currentProjects) => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
@@ -73,6 +78,7 @@ export const projectDispatcher = () => {
         if (rootBotProjectId) {
           navigateToBot(callbackHelpers, rootBotProjectId, '');
         }
+        botRuntimeOperations?.stopBot(projectIdToRemove);
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
@@ -109,7 +115,7 @@ export const projectDispatcher = () => {
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
           throw new Error(
-            formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
+            formatMessage('This operation cannot be completed. The bot is already part of the Bot Project')
           );
         }
         const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
@@ -197,9 +203,20 @@ export const projectDispatcher = () => {
 
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', navigate = true) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
+        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+
+        if (rootBotId) {
+          const rootBotLocation = await snapshot.getPromise(locationState(rootBotId));
+          // Reloading the same bot. No need to fetch resources again.
+          if (rootBotLocation === path) {
+            navigateToBot(callbackHelpers, rootBotId);
+            return;
+          }
+        }
+
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
 
@@ -469,6 +486,12 @@ export const projectDispatcher = () => {
               isRootBot: true,
               isRemote: false,
             });
+            // if create from QnATemplate, continue creation flow.
+            if (templateId === QnABotTemplateId) {
+              callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
+              callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
+            }
+
             projectIdCache.set(projectId);
             navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
             callbackHelpers.set(botOpeningMessage, '');
@@ -479,6 +502,7 @@ export const projectDispatcher = () => {
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
             } else {
               // failure
+              callbackHelpers.set(botOpeningState, false);
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
@@ -487,6 +511,7 @@ export const projectDispatcher = () => {
           clearInterval(timer);
           callbackHelpers.set(botProjectIdsState, []);
           handleProjectFailure(callbackHelpers, err);
+          callbackHelpers.set(botOpeningState, false);
           navigateTo('/home');
         }
       }, 5000);
