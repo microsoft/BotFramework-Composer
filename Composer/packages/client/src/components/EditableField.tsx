@@ -10,6 +10,9 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
+
+const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'PageDown', 'PageUp', 'Home', 'End'];
+
 //------------------------
 const defaultContainerStyle = (hasFocus, hasErrors) => css`
   display: flex;
@@ -100,6 +103,24 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
   const [multiline, setMultiline] = useState<boolean>(true);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  // This effect prevents host DetailsList's FocusZone from stealing the focus and consuming the navigation keys.
+  React.useEffect(() => {
+    if (rootRef.current && hasFocus) {
+      const inputElm = rootRef.current.querySelector<HTMLElement>(multiline ? 'textarea' : 'input');
+
+      const keydownHandler = (e: KeyboardEvent) => {
+        if (allowedNavigationKeys.includes(e.key)) {
+          e.stopPropagation();
+        }
+      };
+
+      inputElm?.addEventListener('keydown', keydownHandler);
+
+      return () => inputElm?.removeEventListener('keydown', keydownHandler);
+    }
+  }, [hasFocus]);
 
   const formConfig: FieldConfig<{ value: string }> = {
     value: {
@@ -195,6 +216,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   return (
     <Fragment>
       <div
+        ref={rootRef}
         css={[defaultContainerStyle(hasFocus, hasEditingErrors), containerStyles]}
         data-test-id={'EditableFieldContainer'}
       >
