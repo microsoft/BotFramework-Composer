@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Link, Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react';
+import { Link, Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility, Stack } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
@@ -25,7 +25,7 @@ const docsUrl = `https://aka.ms/composer-package-manager-readme`;
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
-  const { settings, projectId, reloadProject } = useProjectApi();
+  const { projectId, reloadProject, projectCollection } = useProjectApi();
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
@@ -36,6 +36,7 @@ const Library: React.FC = () => {
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
 
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
+  const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const httpClient = useHttpClient();
@@ -113,11 +114,13 @@ const Library: React.FC = () => {
   }
 
   useEffect(() => {
-
-
     getLibraries();
+    setCurrentProjectId(projectId);
+  },[]);
 
-    if (settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
+  useEffect(() => {
+    const settings = projectCollection.find((b) =>  b.projectId === currentProjectId).setting;
+    if (settings && settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       getInstalledLibraries();
 
@@ -130,8 +133,11 @@ const Library: React.FC = () => {
         setRuntimeLanguage('c#');
         setProgrammingLanguageSelection('c#');
       }
+    } else {
+      setEjectedRuntime(false);
+      updateInstalledComponents([]);
     }
-  }, []);
+  }, [projectCollection, currentProjectId]);
 
   useEffect(() => {
     const groups: any[] = [];
@@ -223,14 +229,14 @@ const Library: React.FC = () => {
 
   const importComponent = async (packageName, version, isUpdating) => {
     try {
-      const results = await installComponentAPI(projectId, packageName, version, isUpdating);
+      const results = await installComponentAPI(currentProjectId, packageName, version, isUpdating);
 
       // check to see if there was a conflict that requires confirmation
       if (results.data.success === false) {
         const title = strings.conflictConfirmationTitle;
         const msg = strings.conflictConfirmationPrompt;
         if (await confirm(title, msg)) {
-          await installComponentAPI(projectId, packageName, version, true);
+          await installComponentAPI(currentProjectId, packageName, version, true);
         }
       } else {
         updateInstalledComponents(results.data.components);
@@ -264,7 +270,8 @@ const Library: React.FC = () => {
 
   const getInstalledLibraries = async () => {
     try {
-      const response = await getInstalledComponentsAPI(projectId);
+      updateInstalledComponents([]);
+      const response = await getInstalledComponentsAPI(currentProjectId);
       updateInstalledComponents(response.data.components);
     } catch (err) {
       setApplicationLevelError({
@@ -292,7 +299,7 @@ const Library: React.FC = () => {
         closeDialog();
         setWorking(true);
         try {
-          const results = await uninstallComponentAPI(projectId, selectedItem.name);
+          const results = await uninstallComponentAPI(currentProjectId, selectedItem.name);
 
           if (results.data.success) {
             updateInstalledComponents(results.data.components);
@@ -326,7 +333,7 @@ const Library: React.FC = () => {
   };
 
   const navigateToEject = (evt: any): void => {
-    navigateTo(`/bot/${projectId}/botProjectsSettings/#runtimeSettings`);
+    navigateTo(`/bot/${currentProjectId}/botProjectsSettings/#runtimeSettings`);
   };
 
   return (
@@ -347,28 +354,18 @@ const Library: React.FC = () => {
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
-        <ProjectList
-          defaultSelected={{
-            projectId: 'fakeId1',
-            displayName: 'Local Test Project',
-          }}
-          projectCollection={[
-            {
-              projectId: 'fakeId1',
-              name: 'Local Test Project',
-              isRemote: false
-            },
-            {
-              projectId: 'fakeId2',
-              name: 'Remote Test Project',
-              isRemote: true
-            }
-          ]}
-          onSelect={(link) => console.log(link.projectId)}
-        />
         <p>{strings.description} <Link href={docsUrl} target="_new">{strings.descriptionLink }</Link></p>
       </div>
-      {!ejectedRuntime && (
+      <Stack horizontal disableShrink styles={{root: { borderTop: '1px solid #CCC'}}}>
+        <Stack.Item styles={{root: { width:"300px", borderRight: "1px solid #CCC"}}}>
+        <ProjectList
+            defaultSelected={projectId}
+            projectCollection={projectCollection}
+            onSelect={(link) => setCurrentProjectId(link.projectId)}
+          />
+        </Stack.Item>
+        <Stack.Item styles={{root: { flexGrow: 1}}}>
+        {!ejectedRuntime && (
         <MessageBar
           messageBarType={MessageBarType.warning}
           isMultiline={false}
@@ -451,6 +448,8 @@ const Library: React.FC = () => {
           </PivotItem>
         </Pivot>
       </Fragment>
+        </Stack.Item>
+      </Stack>
     </ScrollablePane>
   );
 };

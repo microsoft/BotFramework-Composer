@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import { jsx, css } from '@emotion/core';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
@@ -41,7 +41,7 @@ const headerCSS = (label: string) => css`
 // -------------------- ProjectList -------------------- //
 
 export type ListLink = {
-  displayName: string,
+  displayName?: string,
   projectId: string
 }
 
@@ -53,8 +53,8 @@ type BotInProject = {
 
 type Props = {
   onSelect?: (link: ListLink) => void;
-  defaultSelected?: ListLink;
-  projectCollection: any[]
+  defaultSelected?: string;
+  projectCollection: BotInProject[]
 };
 
 export const ProjectList: React.FC<Props> = ({
@@ -64,21 +64,18 @@ export const ProjectList: React.FC<Props> = ({
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
 
-  const [selectedLink, setSelectedLink] = useState<ListLink | undefined>(defaultSelected);
+  const [selectedLink, setSelectedLink] = useState<string | undefined>(defaultSelected);
 
-  useEffect(() => {
-    setSelectedLink(defaultSelected);
-  }, [defaultSelected]);
+  const createProjectList = () => {
+    return projectCollection.filter((p) => !p.isRemote).map(renderBotHeader);
+  }
 
-  const createProjectList = useCallback(() => {
-    return projectCollection.map(renderBotHeader);
-  }, [projectCollection]);
 
   const handleOnSelect = (link: ListLink) => {
     // Skip state change when link not changed.
-    if (isEqual(link, selectedLink)) return;
+    if (link.projectId === selectedLink) return;
 
-    setSelectedLink(link);
+    setSelectedLink(link.projectId);
     onSelect?.(link);
   };
 
@@ -92,13 +89,13 @@ export const ProjectList: React.FC<Props> = ({
       <span key={bot.name} css={headerCSS('bot-header')} data-testid={`BotHeader-${bot.name}`} role="grid">
         <ListItem
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
-          isActive={link.projectId === selectedLink.projectId}
+          isActive={link.projectId === selectedLink}
           link={link}
           onSelect={handleOnSelect}
         />
       </span>
     );
-  };
+  }
 
   const projectList = createProjectList();
 

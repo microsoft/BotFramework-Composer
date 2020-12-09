@@ -20,10 +20,10 @@ const navItem = (
   position: relative;
   height: 24px;
   font-size: 12px;
+  font-weight: 600;
   padding-left: ${padLeft}px;
-  color: ${isActive ? NeutralColors.white : '#545454'};
-  background: ${isActive ? '#0078d4' : 'transparent'};
-  font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
+  color: '#545454';
+  background: ${isActive ? 'rgb(243, 242, 241)' : 'transparent'};
 
   display: flex;
   flex-direction: row;
@@ -80,11 +80,10 @@ export const ListItem: React.FC<Props> = ({
   icon,
   onSelect,
   textWidth = 100,
-  padLeft = 0,
+  padLeft = 16,
 }) => {
 
 
-  console.log(link, isActive);
   const linkString = `${link.projectId}_ListItem`;
 
   return (
