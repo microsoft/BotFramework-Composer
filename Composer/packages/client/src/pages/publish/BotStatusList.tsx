@@ -42,7 +42,6 @@ export type IBotStatusListProps = {
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: IBotStatus) => void;
-  onLogClick: (item: IStatus) => void;
   onRollbackClick: (selectedVersion: IStatus, item: IBotStatus) => void;
 };
 
@@ -57,7 +56,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     updatePublishHistory,
     changePublishTarget,
     updateSelectedBots,
-    onLogClick,
     onRollbackClick,
   } = props;
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
@@ -302,7 +300,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
               isRollbackSupported={isRollbackSupported}
               items={publishStatusList}
               updateItems={hanldeUpdatePublishHistory}
-              onLogClick={onLogClick}
               onRollbackClick={handleRollbackClick}
             />
           )}

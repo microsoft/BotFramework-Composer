@@ -21,7 +21,6 @@ import { IStatus } from './PublishStatusList';
 import { BotStatusList, IBotStatus } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
-import { LogDialog } from './LogDialog';
 import { PublishToolbar } from './PublishToolbar';
 
 const publishStatusInterval = 10000;
@@ -103,12 +102,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
     { projectId: string; publishHistory: { [key: string]: IStatus[] } }[]
   >(publishHistoryList);
-  const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [pullDialogHidden, setPullDialogHidden] = useState(true);
-
-  // items to show in the list
-  const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
 
   const isPullSupported = useMemo(() => {
     return !!selectedBots.find((bot) => {
@@ -204,8 +199,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   useEffect(() => {
     if (projectId) {
       getPublishTargetTypes(projectId);
-      // init selected status
-      setSelectedVersion(null);
     }
   }, [projectId]);
 
@@ -253,10 +246,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const onRollbackToVersion = (selectedVersion: IStatus, item: IBotStatus) => {
     item.publishTarget && item.publishTargets && rollbackToVersion(selectedVersion, item);
-  };
-  const onShowLog = (selectedVersion) => {
-    setSelectedVersion(selectedVersion);
-    setShowLog(true);
   };
   const updateBotStatusList = (statusList: IBotStatus[]) => {
     setBotStatusList(statusList);
@@ -380,7 +369,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             />
           );
         })}
-      {showLog && <LogDialog value={selectedVersion?.log} onDismiss={() => setShowLog(false)} />}
       <PublishToolbar
         canPublish={canPublish}
         canPull={isPullSupported}
@@ -402,7 +390,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             updateItems={updateBotStatusList}
             updatePublishHistory={updatePublishHistory}
             updateSelectedBots={updateSelectedBots}
-            onLogClick={onShowLog}
             onRollbackClick={onRollbackToVersion}
           />
         </div>

@@ -16,11 +16,11 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { listRoot, tableView, detailList } from './styles';
+import { LogDialog } from './LogDialog';
 
 export interface IStatusListProps {
   items: IStatus[];
   isRollbackSupported: boolean;
-  onLogClick: (item: IStatus) => void;
   onRollbackClick: (item: IStatus) => void;
   updateItems: (items: IStatus[]) => void;
 }
@@ -50,8 +50,10 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
-  const { items, isRollbackSupported, onLogClick, onRollbackClick } = props;
+  const { items, isRollbackSupported, onRollbackClick } = props;
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
+  const [displayedLog, setDisplayedLog] = useState<string | null>(null);
+
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted && items) {
       column.isSortedDescending = !column.isSortedDescending;
@@ -178,7 +180,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             allowDisabledFocus
             styles={{ root: { color: '#0078D4' } }}
             onClick={() => {
-              onLogClick(item);
+              setDisplayedLog(item.log || '');
             }}
           >
             {formatMessage('View log')}
@@ -242,6 +244,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </div>
+      {displayedLog !== null ? <LogDialog value={displayedLog} onDismiss={() => setDisplayedLog(null)} /> : null}
     </div>
   );
 };
