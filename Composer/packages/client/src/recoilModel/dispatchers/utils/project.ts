@@ -78,7 +78,7 @@ import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { rootBotProjectIdSelector } from '../../selectors';
+import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
@@ -112,15 +112,18 @@ export const setErrorOnBotProject = async (
 
 export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => {
   const { snapshot, reset } = callbackHelpers;
-  reset(botProjectSpaceLoadedState);
   const projectIds = await snapshot.getPromise(botProjectIdsState);
+  const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
+  reset(botProjectSpaceLoadedState);
   reset(botProjectIdsState);
+
   for (const projectId of projectIds) {
+    botRuntimeOperations?.stopBot(projectId);
     resetBotStates(callbackHelpers, projectId);
   }
-  const workers = [lgWorker, luWorker, qnaWorker];
 
+  const workers = [lgWorker, luWorker, qnaWorker];
   return Promise.all([workers.map((w) => w.flush())]);
 };
 
@@ -191,13 +194,16 @@ export const getMergedSettings = (projectId, settings, botName): DialogSetting =
 export const navigateToBot = (
   callbackHelpers: CallbackInterface,
   projectId: string,
-  mainDialog: string,
+  mainDialog?: string,
   urlSuffix?: string
 ) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    let url = `/bot/${projectId}`;
+    if (mainDialog) {
+      url += `/dialogs/${mainDialog}`;
+    }
     if (urlSuffix) {
       // deep link was provided to creation flow (base64 encoded to make query string parsing easier)
       urlSuffix = atob(urlSuffix);
@@ -714,6 +720,10 @@ export const checkIfBotExistsInBotProjectFile = async (
   }
   const rootBotLocation = await snapshot.getPromise(locationState(rootBotProjectId));
   const { content: botProjectFile } = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
+
+  if (rootBotLocation === pathOrManifest) {
+    return true;
+  }
 
   for (const uniqueSkillName in botProjectFile.skills) {
     const { manifest, workspace } = botProjectFile.skills[uniqueSkillName];
