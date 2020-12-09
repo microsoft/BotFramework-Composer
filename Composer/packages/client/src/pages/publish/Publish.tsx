@@ -85,13 +85,17 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     deleteNotification,
   } = useRecoilValue(dispatcherState);
 
+  // TODO: save selectedBotIds instead of whole bot.
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
+  // TODO: this is a computed boolean.
   const [publishDisabled, setPublishDisabled] = useState(false);
-
+  // TODO: this state is never used?
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
+  // TODO: Concept not clear. What is this state for?
   const [currentBotPublishTargetList, setCurrentBotPublishTargetList] = useState<
     { projectId: string; publishTarget: string }[]
   >([]);
+  // TODO: Define data model.
   // fill Settings, status, publishType, publish target for bot from botProjectMeta, publishHistory
   const { botSettingList, statusList, botPublishTypesList } = useMemo(() => {
     return generateComputedData(botProjectData, publishHistoryList, currentBotPublishTargetList);
@@ -368,6 +372,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
+          {/* TODO: define a better data model for BotStatusList props */}
           <BotStatusList
             botPublishHistoryList={botPublishHistoryList}
             botPublishTypesList={botPublishTypesList}
