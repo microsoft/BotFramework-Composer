@@ -15,7 +15,7 @@ interface ILoadingProps {
 export const Loading: React.FC<ILoadingProps> = (props) => {
   const { botStatus } = props;
   const publishing = botStatus === BotStatus.publishing;
-  const reloading = botStatus === BotStatus.reloading;
+  const reloading = botStatus === BotStatus.starting;
 
   if (!publishing && !reloading) return null;
   return (

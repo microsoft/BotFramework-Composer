@@ -53,7 +53,7 @@ const tableColumns: IColumn[] = [
     maxWidth: 150,
     isResizable: true,
     onRender: ({ displayName, isRootBot }) => {
-      return `${displayName} (${isRootBot ? formatMessage('Root bot') : formatMessage('Skill')})`;
+      return `${displayName} ${!isRootBot ? '(Skill)' : ''}`;
     },
     isRowHeader: true,
   },

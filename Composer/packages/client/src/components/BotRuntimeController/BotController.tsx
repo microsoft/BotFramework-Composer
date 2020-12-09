@@ -101,7 +101,7 @@ const BotController: React.FC = () => {
           status === BotStatus.published ||
           status == BotStatus.pending ||
           status == BotStatus.queued ||
-          status == BotStatus.reloading
+          status == BotStatus.starting
         );
       }),
     [projectCollection]
@@ -110,6 +110,7 @@ const BotController: React.FC = () => {
   const { startAllBots, stopAllBots } = useBotOperations();
 
   const handleClick = async () => {
+    queueStartAllBots(false);
     if (!botStartComplete) {
       TelemetryClient.track('StartAllBotsButtonClicked');
       startAllBots();
@@ -130,10 +131,14 @@ const BotController: React.FC = () => {
   const buttonText = useMemo(() => {
     if (areBotsStarting) {
       setStatusIconClass(undefined);
-      return formatMessage('Starting bots.. ({running}/{total} running)', {
-        running: runningBots.projectIds.length,
-        total: runningBots.totalBots,
-      });
+      return formatMessage(
+        `{
+          total, plural,
+            =1 {Starting bot..}
+          other {Starting bots.. ({running}/{total} running)}
+        }`,
+        { running: runningBots.projectIds.length, total: runningBots.totalBots }
+      );
     }
 
     if (botStartComplete) {
@@ -141,18 +146,31 @@ const BotController: React.FC = () => {
         hideController(false);
       }
       setStatusIconClass('Refresh');
-      return formatMessage('Restart all bots ({running}/{total} running)', {
-        running: runningBots.projectIds.length,
-        total: runningBots.totalBots,
-      });
+
+      return formatMessage(
+        `{
+          total, plural,
+            =1 {Restart bot}
+          other {Restart all bots ({running}/{total} running)}
+        }`,
+        { running: runningBots.projectIds.length, total: runningBots.totalBots }
+      );
     }
     if (startAllOperationQueued) {
       queueStartAllBots(false);
       startAllBots();
     }
     setStatusIconClass('Play');
-    return formatMessage('Start all bots');
-  }, [runningBots, botStartComplete, areBotsStarting]);
+
+    return formatMessage(
+      `{
+        total, plural,
+          =1 {Start bot}
+          other {Start all bots}
+      }`,
+      { total: runningBots.totalBots }
+    );
+  }, [runningBots, botStartComplete, areBotsStarting, startAllOperationQueued]);
 
   const items = useMemo<IContextualMenuItem[]>(() => {
     return projectCollection.map(({ name: displayName, projectId }) => ({
