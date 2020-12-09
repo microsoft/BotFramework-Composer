@@ -65,8 +65,6 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
         color: SharedColors.gray20,
       });
     }
-    console.log('Status is', botStatus);
-    console.log('Copy is', BotStatusesCopy[botStatus]);
     return BotStatusesCopy[botStatus] ?? BotStatusesCopy.inactive;
   }, [botStatus]);
 
