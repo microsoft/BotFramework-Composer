@@ -102,13 +102,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [botProjectData, publishHistoryList]);
 
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
+  // TODO: Define the data type outside.
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
     { projectId: string; publishHistory: { [key: string]: IStatus[] } }[]
   >(publishHistoryList);
+  // TODO: preferred naming convention - xxxVisible, setXXXVisibility
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [pullDialogHidden, setPullDialogHidden] = useState(true);
 
-  const isPullSupported = useMemo(() => {
+  const canPull = useMemo(() => {
     return !!selectedBots.find((bot) => {
       const publishTypes = botPublishTypesList.find((types) => types.projectId === bot.id)?.publishTypes;
       const type = publishTypes?.find(
@@ -120,7 +122,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       return false;
     });
   }, [selectedBots]);
-
   const canPublish = selectedBots.length > 0 && !publishDisabled;
 
   const [statusIntervals, setStatusIntervals] = useState<{ [key: string]: NodeJS.Timeout }[]>([]);
@@ -363,7 +364,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         })}
       <PublishToolbar
         canPublish={canPublish}
-        canPull={isPullSupported}
+        canPull={canPull}
         onPublish={() => setPublishDialogHidden(false)}
         onPull={() => setPullDialogHidden(false)}
       />
