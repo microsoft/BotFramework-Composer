@@ -56,11 +56,11 @@ type BotProjectEvents = {
   CreateNewBotProjectCompleted: { template: string };
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
-  StartBotButtonClicked: { isRoot: boolean; projectId };
+  StartBotButtonClicked: { isRoot: boolean; projectId; location: string };
   RestartAllBotsButtonClicked: undefined;
   StartBotStarted: { projectId: string };
   StartBotCompleted: { projectId: string; status: string };
-  StopBotButtonClicked: { isRoot: boolean; projectId: string };
+  StopBotButtonClicked: { isRoot: boolean; projectId: string; location: string };
 };
 
 type DesignerEvents = {

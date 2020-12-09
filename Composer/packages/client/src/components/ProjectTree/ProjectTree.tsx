@@ -340,6 +340,10 @@ export const ProjectTree: React.FC<Props> = ({
         icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
         onClick: () => {
           isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
+          TelemetryClient.log(isRunning ? 'StopBotButtonClicked' : 'StartBotButtonClicked', {
+            projectId: bot.projectId,
+            location: 'projectTree',
+          });
         },
       },
       {

@@ -68,6 +68,7 @@ const BotController: React.FC = () => {
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllOperationQueued, queueStartAllBots] = useState(false);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const builderEssentials = useRecoilValue(buildConfigurationSelector);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -115,8 +116,11 @@ const BotController: React.FC = () => {
     } else {
       await stopAllBots();
       queueStartAllBots(true);
-      TelemetryClient.log('StopAllBotsButtonClicked');
+      TelemetryClient.log('RestartAllBotsButtonClicked');
     }
+    builderEssentials.forEach(({ projectId }) => {
+      TelemetryClient.log('StartBotStarted', { projectId });
+    });
   };
 
   const onSplitButtonClick = () => {

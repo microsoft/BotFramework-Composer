@@ -8,7 +8,6 @@ import { useRecoilValue } from 'recoil';
 import { BotStatus } from '../../constants';
 import { dispatcherState, rootBotProjectIdSelector } from '../../recoilModel';
 import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../recoilModel/selectors';
-import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { useStartedRuntimesTracker } from './useStartedRuntimesTracker';
 
@@ -27,7 +26,6 @@ export function useBotOperations() {
     sensitiveSettings,
     botBuildRequired: boolean
   ) => {
-    TelemetryClient.log('StartBotStarted', { projectId });
     resetBotRuntimeError(projectId);
     setBotStatus(projectId, BotStatus.pending);
     if (botBuildRequired) {
