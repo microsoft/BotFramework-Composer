@@ -103,12 +103,12 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
   const [multiline, setMultiline] = useState<boolean>(true);
-  const rootRef = useRef<HTMLDivElement | null>(null);
+  const rootElmRef = useRef<HTMLDivElement | null>(null);
 
   // This effect prevents host DetailsList's FocusZone from stealing the focus and consuming the navigation keys.
   React.useEffect(() => {
-    if (rootRef.current && hasFocus) {
-      const inputElm = rootRef.current.querySelector<HTMLElement>(multiline ? 'textarea' : 'input');
+    if (rootElmRef.current && hasFocus) {
+      const inputElm = rootElmRef.current.querySelector<HTMLElement>(multiline ? 'textarea' : 'input');
 
       const keydownHandler = (e: KeyboardEvent) => {
         if (allowedNavigationKeys.includes(e.key)) {
@@ -120,7 +120,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
 
       return () => inputElm?.removeEventListener('keydown', keydownHandler);
     }
-  }, [hasFocus]);
+  }, [hasFocus, multiline]);
 
   const formConfig: FieldConfig<{ value: string }> = {
     value: {
@@ -216,7 +216,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   return (
     <Fragment>
       <div
-        ref={rootRef}
+        ref={rootElmRef}
         css={[defaultContainerStyle(hasFocus, hasEditingErrors), containerStyles]}
         data-test-id={'EditableFieldContainer'}
       >
