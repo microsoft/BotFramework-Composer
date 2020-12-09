@@ -430,19 +430,22 @@ export class Builder {
       culture: config.fallbackLocal,
     });
 
-    if (qnaContents) {
-      const subscriptionKeyEndpoint = `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    //we need to filter the source qna file out.
+    const filteredQnaContents = qnaContents?.filter((content) => !content.id.endsWith('.source'));
 
-      const buildResult = await this.qnaBuilder.build(qnaContents, config.subscriptionKey, config.botName, {
-        endpoint: subscriptionKeyEndpoint,
-        suffix: config.suffix,
-      });
+    if (!filteredQnaContents || filteredQnaContents.length === 0) return;
 
-      await this.qnaBuilder.writeDialogAssets(buildResult, {
-        force: true,
-        out: this.generatedFolderPath,
-      });
-    }
+    const subscriptionKeyEndpoint = `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+
+    const buildResult = await this.qnaBuilder.build(filteredQnaContents, config.subscriptionKey, config.botName, {
+      endpoint: subscriptionKeyEndpoint,
+      suffix: config.suffix,
+    });
+
+    await this.qnaBuilder.writeDialogAssets(buildResult, {
+      force: true,
+      out: this.generatedFolderPath,
+    });
   }
 
   //delete files in generated folder

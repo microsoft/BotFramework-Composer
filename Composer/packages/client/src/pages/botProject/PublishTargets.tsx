@@ -40,7 +40,7 @@ const publishTargetsHeader = css`
 `;
 
 const publishTargetsHeaderText = css`
-  width: 200px;
+  width: 300px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.semibold};
   border-bottom: 1px solid ${NeutralColors.gray30};
@@ -61,6 +61,9 @@ const publishTargetsItemText = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 const addPublishProfile = {
@@ -216,8 +219,12 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           {publishTargets?.map((p, index) => {
             return (
               <div key={index} css={publishTargetsItem}>
-                <div css={publishTargetsItemText}>{p.name} </div>
-                <div css={publishTargetsItemText}>{p.type} </div>
+                <div css={publishTargetsItemText} title={p.name}>
+                  {p.name}
+                </div>
+                <div css={publishTargetsItemText} title={p.type}>
+                  {p.type}
+                </div>
                 <div css={publishTargetsEditButton}>
                   <ActionButton styles={editPublishProfile} onClick={() => onEdit(index, p)}>
                     {formatMessage('Edit')}
