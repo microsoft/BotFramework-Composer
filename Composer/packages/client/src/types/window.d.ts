@@ -4,6 +4,7 @@
 // eslint-disable-next-line @bfc/bfcomposer/office-ui-import-scope
 import * as Fabric from 'office-ui-fabric-react';
 import * as ExtensionClient from '@bfc/extension-client';
+import { ExtensionSettings } from '@bfc/extension-client';
 
 declare global {
   interface Window {
@@ -21,9 +22,11 @@ declare global {
      * Composer UI Extension API
      */
     Composer: {
+      __extensionId: string;
       __pluginType: string;
-      render: (type: string, shell: Shell, component: React.ReactElement) => void;
+      render: (component: React.ReactElement) => void;
       sync: (shell: Shell) => void;
+      settings: ExtensionSettings;
       [key: string]: any;
     };
 

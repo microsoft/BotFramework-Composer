@@ -45,7 +45,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
       };
 
       if (schema) {
-        const uri = btoa(JSON.stringify(schema));
+        const uri = typeof schema === 'object' ? btoa(JSON.stringify(schema)) : schema;
         const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
         const currentSchema = otherSchemas.find((s) => s.uri === uri);
 
@@ -59,7 +59,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
           ...otherSchemas.filter((s) => s.uri !== uri),
           {
             uri,
-            schema,
+            schema: typeof schema === 'object' ? schema : undefined,
             fileMatch: [...(currentSchema?.fileMatch || []), model.uri.toString()],
           },
         ];

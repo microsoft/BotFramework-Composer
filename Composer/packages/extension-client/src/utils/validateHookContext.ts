@@ -3,13 +3,13 @@
 
 import { PluginType } from '../types/pluginType';
 
-type HookContext = 'project' | 'application';
+type HookContext = 'project' | 'application' | 'settings';
 
 const pluginTypeToContextMap: { [key in PluginType]: HookContext[] } = {
-  page: ['project', 'application'],
-  publish: ['project', 'application'],
-  storage: [],
-  create: [],
+  page: ['project', 'application', 'settings'],
+  publish: ['project', 'application', 'settings'],
+  storage: ['settings'],
+  create: ['settings'],
 };
 
 export function validateHookContext(targetContext: HookContext) {
