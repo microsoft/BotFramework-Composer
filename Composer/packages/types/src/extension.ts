@@ -38,13 +38,9 @@ export type ExtensionBundle = {
   path: string;
 };
 
-export type ExtensionConfigurationSchema = {
-  [key: string]: JSONSchema7;
-};
+export type ExtensionConfigurationSchema = Record<string, JSONSchema7>;
 
-export type ExtensionSettings = {
-  [key: string]: unknown;
-};
+export type ExtensionSettings = Record<string, unknown>;
 
 export type ExtensionMetadata = {
   /** name field from package.json */
@@ -89,16 +85,12 @@ export type PackageJSON = {
     enabled?: boolean;
     contributes?: ExtensionContribution;
     bundles?: ExtensionBundle[];
-    configuration?: {
-      [key: string]: JSONSchema7;
-    };
+    configuration?: Record<string, JSONSchema7>;
   };
 };
 
 export type ExtensionCollection = {
-  storage: {
-    [key: string]: any;
-  };
+  storage: Record<string, any>;
   publish: {
     [key: string]: {
       plugin: {
