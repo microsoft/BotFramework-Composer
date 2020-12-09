@@ -81,7 +81,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setPublishTargets,
     publishToTarget,
     setQnASettings,
-    rollbackToVersion: rollbackToVersionDispatcher,
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
@@ -235,18 +234,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       });
     };
   });
-  const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
-    const setting = botSettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
-    const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
-    if (setting) {
-      const sensitiveSettings = getSensitiveProperties(setting);
-      rollbackToVersionDispatcher(item.id, selectedTarget, version.id, sensitiveSettings);
-    }
-  };
 
-  const onRollbackToVersion = (selectedVersion: IStatus, item: IBotStatus) => {
-    item.publishTarget && item.publishTargets && rollbackToVersion(selectedVersion, item);
-  };
   const updateBotStatusList = (statusList: IBotStatus[]) => {
     setBotStatusList(statusList);
   };
@@ -390,7 +378,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             updateItems={updateBotStatusList}
             updatePublishHistory={updatePublishHistory}
             updateSelectedBots={updateSelectedBots}
-            onRollbackClick={onRollbackToVersion}
+            onRollbackClick={() => null}
           />
         </div>
       </div>
