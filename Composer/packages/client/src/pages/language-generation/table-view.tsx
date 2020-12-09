@@ -255,7 +255,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim();
                   if (newValue) {
-                    handleTemplateUpdate(item.name, { ...item, body: newValue });
+                    // prefix with - to body
+                    const fixedBody =
+                      !newValue.startsWith('-') && !newValue.startsWith('[') ? `- ${newValue}` : newValue;
+                    handleTemplateUpdate(item.name, { ...item, body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
@@ -285,7 +288,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
-                  handleTemplateUpdate(item.name, { ...item, body: value });
+                  const newValue = value?.trim();
+                  if (newValue) {
+                    // prefix with - to body
+                    const fixedBody =
+                      !newValue.startsWith('-') && !newValue.startsWith('[') ? `- ${newValue}` : newValue;
+                    handleTemplateUpdate(item.name, { ...item, body: fixedBody });
+                  }
                 }}
                 onChange={() => {}}
               />
@@ -315,7 +324,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim();
                   if (newValue) {
-                    handleTemplateUpdateDefaultLocale(item.name, { ...item, body: newValue });
+                    // prefix with - to body
+                    const fixedBody =
+                      !newValue.startsWith('-') && !newValue.startsWith('[') ? `- ${newValue}` : newValue;
+                    handleTemplateUpdateDefaultLocale(item.name, { ...item, body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
