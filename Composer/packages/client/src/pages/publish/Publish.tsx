@@ -6,15 +6,11 @@ import { jsx } from '@emotion/core';
 import { useState, useEffect, useMemo, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogSetting, PublishTarget } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification, PublishType } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
@@ -25,6 +21,8 @@ import { IStatus } from './PublishStatusList';
 import { BotStatusList, IBotStatus } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
+import { LogDialog } from './LogDialog';
+import { PublishToolbar } from './PublishToolbar';
 
 const publishStatusInterval = 10000;
 const generateComputedData = (botProjectData, publishHistoryList, currentBotPublishTargetList) => {
@@ -125,40 +123,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     });
   }, [selectedBots]);
 
-  const toolbarItems: IToolbarItem[] = [
-    {
-      type: 'element',
-      align: 'left',
-      element: (
-        <ActionButton
-          data-testid="publishPage-Toolbar-Publish"
-          disabled={publishDisabled || selectedBots.length === 0}
-          onClick={() => setPublishDialogHidden(false)}
-        >
-          <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M16 4.28906V15H5V0H11.7109L16 4.28906ZM12 4H14.2891L12 1.71094V4ZM15 14V5H11V1H6V14H15ZM0 5H4V6H0V5ZM1 7H4V8H1V7ZM2 9H4V10H2V9Z"
-              fill={selectedBots.length > 0 && !publishDisabled ? '#0078D4' : 'rgb(161, 159, 157)'}
-            />
-          </svg>
-          <span css={{ marginLeft: '8px' }}>{formatMessage('Publish selected bots')}</span>
-        </ActionButton>
-      ),
-    },
-    {
-      type: 'action',
-      text: formatMessage('Pull from selected profile'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'CloudDownload',
-        },
-        onClick: () => setPullDialogHidden(false),
-      },
-      align: 'left',
-      dataTestid: 'publishPage-Toolbar-Pull',
-      disabled: !isPullSupported,
-    },
-  ];
+  const canPublish = selectedBots.length > 0 && !publishDisabled;
+
   const [statusIntervals, setStatusIntervals] = useState<{ [key: string]: NodeJS.Timeout }[]>([]);
   const getUpdatedStatus = (target, botProjectId): NodeJS.Timeout => {
     // TODO: this should use a backoff mechanism to not overload the server with requests
@@ -415,7 +381,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           );
         })}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
-      <Toolbar toolbarItems={toolbarItems} />
+      <PublishToolbar
+        canPublish={canPublish}
+        canPull={isPullSupported}
+        onPublish={() => setPublishDialogHidden(false)}
+        onPull={() => setPullDialogHidden(false)}
+      />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Publish your bots')}</h1>
       </div>
@@ -441,24 +412,3 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 };
 
 export default Publish;
-const LogDialog = (props) => {
-  const logDialogProps = {
-    title: 'Publish Log',
-  };
-  return (
-    <Dialog
-      dialogContentProps={logDialogProps}
-      hidden={false}
-      minWidth={700}
-      modalProps={{ isBlocking: true }}
-      onDismiss={props.onDismiss}
-    >
-      <TextField
-        multiline
-        placeholder="Log Output"
-        style={{ minHeight: 300 }}
-        value={props && props.version ? props.version.log : ''}
-      />
-    </Dialog>
-  );
-};
