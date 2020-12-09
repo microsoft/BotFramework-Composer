@@ -94,8 +94,8 @@ type QnaEvents = {
 type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
   NewPublishingProfileSaved: { type: string };
-  PublishingProfileStarted: undefined;
-  PublishingProfileCompleted: { type: string };
+  PublishingProfileStarted: { target: string; projectId: string };
+  PublishingProfileCompleted: { target: string; projectId: string };
 };
 
 type AppSettingsEvents = {

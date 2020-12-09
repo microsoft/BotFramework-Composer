@@ -110,7 +110,33 @@ const trackEvent = <TN extends TelemetryEventName>(
   track([{ type: TelemetryEventTypes.TrackEvent, name, properties }]);
 };
 
+const timedEvents = {};
+
+const startEvent = <TN extends TelemetryEventName>(
+  name: TN,
+  id: string,
+  properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+) => {
+  timedEvents[id] = {
+    name,
+    properties,
+    startTime: Date.now(),
+  };
+};
+
+const endEvent = <TN extends TelemetryEventName>(eventName: TN, id: string) => {
+  if (timedEvents[id]) {
+    const { name, properties, startTime } = timedEvents[id];
+    if (eventName === name) {
+      trackEvent(name, { ...properties, duration: Date.now() - startTime });
+      delete timedEvents[id];
+    }
+  }
+};
+
 export const TelemetryService = {
   track,
   trackEvent,
+  startEvent,
+  endEvent,
 };
