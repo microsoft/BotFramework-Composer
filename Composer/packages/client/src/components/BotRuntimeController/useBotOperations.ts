@@ -83,9 +83,11 @@ export function useBotOperations() {
     }
   };
 
-  const stopAllBots = () => {
+  const stopAllBots = async (): Promise<void> => {
     setProjectsToTrack([]);
-    builderEssentials.forEach(({ projectId }) => botRuntimeOperations?.stopBot(projectId));
+    for (const projectBuilder of builderEssentials) {
+      await botRuntimeOperations?.stopBot(projectBuilder.projectId);
+    }
   };
 
   const startSingleBot = (projectId: string, skipBuild: boolean | undefined = undefined) => {

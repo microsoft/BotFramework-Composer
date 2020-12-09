@@ -6,7 +6,7 @@ import { FeatureFlagMap } from '@botframework-composer/types';
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   FORM_DIALOG: {
-    displayName: formatMessage('Show Form Dialog'),
+    displayName: formatMessage('Form dialogs'),
     description: formatMessage(
       'Automatically generate dialogs that collect information from a user to manage conversations.'
     ),
@@ -23,10 +23,16 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   },
   ORCHESTRATOR: {
     displayName: formatMessage('Orchestrator'),
-    description: formatMessage(
-      'Use as intent-only recognizer, typically for routing to skills or subsequent LUIS or QnAMaker processing or when entity extraction is not needed.'
-    ),
+    description: formatMessage('Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB'),
+    documentationLink: 'https://aka.ms/bf-orchestrator',
     isHidden: false,
     enabled: false,
+  },
+  PACKAGE_MANAGER: {
+    displayName: formatMessage('Package manager'),
+    description: formatMessage('Discover and use components that can be installed into your bot.'),
+    isHidden: false,
+    enabled: false,
+    documentationLink: 'https://aka.ms/composer-package-manager-readme',
   },
 });

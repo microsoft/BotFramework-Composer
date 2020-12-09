@@ -241,7 +241,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim();
                   if (newValue) {
-                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
+                    const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
@@ -273,7 +274,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
-                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
+                    const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
@@ -304,9 +306,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
+                    const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
                     handleTemplateUpdateDefaultLocale(item.name, {
                       Name: item.name,
-                      Body: newValue,
+                      Body: fixedBody,
                     });
                   }
                 }}
