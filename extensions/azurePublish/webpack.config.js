@@ -60,43 +60,25 @@ module.exports = [
       global: false,
     },
     output: {
-      filename: 'publish.js',
-      path: resolve(__dirname, 'lib', 'ui'),
-    },
-    externals: {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-      'office-ui-fabric-react': 'Fabric',
+      path: resolve(__dirname, 'lib', 'node'),
+      filename: 'index.js',
+      libraryTarget: 'commonjs2',
     },
     module: {
-      rules: [
-        { test: /\.tsx?$/, use: 'ts-loader' },
-        {
-          test: /\.svg$/i,
-          use: [
-            {
-              loader: 'url-loader',
-            },
-          ],
-        },
-      ],
+      rules: [{ test: /\.tsx?$/, use: 'ts-loader', exclude: [/node_modules/] }],
     },
     resolve: {
-      extensions: ['.js', '.ts', '.tsx'],
-      alias: {
-        // Support lsp code editor
-        vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
-      },
+      extensions: ['.js', '.ts', '.tsx', '.json'],
     },
-    // Some libraries import Node modules but don't use them in the browser.
-    // Tell Webpack to provide empty mocks for them so importing them works.
-    node: {
-      module: 'empty',
-      dgram: 'empty',
-      dns: 'mock',
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
+    optimization:  {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            keep_fnames: /AbortSignal/,
+          },
+        }),
+      ],
     }
-  },
+  }
 ];

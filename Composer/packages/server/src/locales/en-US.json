@@ -914,6 +914,9 @@
   "disable_a5c05db3": {
     "message": "Disable"
   },
+  "discover_and_use_components_that_can_be_installed__49e308bf": {
+    "message": "Discover and use components that can be installed into your bot."
+  },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
   },
@@ -1052,14 +1055,23 @@
   "enter_a_min_value_c3030813": {
     "message": "Enter a min value"
   },
+  "enter_a_url_7b4d6063": {
+    "message": "Enter a URL"
+  },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
   },
   "enter_luis_application_name_df312e75": {
     "message": "Enter LUIS application name"
   },
-  "enter_luis_key_336f7ed7": {
-    "message": "Enter LUIS key"
+  "enter_luis_authoring_key_c59f8f1f": {
+    "message": "Enter LUIS authoring key"
+  },
+  "enter_luis_authoringkey_12c33eaf": {
+    "message": "Enter LUIS authoringkey"
+  },
+  "enter_luis_endpoint_key_f8eb30f5": {
+    "message": "Enter LUIS endpoint key"
   },
   "enter_luis_region_2316eceb": {
     "message": "Enter LUIS region"
@@ -1619,14 +1631,17 @@
   "luis_application_name_1530d3aa": {
     "message": "LUIS application name"
   },
+  "luis_authoring_key_c8414499": {
+    "message": "LUIS authoring key"
+  },
   "luis_authoring_key_cfaba7dd": {
     "message": "LUIS Authoring key:"
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
   },
-  "luis_key_ae69c27e": {
-    "message": "LUIS key"
+  "luis_endpoint_key_c685e219": {
+    "message": "LUIS endpoint key"
   },
   "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
     "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
@@ -1982,6 +1997,9 @@
   "output_5023cf84": {
     "message": "Output"
   },
+  "package_manager_6c42db30": {
+    "message": "Package manager"
+  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2312,6 +2330,9 @@
   "responses_12d6df1d": {
     "message": "Responses"
   },
+  "restart_all_bots_running_total_running_cf47a2b5": {
+    "message": "Restart all bots ({ running }/{ total } running)"
+  },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
@@ -2324,8 +2345,14 @@
   "root_bot_da9de71c": {
     "message": "Root Bot"
   },
-  "root_bot_luis_key_is_empty_852d8c33": {
-    "message": "Root Bot LUIS key is empty"
+  "root_bot_e2d0a1fc": {
+    "message": "Root bot"
+  },
+  "root_bot_luis_authoring_key_is_empty_aec2634e": {
+    "message": "Root Bot LUIS authoring key is empty"
+  },
+  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
+    "message": "Root Bot LUIS endpoint key is empty"
   },
   "root_bot_luis_region_is_empty_67932308": {
     "message": "Root Bot LUIS region is empty"
@@ -2600,9 +2627,6 @@
   "step_of_setlength_43c73821": {
     "message": "{ step } of { setLength }"
   },
-  "stop_all_bots_running_total_running_df36cb0a": {
-    "message": "Stop all bots ({ running }/{ total } running)"
-  },
   "stop_bot_866e8976": {
     "message": "Stop Bot"
   },
@@ -2725,6 +2749,9 @@
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "This language will be copied and used as the basis (and fallback language) for the translation."
+  },
+  "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
+    "message": "This operation cannot be completed. The bot is already part of the Bot Project"
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
@@ -2918,8 +2945,11 @@
   "url_should_start_with_http_s_9ca55d94": {
     "message": "Url should start with http[s]://"
   },
-  "use_custom_luis_key_73f92d45": {
-    "message": "Use custom LUIS key"
+  "use_custom_luis_authoring_key_9c71470b": {
+    "message": "Use custom LUIS authoring key"
+  },
+  "use_custom_luis_endpoint_key_572e2c29": {
+    "message": "Use custom LUIS endpoint key"
   },
   "use_custom_luis_region_49d31dbf": {
     "message": "Use custom LUIS region"
