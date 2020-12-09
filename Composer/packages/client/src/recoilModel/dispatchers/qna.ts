@@ -34,7 +34,7 @@ export const updateQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   //To do: support other languages on qna
-  id = `${getBaseName(id)}.en-us`;
+  id = id.endsWith('.source') ? id : `${getBaseName(id)}.en-us`;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
   const newQnAFiles = qnaFiles.map((file) => {
