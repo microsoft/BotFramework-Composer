@@ -31,7 +31,7 @@ describe('<Header />', () => {
       return { location: { pathname: 'http://server/bot/1234/dialogs' } };
     });
     const result = renderWithRecoil(<Header />);
-    expect(result.findByDisplayValue('Start all bots')).not.toBeNull();
+    expect(result.findAllByDisplayValue('Start all bots')).not.toBeNull();
   });
 
   it('should show the start bots widget on settings page', async () => {
@@ -39,6 +39,6 @@ describe('<Header />', () => {
       return { location: { pathname: 'http://server/bot/1234/settings' } };
     });
     const result = renderWithRecoil(<Header />);
-    expect(result.findByDisplayValue('Start all bots')).not.toBeNull();
+    expect(result.findAllByDisplayValue('Start all bots')).not.toBeNull();
   });
 });

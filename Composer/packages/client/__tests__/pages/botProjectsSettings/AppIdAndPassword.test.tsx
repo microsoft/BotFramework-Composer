@@ -44,6 +44,7 @@ describe('App Id and Password', () => {
       luis: {
         authoringKey: '',
         authoringRegion: '',
+        endpointKey: '',
       },
       qna: {
         subscriptionKey: '',
@@ -63,6 +64,7 @@ describe('App Id and Password', () => {
       luis: {
         authoringKey: '',
         authoringRegion: '',
+        endpointKey: '',
       },
       qna: {
         subscriptionKey: '',
