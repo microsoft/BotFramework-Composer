@@ -111,7 +111,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
       hidden={false}
       minWidth={minWidth}
       modalProps={{
-        isBlocking: isBlocking ? true : false,
+        isBlocking: Boolean(isBlocking),
         styles: currentStyle.modal,
       }}
       onDismiss={onDismiss}

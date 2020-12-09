@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Fragment, useState, useMemo, useEffect } from 'react';
+import { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
@@ -53,7 +53,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const userSettings = useRecoilValue(userSettingsState);
   const currentUser = useRecoilValue(currentUserState);
-  // const graphToken = useRecoilValue(grahpTokenState);
   const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const targetTypes = useMemo(() => {
@@ -68,7 +67,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
   };
 
-  const isNameValid = (newName) => {
+  const isValidateProfileName = (newName) => {
     if (!newName || newName.trim() === '') {
       setErrorMsg(formatMessage('Must have a name'));
     } else {
@@ -88,7 +87,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const updateName = (e, newName) => {
     setName(newName);
-    isNameValid(newName);
+    isValidateProfileName(newName);
   };
 
   const saveDisabled = useMemo(() => {
@@ -157,8 +156,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     };
   }, [projectId, name, targetType]);
 
-  const submit = useMemo(
-    () => (_e) => {
+  const submit = useCallback(
+    (_e) => {
       if (targetType) {
         console.log(config);
         props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);

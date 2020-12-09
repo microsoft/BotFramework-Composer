@@ -53,7 +53,6 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
         if (popup) {
           idToken = await monitorWindowForQueryParam(popup, 'id_token', authConfig.redirectUrl);
           storage.set('idToken', idToken || '');
-          console.log('idtoken', idToken);
         }
       } else if (isTokenExpired(idToken)) {
         // refresh idToken
@@ -74,7 +73,6 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
         token =
           notDisplayFrame.contentWindow &&
           (await monitorWindowForQueryParam(notDisplayFrame.contentWindow, 'access_token', authConfig.redirectUrl));
-        console.log('access', token);
         notDisplayFrame.remove();
         // update cache
         storage.set(key, token);

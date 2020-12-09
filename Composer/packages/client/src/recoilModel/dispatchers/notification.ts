@@ -28,11 +28,11 @@ export const deleteNotificationInternal = ({ reset, set }: CallbackInterface, id
 export const updateNotificationInternal = ({ set }: CallbackInterface, id: string, newValue: CardProps) => {
   set(notificationsState(id), { ...newValue, id: id });
   // check if notification exist
-  set(notificationIdsState, (notifications) => {
-    if (notifications.find((notification) => notification === id)) {
-      return notifications;
+  set(notificationIdsState, (notificationIds) => {
+    if (notificationIds.some((notificationId) => notificationId === id)) {
+      return notificationIds;
     } else {
-      return [...notifications, id];
+      return [...notificationIds, id];
     }
   });
 };

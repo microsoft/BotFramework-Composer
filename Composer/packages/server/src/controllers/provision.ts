@@ -39,10 +39,6 @@ export const ProvisionController = {
     const type = req.params.type; // type is webapp or functions
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
-    // deal with publishTargets not exist in settings
-    // const publishTargets = currentProject.settings?.publishTargets || [];
-
-    console.log('CALLING PLUGIN EXTENSION METHOD FOR ', type);
 
     if (ExtensionContext?.extensions?.publish[type]?.methods?.provision) {
       // get the externally provision method
