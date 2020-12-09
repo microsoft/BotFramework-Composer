@@ -103,24 +103,6 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
   const [multiline, setMultiline] = useState<boolean>(true);
-  const rootElmRef = useRef<HTMLDivElement | null>(null);
-
-  // This effect prevents host DetailsList's FocusZone from stealing the focus and consuming the navigation keys.
-  React.useEffect(() => {
-    if (rootElmRef.current && hasFocus) {
-      const inputElm = rootElmRef.current.querySelector<HTMLElement>(multiline ? 'textarea' : 'input');
-
-      const keydownHandler = (e: KeyboardEvent) => {
-        if (allowedNavigationKeys.includes(e.key)) {
-          e.stopPropagation();
-        }
-      };
-
-      inputElm?.addEventListener('keydown', keydownHandler);
-
-      return () => inputElm?.removeEventListener('keydown', keydownHandler);
-    }
-  }, [hasFocus, multiline]);
 
   const formConfig: FieldConfig<{ value: string }> = {
     value: {
@@ -195,6 +177,10 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   // single line, press Enter to submit
   // multipe line, press Enter to submit, Shift+Enter get a new line,
   const handleOnKeyDown = (e) => {
+    // This prevents host DetailsList's FocusZone from stealing the focus and consuming the navigation keys.
+    if (allowedNavigationKeys.includes(e.key)) {
+      e.stopPropagation();
+    }
     const enterOnField = e.key === 'Enter' && hasFocus;
     const multilineEnter = multiline ? !e.shiftKey : true;
     if (enterOnField && multilineEnter) {
@@ -216,7 +202,6 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   return (
     <Fragment>
       <div
-        ref={rootElmRef}
         css={[defaultContainerStyle(hasFocus, hasEditingErrors), containerStyles]}
         data-test-id={'EditableFieldContainer'}
       >
