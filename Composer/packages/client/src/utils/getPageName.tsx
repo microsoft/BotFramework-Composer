@@ -5,7 +5,7 @@ import { PageNames } from '@bfc/shared';
 
 const PagesRegex = {
   [PageNames.Design]: /\/dialogs/i,
-  [PageNames.Home]: /\/home|\//i,
+  [PageNames.Home]: /\/home/i,
   [PageNames.LanguageGeneration]: /\/language-generation/i,
   [PageNames.LanguageUnderstanding]: /\/language-understanding/i,
   [PageNames.KnowledgeBase]: /\/knowledge-base/i,

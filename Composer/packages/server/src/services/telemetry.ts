@@ -49,11 +49,11 @@ if (instrumentationKey) {
     // Remove PII from url
     if (envelope.data.baseType === 'RequestData' && data.baseData.url.match(/\/\d+.\d+/i)) {
       if (typeof data.baseData.url === 'string') {
-        data.baseData.url = data.baseData.url.replace(/\/\d+.\d+/i, '/XXXXX.XXXXXXXXXX');
+        data.baseData.url = data.baseData.url.replace(/\/\d+.\d+/, '/XXXXX.XXXXXXXXXX');
       }
 
       if (typeof data.baseData.name === 'string') {
-        data.baseData.name = data.baseData.name.replace(/\/\d+.\d+/i, '/XXXXX.XXXXXXXXXX');
+        data.baseData.name = data.baseData.name.replace(/\/\d+.\d+/, '/XXXXX.XXXXXXXXXX');
       }
     }
 
