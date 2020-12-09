@@ -50,7 +50,7 @@ export type DownSamplingConfig = {
 
 const getUserAgent = () => {
   const platform = useElectronContext() ? 'desktop' : 'web';
-  return `composer-${COMPOSER_VERSION}-${platform}`;
+  return `microsoft.bot.composer/${COMPOSER_VERSION} ${platform}`;
 };
 
 export class Builder {
