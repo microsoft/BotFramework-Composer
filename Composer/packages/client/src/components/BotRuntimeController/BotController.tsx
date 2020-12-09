@@ -130,7 +130,9 @@ const BotController: React.FC = () => {
     }
 
     if (botStartComplete) {
-      hideController(false);
+      if (statusIconClass !== 'Refresh') {
+        hideController(false);
+      }
       setStatusIconClass('Refresh');
       return formatMessage('Restart all bots ({running}/{total} running)', {
         running: runningBots.projectIds.length,
