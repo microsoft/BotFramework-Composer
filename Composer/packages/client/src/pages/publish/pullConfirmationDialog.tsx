@@ -36,8 +36,8 @@ export const PullConfirmationDialog: React.FC<PullConfirmationDialogProps> = (pr
       </p>
       <p>{formatMessage('Do you want to proceed?')}</p>
       <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-        <PrimaryButton text={formatMessage('Pull')} onClick={onConfirm} />
+        <DefaultButton data-testid="pull-cancel-button" text={formatMessage('Cancel')} onClick={onDismiss} />
+        <PrimaryButton data-testid="pull-confirm-button" text={formatMessage('Pull')} onClick={onConfirm} />
       </DialogFooter>
     </Dialog>
   );
