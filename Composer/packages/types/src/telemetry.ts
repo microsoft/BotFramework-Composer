@@ -69,7 +69,7 @@ type DesignerEvents = {
   EditModeToggled: undefined;
   HelpLinkClicked: { url: string };
   ToolbarButtonClicked: { name: string };
-  EmulatorButtonClicked: { isRoot: boolean };
+  EmulatorButtonClicked: { isRoot: boolean; projectId: string };
   LeftMenuExpanded: undefined;
   LeftMenuCollapsed: undefined;
   ProjectTreeFilterUsed: undefined;
