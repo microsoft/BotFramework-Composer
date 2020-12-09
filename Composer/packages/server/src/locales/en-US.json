@@ -35,6 +35,9 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
   },
+  "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
+    "message": "A schema, or form, is the list of properties your bot will collect."
+  },
   "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
     "message": "A skill bot that can be called from a host bot."
   },
@@ -244,6 +247,9 @@
   },
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "Are you sure you want to remove \"{ propertyName }\"?"
+  },
+  "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
+    "message": "Are you sure you want to remove this property?"
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "Are you sure you want to start over? Your progress will be lost."
@@ -797,8 +803,8 @@
   "delete_bot_73586104": {
     "message": "Delete Bot"
   },
-  "delete_form_dialog_schema_892df4e8": {
-    "message": "Delete form dialog schema"
+  "delete_form_dialog_schema_c8e28229": {
+    "message": "Delete form dialog schema?"
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
@@ -811,6 +817,9 @@
   },
   "delete_property_b3786fa0": {
     "message": "Delete Property"
+  },
+  "delete_property_da7646f6": {
+    "message": "Delete property?"
   },
   "delete_this_bot_fb78e519": {
     "message": "Delete this bot"
@@ -863,6 +872,12 @@
   "dialog_events_f1b2e2a0": {
     "message": "Dialog events"
   },
+  "dialog_generation_failed_3c73e599": {
+    "message": "Dialog generation failed."
+  },
+  "dialog_generation_was_successful_be280943": {
+    "message": "Dialog generation was successful."
+  },
   "dialog_input_schema_c7864fbd": {
     "message": "Dialog input schema."
   },
@@ -893,8 +908,14 @@
   "disable_a5c05db3": {
     "message": "Disable"
   },
+  "discover_and_use_components_that_can_be_installed__49e308bf": {
+    "message": "Discover and use components that can be installed into your bot."
+  },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
+  },
+  "do_you_want_to_proceed_cd35aa38": {
+    "message": "Do you want to proceed?"
   },
   "do_you_want_to_update_b_existingprojectname_b_c34014f": {
     "message": "Do you want to update <b>{ existingProjectName }</b>"
@@ -1031,14 +1052,20 @@
   "enter_a_min_value_c3030813": {
     "message": "Enter a min value"
   },
+  "enter_a_url_7b4d6063": {
+    "message": "Enter a URL"
+  },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
   },
   "enter_luis_application_name_df312e75": {
     "message": "Enter LUIS application name"
   },
-  "enter_luis_key_336f7ed7": {
-    "message": "Enter LUIS key"
+  "enter_luis_authoring_key_c59f8f1f": {
+    "message": "Enter LUIS authoring key"
+  },
+  "enter_luis_endpoint_key_f8eb30f5": {
+    "message": "Enter LUIS endpoint key"
   },
   "enter_luis_region_2316eceb": {
     "message": "Enter LUIS region"
@@ -1121,6 +1148,9 @@
   "expected_responses_intent_intentname_44b051c": {
     "message": "Expected responses (intent: #{ intentName })"
   },
+  "export_json_2e2981f5": {
+    "message": "Export JSON"
+  },
   "export_this_bot_as_zip_c4bfddf2": {
     "message": "Export this bot as .zip"
   },
@@ -1160,6 +1190,9 @@
   "false_eef8c169": {
     "message": "False"
   },
+  "fetching_form_dialog_schema_templates_failed_44e2dd63": {
+    "message": "Fetching form dialog schema templates failed."
+  },
   "field_set_6e7d7f67": {
     "message": "Field Set"
   },
@@ -1196,8 +1229,14 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
+  "form_dialog_error_ba7c37fe": {
+    "message": "Form dialog error"
+  },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Form dialog schema actions"
+  },
+  "form_dialogs_4a1e22f9": {
+    "message": "Form dialogs"
   },
   "form_editor_7c2b02f0": {
     "message": "form editor"
@@ -1226,8 +1265,11 @@
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
+  },
+  "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
+    "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1466,6 +1508,9 @@
   "learn_more_about_title_d1d3edbe": {
     "message": "Learn more about { title }"
   },
+  "learn_more_about_your_property_schema_3a0a0890": {
+    "message": "Learn more about your property schema"
+  },
   "learn_more_c08939e8": {
     "message": "Learn more."
   },
@@ -1513,9 +1558,6 @@
   },
   "list_view_e33843f0": {
     "message": "List view"
-  },
-  "load_form_dialog_schema_templates_error_6a348e76": {
-    "message": "Load form dialog schema templates Error"
   },
   "loading_25990131": {
     "message": "Loading..."
@@ -1583,14 +1625,17 @@
   "luis_application_name_1530d3aa": {
     "message": "LUIS application name"
   },
+  "luis_authoring_key_c8414499": {
+    "message": "LUIS authoring key"
+  },
   "luis_authoring_key_cfaba7dd": {
     "message": "LUIS Authoring key:"
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
   },
-  "luis_key_ae69c27e": {
-    "message": "LUIS key"
+  "luis_endpoint_key_c685e219": {
+    "message": "LUIS endpoint key"
   },
   "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
     "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
@@ -1943,6 +1988,9 @@
   "output_5023cf84": {
     "message": "Output"
   },
+  "package_manager_6c42db30": {
+    "message": "Package manager"
+  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2120,6 +2168,9 @@
   "publishing_name_to_publishtarget_failed_8677b68d": {
     "message": "Publishing { name } to { publishTarget } failed."
   },
+  "pull_d1c3e8fe": {
+    "message": "Pull"
+  },
   "pull_from_selected_profile_b5c635ec": {
     "message": "Pull from selected profile"
   },
@@ -2252,6 +2303,9 @@
   "responses_12d6df1d": {
     "message": "Responses"
   },
+  "restart_all_bots_running_total_running_cf47a2b5": {
+    "message": "Restart all bots ({ running }/{ total } running)"
+  },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
@@ -2264,8 +2318,14 @@
   "root_bot_da9de71c": {
     "message": "Root Bot"
   },
-  "root_bot_luis_key_is_empty_852d8c33": {
-    "message": "Root Bot LUIS key is empty"
+  "root_bot_e2d0a1fc": {
+    "message": "Root bot"
+  },
+  "root_bot_luis_authoring_key_is_empty_aec2634e": {
+    "message": "Root Bot LUIS authoring key is empty"
+  },
+  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
+    "message": "Root Bot LUIS endpoint key is empty"
   },
   "root_bot_luis_region_is_empty_67932308": {
     "message": "Root Bot LUIS region is empty"
@@ -2429,9 +2489,6 @@
   "show_code_f3e9d1cc": {
     "message": "Show code"
   },
-  "show_form_dialog_90aad050": {
-    "message": "Show Form Dialog"
-  },
   "show_item_diagnostics_f6e902c7": {
     "message": "Show { item } Diagnostics"
   },
@@ -2519,6 +2576,9 @@
   "start_command_a085f2ec": {
     "message": "Start command"
   },
+  "start_over_d7ce7a57": {
+    "message": "Start over?"
+  },
   "start_typing_kind_or_b0c305da": {
     "message": "Start typing { kind } or"
   },
@@ -2536,9 +2596,6 @@
   },
   "step_of_setlength_43c73821": {
     "message": "{ step } of { setLength }"
-  },
-  "stop_all_bots_running_total_running_df36cb0a": {
-    "message": "Stop all bots ({ running }/{ total } running)"
   },
   "stop_bot_866e8976": {
     "message": "Stop Bot"
@@ -2662,6 +2719,9 @@
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "This language will be copied and used as the basis (and fallback language) for the translation."
+  },
+  "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
+    "message": "This operation cannot be completed. The bot is already part of the Bot Project"
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
@@ -2852,8 +2912,11 @@
   "url_should_start_with_http_s_9ca55d94": {
     "message": "Url should start with http[s]://"
   },
-  "use_custom_luis_key_73f92d45": {
-    "message": "Use custom LUIS key"
+  "use_custom_luis_authoring_key_9c71470b": {
+    "message": "Use custom LUIS authoring key"
+  },
+  "use_custom_luis_endpoint_key_572e2c29": {
+    "message": "Use custom LUIS endpoint key"
   },
   "use_custom_luis_region_49d31dbf": {
     "message": "Use custom LUIS region"
@@ -3008,6 +3071,9 @@
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
   },
+  "you_are_about_to_pull_project_files_from_the_selec_15786351": {
+    "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+  },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "You can create a new bot from scratch with Composer, or start with a template."
   },
@@ -3034,6 +3100,9 @@
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
+  },
+  "your_dialog_was_generated_successfully_61c13b73": {
+    "message": "Your dialog was generated successfully."
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
