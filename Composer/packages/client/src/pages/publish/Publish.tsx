@@ -380,7 +380,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             />
           );
         })}
-      {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
+      {showLog && <LogDialog value={selectedVersion?.log} onDismiss={() => setShowLog(false)} />}
       <PublishToolbar
         canPublish={canPublish}
         canPull={isPullSupported}

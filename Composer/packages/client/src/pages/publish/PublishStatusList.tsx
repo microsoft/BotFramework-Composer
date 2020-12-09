@@ -31,6 +31,7 @@ export interface IStatus {
   status: number;
   message: string;
   comment: string;
+  log?: string;
   action?: {
     href: string;
     label: string;
