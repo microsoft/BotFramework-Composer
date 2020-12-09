@@ -157,8 +157,8 @@ describe('#loadFromDir', () => {
 
     await manager.loadFromDir('/some/dir');
 
-    expect(readJson).toHaveBeenCalledWith('/some/dir/extension1/package.json');
-    expect(readJson).toHaveBeenCalledWith('/some/dir/extension2/package.json');
+    expect(readJson).toHaveBeenCalledWith(['', 'some', 'dir', 'extension1', 'package.json'].join(path.sep));
+    expect(readJson).toHaveBeenCalledWith(['', 'some', 'dir', 'extension2', 'package.json'].join(path.sep));
 
     expect(updateManifestSpy).toHaveBeenCalledWith('extension1', expect.objectContaining({ id: 'extension1' }));
     expect(updateManifestSpy).toHaveBeenCalledWith('extension2', expect.objectContaining({ id: 'extension2' }));
