@@ -13,6 +13,9 @@ import keys from 'lodash/keys';
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
+import { setEnvDefault } from '../../utility/setEnvDefault';
+import { useElectronContext } from '../../utility/electronContext';
+import { COMPOSER_VERSION } from '../../constants';
 
 import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
@@ -43,6 +46,11 @@ export type CrossTrainConfig = {
 export type DownSamplingConfig = {
   maxImbalanceRatio: number;
   maxUtteranceAllowed: number;
+};
+
+const getUserAgent = () => {
+  const platform = useElectronContext() ? 'desktop' : 'web';
+  return `microsoft.bot.composer/${COMPOSER_VERSION} ${platform}`;
 };
 
 export class Builder {
@@ -82,6 +90,10 @@ export class Builder {
     allFiles: FileInfo[],
     emptyFiles: { [key: string]: boolean }
   ) => {
+    const userAgent = getUserAgent();
+    setEnvDefault('LUIS_USER_AGENT', userAgent);
+    setEnvDefault('QNA_USER_AGENT', userAgent);
+
     try {
       await this.createGeneratedDir();
       //do cross train before publish
@@ -430,19 +442,22 @@ export class Builder {
       culture: config.fallbackLocal,
     });
 
-    if (qnaContents) {
-      const subscriptionKeyEndpoint = `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    //we need to filter the source qna file out.
+    const filteredQnaContents = qnaContents?.filter((content) => !content.id.endsWith('.source'));
 
-      const buildResult = await this.qnaBuilder.build(qnaContents, config.subscriptionKey, config.botName, {
-        endpoint: subscriptionKeyEndpoint,
-        suffix: config.suffix,
-      });
+    if (!filteredQnaContents || filteredQnaContents.length === 0) return;
 
-      await this.qnaBuilder.writeDialogAssets(buildResult, {
-        force: true,
-        out: this.generatedFolderPath,
-      });
-    }
+    const subscriptionKeyEndpoint = `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+
+    const buildResult = await this.qnaBuilder.build(filteredQnaContents, config.subscriptionKey, config.botName, {
+      endpoint: subscriptionKeyEndpoint,
+      suffix: config.suffix,
+    });
+
+    await this.qnaBuilder.writeDialogAssets(buildResult, {
+      force: true,
+      out: this.generatedFolderPath,
+    });
   }
 
   //delete files in generated folder

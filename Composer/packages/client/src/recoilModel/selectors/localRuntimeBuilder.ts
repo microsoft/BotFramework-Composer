@@ -124,7 +124,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
       await dispatcher.publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
     },
     stopBot: async (projectId: string) => {
-      dispatcher.stopPublishBot(projectId);
+      await dispatcher.stopPublishBot(projectId);
     },
   };
 };

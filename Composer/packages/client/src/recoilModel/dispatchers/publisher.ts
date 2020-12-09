@@ -179,8 +179,8 @@ export const publisherDispatcher = () => {
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           metadata: {
             ...metadata,
-            luResources: referredLuFiles.map((file) => file.id),
-            qnaResources: qnaFiles.map((file) => file.id),
+            luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           },
           sensitiveSettings,
         });
