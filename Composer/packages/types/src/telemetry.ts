@@ -46,7 +46,7 @@ type ApplicationEvents = {
 type SessionEvents = {
   SessionStarted: { resolution: string; os: string };
   SessionEnded: undefined;
-  NavigateTo: { sectionName: string };
+  NavigateTo: { sectionName: string; url: string };
 };
 
 type BotProjectEvents = {
@@ -57,9 +57,9 @@ type BotProjectEvents = {
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
   StartBotButtonClicked: { isRoot: boolean; projectId };
+  RestartAllBotsButtonClicked: undefined;
   StartBotStarted: { projectId: string };
   StartBotCompleted: { projectId: string; status: string };
-  StopAllBotsButtonClicked: undefined;
   StopBotButtonClicked: { isRoot: boolean; projectId: string };
 };
 

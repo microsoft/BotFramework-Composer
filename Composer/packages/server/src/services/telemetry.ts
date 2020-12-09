@@ -13,6 +13,7 @@ import { SettingsService } from './settings';
 const log = logger.extend('telemetry-service');
 
 const instrumentationKey = APPINSIGHTS_INSTRUMENTATIONKEY || getBuildEnvironment()?.APPINSIGHTS_INSTRUMENTATIONKEY;
+
 const getTelemetryContext = () => {
   const electronContext = useElectronContext();
 
@@ -43,7 +44,18 @@ if (instrumentationKey) {
     if (!telemetry?.allowDataCollection) {
       return false;
     }
-    const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.Domain>;
+    const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
+
+    // Remove PII from url
+    if (envelope.data.baseType === 'RequestData' && data.baseData.url.match(/\/\d+.\d+/i)) {
+      if (typeof data.baseData.url === 'string') {
+        data.baseData.url = data.baseData.url.replace(/\/\d+.\d+/i, '/XXXXX.XXXXXXXXXX');
+      }
+
+      if (typeof data.baseData.name === 'string') {
+        data.baseData.name = data.baseData.name.replace(/\/\d+.\d+/i, '/XXXXX.XXXXXXXXXX');
+      }
+    }
 
     if (AppInsights.Contracts.domainSupportsProperties(data.baseData)) {
       data.baseData.properties.toolName = 'bf-composer';

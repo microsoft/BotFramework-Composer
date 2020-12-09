@@ -40,7 +40,7 @@ export const useInitializeLogger = () => {
   }, []);
 
   useEffect(() => {
-    TelemetryClient.log('NavigateTo', { sectionName: page });
+    TelemetryClient.log('NavigateTo', { sectionName: page, url });
     TelemetryClient.pageView(page, url);
   }, [page]);
 

@@ -5,7 +5,7 @@ import { PageNames } from '@bfc/shared';
 
 const PagesRegex = {
   [PageNames.Design]: /\/dialogs/i,
-  [PageNames.Home]: /\/home/i,
+  [PageNames.Home]: /\/home|\//i,
   [PageNames.LanguageGeneration]: /\/language-generation/i,
   [PageNames.LanguageUnderstanding]: /\/language-understanding/i,
   [PageNames.KnowledgeBase]: /\/knowledge-base/i,
@@ -17,8 +17,8 @@ const PagesRegex = {
 };
 
 export const getPageName = (pathname: string): PageNames => {
-  for (const page of Object.values(PageNames)) {
-    if (PagesRegex[page as string]?.test(pathname)) {
+  for (const page of Object.values(PageNames) as PageNames[]) {
+    if (PagesRegex[page]?.test(pathname)) {
       return page;
     }
   }
