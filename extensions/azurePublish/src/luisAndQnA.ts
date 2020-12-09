@@ -19,9 +19,11 @@ type QnaConfigType = {
   qnaRegion: string | 'westus';
 };
 
+type Resource = { id: string; isEmpty: boolean };
+
 type Resources = {
-  luResources: string[];
-  qnaResources: string[];
+  luResources: Resource[];
+  qnaResources: Resource[];
 }
 
 type BuildSettingType = {
@@ -201,17 +203,20 @@ export async function build(project: IBotProject, path: string, settings: BuildS
   const {builder, files} = project;
 
   const luFiles: FileInfo[] = [];
-  luResources.forEach((id) => {
+  const emptyFiles = {};
+  luResources.forEach(({ id, isEmpty }) => {
     const fileName = `${id}.lu`;
     const f = files.get(fileName);
+    if (isEmpty) emptyFiles[fileName] = true;
     if (f) {
       luFiles.push(f);
     }
   });
   const qnaFiles: FileInfo[] = [];
-  qnaResources.forEach((id) => {
+  qnaResources.forEach(({ id, isEmpty }) => {
     const fileName = `${id}.qna`;
     const f = files.get(fileName);
+    if (isEmpty) emptyFiles[fileName] = true;
     if (f) {
       qnaFiles.push(f);
     }
@@ -219,6 +224,6 @@ export async function build(project: IBotProject, path: string, settings: BuildS
 
   builder.rootDir = botPath(path);
   builder.setBuildConfig( {...luisConfig, ...qnaConfig},  project.settings.downsampling );
-  await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[]);
+  await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[], emptyFiles);
   await builder.copyModelPathToBot();
 }

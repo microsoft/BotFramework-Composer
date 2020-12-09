@@ -13,8 +13,9 @@ context('Luis Deploy', () => {
 
   it('can deploy luis success', () => {
     cy.visitPage('Project Settings');
-    cy.findAllByTestId('rootLUISKey').type('12345678', { delay: 200 });
-    cy.findAllByTestId('rootLUISRegion').type('westus', { delay: 200 });
+    cy.findAllByTestId('rootLUISAuthoringKey').type('12345678', { delay: 200 });
+    cy.findAllByTestId('rootLUISRegion').click();
+    cy.findByText('westus').click();
     cy.visitPage('User Input');
     cy.url().should('contain', 'language-understanding/all');
     cy.visitPage('Design');
