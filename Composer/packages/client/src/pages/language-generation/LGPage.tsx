@@ -46,7 +46,7 @@ const LGPage: React.FC<RouteComponentProps<{
       if (lgFileId) url += `/item/${lgFileId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
-      TelemetryClient.track('EditModeToggled');
+      TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
     [dialogId, projectId, edit, lgFileId]
   );

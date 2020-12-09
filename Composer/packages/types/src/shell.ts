@@ -71,7 +71,6 @@ export type ApplicationContextApi = {
   isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
-  // TODO: Add TelemetryClient interface
   telemetryClient: TelemetryClient;
 };
 

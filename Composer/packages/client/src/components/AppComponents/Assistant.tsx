@@ -17,12 +17,11 @@ export const Assistant = () => {
   const { telemetry } = useRecoilValue(userSettingsState);
   const onboarding = useRecoilValue(onboardingState);
   const { showing: appUpdaterDialogShowing } = useRecoilValue(appUpdateState);
-  const electron = isElectron();
 
   const renderDataCollectionDialog =
-    electron && !appUpdaterDialogShowing && typeof telemetry.allowDataCollection === 'undefined';
+    isElectron() && !appUpdaterDialogShowing && typeof telemetry.allowDataCollection === 'undefined';
   const renderOnboarding = !renderDataCollectionDialog && !appUpdaterDialogShowing && !onboarding.complete;
-  const renderAppUpdater = electron;
+  const renderAppUpdater = isElectron();
 
   return (
     <Fragment>

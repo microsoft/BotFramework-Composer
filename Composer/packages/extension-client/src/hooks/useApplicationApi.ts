@@ -21,7 +21,6 @@ const APPLICATION_KEYS = [
   'api.addCoachMarkRef',
   'api.setApplicationLevelError',
   'api.confirm',
-  'api.telemetryClient',
 ];
 
 export function useApplicationApi(): ApplicationContext & ApplicationContextApi {

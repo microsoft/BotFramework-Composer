@@ -55,7 +55,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       let url = `${baseURL}knowledge-base/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
-      TelemetryClient.track('EditModeToggled');
+      TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
     [dialogId, actualProjectId, edit]
   );

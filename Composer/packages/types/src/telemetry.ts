@@ -60,12 +60,11 @@ type BotProjectEvents = {
 type DesignerEvents = {
   ActionAdded: { type: string };
   ActionDeleted: { type: string };
-  EditModeToggled: undefined;
+  EditModeToggled: { jsonView: boolean };
   HelpLinkClicked: { url: string };
   ToolbarButtonClicked: { name: string };
   EmulatorButtonClicked: { isRoot: boolean; projectId: string };
-  LeftMenuExpanded: undefined;
-  LeftMenuCollapsed: undefined;
+  LeftMenuModeToggled: { expanded: boolean };
   ProjectTreeFilterUsed: undefined;
   TooltipOpened: { location?: string; title: string; duration: number };
   AddNewTriggerStarted: undefined;

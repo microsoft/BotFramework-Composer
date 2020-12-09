@@ -25,10 +25,6 @@ export function getBuildEnvironment() {
   return {};
 }
 
-debug('Retrieving QNA_SUBSCRIPTION_KEY');
-const subscriptionKey = QNA_SUBSCRIPTION_KEY || getBuildEnvironment()?.QNA_SUBSCRIPTION_KEY;
-debug('Retrieved QNA_SUBSCRIPTION_KEY: %s', subscriptionKey);
-
 async function importQnAFromUrl(builder: any, url: string, subscriptionKey: string, multiTurn = false) {
   url = url.trim();
   let onlineQnAContent = '';

@@ -70,7 +70,7 @@ const wrapDispatcher = (dispatchers, forceUpdate) => {
   return Object.keys(dispatchers).reduce((boundDispatchers, dispatcherName) => {
     const dispatcher = async (...args) => {
       forceUpdate([]); //guarantee the snapshot get the latest state
-      return await dispatchers[dispatcherName](...args);
+      await dispatchers[dispatcherName](...args);
     };
     boundDispatchers[dispatcherName] = dispatcher;
     return boundDispatchers;

@@ -349,7 +349,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                         iconProps: { iconName: 'CodeEdit' },
                         onClick: () => {
                           navigateTo(`${baseURL}knowledge-base/${dialogId}/edit?C=${containerId}`);
-                          TelemetryClient.track('EditModeToggled');
+                          TelemetryClient.track('EditModeToggled', { jsonView: true });
                         },
                       },
                       {

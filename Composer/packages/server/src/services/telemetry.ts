@@ -10,7 +10,7 @@ import { useElectronContext } from '../utility/electronContext';
 import { getBuildEnvironment } from '../models/utilities/parser';
 
 import { SettingsService } from './settings';
-const log = logger.extend('telemetry-service');
+const log = logger.extend('telemetry');
 
 const instrumentationKey = APPINSIGHTS_INSTRUMENTATIONKEY || getBuildEnvironment()?.APPINSIGHTS_INSTRUMENTATIONKEY;
 
@@ -95,8 +95,7 @@ const track = (events: TelemetryEvent[]) => {
             break;
         }
       } catch (error) {
-        log('App Insights error: %s', error.message || '');
-        // swallow the exception on a failed attempt to collect usage data
+        log('App Insights error: %O', error);
       }
     }
   }
