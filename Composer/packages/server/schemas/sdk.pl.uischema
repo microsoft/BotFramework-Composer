@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Wyślij odpowiedź, aby zadać pytanie",
-      "subtitle": "Działanie Ask"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Monituj o plik lub załącznik",
-      "subtitle": "Dane wejściowe załącznika"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Monituj z wieloma opcjami wyboru",
-      "subtitle": "Wprowadzanie wyboru"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Monituj o potwierdzenie",
-      "subtitle": "Potwierdź dane wejściowe"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Monituj o datę lub godzinę",
-      "subtitle": "Dane wejściowe daty i godziny"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Monituj o liczbę",
-      "subtitle": "Liczbowe dane wejściowe"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Logowanie OAuth",
-      "subtitle": "Dane wejściowe OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Monituj o tekst",
-      "subtitle": "Tekstowe dane wejściowe"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Rozpocznij nowy dialog",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Emituj zdarzenie śledzenia",
       "subtitle": "Śledź działanie"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Wyślij odpowiedź, aby zadać pytanie",
+      "subtitle": "Działanie Ask"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Monituj o plik lub załącznik",
+      "subtitle": "Dane wejściowe załącznika"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Monituj z wieloma opcjami wyboru",
+      "subtitle": "Wprowadzanie wyboru"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Monituj o potwierdzenie",
+      "subtitle": "Potwierdź dane wejściowe"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Monituj o datę lub godzinę",
+      "subtitle": "Dane wejściowe daty i godziny"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Monituj o liczbę",
+      "subtitle": "Liczbowe dane wejściowe"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Logowanie OAuth",
+      "subtitle": "Dane wejściowe OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Monituj o tekst",
+      "subtitle": "Tekstowe dane wejściowe"
     }
   },
   "Microsoft.OnActivity": {
