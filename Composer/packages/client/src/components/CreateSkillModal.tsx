@@ -16,6 +16,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
 import { skillsStateSelector } from '../recoilModel';
+import TelemetryClient from '../telemetry/TelemetryClient';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -178,6 +179,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
       !Object.values(formDataErrors).some(Boolean)
     ) {
       onSubmit(formData.manifestUrl, formData.endpointName);
+      TelemetryClient.track('AddNewSkillCompleted');
     }
   };
 

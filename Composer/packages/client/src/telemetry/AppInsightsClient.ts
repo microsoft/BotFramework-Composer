@@ -11,7 +11,7 @@ export default class AppInsightsClient {
   private static _eventPool: TelemetryEvent[] = [];
   private static _intervalId: NodeJS.Timeout | null = null;
 
-  public static logEvent(name: string, properties: LogData) {
+  public static trackEvent(name: string, properties: LogData) {
     this.startInterval();
     this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
     if (this._eventPool.length >= BATCH_SIZE) {

@@ -25,6 +25,7 @@ import {
   isEjectRuntimeExistState,
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
@@ -80,6 +81,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const toggleCustomRuntime = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
+    TelemetryClient.track('CustomRuntimeToggleChanged', { enabled: isOn });
   };
 
   const updateSetting = (field) => (e, newValue) => {
@@ -129,6 +131,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     await runtimeEjection?.onAction(projectId, templateKey);
     setEjecting(false);
     setTemplateKey(templateKey);
+    TelemetryClient.track('GetNewRuntime', { runtimeType: templateKey });
   };
 
   const callUpdateBoilerplate = async () => {

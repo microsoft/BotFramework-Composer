@@ -20,11 +20,11 @@ export default class TelemetryClient {
     this._telemetrySettings = telemetrySettings;
   }
 
-  public static log<TN extends TelemetryEventName>(
+  public static track<TN extends TelemetryEventName>(
     eventName: TN,
     properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
   ) {
-    this.client?.logEvent(eventName, { ...this.sharedProperties, ...properties });
+    this.client?.trackEvent(eventName, { ...this.sharedProperties, ...properties });
   }
 
   public static pageView<TN extends TelemetryEventName>(
