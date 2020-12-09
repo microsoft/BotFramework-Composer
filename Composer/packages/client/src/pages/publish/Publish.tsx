@@ -171,6 +171,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const getUpdatedStatus = (target, botProjectId): NodeJS.Timeout => {
     // TODO: this should use a backoff mechanism to not overload the server with requests
     // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
+    getPublishStatus(botProjectId, target);
     return setInterval(async () => {
       getPublishStatus(botProjectId, target);
     }, publishStatusInterval);
