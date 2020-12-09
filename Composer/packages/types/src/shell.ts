@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { AxiosInstance } from 'axios';
-import { Diagnostic } from '@bfc/shared';
 
+import { IDiagnostic } from './diagnostic';
 import type {
   DialogInfo,
   LuFile,
@@ -135,7 +135,7 @@ export type BotInProject = {
   name: string;
   isRemote: boolean;
   isRootBot: boolean;
-  diagnostics: Diagnostic[];
+  diagnostics: IDiagnostic[];
   error: { [key: string]: any };
   buildEssentials: { [key: string]: any };
   isPvaSchema: boolean;
