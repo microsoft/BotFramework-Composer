@@ -24,15 +24,21 @@ export type PublishResult = {
 };
 
 export type ProcessStatus = {
-  id: string; // unique id
-  projectId: string; // reference to projectId that this process is for
-  processName: string; // name used to pull this process if jobId is not known
-  time: Date; // contains start time
-  status: number; // contains http status code
-  message: string; // contains latest message
-  log: string[]; // contains all messages
-  comment?: string; // contains user supplied comment about process
-  config?: any; // contains provision result
+  /** Unique Process Id */
+  id: string;
+  projectId: string;
+  /** name used to pull this process if jobId is not known*/
+  processName: string;
+  /** start time */
+  time: Date;
+  status: number;
+  /** contains latest message */
+  message: string;
+  /** contains all messages */
+  log: string[];
+  comment?: string;
+  /** contains provision result */
+  config?: any;
 };
 
 export type PublishResponse = {

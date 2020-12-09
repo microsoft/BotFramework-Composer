@@ -42,14 +42,13 @@ export const provisionDispatcher = () => {
       graphToken = ''
     ) => {
       try {
-        console.log('graph token is: ', graphToken);
         const result = await httpClient.post(`/provision/${projectId}/${type}`, config, {
           headers: { Authorization: `Bearer ${armToken}`, graphtoken: graphToken },
         });
-        console.log(result.data);
+        // set notification
         const notification = createNotification(getProvisionPendingNotification(result.data.message));
         addNotificationInternal(callbackHelpers, notification);
-        // update provision status
+        // initialize this profile's provision status state
         callbackHelpers.set(provisionStatusState(projectId), (provisionStatus) => {
           const newStat = {
             ...provisionStatus,
@@ -58,11 +57,10 @@ export const provisionDispatcher = () => {
               notificationId: notification.id,
             },
           };
-          console.log(newStat);
           return newStat;
         });
 
-        // get provision status
+        // call provision status api interval to update the state.
         updateProvisionStatus(
           callbackHelpers,
           result.data.id,
@@ -72,7 +70,12 @@ export const provisionDispatcher = () => {
           notification.id
         );
       } catch (error) {
-        console.log(error.response.data);
+        // set notification
+        console.error(error.response?.data);
+        const notification = createNotification(
+          getProvisionFailureNotification(error.response?.data || 'Error when provision target')
+        );
+        addNotificationInternal(callbackHelpers, notification);
       }
     }
   );
@@ -98,7 +101,7 @@ export const provisionDispatcher = () => {
             return newStatus;
           });
 
-          // update publishConfig
+          // update publishTargets
           callbackHelpers.set(settingsState(projectId), (settings) => {
             const profile = {
               configuration: JSON.stringify(response.data.config, null, 2),
