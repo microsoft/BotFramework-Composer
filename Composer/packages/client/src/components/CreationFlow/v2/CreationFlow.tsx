@@ -160,6 +160,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onSubmit={handleSubmit}
         />
         <CreateOptionsV2
+          fetchTemplates={fetchTemplatesV2}
           path="create"
           templates={templateProjects}
           onDismiss={handleDismiss}

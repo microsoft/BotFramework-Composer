@@ -178,8 +178,8 @@ export const BotStatusesCopy = {
 export const DialogCreationCopy = {
   get CREATE_NEW_BOT() {
     return {
-      title: formatMessage('Create bot from template or scratch?'),
-      subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+      title: formatMessage('Choose a template for your bot'),
+      subText: formatMessage("Microsoft's templates offer best practices for developing conversational bots"),
     };
   },
   get CREATE_NEW_SKILLBOT() {

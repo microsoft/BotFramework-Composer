@@ -20,12 +20,16 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, BotTemplateV2 } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
+import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../../constants';
+import { root } from '../../Page';
+
+import { TemplateDetailView } from './TemplateDetailView';
 
 // -------------------- Styles -------------------- //
 
@@ -42,16 +46,25 @@ const optionRoot = css`
 `;
 
 const detailListContainer = css`
-  width: 100%;
+  width: 50%;
   height: 400px;
-  position: relative;
   overflow: hidden;
+  float: left;
   flex-grow: 1;
 `;
 
-const listHeader = css`
-  margin-top: 10px;
-  margin-bottom: 0;
+const templateDetailContainer = css`
+  width: 50%;
+  height: 400px;
+  overflow: hidden;
+  flex-grow: 1;
+  float: left;
+`;
+
+const pickerContainer = css`
+  position: relative;
+  height: 400px;
+  border: 1px solid #f3f2f1;
 `;
 
 const rowDetails = (disabled) => {
@@ -108,14 +121,17 @@ type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
   onNext: (data: string) => void;
+  fetchTemplates: (feedUrls?: string[]) => Promise<void>;
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
-  const [option, setOption] = useState(optionKeys.createFromScratch);
-  const [disabled, setDisabled] = useState(true);
+  const [option, setOption] = useState(optionKeys.createFromTemplate);
+  const [disabled, setDisabled] = useState(false);
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
+  const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps } | undefined>(undefined);
+
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
@@ -126,25 +142,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       },
     });
   }, []);
-
-  function SelectOption(props) {
-    const { checked, text, key } = props;
-    return (
-      <div key={key} css={optionRoot}>
-        <Icon css={optionIcon(checked)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
-        <span>{text}</span>
-      </div>
-    );
-  }
-
-  const handleChange = (event, option) => {
-    setOption(option.key);
-    if (option.key === optionKeys.createFromTemplate) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  };
 
   const handleJumpToNext = () => {
     let routeToTemplate = emptyBotKey;
@@ -181,34 +178,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         </div>
       ),
     },
-    {
-      key: 'description',
-      name: formatMessage('Description'),
-      fieldName: 'dateModifiedValue',
-      minWidth: 200,
-      maxWidth: 450,
-      isResizable: !disabled,
-      data: 'string',
-      styles: rowTitle(disabled),
-      onRender: (item) => (
-        <div data-is-focusable css={tableCell}>
-          <div css={content} tabIndex={-1}>
-            {item.description}
-          </div>
-        </div>
-      ),
-    },
   ];
 
-  const onRenderDetailsHeader = (props, defaultRender) => {
-    return (
-      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
-        {defaultRender({
-          ...props,
-        })}
-      </Sticky>
-    );
-  };
   const onRenderRow = (props) => {
     if (props) {
       return (
@@ -228,29 +199,17 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     }
   }, [templates]);
 
-  const choiceOptions = [
-    {
-      ariaLabel: formatMessage('Create from scratch') + (option === optionKeys.createFromScratch ? ' selected' : ''),
-      key: optionKeys.createFromScratch,
-      'data-testid': 'Create from scratch',
-      text: formatMessage('Create from scratch'),
-      onRenderField: SelectOption,
-    },
-    {
-      ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
-      key: optionKeys.createFromQnA,
-      'data-testid': 'Create from QnA',
-      text: formatMessage('Create from knowledge base (QnA Maker)'),
-      onRenderField: SelectOption,
-    },
-    {
-      ariaLabel: formatMessage('Create from template') + (option === optionKeys.createFromTemplate ? ' selected' : ''),
-      key: optionKeys.createFromTemplate,
-      'data-testid': 'Create from template',
-      text: formatMessage('Create from template'),
-      onRenderField: SelectOption,
-    },
-  ];
+  useEffect(() => {
+    if (selectedFeed?.props?.headerText?.toLowerCase() === 'c#') {
+      props.fetchTemplates([
+        'https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+      ]);
+    } else {
+      props.fetchTemplates([
+        'https://registry.npmjs.org/-/v1/search?text=bot&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+      ]);
+    }
+  }, [selectedFeed]);
 
   return (
     <Fragment>
@@ -260,29 +219,33 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
       >
-        <ChoiceGroup
-          label={formatMessage('Choose how to create your bot')}
-          options={choiceOptions}
-          selectedKey={option}
-          onChange={handleChange}
-        />
-        <h3 css={listHeader}>{formatMessage('Examples')}</h3>
-        <div css={detailListContainer} data-is-scrollable="true">
-          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-            <DetailsList
-              isHeaderVisible
-              checkboxVisibility={CheckboxVisibility.hidden}
-              columns={tableColums}
-              compact={false}
-              getKey={(item) => item.name}
-              items={templates}
-              layoutMode={DetailsListLayoutMode.justified}
-              selection={selection}
-              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
-              onRenderDetailsHeader={onRenderDetailsHeader}
-              onRenderRow={onRenderRow}
-            />
-          </ScrollablePane>
+        <Pivot aria-label="Basic Pivot Example" onLinkClick={setSelectedFeed}>
+          <PivotItem headerText="C#"></PivotItem>
+          <PivotItem headerText="Typescript"></PivotItem>
+        </Pivot>
+        <div css={pickerContainer}>
+          <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
+            <ScrollablePane
+              scrollbarVisibility={ScrollbarVisibility.auto}
+              styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
+            >
+              <DetailsList
+                checkboxVisibility={CheckboxVisibility.hidden}
+                columns={tableColums}
+                compact={false}
+                getKey={(item) => item.name}
+                isHeaderVisible={false}
+                items={templates}
+                layoutMode={DetailsListLayoutMode.justified}
+                selection={selection}
+                selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+                onRenderRow={onRenderRow}
+              />
+            </ScrollablePane>
+          </div>
+          <div css={templateDetailContainer} data-is-scrollable="true">
+            <TemplateDetailView templateId={currentTemplate} />
+          </div>
         </div>
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
