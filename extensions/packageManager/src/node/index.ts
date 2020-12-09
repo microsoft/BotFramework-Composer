@@ -94,6 +94,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
         if (dryRunMergeResults) {
           res.json({
+            projectId,
             components: dryRunMergeResults.components.filter((c) => c.includesSchema || c.includesExports),
           });
         } else {
@@ -103,6 +104,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         }
       } else {
         res.json({
+          projectId,
           components: [],
         });
       }

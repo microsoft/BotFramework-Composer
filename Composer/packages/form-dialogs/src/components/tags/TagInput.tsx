@@ -95,10 +95,15 @@ export const TagInput = (props: TagInputProps) => {
 
   const addTag = (value: string) => {
     const clonedTags = [...tags];
-    if (clonedTags.indexOf(value) === -1) {
-      clonedTags.push(value);
-      onChange(clonedTags);
-    }
+    // Extract comma separated tags
+    const enteredTags = csvToArray(value).filter((t) => !!t);
+
+    // Remove repetitive tags
+    const newTags = enteredTags.filter((et) => !clonedTags.includes(et));
+
+    clonedTags.push(...newTags);
+    onChange(clonedTags);
+
     setInput('');
   };
 
@@ -109,7 +114,6 @@ export const TagInput = (props: TagInputProps) => {
   };
 
   const onPaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
-    setInput('');
     event.preventDefault();
 
     const pasteData = event.clipboardData;
@@ -118,10 +122,8 @@ export const TagInput = (props: TagInputProps) => {
       return;
     }
 
-    const text = pasteData.getData('text/plain');
-    const tags = csvToArray(text);
-
-    onChange(tags);
+    const value = pasteData.getData('text/plain');
+    addTag(value);
   };
 
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

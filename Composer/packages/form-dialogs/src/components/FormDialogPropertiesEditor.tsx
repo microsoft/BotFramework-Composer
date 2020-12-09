@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import {
   allFormDialogPropertyIdsSelector,
   formDialogSchemaAtom,
+  formDialogSchemaJsonSelector,
   formDialogSchemaValidSelector,
 } from 'src/atoms/appState';
 import { useHandlers } from 'src/atoms/handlers';
@@ -21,6 +22,7 @@ import { CommandBarUploadButton } from 'src/components/common/CommandBarUpload';
 import { FormDialogSchemaDetails } from 'src/components/property/FormDialogSchemaDetails';
 import { useUndo } from 'src/undo/useUndo';
 import { useUndoKeyBinding } from 'src/utils/hooks/useUndoKeyBinding';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 const Root = styled(Stack)({
   backgroundColor: NeutralColors.gray20,
@@ -42,7 +44,6 @@ const GenerationProgressIndicator = styled(ProgressIndicator)({
 
 const ListCommandBar = styled(CommandBar)({
   position: 'relative',
-  zIndex: 1,
   margin: '0 0 1px 0',
   '& .ms-CommandBar': {
     padding: '0 12px',
@@ -58,6 +59,17 @@ const SchemaName = styled(Stack)({
   backgroundColor: FluentTheme.palette.white,
 });
 
+const downloadFile = async (fileName: string, schemaExtension: string, content: string) => {
+  const blob = new Blob([content], { type: 'application/json' });
+  const href = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = href;
+  link.download = `${fileName}.${schemaExtension}`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 type Props = {
   schemaExtension: string;
   isGenerating: boolean;
@@ -72,6 +84,7 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
   const schema = useRecoilValue(formDialogSchemaAtom);
   const propertyIds = useRecoilValue(allFormDialogPropertyIdsSelector);
   const schemaValid = useRecoilValue(formDialogSchemaValidSelector);
+  const schemaJson = useRecoilValue(formDialogSchemaJsonSelector);
 
   const { importSchema, addProperty } = useHandlers();
 
@@ -135,14 +148,30 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
       onRender: () => <CommandBarUploadButton accept={schemaExtension} disabled={isGenerating} onUpload={upload} />,
     },
     {
+      key: 'export',
+      iconProps: { iconName: 'Export' },
+      text: formatMessage('Export JSON'),
+      title: formatMessage('Export JSON'),
+      ariaLabel: formatMessage('Export JSON'),
+      disabled: !propertyIds.length || !schemaValid,
+      onClick: () => {
+        downloadFile(schema.name, schemaExtension, schemaJson);
+      },
+    },
+    {
       key: 'reset',
       iconProps: { iconName: 'Clear' },
       text: formatMessage('Clear all'),
       title: formatMessage('Clear all'),
       ariaLabel: formatMessage('Clear all'),
-      disabled: isGenerating,
-      onClick: () => {
-        if (confirm(formatMessage('Are you sure you want to start over? Your progress will be lost.'))) {
+      disabled: isGenerating || !propertyIds.length,
+      onClick: async () => {
+        const result = await OpenConfirmModal(
+          formatMessage('Start over?'),
+          formatMessage('Are you sure you want to start over? Your progress will be lost.')
+        );
+
+        if (result) {
           onReset();
         }
       },
