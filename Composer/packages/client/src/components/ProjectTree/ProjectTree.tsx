@@ -343,6 +343,7 @@ export const ProjectTree: React.FC<Props> = ({
           TelemetryClient.log(isRunning ? 'StopBotButtonClicked' : 'StartBotButtonClicked', {
             projectId: bot.projectId,
             location: 'projectTree',
+            isRoot: bot.projectId === rootProjectId,
           });
         },
       },
