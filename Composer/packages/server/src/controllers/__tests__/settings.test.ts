@@ -34,6 +34,7 @@ describe('server settings', () => {
   });
 
   it('should get user settings', async () => {
+    Store.get = jest.fn().mockReturnValue({ telemetry: {} });
     const mockReq = {
       params: {},
       query: {},

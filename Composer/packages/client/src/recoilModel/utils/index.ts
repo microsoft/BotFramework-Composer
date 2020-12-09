@@ -20,10 +20,11 @@ export const DEFAULT_USER_SETTINGS = {
   propertyEditorWidth: 400,
   dialogNavWidth: 180,
   appLocale: 'en-US',
+  telemetry: {},
 };
 
 export const getUserSettings = (): UserSettings => {
-  const loadedSettings = storage.get('userSettings') || {};
+  const loadedSettings = storage.get('userSettings', {});
   const settings = merge(DEFAULT_USER_SETTINGS, loadedSettings);
 
   if (isElectron()) {

@@ -14,9 +14,7 @@ context('RemoveDialog', () => {
       });
     });
 
-    cy.get('.ms-ContextualMenu-linkContent > .ms-ContextualMenu-itemText').within(() => {
-      cy.findByText('Remove this dialog').click();
-    });
+    cy.findByText('Remove this dialog').click();
 
     cy.findByText('Yes').click();
 

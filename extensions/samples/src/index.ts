@@ -77,7 +77,7 @@ function getRemoteSamples(): BotTemplate[] {
     package: {
       packageName: 'Preview.Bot.Component.ConversationalCore',
       packageSource: 'nuget',
-      packageVersion: '0.0.1-preview3'
+      packageVersion: '0.0.1-preview5'
     }
   }]
 }

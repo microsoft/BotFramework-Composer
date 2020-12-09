@@ -2,16 +2,20 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { pathExists, writeFile } from 'fs-extra';
+import { pathExists, writeFile, copy } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
+import keys from 'lodash/keys';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
+import { setEnvDefault } from '../../utility/setEnvDefault';
+import { useElectronContext } from '../../utility/electronContext';
+import { COMPOSER_VERSION } from '../../constants';
 
 import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
@@ -26,6 +30,7 @@ const SETTINGS = 'settings';
 const INTERRUPTION = 'interruption';
 const SAMPLE_SIZE_CONFIGURATION = 2;
 const CrossTrainConfigName = 'cross-train.config.json';
+const MODEL = 'model';
 
 export type SingleConfig = {
   rootDialog: boolean;
@@ -43,6 +48,11 @@ export type DownSamplingConfig = {
   maxUtteranceAllowed: number;
 };
 
+const getUserAgent = () => {
+  const platform = useElectronContext() ? 'desktop' : 'web';
+  return `microsoft.bot.composer/${COMPOSER_VERSION} ${platform}`;
+};
+
 export class Builder {
   public botDir: string;
   public generatedFolderPath: string;
@@ -51,6 +61,7 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
   private _locale: string;
+  private containOrchestrator = false;
 
   private luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -67,7 +78,22 @@ export class Builder {
     this._locale = locale;
   }
 
-  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) => {
+  public set rootDir(path: string) {
+    this.botDir = path;
+    this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
+    this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERRUPTION);
+  }
+
+  public build = async (
+    luFiles: FileInfo[],
+    qnaFiles: FileInfo[],
+    allFiles: FileInfo[],
+    emptyFiles: { [key: string]: boolean }
+  ) => {
+    const userAgent = getUserAgent();
+    setEnvDefault('LUIS_USER_AGENT', userAgent);
+    setEnvDefault('QNA_USER_AGENT', userAgent);
+
     try {
       await this.createGeneratedDir();
       //do cross train before publish
@@ -76,10 +102,14 @@ export class Builder {
 
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
       const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
-
+      if (orchestratorBuildFiles.length) {
+        this.containOrchestrator = true;
+      } else {
+        this.containOrchestrator = false;
+      }
       await this.runLuBuild(luBuildFiles);
       await this.runQnaBuild(interruptionQnaFiles);
-      await this.runOrchestratorBuild(orchestratorBuildFiles);
+      await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
@@ -128,8 +158,8 @@ export class Builder {
    * 4) Generate settings file for runtime containing model and snapshot paths and place in /generated folder
    * @param luFiles LU Files needed to build snapshot data
    */
-  public runOrchestratorBuild = async (luFiles: FileInfo[]) => {
-    if (!luFiles.length) return;
+  public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
+    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
     const nlrList = await this.runOrchestratorNlrList();
     const defaultNLR = nlrList.default;
@@ -216,7 +246,50 @@ export class Builder {
         content: fi.content,
       }));
 
-    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, null, fullEmbedding);
+    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, '', null, fullEmbedding);
+  }
+
+  public async copyModelPathToBot() {
+    if (this.containOrchestrator) {
+      const nlrList = await this.runOrchestratorNlrList();
+      const defaultNLR = nlrList.default;
+      const folderName = defaultNLR.replace('.onnx', '');
+      const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
+      const destDir = Path.resolve(Path.join(this.botDir, MODEL), folderName);
+      await copy(modelPath, destDir);
+      await this.updateOrchestratorSetting(folderName);
+    }
+  }
+
+  public async getQnaConfig() {
+    const config = this._getConfig([]);
+    const subscriptionKeyEndpoint = `https://${config?.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    // Find any files that contain the name 'qnamaker.settings' in them
+    // These are generated by the LuBuild process and placed in the generated folder
+    // These contain dialog-to-luis app id mapping
+    const paths = await this.storage.glob('qnamaker.settings.*', this.generatedFolderPath);
+    if (!paths.length) return {};
+
+    const qnaConfigFile = await this.storage.readFile(Path.join(this.generatedFolderPath, paths[0]));
+    const qna: any = {};
+
+    const qnaConfig = await JSON.parse(qnaConfigFile);
+    const endpointKey = await this.qnaBuilder.getEndpointKeys(config.subscriptionKey, subscriptionKeyEndpoint);
+    Object.assign(qna, qnaConfig.qna, { endpointKey: endpointKey.primaryEndpointKey });
+
+    return qna;
+  }
+
+  private async updateOrchestratorSetting(dirName: string) {
+    const runtimeRootPath = './ComposerDialogs';
+    const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
+    const content = JSON.parse(await this.storage.readFile(settingPath));
+    content.orchestrator.ModelPath = `${runtimeRootPath}/${MODEL}/${dirName}`;
+    keys(content.orchestrator.snapshots).forEach((key) => {
+      const values = content.orchestrator.snapshots[key].split('ComposerDialogs');
+      content.orchestrator.snapshots[key] = `${runtimeRootPath}${values[1]}`;
+    });
+    await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
   }
 
   private async createGeneratedDir() {
@@ -369,20 +442,22 @@ export class Builder {
       culture: config.fallbackLocal,
     });
 
-    if (qnaContents) {
-      const subscriptionKeyEndpoint =
-        config.endpoint ?? `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    //we need to filter the source qna file out.
+    const filteredQnaContents = qnaContents?.filter((content) => !content.id.endsWith('.source'));
 
-      const buildResult = await this.qnaBuilder.build(qnaContents, config.subscriptionKey, config.botName, {
-        endpoint: subscriptionKeyEndpoint,
-        suffix: config.suffix,
-      });
+    if (!filteredQnaContents || filteredQnaContents.length === 0) return;
 
-      await this.qnaBuilder.writeDialogAssets(buildResult, {
-        force: true,
-        out: this.generatedFolderPath,
-      });
-    }
+    const subscriptionKeyEndpoint = `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+
+    const buildResult = await this.qnaBuilder.build(filteredQnaContents, config.subscriptionKey, config.botName, {
+      endpoint: subscriptionKeyEndpoint,
+      suffix: config.suffix,
+    });
+
+    await this.qnaBuilder.writeDialogAssets(buildResult, {
+      force: true,
+      out: this.generatedFolderPath,
+    });
   }
 
   //delete files in generated folder
@@ -412,7 +487,7 @@ export class Builder {
       region: this.config.authoringRegion || '',
       qnaRegion: this.config.qnaRegion || this.config.authoringRegion || '',
       botName: this.config.name || '',
-      suffix: this.config.environment || '',
+      suffix: this.config.environment || 'composer',
       fallbackLocal: this.config.defaultLanguage || 'en-us',
       endpoint: this.config.endpoint || null,
       authoringEndpoint: this.config.authoringEndpoint || null,
