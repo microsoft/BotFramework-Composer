@@ -140,6 +140,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
+  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
+  const rootLuisEndpointKey = groupLUISEndpointKey.root;
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
@@ -159,11 +161,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [qnaKeyErrorMsg, setQnAKeyErrorMsg] = useState<string>('');
 
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
+  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>(rootLuisEndpointKey ?? '');
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
   const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
+  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
@@ -227,6 +231,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
+  const handleRootLUISEndpointKeyOnChange = (e, value) => {
+    setLuisKeyErrorMsg('');
+    setLocalRootLuisEndpointKey(value);
+  };
+
   const handleRootQnAKeyOnChange = (e, value) => {
     if (value) {
       setQnAKeyErrorMsg('');
@@ -257,7 +266,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     });
   };
 
-  const handleRootLuisKeyOnBlur = () => {
+  const handleRootLuisAuthoringKeyOnBlur = () => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
         formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
@@ -266,6 +275,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     setSettings(projectId, {
       ...mergedSettings,
       luis: { ...mergedSettings.luis, authoringKey: localRootLuisKey },
+    });
+  };
+
+  const handleRootLuisEndpointKeyOnBlur = () => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, endpointKey: localRootLuisEndpointKey },
     });
   };
 
@@ -307,17 +323,32 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <div ref={luisKeyFieldRef}>
           <TextField
-            aria-label={formatMessage('LUIS key')}
-            data-testid={'rootLUISKey'}
+            aria-label={formatMessage('LUIS authoring key')}
+            data-testid={'rootLUISAuthoringKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
-            id={'luisKey'}
-            label={formatMessage('LUIS key')}
-            placeholder={formatMessage('Enter LUIS key')}
+            id={'luisAuthoringKey'}
+            label={formatMessage('LUIS authoring key')}
+            placeholder={formatMessage('Enter LUIS authoring key')}
             required={isLUISKeyNeeded}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
             value={localRootLuisKey}
-            onBlur={handleRootLuisKeyOnBlur}
+            onBlur={handleRootLuisAuthoringKeyOnBlur}
             onChange={handleRootLUISKeyOnChange}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
+        <div ref={luisEndpointKeyFieldRef}>
+          <TextField
+            aria-label={formatMessage('LUIS endpoint key')}
+            data-testid={'rootLUISEndpointKey'}
+            errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
+            id={'luisEndpointKey'}
+            label={formatMessage('LUIS endpoint key')}
+            placeholder={formatMessage('Enter LUIS endpoint key')}
+            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            value={localRootLuisEndpointKey}
+            onBlur={handleRootLuisEndpointKeyOnBlur}
+            onChange={handleRootLUISEndpointKeyOnChange}
             onRenderLabel={onRenderLabel}
           />
         </div>

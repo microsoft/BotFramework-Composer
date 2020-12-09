@@ -308,8 +308,9 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderBotHeader = (bot: BotInProject) => {
+    const displayName = `${bot.name} (${rootProjectId === bot.projectId ? 'Root Bot' : 'Skill'})`;
     const link: TreeLink = {
-      displayName: bot.name,
+      displayName,
       projectId: rootProjectId,
       skillId: rootProjectId === bot.projectId ? undefined : bot.projectId,
       isRoot: true,
