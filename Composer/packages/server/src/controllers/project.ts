@@ -16,9 +16,9 @@ import StorageService from '../services/storage';
 import settings from '../settings';
 import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
+import { TelemetryService } from '../services/telemetry';
 
 import { Path } from './../utility/path';
-import { TelemetryService } from '../services/telemetry';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
