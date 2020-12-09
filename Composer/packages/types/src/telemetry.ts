@@ -31,6 +31,10 @@ export enum PageNames {
   Plugin = 'Plugin',
   Settings = 'Settings',
   Unknown = 'Unknown',
+
+  // Extensions
+  Forms = 'Forms',
+  PackageManger = 'PackageManger',
 }
 
 type ApplicationEvents = {
@@ -47,7 +51,7 @@ type BotProjectEvents = {
   CreateNewBotProject: { method: 'toolbar' | 'newCallToAction' | 'luisCallToAction' };
   CreateNewBotProjectNextButton: { template: string };
   CreateNewBotProjectFromExample: { template: string };
-  CreateNewBotProjectCompleted: { template: string };
+  CreateNewBotProjectCompleted: { template: string; status: number };
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
   StartBotButtonClicked: { isRoot: boolean; location: string; projectId: string };
@@ -114,6 +118,8 @@ type PageView = {
   [PageNames.Plugin]: undefined;
   [PageNames.Settings]: undefined;
   [PageNames.Unknown]: undefined;
+  [PageNames.Forms]: undefined;
+  [PageNames.PackageManger]: undefined;
 };
 
 export type TelemetryEvents = ApplicationEvents &

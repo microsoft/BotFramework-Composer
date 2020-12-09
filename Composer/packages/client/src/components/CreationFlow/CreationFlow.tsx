@@ -138,7 +138,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       default:
         saveTemplateId(templateId);
         await handleCreateNew(formData, templateId);
-        TelemetryClient.track('CreateNewBotProjectCompleted', { template: templateId });
     }
   };
 

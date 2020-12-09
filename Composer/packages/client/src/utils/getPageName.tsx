@@ -14,6 +14,10 @@ const PagesRegex = {
   [PageNames.BotProjectsSettings]: /\/botProjectsSettings/i,
   [PageNames.Plugin]: /\/plugin/i,
   [PageNames.Settings]: /\/settings/i,
+
+  // Extensions
+  [PageNames.Forms]: /\/forms/i,
+  [PageNames.PackageManger]: /\/package-manager/i,
 };
 
 export const getPageName = (pathname: string): PageNames => {
