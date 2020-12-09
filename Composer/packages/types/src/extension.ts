@@ -8,9 +8,8 @@ import { PassportStatic } from 'passport';
 
 import { PublishPlugin } from './publish';
 import { RuntimeTemplate, BotTemplate } from './runtime';
-import { BotProjectService } from './project';
+import { BotProjectService, IBotProject } from './project';
 import { UserIdentity } from './user';
-import { IBotProject } from './server';
 
 export type ExtensionPublishContribution = {
   bundleId: string;
@@ -139,5 +138,5 @@ export type IExtensionContext = {
   on(event: 'project:created', listener: ProjectEventListener): void;
   on(event: ComposerEvent, listener: (...args: any[]) => void | Promise<void>): void;
 
-  emit(event: ComposerEvent, ...args: any[]): void;
+  emit(event: ComposerEvent, ...args: any[]): Promise<void>;
 };

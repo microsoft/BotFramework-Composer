@@ -6,12 +6,10 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import endsWith from 'lodash/endsWith';
+import { LocationRef, Resource } from '@botframework-composer/types';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
-import { LocationRef } from '../interface';
-
-import { Resource } from './../interface';
 
 jest.mock('azure-storage', () => {
   return {};

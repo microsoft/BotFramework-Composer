@@ -4,12 +4,12 @@
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { remove } from 'fs-extra';
+import { LocationRef } from '@botframework-composer/types';
 
 import { ExtensionContext } from '../models/extension/extensionContext';
 import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssetService from '../services/asset';
-import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';

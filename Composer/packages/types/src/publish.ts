@@ -3,7 +3,7 @@
 
 import type { JSONSchema7 } from 'json-schema';
 
-import type { IBotProject } from './server';
+import type { IBotProject } from './project';
 import type { UserIdentity } from './user';
 import type { ILuisConfig, IQnAConfig } from './settings';
 import { AuthParameters } from './auth';

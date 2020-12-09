@@ -6,10 +6,9 @@ import * as fs from 'fs';
 import { remove } from 'fs-extra';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 import formatMessage from 'format-message';
-import { UserIdentity } from '@botframework-composer/types';
+import { UserIdentity, LocationRef } from '@botframework-composer/types';
 
 import { ExtensionContext } from '../models/extension/extensionContext';
-import { LocationRef } from '../models/bot/interface';
 import settings from '../settings';
 import log from '../logger';
 import AssetService from '../services/asset';

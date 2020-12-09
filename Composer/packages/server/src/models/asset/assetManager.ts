@@ -11,11 +11,11 @@ import yeoman from 'yeoman-environment';
 import Environment from 'yeoman-environment';
 import TerminalAdapter from 'yeoman-environment/lib/adapter';
 import { QnABotTemplateId } from '@bfc/shared';
+import { LocationRef } from '@botframework-composer/types';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
-import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';

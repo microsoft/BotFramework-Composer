@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { getDefaultFeatureFlags, ServerSettings } from '@bfc/shared';
+import { LocationRef } from '@botframework-composer/types';
 
 import settings from '../settings';
-import { LocationRef } from '../models/bot/interface';
 import { StorageConnection } from '../models/storage/interface';
 import { BotProjectMetadata } from '../services/project';
 

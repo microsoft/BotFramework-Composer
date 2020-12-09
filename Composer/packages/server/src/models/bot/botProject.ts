@@ -16,6 +16,8 @@ import {
   FileExtensions,
   DialogUtils,
   checkForPVASchema,
+  LocationRef,
+  IBuildConfig,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity } from '@bfc/extension';
@@ -35,7 +37,6 @@ import AssetService from '../../services/asset';
 import { isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, IBuildConfig } from './interface';
 import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
@@ -64,11 +65,11 @@ export class BotProject implements IBotProject {
   public defaultUISchema: {
     [key: string]: string;
   };
-  public diagnostics: Diagnostic[] = [];
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
 
   private files = new Map<string, FileInfo>();
+  private diagnostics: Diagnostic[] = [];
 
   constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
     this.ref = ref;
@@ -184,7 +185,7 @@ export class BotProject implements IBotProject {
   };
 
   public getProject = () => {
-    const project = {
+    return {
       botName: this.name,
       files: Array.from(this.files.values()),
       location: this.dir,
@@ -193,7 +194,6 @@ export class BotProject implements IBotProject {
       settings: this.settings,
       filesWithoutRecognizers: Array.from(this.files.values()).filter(({ name }) => !isRecognizer(name)),
     };
-    return project;
   };
 
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
@@ -517,7 +517,7 @@ export class BotProject implements IBotProject {
     return locationRef;
   };
 
-  public copyTo = async (locationRef: LocationRef, user?: UserIdentity) => {
+  public copyTo = async (locationRef: LocationRef, user?: UserIdentity): Promise<IBotProject> => {
     const newProjRef = await this.cloneFiles(locationRef);
     return new BotProject(newProjRef, user, this.eTag || '');
   };

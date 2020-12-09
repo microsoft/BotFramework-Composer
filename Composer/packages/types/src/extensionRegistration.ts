@@ -9,7 +9,7 @@ import { IExtensionContext, ExtensionSettings } from './extension';
 import { PublishPlugin } from './publish';
 import { RuntimeTemplate, BotTemplate } from './runtime';
 import { UserIdentity } from './user';
-import { IBotProject } from './server';
+import { IBotProject } from './project';
 
 export type ExtensionStore<T = any> = {
   readAll(): Partial<T>;
