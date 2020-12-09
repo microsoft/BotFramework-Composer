@@ -570,7 +570,7 @@ async function createProjectAsync(req: Request, jobId: string) {
       });
     }
   } catch (err) {
-    BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err);
+    BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
   }
 }
 
