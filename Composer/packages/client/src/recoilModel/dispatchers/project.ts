@@ -29,6 +29,7 @@ import {
   createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
+  locationState,
   projectMetaDataState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
@@ -114,7 +115,7 @@ export const projectDispatcher = () => {
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
           throw new Error(
-            formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
+            formatMessage('This operation cannot be completed. The bot is already part of the Bot Project')
           );
         }
         const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
@@ -202,9 +203,20 @@ export const projectDispatcher = () => {
 
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', navigate = true) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
+        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+
+        if (rootBotId) {
+          const rootBotLocation = await snapshot.getPromise(locationState(rootBotId));
+          // Reloading the same bot. No need to fetch resources again.
+          if (rootBotLocation === path) {
+            navigateToBot(callbackHelpers, rootBotId);
+            return;
+          }
+        }
+
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
 
