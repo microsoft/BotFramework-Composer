@@ -111,15 +111,15 @@ const BotController: React.FC = () => {
 
   const handleClick = async () => {
     if (!botStartComplete) {
-      TelemetryClient.log('StartAllBotsButtonClicked');
+      TelemetryClient.track('StartAllBotsButtonClicked');
       startAllBots();
     } else {
       await stopAllBots();
       queueStartAllBots(true);
-      TelemetryClient.log('RestartAllBotsButtonClicked');
+      TelemetryClient.track('RestartAllBotsButtonClicked');
     }
     builderEssentials.forEach(({ projectId }) => {
-      TelemetryClient.log('StartBotStarted', { projectId });
+      TelemetryClient.track('StartBotStarted', { projectId });
     });
   };
 

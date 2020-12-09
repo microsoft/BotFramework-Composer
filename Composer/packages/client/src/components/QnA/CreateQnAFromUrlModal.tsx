@@ -144,7 +144,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
               return;
             }
             onSubmit(formData);
-            TelemetryClient.log('AddNewKnowledgeBaseCompleted');
+            TelemetryClient.track('AddNewKnowledgeBaseCompleted');
           }}
         />
       </DialogFooter>

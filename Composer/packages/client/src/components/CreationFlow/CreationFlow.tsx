@@ -99,7 +99,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
     const projectId = await openProject(botFolder);
-    TelemetryClient.log('BotProjectOpened', { method: 'toolbar', projectId });
+    TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
@@ -137,7 +137,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       default:
         saveTemplateId(templateId);
         await handleCreateNew(formData, templateId);
-        TelemetryClient.log('CreateNewBotProjectCompleted', { template: templateId });
+        TelemetryClient.track('CreateNewBotProjectCompleted', { template: templateId });
     }
   };
 

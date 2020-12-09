@@ -82,7 +82,7 @@ export const SideBar = () => {
               iconName: 'GlobalNavButton',
             }}
             onClick={() => {
-              TelemetryClient.log(sideBarExpand ? 'LeftMenuCollapsed' : 'LeftMenuExpanded');
+              TelemetryClient.track(sideBarExpand ? 'LeftMenuCollapsed' : 'LeftMenuExpanded');
               setSideBarExpand((current) => !current);
             }}
           />

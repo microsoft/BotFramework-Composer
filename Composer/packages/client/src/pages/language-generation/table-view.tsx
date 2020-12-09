@@ -435,7 +435,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onClick={() => {
             onCreateNewTemplate();
             setMessage(formatMessage('item added'));
-            TelemetryClient.log('NewTemplateAdded');
+            TelemetryClient.track('NewTemplateAdded');
           }}
         >
           {formatMessage('New template')}

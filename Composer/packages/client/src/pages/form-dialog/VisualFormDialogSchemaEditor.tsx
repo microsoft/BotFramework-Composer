@@ -95,7 +95,7 @@ export const VisualFormDialogSchemaEditor = React.memo((props: Props) => {
         <ActionButton
           onClick={() => {
             setShowEditor(!showEditor);
-            TelemetryClient.log('EditModeToggled');
+            TelemetryClient.track('EditModeToggled');
           }}
         >
           {showEditor ? formatMessage('Hide code') : formatMessage('Show code')}

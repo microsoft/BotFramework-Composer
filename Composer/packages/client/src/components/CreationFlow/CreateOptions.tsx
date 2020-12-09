@@ -164,7 +164,7 @@ export function CreateOptions(props: CreateOptionsProps) {
     let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
       routeToTemplate = currentTemplate;
-      TelemetryClient.log('CreateNewBotProjectFromExample', { template: routeToTemplate });
+      TelemetryClient.track('CreateNewBotProjectFromExample', { template: routeToTemplate });
     }
 
     if (option === optionKeys.createFromQnA) {
@@ -175,7 +175,7 @@ export function CreateOptions(props: CreateOptionsProps) {
       routeToTemplate += props.location.search;
     }
 
-    TelemetryClient.log('CreateNewBotProjectNextButton', { template: routeToTemplate });
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
     onNext(routeToTemplate);
   };
 

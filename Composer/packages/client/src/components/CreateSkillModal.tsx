@@ -179,7 +179,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
       !Object.values(formDataErrors).some(Boolean)
     ) {
       onSubmit(formData.manifestUrl, formData.endpointName);
-      TelemetryClient.log('AddNewSkillCompleted');
+      TelemetryClient.track('AddNewSkillCompleted');
     }
   };
 

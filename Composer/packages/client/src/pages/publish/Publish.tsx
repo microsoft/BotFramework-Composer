@@ -163,7 +163,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         },
         onClick: () => {
           setPullDialogHidden(false);
-          TelemetryClient.log('ToolbarButtonClicked', { name: 'pullFromProfile' });
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'pullFromProfile' });
         },
       },
       align: 'left',

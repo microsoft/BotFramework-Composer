@@ -156,7 +156,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     async (name: string, type: string, configuration: string) => {
       const targets = [...(publishTargets || []), { name, type, configuration }];
       await setPublishTargets(targets, projectId);
-      TelemetryClient.log('NewPublishingProfileSaved', { type });
+      TelemetryClient.track('NewPublishingProfileSaved', { type });
     },
     [publishTargets, projectId]
   );
@@ -236,7 +236,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
             styles={addPublishProfile}
             onClick={() => {
               setAddDialogHidden(false);
-              TelemetryClient.log('NewPublishingProfileStarted');
+              TelemetryClient.track('NewPublishingProfileStarted');
             }}
           >
             {formatMessage('Add new publish profile')}

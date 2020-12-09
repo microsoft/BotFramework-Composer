@@ -37,7 +37,7 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
           title={formatMessage('Stop Bot')}
           onClick={() => {
             stopSingleBot(projectId);
-            TelemetryClient.log('StopBotButtonClicked', { isRoot, projectId, location: 'botController' });
+            TelemetryClient.track('StopBotButtonClicked', { isRoot, projectId, location: 'botController' });
           }}
         />
       );
@@ -51,7 +51,7 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
           title={formatMessage('Start Bot')}
           onClick={() => {
             startSingleBot(projectId);
-            TelemetryClient.log('StartBotButtonClicked', { isRoot, projectId, location: 'botController' });
+            TelemetryClient.track('StartBotButtonClicked', { isRoot, projectId, location: 'botController' });
           }}
         />
       );

@@ -284,7 +284,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     onDismiss();
     onSubmit(dialogId, formData);
-    TelemetryClient.log('AddNewTriggerCompleted', { kind: formData.$kind });
+    TelemetryClient.track('AddNewTriggerCompleted', { kind: formData.$kind });
   };
 
   const onSelectTriggerType = (e, option) => {

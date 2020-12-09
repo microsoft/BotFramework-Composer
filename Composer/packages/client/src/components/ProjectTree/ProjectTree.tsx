@@ -228,7 +228,7 @@ export const ProjectTree: React.FC<Props> = ({
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
-  const debouncedTelemetry = useRef(debounce(() => TelemetryClient.log('ProjectTreeFilterUsed'), 1000)).current;
+  const debouncedTelemetry = useRef(debounce(() => TelemetryClient.track('ProjectTreeFilterUsed'), 1000)).current;
   const delayedSetFilter = throttle((newValue) => {
     setFilter(newValue);
     debouncedTelemetry();
@@ -332,7 +332,7 @@ export const ProjectTree: React.FC<Props> = ({
         icon: 'Add',
         onClick: () => {
           onBotCreateDialog(bot.projectId);
-          TelemetryClient.log('AddNewDialogStarted');
+          TelemetryClient.track('AddNewDialogStarted');
         },
       },
       {
@@ -340,7 +340,7 @@ export const ProjectTree: React.FC<Props> = ({
         icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
         onClick: () => {
           isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
-          TelemetryClient.log(isRunning ? 'StopBotButtonClicked' : 'StartBotButtonClicked', {
+          TelemetryClient.track(isRunning ? 'StopBotButtonClicked' : 'StartBotButtonClicked', {
             projectId: bot.projectId,
             location: 'projectTree',
             isRoot: bot.projectId === rootProjectId,
@@ -414,7 +414,7 @@ export const ProjectTree: React.FC<Props> = ({
         icon: 'Add',
         onClick: () => {
           onDialogCreateTrigger(skillId, dialog.id);
-          TelemetryClient.log('AddNewTriggerStarted');
+          TelemetryClient.track('AddNewTriggerStarted');
         },
       },
       {
@@ -428,7 +428,7 @@ export const ProjectTree: React.FC<Props> = ({
       icon: 'Add',
       onClick: () => {
         createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
-        TelemetryClient.log('AddNewKnowledgeBaseStarted');
+        TelemetryClient.track('AddNewKnowledgeBaseStarted');
       },
     };
 

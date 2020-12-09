@@ -27,10 +27,10 @@ export const useInitializeLogger = () => {
     ipcRenderer?.on('session-update', (_event, name) => {
       switch (name) {
         case 'session-started':
-          TelemetryClient.log('SessionStarted', { os: window.navigator.platform });
+          TelemetryClient.track('SessionStarted', { os: window.navigator.platform });
           break;
         case 'session-ended':
-          TelemetryClient.log('SessionEnded');
+          TelemetryClient.track('SessionEnded');
           TelemetryClient.drain();
           break;
         default:
@@ -40,7 +40,7 @@ export const useInitializeLogger = () => {
   }, []);
 
   useEffect(() => {
-    TelemetryClient.log('NavigateTo', { sectionName: page, url });
+    TelemetryClient.track('NavigateTo', { sectionName: page, url });
     TelemetryClient.pageView(page, url);
   }, [page]);
 

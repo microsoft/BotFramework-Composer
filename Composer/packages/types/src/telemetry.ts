@@ -7,12 +7,6 @@ export type ServerSettings = Partial<{ telemetry: TelemetrySettings }>;
 
 export type LogData = Record<string, unknown>;
 
-export type TelemetryLogger = {
-  logEvent: (name: string, properties: LogData) => void;
-  logPageView: (name: string, url: string, properties: LogData) => void;
-  drain?: () => void;
-};
-
 export enum TelemetryEventTypes {
   TrackEvent = 'TrackEvent',
   PageView = 'PageView',
@@ -137,7 +131,7 @@ export type TelemetryEvents = ApplicationEvents &
 export type TelemetryEventName = keyof TelemetryEvents;
 
 export type TelemetryClient = {
-  log: <TN extends TelemetryEventName>(
+  track: <TN extends TelemetryEventName>(
     eventName: TN,
     properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
   ) => void;

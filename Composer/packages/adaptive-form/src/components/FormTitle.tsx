@@ -157,7 +157,7 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
                 rel="noopener noreferrer"
                 target="_blank"
                 onClick={() => {
-                  shellApi.telemetryClient?.log('HelpLinkClicked', { url: uiOptions.helpLink as string });
+                  shellApi.telemetryClient?.track('HelpLinkClicked', { url: uiOptions.helpLink as string });
                 }}
               >
                 {formatMessage('Learn more')}

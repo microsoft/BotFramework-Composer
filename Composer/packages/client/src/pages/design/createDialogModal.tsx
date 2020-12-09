@@ -97,7 +97,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
       const dialogData = seedNewDialog(formData);
 
       onSubmit(formData.name, dialogData);
-      TelemetryClient.log('AddNewDialogCompleted');
+      TelemetryClient.track('AddNewDialogCompleted');
     },
     [hasErrors, formData]
   );

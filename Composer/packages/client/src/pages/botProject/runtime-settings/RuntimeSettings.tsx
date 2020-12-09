@@ -81,7 +81,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const toggleCustomRuntime = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
-    TelemetryClient.log('CustomRuntimeToggleChanged', { enabled: isOn });
+    TelemetryClient.track('CustomRuntimeToggleChanged', { enabled: isOn });
   };
 
   const updateSetting = (field) => (e, newValue) => {
@@ -131,7 +131,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     await runtimeEjection?.onAction(projectId, templateKey);
     setEjecting(false);
     setTemplateKey(templateKey);
-    TelemetryClient.log('GetNewRuntime', { runtimeType: templateKey });
+    TelemetryClient.track('GetNewRuntime', { runtimeType: templateKey });
   };
 
   const callUpdateBoilerplate = async () => {

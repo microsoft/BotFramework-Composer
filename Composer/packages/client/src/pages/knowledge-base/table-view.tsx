@@ -349,7 +349,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                         iconProps: { iconName: 'CodeEdit' },
                         onClick: () => {
                           navigateTo(`${baseURL}knowledge-base/${dialogId}/edit?C=${containerId}`);
-                          TelemetryClient.log('EditModeToggled');
+                          TelemetryClient.track('EditModeToggled');
                         },
                       },
                       {
@@ -391,7 +391,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                 onClick={() => {
                   onCreateNewQnAPairsStart(props.group?.key);
                   actions.setMessage('item added');
-                  TelemetryClient.log('NewQnAPair');
+                  TelemetryClient.track('NewQnAPair');
                 }}
               >
                 {formatMessage('+ Add QnA Pair')}
@@ -453,7 +453,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
               styles={addAlternative}
               onClick={() => {
                 setCreatingQuestionInKthSection(item.sectionId);
-                TelemetryClient.log('AlternateQnAPhraseAdded');
+                TelemetryClient.track('AlternateQnAPhraseAdded');
               }}
             >
               {formatMessage('+ Add alternative phrasing')}
@@ -786,7 +786,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             text={formatMessage('Create new KB')}
             onClick={() => {
               actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId, dialogId });
-              TelemetryClient.log('AddNewKnowledgeBaseStarted');
+              TelemetryClient.track('AddNewKnowledgeBaseStarted');
             }}
           />
         </div>

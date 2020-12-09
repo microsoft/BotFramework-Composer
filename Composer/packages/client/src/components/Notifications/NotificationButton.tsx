@@ -49,7 +49,7 @@ const NotificationButton: React.FC<NotificationButtonProps> = ({ buttonStyles })
   const toggleIsOpen = () => {
     if (!isOpen) {
       notifications.map(({ id }) => markNotificationAsRead(id));
-      TelemetryClient.log('NotificationPanelOpened');
+      TelemetryClient.track('NotificationPanelOpened');
     }
     setIsOpen(!isOpen);
   };

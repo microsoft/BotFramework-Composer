@@ -266,7 +266,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateUserSettings,
     confirm: OpenConfirmModal,
     telemetryClient: {
-      log: (...args) => TelemetryClient.log(...args),
+      track: (...args) => TelemetryClient.track(...args),
       pageView: (...args) => TelemetryClient.pageView(...args),
     },
   };

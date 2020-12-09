@@ -39,7 +39,7 @@ export const BotRuntimeStatus = React.memo((props: BotRuntimeStatusProps) => {
       case BotStatus.failed:
         setIntervalRunning(false);
         stopSingleBot(projectId);
-        TelemetryClient.log('StartBotCompleted', { projectId, status: currentBotStatus });
+        TelemetryClient.track('StartBotCompleted', { projectId, status: currentBotStatus });
         break;
       case BotStatus.published:
         setIntervalRunning(false);
@@ -56,7 +56,7 @@ export const BotRuntimeStatus = React.memo((props: BotRuntimeStatusProps) => {
           }, pollingInterval);
         }
         setIntervalRunning(false);
-        TelemetryClient.log('StartBotCompleted', { projectId, status: currentBotStatus });
+        TelemetryClient.track('StartBotCompleted', { projectId, status: currentBotStatus });
         break;
       }
     }

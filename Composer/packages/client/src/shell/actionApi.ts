@@ -87,7 +87,7 @@ export const useActionApi = (projectId: string) => {
 
   async function constructActions(dialogId: string, actions: MicrosoftIDialog[]) {
     actions.forEach(({ $kind }) => {
-      TelemetryClient.log('ActionAdded', { type: $kind });
+      TelemetryClient.track('ActionAdded', { type: $kind });
     });
     // '- hi' -> 'SendActivity_1234'
     const referenceLgText: FieldProcessorAsync<string> = async (fromId, fromAction, toId, toAction, lgFieldName) =>
@@ -121,7 +121,7 @@ export const useActionApi = (projectId: string) => {
   }
 
   async function constructAction(dialogId: string, action: MicrosoftIDialog) {
-    TelemetryClient.log('ActionAdded', { type: action.$kind });
+    TelemetryClient.track('ActionAdded', { type: action.$kind });
     const [newAction] = await constructActions(dialogId, [action]);
     return newAction;
   }
@@ -132,7 +132,7 @@ export const useActionApi = (projectId: string) => {
   }
 
   async function deleteAction(dialogId: string, action: MicrosoftIDialog) {
-    TelemetryClient.log('ActionDeleted', { type: action.$kind });
+    TelemetryClient.track('ActionDeleted', { type: action.$kind });
     return destructAction(
       action,
       (templates: string[]) => removeLgTemplates(dialogId, templates),
@@ -142,7 +142,7 @@ export const useActionApi = (projectId: string) => {
 
   async function deleteActions(dialogId: string, actions: MicrosoftIDialog[]) {
     actions.forEach(({ $kind }) => {
-      TelemetryClient.log('ActionDeleted', { type: $kind });
+      TelemetryClient.track('ActionDeleted', { type: $kind });
     });
     return destructActions(
       actions,

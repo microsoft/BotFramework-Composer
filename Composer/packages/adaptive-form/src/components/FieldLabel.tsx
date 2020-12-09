@@ -54,7 +54,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
                 rel="noopener noreferrer"
                 target="_blank"
                 onClick={() => {
-                  telemetryClient.log('HelpLinkClicked', { url: helpLink });
+                  telemetryClient.track('HelpLinkClicked', { url: helpLink });
                 }}
               >
                 {formatMessage('Learn more')}
@@ -73,7 +73,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
             // Only log TooltipOpened event if the user opened
             // the tooltip for longer than 1000ms
             if (duration > 1000) {
-              telemetryClient?.log('TooltipOpened', {
+              telemetryClient?.track('TooltipOpened', {
                 duration,
                 location: baseSchema?.properties?.$kind?.const as string,
                 title,
