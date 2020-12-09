@@ -19,6 +19,7 @@ import { Skill } from './indexers';
 import type { ILUFeaturesConfig, SkillSetting, UserSettings, DialogSetting } from './settings';
 import { MicrosoftIDialog } from './sdk';
 import { FeatureFlagKey } from './featureFlags';
+import { TelemetryClient } from './telemetry';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
@@ -70,6 +71,8 @@ export type ApplicationContextApi = {
   isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
+  // TODO: Add TelemetryClient interface
+  telemetryClient: TelemetryClient;
 };
 
 export type ApplicationContext = {

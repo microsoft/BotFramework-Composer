@@ -18,6 +18,7 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification, PublishType } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -152,7 +153,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         iconProps: {
           iconName: 'CloudDownload',
         },
-        onClick: () => setPullDialogHidden(false),
+        onClick: () => {
+          setPullDialogHidden(false);
+          TelemetryClient.log('ToolbarButtonClicked', { name: 'pullFromProfile' });
+        },
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Pull',

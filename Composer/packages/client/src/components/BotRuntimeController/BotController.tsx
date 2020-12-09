@@ -17,9 +17,11 @@ import {
   dispatcherState,
   runningBotsSelector,
   allDiagnosticsSelectorFamily,
+  rootBotProjectIdSelector,
 } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -64,6 +66,7 @@ const BotController: React.FC = () => {
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
   const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -106,8 +109,10 @@ const BotController: React.FC = () => {
 
   const handleClick = () => {
     if (!botStartComplete) {
+      TelemetryClient.log('StartAllBotsButtonClicked');
       startAllBots();
     } else {
+      TelemetryClient.log('StopAllBotsButtonClicked');
       stopAllBots();
     }
   };
@@ -142,9 +147,10 @@ const BotController: React.FC = () => {
       key: projectId,
       displayName,
       projectId,
+      isRoot: projectId === rootProjectId,
       setGlobalErrorCalloutVisibility,
     }));
-  }, [projectCollection]);
+  }, [projectCollection, rootProjectId]);
 
   return (
     <React.Fragment>

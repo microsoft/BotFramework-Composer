@@ -10,18 +10,20 @@ import formatMessage from 'format-message';
 
 import { botStatusState } from '../../recoilModel';
 import { BotStatus } from '../../constants';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { useBotOperations } from './useBotOperations';
 
 interface BotRuntimeOperationsProps {
   projectId: string;
+  isRoot: boolean;
 }
 
 const loadingSpinnerStyle = css`
   margin-left: 8px;
 `;
 
-export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ projectId }) => {
+export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ projectId, isRoot }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const { startSingleBot, stopSingleBot } = useBotOperations();
 
@@ -33,7 +35,10 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
           iconProps={{ iconName: 'CircleStopSolid' }}
           styles={{ root: { height: '20px' } }}
           title={formatMessage('Stop Bot')}
-          onClick={() => stopSingleBot(projectId)}
+          onClick={() => {
+            stopSingleBot(projectId);
+            TelemetryClient.log('StopBotButtonClicked', { isRoot, projectId });
+          }}
         />
       );
     case BotStatus.inactive:
@@ -44,7 +49,10 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
           iconProps={{ iconName: 'Play' }}
           styles={{ root: { height: '20px' } }}
           title={formatMessage('Start Bot')}
-          onClick={() => startSingleBot(projectId)}
+          onClick={() => {
+            TelemetryClient.log('StartBotButtonClicked', { isRoot, projectId });
+            startSingleBot(projectId);
+          }}
         />
       );
     default:

@@ -25,18 +25,42 @@ export type TelemetryEvent = {
   properties?: LogData;
 };
 
+export enum PageNames {
+  Design = 'Design',
+  Home = 'Home',
+  LanguageGeneration = 'LanguageGeneration',
+  LanguageUnderstanding = 'LanguageUnderstanding',
+  KnowledgeBase = 'KnowledgeBase',
+  Publish = 'Publish',
+  Diagnostics = 'Diagnostics',
+  BotProjectsSettings = 'BotProjectsSettings',
+  Plugin = 'Plugin',
+  Settings = 'Settings',
+  Unknown = 'Unknown',
+}
+
+type ApplicationEvents = {
+  NotificationPanelOpened: undefined;
+};
+
 type SessionEvents = {
-  SessionStarted: { resolution: string; pva: boolean };
+  SessionStarted: { resolution: string; os: string };
   SessionEnded: undefined;
   NavigateTo: { sectionName: string };
 };
 
 type BotProjectEvents = {
-  CreateNewBotProjectUsingNewButton: undefined;
-  CreateNewBotProjectNextButton: undefined;
-  CreateNewBotProjectFromExample: undefined;
-  CreateNewBotProjectCompleted: undefined;
-  BotProjectOpened: undefined;
+  CreateNewBotProject: { method: 'toolbar' | 'newCallToAction' | 'luisCallToAction' };
+  CreateNewBotProjectNextButton: { template: string };
+  CreateNewBotProjectFromExample: { template: string };
+  CreateNewBotProjectCompleted: { template: string };
+  BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
+  StartAllBotsButtonClicked: undefined;
+  StartBotButtonClicked: { isRoot: boolean; projectId };
+  StartBotStarted: { projectId: string };
+  StartBotCompleted: { projectId: string; status: string };
+  StopAllBotsButtonClicked: undefined;
+  StopBotButtonClicked: { isRoot: boolean; projectId: string };
 };
 
 type DesignerEvents = {
@@ -45,48 +69,82 @@ type DesignerEvents = {
   EditModeToggled: undefined;
   HelpLinkClicked: { url: string };
   ToolbarButtonClicked: { name: string };
-  EmulatorButtonClicked: undefined;
+  EmulatorButtonClicked: { isRoot: boolean };
   LeftMenuExpanded: undefined;
   LeftMenuCollapsed: undefined;
-  LeftMenuFilterUsed: undefined;
-  TooltipOpened: { location?: string; title: string };
-  NewTriggerStarted: undefined;
-  NewTriggerCompleted: { kind: string };
-  NewDialogAdded: undefined;
-  AddNewSkillStarted: undefined;
+  ProjectTreeFilterUsed: undefined;
+  TooltipOpened: { location?: string; title: string; duration: number };
+  AddNewTriggerStarted: undefined;
+  AddNewTriggerCompleted: { kind: string };
+  AddNewDialogStarted: undefined;
+  AddNewDialogCompleted: undefined;
+  AddNewSkillStarted: { method: string };
   AddNewSkillCompleted: undefined;
-  UseCustomRuntimeToggle: undefined;
   NewTemplateAdded: undefined;
   FormDialogGenerated: { durationMilliseconds: number };
 };
 
 type QnaEvents = {
-  NewKnowledgeBaseStarted: undefined;
-  NewKnowledgeBaseCreated: undefined;
+  AddNewKnowledgeBaseStarted: undefined;
+  AddNewKnowledgeBaseCompleted: undefined;
   NewQnAPair: undefined;
   AlternateQnAPhraseAdded: undefined;
-  QnAEditModeToggled: undefined;
 };
 
 type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
-  NewPublishingProfileSaved: undefined;
+  NewPublishingProfileSaved: { type: string };
   PublishingProfileStarted: undefined;
-  PublishingProfileCompleted: undefined;
+  PublishingProfileCompleted: { type: string };
 };
 
 type AppSettingsEvents = {
   FeatureFlagChanged: { featureFlag: string; enabled: boolean };
 };
 
+type BotSettingsEvents = {
+  CustomRuntimeToggleChanged: { enabled: boolean };
+  GetNewRuntime: { runtimeType: string };
+};
+
 type OtherEvents = {};
 
-export type TelemetryEvents = BotProjectEvents &
+type PageView = {
+  [PageNames.Design]: undefined;
+  [PageNames.Home]: undefined;
+  [PageNames.LanguageGeneration]: undefined;
+  [PageNames.LanguageUnderstanding]: undefined;
+  [PageNames.KnowledgeBase]: undefined;
+  [PageNames.Publish]: undefined;
+  [PageNames.Diagnostics]: undefined;
+  [PageNames.BotProjectsSettings]: undefined;
+  [PageNames.Plugin]: undefined;
+  [PageNames.Settings]: undefined;
+  [PageNames.Unknown]: undefined;
+};
+
+export type TelemetryEvents = ApplicationEvents &
+  BotProjectEvents &
   DesignerEvents &
-  OtherEvents &
   SessionEvents &
+  BotSettingsEvents &
+  OtherEvents &
   PublishingEvents &
   QnaEvents &
-  AppSettingsEvents;
+  AppSettingsEvents &
+  PageView;
 
 export type TelemetryEventName = keyof TelemetryEvents;
+
+export type TelemetryClient = {
+  log: <TN extends TelemetryEventName>(
+    eventName: TN,
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+  ) => void;
+
+  pageView: <TN extends TelemetryEventName>(
+    eventName: TN,
+    url: string,
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+  ) => void;
+};
