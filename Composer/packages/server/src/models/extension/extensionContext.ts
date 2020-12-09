@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import { EventEmitter } from 'events';
-
 import passport from 'passport';
 import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
@@ -32,6 +30,15 @@ class AsyncEventEmitter {
     this.listeners.get(event)?.push(listener);
   }
 
+  public removeListener(event: string, listener: Listener) {
+    const eventListeners = this.listeners.get(event);
+
+    if (eventListeners && eventListeners.length > 0) {
+      const newListeners = eventListeners.filter((l) => l !== listener);
+      this.listeners.set(event, newListeners);
+    }
+  }
+
   public on(event: string, listener: Listener) {
     this.addListener(event, listener);
   }
@@ -39,7 +46,13 @@ class AsyncEventEmitter {
   public async emit(event: string, ...args: any[]) {
     const listeners = this.listeners.get(event) ?? [];
 
-    await Promise.all(listeners.map((l) => l(...args)));
+    for (const l of listeners) {
+      try {
+        await l(...args);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
 }
 

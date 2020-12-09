@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IBotProject } from './server';
+import { IBotProject } from './project';
 import { DialogSetting } from './settings';
 
 type Stat = {

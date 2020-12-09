@@ -4,13 +4,12 @@
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
-import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
+import { luImportResolverGenerator, ResolverResource, LocationRef } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
 import { ensureDir, existsSync, remove } from 'fs-extra';
 
 import { BotProject } from '../models/bot/botProject';
-import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
 import log from '../logger';
 import { ExtensionContext } from '../models/extension/extensionContext';
