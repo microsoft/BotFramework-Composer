@@ -582,7 +582,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <ActionButton
           onClick={() => {
             setDialogJsonVisibility((current) => !current);
-            TelemetryClient.track('EditModeToggled', { jsonView: !current });
+            TelemetryClient.track('EditModeToggled', { jsonView: dialogJsonVisible });
           }}
         >
           {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}

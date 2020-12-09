@@ -265,10 +265,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     setApplicationLevelError,
     updateUserSettings,
     confirm: OpenConfirmModal,
-    telemetryClient: {
-      track: (...args) => TelemetryClient.track(...args),
-      pageView: (...args) => TelemetryClient.pageView(...args),
-    },
+    telemetryClient: TelemetryClient,
   };
 
   const currentDialog = useMemo(() => {
