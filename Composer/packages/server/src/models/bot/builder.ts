@@ -19,11 +19,11 @@ import { COMPOSER_VERSION } from '../../constants';
 
 import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
-const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
-const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
-const qnaBuild = require('@bfcomposer/bf-lu/lib/parser/qnabuild/builder.js');
-const LuisBuilder = require('@bfcomposer/bf-lu/lib/parser/luis/luisBuilder');
-const luisToLuContent = require('@bfcomposer/bf-lu/lib/parser/luis/luConverter');
+const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
+const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
+const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
+const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const SETTINGS = 'settings';
@@ -48,9 +48,9 @@ export type DownSamplingConfig = {
   maxUtteranceAllowed: number;
 };
 
-const getUserAgent = (botName: string, botId: string) => {
-  const platform = useElectronContext() ? 'electron' : 'web';
-  return `composer-${COMPOSER_VERSION}-${botName}-${botId}-${platform}`;
+const getUserAgent = () => {
+  const platform = useElectronContext() ? 'desktop' : 'web';
+  return `composer-${COMPOSER_VERSION}-${platform}`;
 };
 
 export class Builder {
@@ -88,11 +88,9 @@ export class Builder {
     luFiles: FileInfo[],
     qnaFiles: FileInfo[],
     allFiles: FileInfo[],
-    emptyFiles: { [key: string]: boolean },
-    botName: string,
-    botId: string
+    emptyFiles: { [key: string]: boolean }
   ) => {
-    const userAgent = getUserAgent(botName, botId);
+    const userAgent = getUserAgent();
     setEnvDefault('LUIS_USER_AGENT', userAgent);
     setEnvDefault('QNA_USER_AGENT', userAgent);
 

@@ -2361,28 +2361,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bfcomposer/bf-lu@1.5.7":
-  version "1.5.7"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.5.7.tgz#00184cfa946e5b8a4be745e6c3ebe75570be9745"
-  integrity sha1-ABhM+pRuW4pL50Xmw+vnVXC+l0U=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "~4.8.0"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.19"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^2.0.3"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -3151,15 +3129,15 @@
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
 
-"@microsoft/bf-lu@^4.11.0-rc.20201030.a9f9b96":
-  version "4.11.0-rc.20201030.a9f9b96"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-rc.20201030.a9f9b96.tgz#9fcb2a18d66bcef74eabc98f06df4574215c402f"
-  integrity sha512-+VFZUGQdH+1lwuSxE9G2lOqO6KPevvhijKyX8N93/I+VxwfHuCF/BZ439MseT3+vJ9OzATfkeccqgOuI/kNBlQ==
+"@microsoft/bf-lu@^4.12.0-dev.20201209.a2ab9dd":
+  version "4.12.0-dev.20201209.a2ab9dd"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20201209.a2ab9dd.tgz#edf04d5f7eab1bad05c759e9e8fde8acb7e3dd5e"
+  integrity sha512-w7gr7w4yOfXpooFNGEcKC+WC6WYxRK5SLQBbZzL2lWPwp+3P+d7Yih/HgnZPpFIg//IK6v/b/JfySYZUe0+fBA==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
     "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
+    antlr4 "~4.8.0"
     chalk "2.4.1"
     console-stream "^0.1.1"
     deep-equal "^1.0.1"
