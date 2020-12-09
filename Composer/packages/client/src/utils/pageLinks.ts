@@ -113,4 +113,11 @@ export const bottomLinks = [
     labelName: formatMessage('Composer Settings'),
     disabled: false,
   },
+  {
+    to: `/extensions`,
+    iconName: 'OEM',
+    labelName: formatMessage('Extensions'),
+    exact: true,
+    disabled: false,
+  },
 ];
