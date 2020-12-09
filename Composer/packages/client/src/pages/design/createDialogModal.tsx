@@ -15,6 +15,7 @@ import { DialogCreationCopy } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { actionsSeedState, schemasState, validateDialogsSelectorFamily } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -96,6 +97,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
       const dialogData = seedNewDialog(formData);
 
       onSubmit(formData.name, dialogData);
+      TelemetryClient.track('AddNewDialogCompleted');
     },
     [hasErrors, formData]
   );

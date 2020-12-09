@@ -16,6 +16,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { CreatePublishTarget } from '../publish/createPublishTarget';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -155,6 +156,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     async (name: string, type: string, configuration: string) => {
       const targets = [...(publishTargets || []), { name, type, configuration }];
       await setPublishTargets(targets, projectId);
+      TelemetryClient.track('NewPublishingProfileSaved', { type });
     },
     [publishTargets, projectId]
   );
@@ -232,7 +234,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           <ActionButton
             data-testid={'addNewPublishProfile'}
             styles={addPublishProfile}
-            onClick={() => setAddDialogHidden(false)}
+            onClick={() => {
+              setAddDialogHidden(false);
+              TelemetryClient.track('NewPublishingProfileStarted');
+            }}
           >
             {formatMessage('Add new publish profile')}
           </ActionButton>

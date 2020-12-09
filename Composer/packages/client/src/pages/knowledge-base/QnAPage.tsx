@@ -14,6 +14,7 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { dialogsSelectorFamily, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
 
@@ -54,6 +55,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       let url = `${baseURL}knowledge-base/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
+      TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
     [dialogId, actualProjectId, edit]
   );

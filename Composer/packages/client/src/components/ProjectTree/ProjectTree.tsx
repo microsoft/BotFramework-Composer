@@ -9,6 +9,7 @@ import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZ
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport } from '@bfc/shared';
+import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
@@ -28,6 +29,7 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { BotStatus } from '../../constants';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -226,7 +228,11 @@ export const ProjectTree: React.FC<Props> = ({
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
-  const delayedSetFilter = throttle((newValue) => setFilter(newValue), 200);
+  const debouncedTelemetry = useRef(debounce(() => TelemetryClient.track('ProjectTreeFilterUsed'), 1000)).current;
+  const delayedSetFilter = throttle((newValue) => {
+    setFilter(newValue);
+    debouncedTelemetry();
+  }, 200);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
@@ -326,6 +332,7 @@ export const ProjectTree: React.FC<Props> = ({
         icon: 'Add',
         onClick: () => {
           onBotCreateDialog(bot.projectId);
+          TelemetryClient.track('AddNewDialogStarted');
         },
       },
       {
@@ -333,6 +340,11 @@ export const ProjectTree: React.FC<Props> = ({
         icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
         onClick: () => {
           isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
+          TelemetryClient.track(isRunning ? 'StopBotButtonClicked' : 'StartBotButtonClicked', {
+            projectId: bot.projectId,
+            location: 'projectTree',
+            isRoot: bot.projectId === rootProjectId,
+          });
         },
       },
       {
@@ -402,6 +414,7 @@ export const ProjectTree: React.FC<Props> = ({
         icon: 'Add',
         onClick: () => {
           onDialogCreateTrigger(skillId, dialog.id);
+          TelemetryClient.track('AddNewTriggerStarted');
         },
       },
       {
@@ -415,6 +428,7 @@ export const ProjectTree: React.FC<Props> = ({
       icon: 'Add',
       onClick: () => {
         createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
+        TelemetryClient.track('AddNewKnowledgeBaseStarted');
       },
     };
 
