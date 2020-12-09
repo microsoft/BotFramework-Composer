@@ -38,12 +38,24 @@ function initialize(registration: IExtensionRegistration) {
   });
 
   registration.context.on('project:created', async (project) => {
+    registration.log('In project created handler');
     const lg = `
 # my_func
 - hello
 - world
-    `;
-    project.updateFile('common.lg', lg);
+`;
+    await project.updateFile('common.lg', lg);
+    await project.init();
+  });
+
+  registration.context.on('project:created', async (project) => {
+    registration.log('Checking lg content');
+    const f = project.getFile('common.en-us.lg');
+    if (f) {
+      registration.log('common.lg content:\n%s', f.content);
+    } else {
+      registration.log('common.lg not found');
+    }
   });
 }
 
