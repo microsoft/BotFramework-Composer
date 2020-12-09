@@ -66,7 +66,8 @@ const BotController: React.FC = () => {
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
   const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
-  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const [startAllOperationQueued, queueStartAllBots] = useState(false);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -107,13 +108,14 @@ const BotController: React.FC = () => {
 
   const { startAllBots, stopAllBots } = useBotOperations();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (!botStartComplete) {
       TelemetryClient.log('StartAllBotsButtonClicked');
       startAllBots();
     } else {
+      await stopAllBots();
+      queueStartAllBots(true);
       TelemetryClient.log('StopAllBotsButtonClicked');
-      stopAllBots();
     }
   };
 
@@ -131,13 +133,19 @@ const BotController: React.FC = () => {
     }
 
     if (botStartComplete) {
-      setStatusIconClass('CircleStopSolid');
-      return formatMessage('Stop all bots ({running}/{total} running)', {
+      if (statusIconClass !== 'Refresh') {
+        hideController(false);
+      }
+      setStatusIconClass('Refresh');
+      return formatMessage('Restart all bots ({running}/{total} running)', {
         running: runningBots.projectIds.length,
         total: runningBots.totalBots,
       });
     }
-
+    if (startAllOperationQueued) {
+      queueStartAllBots(false);
+      startAllBots();
+    }
     setStatusIconClass('Play');
     return formatMessage('Start all bots');
   }, [runningBots, botStartComplete, areBotsStarting]);
@@ -147,10 +155,11 @@ const BotController: React.FC = () => {
       key: projectId,
       displayName,
       projectId,
-      isRoot: projectId === rootProjectId,
+      isRoot: projectId === rootBotId,
       setGlobalErrorCalloutVisibility,
+      isRootBot: projectId === rootBotId,
     }));
-  }, [projectCollection, rootProjectId]);
+  }, [projectCollection, rootBotId]);
 
   return (
     <React.Fragment>

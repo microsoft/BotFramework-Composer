@@ -62,7 +62,7 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[2]), BotStatus.failed);
     };
     const { findByText } = renderWithRecoil(<BotController />, initRecoilState);
-    await findByText('Stop all bots (2/3 running)');
+    await findByText('Restart all bots (2/3 running)');
   });
 
   it('should show that no bots have been started', async () => {
