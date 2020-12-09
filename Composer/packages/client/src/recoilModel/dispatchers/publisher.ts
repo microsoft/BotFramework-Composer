@@ -187,8 +187,8 @@ export const publisherDispatcher = () => {
           {
             metadata: {
               ...metadata,
-              luResources: referredLuFiles.map((file) => file.id),
-              qnaResources: qnaFiles.map((file) => file.id),
+              luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+              qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
             },
             sensitiveSettings,
           },

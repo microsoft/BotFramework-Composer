@@ -13,6 +13,9 @@ import keys from 'lodash/keys';
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
+import { setEnvDefault } from '../../utility/setEnvDefault';
+import { useElectronContext } from '../../utility/electronContext';
+import { COMPOSER_VERSION } from '../../constants';
 
 import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
@@ -43,6 +46,11 @@ export type CrossTrainConfig = {
 export type DownSamplingConfig = {
   maxImbalanceRatio: number;
   maxUtteranceAllowed: number;
+};
+
+const getUserAgent = () => {
+  const platform = useElectronContext() ? 'desktop' : 'web';
+  return `microsoft.bot.composer/${COMPOSER_VERSION} ${platform}`;
 };
 
 export class Builder {
@@ -82,6 +90,10 @@ export class Builder {
     allFiles: FileInfo[],
     emptyFiles: { [key: string]: boolean }
   ) => {
+    const userAgent = getUserAgent();
+    setEnvDefault('LUIS_USER_AGENT', userAgent);
+    setEnvDefault('QNA_USER_AGENT', userAgent);
+
     try {
       await this.createGeneratedDir();
       //do cross train before publish
