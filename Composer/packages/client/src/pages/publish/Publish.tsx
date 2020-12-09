@@ -138,6 +138,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         <ActionButton
           data-testid="publishPage-Toolbar-Publish"
           disabled={publishDisabled || selectedBots.length === 0}
+          styles={{ root: { fontSize: '16px' } }}
           onClick={() => {
             if (isShowAuthDialog(false)) {
               setShowAuthDialog(true);
@@ -145,7 +146,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               setPublishDialogHidden(false);
             }
           }}
-          styles={{ root: { fontSize: '16px' } }}
         >
           <svg
             css={{ margin: '0 4px' }}
