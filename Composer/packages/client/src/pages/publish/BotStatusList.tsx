@@ -102,7 +102,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     if (!option) return null;
     const style = {
       ...(option.data && option.data.style),
-      maxWidth: '120px',
+      width: '80%',
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
@@ -174,8 +174,8 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       name: formatMessage('Publish target'),
       className: 'publishTarget',
       fieldName: 'target',
-      minWidth: 114,
-      maxWidth: 134,
+      minWidth: 180,
+      maxWidth: 200,
       isRowHeader: true,
       isResizable: true,
       data: 'string',
@@ -185,7 +185,10 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             defaultSelectedKey={item.publishTarget}
             options={publishTargetOptions(item)}
             placeholder={formatMessage('Select a publish target')}
-            styles={{ root: { width: '134px' } }}
+            styles={{
+              root: { width: '100%' },
+              dropdownItems: { selectors: { '.ms-Button-flexContainer': { width: '100%' } } },
+            }}
             onChange={(_, option?: IDropdownOption) => handleChangePublishTarget(item, option)}
             onRenderOption={onRenderOption}
           />

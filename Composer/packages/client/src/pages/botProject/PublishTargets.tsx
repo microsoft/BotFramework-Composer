@@ -38,7 +38,7 @@ const publishTargetsHeader = css`
 `;
 
 const publishTargetsHeaderText = css`
-  width: 200px;
+  width: 300px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.semibold};
   border-bottom: 1px solid ${NeutralColors.gray30};
