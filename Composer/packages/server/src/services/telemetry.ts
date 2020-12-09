@@ -18,9 +18,9 @@ const getTelemetryContext = () => {
   const electronContext = useElectronContext();
 
   if (electronContext) {
-    const { sessionId, machineId } = electronContext;
+    const { sessionId, machineId, composerVersion } = electronContext;
     const { telemetry = {} } = SettingsService.getSettings();
-    return { sessionId, userId: machineId, telemetry };
+    return { sessionId, userId: machineId, telemetry, composerVersion };
   }
 
   return {};
@@ -39,7 +39,7 @@ if (instrumentationKey) {
   // do not collect the user's machine name
   AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope, context): boolean => {
-    const { sessionId, userId, telemetry } = getTelemetryContext();
+    const { sessionId, userId, telemetry, composerVersion } = getTelemetryContext();
 
     if (!telemetry?.allowDataCollection) {
       return false;
@@ -61,6 +61,10 @@ if (instrumentationKey) {
       data.baseData.properties.toolName = 'bf-composer';
       data.baseData.properties.sessionId = sessionId;
       data.baseData.properties.userId = userId;
+
+      if (composerVersion) {
+        data.baseData.properties.composerVersion = composerVersion;
+      }
 
       // remove PII
       for (const property of piiProperties) {

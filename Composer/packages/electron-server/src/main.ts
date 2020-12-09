@@ -157,6 +157,7 @@ async function loadServer() {
     getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
     machineId,
     sessionId,
+    composerVersion: app.getVersion(),
   });
   log(`Server started at port: ${serverPort}`);
 }

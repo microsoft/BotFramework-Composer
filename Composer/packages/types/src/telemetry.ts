@@ -44,7 +44,7 @@ type ApplicationEvents = {
 };
 
 type SessionEvents = {
-  SessionStarted: { resolution: string; os: string };
+  SessionStarted: { os: string };
   SessionEnded: undefined;
   NavigateTo: { sectionName: string; url: string };
 };

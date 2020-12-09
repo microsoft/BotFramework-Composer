@@ -27,7 +27,7 @@ export const useInitializeLogger = () => {
     ipcRenderer?.on('session-update', (_event, name) => {
       switch (name) {
         case 'session-started':
-          TelemetryClient.log('SessionStarted', {} as any);
+          TelemetryClient.log('SessionStarted', { os: window.navigator.platform });
           break;
         case 'session-ended':
           TelemetryClient.log('SessionEnded');
