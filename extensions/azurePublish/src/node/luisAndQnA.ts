@@ -113,7 +113,7 @@ export async function publishLuisToPrediction(
         break;
       } catch (err) {
         if (retryCount < 1) {
-          this.logger({
+          logger({
             status: AzurePublishErrors.LUIS_PUBLISH_ERROR,
             message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
           });
@@ -162,7 +162,7 @@ export async function publishLuisToPrediction(
         }
         catch (err) {
           if (retryCount < 1) {
-            this.logger({
+            logger({
               status: AzurePublishErrors.LUIS_PUBLISH_ERROR,
               message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
             });
