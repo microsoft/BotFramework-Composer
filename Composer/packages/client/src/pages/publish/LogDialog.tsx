@@ -5,7 +5,12 @@ import React from 'react';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-export const LogDialog = (props) => {
+export interface LogDialogProps {
+  value?: string;
+  onDismiss: () => void;
+}
+
+export const LogDialog: React.FC<LogDialogProps> = ({ value = '', onDismiss }) => {
   const logDialogProps = {
     title: 'Publish Log',
   };
@@ -15,14 +20,9 @@ export const LogDialog = (props) => {
       hidden={false}
       minWidth={700}
       modalProps={{ isBlocking: true }}
-      onDismiss={props.onDismiss}
+      onDismiss={onDismiss}
     >
-      <TextField
-        multiline
-        placeholder="Log Output"
-        style={{ minHeight: 300 }}
-        value={props && props.version ? props.version.log : ''}
-      />
+      <TextField multiline placeholder="Log Output" style={{ minHeight: 300 }} value={value} />
     </Dialog>
   );
 };
