@@ -4,6 +4,7 @@
 
 import { AxiosInstance } from 'axios';
 
+import { IDiagnostic } from './diagnostic';
 import type {
   DialogInfo,
   LuFile,
@@ -128,9 +129,23 @@ export type ProjectContextApi = {
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
 
+export type BotInProject = {
+  dialogs: DialogInfo[];
+  projectId: string;
+  name: string;
+  isRemote: boolean;
+  isRootBot: boolean;
+  diagnostics: IDiagnostic[];
+  error: { [key: string]: any };
+  buildEssentials: { [key: string]: any };
+  isPvaSchema: boolean;
+  setting: DialogSetting;
+};
+
 export type ProjectContext = {
   botName: string;
   projectId: string;
+  projectCollection: BotInProject[];
   dialogs: DialogInfo[];
   dialogSchemas: DialogSchemaFile[];
   lgFiles: LgFile[];
