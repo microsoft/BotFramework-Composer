@@ -6,7 +6,7 @@ import path from 'path';
 import crypto from 'crypto';
 
 import toNumber from 'lodash/toNumber';
-import getPort from 'get-port';
+import portfinder from 'portfinder';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
@@ -145,7 +145,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     // Dynamically search for an open PORT starting with PORT or 5000, so that
     // the app doesn't crash if the port is already being used.
     // (disabled in dev in order to avoid breaking the webpack dev server proxy)
-    port = await getPort({ port: preferredPort });
+    port = await portfinder.getPortPromise({ port: preferredPort });
   }
   let server;
   await new Promise((resolve) => {

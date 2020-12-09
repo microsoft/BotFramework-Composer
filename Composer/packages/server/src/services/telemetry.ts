@@ -1,25 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import fs from 'fs';
 
 import * as AppInsights from 'applicationinsights';
 import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEvent } from '@bfc/shared';
 
 import { APPINSIGHTS_INSTRUMENTATIONKEY, piiProperties } from '../constants';
 import { useElectronContext } from '../utility/electronContext';
-import { Path } from '../utility/path';
+import { getBuildEnvironment } from '../models/utilities/parser';
 
 import { SettingsService } from './settings';
-
-const buildEnvPath = Path.join(__dirname, '../../env.json');
-
-function getBuildEnvironment() {
-  if (fs.existsSync(buildEnvPath)) {
-    return JSON.parse(fs.readFileSync(buildEnvPath, 'utf-8'));
-  }
-
-  return {};
-}
 
 const instrumentationKey = APPINSIGHTS_INSTRUMENTATIONKEY || getBuildEnvironment()?.APPINSIGHTS_INSTRUMENTATIONKEY;
 
