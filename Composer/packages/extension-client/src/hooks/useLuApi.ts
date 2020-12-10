@@ -10,6 +10,7 @@ import { validateHookContext } from '../utils/validateHookContext';
 import { useStore } from './useStore';
 
 const LU_KEYS = [
+  // type LuContextApi
   'api.getLuIntent',
   'api.getLuIntents',
   'api.addLuIntent',

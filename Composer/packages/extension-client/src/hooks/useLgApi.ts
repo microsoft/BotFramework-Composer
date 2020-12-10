@@ -10,6 +10,7 @@ import { validateHookContext } from '../utils/validateHookContext';
 import { useStore } from './useStore';
 
 const LG_KEYS = [
+  // type LgContextApi
   'api.getLgTemplates',
   'api.copyLgTemplate',
   'api.addLgTemplate',

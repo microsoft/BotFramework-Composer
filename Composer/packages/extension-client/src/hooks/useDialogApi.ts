@@ -10,6 +10,7 @@ import { validateHookContext } from '../utils/validateHookContext';
 import { useStore } from './useStore';
 
 const DIALOG_KEYS = [
+  // type DialogEditingContext
   'data.currentDialog',
   'data.designerId',
   'data.dialogId',
@@ -20,9 +21,12 @@ const DIALOG_KEYS = [
   'data.focusedTab',
   'data.focusPath',
 
+  // type DialogEditingContextApi
   'api.saveData',
+  'api.onOpenDialog',
   'api.onFocusSteps',
   'api.onFocusEvent',
+  'api.onSelect',
   'api.onCopy',
   'api.undo',
   'api.redo',
