@@ -21,6 +21,7 @@ const PROJECT_KEYS = [
   'data.skillsSettings',
   'data.schemas',
   'data.settings',
+  'data.projectCollection',
 
   'api.getDialog',
   'api.saveDialog',

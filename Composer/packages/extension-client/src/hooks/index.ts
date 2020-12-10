@@ -11,3 +11,4 @@ export * from './useApplicationApi';
 export * from './useExtensionSettings';
 export * from './useHttpClient';
 export * from './useProjectApi';
+export * from './useTelemetryClient';

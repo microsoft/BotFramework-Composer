@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { useState, useEffect, useRef } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx, keyframes } from '@emotion/core';
 import { mergeStyleSets } from '@uifabric/styling';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
@@ -101,6 +101,30 @@ const errorTextStyle = css`
   margin-bottom: 5px;
 `;
 
+const fadeIn = keyframes`
+	from { transform: translate3d(0,-10px,0) }
+	to { translate3d(0,0,0) }
+`;
+
+const luisRegionErrorContainerStyle = css`
+  display: flex;
+  width: 100%;
+  height: 48px;
+  background: #fed9cc;
+  color: ${NeutralColors.black};
+  line-height: 48px;
+  font-size: ${FontSizes.small};
+  margin-top: 5px;
+  animation-fill-mode: both;
+  animation-duration: 0.367s;
+  animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+  animation-name: ${fadeIn};
+`;
+
+const luisRegionErrorTextStyle = css`
+  margin-bottom: 5px;
+`;
+
 // -------------------- ExternalService -------------------- //
 
 type RootBotExternalServiceProps = {
@@ -174,19 +198,21 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   useEffect(() => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
-        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
+        formatMessage(
+          'LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish'
+        )
       );
     } else {
       setLuisKeyErrorMsg('');
     }
     if (!localRootQnAKey) {
-      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
+      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
     } else {
       setQnAKeyErrorMsg('');
     }
 
     if (isLUISKeyNeeded && !localRootLuisRegion) {
-      setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
+      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
     } else {
       setLuisRegionErrorMsg('');
     }
@@ -225,14 +251,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setLocalRootLuisKey(value);
     } else {
       setLuisKeyErrorMsg(
-        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
+        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
       );
       setLocalRootLuisKey('');
     }
   };
 
   const handleRootLUISEndpointKeyOnChange = (e, value) => {
-    setLuisKeyErrorMsg('');
     setLocalRootLuisEndpointKey(value);
   };
 
@@ -241,7 +266,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setQnAKeyErrorMsg('');
       setLocalRootQnAKey(value);
     } else {
-      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
+      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
       setLocalRootQnAKey('');
     }
   };
@@ -251,14 +276,14 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setLuisRegionErrorMsg('');
       setLocalRootLuisRegion(value.key as string);
     } else {
-      setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
+      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
       setLocalRootLuisRegion('');
     }
   };
 
   const handleRootLuisRegionOnBlur = () => {
     if (isLUISKeyNeeded && !localRootLuisRegion) {
-      setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
+      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
     }
     setSettings(projectId, {
       ...mergedSettings,
@@ -269,7 +294,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const handleRootLuisAuthoringKeyOnBlur = () => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
-        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
+        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
       );
     }
     setSettings(projectId, {
@@ -287,7 +312,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const handleRootQnAKeyOnBlur = () => {
     if (!localRootQnAKey) {
-      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
+      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
     }
     submitQnASubscripionKey(localRootQnAKey);
   };
@@ -341,7 +366,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           <TextField
             aria-label={formatMessage('LUIS endpoint key')}
             data-testid={'rootLUISEndpointKey'}
-            errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             id={'luisEndpointKey'}
             label={formatMessage('LUIS endpoint key')}
             placeholder={formatMessage('Enter LUIS endpoint key')}
@@ -356,7 +380,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           <Dropdown
             aria-label={formatMessage('LUIS region')}
             data-testid={'rootLUISRegion'}
-            errorMessage={luisRegionErrorMsg}
             id={'luisRegion'}
             label={formatMessage('LUIS region')}
             options={LUIS_REGIONS}
@@ -368,6 +391,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             onChange={handleRootLuisRegionOnChange}
             onRenderLabel={onRenderLabel}
           />
+          {luisRegionErrorMsg && (
+            <div css={luisRegionErrorContainerStyle}>
+              <Icon iconName="ErrorBadge" styles={errorIcon} />
+              <div css={luisRegionErrorTextStyle}>{luisRegionErrorMsg}</div>
+            </div>
+          )}
         </div>
         <div ref={qnaKeyFieldRef}>
           <TextField

@@ -15,6 +15,7 @@ import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
 import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -72,13 +73,16 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
-      openProject(item.path);
+      await openProject(item.path, 'default', true, (projectId) => {
+        TelemetryClient.track('BotProjectOpened', { method: 'list', projectId });
+      });
     }
   };
 
   const onClickTemplate = async (id: string) => {
     saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    TelemetryClient.track('CreateNewBotProject', { method: 'luisCallToAction' });
     navigate(`projects/create/${id}`);
   };
 
@@ -98,6 +102,8 @@ const Home: React.FC<RouteComponentProps> = () => {
           setCreationFlowType('Bot');
           setCreationFlowStatus(CreationFlowStatus.NEW);
           navigate(`projects/create`);
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+          TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
         },
       },
       align: 'left',
@@ -114,6 +120,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.OPEN);
           navigate(`projects/open`);
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'openBot' });
         },
       },
       align: 'left',
@@ -130,6 +137,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
           navigate(`projects/${projectId}/${templateId}/save`);
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
         },
       },
       align: 'left',
@@ -155,6 +163,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.newBotItem}
                 title={addButton}
                 onClick={() => {
+                  TelemetryClient.track('CreateNewBotProject', { method: 'newCallToAction' });
                   setCreationFlowStatus(CreationFlowStatus.NEW);
                   navigate('projects/create');
                 }}
@@ -168,7 +177,9 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={async () => {
-                  openProject(recentProjects[0].path);
+                  await openProject(recentProjects[0].path, 'default', true, (projectId) => {
+                    TelemetryClient.track('BotProjectOpened', { method: 'callToAction', projectId });
+                  });
                 }}
               />
             ) : (
