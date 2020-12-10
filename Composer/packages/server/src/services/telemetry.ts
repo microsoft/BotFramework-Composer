@@ -69,7 +69,7 @@ if (instrumentationKey) {
 
       // remove PII
       for (const property of piiProperties) {
-        if (data.baseData.properties[property]) {
+        if (data.baseData.properties[property] !== undefined) {
           delete data.baseData.properties[property];
         }
       }
