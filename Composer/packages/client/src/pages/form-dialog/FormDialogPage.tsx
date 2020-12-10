@@ -33,6 +33,10 @@ type Props = RouteComponentProps<{ projectId: string; schemaId: string }>;
 
 const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const { projectId = '', schemaId = '' } = props;
+
+  const [generatingSchemaId, setGeneratingSchemaId] = React.useState(schemaId || '');
+  React.useEffect(() => setGeneratingSchemaId(schemaId), [schemaId]);
+
   const formDialogSchemaIds = useRecoilValue(formDialogSchemaIdsState(projectId));
   const formDialogError = useRecoilValue(formDialogErrorState);
   const formDialogLibraryTemplates = useRecoilValue(formDialogLibraryTemplatesState);
@@ -88,10 +92,12 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const generateDialog = React.useCallback(
     (schemaId: string) => {
       if (schemaId) {
+        setGeneratingSchemaId(schemaId);
         generationStartedRef.current = true;
 
         const notification = createNotification({
-          title: formatMessage('Generating your dialog using "{schemaId}" schema, please wait...', { schemaId }),
+          title: formatMessage('Generating dialog for "{schemaId}"', { schemaId }),
+          description: formatMessage('Generating your dialog using "{schemaId}" schema, please wait...', { schemaId }),
           type: 'pending',
         });
         generationPendingNotificationIdRef.current = notification.id;
@@ -128,8 +134,13 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
           createNotification({
             type: 'success',
             title: formatMessage('Dialog generation was successful.'),
-            description: formatMessage('Your dialog was generated successfully.'),
-            link: { label: formatMessage('View dialog'), onClick: () => schemaId && viewDialog(schemaId) },
+            description: formatMessage('Your dialog for "{schemaId}" was generated successfully.', {
+              schemaId: generatingSchemaId,
+            }),
+            link: {
+              label: formatMessage('View dialog'),
+              onClick: () => generatingSchemaId && viewDialog(generatingSchemaId),
+            },
           })
         );
       } else {
@@ -137,7 +148,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         addNotification(
           createNotification({
             type: 'error',
-            title: formatMessage('Dialog generation failed.'),
+            title: formatMessage('Dialog generation has failed.'),
             description: formDialogError.message,
           })
         );
@@ -155,7 +166,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         );
       }
     }
-  }, [formDialogError, formDialogGenerationProgressing, schemaId]);
+  }, [formDialogError, formDialogGenerationProgressing]);
 
   const updateItem = React.useCallback(
     (id: string, content: string) => {
