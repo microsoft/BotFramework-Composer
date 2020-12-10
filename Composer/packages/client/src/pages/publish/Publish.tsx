@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, useMemo, Fragment } from 'react';
+import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
@@ -28,6 +28,7 @@ import { getPendingNotificationCardProps, getPublishedNotificationCardProps } fr
 import { PullDialog } from './pullDialog';
 
 const publishStatusInterval = 10000;
+const deleteNotificationInterval = 5000;
 const generateComputedData = (botProjectData, publishHistoryList, currentBotPublishTargetList) => {
   const botSettingList: { projectId: string; setting: DialogSetting }[] = [];
   const statusList: IBotStatus[] = [];
@@ -171,16 +172,25 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       disabled: !isPullSupported,
     },
   ];
-  const [statusIntervals, setStatusIntervals] = useState<{ [key: string]: number }>({});
-  const getUpdatedStatus = (target, botProjectId): number => {
+  const statusIntervalsRef = useRef<{ [key: string]: number }>({});
+  const getUpdatedStatus = (target, botProjectId): void => {
     // TODO: this should use a backoff mechanism to not overload the server with requests
     // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
+    const statusIntervals = statusIntervalsRef.current;
+    if (statusIntervals[`${botProjectId}-${target.name}`]) return;
     getPublishStatus(botProjectId, target);
-    return window.setInterval(async () => {
+    statusIntervals[`${botProjectId}-${target.name}`] = window.setInterval(async () => {
       getPublishStatus(botProjectId, target);
     }, publishStatusInterval);
   };
 
+  const cleanupInterval = (target, botProjectId): void => {
+    const statusIntervals = statusIntervalsRef.current;
+    if (statusIntervals[`${botProjectId}-${target.name}`]) {
+      clearInterval(statusIntervals[`${botProjectId}-${target.name}`]);
+      delete statusIntervals[`${botProjectId}-${target.name}`];
+    }
+  };
   const [pendingNotification, setPendingNotification] = useState<Notification>();
   const [previousBotPublishHistoryList, setPreviousBotPublishHistoryList] = useState(botPublishHistoryList);
   // check history to see if a 202 is found
@@ -207,7 +217,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       })
     );
 
-    selectedBots.forEach((bot) => {
+    botStatusList.forEach((bot) => {
       if (!(bot.publishTarget && bot.publishTargets)) {
         return;
       }
@@ -226,28 +236,25 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       const latestPublishItem = botPublishHistory[0];
       // stop polling if status is 200 or 500
       if (latestPublishItem.status === 202) {
-        if (!statusIntervals[bot.id]) {
-          setStatusIntervals({ ...statusIntervals, [bot.id]: getUpdatedStatus(selectedTarget, bot.id) });
-        }
+        getUpdatedStatus(selectedTarget, bot.id);
       } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
-        const interval = statusIntervals[bot.id];
-        if (interval) {
-          clearInterval(interval);
-          delete statusIntervals[bot.id];
-          setStatusIntervals(statusIntervals);
-        }
+        cleanupInterval(selectedTarget, bot.id);
         // show result notifications
         if (!isEqual(previousBotPublishHistory, botPublishHistory)) {
           bot.status = latestPublishItem.status;
           if (showNotifications[bot.id]) {
             pendingNotification && deleteNotification(pendingNotification.id);
-            addNotification(createNotification(getPublishedNotificationCardProps(bot)));
+            const resultNotification = createNotification(getPublishedNotificationCardProps(bot));
+            addNotification(resultNotification);
             setShowNotifications({ ...showNotifications, [botProjectId]: false });
+            setTimeout(() => {
+              deleteNotification(resultNotification.id);
+            }, deleteNotificationInterval);
           }
         }
       }
     });
-  }, [botPublishHistoryList, selectedBots]);
+  }, [botPublishHistoryList]);
 
   useEffect(() => {
     if (projectId) {
@@ -285,11 +292,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     return () => {
-      Object.values(statusIntervals).forEach((value) => {
-        clearInterval(value);
-      });
+      const statusIntervals = statusIntervalsRef.current;
+      if (statusIntervals) {
+        Object.values(statusIntervals).forEach((value) => {
+          window.clearInterval(value);
+        });
+      }
     };
-  });
+  }, []);
   const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
     const setting = botSettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
     const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
@@ -348,7 +358,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification(notification);
 
     // publish to remote
-    const intervals: { [key: string]: number } = {};
     for (const bot of items) {
       if (bot.publishTarget && bot.publishTargets) {
         const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
@@ -374,11 +383,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
-        if (!intervals[botProjectId]) {
-          intervals[botProjectId] = getUpdatedStatus(selectedTarget, botProjectId);
-        }
+        getUpdatedStatus(selectedTarget, botProjectId);
       }
-      setStatusIntervals(intervals);
+
       setBotStatusList(
         botStatusList.map((bot) => {
           const item = items.find((i) => i.id === bot.id);
