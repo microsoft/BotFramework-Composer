@@ -171,12 +171,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       disabled: !isPullSupported,
     },
   ];
-  const [statusIntervals, setStatusIntervals] = useState<{ [key: string]: NodeJS.Timeout }[]>([]);
-  const getUpdatedStatus = (target, botProjectId): NodeJS.Timeout => {
+  const [statusIntervals, setStatusIntervals] = useState<{ [key: string]: number }>({});
+  const getUpdatedStatus = (target, botProjectId): number => {
     // TODO: this should use a backoff mechanism to not overload the server with requests
     // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
     getPublishStatus(botProjectId, target);
-    return setInterval(async () => {
+    return window.setInterval(async () => {
       getPublishStatus(botProjectId, target);
     }, publishStatusInterval);
   };
@@ -226,14 +226,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       const latestPublishItem = botPublishHistory[0];
       // stop polling if status is 200 or 500
       if (latestPublishItem.status === 202) {
-        if (!statusIntervals.some((i) => i[bot.id])) {
-          setStatusIntervals([...statusIntervals, { [bot.id]: getUpdatedStatus(selectedTarget, bot.id) }]);
+        if (!statusIntervals[bot.id]) {
+          setStatusIntervals({ ...statusIntervals, [bot.id]: getUpdatedStatus(selectedTarget, bot.id) });
         }
       } else if (latestPublishItem.status === 200 || latestPublishItem.status === 500) {
-        const interval = statusIntervals.find((i) => i[bot.id]);
+        const interval = statusIntervals[bot.id];
         if (interval) {
-          clearInterval(interval[bot.id]);
-          setStatusIntervals(statusIntervals.filter((i) => !i[botProjectId]));
+          clearInterval(interval);
+          delete statusIntervals[bot.id];
+          setStatusIntervals(statusIntervals);
         }
         // show result notifications
         if (!isEqual(previousBotPublishHistory, botPublishHistory)) {
@@ -284,8 +285,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     return () => {
-      Object.keys(statusIntervals).forEach((key) => {
-        clearInterval(statusIntervals[key]);
+      Object.values(statusIntervals).forEach((value) => {
+        clearInterval(value);
       });
     };
   });
@@ -347,7 +348,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification(notification);
 
     // publish to remote
-    const intervals: { [key: string]: NodeJS.Timeout }[] = [];
+    const intervals: { [key: string]: number } = {};
     for (const bot of items) {
       if (bot.publishTarget && bot.publishTargets) {
         const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
@@ -373,7 +374,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
-        intervals.push({ [botProjectId]: getUpdatedStatus(selectedTarget, botProjectId) });
+        if (!intervals[botProjectId]) {
+          intervals[botProjectId] = getUpdatedStatus(selectedTarget, botProjectId);
+        }
       }
       setStatusIntervals(intervals);
       setBotStatusList(
