@@ -245,7 +245,6 @@ export const projectDispatcher = () => {
         if (navigate) {
           navigateToBot(callbackHelpers, projectId, mainDialog);
         }
-        set(botOpeningState, false);
 
         if (typeof callback === 'function') {
           callback(projectId);
@@ -255,6 +254,7 @@ export const projectDispatcher = () => {
         removeRecentProject(callbackHelpers, path);
         handleProjectFailure(callbackHelpers, ex);
         navigateTo('/home');
+      } finally {
         set(botOpeningState, false);
       }
     }
