@@ -63,7 +63,7 @@ type TextFieldWithCustomButtonProps = {
   label: string;
   ariaLabel: string;
   buttonText: string;
-  errorMessage;
+  errorMessage?;
   placeholder: string;
   placeholderOnDisable: string;
   value: string;
