@@ -26,7 +26,7 @@ import {
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { TextFieldWithCustomButton } from '../../components/TextFieldWithCustomButton';
+import { FieldWithCustomButton } from '../../components/FieldWithCustomButton';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 // -------------------- Styles -------------------- //
 
@@ -207,7 +207,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           onRenderLabel={onRenderLabel}
         />
         <div ref={luisKeyFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('LUIS authoring key')}
             buttonText={formatMessage('Use custom LUIS authoring key')}
             errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
@@ -222,7 +222,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           />
         </div>
         <div ref={luisEndpointKeyFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('LUIS endpoint key')}
             buttonText={formatMessage('Use custom LUIS endpoint key')}
             id={'luisEndpointKey'}
@@ -235,7 +235,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           />
         </div>
         <div ref={luisRegionFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('LUIS region')}
             buttonText={formatMessage('Use custom LUIS region')}
             errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
@@ -249,7 +249,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           />
         </div>
         <div ref={qnaKeyFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('QnA Maker Subscription key')}
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
             errorMessage={!rootQnAKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
