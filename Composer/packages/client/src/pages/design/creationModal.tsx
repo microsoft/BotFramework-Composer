@@ -18,6 +18,7 @@ import {
   filteredTemplatesSelector,
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -90,6 +91,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     };
     if (creationFlowType === 'Skill') {
       addNewSkillToBotProject(newBotData);
+      TelemetryClient.track('AddNewSkillCompleted');
     } else {
       createNewBot(newBotData);
     }
@@ -124,6 +126,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     handleDismiss();
     if (creationFlowType === 'Skill') {
       addExistingSkillToBotProject(botFolder);
+      TelemetryClient.track('AddNewSkillCompleted');
     } else {
       openProject(botFolder);
     }

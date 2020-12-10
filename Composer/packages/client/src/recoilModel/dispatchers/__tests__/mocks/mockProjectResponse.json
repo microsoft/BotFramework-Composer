@@ -8680,8 +8680,7 @@
       "command": ""
     },
     "downsampling": {
-      "maxImbalanceRatio": 10,
-      "maxUtteranceAllowed": 15000
+      "maxImbalanceRatio": 10
     }
   }
 }

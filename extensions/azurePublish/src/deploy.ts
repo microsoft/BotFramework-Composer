@@ -140,7 +140,7 @@ export class BotProjectDeploy {
         .glob('**/*', {
           cwd: source,
           dot: true,
-          ignore: ['**/code.zip', 'node_modules/**/*'],
+          ignore: ['**/code.zip', 'node_modules/**/*', '**/onnxruntime.pdb', '**/oc_abi.pdb'],
         })
         .on('error', (err) => reject(err))
         .pipe(stream);

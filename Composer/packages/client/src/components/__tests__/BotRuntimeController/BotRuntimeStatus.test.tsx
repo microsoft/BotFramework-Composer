@@ -82,7 +82,7 @@ describe('<BotRuntimeStatus />', () => {
 
     it('should poll if bot is loading', async () => {
       renderWithRecoil(<BotRuntimeStatus projectId={projectId} />, ({ set }) => {
-        set(botStatusState(projectId), BotStatus.reloading);
+        set(botStatusState(projectId), BotStatus.starting);
       });
 
       jest.advanceTimersByTime(pollingInterval);

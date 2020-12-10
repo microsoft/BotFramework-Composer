@@ -153,9 +153,12 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
               <br />
               <Link
                 aria-label={formatMessage('Learn more about {title}', { title: getHelpLinkLabel() })}
-                href={uiOptions?.helpLink}
+                href={uiOptions.helpLink}
                 rel="noopener noreferrer"
                 target="_blank"
+                onClick={() => {
+                  shellApi.telemetryClient?.track('HelpLinkClicked', { url: uiOptions.helpLink as string });
+                }}
               >
                 {formatMessage('Learn more')}
               </Link>
