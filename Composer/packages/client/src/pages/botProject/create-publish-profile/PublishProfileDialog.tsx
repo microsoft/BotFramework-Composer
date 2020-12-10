@@ -13,10 +13,10 @@ import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { EditProfileDialog } from './EditProfileDialog';
 import { AddProfileDialog } from './AddProfileDialog';
-import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 type PublishProfileDialogProps = {
   closeDialog: () => void;
