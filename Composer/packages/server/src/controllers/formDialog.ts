@@ -71,7 +71,9 @@ const generate = async (req: Request, res: Response) => {
 
     if (!result.success) {
       res.status(500).json({ id: projectId, errors: result.errors });
+      return;
     }
+
     res.status(200).json({ id: projectId });
   } else {
     res.status(404).json({
