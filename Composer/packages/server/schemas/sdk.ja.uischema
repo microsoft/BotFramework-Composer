@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "質問をするための応答を送信する",
-      "subtitle": "Ask アクティビティ"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "ファイルまたは添付ファイルの入力を求めるプロンプト",
-      "subtitle": "添付ファイルの入力"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "複数選択のプロンプト",
-      "subtitle": "選択肢の入力"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "確認を求めるプロンプト",
-      "subtitle": "入力の確認"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "日付または時刻の入力を求めるプロンプト",
-      "subtitle": "日付/時刻の入力"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "数値の入力を求めるプロンプト",
-      "subtitle": "数値入力"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth ログイン",
-      "subtitle": "OAuth 入力"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "テキストの入力を求めるプロンプト",
-      "subtitle": "テキスト入力"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "新しいダイアログの開始",
@@ -218,6 +170,54 @@
     "form": {
       "label": "トレース イベントの生成",
       "subtitle": "アクティビティのトレース"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "質問をするための応答を送信する",
+      "subtitle": "Ask アクティビティ"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "ファイルまたは添付ファイルの入力を求めるプロンプト",
+      "subtitle": "添付ファイルの入力"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "複数選択のプロンプト",
+      "subtitle": "選択肢の入力"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "確認を求めるプロンプト",
+      "subtitle": "入力の確認"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "日付または時刻の入力を求めるプロンプト",
+      "subtitle": "日付/時刻の入力"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "数値の入力を求めるプロンプト",
+      "subtitle": "数値入力"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth ログイン",
+      "subtitle": "OAuth 入力"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "テキストの入力を求めるプロンプト",
+      "subtitle": "テキスト入力"
     }
   },
   "Microsoft.OnActivity": {
