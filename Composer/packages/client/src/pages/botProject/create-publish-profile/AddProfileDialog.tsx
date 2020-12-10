@@ -90,7 +90,7 @@ export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
     PluginAPI.publish.savePublishConfig = (config) => {
       updateSettings(name, targetType, JSON.stringify(config) || '{}');
     };
-  }, [targetType, types, updateSettings]);
+  }, [targetType, name, types, updateSettings]);
 
   useEffect(() => {
     PluginAPI.publish.startProvision = async (config) => {

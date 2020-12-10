@@ -95,9 +95,7 @@ export class AssetManager {
   private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
     // install package
     if (template.package) {
-      const { stderr: initErr } = await execAsync(
-        `dotnet new -i ${template.package.packageName}::${template.package.packageVersion}`
-      );
+      const { stderr: initErr } = await execAsync(`dotnet new -i ${template.package.packageName}`);
       if (initErr) {
         throw new Error(initErr);
       }

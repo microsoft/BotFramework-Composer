@@ -5,10 +5,10 @@
 import { pathExists, writeFile, copy } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
-import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
+import has from 'lodash/has';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -28,7 +28,6 @@ const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 const GENERATEDFOLDER = 'generated';
 const SETTINGS = 'settings';
 const INTERRUPTION = 'interruption';
-const SAMPLE_SIZE_CONFIGURATION = 2;
 const CrossTrainConfigName = 'cross-train.config.json';
 const MODEL = 'model';
 
@@ -45,7 +44,6 @@ export type CrossTrainConfig = {
 
 export type DownSamplingConfig = {
   maxImbalanceRatio: number;
-  maxUtteranceAllowed: number;
 };
 
 const getUserAgent = () => {
@@ -59,7 +57,7 @@ export class Builder {
   public interruptionFolderPath: string;
   public storage: IFileStorage;
   public config: IConfig | null = null;
-  public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
+  public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
   private containOrchestrator = false;
 
@@ -98,7 +96,7 @@ export class Builder {
       await this.createGeneratedDir();
       //do cross train before publish
       await this.crossTrain(luFiles, qnaFiles, allFiles);
-      await this.downSampling((await this.getInterruptionFiles()).interruptionLuFiles);
+      await this.downSamplingInterruption((await this.getInterruptionFiles()).interruptionLuFiles);
 
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
       const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
@@ -350,19 +348,36 @@ export class Builder {
   }
 
   private doDownSampling(luObject: any) {
-    //do bootstramp sampling to make the utterances' number ratio to 1:10
-    const bootstrapSampler = new ComposerBootstrapSampler(
-      luObject.utterances,
-      this.downSamplingConfig.maxImbalanceRatio,
-      SAMPLE_SIZE_CONFIGURATION
-    );
-    luObject.utterances = bootstrapSampler.getSampledUtterances();
-    //if detect the utterances>15000, use reservoir sampling to down size
+    if (!luObject) return luObject;
+
+    //separate the intents, we only do downsampling for interruption intent
+    const intentsMap = {};
+    const normalItems: any[] = [];
+    const interruptionItems: any[] = [];
+    [...luObject.utterances, ...luObject.patterns].forEach((utterance) => {
+      const { intent } = utterance;
+      if (utterance.intent === '_Interruption') {
+        interruptionItems.push(utterance);
+      } else {
+        normalItems.push(utterance);
+        intentsMap[intent] = (intentsMap[intent] ?? 0) + 1;
+      }
+    });
+
+    //find the minimum utterance length from the normal intents
+    const minNum = keys(intentsMap).reduce((result, key, index) => {
+      if (index === 0) return intentsMap[key];
+      return intentsMap[key] < result ? intentsMap[key] : result;
+    }, 0);
+
+    //downsize the interruption utterances to ratio*the minimum length of normal intent utterances
     const reservoirSampler = new ComposerReservoirSampler(
-      luObject.utterances,
-      this.downSamplingConfig.maxUtteranceAllowed
+      interruptionItems,
+      this.downSamplingConfig.maxImbalanceRatio * minNum
     );
-    luObject.utterances = reservoirSampler.getSampledUtterances();
+    const finalItems = [...normalItems, ...reservoirSampler.getSampledUtterances()];
+    luObject.utterances = finalItems.filter((item) => !has(item, 'pattern'));
+    luObject.patterns = finalItems.filter((item) => has(item, 'pattern'));
     return luObject;
   }
 
@@ -394,7 +409,9 @@ export class Builder {
     );
   }
 
-  private async downSampling(files: FileInfo[]) {
+  private async downSamplingInterruption(files: FileInfo[]) {
+    if (this.downSamplingConfig.maxImbalanceRatio === -1) return;
+
     const models = files.map((file) => file.path);
 
     let luContents = await this.luBuilder.loadContents(models, {

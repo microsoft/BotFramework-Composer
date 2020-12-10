@@ -16,6 +16,7 @@ import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '.
 
 import { EditProfileDialog } from './EditProfileDialog';
 import { AddProfileDialog } from './AddProfileDialog';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 type PublishProfileDialogProps = {
   closeDialog: () => void;
@@ -118,6 +119,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     async (name: string, type: string, configuration: string) => {
       const newTargets = [...(targets || []), { name, type, configuration }];
       await setPublishTargets(newTargets, projectId);
+      TelemetryClient.track('NewPublishingProfileSaved', { type });
     },
     [targets, projectId]
   );

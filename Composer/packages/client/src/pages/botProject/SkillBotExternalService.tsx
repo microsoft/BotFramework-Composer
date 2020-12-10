@@ -105,6 +105,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
+  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
@@ -212,7 +213,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
             id={'luisAuthoringKey'}
             label={formatMessage('LUIS authoring key')}
-            placeholder={formatMessage('Enter LUIS authoringkey')}
+            placeholder={formatMessage('Enter LUIS authoring key')}
             placeholderOnDisable={rootLuisKey}
             required={isLUISKeyNeeded}
             value={skillLuisKey}
@@ -220,11 +221,10 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             onRenderLabel={onRenderLabel}
           />
         </div>
-        <div ref={luisKeyFieldRef}>
+        <div ref={luisEndpointKeyFieldRef}>
           <TextFieldWithCustomButton
             ariaLabel={formatMessage('LUIS endpoint key')}
             buttonText={formatMessage('Use custom LUIS endpoint key')}
-            errorMessage={!rootLuisEndpointKey ? formatMessage('Root Bot LUIS endpoint key is empty') : ''}
             id={'luisEndpointKey'}
             label={formatMessage('LUIS endpoint key')}
             placeholder={formatMessage('Enter LUIS endpoint key')}

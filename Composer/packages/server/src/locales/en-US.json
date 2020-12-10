@@ -926,6 +926,9 @@
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
   },
+  "do_you_want_to_proceed_cd35aa38": {
+    "message": "Do you want to proceed?"
+  },
   "do_you_want_to_update_b_existingprojectname_b_c34014f": {
     "message": "Do you want to update <b>{ existingProjectName }</b>"
   },
@@ -1072,9 +1075,6 @@
   },
   "enter_luis_authoring_key_c59f8f1f": {
     "message": "Enter LUIS authoring key"
-  },
-  "enter_luis_authoringkey_12c33eaf": {
-    "message": "Enter LUIS authoringkey"
   },
   "enter_luis_endpoint_key_f8eb30f5": {
     "message": "Enter LUIS endpoint key"
@@ -2204,6 +2204,9 @@
   "publishing_name_to_publishtarget_failed_8677b68d": {
     "message": "Publishing { name } to { publishTarget } failed."
   },
+  "pull_d1c3e8fe": {
+    "message": "Pull"
+  },
   "pull_from_selected_profile_b5c635ec": {
     "message": "Pull from selected profile"
   },
@@ -3109,6 +3112,9 @@
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
+  },
+  "you_are_about_to_pull_project_files_from_the_selec_15786351": {
+    "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
   },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "You can create a new bot from scratch with Composer, or start with a template."

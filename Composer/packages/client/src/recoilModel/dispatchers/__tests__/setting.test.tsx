@@ -67,7 +67,6 @@ const settings = {
   },
   downsampling: {
     maxImbalanceRatio: 10,
-    maxUtteranceAllowed: 15000,
   },
   skill: {},
   customFunctions: [],

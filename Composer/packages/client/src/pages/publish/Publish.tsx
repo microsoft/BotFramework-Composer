@@ -22,6 +22,7 @@ import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/proj
 import { armScopes } from '../../constants';
 import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
 import { AuthClient } from '../../utils/authClient';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -171,7 +172,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         iconProps: {
           iconName: 'CloudDownload',
         },
-        onClick: () => setPullDialogHidden(false),
+        onClick: () => {
+          setPullDialogHidden(false);
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'pullFromProfile' });
+        },
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Pull',
