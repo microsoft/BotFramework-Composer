@@ -6,6 +6,7 @@ import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaF
 import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
+import { LanguageFileImport } from '../../../../types/src';
 import {
   botDisplayNameState,
   botErrorState,
@@ -28,7 +29,13 @@ import {
   dialogState,
   schemasState,
 } from '../atoms';
-import { dialogsSelectorFamily, buildEssentialsSelector, validateDialogsSelectorFamily } from '../selectors';
+import {
+  dialogsSelectorFamily,
+  buildEssentialsSelector,
+  validateDialogsSelectorFamily,
+  lgImportsSelectorFamily,
+  luImportsSelectorFamily,
+} from '../selectors';
 
 // Actions
 export const localBotsWithoutErrorsSelector = selector({
@@ -43,6 +50,20 @@ export const localBotsWithoutErrorsSelector = selector({
   },
 });
 
+export const localBotPublishHistorySelector = selector({
+  key: 'localBotPublishHistorySelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+    const result = botProjectIds.map((projectId: string) => {
+      const publishHistory = get(publishHistoryState(projectId));
+      return {
+        projectId,
+        publishHistory,
+      };
+    });
+    return result;
+  },
+});
 export const localBotsDataSelector = selector({
   key: 'localBotsDataSelector',
   get: ({ get }) => {
@@ -110,8 +131,19 @@ export const botProjectSpaceSelector = selector({
         crossTrainConfig: {},
       };
 
+      const lgImports: Record<string, LanguageFileImport[]> = {};
+
+      dialogs.forEach((d) => {
+        lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+      });
+
+      const luImports: Record<string, LanguageFileImport[]> = {};
+
+      dialogs.forEach((d) => {
+        luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+      });
+
       const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
-      const publishHistory = get(publishHistoryState(projectId));
       const publishTypes = get(publishTypesState(projectId));
 
       return {
@@ -126,8 +158,9 @@ export const botProjectSpaceSelector = selector({
         diagnostics,
         buildEssentials,
         isPvaSchema,
-        publishHistory,
         publishTypes,
+        lgImports,
+        luImports,
       };
     });
     return result;

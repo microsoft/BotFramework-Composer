@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { join } from 'path';
-import { Request } from 'express';
 
 import merge from 'lodash/merge';
 import { defaultPublishConfig, PublishResult } from '@bfc/shared';
@@ -15,6 +14,7 @@ import { authService } from '../services/auth/auth';
 import AssetService from '../services/asset';
 import logger from '../logger';
 import { LocationRef } from '../models/bot/interface';
+import { TelemetryService } from '../services/telemetry';
 
 const log = logger.extend('publisher-controller');
 
@@ -50,12 +50,15 @@ export const PublishController = {
         })
     );
   },
-  publish: async (req: Request, res) => {
-    const target = req.params.target;
+  publish: async (req, res) => {
+    const target: string = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
     const { metadata, sensitiveSettings } = req.body;
-    const projectId = req.params.projectId;
+    const projectId: string = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    TelemetryService.trackEvent('PublishingProfileStarted', { target, projectId });
+    TelemetryService.startEvent('PublishingProfileCompleted', target + projectId, { target, projectId });
 
     // deal with publishTargets not exist in settings
     const publishTargets = currentProject.settings?.publishTargets || [];
@@ -146,8 +149,11 @@ export const PublishController = {
           authService.getAccessToken.bind(authService)
         );
         // update the eTag if the publish was completed and an eTag is provided
-        if (results.status === 200 && results.result?.eTag) {
-          BotProjectService.setProjectLocationData(projectId, { eTag: results.result.eTag });
+        if (results.status === 200) {
+          TelemetryService.endEvent('PublishingProfileCompleted', target + projectId);
+          if (results.result?.eTag) {
+            BotProjectService.setProjectLocationData(projectId, { eTag: results.result.eTag });
+          }
         }
         // copy status into payload for ease of access in client
         const response: PublishResult = {

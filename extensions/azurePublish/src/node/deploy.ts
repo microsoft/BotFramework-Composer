@@ -135,13 +135,12 @@ export class BotProjectDeploy {
     try {
       const archive = archiver('zip', { zlib: { level: 9 } });
       const stream = fs.createWriteStream(out);
-
       return new Promise((resolve, reject) => {
         archive
           .glob('**/*', {
             cwd: source,
             dot: true,
-            ignore: ['**/code.zip', 'node_modules/**/*'],
+            ignore: ['**/code.zip', 'node_modules/**/*', '**/onnxruntime.pdb', '**/oc_abi.pdb'],
           })
           .on('error', (err) => reject(err))
           .pipe(stream);

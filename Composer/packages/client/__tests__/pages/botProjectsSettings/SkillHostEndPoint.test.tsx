@@ -45,6 +45,7 @@ describe('SkillHostEndPoint', () => {
       luis: {
         authoringKey: '',
         authoringRegion: '',
+        endpointKey: '',
       },
       qna: {
         subscriptionKey: '',

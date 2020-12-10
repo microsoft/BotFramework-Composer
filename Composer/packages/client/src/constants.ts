@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -38,6 +39,21 @@ export const Tips = {
     );
   },
 };
+
+export const LUIS_REGIONS: IDropdownOption[] = [
+  {
+    key: 'westus',
+    text: formatMessage('westus'),
+  },
+  {
+    key: 'westeurope',
+    text: formatMessage('westeurope'),
+  },
+  {
+    key: 'australia',
+    text: formatMessage('australia'),
+  },
+];
 
 export const Links = {
   LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
@@ -105,7 +121,7 @@ export enum BotStatus {
   inactive = 'inactive',
   publishing = 'publishing',
   published = 'published',
-  reloading = 'loading',
+  starting = 'starting',
   pending = 'pending',
   failed = 'failed',
   stopping = 'stopping',
@@ -151,7 +167,7 @@ export const BotStatusesCopy = {
   get queued() {
     return formatMessage('Queued');
   },
-  get reloading() {
+  get starting() {
     return formatMessage('Starting');
   },
   get stopping() {
@@ -279,18 +295,6 @@ export const addSkillDialog = {
   },
 };
 
-export const PublishProfileDialog = {
-  ADD_PROFILE: {
-    title: formatMessage('Add a publish profile'),
-    subText: formatMessage(
-      'Publish profile informs your bot where to use resources from. The resoruces you provision for your bot will live within this profile'
-    ),
-  },
-  EDIT_PROFILE: {
-    title: formatMessage('Edit a publish profile'),
-  },
-};
-
 export const repairSkillDialog = (name: string) => {
   return {
     title: formatMessage('Link to this skill has been broken'),
@@ -335,14 +339,13 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const authConfig = {
   // for web login
-  clientId: 'dbfa1f3b-403c-4bef-83be-3767eead7af0',
+  clientId: process.env.WEBLOGIN_CLIENTID,
   scopes: [
     'https://management.core.windows.net/user_impersonation',
     'https://graph.microsoft.com/Application.ReadWrite.All',
   ],
-  tenantId: '79ee0e7f-fc67-425a-a1d6-de8faaeb626b',
-  redirectUrl: `http://localhost:3000/oauth`,
-  clientSecret: '1PZov0~I7p~GVZIum1-_nOIT31-u~6aHC4',
+  tenantId: process.env.WEBLOGIN_TENANTID,
+  redirectUrl: process.env.WEBLOGIN_REDIRECTURL,
 };
 
 export const armScopes = {

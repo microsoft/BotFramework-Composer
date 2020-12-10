@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/camelcase */
+import { randomBytes } from 'crypto';
+
 import querystring from 'query-string';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -9,12 +11,11 @@ import formatMessage from 'format-message';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
 import { Dispatcher } from '../recoilModel/dispatchers';
+import { authConfig, authUrl } from '../constants';
 
 import storage from './storage';
 import httpClient from './httpUtil';
-import { authConfig, authUrl } from '../constants';
-import { randomBytes } from 'crypto';
-import { AuthParameters } from '@botframework-composer/types';
+import { isElectron } from './electronUtil';
 
 export function isTokenExpired(token: string): boolean {
   try {
@@ -225,13 +226,17 @@ export function createHidenIframe(url: string): HTMLIFrameElement {
   return iframe;
 }
 
-export async function monitorWindowForQueryParam(popup: Window, queryParam: string): Promise<string | null> {
+export async function monitorWindowForQueryParam(
+  popup: Window,
+  queryParam: string,
+  redirectUrl: string
+): Promise<string | null> {
   return new Promise((resolve) => {
     const startTime = Date.now();
     const popupTimer = setInterval(() => {
       try {
         // check location change, which means redirect occur
-        if (popup.location.href.includes(authConfig.redirectUrl)) {
+        if (popup.location.href.includes(redirectUrl)) {
           const result = querystring.parse(popup.location.hash);
           const values = result[queryParam];
           if (values) {
@@ -272,8 +277,8 @@ export function cleanTokenFromCache(key: string) {
   tokenKeys.forEach((item) => storage.remove(item));
 }
 
-export function getIdTokenUrl(options: AuthParameters) {
-  const { clientId } = options;
+export function getIdTokenUrl(options: { clientId: string; redirectUrl: string }) {
+  const { clientId, redirectUrl } = options;
   const scopes = authConfig.scopes;
   if (scopes.indexOf('openid') === -1) {
     scopes.push('openid');
@@ -282,12 +287,12 @@ export function getIdTokenUrl(options: AuthParameters) {
     scopes.push('profile');
   }
   const params = [
-    `client_id=${encodeURIComponent(clientId || authConfig.clientId)}`,
+    `client_id=${encodeURIComponent(clientId)}`,
     `response_type=id_token`,
-    `redirect_uri=${encodeURIComponent(authConfig.redirectUrl)}`,
+    `redirect_uri=${encodeURIComponent(redirectUrl)}`,
     `scope=${encodeURIComponent(scopes.join(' '))}`,
     `response_mode=fragment`,
-    `state=${encodeURIComponent(generateState(clientId || authConfig.clientId))}`,
+    `state=${encodeURIComponent(generateState(clientId))}`,
     `nonce=${encodeURIComponent(generateNonce())}`,
   ].join('&');
 
@@ -295,21 +300,45 @@ export function getIdTokenUrl(options: AuthParameters) {
   return url;
 }
 
-export function getAccessTokenUrl(options: AuthParameters, idToken: string) {
-  const { clientId, scopes = [] } = options;
+export function getAccessTokenUrl(options: { clientId: string; redirectUrl: string; scopes: string[] }) {
+  const { clientId, scopes, redirectUrl } = options;
   // return access token url
   const params = [
-    `client_id=${encodeURIComponent(authConfig.clientId)}`,
+    `client_id=${encodeURIComponent(clientId)}`,
     `response_type=token`,
-    `redirect_uri=${encodeURIComponent(clientId || authConfig.redirectUrl)}`,
+    `redirect_uri=${encodeURIComponent(redirectUrl)}`,
     `scope=${encodeURIComponent(scopes.join(' '))}`,
     `response_mode=fragment`,
-    `state=${encodeURIComponent(generateState(authConfig.clientId))}`,
+    `state=${encodeURIComponent(generateState(clientId))}`,
     `nonce=${encodeURIComponent(generateNonce())}`,
     `prompt=none`,
   ];
   const url = `${authUrl}?${params.join('&')}`;
   return url;
+}
+
+export function isShowAuthDialog(needGraph: boolean): boolean {
+  if (isElectron()) {
+    return false;
+  } else if (!(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId)) {
+    return isTokenExpired(getTokenFromCache('accessToken'))
+      ? true
+      : needGraph && isTokenExpired(getTokenFromCache('graphToken'))
+      ? true
+      : false;
+  } else {
+    return false;
+  }
+}
+
+export function isGetTokenFromUser(): boolean {
+  if (isElectron()) {
+    return false;
+  } else if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 function generateNonce(): string {

@@ -156,8 +156,20 @@ export type LgParsed = {
 };
 
 export type LanguageFileImport = {
-  id: string;
+  /**
+   * The display name of the import (the part between the brackets)
+   */
+  displayName: string;
+
+  /**
+   * The path to the language files (the part between the parens)
+   */
   importPath: string;
+
+  /**
+   * The ID of the LGFile or LUFile (extracted from the importPath)
+   */
+  id: string;
 };
 
 export type LgFile = {

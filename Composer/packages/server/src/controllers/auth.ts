@@ -24,9 +24,9 @@ async function getAccessToken(req: GetAccessTokenRequest, res: Response) {
       .status(400)
       .send('Must pass a "targetResource" parameter to perform authentication in Electron environment.');
   }
-  // if (!isElectron && !clientId) {
-  //   return res.status(400).send('Must pass a "clientId" parameter to perform authentication in a Web environment.');
-  // }
+  if (!isElectron && !clientId) {
+    return res.status(400).send('Must pass a "clientId" parameter to perform authentication in a Web environment.');
+  }
   const parsedScopes: string[] = JSON.parse(scopes);
 
   const accessToken = await authService.getAccessToken({ clientId, targetResource, scopes: parsedScopes });

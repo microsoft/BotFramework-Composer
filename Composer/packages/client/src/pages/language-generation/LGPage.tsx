@@ -13,6 +13,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -21,8 +22,9 @@ const LGPage: React.FC<RouteComponentProps<{
   dialogId: string;
   projectId: string;
   skillId: string;
+  lgFileId: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
+  const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
@@ -33,18 +35,20 @@ const LGPage: React.FC<RouteComponentProps<{
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
-    if (!activeDialog && dialogs.length && dialogId !== 'common') {
+    if (!activeDialog && dialogs.length && dialogId !== 'common' && !lgFileId) {
       navigateTo(`${baseURL}language-generation/common`);
     }
-  }, [dialogId, dialogs, projectId]);
+  }, [dialogId, dialogs, projectId, lgFileId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
       let url = `${baseURL}language-generation/${dialogId}`;
+      if (lgFileId) url += `/item/${lgFileId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
+      TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
-    [dialogId, projectId, edit]
+    [dialogId, projectId, edit, lgFileId]
   );
 
   const onRenderHeaderContent = () => {
@@ -61,6 +65,7 @@ const LGPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LGPage"
       dialogId={dialogId}
+      fileId={lgFileId}
       mainRegionName={formatMessage('LG editor')}
       navRegionName={formatMessage('LG Navigation Pane')}
       pageMode={'language-generation'}
@@ -72,8 +77,8 @@ const LGPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit/*" projectId={projectId} skillId={skillId} />
-          <TableView dialogId={dialogId} path="/" projectId={projectId} />
+          <CodeEditor dialogId={dialogId} lgFileId={lgFileId} path="/edit/*" projectId={projectId} skillId={skillId} />
+          <TableView dialogId={dialogId} lgFileId={lgFileId} path="/" projectId={projectId} />
         </Router>
       </Suspense>
     </Page>

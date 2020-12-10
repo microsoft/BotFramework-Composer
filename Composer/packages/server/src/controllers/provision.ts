@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { Request } from 'express';
+
 import { ExtensionContext } from '../models/extension/extensionContext';
 import { authService } from '../services/auth/auth';
-
 import { BotProjectService } from '../services/project';
-import { Request } from 'express';
 export const ProvisionController = {
   getResources: async (req, res) => {
     const user = await ExtensionContext.getUserFromRequest(req);
@@ -39,10 +39,6 @@ export const ProvisionController = {
     const type = req.params.type; // type is webapp or functions
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
-    // deal with publishTargets not exist in settings
-    // const publishTargets = currentProject.settings?.publishTargets || [];
-
-    console.log('CALLING PLUGIN EXTENSION METHOD FOR ', type);
 
     if (ExtensionContext?.extensions?.publish[type]?.methods?.provision) {
       // get the externally provision method

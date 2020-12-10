@@ -5,9 +5,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import onboardingStorage from '../utils/onboardingStorage';
-import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 import { useLocation } from '../utils/hooks';
 import { dispatcherState, onboardingState, botProjectIdsState, validateDialogsSelectorFamily } from '../recoilModel';
 

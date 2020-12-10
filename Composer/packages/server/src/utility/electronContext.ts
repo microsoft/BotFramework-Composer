@@ -9,6 +9,8 @@ export type ElectronContext = {
   ) => Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
   logOut: () => void;
   machineId: string;
+  sessionId: string;
+  composerVersion: string;
 };
 
 let context;

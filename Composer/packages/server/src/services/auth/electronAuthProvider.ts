@@ -20,7 +20,7 @@ type TokenCache = Record<string, TokenRecord>;
 
 export class ElectronAuthProvider extends AuthProvider {
   private _electronContext: ElectronContext | undefined;
-  private tokenRefreshFactor = 0.75; // refresh the token after 75% of the expiry time has passed
+  private tokenRefreshFactor = 0.65; // refresh the token after 75% of the expiry time has passed
   private tokenCache: TokenCache;
 
   constructor(config: AuthConfig) {

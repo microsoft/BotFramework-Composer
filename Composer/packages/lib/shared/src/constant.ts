@@ -9,7 +9,12 @@ export const SensitiveProperties = [
   'qna.subscriptionKey',
 ];
 
-export const RootBotManagedProperties = ['luis.authoringKey', 'luis.authoringRegion', 'qna.subscriptionKey'];
+export const RootBotManagedProperties = [
+  'luis.authoringKey',
+  'luis.authoringRegion',
+  'qna.subscriptionKey',
+  'luis.endpointKey',
+];
 
 export const FieldNames = {
   Events: 'triggers',
@@ -19,11 +24,6 @@ export const FieldNames = {
   DefaultCase: 'default',
   Cases: 'cases',
 };
-
-export enum ProvisionType {
-  createNew = 'createNew',
-  selectExisted = 'selectExisted',
-}
 
 export const defaultPublishConfig = {
   name: 'default',

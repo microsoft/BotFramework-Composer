@@ -9,10 +9,12 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import ReactDOM from 'react-dom';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
-import { dialogStyle } from './dialogStyle';
+const dialogStyle = {
+  normal: 'NORMAL',
+  console: 'CONSOLE',
+};
 
 // -------------------- Styles -------------------- //
 const normalStyle = css`
@@ -33,46 +35,35 @@ const consoleStyle = css`
   white-space: pre-line;
 `;
 
-export const builtInStyles = {
+const builtInStyles = {
   [dialogStyle.normal]: normalStyle,
   [dialogStyle.console]: consoleStyle,
 };
 
-export const dialog = {
+const dialog = {
   title: {
     fontWeight: FontWeights.bold,
   },
 };
 
-export const dialogModal = {
+const dialogModal = {
   main: {
     maxWidth: '600px !important',
   },
 };
 
-export const confirmationContainer = css`
+const confirmationContainer = css`
   display: flex;
   flex-direction: column;
 `;
 
-export const confirmation = css`
-  padding: 15px;
-  margin-bottom: 20px;
-  white-space: pre-line;
-  background: ${SharedColors.red10};
-`;
-
-export const confirmationContent = css`
-  width: 500px;
-`;
-
 // -------------------- ConfirmDialog -------------------- //
 
-interface ConfirmDialogProps {
+type ConfirmDialogProps = {
   onCancel: () => void;
   onConfirm: () => void;
   setting: any;
-}
+};
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   const { setting, onCancel, onConfirm } = props;

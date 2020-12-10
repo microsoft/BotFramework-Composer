@@ -22,7 +22,7 @@ import { authConfig, ResourcesItem } from '../types';
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
-const ProvisionLog = `provision.${process.env.NODE_ENV === 'production'? 'production': 'development'}.log`;
+const getProvisionLogName = (name:string) => `provision.${name}.log`;
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
 interface DeployResources {
@@ -74,7 +74,8 @@ function publishResultFromStatus(procStatus: ProcessStatus): PublishResponse {
 export default async (composer: IExtensionRegistration): Promise<void> => {
   class AzurePublisher implements PublishPlugin<PublishConfig> {
     private historyFilePath: string;
-    private publishHistories: Record<string, Record<string, PublishResult[]>>;
+    private publishHistories: Record<string, Record<string, PublishResult[]>>; // use botId profileName as key
+    private provisionHistories: Record<string, Record<string, ProcessStatus>>;
     private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
@@ -86,6 +87,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
     constructor(mode: string, name: string, description: string, bundleId: string) {
       this.publishHistories = {};
+      this.provisionHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
@@ -401,27 +403,20 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           },
         };
 
-        console.log(publishProfile);
-
-        // write this to the project settings. Browser need to refresh to get the update
-        // project.settings.publishTargets.push({
-        //   name: config.name,
-        //   type: 'azurePublish',
-        //   configuration: JSON.stringify(publishProfile),
-        //   lastPublished: null,
-        // });
-
-        // await project.updateDefaultSlotEnvSettings(project.settings);
+        this.logger(publishProfile);
 
         BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!', publishProfile);
       } catch (error) {
         BackgroundProcessManager.updateProcess(jobId, 500,
         `${stringifyError(error)}
-        detail message can see ${ProvisionLog} in your bot folder`);
+        detail message can see ${getProvisionLogName(name)} in your bot folder`);
         // save provision history to log file.
-        const provisionHistoryPath = path.resolve(project.dataDir, ProvisionLog);
+        const provisionHistoryPath = path.resolve(project.dataDir, getProvisionLogName(name));
         await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
       }
+      // add in history
+      this.addProvisionHistory(project.id, config.name, BackgroundProcessManager.getStatus(jobId));
+      BackgroundProcessManager.removeProcess(jobId);
     };
 
     /**************************************************************************************************
@@ -520,7 +515,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         result: {
           message: 'bot not published',
         }
-
       };
     };
 
@@ -544,11 +538,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         }
       } else {
         // If job id was not present or failed to resolve the status, use the pid and profileName
-        const status = BackgroundProcessManager.getStatusByName(project.id, processName);
+        const status = BackgroundProcessManager.getStatusByName(botId, processName);
         if (status) {
           return status;
         }
       }
+
+      // if ACTIVE status is found, look for recent status in history
+      return this.getProvisionHistory(botId, processName);
     };
 
     getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
@@ -615,6 +612,28 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       return recommendedResources;
+    };
+
+    private addProvisionHistory = (botId:string, profileName: string, newValue:ProcessStatus) => {
+      if(!this.provisionHistories[botId]){
+        this.provisionHistories[botId] = {};
+      }
+      this.provisionHistories[botId][profileName] = newValue;
+    }
+
+    private getProvisionHistory = (botId:string, profileName:string) => {
+      if (this.provisionHistories?.[botId]?.[profileName]) {
+        return this.provisionHistories[botId][profileName];
+      }
+      return {
+        id: '',
+        projectId: botId,
+        processName: profileName,
+        time: new Date(),
+        log:[],
+        status: 500,
+        message: 'not found',
+      } as ProcessStatus;
     };
   }
 

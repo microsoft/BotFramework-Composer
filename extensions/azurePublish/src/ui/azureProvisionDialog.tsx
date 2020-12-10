@@ -18,6 +18,8 @@ import {
   setTitle,
   getSchema,
   getType,
+  getTokenFromCache,
+  isGetTokenFromUser,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -170,20 +172,39 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
-    getAccessToken(authConfig.arm).then((token)=> {
-      setToken(token);
+    if(isGetTokenFromUser()){
+      const { accessToken } = getTokenFromCache();
+      console.log(accessToken);
+
+      setToken(accessToken);
       // decode token
-      const decoded = decodeToken(token);
+      const decoded = decodeToken(accessToken);
       if(decoded){
         setCurrentUser({
-          token: token,
+          token: accessToken,
           email: decoded.upn,
           name: decoded.name,
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
       }
-    });
+    } else {
+      getAccessToken(authConfig.arm).then((token)=> {
+        setToken(token);
+        // decode token
+        const decoded = decodeToken(token);
+        if(decoded){
+          setCurrentUser({
+            token: token,
+            email: decoded.upn,
+            name: decoded.name,
+            expiration: (decoded.exp || 0) * 1000, // convert to ms,
+            sessionExpired: false,
+          });
+        }
+      });
+    }
+
   }, []);
 
   useEffect(()=> {
@@ -191,7 +212,7 @@ export const AzureProvisionDialog: React.FC = () => {
       getSubscriptions(token).then(setSubscriptions);
       getResources();
     }
-  },[token])
+  },[token]);
 
   const getResources = async () => {
     try {

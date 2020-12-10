@@ -22,10 +22,9 @@ import { botEndpointsState } from '../atoms';
 import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
 
-import { armScopes, BotStatus, Text } from './../../constants';
+import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
-import { AuthClient } from '../../utils/authClient';
 import { setRootBotSettingState } from './setting';
 
 const PUBLISH_SUCCESS = 200;
@@ -74,7 +73,7 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({ ...botEndpoints, [projectId]: `${endpointURL}/api/messages` }));
       } else {
-        set(botStatusState(projectId), BotStatus.reloading);
+        set(botStatusState(projectId), BotStatus.starting);
       }
     }
 
@@ -125,7 +124,7 @@ export const publisherDispatcher = () => {
           [projectId]: `${endpointURL}/api/messages`,
         }));
       } else if (status === PUBLISH_PENDING) {
-        set(botStatusState(projectId), BotStatus.reloading);
+        set(botStatusState(projectId), BotStatus.starting);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
         if (checkIfDotnetVersionMissing(data)) {
@@ -174,14 +173,10 @@ export const publisherDispatcher = () => {
       projectId: string,
       target: any,
       metadata: any,
-      sensitiveSettings
+      sensitiveSettings,
+      token = ''
     ) => {
       try {
-        let token = '';
-        if (target.type !== defaultPublishConfig.type) {
-          token = await AuthClient.getAccessToken(armScopes);
-        }
-
         const { snapshot } = callbackHelpers;
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const luFiles = await snapshot.getPromise(luFilesState(projectId));
@@ -192,8 +187,8 @@ export const publisherDispatcher = () => {
           {
             metadata: {
               ...metadata,
-              luResources: referredLuFiles.map((file) => file.id),
-              qnaResources: qnaFiles.map((file) => file.id),
+              luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+              qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
             },
             sensitiveSettings,
           },
