@@ -34,7 +34,7 @@ type Props = RouteComponentProps<{ projectId: string; schemaId: string }>;
 const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const { projectId = '', schemaId = '' } = props;
 
-  const [generatingSchemaId, setGeneratingSchemaId] = React.useState('');
+  const [generatingSchemaId, setGeneratingSchemaId] = React.useState(schemaId || '');
   React.useEffect(() => setGeneratingSchemaId(schemaId), [schemaId]);
 
   const formDialogSchemaIds = useRecoilValue(formDialogSchemaIdsState(projectId));
