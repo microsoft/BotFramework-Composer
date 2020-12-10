@@ -9,7 +9,12 @@ export const SensitiveProperties = [
   'qna.subscriptionKey',
 ];
 
-export const RootBotManagedProperties = ['luis.authoringKey', 'luis.authoringRegion', 'qna.subscriptionKey'];
+export const RootBotManagedProperties = [
+  'luis.authoringKey',
+  'luis.authoringRegion',
+  'qna.subscriptionKey',
+  'luis.endpointKey',
+];
 
 export const FieldNames = {
   Events: 'triggers',

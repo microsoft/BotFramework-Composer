@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Enviar una respuesta para formular una pregunta",
-      "subtitle": "Actividad de la pregunta"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Solicitar un archivo o datos adjuntos",
-      "subtitle": "Entrada de datos adjuntos"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Aviso con varias opciones",
-      "subtitle": "Entrada de opciones"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Solicitar confirmación",
-      "subtitle": "Confirmar entrada"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Solicitar una fecha o una hora",
-      "subtitle": "Entrada de fecha y hora"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Solicitar un número",
-      "subtitle": "Entrada de número"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Inicio de sesión de OAuth",
-      "subtitle": "Entrada de OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Solicitar texto",
-      "subtitle": "Entrada de texto"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Iniciar un nuevo cuadro de diálogo",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Emitir un evento de seguimiento",
       "subtitle": "Actividad de seguimiento"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Enviar una respuesta para formular una pregunta",
+      "subtitle": "Actividad de la pregunta"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Solicitar un archivo o datos adjuntos",
+      "subtitle": "Entrada de datos adjuntos"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Aviso con varias opciones",
+      "subtitle": "Entrada de opciones"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Solicitar confirmación",
+      "subtitle": "Confirmar entrada"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Solicitar una fecha o una hora",
+      "subtitle": "Entrada de fecha y hora"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Solicitar un número",
+      "subtitle": "Entrada de número"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Inicio de sesión de OAuth",
+      "subtitle": "Entrada de OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Solicitar texto",
+      "subtitle": "Entrada de texto"
     }
   },
   "Microsoft.OnActivity": {

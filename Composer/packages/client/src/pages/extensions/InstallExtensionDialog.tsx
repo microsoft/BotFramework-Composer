@@ -11,7 +11,7 @@ import axios, { CancelToken } from 'axios';
 import formatMessage from 'format-message';
 import { ExtensionSearchResult } from '@bfc/extension-client';
 
-import httpClient from '../../../utils/httpUtil';
+import httpClient from '../../utils/httpUtil';
 
 import { ExtensionSearchResults } from './ExtensionSearchResults';
 

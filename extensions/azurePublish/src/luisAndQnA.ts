@@ -19,9 +19,11 @@ type QnaConfigType = {
   qnaRegion: string | 'westus';
 };
 
+type Resource = { id: string; isEmpty: boolean };
+
 type Resources = {
-  luResources: string[];
-  qnaResources: string[];
+  luResources: Resource[];
+  qnaResources: Resource[];
 }
 
 type BuildSettingType = {
@@ -91,29 +93,45 @@ export async function publishLuisToPrediction(
     // In order for the bot to use the LUIS models, we need to assign a LUIS key to the endpoint of each app
     // First step is to get a list of all the accounts available based on the given luisAuthoringKey.
     let accountList;
-    try {
-      // Make a call to the azureaccounts api
-      // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be313cec181ae720aa2b26c
-      // This returns a list of azure account information objects with AzureSubscriptionID, ResourceGroup, AccountName for each.
-      const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
-      const options = {
-        headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-      } as rp.RequestPromiseOptions;
-      const response = await rp.get(getAccountUri, options);
 
-      // this should include an array of account info objects
-      accountList = JSON.parse(response);
-    } catch (err) {
-      // handle the token invalid
-      const error = JSON.parse(err.error);
-      if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
-        throw new Error(
-          `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
-        );
-      } else {
-        throw err;
+    // Retry twice here
+    let retryCount = 0;
+    while (retryCount < 2) {
+      try {
+        // Make a call to the azureaccounts api
+        // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be313cec181ae720aa2b26c
+        // This returns a list of azure account information objects with AzureSubscriptionID, ResourceGroup, AccountName for each.
+        const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
+        const options = {
+          headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+        } as rp.RequestPromiseOptions;
+        const response = await rp.get(getAccountUri, options);
+
+        // this should include an array of account info objects
+        accountList = JSON.parse(response);
+        break;
+      } catch (err) {
+        if (retryCount < 1) {
+          this.logger({
+            status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+            message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+          });
+          retryCount++;
+        }
+        else {
+          // handle the token invalid
+          const error = JSON.parse(err.error);
+          if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+            throw new Error(
+              `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+            );
+          } else {
+            throw err;
+          }
+        }
       }
     }
+
     // Extract the accoutn object that matches the expected resource name.
     // This is the name that would appear in the azure portal associated with the luis endpoint key.
     const account = getAccount(accountList, luisResource ? luisResource : `${name}-${environment}-luis`);
@@ -127,14 +145,47 @@ export async function publishLuisToPrediction(
         message: `Assigning to luis app id: ${luisAppId}`,
       });
 
-      const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
-      const options = {
-        body: account,
-        json: true,
-        headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-      } as rp.RequestPromiseOptions;
-      await rp.post(luisAssignEndpoint, options);
+      // Retry at most twice for each api call
+      let retryCount = 0;
+      while (retryCount < 2) {
+        try {
+          const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
+          const options = {
+            body: account,
+            json: true,
+            headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+          } as rp.RequestPromiseOptions;
+          const response = await rp.post(luisAssignEndpoint, options);
+
+          this.logger({
+            status: BotProjectDeployLoggerType.DEPLOY_INFO,
+            message: response,
+          });
+          break;
+        }
+        catch (err) {
+          if (retryCount < 1) {
+            this.logger({
+              status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+              message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+            });
+            retryCount++;
+          }
+          else {
+            // handle the token invalid
+            const error = JSON.parse(err.error);
+            if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+              throw new Error(
+                `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+              );
+            } else {
+              throw err;
+            }
+          }
+        }
+      }
     }
+
 
     // The process has now completed.
     logger({
@@ -152,17 +203,20 @@ export async function build(project: IBotProject, path: string, settings: BuildS
   const {builder, files} = project;
 
   const luFiles: FileInfo[] = [];
-  luResources.forEach((id) => {
+  const emptyFiles = {};
+  luResources.forEach(({ id, isEmpty }) => {
     const fileName = `${id}.lu`;
     const f = files.get(fileName);
+    if (isEmpty) emptyFiles[fileName] = true;
     if (f) {
       luFiles.push(f);
     }
   });
   const qnaFiles: FileInfo[] = [];
-  qnaResources.forEach((id) => {
+  qnaResources.forEach(({ id, isEmpty }) => {
     const fileName = `${id}.qna`;
     const f = files.get(fileName);
+    if (isEmpty) emptyFiles[fileName] = true;
     if (f) {
       qnaFiles.push(f);
     }
@@ -170,6 +224,6 @@ export async function build(project: IBotProject, path: string, settings: BuildS
 
   builder.rootDir = botPath(path);
   builder.setBuildConfig( {...luisConfig, ...qnaConfig},  project.settings.downsampling );
-  await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[]);
+  await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[], emptyFiles);
   await builder.copyModelPathToBot();
 }

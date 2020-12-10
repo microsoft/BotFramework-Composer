@@ -40,6 +40,16 @@
           }
         ]
       }
+    },
+    "configuration": {
+      "filter": {
+        "description": "Array of file types to show in the page contribution.",
+        "type": "array",
+        "default": ["dialog", "lg", "lu", "qna"],
+        "items": {
+          "type": "string"
+        }
+      }
     }
   },
   "main": "lib/node/index.js",

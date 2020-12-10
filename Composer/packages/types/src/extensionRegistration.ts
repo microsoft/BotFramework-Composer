@@ -5,7 +5,7 @@ import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 import { PassportStatic } from 'passport';
 
-import { IExtensionContext } from './extension';
+import { IExtensionContext, ExtensionSettings } from './extension';
 import { PublishPlugin } from './publish';
 import { RuntimeTemplate, BotTemplate } from './runtime';
 import { UserIdentity } from './user';
@@ -26,6 +26,7 @@ export type IExtensionRegistration = {
   readonly name: string;
   readonly log: Debugger;
   readonly store: ExtensionStore<any>;
+  readonly settings: ExtensionSettings;
   description: string;
   /**
    * Sets a custom storage class.

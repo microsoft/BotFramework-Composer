@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Отправьте ответ, чтобы задать вопрос",
-      "subtitle": "Действие вопроса"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Подсказка для файла или вложения",
-      "subtitle": "Входные данные вложения"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Предложение с множественным выбором",
-      "subtitle": "Входные данные для варианта выбора"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Подсказка для подтверждения",
-      "subtitle": "Подтверждение ввода"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Подсказка для даты или времени",
-      "subtitle": "Ввод даты и времени"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Подсказка для числа",
-      "subtitle": "Ввод числа"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Вход OAuth",
-      "subtitle": "Входные данные OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Подсказка для текста",
-      "subtitle": "Ввод текста"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Начать новый диалог",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Выдать событие трассировки",
       "subtitle": "Действие трассировки"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Отправьте ответ, чтобы задать вопрос",
+      "subtitle": "Действие вопроса"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Подсказка для файла или вложения",
+      "subtitle": "Входные данные вложения"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Предложение с множественным выбором",
+      "subtitle": "Входные данные для варианта выбора"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Подсказка для подтверждения",
+      "subtitle": "Подтверждение ввода"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Подсказка для даты или времени",
+      "subtitle": "Ввод даты и времени"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Подсказка для числа",
+      "subtitle": "Ввод числа"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Вход OAuth",
+      "subtitle": "Входные данные OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Подсказка для текста",
+      "subtitle": "Ввод текста"
     }
   },
   "Microsoft.OnActivity": {

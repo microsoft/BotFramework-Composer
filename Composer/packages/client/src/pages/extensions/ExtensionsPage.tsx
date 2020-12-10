@@ -23,9 +23,11 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
-import { dispatcherState, extensionsState } from '../../../recoilModel';
+import { dispatcherState, extensionsState } from '../../recoilModel';
+import httpClient from '../../utils/httpUtil';
 
 import { InstallExtensionDialog } from './InstallExtensionDialog';
+import { ExtensionsSettings } from './ExtensionsSettings';
 
 const remoteExtensionsState = selector({
   key: 'remoteExtensions',
@@ -38,12 +40,14 @@ const noExtensionsStyles = css`
   justify-content: center;
 `;
 
-const Extensions: React.FC<RouteComponentProps> = () => {
+const ExtensionsPage: React.FC<RouteComponentProps> = () => {
   const { fetchExtensions, toggleExtension, addExtension, removeExtension } = useRecoilValue(dispatcherState);
   const extensions = useRecoilValue(remoteExtensionsState);
   // if a string, its the id of the extension being updated
   const [isUpdating, setIsUpdating] = useState<string | boolean>(false);
   const [showNewModal, setShowNewModal] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [settings, setSettings] = useState({});
   const [selectedExtensions, setSelectedExtensions] = useState<ExtensionMetadata[]>([]);
   const selection = useRef(
     new Selection({
@@ -53,8 +57,15 @@ const Extensions: React.FC<RouteComponentProps> = () => {
     })
   ).current;
 
+  const fetchSettings = async () => {
+    const res = await httpClient.get('/extensions/settings');
+
+    setSettings(res.data);
+  };
+
   useEffect(() => {
     fetchExtensions();
+    fetchSettings();
   }, []);
 
   const installedColumns: IColumn[] = [
@@ -145,6 +156,19 @@ const Extensions: React.FC<RouteComponentProps> = () => {
       disabled: selectedExtensions.length === 0,
       align: 'left',
     },
+    {
+      type: 'action',
+      align: 'right',
+      text: formatMessage('Settings'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Settings',
+        },
+        onClick: () => {
+          setShowSettings(true);
+        },
+      },
+    },
   ];
 
   const submit = useCallback(async (selectedExtension?: ExtensionSearchResult) => {
@@ -173,6 +197,32 @@ const Extensions: React.FC<RouteComponentProps> = () => {
 
   const dismissInstallDialog = useCallback(() => setShowNewModal(false), []);
 
+  const renderRow = (rowProps, defaultRender) => {
+    if (rowProps && defaultRender) {
+      if (isUpdating) {
+        return defaultRender(rowProps);
+      }
+
+      if (extensions.length === 0) {
+        return (
+          <div css={noExtensionsStyles}>
+            <p>{formatMessage('No extensions installed')}</p>
+          </div>
+        );
+      }
+
+      const customStyles: Partial<IDetailsRowStyles> = {
+        root: {
+          color: rowProps.item?.enabled ? undefined : NeutralColors.gray90,
+        },
+      };
+
+      return <DetailsRow {...rowProps} styles={customStyles} />;
+    }
+
+    return null;
+  };
+
   return (
     <div style={{ maxWidth: '100%' }}>
       <Toolbar toolbarItems={toolbarItems} />
@@ -184,35 +234,13 @@ const Extensions: React.FC<RouteComponentProps> = () => {
         layoutMode={DetailsListLayoutMode.justified}
         selection={selection}
         selectionMode={SelectionMode.multiple}
-        onRenderRow={(rowProps, defaultRender) => {
-          if (rowProps && defaultRender) {
-            if (isUpdating) {
-              return defaultRender(rowProps);
-            }
-
-            if (extensions.length === 0) {
-              return (
-                <div css={noExtensionsStyles}>
-                  <p>{formatMessage('No extensions installed')}</p>
-                </div>
-              );
-            }
-
-            const customStyles: Partial<IDetailsRowStyles> = {
-              root: {
-                color: rowProps.item?.enabled ? undefined : NeutralColors.gray90,
-              },
-            };
-
-            return <DetailsRow {...rowProps} styles={customStyles} />;
-          }
-
-          return null;
-        }}
+        onRenderRow={renderRow}
       />
       <InstallExtensionDialog isOpen={showNewModal} onDismiss={dismissInstallDialog} onInstall={submit} />
+      <ExtensionsSettings isOpen={showSettings} settings={settings} onDismiss={() => setShowSettings(false)} />
     </div>
   );
 };
 
-export { Extensions };
+export default ExtensionsPage;
+export { ExtensionsPage };
