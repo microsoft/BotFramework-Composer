@@ -45,7 +45,7 @@ export const BotRuntimeStatus = React.memo((props: BotRuntimeStatusProps) => {
         setIntervalRunning(false);
         startSingleBot(projectId, true);
         break;
-      case BotStatus.reloading:
+      case BotStatus.starting:
         setIntervalRunning(true);
         break;
 
