@@ -21,7 +21,7 @@
     "message": "Med en formulärdialogruta kan din robot samla in delar av information."
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
-    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
+    "message": "Ett kunskapsbasnamn får inte innehålla blanksteg eller specialtecken. Använd bokstäver, siffror, - eller _."
   },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "En miniatyröversikt för fil ger en överblick över din källkod, vilket underlättar navigeringen och ger dig bättre kodförståelse."
@@ -35,11 +35,17 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "En egenskap är en informationsenhet som din robot samlar in. Egenskapsnamnet är det namn som används i Composer. Det är inte nödvändigtvis samma text som visas i robotens meddelanden."
   },
+  "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
+    "message": "A schema, or form, is the list of properties your bot will collect."
+  },
+  "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
+    "message": "A skill bot that can be called from a host bot."
+  },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "En prenumerationsnyckel skapas när du skapar en QnA Maker-resurs."
   },
   "a_valid_url_should_start_with_http_or_https_327b1a30": {
-    "message": "A valid URL should start with http:// or https://"
+    "message": "En giltig URL måste börja med http:// eller https://"
   },
   "about_70c18bba": {
     "message": "Om"
@@ -92,6 +98,9 @@
   "actions_moved_d7777b29": {
     "message": "Flyttade åtgärder"
   },
+  "active_language_6d001457": {
+    "message": "Active language"
+  },
   "activities_125193f7": {
     "message": "Aktiviteter"
   },
@@ -107,11 +116,11 @@
   "add_8523c19b": {
     "message": "Lägg till"
   },
+  "add_a_dialog_e378aa3a": {
+    "message": "Add a dialog"
+  },
   "add_a_new_key_5c208c29": {
     "message": "Lägg till ny nyckel"
-  },
-  "add_a_new_skill_dialog_aaaafa9c": {
-    "message": "Lägg till en ny färdighetsdialogruta"
   },
   "add_a_new_trigger_a82d3db8": {
     "message": "Lägg till en ny utlösare"
@@ -125,6 +134,9 @@
   "add_a_skill_46d2b71c": {
     "message": "Lägg till en färdighet"
   },
+  "add_a_trigger_c6861401": {
+    "message": "Add a trigger"
+  },
   "add_a_welcome_message_9e1480b2": {
     "message": "Lägg till ett välkomstmeddelande"
   },
@@ -137,35 +149,26 @@
   "add_custom_runtime_6b73dc44": {
     "message": "Lägg till anpassad körning"
   },
-  "add_language_75dee49e": {
-    "message": "Lägg till språk"
-  },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Lägg till flera kommaavgränsade synonymer"
   },
   "add_new_answer_9de3808e": {
     "message": "Lägg till nytt svar"
   },
-  "add_new_dialog_25f12c9": {
-    "message": "Lägg till ny dialogruta"
-  },
   "add_new_extension_19b82b77": {
     "message": "Lägg till nytt tillägg"
   },
-  "add_new_knowledge_base_on_displayname_7f44609c": {
-    "message": " Lägg till ny kunskapsbas på { displayName }"
-  },
-  "add_new_profile_47b225e6": {
-    "message": "Lägg till ny profil"
+  "add_new_knowledge_base_1a3afed3": {
+    "message": "Add new knowledge base"
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "Lägg till nytt { propertyName }"
   },
+  "add_new_publish_profile_93345a07": {
+    "message": "Add new publish profile"
+  },
   "add_new_question_85612b7f": {
     "message": "Lägg till ny fråga"
-  },
-  "add_new_trigger_on_displayname_2aaf6e4c": {
-    "message": "Lägg till ny utlösare på { displayName }"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Lägg till ny valideringsregel här"
@@ -177,10 +180,10 @@
     "message": "+ Lägg till QnA-par"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> lägga till några exempelfraser som utlöser den här avsikten:\n> – berätta om vädret\n> – hur är vädret i '{'city=Seattle'}'\n\n> entitetsdefinitioner:\n> @ ml city"
+    "message": "> lägga till några exempelfraser som utlöser den här avsikten:\n> – berätta om vädret\n> – hur är vädret i {city=Seattle}\n\n> entitetsdefinitioner:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> lägg till vissa förväntade användarsvar:\n> – Påminn mig att '{'itemTitle=köpa mjölk'}'\n> – Påminn mig att '{'itemTitle'}'\n> –lägga till '{'itemTitle'}' i min att göra-lista\n>\n> entitetsdefinitioner:\n> @ ml-itemTitle\n"
+    "message": "> lägg till vissa förväntade användarsvar:\n> – Påminn mig att {itemTitle=köpa mjölk}\n> – Påminn mig att {itemTitle}\n> –lägga till {itemTitle} i min att göra-lista\n>\n> entitetsdefinitioner:\n> @ ml-itemTitle\n"
   },
   "add_welcome_message_49d9ded9": {
     "message": "Lägg till välkomstmeddelande"
@@ -191,20 +194,11 @@
   "advanced_options_4dcc8385": {
     "message": "Avancerade alternativ"
   },
+  "advanced_settings_view_json_b83638b4": {
+    "message": "Advanced Settings View (json)"
+  },
   "all_4321c3a1": {
     "message": "Alla"
-  },
-  "all_language_generation_files_ef778f24": {
-    "message": "alla språkgenereringsfiler"
-  },
-  "all_language_understanding_files_714b33eb": {
-    "message": "alla språkförståelsefiler"
-  },
-  "all_profiles_8321b1aa": {
-    "message": "Alla profiler"
-  },
-  "all_qna_files_349d7fe1": {
-    "message": "alla qna-filer"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "En redigeringsnyckel skapas automatiskt när du skapar ett LUIS-konto."
@@ -227,11 +221,14 @@
   "any_string_f22dc2e1": {
     "message": "alla strängar"
   },
-  "application_language_87691b6": {
-    "message": "Programspråk"
+  "app_id_password_424f613a": {
+    "message": "App Id / Password"
   },
   "application_language_f100f3e0": {
     "message": "Programspråk"
+  },
+  "application_language_settings_26f82dfc": {
+    "message": "Application Language settings"
   },
   "application_settings_39e840c6": {
     "message": "Programinställningar"
@@ -251,6 +248,9 @@
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "Vill du ta bort { propertyName }?"
   },
+  "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
+    "message": "Are you sure you want to remove this property?"
+  },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "Vill du starta om? Ditt arbete kommer att gå förlorat."
   },
@@ -259,9 +259,6 @@
   },
   "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
     "message": "Vill du avinstallera de här tilläggen?"
-  },
-  "arm_template_bc8441bb": {
-    "message": "ARM-mall"
   },
   "array_643947ee": {
     "message": "Matris"
@@ -277,6 +274,9 @@
   },
   "ask_a_question_92ef7e0c": {
     "message": "Ställ en fråga"
+  },
+  "ask_activity_82c174e2": {
+    "message": "Ask Activity"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "Minst en fråga krävs"
@@ -299,29 +299,11 @@
   "auto_update_86eb33b0": {
     "message": "Automatisk uppdatering"
   },
-  "available_skills_95c114ac": {
-    "message": "Tillgängliga färdigheter"
-  },
-  "azure_app_service_plan_a285fb06": {
-    "message": "Azure App Service-plan"
-  },
-  "azure_application_insights_c80028e4": {
-    "message": "Azure Application Insights"
-  },
-  "azure_blob_storage_b5503630": {
-    "message": "Azure Blob Storage"
-  },
-  "azure_bot_service_3afc983": {
-    "message": "Azure Bot Service"
-  },
-  "azure_cosmos_db_a82b5d09": {
-    "message": "Azure Cosmos DB"
+  "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
+    "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
   "back_2900f52a": {
     "message": "Tillbaka"
-  },
-  "basic_assistant_d23bde15": {
-    "message": "Basic Assistant"
   },
   "been_used_5daccdb2": {
     "message": "Har använts"
@@ -368,17 +350,20 @@
   "boolean_value_98d39ea1": {
     "message": "Booleskt värde."
   },
+  "bot_416bf08d": {
+    "message": "bot"
+  },
   "bot_7926b66d": {
-    "message": "Bot"
+    "message": "Robot"
   },
   "bot_asks_5e9f0202": {
     "message": "Roboten frågar"
   },
-  "bot_configured_for_speech_66fc8e57": {
-    "message": "Roboten har konfigurerats för tal"
+  "bot_content_was_successfully_imported_5a07ae64": {
+    "message": "Bot content was successfully imported."
   },
-  "bot_configured_for_text_a67eca78": {
-    "message": "Roboten har konfigurerats för text"
+  "bot_controller_319b408d": {
+    "message": "Bot Controller"
   },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "Med Bot Framework Composer kan utvecklare och flerdisciplinära grupper skapa alla typer av konversationsupplevelser med de senaste komponenterna från Bot Framework, som SDK, LG, LU och deklarativa filformat, utan att behöva skriva någon kod alls."
@@ -404,14 +389,20 @@
   "bot_language_active_7cf9dc78": {
     "message": "Robotspråk (aktivt)"
   },
-  "bot_name_bbd0779d": {
-    "message": "Robotnamn"
+  "bot_management_and_configurations_b7dadd69": {
+    "message": "Bot management and configurations"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "Robotnamnet är { botName }"
   },
   "bot_project_file_does_not_exist_a0864a2c": {
     "message": "Robotprojektfilen finns inte."
+  },
+  "bot_projects_settings_list_view_ab58e5d": {
+    "message": "Bot projects settings list View"
+  },
+  "bot_projects_settings_navigation_pane_c2074a5f": {
+    "message": "Bot Projects Settings Navigation Pane"
   },
   "bot_responses_4617b4a2": {
     "message": "Robotsvar"
@@ -424,9 +415,6 @@
   },
   "bot_settings_ce2783e4": {
     "message": "Robotinställningar"
-  },
-  "bot_web_app_ca8b1468": {
-    "message": "Robotwebbapp"
   },
   "branch_if_else_391e5681": {
     "message": "Gren: om/annars"
@@ -445,6 +433,12 @@
   },
   "build_your_first_bot_f9c3e427": {
     "message": "Skapa din första robot"
+  },
+  "building_5e8a3c1d": {
+    "message": "Building"
+  },
+  "building_runtime_22f11a1f": {
+    "message": "Building runtime"
   },
   "bytes_74acea97": {
     "message": "Byte"
@@ -485,12 +479,6 @@
   "choose_one_2c4277df": {
     "message": "Välj en"
   },
-  "choose_one_7feacdb6": {
-    "message": "Välj en:"
-  },
-  "choose_your_assistant_7ee96d89": {
-    "message": "Välj din assistent"
-  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -518,11 +506,20 @@
   "comment_7ef1428e": {
     "message": "Kommentar"
   },
+  "comments_e07bcbe3": {
+    "message": "Comments"
+  },
+  "common_7911ab4b": {
+    "message": "Common"
+  },
   "component_stacktrace_e24b1983": {
     "message": "Komponentstackspårning:"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer kan ännu inte översätta din robot automatiskt.\nOm du vill skapa en översättning manuellt skapar Composer en kopia av robotens innehåll med namnet på det målspråket. Därefter kan du översätta innehållet utan att den ursprungliga robotlogiken eller flödet, och du kan växla mellan språken för att se till att svaren har översatts korrekt."
+  },
+  "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
+    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
   },
   "composer_introduction_98a93701": {
     "message": "Introduktion till Composer"
@@ -530,11 +527,17 @@
   "composer_is_up_to_date_9118257d": {
     "message": "Composer har uppdaterats."
   },
+  "composer_language_is_the_language_of_composer_ui_c23a57b6": {
+    "message": "Composer language is the language of Composer UI"
+  },
   "composer_logo_ba2048a0": {
     "message": "Composer-logotyp"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer behöver .NET Core SDK"
+  },
+  "composer_settings_31b04099": {
+    "message": "Composer Settings"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer kommer att startas om."
@@ -545,20 +548,8 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
-  "configuration_summary_f9b92424": {
-    "message": "Konfigurationssammanfattning"
-  },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Konfigurera Composer till att starta roboten med körningskod som du kan anpassa och kontrollera."
-  },
-  "configured_with_enterprise_scenarios_calendar_who__e9e7e75a": {
-    "message": "Konfigurerad med Enterprise-scenarier, kalender, vem-robot, professionell chit-chat."
-  },
-  "configured_with_hospitality_scenarios_bing_search__f71c09c0": {
-    "message": "Konfigurerad med hotell och resor-scenarier, Bing-sökning och vårdande chit-chat."
-  },
-  "configured_with_simple_conversational_capability_l_d42f128c": {
-    "message": "Konfigurerad med enkel konversationskapacitet som hälsning, chit-chat och annat."
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Konfigurerar standardspråkmodellen som ska användas om det inte finns någon kulturkod i filnamnet (standardinställning: en-us)"
@@ -581,8 +572,8 @@
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Grattis! Din modell har publicerats."
   },
-  "connect_to_a_new_skill_34d582ab": {
-    "message": "Anslut till en ny färdighet"
+  "connect_a_remote_skill_10cf0724": {
+    "message": "Connect a remote skill"
   },
   "connect_to_a_skill_53c9dff0": {
     "message": "Anslut till en färdighet"
@@ -590,8 +581,11 @@
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Anslut till QnA KnowledgeBase"
   },
-  "content_1440204b": {
-    "message": "Innehåll"
+  "connecting_to_b_source_b_to_import_bot_content_106cf675": {
+    "message": "Connecting to <b>{ source }</b> to import bot content..."
+  },
+  "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
+    "message": "Connecting to <b>{ targetName }</b> to import bot content..."
   },
   "continue_loop_22635585": {
     "message": "Fortsätt loop"
@@ -602,6 +596,12 @@
   "conversation_invoked_e960884e": {
     "message": "Konversationen har anropats"
   },
+  "conversational_core_preview_template_is_available__ba9b43b8": {
+    "message": "Conversational Core preview template is available since you have that feature turned on."
+  },
+  "conversational_core_template_899e3082": {
+    "message": "Conversational Core Template"
+  },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate-aktivitet"
   },
@@ -610,6 +610,9 @@
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Kopiera innehåll för översättning"
+  },
+  "copy_project_location_to_clipboard_eb85c474": {
+    "message": "Copy project location to clipboard"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Det gick inte att ansluta till minnet."
@@ -635,17 +638,20 @@
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Skapa ett namn för projektet som ska användas för att namnge programmet: (projektnamn-miljö-LUfilename)"
   },
-  "create_a_new_bot_or_choose_from_virtual_assistant__7c1e6674": {
-    "message": "Skapa en ny robot eller välj från virtuella assistentmallar."
-  },
   "create_a_new_dialog_21d84b82": {
     "message": "Skapa en ny dialogruta"
   },
   "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
     "message": "Skapa ett nytt formulärdialogschema genom att klicka på + ovan."
   },
+  "create_a_new_skill_e961ff28": {
+    "message": "Create a new skill"
+  },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Skapa ett nytt färdighetsmanifest eller välj det du vill redigera"
+  },
+  "create_a_skill_in_your_bot_d7659e6b": {
+    "message": "Create a skill in your bot"
   },
   "create_a_trigger_40e74743": {
     "message": "Skapa en utlösare"
@@ -679,12 +685,6 @@
   },
   "create_kb_e78571ba": {
     "message": "Skapa kunskapsbas"
-  },
-  "create_kb_from_scratch_eddd037a": {
-    "message": "Skapa kunskapsbas från början"
-  },
-  "create_kb_from_url_or_file_49ad6671": {
-    "message": "Skapa kunskapsbas från URL eller fil"
   },
   "create_knowledge_base_from_scratch_afe4d2a2": {
     "message": "Skapa kunskapsbas från grunden"
@@ -722,20 +722,26 @@
   "custom_events_d6f0e45b": {
     "message": "Anpassade händelser"
   },
-  "custom_name_optional_60ee6a1a": {
-    "message": "Anpassat namn (valfritt)"
-  },
   "custom_recognizer_951bab90": {
     "message": "Anpassat identifieringsobjekt"
   },
-  "customize_your_assistant_e4038b74": {
-    "message": "Anpassa din assistent"
+  "custom_runtime_426aa34f": {
+    "message": "Custom runtime"
   },
   "cut_c8c92681": {
     "message": "Klipp ut"
   },
+  "data_collection_32efe1e7": {
+    "message": "Data collection"
+  },
+  "data_collection_7db2e237": {
+    "message": "Data Collection"
+  },
   "data_loading_4c9bb9f6": {
     "message": "Data läses in..."
+  },
+  "data_transferring_between_services_c0971544": {
+    "message": "Data transferring between services"
   },
   "date_ee500367": {
     "message": "Datum"
@@ -763,6 +769,9 @@
   },
   "default_language_486a558d": {
     "message": "Standardspråk"
+  },
+  "default_language_a976938d": {
+    "message": "DEFAULT LANGUAGE"
   },
   "default_language_b11c37db": {
     "message": "Standardspråk"
@@ -794,14 +803,11 @@
   "delete_bot_73586104": {
     "message": "Ta bort robot"
   },
-  "delete_form_dialog_schema_892df4e8": {
-    "message": "Ta bort formulärdialogschema"
+  "delete_form_dialog_schema_c8e28229": {
+    "message": "Delete form dialog schema?"
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "Ta bort kunskapsbas"
-  },
-  "delete_language_1527609d": {
-    "message": "Ta bort språk"
   },
   "delete_properties_8bc77b42": {
     "message": "Ta bort egenskaper"
@@ -812,8 +818,14 @@
   "delete_property_b3786fa0": {
     "message": "Ta bort egenskap"
   },
+  "delete_property_da7646f6": {
+    "message": "Delete property?"
+  },
+  "delete_this_bot_fb78e519": {
+    "message": "Delete this bot"
+  },
   "deleting_dialogid_failed_1d7cc05a": {
-    "message": "Deleting \"{ dialogId }\" failed."
+    "message": "Det gick inte att ta bort { dialogId }."
   },
   "describe_your_skill_88554792": {
     "message": "Beskriv din färdighet"
@@ -823,6 +835,27 @@
   },
   "design_51b2812a": {
     "message": "Design"
+  },
+  "diagnostic_links_228dc6fe": {
+    "message": "diagnostic links"
+  },
+  "diagnostic_list_29813310": {
+    "message": "Diagnostic list"
+  },
+  "diagnostic_list_89b39c2e": {
+    "message": "Diagnostic List"
+  },
+  "diagnostic_message_msg_5387e951": {
+    "message": "Diagnostic Message { msg }"
+  },
+  "diagnostic_type_e1979c21": {
+    "message": "Diagnostic type"
+  },
+  "diagnostics_a11880f6": {
+    "message": "Diagnostics"
+  },
+  "diagnostics_pane_2d77c390": {
+    "message": "Diagnostics Pane"
   },
   "dialog_68ba69ba": {
     "message": "(Dialogruta)"
@@ -838,6 +871,12 @@
   },
   "dialog_events_f1b2e2a0": {
     "message": "Dialogrutehändelser"
+  },
+  "dialog_generation_failed_3c73e599": {
+    "message": "Dialog generation failed."
+  },
+  "dialog_generation_was_successful_be280943": {
+    "message": "Dialog generation was successful."
   },
   "dialog_input_schema_c7864fbd": {
     "message": "Indataschema för dialogruta."
@@ -869,8 +908,17 @@
   "disable_a5c05db3": {
     "message": "Inaktivera"
   },
+  "discover_and_use_components_that_can_be_installed__49e308bf": {
+    "message": "Discover and use components that can be installed into your bot."
+  },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Visa linjer som sträcker sig utanför redigeringsprogrammets bredd på nästa rad."
+  },
+  "do_you_want_to_proceed_cd35aa38": {
+    "message": "Do you want to proceed?"
+  },
+  "do_you_want_to_update_b_existingprojectname_b_c34014f": {
+    "message": "Do you want to update <b>{ existingProjectName }</b>"
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "Vill du fortsätta?"
@@ -901,12 +949,6 @@
   },
   "duplicate_name_d295a09d": {
     "message": "Duplicera namn"
-  },
-  "duplicate_skill_manifest_url_74d85839": {
-    "message": "Duplicera URL för färdighetsmanifest"
-  },
-  "duplicate_skill_name_d9f6eb8d": {
-    "message": "Duplicera färdighetsnamn"
   },
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicerade avsikter har identifierats"
@@ -945,7 +987,7 @@
     "message": "Redigera egenskap"
   },
   "edit_schema_a2ab5695": {
-    "message": "Edit schema"
+    "message": "Redigera schema"
   },
   "edit_source_45af68b4": {
     "message": "Redigera källa"
@@ -977,6 +1019,9 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Aktivera extrahering av flera turer"
   },
+  "enable_the_new_conversational_core_template_built__df338773": {
+    "message": "Enable the new conversational core template built on the component model"
+  },
   "enabled_ba7cab66": {
     "message": "Aktiverat"
   },
@@ -995,8 +1040,8 @@
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation-aktivitet"
   },
-  "english_us_1d884ccd": {
-    "message": "Engelska (USA)"
+  "endpoints_ff946539": {
+    "message": "Endpoints"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
     "message": "Ange en manifest-URL så att du kan lägga till en ny färdighet i roboten."
@@ -1007,11 +1052,35 @@
   "enter_a_min_value_c3030813": {
     "message": "Ange ett minsta värde"
   },
+  "enter_a_url_7b4d6063": {
+    "message": "Enter a URL"
+  },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Ange en URL eller bläddra om du vill överföra en fil "
   },
-  "enterprise_assistant_434df551": {
-    "message": "Enterprise-assistent"
+  "enter_luis_application_name_df312e75": {
+    "message": "Enter LUIS application name"
+  },
+  "enter_luis_authoring_key_c59f8f1f": {
+    "message": "Enter LUIS authoring key"
+  },
+  "enter_luis_endpoint_key_f8eb30f5": {
+    "message": "Enter LUIS endpoint key"
+  },
+  "enter_luis_region_2316eceb": {
+    "message": "Enter LUIS region"
+  },
+  "enter_microsoft_app_id_c92101b0": {
+    "message": "Enter Microsoft App Id"
+  },
+  "enter_microsoft_app_password_b0926c39": {
+    "message": "Enter Microsoft App Password"
+  },
+  "enter_qna_maker_subscription_key_d26b4bad": {
+    "message": "Enter QnA Maker Subscription key"
+  },
+  "enter_skill_host_endpoint_url_e22eeab5": {
+    "message": "Enter Skill host endpoint url"
   },
   "entities_ef09392c": {
     "message": "Entiteter"
@@ -1031,9 +1100,6 @@
   "error_event_c079b608": {
     "message": "Felhändelse"
   },
-  "error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980": {
-    "message": "Fel: { func } har ingen utvärderare. Det är inte en inbyggd eller anpassad funktion"
-  },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "Fel i UI-schema för { title }: { errorMsg }\n{ options }"
   },
@@ -1042,6 +1108,9 @@
   },
   "error_occurred_5549a6b4": {
     "message": "Ett fel har inträffat"
+  },
+  "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
+    "message": "{ error } Please add unknown functions to setting''s customFunctions field."
   },
   "error_processing_schema_2c707cf3": {
     "message": "Fel vid schemabearbetning"
@@ -1079,14 +1148,11 @@
   "expected_responses_intent_intentname_44b051c": {
     "message": "Förväntade svar (avsikt: #{ intentName })"
   },
-  "export_as_skill_764cf284": {
-    "message": "Exportera som färdighet"
+  "export_json_2e2981f5": {
+    "message": "Export JSON"
   },
-  "export_assets_to_zip_d2d798ab": {
-    "message": "Exportera tillgångar till .zip"
-  },
-  "export_de71cd8e": {
-    "message": "Exportera"
+  "export_this_bot_as_zip_c4bfddf2": {
+    "message": "Export this bot as .zip"
   },
   "expression_7f906a13": {
     "message": "Uttryck"
@@ -1103,6 +1169,9 @@
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "Externa resurser kommer inte att ändras."
   },
+  "external_services_da7820ce": {
+    "message": "External services"
+  },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "Extrahera frågepar från vanliga frågor och svar online, produkthandböcker och andra filer. Format som stöds är tsv, pdf, doc, docx och xlsx, vilka innehåller frågor och svar i följd. Läs mer om kunskapsbaskällor. Hoppa över det här steget om du vill lägga till frågor och svar manuellt när du har skapat dem. Antal källor och filstorlekar som du kan lägga till beror på vilken QnA-tjänst-SKU du väljer. Läs mer om QnA Maker SKU:er."
   },
@@ -1112,14 +1181,17 @@
   "extracting_qna_pairs_from_url_b0331bba": {
     "message": "Extraherar QnA-par från { url }"
   },
-  "fallback_text_e5ff1cb7": {
-    "message": "Återställningstext"
+  "failed_to_start_1edb0dbe": {
+    "message": "Failed to start"
   },
   "false_2f39ee6d": {
     "message": "falskt"
   },
   "false_eef8c169": {
     "message": "Falskt"
+  },
+  "fetching_form_dialog_schema_templates_failed_44e2dd63": {
+    "message": "Fetching form dialog schema templates failed."
   },
   "field_set_6e7d7f67": {
     "message": "Fältuppsättning"
@@ -1157,8 +1229,14 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "När det gäller egenskaper av typen lista (eller uppräkning) godkänner din robot bara de värden som du definierar. När dialogen har skapats kan du tillhandahålla synonymer för varje enskilt värde."
   },
+  "form_dialog_error_ba7c37fe": {
+    "message": "Form dialog error"
+  },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Åtgärder för formulärdialogschema"
+  },
+  "form_dialogs_4a1e22f9": {
+    "message": "Form dialogs"
   },
   "form_editor_7c2b02f0": {
     "message": "formulärredigeringsprogram"
@@ -1167,10 +1245,10 @@
     "message": "formulärrubrik"
   },
   "form_wide_operations_1c1a73eb": {
-    "message": "form-wide operations"
+    "message": "åtgärder för hela formuläret"
   },
-  "forms_380ab2ae": {
-    "message": "Formulär"
+  "forms_preview_af001fab": {
+    "message": "Forms (preview)"
   },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "fromTemplateName finns inte"
@@ -1187,11 +1265,20 @@
   "generate_dialog_b80a85b2": {
     "message": "Generera dialog"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
+  },
+  "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
+    "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Hämta en ny kopia av körningskoden"
+  },
+  "get_activity_members_11339605": {
+    "message": "Get activity members"
+  },
+  "get_conversation_members_71602275": {
+    "message": "Get conversation members"
   },
   "get_started_50c13c6c": {
     "message": "Kom igång!"
@@ -1202,8 +1289,8 @@
   "getting_started_f45a7e87": {
     "message": "Komma i gång"
   },
-  "give_your_bot_personality_multi_language_capabilit_f00c2c93": {
-    "message": "Ge din robot personlighet, flerspråksfunktioner och mer; du kan redigera detta senare i robotinställningarna."
+  "getting_template_910a4116": {
+    "message": "Getting template"
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Gå till QnA-vysida."
@@ -1214,9 +1301,6 @@
   "greeting_f906f962": {
     "message": "Hälsning"
   },
-  "greeting_message_ce77bbb2": {
-    "message": "Hälsningsmeddelande"
-  },
   "handle_a_condition_f32eb8d": {
     "message": "Hantera ett villkor"
   },
@@ -1226,11 +1310,11 @@
   "handover_to_human_1a619574": {
     "message": "Överlämnande till person"
   },
+  "help_us_improve_468828c5": {
+    "message": "Help us improve?"
+  },
   "here_s_what_we_know_4e9c1731": {
     "message": "Detta är vad vi vet…"
-  },
-  "hi_there_here_are_some_things_that_i_can_do_32909722": {
-    "message": "Hej! Här är några saker som jag kan göra!"
   },
   "hide_code_5dcffa94": {
     "message": "Dölj kod"
@@ -1238,20 +1322,8 @@
   "home_351838cd": {
     "message": "Start"
   },
-  "hospitality_assistant_c330e403": {
-    "message": "Hotell- och reseassistenten"
-  },
-  "hosts_your_bot_application_9dd01ffc": {
-    "message": "Är värd för ditt robotprogram."
-  },
-  "hosts_your_qna_maker_knowledgebases_64713aee": {
-    "message": "Är värd för dina QnA Maker-kunskapsbaser"
-  },
   "http_request_79847109": {
     "message": "HTTP-begäran"
-  },
-  "i_am_sorry_i_didn_t_understand_that_f86e307a": {
-    "message": "Jag förstod tyvärr inte det"
   },
   "i_want_to_delete_this_bot_f81a4735": {
     "message": "Jag vill ta bort den här roboten"
@@ -1271,17 +1343,26 @@
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "Om problemet kvarstår så gör en felanmälan på"
   },
-  "if_turned_on_then_externally_stored_templates_will_3f487651": {
-    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
-  },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "Ange informationen nedan om du redan har ett LUIS-konto. Om du inte har något konto ännu så skapa ett (kostnadsfritt) konto först."
   },
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "Ange informationen nedan om du redan har ett QNA-konto. Om du inte har något konto ännu så skapa ett (kostnadsfritt) konto först."
   },
+  "import_as_new_35630827": {
+    "message": "Import as new"
+  },
   "import_schema_75659c5f": {
     "message": "Importera schema"
+  },
+  "import_your_bot_to_new_project_8751d82f": {
+    "message": "Import your bot to new project"
+  },
+  "importing_b_botname_b_from_sourcename_f7410826": {
+    "message": "Importing <b>{ botName }</b> from { sourceName }..."
+  },
+  "importing_bot_content_from_targetname_6da78f15": {
+    "message": "Importing bot content from { targetName }..."
   },
   "in_production_5a70b8b4": {
     "message": "I produktion"
@@ -1291,6 +1372,12 @@
   },
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
     "message": "Ställ in typ av utlösare på <i>Aktiviteter</i> i listrutan i guiden <b>Skapa en utlösare</b>. Ställ sedan in <b>Aktivitetstyp</b> på <i>Hälsning (ConversationUpdate-aktivitet) </i> och klicka på knappen <b>Skicka</b>."
+  },
+  "inactive_34365329": {
+    "message": "Inactive"
+  },
+  "initializing_bot_project_48f55e12": {
+    "message": "Initializing bot project"
   },
   "input_1d1d9b8e": {
     "message": "Indata"
@@ -1388,14 +1475,8 @@
   "language_generation_1876f6d6": {
     "message": "Språkgenerering"
   },
-  "language_generation_file_80c08efe": {
-    "message": "språkgenereringsfil"
-  },
   "language_understanding_9ae3f1f6": {
     "message": "Språkförståelse"
-  },
-  "language_understanding_file_a65abc2c": {
-    "message": "språkförståelsefil"
   },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
@@ -1403,14 +1484,32 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "Tiden för senaste ändring är { Time }"
   },
+  "learn_more_14816ec": {
+    "message": "Learn More."
+  },
   "learn_more_a79a7918": {
     "message": "Läs mer"
+  },
+  "learn_more_about_activities_134f453d": {
+    "message": "Learn more about activities"
+  },
+  "learn_more_about_endpoints_df156708": {
+    "message": "Learn more about endpoints"
   },
   "learn_more_about_knowledge_base_sources_24369b09": {
     "message": "Läs mer om kunskapsbaskällor. "
   },
+  "learn_more_about_manifests_6e7c364b": {
+    "message": "Learn more about manifests"
+  },
+  "learn_more_about_skill_manifests_7708ce2c": {
+    "message": "Learn more about skill manifests"
+  },
   "learn_more_about_title_d1d3edbe": {
     "message": "Läs mer om { title }"
+  },
+  "learn_more_about_your_property_schema_3a0a0890": {
+    "message": "Learn more about your property schema"
   },
   "learn_more_c08939e8": {
     "message": "Läs mer."
@@ -1442,6 +1541,9 @@
   "line_startline_startcharacter_line_endline_endchar_372bb2f4": {
     "message": "rad { startLine }:{ startCharacter } – rad { endLine }:{ endCharacter }"
   },
+  "link_to_this_skill_has_been_broken_343072bd": {
+    "message": "Link to this skill has been broken"
+  },
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "länk till den plats där LUIS-avsikten definieras"
   },
@@ -1451,17 +1553,29 @@
   "list_count_values_33ea7088": {
     "message": "lista – { count } värden"
   },
+  "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
+    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language."
+  },
   "list_view_e33843f0": {
     "message": "Listvy"
-  },
-  "load_form_dialog_schema_templates_error_6a348e76": {
-    "message": "Fel vid inläsning av formulärdialogschemamallar"
   },
   "loading_25990131": {
     "message": "Läser in..."
   },
   "loading_bde52856": {
     "message": "Läser in"
+  },
+  "local_bot_runtime_manager_812cbd0c": {
+    "message": "Local bot runtime manager"
+  },
+  "local_composer_386e07d7": {
+    "message": "Local Composer"
+  },
+  "local_skill_6ce0d311": {
+    "message": "Local Skill."
+  },
+  "locate_the_bot_file_and_repair_the_link_202045b1": {
+    "message": "Locate the bot file and repair the link"
   },
   "location_e17bd402": {
     "message": "Plats"
@@ -1508,11 +1622,29 @@
   "luis_add4bbe3": {
     "message": "LUIS"
   },
+  "luis_application_name_1530d3aa": {
+    "message": "LUIS application name"
+  },
+  "luis_authoring_key_c8414499": {
+    "message": "LUIS authoring key"
+  },
   "luis_authoring_key_cfaba7dd": {
     "message": "LUIS-redigeringsnyckel:"
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis-redigeringsregion"
+  },
+  "luis_endpoint_key_c685e219": {
+    "message": "LUIS endpoint key"
+  },
+  "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
+    "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
+  },
+  "luis_region_9879d8de": {
+    "message": "LUIS region"
+  },
+  "luis_region_is_required_163ca19f": {
+    "message": "LUIS Region is required"
   },
   "main_dialog_eed5c847": {
     "message": "Huvuddialogruta"
@@ -1520,8 +1652,20 @@
   "make_a_copy_77d1233": {
     "message": "Gör en kopia"
   },
+  "manage_bot_languages_9ec36fd7": {
+    "message": "Manage bot languages"
+  },
+  "manage_profiles_715c2092": {
+    "message": "Manage profiles"
+  },
   "manage_properties_c9fa4456": {
     "message": "Hantera egenskaper"
+  },
+  "manifest_could_not_be_loaded_1c011a6a": {
+    "message": "Manifest could not be loaded"
+  },
+  "manifest_editor_1426637": {
+    "message": "manifest editor"
   },
   "manifest_url_30824e88": {
     "message": "Manifest-URL"
@@ -1543,6 +1687,9 @@
   },
   "menu_items_2d66492c": {
     "message": "Menyobjekt"
+  },
+  "merging_packages_6115c7ea": {
+    "message": "Merging Packages"
   },
   "message_5c38209d": {
     "message": "Meddelande"
@@ -1637,8 +1784,8 @@
   "name_and_save_your_skill_manifest_cfd672b7": {
     "message": "Namnge och spara ditt färdighetsmanifest."
   },
-  "name_cannot_include_special_characters_or_spaces_59a1950b": {
-    "message": "Namnet får inte innehålla specialtecken eller blanksteg"
+  "name_cannot_be_found_at_the_location_27560dcb": {
+    "message": "{ name } cannot be found at the location."
   },
   "name_copy_55d27c1a": {
     "message": "{ name } _Copy"
@@ -1660,9 +1807,6 @@
   },
   "navigation_pane_e587b73c": {
     "message": "Navigeringsfönster"
-  },
-  "navigation_panel_530ae4ac": {
-    "message": "Navigeringspanel"
   },
   "navigation_path_8b299e64": {
     "message": "Navigeringssökväg"
@@ -1709,6 +1853,9 @@
   "no_name_e082310e": {
     "message": "[inget namn]"
   },
+  "no_qna_file_with_name_id_7cb89755": {
+    "message": "NO QNA FILE WITH NAME { id }"
+  },
   "no_search_results_1ba50423": {
     "message": "Inga sökresultat"
   },
@@ -1724,20 +1871,11 @@
   "not_a_single_template_e37f894": {
     "message": "Inte en enskild mall"
   },
+  "not_now_97efd947": {
+    "message": "Not now"
+  },
   "not_yet_published_669e37b3": {
     "message": "Har ännu inte publicerats"
-  },
-  "notes_c42e0fd5": {
-    "message": "Anmärkningar"
-  },
-  "notification_list_ee2abb6c": {
-    "message": "Meddelandelista"
-  },
-  "notification_message_msg_7d55d08e": {
-    "message": "Aviseringsmeddelande { msg }"
-  },
-  "notification_type_263c145d": {
-    "message": "Meddelandetyp"
   },
   "notifications_cbfa7704": {
     "message": "Meddelanden"
@@ -1796,6 +1934,9 @@
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents-typer"
   },
+  "open_an_existing_skill_fbd87273": {
+    "message": "Open an existing skill"
+  },
   "open_e0beb7b9": {
     "message": "Öppna"
   },
@@ -1803,7 +1944,10 @@
     "message": "Öppna infogat redigeringsprogram"
   },
   "open_notification_panel_5796edb3": {
-    "message": "Open notification panel"
+    "message": "Öppna meddelandepanelen"
+  },
+  "open_start_bots_panel_f7f87200": {
+    "message": "Open start bots panel"
   },
   "optional_221bcc9d": {
     "message": "Valfritt"
@@ -1823,6 +1967,12 @@
   "or_4f7d4edb": {
     "message": "Eller: "
   },
+  "orchestrator_36e58231": {
+    "message": "Orchestrator"
+  },
+  "orchestrator_recognizer_cf38b65a": {
+    "message": "Orchestrator recognizer"
+  },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "ursprunglig LG-fil hittades inte i arkivet"
   },
@@ -1838,6 +1988,9 @@
   "output_5023cf84": {
     "message": "Utdata"
   },
+  "package_manager_6c42db30": {
+    "message": "Package manager"
+  },
   "page_number_cdee4179": {
     "message": "Sidnummer"
   },
@@ -1846,15 +1999,6 @@
   },
   "paste_5963d1c1": {
     "message": "Klistra in"
-  },
-  "personality_1381bf78": {
-    "message": "{ personality }"
-  },
-  "personality_cf47985f": {
-    "message": "Personlighet"
-  },
-  "personality_choice_3dfd8268": {
-    "message": "Personlighetsval"
   },
   "please_add_at_least_minitems_endpoint_5439fd74": {
     "message": "Lägg till minst { minItems }-slutpunkt"
@@ -1895,6 +2039,9 @@
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Välj en aktivitetstyp"
   },
+  "powervirtualagents_logo_11858924": {
+    "message": "PowerVirtualAgents Logo"
+  },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "tryck på Retur om du vill lägga till det här objektet eller på tabbtangenten om du vill flytta till nästa interaktiva element"
   },
@@ -1902,10 +2049,13 @@
     "message": "tryck på Retur om du vill lägga till det här namnet och gå vidare till nästa rad, eller tryck på tabbtangenten om du vill gå till värdefältet"
   },
   "preview_features_e279bac5": {
-    "message": "Preview features"
+    "message": "Förhandsgranskningsfunktioner"
   },
   "previous_bd2ac015": {
     "message": "Föregående"
+  },
+  "previous_bot_content_has_been_backed_up_to_d6d23960": {
+    "message": " Previous bot content has been backed up to:"
   },
   "previous_folder_e7eeb306": {
     "message": "föregående mapp"
@@ -1916,8 +2066,14 @@
   "privacy_button_b58e437": {
     "message": "Sekretessknapp"
   },
+  "privacy_statement_da69ebc6": {
+    "message": "Privacy statement"
+  },
   "progress_of_total_87de8616": {
     "message": "{ progress } % av { total }"
+  },
+  "project_settings_bb885d3e": {
+    "message": "Project Settings"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "Promptkonfigurationer"
@@ -1962,7 +2118,7 @@
     "message": "Egenskapsnamn"
   },
   "property_name_is_required_5bc57d97": {
-    "message": "Property name is required!"
+    "message": "Egenskapsnamn krävs!"
   },
   "property_title_f2b443b7": {
     "message": "Egenskapsrubrik"
@@ -1972,12 +2128,6 @@
   },
   "property_type_e38cf7e4": {
     "message": "Egenskapstyp"
-  },
-  "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
-    "message": "Ge en kort beskrivning. Den visas på publiceringshistoriklistan."
-  },
-  "provisioning_summary_2be9422f": {
-    "message": "Etableringssammanfattning"
   },
   "pseudo_1a319287": {
     "message": "Pseudo"
@@ -1994,17 +2144,35 @@
   "publish_models_9a36752a": {
     "message": "Publicera modeller"
   },
-  "publish_profiles_cf8d307b": {
-    "message": "Publicera profiler"
+  "publish_selected_bots_825bc03a": {
+    "message": "Publish selected bots"
   },
-  "publish_to_selected_profile_c0998a2": {
-    "message": "Publicera till utvald profil"
+  "publish_target_388f6adf": {
+    "message": "Publish target"
+  },
+  "publish_targets_8afc4467": {
+    "message": "Publish targets"
+  },
+  "publish_your_bots_6e1ba7c2": {
+    "message": "Publish your bots"
   },
   "published_4bb5209e": {
     "message": "Publicerat"
   },
+  "publishing_count_bots_b2a7f564": {
+    "message": "Publishing { count } bots"
+  },
   "publishing_d63a8f2d": {
     "message": "Publicerar"
+  },
+  "publishing_name_to_publishtarget_failed_8677b68d": {
+    "message": "Publishing { name } to { publishTarget } failed."
+  },
+  "pull_d1c3e8fe": {
+    "message": "Pull"
+  },
+  "pull_from_selected_profile_b5c635ec": {
+    "message": "Pull from selected profile"
   },
   "qna_28ee5e26": {
     "message": "Frågor och svar"
@@ -2012,20 +2180,14 @@
   "qna_editor_9eb94b02": {
     "message": "QnA-redigeringsprogram"
   },
-  "qna_file_37705cb7": {
-    "message": "QNA-fil"
-  },
   "qna_intent_recognized_49c3d797": {
     "message": "QnA-avsikt känns igen"
   },
-  "qna_maker_azure_search_service_88a403db": {
-    "message": "QnA Maker Azure Search-tjänst"
+  "qna_maker_subscription_key_e009c9d9": {
+    "message": "QnA Maker Subscription key"
   },
-  "qna_maker_c313ed6e": {
-    "message": "QnA Maker"
-  },
-  "qna_maker_web_app_3da183bd": {
-    "message": "QnA Maker-webbapp"
+  "qna_maker_subscription_key_is_required_to_start_yo_9c0bc65a": {
+    "message": "QnA Maker subscription Key is required to start your bot locally, and publish"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "QNA-navigeringsfönster"
@@ -2045,6 +2207,9 @@
   "question_is_empty_now_f0b5733e": {
     "message": "Frågan är tom nu"
   },
+  "queued_d0e45c4b": {
+    "message": "Queued"
+  },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
   },
@@ -2056,6 +2221,9 @@
   },
   "recent_bots_53585911": {
     "message": "Senaste robotarna"
+  },
+  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
+    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
   },
   "recognizer_type_dc591e16": {
     "message": "Typ av identifieringsobjekt"
@@ -2084,14 +2252,23 @@
   "reloading_49d2f661": {
     "message": "Läser in igen"
   },
-  "remote_templates_a23c242d": {
-    "message": "Remote templates"
+  "remote_skill_ed36a7e6": {
+    "message": "Remote skill"
+  },
+  "remote_skill_f9074d76": {
+    "message": "Remote Skill."
   },
   "remove_f47dc62a": {
     "message": "Ta bort"
   },
   "remove_this_dialog_6146716c": {
     "message": "Ta bort den här dialogen"
+  },
+  "remove_this_skill_from_project_4c1900a9": {
+    "message": "Remove this skill from project"
+  },
+  "remove_this_skill_from_your_project_3c9d4b0f": {
+    "message": "Remove this skill from your project"
   },
   "remove_this_trigger_622d866d": {
     "message": "Ta bort den här utlösaren"
@@ -2120,23 +2297,47 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | Prioritet: { priority }"
   },
-  "resource_374a9df": {
-    "message": "Resurs"
-  },
   "response_is_response_3cd62f8f": {
     "message": "Svaret är { response }"
   },
   "responses_12d6df1d": {
     "message": "Svar"
   },
-  "restart_bot_34e36428": {
-    "message": "Starta om robot"
+  "restart_all_bots_running_total_running_cf47a2b5": {
+    "message": "Restart all bots ({ running }/{ total } running)"
   },
   "review_and_generate_63dec712": {
     "message": "Granska och generera"
   },
   "rollback_26326307": {
     "message": "Återta"
+  },
+  "root_bot_7bb35314": {
+    "message": "Root bot."
+  },
+  "root_bot_da9de71c": {
+    "message": "Root Bot"
+  },
+  "root_bot_e2d0a1fc": {
+    "message": "Root bot"
+  },
+  "root_bot_luis_authoring_key_is_empty_aec2634e": {
+    "message": "Root Bot LUIS authoring key is empty"
+  },
+  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
+    "message": "Root Bot LUIS endpoint key is empty"
+  },
+  "root_bot_luis_region_is_empty_67932308": {
+    "message": "Root Bot LUIS region is empty"
+  },
+  "root_bot_of_your_project_that_greets_users_and_can_94570f36": {
+    "message": "Root bot of your project that greets users, and can call skills."
+  },
+  "root_bot_qna_maker_subscription_key_is_empty_7b7c8c4a": {
+    "message": "Root Bot QnA Maker Subscription key is empty"
+  },
+  "running_c5a4998d": {
+    "message": "Running"
   },
   "runtime_already_exists_f181f5ec": {
     "message": "Körningen finns redan"
@@ -2183,14 +2384,14 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Sök efter tillägg på NPM"
   },
-  "search_index_for_your_qna_maker_knowledgebases_22700ca7": {
-    "message": "Sökindex för dina QnA Maker-kunskapsbaser."
-  },
-  "see_log_4b833bf7": {
-    "message": "Se loggen"
+  "see_details_da74090e": {
+    "message": "See Details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Välj en robot"
+  },
+  "select_a_publish_target_d4530c94": {
+    "message": "Select a publish target"
   },
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "Välj en utlösare till vänster"
@@ -2203,9 +2404,6 @@
   },
   "select_an_event_type_3d7108f1": {
     "message": "Välj en händelsetyp"
-  },
-  "select_an_option_9f5dfb55": {
-    "message": "Välj ett alternativ"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Välj ett schema att redigera eller skapa ett nytt"
@@ -2220,7 +2418,7 @@
     "message": "Välj alternativ"
   },
   "select_property_type_45c6e68e": {
-    "message": "Select property type"
+    "message": "Välj egenskapstyp"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Välj den körningsversion som ska läggas till"
@@ -2233,9 +2431,6 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Välj vilka uppgifter som den här färdigheten ska kunna utföra"
-  },
-  "selected_assistant_type_83d58f54": {
-    "message": "Vald assistenttyp"
   },
   "selection_field_86d1dc94": {
     "message": "urvalsfält"
@@ -2264,11 +2459,17 @@
   "set_destination_folder_f76e0259": {
     "message": "Ange målmapp"
   },
+  "set_it_as_default_language_212f0a00": {
+    "message": "Set it as default language"
+  },
   "set_properties_7415af3c": {
     "message": "Konfigurera egenskaper"
   },
   "set_up_your_bot_75009578": {
     "message": "Konfigurera din robot"
+  },
+  "setting_things_up_8022afe8": {
+    "message": "Setting things up..."
   },
   "settings_5aa0fd0c": {
     "message": "Inställningar"
@@ -2282,17 +2483,14 @@
   "settings_menu_c99ecc6d": {
     "message": "Menyn Inställningar"
   },
-  "show_all_notifications_55bf7858": {
-    "message": "Visa alla meddelanden"
+  "show_all_diagnostics_c11f4e09": {
+    "message": "Show All Diagnostics"
   },
   "show_code_f3e9d1cc": {
     "message": "Visa kod"
   },
-  "show_form_dialog_90aad050": {
-    "message": "Show Form Dialog"
-  },
-  "show_form_dialog_editor_in_the_canvas_140492b2": {
-    "message": "Show form dialog editor in the canvas"
+  "show_item_diagnostics_f6e902c7": {
+    "message": "Show { item } Diagnostics"
   },
   "show_keys_3072a5b8": {
     "message": "Visa nycklar"
@@ -2303,6 +2501,9 @@
   "sign_out_user_6845d640": {
     "message": "Logga ut användare"
   },
+  "skill_9b084d2e": {
+    "message": "Skill"
+  },
   "skill_dialog_name_1bbf0eff": {
     "message": "Namn på färdighetsdialog"
   },
@@ -2312,8 +2513,11 @@
   "skill_endpoints_e4e3d8c1": {
     "message": "Färdighetsslutpunkter"
   },
-  "skill_host_endpoint_b1088d0": {
-    "message": "Slutpunkt för färdighetsvärd"
+  "skill_host_endpoint_4118a173": {
+    "message": "Skill host endpoint"
+  },
+  "skill_host_endpoint_url_e68b65f6": {
+    "message": "Skill host endpoint url"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "Slutpunkten för färdighetsmanifestet har konfigurerats felaktigt"
@@ -2321,8 +2525,11 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
-  "skills_49cccd6a": {
-    "message": "Färdigheter"
+  "something_happened_while_attempting_to_pull_e_952c7afe": {
+    "message": "Something happened while attempting to pull: { e }"
+  },
+  "something_went_wrong_d238c551": {
+    "message": "Something went wrong"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "Det uppstod tyvärr ett fel med anslutningen till robotkörningen"
@@ -2343,7 +2550,7 @@
     "message": "Mellanslag och specialtecken tillåts inte. Använd bokstäver, siffror,- eller _."
   },
   "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
+    "message": "Blanksteg och specialtecken tillåts inte. Använd bokstäver, siffror,- eller _, och inled namnet med en bokstav."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Ange ett namn och en beskrivning för din nya dialogruta."
@@ -2351,8 +2558,14 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "Ange ett namn, en beskrivning och en plats för det nya robotprojektet."
   },
-  "speech_16063aed": {
-    "message": "Tal"
+  "start_all_bots_eac99ea": {
+    "message": "Start all bots"
+  },
+  "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
+    "message": "Start and stop local bot runtimes individually."
+  },
+  "start_bot_1da1ebf4": {
+    "message": "Start bot"
   },
   "start_bot_25ecad14": {
     "message": "Starta robot"
@@ -2363,8 +2576,17 @@
   "start_command_a085f2ec": {
     "message": "Startkommando"
   },
+  "start_over_d7ce7a57": {
+    "message": "Start over?"
+  },
   "start_typing_kind_or_b0c305da": {
-    "message": "Start typing { kind } or"
+    "message": "Börja skriva { kind } eller"
+  },
+  "starting_2b76fa0d": {
+    "message": "Starting"
+  },
+  "starting_bots_running_total_running_45302684": {
+    "message": "Starting bots.. ({ running }/{ total } running)"
   },
   "state_is_state_a2b8943": {
     "message": "Tillståndet är { state }"
@@ -2374,6 +2596,15 @@
   },
   "step_of_setlength_43c73821": {
     "message": "{ step } av { setLength }"
+  },
+  "stop_bot_866e8976": {
+    "message": "Stop Bot"
+  },
+  "stop_bot_be23cf96": {
+    "message": "Stop bot"
+  },
+  "stopping_e4de5f4a": {
+    "message": "Stopping"
   },
   "string_24369b3": {
     "message": "Sträng"
@@ -2386,15 +2617,6 @@
   },
   "submit_a3cc6859": {
     "message": "Skicka in"
-  },
-  "subscription_keys_for_language_understanding_cogni_105e039f": {
-    "message": "Prenumerationsnycklar för kognitiva tjänster för språkförståelse."
-  },
-  "subscription_keys_for_qna_maker_cognitive_service__91da99a4": {
-    "message": "Prenumerationsnycklar för QnA Maker Cognitive Service som gör det lättare för den robotpersonlighet du valt."
-  },
-  "summary_24ad7681": {
-    "message": "Sammanfattning"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonymer (valfritt)"
@@ -2420,38 +2642,20 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "Färdighetens slutpunkt /API/messages."
   },
-  "the_azure_bot_service_resource_stores_configuratio_b7b4e73d": {
-    "message": "Azure Bot Service-resursen lagrar konfigurationsinformation som tillåter åtkomst till din virtuella assistent öppnas via de kanaler som stöds och ger OAuth-autentisering."
-  },
-  "the_callback_url_for_the_skill_host_e20e1012": {
-    "message": "Motringningsadress för färdighetsvärddatorn."
-  },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "Den dialog som du försökte ta bort används för närvarande i nedanstående dialog(er). Om du tar bort den här dialogen kommer din robot att fungera utan ytterligare åtgärder."
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
-    "message": "The file name can not be empty"
-  },
-  "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
-    "message": "Följande anpassningar kommer att tillämpas på din robot"
+    "message": "Filnamnet får inte vara tomt"
   },
   "the_following_lufile_s_are_invalid_c61ea748": {
     "message": "Följande LuFile-filer är ogiltiga: \n"
-  },
-  "the_following_will_be_provisioned_to_enable_your_b_6c52fdac": {
-    "message": "Följande etableras för att aktivera din robot"
   },
   "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
     "message": "Huvuddialogen namnges efter din robot. Det är robotens rot och startpunkt."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "Manifestet kan redigeras och förfinas manuellt när och om så behövs."
-  },
-  "the_microsoft_app_id_that_will_be_calling_the_skil_955424de": {
-    "message": "Det Microsoft App-ID som kommer att anropa färdigheten."
-  },
-  "the_microsoft_app_password_that_will_be_calling_th_acf9e1ea": {
-    "message": "Det Microsoft-applösenord som kommer att anropa färdigheten."
   },
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
     "message": "Det går inte att hitta sidan du söker efter."
@@ -2472,10 +2676,19 @@
     "message": "Det finns inga { kind }-egenskaper."
   },
   "there_are_no_notifications_e81eab8d": {
-    "message": "There are no notifications."
+    "message": "Det finns inga meddelanden."
+  },
+  "there_are_no_preview_features_at_this_time_a5c40953": {
+    "message": "Det finns för närvarande inga förhandsgranskningsfunktioner."
   },
   "there_was_an_error_74ed3c58": {
     "message": "Ett fel uppstod"
+  },
+  "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
+    "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
+  },
+  "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
+    "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "Det uppstod ett fel när din kunskapsbas"
@@ -2486,26 +2699,20 @@
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "De här uppgifterna används för att generera manifestet och beskriva den här färdighetens funktioner för dem som kanske vill använda den."
   },
-  "this_bot_has_errors_72fb40d5": {
-    "message": "Den här roboten innehåller fel"
-  },
-  "this_bot_has_warnings_b6735e2e": {
-    "message": "Den här roboten innehåller varningar"
-  },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "Med detta konfigureras en datadriven dialogruta via en samling händelser och åtgärder."
   },
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "Den här dialogen har ingen utlösare ännu."
   },
-  "this_is_a_botname_notification_c8a391c7": {
-    "message": "This is a { botName } notification"
-  },
   "this_is_a_required_field_acb9837e": {
     "message": "Det här är ett obligatoriskt fält."
   },
-  "this_is_a_severity_notification_9beabb58": {
-    "message": "Det här är ett { severity }-meddelande"
+  "this_is_a_severity_diagnostic_58312674": {
+    "message": "This is a { severity } diagnostic"
+  },
+  "this_is_the_bot_language_you_are_currently_authori_4a26541": {
+    "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
     "message": "Det här är det språk som används för Composer-användargränssnittet."
@@ -2513,11 +2720,17 @@
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "Det här språket kommer att kopieras och användas som bas (och grundspråk) för översättningen."
   },
+  "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
+    "message": "This operation cannot be completed. The bot is already part of the Bot Project"
+  },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "Den här åtgärden kan inte slutföras. Färdigheten ingår redan i robotprojektet"
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "Med det här alternativet kan dina användare ange flera värden för den här egenskapen."
+  },
+  "this_page_contains_detailed_information_about_your_b2b3413b": {
+    "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "Den här typen av utlösare stöds inte av RegEx-identifieringsobjektet. Om du vill försäkra dig om att utlösaren har aktiverats, så ändra typ av identifieringsobjekt."
@@ -2528,11 +2741,11 @@
   "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
     "message": "Detta tar bort dialogen och dess innehåll. Vill du fortsätta?"
   },
-  "this_will_delete_the_profile_do_you_wish_to_contin_61b54894": {
-    "message": "Detta tar bort profilen. Vill du fortsätta?"
-  },
   "this_will_open_your_emulator_application_if_you_do_ba277151": {
     "message": "Detta öppnar ditt emulatorprogram. Om du inte redan har installerat Bot Framework Emulator kan du ladda ned det <a>här</a>."
+  },
+  "throw_exception_9d0d1db": {
+    "message": "Throw exception"
   },
   "time_2b5aac58": {
     "message": "Tid"
@@ -2610,7 +2823,7 @@
     "message": "Försök igen"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
-    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
+    "message": "Prova nya funktioner i förhandsversionen och hjälp oss att förbättra Composer. Du kan aktivera eller inaktivera dem när du vill."
   },
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "Skriv ett namn som beskriver det här innehållet"
@@ -2643,7 +2856,7 @@
     "message": "Avinstallera"
   },
   "unknown_47a3b725": {
-    "message": "Unknown"
+    "message": "Okänt"
   },
   "unknown_intent_44b962ba": {
     "message": "Okänd avsikt"
@@ -2656,6 +2869,9 @@
   },
   "unused_8d193e3": {
     "message": "Oanvänt"
+  },
+  "update_4d8ee62": {
+    "message": "Update"
   },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
     "message": "Uppdatera en aktivitet som tidigare skickats under konversationen"
@@ -2684,6 +2900,9 @@
   "update_scripts_c58771a2": {
     "message": "Uppdatera skript"
   },
+  "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
+    "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
+  },
   "updating_scripts_e17a5722": {
     "message": "Uppdaterar skript... "
   },
@@ -2692,6 +2911,18 @@
   },
   "url_should_start_with_http_s_9ca55d94": {
     "message": "URL:en ska börja med http[s]://"
+  },
+  "use_custom_luis_authoring_key_9c71470b": {
+    "message": "Use custom LUIS authoring key"
+  },
+  "use_custom_luis_endpoint_key_572e2c29": {
+    "message": "Use custom LUIS endpoint key"
+  },
+  "use_custom_luis_region_49d31dbf": {
+    "message": "Use custom LUIS region"
+  },
+  "use_custom_qna_maker_subscription_key_126e79df": {
+    "message": "Use custom QnA Maker Subscription key"
   },
   "use_custom_runtime_d7d323fd": {
     "message": "Använd anpassad körning"
@@ -2702,18 +2933,6 @@
   "used_in_126529e5": {
     "message": "Används i"
   },
-  "used_to_capture_conversation_and_application_telem_cae2c2a4": {
-    "message": "Används för att fånga in konversations- och programtelemetri."
-  },
-  "used_to_host_your_bot_web_app_and_qna_maker_web_ap_514dc11b": {
-    "message": "Används som värd för din robotwebbapp och QnA Maker-webbapp."
-  },
-  "used_to_store_conversation_state_11f348bd": {
-    "message": "Används för att lagra konversationstillstånd."
-  },
-  "used_to_store_conversation_transcripts_d80440ab": {
-    "message": "Används för att lagra konversationsavskrifter."
-  },
   "user_input_673e4a89": {
     "message": "Användarindata"
   },
@@ -2722,12 +2941,6 @@
   },
   "user_is_typing_790cb502": {
     "message": "Användaren skriver"
-  },
-  "va_creation_6babf7db": {
-    "message": "VA Creation"
-  },
-  "va_template_made_available_in_new_bot_flow_5f85baa4": {
-    "message": "VA template made available in new bot flow."
   },
   "validating_35b79a96": {
     "message": "Validerar..."
@@ -2750,14 +2963,14 @@
   "video_tutorials_79eb26ca": {
     "message": "Videosjälvstudier:"
   },
-  "view_ba339f93": {
-    "message": "Vy"
-  },
   "view_dialog_f5151228": {
     "message": "Visa dialog"
   },
   "view_kb_c382e495": {
     "message": "Visa kunskapsbas"
+  },
+  "view_log_6d51af5e": {
+    "message": "View log"
   },
   "view_on_npm_2051324d": {
     "message": "Visa på NPM"
@@ -2816,9 +3029,6 @@
   "what_is_the_type_of_this_trigger_d2701744": {
     "message": "Av vilken typ är den här utlösaren?"
   },
-  "what_will_your_virtual_assistant_say_if_it_does_no_972dd9ab": {
-    "message": "Vad händer om den virtuella assistenten inte förstår användaren?"
-  },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "Vad din robot säger till användaren. Det här är en mall som används för att skapa det utgående meddelandet. Den kan omfatta regler för språkskapande, egenskaper från minnet och andra funktioner.\n\nOm du exempelvis vill definiera variationer som ska väljas slumpmässigt skriver du:\n– hejsan\n– hej"
   },
@@ -2844,7 +3054,13 @@
     "message": "Vilken händelse?"
   },
   "write_an_expression_8773ea5c": {
-    "message": "Write an expression"
+    "message": "Skriv ett uttryck"
+  },
+  "write_your_message_5d0f151b": {
+    "message": "Write your message"
+  },
+  "yes_collect_data_b79b7844": {
+    "message": "Yes, collect data"
   },
   "yes_dde87d5": {
     "message": "Ja"
@@ -2855,6 +3071,9 @@
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "Du är i färd med att publicera din robot till profilen nedan. Vill du fortsätta?"
   },
+  "you_are_about_to_pull_project_files_from_the_selec_15786351": {
+    "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+  },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "Du kan skapa en ny robot från början med Composer eller börja med en mall."
   },
@@ -2864,8 +3083,17 @@
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
     "message": "Du kan hantera alla robotsvar här. Använd mallarna till att skapa avancerad svarslogik baserat på dina egna behov."
   },
+  "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
+    "message": "You can only connect to a skill in the root bot."
+  },
+  "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
+    "message": "You can turn data collection on or off at any time in the Application Settings."
+  },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "Du har inte behörighet att spara robotar här"
+  },
+  "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
+    "message": "You have successfully published { name } to { publishTarget }"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
     "message": "Ditt skapande av robotar i Composer"
@@ -2873,7 +3101,13 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Din robot använder LUIS och QNA för språkförståelse."
   },
+  "your_dialog_was_generated_successfully_61c13b73": {
+    "message": "Your dialog was generated successfully."
+  },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Kunskapsbasen är klar!"
+  },
+  "your_project_2a42631c": {
+    "message": "your project"
   }
 }

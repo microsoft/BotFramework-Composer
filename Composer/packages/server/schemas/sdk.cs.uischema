@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Pokud se chcete na něco zeptat, odešlete odpověď",
-      "subtitle": "Aktivita Ask"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Vyžádat soubor nebo přílohu",
-      "subtitle": "Vstup přílohy"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Zobrazit výzvu s více volbami",
-      "subtitle": "Vstup volby"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Vyžádat potvrzení",
-      "subtitle": "Potvrdit vstup"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Vyžádat datum nebo čas",
-      "subtitle": "Vstup data a času"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Vyžádat číslo",
-      "subtitle": "Vstup čísla"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Přihlášení OAuth",
-      "subtitle": "Vstup OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Vyžádat text",
-      "subtitle": "Textový vstup"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Zahájit nový dialog",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Vygenerovat událost trasování",
       "subtitle": "Aktivita Trace"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Pokud se chcete na něco zeptat, odešlete odpověď",
+      "subtitle": "Aktivita Ask"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Vyžádat soubor nebo přílohu",
+      "subtitle": "Vstup přílohy"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Zobrazit výzvu s více volbami",
+      "subtitle": "Vstup volby"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Vyžádat potvrzení",
+      "subtitle": "Potvrdit vstup"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Vyžádat datum nebo čas",
+      "subtitle": "Vstup data a času"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Vyžádat číslo",
+      "subtitle": "Vstup čísla"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Přihlášení OAuth",
+      "subtitle": "Vstup OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Vyžádat text",
+      "subtitle": "Textový vstup"
     }
   },
   "Microsoft.OnActivity": {
