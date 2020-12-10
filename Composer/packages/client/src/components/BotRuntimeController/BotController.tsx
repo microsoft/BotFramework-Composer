@@ -21,6 +21,7 @@ import {
 } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -67,6 +68,7 @@ const BotController: React.FC = () => {
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllOperationQueued, queueStartAllBots] = useState(false);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const builderEssentials = useRecoilValue(buildConfigurationSelector);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -109,11 +111,16 @@ const BotController: React.FC = () => {
 
   const handleClick = async () => {
     if (!botStartComplete) {
+      TelemetryClient.track('StartAllBotsButtonClicked');
       startAllBots();
     } else {
       await stopAllBots();
       queueStartAllBots(true);
+      TelemetryClient.track('RestartAllBotsButtonClicked');
     }
+    builderEssentials.forEach(({ projectId }) => {
+      TelemetryClient.track('StartBotStarted', { projectId });
+    });
   };
 
   const onSplitButtonClick = () => {
@@ -152,10 +159,11 @@ const BotController: React.FC = () => {
       key: projectId,
       displayName,
       projectId,
+      isRoot: projectId === rootBotId,
       setGlobalErrorCalloutVisibility,
       isRootBot: projectId === rootBotId,
     }));
-  }, [projectCollection]);
+  }, [projectCollection, rootBotId]);
 
   return (
     <React.Fragment>

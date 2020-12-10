@@ -43,6 +43,7 @@ import {
 import { undoFunctionState } from '../recoilModel/undo/history';
 import { skillsStateSelector } from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
+import TelemetryClient from '../telemetry/TelemetryClient';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -270,6 +271,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     setApplicationLevelError,
     updateUserSettings,
     confirm: OpenConfirmModal,
+    telemetryClient: TelemetryClient,
   };
 
   const currentDialog = useMemo(() => {
