@@ -84,11 +84,10 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
     customerStyle = { dialog: {}, modal: {} },
     minWidth,
   } = props;
-  const [currentStyle, setStyle] = useState(styles[dialogType]);
+  /* add customer styles to the array */
+  styles[DialogTypes.Customer] = customerStyle;
 
-  if (dialogType === DialogTypes.Customer) {
-    styles[DialogTypes.Customer] = customerStyle;
-  }
+  const [currentStyle, setStyle] = useState(styles[dialogType]);
 
   useEffect(() => {
     if (dialogType) {
