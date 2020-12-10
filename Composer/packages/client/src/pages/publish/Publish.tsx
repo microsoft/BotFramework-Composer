@@ -85,28 +85,28 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     deleteNotification,
   } = useRecoilValue(dispatcherState);
 
-  // TODO: save selectedBotIds instead of whole bot.
+  // CR: save selectedBotIds instead of whole bot.
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
-  // TODO: this is a computed boolean.
+  // CR: this is a computed boolean.
   const [publishDisabled, setPublishDisabled] = useState(false);
-  // TODO: this state is never used?
+  // CR: this state is never used?
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
-  // TODO: Concept not clear. What is this state for?
+  // CR: Concept not clear. What is this state for?
   const [currentBotPublishTargetList, setCurrentBotPublishTargetList] = useState<
     { projectId: string; publishTarget: string }[]
   >([]);
-  // TODO: Define data model.
+  // CR: Define data model.
   // fill Settings, status, publishType, publish target for bot from botProjectMeta, publishHistory
   const { botSettingList, statusList, botPublishTypesList } = useMemo(() => {
     return generateComputedData(botProjectData, publishHistoryList, currentBotPublishTargetList);
   }, [botProjectData, publishHistoryList]);
 
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
-  // TODO: Define the data type outside.
+  // CR: Define the data type outside.
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
     { projectId: string; publishHistory: { [key: string]: IStatus[] } }[]
   >(publishHistoryList);
-  // TODO: preferred naming convention - xxxVisible, setXXXVisibility
+  // CR: preferred naming convention - xxxVisible, setXXXVisibility
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [pullDialogHidden, setPullDialogHidden] = useState(true);
 
@@ -373,7 +373,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          {/* TODO: define a better data model for BotStatusList props */}
+          {/* CR: define a better data model for BotStatusList props */}
           <BotStatusList
             botPublishHistoryList={botPublishHistoryList}
             botPublishTypesList={botPublishTypesList}
