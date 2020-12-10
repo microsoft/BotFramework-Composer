@@ -73,7 +73,7 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({ ...botEndpoints, [projectId]: `${endpointURL}/api/messages` }));
       } else {
-        set(botStatusState(projectId), BotStatus.reloading);
+        set(botStatusState(projectId), BotStatus.starting);
       }
     }
 
@@ -119,7 +119,7 @@ export const publisherDispatcher = () => {
           [projectId]: `${endpointURL}/api/messages`,
         }));
       } else if (status === PUBLISH_PENDING) {
-        set(botStatusState(projectId), BotStatus.reloading);
+        set(botStatusState(projectId), BotStatus.starting);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
         if (checkIfDotnetVersionMissing(data)) {

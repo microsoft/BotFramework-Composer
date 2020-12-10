@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "发送响应以提出问题",
-      "subtitle": "提问活动"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "提示输入文件或附件",
-      "subtitle": "附件输入"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "带多项选择的提示语",
-      "subtitle": "选项输入"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "提示进行确认",
-      "subtitle": "确认输入"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "提示输入日期或时间",
-      "subtitle": "日期/时间输入"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "提示输入数字",
-      "subtitle": "数字输入"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth 登录",
-      "subtitle": "OAuth 输入"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "提示输入文本",
-      "subtitle": "文本输入"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "开始新对话",
@@ -218,6 +170,54 @@
     "form": {
       "label": "发出跟踪事件",
       "subtitle": "跟踪活动"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "发送响应以提出问题",
+      "subtitle": "提问活动"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "提示输入文件或附件",
+      "subtitle": "附件输入"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "带多项选择的提示语",
+      "subtitle": "选项输入"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "提示进行确认",
+      "subtitle": "确认输入"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "提示输入日期或时间",
+      "subtitle": "日期/时间输入"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "提示输入数字",
+      "subtitle": "数字输入"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth 登录",
+      "subtitle": "OAuth 输入"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "提示输入文本",
+      "subtitle": "文本输入"
     }
   },
   "Microsoft.OnActivity": {

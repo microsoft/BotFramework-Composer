@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Skicka ett svar för att ställa en fråga",
-      "subtitle": "Fråga aktivitet"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Fråga efter en fil eller bilaga",
-      "subtitle": "Indata för bifogad fil"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Prompt med flera alternativ",
-      "subtitle": "Utvalda indata"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Fråga efter bekräftelse",
-      "subtitle": "Bekräfta indata"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Fråga efter datum eller tid",
-      "subtitle": "Inmatning av datum/tid"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Fråga efter ett nummer",
-      "subtitle": "Nummerindata"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth-inloggning",
-      "subtitle": "OAuth-indata"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Fråga efter text",
-      "subtitle": "Textinmatning"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Påbörja en ny dialogruta",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Generera en spårningshändelse",
       "subtitle": "Spårningsaktivitet"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Skicka ett svar för att ställa en fråga",
+      "subtitle": "Fråga aktivitet"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Fråga efter en fil eller bilaga",
+      "subtitle": "Indata för bifogad fil"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Prompt med flera alternativ",
+      "subtitle": "Utvalda indata"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Fråga efter bekräftelse",
+      "subtitle": "Bekräfta indata"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Fråga efter datum eller tid",
+      "subtitle": "Inmatning av datum/tid"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Fråga efter ett nummer",
+      "subtitle": "Nummerindata"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth-inloggning",
+      "subtitle": "OAuth-indata"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Fråga efter text",
+      "subtitle": "Textinmatning"
     }
   },
   "Microsoft.OnActivity": {

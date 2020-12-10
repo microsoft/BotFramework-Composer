@@ -3,7 +3,7 @@
   "description": "Bunlar, yükleyici tarafından oluşturulabilen çeşitlerin tümüdür.",
   "definitions": {
     "Microsoft.ActivityTemplate": {
-      "title": "Microsoft activity template",
+      "title": "Microsoft etkinlik şablonu",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -26,7 +26,7 @@
       }
     },
     "Microsoft.AdaptiveDialog": {
-      "title": "Adaptive dialog",
+      "title": "Uyarlamalı diyalog",
       "description": "Konuşmaya göre uyarlanabilen esnek ve veri temelli iletişim kutusu.",
       "patternProperties": {
         "^\\$": {
@@ -52,7 +52,7 @@
           "description": "Kullanıcı girişini amaç ve varlıkları tanıyarak yorumlayan giriş tanıyıcısı."
         },
         "generator": {
-          "title": "Language generator",
+          "title": "Dil oluşturucusu",
           "description": "Bot yanıtlarını oluşturan dil oluşturucu."
         },
         "selector": {
@@ -72,7 +72,7 @@
           "description": "Doldurulacak şema.",
           "anyOf": {
             "0": {
-              "title": "Core schema meta-schema"
+              "title": "Çekirdek şema meta şema"
             },
             "1": {
               "title": "JSON şemasına yönelik başvuru",
@@ -91,7 +91,7 @@
       }
     },
     "Microsoft.AgeEntityRecognizer": {
-      "title": "Age entity recognizer",
+      "title": "Yaş varlığı tanıyıcısı",
       "description": "Yaşı tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -111,7 +111,7 @@
       }
     },
     "Microsoft.Ask": {
-      "title": "Send activity to ask a question",
+      "title": "Soru sormak için etkinlik gönderin",
       "description": "Bu, bir yanıt beklenirken kullanıcıya etkinlik gönderen bir eylemdir",
       "patternProperties": {
         "^\\$": {
@@ -121,7 +121,7 @@
       },
       "properties": {
         "expectedProperties": {
-          "title": "Expected properties",
+          "title": "Beklenen özellikler",
           "description": "Kullanıcıdan beklenen özellikler.",
           "items": {
             "title": "Ad",
@@ -129,7 +129,7 @@
           }
         },
         "defaultOperation": {
-          "title": "Default operation",
+          "title": "Varsayılan işlem",
           "description": "Bu Sorunun yanıtında hiçbir işlem tanınmadığında kullanılacak varsayılan işlemi ayarlar."
         },
         "id": {
@@ -288,7 +288,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "İşlenen etkinlik",
           "description": "False olarak ayarlandığında, çağrılan iletişim kutusu geçerli etkinliği işleyebilir."
         },
         "resultProperty": {
@@ -324,7 +324,7 @@
           "description": "True ise bu eylemi devre dışı bırakacak isteğe bağlı koşul."
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "İşlenen etkinlik",
           "description": "False olarak ayarlandığında yetenek, Etkinlik özelliğindeki etkinlik yerine geçerli dönüş bağlamındaki etkinlik kullanılarak başlatılır."
         },
         "resultProperty": {
@@ -340,11 +340,11 @@
           "description": "Yetenek konağının geri arama URL'si."
         },
         "connectionName": {
-          "title": "OAuth connection name (SSO)",
+          "title": "OAuth bağlantı adı (SSO)",
           "description": "Bir beceriyle çoklu oturum açma gerçekleştirmek için kullanılacak OAuth Bağlantı Adı."
         },
         "skillAppId": {
-          "title": "Skill App Id",
+          "title": "Yetenek Uygulaması Kimliği",
           "description": "Yeteneğin Microsoft Uygulama Kimliği."
         },
         "skillEndpoint": {
@@ -356,7 +356,7 @@
           "description": "Yeteneğe gönderilecek etkinlik."
         },
         "allowInterruptions": {
-          "title": "Allow interruptions",
+          "title": "Kesintilere izin ver",
           "description": "Üst öğenin yeteneği kesmesine izin verilip verilmeyeceğini belirleyen bir Boole ifadesi."
         },
         "$kind": {
@@ -370,7 +370,7 @@
       }
     },
     "Microsoft.BreakLoop": {
-      "title": "Break loop",
+      "title": "Döngüyü kes",
       "description": "Bu döngüyü yürütmeyi durdur",
       "patternProperties": {
         "^\\$": {
@@ -416,7 +416,7 @@
           "description": "True ise bu eylemi devre dışı bırakacak isteğe bağlı koşul."
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "İşlenen etkinlik",
           "description": "False olarak ayarlandığında, çağıran iletişim kutusuna geçerli etkinliği işlemesi belirtilir."
         },
         "eventName": {
@@ -456,7 +456,7 @@
           "description": "True ise bu eylemi devre dışı bırakacak isteğe bağlı koşul."
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "İşlenen etkinlik",
           "description": "False olarak ayarlandığında, çağıran iletişim kutusuna geçerli etkinliği işlemesi belirtilir."
         },
         "eventName": {
@@ -478,22 +478,22 @@
       }
     },
     "Microsoft.ChannelMentionEntityRecognizer": {
-      "title": "Channel mention entity recognizer",
-      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "title": "Bahsetme varlık tanıyıcısını kanal yoluyla aktarma",
+      "description": "Kanal tarafından etkinlik.varlıklar aracılığıyla tanıyıcı sonucuna geçirilen bahsetme varlıklarını yükseltir.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Araç özelliği",
+          "description": "Araçlar için açık uçlu özellik."
         }
       },
       "properties": {
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "İletişim kutusu nesnesinin türü",
+          "description": "Yapılandırmakta olduğunuz bileşen için geçerli özellikleri tanımlar (bir iletişim kutusu .schema dosyasından)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Tasarımcı bilgileri",
+          "description": "Bot Framework Composer için ek bilgiler."
         }
       }
     },
@@ -698,7 +698,7 @@
       }
     },
     "Microsoft.ConditionalSelector": {
-      "title": "Conditional trigger selector",
+      "title": "Koşullu tetikleyici seçicisi",
       "description": "Koşula bağlı bir kural seçici kullanın",
       "patternProperties": {
         "^\\$": {
@@ -750,7 +750,7 @@
           }
         },
         "choiceOptions": {
-          "title": "Choice options",
+          "title": "Seçim seçenekleri",
           "description": "Seçim Seçenekleri veya kullanıcıya görüntü seçeneklerini denetlemek için Seçim Seçenekleri sunan ifade.",
           "oneOf": {
             "0": {
@@ -888,7 +888,7 @@
       }
     },
     "Microsoft.ConfirmationEntityRecognizer": {
-      "title": "Confirmation entity recognizer",
+      "title": "Onay varlığı tanıyıcısı",
       "description": "Onay seçimlerini tanıyan tanıyıcı (evet/hayır).",
       "patternProperties": {
         "^\\$": {
@@ -908,43 +908,43 @@
       }
     },
     "Microsoft.ContinueConversationLater": {
-      "title": "Continue conversation later (Queue)",
-      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "title": "Konuşmaya daha sonra devam edin (Kuyruk)",
+      "description": "Konuşmaya daha sonra devam edin (Azure Depolama Kuyruğu aracılığıyla).",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Araç özelliği",
+          "description": "Araçlar için açık uçlu özellik."
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "Kimlik",
+          "description": "İletişim kutusunun isteğe bağlı kimliği"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "Devre Dışı",
+          "description": "True ise bu eylemi devre dışı bırakacak isteğe bağlı koşul."
         },
         "date": {
-          "title": "Date",
-          "description": "Date in the future as a ISO string when the conversation should continue."
+          "title": "Tarih",
+          "description": "ISO dizesi olarak, konuşmanın devam etmesi gereken gelecekteki bir tarih."
         },
         "value": {
-          "title": "Value",
-          "description": "Value to send in the activity.value."
+          "title": "Değer",
+          "description": "etkinlik.değer içinde gönderilecek değer."
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "İletişim kutusu nesnesinin türü",
+          "description": "Yapılandırmakta olduğunuz bileşen için geçerli özellikleri tanımlar (bir iletişim kutusu .schema dosyasından)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Tasarımcı bilgileri",
+          "description": "Bot Framework Composer için ek bilgiler."
         }
       }
     },
     "Microsoft.ContinueLoop": {
-      "title": "Continue loop",
+      "title": "Döngüye devam et",
       "description": "Bu şablonu yürütmeyi durdurun ve döngünün bir sonraki yinelemesiyle devam edin.",
       "patternProperties": {
         "^\\$": {
@@ -972,7 +972,7 @@
       }
     },
     "Microsoft.CrossTrainedRecognizerSet": {
-      "title": "Cross-trained recognizer set",
+      "title": "Çapraz eğitimli tanıyıcı kümesi",
       "description": "Çapraz eğitimli tanıyıcılar arasında seçim yapmaya yönelik tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -1000,7 +1000,7 @@
       }
     },
     "Microsoft.CurrencyEntityRecognizer": {
-      "title": "Currency entity recognizer",
+      "title": "Para birimi varlığı tanıyıcısı",
       "description": "Para birimini tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -1020,7 +1020,7 @@
       }
     },
     "Microsoft.DateTimeEntityRecognizer": {
-      "title": "Date and time entity recognizer",
+      "title": "Tarih ve saat varlığı tanıyıcısı",
       "description": "Tarihleri ve saat bölümlerini tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -1054,7 +1054,7 @@
       },
       "properties": {
         "defaultValue": {
-          "title": "Default date",
+          "title": "Varsayılan tarih",
           "description": "Maksimum giriş istemi sayısı aşıldığında 'özellik', ifadenin değeri veya sonucu olarak ayarlanır."
         },
         "value": {
@@ -1220,7 +1220,7 @@
       }
     },
     "Microsoft.DeleteProperty": {
-      "title": "Delete property",
+      "title": "Özelliği sil",
       "description": "Bir özelliği ve taşıdığı değeri silin.",
       "patternProperties": {
         "^\\$": {
@@ -1252,7 +1252,7 @@
       }
     },
     "Microsoft.DimensionEntityRecognizer": {
-      "title": "Dimension entity recognizer",
+      "title": "Boyut varlığı tanıyıcısı",
       "description": "Boyutu tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -1332,7 +1332,7 @@
           "description": "Bellekteki dizide yapılacak değişiklik türü.",
           "oneOf": {
             "0": {
-              "title": "Change type",
+              "title": "Değişiklik türü",
               "description": "Standart değişim türü."
             }
           }
@@ -1346,7 +1346,7 @@
           "description": "Güncelleştirilecek diziyi tutan özellik."
         },
         "resultProperty": {
-          "title": "Result property",
+          "title": "Sonuç özelliği",
           "description": "Bu eylemin sonucunu depolayacak özellik."
         },
         "value": {
@@ -1364,7 +1364,7 @@
       }
     },
     "Microsoft.EmailEntityRecognizer": {
-      "title": "Email entity recognizer",
+      "title": "E-posta varlığı tanıyıcısı",
       "description": "E-postayı tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -1494,7 +1494,7 @@
       }
     },
     "Microsoft.FirstSelector": {
-      "title": "First trigger selector",
+      "title": "İlk tetikleyici seçicisi",
       "description": "İlk true kuralı seçicisi",
       "patternProperties": {
         "^\\$": {
@@ -1606,7 +1606,7 @@
       }
     },
     "Microsoft.GetActivityMembers": {
-      "title": "Get activity members",
+      "title": "Etkinlik üyelerini alma",
       "description": "Bir etkinliğe katılan üyeleri alın. (Yalnızca BotFrameworkAdapter)",
       "patternProperties": {
         "^\\$": {
@@ -1624,7 +1624,7 @@
           "description": "Özellik (bilgi depolayacak adlandırılmış konum)."
         },
         "activityId": {
-          "title": "Activity Id",
+          "title": "Etkinlik Kimliği",
           "description": "Üyeleri almak için kullanılacak etkinlik kimliği veya etkinlik kimliğine yönelik ifade. Hiçbiri tanımlanmadıysa geçerli etkinlik kimliği kullanılır."
         },
         "disabled": {
@@ -1642,7 +1642,7 @@
       }
     },
     "Microsoft.GetConversationMembers": {
-      "title": "Get conversation members",
+      "title": "Konuşma üyelerini alma",
       "description": "Bir konuşmaya katılan üyeleri alın. (Yalnızca BotFrameworkAdapter)",
       "patternProperties": {
         "^\\$": {
@@ -1674,7 +1674,7 @@
       }
     },
     "Microsoft.GotoAction": {
-      "title": "Go to action",
+      "title": "Eyleme git",
       "description": "Kimliğe göre bir eyleme gidin.",
       "patternProperties": {
         "^\\$": {
@@ -1706,7 +1706,7 @@
       }
     },
     "Microsoft.GuidEntityRecognizer": {
-      "title": "Guid entity recognizer",
+      "title": "GUID varlığı tanıyıcısı",
       "description": "GUID'leri tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -1726,7 +1726,7 @@
       }
     },
     "Microsoft.HashtagEntityRecognizer": {
-      "title": "Hashtag entity recognizer",
+      "title": "Diyez etiketi varlığı tanıyıcısı",
       "description": "Diyez etiketlerini tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -1812,204 +1812,204 @@
       "description": "Dizi şablonu, etkinlik veya ActivityTemplate uygulaması olan ActivityTemplate bileşenleri",
       "oneOf": {
         "1": {
-          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
-          "title": "Activity",
+          "description": "Etkinlik, Bot Framework 3.0 protokolü için temel iletişim türüdür.",
+          "title": "Etkinlik",
           "properties": {
             "type": {
-              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "type"
+              "description": "Etkinlik türünü içerir. Olası değerler şunlardır: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "tür"
             },
             "id": {
-              "description": "Contains an ID that uniquely identifies the activity on the channel.",
-              "title": "id"
+              "description": "Kanaldaki etkinliği benzersiz olarak tanımlayan bir kimlik içerir.",
+              "title": "kimlik"
             },
             "timestamp": {
-              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
-              "title": "timestamp"
+              "description": "İletinin gönderildiği, UTC olarak ISO-8601 biçiminde ifade edilen tarih ve saati içerir.",
+              "title": "zaman damgası"
             },
             "localTimestamp": {
-              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "description": "İletinin yerel saatle gönderildiği, ISO-8601 biçiminde ifade edilen tarih ve saati\niçerir.\nÖrneğin, 2016-09-23T13:07:49.4714686-07:00.",
               "title": "localTimestamp"
             },
             "localTimezone": {
-              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "description": "İletinin yerel saatle IANA Saat Dilimi veritabanı biçiminde ifade edildiği saat diliminin\nadını içerir.\nÖrneğin, Amerika/Los_Angeles.",
               "title": "localTimezone"
             },
             "serviceUrl": {
-              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "description": "Kanalın hizmet uç noktasını belirten URL'yi içerir. Kanal tarafından ayarlanır.",
               "title": "serviceUrl"
             },
             "channelId": {
-              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "description": "Kanalı benzersiz olarak tanımlayan bir kimlik içerir. Kanal tarafından ayarlanır.",
               "title": "channelId"
             },
             "from": {
-              "description": "Identifies the sender of the message.",
-              "title": "from"
+              "description": "İletinin gönderenini tanımlar.",
+              "title": "şuradan"
             },
             "conversation": {
-              "description": "Identifies the conversation to which the activity belongs.",
-              "title": "conversation",
+              "description": "Etkinliğin ait olduğu konuşmayı tanımlar.",
+              "title": "konuşma",
               "properties": {
                 "isGroup": {
-                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "description": "Etkinliğin oluşturulduğu saatte konuşmanın ikiden çok katılımcı içerip içermediğini\ngösterir",
                   "title": "isGroup"
                 },
                 "conversationType": {
-                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "description": "Kanallarda konuşma türlerini birbirinden ayıran konuşma türünü gösterir",
                   "title": "conversationType"
                 },
                 "id": {
-                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-                  "title": "id"
+                  "description": "Bu kanaldaki kullanıcının veya botun kanal kimliği (Örnek: joe@smith.com veya @joesmith ya da\n123456)",
+                  "title": "kimlik"
                 },
                 "name": {
-                  "description": "Display friendly name",
-                  "title": "name"
+                  "description": "Kolay adı görüntüle",
+                  "title": "ad"
                 },
                 "aadObjectId": {
-                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "description": "Bu hesabın Azure Active Directory (AAD) içindeki nesne kimliği",
                   "title": "aadObjectId"
                 },
                 "role": {
-                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-                  "title": "role"
+                  "description": "Hesabın arkasındaki varlığın rolü (Örnek: Kullanıcı, Bot vb.). Olası değerler şunlardır:\n'user', 'bot'",
+                  "title": "rol"
                 }
               }
             },
             "recipient": {
-              "description": "Identifies the recipient of the message.",
-              "title": "recipient"
+              "description": "İletinin alıcısını tanımlar.",
+              "title": "alıcı"
             },
             "textFormat": {
-              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "description": "Metin alanlarının biçimi Default:markdown. Olası değerler şunlardır: 'markdown', 'plain', 'xml'",
               "title": "textFormat"
             },
             "attachmentLayout": {
-              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "description": "Birden çok ek için düzen ipucu. Varsayılan: list. Olası değerler şunlardır: 'list',\n'carousel'",
               "title": "attachmentLayout"
             },
             "membersAdded": {
-              "description": "The collection of members added to the conversation.",
+              "description": "Konuşmaya eklenen üye koleksiyonu.",
               "title": "membersAdded",
               "items": {
-                "description": "Channel account information needed to route a message",
+                "description": "Bir iletiyi yönlendirmek için gereken kanal hesabı bilgileri",
                 "title": "ChannelAccount",
                 "properties": {
                   "id": {
-                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-                    "title": "id"
+                    "description": "Bu kanaldaki kullanıcının veya botun kanal kimliği (Örnek: joe@smith.com veya @joesmith ya da\n123456)",
+                    "title": "kimlik"
                   },
                   "name": {
-                    "description": "Display friendly name",
-                    "title": "name"
+                    "description": "Kolay adı görüntüle",
+                    "title": "ad"
                   },
                   "aadObjectId": {
-                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "description": "Bu hesabın Azure Active Directory (AAD) içindeki nesne kimliği",
                     "title": "aadObjectId"
                   },
                   "role": {
-                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-                    "title": "role"
+                    "description": "Hesabın arkasındaki varlığın rolü (Örnek: Kullanıcı, Bot vb.). Olası değerler şunlardır:\n'user', 'bot'",
+                    "title": "rol"
                   }
                 }
               }
             },
             "membersRemoved": {
-              "description": "The collection of members removed from the conversation.",
+              "description": "Konuşmadan kaldırılan üye koleksiyonu.",
               "title": "membersRemoved"
             },
             "reactionsAdded": {
-              "description": "The collection of reactions added to the conversation.",
+              "description": "Konuşmaya eklenen tepki koleksiyonu.",
               "title": "reactionsAdded",
               "items": {
-                "description": "Message reaction object",
+                "description": "İleti tepki nesnesi",
                 "title": "MessageReaction",
                 "properties": {
                   "type": {
-                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
-                    "title": "type"
+                    "description": "İleti tepki türü. Olası değerler şunlardır: 'like', 'plusOne'",
+                    "title": "tür"
                   }
                 }
               }
             },
             "reactionsRemoved": {
-              "description": "The collection of reactions removed from the conversation.",
+              "description": "Konuşmadan kaldırılan tepki koleksiyonu.",
               "title": "reactionsRemoved"
             },
             "topicName": {
-              "description": "The updated topic name of the conversation.",
+              "description": "Konuşmanın güncelleştirilmiş konu adı.",
               "title": "topicName"
             },
             "historyDisclosed": {
-              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "description": "Kanalın önceki geçmişinin açıklanıp açıklanmadığını gösterir.",
               "title": "historyDisclosed"
             },
             "locale": {
-              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
-              "title": "locale"
+              "description": "Metin alanının içeriğine ilişkin yerel ayar adı.\nYerel ayar adı, bir dil ile ilişkili iki ya da üç harfli ISO 639 kültür kodunun\nve bir ülke ya da bölge\nile ilişkili iki harfli ISO 3166 alt kültür kodunun bileşiminden oluşur.\nYerel ayar adı ayrıca geçerli bir BCP-47 dil etiketine de karşılık gelebilir.",
+              "title": "yerel ayar"
             },
             "text": {
-              "description": "The text content of the message.",
-              "title": "text"
+              "description": "İletinin metin içeriği.",
+              "title": "metin"
             },
             "speak": {
-              "description": "The text to speak.",
-              "title": "speak"
+              "description": "Konuşulacak metin.",
+              "title": "konuş"
             },
             "inputHint": {
-              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "description": "İleti istemciye teslim edildikten sonra botunuzun\nkullanıcı girişini kabul edip etmeyeceğini, kullanıcı girişi bekleyip beklemediğini veya kullanıcı girişini \nyoksayıp saymadığını gösterir. Olası değerler şunlardır: 'acceptingInput', 'ignoringInput', 'expectingInput'",
               "title": "inputHint"
             },
             "summary": {
-              "description": "The text to display if the channel cannot render cards.",
-              "title": "summary"
+              "description": "Kanal kartları işleyemezse görüntülenecek metin.",
+              "title": "özet"
             },
             "suggestedActions": {
-              "description": "The suggested actions for the activity.",
+              "description": "Etkinlik için önerilen eylemler.",
               "title": "suggestedActions",
               "properties": {
                 "to": {
-                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
-                  "title": "to",
+                  "description": "Eylemlerin gösterilmesi gereken alıcıların kimlikleri. Bu kimlikler channelId'ye görelidir\nve etkinliğin tüm alıcılarının bir alt kümesidir",
+                  "title": "-",
                   "items": {
-                    "title": "Id",
-                    "description": "Id of recipient."
+                    "title": "Kimlik",
+                    "description": "Alıcının kimliği."
                   }
                 },
                 "actions": {
-                  "description": "Actions that can be shown to the user",
-                  "title": "actions",
+                  "description": "Kullanıcıya gösterilebilen eylemler",
+                  "title": "eylemler",
                   "items": {
-                    "description": "A clickable action",
+                    "description": "Tıklanabilir bir eylem",
                     "title": "CardAction",
                     "properties": {
                       "type": {
-                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-                        "title": "type"
+                        "description": "Bu düğme tarafından uygulanan eylemin türü. Olası değerler şunlardır: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "tür"
                       },
                       "title": {
-                        "description": "Text description which appears on the button",
-                        "title": "title"
+                        "description": "Düğmede görünen metin açıklaması",
+                        "title": "başlık"
                       },
                       "image": {
-                        "description": "Image URL which will appear on the button, next to text label",
-                        "title": "image"
+                        "description": "Düğmede metin etiketinin yanında görünecek resim URL'si",
+                        "title": "görüntü"
                       },
                       "text": {
-                        "description": "Text for this action",
-                        "title": "text"
+                        "description": "Bu eylemin metni",
+                        "title": "metin"
                       },
                       "displayText": {
-                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "description": "(İsteğe bağlı) düğmeye tıklanırsa sohbet akışında görüntülenecek metin",
                         "title": "displayText"
                       },
                       "value": {
-                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
-                        "title": "value"
+                        "description": "Eylemin tamamlayıcı parametresi. Bu özelliğin içeriği ActionType'a bağımlıdır",
+                        "title": "değer"
                       },
                       "channelData": {
-                        "description": "Channel-specific data associated with this action",
+                        "description": "Bu eylemle ilişkili kanala özgü veriler",
                         "title": "channelData"
                       }
                     }
@@ -2018,160 +2018,160 @@
               }
             },
             "attachments": {
-              "description": "Attachments",
-              "title": "attachments",
+              "description": "Ekler",
+              "title": "ekler",
               "items": {
-                "description": "An attachment within an activity",
-                "title": "Attachment",
+                "description": "Etkinlik içindeki bir ek",
+                "title": "Ek",
                 "properties": {
                   "contentType": {
-                    "description": "mimetype/Contenttype for the file",
+                    "description": "dosyaya ilişkin mimetype/Contenttype",
                     "title": "contentType"
                   },
                   "contentUrl": {
-                    "description": "Content Url",
+                    "description": "İçerik URL'si",
                     "title": "contentUrl"
                   },
                   "content": {
-                    "description": "Embedded content",
-                    "title": "content"
+                    "description": "Ekli içerik",
+                    "title": "içerik"
                   },
                   "name": {
-                    "description": "(OPTIONAL) The name of the attachment",
-                    "title": "name"
+                    "description": "(İSTEĞE BAĞLI) Ekin adı",
+                    "title": "ad"
                   },
                   "thumbnailUrl": {
-                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "description": "(İSTEĞE BAĞLI) Ek ile ilişkili küçük resim",
                     "title": "thumbnailUrl"
                   }
                 }
               }
             },
             "entities": {
-              "description": "Represents the entities that were mentioned in the message.",
-              "title": "entities",
+              "description": "İletide bahsedilen varlıkları gösterir.",
+              "title": "varlıklar",
               "items": {
-                "description": "Metadata object pertaining to an activity",
-                "title": "Entity",
+                "description": "Bir etkinlikle ilgili meta veri nesnesi",
+                "title": "Varlık",
                 "properties": {
                   "type": {
-                    "description": "Type of this entity (RFC 3987 IRI)",
-                    "title": "type"
+                    "description": "Bu varlığın türü (RFC 3987 IRI)",
+                    "title": "tür"
                   }
                 }
               }
             },
             "channelData": {
-              "description": "Contains channel-specific content.",
+              "description": "Kanala özgü içerik barındırır.",
               "title": "channelData"
             },
             "action": {
-              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
-              "title": "action"
+              "description": "Bir contactRelationUpdate alıcısının, gönderenin ilgili kişi listesine eklenip eklenmeyeceğini veya\nbu listeden kaldırılıp kaldırılmayacağını gösterir.",
+              "title": "eylem"
             },
             "replyToId": {
-              "description": "Contains the ID of the message to which this message is a reply.",
+              "description": "Bu iletinin yanıt olarak gönderildiği iletinin kimliğini içerir.",
               "title": "replyToId"
             },
             "label": {
-              "description": "A descriptive label for the activity.",
-              "title": "label"
+              "description": "Etkinlik için tanımlayıcı bir etiket.",
+              "title": "etiket"
             },
             "valueType": {
-              "description": "The type of the activity's value object.",
+              "description": "Etkinliğin değer nesnesinin türü.",
               "title": "valueType"
             },
             "value": {
-              "description": "A value that is associated with the activity.",
-              "title": "value"
+              "description": "Etkinlikle ilişkili değer.",
+              "title": "değer"
             },
             "name": {
-              "description": "The name of the operation associated with an invoke or event activity.",
-              "title": "name"
+              "description": "Bir çağrı veya olay etkinliği ile ilişkili işlemin adı.",
+              "title": "ad"
             },
             "relatesTo": {
-              "description": "A reference to another conversation or activity.",
+              "description": "Başka bir konuşma veya etkinlik başvurusu.",
               "title": "relatesTo",
               "properties": {
                 "activityId": {
-                  "description": "(Optional) ID of the activity to refer to",
+                  "description": "(İsteğe bağlı) Başvurulacak etkinliğin kimliği",
                   "title": "activityId"
                 },
                 "user": {
-                  "description": "(Optional) User participating in this conversation",
-                  "title": "user"
+                  "description": "(İsteğe bağlı) Bu konuşmaya katılan kullanıcı",
+                  "title": "kullanıcı"
                 },
                 "bot": {
-                  "description": "Bot participating in this conversation",
+                  "description": "Bu konuşmaya katılan bot",
                   "title": "bot"
                 },
                 "conversation": {
-                  "description": "Conversation reference",
-                  "title": "conversation"
+                  "description": "Konuşma başvurusu",
+                  "title": "konuşma"
                 },
                 "channelId": {
-                  "description": "Channel ID",
+                  "description": "Kanal Kimliği",
                   "title": "channelId"
                 },
                 "serviceUrl": {
-                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "description": "Başvurulan konuşmayla ilgili işlemlerin gerçekleştirilebileceği hizmet uç noktası",
                   "title": "serviceUrl"
                 }
               }
             },
             "code": {
-              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "code"
+              "description": "Konuşmanın neden sonlandırıldığını gösteren endOfConversation etkinliklerine yönelik bir kod.\nOlası değerler şunlardır: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "kod"
             },
             "expiration": {
-              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
-              "title": "expiration"
+              "description": "Etkinliğin \"süresi doldu\" olarak kabul edilmesi ve alıcıya sunulmaması\ngereken saat.",
+              "title": "süre sonu"
             },
             "importance": {
-              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
-              "title": "importance"
+              "description": "Etkinliğin önemi. Olası değerler şunlardır: 'low', 'normal', 'high'",
+              "title": "önem derecesi"
             },
             "deliveryMode": {
-              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "description": "Etkinliğin alıcı alternatif teslim yollarına sinyal verecek bir teslim ipucu.\nVarsayılan teslim modu: \"varsayılan\". Olası değerler şunlardır: 'normal', 'notification'",
               "title": "deliveryMode"
             },
             "listenFor": {
-              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "description": "Konuşma ve dil hazırlama sistemlerinin dinlemesi gereken tümcecik ve başvuru listesi",
               "title": "listenFor",
               "items": {
-                "title": "Phrase",
-                "description": "Phrase to listen for."
+                "title": "Tümcecik",
+                "description": "Dinlenecek tümcecik."
               }
             },
             "textHighlights": {
-              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "description": "Etkinlik bir ReplyToId değeri içerdiğinde vurgulanacak metin parçaları koleksiyonu.",
               "title": "textHighlights",
               "items": {
-                "description": "Refers to a substring of content within another field",
+                "description": "Başka bir alan içindeki içeriğin alt dizesine başvurur",
                 "title": "TextHighlight",
                 "properties": {
                   "text": {
-                    "description": "Defines the snippet of text to highlight",
-                    "title": "text"
+                    "description": "Vurgulanacak metin parçacığını tanımlar",
+                    "title": "metin"
                   },
                   "occurrence": {
-                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
-                    "title": "occurrence"
+                    "description": "Birden çok varsa, başvurulan metin içindeki metin alanının oluşumu.",
+                    "title": "oluşum"
                   }
                 }
               }
             },
             "semanticAction": {
-              "description": "An optional programmatic action accompanying this request",
+              "description": "Bu isteğe eşlik eden isteğe bağlı bir programlı eylem",
               "title": "semanticAction",
               "properties": {
                 "id": {
-                  "description": "ID of this action",
-                  "title": "id"
+                  "description": "Bu eylemin kimliği",
+                  "title": "kimlik"
                 },
                 "entities": {
-                  "description": "Entities associated with this action",
-                  "title": "entities"
+                  "description": "Bu eylemle ilişkili varlıklar",
+                  "title": "varlıklar"
                 }
               }
             }
@@ -2180,11 +2180,11 @@
       }
     },
     "Microsoft.IDialog": {
-      "title": "Microsoft dialogs",
+      "title": "Microsoft iletişim kutuları",
       "description": "İletişim Kutusundan türetilen bileşenler"
     },
     "Microsoft.IEntityRecognizer": {
-      "title": "Entity recognizers",
+      "title": "Varlık tanıyıcıları",
       "description": "EntityRecognizer'dan türetilen bileşenler.",
       "oneOf": {
         "0": {
@@ -2198,7 +2198,7 @@
       "description": "LanguageGenerator sınıfından türetilen bileşenler"
     },
     "Microsoft.IRecognizer": {
-      "title": "Microsoft recognizer",
+      "title": "Microsoft tanıyıcısı",
       "description": "Recognizer sınıfından türetilen bileşenler"
     },
     "Microsoft.ITextTemplate": {
@@ -2332,7 +2332,7 @@
       }
     },
     "Microsoft.IpEntityRecognizer": {
-      "title": "IP entity recognizer",
+      "title": "IP varlığı tanıyıcısı",
       "description": "İnternet IP desenlerini (192.1.1.1 gibi) tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -2352,7 +2352,7 @@
       }
     },
     "Microsoft.LanguagePolicy": {
-      "title": "Language policy",
+      "title": "Dil ilkesi",
       "description": "Bu, dil için kullanılacak yerel ayar aramalarına yönelik bir ilke eşlemesini gösterir",
       "additionalProperties": {
         "title": "Yerel ayar başına ilke",
@@ -2406,7 +2406,7 @@
           "description": "İzleme etkinliğinin etiketi (izleme etkinlikleri listesinde tanımlamak için kullanılır.)"
         },
         "traceActivity": {
-          "title": "Send trace activity",
+          "title": "İzleme etkinliği gönder",
           "description": "True ise, otomatik olarak bir TraceActivity gönderir (Bot Framework Emulator'da görüntüleyin)."
         },
         "$kind": {
@@ -2434,15 +2434,15 @@
           "description": "RecognizerSet ile kullanılan isteğe bağlı benzersiz kimlik. Diğer tanıyıcılar, bu tanıyıcı için çapraz eğitim verileri olduğunda 'DeferToRecognizer_{Id}' amacını döndürmelidir."
         },
         "applicationId": {
-          "title": "LUIS application id",
+          "title": "LUIS uygulama kimliği",
           "description": "LUIS hizmetindeki modelinizin uygulama kimliği."
         },
         "version": {
-          "title": "LUIS version",
-          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+          "title": "LUIS sürümü",
+          "description": "Hedeflenecek isteğe bağlı sürüm. Null ise predictionOptions.Slot kullanılır."
         },
         "endpoint": {
-          "title": "LUIS endpoint",
+          "title": "LUIS uç noktası",
           "description": "https://westus.api.cognitive.microsoft.com gibi bir LUIS hizmeti için kullanılacak uç nokta."
         },
         "endpointKey": {
@@ -2450,7 +2450,7 @@
           "description": "Uç noktayı çağırmak için kullanılan LUIS tahmin anahtarı."
         },
         "externalEntityRecognizer": {
-          "title": "External entity recognizer",
+          "title": "Dış varlık tanıyıcısı",
           "description": "Bu tanıyıcı tarafından tanınan varlıklar, LUIS'ye dış varlık olarak geçirilir."
         },
         "dynamicLists": {
@@ -2506,7 +2506,7 @@
               "description": "LUIS hizmetindeki ifadeleri günlüğe kaydetmek için true."
             },
             "preferExternalEntities": {
-              "title": "Prefer external entities",
+              "title": "Dış varlıkları tercih et",
               "description": "Dış varlıkları LUIS modelleri tarafından oluşturulanlara tercih etmek için true."
             },
             "slot": {
@@ -2526,7 +2526,7 @@
       }
     },
     "Microsoft.MentionEntityRecognizer": {
-      "title": "Mentions entity recognizer",
+      "title": "Bahsetmeler varlığı tanıyıcısı",
       "description": "@Bahsetmeleri tanıyan tanıyıcı",
       "patternProperties": {
         "^\\$": {
@@ -2546,7 +2546,7 @@
       }
     },
     "Microsoft.MostSpecificSelector": {
-      "title": "Most specific trigger selector",
+      "title": "En belirgin tetikleyici seçicisi",
       "description": "İsteğe bağlı ek seçiciyle en belirgin true olayları seçin",
       "patternProperties": {
         "^\\$": {
@@ -2598,7 +2598,7 @@
       }
     },
     "Microsoft.NumberEntityRecognizer": {
-      "title": "Number entity recognizer",
+      "title": "Sayı varlığı tanıyıcısı",
       "description": "Sayıları tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -2702,7 +2702,7 @@
       }
     },
     "Microsoft.NumberRangeEntityRecognizer": {
-      "title": "Number range entity recognizer",
+      "title": "Sayı aralığı varlığı tanıyıcısı",
       "description": "Sayı aralıklarını tanıyan tanıyıcı (Örneğin: 2-5).",
       "patternProperties": {
         "^\\$": {
@@ -2772,7 +2772,7 @@
           "description": "Konuşmanın her seferinde özelliğin olası değeri olarak incelenecek ifade."
         },
         "allowInterruptions": {
-          "title": "Allow interruptions",
+          "title": "Kesintilere izin ver",
           "description": "Üst öğenin girişi kesmesine izin verilip verilmeyeceğini belirleyen bir boole ifadesi."
         },
         "alwaysPrompt": {
@@ -3130,7 +3130,7 @@
       }
     },
     "Microsoft.OnContinueConversation": {
-      "title": "On continue conversation",
+      "title": "Konuşmaya devam edildiğinde",
       "description": "ContinueConversationLater eyleminden yeniden bir konuşma başlatıldığında gerçekleştirilecek eylemler.",
       "patternProperties": {
         "^\\$": {
@@ -3314,7 +3314,7 @@
       }
     },
     "Microsoft.OnError": {
-      "title": "On error",
+      "title": "Hatada",
       "description": "Bir 'Hata' iletişim kutusu olayı oluştuğunda gerçekleştirilecek eylem.",
       "patternProperties": {
         "^\\$": {
@@ -3422,38 +3422,38 @@
       }
     },
     "Microsoft.OnInstallationUpdateActivity": {
-      "title": "On InstallationUpdate activity",
-      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "title": "InstallationUpdate etkinliğinde",
+      "description": "'InstallationUpdate' türüne sahip bir etkinlik alındığında gerçekleştirilecek eylemler.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Araç özelliği",
+          "description": "Araçlar için açık uçlu özellik."
         }
       },
       "properties": {
         "condition": {
-          "title": "Condition",
-          "description": "Condition (expression)."
+          "title": "Koşul",
+          "description": "Koşul (ifade)."
         },
         "actions": {
-          "title": "Actions",
-          "description": "Sequence of actions to execute."
+          "title": "Eylemler",
+          "description": "Yürütülecek eylem dizisi."
         },
         "priority": {
-          "title": "Priority",
-          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+          "title": "Öncelik",
+          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
-          "title": "Run Once",
-          "description": "True if rule should run once per unique conditions"
+          "title": "Bir Kez Çalıştır",
+          "description": "Kural benzersiz koşullar başına bir kere çalıştırılırsa true"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "İletişim kutusu nesnesinin türü",
+          "description": "Yapılandırmakta olduğunuz bileşen için geçerli özellikleri tanımlar (bir iletişim kutusu .schema dosyasından)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Tasarımcı bilgileri",
+          "description": "Bot Framework Composer için ek bilgiler."
         }
       }
     },
@@ -3686,7 +3686,7 @@
       }
     },
     "Microsoft.OnQnAMatch": {
-      "title": "On QnAMaker match",
+      "title": "Soru-Cevap Oluşturma eşleşmesinde",
       "description": "Soru-Cevap Oluşturma'dan bir eşleştirme bulunduğunda gerçekleştirilecek eylemler.",
       "patternProperties": {
         "^\\$": {
@@ -3830,7 +3830,7 @@
       }
     },
     "Microsoft.OrdinalEntityRecognizer": {
-      "title": "Ordinal entity recognizer",
+      "title": "Sıra numarası varlığı tanıyıcısı",
       "description": "Sıra numaralarını tanıyan tanıyıcı (örnek: birinci, ikinci, 3.).",
       "patternProperties": {
         "^\\$": {
@@ -3850,7 +3850,7 @@
       }
     },
     "Microsoft.PercentageEntityRecognizer": {
-      "title": "Percentage entity recognizer",
+      "title": "Yüzde varlığı tanıyıcısı",
       "description": "Yüzdeleri tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -3870,7 +3870,7 @@
       }
     },
     "Microsoft.PhoneNumberEntityRecognizer": {
-      "title": "Phone number entity recognizer",
+      "title": "Telefon numarası varlığı tanıyıcısı",
       "description": "Telefon numaralarını tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -3890,7 +3890,7 @@
       }
     },
     "Microsoft.QnAMakerDialog": {
-      "title": "QnAMaker dialog",
+      "title": "Soru-Cevap Oluşturma iletişim kutusu",
       "description": "Soruları yanıtlamak için Soru-Cevap Oluşturma bilgi bankasını kullanan iletişim kutusu.",
       "patternProperties": {
         "^\\$": {
@@ -3904,7 +3904,7 @@
           "description": "Soru-Cevap Oluşturma Bilgi Bankanızın Bilgi Bankası Kimliği."
         },
         "endpointKey": {
-          "title": "Endpoint key",
+          "title": "Uç nokta anahtarı",
           "description": "Soru-Cevap Oluşturma BB'nin uç nokta anahtarı."
         },
         "hostname": {
@@ -3932,7 +3932,7 @@
           "description": "Eşleşme yok seçeneği belirlendiğinde oluşan özel yanıt."
         },
         "strictFilters": {
-          "title": "Strict filters",
+          "title": "Katı filtreler",
           "description": "Soru-Cevap Oluşturma BB çağrılırken kullanılacak meta veri filtreleri.",
           "items": {
             "title": "Meta veri filtresi",
@@ -3958,7 +3958,7 @@
           "description": "Test ortamına işaret ediyorsa true, etmiyorsa false."
         },
         "rankerType": {
-          "title": "Ranker type",
+          "title": "Derecelendirici türü",
           "description": "Derecelendirici Türü.",
           "oneOf": {
             "0": {
@@ -3969,11 +3969,11 @@
         },
         "strictFiltersJoinOperator": {
           "title": "StrictFiltersJoinOperator",
-          "description": "Join operator for Strict Filters.",
+          "description": "Katı Filtreler için birleşim işleci.",
           "oneOf": {
             "0": {
-              "title": "Join operator",
-              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+              "title": "Birleşim işleci",
+              "description": "Katı Filtre değerleriyle birlikte kullanılacak Birleşim İşlecinin değeri."
             }
           }
         },
@@ -3988,7 +3988,7 @@
       }
     },
     "Microsoft.QnAMakerRecognizer": {
-      "title": "QnAMaker recognizer",
+      "title": "Soru-Cevap Oluşturma tanıyıcısı",
       "description": "Bir BB'den QnAMatch amaçları oluşturmaya yönelik tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -4003,10 +4003,10 @@
         },
         "knowledgeBaseId": {
           "title": "Bilgi Bankası Kimliği",
-          "description": "Knowledge base Id of your QnA Maker knowledge base."
+          "description": "Soru-Cevap Oluşturma bilgi bankanızın bilgi bankası kimliği."
         },
         "endpointKey": {
-          "title": "Endpoint key",
+          "title": "Uç nokta anahtarı",
           "description": "Soru-Cevap Oluşturma BB'nin uç nokta anahtarı."
         },
         "hostname": {
@@ -4018,7 +4018,7 @@
           "description": "Sonuçları filtrelemeye ilişkin eşik puanı."
         },
         "strictFilters": {
-          "title": "Strict filters",
+          "title": "Katı filtreler",
           "description": "Soru-Cevap Oluşturma BB çağrılırken kullanılacak meta veri filtreleri.",
           "items": {
             "title": "Meta veri filtreleri",
@@ -4040,11 +4040,11 @@
           "description": "Almak istediğiniz yanıt sayısı."
         },
         "isTest": {
-          "title": "Use test environment",
+          "title": "Test ortamını kullan",
           "description": "Test ortamına işaret ediyorsa true, etmiyorsa false."
         },
         "rankerType": {
-          "title": "Ranker type",
+          "title": "Derecelendirici türü",
           "description": "Derecelendirici Türü.",
           "oneOf": {
             "0": {
@@ -4055,16 +4055,16 @@
         },
         "strictFiltersJoinOperator": {
           "title": "StrictFiltersJoinOperator",
-          "description": "Join operator for Strict Filters.",
+          "description": "Katı Filtreler için birleşim işleci.",
           "oneOf": {
             "0": {
-              "title": "Join operator",
-              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+              "title": "Birleşim işleci",
+              "description": "Katı Filtre değerleriyle birlikte kullanılacak Birleşim İşlecinin değeri."
             }
           }
         },
         "includeDialogNameInMetadata": {
-          "title": "Include dialog name",
+          "title": "Diyalog adını ekle",
           "description": "False olarak ayarlandığında, iletişim kutusu adı Soru-Cevap Oluşturma'ya geçirilmez. (varsayılan) true"
         },
         "metadata": {
@@ -4086,11 +4086,11 @@
           }
         },
         "context": {
-          "title": "QnA request context",
+          "title": "Soru-Cevap istek bağlamı",
           "description": "Derecelendirme için kullanılacak bağlam."
         },
         "qnaId": {
-          "title": "QnA Id",
+          "title": "Soru-Cevap kimliği",
           "description": "Soru-Cevap Oluşturma API'sine geçirilecek QnAId olan bir sayı veya ifade."
         },
         "$kind": {
@@ -4128,7 +4128,7 @@
       }
     },
     "Microsoft.RecognizerSet": {
-      "title": "Recognizer set",
+      "title": "Tanıyıcı kümesi",
       "description": "Kümedeki tanıyıcıların amaçları ile varlıklarının birleşimini oluşturur.",
       "patternProperties": {
         "^\\$": {
@@ -4156,7 +4156,7 @@
       }
     },
     "Microsoft.RegexEntityRecognizer": {
-      "title": "Regex entity recognizer",
+      "title": "Normal ifade varlığı tanıyıcısı",
       "description": "Normal ifadeye göre giriş desenlerini tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -4260,7 +4260,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "İşlenen etkinlik",
           "description": "False olarak ayarlandığında, çağrılan iletişim kutusu geçerli etkinliği işleyebilir."
         },
         "$kind": {
@@ -4309,7 +4309,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "İşlenen etkinlik",
           "description": "False olarak ayarlandığında, çağrılan iletişim kutusu geçerli etkinliği işleyebilir."
         },
         "$kind": {
@@ -4323,7 +4323,7 @@
       }
     },
     "Microsoft.ResourceMultiLanguageGenerator": {
-      "title": "Resource multi-language generator",
+      "title": "Kaynak çoklu dil oluşturucusu",
       "description": "Kaynak kimliğine göre kaynağa bağlı olan Çoklu Dil Oluşturucu.",
       "patternProperties": {
         "^\\$": {
@@ -4341,7 +4341,7 @@
           "description": "Kök dil oluşturucu olan kaynak. Aynı ada ve dil sonekine sahip diğer oluşturucular, bu oluşturucuya yüklenir ve Dil İlkesine göre kullanılır."
         },
         "languagePolicy": {
-          "title": "Language policy",
+          "title": "Dil ilkesi",
           "description": "Bu oluşturucu için alternatif dil ilkesi ayarlayın. Ayarlanmazsa genel dil ilkesi kullanılır."
         },
         "$kind": {
@@ -4469,7 +4469,7 @@
       }
     },
     "Microsoft.SignOutUser": {
-      "title": "Sign out user",
+      "title": "Kullanıcının oturumunu kapat",
       "description": "Önceden OAuthInput kullanarak oturum açmış bir kullanıcının oturumunu kapatın.",
       "patternProperties": {
         "^\\$": {
@@ -4487,7 +4487,7 @@
           "description": "Oturumu kapatacak kullanıcıya yönelik ifade. Varsayılan: user.id."
         },
         "connectionName": {
-          "title": "Connection name",
+          "title": "Bağlantı adı",
           "description": "Bir kullanıcının oturumunu açmak için OAuthInput ile kullanılmış olan bağlantı adı."
         },
         "disabled": {
@@ -4505,7 +4505,7 @@
       }
     },
     "Microsoft.StaticActivityTemplate": {
-      "title": "Microsoft static activity template",
+      "title": "Microsoft statik etkinlik şablonu",
       "description": "Bu, statik bir Etkinlik nesnesi tanımlamanızı sağlar",
       "patternProperties": {
         "^\\$": {
@@ -4583,7 +4583,7 @@
       }
     },
     "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetry - track event",
+      "title": "Telemetri - olayı izle",
       "description": "Kayıtlı Telemetri İstemcisini kullanarak özel bir olayı izleyin.",
       "patternProperties": {
         "^\\$": {
@@ -4601,7 +4601,7 @@
           "description": "True ise bu eylemi devre dışı bırakacak isteğe bağlı koşul."
         },
         "eventName": {
-          "title": "Event name",
+          "title": "Olay adı",
           "description": "İzlenecek olayın adı."
         },
         "properties": {
@@ -4619,7 +4619,7 @@
       }
     },
     "Microsoft.TemperatureEntityRecognizer": {
-      "title": "Temperature recognizer",
+      "title": "Sıcaklık tanıyıcısı",
       "description": "Sıcaklıkları tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
@@ -4639,7 +4639,7 @@
       }
     },
     "Microsoft.TemplateEngineLanguageGenerator": {
-      "title": "Template multi-language generator",
+      "title": "Şablon çoklu dil oluşturucusu",
       "description": "Şablonların yalnızca satır içi değerlendirmesine izin veren Şablon Oluşturucu.",
       "patternProperties": {
         "^\\$": {
@@ -4767,34 +4767,34 @@
       }
     },
     "Microsoft.ThrowException": {
-      "title": "Throw an exception",
-      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "title": "Özel durum oluştur",
+      "description": "Özel durum oluşturun. Bu özel durumu, OnError tetikleyicisiyle yakalayın.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Araç özelliği",
+          "description": "Araçlar için açık uçlu özellik."
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "Kimlik",
+          "description": "İletişim kutusunun isteğe bağlı kimliği"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "Devre Dışı",
+          "description": "True ise bu eylemi devre dışı bırakacak isteğe bağlı koşul."
         },
         "errorValue": {
-          "title": "Error value",
-          "description": "Error value to throw."
+          "title": "Hata değeri",
+          "description": "Oluşturulacak hata değeri."
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "İletişim kutusu nesnesinin türü",
+          "description": "Yapılandırmakta olduğunuz bileşen için geçerli özellikleri tanımlar (bir iletişim kutusu .schema dosyasından)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Tasarımcı bilgileri",
+          "description": "Bot Framework Composer için ek bilgiler."
         }
       }
     },
@@ -4843,7 +4843,7 @@
       }
     },
     "Microsoft.TrueSelector": {
-      "title": "True trigger selector",
+      "title": "True tetikleyici seçicisi",
       "description": "Tüm true olaylara yönelik seçici",
       "patternProperties": {
         "^\\$": {
@@ -4863,7 +4863,7 @@
       }
     },
     "Microsoft.UpdateActivity": {
-      "title": "Update an activity",
+      "title": "Etkinliği güncelleştir",
       "description": "Bir etkinlikle yanıtlayın.",
       "patternProperties": {
         "^\\$": {
@@ -4899,7 +4899,7 @@
       }
     },
     "Microsoft.UrlEntityRecognizer": {
-      "title": "Url recognizer",
+      "title": "URL tanıyıcısı",
       "description": "URL'leri tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {

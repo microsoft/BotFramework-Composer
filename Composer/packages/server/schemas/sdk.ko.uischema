@@ -6,57 +6,9 @@
       "properties": {
         "recognizer": {
           "description": "사용자가 말하는 내용을 이해하려면 대화에 \"인식기\"가 있어야 합니다. 인식기에는 사용자가 사용할 수 있는 예제 단어와 문장이 포함되어 있습니다.",
-          "label": "Language Understanding"
+          "label": "언어 이해"
         }
       }
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "응답을 보내 질문하기",
-      "subtitle": "질문 활동"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "파일 또는 첨부 파일 요청 메시지 표시",
-      "subtitle": "첨부 파일 입력"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "다중 선택 요청 메시지 표시",
-      "subtitle": "선택 항목 입력"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "확인 요청 메시지 표시",
-      "subtitle": "입력 확인"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "날짜 또는 시간 요청 메시지 표시",
-      "subtitle": "날짜/시간 입력"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "숫자 요청 메시지 표시",
-      "subtitle": "숫자 입력"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth 로그인",
-      "subtitle": "OAuth 입력"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "텍스트 요청 메시지 표시",
-      "subtitle": "텍스트 입력"
     }
   },
   "Microsoft.BeginDialog": {
@@ -218,6 +170,54 @@
     "form": {
       "label": "추적 이벤트 내보내기",
       "subtitle": "추적 활동"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "응답을 보내 질문하기",
+      "subtitle": "질문 활동"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "파일 또는 첨부 파일 요청 메시지 표시",
+      "subtitle": "첨부 파일 입력"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "다중 선택 요청 메시지 표시",
+      "subtitle": "선택 항목 입력"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "확인 요청 메시지 표시",
+      "subtitle": "입력 확인"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "날짜 또는 시간 요청 메시지 표시",
+      "subtitle": "날짜/시간 입력"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "숫자 요청 메시지 표시",
+      "subtitle": "숫자 입력"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth 로그인",
+      "subtitle": "OAuth 입력"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "텍스트 요청 메시지 표시",
+      "subtitle": "텍스트 입력"
     }
   },
   "Microsoft.OnActivity": {
