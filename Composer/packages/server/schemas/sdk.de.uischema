@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Antwort an \"Frage stellen\" senden",
-      "subtitle": "Frageaktivität"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Äußerung für eine Datei oder Anlage",
-      "subtitle": "Anlageneingabe"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Äußerung mit Mehrfachauswahl",
-      "subtitle": "Auswahleingabe"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Äußerung für eine Bestätigung",
-      "subtitle": "Eingabe bestätigen"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Äußerung für ein Datum oder eine Uhrzeit",
-      "subtitle": "Eingabe für Datum/Uhrzeit"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Äußerung für eine Zahl",
-      "subtitle": "Zahleneingabe"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth-Anmeldung",
-      "subtitle": "OAuth-Eingabe"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Äußerung für Text",
-      "subtitle": "Texteingabe"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Neuen Dialog starten",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Ablaufverfolgungsereignis ausgeben",
       "subtitle": "Ablaufverfolgungsaktivität"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Antwort an \"Frage stellen\" senden",
+      "subtitle": "Frageaktivität"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Äußerung für eine Datei oder Anlage",
+      "subtitle": "Anlageneingabe"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Äußerung mit Mehrfachauswahl",
+      "subtitle": "Auswahleingabe"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Äußerung für eine Bestätigung",
+      "subtitle": "Eingabe bestätigen"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Äußerung für ein Datum oder eine Uhrzeit",
+      "subtitle": "Eingabe für Datum/Uhrzeit"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Äußerung für eine Zahl",
+      "subtitle": "Zahleneingabe"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth-Anmeldung",
+      "subtitle": "OAuth-Eingabe"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Äußerung für Text",
+      "subtitle": "Texteingabe"
     }
   },
   "Microsoft.OnActivity": {

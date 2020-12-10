@@ -63,14 +63,14 @@ type TextFieldWithCustomButtonProps = {
   label: string;
   ariaLabel: string;
   buttonText: string;
-  errorMessage;
+  errorMessage?;
   placeholder: string;
   placeholderOnDisable: string;
   value: string;
   onBlur?: (value) => void;
   onChange?: (e, value) => void;
   onRenderLabel?: IRenderFunction<ITextFieldProps>;
-  required: boolean;
+  required?: boolean;
   id?: string;
 };
 
@@ -94,7 +94,7 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
     placeholder,
     placeholderOnDisable,
     onChange,
-    required,
+    required = false,
     ariaLabel,
     value,
     buttonText,

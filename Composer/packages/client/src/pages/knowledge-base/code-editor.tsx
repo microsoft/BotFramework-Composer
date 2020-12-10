@@ -16,6 +16,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { dispatcherState, userSettingsState, qnaFilesState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { getBaseName } from '../../utils/fileUtil';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { backIcon } from './styles';
 
@@ -91,6 +92,7 @@ const CodeEditor: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           styles={backIcon}
           onClick={() => {
             navigateTo(`${baseURL}knowledge-base/${dialogId}`);
+            TelemetryClient.track('EditModeToggled', { jsonView: false });
           }}
         >
           {searchContainerName}

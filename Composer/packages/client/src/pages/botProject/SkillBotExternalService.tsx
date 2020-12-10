@@ -87,6 +87,9 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
   const skillLuisKey = groupLUISAuthoringKey[projectId];
+  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
+  const rootLuisEndpointKey = groupLUISEndpointKey.root;
+  const skillLuisEndpointKey = groupLUISEndpointKey[projectId];
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const skillLuisRegion = groupLUISRegion[projectId];
@@ -102,6 +105,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
+  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
@@ -169,14 +173,21 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const handleLUISRegionOnBlur = (value) => {
     setSettings(projectId, {
       ...mergedSettings,
-      luis: { ...mergedSettings.luis, authoringRegion: value ? value : '' },
+      luis: { ...mergedSettings.luis, authoringRegion: value ?? '' },
     });
   };
 
   const handleLUISKeyOnBlur = (value) => {
     setSettings(projectId, {
       ...mergedSettings,
-      luis: { ...mergedSettings.luis, authoringKey: value ? value : '' },
+      luis: { ...mergedSettings.luis, authoringKey: value ?? '' },
+    });
+  };
+
+  const handleLUISEndpointKeyOnBlur = (value) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, endpointKey: value ?? '' },
     });
   };
 
@@ -197,16 +208,29 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         />
         <div ref={luisKeyFieldRef}>
           <TextFieldWithCustomButton
-            ariaLabel={formatMessage('LUIS key')}
-            buttonText={formatMessage('Use custom LUIS key')}
-            errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS key is empty') : ''}
-            id={'luisKey'}
-            label={formatMessage('LUIS key')}
-            placeholder={formatMessage('Enter LUIS key')}
+            ariaLabel={formatMessage('LUIS authoring key')}
+            buttonText={formatMessage('Use custom LUIS authoring key')}
+            errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
+            id={'luisAuthoringKey'}
+            label={formatMessage('LUIS authoring key')}
+            placeholder={formatMessage('Enter LUIS authoring key')}
             placeholderOnDisable={rootLuisKey}
             required={isLUISKeyNeeded}
             value={skillLuisKey}
             onBlur={handleLUISKeyOnBlur}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
+        <div ref={luisEndpointKeyFieldRef}>
+          <TextFieldWithCustomButton
+            ariaLabel={formatMessage('LUIS endpoint key')}
+            buttonText={formatMessage('Use custom LUIS endpoint key')}
+            id={'luisEndpointKey'}
+            label={formatMessage('LUIS endpoint key')}
+            placeholder={formatMessage('Enter LUIS endpoint key')}
+            placeholderOnDisable={rootLuisEndpointKey}
+            value={skillLuisEndpointKey}
+            onBlur={handleLUISEndpointKeyOnBlur}
             onRenderLabel={onRenderLabel}
           />
         </div>

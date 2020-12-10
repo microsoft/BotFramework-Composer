@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, fireEvent } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
-import { useRecognizerConfig } from '@bfc/extension-client';
+import { useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 
 import { IntentField } from '../IntentField';
 
@@ -41,6 +41,9 @@ describe('<IntentField />', () => {
     (useRecognizerConfig as jest.Mock).mockReturnValue({
       recognizers,
       currentRecognizer: recognizers[0],
+    });
+    (useShellApi as jest.Mock).mockReturnValue({
+      shellApi: {},
     });
 
     const { getByLabelText } = renderSubject({ value: 'MyIntent' });

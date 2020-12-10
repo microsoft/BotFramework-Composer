@@ -84,7 +84,7 @@ export const formDialogsDispatcher = () => {
         const response = await httpClient.post(`/formDialogs/${projectId}/generate`, {
           name: schemaId,
         });
-        TelemetryClient.log('FormDialogGenerated', { durationMilliseconds: Date.now() - generateStartTime });
+        TelemetryClient.track('FormDialogGenerated', { durationMilliseconds: Date.now() - generateStartTime });
         await reloadProject(response.data.id);
       } catch (ex) {
         set(formDialogErrorState, {

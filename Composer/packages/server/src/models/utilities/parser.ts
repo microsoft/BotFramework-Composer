@@ -17,7 +17,7 @@ const debug = log.extend('helper-parser');
 
 const BuildEnvPath = Path.join(__dirname, '../../env.json');
 
-function getBuildEnvironment() {
+export function getBuildEnvironment() {
   if (fs.existsSync(BuildEnvPath)) {
     return JSON.parse(fs.readFileSync(BuildEnvPath, 'utf-8'));
   }

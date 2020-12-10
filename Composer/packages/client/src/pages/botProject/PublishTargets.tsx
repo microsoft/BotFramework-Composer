@@ -16,6 +16,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { CreatePublishTarget } from '../publish/createPublishTarget';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -38,7 +39,7 @@ const publishTargetsHeader = css`
 `;
 
 const publishTargetsHeaderText = css`
-  width: 200px;
+  width: 300px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.semibold};
   border-bottom: 1px solid ${NeutralColors.gray30};
@@ -59,6 +60,9 @@ const publishTargetsItemText = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 const addPublishProfile = {
@@ -152,6 +156,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     async (name: string, type: string, configuration: string) => {
       const targets = [...(publishTargets || []), { name, type, configuration }];
       await setPublishTargets(targets, projectId);
+      TelemetryClient.track('NewPublishingProfileSaved', { type });
     },
     [publishTargets, projectId]
   );
@@ -212,8 +217,12 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           {publishTargets?.map((p, index) => {
             return (
               <div key={index} css={publishTargetsItem}>
-                <div css={publishTargetsItemText}>{p.name} </div>
-                <div css={publishTargetsItemText}>{p.type} </div>
+                <div css={publishTargetsItemText} title={p.name}>
+                  {p.name}
+                </div>
+                <div css={publishTargetsItemText} title={p.type}>
+                  {p.type}
+                </div>
                 <div css={publishTargetsEditButton}>
                   <ActionButton styles={editPublishProfile} onClick={async () => await onEdit(index, p)}>
                     {formatMessage('Edit')}
@@ -225,7 +234,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           <ActionButton
             data-testid={'addNewPublishProfile'}
             styles={addPublishProfile}
-            onClick={() => setAddDialogHidden(false)}
+            onClick={() => {
+              setAddDialogHidden(false);
+              TelemetryClient.track('NewPublishingProfileStarted');
+            }}
           >
             {formatMessage('Add new publish profile')}
           </ActionButton>

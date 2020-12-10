@@ -197,6 +197,7 @@ export const Header = () => {
               role={'button'}
               tabIndex={0}
               onClick={() => setTeachingBubbleVisibility(true)}
+              onKeyDown={() => setTeachingBubbleVisibility(true)}
             >
               {`${projectName} (${locale})`}
             </span>

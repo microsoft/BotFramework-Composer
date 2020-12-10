@@ -14,6 +14,7 @@ import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
+
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LUPage: React.FC<RouteComponentProps<{
@@ -59,6 +60,7 @@ const LUPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LUPage"
       dialogId={dialogId}
+      fileId={luFileId}
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}
       pageMode={'language-understanding'}
