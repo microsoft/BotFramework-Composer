@@ -61,13 +61,13 @@ export class BotProjectDeploy {
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: "Building the bot's resources ...",
+        message: "Building the bot app...",
       });
       await build(project, this.projPath, settings);
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Build Success!',
+        message: 'Build succeeded!',
       });
 
       // this function returns an object that contains the luis APP ids mapping
@@ -103,12 +103,12 @@ export class BotProjectDeploy {
       // Build a zip file of the project
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing up the bot service ...',
+        message: 'Creating build artifact...',
       });
       await this.zipDirectory(pathToArtifacts, this.zipPath);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing Service Success!',
+        message: 'Build artifact ready!',
       });
 
       // STEP 5: DEPLOY THE ZIP FILE TO AZURE
@@ -120,7 +120,7 @@ export class BotProjectDeploy {
       await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
-        message: 'Publish To Azure Success!',
+        message: 'Published successfully!',
       });
     } catch (error) {
       this.logger({
@@ -140,7 +140,7 @@ export class BotProjectDeploy {
           .glob('**/*', {
             cwd: source,
             dot: true,
-            ignore: ['**/code.zip', 'node_modules/**/*', '**/onnxruntime.pdb', '**/oc_abi.pdb'],
+            ignore: ['**/code.zip', 'node_modules/**/*'],
           })
           .on('error', (err) => reject(err))
           .pipe(stream);
@@ -158,7 +158,7 @@ export class BotProjectDeploy {
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Retrieve publishing details ...',
+      message: 'Uploading zip file...',
     });
 
     const publishEndpoint = `https://${

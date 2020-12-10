@@ -10,7 +10,7 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogSetting, PublishTarget, PublishResult } from '@bfc/shared';
+import { DialogSetting, PublishTarget } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
@@ -27,6 +27,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { BotStatusList, IBotStatus } from './BotStatusList';
+import { IStatus } from './PublishStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
 
@@ -110,7 +111,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
-    { projectId: string; publishHistory: { [key: string]: PublishResult[] } }[]
+    { projectId: string; publishHistory: { [key: string]: IStatus[] } }[]
   >(publishHistoryList);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
@@ -119,7 +120,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   // items to show in the list
-  const [selectedVersion, setSelectedVersion] = useState<PublishResult | null>(null);
+  const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
 
   const isPullSupported = useMemo(() => {
     return !!selectedBots.find((bot) => {
@@ -320,7 +321,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  const onRollbackToVersion = (selectedVersion: PublishResult, item: IBotStatus) => {
+  const onRollbackToVersion = (selectedVersion: IStatus, item: IBotStatus) => {
     item.publishTarget && item.publishTargets && rollbackToVersion(selectedVersion, item);
   };
   const onShowLog = (selectedVersion) => {
@@ -330,7 +331,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const updateBotStatusList = (statusList: IBotStatus[]) => {
     setBotStatusList(statusList);
   };
-  const updatePublishHistory = (publishHistories: PublishResult[], botStatus: IBotStatus) => {
+  const updatePublishHistory = (publishHistories: IStatus[], botStatus: IBotStatus) => {
     const newPublishHistory = botPublishHistoryList.map((botPublishHistory) => {
       if (botPublishHistory.projectId === botStatus.id && botStatus.publishTarget) {
         botPublishHistory.publishHistory = {
