@@ -13,6 +13,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -45,6 +46,7 @@ const LGPage: React.FC<RouteComponentProps<{
       if (lgFileId) url += `/item/${lgFileId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
+      TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
     [dialogId, projectId, edit, lgFileId]
   );
@@ -63,6 +65,7 @@ const LGPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LGPage"
       dialogId={dialogId}
+      fileId={lgFileId}
       mainRegionName={formatMessage('LG editor')}
       navRegionName={formatMessage('LG Navigation Pane')}
       pageMode={'language-generation'}

@@ -8,15 +8,17 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import {
   dispatcherState,
+  formDialogErrorState,
   formDialogGenerationProgressingState,
   formDialogLibraryTemplatesState,
   formDialogSchemaIdsState,
 } from '../../recoilModel';
+import { createNotification } from '../../recoilModel/dispatchers/notification';
 
 import CreateFormDialogSchemaModal from './CreateFormDialogSchemaModal';
 import { FormDialogSchemaList } from './FormDialogSchemaList';
@@ -32,6 +34,7 @@ type Props = RouteComponentProps<{ projectId: string; schemaId: string }>;
 const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const { projectId = '', schemaId = '' } = props;
   const formDialogSchemaIds = useRecoilValue(formDialogSchemaIdsState(projectId));
+  const formDialogError = useRecoilValue(formDialogErrorState);
   const formDialogLibraryTemplates = useRecoilValue(formDialogLibraryTemplatesState);
   const formDialogGenerationProgressing = useRecoilValue(formDialogGenerationProgressingState);
   const {
@@ -41,8 +44,12 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     updateFormDialogSchema,
     navigateToGeneratedDialog,
     loadFormDialogSchemaTemplates,
+    addNotification,
+    deleteNotification,
   } = useRecoilValue(dispatcherState);
 
+  const generationStartedRef = React.useRef(false);
+  const generationPendingNotificationIdRef = React.useRef<string | undefined>();
   const { 0: createSchemaDialogOpen, 1: setCreateSchemaDialogOpen } = React.useState(false);
 
   React.useEffect(() => {
@@ -65,7 +72,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const deleteItem = React.useCallback(
     async (id: string) => {
       const res = await OpenConfirmModal(
-        formatMessage('Delete form dialog schema'),
+        formatMessage('Delete form dialog schema?'),
         formatMessage('Are you sure you want to remove form dialog schema "{id}"?', { id })
       );
       if (res) {
@@ -81,6 +88,15 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const generateDialog = React.useCallback(
     (schemaId: string) => {
       if (schemaId) {
+        generationStartedRef.current = true;
+
+        const notification = createNotification({
+          title: formatMessage('Generating your dialog using "{schemaId}" schema, please wait...', { schemaId }),
+          type: 'pending',
+        });
+        generationPendingNotificationIdRef.current = notification.id;
+        addNotification(notification);
+
         generateFormDialog({ projectId, schemaId });
       }
     },
@@ -95,6 +111,51 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     },
     [navigateToGeneratedDialog, projectId]
   );
+
+  React.useEffect(() => {
+    // Check to see if generation was in progress.
+    if (generationStartedRef.current && !formDialogGenerationProgressing) {
+      generationStartedRef.current = false;
+
+      if (generationPendingNotificationIdRef.current) {
+        deleteNotification(generationPendingNotificationIdRef.current);
+      }
+
+      // If the generation was started and now it's over check for errors.
+      if (!formDialogError) {
+        // No error, show success message.
+        addNotification(
+          createNotification({
+            type: 'success',
+            title: formatMessage('Dialog generation was successful.'),
+            description: formatMessage('Your dialog was generated successfully.'),
+            link: { label: formatMessage('View dialog'), onClick: () => schemaId && viewDialog(schemaId) },
+          })
+        );
+      } else {
+        // error, show failed message with error.
+        addNotification(
+          createNotification({
+            type: 'error',
+            title: formatMessage('Dialog generation failed.'),
+            description: formDialogError.message,
+          })
+        );
+      }
+    } else {
+      // There is an error but it's not about generation.
+      // Show failed message with error.
+      if (formDialogError) {
+        addNotification(
+          createNotification({
+            type: 'error',
+            title: formatMessage('Form dialog error'),
+            description: formDialogError.message,
+          })
+        );
+      }
+    }
+  }, [formDialogError, formDialogGenerationProgressing, schemaId]);
 
   const updateItem = React.useCallback(
     (id: string, content: string) => {

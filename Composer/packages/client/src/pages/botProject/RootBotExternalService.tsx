@@ -8,6 +8,7 @@ import { mergeStyleSets } from '@uifabric/styling';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -28,6 +29,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { LUIS_REGIONS } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -138,6 +140,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
+  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
+  const rootLuisEndpointKey = groupLUISEndpointKey.root;
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
@@ -157,11 +161,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [qnaKeyErrorMsg, setQnAKeyErrorMsg] = useState<string>('');
 
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
+  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>(rootLuisEndpointKey ?? '');
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
   const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
+  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
@@ -225,6 +231,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
+  const handleRootLUISEndpointKeyOnChange = (e, value) => {
+    setLuisKeyErrorMsg('');
+    setLocalRootLuisEndpointKey(value);
+  };
+
   const handleRootQnAKeyOnChange = (e, value) => {
     if (value) {
       setQnAKeyErrorMsg('');
@@ -235,10 +246,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
-  const handleRootLuisRegionOnChange = (e, value) => {
-    if (value) {
+  const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
+    if (value != null) {
       setLuisRegionErrorMsg('');
-      setLocalRootLuisRegion(value);
+      setLocalRootLuisRegion(value.key as string);
     } else {
       setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
       setLocalRootLuisRegion('');
@@ -255,7 +266,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     });
   };
 
-  const handleRootLuisKeyOnBlur = () => {
+  const handleRootLuisAuthoringKeyOnBlur = () => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
         formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
@@ -264,6 +275,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     setSettings(projectId, {
       ...mergedSettings,
       luis: { ...mergedSettings.luis, authoringKey: localRootLuisKey },
+    });
+  };
+
+  const handleRootLuisEndpointKeyOnBlur = () => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, endpointKey: localRootLuisEndpointKey },
     });
   };
 
@@ -293,11 +311,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-labelledby={'LUIS name'}
-          data-testid={'rootLUISName'}
+          aria-label={formatMessage('LUIS application name')}
+          data-testid={'rootLUISApplicationName'}
           id={'luisName'}
-          label={formatMessage('LUIS name')}
-          placeholder={'Enter LUIS name'}
+          label={formatMessage('LUIS application name')}
+          placeholder={formatMessage('Enter LUIS application name')}
           value={localRootLuisName}
           onBlur={handleRootLUISNameOnBlur}
           onChange={handleRootLUISNameOnChange}
@@ -305,31 +323,47 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <div ref={luisKeyFieldRef}>
           <TextField
-            aria-labelledby={'LUIS key'}
-            data-testid={'rootLUISKey'}
+            aria-label={formatMessage('LUIS authoring key')}
+            data-testid={'rootLUISAuthoringKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
-            id={'luisKey'}
-            label={formatMessage('LUIS key')}
-            placeholder={'Enter LUIS key'}
+            id={'luisAuthoringKey'}
+            label={formatMessage('LUIS authoring key')}
+            placeholder={formatMessage('Enter LUIS authoring key')}
             required={isLUISKeyNeeded}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
             value={localRootLuisKey}
-            onBlur={handleRootLuisKeyOnBlur}
+            onBlur={handleRootLuisAuthoringKeyOnBlur}
             onChange={handleRootLUISKeyOnChange}
             onRenderLabel={onRenderLabel}
           />
         </div>
-        <div ref={luisRegionFieldRef}>
+        <div ref={luisEndpointKeyFieldRef}>
           <TextField
-            aria-labelledby={'LUIS region'}
+            aria-label={formatMessage('LUIS endpoint key')}
+            data-testid={'rootLUISEndpointKey'}
+            errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
+            id={'luisEndpointKey'}
+            label={formatMessage('LUIS endpoint key')}
+            placeholder={formatMessage('Enter LUIS endpoint key')}
+            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            value={localRootLuisEndpointKey}
+            onBlur={handleRootLuisEndpointKeyOnBlur}
+            onChange={handleRootLUISEndpointKeyOnChange}
+            onRenderLabel={onRenderLabel}
+          />
+        </div>
+        <div ref={luisRegionFieldRef}>
+          <Dropdown
+            aria-label={formatMessage('LUIS region')}
             data-testid={'rootLUISRegion'}
-            errorMessage={errorElement(luisRegionErrorMsg)}
+            errorMessage={luisRegionErrorMsg}
             id={'luisRegion'}
             label={formatMessage('LUIS region')}
-            placeholder={'Enter LUIS region'}
+            options={LUIS_REGIONS}
+            placeholder={formatMessage('Enter LUIS region')}
             required={isLUISKeyNeeded}
+            selectedKey={localRootLuisRegion}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-            value={localRootLuisRegion}
             onBlur={handleRootLuisRegionOnBlur}
             onChange={handleRootLuisRegionOnChange}
             onRenderLabel={onRenderLabel}
@@ -337,12 +371,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={qnaKeyFieldRef}>
           <TextField
-            aria-labelledby={'QnA Maker Subscription key'}
+            aria-label={formatMessage('QnA Maker Subscription key')}
             data-testid={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             id={'qnaKey'}
             label={formatMessage('QnA Maker Subscription key')}
-            placeholder={'Enter QnA Maker Subscription key'}
+            placeholder={formatMessage('Enter QnA Maker Subscription key')}
             required={isQnAKeyNeeded}
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
             value={localRootQnAKey}

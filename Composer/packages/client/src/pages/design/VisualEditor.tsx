@@ -94,7 +94,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
       }
     });
     return sdkSchema;
-  }, [formConfig, schemas]);
+  }, [formConfig, schemas, dialogId]);
 
   useEffect(() => {
     const dialog = dialogs.find((d) => d.id === dialogId);

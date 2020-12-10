@@ -32,6 +32,7 @@ import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
 import { featureFlagsState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -163,6 +164,7 @@ export function CreateOptions(props: CreateOptionsProps) {
     let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
       routeToTemplate = currentTemplate;
+      TelemetryClient.track('CreateNewBotProjectFromExample', { template: routeToTemplate });
     }
 
     if (option === optionKeys.createFromQnA) {
@@ -173,6 +175,7 @@ export function CreateOptions(props: CreateOptionsProps) {
       routeToTemplate += props.location.search;
     }
 
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
     onNext(routeToTemplate);
   };
 

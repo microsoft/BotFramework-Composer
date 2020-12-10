@@ -97,7 +97,7 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
   const initialValue = useMemo(() => {
     const designerName = formData.$designer?.name;
 
-    return designerName || uiLabel || schema.title;
+    return designerName ?? uiLabel ?? schema.title;
   }, [formData.$designer?.name, uiLabel, schema.title]);
 
   const getHelpLinkLabel = (): string => {
@@ -153,9 +153,12 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
               <br />
               <Link
                 aria-label={formatMessage('Learn more about {title}', { title: getHelpLinkLabel() })}
-                href={uiOptions?.helpLink}
+                href={uiOptions.helpLink}
                 rel="noopener noreferrer"
                 target="_blank"
+                onClick={() => {
+                  shellApi.telemetryClient?.track('HelpLinkClicked', { url: uiOptions.helpLink as string });
+                }}
               >
                 {formatMessage('Learn more')}
               </Link>

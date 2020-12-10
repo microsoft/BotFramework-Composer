@@ -42,8 +42,8 @@ const tableColumns: IColumn[] = [
     maxWidth: 20,
     fieldName: 'control',
     isRowHeader: false,
-    onRender: ({ projectId }) => {
-      return <BotRuntimeOperations projectId={projectId} />;
+    onRender: ({ projectId, isRoot }) => {
+      return <BotRuntimeOperations isRoot={isRoot} projectId={projectId} />;
     },
   },
   {
@@ -52,7 +52,9 @@ const tableColumns: IColumn[] = [
     minWidth: 150,
     maxWidth: 150,
     isResizable: true,
-    fieldName: 'displayName',
+    onRender: ({ displayName, isRootBot }) => {
+      return `${displayName} (${isRootBot ? formatMessage('Root bot') : formatMessage('Skill')})`;
+    },
     isRowHeader: true,
   },
   {
@@ -80,8 +82,8 @@ const tableColumns: IColumn[] = [
     minWidth: 150,
     maxWidth: 150,
     isRowHeader: true,
-    onRender: ({ projectId }) => {
-      return <OpenEmulatorButton projectId={projectId} />;
+    onRender: ({ projectId, isRoot }) => {
+      return <OpenEmulatorButton isRoot={isRoot} projectId={projectId} />;
     },
   },
 ];

@@ -16,7 +16,7 @@ describe('Application Insights Logger', () => {
   it('should log event to the server', async () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
-    AppInsightsClient.logEvent('TestEvent', { value: '1' });
+    AppInsightsClient.trackEvent('TestEvent', { value: '1' });
     AppInsightsClient.drain();
 
     expect(httpClient.post).toBeCalledWith(

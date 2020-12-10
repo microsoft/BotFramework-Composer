@@ -1,18 +1,48 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
+import { PageNames } from '@bfc/shared';
 
 import { currentProjectIdState, userSettingsState } from '../recoilModel';
+import { getPageName } from '../utils/getPageName';
+import { useLocation } from '../utils/hooks';
 
 import TelemetryClient from './TelemetryClient';
 
-export const useInitializeLogger = () => {
-  const projectId = useRecoilValue(currentProjectIdState);
-  const { telemetry } = useRecoilValue(userSettingsState);
+const { ipcRenderer } = window;
 
-  TelemetryClient.setup(telemetry, { projectId });
+export const useInitializeLogger = () => {
+  const rootProjectId = useRecoilValue(currentProjectIdState);
+  const { telemetry } = useRecoilValue(userSettingsState);
+  const {
+    location: { pathname, href: url },
+  } = useLocation();
+  const page = useMemo<PageNames>(() => getPageName(pathname), [pathname]);
+
+  TelemetryClient.setup(telemetry, { rootProjectId, page });
+
+  useEffect(() => {
+    ipcRenderer?.on('session-update', (_event, name) => {
+      switch (name) {
+        case 'session-started':
+          TelemetryClient.track('SessionStarted', { os: window.navigator.platform });
+          break;
+        case 'session-ended':
+          TelemetryClient.track('SessionEnded');
+          TelemetryClient.drain();
+          break;
+        default:
+          break;
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    TelemetryClient.track('NavigateTo', { sectionName: page, url });
+    TelemetryClient.pageView(page, url);
+  }, [page]);
 
   const handleBeforeUnload = useCallback(() => {
     TelemetryClient.drain();

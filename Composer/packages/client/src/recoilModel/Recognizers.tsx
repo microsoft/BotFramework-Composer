@@ -76,7 +76,7 @@ export const getMultiLanguagueRecognizerDialog = (
 
 export const getLuisRecognizerDialogs = (target: string, luFiles: LuFile[]) => {
   return luFiles
-    .filter((item) => !item.empty && getBaseName(item.id) === target)
+    .filter((item) => getBaseName(item.id) === target)
     .map((item) => ({ id: `${item.id}.lu.dialog`, content: LuisRecognizerTemplate(target, item.id) }));
 };
 

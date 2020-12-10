@@ -4,7 +4,7 @@
 import TelemetryClient from '../TelemetryClient';
 import AppInsightsClient from '../AppInsightsClient';
 
-AppInsightsClient.logEvent = jest.fn();
+AppInsightsClient.trackEvent = jest.fn();
 AppInsightsClient.logPageView = jest.fn();
 
 describe('TelemetryClient', () => {
@@ -14,9 +14,9 @@ describe('TelemetryClient', () => {
 
   it('adds property to logEvent', () => {
     TelemetryClient.setup({ allowDataCollection: true }, { prop1: 'prop1' });
-    TelemetryClient.log('ToolbarButtonClicked', { name: 'test' });
+    TelemetryClient.track('ToolbarButtonClicked', { name: 'test' });
 
-    expect(AppInsightsClient.logEvent).toBeCalledWith(
+    expect(AppInsightsClient.trackEvent).toBeCalledWith(
       'ToolbarButtonClicked',
       expect.objectContaining({
         prop1: 'prop1',
@@ -41,8 +41,8 @@ describe('TelemetryClient', () => {
 
   it('does not call AppInsightsClient.logEvent when allowDataCollection is false', () => {
     TelemetryClient.setup({ allowDataCollection: false }, { prop1: 'prop1' });
-    TelemetryClient.log('ToolbarButtonClicked', { name: 'test' });
+    TelemetryClient.track('ToolbarButtonClicked', { name: 'test' });
 
-    expect(AppInsightsClient.logEvent).not.toHaveBeenCalled();
+    expect(AppInsightsClient.trackEvent).not.toHaveBeenCalled();
   });
 });
