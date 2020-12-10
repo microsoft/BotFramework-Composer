@@ -89,7 +89,7 @@ export class DefaultSettingManager extends FileSettingManager {
         key: '',
       },
       downsampling: {
-        maxImbalanceRatio: 10,
+        maxImbalanceRatio: -1,
       },
       skillConfiguration: {
         // TODO: Setting isSkill property to true for now. A runtime change is required to remove dependancy on isSkill prop #4501

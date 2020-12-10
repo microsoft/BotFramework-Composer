@@ -8,6 +8,7 @@ import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathemati
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
+import has from 'lodash/has';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -351,14 +352,14 @@ export class Builder {
 
     //separate the intents, we only do downsampling for interruption intent
     const intentsMap = {};
-    const normalUtterances: any[] = [];
-    const interruptionUtterances: any[] = [];
-    luObject.utterances.forEach((utterance) => {
+    const normalItems: any[] = [];
+    const interruptionItems: any[] = [];
+    [...luObject.utterances, ...luObject.patterns].forEach((utterance) => {
       const { intent } = utterance;
       if (utterance.intent === '_Interruption') {
-        interruptionUtterances.push(utterance);
+        interruptionItems.push(utterance);
       } else {
-        normalUtterances.push(utterance);
+        normalItems.push(utterance);
         intentsMap[intent] = (intentsMap[intent] ?? 0) + 1;
       }
     });
@@ -371,10 +372,12 @@ export class Builder {
 
     //downsize the interruption utterances to ratio*the minimum length of normal intent utterances
     const reservoirSampler = new ComposerReservoirSampler(
-      interruptionUtterances,
+      interruptionItems,
       this.downSamplingConfig.maxImbalanceRatio * minNum
     );
-    luObject.utterances = [...normalUtterances, ...reservoirSampler.getSampledUtterances()];
+    const finalItems = [...normalItems, ...reservoirSampler.getSampledUtterances()];
+    luObject.utterances = finalItems.filter((item) => !has(item, 'pattern'));
+    luObject.patterns = finalItems.filter((item) => has(item, 'pattern'));
     return luObject;
   }
 
