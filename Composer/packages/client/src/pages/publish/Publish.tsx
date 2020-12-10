@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
@@ -29,6 +29,8 @@ import { PullDialog } from './pullDialog';
 
 const publishStatusInterval = 10000;
 const deleteNotificationInterval = 5000;
+const intervals: { [key: string]: number } = {};
+
 const generateComputedData = (botProjectData, publishHistoryList, currentBotPublishTargetList) => {
   const botSettingList: { projectId: string; setting: DialogSetting }[] = [];
   const statusList: IBotStatus[] = [];
@@ -172,25 +174,24 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       disabled: !isPullSupported,
     },
   ];
-  const statusIntervalsRef = useRef<{ [key: string]: number }>({});
+
   const getUpdatedStatus = (target, botProjectId): void => {
     // TODO: this should use a backoff mechanism to not overload the server with requests
     // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
-    const statusIntervals = statusIntervalsRef.current;
-    if (statusIntervals[`${botProjectId}-${target.name}`]) return;
+    if (intervals[`${botProjectId}-${target.name}`]) return;
     getPublishStatus(botProjectId, target);
-    statusIntervals[`${botProjectId}-${target.name}`] = window.setInterval(async () => {
+    intervals[`${botProjectId}-${target.name}`] = window.setInterval(async () => {
       getPublishStatus(botProjectId, target);
     }, publishStatusInterval);
   };
 
   const cleanupInterval = (target, botProjectId): void => {
-    const statusIntervals = statusIntervalsRef.current;
-    if (statusIntervals[`${botProjectId}-${target.name}`]) {
-      clearInterval(statusIntervals[`${botProjectId}-${target.name}`]);
-      delete statusIntervals[`${botProjectId}-${target.name}`];
+    if (intervals[`${botProjectId}-${target.name}`]) {
+      clearInterval(intervals[`${botProjectId}-${target.name}`]);
+      delete intervals[`${botProjectId}-${target.name}`];
     }
   };
+
   const [pendingNotification, setPendingNotification] = useState<Notification>();
   const [previousBotPublishHistoryList, setPreviousBotPublishHistoryList] = useState(botPublishHistoryList);
   // check history to see if a 202 is found
@@ -292,9 +293,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     return () => {
-      const statusIntervals = statusIntervalsRef.current;
-      if (statusIntervals) {
-        Object.values(statusIntervals).forEach((value) => {
+      if (intervals) {
+        Object.values(intervals).forEach((value) => {
           window.clearInterval(value);
         });
       }
@@ -383,7 +383,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
-        getUpdatedStatus(selectedTarget, botProjectId);
+        selectedTarget && getUpdatedStatus(selectedTarget, botProjectId);
       }
 
       setBotStatusList(
