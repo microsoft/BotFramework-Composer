@@ -186,7 +186,8 @@ export class BotProjectDeploy {
       // close file read stream
       fileReadStream.close();
       if (err.statusCode === 403) {
-        throw createCustomizeError(AzurePublishErrors.DEPLOY_ZIP_ERROR,
+        throw createCustomizeError(
+          AzurePublishErrors.DEPLOY_ZIP_ERROR,
           `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
         );
       } else {

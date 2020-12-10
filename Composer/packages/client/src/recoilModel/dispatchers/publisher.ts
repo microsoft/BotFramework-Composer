@@ -35,7 +35,7 @@ const missingDotnetVersionError = {
   message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
   linkAfterMessage: {
     text: formatMessage('Learn more.'),
-    url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
+    url: 'https://aka.ms/install-composer',
   },
   link: {
     text: formatMessage('Install Microsoft .NET Core SDK'),
