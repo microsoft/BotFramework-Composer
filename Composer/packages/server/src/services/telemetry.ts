@@ -39,12 +39,15 @@ if (instrumentationKey) {
   // do not collect the user's machine name
   AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope, context): boolean => {
-    const { sessionId, userId, telemetry, composerVersion } = getTelemetryContext();
+    const { sessionId, telemetry, composerVersion } = getTelemetryContext();
 
     if (!telemetry?.allowDataCollection) {
       return false;
     }
     const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
+
+    // Add session id
+    envelope.tags[AppInsights.defaultClient.context.keys.sessionId] = sessionId;
 
     // Remove PII from url
     if (envelope.data.baseType === 'RequestData' && data.baseData.url.match(/\/\d+.\d+/i)) {
@@ -59,8 +62,6 @@ if (instrumentationKey) {
 
     if (AppInsights.Contracts.domainSupportsProperties(data.baseData)) {
       data.baseData.properties.toolName = 'bf-composer';
-      data.baseData.properties.sessionId = sessionId;
-      data.baseData.properties.userId = userId;
 
       if (composerVersion) {
         data.baseData.properties.composerVersion = composerVersion;
