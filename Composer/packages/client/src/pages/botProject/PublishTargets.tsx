@@ -13,6 +13,7 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
+
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 
 // -------------------- Styles -------------------- //
@@ -169,11 +170,11 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
             // reset current
             setCurrent(null);
           }}
-          types={publishTypes}
-          projectId={projectId}
-          targets={publishTargets || []}
           current={current}
+          projectId={projectId}
           setPublishTargets={setPublishTargets}
+          targets={publishTargets || []}
+          types={publishTypes}
         />
       ) : null}
     </Fragment>

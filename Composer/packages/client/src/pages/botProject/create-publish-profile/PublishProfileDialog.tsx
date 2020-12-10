@@ -5,15 +5,17 @@
 import { jsx } from '@emotion/core';
 import { Fragment, useState, useEffect, useCallback } from 'react';
 import { PublishTarget } from '@bfc/shared';
+import formatMessage from 'format-message';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+
 import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
-import formatMessage from 'format-message';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
+
 import { EditProfileDialog } from './EditProfileDialog';
 import { AddProfileDialog } from './AddProfileDialog';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 type PublishProfileDialogProps = {
   closeDialog: () => void;
@@ -32,8 +34,6 @@ enum PageTypes {
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
   const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
-  // const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
-  // const [pluginConfigIsValid, setPluginConfigIsValid] = useState(false);
   const [page, setPage] = useState(current ? PageTypes.EditProfile : PageTypes.AddProfile);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
 
@@ -126,32 +126,32 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     <Fragment>
       {page === PageTypes.EditProfile && (
         <EditProfileDialog
-          onDismiss={closeDialog}
           current={props.current}
           types={types}
           updateSettings={updatePublishTarget}
+          onDismiss={closeDialog}
         />
       )}
       {page != PageTypes.EditProfile && (
         <DialogWrapper
+          isOpen
           dialogType={DialogTypes.Customer}
-          isOpen={true}
           minWidth={900}
-          title={dialogTitle.title}
           subText={dialogTitle.subText}
+          title={dialogTitle.title}
           onDismiss={closeDialog}
         >
           {page === PageTypes.AddProfile && (
             <AddProfileDialog
+              projectId={projectId}
+              setType={setSelectType}
+              targets={targets}
+              types={types}
+              updateSettings={savePublishTarget}
               onDismiss={closeDialog}
               onNext={() => {
                 setPage(PageTypes.ConfigProvision);
               }}
-              targets={targets}
-              types={types}
-              updateSettings={savePublishTarget}
-              projectId={projectId}
-              setType={setSelectType}
             />
           )}
           {page === PageTypes.ConfigProvision && selectedType?.bundleId && (

@@ -7,14 +7,14 @@ import formatMessage from 'format-message';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { useState, useMemo, useCallback, Fragment, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { armScopes, graphScopes } from '../../../constants';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
-// import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { separator } from '../../publish/styles';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
+
+import { separator } from '../../publish/styles';
+import { armScopes, graphScopes } from '../../../constants';
 import { PublishType } from '../../../recoilModel/types';
 import { isShowAuthDialog } from '../../../utils/auth';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';

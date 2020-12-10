@@ -7,15 +7,16 @@ import formatMessage from 'format-message';
 import { useState, useCallback, useMemo } from 'react';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { label, separator } from '../../publish/styles';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { JsonEditor } from '@bfc/code-editor';
-import { PublishType } from '../../../recoilModel/types';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
+
+import { PublishType } from '../../../recoilModel/types';
+import { label, separator } from '../../publish/styles';
 import { userSettingsState } from '../../../recoilModel';
 
 type EditProfileDialogProps = {
@@ -62,19 +63,19 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props) => {
 
   return (
     <DialogWrapper
+      isOpen
       dialogType={DialogTypes.Customer}
       minWidth={700}
       title={formatMessage('Edit a publish profile')}
       onDismiss={onDismiss}
-      isOpen={true}
     >
       <div style={{ width: '60%' }}>
         <form>
           <TextField
+            readOnly
             defaultValue={current?.item.name || ''}
             label={formatMessage('Create profile name')}
             placeholder={formatMessage('My Staging Environment')}
-            readOnly={true}
           />
           <Dropdown
             defaultSelectedKey={targetType}
