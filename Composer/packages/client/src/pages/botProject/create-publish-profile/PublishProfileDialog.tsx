@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
+import { Fragment, useState, useEffect, useCallback } from 'react';
 import { PublishTarget } from '@bfc/shared';
 import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
@@ -70,8 +70,6 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   // setup plugin APIs
   useEffect(() => {
-    PluginAPI.publish.setPublishConfig = (config) => console.log(config); //setConfig(config);
-    PluginAPI.publish.setConfigIsValid = (valid) => console.log(valid); //setPluginConfigIsValid(valid);
     PluginAPI.publish.closeDialog = closeDialog;
     PluginAPI.publish.onBack = () => {
       setPage(PageTypes.AddProfile);
