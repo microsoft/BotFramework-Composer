@@ -539,6 +539,9 @@
   "composer_settings_31b04099": {
     "message": "Composer Settings"
   },
+  "composer_will_create_your_bot_resources_in_this_az_cc62faf8": {
+    "message": "Composer will create your bot resources in this Azure destination. If you already have assets created then select import"
+  },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer will restart."
   },
@@ -550,6 +553,9 @@
   },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Configure Composer to start your bot using runtime code you can customize and control."
+  },
+  "configure_resources_27fec71f": {
+    "message": "Configure resources"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"

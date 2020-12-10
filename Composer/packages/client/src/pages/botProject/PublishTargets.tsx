@@ -2,22 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { Fragment, useState, useCallback, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { PublishProfileDialog } from '../../constants';
-
-import { CreatePublishTarget } from './createPublishTarget';
+import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 
 // -------------------- Styles -------------------- //
 
@@ -108,92 +104,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
-  const [dialogProps, setDialogProps] = useState({
-    title: formatMessage('Title'),
-    type: DialogType.normal,
-  });
-
   const [dialogHidden, setDialogHidden] = useState(true);
-  const [dialogChildren, setDialogChildren] = useState({});
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
-
-  // CRUD publish target
-  const updatePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string, editTarget: any) => {
-      if (!editTarget) {
-        return;
-      }
-
-      const targets = publishTargets ? [...publishTargets] : [];
-      targets[editTarget.index] = {
-        name,
-        type,
-        configuration,
-      };
-
-      await setPublishTargets(targets, projectId);
-    },
-    [publishTargets, projectId]
-  );
-  const savePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string) => {
-      const targets = [...(publishTargets || []), { name, type, configuration }];
-      await setPublishTargets(targets, projectId);
-    },
-    [publishTargets, projectId]
-  );
-
-  // add profile
-  const openAddProfileDialog = useCallback(() => {
-    setDialogProps({
-      ...PublishProfileDialog.ADD_PROFILE,
-      type: DialogType.normal,
-    });
-    setDialogChildren(
-      <CreatePublishTarget
-        closeDialog={() => setDialogHidden(true)}
-        current={null}
-        projectId={projectId}
-        setDialogProps={setDialogProps}
-        targets={publishTargets || []}
-        types={publishTypes}
-        updateSettings={savePublishTarget}
-      />
-    );
-    setDialogHidden(false);
-  }, [publishTypes, savePublishTarget, publishTargets]);
-
-  // edit profile
-  const openEditProfileDialog = useCallback(
-    (editTarget) => {
-      setDialogProps({
-        ...PublishProfileDialog.EDIT_PROFILE,
-        type: DialogType.normal,
-      });
-      setDialogChildren(
-        <CreatePublishTarget
-          closeDialog={() => setDialogHidden(true)}
-          current={editTarget ? editTarget : null}
-          projectId={projectId}
-          setDialogProps={setDialogProps}
-          targets={(publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
-          types={publishTypes}
-          updateSettings={updatePublishTarget}
-        />
-      );
-      setDialogHidden(false);
-    },
-    [publishTypes, publishTargets, updatePublishTarget]
-  );
-
-  const onEdit = useCallback(
-    async (index: number, item: PublishTarget) => {
-      const newItem = { item: item, index: index };
-      openEditProfileDialog(newItem);
-    },
-    [publishTargets]
-  );
+  const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
 
   useEffect(() => {
     if (projectId) {
@@ -226,7 +140,13 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                   {p.type}
                 </div>
                 <div css={publishTargetsEditButton}>
-                  <ActionButton styles={editPublishProfile} onClick={() => onEdit(index, p)}>
+                  <ActionButton
+                    styles={editPublishProfile}
+                    onClick={() => {
+                      setCurrent({ item: p, index: index });
+                      setDialogHidden(false);
+                    }}
+                  >
                     {formatMessage('Edit')}
                   </ActionButton>
                 </div>
@@ -236,21 +156,26 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           <ActionButton
             data-testid={'addNewPublishProfile'}
             styles={addPublishProfile}
-            onClick={() => openAddProfileDialog()}
+            onClick={() => setDialogHidden(false)}
           >
             {formatMessage('Add new publish profile')}
           </ActionButton>
         </div>
       </CollapsableWrapper>
-      <DialogWrapper
-        dialogType={DialogTypes.Customer}
-        isOpen={!dialogHidden}
-        minWidth={900}
-        title={dialogProps.title}
-        onDismiss={() => setDialogHidden(true)}
-      >
-        {dialogChildren}
-      </DialogWrapper>
+      {!dialogHidden ? (
+        <PublishProfileDialog
+          closeDialog={() => {
+            setDialogHidden(true);
+            // reset current
+            setCurrent(null);
+          }}
+          types={publishTypes}
+          projectId={projectId}
+          targets={publishTargets || []}
+          current={current}
+          setPublishTargets={setPublishTargets}
+        />
+      ) : null}
     </Fragment>
   );
 };
