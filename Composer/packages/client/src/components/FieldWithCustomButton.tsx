@@ -104,12 +104,12 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     onRenderLabel = defaultRenderLabel,
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
-  const textFieldComponentRef = useRef<ITextField>(null);
+  const fieldComponentRef = useRef<ITextField>(null);
   const [autoFoucsOnTextField, setAutoFoucsOnTextField] = useState<boolean>();
   const [localValue, setLocalValue] = useState<string>(value);
   useEffect(() => {
     if (autoFoucsOnTextField) {
-      textFieldComponentRef.current?.focus();
+      fieldComponentRef.current?.focus();
     }
   }, [autoFoucsOnTextField]);
 
@@ -118,28 +118,30 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     setDisabled(!value);
   }, [value]);
 
+  const commonProps = {
+    id,
+    label,
+    required,
+    onRenderLabel,
+    'aria-label': ariaLabel,
+    componentRef: fieldComponentRef,
+  };
+
   return (
     <Fragment>
       {isDisabled ? (
         <TextField
+          {...commonProps}
           disabled
           errorMessage={required ? errorElement(errorMessage) : ''}
-          id={id}
-          label={label}
           placeholder={placeholderOnDisable}
-          required={required}
           styles={disabledTextFieldStyle}
-          onRenderLabel={onRenderLabel}
         />
       ) : (
         <TextField
-          aria-label={ariaLabel}
-          componentRef={textFieldComponentRef}
+          {...commonProps}
           disabled={isDisabled}
-          id={id}
-          label={label}
           placeholder={placeholder}
-          required={required}
           value={localValue}
           onBlur={() => {
             if (!localValue) {
@@ -151,7 +153,6 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
             setLocalValue(value ?? '');
             onChange && onChange(e, value);
           }}
-          onRenderLabel={onRenderLabel}
         />
       )}
 
