@@ -284,7 +284,7 @@ export const ProjectTree: React.FC<Props> = ({
   }
 
   const dialogIsFormDialog = (dialog: DialogInfo) => {
-    return formDialogComposerFeatureEnabled && dialog.content?.schema !== undefined;
+    return formDialogComposerFeatureEnabled && dialog.isFormDialog;
   };
 
   const formDialogSchemaExists = (projectId: string, dialog: DialogInfo) => {
