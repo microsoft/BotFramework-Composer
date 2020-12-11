@@ -60,7 +60,7 @@ namespace Microsoft.BotFramework.Composer.Core
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            var rootDialog = resourceExplorer.LoadType<AdaptiveDialog>(rootFile);
+            var rootDialog = resourceExplorer.LoadType<Dialog>(rootFile);
             this.dialogManager = new DialogManager(rootDialog)
                                 .UseResourceExplorer(resourceExplorer)
                                 .UseLanguageGeneration()
