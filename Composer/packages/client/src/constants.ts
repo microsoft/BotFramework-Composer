@@ -337,6 +337,28 @@ export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
+export const authConfig = {
+  // for web login
+  clientId: process.env.WEBLOGIN_CLIENTID,
+  scopes: [
+    'https://management.core.windows.net/user_impersonation',
+    'https://graph.microsoft.com/Application.ReadWrite.All',
+  ],
+  tenantId: process.env.WEBLOGIN_TENANTID,
+  redirectUrl: process.env.WEBLOGIN_REDIRECTURL,
+};
+
+export const armScopes = {
+  scopes: ['https://management.core.windows.net/user_impersonation'],
+  targetResource: 'https://management.core.windows.net/',
+};
+export const graphScopes = {
+  scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
+  targetResource: 'https://graph.microsoft.com/',
+};
+
+export const authUrl = `https://login.microsoftonline.com/${authConfig.tenantId}/oauth2/v2.0/authorize`;
+
 export const triggerNotSupportedWarning = () =>
   formatMessage(
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'

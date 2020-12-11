@@ -91,6 +91,9 @@ function getClientEnvironment(publicUrl) {
         COMPOSER_VERSION: '1.3.0-rc4',
         LOCAL_PUBLISH_PATH:
           process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../../extensions/localPublish/hostedBots'),
+        WEBLOGIN_CLIENTID: process.env.WEBLOGIN_CLIENTID,
+        WEBLOGIN_TENANTID: process.env.WEBLOGIN_TENANTID,
+        WEBLOGIN_REDIRECTURL: process.env.WEBLOGIN_REDIRECTURL,
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
