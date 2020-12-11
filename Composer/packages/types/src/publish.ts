@@ -10,13 +10,16 @@ import { AuthParameters } from './auth';
 
 export type PublishResult = {
   message: string;
+  /** for azure or pva publish */
   comment?: string;
   eTag?: string;
   log?: string;
-  id: string;
-  time: string;
+  id?: string;
+  time?: string;
+  status?: number;
+  /** for local publish */
   endpointURL?: string;
-  status: number;
+  /** for PVA publish */
   action?: {
     href: string;
     label: string;

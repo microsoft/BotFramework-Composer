@@ -956,6 +956,9 @@
   "duplicate_name_d295a09d": {
     "message": "Duplicate name"
   },
+  "duplicate_root_dialog_name_287ab65b": {
+    "message": "Duplicate root dialog name"
+  },
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
   },
@@ -1598,8 +1601,8 @@
   "login_6f3d6249": {
     "message": "Login"
   },
-  "login_to_composer_eb42b41": {
-    "message": "Login to Composer"
+  "login_to_azure_c0cb057e": {
+    "message": "Login to Azure"
   },
   "loop_for_each_item_53eb7c5b": {
     "message": "Loop: for each item"

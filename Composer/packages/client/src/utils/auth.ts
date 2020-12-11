@@ -155,7 +155,7 @@ export async function refreshToken(): Promise<string> {
   const loginUrl = BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
 
   return new Promise((resolve, reject) => {
-    const iframe = createHidenIframe(loginUrl);
+    const iframe = createHiddenIframe(loginUrl);
     const startTime = Date.now();
     const iframeTimer = setInterval(() => {
       try {
