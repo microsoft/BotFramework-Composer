@@ -872,8 +872,8 @@
   "dialog_events_f1b2e2a0": {
     "message": "Dialog events"
   },
-  "dialog_generation_failed_3c73e599": {
-    "message": "Dialog generation failed."
+  "dialog_generation_has_failed_550f0927": {
+    "message": "Dialog generation has failed."
   },
   "dialog_generation_was_successful_be280943": {
     "message": "Dialog generation was successful."
@@ -908,8 +908,8 @@
   "disable_a5c05db3": {
     "message": "Disable"
   },
-  "discover_and_use_components_that_can_be_installed__49e308bf": {
-    "message": "Discover and use components that can be installed into your bot."
+  "discover_and_use_components_that_can_be_installed__b15032de": {
+    "message": "Discover and use components that can be installed into your bot"
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
@@ -1264,6 +1264,9 @@
   },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
+  },
+  "generating_dialog_for_schemaid_51b2744f": {
+    "message": "Generating dialog for \"{ schemaId }\""
   },
   "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
     "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
@@ -1631,20 +1634,23 @@
   "luis_authoring_key_cfaba7dd": {
     "message": "LUIS Authoring key:"
   },
+  "luis_authoring_key_is_required_with_the_current_re_464f655e": {
+    "message": "LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish"
+  },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
   },
   "luis_endpoint_key_c685e219": {
     "message": "LUIS endpoint key"
   },
-  "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
-    "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
+  "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
+    "message": "LUIS key is required with the current recognizer setting to start your bot locally, and publish"
   },
   "luis_region_9879d8de": {
     "message": "LUIS region"
   },
-  "luis_region_is_required_163ca19f": {
-    "message": "LUIS Region is required"
+  "luis_region_is_required_4b7a19af": {
+    "message": "LUIS region is required"
   },
   "main_dialog_eed5c847": {
     "message": "Main dialog"
@@ -2186,8 +2192,8 @@
   "qna_maker_subscription_key_e009c9d9": {
     "message": "QnA Maker Subscription key"
   },
-  "qna_maker_subscription_key_is_required_to_start_yo_9c0bc65a": {
-    "message": "QnA Maker subscription Key is required to start your bot locally, and publish"
+  "qna_maker_subscription_key_is_required_to_start_yo_1892741": {
+    "message": "QnA Maker Subscription key is required to start your bot locally, and publish"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "Qna Navigation Pane"
@@ -2303,9 +2309,6 @@
   "responses_12d6df1d": {
     "message": "Responses"
   },
-  "restart_all_bots_running_total_running_cf47a2b5": {
-    "message": "Restart all bots ({ running }/{ total } running)"
-  },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
@@ -2318,14 +2321,8 @@
   "root_bot_da9de71c": {
     "message": "Root Bot"
   },
-  "root_bot_e2d0a1fc": {
-    "message": "Root bot"
-  },
   "root_bot_luis_authoring_key_is_empty_aec2634e": {
     "message": "Root Bot LUIS authoring key is empty"
-  },
-  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
-    "message": "Root Bot LUIS endpoint key is empty"
   },
   "root_bot_luis_region_is_empty_67932308": {
     "message": "Root Bot LUIS region is empty"
@@ -2558,9 +2555,6 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "Specify a name, description, and location for your new bot project."
   },
-  "start_all_bots_eac99ea": {
-    "message": "Start all bots"
-  },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Start and stop local bot runtimes individually."
   },
@@ -2584,9 +2578,6 @@
   },
   "starting_2b76fa0d": {
     "message": "Starting"
-  },
-  "starting_bots_running_total_running_45302684": {
-    "message": "Starting bots.. ({ running }/{ total } running)"
   },
   "state_is_state_a2b8943": {
     "message": "State is { state }"
@@ -2800,6 +2791,15 @@
   },
   "total_mb_531a3721": {
     "message": "{ total }MB"
+  },
+  "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
+    "message": "{ total, plural,\n     =1 {Restart bot}\n  other {Restart all bots ({ running }/{ total } running)}\n}"
+  },
+  "total_plural_1_start_bot_other_start_all_bots_8e25aec9": {
+    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all bots}\n}"
+  },
+  "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
+    "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
   },
   "trigger_phrases_f6754fa": {
     "message": "Trigger phrases"
@@ -3101,8 +3101,8 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
   },
-  "your_dialog_was_generated_successfully_61c13b73": {
-    "message": "Your dialog was generated successfully."
+  "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
+    "message": "Your dialog for \"{ schemaId }\" was generated successfully."
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
