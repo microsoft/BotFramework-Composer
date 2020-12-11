@@ -203,7 +203,7 @@ export function createPopupWindow(loginUrl: string): Window | null {
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   const popup = window.open(
     loginUrl,
-    formatMessage('Login to Composer'),
+    formatMessage('Login to Azure'),
     `width=483, height=600, top=${top}, left=${left}`
   );
 
@@ -217,7 +217,7 @@ export function createPopupWindow(loginUrl: string): Window | null {
   return popup;
 }
 
-export function createHidenIframe(url: string): HTMLIFrameElement {
+export function createHiddenIframe(url: string): HTMLIFrameElement {
   const iframe = document.createElement('iframe');
   iframe.src = url;
   iframe.style.display = 'none';

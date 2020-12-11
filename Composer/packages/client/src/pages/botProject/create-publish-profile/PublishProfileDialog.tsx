@@ -27,7 +27,7 @@ type PublishProfileDialogProps = {
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
 };
 
-enum PageTypes {
+enum Page {
   AddProfile = 'add',
   EditProfile = 'edit',
   ConfigProvision = 'config',
@@ -35,7 +35,7 @@ enum PageTypes {
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
   const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
-  const [page, setPage] = useState(current ? PageTypes.EditProfile : PageTypes.AddProfile);
+  const [page, setPage] = useState(current ? Page.EditProfile : Page.AddProfile);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
 
   const [dialogTitle, setTitle] = useState({
@@ -73,7 +73,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   useEffect(() => {
     PluginAPI.publish.closeDialog = closeDialog;
     PluginAPI.publish.onBack = () => {
-      setPage(PageTypes.AddProfile);
+      setPage(Page.AddProfile);
     };
     PluginAPI.publish.getTokenFromCache = () => {
       return {
@@ -126,7 +126,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   return (
     <Fragment>
-      {page === PageTypes.EditProfile && (
+      {page === Page.EditProfile && (
         <EditProfileDialog
           current={props.current}
           types={types}
@@ -134,7 +134,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           onDismiss={closeDialog}
         />
       )}
-      {page != PageTypes.EditProfile && (
+      {page != Page.EditProfile && (
         <DialogWrapper
           isOpen
           dialogType={DialogTypes.Customer}
@@ -143,7 +143,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           title={dialogTitle.title}
           onDismiss={closeDialog}
         >
-          {page === PageTypes.AddProfile && (
+          {page === Page.AddProfile && (
             <AddProfileDialog
               projectId={projectId}
               setType={setSelectType}
@@ -152,11 +152,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
               updateSettings={savePublishTarget}
               onDismiss={closeDialog}
               onNext={() => {
-                setPage(PageTypes.ConfigProvision);
+                setPage(Page.ConfigProvision);
               }}
             />
           )}
-          {page === PageTypes.ConfigProvision && selectedType?.bundleId && (
+          {page === Page.ConfigProvision && selectedType?.bundleId && (
             <div css={publishSurfaceStyles}>
               <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
             </div>

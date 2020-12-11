@@ -71,7 +71,6 @@ export const provisionDispatcher = () => {
         );
       } catch (error) {
         // set notification
-        console.error(error.response?.data);
         const notification = createNotification(
           getProvisionFailureNotification(error.response?.data || 'Error when provision target')
         );
@@ -90,10 +89,11 @@ export const provisionDispatcher = () => {
     notificationId: string
   ) => {
     const timer = setInterval(async () => {
+      let notification,
+        isCleanTimer = false;
       try {
         const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
         if (response.data?.status === 200 && response.data.config && response.data.config != {}) {
-          clearInterval(timer);
           // delete provisionStatus
           callbackHelpers.set(provisionStatusState(projectId), (status) => {
             const newStatus = { ...status };
@@ -115,55 +115,41 @@ export const provisionDispatcher = () => {
             };
           });
 
-          // update notification
-          updateNotificationInternal(
-            callbackHelpers,
-            notificationId,
-            getProvisionSuccessNotification(response.data.message)
-          );
+          notification = getProvisionSuccessNotification(response.data.message);
+          isCleanTimer = true;
         } else {
           if (response.data.status !== 500) {
-            updateNotificationInternal(
-              callbackHelpers,
-              notificationId,
-              getProvisionPendingNotification(response.data.message)
-            );
+            notification = getProvisionPendingNotification(response.data.message);
           } else {
-            updateNotificationInternal(
-              callbackHelpers,
-              notificationId,
-              getProvisionFailureNotification(response.data.message)
-            );
+            notification = getProvisionFailureNotification(response.data.message);
+            isCleanTimer = true;
           }
 
           // update provision status
           const statObj = await callbackHelpers.snapshot.getPromise(provisionStatusState(projectId));
           const stat = statObj[targetName];
           const newStat = { ...stat, ...response.data, notificationId };
-          // update provision status
           callbackHelpers.set(provisionStatusState(projectId), (status) => ({
             ...status,
             [targetName]: newStat,
           }));
-          if (response.data.status === 500) {
-            clearInterval(timer);
-          }
         }
       } catch (err) {
-        console.error(err);
-
-        updateNotificationInternal(
-          callbackHelpers,
-          notificationId,
-          getProvisionFailureNotification(err.response?.data?.message || 'Error')
-        );
+        // update notification
+        notification = getProvisionFailureNotification(err.response?.data?.message || 'Error');
         const newStat = { ...err.response?.data, notificationId };
         // update provision status
         callbackHelpers.set(provisionStatusState(projectId), (status) => ({
           ...status,
           [targetName]: newStat,
         }));
-        clearInterval(timer);
+        isCleanTimer = true;
+      } finally {
+        if (isCleanTimer) {
+          clearInterval(timer);
+        }
+        // update notification
+        updateNotificationInternal(callbackHelpers, notificationId, notification);
       }
     }, 5000);
   };

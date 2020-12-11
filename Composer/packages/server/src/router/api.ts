@@ -66,7 +66,6 @@ router.put('/storages/folder', StorageController.updateFolder);
 
 // provision
 router.get('/provision/:projectId/status/:type/:target/:jobId', ProvisionController.getProvisionStatus);
-// router.get('/provision/:projectId/status/:type/:target', ProvisionController.getProvisionStatus);
 router.get('/provision/:projectId/:type/resources', ProvisionController.getResources);
 router.post('/provision/:projectId/:type', ProvisionController.provision);
 

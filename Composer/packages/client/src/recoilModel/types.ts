@@ -44,17 +44,6 @@ export interface PublishType {
   };
 }
 
-export interface ProvisionStatus {
-  id: string;
-  projectId: string;
-  processName: string;
-  time: Date;
-  status: number;
-  message: string;
-  log: string[];
-  comment: string;
-}
-
 export interface RuntimeTemplate {
   /** internal use key */
   key: string;

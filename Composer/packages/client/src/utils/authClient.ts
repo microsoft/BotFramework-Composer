@@ -9,7 +9,7 @@ import {
   getTokenFromCache,
   createPopupWindow,
   monitorWindowForQueryParam,
-  createHidenIframe,
+  createHiddenIframe,
   getIdTokenUrl,
   getAccessTokenUrl,
   isTokenExpired,
@@ -56,7 +56,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
         }
       } else if (isTokenExpired(idToken)) {
         // refresh idToken
-        const notDisplayFrame = createHidenIframe(
+        const notDisplayFrame = createHiddenIframe(
           getIdTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl })
         );
         idToken =
@@ -67,7 +67,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
 
       // use id token to get access token
       if (typeof idToken === 'string') {
-        const notDisplayFrame = createHidenIframe(
+        const notDisplayFrame = createHiddenIframe(
           getAccessTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl, scopes: scopes })
         );
         token =
