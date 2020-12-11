@@ -74,7 +74,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public IStorage ConfigureStorage(BotSettings settings)
         {
-            if (string.IsNullOrEmpty(settings?.CosmosDb.ContainerId))
+            if (string.IsNullOrEmpty(settings?.CosmosDb?.ContainerId))
             {
                 if (!string.IsNullOrEmpty(this.Configuration["cosmosdb:collectionId"]))
                 {
