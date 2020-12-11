@@ -98,7 +98,14 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   };
   const onRenderOption = (option?: IDropdownOption): JSX.Element | null => {
     if (!option) return null;
-    return <div style={option.data && option.data.style}>{option.text}</div>;
+    const style = {
+      ...(option.data && option.data.style),
+      width: '80%',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+    };
+    return <div style={style}>{option.text}</div>;
   };
   const onRenderStatus = (item: IBotStatus): JSX.Element | null => {
     if (!item.status) {
@@ -165,8 +172,8 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       name: formatMessage('Publish target'),
       className: 'publishTarget',
       fieldName: 'target',
-      minWidth: 114,
-      maxWidth: 134,
+      minWidth: 180,
+      maxWidth: 200,
       isRowHeader: true,
       isResizable: true,
       data: 'string',
@@ -176,7 +183,10 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             defaultSelectedKey={item.publishTarget}
             options={publishTargetOptions(item)}
             placeholder={formatMessage('Select a publish target')}
-            styles={{ root: { width: '134px' } }}
+            styles={{
+              root: { width: '100%' },
+              dropdownItems: { selectors: { '.ms-Button-flexContainer': { width: '100%' } } },
+            }}
             onChange={(_, option?: IDropdownOption) => handleChangePublishTarget(item, option)}
             onRenderOption={onRenderOption}
           />

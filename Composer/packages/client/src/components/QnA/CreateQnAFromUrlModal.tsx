@@ -15,6 +15,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dispatcherState, onCreateQnAFromUrlDialogCompleteState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import {
   knowledgeBaseSourceUrl,
@@ -143,6 +144,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
               return;
             }
             onSubmit(formData);
+            TelemetryClient.track('AddNewKnowledgeBaseCompleted');
           }}
         />
       </DialogFooter>

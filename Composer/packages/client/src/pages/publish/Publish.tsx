@@ -14,6 +14,7 @@ import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector 
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification, PublishType } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -128,6 +129,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const getUpdatedStatus = (target, botProjectId): NodeJS.Timeout => {
     // TODO: this should use a backoff mechanism to not overload the server with requests
     // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
+    getPublishStatus(botProjectId, target);
     return setInterval(async () => {
       getPublishStatus(botProjectId, target);
     }, publishStatusInterval);
@@ -365,8 +367,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <PublishToolbar
         canPublish={canPublish}
         canPull={canPull}
-        onPublish={() => setPublishDialogHidden(false)}
-        onPull={() => setPullDialogHidden(false)}
+        onPublish={() => {
+          setPublishDialogHidden(false);
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
+        }}
+        onPull={() => {
+          setPullDialogHidden(false);
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'pullFromProfile' });
+        }}
       />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Publish your bots')}</h1>

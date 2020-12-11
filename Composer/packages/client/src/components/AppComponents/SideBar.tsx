@@ -13,6 +13,7 @@ import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
 import { NavItem } from '../NavItem';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { useLinks } from './../../utils/hooks';
 
@@ -81,6 +82,7 @@ export const SideBar = () => {
               iconName: 'GlobalNavButton',
             }}
             onClick={() => {
+              TelemetryClient.track('LeftMenuModeToggled', { expanded: !sideBarExpand });
               setSideBarExpand((current) => !current);
             }}
           />

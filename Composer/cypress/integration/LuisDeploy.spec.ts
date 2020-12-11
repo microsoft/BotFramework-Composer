@@ -13,8 +13,9 @@ context('Luis Deploy', () => {
 
   it('can deploy luis success', () => {
     cy.visitPage('Project Settings');
-    cy.findAllByTestId('rootLUISKey').type('12345678', { delay: 200 });
-    cy.findAllByTestId('rootLUISRegion').type('westus', { delay: 200 });
+    cy.findAllByTestId('rootLUISAuthoringKey').type('12345678', { delay: 200 });
+    cy.findAllByTestId('rootLUISRegion').click();
+    cy.findByText('westus').click();
     cy.visitPage('User Input');
     cy.url().should('contain', 'language-understanding/all');
     cy.visitPage('Design');
@@ -24,7 +25,7 @@ context('Luis Deploy', () => {
       status: 400,
       response: 'fixture:luPublish/failure',
     });
-    cy.findByTitle(/^Start all bots/).click();
+    cy.findByTitle(/^Start bot/).click();
     cy.findByTitle('Open start bots panel').click();
     cy.findByText('See Details').click();
 
@@ -35,6 +36,6 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/success',
     });
     cy.findByText('Try again').click();
-    cy.findByTitle(/^Starting bots../);
+    cy.findByTitle(/^Starting bot../);
   });
 });
