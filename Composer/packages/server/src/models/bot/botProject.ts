@@ -549,7 +549,7 @@ export class BotProject implements IBotProject {
     return qnaEndpointKey;
   };
 
-  public async generateDialog(name: string, templateDirs?: string[]) {
+  public async generateDialog(name: string, templateDirs?: string[]): Promise<{ success: boolean; errors: string[] }> {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`, {});
     const schemaPath = Path.resolve(this.dir, relativePath);
@@ -557,7 +557,12 @@ export class BotProject implements IBotProject {
     const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`, {});
     const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
 
+    const errors: string[] = [];
+
     const feedback = (type: FeedbackType, message: string): void => {
+      if (type == FeedbackType.error) {
+        errors.push(message);
+      }
       // eslint-disable-next-line no-console
       console.log(`${type} - ${message}`);
     };
@@ -596,7 +601,7 @@ export class BotProject implements IBotProject {
     // merge - if generated assets should be merged with any user customized assets
     // singleton - if the generated assets should be merged into a single dialog
     // feeback - a callback for status and progress and generation happens
-    await generate(
+    const success = await generate(
       generateParams.schemaPath,
       generateParams.prefix,
       generateParams.outDir,
@@ -608,6 +613,8 @@ export class BotProject implements IBotProject {
       generateParams.singleton,
       generateParams.feedback
     );
+
+    return { success, errors };
   }
 
   public async deleteFormDialog(dialogId: string) {

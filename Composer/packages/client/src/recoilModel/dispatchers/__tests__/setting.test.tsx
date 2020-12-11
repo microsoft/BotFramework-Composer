@@ -24,7 +24,7 @@ const settings = {
   MicrosoftAppId: '',
   cosmosDb: {
     authKey: '',
-    collectionId: 'botstate-collection',
+    containerId: 'botstate-container',
     cosmosDBEndpoint: '',
     databaseId: 'botstate-db',
   },

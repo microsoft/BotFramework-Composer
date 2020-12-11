@@ -31,6 +31,7 @@ import {
   filePersistenceState,
   locationState,
   projectMetaDataState,
+  settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
@@ -245,7 +246,6 @@ export const projectDispatcher = () => {
         if (navigate) {
           navigateToBot(callbackHelpers, projectId, mainDialog);
         }
-        set(botOpeningState, false);
 
         if (typeof callback === 'function') {
           callback(projectId);
@@ -255,6 +255,7 @@ export const projectDispatcher = () => {
         removeRecentProject(callbackHelpers, path);
         handleProjectFailure(callbackHelpers, ex);
         navigateTo('/home');
+      } finally {
         set(botOpeningState, false);
       }
     }
@@ -465,8 +466,12 @@ export const projectDispatcher = () => {
 
   /** Resets the file persistence of a project, and then reloads the bot state. */
   const reloadProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { snapshot } = callbackHelpers;
     callbackHelpers.reset(filePersistenceState(projectId));
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
+
+    // Reload needs to pull the settings from the local storage persisted in the current settingsState of the project
+    botFiles.mergedSettings = await snapshot.getPromise(settingsState(projectId));
     await initBotState(callbackHelpers, projectData, botFiles);
   });
 
