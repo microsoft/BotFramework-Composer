@@ -443,6 +443,8 @@ const create = async (
     baseUri: 'https://graph.windows.net',
   });
 
+  const botName = `${name}-${environment}`;
+
   // If the appId is not specified, create one
   if (!appId) {
     logger({
@@ -451,7 +453,7 @@ const create = async (
     });
 
     // create the app registration
-    const appCreated = await createApp(graphClient, name, appPassword);
+    const appCreated = await createApp(graphClient, botName, appPassword);
     if (appCreated === false) {
       return provisionFailed();
     }
@@ -465,15 +467,13 @@ const create = async (
     message: `> Create App Id Success! ID: ${appId}`,
   });
 
-  const resourceGroupName = (name = `${name}-${environment}`);
-
   // timestamp will be used as deployment name
   const timeStamp = new Date().getTime().toString();
   const client = new ResourceManagementClient(creds, subId);
 
   // Create a resource group to contain the new resources
   try {
-    const rpres = await createResourceGroup(client, location, resourceGroupName);
+    const rpres = await createResourceGroup(client, location, botName);
   } catch (err) {
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -487,7 +487,7 @@ const create = async (
     appId,
     appPassword,
     location,
-    name,
+    botName,
     createLuisAuthoringResource,
     createLuisResource,
     createAppInsights,
@@ -496,7 +496,7 @@ const create = async (
   );
 
   // Validate the deployment using the Azure API
-  const validation = await validateDeployment(client, resourceGroupName, timeStamp, deploymentTemplateParam);
+  const validation = await validateDeployment(client, botName, timeStamp, deploymentTemplateParam);
 
   // Handle validation errors
   if (validation.error) {
@@ -512,7 +512,7 @@ const create = async (
     }
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      message: `+ To delete this resource group, run 'az group delete -g ${botName} --no-wait'`,
     });
     return provisionFailed();
   }
@@ -525,7 +525,7 @@ const create = async (
   });
   const spinner = ora().start();
   try {
-    const deployment = await createDeployment(client, resourceGroupName, timeStamp, deploymentTemplateParam);
+    const deployment = await createDeployment(client, botName, timeStamp, deploymentTemplateParam);
     // Handle errors
     if (deployment._response.status != 200) {
       spinner.fail();
@@ -539,7 +539,7 @@ const create = async (
       });
       logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+        message: `+ To delete this resource group, run 'az group delete -g ${botName} --no-wait'`,
       });
       return provisionFailed();
     }
@@ -557,10 +557,10 @@ const create = async (
   // Create qna resources, the reason why seperate the qna resources from others: https://github.com/Azure/azure-sdk-for-js/issues/10186
   if (createQnAResource) {
     const qnaDeployName = new Date().getTime().toString();
-    const qnaDeploymentTemplateParam = getQnaTemplateParam(location, name);
+    const qnaDeploymentTemplateParam = getQnaTemplateParam(location, botName);
     const qnaValidation = await validateQnADeployment(
       client,
-      resourceGroupName,
+      botName,
       qnaDeployName,
       qnaDeploymentTemplateParam
     );
@@ -577,7 +577,7 @@ const create = async (
       }
       logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+        message: `+ To delete this resource group, run 'az group delete -g ${botName} --no-wait'`,
       });
       return provisionFailed();
     }
@@ -591,7 +591,7 @@ const create = async (
     try {
       const qnaDeployment = await createQnADeployment(
         client,
-        resourceGroupName,
+        botName,
         qnaDeployName,
         qnaDeploymentTemplateParam
       );
@@ -608,7 +608,7 @@ const create = async (
         });
         logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+          message: `+ To delete this resource group, run 'az group delete -g ${botName} --no-wait'`,
         });
         return provisionFailed();
       }
@@ -621,7 +621,7 @@ const create = async (
       return provisionFailed();
     }
 
-    const qnaDeploymentOutput = await client.deployments.get(resourceGroupName, qnaDeployName);
+    const qnaDeploymentOutput = await client.deployments.get(botName, qnaDeployName);
     if (qnaDeploymentOutput && qnaDeploymentOutput.properties && qnaDeploymentOutput.properties.outputs) {
       const qnaOutputResult = qnaDeploymentOutput.properties.outputs;
       qnaResult = unpackObject(qnaOutputResult);
@@ -636,22 +636,22 @@ const create = async (
     });
 
     const appinsightsClient = new ApplicationInsightsManagementClient(creds, subId);
-    const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
+    const appComponents = await appinsightsClient.components.get(botName, botName);
     const appinsightsId = appComponents.appId;
     const appinsightsInstrumentationKey = appComponents.instrumentationKey;
     const apiKeyOptions = {
-      name: `${resourceGroupName}-provision-${timeStamp}`,
+      name: `${botName}-provision-${timeStamp}`,
       linkedReadProperties: [
-        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
-        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
+        `/subscriptions/${subId}/resourceGroups/${botName}/providers/microsoft.insights/components/${botName}/api`,
+        `/subscriptions/${subId}/resourceGroups/${botName}/providers/microsoft.insights/components/${botName}/agentconfig`,
       ],
       linkedWriteProperties: [
-        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
+        `/subscriptions/${subId}/resourceGroups/${botName}/providers/microsoft.insights/components/${botName}/annotations`,
       ],
     };
     const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
-      resourceGroupName,
-      resourceGroupName,
+      botName,
+      botName,
       apiKeyOptions
     );
     const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
@@ -671,12 +671,12 @@ const create = async (
 
     if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
       const botServiceClient = new AzureBotService(creds, subId);
-      const botCreated = await botServiceClient.bots.get(resourceGroupName, name);
+      const botCreated = await botServiceClient.bots.get(botName, botName);
       if (botCreated.properties) {
         botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
         botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
         botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
-        const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, name, botCreated);
+        const botUpdateResult = await botServiceClient.bots.update(botName, botName, botCreated);
 
         if (botUpdateResult._response.status != 200) {
           logger({
@@ -704,11 +704,11 @@ const create = async (
 
   // Validate that everything was successfully created.
   // Then, update the settings file with information about the new resources
-  const updateResult = await updateDeploymentJsonFile(client, resourceGroupName, timeStamp, appId, appPassword);
+  const updateResult = await updateDeploymentJsonFile(client, botName, timeStamp, appId, appPassword);
 
   // Handle errors
   if (!updateResult) {
-    const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
+    const operations = await client.deploymentOperations.list(botName, timeStamp);
     if (operations) {
       const failedOperations = operations.filter(
         (value) => value && value.properties && value.properties.statusMessage.error !== null
