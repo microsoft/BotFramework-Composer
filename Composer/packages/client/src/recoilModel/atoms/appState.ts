@@ -264,3 +264,8 @@ export const displaySkillManifestState = atom<undefined | string>({
   key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
 });
+
+export const templateReadMeHtml = atom<string>({
+  key: getFullyQualifiedKey('templateReadMeHtml'),
+  default: '',
+});

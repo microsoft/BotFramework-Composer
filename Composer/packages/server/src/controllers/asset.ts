@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 import { BotTemplateV2, FeedType } from '@bfc/shared';
+// import { request } from 'request';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import { getNugetTemplates } from '../utility/nuget';
+
+const request = require('request'); // If server-side node code.
+const through = require('through');
+const trumpet = require('trumpet');
 
 async function getProjTemplates(req: any, res: any) {
   try {
@@ -102,7 +108,43 @@ export async function getProjTemplatesV2(req: any, res: any) {
   }
 }
 
+export async function getTemplateReadMe(req: any, res: any) {
+  try {
+    // Get FeedUrl
+    // let readMe = '';
+    const { moduleName } = req.body;
+    const tr = trumpet();
+
+    const moduleURL = 'http://npmjs.org/' + moduleName;
+    const npmReq = request(moduleURL).pipe(tr);
+
+    let readme = '';
+    npmReq
+      .pipe(
+        through(
+          (data) => {
+            readme += data.toString();
+          },
+          () => {
+            // readmeCache[module] = readme;
+            // callback(null, readme);
+            // readMe = readme;
+            res.status(200).json(readme);
+          }
+        )
+      )
+      .on('error', () => {
+        console.log('error');
+      });
+  } catch (error) {
+    res.status(400).json({
+      message: error instanceof Error ? error.message : error,
+    });
+  }
+}
+
 export const AssetController = {
   getProjTemplates: getProjTemplates,
   getProjTemplatesV2: getProjTemplatesV2,
+  getTemplateReadMe: getTemplateReadMe,
 };

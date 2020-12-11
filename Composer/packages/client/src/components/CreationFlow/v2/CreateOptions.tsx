@@ -56,7 +56,7 @@ const detailListContainer = css`
 const templateDetailContainer = css`
   width: 50%;
   height: 400px;
-  overflow: hidden;
+  overflow: auto;
   flex-grow: 1;
   float: left;
 `;
@@ -122,12 +122,14 @@ type CreateOptionsProps = {
   onDismiss: () => void;
   onNext: (data: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
+  fetchReadMe: (moduleName: string) => Promise<void>;
+  templateReadMe: string;
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option, setOption] = useState(optionKeys.createFromTemplate);
   const [disabled, setDisabled] = useState(false);
-  const { templates, onDismiss, onNext } = props;
+  const { templates, onDismiss, onNext, fetchReadMe, templateReadMe } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps } | undefined>(undefined);
@@ -211,6 +213,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     }
   }, [selectedFeed]);
 
+  useEffect(() => {
+    fetchReadMe(currentTemplate);
+  }, [currentTemplate]);
+
   return (
     <Fragment>
       <DialogWrapper
@@ -244,7 +250,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            <TemplateDetailView templateId={currentTemplate} />
+            <TemplateDetailView readMe={templateReadMe} templateId={currentTemplate} />
           </div>
         </div>
         <DialogFooter>

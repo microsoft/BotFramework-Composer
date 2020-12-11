@@ -16,6 +16,7 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
   featureFlagsState,
+  templateReadMeHtml,
 } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
@@ -176,6 +177,23 @@ export const storageDispatcher = () => {
     }
   });
 
+  const fetchReadMe = useRecoilCallback(({ set }: CallbackInterface) => async (moduleName: string) => {
+    try {
+      const response = await httpClient.post(`assets/templateReadme`, {
+        moduleName: moduleName,
+      });
+      const data = response?.data;
+      if (data) {
+        set(templateReadMeHtml, data);
+      }
+    } catch (ex) {
+      set(applicationErrorState, {
+        message: ex.message,
+        summary: formatMessage('Error fetching template readMe'),
+      });
+    }
+  });
+
   const fetchRuntimeTemplates = useRecoilCallback<[], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async () => {
       const { set } = callbackHelpers;
@@ -219,6 +237,7 @@ export const storageDispatcher = () => {
 
   return {
     fetchStorages,
+    fetchReadMe,
     updateCurrentPathForStorage,
     addNewStorage,
     fetchStorageByName,

@@ -99,6 +99,8 @@
     "portfinder": "^1.0.28",
     "rimraf": "^3.0.2",
     "tar": "^6.0.5",
+    "through": "^2.3.8",
+    "trumpet": "^1.7.2",
     "ts-md5": "^1.2.7",
     "tslib": "^2.0.0",
     "unzip-stream": "^0.3.0",
