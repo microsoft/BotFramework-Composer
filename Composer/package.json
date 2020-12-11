@@ -69,7 +69,7 @@
     "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
     "l10n:extractJson": "node scripts/l10n-extractJson.js",
     "l10n:transform": "node scripts/l10n-transform.js",
-    "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \"ts,.tsx,.jsx,.js\" --out-dir l10ntemp ./packages",
+    "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp ./packages",
     "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas && rimraf l10ntemp"
   },
   "husky": {

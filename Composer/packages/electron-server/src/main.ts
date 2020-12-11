@@ -22,6 +22,8 @@ import { getAppLocale, loadLocale, updateAppLocale } from './utility/locale';
 import log from './utility/logger';
 import { isLinux, isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
+import { getMachineId } from './utility/machineId';
+import { getSessionId } from './utility/sessionId';
 
 const env = log.extend('env');
 env('%O', process.env);
@@ -141,6 +143,9 @@ async function loadServer() {
     process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR = join(unpackedDir, 'form-dialog-templates');
   }
 
+  const machineId = await getMachineId();
+  const sessionId = getSessionId();
+
   // only create a new data directory if packaged electron app
   log('Creating app data directory...');
   await createAppDataDir();
@@ -150,6 +155,9 @@ async function loadServer() {
   const { start } = await import('@bfc/server');
   serverPort = await start({
     getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
+    machineId,
+    sessionId,
+    composerVersion: app.getVersion(),
   });
   log(`Server started at port: ${serverPort}`);
 }
@@ -271,6 +279,9 @@ async function run() {
     await main();
 
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
+
+    const mainWindow = getMainWindow();
+    mainWindow?.webContents.send('session-update', 'session-started');
   });
 
   // Quit when all windows are closed.
@@ -280,6 +291,11 @@ async function run() {
     if (!isMac()) {
       app.quit();
     }
+  });
+
+  app.on('before-quit', () => {
+    const mainWindow = ElectronWindow.getInstance().browserWindow;
+    mainWindow?.webContents.send('session-update', 'session-ended');
   });
 
   app.on('activate', () => {

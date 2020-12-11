@@ -3,7 +3,7 @@
   "description": "这些是可由加载程序创建的所有类型。",
   "definitions": {
     "Microsoft.ActivityTemplate": {
-      "title": "Microsoft activity template",
+      "title": "Microsoft 活动模板",
       "patternProperties": {
         "^\\$": {
           "title": "工具属性",
@@ -26,7 +26,7 @@
       }
     },
     "Microsoft.AdaptiveDialog": {
-      "title": "Adaptive dialog",
+      "title": "自适应对话",
       "description": "可适应对话的灵活的数据驱动对话。",
       "patternProperties": {
         "^\\$": {
@@ -52,7 +52,7 @@
           "description": "将用户输入解释为意向和实体的输入识别器。"
         },
         "generator": {
-          "title": "Language generator",
+          "title": "语言生成器",
           "description": "生成机器人响应的语言生成器。"
         },
         "selector": {
@@ -72,7 +72,7 @@
           "description": "要填充的架构。",
           "anyOf": {
             "0": {
-              "title": "Core schema meta-schema"
+              "title": "核心架构元架构"
             },
             "1": {
               "title": "对 JSON 架构的引用",
@@ -91,7 +91,7 @@
       }
     },
     "Microsoft.AgeEntityRecognizer": {
-      "title": "Age entity recognizer",
+      "title": "年龄实体识别器",
       "description": "用于识别年龄的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -111,7 +111,7 @@
       }
     },
     "Microsoft.Ask": {
-      "title": "Send activity to ask a question",
+      "title": "发送活动来提问",
       "description": "在需要响应时，此操作会向用户发送活动",
       "patternProperties": {
         "^\\$": {
@@ -121,7 +121,7 @@
       },
       "properties": {
         "expectedProperties": {
-          "title": "Expected properties",
+          "title": "预期属性",
           "description": "需要从用户那里获得的属性。",
           "items": {
             "title": "名称",
@@ -129,7 +129,7 @@
           }
         },
         "defaultOperation": {
-          "title": "Default operation",
+          "title": "默认操作",
           "description": "设置在对此询问的响应中未识别任何操作时，将使用哪个默认操作。"
         },
         "id": {
@@ -288,7 +288,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "已处理活动",
           "description": "如果设置为 false，则被调用的对话可以处理当前活动。"
         },
         "resultProperty": {
@@ -324,7 +324,7 @@
           "description": "可选条件，如果为 true，则禁用此操作。"
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "已处理活动",
           "description": "设置为 false 时，将使用当前轮次上下文中的活动代替“活动”属性中的活动来启动技能。"
         },
         "resultProperty": {
@@ -340,11 +340,11 @@
           "description": "技能主机的回叫 URL。"
         },
         "connectionName": {
-          "title": "OAuth connection name (SSO)",
+          "title": "OAuth 连接名称(SSO)",
           "description": "OAuth 连接名称，用于执行技能的单一登录。"
         },
         "skillAppId": {
-          "title": "Skill App Id",
+          "title": "技能应用 ID",
           "description": "用于技能的 Microsoft 应用 ID。"
         },
         "skillEndpoint": {
@@ -356,7 +356,7 @@
           "description": "要发送到技能的活动。"
         },
         "allowInterruptions": {
-          "title": "Allow interruptions",
+          "title": "允许中断",
           "description": "用于确定是否允许父对象中断技能的布尔表达式。"
         },
         "$kind": {
@@ -370,7 +370,7 @@
       }
     },
     "Microsoft.BreakLoop": {
-      "title": "Break loop",
+      "title": "中断循环",
       "description": "停止执行此循环",
       "patternProperties": {
         "^\\$": {
@@ -416,7 +416,7 @@
           "description": "可选条件，如果为 true，则禁用此操作。"
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "已处理活动",
           "description": "如果设置为 false，则指示调用方对话应处理当前活动。"
         },
         "eventName": {
@@ -456,7 +456,7 @@
           "description": "可选条件，如果为 true，则禁用此操作。"
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "已处理活动",
           "description": "如果设置为 false，则指示调用方对话应处理当前活动。"
         },
         "eventName": {
@@ -478,22 +478,22 @@
       }
     },
     "Microsoft.ChannelMentionEntityRecognizer": {
-      "title": "Channel mention entity recognizer",
-      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "title": "渠道提及实体识别器",
+      "description": "将由渠道通过 activity.entities 传递的提及实体提升为识别器结果。",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
         }
       },
       "properties": {
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
         }
       }
     },
@@ -698,7 +698,7 @@
       }
     },
     "Microsoft.ConditionalSelector": {
-      "title": "Conditional trigger selector",
+      "title": "条件触发器选择器",
       "description": "使用基于条件的规则选择器",
       "patternProperties": {
         "^\\$": {
@@ -750,7 +750,7 @@
           }
         },
         "choiceOptions": {
-          "title": "Choice options",
+          "title": "选项",
           "description": "选项或表达式，用于提供选项来控制向用户显示的选项。",
           "oneOf": {
             "0": {
@@ -888,7 +888,7 @@
       }
     },
     "Microsoft.ConfirmationEntityRecognizer": {
-      "title": "Confirmation entity recognizer",
+      "title": "确认实体识别器",
       "description": "用于识别确认选项(是/否)的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -908,43 +908,43 @@
       }
     },
     "Microsoft.ContinueConversationLater": {
-      "title": "Continue conversation later (Queue)",
-      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "title": "稍后继续对话(队列)",
+      "description": "稍后继续对话(通过 Azure 存储队列)。",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "可选的对话 ID"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
         },
         "date": {
-          "title": "Date",
-          "description": "Date in the future as a ISO string when the conversation should continue."
+          "title": "日期",
+          "description": "应继续对话的未来日期(以 ISO 字符串形式)。"
         },
         "value": {
-          "title": "Value",
-          "description": "Value to send in the activity.value."
+          "title": "值",
+          "description": "要在 activity.value 中发送的值。"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
         }
       }
     },
     "Microsoft.ContinueLoop": {
-      "title": "Continue loop",
+      "title": "继续循环",
       "description": "停止执行此模板并继续循环的下一个迭代。",
       "patternProperties": {
         "^\\$": {
@@ -972,7 +972,7 @@
       }
     },
     "Microsoft.CrossTrainedRecognizerSet": {
-      "title": "Cross-trained recognizer set",
+      "title": "交叉训练的识别器集",
       "description": "用于在交叉定型识别器之间进行选择的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -1000,7 +1000,7 @@
       }
     },
     "Microsoft.CurrencyEntityRecognizer": {
-      "title": "Currency entity recognizer",
+      "title": "货币实体识别器",
       "description": "用于识别货币的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -1020,7 +1020,7 @@
       }
     },
     "Microsoft.DateTimeEntityRecognizer": {
-      "title": "Date and time entity recognizer",
+      "title": "日期和时间实体识别器",
       "description": "用于识别日期和时间片段的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -1054,7 +1054,7 @@
       },
       "properties": {
         "defaultValue": {
-          "title": "Default date",
+          "title": "默认日期",
           "description": "当超出最大轮次数时，“属性”将被设置为值或表达式的结果。"
         },
         "value": {
@@ -1220,7 +1220,7 @@
       }
     },
     "Microsoft.DeleteProperty": {
-      "title": "Delete property",
+      "title": "删除属性",
       "description": "删除一个属性及其包含的任何值。",
       "patternProperties": {
         "^\\$": {
@@ -1252,7 +1252,7 @@
       }
     },
     "Microsoft.DimensionEntityRecognizer": {
-      "title": "Dimension entity recognizer",
+      "title": "维度实体识别器",
       "description": "用于识别维度的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -1332,7 +1332,7 @@
           "description": "内存中数组的更改类型。",
           "oneOf": {
             "0": {
-              "title": "Change type",
+              "title": "更改类型",
               "description": "标准更改类型。"
             }
           }
@@ -1346,7 +1346,7 @@
           "description": "用于保留要更新的数组的属性。"
         },
         "resultProperty": {
-          "title": "Result property",
+          "title": "结果属性",
           "description": "用于存储此操作结果的属性。"
         },
         "value": {
@@ -1364,7 +1364,7 @@
       }
     },
     "Microsoft.EmailEntityRecognizer": {
-      "title": "Email entity recognizer",
+      "title": "电子邮件实体识别器",
       "description": "用于识别电子邮件的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -1494,7 +1494,7 @@
       }
     },
     "Microsoft.FirstSelector": {
-      "title": "First trigger selector",
+      "title": "第一个触发器选择器",
       "description": "第一个真实规则的选择器",
       "patternProperties": {
         "^\\$": {
@@ -1606,7 +1606,7 @@
       }
     },
     "Microsoft.GetActivityMembers": {
-      "title": "Get activity members",
+      "title": "获取活动成员",
       "description": "获取参与活动的成员。(仅限 BotFrameworkAdapter) ",
       "patternProperties": {
         "^\\$": {
@@ -1624,7 +1624,7 @@
           "description": "属性(用于存储信息的已命名位置)。"
         },
         "activityId": {
-          "title": "Activity Id",
+          "title": "活动 ID",
           "description": "用于获取成员的活动 ID 或表示 activityId 的表达式。如果没有定义，则使用当前的活动 ID。"
         },
         "disabled": {
@@ -1642,7 +1642,7 @@
       }
     },
     "Microsoft.GetConversationMembers": {
-      "title": "Get conversation members",
+      "title": "获取对话成员",
       "description": "获取参与对话的成员。(仅限 BotFrameworkAdapter) ",
       "patternProperties": {
         "^\\$": {
@@ -1674,7 +1674,7 @@
       }
     },
     "Microsoft.GotoAction": {
-      "title": "Go to action",
+      "title": "转到操作",
       "description": "转到操作(按 ID)。",
       "patternProperties": {
         "^\\$": {
@@ -1706,7 +1706,7 @@
       }
     },
     "Microsoft.GuidEntityRecognizer": {
-      "title": "Guid entity recognizer",
+      "title": "Guid 实体识别器",
       "description": "用于识别 GUID 的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -1726,7 +1726,7 @@
       }
     },
     "Microsoft.HashtagEntityRecognizer": {
-      "title": "Hashtag entity recognizer",
+      "title": "井号标签实体识别器",
       "description": "用于识别井号标签的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -1812,204 +1812,204 @@
       "description": "ActivityTemplate 组件，即字符串模板、活动或 ActivityTemplate 的实现",
       "oneOf": {
         "1": {
-          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
-          "title": "Activity",
+          "description": "活动是 Bot Framework 3.0 协议的基本通信类型。",
+          "title": "活动",
           "properties": {
             "type": {
-              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "type"
+              "description": "包含活动类型。可取值包括: \"message\"、\"contactRelationUpdate\"、\n\"conversationUpdate\"、\"typing\"、\"endOfConversation\"、\"event\"、\"invoke\"、\"deleteUserData\"、\n\"messageUpdate\"、\"messageDelete\"、\"installationUpdate\"、\"messageReaction\"、\"suggestion\"、\n\"trace\"、\"handoff\"",
+              "title": "类型"
             },
             "id": {
-              "description": "Contains an ID that uniquely identifies the activity on the channel.",
-              "title": "id"
+              "description": "包含唯一标识通道上活动的 ID。",
+              "title": "ID"
             },
             "timestamp": {
-              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
-              "title": "timestamp"
+              "description": "包含以 ISO-8601 格式表示的消息发送日期和时间(UTC)。",
+              "title": "时间戳"
             },
             "localTimestamp": {
-              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "description": "包含以 ISO-8601 格式表示的消息发送日期和时间\n(本地时间)。\n例如，2016-09-23T13:07:49.4714686-07:00。",
               "title": "localTimestamp"
             },
             "localTimezone": {
-              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "description": "包含以 IANA 时区数据库格式表示的消息所在时区\n(本地时间)名称。\n例如，America/Los_Angeles。",
               "title": "localTimezone"
             },
             "serviceUrl": {
-              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "description": "包含指定通道的服务终结点的 URL。按通道设置。",
               "title": "serviceUrl"
             },
             "channelId": {
-              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "description": "包含唯一标识通道的 ID。按通道设置。",
               "title": "channelId"
             },
             "from": {
-              "description": "Identifies the sender of the message.",
-              "title": "from"
+              "description": "标识消息的发送方。",
+              "title": "从"
             },
             "conversation": {
-              "description": "Identifies the conversation to which the activity belongs.",
-              "title": "conversation",
+              "description": "标识活动所属的对话。",
+              "title": "对话",
               "properties": {
                 "isGroup": {
-                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "description": "指明在生成活动时对话中是否包含\n超过两个参与者",
                   "title": "isGroup"
                 },
                 "conversationType": {
-                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "description": "指明区分对话类型的通道中的对话类型",
                   "title": "conversationType"
                 },
                 "id": {
-                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-                  "title": "id"
+                  "description": "此通道上用户或机器人的通道 ID (例如: joe@smith.com、@joesmith 或\n123456) ",
+                  "title": "ID"
                 },
                 "name": {
-                  "description": "Display friendly name",
-                  "title": "name"
+                  "description": "显示易记名称",
+                  "title": "名称"
                 },
                 "aadObjectId": {
-                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "description": "此帐户在 Azure Active Directory (AAD)中的对象 ID",
                   "title": "aadObjectId"
                 },
                 "role": {
-                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-                  "title": "role"
+                  "description": "帐户后实体的角色(例如: 用户、机器人等)。可取值包括:\n\"user\"、\"bot\"",
+                  "title": "角色"
                 }
               }
             },
             "recipient": {
-              "description": "Identifies the recipient of the message.",
-              "title": "recipient"
+              "description": "标识消息的接收方。",
+              "title": "收件人"
             },
             "textFormat": {
-              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "description": "文本字段 Default:markdown 的格式。可取值包括: \"markdown\"、\"plain\"、\"xml\"",
               "title": "textFormat"
             },
             "attachmentLayout": {
-              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "description": "多个附件的布局提示。默认值: list。可能的值包括: \"list\"、\n\"carousel\"",
               "title": "attachmentLayout"
             },
             "membersAdded": {
-              "description": "The collection of members added to the conversation.",
+              "description": "添加到对话中的成员的集合。",
               "title": "membersAdded",
               "items": {
-                "description": "Channel account information needed to route a message",
+                "description": "路由消息所需的通道帐户信息",
                 "title": "ChannelAccount",
                 "properties": {
                   "id": {
-                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-                    "title": "id"
+                    "description": "此通道上用户或机器人的通道 ID (例如: joe@smith.com、@joesmith 或\n123456) ",
+                    "title": "ID"
                   },
                   "name": {
-                    "description": "Display friendly name",
-                    "title": "name"
+                    "description": "显示易记名称",
+                    "title": "名称"
                   },
                   "aadObjectId": {
-                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "description": "此帐户在 Azure Active Directory (AAD)中的对象 ID",
                     "title": "aadObjectId"
                   },
                   "role": {
-                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-                    "title": "role"
+                    "description": "帐户后实体的角色(例如: 用户、机器人等)。可取值包括:\n\"user\"、\"bot\"",
+                    "title": "角色"
                   }
                 }
               }
             },
             "membersRemoved": {
-              "description": "The collection of members removed from the conversation.",
+              "description": "从对话中删除的成员的集合。",
               "title": "membersRemoved"
             },
             "reactionsAdded": {
-              "description": "The collection of reactions added to the conversation.",
+              "description": "添加到对话中的回应的集合。",
               "title": "reactionsAdded",
               "items": {
-                "description": "Message reaction object",
+                "description": "消息反应对象",
                 "title": "MessageReaction",
                 "properties": {
                   "type": {
-                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
-                    "title": "type"
+                    "description": "消息反应类型。可取值包括: \"like\"、\"plusOne\"",
+                    "title": "类型"
                   }
                 }
               }
             },
             "reactionsRemoved": {
-              "description": "The collection of reactions removed from the conversation.",
+              "description": "从对话中删除的回应的集合。",
               "title": "reactionsRemoved"
             },
             "topicName": {
-              "description": "The updated topic name of the conversation.",
+              "description": "对话的已更新主题名称。",
               "title": "topicName"
             },
             "historyDisclosed": {
-              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "description": "指明是否公开通道的过往历史记录。",
               "title": "historyDisclosed"
             },
             "locale": {
-              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
-              "title": "locale"
+              "description": "文本字段内容的区域设置名称。\n区域设置名称是与语言关联的 ISO 639 两字母或三字母\n区域性代码\n以及与国家/地区关联的 ISO 3166 两字母子区域性代码的组合。\n区域设置名称还可以对应于有效的 BCP-47 语言标记。",
+              "title": "区域设置"
             },
             "text": {
-              "description": "The text content of the message.",
-              "title": "text"
+              "description": "消息的文本内容。",
+              "title": "文本"
             },
             "speak": {
-              "description": "The text to speak.",
-              "title": "speak"
+              "description": "要朗读的文本。",
+              "title": "说话"
             },
             "inputHint": {
-              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "description": "指明在消息传递到客户端后，机器人是接受、\n期望还是忽略用户输入。可取\n值包括: \"acceptingInput\"、\"ignoringInput\"、\"expectingInput\"",
               "title": "inputHint"
             },
             "summary": {
-              "description": "The text to display if the channel cannot render cards.",
-              "title": "summary"
+              "description": "通道无法呈现卡片时要显示的文本。",
+              "title": "摘要"
             },
             "suggestedActions": {
-              "description": "The suggested actions for the activity.",
+              "description": "活动的建议操作。",
               "title": "suggestedActions",
               "properties": {
                 "to": {
-                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
-                  "title": "to",
+                  "description": "应向其显示操作的接收方的 ID。这些 ID 相对于\nchannelId 和活动的所有接收方的子集",
+                  "title": "到",
                   "items": {
-                    "title": "Id",
-                    "description": "Id of recipient."
+                    "title": "ID",
+                    "description": "接收方 ID。"
                   }
                 },
                 "actions": {
-                  "description": "Actions that can be shown to the user",
-                  "title": "actions",
+                  "description": "可以向用户显示的操作",
+                  "title": "操作",
                   "items": {
-                    "description": "A clickable action",
+                    "description": "可单击的操作",
                     "title": "CardAction",
                     "properties": {
                       "type": {
-                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-                        "title": "type"
+                        "description": "由此按钮实现的操作类型。可能的值包括: \"openUrl\"、\"imBack\"、\n\"postBack\"、\"playAudio\"、\"playVideo\"、\"showImage\"、\"downloadFile\"、\"signin\"、\"call\"、\n\"payment\"、\"messageBack\"",
+                        "title": "类型"
                       },
                       "title": {
-                        "description": "Text description which appears on the button",
-                        "title": "title"
+                        "description": "按钮上显示的文本说明",
+                        "title": "标题"
                       },
                       "image": {
-                        "description": "Image URL which will appear on the button, next to text label",
-                        "title": "image"
+                        "description": "将显示在文本标签旁边的按钮上的图像 URL",
+                        "title": "图像"
                       },
                       "text": {
-                        "description": "Text for this action",
-                        "title": "text"
+                        "description": "此操作的文本",
+                        "title": "文本"
                       },
                       "displayText": {
-                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "description": "(可选)在单击按钮时在聊天源中显示的文本",
                         "title": "displayText"
                       },
                       "value": {
-                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
-                        "title": "value"
+                        "description": "操作的补充参数。此属性的内容取决于 ActionType",
+                        "title": "值"
                       },
                       "channelData": {
-                        "description": "Channel-specific data associated with this action",
+                        "description": "与此操作关联的特定于通道的数据",
                         "title": "channelData"
                       }
                     }
@@ -2018,160 +2018,160 @@
               }
             },
             "attachments": {
-              "description": "Attachments",
-              "title": "attachments",
+              "description": "附件",
+              "title": "附件",
               "items": {
-                "description": "An attachment within an activity",
-                "title": "Attachment",
+                "description": "活动中的附件",
+                "title": "附件",
                 "properties": {
                   "contentType": {
-                    "description": "mimetype/Contenttype for the file",
+                    "description": "文件的 mimetype/Contenttype",
                     "title": "contentType"
                   },
                   "contentUrl": {
-                    "description": "Content Url",
+                    "description": "内容 URL",
                     "title": "contentUrl"
                   },
                   "content": {
-                    "description": "Embedded content",
-                    "title": "content"
+                    "description": "嵌入的内容",
+                    "title": "内容"
                   },
                   "name": {
-                    "description": "(OPTIONAL) The name of the attachment",
-                    "title": "name"
+                    "description": "(可选)附件的名称",
+                    "title": "名称"
                   },
                   "thumbnailUrl": {
-                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "description": "(可选)与附件关联的缩略图",
                     "title": "thumbnailUrl"
                   }
                 }
               }
             },
             "entities": {
-              "description": "Represents the entities that were mentioned in the message.",
-              "title": "entities",
+              "description": "表示消息中提到的实体。",
+              "title": "实体",
               "items": {
-                "description": "Metadata object pertaining to an activity",
-                "title": "Entity",
+                "description": "与活动相关的元数据对象",
+                "title": "实体",
                 "properties": {
                   "type": {
-                    "description": "Type of this entity (RFC 3987 IRI)",
-                    "title": "type"
+                    "description": "此实体的类型(RFC 3987 IRI)",
+                    "title": "类型"
                   }
                 }
               }
             },
             "channelData": {
-              "description": "Contains channel-specific content.",
+              "description": "包含特定于通道的内容。",
               "title": "channelData"
             },
             "action": {
-              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
-              "title": "action"
+              "description": "指明是否在发送方的联系人列表中添加或\n删除了 contactRelationUpdate 接收方。",
+              "title": "操作"
             },
             "replyToId": {
-              "description": "Contains the ID of the message to which this message is a reply.",
+              "description": "包含此消息作为答复的消息的 ID。",
               "title": "replyToId"
             },
             "label": {
-              "description": "A descriptive label for the activity.",
-              "title": "label"
+              "description": "活动的描述性标签。",
+              "title": "标签"
             },
             "valueType": {
-              "description": "The type of the activity's value object.",
+              "description": "活动的值对象的类型。",
               "title": "valueType"
             },
             "value": {
-              "description": "A value that is associated with the activity.",
-              "title": "value"
+              "description": "与活动关联的值。",
+              "title": "值"
             },
             "name": {
-              "description": "The name of the operation associated with an invoke or event activity.",
-              "title": "name"
+              "description": "与调用或事件活动关联的操作的名称。",
+              "title": "名称"
             },
             "relatesTo": {
-              "description": "A reference to another conversation or activity.",
+              "description": "对另一个对话或活动的引用。",
               "title": "relatesTo",
               "properties": {
                 "activityId": {
-                  "description": "(Optional) ID of the activity to refer to",
+                  "description": "(可选)要引用的活动的 ID ",
                   "title": "activityId"
                 },
                 "user": {
-                  "description": "(Optional) User participating in this conversation",
-                  "title": "user"
+                  "description": "(可选)参与此对话的用户",
+                  "title": "用户"
                 },
                 "bot": {
-                  "description": "Bot participating in this conversation",
-                  "title": "bot"
+                  "description": "参与此对话的机器人",
+                  "title": "机器人"
                 },
                 "conversation": {
-                  "description": "Conversation reference",
-                  "title": "conversation"
+                  "description": "对话引用",
+                  "title": "对话"
                 },
                 "channelId": {
-                  "description": "Channel ID",
+                  "description": "通道 ID",
                   "title": "channelId"
                 },
                 "serviceUrl": {
-                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "description": "可在其中执行涉及所引用对话的操作的服务终结点",
                   "title": "serviceUrl"
                 }
               }
             },
             "code": {
-              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "code"
+              "description": "指示对话结束原因的 endOfConversation 活动代码。\n可能的值包括: \"unknown\"、\"completedSuccessfully\"、\"userCancelled\"、\"botTimedOut\"、\n\"botIssuedInvalidMessage\"、\"channelFailed\"",
+              "title": "代码"
             },
             "expiration": {
-              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
-              "title": "expiration"
+              "description": "应将活动视为“已过期”且不应\n显示给收件人的时间。",
+              "title": "到期"
             },
             "importance": {
-              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
-              "title": "importance"
+              "description": "活动的重要性级别。可能的值包括:“低”、“正常”、“高”",
+              "title": "重要性"
             },
             "deliveryMode": {
-              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "description": "要向活动的接收方备用传递路径示意的传递提示。\n默认传递模式为 \"default\"。可取值包括: \"normal\"、\"notification\"",
               "title": "deliveryMode"
             },
             "listenFor": {
-              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "description": "语音和语言启动系统应侦听的短语和引用列表",
               "title": "listenFor",
               "items": {
-                "title": "Phrase",
-                "description": "Phrase to listen for."
+                "title": "短语",
+                "description": "要侦听的短语。"
               }
             },
             "textHighlights": {
-              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "description": "活动包含 ReplyToId 值时要突出显示的文本片段集合。",
               "title": "textHighlights",
               "items": {
-                "description": "Refers to a substring of content within another field",
+                "description": "表示另一个字段中内容的子字符串",
                 "title": "TextHighlight",
                 "properties": {
                   "text": {
-                    "description": "Defines the snippet of text to highlight",
-                    "title": "text"
+                    "description": "定义要突出显示的文本片段",
+                    "title": "文本"
                   },
                   "occurrence": {
-                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
-                    "title": "occurrence"
+                    "description": "引用文本中的文本字段的出现次数(如果存在多个)。",
+                    "title": "出现次数"
                   }
                 }
               }
             },
             "semanticAction": {
-              "description": "An optional programmatic action accompanying this request",
+              "description": "此请求随附的可选编程操作",
               "title": "semanticAction",
               "properties": {
                 "id": {
-                  "description": "ID of this action",
-                  "title": "id"
+                  "description": "此操作的 ID",
+                  "title": "ID"
                 },
                 "entities": {
-                  "description": "Entities associated with this action",
-                  "title": "entities"
+                  "description": "与此操作关联的实体",
+                  "title": "实体"
                 }
               }
             }
@@ -2180,11 +2180,11 @@
       }
     },
     "Microsoft.IDialog": {
-      "title": "Microsoft dialogs",
+      "title": "Microsoft 对话",
       "description": "派生自 Dialog 的组件"
     },
     "Microsoft.IEntityRecognizer": {
-      "title": "Entity recognizers",
+      "title": "实体识别器",
       "description": "派生自 EntityRecognizer 的组件。",
       "oneOf": {
         "0": {
@@ -2198,7 +2198,7 @@
       "description": "派生自 LanguageGenerator 类的组件"
     },
     "Microsoft.IRecognizer": {
-      "title": "Microsoft recognizer",
+      "title": "Microsoft 识别器",
       "description": "派生自 Recognizer 类的组件"
     },
     "Microsoft.ITextTemplate": {
@@ -2332,7 +2332,7 @@
       }
     },
     "Microsoft.IpEntityRecognizer": {
-      "title": "IP entity recognizer",
+      "title": "IP 实体识别器",
       "description": "用于识别 Internet IP 模式(如 192.1.1.1)的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -2352,7 +2352,7 @@
       }
     },
     "Microsoft.LanguagePolicy": {
-      "title": "Language policy",
+      "title": "语言策略",
       "description": "这表示用于语言的区域设置查找的策略映射",
       "additionalProperties": {
         "title": "每区域设置策略",
@@ -2406,7 +2406,7 @@
           "description": "跟踪活动的标签(用于在跟踪活动列表中标识它)。"
         },
         "traceActivity": {
-          "title": "Send trace activity",
+          "title": "发送跟踪活动",
           "description": "如果为 true，则自动发送 TraceActivity (Bot Framework Emulator 中的视图)。"
         },
         "$kind": {
@@ -2434,15 +2434,15 @@
           "description": "可选的用于 RecognizerSet 的唯一 ID。当为此识别器交叉训练数据时，其他识别器应返回 \"DeferToRecognizer_{Id}\" 意向。"
         },
         "applicationId": {
-          "title": "LUIS application id",
+          "title": "LUIS 应用程序 ID",
           "description": "来自 LUIS 服务的模型的应用程序 ID。"
         },
         "version": {
-          "title": "LUIS version",
-          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+          "title": "LUIS 版本",
+          "description": "要定目标到的可选版本。如果为 null，则使用 predictionOptions.Slot。"
         },
         "endpoint": {
-          "title": "LUIS endpoint",
+          "title": "LUIS 终结点",
           "description": "要用于 LUIS 服务的终结点，如 https://westus.api.cognitive.microsoft.com。"
         },
         "endpointKey": {
@@ -2450,7 +2450,7 @@
           "description": "用于调用终结点的 LUIS 预测密钥。"
         },
         "externalEntityRecognizer": {
-          "title": "External entity recognizer",
+          "title": "外部实体识别器",
           "description": "此识别器识别的实体将作为外部实体传递给 LUIS。"
         },
         "dynamicLists": {
@@ -2506,7 +2506,7 @@
               "description": "True 表示对 LUIS 服务记录言语。"
             },
             "preferExternalEntities": {
-              "title": "Prefer external entities",
+              "title": "首选外部实体",
               "description": "True 表示首选外部实体，而不是 LUIS 模型生成的实体。"
             },
             "slot": {
@@ -2526,7 +2526,7 @@
       }
     },
     "Microsoft.MentionEntityRecognizer": {
-      "title": "Mentions entity recognizer",
+      "title": "提及实体识别器",
       "description": "用于识别 @提及的识别器",
       "patternProperties": {
         "^\\$": {
@@ -2546,7 +2546,7 @@
       }
     },
     "Microsoft.MostSpecificSelector": {
-      "title": "Most specific trigger selector",
+      "title": "最具体的触发器选择器",
       "description": "使用可选附加选择器选择最具体的真实事件",
       "patternProperties": {
         "^\\$": {
@@ -2598,7 +2598,7 @@
       }
     },
     "Microsoft.NumberEntityRecognizer": {
-      "title": "Number entity recognizer",
+      "title": "数字实体识别器",
       "description": "用于识别数字的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -2702,7 +2702,7 @@
       }
     },
     "Microsoft.NumberRangeEntityRecognizer": {
-      "title": "Number range entity recognizer",
+      "title": "数值范围实体识别器",
       "description": "用于识别数字范围(例如: 2 到 5)的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -2772,7 +2772,7 @@
           "description": "要在对话的每个回合作为属性的可取值检查的表达式。"
         },
         "allowInterruptions": {
-          "title": "Allow interruptions",
+          "title": "允许中断",
           "description": "用于确定是否允许父对象中断输入的布尔表达式。"
         },
         "alwaysPrompt": {
@@ -3130,7 +3130,7 @@
       }
     },
     "Microsoft.OnContinueConversation": {
-      "title": "On continue conversation",
+      "title": "在继续对话后",
       "description": "在通过 ContinueConversationLater 操作再次开始对话时执行的操作。",
       "patternProperties": {
         "^\\$": {
@@ -3314,7 +3314,7 @@
       }
     },
     "Microsoft.OnError": {
-      "title": "On error",
+      "title": "在出错后",
       "description": "在发生“错误”对话事件时执行的操作。",
       "patternProperties": {
         "^\\$": {
@@ -3422,38 +3422,38 @@
       }
     },
     "Microsoft.OnInstallationUpdateActivity": {
-      "title": "On InstallationUpdate activity",
-      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "title": "在 InstallationUpdate 活动后",
+      "description": "在收到类型为 \"InstallationUpdate\" 的活动后执行的操作。",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
         }
       },
       "properties": {
         "condition": {
-          "title": "Condition",
-          "description": "Condition (expression)."
+          "title": "条件",
+          "description": "条件(表达式)。"
         },
         "actions": {
-          "title": "Actions",
-          "description": "Sequence of actions to execute."
+          "title": "操作",
+          "description": "要执行的操作序列。"
         },
         "priority": {
-          "title": "Priority",
-          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+          "title": "优先级",
+          "description": "触发器的优先级，0 表示优先级最高，小于 0 表示被忽略。"
         },
         "runOnce": {
-          "title": "Run Once",
-          "description": "True if rule should run once per unique conditions"
+          "title": "运行一次",
+          "description": "如果规则应根据唯一条件运行一次，则为 true"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
         }
       }
     },
@@ -3686,7 +3686,7 @@
       }
     },
     "Microsoft.OnQnAMatch": {
-      "title": "On QnAMaker match",
+      "title": "在 QnAMaker 匹配后",
       "description": "当找到来自 QnAMaker 的匹配项时执行的操作。",
       "patternProperties": {
         "^\\$": {
@@ -3830,7 +3830,7 @@
       }
     },
     "Microsoft.OrdinalEntityRecognizer": {
-      "title": "Ordinal entity recognizer",
+      "title": "序号实体识别器",
       "description": "用于识别序数(例如: 第一、第二、第三)的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -3850,7 +3850,7 @@
       }
     },
     "Microsoft.PercentageEntityRecognizer": {
-      "title": "Percentage entity recognizer",
+      "title": "百分比实体识别器",
       "description": "用于识别百分比的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -3870,7 +3870,7 @@
       }
     },
     "Microsoft.PhoneNumberEntityRecognizer": {
-      "title": "Phone number entity recognizer",
+      "title": "电话号码实体识别器",
       "description": "用于识别电话号码的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -3890,7 +3890,7 @@
       }
     },
     "Microsoft.QnAMakerDialog": {
-      "title": "QnAMaker dialog",
+      "title": "QnAMaker 对话",
       "description": "使用 QnAMAker 知识库来回答问题的对话。",
       "patternProperties": {
         "^\\$": {
@@ -3904,7 +3904,7 @@
           "description": "QnA Maker 知识库的知识库 ID。"
         },
         "endpointKey": {
-          "title": "Endpoint key",
+          "title": "终结点密钥",
           "description": "QnA Maker KB 的终结点密钥。"
         },
         "hostname": {
@@ -3932,7 +3932,7 @@
           "description": "未选择匹配选项时的自定义响应。"
         },
         "strictFilters": {
-          "title": "Strict filters",
+          "title": "严格筛选器",
           "description": "要在调用 QnA Maker KB 时使用的元数据筛选器。",
           "items": {
             "title": "元数据筛选器",
@@ -3958,7 +3958,7 @@
           "description": "如果指向测试环境，则为 true，否则为 false。"
         },
         "rankerType": {
-          "title": "Ranker type",
+          "title": "排名程序类型",
           "description": "排名程序类型。",
           "oneOf": {
             "0": {
@@ -3969,11 +3969,11 @@
         },
         "strictFiltersJoinOperator": {
           "title": "StrictFiltersJoinOperator",
-          "description": "Join operator for Strict Filters.",
+          "description": "严格筛选器的联接运算符。",
           "oneOf": {
             "0": {
-              "title": "Join operator",
-              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+              "title": "联接运算符",
+              "description": "联接运算符的值，用作与严格筛选器值的联接。"
             }
           }
         },
@@ -3988,7 +3988,7 @@
       }
     },
     "Microsoft.QnAMakerRecognizer": {
-      "title": "QnAMaker recognizer",
+      "title": "QnAMaker 识别器",
       "description": "用于从知识库生成 QnAMatch 意向的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -4003,10 +4003,10 @@
         },
         "knowledgeBaseId": {
           "title": "知识库 ID",
-          "description": "Knowledge base Id of your QnA Maker knowledge base."
+          "description": "QnA Maker 知识库的知识库 ID。"
         },
         "endpointKey": {
-          "title": "Endpoint key",
+          "title": "终结点密钥",
           "description": "QnA Maker KB 的终结点密钥。"
         },
         "hostname": {
@@ -4018,7 +4018,7 @@
           "description": "筛选结果的阈值分数。"
         },
         "strictFilters": {
-          "title": "Strict filters",
+          "title": "严格筛选器",
           "description": "要在调用 QnA Maker KB 时使用的元数据筛选器。",
           "items": {
             "title": "元数据筛选器",
@@ -4040,11 +4040,11 @@
           "description": "要检索的答案数。"
         },
         "isTest": {
-          "title": "Use test environment",
+          "title": "使用测试环境",
           "description": "如果指向测试环境，则为 true，否则为 false。"
         },
         "rankerType": {
-          "title": "Ranker type",
+          "title": "排名程序类型",
           "description": "排名程序类型。",
           "oneOf": {
             "0": {
@@ -4055,16 +4055,16 @@
         },
         "strictFiltersJoinOperator": {
           "title": "StrictFiltersJoinOperator",
-          "description": "Join operator for Strict Filters.",
+          "description": "严格筛选器的联接运算符。",
           "oneOf": {
             "0": {
-              "title": "Join operator",
-              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+              "title": "联接运算符",
+              "description": "联接运算符的值，用作与严格筛选器值的联接。"
             }
           }
         },
         "includeDialogNameInMetadata": {
-          "title": "Include dialog name",
+          "title": "包括对话名称",
           "description": "设置为 false 时，将不会向 QnAMaker 传递对话名称。(默认)为 true"
         },
         "metadata": {
@@ -4086,11 +4086,11 @@
           }
         },
         "context": {
-          "title": "QnA request context",
+          "title": "QnA 请求上下文",
           "description": "用于排名的上下文。"
         },
         "qnaId": {
-          "title": "QnA Id",
+          "title": "QnA ID",
           "description": "表示传递到 QnAMaker API 的 QnAId 的数字或表达式。"
         },
         "$kind": {
@@ -4128,7 +4128,7 @@
       }
     },
     "Microsoft.RecognizerSet": {
-      "title": "Recognizer set",
+      "title": "识别器集",
       "description": "创建集中识别器的意向和实体的联合。",
       "patternProperties": {
         "^\\$": {
@@ -4156,7 +4156,7 @@
       }
     },
     "Microsoft.RegexEntityRecognizer": {
-      "title": "Regex entity recognizer",
+      "title": "正则表达式实体识别器",
       "description": "用于识别基于正则表达式的输入模式的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -4260,7 +4260,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "已处理活动",
           "description": "如果设置为 false，则被调用的对话可以处理当前活动。"
         },
         "$kind": {
@@ -4309,7 +4309,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "已处理活动",
           "description": "如果设置为 false，则被调用的对话可以处理当前活动。"
         },
         "$kind": {
@@ -4323,7 +4323,7 @@
       }
     },
     "Microsoft.ResourceMultiLanguageGenerator": {
-      "title": "Resource multi-language generator",
+      "title": "资源多语言生成器",
       "description": "按资源 ID 绑定到资源的多语言生成器。",
       "patternProperties": {
         "^\\$": {
@@ -4341,7 +4341,7 @@
           "description": "作为根语言生成器的资源。具有相同名称和语言后缀的其他生成器将被加载到此生成器，并会根据语言策略来使用。"
         },
         "languagePolicy": {
-          "title": "Language policy",
+          "title": "语言策略",
           "description": "为此生成器设置备用语言策略。如果不设置，将使用全局语言策略。"
         },
         "$kind": {
@@ -4469,7 +4469,7 @@
       }
     },
     "Microsoft.SignOutUser": {
-      "title": "Sign out user",
+      "title": "注销用户",
       "description": "将先前使用 OAuthInput 登录的用户注销。",
       "patternProperties": {
         "^\\$": {
@@ -4487,7 +4487,7 @@
           "description": "表示要注销的用户的表达式。默认值为 user.id。"
         },
         "connectionName": {
-          "title": "Connection name",
+          "title": "连接名称",
           "description": "与 OAuthInput 一起用于登录用户的连接名称。"
         },
         "disabled": {
@@ -4505,7 +4505,7 @@
       }
     },
     "Microsoft.StaticActivityTemplate": {
-      "title": "Microsoft static activity template",
+      "title": "Microsoft 静态活动模板",
       "description": "可用于定义静态 Activity 对象",
       "patternProperties": {
         "^\\$": {
@@ -4583,7 +4583,7 @@
       }
     },
     "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetry - track event",
+      "title": "遥测 - 跟踪事件",
       "description": "使用已注册的遥测客户端跟踪自定义事件。",
       "patternProperties": {
         "^\\$": {
@@ -4601,7 +4601,7 @@
           "description": "可选条件，如果为 true，则禁用此操作。"
         },
         "eventName": {
-          "title": "Event name",
+          "title": "事件名称",
           "description": "要跟踪的事件的名称。"
         },
         "properties": {
@@ -4619,7 +4619,7 @@
       }
     },
     "Microsoft.TemperatureEntityRecognizer": {
-      "title": "Temperature recognizer",
+      "title": "温度识别器",
       "description": "用于识别温度的识别器。",
       "patternProperties": {
         "^\\$": {
@@ -4639,7 +4639,7 @@
       }
     },
     "Microsoft.TemplateEngineLanguageGenerator": {
-      "title": "Template multi-language generator",
+      "title": "模板多语言生成器",
       "description": "仅允许对模板进行内联计算的模板生成器。",
       "patternProperties": {
         "^\\$": {
@@ -4767,34 +4767,34 @@
       }
     },
     "Microsoft.ThrowException": {
-      "title": "Throw an exception",
-      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "title": "抛出异常 ",
+      "description": "抛出异常。使用 OnError 触发器来捕获此异常。",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "工具属性",
+          "description": "工具的开放端属性。"
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "可选的对话 ID"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "已禁用",
+          "description": "可选条件，如果为 true，则禁用此操作。"
         },
         "errorValue": {
-          "title": "Error value",
-          "description": "Error value to throw."
+          "title": "错误值",
+          "description": "要抛出的错误值。"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "对话对象的种类",
+          "description": "定义要配置的组件的有效属性(从对话 .schema 文件) "
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "设计器信息",
+          "description": "Bot Framework Composer 的额外信息。"
         }
       }
     },
@@ -4843,7 +4843,7 @@
       }
     },
     "Microsoft.TrueSelector": {
-      "title": "True trigger selector",
+      "title": "True 触发器选择器",
       "description": "所有真实事件的选择器",
       "patternProperties": {
         "^\\$": {
@@ -4863,7 +4863,7 @@
       }
     },
     "Microsoft.UpdateActivity": {
-      "title": "Update an activity",
+      "title": "更新活动",
       "description": "用活动来响应。",
       "patternProperties": {
         "^\\$": {
@@ -4899,7 +4899,7 @@
       }
     },
     "Microsoft.UrlEntityRecognizer": {
-      "title": "Url recognizer",
+      "title": "URL 识别器",
       "description": "用于识别 URL 的识别器。",
       "patternProperties": {
         "^\\$": {

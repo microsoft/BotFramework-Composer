@@ -13,6 +13,7 @@ import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
 import { NavItem } from '../NavItem';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { useLinks } from './../../utils/hooks';
 
@@ -32,7 +33,7 @@ const globalNav = css`
 `;
 
 const sideBar = (isExpand: boolean) => css`
-  width: ${isExpand ? '175' : '48'}px;
+  width: ${isExpand ? '200' : '48'}px;
   background-color: ${NeutralColors.gray20};
   height: 100%;
   border-right: 1px solid ${NeutralColors.gray50};
@@ -81,6 +82,7 @@ export const SideBar = () => {
               iconName: 'GlobalNavButton',
             }}
             onClick={() => {
+              TelemetryClient.track('LeftMenuModeToggled', { expanded: !sideBarExpand });
               setSideBarExpand((current) => !current);
             }}
           />
@@ -92,9 +94,9 @@ export const SideBar = () => {
               <NavItem
                 key={'NavLeftBar' + index}
                 disabled={link.disabled}
-                exact={link.exact}
                 iconName={link.iconName}
                 labelName={link.labelName}
+                match={link.match}
                 showTooltip={showTooltips(link)}
                 to={mapNavItemTo(link.to)}
               />
@@ -109,7 +111,6 @@ export const SideBar = () => {
             <NavItem
               key={'NavLeftBar' + index}
               disabled={link.disabled}
-              exact={link.exact}
               iconName={link.iconName}
               labelName={link.labelName}
               showTooltip={showTooltips(link)}
