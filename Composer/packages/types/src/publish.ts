@@ -13,10 +13,10 @@ export type PublishResult = {
   comment?: string;
   eTag?: string;
   log?: string;
-  id?: string;
-  time?: string;
+  id: string;
+  time: string;
   endpointURL?: string;
-  status?: number;
+  status: number;
   action?: {
     href: string;
     label: string;
