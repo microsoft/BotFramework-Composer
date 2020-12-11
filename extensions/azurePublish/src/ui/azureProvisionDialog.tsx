@@ -87,7 +87,7 @@ function decodeToken(token: string) {
   try {
     return jwtDecode<any>(token);
   } catch (err) {
-    console.error(err);
+    console.error('decode token error in ', err);
     return null;
   }
 }
@@ -99,7 +99,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const [luisLocations, setLuisLocations] = useState<string[]>([]);
 
   const [token, setToken] = useState<string>();
-  const [graphToken, setGraphToken] = useState<string>();
   const [currentUser, setCurrentUser] = useState<any>();
 
   const [choice, setChoice] = useState(choiceOptions[0]);
@@ -174,7 +173,6 @@ export const AzureProvisionDialog: React.FC = () => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
     if(isGetTokenFromUser()){
       const { accessToken } = getTokenFromCache();
-      console.log(accessToken);
 
       setToken(accessToken);
       // decode token
@@ -225,7 +223,6 @@ export const AzureProvisionDialog: React.FC = () => {
   };
 
   const subscriptionOption = useMemo(() => {
-    console.log('GOT SUBSCRIPTIONS', subscriptions);
     return subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
@@ -234,7 +231,6 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [deployLocations]);
 
   const luisLocationsOption = useMemo((): IDropdownOption[] => {
-    console.log(luisLocations);
     return luisLocations.map((t) => ({ key: t, text: t }));
   }, [luisLocations]);
 
@@ -261,7 +257,6 @@ export const AzureProvisionDialog: React.FC = () => {
       }
       // check app name whether exist or not
       CheckWebAppNameAvailability(token, app, currentSubscription.subscriptionId).then(value=>{
-        console.log(value);
         if(!value.nameAvailable){
           setErrorHostName(value.message);
         } else {

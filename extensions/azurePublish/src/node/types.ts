@@ -66,7 +66,7 @@ export interface BotProjectDeployConfig {
  * for background process manager
  */
 export interface ProcessStatus {
-  id: string;
+  id: string; // jobId
   projectId: string; // reference to projectId that this process is for
   processName: string; // name used to pull this process if jobId is not known
   time: Date; // contains start time

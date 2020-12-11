@@ -135,36 +135,6 @@ export const targetSelected = css`
   padding-right: 5px;
 `;
 
-export const resourcesListContainer = css`
-  border: 1px solid #979797;
-  margin-top: 20px;
-  position: relative;
-  min-width: 260px;
-  flex: 1;
-  min-height: 582px;
-`;
-
-const theme: ITheme = getTheme();
-const { palette } = theme;
-export const resourcesListCell = css`
-  min-height: 54px;
-  padding: 16px;
-  box-sizing: border-box;
-  display: flex;
-  &:focus {
-    outline: rgb(102, 102, 102) solid 1px;
-  }
-  &:hover {
-    background: ${palette.neutralLight};
-  }
-`;
-
-export const resourcesListCellContent = css`
-  margin-left: 16px;
-  overflow: hidden;
-  flex: 1;
-`;
-
 export const separator = css`
   ::before {
     background: gray;
