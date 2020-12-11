@@ -93,6 +93,7 @@ export const formDialogsDispatcher = () => {
             schemaId,
           }),
           kind: 'generation',
+          logs: ex.data?.logs,
         });
       } finally {
         set(formDialogGenerationProgressingState, false);
@@ -113,8 +114,8 @@ export const formDialogsDispatcher = () => {
           return;
         }
 
-        await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
-        await reloadProject(projectId);
+        const response = await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
+        await reloadProject(response.data.id);
       } catch (ex) {
         set(formDialogErrorState, {
           ...ex,

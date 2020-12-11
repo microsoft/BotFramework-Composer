@@ -31,7 +31,7 @@ export interface BlobStorageConfiguration {
 
 export interface CosmosDbConfiguration {
   authKey: string;
-  collectionId: string;
+  containerId: string;
   cosmosDBEndpoint: string;
   databaseId: string;
 }
