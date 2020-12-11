@@ -28,6 +28,7 @@ const publishStatusInterval = 10000;
 const deleteNotificationInterval = 5000;
 const intervals: { [key: string]: number } = {};
 
+// CR: Data model. What is stable data? What is frequently changed data? Manage them separately rather than repeating them.
 const generateComputedData = (botProjectData, publishHistoryList, currentBotPublishTargetList) => {
   const botSettingList: { projectId: string; setting: DialogSetting }[] = [];
   const statusList: IBotStatus[] = [];
@@ -150,6 +151,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   // check history to see if a 202 is found
   useEffect(() => {
     // set publishDisabled
+    // CR: make it computed from (history, selectedBots).
     setPublishDisabled(
       selectedBots.some((bot) => {
         if (!(bot.publishTarget && bot.publishTargets)) {
@@ -171,6 +173,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       })
     );
 
+    // CR: Impl in the polling logic.
     botStatusList.forEach((bot) => {
       if (!(bot.publishTarget && bot.publishTargets)) {
         return;
@@ -210,12 +213,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     });
   }, [botPublishHistoryList]);
 
+  // CR: is it still necessary after merging the bot-project feature?
   useEffect(() => {
     if (projectId) {
       getPublishTargetTypes(projectId);
     }
   }, [projectId]);
 
+  // CR: this hook is anti-pattern. Use computed value.
   useEffect(() => {
     // init bot status list for the botProjectData is empty array when first mounted
     setBotPublishHistoryList(publishHistoryList);
@@ -230,6 +235,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       })
     );
   }, [publishHistoryList]);
+
+  // CR: Listen on 'botProjectData' but consumes 'statusList'?
+  // CR: Can be moved to polling logic.
   useEffect(() => {
     statusList.forEach((botStatus) => {
       if (!botStatus.publishTargets || !botStatus.publishTarget) {
@@ -279,6 +287,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     });
     setSelectedBots(bots);
   };
+
+  // CR: Too complicated member function. Needs refactor.
   const publish = async (items: IBotStatus[]) => {
     setPublishDisabled(true);
     setPreviousBotPublishHistoryList(botPublishHistoryList);
@@ -334,6 +344,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       );
     }
   };
+
+  // CR: Changes a property but causes whole array re-mapped. Consider managing `selectedPublishTarget` separately.
+  //     selectedPublishTarget: Map<BotId, TargetId>;
   const changePublishTarget = (publishTarget, currentBotStatus) => {
     const target = currentBotStatus.publishTargets.find((t) => t.name === publishTarget);
     if (currentBotPublishTargetList.some((targetMap) => targetMap.projectId === currentBotStatus.id)) {
