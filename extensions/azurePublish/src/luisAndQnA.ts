@@ -112,7 +112,7 @@ export async function publishLuisToPrediction(
         break;
       } catch (err) {
         if (retryCount < 1) {
-          this.logger({
+          logger({
             status: BotProjectDeployLoggerType.DEPLOY_ERROR,
             message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
           });
