@@ -70,7 +70,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       minWidth: 70,
       maxWidth: 90,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IStatus) => {
         return <span>{moment(item.time).format('h:mm a')}</span>;
@@ -85,7 +84,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       minWidth: 70,
       maxWidth: 90,
       isRowHeader: true,
-      isResizable: true,
       onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: IStatus) => {
@@ -100,7 +98,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       fieldName: 'status',
       minWidth: 40,
       maxWidth: 40,
-      isResizable: true,
       data: 'string',
       onRender: (item: IStatus) => {
         if (item.status === 200) {
@@ -124,7 +121,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       fieldName: 'message',
       minWidth: 150,
       maxWidth: 300,
-      isResizable: true,
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
@@ -155,7 +151,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       fieldName: 'comment',
       minWidth: 70,
       maxWidth: 90,
-      isResizable: true,
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
@@ -170,7 +165,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       className: 'publishLog',
       minWidth: 70,
       maxWidth: 90,
-      isResizable: true,
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
