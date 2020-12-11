@@ -4,19 +4,22 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useEffect } from 'react';
-import { TextField, ITextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { SharedColors } from '@uifabric/fluent-theme';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 const disabledTextFieldStyle = {
   root: {
     selectors: {
       '.ms-TextField-field': {
+        background: '#ddf3db',
+      },
+      '.ms-Dropdown-title': {
         background: '#ddf3db',
       },
       'p > span': {
@@ -28,7 +31,7 @@ const disabledTextFieldStyle = {
 
 const actionButtonStyle = {
   root: {
-    fontSize: FontSizes.size12,
+    fontSize: '12px',
     fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
     marginLeft: 0,
@@ -51,13 +54,37 @@ const errorIcon = {
     color: '#A80000',
     marginRight: 8,
     paddingLeft: 12,
-    fontSize: FontSizes.size12,
+    fontSize: '12px',
   },
 };
 
 const errorTextStyle = css`
   margin-bottom: 5px;
 `;
+
+const labelContainer = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const customerLabel = css`
+  font-size: ${FontSizes.small};
+  margin-right: 5px;
+`;
+
+const unknownIconStyle = (required) => {
+  return {
+    root: {
+      selectors: {
+        '&::before': {
+          content: required ? " '*'" : '',
+          color: SharedColors.red10,
+          paddingRight: 3,
+        },
+      },
+    },
+  };
+};
 
 type Props = {
   label: string;
@@ -69,9 +96,9 @@ type Props = {
   value: string;
   onBlur?: (value) => void;
   onChange?: (e, value) => void;
-  onRenderLabel?: IRenderFunction<ITextFieldProps>;
   required?: boolean;
   id?: string;
+  options?: IDropdownOption[];
 };
 
 const errorElement = (errorText: string) => {
@@ -84,8 +111,15 @@ const errorElement = (errorText: string) => {
   );
 };
 
-const defaultRenderLabel = (props, defaultRender) => {
-  return defaultRender(props);
+const onRenderLabel = (props) => {
+  return (
+    <div css={labelContainer}>
+      <div css={customerLabel}> {props.label} </div>
+      <TooltipHost content={props.label}>
+        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
+      </TooltipHost>
+    </div>
+  );
 };
 
 export const FieldWithCustomButton: React.FC<Props> = (props) => {
@@ -101,17 +135,17 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     onBlur,
     errorMessage,
     id = '',
-    onRenderLabel = defaultRenderLabel,
+    options,
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
-  const fieldComponentRef = useRef<ITextField>(null);
-  const [autoFoucsOnTextField, setAutoFoucsOnTextField] = useState<boolean>();
+  const fieldComponentRef = useRef<any>(null);
+  const [autoFocusOnTextField, setAutoFocusOnTextField] = useState<boolean>();
   const [localValue, setLocalValue] = useState<string>(value);
   useEffect(() => {
-    if (autoFoucsOnTextField) {
+    if (autoFocusOnTextField) {
       fieldComponentRef.current?.focus();
     }
-  }, [autoFoucsOnTextField]);
+  }, [autoFocusOnTextField]);
 
   useEffect(() => {
     setLocalValue(value);
@@ -122,45 +156,70 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     id,
     label,
     required,
-    onRenderLabel,
     'aria-label': ariaLabel,
-    componentRef: fieldComponentRef,
   };
+  const commonDisabledProps = {
+    disabled: true,
+    componentRef: fieldComponentRef,
+    placeholder: placeholderOnDisable,
+    styles: disabledTextFieldStyle,
+    onRenderLabel,
+  };
+  const commonEnabledProps = {
+    disabled: false,
+    placeholder,
+    onBlur: () => {
+      if (!localValue) {
+        setDisabled(true);
+      }
+      onBlur && onBlur(localValue);
+    },
+  };
+
+  const disabledField =
+    options == null ? (
+      <TextField {...commonProps} {...commonDisabledProps} errorMessage={required ? errorElement(errorMessage) : ''} />
+    ) : (
+      <Dropdown
+        {...commonProps}
+        {...commonDisabledProps}
+        errorMessage={required ? errorMessage : ''}
+        options={options}
+      />
+    );
+
+  const enabledField =
+    options == null ? (
+      <TextField
+        {...commonProps}
+        {...commonEnabledProps}
+        value={localValue}
+        onChange={(e, value) => {
+          setLocalValue(value ?? '');
+          onChange && onChange(e, value);
+        }}
+      />
+    ) : (
+      <Dropdown
+        {...commonProps}
+        {...commonEnabledProps}
+        options={options}
+        selectedKey={localValue}
+        onChange={(e, option: IDropdownOption | undefined) => {
+          setLocalValue((option?.key as string) ?? '');
+          onChange && onChange(e, option?.key);
+        }}
+      />
+    );
 
   return (
     <Fragment>
-      {isDisabled ? (
-        <TextField
-          {...commonProps}
-          disabled
-          errorMessage={required ? errorElement(errorMessage) : ''}
-          placeholder={placeholderOnDisable}
-          styles={disabledTextFieldStyle}
-        />
-      ) : (
-        <TextField
-          {...commonProps}
-          disabled={isDisabled}
-          placeholder={placeholder}
-          value={localValue}
-          onBlur={() => {
-            if (!localValue) {
-              setDisabled(true);
-            }
-            onBlur && onBlur(localValue);
-          }}
-          onChange={(e, value) => {
-            setLocalValue(value ?? '');
-            onChange && onChange(e, value);
-          }}
-        />
-      )}
-
+      {isDisabled ? disabledField : enabledField}
       <ActionButton
         styles={actionButtonStyle}
         onClick={() => {
           setDisabled(false);
-          setAutoFoucsOnTextField(true);
+          setAutoFocusOnTextField(true);
         }}
       >
         {buttonText}
