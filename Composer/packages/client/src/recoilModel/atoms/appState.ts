@@ -23,7 +23,7 @@ export type BotProject = {
 };
 
 export type CurrentUser = {
-  token: string | null;
+  token: string | null; // aad token
   email?: string;
   name?: string;
   expiration?: number;
@@ -82,6 +82,11 @@ export const applicationErrorState = atom<StateError | undefined>({
 
 export const currentUserState = atom<CurrentUser>({
   key: getFullyQualifiedKey('currentUser'),
+  default: {} as CurrentUser,
+});
+
+export const grahpTokenState = atom<CurrentUser>({
+  key: getFullyQualifiedKey('grahpToken'),
   default: {} as CurrentUser,
 });
 

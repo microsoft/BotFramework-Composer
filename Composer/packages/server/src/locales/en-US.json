@@ -587,6 +587,9 @@
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
     "message": "Connecting to <b>{ targetName }</b> to import bot content..."
   },
+  "continue_ac067716": {
+    "message": "Continue"
+  },
   "continue_loop_22635585": {
     "message": "Continue loop"
   },
@@ -709,6 +712,9 @@
   },
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
+  },
+  "create_profile_name_b85e8c2d": {
+    "message": "Create profile name"
   },
   "creating_your_knowledge_base_ef4f9872": {
     "message": "Creating your knowledge base"
@@ -949,6 +955,9 @@
   },
   "duplicate_name_d295a09d": {
     "message": "Duplicate name"
+  },
+  "duplicate_root_dialog_name_287ab65b": {
+    "message": "Duplicate root dialog name"
   },
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
@@ -1592,8 +1601,8 @@
   "login_6f3d6249": {
     "message": "Login"
   },
-  "login_to_composer_eb42b41": {
-    "message": "Login to Composer"
+  "login_to_azure_c0cb057e": {
+    "message": "Login to Azure"
   },
   "loop_for_each_item_53eb7c5b": {
     "message": "Loop: for each item"
@@ -1769,6 +1778,9 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
+  "msg_bf173fef": {
+    "message": "{ msg }"
+  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -1781,8 +1793,8 @@
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"
   },
-  "my_publish_profile_2ed56828": {
-    "message": "My Publish Profile"
+  "my_staging_environment_2b92d0aa": {
+    "message": "My Staging Environment"
   },
   "name_1aed4a1b": {
     "message": "Name"
@@ -2006,6 +2018,9 @@
   "paste_5963d1c1": {
     "message": "Paste"
   },
+  "paste_token_here_eccec7e4": {
+    "message": "Paste token here"
+  },
   "please_add_at_least_minitems_endpoint_5439fd74": {
     "message": "Please add at least { minItems } endpoint"
   },
@@ -2135,6 +2150,24 @@
   "property_type_e38cf7e4": {
     "message": "Property Type"
   },
+  "provide_access_tokens_8ead7563": {
+    "message": "Provide access tokens"
+  },
+  "provide_arm_token_by_running_az_account_get_access_e9d825a4": {
+    "message": "Provide ARM token by running `az account get-access-token`"
+  },
+  "provide_graph_token_by_running_az_account_get_acce_6d27a279": {
+    "message": "Provide graph token by running `az account get-access-token  --resource-type ms-graph`"
+  },
+  "provision_failure_983d3844": {
+    "message": "Provision failure"
+  },
+  "provision_success_d6a6e437": {
+    "message": "Provision success"
+  },
+  "provisioning_1330aede": {
+    "message": "Provisioning ..."
+  },
   "pseudo_1a319287": {
     "message": "Pseudo"
   },
@@ -2144,11 +2177,11 @@
   "publish_configuration_d759a4e3": {
     "message": "Publish Configuration"
   },
-  "publish_destination_type_5f8c200a": {
-    "message": "Publish Destination Type"
-  },
   "publish_models_9a36752a": {
     "message": "Publish models"
+  },
+  "publish_profile_informs_your_bot_where_to_use_reso_b5fc0308": {
+    "message": "Publish profile informs your bot where to use resources from. The resoruces you provision for your bot will live within this profile"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
@@ -2428,6 +2461,9 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
+  },
+  "select_your_publish_target_de531f7f": {
+    "message": "Select your publish target"
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -2767,6 +2803,9 @@
   },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
+  },
+  "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
+    "message": "To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
