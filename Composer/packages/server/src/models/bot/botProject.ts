@@ -14,7 +14,6 @@ import {
   IBotProject,
   DialogSetting,
   FileExtensions,
-  Skill,
   DialogUtils,
   checkForPVASchema,
 } from '@bfc/shared';
@@ -37,7 +36,6 @@ import { isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { retrieveSkillManifests } from './skillManager';
 import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
@@ -66,7 +64,6 @@ export class BotProject implements IBotProject {
   public defaultUISchema: {
     [key: string]: string;
   };
-  public skills: Skill[] = [];
   public diagnostics: Diagnostic[] = [];
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
@@ -183,9 +180,6 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillManifests, diagnostics } = await retrieveSkillManifests(this.settings?.skill);
-    this.skills = skillManifests;
-    this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
   };
 
@@ -195,7 +189,6 @@ export class BotProject implements IBotProject {
       files: Array.from(this.files.values()),
       location: this.dir,
       schemas: this.getSchemas(),
-      skills: this.skills,
       diagnostics: this.diagnostics,
       settings: this.settings,
       filesWithoutRecognizers: Array.from(this.files.values()).filter(({ name }) => !isRecognizer(name)),
@@ -478,27 +471,31 @@ export class BotProject implements IBotProject {
   public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
     if (this.settings) {
       const luFiles: FileInfo[] = [];
+      const emptyFiles = {};
       luResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.lu`;
         const f = this.files.get(fileName);
+        if (isEmpty) emptyFiles[fileName] = true;
         if (f) {
           luFiles.push(f);
         }
       });
       const qnaFiles: FileInfo[] = [];
-      qnaResource.forEach(({ id }) => {
+      qnaResource.forEach(({ id, isEmpty }) => {
         const fileName = `${id}.qna`;
         const f = this.files.get(fileName);
+        if (isEmpty) emptyFiles[fileName] = true;
         if (f) {
           qnaFiles.push(f);
         }
       });
 
+      this.builder.rootDir = this.dir;
       this.builder.setBuildConfig(
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
         this.settings.downsampling
       );
-      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
+      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[], emptyFiles);
     }
   };
 
@@ -552,7 +549,7 @@ export class BotProject implements IBotProject {
     return qnaEndpointKey;
   };
 
-  public async generateDialog(name: string, templateDirs?: string[]) {
+  public async generateDialog(name: string, templateDirs?: string[]): Promise<{ success: boolean; errors: string[] }> {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`, {});
     const schemaPath = Path.resolve(this.dir, relativePath);
@@ -560,7 +557,12 @@ export class BotProject implements IBotProject {
     const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`, {});
     const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
 
+    const errors: string[] = [];
+
     const feedback = (type: FeedbackType, message: string): void => {
+      if (type == FeedbackType.error) {
+        errors.push(message);
+      }
       // eslint-disable-next-line no-console
       console.log(`${type} - ${message}`);
     };
@@ -599,7 +601,7 @@ export class BotProject implements IBotProject {
     // merge - if generated assets should be merged with any user customized assets
     // singleton - if the generated assets should be merged into a single dialog
     // feeback - a callback for status and progress and generation happens
-    await generate(
+    const success = await generate(
       generateParams.schemaPath,
       generateParams.prefix,
       generateParams.outDir,
@@ -611,6 +613,8 @@ export class BotProject implements IBotProject {
       generateParams.singleton,
       generateParams.feedback
     );
+
+    return { success, errors };
   }
 
   public async deleteFormDialog(dialogId: string) {

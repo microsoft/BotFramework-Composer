@@ -21,7 +21,7 @@
     "message": "양식 대화를 통해 봇이 정보를 수집하도록 할 수 있습니다."
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
-    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
+    "message": "기술 자료 이름에는 공백이나 특수 문자를 사용할 수 없습니다. 문자, 숫자, - 또는 _을 사용하세요."
   },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "미니맵은 빠른 탐색 및 코드 이해를 위해 소스 코드를 간단하게 설명합니다."
@@ -35,11 +35,17 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "속성은 봇에서 수집하는 정보입니다. 속성 이름은 Composer에서 사용되는 이름입니다. 이 이름은 봇의 메시지에 표시되는 텍스트와 반드시 같지는 않습니다."
   },
+  "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
+    "message": "A schema, or form, is the list of properties your bot will collect."
+  },
+  "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
+    "message": "A skill bot that can be called from a host bot."
+  },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "구독 키는 QnA Maker 리소스를 만들 때 생성됩니다."
   },
   "a_valid_url_should_start_with_http_or_https_327b1a30": {
-    "message": "A valid URL should start with http:// or https://"
+    "message": "유효한 URL은 http:// 또는 https://로 시작해야 합니다."
   },
   "about_70c18bba": {
     "message": "정보"
@@ -92,6 +98,9 @@
   "actions_moved_d7777b29": {
     "message": "작업 이동됨"
   },
+  "active_language_6d001457": {
+    "message": "Active language"
+  },
   "activities_125193f7": {
     "message": "활동"
   },
@@ -107,11 +116,11 @@
   "add_8523c19b": {
     "message": "추가"
   },
+  "add_a_dialog_e378aa3a": {
+    "message": "Add a dialog"
+  },
   "add_a_new_key_5c208c29": {
     "message": "새 키 추가"
-  },
-  "add_a_new_skill_dialog_aaaafa9c": {
-    "message": "새 기술 대화 추가"
   },
   "add_a_new_trigger_a82d3db8": {
     "message": "새 트리거 추가"
@@ -125,6 +134,9 @@
   "add_a_skill_46d2b71c": {
     "message": "기술 추가"
   },
+  "add_a_trigger_c6861401": {
+    "message": "Add a trigger"
+  },
   "add_a_welcome_message_9e1480b2": {
     "message": "환영 메시지 추가"
   },
@@ -137,35 +149,26 @@
   "add_custom_runtime_6b73dc44": {
     "message": "사용자 지정 런타임 추가"
   },
-  "add_language_75dee49e": {
-    "message": "언어 추가"
-  },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "쉼표로 구분된 여러 동의어 추가"
   },
   "add_new_answer_9de3808e": {
     "message": "새 답변 추가"
   },
-  "add_new_dialog_25f12c9": {
-    "message": "새 대화 추가"
-  },
   "add_new_extension_19b82b77": {
     "message": "새 확장 추가"
   },
-  "add_new_knowledge_base_on_displayname_7f44609c": {
-    "message": " { displayName }에 새 기술 자료 추가"
-  },
-  "add_new_profile_47b225e6": {
-    "message": "새 프로필 추가"
+  "add_new_knowledge_base_1a3afed3": {
+    "message": "Add new knowledge base"
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "새 { propertyName } 추가"
   },
+  "add_new_publish_profile_93345a07": {
+    "message": "Add new publish profile"
+  },
   "add_new_question_85612b7f": {
     "message": "새 질문 추가"
-  },
-  "add_new_trigger_on_displayname_2aaf6e4c": {
-    "message": "{ displayName }에 새 트리거 추가"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "여기에 새 유효성 검사 규칙 추가"
@@ -191,20 +194,11 @@
   "advanced_options_4dcc8385": {
     "message": "고급 옵션"
   },
+  "advanced_settings_view_json_b83638b4": {
+    "message": "Advanced Settings View (json)"
+  },
   "all_4321c3a1": {
     "message": "모두"
-  },
-  "all_language_generation_files_ef778f24": {
-    "message": "모든 언어 생성 파일"
-  },
-  "all_language_understanding_files_714b33eb": {
-    "message": "모든 언어 이해 파일"
-  },
-  "all_profiles_8321b1aa": {
-    "message": "모든 프로필"
-  },
-  "all_qna_files_349d7fe1": {
-    "message": "모든 qna 파일"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "작성 키는 LUIS 계정을 만들 때 자동으로 생성됩니다."
@@ -227,11 +221,14 @@
   "any_string_f22dc2e1": {
     "message": "모든 문자열"
   },
-  "application_language_87691b6": {
-    "message": "애플리케이션 언어"
+  "app_id_password_424f613a": {
+    "message": "App Id / Password"
   },
   "application_language_f100f3e0": {
     "message": "애플리케이션 언어"
+  },
+  "application_language_settings_26f82dfc": {
+    "message": "Application Language settings"
   },
   "application_settings_39e840c6": {
     "message": "애플리케이션 설정"
@@ -251,6 +248,9 @@
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "\"{ propertyName }\"을(를) 제거하시겠습니까?"
   },
+  "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
+    "message": "Are you sure you want to remove this property?"
+  },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "다시 시작하시겠습니까? 지금까지 진행된 작업을 잃게 됩니다."
   },
@@ -259,9 +259,6 @@
   },
   "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
     "message": "이 확장을 제거하시겠습니까?"
-  },
-  "arm_template_bc8441bb": {
-    "message": "ARM 템플릿"
   },
   "array_643947ee": {
     "message": "배열"
@@ -277,6 +274,9 @@
   },
   "ask_a_question_92ef7e0c": {
     "message": "질문하기"
+  },
+  "ask_activity_82c174e2": {
+    "message": "Ask Activity"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "하나 이상의 질문이 필요합니다."
@@ -299,29 +299,11 @@
   "auto_update_86eb33b0": {
     "message": "자동 업데이트"
   },
-  "available_skills_95c114ac": {
-    "message": "사용 가능한 기술"
-  },
-  "azure_app_service_plan_a285fb06": {
-    "message": "Azure App Service 계획"
-  },
-  "azure_application_insights_c80028e4": {
-    "message": "Azure Application Insights"
-  },
-  "azure_blob_storage_b5503630": {
-    "message": "Azure Blob Storage"
-  },
-  "azure_bot_service_3afc983": {
-    "message": "Azure Bot Service"
-  },
-  "azure_cosmos_db_a82b5d09": {
-    "message": "Azure Cosmos DB"
+  "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
+    "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
   "back_2900f52a": {
     "message": "뒤로"
-  },
-  "basic_assistant_d23bde15": {
-    "message": "기본 도우미"
   },
   "been_used_5daccdb2": {
     "message": "사용됨"
@@ -368,17 +350,20 @@
   "boolean_value_98d39ea1": {
     "message": "부울 값입니다."
   },
+  "bot_416bf08d": {
+    "message": "bot"
+  },
   "bot_7926b66d": {
-    "message": "Bot"
+    "message": "봇"
   },
   "bot_asks_5e9f0202": {
     "message": "봇 요청"
   },
-  "bot_configured_for_speech_66fc8e57": {
-    "message": "음성에 대해 봇이 구성됨"
+  "bot_content_was_successfully_imported_5a07ae64": {
+    "message": "Bot content was successfully imported."
   },
-  "bot_configured_for_text_a67eca78": {
-    "message": "텍스트에 대해 봇이 구성됨"
+  "bot_controller_319b408d": {
+    "message": "Bot Controller"
   },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "Bot Framework Composer를 통해 개발자와 여러 전문 분야 팀은 Bot Framework의 최신 구성 요소(예: SDK, LG, LU, 선언적 파일 형식)를 사용하여 코드를 작성하지 않고도 모든 종류의 대화형 환경을 빌드할 수 있습니다."
@@ -404,14 +389,20 @@
   "bot_language_active_7cf9dc78": {
     "message": "봇 언어(활성)"
   },
-  "bot_name_bbd0779d": {
-    "message": "봇 이름"
+  "bot_management_and_configurations_b7dadd69": {
+    "message": "Bot management and configurations"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "봇 이름은 { botName }입니다."
   },
   "bot_project_file_does_not_exist_a0864a2c": {
     "message": "봇 프로젝트 파일이 없습니다."
+  },
+  "bot_projects_settings_list_view_ab58e5d": {
+    "message": "Bot projects settings list View"
+  },
+  "bot_projects_settings_navigation_pane_c2074a5f": {
+    "message": "Bot Projects Settings Navigation Pane"
   },
   "bot_responses_4617b4a2": {
     "message": "봇 응답"
@@ -424,9 +415,6 @@
   },
   "bot_settings_ce2783e4": {
     "message": "봇 설정"
-  },
-  "bot_web_app_ca8b1468": {
-    "message": "봇 웹앱"
   },
   "branch_if_else_391e5681": {
     "message": "분기: If/else"
@@ -445,6 +433,12 @@
   },
   "build_your_first_bot_f9c3e427": {
     "message": "첫 번째 봇 빌드"
+  },
+  "building_5e8a3c1d": {
+    "message": "Building"
+  },
+  "building_runtime_22f11a1f": {
+    "message": "Building runtime"
   },
   "bytes_74acea97": {
     "message": "바이트"
@@ -485,12 +479,6 @@
   "choose_one_2c4277df": {
     "message": "하나 선택"
   },
-  "choose_one_7feacdb6": {
-    "message": "하나 선택:"
-  },
-  "choose_your_assistant_7ee96d89": {
-    "message": "도우미 선택"
-  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -518,11 +506,20 @@
   "comment_7ef1428e": {
     "message": "주석"
   },
+  "comments_e07bcbe3": {
+    "message": "Comments"
+  },
+  "common_7911ab4b": {
+    "message": "Common"
+  },
   "component_stacktrace_e24b1983": {
     "message": "구성 요소 스택 추적:"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer는 봇을 자동으로 번역할 수 없습니다.\n수동으로 번역을 만들기 위해 Composer는 다른 언어 이름으로 봇 콘텐츠의 복사본을 만듭니다. 그런 후에 원래 봇 논리나 흐름에 영향을 주지 않고 이 콘텐츠를 번역할 수 있으며, 언어 간에 전환하여 응답이 적절하게 올바로 번역되었는지 확인할 수 있습니다."
+  },
+  "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
+    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
   },
   "composer_introduction_98a93701": {
     "message": "Composer 소개"
@@ -530,11 +527,17 @@
   "composer_is_up_to_date_9118257d": {
     "message": "Composer가 최신 상태입니다."
   },
+  "composer_language_is_the_language_of_composer_ui_c23a57b6": {
+    "message": "Composer language is the language of Composer UI"
+  },
   "composer_logo_ba2048a0": {
     "message": "Composer 로고"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer에 .NET Core SDK가 필요합니다."
+  },
+  "composer_settings_31b04099": {
+    "message": "Composer Settings"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer가 다시 시작됩니다."
@@ -545,20 +548,8 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
-  "configuration_summary_f9b92424": {
-    "message": "구성 요약"
-  },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "사용자 지정하고 제어할 수 있는 런타임 코드를 사용하여 봇을 시작하도록 Composer를 구성합니다."
-  },
-  "configured_with_enterprise_scenarios_calendar_who__e9e7e75a": {
-    "message": "엔터프라이즈 시나리오, 일정, Who 봇, 전문 잡담으로 구성되었습니다."
-  },
-  "configured_with_hospitality_scenarios_bing_search__f71c09c0": {
-    "message": "숙박 시나리오, Bing Search 및 배려하는 잡담으로 구성되었습니다."
-  },
-  "configured_with_simple_conversational_capability_l_d42f128c": {
-    "message": "인사말, 잡담 등의 간단한 대화 기능으로 구성되었습니다."
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "파일 이름에 문화권 코드가 없는 경우에 사용할 기본 언어 모델을 구성합니다(기본값: en-us)."
@@ -581,8 +572,8 @@
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "축하합니다! 모델을 게시했습니다."
   },
-  "connect_to_a_new_skill_34d582ab": {
-    "message": "새 기술에 연결"
+  "connect_a_remote_skill_10cf0724": {
+    "message": "Connect a remote skill"
   },
   "connect_to_a_skill_53c9dff0": {
     "message": "기술에 연결"
@@ -590,8 +581,11 @@
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "QnA 기술 자료에 연결"
   },
-  "content_1440204b": {
-    "message": "콘텐츠"
+  "connecting_to_b_source_b_to_import_bot_content_106cf675": {
+    "message": "Connecting to <b>{ source }</b> to import bot content..."
+  },
+  "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
+    "message": "Connecting to <b>{ targetName }</b> to import bot content..."
   },
   "continue_loop_22635585": {
     "message": "루프 계속"
@@ -602,6 +596,12 @@
   "conversation_invoked_e960884e": {
     "message": "대화 호출됨"
   },
+  "conversational_core_preview_template_is_available__ba9b43b8": {
+    "message": "Conversational Core preview template is available since you have that feature turned on."
+  },
+  "conversational_core_template_899e3082": {
+    "message": "Conversational Core Template"
+  },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate 활동"
   },
@@ -610,6 +610,9 @@
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "번역할 콘텐츠 복사"
+  },
+  "copy_project_location_to_clipboard_eb85c474": {
+    "message": "Copy project location to clipboard"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "스토리지에 연결할 수 없습니다."
@@ -635,17 +638,20 @@
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "애플리케이션 이름을 지정하는 데 사용할 프로젝트 이름을 만듭니다(projectname-environment-LUfilename)."
   },
-  "create_a_new_bot_or_choose_from_virtual_assistant__7c1e6674": {
-    "message": "새 봇을 만들거나 가상 도우미 템플릿 중에서 선택하세요."
-  },
   "create_a_new_dialog_21d84b82": {
     "message": "새 대화 만들기"
   },
   "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
     "message": "위의 +를 클릭하여 새 양식 대화 스키마를 만드세요."
   },
+  "create_a_new_skill_e961ff28": {
+    "message": "Create a new skill"
+  },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "새 기술 매니페스트를 만들거나 편집할 기술 매니페스트를 선택합니다."
+  },
+  "create_a_skill_in_your_bot_d7659e6b": {
+    "message": "Create a skill in your bot"
   },
   "create_a_trigger_40e74743": {
     "message": "트리거 만들기"
@@ -679,12 +685,6 @@
   },
   "create_kb_e78571ba": {
     "message": "KB 만들기"
-  },
-  "create_kb_from_scratch_eddd037a": {
-    "message": "처음부터 KB 만들기"
-  },
-  "create_kb_from_url_or_file_49ad6671": {
-    "message": "URL 또는 파일에서 KB 만들기"
   },
   "create_knowledge_base_from_scratch_afe4d2a2": {
     "message": "기술 자료 새로 만들기"
@@ -722,20 +722,26 @@
   "custom_events_d6f0e45b": {
     "message": "사용자 지정 이벤트"
   },
-  "custom_name_optional_60ee6a1a": {
-    "message": "사용자 지정 이름(선택 사항)"
-  },
   "custom_recognizer_951bab90": {
     "message": "사용자 지정 인식기"
   },
-  "customize_your_assistant_e4038b74": {
-    "message": "도우미 사용자 지정"
+  "custom_runtime_426aa34f": {
+    "message": "Custom runtime"
   },
   "cut_c8c92681": {
     "message": "잘라내기"
   },
+  "data_collection_32efe1e7": {
+    "message": "Data collection"
+  },
+  "data_collection_7db2e237": {
+    "message": "Data Collection"
+  },
   "data_loading_4c9bb9f6": {
     "message": "데이터를 로드하는 중..."
+  },
+  "data_transferring_between_services_c0971544": {
+    "message": "Data transferring between services"
   },
   "date_ee500367": {
     "message": "날짜"
@@ -763,6 +769,9 @@
   },
   "default_language_486a558d": {
     "message": "기본 언어"
+  },
+  "default_language_a976938d": {
+    "message": "DEFAULT LANGUAGE"
   },
   "default_language_b11c37db": {
     "message": "기본 언어"
@@ -794,14 +803,11 @@
   "delete_bot_73586104": {
     "message": "봇 삭제"
   },
-  "delete_form_dialog_schema_892df4e8": {
-    "message": "양식 대화 스키마 삭제"
+  "delete_form_dialog_schema_c8e28229": {
+    "message": "Delete form dialog schema?"
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "기술 자료 삭제"
-  },
-  "delete_language_1527609d": {
-    "message": "언어 삭제"
   },
   "delete_properties_8bc77b42": {
     "message": "속성 삭제"
@@ -812,8 +818,14 @@
   "delete_property_b3786fa0": {
     "message": "속성 삭제"
   },
+  "delete_property_da7646f6": {
+    "message": "Delete property?"
+  },
+  "delete_this_bot_fb78e519": {
+    "message": "Delete this bot"
+  },
   "deleting_dialogid_failed_1d7cc05a": {
-    "message": "Deleting \"{ dialogId }\" failed."
+    "message": "\"{ dialogId }\"을(를) 삭제하지 못했습니다."
   },
   "describe_your_skill_88554792": {
     "message": "기술 설명"
@@ -823,6 +835,27 @@
   },
   "design_51b2812a": {
     "message": "디자인"
+  },
+  "diagnostic_links_228dc6fe": {
+    "message": "diagnostic links"
+  },
+  "diagnostic_list_29813310": {
+    "message": "Diagnostic list"
+  },
+  "diagnostic_list_89b39c2e": {
+    "message": "Diagnostic List"
+  },
+  "diagnostic_message_msg_5387e951": {
+    "message": "Diagnostic Message { msg }"
+  },
+  "diagnostic_type_e1979c21": {
+    "message": "Diagnostic type"
+  },
+  "diagnostics_a11880f6": {
+    "message": "Diagnostics"
+  },
+  "diagnostics_pane_2d77c390": {
+    "message": "Diagnostics Pane"
   },
   "dialog_68ba69ba": {
     "message": "(대화)"
@@ -838,6 +871,12 @@
   },
   "dialog_events_f1b2e2a0": {
     "message": "대화 이벤트"
+  },
+  "dialog_generation_failed_3c73e599": {
+    "message": "Dialog generation failed."
+  },
+  "dialog_generation_was_successful_be280943": {
+    "message": "Dialog generation was successful."
   },
   "dialog_input_schema_c7864fbd": {
     "message": "대화 입력 스키마입니다."
@@ -869,8 +908,17 @@
   "disable_a5c05db3": {
     "message": "사용 안 함"
   },
+  "discover_and_use_components_that_can_be_installed__49e308bf": {
+    "message": "Discover and use components that can be installed into your bot."
+  },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "편집기 너비 외부로 확장되는 줄을 다음 줄에 표시합니다."
+  },
+  "do_you_want_to_proceed_cd35aa38": {
+    "message": "Do you want to proceed?"
+  },
+  "do_you_want_to_update_b_existingprojectname_b_c34014f": {
+    "message": "Do you want to update <b>{ existingProjectName }</b>"
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "계속하시겠습니까?"
@@ -901,12 +949,6 @@
   },
   "duplicate_name_d295a09d": {
     "message": "중복된 이름"
-  },
-  "duplicate_skill_manifest_url_74d85839": {
-    "message": "중복된 기술 매니페스트 URL"
-  },
-  "duplicate_skill_name_d9f6eb8d": {
-    "message": "중복된 기술 이름"
   },
   "duplicated_intents_recognized_d3908424": {
     "message": "중복된 의도 인식됨"
@@ -945,7 +987,7 @@
     "message": "속성 편집"
   },
   "edit_schema_a2ab5695": {
-    "message": "Edit schema"
+    "message": "스키마 편집"
   },
   "edit_source_45af68b4": {
     "message": "원본 편집"
@@ -977,6 +1019,9 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "멀티 턴 추출 사용"
   },
+  "enable_the_new_conversational_core_template_built__df338773": {
+    "message": "Enable the new conversational core template built on the component model"
+  },
   "enabled_ba7cab66": {
     "message": "사용"
   },
@@ -995,8 +1040,8 @@
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation 활동"
   },
-  "english_us_1d884ccd": {
-    "message": "영어(미국)"
+  "endpoints_ff946539": {
+    "message": "Endpoints"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
     "message": "봇에 새 기술을 추가하려면 매니페스트 URL을 입력합니다."
@@ -1007,11 +1052,35 @@
   "enter_a_min_value_c3030813": {
     "message": "최솟값 입력"
   },
+  "enter_a_url_7b4d6063": {
+    "message": "Enter a URL"
+  },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "URL을 입력하거나 파일을 찾아보고 업로드 "
   },
-  "enterprise_assistant_434df551": {
-    "message": "엔터프라이즈 도우미"
+  "enter_luis_application_name_df312e75": {
+    "message": "Enter LUIS application name"
+  },
+  "enter_luis_authoring_key_c59f8f1f": {
+    "message": "Enter LUIS authoring key"
+  },
+  "enter_luis_endpoint_key_f8eb30f5": {
+    "message": "Enter LUIS endpoint key"
+  },
+  "enter_luis_region_2316eceb": {
+    "message": "Enter LUIS region"
+  },
+  "enter_microsoft_app_id_c92101b0": {
+    "message": "Enter Microsoft App Id"
+  },
+  "enter_microsoft_app_password_b0926c39": {
+    "message": "Enter Microsoft App Password"
+  },
+  "enter_qna_maker_subscription_key_d26b4bad": {
+    "message": "Enter QnA Maker Subscription key"
+  },
+  "enter_skill_host_endpoint_url_e22eeab5": {
+    "message": "Enter Skill host endpoint url"
   },
   "entities_ef09392c": {
     "message": "엔터티"
@@ -1031,9 +1100,6 @@
   "error_event_c079b608": {
     "message": "오류 이벤트"
   },
-  "error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980": {
-    "message": "오류: { func }에는 평가기가 없으므로 기본 제공 함수 또는 사용자 지정 함수가 아닙니다."
-  },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "{ title }의 UI 스키마에서 오류 발생: { errorMsg }\n{ options }"
   },
@@ -1042,6 +1108,9 @@
   },
   "error_occurred_5549a6b4": {
     "message": "오류 발생"
+  },
+  "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
+    "message": "{ error } Please add unknown functions to setting''s customFunctions field."
   },
   "error_processing_schema_2c707cf3": {
     "message": "스키마 처리 오류"
@@ -1079,14 +1148,11 @@
   "expected_responses_intent_intentname_44b051c": {
     "message": "예상 응답(의도: #{ intentName })"
   },
-  "export_as_skill_764cf284": {
-    "message": "기술로 내보내기"
+  "export_json_2e2981f5": {
+    "message": "Export JSON"
   },
-  "export_assets_to_zip_d2d798ab": {
-    "message": "자산을 .zip으로 내보내기"
-  },
-  "export_de71cd8e": {
-    "message": "내보내기"
+  "export_this_bot_as_zip_c4bfddf2": {
+    "message": "Export this bot as .zip"
   },
   "expression_7f906a13": {
     "message": "식"
@@ -1103,6 +1169,9 @@
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "외부 리소스는 변경되지 않습니다."
   },
+  "external_services_da7820ce": {
+    "message": "External services"
+  },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "온라인 FAQ, 제품 설명서 또는 기타 파일에서 질문과 답변 쌍을 추출합니다. 지원되는 형식은 질문과 답변이 순서대로 포함된 .tsv, .pdf, .doc, .docx, .xlsx입니다. 기술 자료 원본에 대해 자세히 알아보세요. 생성 후에 질문과 답변을 수동으로 추가하려면 이 단계를 건너뜁니다. 추가할 수 있는 원본 수와 파일 크기는 선택한 QnA 서비스 SKU에 따라 다릅니다. QnA Maker SKU에 대해 자세히 알아보세요."
   },
@@ -1112,14 +1181,17 @@
   "extracting_qna_pairs_from_url_b0331bba": {
     "message": "{ url }에서 QNA 쌍을 추출하는 중"
   },
-  "fallback_text_e5ff1cb7": {
-    "message": "대체 텍스트"
+  "failed_to_start_1edb0dbe": {
+    "message": "Failed to start"
   },
   "false_2f39ee6d": {
     "message": "false"
   },
   "false_eef8c169": {
     "message": "False"
+  },
+  "fetching_form_dialog_schema_templates_failed_44e2dd63": {
+    "message": "Fetching form dialog schema templates failed."
   },
   "field_set_6e7d7f67": {
     "message": "필드 집합"
@@ -1157,8 +1229,14 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "형식 목록(또는 열거형)의 속성의 경우에는 봇에서 사용자가 정의한 값만 허용합니다. 대화가 생성된 후 각 값의 동의어를 제공할 수 있습니다."
   },
+  "form_dialog_error_ba7c37fe": {
+    "message": "Form dialog error"
+  },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "양식 대화 스키마 작업"
+  },
+  "form_dialogs_4a1e22f9": {
+    "message": "Form dialogs"
   },
   "form_editor_7c2b02f0": {
     "message": "폼 편집기"
@@ -1167,10 +1245,10 @@
     "message": "폼 제목"
   },
   "form_wide_operations_1c1a73eb": {
-    "message": "form-wide operations"
+    "message": "양식 전체 작업"
   },
-  "forms_380ab2ae": {
-    "message": "양식"
+  "forms_preview_af001fab": {
+    "message": "Forms (preview)"
   },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "fromTemplateName이 없습니다."
@@ -1187,11 +1265,20 @@
   "generate_dialog_b80a85b2": {
     "message": "대화 생성"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
+  },
+  "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
+    "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "런타임 코드의 새 복사본 가져오기"
+  },
+  "get_activity_members_11339605": {
+    "message": "Get activity members"
+  },
+  "get_conversation_members_71602275": {
+    "message": "Get conversation members"
   },
   "get_started_50c13c6c": {
     "message": "시작하세요!"
@@ -1202,8 +1289,8 @@
   "getting_started_f45a7e87": {
     "message": "시작하기"
   },
-  "give_your_bot_personality_multi_language_capabilit_f00c2c93": {
-    "message": "봇에 개성, 인공 지능, 다국어 기능 등을 제공하세요. 나중에 봇 설정에서 해당 기능을 편집할 수 있습니다."
+  "getting_template_910a4116": {
+    "message": "Getting template"
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "QnA 전체 보기 페이지로 이동합니다."
@@ -1214,9 +1301,6 @@
   "greeting_f906f962": {
     "message": "인사말"
   },
-  "greeting_message_ce77bbb2": {
-    "message": "인사말 메시지"
-  },
   "handle_a_condition_f32eb8d": {
     "message": "조건 처리"
   },
@@ -1226,11 +1310,11 @@
   "handover_to_human_1a619574": {
     "message": "인간에게 핸드오버"
   },
+  "help_us_improve_468828c5": {
+    "message": "Help us improve?"
+  },
   "here_s_what_we_know_4e9c1731": {
     "message": "알고 있는 사항은 다음과 같습니다."
-  },
-  "hi_there_here_are_some_things_that_i_can_do_32909722": {
-    "message": "안녕하세요! 제가 수행할 수 있는 작업은 다음과 같습니다!"
   },
   "hide_code_5dcffa94": {
     "message": "코드 숨기기"
@@ -1238,20 +1322,8 @@
   "home_351838cd": {
     "message": "홈"
   },
-  "hospitality_assistant_c330e403": {
-    "message": "숙박 도우미"
-  },
-  "hosts_your_bot_application_9dd01ffc": {
-    "message": "봇 애플리케이션을 호스트합니다."
-  },
-  "hosts_your_qna_maker_knowledgebases_64713aee": {
-    "message": "QnA Maker 기술 자료를 호스트합니다."
-  },
   "http_request_79847109": {
     "message": "HTTP 요청"
-  },
-  "i_am_sorry_i_didn_t_understand_that_f86e307a": {
-    "message": "죄송합니다. 이해하지 못했습니다."
   },
   "i_want_to_delete_this_bot_f81a4735": {
     "message": "이 봇을 삭제하겠습니다."
@@ -1271,17 +1343,26 @@
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "이 문제가 계속되면 다음에서 이슈를 제출하세요."
   },
-  "if_turned_on_then_externally_stored_templates_will_3f487651": {
-    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
-  },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "LUIS 계정이 이미 있는 경우 아래에 정보를 입력하세요. 계정이 아직 없는 경우에는 먼저 (무료) 계정을 만드세요."
   },
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "QNA 계정이 이미 있는 경우 아래에 정보를 입력하세요. 계정이 아직 없는 경우에는 먼저 (무료) 계정을 만드세요."
   },
+  "import_as_new_35630827": {
+    "message": "Import as new"
+  },
   "import_schema_75659c5f": {
     "message": "스키마 가져오기"
+  },
+  "import_your_bot_to_new_project_8751d82f": {
+    "message": "Import your bot to new project"
+  },
+  "importing_b_botname_b_from_sourcename_f7410826": {
+    "message": "Importing <b>{ botName }</b> from { sourceName }..."
+  },
+  "importing_bot_content_from_targetname_6da78f15": {
+    "message": "Importing bot content from { targetName }..."
   },
   "in_production_5a70b8b4": {
     "message": "프로덕션에서"
@@ -1291,6 +1372,12 @@
   },
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
     "message": "<b>트리거 만들기</b> 마법사의 드롭다운에서 트리거 유형을 <i>활동</i>으로 설정하고 <b>활동 유형</b>을 <i>인사말(ConversationUpdate 활동)</i>로 설정한 다음, <b>제출</b> 단추를 클릭합니다."
+  },
+  "inactive_34365329": {
+    "message": "Inactive"
+  },
+  "initializing_bot_project_48f55e12": {
+    "message": "Initializing bot project"
   },
   "input_1d1d9b8e": {
     "message": "입력"
@@ -1388,14 +1475,8 @@
   "language_generation_1876f6d6": {
     "message": "언어 생성"
   },
-  "language_generation_file_80c08efe": {
-    "message": "언어 생성 파일"
-  },
   "language_understanding_9ae3f1f6": {
-    "message": "Language Understanding"
-  },
-  "language_understanding_file_a65abc2c": {
-    "message": "언어 이해 파일"
+    "message": "언어 이해"
   },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
@@ -1403,14 +1484,32 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "마지막으로 수정한 시간은 { time }입니다."
   },
+  "learn_more_14816ec": {
+    "message": "Learn More."
+  },
   "learn_more_a79a7918": {
     "message": "자세한 정보"
+  },
+  "learn_more_about_activities_134f453d": {
+    "message": "Learn more about activities"
+  },
+  "learn_more_about_endpoints_df156708": {
+    "message": "Learn more about endpoints"
   },
   "learn_more_about_knowledge_base_sources_24369b09": {
     "message": "기술 자료 원본에 대해 자세히 알아보세요. "
   },
+  "learn_more_about_manifests_6e7c364b": {
+    "message": "Learn more about manifests"
+  },
+  "learn_more_about_skill_manifests_7708ce2c": {
+    "message": "Learn more about skill manifests"
+  },
   "learn_more_about_title_d1d3edbe": {
     "message": "{ title }에 대한 자세한 정보"
+  },
+  "learn_more_about_your_property_schema_3a0a0890": {
+    "message": "Learn more about your property schema"
   },
   "learn_more_c08939e8": {
     "message": "자세히 알아보세요."
@@ -1442,6 +1541,9 @@
   "line_startline_startcharacter_line_endline_endchar_372bb2f4": {
     "message": "줄 { startLine }:{ startCharacter } ~ 줄 { endLine }:{ endCharacter }"
   },
+  "link_to_this_skill_has_been_broken_343072bd": {
+    "message": "Link to this skill has been broken"
+  },
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "이 LUIS 의도가 정의되어 있는 위치 링크"
   },
@@ -1451,17 +1553,29 @@
   "list_count_values_33ea7088": {
     "message": "목록 - 값 { count }개"
   },
+  "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
+    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language."
+  },
   "list_view_e33843f0": {
     "message": "목록 보기"
-  },
-  "load_form_dialog_schema_templates_error_6a348e76": {
-    "message": "양식 대화 스키마 템플릿 로드 오류"
   },
   "loading_25990131": {
     "message": "로딩 중..."
   },
   "loading_bde52856": {
     "message": "로딩 중"
+  },
+  "local_bot_runtime_manager_812cbd0c": {
+    "message": "Local bot runtime manager"
+  },
+  "local_composer_386e07d7": {
+    "message": "Local Composer"
+  },
+  "local_skill_6ce0d311": {
+    "message": "Local Skill."
+  },
+  "locate_the_bot_file_and_repair_the_link_202045b1": {
+    "message": "Locate the bot file and repair the link"
   },
   "location_e17bd402": {
     "message": "위치"
@@ -1508,11 +1622,29 @@
   "luis_add4bbe3": {
     "message": "LUIS"
   },
+  "luis_application_name_1530d3aa": {
+    "message": "LUIS application name"
+  },
+  "luis_authoring_key_c8414499": {
+    "message": "LUIS authoring key"
+  },
   "luis_authoring_key_cfaba7dd": {
     "message": "LUIS 작성 키:"
   },
   "luis_authoring_region_b142f97b": {
     "message": "LUIS 작성 지역"
+  },
+  "luis_endpoint_key_c685e219": {
+    "message": "LUIS endpoint key"
+  },
+  "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
+    "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
+  },
+  "luis_region_9879d8de": {
+    "message": "LUIS region"
+  },
+  "luis_region_is_required_163ca19f": {
+    "message": "LUIS Region is required"
   },
   "main_dialog_eed5c847": {
     "message": "주 대화"
@@ -1520,8 +1652,20 @@
   "make_a_copy_77d1233": {
     "message": "복사본 만들기"
   },
+  "manage_bot_languages_9ec36fd7": {
+    "message": "Manage bot languages"
+  },
+  "manage_profiles_715c2092": {
+    "message": "Manage profiles"
+  },
   "manage_properties_c9fa4456": {
     "message": "속성 관리"
+  },
+  "manifest_could_not_be_loaded_1c011a6a": {
+    "message": "Manifest could not be loaded"
+  },
+  "manifest_editor_1426637": {
+    "message": "manifest editor"
   },
   "manifest_url_30824e88": {
     "message": "매니페스트 URL"
@@ -1543,6 +1687,9 @@
   },
   "menu_items_2d66492c": {
     "message": "메뉴 항목"
+  },
+  "merging_packages_6115c7ea": {
+    "message": "Merging Packages"
   },
   "message_5c38209d": {
     "message": "메시지"
@@ -1637,8 +1784,8 @@
   "name_and_save_your_skill_manifest_cfd672b7": {
     "message": "기술 매니페스트에 이름을 지정하고 저장합니다."
   },
-  "name_cannot_include_special_characters_or_spaces_59a1950b": {
-    "message": "이름에는 특수 문자나 공백을 사용할 수 없습니다."
+  "name_cannot_be_found_at_the_location_27560dcb": {
+    "message": "{ name } cannot be found at the location."
   },
   "name_copy_55d27c1a": {
     "message": "{ name }_Copy"
@@ -1660,9 +1807,6 @@
   },
   "navigation_pane_e587b73c": {
     "message": "탐색 창"
-  },
-  "navigation_panel_530ae4ac": {
-    "message": "탐색 패널"
   },
   "navigation_path_8b299e64": {
     "message": "탐색 경로"
@@ -1709,6 +1853,9 @@
   "no_name_e082310e": {
     "message": "[이름 없음]"
   },
+  "no_qna_file_with_name_id_7cb89755": {
+    "message": "NO QNA FILE WITH NAME { id }"
+  },
   "no_search_results_1ba50423": {
     "message": "검색 결과가 없습니다."
   },
@@ -1724,20 +1871,11 @@
   "not_a_single_template_e37f894": {
     "message": "단일 템플릿이 아닙니다."
   },
+  "not_now_97efd947": {
+    "message": "Not now"
+  },
   "not_yet_published_669e37b3": {
     "message": "아직 게시되지 않음"
-  },
-  "notes_c42e0fd5": {
-    "message": "참고"
-  },
-  "notification_list_ee2abb6c": {
-    "message": "알림 목록"
-  },
-  "notification_message_msg_7d55d08e": {
-    "message": "알림 메시지 { msg }"
-  },
-  "notification_type_263c145d": {
-    "message": "알림 유형"
   },
   "notifications_cbfa7704": {
     "message": "알림"
@@ -1796,6 +1934,9 @@
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents 유형"
   },
+  "open_an_existing_skill_fbd87273": {
+    "message": "Open an existing skill"
+  },
   "open_e0beb7b9": {
     "message": "열기"
   },
@@ -1803,7 +1944,10 @@
     "message": "인라인 편집기 열기"
   },
   "open_notification_panel_5796edb3": {
-    "message": "Open notification panel"
+    "message": "알림 패널 열기"
+  },
+  "open_start_bots_panel_f7f87200": {
+    "message": "Open start bots panel"
   },
   "optional_221bcc9d": {
     "message": "선택 사항"
@@ -1823,6 +1967,12 @@
   "or_4f7d4edb": {
     "message": "또는 "
   },
+  "orchestrator_36e58231": {
+    "message": "Orchestrator"
+  },
+  "orchestrator_recognizer_cf38b65a": {
+    "message": "Orchestrator recognizer"
+  },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "원본 lg 파일이 저장소에 없습니다."
   },
@@ -1838,6 +1988,9 @@
   "output_5023cf84": {
     "message": "출력"
   },
+  "package_manager_6c42db30": {
+    "message": "Package manager"
+  },
   "page_number_cdee4179": {
     "message": "페이지 번호"
   },
@@ -1846,15 +1999,6 @@
   },
   "paste_5963d1c1": {
     "message": "붙여넣기"
-  },
-  "personality_1381bf78": {
-    "message": "{ personality }"
-  },
-  "personality_cf47985f": {
-    "message": "개성"
-  },
-  "personality_choice_3dfd8268": {
-    "message": "개성 선택"
   },
   "please_add_at_least_minitems_endpoint_5439fd74": {
     "message": "엔드포인트를 { minItems }개 이상 추가하세요."
@@ -1895,6 +2039,9 @@
   "please_select_an_activity_type_92f4a8a1": {
     "message": "활동 유형을 선택하세요."
   },
+  "powervirtualagents_logo_11858924": {
+    "message": "PowerVirtualAgents Logo"
+  },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "이 항목을 추가하려면 &lt;Enter&gt; 키를 누르고, 다음 대화형 요소로 이동하려면 &lt;Tab&gt; 키를 누릅니다."
   },
@@ -1902,10 +2049,13 @@
     "message": "이 이름을 추가하고 다음 행으로 이동하려면 &lt;Enter&gt; 키를 누르고, 값 필드로 이동하려면 &lt;Tab&gt; 키를 누릅니다."
   },
   "preview_features_e279bac5": {
-    "message": "Preview features"
+    "message": "미리 보기 기능"
   },
   "previous_bd2ac015": {
     "message": "이전"
+  },
+  "previous_bot_content_has_been_backed_up_to_d6d23960": {
+    "message": " Previous bot content has been backed up to:"
   },
   "previous_folder_e7eeb306": {
     "message": "이전 폴더"
@@ -1916,8 +2066,14 @@
   "privacy_button_b58e437": {
     "message": "개인 정보 단추"
   },
+  "privacy_statement_da69ebc6": {
+    "message": "Privacy statement"
+  },
   "progress_of_total_87de8616": {
     "message": "{ total } 중 { progress }%"
+  },
+  "project_settings_bb885d3e": {
+    "message": "Project Settings"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "프롬프트 구성"
@@ -1962,7 +2118,7 @@
     "message": "속성 이름"
   },
   "property_name_is_required_5bc57d97": {
-    "message": "Property name is required!"
+    "message": "속성 이름은 필수입니다."
   },
   "property_title_f2b443b7": {
     "message": "속성 제목"
@@ -1972,12 +2128,6 @@
   },
   "property_type_e38cf7e4": {
     "message": "속성 유형"
-  },
-  "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
-    "message": "간단한 설명을 입력하세요. 이 설명은 게시 기록 목록에 표시됩니다."
-  },
-  "provisioning_summary_2be9422f": {
-    "message": "프로비저닝 요약"
   },
   "pseudo_1a319287": {
     "message": "의사"
@@ -1994,17 +2144,35 @@
   "publish_models_9a36752a": {
     "message": "게시 모델"
   },
-  "publish_profiles_cf8d307b": {
-    "message": "게시 프로필"
+  "publish_selected_bots_825bc03a": {
+    "message": "Publish selected bots"
   },
-  "publish_to_selected_profile_c0998a2": {
-    "message": "선택한 프로필에 게시"
+  "publish_target_388f6adf": {
+    "message": "Publish target"
+  },
+  "publish_targets_8afc4467": {
+    "message": "Publish targets"
+  },
+  "publish_your_bots_6e1ba7c2": {
+    "message": "Publish your bots"
   },
   "published_4bb5209e": {
     "message": "게시됨"
   },
+  "publishing_count_bots_b2a7f564": {
+    "message": "Publishing { count } bots"
+  },
   "publishing_d63a8f2d": {
     "message": "게시 중"
+  },
+  "publishing_name_to_publishtarget_failed_8677b68d": {
+    "message": "Publishing { name } to { publishTarget } failed."
+  },
+  "pull_d1c3e8fe": {
+    "message": "Pull"
+  },
+  "pull_from_selected_profile_b5c635ec": {
+    "message": "Pull from selected profile"
   },
   "qna_28ee5e26": {
     "message": "QnA"
@@ -2012,20 +2180,14 @@
   "qna_editor_9eb94b02": {
     "message": "QnA 편집기"
   },
-  "qna_file_37705cb7": {
-    "message": "qna 파일"
-  },
   "qna_intent_recognized_49c3d797": {
     "message": "QnA 의도 인식됨"
   },
-  "qna_maker_azure_search_service_88a403db": {
-    "message": "QnA Maker Azure Search 서비스"
+  "qna_maker_subscription_key_e009c9d9": {
+    "message": "QnA Maker Subscription key"
   },
-  "qna_maker_c313ed6e": {
-    "message": "QnA Maker"
-  },
-  "qna_maker_web_app_3da183bd": {
-    "message": "QnA Maker 웹앱"
+  "qna_maker_subscription_key_is_required_to_start_yo_9c0bc65a": {
+    "message": "QnA Maker subscription Key is required to start your bot locally, and publish"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "Qna 탐색 창"
@@ -2045,6 +2207,9 @@
   "question_is_empty_now_f0b5733e": {
     "message": "현재 질문이 비어 있습니다."
   },
+  "queued_d0e45c4b": {
+    "message": "Queued"
+  },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
   },
@@ -2056,6 +2221,9 @@
   },
   "recent_bots_53585911": {
     "message": "최근 봇"
+  },
+  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
+    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
   },
   "recognizer_type_dc591e16": {
     "message": "인식기 유형"
@@ -2084,14 +2252,23 @@
   "reloading_49d2f661": {
     "message": "다시 로드하는 중"
   },
-  "remote_templates_a23c242d": {
-    "message": "Remote templates"
+  "remote_skill_ed36a7e6": {
+    "message": "Remote skill"
+  },
+  "remote_skill_f9074d76": {
+    "message": "Remote Skill."
   },
   "remove_f47dc62a": {
     "message": "제거"
   },
   "remove_this_dialog_6146716c": {
     "message": "이 대화 상자 제거"
+  },
+  "remove_this_skill_from_project_4c1900a9": {
+    "message": "Remove this skill from project"
+  },
+  "remove_this_skill_from_your_project_3c9d4b0f": {
+    "message": "Remove this skill from your project"
   },
   "remove_this_trigger_622d866d": {
     "message": "이 트리거 제거"
@@ -2120,23 +2297,47 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | 우선 순위: { priority }"
   },
-  "resource_374a9df": {
-    "message": "리소스"
-  },
   "response_is_response_3cd62f8f": {
     "message": "응답은 { response }입니다."
   },
   "responses_12d6df1d": {
     "message": "응답"
   },
-  "restart_bot_34e36428": {
-    "message": "봇 다시 시작"
+  "restart_all_bots_running_total_running_cf47a2b5": {
+    "message": "Restart all bots ({ running }/{ total } running)"
   },
   "review_and_generate_63dec712": {
     "message": "검토 및 생성"
   },
   "rollback_26326307": {
     "message": "롤백"
+  },
+  "root_bot_7bb35314": {
+    "message": "Root bot."
+  },
+  "root_bot_da9de71c": {
+    "message": "Root Bot"
+  },
+  "root_bot_e2d0a1fc": {
+    "message": "Root bot"
+  },
+  "root_bot_luis_authoring_key_is_empty_aec2634e": {
+    "message": "Root Bot LUIS authoring key is empty"
+  },
+  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
+    "message": "Root Bot LUIS endpoint key is empty"
+  },
+  "root_bot_luis_region_is_empty_67932308": {
+    "message": "Root Bot LUIS region is empty"
+  },
+  "root_bot_of_your_project_that_greets_users_and_can_94570f36": {
+    "message": "Root bot of your project that greets users, and can call skills."
+  },
+  "root_bot_qna_maker_subscription_key_is_empty_7b7c8c4a": {
+    "message": "Root Bot QnA Maker Subscription key is empty"
+  },
+  "running_c5a4998d": {
+    "message": "Running"
   },
   "runtime_already_exists_f181f5ec": {
     "message": "런타임이 이미 있습니다."
@@ -2183,14 +2384,14 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "npm에서 확장 검색"
   },
-  "search_index_for_your_qna_maker_knowledgebases_22700ca7": {
-    "message": "QnA Maker 기술 자료의 검색 인덱스입니다."
-  },
-  "see_log_4b833bf7": {
-    "message": "로그 보기"
+  "see_details_da74090e": {
+    "message": "See Details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "봇 선택"
+  },
+  "select_a_publish_target_d4530c94": {
+    "message": "Select a publish target"
   },
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "왼쪽에서 트리거 선택"
@@ -2203,9 +2404,6 @@
   },
   "select_an_event_type_3d7108f1": {
     "message": "이벤트 유형 선택"
-  },
-  "select_an_option_9f5dfb55": {
-    "message": "옵션 선택"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "편집할 스키마를 선택하거나 새 스키마를 만드세요."
@@ -2220,7 +2418,7 @@
     "message": "옵션 선택"
   },
   "select_property_type_45c6e68e": {
-    "message": "Select property type"
+    "message": "속성 유형 선택"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "추가할 런타임 버전 선택"
@@ -2233,9 +2431,6 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "이 기술이 수행할 수 있는 작업 선택"
-  },
-  "selected_assistant_type_83d58f54": {
-    "message": "선택한 도우미 유형"
   },
   "selection_field_86d1dc94": {
     "message": "선택 필드"
@@ -2264,11 +2459,17 @@
   "set_destination_folder_f76e0259": {
     "message": "대상 폴더 설정"
   },
+  "set_it_as_default_language_212f0a00": {
+    "message": "Set it as default language"
+  },
   "set_properties_7415af3c": {
     "message": "속성 설정"
   },
   "set_up_your_bot_75009578": {
     "message": "봇 설정"
+  },
+  "setting_things_up_8022afe8": {
+    "message": "Setting things up..."
   },
   "settings_5aa0fd0c": {
     "message": "설정"
@@ -2282,17 +2483,14 @@
   "settings_menu_c99ecc6d": {
     "message": "설정 메뉴"
   },
-  "show_all_notifications_55bf7858": {
-    "message": "모든 알림 표시"
+  "show_all_diagnostics_c11f4e09": {
+    "message": "Show All Diagnostics"
   },
   "show_code_f3e9d1cc": {
     "message": "코드 표시"
   },
-  "show_form_dialog_90aad050": {
-    "message": "Show Form Dialog"
-  },
-  "show_form_dialog_editor_in_the_canvas_140492b2": {
-    "message": "Show form dialog editor in the canvas"
+  "show_item_diagnostics_f6e902c7": {
+    "message": "Show { item } Diagnostics"
   },
   "show_keys_3072a5b8": {
     "message": "키 표시"
@@ -2303,6 +2501,9 @@
   "sign_out_user_6845d640": {
     "message": "사용자 로그아웃"
   },
+  "skill_9b084d2e": {
+    "message": "Skill"
+  },
   "skill_dialog_name_1bbf0eff": {
     "message": "기술 대화 이름"
   },
@@ -2312,8 +2513,11 @@
   "skill_endpoints_e4e3d8c1": {
     "message": "기술 엔드포인트"
   },
-  "skill_host_endpoint_b1088d0": {
-    "message": "기술 호스트 엔드포인트"
+  "skill_host_endpoint_4118a173": {
+    "message": "Skill host endpoint"
+  },
+  "skill_host_endpoint_url_e68b65f6": {
+    "message": "Skill host endpoint url"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "기술 매니페스트 엔드포인트가 잘못 구성되었습니다."
@@ -2321,8 +2525,11 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } 매니페스트"
   },
-  "skills_49cccd6a": {
-    "message": "기술"
+  "something_happened_while_attempting_to_pull_e_952c7afe": {
+    "message": "Something happened while attempting to pull: { e }"
+  },
+  "something_went_wrong_d238c551": {
+    "message": "Something went wrong"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "죄송합니다. 봇 런타임을 연결하는 중 문제가 발생했습니다."
@@ -2343,7 +2550,7 @@
     "message": "공백과 특수 문자는 사용할 수 없습니다. 문자, 숫자, - 또는 _를 사용하세요."
   },
   "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
+    "message": "공백 및 특수 문자는 사용할 수 없습니다. 문자, 숫자, - 또는 _를 사용하고 이름을 문자로 시작하세요."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "새 대화의 이름과 설명을 지정합니다."
@@ -2351,8 +2558,14 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "새 봇 프로젝트의 이름, 설명, 위치를 지정합니다."
   },
-  "speech_16063aed": {
-    "message": "음성"
+  "start_all_bots_eac99ea": {
+    "message": "Start all bots"
+  },
+  "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
+    "message": "Start and stop local bot runtimes individually."
+  },
+  "start_bot_1da1ebf4": {
+    "message": "Start bot"
   },
   "start_bot_25ecad14": {
     "message": "봇 시작"
@@ -2363,8 +2576,17 @@
   "start_command_a085f2ec": {
     "message": "시작 명령"
   },
+  "start_over_d7ce7a57": {
+    "message": "Start over?"
+  },
   "start_typing_kind_or_b0c305da": {
-    "message": "Start typing { kind } or"
+    "message": "{ kind } 입력 시작 또는"
+  },
+  "starting_2b76fa0d": {
+    "message": "Starting"
+  },
+  "starting_bots_running_total_running_45302684": {
+    "message": "Starting bots.. ({ running }/{ total } running)"
   },
   "state_is_state_a2b8943": {
     "message": "상태는 { state }입니다."
@@ -2374,6 +2596,15 @@
   },
   "step_of_setlength_43c73821": {
     "message": "{ step }/{ setLength }"
+  },
+  "stop_bot_866e8976": {
+    "message": "Stop Bot"
+  },
+  "stop_bot_be23cf96": {
+    "message": "Stop bot"
+  },
+  "stopping_e4de5f4a": {
+    "message": "Stopping"
   },
   "string_24369b3": {
     "message": "문자열"
@@ -2386,15 +2617,6 @@
   },
   "submit_a3cc6859": {
     "message": "제출"
-  },
-  "subscription_keys_for_language_understanding_cogni_105e039f": {
-    "message": "Language Understanding Cognitive Service의 구독 키입니다."
-  },
-  "subscription_keys_for_qna_maker_cognitive_service__91da99a4": {
-    "message": "선택한 봇 개성을 쉽게 사용할 수 있게 해주는 QnA Maker Cognitive Service의 구독 키입니다."
-  },
-  "summary_24ad7681": {
-    "message": "요약"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "동의어(선택 사항)"
@@ -2420,38 +2642,20 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "기술의 /api/messages 엔드포인트입니다."
   },
-  "the_azure_bot_service_resource_stores_configuratio_b7b4e73d": {
-    "message": "Azure Bot Service 리소스는 가상 도우미가 지원되는 채널에서 액세스 가능하고 OAuth 인증을 제공할 수 있도록 하는 구성 정보를 저장합니다."
-  },
-  "the_callback_url_for_the_skill_host_e20e1012": {
-    "message": "기술 호스트의 콜백 URL입니다."
-  },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "삭제하려는 대화는 현재 아래 대화에서 사용되고 있습니다. 이 대화를 제거하면 봇이 추가 작업 없이 오작동합니다."
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
-    "message": "The file name can not be empty"
-  },
-  "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
-    "message": "봇에 다음 사용자 지정이 적용됩니다."
+    "message": "파일 이름은 비워 둘 수 없습니다."
   },
   "the_following_lufile_s_are_invalid_c61ea748": {
     "message": "다음 LuFile이 잘못되었습니다. \n"
-  },
-  "the_following_will_be_provisioned_to_enable_your_b_6c52fdac": {
-    "message": "봇을 사용할 수 있도록 다음이 프로비저닝됩니다."
   },
   "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
     "message": "주 대화 이름은 봇에 따라 지정됩니다. 주 대화는 봇의 루트이자 진입점입니다."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "필요한 경우 어디서든 매니페스트를 수동으로 편집하고 구체화할 수 있습니다."
-  },
-  "the_microsoft_app_id_that_will_be_calling_the_skil_955424de": {
-    "message": "기술을 호출할 Microsoft 앱 ID입니다."
-  },
-  "the_microsoft_app_password_that_will_be_calling_th_acf9e1ea": {
-    "message": "기술을 호출할 Microsoft 앱 암호입니다."
   },
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
     "message": "원하는 페이지를 찾을 수 없습니다."
@@ -2472,10 +2676,19 @@
     "message": "{ kind } 속성이 없습니다."
   },
   "there_are_no_notifications_e81eab8d": {
-    "message": "There are no notifications."
+    "message": "알림이 없습니다."
+  },
+  "there_are_no_preview_features_at_this_time_a5c40953": {
+    "message": "현재 미리 보기 기능이 없습니다."
   },
   "there_was_an_error_74ed3c58": {
     "message": "오류가 발생했습니다."
+  },
+  "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
+    "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
+  },
+  "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
+    "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "KB를 만드는 중 오류가 발생했습니다."
@@ -2486,26 +2699,20 @@
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "이 작업은 매니페스트를 생성하고 이 기술의 기능을 잠재적 사용자에게 설명하는 데 사용됩니다."
   },
-  "this_bot_has_errors_72fb40d5": {
-    "message": "이 봇에 오류가 있습니다."
-  },
-  "this_bot_has_warnings_b6735e2e": {
-    "message": "이 봇에 경고가 있습니다."
-  },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "이벤트 및 작업 컬렉션을 통해 데이터 기반 대화가 구성됩니다."
   },
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "이 대화에는 아직 트리거가 없습니다."
   },
-  "this_is_a_botname_notification_c8a391c7": {
-    "message": "This is a { botName } notification"
-  },
   "this_is_a_required_field_acb9837e": {
     "message": "필수 필드입니다."
   },
-  "this_is_a_severity_notification_9beabb58": {
-    "message": "{ severity } 알림입니다."
+  "this_is_a_severity_diagnostic_58312674": {
+    "message": "This is a { severity } diagnostic"
+  },
+  "this_is_the_bot_language_you_are_currently_authori_4a26541": {
+    "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
     "message": "Composer 사용자 인터페이스에 사용되는 언어입니다."
@@ -2513,11 +2720,17 @@
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "이 언어는 복사되어 번역 기준(및 대체 언어)으로 사용됩니다."
   },
+  "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
+    "message": "This operation cannot be completed. The bot is already part of the Bot Project"
+  },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "이 작업을 완료할 수 없습니다. 기술이 이미 봇 프로젝트의 일부입니다."
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "이 옵션을 사용하여 이 속성의 값을 여러 개 제공할 수 있습니다."
+  },
+  "this_page_contains_detailed_information_about_your_b2b3413b": {
+    "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "이 트리거 유형은 RegEx 인식기에서 지원되지 않습니다. 이 트리거를 실행하려면 인식기 유형을 변경하세요."
@@ -2528,11 +2741,11 @@
   "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
     "message": "대화와 대화 내용이 삭제됩니다. 계속하시겠습니까?"
   },
-  "this_will_delete_the_profile_do_you_wish_to_contin_61b54894": {
-    "message": "프로필이 삭제됩니다. 계속하시겠습니까?"
-  },
   "this_will_open_your_emulator_application_if_you_do_ba277151": {
     "message": "에뮬레이터 애플리케이션이 열립니다. Bot Framework Emulator가 아직 설치되지 않은 경우 <a>여기</a>에서 다운로드할 수 있습니다."
+  },
+  "throw_exception_9d0d1db": {
+    "message": "Throw exception"
   },
   "time_2b5aac58": {
     "message": "시간"
@@ -2610,7 +2823,7 @@
     "message": "다시 시도"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
-    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
+    "message": "미리 보기의 새로운 기능을 사용해 보고 Composer를 개선할 수 있도록 도와주세요. 언제든지 해당 기능을 켜거나 끌 수 있습니다."
   },
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "이 콘텐츠를 설명하는 이름을 입력하세요."
@@ -2643,7 +2856,7 @@
     "message": "제거"
   },
   "unknown_47a3b725": {
-    "message": "Unknown"
+    "message": "알 수 없음"
   },
   "unknown_intent_44b962ba": {
     "message": "알 수 없는 의도"
@@ -2656,6 +2869,9 @@
   },
   "unused_8d193e3": {
     "message": "사용되지 않음"
+  },
+  "update_4d8ee62": {
+    "message": "Update"
   },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
     "message": "대화 중에 이전에 보낸 활동을 업데이트합니다."
@@ -2684,6 +2900,9 @@
   "update_scripts_c58771a2": {
     "message": "스크립트 업데이트"
   },
+  "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
+    "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
+  },
   "updating_scripts_e17a5722": {
     "message": "스크립트를 업데이트하는 중... "
   },
@@ -2692,6 +2911,18 @@
   },
   "url_should_start_with_http_s_9ca55d94": {
     "message": "URL은 http[s]://로 시작해야 합니다."
+  },
+  "use_custom_luis_authoring_key_9c71470b": {
+    "message": "Use custom LUIS authoring key"
+  },
+  "use_custom_luis_endpoint_key_572e2c29": {
+    "message": "Use custom LUIS endpoint key"
+  },
+  "use_custom_luis_region_49d31dbf": {
+    "message": "Use custom LUIS region"
+  },
+  "use_custom_qna_maker_subscription_key_126e79df": {
+    "message": "Use custom QnA Maker Subscription key"
   },
   "use_custom_runtime_d7d323fd": {
     "message": "사용자 지정 런타임 사용"
@@ -2702,18 +2933,6 @@
   "used_in_126529e5": {
     "message": "사용된 위치"
   },
-  "used_to_capture_conversation_and_application_telem_cae2c2a4": {
-    "message": "대화 및 애플리케이션 원격 분석을 캡처하는 데 사용됩니다."
-  },
-  "used_to_host_your_bot_web_app_and_qna_maker_web_ap_514dc11b": {
-    "message": "봇 웹앱 및 QnA Maker 웹앱을 호스트하는 데 사용됩니다."
-  },
-  "used_to_store_conversation_state_11f348bd": {
-    "message": "대화 상태를 저장하는 데 사용됩니다."
-  },
-  "used_to_store_conversation_transcripts_d80440ab": {
-    "message": "대화 대본을 저장하는 데 사용됩니다."
-  },
   "user_input_673e4a89": {
     "message": "사용자 입력"
   },
@@ -2722,12 +2941,6 @@
   },
   "user_is_typing_790cb502": {
     "message": "사용자가 입력 중입니다."
-  },
-  "va_creation_6babf7db": {
-    "message": "VA Creation"
-  },
-  "va_template_made_available_in_new_bot_flow_5f85baa4": {
-    "message": "VA template made available in new bot flow."
   },
   "validating_35b79a96": {
     "message": "유효성을 검사하는 중..."
@@ -2750,14 +2963,14 @@
   "video_tutorials_79eb26ca": {
     "message": "비디오 자습서:"
   },
-  "view_ba339f93": {
-    "message": "보기"
-  },
   "view_dialog_f5151228": {
     "message": "대화 보기"
   },
   "view_kb_c382e495": {
     "message": "KB 보기"
+  },
+  "view_log_6d51af5e": {
+    "message": "View log"
   },
   "view_on_npm_2051324d": {
     "message": "npm에서 보기"
@@ -2816,9 +3029,6 @@
   "what_is_the_type_of_this_trigger_d2701744": {
     "message": "이 트리거의 유형은 무엇입니까?"
   },
-  "what_will_your_virtual_assistant_say_if_it_does_no_972dd9ab": {
-    "message": "가상 도우미가 사용자를 이해하지 못하는 경우 어떤 말을 합니까?"
-  },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "봇이 사용자에게 말하는 내용입니다. 이 템플릿은 보내는 메시지를 만드는 데 사용됩니다. 언어 생성 규칙, 메모리의 속성, 기타 기능을 포함할 수 있습니다.\n\n예를 들어 임의로 선택되는 변형을 정의하려면 다음과 같이 작성합니다.\n- hello\n- hi"
   },
@@ -2844,7 +3054,13 @@
     "message": "어떤 이벤트입니까?"
   },
   "write_an_expression_8773ea5c": {
-    "message": "Write an expression"
+    "message": "식 작성"
+  },
+  "write_your_message_5d0f151b": {
+    "message": "Write your message"
+  },
+  "yes_collect_data_b79b7844": {
+    "message": "Yes, collect data"
   },
   "yes_dde87d5": {
     "message": "예"
@@ -2855,6 +3071,9 @@
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "아래 프로필에 봇을 게시하려고 합니다. 계속하시겠습니까?"
   },
+  "you_are_about_to_pull_project_files_from_the_selec_15786351": {
+    "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+  },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "Composer를 사용하여 새 봇을 처음부터 만들거나, 템플릿으로 시작할 수 있습니다."
   },
@@ -2864,8 +3083,17 @@
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
     "message": "여기에서 모든 봇 응답을 관리할 수 있습니다. 템플릿을 활용하여 요구에 따라 정교한 응답 논리를 만드세요."
   },
+  "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
+    "message": "You can only connect to a skill in the root bot."
+  },
+  "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
+    "message": "You can turn data collection on or off at any time in the Application Settings."
+  },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "여기에 봇을 저장할 수 있는 권한이 없습니다."
+  },
+  "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
+    "message": "You have successfully published { name } to { publishTarget }"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
     "message": "Composer에서 봇을 만드는 사용자 경험"
@@ -2873,7 +3101,13 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "봇은 자연어 이해를 위해 LUIS 및 QNA를 사용하고 있습니다."
   },
+  "your_dialog_was_generated_successfully_61c13b73": {
+    "message": "Your dialog was generated successfully."
+  },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "기술 자료가 준비되었습니다."
+  },
+  "your_project_2a42631c": {
+    "message": "your project"
   }
 }

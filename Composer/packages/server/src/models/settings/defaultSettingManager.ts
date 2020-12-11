@@ -6,6 +6,7 @@ import { UserIdentity } from '@bfc/extension';
 import has from 'lodash/has';
 import get from 'lodash/get';
 import set from 'lodash/set';
+import unset from 'lodash/unset';
 
 import { Path } from '../../utility/path';
 import log from '../../logger';
@@ -18,8 +19,10 @@ const newSettingsValuePath = [
   'luis.endpoint',
   'luis.authoringEndpoint',
   'skillConfiguration',
-  'customizedFunctions',
+  'customFunctions',
 ];
+
+const discardedSettingsValuePath = ['downsampling.maxUtteranceAllowed'];
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string, user?: UserIdentity) {
@@ -37,7 +40,7 @@ export class DefaultSettingManager extends FileSettingManager {
       MicrosoftAppId: '',
       cosmosDb: {
         authKey: '',
-        collectionId: 'botstate-collection',
+        containerId: 'botstate-container',
         cosmosDBEndpoint: '',
         databaseId: 'botstate-db',
       },
@@ -86,17 +89,17 @@ export class DefaultSettingManager extends FileSettingManager {
         key: '',
       },
       downsampling: {
-        maxImbalanceRatio: 10,
-        maxUtteranceAllowed: 15000,
+        maxImbalanceRatio: -1,
       },
       skillConfiguration: {
-        isSkill: false,
-        allowedCallers: ['*'],
+        // TODO: Setting isSkill property to true for now. A runtime change is required to remove dependancy on isSkill prop #4501
+        isSkill: true,
+        allowedCallers: [],
       },
       skill: {},
       defaultLanguage: 'en-us',
       languages: ['en-us'],
-      customizedFunctions: [],
+      customFunctions: [],
       importedLibraries: [],
     };
   };
@@ -108,6 +111,13 @@ export class DefaultSettingManager extends FileSettingManager {
     newSettingsValuePath.forEach((jsonPath: string) => {
       if (!has(result, jsonPath)) {
         set(result, jsonPath, get(defaultValue, jsonPath));
+        updateFile = true;
+      }
+    });
+
+    discardedSettingsValuePath.forEach((jsonPath: string) => {
+      if (has(result, jsonPath)) {
+        unset(result, jsonPath);
         updateFile = true;
       }
     });

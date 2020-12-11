@@ -30,6 +30,7 @@ describe('<CreationFlow/>', () => {
       setCreationFlowStatus: jest.fn(),
       navTo: jest.fn(),
       saveTemplateId: jest.fn(),
+      setCurrentPageMode: jest.fn(),
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
     set(featureFlagsState, getDefaultFeatureFlags());
@@ -87,7 +88,6 @@ describe('<CreationFlow/>', () => {
       description: '',
       location: expectedLocation,
       name: 'EchoBot-1',
-      qnaKbUrls: undefined,
       schemaUrl: '',
       templateId: 'EchoBot',
     });

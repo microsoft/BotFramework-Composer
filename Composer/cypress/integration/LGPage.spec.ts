@@ -11,7 +11,6 @@ context('LG Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonBot Responses').click();
     // left nav tree
     cy.contains('TodoSample');
-    cy.contains('All');
 
     cy.findByTestId('showcode').as('switchButton');
 
@@ -29,7 +28,7 @@ context('LG Page', () => {
 
     // nav to Main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
   });
 });

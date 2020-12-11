@@ -10,8 +10,9 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { notificationsSelector } from '../../recoilModel/selectors/notificationsSelector';
+import { notificationsSelector } from '../../recoilModel/selectors/notifications';
 import { dispatcherState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { NotificationPanel } from './NotificationPanel';
 
@@ -48,6 +49,7 @@ const NotificationButton: React.FC<NotificationButtonProps> = ({ buttonStyles })
   const toggleIsOpen = () => {
     if (!isOpen) {
       notifications.map(({ id }) => markNotificationAsRead(id));
+      TelemetryClient.track('NotificationPanelOpened');
     }
     setIsOpen(!isOpen);
   };

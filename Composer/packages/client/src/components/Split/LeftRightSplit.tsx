@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { default as Measure, ContentRect } from 'react-measure';
 import { useRecoilValue } from 'recoil';
 
-import { dispatcherState, currentModeState } from '../../recoilModel';
+import { dispatcherState, PageMode } from '../../recoilModel';
 
 const defaultSplitterWidth = 5;
 
@@ -143,6 +143,7 @@ type Props = {
   minRightPixels?: number;
   splitterWidth?: number;
   renderSplitter?: () => React.ReactNode;
+  pageMode: PageMode;
 };
 
 export const LeftRightSplit = (props: React.PropsWithChildren<Props>) => {
@@ -152,6 +153,7 @@ export const LeftRightSplit = (props: React.PropsWithChildren<Props>) => {
     minLeftPixels,
     splitterWidth = defaultSplitterWidth,
     renderSplitter,
+    pageMode,
   } = props;
 
   const [currentContentWidth, setCurrentContentWidth] = React.useState<number>(0);
@@ -166,7 +168,6 @@ export const LeftRightSplit = (props: React.PropsWithChildren<Props>) => {
   const [leftStart, setLeftStart] = React.useState(0);
   const [screenStart, setScreenStart] = React.useState(0);
 
-  const currentPageMode = useRecoilValue(currentModeState);
   const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const constrainLeft = (value: number): number => {
@@ -204,7 +205,7 @@ export const LeftRightSplit = (props: React.PropsWithChildren<Props>) => {
       // calculate candidate left
       const newLeft = constrainLeft(leftStart + (event.screenX - screenStart));
       setLeftWidth(newLeft);
-      setPageElementState(currentPageMode, { leftSplitWidth: newLeft });
+      setPageElementState(pageMode, { leftSplitWidth: newLeft });
     }
   };
 
