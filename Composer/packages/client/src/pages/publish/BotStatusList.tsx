@@ -150,10 +150,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       name: formatMessage('Bot'),
       className: 'publishName',
       fieldName: 'name',
-      minWidth: 114,
-      maxWidth: 134,
+      minWidth: 100,
+      maxWidth: 200,
       isRowHeader: true,
-      isResizable: true,
       onColumnClick: sortByName,
       data: 'string',
       onRender: (item: IBotStatus) => {
@@ -161,6 +160,15 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
           <Checkbox
             disabled={publishDisabled}
             label={item.name}
+            styles={{
+              label: { width: '100%' },
+              text: {
+                width: 'calc(100% - 25px)',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+              },
+            }}
             onChange={(_, isChecked) => changeSelected(item, isChecked)}
           />
         );
@@ -172,10 +180,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       name: formatMessage('Publish target'),
       className: 'publishTarget',
       fieldName: 'target',
-      minWidth: 180,
+      minWidth: 100,
       maxWidth: 200,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return (
@@ -202,7 +209,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       minWidth: 114,
       maxWidth: 134,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return <span>{item.time ? moment(item.time).format('MM-DD-YYYY') : null}</span>;
@@ -217,7 +223,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       minWidth: 114,
       maxWidth: 134,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return onRenderStatus(item);
@@ -232,7 +237,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       minWidth: 150,
       maxWidth: 300,
       isRowHeader: true,
-      isResizable: true,
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
@@ -299,7 +303,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     return (
       <Fragment>
         {defaultRender(props)}
-        <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none' }}>
+        <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none', margin: '20px 0 38px 12px' }}>
           <div css={{ fontSize: '14px', lineHeight: '20px', color: '#323130', fontWeight: 'bold' }}>
             Publish history
           </div>
