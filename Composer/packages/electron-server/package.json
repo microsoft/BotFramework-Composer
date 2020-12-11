@@ -76,6 +76,6 @@
   },
   "peerDependencies": {
     "oneauth-mac": "1.11.0",
-    "oneauth-win64": "1.11.0"
+    "oneauth-win64": "1.14.0"
   }
 }

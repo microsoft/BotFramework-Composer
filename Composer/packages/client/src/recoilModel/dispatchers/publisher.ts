@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig, isSkillHostUpdateRequired } from '@bfc/shared';
+import { defaultPublishConfig, isSkillHostUpdateRequired, PublishResult } from '@bfc/shared';
 
 import {
   publishTypesState,
@@ -44,9 +44,7 @@ const missingDotnetVersionError = {
 };
 
 const checkIfDotnetVersionMissing = (err: any) => {
-  return /(Command failed: dotnet build)| (Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
-    err.message as string
-  );
+  return /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(err.message as string);
 };
 
 export const publisherDispatcher = () => {
@@ -66,7 +64,7 @@ export const publisherDispatcher = () => {
     });
   };
 
-  const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data, target) => {
+  const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data: PublishResult, target) => {
     const { endpointURL, status } = data;
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
@@ -92,10 +90,15 @@ export const publisherDispatcher = () => {
     });
   };
 
-  const updatePublishStatus = async (callbackHelpers: CallbackInterface, projectId: string, target: any, data: any) => {
+  const updatePublishStatus = async (
+    callbackHelpers: CallbackInterface,
+    projectId: string,
+    target: any,
+    data: PublishResult
+  ) => {
     if (data == null) return;
     const { set, snapshot } = callbackHelpers;
-    const { endpointURL, status, id } = data;
+    const { endpointURL, status } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
@@ -141,7 +144,7 @@ export const publisherDispatcher = () => {
         } else {
           // make sure this status payload represents the same item as item 0 (most of the time)
           // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
-          if (targetHistories.length && targetHistories[0].id === id) {
+          if (targetHistories.length && targetHistories[0].id === data.id) {
             targetHistories[0] = currentHistory;
           } else {
             targetHistories.unshift(currentHistory);
@@ -168,7 +171,8 @@ export const publisherDispatcher = () => {
       projectId: string,
       target: any,
       metadata: any,
-      sensitiveSettings
+      sensitiveSettings,
+      token = ''
     ) => {
       try {
         const { snapshot } = callbackHelpers;
@@ -176,14 +180,20 @@ export const publisherDispatcher = () => {
         const luFiles = await snapshot.getPromise(luFilesState(projectId));
         const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-        const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
-          metadata: {
-            ...metadata,
-            luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-            qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+        const response = await httpClient.post(
+          `/publish/${projectId}/publish/${target.name}`,
+          {
+            metadata: {
+              ...metadata,
+              luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+              qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            },
+            sensitiveSettings,
           },
-          sensitiveSettings,
-        });
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
@@ -212,10 +222,10 @@ export const publisherDispatcher = () => {
 
   // get bot status from target publisher
   const getPublishStatus = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, jobId?: string) => {
       try {
-        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
-        updatePublishStatus(callbackHelpers, projectId, target, response?.data);
+        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}${jobId ? '/' + jobId : ''}`);
+        updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
       }
