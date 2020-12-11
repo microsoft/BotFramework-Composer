@@ -54,14 +54,11 @@ const schema: JSONSchema7 = {
             databaseId: {
               type: 'string',
             },
-            collectionId: {
-              type: 'string',
-            },
             containerId: {
               type: 'string',
             },
           },
-          required: ['cosmosDBEndpoint', 'authKey', 'databaseId', 'collectionId', 'containerId'],
+          required: ['cosmosDBEndpoint', 'authKey', 'databaseId', 'containerId'],
         },
         blobStorage: {
           type: 'object',
@@ -119,7 +116,6 @@ const schema: JSONSchema7 = {
         cosmosDBEndpoint: '<endpoint url>',
         authKey: '<auth key>',
         databaseId: 'botstate-db',
-        collectionId: 'botstate-collection',
         containerId: 'botstate-container',
       },
       blobStorage: {

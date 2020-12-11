@@ -240,7 +240,9 @@ export const formDialogGenerationProgressingState = atom({
   default: false,
 });
 
-export const formDialogErrorState = atom<(Error & { kind: 'templateFetch' | 'generation' | 'deletion' }) | undefined>({
+export const formDialogErrorState = atom<
+  (Error & { kind: 'templateFetch' | 'generation' | 'deletion'; logs?: string[] }) | undefined
+>({
   key: getFullyQualifiedKey('formDialogError'),
   default: undefined,
 });
