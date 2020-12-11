@@ -6,57 +6,9 @@
       "properties": {
         "recognizer": {
           "description": "Para entender o que o usuário diz, o diálogo precisa de um \"Reconhecedor\" que inclua palavras e frases de exemplo que os usuários podem usar.",
-          "label": "Reconhecimento vocal"
+          "label": "Reconhecimento de linguagem"
         }
       }
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Enviar uma resposta para fazer uma pergunta",
-      "subtitle": "Atividade de Pergunta"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Solicitar um arquivo ou um anexo",
-      "subtitle": "Entrada de Anexo"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Prompt com várias opções",
-      "subtitle": "Entrada da Escolha"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Solicitar confirmação",
-      "subtitle": "Confirmar a Entrada"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Solicitar uma data ou uma hora",
-      "subtitle": "Entrada de Data e Hora"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Solicitar um número",
-      "subtitle": "Entrada de Número"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Logon do OAuth",
-      "subtitle": "Entrada do OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Solicitar o texto",
-      "subtitle": "Entrada de Texto"
     }
   },
   "Microsoft.BeginDialog": {
@@ -218,6 +170,54 @@
     "form": {
       "label": "Emitir um evento de rastreamento",
       "subtitle": "Atividade de Rastreamento"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Enviar uma resposta para fazer uma pergunta",
+      "subtitle": "Atividade de Pergunta"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Solicitar um arquivo ou um anexo",
+      "subtitle": "Entrada de Anexo"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Prompt com várias opções",
+      "subtitle": "Entrada da Escolha"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Solicitar confirmação",
+      "subtitle": "Confirmar a Entrada"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Solicitar uma data ou uma hora",
+      "subtitle": "Entrada de Data e Hora"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Solicitar um número",
+      "subtitle": "Entrada de Número"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Logon do OAuth",
+      "subtitle": "Entrada do OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Solicitar o texto",
+      "subtitle": "Entrada de Texto"
     }
   },
   "Microsoft.OnActivity": {

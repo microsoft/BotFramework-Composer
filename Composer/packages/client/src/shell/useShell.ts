@@ -8,6 +8,7 @@ import {
   Shell,
   DialogSchemaFile,
   DialogInfo,
+  BotInProject,
   FeatureFlagKey,
   SDKKinds,
 } from '@botframework-composer/types';
@@ -20,6 +21,7 @@ import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../ut
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
 import {
+  botProjectSpaceSelector,
   dispatcherState,
   userSettingsState,
   settingsState,
@@ -41,6 +43,7 @@ import {
 import { undoFunctionState } from '../recoilModel/undo/history';
 import { skillsStateSelector } from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
+import TelemetryClient from '../telemetry/TelemetryClient';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -92,6 +95,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const flowZoomRate = useRecoilValue(rateInfoState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const isRootBot = rootBotProjectId === projectId;
+  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
+    ...bot,
+    hasWarnings: false,
+  }));
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState(projectId));
@@ -264,6 +271,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     setApplicationLevelError,
     updateUserSettings,
     confirm: OpenConfirmModal,
+    telemetryClient: TelemetryClient,
   };
 
   const currentDialog = useMemo(() => {
@@ -285,6 +293,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     locale,
     botName,
     projectId,
+    projectCollection,
     dialogs,
     dialogSchemas,
     dialogId,

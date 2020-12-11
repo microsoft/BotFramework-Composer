@@ -15,6 +15,7 @@ import { dispatcherState, locationState } from '../../recoilModel';
 
 import { PullFailedDialog } from './pullFailedDialog';
 import { PullStatus } from './pullStatus';
+import { PullConfirmationDialog } from './pullConfirmationDialog';
 
 type PullDialogProps = {
   onDismiss: () => void;
@@ -22,13 +23,13 @@ type PullDialogProps = {
   selectedTarget: PublishTarget | undefined;
 };
 
-type PullDialogStatus = 'connecting' | 'downloading' | 'error';
+type PullDialogStatus = 'confirming' | 'connecting' | 'downloading' | 'error';
 
 const CONNECTING_STATUS_DISPLAY_TIME = 2000;
 
 export const PullDialog: React.FC<PullDialogProps> = (props) => {
   const { onDismiss, projectId, selectedTarget } = props;
-  const [status, setStatus] = useState<PullDialogStatus>('connecting');
+  const [status, setStatus] = useState<PullDialogStatus>('confirming');
   const [error, setError] = useState<string>('');
   const { addNotification, reloadProject } = useRecoilValue(dispatcherState);
   const botLocation = useRecoilValue(locationState(projectId));
@@ -83,7 +84,14 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
     onDismiss();
   }, [onDismiss]);
 
+  const onConfirm = useCallback(() => {
+    setStatus('connecting');
+  }, []);
+
   switch (status) {
+    case 'confirming':
+      return <PullConfirmationDialog onConfirm={onConfirm} onDismiss={onCancelOrDone} />;
+
     case 'connecting':
       return <PullStatus publishTarget={selectedTarget} state={'connecting'} />;
 

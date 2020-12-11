@@ -120,7 +120,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
       }
     },
     startBot: async (projectId: string, sensitiveSettings) => {
-      dispatcher.setBotStatus(projectId, BotStatus.reloading);
+      dispatcher.setBotStatus(projectId, BotStatus.starting);
       await dispatcher.publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
     },
     stopBot: async (projectId: string) => {
