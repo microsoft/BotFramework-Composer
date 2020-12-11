@@ -2,12 +2,15 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import React, { useRef } from 'react';
 import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+import { useShellApi } from '@bfc/extension-client';
+
+import { useAdaptiveFormContext } from '../AdaptiveFormContext';
 
 import { Link } from './Link';
 import { focusBorder } from './sharedStyles';
@@ -21,6 +24,11 @@ interface DescriptionCalloutProps {
 
 const DescriptionCallout: React.FC<DescriptionCalloutProps> = function DescriptionCallout(props) {
   const { description, title, helpLink } = props;
+  const { baseSchema } = useAdaptiveFormContext();
+  const { shellApi } = useShellApi();
+  const { telemetryClient } = shellApi;
+
+  const timeOpened = useRef<number | null>(null);
 
   if (!description) {
     return null;
@@ -45,12 +53,35 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
                 href={helpLink}
                 rel="noopener noreferrer"
                 target="_blank"
+                onClick={() => {
+                  telemetryClient.track('HelpLinkClicked', { url: helpLink });
+                }}
               >
                 {formatMessage('Learn more')}
               </Link>
             )}
           </div>
         ),
+      }}
+      onTooltipToggle={(visible) => {
+        if (visible) {
+          timeOpened.current = Date.now();
+        } else {
+          if (timeOpened.current) {
+            const duration = Date.now() - timeOpened.current;
+
+            // Only log TooltipOpened event if the user opened
+            // the tooltip for longer than 1000ms
+            if (duration > 1000) {
+              telemetryClient?.track('TooltipOpened', {
+                duration,
+                location: baseSchema?.properties?.$kind?.const as string,
+                title,
+              });
+            }
+          }
+          timeOpened.current = null;
+        }
       }}
     >
       <div css={focusBorder} data-testid="FieldLabelDescriptionIcon" tabIndex={0}>

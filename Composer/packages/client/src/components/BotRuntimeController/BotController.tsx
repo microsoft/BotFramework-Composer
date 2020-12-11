@@ -12,6 +12,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
   buildConfigurationSelector,
   dispatcherState,
@@ -65,19 +66,23 @@ const BotController: React.FC = () => {
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
   const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
-  const [startAllOperationQueued, queueStartAllBots] = useState(false);
+  const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const [botStartComplete, setBotsStartCompleted] = useState(false);
+  const [areBotsStarting, setBotsStarting] = useState(false);
+  const [startPanelButtonText, setStartPanelButtonText] = useState('');
+  const { startAllBots, stopAllBots } = useBotOperations();
+  const builderEssentials = useRecoilValue(buildConfigurationSelector);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
 
-  useClickOutsideOutsideTarget(
-    isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
-    (event: React.MouseEvent<HTMLElement>) => {
-      hideController(true);
-      event.stopPropagation();
+  useEffect(() => {
+    if (runningBots.projectIds.length === 0 && startAllBotsOperationQueued) {
+      queueStartAllBots(false);
+      startAllBots();
     }
-  );
+  }, [runningBots, startAllBotsOperationQueued]);
 
   useEffect(() => {
     if (projectCollection.length === 0 || errors.length) {
@@ -87,75 +92,104 @@ const BotController: React.FC = () => {
     setDisableOnStartBotsWidget(false);
   }, [projectCollection, errors]);
 
-  const botStartComplete = useMemo(() => projectCollection.find(({ status }) => status === BotStatus.connected), [
-    projectCollection,
-  ]);
+  useEffect(() => {
+    const botsStarting = !!projectCollection.find(({ status }) => {
+      return (
+        status === BotStatus.publishing ||
+        status === BotStatus.published ||
+        status == BotStatus.pending ||
+        status == BotStatus.queued ||
+        status == BotStatus.starting
+      );
+    });
+    setBotsStarting(botsStarting);
 
-  const areBotsStarting = useMemo(
-    () =>
-      !!projectCollection.find(({ status }) => {
-        return (
-          status === BotStatus.publishing ||
-          status === BotStatus.published ||
-          status == BotStatus.pending ||
-          status == BotStatus.queued ||
-          status == BotStatus.reloading
-        );
-      }),
-    [projectCollection]
+    const botsStarted = !!projectCollection.find(({ status }) => status === BotStatus.connected);
+    setBotsStartCompleted(botsStarted);
+
+    if (botsStarting) {
+      setStatusIconClass(undefined);
+      setStartPanelButtonText(
+        formatMessage(
+          `{
+          total, plural,
+            =1 {Starting bot..}
+          other {Starting bots.. ({running}/{total} running)}
+        }`,
+          { running: runningBots.projectIds.length, total: runningBots.totalBots }
+        )
+      );
+      return;
+    }
+
+    if (botsStarted) {
+      if (statusIconClass !== 'Refresh') {
+        hideController(false);
+      }
+      setStatusIconClass('Refresh');
+
+      setStartPanelButtonText(
+        formatMessage(
+          `{
+          total, plural,
+            =1 {Restart bot}
+          other {Restart all bots ({running}/{total} running)}
+        }`,
+          { running: runningBots.projectIds.length, total: runningBots.totalBots }
+        )
+      );
+      return;
+    }
+
+    setStatusIconClass('Play');
+    setStartPanelButtonText(
+      formatMessage(
+        `{
+        total, plural,
+          =1 {Start bot}
+          other {Start all bots}
+      }`,
+        { total: runningBots.totalBots }
+      )
+    );
+  }, [runningBots, startAllBotsOperationQueued]);
+
+  useClickOutsideOutsideTarget(
+    isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
+    (event: React.MouseEvent<HTMLElement>) => {
+      hideController(true);
+      event.stopPropagation();
+    }
   );
-
-  const { startAllBots, stopAllBots } = useBotOperations();
 
   const handleClick = async () => {
     if (!botStartComplete) {
+      TelemetryClient.track('StartAllBotsButtonClicked');
       startAllBots();
     } else {
       await stopAllBots();
       queueStartAllBots(true);
+      TelemetryClient.track('RestartAllBotsButtonClicked');
     }
+    builderEssentials.forEach(({ projectId }) => {
+      TelemetryClient.track('StartBotStarted', { projectId });
+    });
   };
 
   const onSplitButtonClick = () => {
     hideController(!isControllerHidden);
   };
 
-  const buttonText = useMemo(() => {
-    if (areBotsStarting) {
-      setStatusIconClass(undefined);
-      return formatMessage('Starting bots.. ({running}/{total} running)', {
-        running: runningBots.projectIds.length,
-        total: runningBots.totalBots,
-      });
-    }
-
-    if (botStartComplete) {
-      if (statusIconClass !== 'Refresh') {
-        hideController(false);
-      }
-      setStatusIconClass('Refresh');
-      return formatMessage('Restart all bots ({running}/{total} running)', {
-        running: runningBots.projectIds.length,
-        total: runningBots.totalBots,
-      });
-    }
-    if (startAllOperationQueued) {
-      queueStartAllBots(false);
-      startAllBots();
-    }
-    setStatusIconClass('Play');
-    return formatMessage('Start all bots');
-  }, [runningBots, botStartComplete, areBotsStarting]);
-
   const items = useMemo<IContextualMenuItem[]>(() => {
     return projectCollection.map(({ name: displayName, projectId }) => ({
       key: projectId,
       displayName,
       projectId,
+      isRoot: projectId === rootBotId,
       setGlobalErrorCalloutVisibility,
       isRootBot: projectId === rootBotId,
     }));
-  }, [projectCollection]);
+  }, [projectCollection, rootBotId]);
 
   return (
     <React.Fragment>
@@ -166,7 +200,7 @@ const BotController: React.FC = () => {
         <DefaultButton
           primary
           aria-roledescription={formatMessage('Bot Controller')}
-          ariaDescription={buttonText}
+          ariaDescription={startPanelButtonText}
           disabled={disableStartBots || areBotsStarting}
           iconProps={{
             iconName: statusIconClass,
@@ -200,7 +234,7 @@ const BotController: React.FC = () => {
               font: '62px',
             },
           }}
-          title={buttonText}
+          title={startPanelButtonText}
           onClick={handleClick}
         >
           {areBotsStarting && (
@@ -213,7 +247,7 @@ const BotController: React.FC = () => {
               }}
             />
           )}
-          <span style={{ margin: '0 0 2px 5px' }}>{buttonText}</span>
+          <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
         </DefaultButton>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton

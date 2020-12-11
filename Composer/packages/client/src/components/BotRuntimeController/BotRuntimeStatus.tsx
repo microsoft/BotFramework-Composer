@@ -9,6 +9,7 @@ import * as React from 'react';
 import { BotStatus } from '../../constants';
 import { botStatusState, dispatcherState } from '../../recoilModel';
 import { useInterval } from '../../utils/hooks';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { useBotOperations } from './useBotOperations';
 
@@ -38,12 +39,13 @@ export const BotRuntimeStatus = React.memo((props: BotRuntimeStatusProps) => {
       case BotStatus.failed:
         setIntervalRunning(false);
         stopSingleBot(projectId);
+        TelemetryClient.track('StartBotCompleted', { projectId, status: currentBotStatus });
         break;
       case BotStatus.published:
         setIntervalRunning(false);
         startSingleBot(projectId, true);
         break;
-      case BotStatus.reloading:
+      case BotStatus.starting:
         setIntervalRunning(true);
         break;
 
@@ -54,6 +56,7 @@ export const BotRuntimeStatus = React.memo((props: BotRuntimeStatusProps) => {
           }, pollingInterval);
         }
         setIntervalRunning(false);
+        TelemetryClient.track('StartBotCompleted', { projectId, status: currentBotStatus });
         break;
       }
     }
