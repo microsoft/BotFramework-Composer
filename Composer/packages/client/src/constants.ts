@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -38,6 +39,21 @@ export const Tips = {
     );
   },
 };
+
+export const LUIS_REGIONS: IDropdownOption[] = [
+  {
+    key: 'westus',
+    text: formatMessage('westus'),
+  },
+  {
+    key: 'westeurope',
+    text: formatMessage('westeurope'),
+  },
+  {
+    key: 'australia',
+    text: formatMessage('australia'),
+  },
+];
 
 export const Links = {
   LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
@@ -105,7 +121,7 @@ export enum BotStatus {
   inactive = 'inactive',
   publishing = 'publishing',
   published = 'published',
-  reloading = 'loading',
+  starting = 'starting',
   pending = 'pending',
   failed = 'failed',
   stopping = 'stopping',
@@ -151,7 +167,7 @@ export const BotStatusesCopy = {
   get queued() {
     return formatMessage('Queued');
   },
-  get reloading() {
+  get starting() {
     return formatMessage('Starting');
   },
   get stopping() {

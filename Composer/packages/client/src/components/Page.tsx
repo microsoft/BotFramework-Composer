@@ -101,6 +101,7 @@ type IPageProps = {
   projectId?: string;
   skillId?: string;
   dialogId?: string;
+  fileId?: string;
 };
 
 const Page: React.FC<IPageProps> = (props) => {
@@ -120,6 +121,7 @@ const Page: React.FC<IPageProps> = (props) => {
     projectId,
     skillId,
     dialogId,
+    fileId,
   } = props;
 
   return (
@@ -138,6 +140,8 @@ const Page: React.FC<IPageProps> = (props) => {
                   projectId,
                   skillId,
                   dialogId,
+                  lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
+                  luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
                 }}
                 options={{
                   showDelete: false,

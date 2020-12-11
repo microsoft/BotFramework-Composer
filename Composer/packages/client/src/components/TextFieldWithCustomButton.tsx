@@ -61,16 +61,16 @@ const errorTextStyle = css`
 
 type TextFieldWithCustomButtonProps = {
   label: string;
-  ariaLabelledby: string;
+  ariaLabel: string;
   buttonText: string;
-  errorMessage;
+  errorMessage?;
   placeholder: string;
   placeholderOnDisable: string;
   value: string;
   onBlur?: (value) => void;
   onChange?: (e, value) => void;
   onRenderLabel?: IRenderFunction<ITextFieldProps>;
-  required: boolean;
+  required?: boolean;
   id?: string;
 };
 
@@ -94,8 +94,8 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
     placeholder,
     placeholderOnDisable,
     onChange,
-    required,
-    ariaLabelledby,
+    required = false,
+    ariaLabel,
     value,
     buttonText,
     onBlur,
@@ -133,7 +133,7 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
         />
       ) : (
         <TextField
-          aria-labelledby={ariaLabelledby}
+          aria-label={ariaLabel}
           componentRef={textFieldComponentRef}
           disabled={isDisabled}
           id={id}

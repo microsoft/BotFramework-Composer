@@ -29,7 +29,6 @@ It will look like this:
       "cosmosDBEndpoint": "<SOME VALUE>",
       "authKey": "<SOME VALUE>",
       "databaseId": "botstate-db",
-      "collectionId": "botstate-collection",
       "containerId": "botstate-container"
     },
     "blobStorage": {

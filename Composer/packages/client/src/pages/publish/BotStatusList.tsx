@@ -100,7 +100,14 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   };
   const onRenderOption = (option?: IDropdownOption): JSX.Element | null => {
     if (!option) return null;
-    return <div style={option.data && option.data.style}>{option.text}</div>;
+    const style = {
+      ...(option.data && option.data.style),
+      width: '80%',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+    };
+    return <div style={style}>{option.text}</div>;
   };
   const onRenderStatus = (item: IBotStatus): JSX.Element | null => {
     if (!item.status) {
@@ -145,10 +152,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       name: formatMessage('Bot'),
       className: 'publishName',
       fieldName: 'name',
-      minWidth: 114,
-      maxWidth: 134,
+      minWidth: 100,
+      maxWidth: 200,
       isRowHeader: true,
-      isResizable: true,
       onColumnClick: sortByName,
       data: 'string',
       onRender: (item: IBotStatus) => {
@@ -156,6 +162,15 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
           <Checkbox
             disabled={publishDisabled}
             label={item.name}
+            styles={{
+              label: { width: '100%' },
+              text: {
+                width: 'calc(100% - 25px)',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+              },
+            }}
             onChange={(_, isChecked) => changeSelected(item, isChecked)}
           />
         );
@@ -167,10 +182,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       name: formatMessage('Publish target'),
       className: 'publishTarget',
       fieldName: 'target',
-      minWidth: 114,
-      maxWidth: 134,
+      minWidth: 100,
+      maxWidth: 200,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return (
@@ -178,7 +192,10 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             defaultSelectedKey={item.publishTarget}
             options={publishTargetOptions(item)}
             placeholder={formatMessage('Select a publish target')}
-            styles={{ root: { width: '134px' } }}
+            styles={{
+              root: { width: '100%' },
+              dropdownItems: { selectors: { '.ms-Button-flexContainer': { width: '100%' } } },
+            }}
             onChange={(_, option?: IDropdownOption) => handleChangePublishTarget(item, option)}
             onRenderOption={onRenderOption}
           />
@@ -194,7 +211,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       minWidth: 114,
       maxWidth: 134,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return <span>{item.time ? moment(item.time).format('MM-DD-YYYY') : null}</span>;
@@ -209,7 +225,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       minWidth: 114,
       maxWidth: 134,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return onRenderStatus(item);
@@ -224,7 +239,6 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       minWidth: 150,
       maxWidth: 300,
       isRowHeader: true,
-      isResizable: true,
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
@@ -291,7 +305,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     return (
       <Fragment>
         {defaultRender(props)}
-        <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none' }}>
+        <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none', margin: '20px 0 38px 12px' }}>
           <div css={{ fontSize: '14px', lineHeight: '20px', color: '#323130', fontWeight: 'bold' }}>
             Publish history
           </div>

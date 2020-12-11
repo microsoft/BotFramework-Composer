@@ -3,7 +3,7 @@
   "description": "Все это виды, которые могут быть созданы загрузчиком.",
   "definitions": {
     "Microsoft.ActivityTemplate": {
-      "title": "Microsoft activity template",
+      "title": "Шаблон действий Майкрософт",
       "patternProperties": {
         "^\\$": {
           "title": "Свойство инструментария",
@@ -26,7 +26,7 @@
       }
     },
     "Microsoft.AdaptiveDialog": {
-      "title": "Adaptive dialog",
+      "title": "Адаптивное диалоговое окно",
       "description": "Гибкий и управляемый данными диалог, который может адаптироваться к беседе.",
       "patternProperties": {
         "^\\$": {
@@ -52,7 +52,7 @@
           "description": "Распознаватель ввода, который интерпретирует данные, введенные пользователем, как намерение и сущности."
         },
         "generator": {
-          "title": "Language generator",
+          "title": "Языковой генератор",
           "description": "Языковой генератор, создающий ответы бота."
         },
         "selector": {
@@ -72,7 +72,7 @@
           "description": "Схема для заполнения.",
           "anyOf": {
             "0": {
-              "title": "Core schema meta-schema"
+              "title": "Метасхема основной схемы"
             },
             "1": {
               "title": "Ссылка на схему JSON",
@@ -91,7 +91,7 @@
       }
     },
     "Microsoft.AgeEntityRecognizer": {
-      "title": "Age entity recognizer",
+      "title": "Распознаватель сущностей возраста",
       "description": "Распознаватель, который распознает возраст.",
       "patternProperties": {
         "^\\$": {
@@ -111,7 +111,7 @@
       }
     },
     "Microsoft.Ask": {
-      "title": "Send activity to ask a question",
+      "title": "Отправка действия для вопроса",
       "description": "Это действие, отправляющее пользователю действие, когда ожидается ответ",
       "patternProperties": {
         "^\\$": {
@@ -121,7 +121,7 @@
       },
       "properties": {
         "expectedProperties": {
-          "title": "Expected properties",
+          "title": "Ожидаемые свойства",
           "description": "Свойства, ожидаемые от пользователя.",
           "items": {
             "title": "Имя",
@@ -129,7 +129,7 @@
           }
         },
         "defaultOperation": {
-          "title": "Default operation",
+          "title": "Операция по умолчанию",
           "description": "Задает операцию по умолчанию, которая будет использоваться, если в ответе на этот вопрос не будет распознана ни одна операция."
         },
         "id": {
@@ -288,7 +288,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "Обработанное действие",
           "description": "Если задано значение false, то вызываемый диалог может обработать текущее действие."
         },
         "resultProperty": {
@@ -324,7 +324,7 @@
           "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "Обработанное действие",
           "description": "Если задано значение false, навык будет запущен с использованием действия в текущем контексте, а не действия в свойстве Activity."
         },
         "resultProperty": {
@@ -340,11 +340,11 @@
           "description": "URL-адрес обратного вызова для узла навыка."
         },
         "connectionName": {
-          "title": "OAuth connection name (SSO)",
+          "title": "Имя подключения OAuth (единый вход)",
           "description": "Имя подключения OAuth, которое использовалось бы для выполнения единого входа с навыком."
         },
         "skillAppId": {
-          "title": "Skill App Id",
+          "title": "ИД приложения навыков",
           "description": "Идентификатор приложения Майкрософт для навыка."
         },
         "skillEndpoint": {
@@ -356,7 +356,7 @@
           "description": "Действие для отправки в навык."
         },
         "allowInterruptions": {
-          "title": "Allow interruptions",
+          "title": "Разрешение прерываний",
           "description": "Логическое выражение, определяющее, следует ли разрешить родительскому элементу прерывать навык."
         },
         "$kind": {
@@ -370,7 +370,7 @@
       }
     },
     "Microsoft.BreakLoop": {
-      "title": "Break loop",
+      "title": "Выход из цикла",
       "description": "Остановка выполнения этого цикла",
       "patternProperties": {
         "^\\$": {
@@ -416,7 +416,7 @@
           "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "Обработанное действие",
           "description": "Если задано значение false, то вызывающему диалогу предписывается обработать текущее действие."
         },
         "eventName": {
@@ -456,7 +456,7 @@
           "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "Обработанное действие",
           "description": "Если задано значение false, то вызывающему диалогу предписывается обработать текущее действие."
         },
         "eventName": {
@@ -478,22 +478,22 @@
       }
     },
     "Microsoft.ChannelMentionEntityRecognizer": {
-      "title": "Channel mention entity recognizer",
-      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "title": "Распознаватель сущностей упоминания канала",
+      "description": "Передает сущности упоминаний, полученные от канала, в результат распознавателя через activity.entities.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Свойство инструментария",
+          "description": "Незаконченное свойство для инструментария."
         }
       },
       "properties": {
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Вид объекта диалога",
+          "description": "Определяет допустимые свойства для настраиваемого компонента (из SCHEMA-файла диалога)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Сведения конструктора",
+          "description": "Дополнительные сведения для Bot Framework Composer."
         }
       }
     },
@@ -698,7 +698,7 @@
       }
     },
     "Microsoft.ConditionalSelector": {
-      "title": "Conditional trigger selector",
+      "title": "Селектор условного триггера",
       "description": "Использование селектора правил на основе условия",
       "patternProperties": {
         "^\\$": {
@@ -750,7 +750,7 @@
           }
         },
         "choiceOptions": {
-          "title": "Choice options",
+          "title": "Варианты выбора",
           "description": "Параметры вариантов выбора или выражение, предоставляющее параметры для управления отображением вариантов выбора для пользователя.",
           "oneOf": {
             "0": {
@@ -888,7 +888,7 @@
       }
     },
     "Microsoft.ConfirmationEntityRecognizer": {
-      "title": "Confirmation entity recognizer",
+      "title": "Распознаватель сущностей подтверждения",
       "description": "Распознаватель, который распознает варианты подтверждения (да/нет).",
       "patternProperties": {
         "^\\$": {
@@ -908,43 +908,43 @@
       }
     },
     "Microsoft.ContinueConversationLater": {
-      "title": "Continue conversation later (Queue)",
-      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "title": "Продолжение беседы позже (очередь)",
+      "description": "Продолжение беседы позже (через Хранилище очередей Azure).",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Свойство инструментария",
+          "description": "Незаконченное свойство для инструментария."
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "Идентификатор",
+          "description": "Необязательный идентификатор диалога"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "Отключено",
+          "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
         },
         "date": {
-          "title": "Date",
-          "description": "Date in the future as a ISO string when the conversation should continue."
+          "title": "Дата",
+          "description": "Дата продолжения беседы в будущем в виде строки ISO."
         },
         "value": {
-          "title": "Value",
-          "description": "Value to send in the activity.value."
+          "title": "Значение",
+          "description": "Значение для отправки в activity.value."
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Вид объекта диалога",
+          "description": "Определяет допустимые свойства для настраиваемого компонента (из SCHEMA-файла диалога)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Сведения конструктора",
+          "description": "Дополнительные сведения для Bot Framework Composer."
         }
       }
     },
     "Microsoft.ContinueLoop": {
-      "title": "Continue loop",
+      "title": "Продолжение цикла",
       "description": "Остановка выполнения этого шаблона и продолжение со следующей итерации цикла.",
       "patternProperties": {
         "^\\$": {
@@ -972,7 +972,7 @@
       }
     },
     "Microsoft.CrossTrainedRecognizerSet": {
-      "title": "Cross-trained recognizer set",
+      "title": "Набор распознавателей с перекрестным обучением",
       "description": "Распознаватель для выбора между перекрестно обученными распознавателями.",
       "patternProperties": {
         "^\\$": {
@@ -1000,7 +1000,7 @@
       }
     },
     "Microsoft.CurrencyEntityRecognizer": {
-      "title": "Currency entity recognizer",
+      "title": "Распознаватель сущностей валюты",
       "description": "Распознаватель, который распознает валюту.",
       "patternProperties": {
         "^\\$": {
@@ -1020,7 +1020,7 @@
       }
     },
     "Microsoft.DateTimeEntityRecognizer": {
-      "title": "Date and time entity recognizer",
+      "title": "Распознаватель сущностей даты и времен",
       "description": "Распознаватель, который распознает фрагменты даты и времени.",
       "patternProperties": {
         "^\\$": {
@@ -1054,7 +1054,7 @@
       },
       "properties": {
         "defaultValue": {
-          "title": "Default date",
+          "title": "Дата по умолчанию",
           "description": "Свойству будет назначено значение или результат этого выражения, если превышено максимальное количество попыток ввода."
         },
         "value": {
@@ -1220,7 +1220,7 @@
       }
     },
     "Microsoft.DeleteProperty": {
-      "title": "Delete property",
+      "title": "Удаление свойства",
       "description": "Удаление свойства и любого содержащегося в нем значения.",
       "patternProperties": {
         "^\\$": {
@@ -1252,7 +1252,7 @@
       }
     },
     "Microsoft.DimensionEntityRecognizer": {
-      "title": "Dimension entity recognizer",
+      "title": "Распознаватель сущностей измерения",
       "description": "Распознаватель, который распознает измерение.",
       "patternProperties": {
         "^\\$": {
@@ -1332,7 +1332,7 @@
           "description": "Тип изменения для массива в памяти.",
           "oneOf": {
             "0": {
-              "title": "Change type",
+              "title": "Тип изменения",
               "description": "Тип стандартного изменения."
             }
           }
@@ -1346,7 +1346,7 @@
           "description": "Свойство, содержащее массив для обновления."
         },
         "resultProperty": {
-          "title": "Result property",
+          "title": "Свойство результата",
           "description": "Свойство для сохранения результата этого действия."
         },
         "value": {
@@ -1364,7 +1364,7 @@
       }
     },
     "Microsoft.EmailEntityRecognizer": {
-      "title": "Email entity recognizer",
+      "title": "Распознаватель сущностей электронной почты",
       "description": "Распознаватель, который распознает электронную почту.",
       "patternProperties": {
         "^\\$": {
@@ -1494,7 +1494,7 @@
       }
     },
     "Microsoft.FirstSelector": {
-      "title": "First trigger selector",
+      "title": "Селектор первого триггера",
       "description": "Селектор для первого истинного правила",
       "patternProperties": {
         "^\\$": {
@@ -1606,7 +1606,7 @@
       }
     },
     "Microsoft.GetActivityMembers": {
-      "title": "Get activity members",
+      "title": "Получение участников действия",
       "description": "Получение членов, участвующих в действии. (Только BotFrameworkAdapter.)",
       "patternProperties": {
         "^\\$": {
@@ -1624,7 +1624,7 @@
           "description": "Свойство (именованное расположение для хранения информации)."
         },
         "activityId": {
-          "title": "Activity Id",
+          "title": "ИД действия",
           "description": "Идентификатор действия или выражение для activityId, используемые для получения членов. Если ничего не определено, будет использоваться текущий идентификатор действия."
         },
         "disabled": {
@@ -1642,7 +1642,7 @@
       }
     },
     "Microsoft.GetConversationMembers": {
-      "title": "Get conversation members",
+      "title": "Получение участников беседы",
       "description": "Получение членов, участвующих в беседе. (Только BotFrameworkAdapter.)",
       "patternProperties": {
         "^\\$": {
@@ -1674,7 +1674,7 @@
       }
     },
     "Microsoft.GotoAction": {
-      "title": "Go to action",
+      "title": "Переход к действию",
       "description": "Переход к действию по идентификатору.",
       "patternProperties": {
         "^\\$": {
@@ -1706,7 +1706,7 @@
       }
     },
     "Microsoft.GuidEntityRecognizer": {
-      "title": "Guid entity recognizer",
+      "title": "Распознаватель сущностей GUID",
       "description": "Распознаватель, распознающий идентификаторы GUID.",
       "patternProperties": {
         "^\\$": {
@@ -1726,7 +1726,7 @@
       }
     },
     "Microsoft.HashtagEntityRecognizer": {
-      "title": "Hashtag entity recognizer",
+      "title": "Распознаватель сущностей хэштегов",
       "description": "Распознаватель, который распознает хэштеги.",
       "patternProperties": {
         "^\\$": {
@@ -1812,204 +1812,204 @@
       "description": "Компоненты, представляющие собой ActivityTemplate, который является шаблоном строк, действием или реализацией ActivityTemplate",
       "oneOf": {
         "1": {
-          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
-          "title": "Activity",
+          "description": "Действие — это базовый тип обмена данными для протокола Bot Framework 3.0.",
+          "title": "Действие",
           "properties": {
             "type": {
-              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "type"
+              "description": "Содержит тип действия. Возможные значения включают в себя: \"message\", \"contactRelationUpdate\",\n\"conversationUpdate\", \"typing\", \"endOfConversation\", \"event\", \"invoke\", \"deleteUserData\",\n\"messageUpdate\", \"messageDelete\", \"installationUpdate\", \"messageReaction\", \"suggestion\",\n\"trace\", \"handoff\".",
+              "title": "тип"
             },
             "id": {
-              "description": "Contains an ID that uniquely identifies the activity on the channel.",
-              "title": "id"
+              "description": "Содержит идентификатор, однозначно определяющий действие в канале.",
+              "title": "идентификатор"
             },
             "timestamp": {
-              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
-              "title": "timestamp"
+              "description": "Содержит дату и время (в формате UTC) отправки сообщения, выраженные в формате ISO-8601.",
+              "title": "метка времени"
             },
             "localTimestamp": {
-              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "description": "Содержит дату и время отправки сообщения (по местному времени) в формате\nISO-8601.\nНапример, 2016-09-23T13:07:49.4714686-07:00.",
               "title": "localTimestamp"
             },
             "localTimezone": {
-              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "description": "Содержит имя часового пояса, в котором было обработано сообщение по местному времени, выраженное в формате\nбазы данных часовых поясов IANA.\nНапример, America/Los_Angeles.",
               "title": "localTimezone"
             },
             "serviceUrl": {
-              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "description": "Содержит URL-адрес, указывающий конечную точку службы канала. Устанавливается каналом.",
               "title": "serviceUrl"
             },
             "channelId": {
-              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "description": "Содержит идентификатор, однозначно определяющий канал. Устанавливается каналом.",
               "title": "channelId"
             },
             "from": {
-              "description": "Identifies the sender of the message.",
-              "title": "from"
+              "description": "Идентифицирует отправителя сообщения.",
+              "title": "из"
             },
             "conversation": {
-              "description": "Identifies the conversation to which the activity belongs.",
-              "title": "conversation",
+              "description": "Идентифицирует беседу, к которой относится действие.",
+              "title": "беседа",
               "properties": {
                 "isGroup": {
-                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "description": "Указывает, содержит ли беседа больше двух участников в момент\nсоздания действия",
                   "title": "isGroup"
                 },
                 "conversationType": {
-                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "description": "Указывает тип беседы в каналах, различающих типы бесед",
                   "title": "conversationType"
                 },
                 "id": {
-                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-                  "title": "id"
+                  "description": "Идентификатор канала для пользователя или бота в этом канале (например: joe@smith.com, @joesmith или\n123456)",
+                  "title": "идентификатор"
                 },
                 "name": {
-                  "description": "Display friendly name",
-                  "title": "name"
+                  "description": "Отображение понятного имени",
+                  "title": "имя"
                 },
                 "aadObjectId": {
-                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "description": "Идентификатор объекта этой учетной записи в Azure Active Directory (AAD)",
                   "title": "aadObjectId"
                 },
                 "role": {
-                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-                  "title": "role"
+                  "description": "Роль сущности за учетной записью (например: пользователь, бот и т. д.). Возможные значения:\n\"user\", \"bot\"",
+                  "title": "роль"
                 }
               }
             },
             "recipient": {
-              "description": "Identifies the recipient of the message.",
-              "title": "recipient"
+              "description": "Идентифицирует получателя сообщения.",
+              "title": "получатель"
             },
             "textFormat": {
-              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "description": "Формат текстовых полей, по умолчанию: markdown. Возможные значения включают в себя: \"markdown\", \"plain\", \"xml\".",
               "title": "textFormat"
             },
             "attachmentLayout": {
-              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "description": "Указание макета для нескольких вложений. По умолчанию: list. Возможные значения: \"list\",\n\"carousel\"",
               "title": "attachmentLayout"
             },
             "membersAdded": {
-              "description": "The collection of members added to the conversation.",
+              "description": "Коллекция членов, добавленных в беседу.",
               "title": "membersAdded",
               "items": {
-                "description": "Channel account information needed to route a message",
+                "description": "Сведения об учетной записи канала, необходимые для маршрутизации сообщения",
                 "title": "ChannelAccount",
                 "properties": {
                   "id": {
-                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-                    "title": "id"
+                    "description": "Идентификатор канала для пользователя или бота в этом канале (например: joe@smith.com, @joesmith или\n123456)",
+                    "title": "идентификатор"
                   },
                   "name": {
-                    "description": "Display friendly name",
-                    "title": "name"
+                    "description": "Отображение понятного имени",
+                    "title": "имя"
                   },
                   "aadObjectId": {
-                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "description": "Идентификатор объекта этой учетной записи в Azure Active Directory (AAD)",
                     "title": "aadObjectId"
                   },
                   "role": {
-                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-                    "title": "role"
+                    "description": "Роль сущности за учетной записью (например: пользователь, бот и т. д.). Возможные значения:\n\"user\", \"bot\"",
+                    "title": "роль"
                   }
                 }
               }
             },
             "membersRemoved": {
-              "description": "The collection of members removed from the conversation.",
+              "description": "Коллекция членов, удаленных из беседы.",
               "title": "membersRemoved"
             },
             "reactionsAdded": {
-              "description": "The collection of reactions added to the conversation.",
+              "description": "Коллекция реакций, добавленных в беседу.",
               "title": "reactionsAdded",
               "items": {
-                "description": "Message reaction object",
+                "description": "Объект реакции на сообщение",
                 "title": "MessageReaction",
                 "properties": {
                   "type": {
-                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
-                    "title": "type"
+                    "description": "Тип реакции на сообщение. Возможные значения включают в себя: \"like\", \"plusOne\".",
+                    "title": "тип"
                   }
                 }
               }
             },
             "reactionsRemoved": {
-              "description": "The collection of reactions removed from the conversation.",
+              "description": "Коллекция реакций, удаленных из беседы.",
               "title": "reactionsRemoved"
             },
             "topicName": {
-              "description": "The updated topic name of the conversation.",
+              "description": "Обновленное название раздела диалога.",
               "title": "topicName"
             },
             "historyDisclosed": {
-              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "description": "Указывает, раскрывается ли предыдущая история канала.",
               "title": "historyDisclosed"
             },
             "locale": {
-              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
-              "title": "locale"
+              "description": "Имя языкового стандарта для содержимого текстового поля.\nИмя языкового стандарта представляет собой сочетание двух- или трехбуквенного кода языка и региональных параметров по ISO 639, связанного\nс языком,\nи двухбуквенного кода субкультуры по ISO 3166, связанного со страной или регионом.\nИмя языкового стандарта также может соответствовать допустимому тегу языка BCP-47.",
+              "title": "языковой стандарт"
             },
             "text": {
-              "description": "The text content of the message.",
-              "title": "text"
+              "description": "Текстовое содержимое сообщения.",
+              "title": "текст"
             },
             "speak": {
-              "description": "The text to speak.",
-              "title": "speak"
+              "description": "Текст для проговаривания.",
+              "title": "проговаривание"
             },
             "inputHint": {
-              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "description": "Указывает, что делает ваш бот — принимает,\nожидает или игнорирует данные, введенные пользователем, после доставки сообщения клиенту. Возможные\nзначения включают в себя: \"acceptingInput\", \"ignoringInput\", \"expectingInput\".",
               "title": "inputHint"
             },
             "summary": {
-              "description": "The text to display if the channel cannot render cards.",
-              "title": "summary"
+              "description": "Текст, отображаемый, когда канал не может визуализировать карточки.",
+              "title": "сводка"
             },
             "suggestedActions": {
-              "description": "The suggested actions for the activity.",
+              "description": "Предлагаемые действия для действия.",
               "title": "suggestedActions",
               "properties": {
                 "to": {
-                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
-                  "title": "to",
+                  "description": "Идентификаторы получателей, которым должны отображаться действия. Эти идентификаторы указываются относительно\nchannelId и подмножества всех получателей действия.",
+                  "title": "в",
                   "items": {
-                    "title": "Id",
-                    "description": "Id of recipient."
+                    "title": "ИД",
+                    "description": "Идентификатор получателя."
                   }
                 },
                 "actions": {
-                  "description": "Actions that can be shown to the user",
-                  "title": "actions",
+                  "description": "Действия, которые могут быть показаны пользователю",
+                  "title": "действия",
                   "items": {
-                    "description": "A clickable action",
+                    "description": "Действие, доступное для щелчка",
                     "title": "CardAction",
                     "properties": {
                       "type": {
-                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-                        "title": "type"
+                        "description": "Тип действия, реализуемого этой кнопкой. Возможные значения включают в себя следующее: \"openUrl\", \"imBack\",\n\"postBack\", \"playAudio\", \"playVideo\", \"showImage\", \"downloadFile\", \"signin\", \"call\",\n\"payment\", \"messageBack\".",
+                        "title": "тип"
                       },
                       "title": {
-                        "description": "Text description which appears on the button",
-                        "title": "title"
+                        "description": "Текстовое описание, отображаемое на кнопке",
+                        "title": "заголовок"
                       },
                       "image": {
-                        "description": "Image URL which will appear on the button, next to text label",
-                        "title": "image"
+                        "description": "URL-адрес изображения, который появится на кнопке рядом с надписью",
+                        "title": "образ"
                       },
                       "text": {
-                        "description": "Text for this action",
-                        "title": "text"
+                        "description": "Текст для этого действия",
+                        "title": "текст"
                       },
                       "displayText": {
-                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "description": "(Необязательно) Текст, отображаемый в веб-канале беседы при нажатии кнопки",
                         "title": "displayText"
                       },
                       "value": {
-                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
-                        "title": "value"
+                        "description": "Дополнительный параметр для действия. Содержимое этого свойства зависит от типа ActionType.",
+                        "title": "значение"
                       },
                       "channelData": {
-                        "description": "Channel-specific data associated with this action",
+                        "description": "Данные, относящиеся к определенному каналу, которые связаны с этим действием",
                         "title": "channelData"
                       }
                     }
@@ -2018,160 +2018,160 @@
               }
             },
             "attachments": {
-              "description": "Attachments",
-              "title": "attachments",
+              "description": "Вложения",
+              "title": "вложения",
               "items": {
-                "description": "An attachment within an activity",
-                "title": "Attachment",
+                "description": "Вложение в действие",
+                "title": "Вложение",
                 "properties": {
                   "contentType": {
-                    "description": "mimetype/Contenttype for the file",
+                    "description": "mimetype/Contenttype для этого файла",
                     "title": "contentType"
                   },
                   "contentUrl": {
-                    "description": "Content Url",
+                    "description": "URL-адрес содержимого",
                     "title": "contentUrl"
                   },
                   "content": {
-                    "description": "Embedded content",
-                    "title": "content"
+                    "description": "Внедренное содержимое",
+                    "title": "содержимое"
                   },
                   "name": {
-                    "description": "(OPTIONAL) The name of the attachment",
-                    "title": "name"
+                    "description": "(Необязательно) Имя вложения",
+                    "title": "имя"
                   },
                   "thumbnailUrl": {
-                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "description": "(Необязательно) Эскиз, связанный с вложением",
                     "title": "thumbnailUrl"
                   }
                 }
               }
             },
             "entities": {
-              "description": "Represents the entities that were mentioned in the message.",
-              "title": "entities",
+              "description": "Представляет сущности, упомянутые в сообщении.",
+              "title": "сущности",
               "items": {
-                "description": "Metadata object pertaining to an activity",
-                "title": "Entity",
+                "description": "Объект метаданных, относящийся к действию",
+                "title": "Сущность",
                 "properties": {
                   "type": {
-                    "description": "Type of this entity (RFC 3987 IRI)",
-                    "title": "type"
+                    "description": "Тип этой сущности (интернационализированный идентификатор ресурса по RFC 3987)",
+                    "title": "тип"
                   }
                 }
               }
             },
             "channelData": {
-              "description": "Contains channel-specific content.",
+              "description": "Содержит содержимое, специфическое для канала.",
               "title": "channelData"
             },
             "action": {
-              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
-              "title": "action"
+              "description": "Указывает, был ли получатель contactRelationUpdate добавлен в\nсписок контактов отправителя или удален из него.",
+              "title": "действие"
             },
             "replyToId": {
-              "description": "Contains the ID of the message to which this message is a reply.",
+              "description": "Содержит идентификатор сообщения, ответом на которое является это сообщение.",
               "title": "replyToId"
             },
             "label": {
-              "description": "A descriptive label for the activity.",
-              "title": "label"
+              "description": "Описательная метка для действия.",
+              "title": "метка"
             },
             "valueType": {
-              "description": "The type of the activity's value object.",
+              "description": "Тип объекта значения для действия.",
               "title": "valueType"
             },
             "value": {
-              "description": "A value that is associated with the activity.",
-              "title": "value"
+              "description": "Значение, связанное с действием.",
+              "title": "значение"
             },
             "name": {
-              "description": "The name of the operation associated with an invoke or event activity.",
-              "title": "name"
+              "description": "Имя операции, связанной с действием вызова или события.",
+              "title": "имя"
             },
             "relatesTo": {
-              "description": "A reference to another conversation or activity.",
+              "description": "Ссылка на другую беседу или другое действие.",
               "title": "relatesTo",
               "properties": {
                 "activityId": {
-                  "description": "(Optional) ID of the activity to refer to",
+                  "description": "(Необязательно) Идентификатор действия для ссылки",
                   "title": "activityId"
                 },
                 "user": {
-                  "description": "(Optional) User participating in this conversation",
-                  "title": "user"
+                  "description": "(Необязательно) Пользователь, участвующий в этой беседе",
+                  "title": "пользователь"
                 },
                 "bot": {
-                  "description": "Bot participating in this conversation",
-                  "title": "bot"
+                  "description": "Бот, участвующий в этой беседе",
+                  "title": "бот"
                 },
                 "conversation": {
-                  "description": "Conversation reference",
-                  "title": "conversation"
+                  "description": "Ссылка на беседу",
+                  "title": "беседа"
                 },
                 "channelId": {
-                  "description": "Channel ID",
+                  "description": "Идентификатор канала",
                   "title": "channelId"
                 },
                 "serviceUrl": {
-                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "description": "Конечная точка службы, в которой можно выполнить операции для указанной в ссылке беседы",
                   "title": "serviceUrl"
                 }
               }
             },
             "code": {
-              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "code"
+              "description": "Код для действий endOfConversation, указывающий причину завершения беседы.\nВозможные значения включают в себя: \"unknown\", \"completedSuccessfully\", \"userCancelled\", \"botTimedOut\",\n\"botIssuedInvalidMessage\", \"channelFailed\".",
+              "title": "код"
             },
             "expiration": {
-              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
-              "title": "expiration"
+              "description": "Время, когда действие должно считаться \"просроченным\" и не должно быть\nпредставлено получателю.",
+              "title": "срок действия"
             },
             "importance": {
-              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
-              "title": "importance"
+              "description": "Важность действия. Возможные значения включают в себя: \"low\", \"normal\", \"high\".",
+              "title": "важность"
             },
             "deliveryMode": {
-              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "description": "Указание доставки, сообщающее получателю об альтернативных путях доставки для действия.\nПо умолчанию используется режим доставки \"default\" (по умолчанию). Возможные значения включают в себя: \"normal\", \"notification\".",
               "title": "deliveryMode"
             },
             "listenFor": {
-              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "description": "Список фраз и ссылок, которые должны выявлять подготовительные речевые и языковые системы",
               "title": "listenFor",
               "items": {
-                "title": "Phrase",
-                "description": "Phrase to listen for."
+                "title": "Фраза",
+                "description": "Фраза для прослушивания."
               }
             },
             "textHighlights": {
-              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "description": "Коллекция текстовых фрагментов, выделяемых, когда действие содержит значение ReplyToId.",
               "title": "textHighlights",
               "items": {
-                "description": "Refers to a substring of content within another field",
+                "description": "Ссылается на подстроку содержимого в другом поле",
                 "title": "TextHighlight",
                 "properties": {
                   "text": {
-                    "description": "Defines the snippet of text to highlight",
-                    "title": "text"
+                    "description": "Определяет фрагмент текста для выделения",
+                    "title": "текст"
                   },
                   "occurrence": {
-                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
-                    "title": "occurrence"
+                    "description": "Вхождение текстового поля в указанный текст, если существует несколько экземпляров.",
+                    "title": "вхождение"
                   }
                 }
               }
             },
             "semanticAction": {
-              "description": "An optional programmatic action accompanying this request",
+              "description": "Дополнительное программное действие, сопровождающее этот запрос",
               "title": "semanticAction",
               "properties": {
                 "id": {
-                  "description": "ID of this action",
-                  "title": "id"
+                  "description": "Идентификатор этого действия",
+                  "title": "идентификатор"
                 },
                 "entities": {
-                  "description": "Entities associated with this action",
-                  "title": "entities"
+                  "description": "Сущности, которые связаны с этим действием",
+                  "title": "сущности"
                 }
               }
             }
@@ -2180,11 +2180,11 @@
       }
     },
     "Microsoft.IDialog": {
-      "title": "Microsoft dialogs",
+      "title": "Диалоговые окна Майкрософт",
       "description": "Компоненты, производные от диалога."
     },
     "Microsoft.IEntityRecognizer": {
-      "title": "Entity recognizers",
+      "title": "Распознаватели сущностей",
       "description": "Компоненты, производные от класса EntityRecognizer.",
       "oneOf": {
         "0": {
@@ -2198,7 +2198,7 @@
       "description": "Компоненты, производные от класса LanguageGenerator."
     },
     "Microsoft.IRecognizer": {
-      "title": "Microsoft recognizer",
+      "title": "Распознаватель Майкрософт",
       "description": "Компоненты, производные от класса Recognizer."
     },
     "Microsoft.ITextTemplate": {
@@ -2332,7 +2332,7 @@
       }
     },
     "Microsoft.IpEntityRecognizer": {
-      "title": "IP entity recognizer",
+      "title": "Распознаватель сущностей IP-адресов",
       "description": "Распознаватель, который распознает шаблоны IP-адресов в Интернете (например, 192.1.1.1).",
       "patternProperties": {
         "^\\$": {
@@ -2352,7 +2352,7 @@
       }
     },
     "Microsoft.LanguagePolicy": {
-      "title": "Language policy",
+      "title": "Языковая политика",
       "description": "Представляет сопоставление политики для поисков языковых стандартов, используемых для языка",
       "additionalProperties": {
         "title": "Политика для языкового стандарта",
@@ -2406,7 +2406,7 @@
           "description": "Метка для действия трассировки (используется для его идентификации в списке действий трассировки)."
         },
         "traceActivity": {
-          "title": "Send trace activity",
+          "title": "Отправка действия трассировки",
           "description": "Если задано значение true, автоматически отправляется TraceActivity (представление в Bot Framework Emulator)."
         },
         "$kind": {
@@ -2434,15 +2434,15 @@
           "description": "Необязательный уникальный идентификатор с RecognizerSet. Другие распознаватели должны возвращать намерение \"DeferToRecognizer_{Id}\" при перекрестном обучении на данных для этого распознавателя."
         },
         "applicationId": {
-          "title": "LUIS application id",
+          "title": "ИД приложения LUIS",
           "description": "Идентификатор приложения для модели из службы LUIS."
         },
         "version": {
-          "title": "LUIS version",
-          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
+          "title": "Версия LUIS",
+          "description": "Необязательная целевая версия. При значении NULL используется predictionOptions.Slot."
         },
         "endpoint": {
-          "title": "LUIS endpoint",
+          "title": "Конечная точка LUIS",
           "description": "Конечная точка, используемая для службы LUIS, например https://westus.api.cognitive.microsoft.com."
         },
         "endpointKey": {
@@ -2450,7 +2450,7 @@
           "description": "Ключ прогноза LUIS, используемый для вызова конечной точки."
         },
         "externalEntityRecognizer": {
-          "title": "External entity recognizer",
+          "title": "Распознаватель внешних сущностей",
           "description": "Сущности, распознаваемые этим распознавателем, будут передаваться в LUIS как внешние сущности."
         },
         "dynamicLists": {
@@ -2506,7 +2506,7 @@
               "description": "Значение true для регистрации речевых фрагментов в службе LUIS."
             },
             "preferExternalEntities": {
-              "title": "Prefer external entities",
+              "title": "Предпочтение внешних сущностей",
               "description": "Значение true, чтобы предпочитать внешние сущности созданным моделями LUIS."
             },
             "slot": {
@@ -2526,7 +2526,7 @@
       }
     },
     "Microsoft.MentionEntityRecognizer": {
-      "title": "Mentions entity recognizer",
+      "title": "Распознаватель сущностей упоминаний",
       "description": "Распознаватель, который распознает @упоминания",
       "patternProperties": {
         "^\\$": {
@@ -2546,7 +2546,7 @@
       }
     },
     "Microsoft.MostSpecificSelector": {
-      "title": "Most specific trigger selector",
+      "title": "Селектор наиболее конкретного триггера",
       "description": "Выберите наиболее специфичные истинные события с помощью необязательного дополнительного селектора",
       "patternProperties": {
         "^\\$": {
@@ -2598,7 +2598,7 @@
       }
     },
     "Microsoft.NumberEntityRecognizer": {
-      "title": "Number entity recognizer",
+      "title": "Распознаватель числовых сущностей",
       "description": "Распознаватель, который распознает числа.",
       "patternProperties": {
         "^\\$": {
@@ -2702,7 +2702,7 @@
       }
     },
     "Microsoft.NumberRangeEntityRecognizer": {
-      "title": "Number range entity recognizer",
+      "title": "Распознаватель сущностей диапазона чисел",
       "description": "Распознаватель, который распознает диапазоны чисел (например: от 2 до 5).",
       "patternProperties": {
         "^\\$": {
@@ -2772,7 +2772,7 @@
           "description": "Выражение для проверки на каждом этапе беседы как возможного значения для свойства."
         },
         "allowInterruptions": {
-          "title": "Allow interruptions",
+          "title": "Разрешение прерываний",
           "description": "Логическое выражение, определяющее, следует ли разрешить родительскому элементу прерывать входные данные."
         },
         "alwaysPrompt": {
@@ -3130,7 +3130,7 @@
       }
     },
     "Microsoft.OnContinueConversation": {
-      "title": "On continue conversation",
+      "title": "При продолжении беседы",
       "description": "Действия, выполняемые при повторном запуске беседы из действия ContinueConversationLater.",
       "patternProperties": {
         "^\\$": {
@@ -3314,7 +3314,7 @@
       }
     },
     "Microsoft.OnError": {
-      "title": "On error",
+      "title": "В случае ошибки",
       "description": "Действие, выполняемое при возникновении события диалога \"Error\".",
       "patternProperties": {
         "^\\$": {
@@ -3422,38 +3422,38 @@
       }
     },
     "Microsoft.OnInstallationUpdateActivity": {
-      "title": "On InstallationUpdate activity",
-      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "title": "При действии InstallationUpdate",
+      "description": "Действия, выполняемые при получении действия с типом \"InstallationUpdate\".",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Свойство инструментария",
+          "description": "Незаконченное свойство для инструментария."
         }
       },
       "properties": {
         "condition": {
-          "title": "Condition",
-          "description": "Condition (expression)."
+          "title": "Условие",
+          "description": "Условие (выражение)."
         },
         "actions": {
-          "title": "Actions",
-          "description": "Sequence of actions to execute."
+          "title": "Действия",
+          "description": "Последовательность действий для выполнения."
         },
         "priority": {
-          "title": "Priority",
-          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+          "title": "Приоритет",
+          "description": "Приоритет для триггера, где 0 является наивысшим, а значение < 0 игнорируется."
         },
         "runOnce": {
-          "title": "Run Once",
-          "description": "True if rule should run once per unique conditions"
+          "title": "Однократный запуск",
+          "description": "Значение true, если правило должно выполняться один раз для уникальных условий"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Вид объекта диалога",
+          "description": "Определяет допустимые свойства для настраиваемого компонента (из SCHEMA-файла диалога)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Сведения конструктора",
+          "description": "Дополнительные сведения для Bot Framework Composer."
         }
       }
     },
@@ -3686,7 +3686,7 @@
       }
     },
     "Microsoft.OnQnAMatch": {
-      "title": "On QnAMaker match",
+      "title": "При соответствии в QnA Maker",
       "description": "Действия, выполняемые, когда найдено соответствие из QnAMaker.",
       "patternProperties": {
         "^\\$": {
@@ -3830,7 +3830,7 @@
       }
     },
     "Microsoft.OrdinalEntityRecognizer": {
-      "title": "Ordinal entity recognizer",
+      "title": "Распознаватель порядковых сущностей",
       "description": "Распознаватель, который распознает порядковые номера (например, \"первый\", \"второй\", \"3-й\").",
       "patternProperties": {
         "^\\$": {
@@ -3850,7 +3850,7 @@
       }
     },
     "Microsoft.PercentageEntityRecognizer": {
-      "title": "Percentage entity recognizer",
+      "title": "Распознаватель процентных сущностей",
       "description": "Распознаватель, который распознает проценты.",
       "patternProperties": {
         "^\\$": {
@@ -3870,7 +3870,7 @@
       }
     },
     "Microsoft.PhoneNumberEntityRecognizer": {
-      "title": "Phone number entity recognizer",
+      "title": "Распознаватель сущностей номеров телефона",
       "description": "Распознаватель, который распознает номера телефонов.",
       "patternProperties": {
         "^\\$": {
@@ -3890,7 +3890,7 @@
       }
     },
     "Microsoft.QnAMakerDialog": {
-      "title": "QnAMaker dialog",
+      "title": "Диалоговое окно QnA Maker",
       "description": "Диалог, использующее базу знаний QnAMAker для ответа на вопросы.",
       "patternProperties": {
         "^\\$": {
@@ -3904,7 +3904,7 @@
           "description": "Идентификатор вашей базы знаний QnA Maker."
         },
         "endpointKey": {
-          "title": "Endpoint key",
+          "title": "Ключ конечной точки",
           "description": "Ключ конечной точки для базы знаний QnA Maker."
         },
         "hostname": {
@@ -3932,7 +3932,7 @@
           "description": "Настраиваемый ответ, когда был выбран вариант отсутствия совпадений."
         },
         "strictFilters": {
-          "title": "Strict filters",
+          "title": "Строгие фильтры",
           "description": "Фильтры метаданных, используемые при вызове базы знаний QnA Maker.",
           "items": {
             "title": "Фильтр метаданных",
@@ -3958,7 +3958,7 @@
           "description": "Значение true, если указывает на тестовую среду; в противном случае — false."
         },
         "rankerType": {
-          "title": "Ranker type",
+          "title": "Тип ранжировщика",
           "description": "Тип ранжировщика.",
           "oneOf": {
             "0": {
@@ -3969,11 +3969,11 @@
         },
         "strictFiltersJoinOperator": {
           "title": "StrictFiltersJoinOperator",
-          "description": "Join operator for Strict Filters.",
+          "description": "Оператор соединения для строгих фильтров.",
           "oneOf": {
             "0": {
-              "title": "Join operator",
-              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
+              "title": "Оператор соединения",
+              "description": "Значение оператора соединения, используемое в сочетании со значениями строгого фильтра."
             }
           }
         },
@@ -3988,7 +3988,7 @@
       }
     },
     "Microsoft.QnAMakerRecognizer": {
-      "title": "QnAMaker recognizer",
+      "title": "Распознаватель QnA Maker",
       "description": "Распознаватель для создания намерений QnAMatch из базы знаний.",
       "patternProperties": {
         "^\\$": {
@@ -4003,10 +4003,10 @@
         },
         "knowledgeBaseId": {
           "title": "Идентификатор базы знаний",
-          "description": "Knowledge base Id of your QnA Maker knowledge base."
+          "description": "ИД базы знаний QnA Maker."
         },
         "endpointKey": {
-          "title": "Endpoint key",
+          "title": "Ключ конечной точки",
           "description": "Ключ конечной точки для базы знаний QnA Maker."
         },
         "hostname": {
@@ -4018,7 +4018,7 @@
           "description": "Оценка порога для фильтрации результатов."
         },
         "strictFilters": {
-          "title": "Strict filters",
+          "title": "Строгие фильтры",
           "description": "Фильтры метаданных, используемые при вызове базы знаний QnA Maker.",
           "items": {
             "title": "Фильтры метаданных",
@@ -4040,11 +4040,11 @@
           "description": "Число ответов, которые требуется получить."
         },
         "isTest": {
-          "title": "Use test environment",
+          "title": "Использование тестовой среды",
           "description": "Значение true, если указывает на тестовую среду; в противном случае — false."
         },
         "rankerType": {
-          "title": "Ranker type",
+          "title": "Тип ранжировщика",
           "description": "Тип ранжировщика.",
           "oneOf": {
             "0": {
@@ -4055,16 +4055,16 @@
         },
         "strictFiltersJoinOperator": {
           "title": "StrictFiltersJoinOperator",
-          "description": "Join operator for Strict Filters.",
+          "description": "Оператор соединения для строгих фильтров.",
           "oneOf": {
             "0": {
-              "title": "Join operator",
-              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+              "title": "Оператор соединения",
+              "description": "Значение оператора соединения, используемое в сочетании со значениями строгого фильтра."
             }
           }
         },
         "includeDialogNameInMetadata": {
-          "title": "Include dialog name",
+          "title": "Включение имени диалогового окна",
           "description": "Если задано значение false, имя диалога не будет передано в QnAMaker, по умолчанию — true."
         },
         "metadata": {
@@ -4086,11 +4086,11 @@
           }
         },
         "context": {
-          "title": "QnA request context",
+          "title": "Контекст запроса QnA",
           "description": "Контекст, используемый для ранжирования."
         },
         "qnaId": {
-          "title": "QnA Id",
+          "title": "ИД в QnA",
           "description": "Число или выражение, представляющее собой идентификатор QnAId для передачи в API QnAMaker."
         },
         "$kind": {
@@ -4128,7 +4128,7 @@
       }
     },
     "Microsoft.RecognizerSet": {
-      "title": "Recognizer set",
+      "title": "Набор распознавателей",
       "description": "Создает объединение намерений и сущностей распознавателей в наборе.",
       "patternProperties": {
         "^\\$": {
@@ -4156,7 +4156,7 @@
       }
     },
     "Microsoft.RegexEntityRecognizer": {
-      "title": "Regex entity recognizer",
+      "title": "Распознаватель сущностей регулярных выражений",
       "description": "Распознаватель, который распознает шаблоны ввода на основе регулярного выражения.",
       "patternProperties": {
         "^\\$": {
@@ -4260,7 +4260,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "Обработанное действие",
           "description": "Если задано значение false, то вызываемый диалог может обработать текущее действие."
         },
         "$kind": {
@@ -4309,7 +4309,7 @@
           }
         },
         "activityProcessed": {
-          "title": "Activity processed",
+          "title": "Обработанное действие",
           "description": "Если задано значение false, то вызываемый диалог может обработать текущее действие."
         },
         "$kind": {
@@ -4323,7 +4323,7 @@
       }
     },
     "Microsoft.ResourceMultiLanguageGenerator": {
-      "title": "Resource multi-language generator",
+      "title": "Многоязычный генератор ресурсов",
       "description": "Многоязычный генератор, который связан с ресурсом по идентификатору ресурса.",
       "patternProperties": {
         "^\\$": {
@@ -4341,7 +4341,7 @@
           "description": "Ресурс, являющийся корневым языковым генератором. Другие генераторы с таким же именем и суффиксом языка будут загружены в этот генератор и использованы в соответствии с языковой политикой."
         },
         "languagePolicy": {
-          "title": "Language policy",
+          "title": "Языковая политика",
           "description": "Задание альтернативной языковой политики для этого генератора. Если значение не задано, будет использоваться глобальная языковая политика."
         },
         "$kind": {
@@ -4469,7 +4469,7 @@
       }
     },
     "Microsoft.SignOutUser": {
-      "title": "Sign out user",
+      "title": "Выход пользователя",
       "description": "Выполнение выхода для пользователя, который ранее вошел с использованием OAuthInput.",
       "patternProperties": {
         "^\\$": {
@@ -4487,7 +4487,7 @@
           "description": "Выражение для пользователя, для которого выполняется выход. По умолчанию: user.id."
         },
         "connectionName": {
-          "title": "Connection name",
+          "title": "Имя подключения",
           "description": "Имя подключения, которое использовалось с OAuthInput для входа пользователя в систему."
         },
         "disabled": {
@@ -4505,7 +4505,7 @@
       }
     },
     "Microsoft.StaticActivityTemplate": {
-      "title": "Microsoft static activity template",
+      "title": "Шаблон статических действий Майкрософт",
       "description": "Это позволяет определить объект статического действия",
       "patternProperties": {
         "^\\$": {
@@ -4583,7 +4583,7 @@
       }
     },
     "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetry - track event",
+      "title": "Телеметрия — отслеживание события",
       "description": "Отслеживание пользовательского события с помощью зарегистрированного клиента телеметрии.",
       "patternProperties": {
         "^\\$": {
@@ -4601,7 +4601,7 @@
           "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
         },
         "eventName": {
-          "title": "Event name",
+          "title": "Имя события",
           "description": "Имя события для отслеживания."
         },
         "properties": {
@@ -4619,7 +4619,7 @@
       }
     },
     "Microsoft.TemperatureEntityRecognizer": {
-      "title": "Temperature recognizer",
+      "title": "Распознаватель температуры",
       "description": "Распознаватель, который распознает значения температуры.",
       "patternProperties": {
         "^\\$": {
@@ -4639,7 +4639,7 @@
       }
     },
     "Microsoft.TemplateEngineLanguageGenerator": {
-      "title": "Template multi-language generator",
+      "title": "Многоязыковой генератор шаблонов",
       "description": "Генератор шаблонов, допускающий только встроенное вычисление шаблонов.",
       "patternProperties": {
         "^\\$": {
@@ -4767,34 +4767,34 @@
       }
     },
     "Microsoft.ThrowException": {
-      "title": "Throw an exception",
-      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "title": "Выдача исключения",
+      "description": "Выдача исключения. Оно фиксируется триггером OnError.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Свойство инструментария",
+          "description": "Незаконченное свойство для инструментария."
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ИД",
+          "description": "Необязательный идентификатор диалога"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "Отключено",
+          "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
         },
         "errorValue": {
-          "title": "Error value",
-          "description": "Error value to throw."
+          "title": "Значение ошибки",
+          "description": "Выдаваемое значение ошибки."
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Вид объекта диалога",
+          "description": "Определяет допустимые свойства для настраиваемого компонента (из SCHEMA-файла диалога)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Сведения конструктора",
+          "description": "Дополнительные сведения для Bot Framework Composer."
         }
       }
     },
@@ -4843,7 +4843,7 @@
       }
     },
     "Microsoft.TrueSelector": {
-      "title": "True trigger selector",
+      "title": "Селектор истинных триггеров",
       "description": "Селектор для всех истинных событий",
       "patternProperties": {
         "^\\$": {
@@ -4863,7 +4863,7 @@
       }
     },
     "Microsoft.UpdateActivity": {
-      "title": "Update an activity",
+      "title": "Обновление действия",
       "description": "Ответ с действием.",
       "patternProperties": {
         "^\\$": {
@@ -4899,7 +4899,7 @@
       }
     },
     "Microsoft.UrlEntityRecognizer": {
-      "title": "Url recognizer",
+      "title": "Распознаватель URL-адресов",
       "description": "Распознаватель, который распознает URL-адреса.",
       "patternProperties": {
         "^\\$": {

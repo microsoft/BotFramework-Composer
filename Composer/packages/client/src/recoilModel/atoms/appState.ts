@@ -235,6 +235,13 @@ export const formDialogGenerationProgressingState = atom({
   default: false,
 });
 
+export const formDialogErrorState = atom<
+  (Error & { kind: 'templateFetch' | 'generation' | 'deletion'; logs?: string[] }) | undefined
+>({
+  key: getFullyQualifiedKey('formDialogError'),
+  default: undefined,
+});
+
 export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any } }>({
   key: getFullyQualifiedKey('pageElement'),
   default: {

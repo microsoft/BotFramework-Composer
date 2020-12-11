@@ -29,11 +29,13 @@ import {
   createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
+  locationState,
   projectMetaDataState,
+  settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
-import { rootBotProjectIdSelector } from '../selectors';
+import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -63,9 +65,11 @@ export const projectDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectIdToRemove: string) => {
       try {
         const { set, snapshot } = callbackHelpers;
+
         const dispatcher = await snapshot.getPromise(dispatcherState);
         await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
         set(botProjectIdsState, (currentProjects) => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
@@ -75,6 +79,7 @@ export const projectDispatcher = () => {
         if (rootBotProjectId) {
           navigateToBot(callbackHelpers, rootBotProjectId, '');
         }
+        botRuntimeOperations?.stopBot(projectIdToRemove);
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
@@ -111,7 +116,7 @@ export const projectDispatcher = () => {
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
           throw new Error(
-            formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
+            formatMessage('This operation cannot be completed. The bot is already part of the Bot Project')
           );
         }
         const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
@@ -198,10 +203,26 @@ export const projectDispatcher = () => {
   );
 
   const openProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', navigate = true) => {
-      const { set } = callbackHelpers;
+    (callbackHelpers: CallbackInterface) => async (
+      path: string,
+      storageId = 'default',
+      navigate = true,
+      callback?: (projectId: string) => void
+    ) => {
+      const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
+        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+
+        if (rootBotId) {
+          const rootBotLocation = await snapshot.getPromise(locationState(rootBotId));
+          // Reloading the same bot. No need to fetch resources again.
+          if (rootBotLocation === path) {
+            navigateToBot(callbackHelpers, rootBotId);
+            return;
+          }
+        }
+
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
 
@@ -224,6 +245,10 @@ export const projectDispatcher = () => {
 
         if (navigate) {
           navigateToBot(callbackHelpers, projectId, mainDialog);
+        }
+
+        if (typeof callback === 'function') {
+          callback(projectId);
         }
       } catch (ex) {
         set(botProjectIdsState, []);
@@ -441,8 +466,12 @@ export const projectDispatcher = () => {
 
   /** Resets the file persistence of a project, and then reloads the bot state. */
   const reloadProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { snapshot } = callbackHelpers;
     callbackHelpers.reset(filePersistenceState(projectId));
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
+
+    // Reload needs to pull the settings from the local storage persisted in the current settingsState of the project
+    botFiles.mergedSettings = await snapshot.getPromise(settingsState(projectId));
     await initBotState(callbackHelpers, projectData, botFiles);
   });
 
@@ -487,6 +516,7 @@ export const projectDispatcher = () => {
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
             } else {
               // failure
+              callbackHelpers.set(botOpeningState, false);
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
@@ -495,6 +525,7 @@ export const projectDispatcher = () => {
           clearInterval(timer);
           callbackHelpers.set(botProjectIdsState, []);
           handleProjectFailure(callbackHelpers, err);
+          callbackHelpers.set(botOpeningState, false);
           navigateTo('/home');
         }
       }, 5000);
