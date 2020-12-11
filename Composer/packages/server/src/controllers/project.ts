@@ -408,10 +408,7 @@ async function checkBoilerplateVersion(req: Request, res: Response) {
   if (currentProject !== undefined) {
     const latestVersion = await AssetService.manager.getBoilerplateCurrentVersion();
     const currentVersion = await AssetService.manager.getBoilerplateVersionFromProject(currentProject);
-    const updateRequired =
-      (latestVersion && currentVersion && latestVersion > currentVersion) || // versions are present in both locations, latest is newer
-      (latestVersion && !currentVersion); // latest version exists, but is mssing from project
-
+    const updateRequired = latestVersion && currentVersion && latestVersion > currentVersion; // versions are present in both locations, latest is newer
     res.status(200).json({
       currentVersion,
       latestVersion,
