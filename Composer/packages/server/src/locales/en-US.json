@@ -872,8 +872,8 @@
   "dialog_events_f1b2e2a0": {
     "message": "Dialog events"
   },
-  "dialog_generation_failed_3c73e599": {
-    "message": "Dialog generation failed."
+  "dialog_generation_has_failed_550f0927": {
+    "message": "Dialog generation has failed."
   },
   "dialog_generation_was_successful_be280943": {
     "message": "Dialog generation was successful."
@@ -908,8 +908,8 @@
   "disable_a5c05db3": {
     "message": "Disable"
   },
-  "discover_and_use_components_that_can_be_installed__49e308bf": {
-    "message": "Discover and use components that can be installed into your bot."
+  "discover_and_use_components_that_can_be_installed__b15032de": {
+    "message": "Discover and use components that can be installed into your bot"
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
@@ -1264,6 +1264,9 @@
   },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
+  },
+  "generating_dialog_for_schemaid_51b2744f": {
+    "message": "Generating dialog for \"{ schemaId }\""
   },
   "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
     "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
@@ -3098,8 +3101,8 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
   },
-  "your_dialog_was_generated_successfully_61c13b73": {
-    "message": "Your dialog was generated successfully."
+  "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
+    "message": "Your dialog for \"{ schemaId }\" was generated successfully."
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
