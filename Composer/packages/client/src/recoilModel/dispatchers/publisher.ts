@@ -44,9 +44,7 @@ const missingDotnetVersionError = {
 };
 
 const checkIfDotnetVersionMissing = (err: any) => {
-  return /(Command failed: dotnet build)| (Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
-    err.message as string
-  );
+  return /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(err.message as string);
 };
 
 export const publisherDispatcher = () => {
