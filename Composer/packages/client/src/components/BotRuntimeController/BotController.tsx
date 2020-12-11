@@ -93,18 +93,23 @@ const BotController: React.FC = () => {
   }, [projectCollection, errors]);
 
   useEffect(() => {
-    const botsStarting = !!projectCollection.find(({ status }) => {
-      return (
-        status === BotStatus.publishing ||
-        status === BotStatus.published ||
-        status == BotStatus.pending ||
-        status == BotStatus.queued ||
-        status == BotStatus.starting
-      );
-    });
+    const botsStarting =
+      startAllBotsOperationQueued ||
+      !!projectCollection.find(({ status }) => {
+        return (
+          status === BotStatus.publishing ||
+          status === BotStatus.published ||
+          status == BotStatus.pending ||
+          status == BotStatus.queued ||
+          status == BotStatus.starting ||
+          status == BotStatus.stopping
+        );
+      });
     setBotsStarting(botsStarting);
 
-    const botsStarted = !!projectCollection.find(({ status }) => status === BotStatus.connected);
+    const botsStarted = !!projectCollection.find(
+      ({ status }) => status === BotStatus.connected || status === BotStatus.failed
+    );
     setBotsStartCompleted(botsStarted);
 
     if (botsStarting) {
@@ -167,8 +172,8 @@ const BotController: React.FC = () => {
       TelemetryClient.track('StartAllBotsButtonClicked');
       startAllBots();
     } else {
-      await stopAllBots();
       queueStartAllBots(true);
+      await stopAllBots();
       TelemetryClient.track('RestartAllBotsButtonClicked');
     }
     builderEssentials.forEach(({ projectId }) => {
