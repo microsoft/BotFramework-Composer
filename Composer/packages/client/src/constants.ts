@@ -121,7 +121,7 @@ export enum BotStatus {
   inactive = 'inactive',
   publishing = 'publishing',
   published = 'published',
-  reloading = 'loading',
+  starting = 'starting',
   pending = 'pending',
   failed = 'failed',
   stopping = 'stopping',
@@ -167,7 +167,7 @@ export const BotStatusesCopy = {
   get queued() {
     return formatMessage('Queued');
   },
-  get reloading() {
+  get starting() {
     return formatMessage('Starting');
   },
   get stopping() {

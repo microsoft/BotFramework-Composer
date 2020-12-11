@@ -14,6 +14,7 @@ import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { formDialogSchemaState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 const Root = styled(Stack)<{
   inProgress: boolean;
@@ -91,7 +92,12 @@ export const VisualFormDialogSchemaEditor = React.memo((props: Props) => {
   return (
     <Root verticalFill inProgress={generationInProgress}>
       <Stack horizontal horizontalAlign="end" styles={editorTopBarStyles} verticalAlign="center">
-        <ActionButton onClick={() => setShowEditor(!showEditor)}>
+        <ActionButton
+          onClick={() => {
+            setShowEditor(!showEditor);
+            TelemetryClient.track('EditModeToggled', { jsonView: !showEditor });
+          }}
+        >
           {showEditor ? formatMessage('Hide code') : formatMessage('Show code')}
         </ActionButton>
       </Stack>

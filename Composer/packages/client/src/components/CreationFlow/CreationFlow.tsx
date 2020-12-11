@@ -21,6 +21,7 @@ import {
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
 import { ImportModal } from '../ImportModal/ImportModal';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -97,7 +98,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openProject(botFolder);
+    await openProject(botFolder, 'default', true, (projectId) => {
+      TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
+    });
   };
 
   const handleCreateNew = async (formData, templateId: string) => {

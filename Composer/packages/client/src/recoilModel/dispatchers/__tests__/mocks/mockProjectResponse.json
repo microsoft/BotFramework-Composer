@@ -8641,7 +8641,7 @@
     "MicrosoftAppId": "",
     "cosmosDb": {
       "authKey": "",
-      "collectionId": "botstate-collection",
+      "containerId": "botstate-container",
       "cosmosDBEndpoint": "",
       "databaseId": "botstate-db"
     },
@@ -8680,8 +8680,7 @@
       "command": ""
     },
     "downsampling": {
-      "maxImbalanceRatio": 10,
-      "maxUtteranceAllowed": 15000
+      "maxImbalanceRatio": 10
     }
   }
 }
