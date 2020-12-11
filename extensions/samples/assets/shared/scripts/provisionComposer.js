@@ -465,7 +465,7 @@ const create = async (
     message: `> Create App Id Success! ID: ${appId}`,
   });
 
-  const resourceGroupName = `${name}-${environment}`;
+  const resourceGroupName = (name = `${name}-${environment}`);
 
   // timestamp will be used as deployment name
   const timeStamp = new Date().getTime().toString();
