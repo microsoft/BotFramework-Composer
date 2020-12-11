@@ -5,9 +5,6 @@ import { JSONSchema7 } from '@botframework-composer/types';
 const schema: JSONSchema7 = {
   type: 'object',
   properties: {
-    accessToken: {
-      type: 'string',
-    },
     name: {
       type: 'string',
       title: 'name',
@@ -106,9 +103,8 @@ const schema: JSONSchema7 = {
       required: ['MicrosoftAppId', 'MicrosoftAppPassword'],
     },
   },
-  required: ['subscriptionID', 'publishName', 'provision', 'accessToken'],
+  required: ['subscriptionID', 'publishName', 'provision'],
   default: {
-    accessToken: '<Access token from az account get-access-token>',
     name: '<unique name in your subscription>',
     environment: 'dev',
     runtimeIdentifier: 'win-x64',
