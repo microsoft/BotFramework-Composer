@@ -15,6 +15,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dispatcherState, onCreateQnAFromUrlDialogCompleteState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import {
   knowledgeBaseSourceUrl,
@@ -100,7 +101,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
             data-testid={`knowledgeLocationTextField-url`}
             errorMessage={formErrors.url}
             label={formatMessage('Knowledge source')}
-            placeholder={formatMessage('Enter a URL or browse to upload a file ')}
+            placeholder={formatMessage('Enter a URL')}
             styles={textField}
             value={formData.url}
             onChange={(e, url = '') => updateField('url', url)}
@@ -124,7 +125,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
           text={formatMessage('Create knowledge base from scratch')}
           onClick={() => {
             // switch to create from scratch flow, pass onComplete callback.
-            actions.createQnAFromScratchDialogBegin({ projectId, onComplete: onComplete?.func });
+            actions.createQnAFromScratchDialogBegin({ projectId, dialogId, onComplete: onComplete?.func });
           }}
         />
         <DefaultButton
@@ -143,6 +144,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
               return;
             }
             onSubmit(formData);
+            TelemetryClient.track('AddNewKnowledgeBaseCompleted');
           }}
         />
       </DialogFooter>

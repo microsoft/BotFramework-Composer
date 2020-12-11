@@ -21,7 +21,7 @@
     "message": "Az űrlap-párbeszédpanel lehetővé teszi, hogy a robotja információkat gyűjtsön."
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
-    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
+    "message": "A tudásbázis neve nem tartalmazhat szóközöket és speciális karaktereket. Betűk, számok, - vagy _ karakterek használhatók."
   },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "Egy minitérkép átfogó képet ad a forráskódról a gyors navigálás és a kód megértése érdekében."
@@ -35,11 +35,17 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "A tulajdonságok a robot által gyűjtött információk. A tulajdonságnév a Composer eszközben használt elnevezés, nem feltétlenül azonos a robot üzeneteiben megjelenő szöveggel."
   },
+  "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
+    "message": "A schema, or form, is the list of properties your bot will collect."
+  },
+  "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
+    "message": "A skill bot that can be called from a host bot."
+  },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A QnA Maker-erőforrások létrehozásakor egy előfizetési kulcs jön létre."
   },
   "a_valid_url_should_start_with_http_or_https_327b1a30": {
-    "message": "A valid URL should start with http:// or https://"
+    "message": "Egy érvényes URL-címnek a http:// vagy a https:// karaktersorral kell kezdődnie"
   },
   "about_70c18bba": {
     "message": "Névjegy"
@@ -92,6 +98,9 @@
   "actions_moved_d7777b29": {
     "message": "Áthelyezett műveletek"
   },
+  "active_language_6d001457": {
+    "message": "Active language"
+  },
   "activities_125193f7": {
     "message": "Tevékenységek"
   },
@@ -107,11 +116,11 @@
   "add_8523c19b": {
     "message": "Hozzáadás"
   },
+  "add_a_dialog_e378aa3a": {
+    "message": "Add a dialog"
+  },
   "add_a_new_key_5c208c29": {
     "message": "Új kulcs hozzáadása"
-  },
-  "add_a_new_skill_dialog_aaaafa9c": {
-    "message": "Új Készségpárbeszéd hozzáadása"
   },
   "add_a_new_trigger_a82d3db8": {
     "message": "Új trigger hozzáadása"
@@ -125,6 +134,9 @@
   "add_a_skill_46d2b71c": {
     "message": "Készség hozzáadása"
   },
+  "add_a_trigger_c6861401": {
+    "message": "Add a trigger"
+  },
   "add_a_welcome_message_9e1480b2": {
     "message": "Üdvözlőüzenet hozzáadása"
   },
@@ -137,35 +149,26 @@
   "add_custom_runtime_6b73dc44": {
     "message": "Egyéni futtatókörnyezet hozzáadása"
   },
-  "add_language_75dee49e": {
-    "message": "Nyelv hozzáadása"
-  },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Több, egymástól vesszővel elválasztott szinonima hozzáadása"
   },
   "add_new_answer_9de3808e": {
     "message": "Új válasz hozzáadása"
   },
-  "add_new_dialog_25f12c9": {
-    "message": "Új párbeszéd hozzáadása"
-  },
   "add_new_extension_19b82b77": {
     "message": "Új bővítmény hozzáadása"
   },
-  "add_new_knowledge_base_on_displayname_7f44609c": {
-    "message": "Új tudásbázis hozzáadása itt: { displayName }"
-  },
-  "add_new_profile_47b225e6": {
-    "message": "Új profil hozzáadása"
+  "add_new_knowledge_base_1a3afed3": {
+    "message": "Add new knowledge base"
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "Új { propertyName } hozzáadása"
   },
+  "add_new_publish_profile_93345a07": {
+    "message": "Add new publish profile"
+  },
   "add_new_question_85612b7f": {
     "message": "Új kérdés hozzáadása"
-  },
-  "add_new_trigger_on_displayname_2aaf6e4c": {
-    "message": "Új trigger hozzáadása itt: { displayName }"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Itt adható hozzá új érvényesítési szabály"
@@ -191,20 +194,11 @@
   "advanced_options_4dcc8385": {
     "message": "Speciális beállítások"
   },
+  "advanced_settings_view_json_b83638b4": {
+    "message": "Advanced Settings View (json)"
+  },
   "all_4321c3a1": {
     "message": "Mind"
-  },
-  "all_language_generation_files_ef778f24": {
-    "message": "minden nyelvgenerálási fájl"
-  },
-  "all_language_understanding_files_714b33eb": {
-    "message": "minden nyelvtanulási fájl"
-  },
-  "all_profiles_8321b1aa": {
-    "message": "Minden profil"
-  },
-  "all_qna_files_349d7fe1": {
-    "message": "minden qna-fájl"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "LUIS-fiók létrehozásakor automatikusan létrejön egy szerzői kulcs."
@@ -227,11 +221,14 @@
   "any_string_f22dc2e1": {
     "message": "bármilyen sztring"
   },
-  "application_language_87691b6": {
-    "message": "Alkalmazásnyelv"
+  "app_id_password_424f613a": {
+    "message": "App Id / Password"
   },
   "application_language_f100f3e0": {
     "message": "Alkalmazásnyelv"
+  },
+  "application_language_settings_26f82dfc": {
+    "message": "Application Language settings"
   },
   "application_settings_39e840c6": {
     "message": "Alkalmazásbeállítások"
@@ -251,6 +248,9 @@
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "Biztosan eltávolítja a következőt: { propertyName }?"
   },
+  "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
+    "message": "Are you sure you want to remove this property?"
+  },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "Biztosan újrakezdi? Az eddigi folyamat adatai elvesznek."
   },
@@ -259,9 +259,6 @@
   },
   "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
     "message": "Biztosan eltávolítja ezeket a bővítményeket?"
-  },
-  "arm_template_bc8441bb": {
-    "message": "Resource Manager-sablon"
   },
   "array_643947ee": {
     "message": "Tömb"
@@ -277,6 +274,9 @@
   },
   "ask_a_question_92ef7e0c": {
     "message": "Kérdés küldése"
+  },
+  "ask_activity_82c174e2": {
+    "message": "Ask Activity"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "Legalább egy kérdés megadása kötelező"
@@ -299,29 +299,11 @@
   "auto_update_86eb33b0": {
     "message": "Automatikus frissítés"
   },
-  "available_skills_95c114ac": {
-    "message": "Elérhető készségek"
-  },
-  "azure_app_service_plan_a285fb06": {
-    "message": "Azure App Service-csomag"
-  },
-  "azure_application_insights_c80028e4": {
-    "message": "Azure Application Insights"
-  },
-  "azure_blob_storage_b5503630": {
-    "message": "Azure Blob Storage"
-  },
-  "azure_bot_service_3afc983": {
-    "message": "Azure Bot Service"
-  },
-  "azure_cosmos_db_a82b5d09": {
-    "message": "Azure Cosmos DB"
+  "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
+    "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
   "back_2900f52a": {
     "message": "Vissza"
-  },
-  "basic_assistant_d23bde15": {
-    "message": "Alapszintű segéd"
   },
   "been_used_5daccdb2": {
     "message": "Használva"
@@ -368,17 +350,20 @@
   "boolean_value_98d39ea1": {
     "message": "Logikai érték."
   },
+  "bot_416bf08d": {
+    "message": "bot"
+  },
   "bot_7926b66d": {
-    "message": "Bot"
+    "message": "Robot"
   },
   "bot_asks_5e9f0202": {
     "message": "A robot kérdezi"
   },
-  "bot_configured_for_speech_66fc8e57": {
-    "message": "Beszédfelismerésre konfigurált robot"
+  "bot_content_was_successfully_imported_5a07ae64": {
+    "message": "Bot content was successfully imported."
   },
-  "bot_configured_for_text_a67eca78": {
-    "message": "Szövegfelismerésre konfigurált robot"
+  "bot_controller_319b408d": {
+    "message": "Bot Controller"
   },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "A Bot Framework Composer a Bot Framework legújabb összetevőinek alkalmazásával különféle beszélgetési élmények létrehozását teszi lehetővé a fejlesztőknek és a több területen jártas csapatoknak: az SDK, LG, LU és a deklaratív fájlformátumok kódírás nélkül használhatók. "
@@ -404,14 +389,20 @@
   "bot_language_active_7cf9dc78": {
     "message": "Robot nyelve (aktív)"
   },
-  "bot_name_bbd0779d": {
-    "message": "Robot neve"
+  "bot_management_and_configurations_b7dadd69": {
+    "message": "Bot management and configurations"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "A robot neve { botName }"
   },
   "bot_project_file_does_not_exist_a0864a2c": {
     "message": "A robot projektfájlja nem létezik."
+  },
+  "bot_projects_settings_list_view_ab58e5d": {
+    "message": "Bot projects settings list View"
+  },
+  "bot_projects_settings_navigation_pane_c2074a5f": {
+    "message": "Bot Projects Settings Navigation Pane"
   },
   "bot_responses_4617b4a2": {
     "message": "A robot válasza"
@@ -424,9 +415,6 @@
   },
   "bot_settings_ce2783e4": {
     "message": "Robotbeállítások"
-  },
-  "bot_web_app_ca8b1468": {
-    "message": "Robot-webalkalmazás"
   },
   "branch_if_else_391e5681": {
     "message": "Ág: ha/máskülönben"
@@ -445,6 +433,12 @@
   },
   "build_your_first_bot_f9c3e427": {
     "message": "Az első robot létrehozása"
+  },
+  "building_5e8a3c1d": {
+    "message": "Building"
+  },
+  "building_runtime_22f11a1f": {
+    "message": "Building runtime"
   },
   "bytes_74acea97": {
     "message": "Bájt"
@@ -485,12 +479,6 @@
   "choose_one_2c4277df": {
     "message": "Válasszon egy lehetőséget"
   },
-  "choose_one_7feacdb6": {
-    "message": "Válasszon egyet:"
-  },
-  "choose_your_assistant_7ee96d89": {
-    "message": "Válassza ki a segédet"
-  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -518,11 +506,20 @@
   "comment_7ef1428e": {
     "message": "Megjegyzés"
   },
+  "comments_e07bcbe3": {
+    "message": "Comments"
+  },
+  "common_7911ab4b": {
+    "message": "Common"
+  },
   "component_stacktrace_e24b1983": {
     "message": "Összetevő veremkivonata:"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "A Composer még nem tudja automatikusan lefordítani a robotot.\nA fordítás manuális elkészítéséhez a Composer létre fog hozni egy másolatot a robot tartalmáról a további nyelv nevével. Ez a tartalom ezután az eredeti robotlogika vagy folyamat befolyásolása nélkül lefordítható, és szabadon lehet váltani a nyelvek között annak biztosításához, hogy a válaszok fordítása helyes és megfelelő legyen."
+  },
+  "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
+    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
   },
   "composer_introduction_98a93701": {
     "message": "A Composer bemutatása"
@@ -530,11 +527,17 @@
   "composer_is_up_to_date_9118257d": {
     "message": "A Composer naprakész."
   },
+  "composer_language_is_the_language_of_composer_ui_c23a57b6": {
+    "message": "Composer language is the language of Composer UI"
+  },
   "composer_logo_ba2048a0": {
     "message": "Composer-embléma"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "A Composer futtatásához a .NET Core SDK szükséges"
+  },
+  "composer_settings_31b04099": {
+    "message": "Composer Settings"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "A Composer újraindul."
@@ -545,20 +548,8 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
-  "configuration_summary_f9b92424": {
-    "message": "Konfiguráció összegzése"
-  },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "A Composer konfigurálásával a robot indítása testreszabható és vezérelhető futásidejű kóddal történhet."
-  },
-  "configured_with_enterprise_scenarios_calendar_who__e9e7e75a": {
-    "message": "Vállalati forgatókönyvekkel, naptárral, Who robottal, professzionális beszélgetéssel konfigurálva."
-  },
-  "configured_with_hospitality_scenarios_bing_search__f71c09c0": {
-    "message": "Vendéglátási forgatókönyvekkel, Bing Search-kereséssel és érdeklődő beszélgetéssel konfigurálva."
-  },
-  "configured_with_simple_conversational_capability_l_d42f128c": {
-    "message": "Egyszerű társalgási képességekkel konfigurálva, mint például köszönés, beszélgetés és így tovább."
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Konfigurálja az alapértelmezett nyelvi modell használatát arra az esetre, ha a fájlnévben nem szerepel kulturális kód (alapértelmezett: en-us)"
@@ -581,8 +572,8 @@
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Gratulálunk! A modell közzététele sikeresen megtörtént."
   },
-  "connect_to_a_new_skill_34d582ab": {
-    "message": "Csatlakozás egy új készséghez"
+  "connect_a_remote_skill_10cf0724": {
+    "message": "Connect a remote skill"
   },
   "connect_to_a_skill_53c9dff0": {
     "message": "Csatlakozás egy készséghez"
@@ -590,8 +581,11 @@
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Csatlakozás a QnA-tudásbázishoz"
   },
-  "content_1440204b": {
-    "message": "Tartalom"
+  "connecting_to_b_source_b_to_import_bot_content_106cf675": {
+    "message": "Connecting to <b>{ source }</b> to import bot content..."
+  },
+  "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
+    "message": "Connecting to <b>{ targetName }</b> to import bot content..."
   },
   "continue_loop_22635585": {
     "message": "Ciklus folytatása"
@@ -602,6 +596,12 @@
   "conversation_invoked_e960884e": {
     "message": "Beszélgetés meghívva"
   },
+  "conversational_core_preview_template_is_available__ba9b43b8": {
+    "message": "Conversational Core preview template is available since you have that feature turned on."
+  },
+  "conversational_core_template_899e3082": {
+    "message": "Conversational Core Template"
+  },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate tevékenység"
   },
@@ -610,6 +610,9 @@
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Tartalom másolása fordításhoz"
+  },
+  "copy_project_location_to_clipboard_eb85c474": {
+    "message": "Copy project location to clipboard"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Nem sikerült csatlakozni a tárolóhoz."
@@ -635,17 +638,20 @@
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Adjon meg egy projektnevet, amely az alkalmazás elnevezéséhez használható: (projectname-environment-LUfilename)"
   },
-  "create_a_new_bot_or_choose_from_virtual_assistant__7c1e6674": {
-    "message": "Hozzon létre egy új robotot, vagy válasszon a virtuális segéd sablonjai közül."
-  },
   "create_a_new_dialog_21d84b82": {
     "message": "Új párbeszéd létrehozása"
   },
   "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
     "message": "Hozzon létre egy új űrlappárbeszédpanel-sémát a fenti + gombra kattintva."
   },
+  "create_a_new_skill_e961ff28": {
+    "message": "Create a new skill"
+  },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Hozzon létre egy új képességjegyzéket, vagy válassza ki, melyiket szeretné szerkeszteni"
+  },
+  "create_a_skill_in_your_bot_d7659e6b": {
+    "message": "Create a skill in your bot"
   },
   "create_a_trigger_40e74743": {
     "message": "Trigger létrehozása"
@@ -679,12 +685,6 @@
   },
   "create_kb_e78571ba": {
     "message": "TUDÁSBÁZIS létrehozása"
-  },
-  "create_kb_from_scratch_eddd037a": {
-    "message": "Teljesen új tudásbázis létrehozása"
-  },
-  "create_kb_from_url_or_file_49ad6671": {
-    "message": "Tudásbázis létrehozása URL-címről vagy fájlból"
   },
   "create_knowledge_base_from_scratch_afe4d2a2": {
     "message": "Tudásbázis létrehozása az alapoktól"
@@ -722,20 +722,26 @@
   "custom_events_d6f0e45b": {
     "message": "Egyéni események"
   },
-  "custom_name_optional_60ee6a1a": {
-    "message": "Egyéni név (nem kötelező)"
-  },
   "custom_recognizer_951bab90": {
     "message": "Egyéni értelmező"
   },
-  "customize_your_assistant_e4038b74": {
-    "message": "A segéd testreszabása"
+  "custom_runtime_426aa34f": {
+    "message": "Custom runtime"
   },
   "cut_c8c92681": {
     "message": "Kivágás"
   },
+  "data_collection_32efe1e7": {
+    "message": "Data collection"
+  },
+  "data_collection_7db2e237": {
+    "message": "Data Collection"
+  },
   "data_loading_4c9bb9f6": {
     "message": "Az adatok betöltése..."
+  },
+  "data_transferring_between_services_c0971544": {
+    "message": "Data transferring between services"
   },
   "date_ee500367": {
     "message": "Dátum"
@@ -763,6 +769,9 @@
   },
   "default_language_486a558d": {
     "message": "Alapértelmezett nyelv"
+  },
+  "default_language_a976938d": {
+    "message": "DEFAULT LANGUAGE"
   },
   "default_language_b11c37db": {
     "message": "Alapértelmezett nyelv"
@@ -794,14 +803,11 @@
   "delete_bot_73586104": {
     "message": "Robot törlése"
   },
-  "delete_form_dialog_schema_892df4e8": {
-    "message": "Űrlappárbeszédpanel-séma törlése"
+  "delete_form_dialog_schema_c8e28229": {
+    "message": "Delete form dialog schema?"
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "Tudásbázis törlése"
-  },
-  "delete_language_1527609d": {
-    "message": "Nyelv törlése"
   },
   "delete_properties_8bc77b42": {
     "message": "Tulajdonságok törlése"
@@ -812,8 +818,14 @@
   "delete_property_b3786fa0": {
     "message": "Tulajdonság törlése"
   },
+  "delete_property_da7646f6": {
+    "message": "Delete property?"
+  },
+  "delete_this_bot_fb78e519": {
+    "message": "Delete this bot"
+  },
   "deleting_dialogid_failed_1d7cc05a": {
-    "message": "Deleting \"{ dialogId }\" failed."
+    "message": "A(z) „{ dialogId }” törlése nem sikerült."
   },
   "describe_your_skill_88554792": {
     "message": "A készsége leírása"
@@ -823,6 +835,27 @@
   },
   "design_51b2812a": {
     "message": "Tervezés"
+  },
+  "diagnostic_links_228dc6fe": {
+    "message": "diagnostic links"
+  },
+  "diagnostic_list_29813310": {
+    "message": "Diagnostic list"
+  },
+  "diagnostic_list_89b39c2e": {
+    "message": "Diagnostic List"
+  },
+  "diagnostic_message_msg_5387e951": {
+    "message": "Diagnostic Message { msg }"
+  },
+  "diagnostic_type_e1979c21": {
+    "message": "Diagnostic type"
+  },
+  "diagnostics_a11880f6": {
+    "message": "Diagnostics"
+  },
+  "diagnostics_pane_2d77c390": {
+    "message": "Diagnostics Pane"
   },
   "dialog_68ba69ba": {
     "message": "(Párbeszéd)"
@@ -838,6 +871,12 @@
   },
   "dialog_events_f1b2e2a0": {
     "message": "Párbeszédesemények"
+  },
+  "dialog_generation_failed_3c73e599": {
+    "message": "Dialog generation failed."
+  },
+  "dialog_generation_was_successful_be280943": {
+    "message": "Dialog generation was successful."
   },
   "dialog_input_schema_c7864fbd": {
     "message": "Párbeszéd bemeneti sémája."
@@ -869,8 +908,17 @@
   "disable_a5c05db3": {
     "message": "Letiltás"
   },
+  "discover_and_use_components_that_can_be_installed__49e308bf": {
+    "message": "Discover and use components that can be installed into your bot."
+  },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "A szerkesztő szélességét meghaladó sorok megjelenítése a következő sorban."
+  },
+  "do_you_want_to_proceed_cd35aa38": {
+    "message": "Do you want to proceed?"
+  },
+  "do_you_want_to_update_b_existingprojectname_b_c34014f": {
+    "message": "Do you want to update <b>{ existingProjectName }</b>"
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "Folytatja?"
@@ -901,12 +949,6 @@
   },
   "duplicate_name_d295a09d": {
     "message": "Többször előforduló név"
-  },
-  "duplicate_skill_manifest_url_74d85839": {
-    "message": "Ismétlődő képességjegyzék URL-címe"
-  },
-  "duplicate_skill_name_d9f6eb8d": {
-    "message": "Többször előforduló készségnév"
   },
   "duplicated_intents_recognized_d3908424": {
     "message": "Többször előforduló szándékok felismerve"
@@ -945,7 +987,7 @@
     "message": "Tulajdonság szerkesztése"
   },
   "edit_schema_a2ab5695": {
-    "message": "Edit schema"
+    "message": "Séma szerkesztése"
   },
   "edit_source_45af68b4": {
     "message": "Forrás szerkesztése"
@@ -977,6 +1019,9 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Többszörös kivonatolás engedélyezése"
   },
+  "enable_the_new_conversational_core_template_built__df338773": {
+    "message": "Enable the new conversational core template built on the component model"
+  },
   "enabled_ba7cab66": {
     "message": "Engedélyezve"
   },
@@ -995,8 +1040,8 @@
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation tevékenység"
   },
-  "english_us_1d884ccd": {
-    "message": "Angol (US)"
+  "endpoints_ff946539": {
+    "message": "Endpoints"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
     "message": "Jegyzék URL-címének beírása egy új képesség a robothoz történő hozzáadásához."
@@ -1007,11 +1052,35 @@
   "enter_a_min_value_c3030813": {
     "message": "Adjon meg egy minimális értéket"
   },
+  "enter_a_url_7b4d6063": {
+    "message": "Enter a URL"
+  },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Adjon meg egy URL-címet, vagy tallózással keresse meg a feltöltendő fájlt "
   },
-  "enterprise_assistant_434df551": {
-    "message": "Vállalati segéd"
+  "enter_luis_application_name_df312e75": {
+    "message": "Enter LUIS application name"
+  },
+  "enter_luis_authoring_key_c59f8f1f": {
+    "message": "Enter LUIS authoring key"
+  },
+  "enter_luis_endpoint_key_f8eb30f5": {
+    "message": "Enter LUIS endpoint key"
+  },
+  "enter_luis_region_2316eceb": {
+    "message": "Enter LUIS region"
+  },
+  "enter_microsoft_app_id_c92101b0": {
+    "message": "Enter Microsoft App Id"
+  },
+  "enter_microsoft_app_password_b0926c39": {
+    "message": "Enter Microsoft App Password"
+  },
+  "enter_qna_maker_subscription_key_d26b4bad": {
+    "message": "Enter QnA Maker Subscription key"
+  },
+  "enter_skill_host_endpoint_url_e22eeab5": {
+    "message": "Enter Skill host endpoint url"
   },
   "entities_ef09392c": {
     "message": "Entitások"
@@ -1031,9 +1100,6 @@
   "error_event_c079b608": {
     "message": "Hibaesemény"
   },
-  "error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980": {
-    "message": "Hiba: A(z) { func } nem rendelkezik értékelővel, nem beépített függvény vagy egyéni függvény"
-  },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "Hiba a következő felhasználói felületének sémájában: { title }: { errorMsg }\n{ options }"
   },
@@ -1042,6 +1108,9 @@
   },
   "error_occurred_5549a6b4": {
     "message": "Hiba történt"
+  },
+  "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
+    "message": "{ error } Please add unknown functions to setting''s customFunctions field."
   },
   "error_processing_schema_2c707cf3": {
     "message": "Hiba a séma feldolgozása során"
@@ -1079,14 +1148,11 @@
   "expected_responses_intent_intentname_44b051c": {
     "message": "Várt válaszok (szándék: #{ intentName })"
   },
-  "export_as_skill_764cf284": {
-    "message": "Exportálás készségként"
+  "export_json_2e2981f5": {
+    "message": "Export JSON"
   },
-  "export_assets_to_zip_d2d798ab": {
-    "message": "Adategységek exportálása .zip fájlba"
-  },
-  "export_de71cd8e": {
-    "message": "Exportálás"
+  "export_this_bot_as_zip_c4bfddf2": {
+    "message": "Export this bot as .zip"
   },
   "expression_7f906a13": {
     "message": "Kifejezés"
@@ -1103,6 +1169,9 @@
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "A külső erőforrások nem módosulnak."
   },
+  "external_services_da7820ce": {
+    "message": "External services"
+  },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "Kérdés-válasz párok kinyerése online GYIK-ból, termékkézikönyvekből vagy más fájlokból. A támogatott formátumok a .tsv, a .pdf, a .doc, a .docx, az .xlsx, ha sorozatban kérdéseket és válaszokat tartalmaznak. További információk a tudásbázis forrásairól. Hagyja ki ezt a lépést, ha a létrehozás után kézzel szeretne hozzáadni kérdéseket és válaszokat. A hozzáadható források száma és fájlmérete a kiválasztott QnA-szolgáltatás termékváltozatától függ. További információ a QnA Maker termékváltozatairól."
   },
@@ -1112,14 +1181,17 @@
   "extracting_qna_pairs_from_url_b0331bba": {
     "message": "Kérdés-válasz párok kivonatolása a következőről: { url }"
   },
-  "fallback_text_e5ff1cb7": {
-    "message": "Tartalék szöveg"
+  "failed_to_start_1edb0dbe": {
+    "message": "Failed to start"
   },
   "false_2f39ee6d": {
     "message": "hamis"
   },
   "false_eef8c169": {
     "message": "Hamis"
+  },
+  "fetching_form_dialog_schema_templates_failed_44e2dd63": {
+    "message": "Fetching form dialog schema templates failed."
   },
   "field_set_6e7d7f67": {
     "message": "Mezőkészlet"
@@ -1157,8 +1229,14 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "A lista (vagy enumerálás) típusú tulajdonságok esetében a robot csak a megadott értékeket fogadja el. A párbeszédpanel létrehozása után az egyes értékekhez szinonimákat adhat meg."
   },
+  "form_dialog_error_ba7c37fe": {
+    "message": "Form dialog error"
+  },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Űrlappárbeszédpanel-séma műveletei"
+  },
+  "form_dialogs_4a1e22f9": {
+    "message": "Form dialogs"
   },
   "form_editor_7c2b02f0": {
     "message": "űrlapszerkesztő"
@@ -1167,10 +1245,10 @@
     "message": "űrlap címe"
   },
   "form_wide_operations_1c1a73eb": {
-    "message": "form-wide operations"
+    "message": "egész űrlapot érintő műveletek"
   },
-  "forms_380ab2ae": {
-    "message": "Űrlapok"
+  "forms_preview_af001fab": {
+    "message": "Forms (preview)"
   },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "a fromTemplateName nem létezik"
@@ -1187,11 +1265,20 @@
   "generate_dialog_b80a85b2": {
     "message": "Párbeszéd létrehozása"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
+  },
+  "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
+    "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "A futtatókörnyezet-kód egy új másolatának beszerzése"
+  },
+  "get_activity_members_11339605": {
+    "message": "Get activity members"
+  },
+  "get_conversation_members_71602275": {
+    "message": "Get conversation members"
   },
   "get_started_50c13c6c": {
     "message": "Vágjunk bele!"
@@ -1202,8 +1289,8 @@
   "getting_started_f45a7e87": {
     "message": "Első lépések"
   },
-  "give_your_bot_personality_multi_language_capabilit_f00c2c93": {
-    "message": "Megadhatja a robot személyiségét, a több nyelv támogatását igénylő lehetőségeket és így tovább. Ezeket később a robot-beállítások között módosíthatja."
+  "getting_template_910a4116": {
+    "message": "Getting template"
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "A QnA teljes nézetű oldalának megnyitása."
@@ -1214,9 +1301,6 @@
   "greeting_f906f962": {
     "message": "Üdvözlés"
   },
-  "greeting_message_ce77bbb2": {
-    "message": "Üdvözlő üzenet"
-  },
   "handle_a_condition_f32eb8d": {
     "message": "Feltétel kezelése"
   },
@@ -1226,11 +1310,11 @@
   "handover_to_human_1a619574": {
     "message": "Átadás valós személynek"
   },
+  "help_us_improve_468828c5": {
+    "message": "Help us improve?"
+  },
   "here_s_what_we_know_4e9c1731": {
     "message": "A rendelkezésünkre álló információ…"
-  },
-  "hi_there_here_are_some_things_that_i_can_do_32909722": {
-    "message": "Helló! Íme néhány dolog, amit meg tudok tenni!"
   },
   "hide_code_5dcffa94": {
     "message": "Kód elrejtése"
@@ -1238,20 +1322,8 @@
   "home_351838cd": {
     "message": "Kezdőlap"
   },
-  "hospitality_assistant_c330e403": {
-    "message": "Vendéglátási segéd"
-  },
-  "hosts_your_bot_application_9dd01ffc": {
-    "message": "A robotalkalmazást üzemelteti."
-  },
-  "hosts_your_qna_maker_knowledgebases_64713aee": {
-    "message": "A QnA Maker-tudásbázisokat üzemelteti"
-  },
   "http_request_79847109": {
     "message": "HTTP-kérelem"
-  },
-  "i_am_sorry_i_didn_t_understand_that_f86e307a": {
-    "message": "Sajnálom, nem értettem"
   },
   "i_want_to_delete_this_bot_f81a4735": {
     "message": "Törölni szeretném ezt a robotot"
@@ -1271,17 +1343,26 @@
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "Ha a probléma nem oldódik meg, jelentse be a problémát itt:"
   },
-  "if_turned_on_then_externally_stored_templates_will_3f487651": {
-    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
-  },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "Ha már van LUIS-fiókja, adja meg az alábbi adatokat. Ha még nincs fiókja, először hozzon létre egy (ingyenes) fiókot."
   },
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "Ha már van QNA-fiókja, adja meg az alábbi adatokat. Ha még nincs fiókja, először hozzon létre egy (ingyenes) fiókot."
   },
+  "import_as_new_35630827": {
+    "message": "Import as new"
+  },
   "import_schema_75659c5f": {
     "message": "Séma importálása"
+  },
+  "import_your_bot_to_new_project_8751d82f": {
+    "message": "Import your bot to new project"
+  },
+  "importing_b_botname_b_from_sourcename_f7410826": {
+    "message": "Importing <b>{ botName }</b> from { sourceName }..."
+  },
+  "importing_bot_content_from_targetname_6da78f15": {
+    "message": "Importing bot content from { targetName }..."
   },
   "in_production_5a70b8b4": {
     "message": "Éles környezetben"
@@ -1291,6 +1372,12 @@
   },
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
     "message": "A <b>Trigger létrehozása</b> varázsló legördülő listájában állítsa be a <i>Tevékenységek</i> triggertípust. Ezután állítsa a <b>Tevékenység típusa</b> beállítást <i>Üdvözlés (ConversationUpdate tevékenység)</i> értékre, és kattintson a <b>Küldés</b> gombra."
+  },
+  "inactive_34365329": {
+    "message": "Inactive"
+  },
+  "initializing_bot_project_48f55e12": {
+    "message": "Initializing bot project"
   },
   "input_1d1d9b8e": {
     "message": "Bemenet"
@@ -1386,16 +1473,10 @@
     "message": "Sor { startLine }:{ startCharacter } – Sor { endLine }:{ endCharacter } "
   },
   "language_generation_1876f6d6": {
-    "message": "Language Generation"
-  },
-  "language_generation_file_80c08efe": {
-    "message": "nyelvgenerálási fájl"
+    "message": "Nyelvgenerálás"
   },
   "language_understanding_9ae3f1f6": {
-    "message": "Language Understanding"
-  },
-  "language_understanding_file_a65abc2c": {
-    "message": "nyelvtanulási fájl"
+    "message": "Nyelvtanulás"
   },
   "languagepolicy_e754ad28": {
     "message": "Nyelvi szabályzat"
@@ -1403,14 +1484,32 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "Utolsó módosítás ideje: { time }"
   },
+  "learn_more_14816ec": {
+    "message": "Learn More."
+  },
   "learn_more_a79a7918": {
     "message": "További információ"
+  },
+  "learn_more_about_activities_134f453d": {
+    "message": "Learn more about activities"
+  },
+  "learn_more_about_endpoints_df156708": {
+    "message": "Learn more about endpoints"
   },
   "learn_more_about_knowledge_base_sources_24369b09": {
     "message": "További információk a tudásbázis forrásairól. "
   },
+  "learn_more_about_manifests_6e7c364b": {
+    "message": "Learn more about manifests"
+  },
+  "learn_more_about_skill_manifests_7708ce2c": {
+    "message": "Learn more about skill manifests"
+  },
   "learn_more_about_title_d1d3edbe": {
     "message": "További információ a következőről: { title }"
+  },
+  "learn_more_about_your_property_schema_3a0a0890": {
+    "message": "Learn more about your property schema"
   },
   "learn_more_c08939e8": {
     "message": "További információ."
@@ -1442,6 +1541,9 @@
   "line_startline_startcharacter_line_endline_endchar_372bb2f4": {
     "message": "Sor { startLine }:{ startCharacter } – Sor { endLine }:{ endCharacter }"
   },
+  "link_to_this_skill_has_been_broken_343072bd": {
+    "message": "Link to this skill has been broken"
+  },
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "hivatkozás a LUIS-szándék meghatározásának helyére"
   },
@@ -1451,17 +1553,29 @@
   "list_count_values_33ea7088": {
     "message": "lista – { count } érték"
   },
+  "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
+    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language."
+  },
   "list_view_e33843f0": {
     "message": "Listanézet"
-  },
-  "load_form_dialog_schema_templates_error_6a348e76": {
-    "message": "Hiba az űrlappárbeszédpanel-séma sablonjainak betöltésekor"
   },
   "loading_25990131": {
     "message": "Betöltés..."
   },
   "loading_bde52856": {
     "message": "Betöltés"
+  },
+  "local_bot_runtime_manager_812cbd0c": {
+    "message": "Local bot runtime manager"
+  },
+  "local_composer_386e07d7": {
+    "message": "Local Composer"
+  },
+  "local_skill_6ce0d311": {
+    "message": "Local Skill."
+  },
+  "locate_the_bot_file_and_repair_the_link_202045b1": {
+    "message": "Locate the bot file and repair the link"
   },
   "location_e17bd402": {
     "message": "Hely"
@@ -1508,11 +1622,29 @@
   "luis_add4bbe3": {
     "message": "LUIS"
   },
+  "luis_application_name_1530d3aa": {
+    "message": "LUIS application name"
+  },
+  "luis_authoring_key_c8414499": {
+    "message": "LUIS authoring key"
+  },
   "luis_authoring_key_cfaba7dd": {
     "message": "A LUIS szerzői kulcsa:"
   },
   "luis_authoring_region_b142f97b": {
     "message": "A Luis szerzői régiója"
+  },
+  "luis_endpoint_key_c685e219": {
+    "message": "LUIS endpoint key"
+  },
+  "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
+    "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
+  },
+  "luis_region_9879d8de": {
+    "message": "LUIS region"
+  },
+  "luis_region_is_required_163ca19f": {
+    "message": "LUIS Region is required"
   },
   "main_dialog_eed5c847": {
     "message": "Fő párbeszéd"
@@ -1520,8 +1652,20 @@
   "make_a_copy_77d1233": {
     "message": "Másolat készítése"
   },
+  "manage_bot_languages_9ec36fd7": {
+    "message": "Manage bot languages"
+  },
+  "manage_profiles_715c2092": {
+    "message": "Manage profiles"
+  },
   "manage_properties_c9fa4456": {
     "message": "Tulajdonságok kezelése"
+  },
+  "manifest_could_not_be_loaded_1c011a6a": {
+    "message": "Manifest could not be loaded"
+  },
+  "manifest_editor_1426637": {
+    "message": "manifest editor"
   },
   "manifest_url_30824e88": {
     "message": "Jegyzék URL-címe"
@@ -1543,6 +1687,9 @@
   },
   "menu_items_2d66492c": {
     "message": "Menüpontok"
+  },
+  "merging_packages_6115c7ea": {
+    "message": "Merging Packages"
   },
   "message_5c38209d": {
     "message": "Üzenet"
@@ -1637,8 +1784,8 @@
   "name_and_save_your_skill_manifest_cfd672b7": {
     "message": "Nevezze el és mentse a képességjegyzéket."
   },
-  "name_cannot_include_special_characters_or_spaces_59a1950b": {
-    "message": "A név nem tartalmazhat különleges karaktereket vagy szóközöket"
+  "name_cannot_be_found_at_the_location_27560dcb": {
+    "message": "{ name } cannot be found at the location."
   },
   "name_copy_55d27c1a": {
     "message": "{ name }_Másolat"
@@ -1660,9 +1807,6 @@
   },
   "navigation_pane_e587b73c": {
     "message": "Navigációs ablaktábla"
-  },
-  "navigation_panel_530ae4ac": {
-    "message": "Navigációs panel"
   },
   "navigation_path_8b299e64": {
     "message": "Navigációs útvonal"
@@ -1709,6 +1853,9 @@
   "no_name_e082310e": {
     "message": "[nincs név]"
   },
+  "no_qna_file_with_name_id_7cb89755": {
+    "message": "NO QNA FILE WITH NAME { id }"
+  },
   "no_search_results_1ba50423": {
     "message": "Nincsenek keresési eredmények"
   },
@@ -1724,20 +1871,11 @@
   "not_a_single_template_e37f894": {
     "message": "Nem egy önálló sablon"
   },
+  "not_now_97efd947": {
+    "message": "Not now"
+  },
   "not_yet_published_669e37b3": {
     "message": "Még nincs közzétéve"
-  },
-  "notes_c42e0fd5": {
-    "message": "Megjegyzések"
-  },
-  "notification_list_ee2abb6c": {
-    "message": "Értesítési lista"
-  },
-  "notification_message_msg_7d55d08e": {
-    "message": "Értesítési üzenet { msg }"
-  },
-  "notification_type_263c145d": {
-    "message": "Értesítés típusa"
   },
   "notifications_cbfa7704": {
     "message": "Értesítések"
@@ -1796,6 +1934,9 @@
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents-típusok"
   },
+  "open_an_existing_skill_fbd87273": {
+    "message": "Open an existing skill"
+  },
   "open_e0beb7b9": {
     "message": "Megnyitás"
   },
@@ -1803,7 +1944,10 @@
     "message": "Beágyazott szerkesztő megnyitása"
   },
   "open_notification_panel_5796edb3": {
-    "message": "Open notification panel"
+    "message": "Értesítési panel megnyitása"
+  },
+  "open_start_bots_panel_f7f87200": {
+    "message": "Open start bots panel"
   },
   "optional_221bcc9d": {
     "message": "Opcionális"
@@ -1823,6 +1967,12 @@
   "or_4f7d4edb": {
     "message": "Vagy: "
   },
+  "orchestrator_36e58231": {
+    "message": "Orchestrator"
+  },
+  "orchestrator_recognizer_cf38b65a": {
+    "message": "Orchestrator recognizer"
+  },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "nem található az eredeti nyelvgenerálási fájl a tárolóban"
   },
@@ -1838,6 +1988,9 @@
   "output_5023cf84": {
     "message": "Kimenet"
   },
+  "package_manager_6c42db30": {
+    "message": "Package manager"
+  },
   "page_number_cdee4179": {
     "message": "Oldalszám"
   },
@@ -1846,15 +1999,6 @@
   },
   "paste_5963d1c1": {
     "message": "Beillesztés"
-  },
-  "personality_1381bf78": {
-    "message": "{ personality }"
-  },
-  "personality_cf47985f": {
-    "message": "Személyiség"
-  },
-  "personality_choice_3dfd8268": {
-    "message": "Személyiség választása"
   },
   "please_add_at_least_minitems_endpoint_5439fd74": {
     "message": "Adjon hozzá legalább { minItems } végpontot"
@@ -1895,6 +2039,9 @@
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Válasszon ki egy tevékenységtípust"
   },
+  "powervirtualagents_logo_11858924": {
+    "message": "PowerVirtualAgents Logo"
+  },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "nyomja le az Enter billentyűt az elem hozzáadásához, vagy a Tab billentyűt, hogy a következő interaktív elemre lépjen"
   },
@@ -1902,10 +2049,13 @@
     "message": "nyomja le az Enter billentyűt a név hozzáadásához és a következő sorra ugráshoz, vagy nyomja le a Tab billentyűt, hogy a következő értékmezőre lépjen"
   },
   "preview_features_e279bac5": {
-    "message": "Preview features"
+    "message": "Előzetes funkciók"
   },
   "previous_bd2ac015": {
     "message": "Előző"
+  },
+  "previous_bot_content_has_been_backed_up_to_d6d23960": {
+    "message": " Previous bot content has been backed up to:"
   },
   "previous_folder_e7eeb306": {
     "message": "előző mappa"
@@ -1916,8 +2066,14 @@
   "privacy_button_b58e437": {
     "message": "Adatvédelem gomb"
   },
+  "privacy_statement_da69ebc6": {
+    "message": "Privacy statement"
+  },
   "progress_of_total_87de8616": {
     "message": "{ progress }% kész, összesen: { total }"
+  },
+  "project_settings_bb885d3e": {
+    "message": "Project Settings"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "További javaslatok konfigurációi"
@@ -1962,7 +2118,7 @@
     "message": "Tulajdonság neve"
   },
   "property_name_is_required_5bc57d97": {
-    "message": "Property name is required!"
+    "message": "A tulajdonság nevének megadása kötelező!"
   },
   "property_title_f2b443b7": {
     "message": "Tulajdonság címe"
@@ -1972,12 +2128,6 @@
   },
   "property_type_e38cf7e4": {
     "message": "Tulajdonság típusa"
-  },
-  "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
-    "message": "Adjon meg egy rövid leírást. Az előzmények közzétételi listájában jelenik meg."
-  },
-  "provisioning_summary_2be9422f": {
-    "message": "Kiépítés összegzése"
   },
   "pseudo_1a319287": {
     "message": "Pszeudo"
@@ -1994,17 +2144,35 @@
   "publish_models_9a36752a": {
     "message": "Modellek közzététele"
   },
-  "publish_profiles_cf8d307b": {
-    "message": "Profilok közzététele"
+  "publish_selected_bots_825bc03a": {
+    "message": "Publish selected bots"
   },
-  "publish_to_selected_profile_c0998a2": {
-    "message": "Közzététel kiválasztott profilba"
+  "publish_target_388f6adf": {
+    "message": "Publish target"
+  },
+  "publish_targets_8afc4467": {
+    "message": "Publish targets"
+  },
+  "publish_your_bots_6e1ba7c2": {
+    "message": "Publish your bots"
   },
   "published_4bb5209e": {
     "message": "Közzétéve"
   },
+  "publishing_count_bots_b2a7f564": {
+    "message": "Publishing { count } bots"
+  },
   "publishing_d63a8f2d": {
     "message": "Közzététel"
+  },
+  "publishing_name_to_publishtarget_failed_8677b68d": {
+    "message": "Publishing { name } to { publishTarget } failed."
+  },
+  "pull_d1c3e8fe": {
+    "message": "Pull"
+  },
+  "pull_from_selected_profile_b5c635ec": {
+    "message": "Pull from selected profile"
   },
   "qna_28ee5e26": {
     "message": "QnA"
@@ -2012,20 +2180,14 @@
   "qna_editor_9eb94b02": {
     "message": "QnA-szerkesztő"
   },
-  "qna_file_37705cb7": {
-    "message": "qna-fájl"
-  },
   "qna_intent_recognized_49c3d797": {
     "message": "Felismert QnA-szándék"
   },
-  "qna_maker_azure_search_service_88a403db": {
-    "message": "QnA Maker Azure Search keresési szolgáltatás"
+  "qna_maker_subscription_key_e009c9d9": {
+    "message": "QnA Maker Subscription key"
   },
-  "qna_maker_c313ed6e": {
-    "message": "QnA Maker"
-  },
-  "qna_maker_web_app_3da183bd": {
-    "message": "QnA Maker webalkalmazás"
+  "qna_maker_subscription_key_is_required_to_start_yo_9c0bc65a": {
+    "message": "QnA Maker subscription Key is required to start your bot locally, and publish"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "QnA navigációs ablaktáblája"
@@ -2045,6 +2207,9 @@
   "question_is_empty_now_f0b5733e": {
     "message": "A kérdés most üres"
   },
+  "queued_d0e45c4b": {
+    "message": "Queued"
+  },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
   },
@@ -2056,6 +2221,9 @@
   },
   "recent_bots_53585911": {
     "message": "Legutóbbi robotok"
+  },
+  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
+    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
   },
   "recognizer_type_dc591e16": {
     "message": "Értelmező típusa"
@@ -2084,14 +2252,23 @@
   "reloading_49d2f661": {
     "message": "Újbóli betöltés"
   },
-  "remote_templates_a23c242d": {
-    "message": "Remote templates"
+  "remote_skill_ed36a7e6": {
+    "message": "Remote skill"
+  },
+  "remote_skill_f9074d76": {
+    "message": "Remote Skill."
   },
   "remove_f47dc62a": {
     "message": "Eltávolítás"
   },
   "remove_this_dialog_6146716c": {
     "message": "A párbeszédpanel eltávolítása"
+  },
+  "remove_this_skill_from_project_4c1900a9": {
+    "message": "Remove this skill from project"
+  },
+  "remove_this_skill_from_your_project_3c9d4b0f": {
+    "message": "Remove this skill from your project"
   },
   "remove_this_trigger_622d866d": {
     "message": "A trigger eltávolítása"
@@ -2120,23 +2297,47 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | Prioritás: { priority }"
   },
-  "resource_374a9df": {
-    "message": "Erőforrás"
-  },
   "response_is_response_3cd62f8f": {
     "message": "Válasz: { response }"
   },
   "responses_12d6df1d": {
     "message": "Válaszok"
   },
-  "restart_bot_34e36428": {
-    "message": "Robot újraindítása"
+  "restart_all_bots_running_total_running_cf47a2b5": {
+    "message": "Restart all bots ({ running }/{ total } running)"
   },
   "review_and_generate_63dec712": {
     "message": "Áttekintés és létrehozás"
   },
   "rollback_26326307": {
     "message": "Visszaállítás"
+  },
+  "root_bot_7bb35314": {
+    "message": "Root bot."
+  },
+  "root_bot_da9de71c": {
+    "message": "Root Bot"
+  },
+  "root_bot_e2d0a1fc": {
+    "message": "Root bot"
+  },
+  "root_bot_luis_authoring_key_is_empty_aec2634e": {
+    "message": "Root Bot LUIS authoring key is empty"
+  },
+  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
+    "message": "Root Bot LUIS endpoint key is empty"
+  },
+  "root_bot_luis_region_is_empty_67932308": {
+    "message": "Root Bot LUIS region is empty"
+  },
+  "root_bot_of_your_project_that_greets_users_and_can_94570f36": {
+    "message": "Root bot of your project that greets users, and can call skills."
+  },
+  "root_bot_qna_maker_subscription_key_is_empty_7b7c8c4a": {
+    "message": "Root Bot QnA Maker Subscription key is empty"
+  },
+  "running_c5a4998d": {
+    "message": "Running"
   },
   "runtime_already_exists_f181f5ec": {
     "message": "A futtatókörnyezet már létezik"
@@ -2183,14 +2384,14 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Bővítmények keresése az npm-en"
   },
-  "search_index_for_your_qna_maker_knowledgebases_22700ca7": {
-    "message": "A QnA Maker tudásbázisainak keresési indexe."
-  },
-  "see_log_4b833bf7": {
-    "message": "Napló megtekintése"
+  "see_details_da74090e": {
+    "message": "See Details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Válasszon robotot"
+  },
+  "select_a_publish_target_d4530c94": {
+    "message": "Select a publish target"
   },
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "Válasszon egy triggert a bal oldalról"
@@ -2203,9 +2404,6 @@
   },
   "select_an_event_type_3d7108f1": {
     "message": "Válasszon ki egy eseménytípust"
-  },
-  "select_an_option_9f5dfb55": {
-    "message": "Válasszon egy lehetőséget"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Válassza ki a szerkeszteni kívánt sémát, vagy hozzon létre újat"
@@ -2220,7 +2418,7 @@
     "message": "Beállítások kiválasztása"
   },
   "select_property_type_45c6e68e": {
-    "message": "Select property type"
+    "message": "Tulajdonságtípus kiválasztása"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "A hozzáadni kívánt futtatókörnyezet-verzió kiválasztása"
@@ -2233,9 +2431,6 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Válassza ki, hogy ez a készség milyen feladatokat tud végezni"
-  },
-  "selected_assistant_type_83d58f54": {
-    "message": "Kijelölt segédtípus"
   },
   "selection_field_86d1dc94": {
     "message": "kiválasztási mező"
@@ -2264,11 +2459,17 @@
   "set_destination_folder_f76e0259": {
     "message": "Célmappa beállítása"
   },
+  "set_it_as_default_language_212f0a00": {
+    "message": "Set it as default language"
+  },
   "set_properties_7415af3c": {
     "message": "Tulajdonságok beállítása"
   },
   "set_up_your_bot_75009578": {
     "message": "A robot beállítása"
+  },
+  "setting_things_up_8022afe8": {
+    "message": "Setting things up..."
   },
   "settings_5aa0fd0c": {
     "message": "Beállítások"
@@ -2282,17 +2483,14 @@
   "settings_menu_c99ecc6d": {
     "message": "Beállítások menü"
   },
-  "show_all_notifications_55bf7858": {
-    "message": "Minden értesítés megjelenítése"
+  "show_all_diagnostics_c11f4e09": {
+    "message": "Show All Diagnostics"
   },
   "show_code_f3e9d1cc": {
     "message": "Kód megjelenítése"
   },
-  "show_form_dialog_90aad050": {
-    "message": "Show Form Dialog"
-  },
-  "show_form_dialog_editor_in_the_canvas_140492b2": {
-    "message": "Show form dialog editor in the canvas"
+  "show_item_diagnostics_f6e902c7": {
+    "message": "Show { item } Diagnostics"
   },
   "show_keys_3072a5b8": {
     "message": "Kulcsok megjelenítése"
@@ -2303,6 +2501,9 @@
   "sign_out_user_6845d640": {
     "message": "Felhasználó kijelentkeztetése"
   },
+  "skill_9b084d2e": {
+    "message": "Skill"
+  },
   "skill_dialog_name_1bbf0eff": {
     "message": "Készség párbeszédneve"
   },
@@ -2312,8 +2513,11 @@
   "skill_endpoints_e4e3d8c1": {
     "message": "Készség végpontjai"
   },
-  "skill_host_endpoint_b1088d0": {
-    "message": "Készség gazdavégpontja"
+  "skill_host_endpoint_4118a173": {
+    "message": "Skill host endpoint"
+  },
+  "skill_host_endpoint_url_e68b65f6": {
+    "message": "Skill host endpoint url"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "A képességjegyzék végpontja helytelenül van konfigurálva"
@@ -2321,8 +2525,11 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } jegyzék"
   },
-  "skills_49cccd6a": {
-    "message": "Készségek"
+  "something_happened_while_attempting_to_pull_e_952c7afe": {
+    "message": "Something happened while attempting to pull: { e }"
+  },
+  "something_went_wrong_d238c551": {
+    "message": "Something went wrong"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "Sajnos hiba történt a robot futtatókörnyezetének csatlakoztatásakor"
@@ -2343,7 +2550,7 @@
     "message": "A szóközök és a különleges karakterek nem engedélyezettek. Betűket, számokat, illetve a - vagy a _ karaktert használja."
   },
   "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
+    "message": "Szóközök és speciális karakterek nem engedélyezettek. Használjon betűket, számokat, - vagy _ karaktereket, és kezdje a nevet egy betűvel."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Adja meg az új párbeszéd nevét és leírását."
@@ -2351,8 +2558,14 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "Adja meg az új robotprojekt nevét, leírását és helyét."
   },
-  "speech_16063aed": {
-    "message": "Beszéd"
+  "start_all_bots_eac99ea": {
+    "message": "Start all bots"
+  },
+  "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
+    "message": "Start and stop local bot runtimes individually."
+  },
+  "start_bot_1da1ebf4": {
+    "message": "Start bot"
   },
   "start_bot_25ecad14": {
     "message": "Robot indítása"
@@ -2363,8 +2576,17 @@
   "start_command_a085f2ec": {
     "message": "Indítási parancs"
   },
+  "start_over_d7ce7a57": {
+    "message": "Start over?"
+  },
   "start_typing_kind_or_b0c305da": {
-    "message": "Start typing { kind } or"
+    "message": "Kezdje beírni: { kind } vagy"
+  },
+  "starting_2b76fa0d": {
+    "message": "Starting"
+  },
+  "starting_bots_running_total_running_45302684": {
+    "message": "Starting bots.. ({ running }/{ total } running)"
   },
   "state_is_state_a2b8943": {
     "message": "Állapot: { state }"
@@ -2374,6 +2596,15 @@
   },
   "step_of_setlength_43c73821": {
     "message": "{ step }/{ setLength }"
+  },
+  "stop_bot_866e8976": {
+    "message": "Stop Bot"
+  },
+  "stop_bot_be23cf96": {
+    "message": "Stop bot"
+  },
+  "stopping_e4de5f4a": {
+    "message": "Stopping"
   },
   "string_24369b3": {
     "message": "Sztring"
@@ -2386,15 +2617,6 @@
   },
   "submit_a3cc6859": {
     "message": "Küldés"
-  },
-  "subscription_keys_for_language_understanding_cogni_105e039f": {
-    "message": "A Language Understanding Cognitive Services-szolgáltatás előfizetési kulcsai."
-  },
-  "subscription_keys_for_qna_maker_cognitive_service__91da99a4": {
-    "message": "A kiválasztott robotszemélyiséget segítő QnA Maker kognitív szolgáltatás előfizetési kulcsai."
-  },
-  "summary_24ad7681": {
-    "message": "Összegzés"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "Szinonimák (nem kötelező)"
@@ -2420,38 +2642,20 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "A készség /api/messages végpontja."
   },
-  "the_azure_bot_service_resource_stores_configuratio_b7b4e73d": {
-    "message": "Az Azure Bot Service erőforrás olyan konfigurációs információkat tárol, amelyek lehetővé teszik a Virtual Assistant a támogatott csatornákon való elérését, és OAuth-hitelesítést biztosítanak."
-  },
-  "the_callback_url_for_the_skill_host_e20e1012": {
-    "message": "A készség gazdagépének visszahívási URL-címe."
-  },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "A törölni kívánt párbeszédet jelenleg az alábbi párbeszéd(ek) használja/használják. A párbeszéd eltávolítása miatt a robot további művelet hiányában meghibásodna."
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
-    "message": "The file name can not be empty"
-  },
-  "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
-    "message": "A következő testreszabások lesznek alkalmazva a robotra"
+    "message": "A fájlnév nem lehet üres"
   },
   "the_following_lufile_s_are_invalid_c61ea748": {
     "message": "A következő nyelvtanulási fájl(ok) érvénytelen(ek): \n"
-  },
-  "the_following_will_be_provisioned_to_enable_your_b_6c52fdac": {
-    "message": "A következők lesznek kiépítve a robot engedélyezéséhez"
   },
   "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
     "message": "A fő párbeszéd a robotról kapja a nevét. Ez a robot gyökere és belépési pontja."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "A jegyzék szükség esetén kézzel szerkeszthető és finomhangolható."
-  },
-  "the_microsoft_app_id_that_will_be_calling_the_skil_955424de": {
-    "message": "A készséget hívó Microsoft-alkalmazás azonosítója."
-  },
-  "the_microsoft_app_password_that_will_be_calling_th_acf9e1ea": {
-    "message": "A készséget hívó Microsoft-alkalmazás jelszava."
   },
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
     "message": "A keresett oldal nem található."
@@ -2472,10 +2676,19 @@
     "message": "Nincsenek { kind } tulajdonságok."
   },
   "there_are_no_notifications_e81eab8d": {
-    "message": "There are no notifications."
+    "message": "Nincsenek értesítések."
+  },
+  "there_are_no_preview_features_at_this_time_a5c40953": {
+    "message": "Jelenleg nincsenek előzetes funkciók."
   },
   "there_was_an_error_74ed3c58": {
     "message": "Hiba történt."
+  },
+  "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
+    "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
+  },
+  "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
+    "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "Hiba történt a KB létrehozásakor"
@@ -2486,26 +2699,20 @@
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "Ezekkel a feladatokkal fogja létrehozni a jegyzéket és leírni a képesség tulajdonságait azoknak, akik esetleg használni szeretnék."
   },
-  "this_bot_has_errors_72fb40d5": {
-    "message": "Ezen a roboton hibák jelentkeztek"
-  },
-  "this_bot_has_warnings_b6735e2e": {
-    "message": "Ezen a roboton figyelmeztetések jelentkeztek"
-  },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "Események és műveletek gyűjteményén keresztül konfigurál egy adatalapú párbeszédet."
   },
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "Ez a párbeszéd még nem rendelkezik triggerrel."
   },
-  "this_is_a_botname_notification_c8a391c7": {
-    "message": "This is a { botName } notification"
-  },
   "this_is_a_required_field_acb9837e": {
     "message": "A mező kitöltése kötelező."
   },
-  "this_is_a_severity_notification_9beabb58": {
-    "message": "Ez egy { severity } értesítés"
+  "this_is_a_severity_diagnostic_58312674": {
+    "message": "This is a { severity } diagnostic"
+  },
+  "this_is_the_bot_language_you_are_currently_authori_4a26541": {
+    "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
     "message": "Ez a Composer felhasználói felületéhez használt nyelv."
@@ -2513,11 +2720,17 @@
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "Ez a nyelv lesz kimásolva és a fordítás alapjaként (valamint tartalék nyelvként) használva."
   },
+  "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
+    "message": "This operation cannot be completed. The bot is already part of the Bot Project"
+  },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "Ez a művelet nem hajtható végre. A képesség már része a robotprojektnek"
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "Ez a beállítás lehetővé teszi, hogy a felhasználók több értéket adjanak a tulajdonságnak."
+  },
+  "this_page_contains_detailed_information_about_your_b2b3413b": {
+    "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "Ezt az indító típust nem támogatja a RegEx-értelmező. Az aktiválás kilövésének biztosításához módosítsa a értelmező típusát."
@@ -2528,11 +2741,11 @@
   "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
     "message": "Ezzel törli a párbeszédet és a tartalmát. Folytatja?"
   },
-  "this_will_delete_the_profile_do_you_wish_to_contin_61b54894": {
-    "message": "Ezzel törli a profilt. Folytatja?"
-  },
   "this_will_open_your_emulator_application_if_you_do_ba277151": {
     "message": "Ezzel megnyitja az Emulator alkalmazást. Ha még nincs telepítve a Bot Framework Emulator, <a>itt</a> letöltheti."
+  },
+  "throw_exception_9d0d1db": {
+    "message": "Throw exception"
   },
   "time_2b5aac58": {
     "message": "Idő"
@@ -2610,7 +2823,7 @@
     "message": "Próbálkozzon újra"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
-    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
+    "message": "Próbálja ki az új előzetes funkciókat, és segítsen nekünk a Composer fejlesztésében. A funkciókat bármikor be-vagy kikapcsolhatja."
   },
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "Írja be a tartalmat leíró nevet"
@@ -2643,7 +2856,7 @@
     "message": "Eltávolítás"
   },
   "unknown_47a3b725": {
-    "message": "Unknown"
+    "message": "Ismeretlen"
   },
   "unknown_intent_44b962ba": {
     "message": "Ismeretlen szándék"
@@ -2656,6 +2869,9 @@
   },
   "unused_8d193e3": {
     "message": "Nincs használatban"
+  },
+  "update_4d8ee62": {
+    "message": "Update"
   },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
     "message": "A beszélgetésben korábban küldött egyik tevékenység frissítése"
@@ -2684,6 +2900,9 @@
   "update_scripts_c58771a2": {
     "message": "Szkriptek frissítése"
   },
+  "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
+    "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
+  },
   "updating_scripts_e17a5722": {
     "message": "A szkriptek frissítése folyamatban van... "
   },
@@ -2692,6 +2911,18 @@
   },
   "url_should_start_with_http_s_9ca55d94": {
     "message": "Az URL-címnek a következővel kell kezdődnie: http[s]://"
+  },
+  "use_custom_luis_authoring_key_9c71470b": {
+    "message": "Use custom LUIS authoring key"
+  },
+  "use_custom_luis_endpoint_key_572e2c29": {
+    "message": "Use custom LUIS endpoint key"
+  },
+  "use_custom_luis_region_49d31dbf": {
+    "message": "Use custom LUIS region"
+  },
+  "use_custom_qna_maker_subscription_key_126e79df": {
+    "message": "Use custom QnA Maker Subscription key"
   },
   "use_custom_runtime_d7d323fd": {
     "message": "Egyéni futtatókörnyezet használata"
@@ -2702,18 +2933,6 @@
   "used_in_126529e5": {
     "message": "Felhasználási hely:"
   },
-  "used_to_capture_conversation_and_application_telem_cae2c2a4": {
-    "message": "A beszélgetés és az alkalmazás telemetriájának rögzítésére szolgál."
-  },
-  "used_to_host_your_bot_web_app_and_qna_maker_web_ap_514dc11b": {
-    "message": "A robot-webalkalmazás és QnA Maker webalkalmazás üzemeltetésére szolgál."
-  },
-  "used_to_store_conversation_state_11f348bd": {
-    "message": "A beszélgetési állapot tárolására szolgál."
-  },
-  "used_to_store_conversation_transcripts_d80440ab": {
-    "message": "A beszélgetési átiratok tárolására szolgál."
-  },
   "user_input_673e4a89": {
     "message": "Felhasználói adatbevitel"
   },
@@ -2722,12 +2941,6 @@
   },
   "user_is_typing_790cb502": {
     "message": "A felhasználó éppen gépel"
-  },
-  "va_creation_6babf7db": {
-    "message": "VA Creation"
-  },
-  "va_template_made_available_in_new_bot_flow_5f85baa4": {
-    "message": "VA template made available in new bot flow."
   },
   "validating_35b79a96": {
     "message": "Érvényesítés..."
@@ -2750,14 +2963,14 @@
   "video_tutorials_79eb26ca": {
     "message": "Oktatóvideók:"
   },
-  "view_ba339f93": {
-    "message": "Nézet"
-  },
   "view_dialog_f5151228": {
     "message": "Nézet párbeszédpanel"
   },
   "view_kb_c382e495": {
     "message": "KB megtekintése"
+  },
+  "view_log_6d51af5e": {
+    "message": "View log"
   },
   "view_on_npm_2051324d": {
     "message": "Megtekintés npm-en"
@@ -2816,9 +3029,6 @@
   "what_is_the_type_of_this_trigger_d2701744": {
     "message": "Milyen típusú ez a trigger?"
   },
-  "what_will_your_virtual_assistant_say_if_it_does_no_972dd9ab": {
-    "message": "Mit mondjon a virtuális asszisztens, ha nem érti a felhasználót?"
-  },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "A bot mit mond a felhasználónak. Ez a kimenő üzenet létrehozásához használt sablon. Ide tartozhat a nyelvgenerálási szabályok, a memória tulajdonságai és egyéb funkciók.\n\nA véletlenszerűen kiválasztott változatok meghatározásához például írja be a következőt:\n-Hello\n-Hi"
   },
@@ -2844,7 +3054,13 @@
     "message": "Melyik esemény?"
   },
   "write_an_expression_8773ea5c": {
-    "message": "Write an expression"
+    "message": "Kifejezés írása"
+  },
+  "write_your_message_5d0f151b": {
+    "message": "Write your message"
+  },
+  "yes_collect_data_b79b7844": {
+    "message": "Yes, collect data"
   },
   "yes_dde87d5": {
     "message": "Igen"
@@ -2855,6 +3071,9 @@
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "Az alábbi profilban fogja közzétenni a robotot. Folytatja?"
   },
+  "you_are_about_to_pull_project_files_from_the_selec_15786351": {
+    "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+  },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "A Composerrel létrehozhat egy új robotot az alapoktól, vagy kezdhet sablonnal."
   },
@@ -2864,8 +3083,17 @@
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
     "message": "Itt kezelheti az összes robotválaszt. A sablonokkal a saját igényein alapuló, kifinomult válaszlogikát hozhat létre."
   },
+  "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
+    "message": "You can only connect to a skill in the root bot."
+  },
+  "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
+    "message": "You can turn data collection on or off at any time in the Application Settings."
+  },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "Nincs engedélye ahhoz, hogy ide mentsen robotokat"
+  },
+  "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
+    "message": "You have successfully published { name } to { publishTarget }"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
     "message": "A robotok létrehozásának folyamata a Composerben"
@@ -2873,7 +3101,13 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "A bot LUIS-t és QNA használ a természetes nyelvek tanulásához."
   },
+  "your_dialog_was_generated_successfully_61c13b73": {
+    "message": "Your dialog was generated successfully."
+  },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "A tudásbázis elkészült!"
+  },
+  "your_project_2a42631c": {
+    "message": "your project"
   }
 }

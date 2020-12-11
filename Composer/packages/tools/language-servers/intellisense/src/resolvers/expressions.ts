@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { buildInFunctionsMap } from '@bfc/built-in-functions';
+import { buildInFunctionsMap, getBuiltInFunctionInsertText } from '@bfc/built-in-functions';
 import { CompletionItem, CompletionItemKind } from 'vscode-languageserver';
 
 export const expressionsResolver = (): CompletionItem[] => {
@@ -9,15 +9,8 @@ export const expressionsResolver = (): CompletionItem[] => {
     return {
       label: key,
       kind: CompletionItemKind.Function,
-      insertText: `${key}(${removeParamFormat(value.Params.toString())})`,
+      insertText: getBuiltInFunctionInsertText(key),
       documentation: value.Introduction,
     };
   });
-};
-
-const removeParamFormat = (params: string): string => {
-  const resultArr = params.split(',').map((element) => {
-    return element.trim().split(':')[0];
-  });
-  return resultArr.join(' ,');
 };

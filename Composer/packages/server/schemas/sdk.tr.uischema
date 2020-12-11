@@ -6,57 +6,9 @@
       "properties": {
         "recognizer": {
           "description": "Kullanıcının söylediklerinin anlaşılması için iletişim kutunuz, kullanıcıların kullanabileceği örnek sözcükleri ve tümceleri içeren bir \"Recognizer\" öğesine ihtiyaç duyar.",
-          "label": "Language Understanding"
+          "label": "Dil Anlama"
         }
       }
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Soru sormak için bir yanıt gönderin",
-      "subtitle": "Soru Sorma Etkinliği"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Dosya veya ek iste",
-      "subtitle": "Ek Girişi"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Çoklu seçimli istem",
-      "subtitle": "Seçim Girişi"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Onay iste",
-      "subtitle": "Girişi Onayla"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Tarih veya saat iste",
-      "subtitle": "Tarih Saat Girişi"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Sayı iste",
-      "subtitle": "Sayı Girişi"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth oturum açma",
-      "subtitle": "OAuth Girişi"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Metin iste",
-      "subtitle": "Metin Girişi"
     }
   },
   "Microsoft.BeginDialog": {
@@ -218,6 +170,54 @@
     "form": {
       "label": "İzleme olayı göster",
       "subtitle": "İzleme Etkinliği"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Soru sormak için bir yanıt gönderin",
+      "subtitle": "Soru Sorma Etkinliği"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Dosya veya ek iste",
+      "subtitle": "Ek Girişi"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Çoklu seçimli istem",
+      "subtitle": "Seçim Girişi"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Onay iste",
+      "subtitle": "Girişi Onayla"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Tarih veya saat iste",
+      "subtitle": "Tarih Saat Girişi"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Sayı iste",
+      "subtitle": "Sayı Girişi"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth oturum açma",
+      "subtitle": "OAuth Girişi"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Metin iste",
+      "subtitle": "Metin Girişi"
     }
   },
   "Microsoft.OnActivity": {

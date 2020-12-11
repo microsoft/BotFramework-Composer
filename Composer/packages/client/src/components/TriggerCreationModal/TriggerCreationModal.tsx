@@ -14,6 +14,7 @@ import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { userSettingsState } from '../../recoilModel/atoms';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
 import { isRegExRecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { dialogContentStyles, modalStyles, dialogWindowStyles } from './styles';
 import { validateForm } from './validators';
@@ -62,6 +63,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     onDismiss();
     onSubmit(dialogId, { ...formData, $kind: selectedType });
+    TelemetryClient.track('AddNewTriggerCompleted', { kind: formData.$kind });
   };
 
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents as any);

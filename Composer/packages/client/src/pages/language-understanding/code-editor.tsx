@@ -22,6 +22,8 @@ const lspServerPath = '/lu-language-server';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
+  skillId?: string;
+  luFileId?: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
@@ -32,15 +34,22 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-  const { dialogId, projectId } = props;
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
-  const settings = useRecoilValue(settingsState(projectId));
+  const { dialogId, projectId, skillId, luFileId } = props;
+  const actualProjectId = skillId ?? projectId;
+
+  const luFiles = useRecoilValue(luFilesState(actualProjectId));
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const settings = useRecoilValue(settingsState(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
 
-  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const diagnostics = get(file, 'diagnostics', []);
   const [luEditor, setLuEditor] = useState<any>(null);
@@ -87,7 +96,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         const payload = {
           id: file.id,
           intentName: Name,
-          projectId,
+          projectId: actualProjectId,
           intent: {
             Name,
             Body,
@@ -95,7 +104,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         };
         updateLuIntentDispatcher(payload);
       }, 500),
-    [file, intent, projectId]
+    [file, intent, actualProjectId]
   );
 
   const updateLuFile = useMemo(
@@ -104,13 +113,13 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         if (!file) return;
         const { id } = file;
         const payload = {
-          projectId,
+          projectId: actualProjectId,
           id,
           content,
         };
         updateLuFileDispatcher(payload);
       }, 500),
-    [file, projectId]
+    [file, actualProjectId]
   );
 
   const onChange = useCallback(
@@ -122,12 +131,12 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         updateLuFile(value);
       }
     },
-    [file, intent, projectId]
+    [file, intent, actualProjectId]
   );
 
   const luFeatures = settings?.luFeatures || {};
   const luOption = {
-    projectId,
+    projectId: actualProjectId,
     fileId: file?.id || dialogId,
     sectionId: intent?.Name,
     luFeatures,
@@ -183,7 +192,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           locale={locale}
           right={defaultLanguageFileEditor}
           onLanguageChange={(locale) => {
-            setLocale(locale, projectId);
+            setLocale(locale, actualProjectId);
           }}
         ></DiffCodeEditor>
       )}

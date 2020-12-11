@@ -2,18 +2,34 @@
 // Licensed under the MIT License.
 
 import { lgImportResolverGenerator } from '@bfc/shared';
-import { lgIndexer } from '@bfc/indexers';
+import { lgUtil } from '@bfc/indexers';
 
 import { WorkerMsg } from './lgParser';
 
-process.on('message', (message: WorkerMsg) => {
-  const { content, id, resources } = message.payload;
-
+process.on('message', (msg: WorkerMsg) => {
   try {
-    const lgImportResolver = lgImportResolverGenerator(resources, '.lg');
-    const { templates, allTemplates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
-    process.send?.({ id: message.id, payload: { id, content, templates, allTemplates, diagnostics } });
+    switch (msg.type) {
+      case 'parse': {
+        const { id, content, lgFiles } = msg.payload;
+        const { templates, allTemplates, diagnostics } = lgUtil.parse(id, content, lgFiles);
+        process.send?.({ id: msg.id, payload: { id, content, templates, allTemplates, diagnostics } });
+        break;
+      }
+
+      case 'updateTemplate': {
+        const { lgFile, templateName, template, lgFiles } = msg.payload;
+        const lgImportResolver = lgImportResolverGenerator(lgFiles, '.lg');
+        const { id, content, templates, allTemplates, diagnostics } = lgUtil.updateTemplate(
+          lgFile,
+          templateName,
+          template,
+          lgImportResolver
+        );
+        process.send?.({ id: msg.id, payload: { id, content, templates, allTemplates, diagnostics } });
+        break;
+      }
+    }
   } catch (error) {
-    process.send?.({ id: message.id, error });
+    process.send?.({ id: msg.id, error });
   }
 });

@@ -27,6 +27,7 @@ answer
 
 const state = {
   projectId: 'test',
+  skillId: '',
   dialogs: [
     { id: '1', content: '', skills: [] },
     { id: '2', content: '', skills: [] },
@@ -69,7 +70,7 @@ const initRecoilState = ({ set }) => {
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
     const { getByTestId, getByText } = renderWithRecoil(
-      <TableView dialogId={'a'} projectId={state.projectId} />,
+      <TableView dialogId={'a'} projectId={state.projectId} skillId={state.skillId} />,
       initRecoilState
     );
     getByTestId('table-view');
@@ -77,7 +78,10 @@ describe('QnA page all up view', () => {
   });
 
   it('should render QnA page code editor', () => {
-    renderWithRecoil(<CodeEditor dialogId={'a'} projectId={state.projectId} />, initRecoilState);
+    renderWithRecoil(
+      <CodeEditor dialogId={'a'} projectId={state.projectId} skillId={state.skillId} />,
+      initRecoilState
+    );
   });
 
   it('should render QnA page', () => {
