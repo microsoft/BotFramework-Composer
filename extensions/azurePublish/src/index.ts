@@ -193,7 +193,8 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       profileName: string,
       jobId: string,
       resourcekey: string,
-      customizeConfiguration: CreateAndDeployResources
+      customizeConfiguration: CreateAndDeployResources,
+      httpProxy: string
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource } = customizeConfiguration;
       try {
@@ -218,7 +219,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         });
 
         // Perform the deploy
-        await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource);
+        await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource, httpProxy);
 
         // update status and history
         const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -322,8 +323,9 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         defaultLanguage,
         settings,
         accessToken,
+        httpProxy
       } = config;
-
+      console.log(JSON.stringify(config, null, 2));
       // get the appropriate runtime template which contains methods to build and configure the runtime
       const runtime = composer.getRuntimeByProject(project);
       // set runtime code path as runtime template folder path
@@ -367,7 +369,8 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           profileName,
           jobId,
           resourcekey,
-          customizeConfiguration
+          customizeConfiguration,
+          httpProxy
         );
       } catch (err) {
         this.logger('%O', err);

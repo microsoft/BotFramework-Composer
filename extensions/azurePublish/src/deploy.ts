@@ -9,7 +9,9 @@ import * as rp from 'request-promise';
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { LuisAndQnaPublish } from './luisAndQnA';
+import * as axios from 'axios';
 import archiver = require('archiver');
+
 const proxy = require("node-global-proxy").default;
 
 export class BotProjectDeploy {
@@ -44,10 +46,11 @@ export class BotProjectDeploy {
     name: string,
     environment: string,
     hostname?: string,
-    luisResource?: string
+    luisResource?: string,
+    proxySettings?: string,
   ) {
     try {
-      const proxySettings = settings.httpProxy;
+      console.log(JSON.stringify(settings, null, 2))
       if (proxySettings) {
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
@@ -98,6 +101,9 @@ export class BotProjectDeploy {
       // this returns a pathToArtifacts where the deployable version lives.
       const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, settings, profileName);
 
+      if (settings.httpProxy) {
+        proxy.stop();
+      }
       // STEP 4: ZIP THE ASSETS
       // Build a zip file of the project
       this.logger({
@@ -116,7 +122,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Publishing to Azure ...',
       });
-      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
+      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname, proxySettings);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Publish To Azure Success!',
@@ -130,9 +136,6 @@ export class BotProjectDeploy {
         proxy.stop();
       }
       throw error;
-    }
-    if (settings.httpProxy) {
-      proxy.stop();
     }
   }
 
@@ -157,15 +160,14 @@ export class BotProjectDeploy {
 
   // Upload the zip file to Azure
   // DOCS HERE: https://docs.microsoft.com/en-us/azure/app-service/deploy-zip
-  private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
+  private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string, proxySettings?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
     });
 
-    const publishEndpoint = `https://${
-      hostname ? hostname : name + '-' + env
-    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    const publishEndpoint = `https://${hostname ? hostname : name + '-' + env
+      }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
       this.logger('%O', err);
@@ -173,19 +175,49 @@ export class BotProjectDeploy {
     });
 
     try {
-      const response = await rp.post({
-        uri: publishEndpoint,
-        auth: {
-          bearer: token,
-        },
-        body: fileReadStream,
-      });
+      let response = undefined;
+      if (proxySettings) {
+        const protocol = proxySettings.startsWith('https') ? 'https' : 'http';
+        const other = protocol == 'https' ? proxySettings.slice(8) : proxySettings.slice(7);
+        const host = other.split(':')[0]
+        const port = parseInt(other.split(':')[1]);
+        console.log(`protocol : ${protocol}, host: ${host}, port: ${port}, publishEndpoint: ${publishEndpoint}, proxy: ${proxySettings}`);
+        response = await axios.default({
+          url: publishEndpoint,
+          method: 'post',
+          data: fileReadStream,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/zip'
+          },
+          proxy: {
+            host: host,
+            port: port,
+          },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity
+        })
+      }
+      else {
+        response = await axios.default({
+          url: publishEndpoint,
+          method: 'post',
+          data: fileReadStream,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/zip'
+          },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity
+        })
+      }
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response,
+        message: response.status,
       });
     } catch (err) {
       // close file read stream
+      console.log('%O', err);
       fileReadStream.close();
       if (err.statusCode === 403) {
         throw new Error(
