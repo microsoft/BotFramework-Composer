@@ -95,7 +95,7 @@ const BotController: React.FC = () => {
   useEffect(() => {
     const botsStarting =
       startAllBotsOperationQueued ||
-      !!projectCollection.find(({ status }) => {
+      projectCollection.some(({ status }) => {
         return (
           status === BotStatus.publishing ||
           status === BotStatus.published ||
@@ -107,7 +107,7 @@ const BotController: React.FC = () => {
       });
     setBotsStarting(botsStarting);
 
-    const botOperationsCompleted = !!projectCollection.find(
+    const botOperationsCompleted = projectCollection.some(
       ({ status }) => status === BotStatus.connected || status === BotStatus.failed
     );
     setBotsStartOperationCompleted(botOperationsCompleted);
