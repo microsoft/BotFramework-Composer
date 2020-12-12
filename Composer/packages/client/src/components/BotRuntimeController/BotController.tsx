@@ -68,7 +68,7 @@ const BotController: React.FC = () => {
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
-  const [botStartComplete, setBotsStartCompleted] = useState(false);
+  const [botsStartOperationCompleted, setBotsStartOperationCompleted] = useState(false);
   const [areBotsStarting, setBotsStarting] = useState(false);
   const [startPanelButtonText, setStartPanelButtonText] = useState('');
   const { startAllBots, stopAllBots } = useBotOperations();
@@ -110,7 +110,7 @@ const BotController: React.FC = () => {
     const botOperationsCompleted = !!projectCollection.find(
       ({ status }) => status === BotStatus.connected || status === BotStatus.failed
     );
-    setBotsStartCompleted(botOperationsCompleted);
+    setBotsStartOperationCompleted(botOperationsCompleted);
 
     if (botsStarting) {
       setStatusIconClass(undefined);
@@ -168,7 +168,7 @@ const BotController: React.FC = () => {
   );
 
   const handleClick = async () => {
-    if (!botStartComplete) {
+    if (!botsStartOperationCompleted) {
       TelemetryClient.track('StartAllBotsButtonClicked');
       startAllBots();
     } else {
