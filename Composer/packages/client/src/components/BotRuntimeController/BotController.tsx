@@ -107,10 +107,10 @@ const BotController: React.FC = () => {
       });
     setBotsStarting(botsStarting);
 
-    const botsStarted = !!projectCollection.find(
+    const botOperationsCompleted = !!projectCollection.find(
       ({ status }) => status === BotStatus.connected || status === BotStatus.failed
     );
-    setBotsStartCompleted(botsStarted);
+    setBotsStartCompleted(botOperationsCompleted);
 
     if (botsStarting) {
       setStatusIconClass(undefined);
@@ -127,7 +127,7 @@ const BotController: React.FC = () => {
       return;
     }
 
-    if (botsStarted) {
+    if (botOperationsCompleted) {
       if (statusIconClass !== 'Refresh') {
         hideController(false);
       }
