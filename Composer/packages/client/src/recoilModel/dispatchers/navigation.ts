@@ -143,7 +143,8 @@ export const navigationDispatcher = () => {
       skillId: string | null,
       dialogId: string,
       selectPath: string,
-      focusPath: string
+      focusPath: string,
+      fragment?: string
     ) => {
       set(currentProjectIdState, projectId);
 
@@ -154,12 +155,23 @@ export const navigationDispatcher = () => {
       const search = getUrlSearch(encodedSelectPath, encodedFocusPath);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       if (search) {
-        const currentUri =
+        let currentUri =
           skillId == null || skillId === projectId
             ? `/bot/${projectId}/dialogs/${dialogId}${search}`
             : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}${search}`;
 
+        if (fragment && typeof fragment === 'string') {
+          currentUri += `#${fragment}`;
+        }
+
         if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
+
+        set(designPageLocationState(projectId), {
+          dialogId,
+          selected: getSelected(focusPath) || selectPath,
+          focused: focusPath ?? '',
+          promptTab: Object.values(PromptTab).find((value) => fragment === value),
+        });
         navigateTo(currentUri);
       } else {
         navTo(skillId ?? projectId, dialogId);
