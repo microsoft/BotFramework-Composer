@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { lgUtil } from '@bfc/indexers';
 import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
+import { getBaseName } from '../../../utils/fileUtil';
 
 import {
   LgActionType,
@@ -105,6 +106,19 @@ export class LgCache {
     if (!lgResources) return;
 
     lgResources.set(value.id, value);
+
+    // update reference resource
+    if (getBaseName(value.id) === 'common') {
+      const updatedCommonLg = value.parseResult;
+      lgResources.forEach((lgResource) => {
+        if (lgResource.parseResult) {
+          lgResource.parseResult.references = lgResource.parseResult.references.map((ref) => {
+            return getBaseName(ref.id) === 'common' ? updatedCommonLg : ref;
+          });
+        }
+      });
+    }
+
     this.projects.set(projectId, lgResources);
   }
 
