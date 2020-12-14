@@ -17,25 +17,13 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 import { listRoot, tableView, detailList } from './styles';
 import { LogDialog } from './LogDialog';
+import { IStatus } from './type';
 
 export interface IStatusListProps {
   items: IStatus[];
   isRollbackSupported: boolean;
   onRollbackClick: (item: IStatus) => void;
   updateItems: (items: IStatus[]) => void;
-}
-
-export interface IStatus {
-  id: string;
-  time: string;
-  status: number;
-  message: string;
-  comment: string;
-  log?: string;
-  action?: {
-    href: string;
-    label: string;
-  };
 }
 
 function onRenderDetailsHeader(props, defaultRender) {

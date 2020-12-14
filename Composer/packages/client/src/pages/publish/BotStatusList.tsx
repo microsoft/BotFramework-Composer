@@ -21,17 +21,8 @@ import { PublishType } from '../../recoilModel/types';
 
 import { IStatus, PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
+import { IBotStatus } from './type';
 
-export type IBotStatus = {
-  id: string;
-  name: string;
-  publishTargets?: PublishTarget[];
-  publishTarget?: string;
-  time?: string;
-  status?: number;
-  message?: string;
-  comment?: string;
-};
 export type IBotStatusListProps = {
   projectId: string;
   items: IBotStatus[];
