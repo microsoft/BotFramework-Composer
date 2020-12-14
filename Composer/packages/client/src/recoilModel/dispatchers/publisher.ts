@@ -212,13 +212,8 @@ export const publisherDispatcher = () => {
 
   // get bot status from target publisher
   const getPublishStatus = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
-      try {
-        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
-        updatePublishStatus(callbackHelpers, projectId, target, response?.data);
-      } catch (err) {
-        updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
-      }
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, response: any) => {
+      updatePublishStatus(callbackHelpers, projectId, target, response?.data);
     }
   );
 
