@@ -16,4 +16,5 @@ export class WebAuthProvider extends AuthProvider {
       'WebAuthProvider has not been implemented yet. Implicit auth flow currently only works in Electron.'
     );
   }
+  logOut() {}
 }

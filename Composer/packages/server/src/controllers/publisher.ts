@@ -4,7 +4,7 @@
 import { join } from 'path';
 
 import merge from 'lodash/merge';
-import { defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig, PublishResult } from '@bfc/shared';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
@@ -43,6 +43,8 @@ export const PublishController = {
               status: typeof methods.getStatus === 'function',
               rollback: typeof methods.rollback === 'function',
               pull: typeof methods.pull === 'function',
+              provision: typeof methods.provision === 'function',
+              getProvisionStatus: typeof methods.getProvisionStatus === 'function',
             },
           };
         })
@@ -66,12 +68,16 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
 
+    // get token from header
+    const accessToken = req.headers.authorization?.substring('Bearer '.length);
+    log('access token get from header: %s', accessToken);
     if (profile && extensionImplementsMethod(extensionName, 'publish')) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
         fullSettings: merge({}, currentProject.settings, sensitiveSettings),
         ...JSON.parse(profile.configuration),
+        accessToken,
       };
 
       // get the externally defined method
@@ -98,13 +104,13 @@ export const PublishController = {
         res.status(results.status).json(response);
       } catch (err) {
         res.status(400).json({
-          statusCode: '400',
+          status: '400',
           message: err.message,
         });
       }
     } else {
       res.status(400).json({
-        statusCode: '400',
+        status: '400',
         message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
       });
     }
@@ -113,6 +119,7 @@ export const PublishController = {
     const target = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
+    const jobId = req.params.jobId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     const publishTargets = currentProject.settings?.publishTargets || [];
@@ -129,6 +136,7 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         const configuration = {
           profileName: profile.name,
+          jobId: jobId,
           ...JSON.parse(profile.configuration),
         };
 
@@ -148,7 +156,7 @@ export const PublishController = {
           }
         }
         // copy status into payload for ease of access in client
-        const response = {
+        const response: PublishResult = {
           ...results.result,
           status: results.status,
         };
@@ -159,7 +167,7 @@ export const PublishController = {
     }
 
     res.status(400).json({
-      statusCode: '400',
+      status: '400',
       message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
     });
   },
@@ -235,14 +243,8 @@ export const PublishController = {
           // call the method
           const results = await pluginMethod.call(null, configuration, currentProject, version, user);
 
-          // copy status into payload for ease of access in client
-          const response = {
-            ...results.result,
-            status: results.status,
-          };
-
           // set status and return value as json
-          return res.status(results.status).json(response);
+          return res.status(results.status).json(results);
         } catch (err) {
           return res.status(400).json({
             statusCode: '400',

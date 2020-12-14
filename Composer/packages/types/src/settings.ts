@@ -69,7 +69,8 @@ export type ILuisConfig = {
   authoringKey: string;
   endpointKey: string;
   authoringEndpoint: string;
-  authoringRegion: string | 'westus';
+  authoringRegion?: string | 'westus';
+  region?: string;
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
 };

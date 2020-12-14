@@ -10,19 +10,22 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogSetting, PublishTarget } from '@bfc/shared';
+import { DialogSetting, PublishTarget, PublishResult } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
+import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification, PublishType } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
+import { armScopes } from '../../constants';
+import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
+import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
-import { IStatus } from './PublishStatusList';
 import { BotStatusList, IBotStatus } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
@@ -107,14 +110,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<
-    { projectId: string; publishHistory: { [key: string]: IStatus[] } }[]
+    { projectId: string; publishHistory: { [key: string]: PublishResult[] } }[]
   >(publishHistoryList);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [pullDialogHidden, setPullDialogHidden] = useState(true);
 
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+
   // items to show in the list
-  const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
+  const [selectedVersion, setSelectedVersion] = useState<PublishResult | null>(null);
 
   const isPullSupported = useMemo(() => {
     return !!selectedBots.find((bot) => {
@@ -138,7 +143,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           data-testid="publishPage-Toolbar-Publish"
           disabled={publishDisabled || selectedBots.length === 0}
           styles={{ root: { fontSize: '16px' } }}
-          onClick={() => setPublishDialogHidden(false)}
+          onClick={() => {
+            if (isShowAuthDialog(false)) {
+              setShowAuthDialog(true);
+            } else {
+              setPublishDialogHidden(false);
+            }
+          }}
         >
           <svg
             css={{ margin: '0 4px' }}
@@ -300,7 +311,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
     };
   }, []);
-  const rollbackToVersion = (version: IStatus, item: IBotStatus) => {
+  const rollbackToVersion = (version: PublishResult, item: IBotStatus) => {
     const setting = botSettingList.find((botSetting) => botSetting.projectId === item.id)?.setting;
     const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
     if (setting) {
@@ -309,7 +320,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  const onRollbackToVersion = (selectedVersion: IStatus, item: IBotStatus) => {
+  const onRollbackToVersion = (selectedVersion: PublishResult, item: IBotStatus) => {
     item.publishTarget && item.publishTargets && rollbackToVersion(selectedVersion, item);
   };
   const onShowLog = (selectedVersion) => {
@@ -319,7 +330,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const updateBotStatusList = (statusList: IBotStatus[]) => {
     setBotStatusList(statusList);
   };
-  const updatePublishHistory = (publishHistories: IStatus[], botStatus: IBotStatus) => {
+  const updatePublishHistory = (publishHistories: PublishResult[], botStatus: IBotStatus) => {
     const newPublishHistory = botPublishHistoryList.map((botPublishHistory) => {
       if (botPublishHistory.projectId === botStatus.id && botStatus.publishTarget) {
         botPublishHistory.publishHistory = {
@@ -344,6 +355,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedBots(bots);
   };
   const publish = async (items: IBotStatus[]) => {
+    // get token
+    let token = '';
+    if (isGetTokenFromUser()) {
+      token = getTokenFromCache('accessToken');
+      console.log(token);
+    } else {
+      token = await AuthClient.getAccessToken(armScopes);
+    }
+
     setPublishDisabled(true);
     setPreviousBotPublishHistoryList(botPublishHistoryList);
     // notifications
@@ -368,7 +388,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         }
         setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
         const sensitiveSettings = getSensitiveProperties(setting);
-        await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
+        await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings, token);
 
         // update the target with a lastPublished date
         const updatedPublishTargets = setting.publishTargets.map((profile) => {
@@ -421,6 +441,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   return (
     <Fragment>
+      {showAuthDialog && (
+        <AuthDialog
+          needGraph={false}
+          next={() => setPublishDialogHidden(false)}
+          onDismiss={() => {
+            setShowAuthDialog(false);
+          }}
+        />
+      )}
       {!publishDialogHidden && (
         <PublishDialog items={selectedBots} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
