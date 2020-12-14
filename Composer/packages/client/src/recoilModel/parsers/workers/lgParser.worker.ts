@@ -105,6 +105,17 @@ export class LgCache {
     if (!lgResources) return;
 
     lgResources.set(value.id, value);
+
+    // update reference resource
+    const updatedResource = value.parseResult;
+    lgResources.forEach((lgResource) => {
+      if (lgResource.parseResult) {
+        lgResource.parseResult.references = lgResource.parseResult.references.map((ref) => {
+          return ref.id === value.id ? updatedResource : ref;
+        });
+      }
+    });
+
     this.projects.set(projectId, lgResources);
   }
 
