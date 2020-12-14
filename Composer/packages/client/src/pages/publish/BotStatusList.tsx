@@ -10,7 +10,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React, { useState, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { PublishTarget } from '@bfc/shared';
+import { PublishTarget, PublishResult } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
@@ -19,7 +19,7 @@ import { FontSizes } from '@uifabric/styling';
 import { navigateTo } from '../../utils/navigation';
 import { PublishType } from '../../recoilModel/types';
 
-import { IStatus, PublishStatusList } from './PublishStatusList';
+import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 
 export type IBotStatus = {
@@ -35,15 +35,15 @@ export type IBotStatus = {
 export type IBotStatusListProps = {
   projectId: string;
   items: IBotStatus[];
-  botPublishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[];
+  botPublishHistoryList: { projectId: string; publishHistory: { [key: string]: PublishResult[] } }[];
   botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[];
   publishDisabled: boolean;
   updateItems: (items: IBotStatus[]) => void;
-  updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
+  updatePublishHistory: (items: PublishResult[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: IBotStatus) => void;
-  onLogClick: (item: IStatus) => void;
-  onRollbackClick: (selectedVersion: IStatus, item: IBotStatus) => void;
+  onLogClick: (item: PublishResult) => void;
+  onRollbackClick: (selectedVersion: PublishResult, item: IBotStatus) => void;
 };
 
 export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
@@ -288,7 +288,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   ];
   const onRenderRow = (props, defaultRender) => {
     const { item }: { item: IBotStatus } = props;
-    const publishStatusList: IStatus[] = item.publishTarget
+    const publishStatusList: PublishResult[] = item.publishTarget
       ? botPublishHistoryList.find((list) => list.projectId === item.id)?.publishHistory[item.publishTarget] || []
       : [];
     const target = item.publishTargets?.find((target) => target.name === item.publishTarget);
