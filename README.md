@@ -25,7 +25,7 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 
 ## Get Started
 
-- Download Composer for [Windows][201], [Mac][203] and [Linux][202]. Please see the [supported OS versions][205].
+- Download Composer for [Windows][201], [Mac][203] and [Linux][202]. Please see [supported OS versions][205].
 - To learn about the Bot Framework Composer, read the [documentation][5].
 - To get yourself familiar with the Composer, read [Introduction to Bot Framework Composer][1].
 - [Create your first bot][3]!
@@ -34,6 +34,8 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 ## Build Composer Locally
 
 To build and run the Composer project locally as a web application, clone the source code from Github and build the application using the instructions below.
+
+Please see [supported NodeJS versions][205] before building.
 
 ```
 $ git clone https://github.com/microsoft/BotFramework-Composer.git
