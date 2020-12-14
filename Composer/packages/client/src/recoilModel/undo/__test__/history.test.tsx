@@ -21,6 +21,7 @@ import { dialogsSelectorFamily } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
 import { undoStatusSelectorFamily } from '../../selectors/undo';
+import { dispatcherState } from '../../DispatcherWrapper';
 const projectId = '123-asd';
 
 export const UndoRedoWrapper = () => {
@@ -73,6 +74,7 @@ describe('<UndoRoot/>', () => {
         { recoilState: undoHistoryState(projectId), initialValue: new UndoHistory(projectId) },
         { recoilState: canUndoState(projectId), initialValue: false },
         { recoilState: canRedoState(projectId), initialValue: false },
+        { recoilState: dispatcherState, initialValue: { selectAndFocus: () => {} } },
         { recoilState: designPageLocationState(projectId), initialValue: { dialogId: '1', focused: '', selected: '' } },
         {
           recoilState: undoFunctionState(projectId),
