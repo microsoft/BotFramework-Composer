@@ -101,7 +101,7 @@ export const runningBotsSelector = selector({
     const localProjects = get(localBotsWithoutErrorsSelector);
     const botsRunning = localProjects.filter((projectId: string) => {
       const result = get(botStatusState(projectId));
-      return result === BotStatus.connected;
+      return result === BotStatus.connected || result === BotStatus.stopping;
     });
     return {
       totalBots: localProjects.length,
@@ -120,7 +120,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
       }
     },
     startBot: async (projectId: string, sensitiveSettings) => {
-      dispatcher.setBotStatus(projectId, BotStatus.reloading);
+      dispatcher.setBotStatus(projectId, BotStatus.starting);
       await dispatcher.publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
     },
     stopBot: async (projectId: string) => {

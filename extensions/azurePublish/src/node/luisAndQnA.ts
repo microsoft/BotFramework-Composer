@@ -8,7 +8,8 @@ import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 import { ILuisConfig, FileInfo, IQnAConfig, IBotProject } from '@botframework-composer/types';
 
-import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { AzurePublishErrors } from './utils/errorHandler';
+import {BotProjectDeployLoggerType} from './types';
 
 const readdir: any = promisify(fs.readdir);
 
@@ -65,7 +66,10 @@ export async function publishLuisToPrediction(
   ) {
     let { authoringKey: luisAuthoringKey, endpoint: luisEndpoint, authoringRegion: luisAuthoringRegion } = luisSettings;
 
-    if (!luisSettings.endpoint) {
+    if(!luisAuthoringRegion){
+      luisAuthoringRegion = luisSettings.region || 'westus';
+    }
+    if (!luisEndpoint) {
       luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
     }
 
@@ -84,7 +88,6 @@ export async function publishLuisToPrediction(
     }
 
     if(!Object.keys(luisAppIds).length) return luisAppIds;
-
     logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'start publish luis',
@@ -112,8 +115,8 @@ export async function publishLuisToPrediction(
         break;
       } catch (err) {
         if (retryCount < 1) {
-          this.logger({
-            status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+          logger({
+            status: AzurePublishErrors.LUIS_PUBLISH_ERROR,
             message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
           });
           retryCount++;
@@ -155,18 +158,14 @@ export async function publishLuisToPrediction(
             json: true,
             headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
           } as rp.RequestPromiseOptions;
-          const response = await rp.post(luisAssignEndpoint, options);
+          await rp.post(luisAssignEndpoint, options);
 
-          this.logger({
-            status: BotProjectDeployLoggerType.DEPLOY_INFO,
-            message: response,
-          });
           break;
         }
         catch (err) {
           if (retryCount < 1) {
-            this.logger({
-              status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+            logger({
+              status: AzurePublishErrors.LUIS_PUBLISH_ERROR,
               message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
             });
             retryCount++;

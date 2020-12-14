@@ -35,8 +35,8 @@ export const PublishDialog = (props) => {
       name: formatMessage('Publish target'),
       className: 'publishtarget',
       fieldName: 'publishTarget',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 180,
+      maxWidth: 200,
       isMultiline: true,
       data: 'string',
       onRender: (item: IBotStatus) => {

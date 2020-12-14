@@ -115,7 +115,7 @@ export const triggerDispatcher = () => {
         };
         await updateDialog(dialogPayload);
         if (autoSelected) {
-          selectTo(projectId, newDialog.id, `triggers[${index}]`);
+          await selectTo(projectId, newDialog.id, `triggers[${index}]`);
         }
       } catch (ex) {
         setError(callbackHelpers, ex);

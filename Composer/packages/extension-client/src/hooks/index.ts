@@ -10,3 +10,4 @@ export * from './useShellApi';
 export * from './useApplicationApi';
 export * from './useProjectApi';
 export * from './useHttpClient';
+export * from './useTelemetryClient';

@@ -3,7 +3,6 @@
 
 import {
   deepCopyActions,
-  deleteAction as destructAction,
   deleteActions as destructActions,
   FieldProcessorAsync,
   walkAdaptiveActionList,
@@ -14,6 +13,8 @@ import {
   LuMetaData,
 } from '@bfc/shared';
 import { LuIntentSection, MicrosoftIDialog } from '@botframework-composer/types';
+
+import TelemetryClient from '../telemetry/TelemetryClient';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -84,6 +85,9 @@ export const useActionApi = (projectId: string) => {
   };
 
   async function constructActions(dialogId: string, actions: MicrosoftIDialog[]) {
+    actions.forEach(({ $kind }) => {
+      TelemetryClient.track('ActionAdded', { type: $kind });
+    });
     // '- hi' -> 'SendActivity_1234'
     const referenceLgText: FieldProcessorAsync<string> = async (fromId, fromAction, toId, toAction, lgFieldName) =>
       createLgTemplate(dialogId, fromAction[lgFieldName] as string, toId, toAction, lgFieldName);
@@ -126,14 +130,13 @@ export const useActionApi = (projectId: string) => {
   }
 
   async function deleteAction(dialogId: string, action: MicrosoftIDialog) {
-    return destructAction(
-      action,
-      (templates: string[]) => removeLgTemplates(dialogId, templates),
-      (luIntents: string[]) => Promise.all(luIntents.map((intent) => removeLuIntent(dialogId, intent)))
-    );
+    return deleteActions(dialogId, [action]);
   }
 
   async function deleteActions(dialogId: string, actions: MicrosoftIDialog[]) {
+    actions.forEach(({ $kind }) => {
+      TelemetryClient.track('ActionDeleted', { type: $kind });
+    });
     return destructActions(
       actions,
       (templates: string[]) => removeLgTemplates(dialogId, templates),

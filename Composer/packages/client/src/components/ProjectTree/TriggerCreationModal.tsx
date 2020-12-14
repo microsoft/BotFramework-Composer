@@ -39,6 +39,7 @@ import { schemasState, userSettingsState } from '../../recoilModel/atoms';
 import { nameRegex } from '../../constants';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 // -------------------- Styles -------------------- //
 
 const styles = {
@@ -283,6 +284,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     onDismiss();
     onSubmit(dialogId, formData);
+    TelemetryClient.track('AddNewTriggerCompleted', { kind: formData.$kind });
   };
 
   const onSelectTriggerType = (e, option) => {

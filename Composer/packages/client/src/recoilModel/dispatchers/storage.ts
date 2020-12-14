@@ -231,7 +231,7 @@ export const storageDispatcher = () => {
       // update server
       await httpClient.post(`/featureFlags`, { featureFlags: newFeatureFlags });
 
-      TelemetryClient.log('FeatureFlagChanged', { featureFlag: featureName, enabled });
+      TelemetryClient.track('FeatureFlagChanged', { featureFlag: featureName, enabled });
     }
   );
 
