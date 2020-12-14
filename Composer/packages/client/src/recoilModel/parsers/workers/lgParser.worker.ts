@@ -108,16 +108,14 @@ export class LgCache {
     lgResources.set(value.id, value);
 
     // update reference resource
-    if (getBaseName(value.id) === 'common') {
-      const updatedCommonLg = value.parseResult;
-      lgResources.forEach((lgResource) => {
-        if (lgResource.parseResult) {
-          lgResource.parseResult.references = lgResource.parseResult.references.map((ref) => {
-            return getBaseName(ref.id) === 'common' ? updatedCommonLg : ref;
-          });
-        }
-      });
-    }
+    const updatedResource = value.parseResult;
+    lgResources.forEach((lgResource) => {
+      if (lgResource.parseResult) {
+        lgResource.parseResult.references = lgResource.parseResult.references.map((ref) => {
+          return ref.id === value.id ? updatedResource : ref;
+        });
+      }
+    });
 
     this.projects.set(projectId, lgResources);
   }
