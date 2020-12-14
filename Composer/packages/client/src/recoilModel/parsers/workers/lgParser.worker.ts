@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import { lgUtil } from '@bfc/indexers';
 import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
-import { getBaseName } from '../../../utils/fileUtil';
 
 import {
   LgActionType,
