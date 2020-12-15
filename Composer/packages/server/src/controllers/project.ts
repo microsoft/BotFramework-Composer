@@ -16,6 +16,7 @@ import StorageService from '../services/storage';
 import settings from '../settings';
 import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
+import { TelemetryService } from '../services/telemetry';
 
 import { Path } from './../utility/path';
 
@@ -71,10 +72,12 @@ async function createProject(req: Request, res: Response) {
         ...project,
       });
     }
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
   } catch (err) {
     res.status(404).json({
       message: err instanceof Error ? err.message : err,
     });
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 404 });
   }
 }
 
@@ -569,8 +572,10 @@ async function createProjectAsync(req: Request, jobId: string) {
         ...project,
       });
     }
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
   } catch (err) {
     BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
   }
 }
 

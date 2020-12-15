@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Een reactie verzenden om een vraag te stellen",
-      "subtitle": "Activiteit vragen"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Vragen om een bestand of een bijlage",
-      "subtitle": "Invoer van bijlage"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Vragen met meerdere keuzes",
-      "subtitle": "Invoer van keuze"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Vragen om bevestiging",
-      "subtitle": "Invoer bevestigen"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Vragen om een datum of tijd",
-      "subtitle": "Invoer van datum/tijd"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Vragen om een getal",
-      "subtitle": "Invoer van getallen"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth-aanmelding",
-      "subtitle": "OAuth-invoer"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Vragen om tekst",
-      "subtitle": "Tekstinvoer"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Een nieuwe dialoog beginnen",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Een traceringsgebeurtenis verzenden",
       "subtitle": "Traceringsgebeurtenis"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Een reactie verzenden om een vraag te stellen",
+      "subtitle": "Activiteit vragen"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Vragen om een bestand of een bijlage",
+      "subtitle": "Invoer van bijlage"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Vragen met meerdere keuzes",
+      "subtitle": "Invoer van keuze"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Vragen om bevestiging",
+      "subtitle": "Invoer bevestigen"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Vragen om een datum of tijd",
+      "subtitle": "Invoer van datum/tijd"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Vragen om een getal",
+      "subtitle": "Invoer van getallen"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth-aanmelding",
+      "subtitle": "OAuth-invoer"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Vragen om tekst",
+      "subtitle": "Tekstinvoer"
     }
   },
   "Microsoft.OnActivity": {

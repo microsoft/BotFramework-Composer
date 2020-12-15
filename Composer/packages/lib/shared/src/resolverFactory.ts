@@ -88,6 +88,6 @@ export function lgImportResolverGenerator(
       resources.find(({ id }) => id === `${targetId}.${locale}`) || resources.find(({ id }) => id === targetId);
 
     if (!targetFile) throw new Error(formatMessage(`File not found`));
-    return new LGResource(resourceId, resourceId, targetFile.content);
+    return new LGResource(targetFile.id, targetFile.id, targetFile.content);
   };
 }

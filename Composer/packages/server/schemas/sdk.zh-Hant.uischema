@@ -6,57 +6,9 @@
       "properties": {
         "recognizer": {
           "description": "若要了解使用者的說話內容，您的對話需要「識別器」; 其中包含使用者可以使用的範例單字和句子。",
-          "label": "Language Understanding"
+          "label": "語言理解"
         }
       }
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "傳送回應以詢問問題",
-      "subtitle": "要求活動"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "提示新增檔案或附件",
-      "subtitle": "附件輸入"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "複選提示",
-      "subtitle": "選擇輸入"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "提示確認",
-      "subtitle": "確認輸入"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "提示輸入日期或時間",
-      "subtitle": "日期時間輸入"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "提示輸入數字",
-      "subtitle": "數字輸入"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth 登入",
-      "subtitle": "OAuth 輸入"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "提示輸入文字",
-      "subtitle": "文字輸入"
     }
   },
   "Microsoft.BeginDialog": {
@@ -218,6 +170,54 @@
     "form": {
       "label": "發出追蹤事件",
       "subtitle": "追蹤活動"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "傳送回應以詢問問題",
+      "subtitle": "要求活動"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "提示新增檔案或附件",
+      "subtitle": "附件輸入"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "複選提示",
+      "subtitle": "選擇輸入"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "提示確認",
+      "subtitle": "確認輸入"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "提示輸入日期或時間",
+      "subtitle": "日期時間輸入"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "提示輸入數字",
+      "subtitle": "數字輸入"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth 登入",
+      "subtitle": "OAuth 輸入"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "提示輸入文字",
+      "subtitle": "文字輸入"
     }
   },
   "Microsoft.OnActivity": {

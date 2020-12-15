@@ -30,6 +30,7 @@ import {
   validateDialogsSelectorFamily,
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId?: string;
@@ -434,6 +435,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onClick={() => {
             onCreateNewTemplate();
             setMessage(formatMessage('item added'));
+            TelemetryClient.track('NewTemplateAdded');
           }}
         >
           {formatMessage('New template')}

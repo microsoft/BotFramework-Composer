@@ -5,9 +5,11 @@ import { AuthParameters } from '@botframework-composer/types';
 
 import { ComposerGlobalName } from '../common/constants';
 
-/** Logs the user into Azure for a given client ID with the provided scopes. Returns an ID token. */
-export function login(params: AuthParameters): Promise<string> {
-  return window[ComposerGlobalName].login(params);
+/**
+ * log out current user
+ */
+export function logOut(): Promise<void> {
+  return window[ComposerGlobalName].logOut();
 }
 
 /** Requests an access token from Azure for a given client ID with the provided scopes.

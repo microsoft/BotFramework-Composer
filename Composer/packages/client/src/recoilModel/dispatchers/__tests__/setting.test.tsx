@@ -24,7 +24,7 @@ const settings = {
   MicrosoftAppId: '',
   cosmosDb: {
     authKey: '',
-    collectionId: 'botstate-collection',
+    containerId: 'botstate-container',
     cosmosDBEndpoint: '',
     databaseId: 'botstate-db',
   },
@@ -67,7 +67,6 @@ const settings = {
   },
   downsampling: {
     maxImbalanceRatio: 10,
-    maxUtteranceAllowed: 15000,
   },
   skill: {},
   customFunctions: [],
