@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { DialogSetting, PublishTarget } from '@bfc/shared';
+
 import { PublishType } from '../../recoilModel/types';
 
 export interface IStatus {
@@ -26,7 +27,7 @@ export type IBotStatus = {
   message?: string;
   comment?: string;
 };
-export type IBotPublishTarget = {
+export type IBot = {
   id: string;
   name: string;
   publishTarget: string;
@@ -35,6 +36,11 @@ export type IBotPublishTarget = {
 export type IBotSetting = {
   projectId: string;
   setting: DialogSetting;
+};
+
+export type IBotPublishTargets = {
+  projectId: string;
+  publishTargets: PublishTarget[];
 };
 
 export type IBotPublishType = {

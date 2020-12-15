@@ -8,7 +8,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
-import { IBotStatus } from './BotStatusList';
+import { IBotStatus } from './type';
 
 const cardContent = css`
   display: flex;

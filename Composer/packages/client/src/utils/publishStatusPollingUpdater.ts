@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import httpClient from './httpUtil';
 
 enum CircuitBreakerStateEnum {
@@ -5,36 +8,51 @@ enum CircuitBreakerStateEnum {
   Open,
 }
 
+export const ApiStatus = {
+  Publishing: 202,
+  Success: 200,
+  Failed: 500,
+  UNKNOW: 404,
+};
+
 export class PublishStatusPollingUpdater {
   private status;
-  private timerId = 0;
+  private timerId;
   private targetName;
-  private botId;
+  private botProjectId;
   private pollingInterval = 10000;
 
-  constructor(targetName, botId) {
+  constructor({ botProjectId, targetName }) {
+    this.botProjectId = botProjectId;
     this.targetName = targetName;
-    this.botId = botId;
   }
 
   async start(onData) {
+    if (!(this.botProjectId && this.targetName)) return;
     if (this.status === CircuitBreakerStateEnum.Open) return;
     this.status = CircuitBreakerStateEnum.Open;
     this.timerId = window.setInterval(async () => {
       try {
-        const response = await httpClient.get(`/publish/${this.botId}/status/${this.targetName}`);
-        onData && onData({ botId: this.botId, targetName: this.targetName, apiResponse: response });
+        const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
+        onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
       } catch (err) {
-        onData && onData({ botId: this.botId, targetName: this.targetName, apiResponse: err.response });
+        console.log(this.timerId);
+        onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
       }
     }, this.pollingInterval);
   }
   stop() {
-    window.clearInterval(this.timerId);
+    if (this.timerId) {
+      window.clearInterval(this.timerId);
+    }
     this.timerId = 0;
     this.status = CircuitBreakerStateEnum.Closed;
   }
-  getProperty() {
-    return { botId: this.botId, targetName: this.targetName };
+  restart(onData) {
+    this.stop();
+    this.start(onData);
+  }
+  beEqual(botProjectId, targetName) {
+    return this.botProjectId === botProjectId && this.targetName === targetName;
   }
 }

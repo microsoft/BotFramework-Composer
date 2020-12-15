@@ -7,27 +7,26 @@ import moment from 'moment';
 import formatMessage from 'format-message';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { PublishTarget } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 
 import { navigateTo } from '../../utils/navigation';
-import { PublishType } from '../../recoilModel/types';
 
-import { IStatus, PublishStatusList } from './PublishStatusList';
+import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
-import { IBotStatus } from './type';
+import { IBot, IBotPublishHistory, IBotPublishTargets, IBotPublishType, IBotStatus, IStatus } from './type';
 
 export type IBotStatusListProps = {
   projectId: string;
-  items: IBotStatus[];
-  botPublishHistoryList: { projectId: string; publishHistory: { [key: string]: IStatus[] } }[];
-  botPublishTypesList: { projectId: string; publishTypes: PublishType[] }[];
+  botList: IBot[];
+  botPublishTargetsList: IBotPublishTargets[];
+  botPublishHistoryList: IBotPublishHistory[];
+  botPublishTypesList: IBotPublishType[];
   publishDisabled: boolean;
   updateItems: (items: IBotStatus[]) => void;
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
@@ -36,10 +35,36 @@ export type IBotStatusListProps = {
   onRollbackClick: (selectedVersion: IStatus, item: IBotStatus) => void;
 };
 
+const generateBotList = (
+  botList: IBot[],
+  botPublishTargetsList: IBotPublishTargets[],
+  botPublishHistoryList: IBotPublishHistory[]
+): IBotStatus[] => {
+  const bots: IBotStatus[] = [];
+  botList.forEach((bot) => {
+    const botStatus: IBotStatus = Object.assign({}, bot);
+    const publishTargets =
+      botPublishTargetsList.find((targetMap) => targetMap.projectId === bot.id)?.publishTargets || [];
+    const publishHistory = botPublishHistoryList.find((historyMap) => historyMap.projectId === bot.id)?.publishHistory;
+    if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
+      botStatus.publishTargets = publishTargets;
+      if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
+        const history = publishHistory[botStatus.publishTarget][0];
+        botStatus.time = history.time;
+        botStatus.comment = history.comment;
+        botStatus.message = history.message;
+        botStatus.status = history.status;
+      }
+    }
+    bots.push(botStatus);
+  });
+  return bots;
+};
 export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const {
     projectId,
-    items,
+    botList,
+    botPublishTargetsList,
     botPublishHistoryList,
     botPublishTypesList,
     publishDisabled,
@@ -53,6 +78,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const [showHistoryBots, setShowHistoryBots] = useState<string[]>([]);
 
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
+  const items: IBotStatus[] = useMemo(() => {
+    return generateBotList(botList, botPublishTargetsList, botPublishHistoryList);
+  }, [botList, botPublishTargetsList, botPublishHistoryList]);
   const sortByName = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
       column.isSortedDescending = !column.isSortedDescending;
