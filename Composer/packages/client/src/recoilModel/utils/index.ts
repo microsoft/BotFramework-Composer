@@ -4,7 +4,7 @@
 import { UserSettings } from '@bfc/shared';
 import merge from 'lodash/merge';
 
-import storage from '../../utils/storage';
+import { ClientStorage } from '../../utils/storage';
 import { isElectron } from '../../utils/electronUtil';
 
 export const DEFAULT_USER_SETTINGS = {
@@ -23,8 +23,10 @@ export const DEFAULT_USER_SETTINGS = {
   telemetry: {},
 };
 
+const userSettingStorage = new ClientStorage<UserSettings>();
+
 export const getUserSettings = (): UserSettings => {
-  const loadedSettings = storage.get('userSettings', {});
+  const loadedSettings = userSettingStorage.get('userSettings') ?? {};
   const settings = merge(DEFAULT_USER_SETTINGS, loadedSettings);
 
   if (isElectron()) {

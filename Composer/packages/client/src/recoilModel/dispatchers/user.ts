@@ -8,7 +8,7 @@ import pick from 'lodash/pick';
 
 import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appState';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
-import storage from '../../utils/storage';
+import { ClientStorage } from '../../utils/storage';
 import { loadLocale } from '../../utils/fileUtil';
 import { UserSettingsPayload } from '../types';
 import { isElectron } from '../../utils/electronUtil';

@@ -1,21 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import storage from './storage';
+import { ClientStorage } from './storage';
 
 const KEY = 'OnboardingState';
 const DEFAULT_STATE = { complete: process.env.NODE_ENV !== 'production' };
 
 interface IOnboardingState {
   complete: boolean;
-  currentSet: string;
+  currentSet?: string;
 }
 
 class OnboardingState {
-  private storage;
+  private storage: ClientStorage<IOnboardingState>;
   private _all;
   constructor() {
-    this.storage = storage;
+    this.storage = new ClientStorage<IOnboardingState>();
     this._all = this.storage.get(KEY, DEFAULT_STATE);
   }
 

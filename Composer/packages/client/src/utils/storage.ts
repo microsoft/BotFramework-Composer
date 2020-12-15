@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export class ClientStorage {
+export class ClientStorage<T> {
   private storage: Storage;
   private _prefix = 'composer';
 
@@ -12,7 +12,7 @@ export class ClientStorage {
     }
   }
 
-  public set<T = any>(key: string, val: T): T | void {
+  public set(key: string, val: T): T | void {
     if (val === undefined) {
       return this.remove(this.prefix(key));
     }
@@ -20,9 +20,15 @@ export class ClientStorage {
     return val;
   }
 
-  public get<T = any>(key: string, def?: T): T {
-    const val = this.deserialize(this.storage.getItem(this.prefix(key)));
-    return val === undefined ? def : val;
+  public get(key: string, def?: T): T | undefined {
+    const item: string | null = this.storage.getItem(this.prefix(key));
+    if (item == null) return undefined;
+    try {
+      const val = this.deserialize(item);
+      return val === undefined ? def : val;
+    } catch (e) {
+      return undefined;
+    }
   }
 
   public has(key: string): boolean {
@@ -37,7 +43,7 @@ export class ClientStorage {
     this.storage.clear();
   }
 
-  public getAll(): { [key: string]: any } {
+  public getAll(): { [key: string]: T } {
     const ret = {};
     this.forEach((key, val) => {
       ret[key] = val;
@@ -45,36 +51,25 @@ export class ClientStorage {
     return ret;
   }
 
-  private forEach(callback: (key: string, val: any) => void) {
+  private forEach(callback: (key: string, val: T) => void) {
     for (let i = 0; i < this.storage.length; i++) {
-      const key = this.storage.key(i);
-      if (key) {
-        callback(key.replace(`${this._prefix}:`, ''), this.get(key));
-      }
+      // note: the definition of Storage.length ensures that key will never be null, but the type-checker doesn't know this,
+      // so this '' default will never actually be used
+      const key = this.storage.key(i) ?? '';
+      const value = this.get(key);
+      if (value != null) callback(key.replace(`${this._prefix}:`, ''), value);
     }
   }
 
-  private serialize(val: any): string {
+  private serialize(val: T): string {
     return JSON.stringify(val);
   }
 
-  private deserialize(val: any): any {
-    if (typeof val !== 'string') {
-      return undefined;
-    }
-
-    try {
-      return JSON.parse(val);
-    } catch (error) {
-      return val || undefined;
-    }
+  private deserialize(val: string): T {
+    return JSON.parse(val);
   }
 
   private prefix(key: string): string {
     return `${this._prefix}:${key}`;
   }
 }
-
-const storage = new ClientStorage();
-
-export default storage;

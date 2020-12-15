@@ -5,12 +5,12 @@ import { ClientStorage } from './storage';
 const KEY = 'RouterCache';
 
 class RouterCache {
-  private storage: ClientStorage;
+  private storage: ClientStorage<string>;
   private _all;
 
   constructor() {
-    this.storage = new ClientStorage(window.sessionStorage);
-    this._all = this.storage.get(KEY, {});
+    this.storage = new ClientStorage<string>(window.sessionStorage);
+    this._all = this.storage.get(KEY) ?? {};
   }
 
   get(to: string) {

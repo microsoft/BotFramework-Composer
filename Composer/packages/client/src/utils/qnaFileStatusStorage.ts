@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import keys from 'lodash/keys';
 
-import storage, { ClientStorage } from './storage';
+import { ClientStorage } from './storage';
 
 const KEY = 'QnaFileStatus';
 
@@ -10,14 +10,16 @@ interface IQnaFileStatus {
   [fileId: string]: boolean;
 }
 
+type StoredData = { [projectId: string]: IQnaFileStatus };
+
 // add qna publish status to local storage
 class QnaFileStatusStorage {
-  private storage: ClientStorage;
-  private _all: { [projectId: string]: IQnaFileStatus };
+  private storage: ClientStorage<StoredData>;
+  private _all: StoredData;
 
   constructor() {
-    this.storage = storage;
-    this._all = this.storage.get(KEY, {});
+    this.storage = new ClientStorage<StoredData>();
+    this._all = this.storage.get(KEY) ?? {};
   }
 
   public get(projectId: string) {

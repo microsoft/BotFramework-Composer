@@ -3,19 +3,21 @@
 
 import set from 'lodash/set';
 
-import storage from './storage';
+import { ClientStorage } from './storage';
 
 const KEY = 'DialogSetting';
 
+type StoredData = {};
+
 class DialogSettingStorage {
-  private storage;
-  private _all;
+  private storage: ClientStorage<StoredData>;
+  private _all: StoredData;
   constructor() {
-    this.storage = storage;
-    this._all = this.storage.get(KEY, {});
+    this.storage = new ClientStorage<StoredData>();
+    this._all = this.storage.get(KEY) ?? {};
   }
   get(projectId: string) {
-    return this._all[projectId] || {};
+    return this._all[projectId] ?? {};
   }
   setField(projectId: string, field: string, value: any) {
     let current = this._all[projectId];

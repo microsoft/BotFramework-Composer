@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import keys from 'lodash/keys';
 
-import storage, { ClientStorage } from './storage';
+import { ClientStorage } from './storage';
 
 const KEY = 'LuFileStatus';
 
@@ -10,14 +10,16 @@ interface ILuFileStatus {
   [fileId: string]: boolean;
 }
 
+type StoredData = { [projectId: string]: ILuFileStatus };
+
 // add luis publish status to local storage
 class LuFileStatusStorage {
-  private storage: ClientStorage;
-  private _all: { [projectId: string]: ILuFileStatus };
+  private storage: ClientStorage<StoredData>;
+  private _all: StoredData;
 
   constructor() {
-    this.storage = storage;
-    this._all = this.storage.get(KEY, {});
+    this.storage = new ClientStorage<StoredData>();
+    this._all = this.storage.get(KEY) ?? {};
   }
 
   public get(projectId: string) {
