@@ -88,9 +88,12 @@ function getClientEnvironment(publicUrl) {
         PUBLIC_URL: publicUrl,
         GIT_SHA: getGitSha().toString().replace('\n', ''),
         SDK_PACKAGE_VERSION: '4.11.0', // TODO: change this when Composer supports custom schema/custom runtime
-        COMPOSER_VERSION: '1.3.0-rc3',
+        COMPOSER_VERSION: '1.3.0',
         LOCAL_PUBLISH_PATH:
           process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../../extensions/localPublish/hostedBots'),
+        WEBLOGIN_CLIENTID: process.env.WEBLOGIN_CLIENTID,
+        WEBLOGIN_TENANTID: process.env.WEBLOGIN_TENANTID,
+        WEBLOGIN_REDIRECTURL: process.env.WEBLOGIN_REDIRECTURL,
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin

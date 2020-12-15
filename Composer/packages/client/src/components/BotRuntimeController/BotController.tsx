@@ -68,7 +68,7 @@ const BotController: React.FC = () => {
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
-  const [botStartComplete, setBotsStartCompleted] = useState(false);
+  const [botsStartOperationCompleted, setBotsStartOperationCompleted] = useState(false);
   const [areBotsStarting, setBotsStarting] = useState(false);
   const [startPanelButtonText, setStartPanelButtonText] = useState('');
   const { startAllBots, stopAllBots } = useBotOperations();
@@ -93,19 +93,24 @@ const BotController: React.FC = () => {
   }, [projectCollection, errors]);
 
   useEffect(() => {
-    const botsStarting = !!projectCollection.find(({ status }) => {
-      return (
-        status === BotStatus.publishing ||
-        status === BotStatus.published ||
-        status == BotStatus.pending ||
-        status == BotStatus.queued ||
-        status == BotStatus.starting
-      );
-    });
+    const botsStarting =
+      startAllBotsOperationQueued ||
+      projectCollection.some(({ status }) => {
+        return (
+          status === BotStatus.publishing ||
+          status === BotStatus.published ||
+          status == BotStatus.pending ||
+          status == BotStatus.queued ||
+          status == BotStatus.starting ||
+          status == BotStatus.stopping
+        );
+      });
     setBotsStarting(botsStarting);
 
-    const botsStarted = !!projectCollection.find(({ status }) => status === BotStatus.connected);
-    setBotsStartCompleted(botsStarted);
+    const botOperationsCompleted = projectCollection.some(
+      ({ status }) => status === BotStatus.connected || status === BotStatus.failed
+    );
+    setBotsStartOperationCompleted(botOperationsCompleted);
 
     if (botsStarting) {
       setStatusIconClass(undefined);
@@ -122,7 +127,7 @@ const BotController: React.FC = () => {
       return;
     }
 
-    if (botsStarted) {
+    if (botOperationsCompleted) {
       if (statusIconClass !== 'Refresh') {
         hideController(false);
       }
@@ -163,12 +168,12 @@ const BotController: React.FC = () => {
   );
 
   const handleClick = async () => {
-    if (!botStartComplete) {
+    if (!botsStartOperationCompleted) {
       TelemetryClient.track('StartAllBotsButtonClicked');
       startAllBots();
     } else {
-      await stopAllBots();
       queueStartAllBots(true);
+      await stopAllBots();
       TelemetryClient.track('RestartAllBotsButtonClicked');
     }
     builderEssentials.forEach(({ projectId }) => {

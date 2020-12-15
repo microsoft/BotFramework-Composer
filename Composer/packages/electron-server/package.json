@@ -2,7 +2,7 @@
   "name": "@bfc/electron-server",
   "license": "MIT",
   "author": "Microsoft Corporation",
-  "version": "1.3.0-rc3",
+  "version": "1.3.0",
   "description": "Electron wrapper around Composer that launches Composer as a desktop application.",
   "main": "./build/main.js",
   "engines": {
@@ -76,6 +76,6 @@
   },
   "peerDependencies": {
     "oneauth-mac": "1.11.0",
-    "oneauth-win64": "1.11.0"
+    "oneauth-win64": "1.14.0"
   }
 }

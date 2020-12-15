@@ -6,10 +6,10 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
-import { BotProjectDeployConfig } from './botProjectDeployConfig';
-import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
 import archiver = require('archiver');
+import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -61,13 +61,13 @@ export class BotProjectDeploy {
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: "Building the bot's resources ...",
+        message: "Building the bot app...",
       });
       await build(project, this.projPath, settings);
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Build Success!',
+        message: 'Build succeeded!',
       });
 
       // this function returns an object that contains the luis APP ids mapping
@@ -103,12 +103,12 @@ export class BotProjectDeploy {
       // Build a zip file of the project
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing up the bot service ...',
+        message: 'Creating build artifact...',
       });
       await this.zipDirectory(pathToArtifacts, this.zipPath);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing Service Success!',
+        message: 'Build artifact ready!',
       });
 
       // STEP 5: DEPLOY THE ZIP FILE TO AZURE
@@ -120,7 +120,7 @@ export class BotProjectDeploy {
       await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
-        message: 'Publish To Azure Success!',
+        message: 'Published successfully!',
       });
     } catch (error) {
       this.logger({
@@ -132,22 +132,25 @@ export class BotProjectDeploy {
   }
 
   private async zipDirectory(source: string, out: string) {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    const stream = fs.createWriteStream(out);
+    try {
+      const archive = archiver('zip', { zlib: { level: 9 } });
+      const stream = fs.createWriteStream(out);
+      return new Promise((resolve, reject) => {
+        archive
+          .glob('**/*', {
+            cwd: source,
+            dot: true,
+            ignore: ['**/code.zip', 'node_modules/**/*'],
+          })
+          .on('error', (err) => reject(err))
+          .pipe(stream);
 
-    return new Promise((resolve, reject) => {
-      archive
-        .glob('**/*', {
-          cwd: source,
-          dot: true,
-          ignore: ['**/code.zip', 'node_modules/**/*', '**/onnxruntime.pdb', '**/oc_abi.pdb'],
-        })
-        .on('error', (err) => reject(err))
-        .pipe(stream);
-
-      stream.on('close', () => resolve());
-      archive.finalize();
-    });
+        stream.on('close', () => resolve());
+        archive.finalize();
+      });
+    } catch (error) {
+      createCustomizeError(AzurePublishErrors.ZIP_FOLDER_ERROR, stringifyError(error));
+    }
   }
 
   // Upload the zip file to Azure
@@ -155,11 +158,11 @@ export class BotProjectDeploy {
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Retrieve publishing details ...',
+      message: 'Uploading zip file...',
     });
 
     const publishEndpoint = `https://${
-      hostname ? hostname : name + '-' + env
+      hostname ? hostname : name + (env ? '-' + env : '')
     }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
@@ -183,11 +186,12 @@ export class BotProjectDeploy {
       // close file read stream
       fileReadStream.close();
       if (err.statusCode === 403) {
-        throw new Error(
+        throw createCustomizeError(
+          AzurePublishErrors.DEPLOY_ZIP_ERROR,
           `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
         );
       } else {
-        throw err;
+        throw createCustomizeError(AzurePublishErrors.DEPLOY_ZIP_ERROR, stringifyError(err));
       }
     }
   }

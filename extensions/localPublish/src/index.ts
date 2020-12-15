@@ -168,11 +168,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           },
         };
       } else {
-        const status = {
+        const publishResult = {
           status: LocalPublisher.runningBots[botId].status,
           result: LocalPublisher.runningBots[botId].result,
         };
-        return status;
+        if (LocalPublisher.runningBots[botId].status === 500) {
+          // after we return the 500 status once, delete it out of the running bots list.
+          delete LocalPublisher.runningBots[botId];
+        }
+        return publishResult;
       }
     } else {
       return {
@@ -263,7 +267,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             encoding: 'utf-8',
           })
         );
-        if (!settings.runtime?.key || settings.runtime?.key !== project.settings.runtime?.key) {
+        // TODO: Understand why this is required as it would never hit this function if runtime is ejected
+        if (settings.runtime?.key && (settings.runtime?.key !== project.settings.runtime?.key)) {
           // in order to change runtime type
           await removeDirAndFiles(this.getBotRuntimeDir(botId));
           // copy runtime template in folder
