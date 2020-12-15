@@ -13,7 +13,8 @@ const index = (jsonFiles: FileInfo[]) => {
 
       if (has(jsonContent, '$schema')) {
         const schema = jsonContent.$schema.toLowerCase().trim();
-        if (schema.startsWith('http://json-schema.org')) {
+        // prettier-ignore
+        if (schema.startsWith('http://json-schema.org')) { // lgtm [js/incomplete-url-substring-sanitization]
           return [...jsonSchemaFiles, { content: jsonContent, id: getBaseName(name) }];
         }
       }

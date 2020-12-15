@@ -15,7 +15,7 @@ export function moveCursor(
 ): { [key: string]: string | undefined } {
   const currentElement = selectableElements.find((element) => element.selectedId === id || element.focusedId === id);
   if (!currentElement) return { selected: id, focused: undefined };
-  let element: SelectorElement = currentElement;
+  let element: SelectorElement;
 
   // tab move or arrow move
   switch (command) {

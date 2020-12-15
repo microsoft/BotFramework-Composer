@@ -70,13 +70,13 @@ export const extensionsDispatcher = () => {
         const toggledExtension: ExtensionMetadata = res.data;
 
         set(extensionsState, (extensions) => {
-          return (extensions = extensions.map((p) => {
+          return extensions.map((p) => {
             if (p.id === toggledExtension.id) {
               // update the toggled extension
               return toggledExtension;
             }
             return p;
-          }));
+          });
         });
       } catch (err) {
         // eslint-disable-next-line no-console
