@@ -10,7 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { IBotStatus } from './BotStatusList';
+import { IBotStatus } from './type';
 
 export const PublishDialog = (props) => {
   const { items } = props;

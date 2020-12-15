@@ -211,12 +211,23 @@ export const publisherDispatcher = () => {
   );
 
   // get bot status from target publisher
-  const getPublishStatus = useRecoilCallback(
+  const getPublishStatusV2 = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, response: any) => {
       updatePublishStatus(callbackHelpers, projectId, target, response?.data);
     }
   );
 
+  // get bot status from target publisher
+  const getPublishStatus = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, jobId?: string) => {
+      try {
+        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}${jobId ? '/' + jobId : ''}`);
+        updatePublishStatus(callbackHelpers, projectId, target, response.data);
+      } catch (err) {
+        updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
+      }
+    }
+  );
   const getPublishHistory = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
       const { set, snapshot } = callbackHelpers;
@@ -291,6 +302,7 @@ export const publisherDispatcher = () => {
     stopPublishBot,
     rollbackToVersion,
     getPublishStatus,
+    getPublishStatusV2,
     getPublishHistory,
     setEjectRuntimeExist,
     openBotInEmulator,
