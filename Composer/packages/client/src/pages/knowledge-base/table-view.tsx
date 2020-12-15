@@ -524,7 +524,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                   ariaLabel={formatMessage('Question is empty now')}
                   depth={0}
                   disabled={isAllowEdit}
-                  id={'New Question'}
+                  id={'NewQuestion'}
                   name={'New Question'}
                   placeholder={formatMessage('Add new question')}
                   styles={editableField}

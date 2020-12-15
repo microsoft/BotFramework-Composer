@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 'use strict';
 
 const path = require('path');
@@ -16,6 +19,7 @@ function ensureSlash(inputPath, needsSlash) {
   if (hasSlash && !needsSlash) {
     return inputPath.substr(0, inputPath.length - 1);
   } else if (!hasSlash && needsSlash) {
+    // lgtm [js/trivial-conditional]
     return `${inputPath}/`;
   } else {
     return inputPath;
