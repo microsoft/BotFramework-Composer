@@ -632,23 +632,28 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
 
     if (content) {
-      updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
+      await updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
-      if (!current) return;
+      if (!current) {
+        commitChanges();
+        return;
+      }
       const currentIdx = parseInt(current);
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+          await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(skillId ?? projectId, dialogId);
+          await navTo(skillId ?? projectId, dialogId);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+        await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
+
+      commitChanges();
     }
   }
   const addNewBtnRef = useCallback((addNew) => {
@@ -658,7 +663,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const handleCreateQnA = async (data) => {
     const { projectId, dialogId } = creatQnAOnInfo;
     if (!projectId || !dialogId) return;
-    createQnATrigger(projectId, dialogId);
+    await createQnATrigger(projectId, dialogId);
 
     const { name, url, multiTurn } = data;
     if (url) {
@@ -666,6 +671,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     } else {
       await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
     }
+    commitChanges();
   };
 
   const handleCreateDialog = (projectId: string) => {
@@ -828,8 +834,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             dialogId={triggerModalInfo.dialogId}
             projectId={triggerModalInfo.projectId}
             onDismiss={onTriggerCreationDismiss}
-            onSubmit={(dialogId, formData) => {
-              createTrigger(triggerModalInfo.projectId, dialogId, formData);
+            onSubmit={async (dialogId, formData) => {
+              await createTrigger(triggerModalInfo.projectId, dialogId, formData);
+              commitChanges();
             }}
           />
         )}

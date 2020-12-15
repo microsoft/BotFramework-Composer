@@ -15,6 +15,7 @@ import { triggerDispatcher } from './trigger';
 import { builderDispatcher } from './builder';
 import { navigationDispatcher } from './navigation';
 import { publisherDispatcher } from './publisher';
+import { provisionDispatcher } from './provision';
 import { settingsDispatcher } from './setting';
 import { skillDispatcher } from './skill';
 import { userDispatcher } from './user';
@@ -42,6 +43,7 @@ const createDispatchers = () => {
     ...builderDispatcher(),
     ...navigationDispatcher(),
     ...publisherDispatcher(),
+    ...provisionDispatcher(),
     ...settingsDispatcher(),
     ...skillDispatcher(),
     ...userDispatcher(),

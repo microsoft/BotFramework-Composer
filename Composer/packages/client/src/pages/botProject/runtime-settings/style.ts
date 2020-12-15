@@ -8,7 +8,6 @@ export const runtimeSettingsStyle = css`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  height: 200px;
 `;
 
 export const runtimeControls = css`
@@ -70,4 +69,9 @@ export const iconStyle = (disabled) => {
 
 export const textOr = css`
   font-size: ${FontSizes.smallPlus};
+`;
+
+export const updateText = css`
+  font-size: ${FontSizes.smallPlus};
+  color: ${NeutralColors.gray130};
 `;

@@ -14,7 +14,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { DialogCreationCopy } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { actionsSeedState, schemasState, validateDialogsSelectorFamily } from '../../recoilModel';
+import { actionsSeedState, botDisplayNameState, schemasState, validateDialogsSelectorFamily } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { name, description, styles as wizardStyles } from './styles';
@@ -38,8 +38,8 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
-
   const { shellApi, ...shellData } = useShellApi();
   const { defaultRecognizer } = useRecognizerConfig();
 
@@ -55,6 +55,10 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
         if (dialogs.some((dialog) => dialog.id.toLowerCase() === value.toLowerCase())) {
           return formatMessage('Duplicate dialog name');
+        }
+
+        if (botName.toLowerCase() === value.toLowerCase()) {
+          return formatMessage('Duplicate root dialog name');
         }
       },
       defaultValue: '',

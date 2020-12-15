@@ -295,21 +295,10 @@ export default async (composer: any): Promise<void> => {
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
         const schemaFolderInRuntime = path.join(destPath, 'schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
-        // install dev dependencies in production, make sure typescript is installed
-        const { stderr: initErr } = await execAsync('npm install && npm install --only=dev', {
-          cwd: destPath,
-        });
-        if (initErr) {
-          composer.log(initErr);
-        }
-        const { stderr: initErr2 } = await execAsync('npm run build', { cwd: destPath });
-        if (initErr2) {
-          throw new Error(initErr2);
-        }
-        return destPath;
-      } else {
-        throw new Error(`Runtime already exists at ${destPath}`);
+
+        return path.relative(project.dir, destPath);
       }
+      throw new Error(`Runtime already exists at ${destPath}`);
     },
     setSkillManifest: async (
       dstRuntimePath: string,
