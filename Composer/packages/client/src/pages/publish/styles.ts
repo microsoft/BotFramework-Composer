@@ -4,6 +4,22 @@ import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+export const settingsContainer = css`
+  display: flex;
+  border-top: 1px solid ${NeutralColors.gray20};
+  padding: 20px 0px;
+`;
+
+export const settingsContent = css`
+  width: 245px;
+  font-size: ${FontSizes.medium};
+`;
+
+export const settingsDescription = css`
+  margin: 0;
+  margin-top: 8px;
+`;
+
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
   height: 60px;
@@ -95,6 +111,7 @@ export const overflowSet = css`
   justify-content: space-between;
   line-height: 36px;
   padding-left: 16px;
+  padding-right: 5px;
   background: ${NeutralColors.white};
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.small};
@@ -114,6 +131,13 @@ export const targetSelected = css`
   background: ${NeutralColors.gray20};
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
+  padding-right: 5px;
+`;
+
+export const separator = css`
+  ::before {
+    background: gray;
+  }
 `;
 
 export const defaultPublishSurface = css`
@@ -122,4 +146,9 @@ export const defaultPublishSurface = css`
 
 export const pvaPublishSurface = css`
   height: 350px;
+`;
+export const azurePublishSurface = css`
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 400px;
 `;
