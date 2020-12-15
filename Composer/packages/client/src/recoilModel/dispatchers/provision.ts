@@ -9,6 +9,7 @@ import { CardProps } from '../../components/Notifications/NotificationCard';
 
 import { addNotificationInternal, createNotification, updateNotificationInternal } from './notification';
 import httpClient from './../../utils/httpUtil';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export const provisionDispatcher = () => {
   const getProvisionPendingNotification = (value: string): CardProps => {
@@ -42,6 +43,7 @@ export const provisionDispatcher = () => {
       graphToken = ''
     ) => {
       try {
+        TelemetryClient.track('NewPublishingProfileStarted');
         const result = await httpClient.post(`/provision/${projectId}/${type}`, config, {
           headers: { Authorization: `Bearer ${armToken}`, graphtoken: graphToken },
         });
@@ -114,6 +116,8 @@ export const provisionDispatcher = () => {
               publishTargets: targetlist,
             };
           });
+
+          TelemetryClient.track('NewPublishingProfileSaved', { type: targetType });
 
           notification = getProvisionSuccessNotification(response.data.message);
           isCleanTimer = true;
