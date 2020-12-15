@@ -32,19 +32,19 @@ export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
+  const { set } = callbackHelpers;
   //To do: support other languages on qna
   id = id.endsWith('.source') ? id : `${getBaseName(id)}.en-us`;
-  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
-  const newQnAFiles = qnaFiles.map((file) => {
-    if (file.id === id) {
-      return updatedQnAFile;
-    }
-    return file;
-  });
 
-  set(qnaFilesState(projectId), newQnAFiles);
+  set(qnaFilesState(projectId), (prevQnAFiles) => {
+    return prevQnAFiles.map((file) => {
+      if (file.id === id) {
+        return updatedQnAFile;
+      }
+      return file;
+    });
+  });
 };
 
 export const createQnAFileState = async (
@@ -74,7 +74,7 @@ export const createQnAFileState = async (
     });
   });
 
-  set(qnaFilesState(projectId), [...qnaFiles, ...changes]);
+  set(qnaFilesState(projectId), (prevQnAFiles) => [...changes, ...prevQnAFiles]);
 };
 
 /**
@@ -88,7 +88,7 @@ export const removeQnAFileState = async (
   { id, projectId }: { id: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  let qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
   //const locale = await snapshot.getPromise(localeState(projectId));
   //To do: support other languages on qna
   const locale = 'en-us';
@@ -105,8 +105,9 @@ export const removeQnAFileState = async (
     }
   });
 
-  qnaFiles = qnaFiles.filter((file) => file.id !== targetQnAFile.id);
-  set(qnaFilesState(projectId), qnaFiles);
+  set(qnaFilesState(projectId), (prevQnAFiles) => {
+    return prevQnAFiles.filter((file) => file.id !== targetQnAFile.id);
+  });
 };
 
 export const createKBFileState = async (
@@ -143,7 +144,7 @@ export const createKBFileState = async (
   }
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
-  set(qnaFilesState(projectId), [createdQnAFile, ...newQnAFiles]);
+  set(qnaFilesState(projectId), (prevQnAFiles) => [createdQnAFile, ...prevQnAFiles]);
 };
 
 export const removeKBFileState = async (
@@ -151,7 +152,7 @@ export const removeKBFileState = async (
   { id, projectId }: { id: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  let qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
   // const locale = await snapshot.getPromise(localeState(projectId));
   //To do: support other languages on qna
   const locale = 'en-us';
@@ -168,8 +169,9 @@ export const removeKBFileState = async (
     }
   });
 
-  qnaFiles = qnaFiles.filter((file) => file.id !== targetQnAFile.id);
-  set(qnaFilesState(projectId), qnaFiles);
+  set(qnaFilesState(projectId), (prevQnAFiles) => {
+    return prevQnAFiles.filter((file) => file.id !== targetQnAFile.id);
+  });
 };
 
 export const renameKBFileState = async (
@@ -195,17 +197,17 @@ export const renameKBFileState = async (
   }
   qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
 
-  const newQnAFiles = qnaFiles.map((file) => {
-    if (file.id === targetQnAFile.id) {
-      return {
-        ...file,
-        id: name,
-      };
-    }
-    return file;
+  set(qnaFilesState(projectId), (prevQnAFiles) => {
+    return prevQnAFiles.map((file) => {
+      if (file.id === targetQnAFile.id) {
+        return {
+          ...file,
+          id: name,
+        };
+      }
+      return file;
+    });
   });
-
-  set(qnaFilesState(projectId), newQnAFiles);
 };
 
 export const qnaDispatcher = () => {

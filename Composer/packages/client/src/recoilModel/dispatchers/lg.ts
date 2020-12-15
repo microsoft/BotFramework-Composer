@@ -21,24 +21,37 @@ const templateIsNotEmpty = ({ name, body }) => {
 // fill other locale lgFile new added template with '- '
 const initialBody = '- ';
 
-const updateLgFiles = (targets: LgFile[], targetId?: string) => {
-  const changes = targets;
-  const id = targetId;
-  return (lgFiles: LgFile[]) => {
-    if (targetId) {
-      const currentFile = lgFiles.find((file) => file.id === id);
-      const targetFile = changes.find((file) => file.id === id);
-      if (currentFile?.content !== targetFile?.content) return lgFiles;
+/**
+ * Recoil state from snapshot can be expired, use updater can make fine-gained operations.
+ *
+ * @param changes lg files need to be updated, usually one locale lg file's structure change need sync to other locale.
+ * @param contentCheckTargetId If content is expired, drop update on this file.
+ *
+ */
+const lgFilesAtomUpdater = (changes: LgFile[], contentCheckTargetId?: string) => {
+  return (prevLgFiles: LgFile[]): LgFile[] => {
+    if (contentCheckTargetId) {
+      const currentFile = prevLgFiles.find((file) => file.id === contentCheckTargetId);
+      const targetFile = changes.find((file) => file.id === contentCheckTargetId);
+      // compaire to drop expired change on current lg file.
+      if (currentFile?.content !== targetFile?.content) {
+        changes = changes.filter((file) => file.id !== contentCheckTargetId);
+      }
     }
 
-    return lgFiles.map((file) => {
+    return prevLgFiles.map((file) => {
       const changedFile = changes.find(({ id }) => id === file.id);
       return changedFile ?? file;
     });
   };
 };
 
-export const updateLgFileState = async (projectId: string, lgFiles: LgFile[], updatedLgFile: LgFile) => {
+// sync lg file structure across locales, it take times, computed changes may be expired at next tick.
+export const updateLgFileState = async (
+  projectId: string,
+  lgFiles: LgFile[],
+  updatedLgFile: LgFile
+): Promise<LgFile[]> => {
   const { id } = updatedLgFile;
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
@@ -118,7 +131,7 @@ export const createLgFileState = async (
       });
     });
 
-    set(lgFilesState(projectId), [...lgFiles, ...changes]);
+    set(lgFilesState(projectId), (prevLgFiles) => [...prevLgFiles, ...changes]);
   } catch (error) {
     setError(callbackHelpers, error);
   }
@@ -129,7 +142,7 @@ export const removeLgFileState = async (
   { id, projectId }: { id: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  let lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+  const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
   const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetLgFile = lgFiles.find((item) => item.id === id) || lgFiles.find((item) => item.id === `${id}.${locale}`);
@@ -138,8 +151,9 @@ export const removeLgFileState = async (
     return;
   }
 
-  lgFiles = lgFiles.filter((file) => file.id !== targetLgFile.id);
-  set(lgFilesState(projectId), lgFiles);
+  set(lgFilesState(projectId), (prevLgFiles) => {
+    return prevLgFiles.filter((file) => file.id !== targetLgFile.id);
+  });
 };
 
 export const lgDispatcher = () => {
@@ -180,22 +194,28 @@ export const lgDispatcher = () => {
       try {
         const { set, snapshot } = callbackHelpers;
         //set content first
-        set(lgFilesState(projectId), (lgFiles) => {
-          const index = lgFiles.findIndex((file) => file.id === id);
-          if (index !== -1) {
-            const cloned = [...lgFiles];
-            cloned[index] = { ...cloned[index], content };
-            return cloned;
-          }
-          return lgFiles;
+        set(lgFilesState(projectId), (prevLgFiles) => {
+          return prevLgFiles.map((file) => {
+            if (file.id === id) {
+              return {
+                ...file,
+                content,
+              };
+            }
+            return file;
+          });
         });
 
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
 
-        //check file content, drop the expired parse result.
-        set(lgFilesState(projectId), updateLgFiles(updatedFiles, id));
+        // compaire to drop expired change on current id lg file.
+        /**
+         * Why other methods do not need double check content?
+         * Because this method already did set content before call lgFilesAtomUpdater.
+         */
+        set(lgFilesState(projectId), lgFilesAtomUpdater(updatedFiles, id));
 
         // if changes happen on common.lg, async re-parse all.
         if (getBaseName(id) === 'common') {
@@ -223,7 +243,7 @@ export const lgDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
+      if (!lgFile) return;
       const sameIdOtherLocaleFiles = lgFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
 
       // create need sync to multi locale file.
@@ -249,8 +269,8 @@ export const lgDispatcher = () => {
             changes.push(updatedFile);
           }
 
-          set(lgFilesState(projectId), (lgFiles) => {
-            return lgFiles.map((file) => {
+          set(lgFilesState(projectId), (prevLgFiles) => {
+            return prevLgFiles.map((file) => {
               const changedFile = changes.find(({ id }) => id === file.id);
               return changedFile ? changedFile : file;
             });
@@ -265,8 +285,8 @@ export const lgDispatcher = () => {
             lgFiles
           )) as LgFile;
 
-          set(lgFilesState(projectId), (lgFiles) => {
-            return lgFiles.map((file) => {
+          set(lgFilesState(projectId), (prevLgFiles) => {
+            return prevLgFiles.map((file) => {
               return file.id === id ? updatedFile : file;
             });
           });
@@ -296,10 +316,10 @@ export const lgDispatcher = () => {
     }) => {
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
+      if (!lgFile) return;
       const updatedFile = (await LgWorker.addTemplate(projectId, lgFile, template, lgFiles)) as LgFile;
       const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-      set(lgFilesState(projectId), updateLgFiles(updatedFiles));
+      set(lgFilesState(projectId), lgFilesAtomUpdater(updatedFiles));
     }
   );
 
@@ -317,10 +337,10 @@ export const lgDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return lgFiles;
+        if (!lgFile) return;
         const updatedFile = (await LgWorker.addTemplates(projectId, lgFile, templates, lgFiles)) as LgFile;
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updateLgFiles(updatedFiles));
+        set(lgFilesState(projectId), lgFilesAtomUpdater(updatedFiles));
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -340,12 +360,12 @@ export const lgDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
+      if (!lgFile) return;
       try {
         const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
 
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updateLgFiles(updatedFiles));
+        set(lgFilesState(projectId), lgFilesAtomUpdater(updatedFiles));
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -366,12 +386,12 @@ export const lgDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return lgFiles;
+        if (!lgFile) return;
 
         const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
 
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updateLgFiles(updatedFiles));
+        set(lgFilesState(projectId), lgFilesAtomUpdater(updatedFiles));
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -394,7 +414,7 @@ export const lgDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return lgFiles;
+        if (!lgFile) return;
         const updatedFile = (await LgWorker.copyTemplate(
           projectId,
           lgFile,
@@ -403,7 +423,7 @@ export const lgDispatcher = () => {
           lgFiles
         )) as LgFile;
         const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
-        set(lgFilesState(projectId), updatedFiles);
+        set(lgFilesState(projectId), lgFilesAtomUpdater(updatedFiles));
       } catch (error) {
         setError(callbackHelpers, error);
       }
