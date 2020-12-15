@@ -17,7 +17,8 @@ const copyJson = (json) => JSON.parse(JSON.stringify(json));
 
 const getStepData = (obiJson) => transformObiRules(obiJson.events[0]).stepGroup;
 
-export class StepEditorDemo extends Component {
+// prettier-ignore
+export class StepEditorDemo extends Component {  // lgtm [js/react/unused-or-undefined-state-property]
   state = {
     selectedFile: defaultFile,
     stepData: getStepData(ObiExamples[defaultFile]),
@@ -45,7 +46,8 @@ export class StepEditorDemo extends Component {
 
   onFocus(id) {
     console.log('focus node', id);
-    this.setState({
+    // prettier-ignore
+    this.setState({ // lgtm [js/react/inconsistent-state-update]
       focusPath: this.state.selectedFile + id,
       stepData: getStepData(copyJson(this.state.stepData)),
     });

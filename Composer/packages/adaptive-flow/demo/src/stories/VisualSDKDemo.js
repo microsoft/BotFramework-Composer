@@ -33,7 +33,8 @@ export class VisualSDKDemo extends Component {
   }
 
   insertActionPreview($kind) {
-    this.setState({
+    // prettier-ignore
+    this.setState({ // lgtm [js/react/inconsistent-state-update]
       actions: [this.factory.create($kind), ...this.state.actions],
     });
   }
