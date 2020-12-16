@@ -173,6 +173,9 @@ export const BotStatusesCopy = {
   get stopping() {
     return formatMessage('Stopping');
   },
+  get pending() {
+    return formatMessage('Status pending');
+  },
 };
 
 export const DialogCreationCopy = {

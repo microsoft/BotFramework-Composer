@@ -4,6 +4,8 @@ import formatMessage from 'format-message';
 import { ExtensionPageContribution } from '@bfc/extension-client';
 import { checkForPVASchema } from '@bfc/shared';
 
+import { PageLink } from '../types/window';
+
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
 export const topLinks = (
@@ -20,7 +22,7 @@ export const topLinks = (
       ? `/bot/${projectId}/`
       : `/bot/${rootProjectId}/skill/${projectId}/`;
 
-  let links = [
+  let links: PageLink[] = [
     {
       to: '/home',
       iconName: 'Home',
@@ -106,7 +108,7 @@ export const topLinks = (
   return links;
 };
 
-export const bottomLinks = [
+export const bottomLinks: PageLink[] = [
   {
     to: `/settings`,
     iconName: 'Settings',
