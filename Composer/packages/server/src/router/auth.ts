@@ -6,7 +6,11 @@ import absh from './absh';
 
 const defaultProvider: AuthProvider = {
   login: null,
-  authorize: (req, res, next) => next(),
+  authorize: (req, res, next) => {
+    if (next) {
+      return next();
+    }
+  },
 };
 
 const PROVIDERS = new Map<string, AuthProviderInit>();
