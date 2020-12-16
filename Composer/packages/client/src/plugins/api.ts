@@ -22,8 +22,6 @@ interface AuthAPI {
 }
 
 interface PublishAPI {
-  setConfigIsValid?: (valid: boolean) => void;
-  setPublishConfig?: (config: PublishConfig) => void;
   useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
   startProvision?: (config: any) => void;
   currentProjectId?: () => string;
@@ -51,8 +49,6 @@ class API implements IAPI {
       },
     };
     this.publish = {
-      setConfigIsValid: undefined,
-      setPublishConfig: undefined,
       useConfigBeingEdited: undefined,
       startProvision: undefined,
       currentProjectId: undefined,
