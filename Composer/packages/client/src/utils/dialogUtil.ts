@@ -266,15 +266,15 @@ function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
 
 export function getFriendlyName(data) {
   const conceptLabels = conceptLabelsFn();
-  if (get(data, '$designer.name')) {
-    return get(data, '$designer.name');
+  if (data?.$designer?.name) {
+    return data?.$designer?.name;
   }
 
-  if (get(data, 'intent')) {
-    return `${get(data, 'intent')}`;
+  if (data?.intent) {
+    return `${data?.intent}`;
   }
 
-  if (conceptLabels[data.$kind] && conceptLabels[data.$kind].title) {
+  if (conceptLabels[data.$kind]?.title) {
     return conceptLabels[data.$kind].title;
   }
 
