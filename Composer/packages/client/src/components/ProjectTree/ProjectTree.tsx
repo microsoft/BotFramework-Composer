@@ -452,7 +452,7 @@ export const ProjectTree: React.FC<Props> = ({
       menu.push({
         label: formatMessage('Edit schema'),
         icon: 'Edit',
-        onClick: (link) =>
+        onClick: (link: TreeLink) =>
           navigateToFormDialogSchema({ projectId: link.skillId ?? link.projectId, schemaId: link.dialogId }),
       });
     }
