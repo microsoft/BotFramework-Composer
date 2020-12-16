@@ -8,7 +8,7 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -53,8 +53,8 @@ const dialogModal = {
 interface FormData {
   name: string;
   authoringKey: string;
-  subscriptionKey: string;
-  qnaRegion: string;
+  subscriptionKey?: string;
+  qnaRegion?: string;
   endpointKey: string;
   authoringRegion: string;
   defaultLanguage: string;
@@ -63,16 +63,16 @@ interface FormData {
   authoringEndpoint: string;
 }
 
-const validate = (value: string) => {
-  if (!nameRegex.test(value)) {
+const validate = (value?: string) => {
+  if (value != null && !nameRegex.test(value)) {
     return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 };
 
 // eslint-disable-next-line react/display-name
-const onRenderLabel = (info) => (props) => (
+const onRenderLabel = (info: string) => (props?: ITextFieldProps) => (
   <Stack horizontal verticalAlign="center">
-    <span css={textFieldLabel}>{props.label}</span>
+    <span css={textFieldLabel}>{props?.label}</span>
     <TooltipHost calloutProps={{ gapSpace: 0 }} content={info}>
       <IconButton iconProps={{ iconName: 'Info' }} styles={{ root: { marginBottom: -3 } }} />
     </TooltipHost>
@@ -99,17 +99,17 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const formConfig: FieldConfig<FormData> = {
     name: {
       required: true,
-      validate: validate,
+      validate,
       defaultValue: config.name || botName,
     },
     authoringKey: {
       required: luConfigShow,
-      validate: validate,
+      validate,
       defaultValue: config.authoringKey,
     },
     subscriptionKey: {
       required: qnaConfigShow,
-      validate: validate,
+      validate,
       defaultValue: config.subscriptionKey,
     },
     qnaRegion: {
@@ -130,7 +130,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
     },
     environment: {
       required: true,
-      validate: validate,
+      validate,
       defaultValue: config.environment,
     },
     endpoint: {
