@@ -139,7 +139,7 @@ export const publisherDispatcher = () => {
         let targetHistories = publishHistory[target.name] ? [...publishHistory[target.name]] : [];
         // if no history exists, create one with the latest status
         // otherwise, replace the latest publish history with this one
-        if (!targetHistories) {
+        if (targetHistories.length === 0) {
           targetHistories = [currentHistory];
         } else {
           // make sure this status payload represents the same item as item 0 (most of the time)

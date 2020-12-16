@@ -116,7 +116,7 @@ export async function removeExtension(req: RemoveExtensionRequest, res: Response
 export async function searchExtensions(req: SearchExtensionsRequest, res: Response) {
   const { q } = req.query;
 
-  const results = await ExtensionManager.search(q ?? '');
+  const results = await ExtensionManager.search(q ?? ''); // lgtm [js/regex-injection]
   res.json(results);
 }
 
@@ -162,10 +162,12 @@ export async function performExtensionFetch(req: ExtensionFetchRequest, res: Res
     const json = await response.json();
     res.json(json);
   } catch (e) {
-    let error = e;
     if (e && e.json) {
-      error = await e.json();
+      const error = await e.json();
+      res.status(500).json(error);
+    } else {
+      // re-throw error to be handled by our error handler
+      throw e;
     }
-    res.status(500).send(error);
   }
 }
