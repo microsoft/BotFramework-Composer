@@ -28,6 +28,47 @@ import { rootBotProjectIdSelector } from '../selectors';
 
 import { addNotificationInternal, deleteNotificationInternal, createNotification } from './notification';
 
+/**
+ * Recoil state from snapshot can be expired, use updater can make fine-gained operations.
+ *
+ * @param changes files need to update/add/delete
+ * @param filter drop some expired changes.
+ *
+ */
+
+const qnaFilesAtomUpdater = (
+  changes: {
+    adds?: QnAFile[];
+    deletes?: QnAFile[];
+    updates?: QnAFile[];
+  },
+  filter?: (oldList: QnAFile[]) => (changeItem: QnAFile) => boolean
+) => {
+  return (oldList: QnAFile[]) => {
+    const updates = changes.updates ? (filter ? changes.updates.filter(filter(oldList)) : changes.updates) : [];
+    const adds = changes.adds ? (filter ? changes.adds.filter(filter(oldList)) : changes.adds) : [];
+    const deletes = changes.deletes
+      ? filter
+        ? changes.deletes.filter(filter(oldList)).map(({ id }) => id)
+        : changes.deletes.map(({ id }) => id)
+      : [];
+
+    // updates
+    let newList = oldList.map((file) => {
+      const changedFile = updates.find(({ id }) => id === file.id);
+      return changedFile ?? file;
+    });
+
+    // deletes
+    newList = newList.filter((file) => !deletes.includes(file.id));
+
+    // adds
+    newList = adds.concat(newList);
+
+    return newList;
+  };
+};
+
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
@@ -37,14 +78,7 @@ export const updateQnAFileState = async (
   id = id.endsWith('.source') ? id : `${getBaseName(id)}.en-us`;
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
 
-  set(qnaFilesState(projectId), (prevQnAFiles) => {
-    return prevQnAFiles.map((file) => {
-      if (file.id === id) {
-        return updatedQnAFile;
-      }
-      return file;
-    });
-  });
+  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedQnAFile] }));
 };
 
 export const createQnAFileState = async (
@@ -73,8 +107,7 @@ export const createQnAFileState = async (
       id: fileId,
     });
   });
-
-  set(qnaFilesState(projectId), (prevQnAFiles) => [...changes, ...prevQnAFiles]);
+  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ adds: changes }));
 };
 
 /**
@@ -104,10 +137,7 @@ export const removeQnAFileState = async (
       qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
     }
   });
-
-  set(qnaFilesState(projectId), (prevQnAFiles) => {
-    return prevQnAFiles.filter((file) => file.id !== targetQnAFile.id);
-  });
+  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ deletes: [targetQnAFile] }));
 };
 
 export const createKBFileState = async (
@@ -124,7 +154,7 @@ export const createKBFileState = async (
 
   const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
 
-  let newQnAFiles = [...qnaFiles];
+  let updatedQnAFiles: QnAFile[] = [];
 
   // if created on a dialog, need update this dialog's all locale qna ref
   if (id.includes('.source') === false) {
@@ -133,18 +163,17 @@ export const createKBFileState = async (
       throw new Error(`update qna file ${updatedQnAId}.qna not exist`);
     }
 
-    newQnAFiles = qnaFiles.map((file) => {
-      if (!file.id.endsWith('.source') && getBaseName(file.id) === getBaseName(updatedQnAId)) {
+    updatedQnAFiles = qnaFiles
+      .filter((file) => !file.id.endsWith('.source') && getBaseName(file.id) === getBaseName(updatedQnAId))
+      .map((file) => {
         return qnaUtil.addImport(file, `${createdSourceQnAId}.qna`);
-      }
-      return file;
-    });
+      });
 
     qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
   }
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
-  set(qnaFilesState(projectId), (prevQnAFiles) => [createdQnAFile, ...prevQnAFiles]);
+  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles, adds: [createdQnAFile] }));
 };
 
 export const removeKBFileState = async (
@@ -168,10 +197,7 @@ export const removeKBFileState = async (
       qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
     }
   });
-
-  set(qnaFilesState(projectId), (prevQnAFiles) => {
-    return prevQnAFiles.filter((file) => file.id !== targetQnAFile.id);
-  });
+  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ deletes: [targetQnAFile] }));
 };
 
 export const renameKBFileState = async (
@@ -458,11 +484,7 @@ ${response.data}
 
       // const updatedFile = await updateQnAFileState(callbackHelpers, { id, content });
       const updatedFile = qnaUtil.updateQnAQuestion(qnaFile, sectionId, questionId, content);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
 
@@ -483,11 +505,7 @@ ${response.data}
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.updateQnAAnswer(qnaFile, sectionId, content);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
 
@@ -508,11 +526,7 @@ ${response.data}
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.createQnAQuestion(qnaFile, sectionId, content);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
 
@@ -533,11 +547,7 @@ ${response.data}
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.removeQnAQuestion(qnaFile, sectionId, questionId);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
 
@@ -557,11 +567,7 @@ ${response.data}
 
       // insert into head, need investigate
       const updatedFile = qnaUtil.insertSection(qnaFile, 0, content);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
 
@@ -580,11 +586,7 @@ ${response.data}
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.removeSection(qnaFile, sectionId);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
 
@@ -603,11 +605,7 @@ ${response.data}
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.addImport(qnaFile, `${sourceId}.qna`);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
   const removeQnAImport = useRecoilCallback(
@@ -625,11 +623,7 @@ ${response.data}
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
   const updateQnAImport = useRecoilCallback(
@@ -650,11 +644,7 @@ ${response.data}
 
       let updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
       updatedFile = qnaUtil.addImport(updatedFile, `${newSourceId}.qna`);
-      set(qnaFilesState(projectId), (qnaFiles) => {
-        return qnaFiles.map((file) => {
-          return file.id === id ? updatedFile : file;
-        });
-      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
   const removeQnAKB = useRecoilCallback(
