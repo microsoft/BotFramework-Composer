@@ -224,7 +224,7 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
 
-        // compaire to drop expired change on current id lg file.
+        // compare to drop expired change on current id lg file.
         /**
          * Why other methods do not need double check content?
          * Because this method already did set content before call lgFilesAtomUpdater.
@@ -234,7 +234,7 @@ export const lgDispatcher = () => {
           lgFilesAtomUpdater({ updates: updatedFiles }, (prevLgFiles) => {
             const targetInState = prevLgFiles.find((file) => file.id === updatedFile.id);
             const targetInCurrentChange = updatedFiles.find((file) => file.id === updatedFile.id);
-            // compaire to drop expired content already setted above.
+            // compare to drop expired content already setted above.
             if (targetInState?.content !== targetInCurrentChange?.content) {
               return (lgFile) => lgFile.id !== updatedFile.id;
             } else {
@@ -269,7 +269,7 @@ export const lgDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return;
+      if (!lgFile) return lgFiles;
       const sameIdOtherLocaleFiles = lgFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
 
       // create need sync to multi locale file.
@@ -331,7 +331,7 @@ export const lgDispatcher = () => {
     }) => {
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return;
+      if (!lgFile) return lgFiles;
       const updatedFile = (await LgWorker.addTemplate(projectId, lgFile, template, lgFiles)) as LgFile;
       const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
       set(lgFilesState(projectId), lgFilesAtomUpdater({ updates: updatedFiles }));
@@ -352,7 +352,7 @@ export const lgDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return;
+        if (!lgFile) return lgFiles;
         const updatedFile = (await LgWorker.addTemplates(projectId, lgFile, templates, lgFiles)) as LgFile;
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
         set(lgFilesState(projectId), lgFilesAtomUpdater({ updates: updatedFiles }));
@@ -375,7 +375,7 @@ export const lgDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return;
+      if (!lgFile) return lgFiles;
       try {
         const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
 
@@ -401,7 +401,7 @@ export const lgDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return;
+        if (!lgFile) return lgFiles;
 
         const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
 
@@ -429,7 +429,7 @@ export const lgDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
         const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return;
+        if (!lgFile) return lgFiles;
         const updatedFile = (await LgWorker.copyTemplate(
           projectId,
           lgFile,
@@ -458,7 +458,7 @@ export const lgDispatcher = () => {
         set(
           lgFilesState(projectId),
           lgFilesAtomUpdater({ updates: reparsedLgFiles }, (prevLgFiles) => {
-            // compaire to drop expired content already setted above.
+            // compare to drop expired content already setted above.
             return (target) => {
               const targetInState = prevLgFiles.find((file) => file.id === target.id);
               const targetInCurrentChange = reparsedLgFiles.find((file) => file.id === target.id);

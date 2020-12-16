@@ -198,7 +198,7 @@ export const luDispatcher = () => {
       try {
         const updatedFile = (await luWorker.parse(id, content, luFeatures)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        // compaire to drop expired change on current id file.
+        // compare to drop expired change on current id file.
         /**
          * Why other methods do not need double check content?
          * Because this method already did set content before call luFilesAtomUpdater.
@@ -208,7 +208,7 @@ export const luDispatcher = () => {
           luFilesAtomUpdater({ updates: updatedFiles }, (prevLuFiles) => {
             const targetInState = prevLuFiles.find((file) => file.id === updatedFile.id);
             const targetInCurrentChange = updatedFiles.find((file) => file.id === updatedFile.id);
-            // compaire to drop expired content already setted above.
+            // compare to drop expired content already setted above.
             if (targetInState?.content !== targetInCurrentChange?.content) {
               return (luFile) => luFile.id !== updatedFile.id;
             } else {
