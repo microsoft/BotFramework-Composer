@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 const { resolve } = require('path');
 // eslint-disable-next-line security/detect-child-process
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 
 const { log } = require('./common');
 
@@ -36,18 +37,7 @@ try {
   const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform} --x64 --config electron-builder-config.json`;
   log.info('Executing command: ', cmd);
 
-  const proc = exec(cmd);
-  proc.stdout.on('data', (data) => {
-    console.log(data);
-  });
-  proc.stderr.on('data', (data) => {
-    console.error(data);
-  });
-  proc.on('close', (code) => {
-    if (code !== 0) {
-      throw new Error(`[electronBuilderPack.js] electron-builder exited with code ${code}`);
-    }
-  });
+  execSync(cmd, { stdio: 'inherit' }); // lgtm [js/shell-command-injection-from-environment]
 } catch (e) {
   log.error('[electronBuilderPack.js] Error occurred while using electron-builder --dir: ', e);
   process.exit(1);
