@@ -95,8 +95,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   // updater onData function
   const updateData = async (data) => {
     const { botProjectId, targetName, apiResponse } = data;
-    const updaterList = pollingUpdaterList;
-    const updater = updaterList.find((i) => i.beEqual(botProjectId, targetName));
+    const updater = pollingUpdaterList.find((i) => i.beEqual(botProjectId, targetName));
     const updatedBot = botList.find((bot) => bot.id === botProjectId);
     const publishTargets = botPublishTargetsList.find((targetsMap) => targetsMap.projectId === botProjectId)
       ?.publishTargets;
@@ -111,7 +110,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       responseData.status === ApiStatus.Failed
     ) {
       // show result notifications
-      // trick display: deleting pending notification doesn't work
       const pendingNotification = pendingNotificationRef.current;
       pendingNotification && (await deleteNotification(pendingNotification.id));
       pendingNotificationRef.current = undefined;
@@ -187,9 +185,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     return () => {
-      const updaterList = pollingUpdaterList;
-      if (updaterList) {
-        updaterList.forEach((updater) => {
+      if (pollingUpdaterList) {
+        pollingUpdaterList.forEach((updater) => {
           updater.stop();
         });
       }
@@ -287,15 +284,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
 
     getPublishHistory(currentBotStatus.id, target);
-    const updaterList = pollingUpdaterList;
-    const updater = updaterList.find((u) => u.beEqual(currentBotStatus.id, publishTarget));
-    if (!updater) {
+
+    // Add new updater
+    if (!pollingUpdaterList.some((u) => u.beEqual(currentBotStatus.id, publishTarget))) {
       const newUpdater = new PublishStatusPollingUpdater({
         botProjectId: currentBotStatus.id,
         targetName: publishTarget,
       });
       newUpdater.start(updateData);
-      updaterList.push(newUpdater);
+      pollingUpdaterList.push(newUpdater);
     }
   };
 
