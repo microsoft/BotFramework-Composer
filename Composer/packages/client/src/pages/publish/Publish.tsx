@@ -307,7 +307,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       {showAuthDialog && (
         <AuthDialog
           needGraph={false}
-          next={() => setPublishDialogHidden(false)}
+          next={() => setPublishDialogVisiblity(true)}
           onDismiss={() => {
             setShowAuthDialog(false);
           }}
@@ -335,7 +335,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         canPublish={canPublish}
         canPull={canPull}
         onPublish={() => {
-          setPublishDialogVisiblity(true);
+          if (isShowAuthDialog(false)) {
+            setShowAuthDialog(true);
+          } else {
+            setPublishDialogVisiblity(true);
+          }
           TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
         }}
         onPull={() => {

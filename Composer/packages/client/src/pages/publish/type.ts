@@ -10,7 +10,7 @@ export type IBotStatus = {
   name: string;
   publishTargets?: PublishTarget[];
   publishTarget?: string;
-  time?: Date;
+  time?: string;
   status?: number;
   message?: string;
   comment?: string;
