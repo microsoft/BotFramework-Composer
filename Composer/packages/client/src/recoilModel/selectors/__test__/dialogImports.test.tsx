@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { LgFile } from '@bfc/shared';
 import { getBaseName } from '../../../utils/fileUtil';
 import { getLanguageFileImports } from '../dialogImports';
 
@@ -37,7 +38,7 @@ const files = [
 
 describe('dialogImports selectors', () => {
   it('should follow all imports and list all unique imports', () => {
-    const getFile = (id) => files.find((f) => getBaseName(f.id) === id) as { id: string; content: string };
+    const getFile = (id) => files.find((f) => getBaseName(f.id) === id) as LgFile;
 
     const fileImports = getLanguageFileImports('name1', getFile);
     expect(fileImports).toEqual([

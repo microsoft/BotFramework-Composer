@@ -23,7 +23,8 @@ import {
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { buildNewlineText, splitNewlineText } from './help';
+import { buildNewlineText, getFileName, splitNewlineText } from './help';
+import { SectionTypes } from './qnaUtil';
 
 const { luParser, sectionOperator } = sectionHandler;
 const { parseFile, validateResource } = BFLUParser;
@@ -104,6 +105,16 @@ export function convertLuParseResultToLuFile(id: string, resource, luFeatures: I
     convertLuDiagnostic(e, id)
   ) as Diagnostic[];
 
+  const imports = Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(
+    ({ Path, Description }) => {
+      return {
+        id: getFileName(Path),
+        description: Description,
+        path: Path,
+      };
+    }
+  );
+
   const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics);
   return {
     id,
@@ -111,6 +122,7 @@ export function convertLuParseResultToLuFile(id: string, resource, luFeatures: I
     empty: !Sections.length,
     intents,
     diagnostics,
+    imports,
     resource: { Sections, Errors, Content },
   };
 }

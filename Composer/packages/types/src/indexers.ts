@@ -114,6 +114,7 @@ export type LuFile = {
   intents: LuIntentSection[];
   empty: boolean;
   resource: LuParseResource;
+  imports: { id: string; path: string; description: string }[];
   [key: string]: any;
 };
 
@@ -136,7 +137,7 @@ export type QnAFile = {
   content: string;
   diagnostics: IDiagnostic[];
   qnaSections: QnASection[];
-  imports: { id: string; path: string }[];
+  imports: { id: string; path: string; description: string }[];
   options: { id: string; name: string; value: string }[];
   empty: boolean;
   resource: LuParseResource;
@@ -178,6 +179,7 @@ export type LgFile = {
   diagnostics: IDiagnostic[];
   templates: LgTemplate[];
   allTemplates: LgTemplate[];
+  imports: { id: string; path: string; description: string }[];
   options?: string[];
   parseResult?: any;
 };
