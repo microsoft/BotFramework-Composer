@@ -14,6 +14,7 @@ import isEmpty from 'lodash/isEmpty';
 import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
 
 import { lgIndexer } from '../lgIndexer';
+
 import { getFileName } from './help';
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected

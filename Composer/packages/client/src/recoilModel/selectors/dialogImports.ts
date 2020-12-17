@@ -37,7 +37,7 @@ export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
       return {
         displayName: item.description,
         importPath: item.path,
-        id: item.id,
+        id: getBaseName(item.id),
       };
     });
 

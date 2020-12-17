@@ -42,6 +42,7 @@ const lgFiles = [
     content: `\r\n# Hello\r\n-hi`,
     templates: [{ name: 'Hello', body: '-hi', parameters: [] }],
     diagnostics: [],
+    imports: [],
     allTemplates: [{ name: 'Hello', body: '-hi', parameters: [] }],
   },
 ] as LgFile[];
