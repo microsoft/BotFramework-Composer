@@ -47,7 +47,7 @@ const migrations: Migration<any>[] = [
   },
 ];
 
-export function runMigrations(initialData: any): any {
+export function runMigrations(initialData) {
   const migrationsToRun: Migration<any>[] = migrations.filter((m) => m.condition(initialData));
   if (migrationsToRun.length > 0) {
     log('migration: running migrations...');
