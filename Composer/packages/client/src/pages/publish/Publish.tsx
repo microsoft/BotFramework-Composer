@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, useMemo, Fragment } from 'react';
+import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -81,7 +81,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     return generateComputedData(botProjectData);
   }, [botProjectData]);
 
-  const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
+  const showNotificationsRef = useRef<Record<string, boolean>>({});
 
   useEffect(() => {
     botList
@@ -112,13 +112,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     ) {
       // show result notifications
       // trick display: deleting pending notification doesn't work
+      const pendingNotification = pendingNotificationRef.current;
       pendingNotification && (await deleteNotification(pendingNotification.id));
+      pendingNotificationRef.current = undefined;
+      const showNotifications = showNotificationsRef.current;
       if (showNotifications[botProjectId]) {
         const resultNotification = createNotification(getPublishedNotificationCardProps(updatedBot));
         addNotification(resultNotification);
-        setShowNotifications({ ...showNotifications, [botProjectId]: false });
         setTimeout(() => {
           deleteNotification(resultNotification.id);
+          showNotificationsRef.current = { ...showNotifications, [botProjectId]: false };
         }, deleteNotificationInterval);
       }
       updater.stop();
@@ -170,7 +173,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [selectedBots]);
   const canPublish = selectedBots.length > 0 && !publishDisabled;
 
-  const [pendingNotification, setPendingNotification] = useState<Notification>();
+  const pendingNotificationRef = useRef<Notification>();
 
   useEffect(() => {
     // init bot status list for the botProjectData is empty array when first mounted
@@ -225,14 +228,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const publish = async (items: IBotStatus[]) => {
     setPublishDialogVisiblity(false);
     // notifications
-    setShowNotifications(
-      items.reduce((accumulator, item) => {
-        accumulator[item.id] = true;
-        return accumulator;
-      }, {})
-    );
+    showNotificationsRef.current = items.reduce((accumulator, item) => {
+      accumulator[item.id] = true;
+      return accumulator;
+    }, {});
     const notification = createNotification(getPendingNotificationCardProps(items));
-    setPendingNotification(notification);
+    pendingNotificationRef.current = notification;
     addNotification(notification);
 
     // publish to remote
