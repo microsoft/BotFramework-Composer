@@ -114,7 +114,7 @@ export type LuFile = {
   intents: LuIntentSection[];
   empty: boolean;
   resource: LuParseResource;
-  published: boolean;
+  published?: boolean;
 };
 
 export type LuParseResource = {
