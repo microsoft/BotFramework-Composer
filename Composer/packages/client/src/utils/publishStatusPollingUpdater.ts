@@ -12,7 +12,7 @@ export const ApiStatus = {
   Publishing: 202,
   Success: 200,
   Failed: 500,
-  UNKNOW: 404,
+  Unknow: 404,
 };
 
 export class PublishStatusPollingUpdater {
@@ -30,16 +30,24 @@ export class PublishStatusPollingUpdater {
   async start(onData) {
     if (!(this.botProjectId && this.targetName)) return;
     if (this.status === CircuitBreakerStateEnum.Open) return;
-    this.status = CircuitBreakerStateEnum.Open;
-    this.timerId = window.setInterval(async () => {
-      try {
-        const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
-        onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
-      } catch (err) {
-        console.log(this.timerId);
-        onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
-      }
-    }, this.pollingInterval);
+    try {
+      this.status = CircuitBreakerStateEnum.Open;
+
+      const firstResponse = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
+      onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: firstResponse });
+      this.timerId = window.setInterval(async () => {
+        try {
+          const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
+          onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
+        } catch (err) {
+          console.log(this.timerId);
+          onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
+        }
+      }, this.pollingInterval);
+    } catch (err) {
+      console.log(this.timerId);
+      onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
+    }
   }
   stop() {
     if (this.timerId) {
@@ -56,3 +64,4 @@ export class PublishStatusPollingUpdater {
     return this.botProjectId === botProjectId && this.targetName === targetName;
   }
 }
+export const pollingUpdaterList: PublishStatusPollingUpdater[] = [];

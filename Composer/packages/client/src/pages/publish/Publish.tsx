@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -13,7 +13,7 @@ import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { ApiStatus, PublishStatusPollingUpdater } from '../../utils/publishStatusPollingUpdater';
+import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -62,6 +62,7 @@ const generateComputedData = (botProjectData) => {
   });
   return { botSettingList, botPublishTargetsList, botPublishTypesList, botList };
 };
+
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectData = useRecoilValue(localBotsDataSelector);
@@ -69,7 +70,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const {
     getPublishHistory,
     getPublishStatusV2,
-    getPublishTargetTypes,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
@@ -82,18 +82,20 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [botProjectData]);
 
   const [showNotifications, setShowNotifications] = useState<Record<string, boolean>>({});
-  // create updater
-  const initUpdaterList = botList
-    .filter((bot) => !!bot.publishTarget && !updaterListRef.current.find((u) => u.beEqual(bot.id, bot.publishTarget)))
-    .map((bot) => {
-      const updater = new PublishStatusPollingUpdater({ botProjectId: bot.id, targetName: bot.publishTarget });
-      return updater;
-    });
 
+  useEffect(() => {
+    botList
+      .filter((bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.beEqual(bot.id, bot.publishTarget)))
+      .map((bot) => {
+        const updater = new PublishStatusPollingUpdater({ botProjectId: bot.id, targetName: bot.publishTarget });
+        updater.start(updateData);
+        pollingUpdaterList.push(updater);
+      });
+  }, [botList]);
   // updater onData function
   const updateData = async (data) => {
     const { botProjectId, targetName, apiResponse } = data;
-    const updaterList = updaterListRef.current;
+    const updaterList = pollingUpdaterList;
     const updater = updaterList.find((i) => i.beEqual(botProjectId, targetName));
     const updatedBot = botList.find((bot) => bot.id === botProjectId);
     const publishTargets = botPublishTargetsList.find((targetsMap) => targetsMap.projectId === botProjectId)
@@ -105,13 +107,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     await getPublishStatusV2(botProjectId, selectedTarget, apiResponse);
     if (
       responseData.status === ApiStatus.Success ||
-      responseData.status === ApiStatus.UNKNOW ||
+      responseData.status === ApiStatus.Unknow ||
       responseData.status === ApiStatus.Failed
     ) {
-      updater.stop();
       // show result notifications
+      // trick display: deleting pending notification doesn't work
+      pendingNotification && (await deleteNotification(pendingNotification.id));
       if (showNotifications[botProjectId]) {
-        pendingNotification && deleteNotification(pendingNotification.id);
         const resultNotification = createNotification(getPublishedNotificationCardProps(updatedBot));
         addNotification(resultNotification);
         setShowNotifications({ ...showNotifications, [botProjectId]: false });
@@ -119,14 +121,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           deleteNotification(resultNotification.id);
         }, deleteNotificationInterval);
       }
+      updater.stop();
     }
   };
-  const updaterListRef = useRef<PublishStatusPollingUpdater[]>(
-    initUpdaterList.map((updater) => {
-      updater.start(updateData);
-      return updater;
-    })
-  );
 
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<IBotPublishHistory[]>(publishHistoryList);
   const [currentBotList, setCurrentBotList] = useState<IBot[]>(botList);
@@ -175,13 +172,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [pendingNotification, setPendingNotification] = useState<Notification>();
 
-  // CR: is it still necessary after merging the bot-project feature?
-  useEffect(() => {
-    if (projectId) {
-      getPublishTargetTypes(projectId);
-    }
-  }, [projectId]);
-
   useEffect(() => {
     // init bot status list for the botProjectData is empty array when first mounted
     setBotPublishHistoryList(publishHistoryList);
@@ -194,7 +184,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     return () => {
-      const updaterList = updaterListRef.current;
+      const updaterList = pollingUpdaterList;
       if (updaterList) {
         updaterList.forEach((updater) => {
           updater.stop();
@@ -232,7 +222,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedBots(bots);
   };
 
-  // CR: Too complicated member function. Needs refactor.
   const publish = async (items: IBotStatus[]) => {
     setPublishDialogVisiblity(false);
     // notifications
@@ -274,14 +263,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
-        const updater = updaterListRef.current.find((u) => u.beEqual(botProjectId, bot.publishTarget));
+        const updater = pollingUpdaterList.find((u) => u.beEqual(botProjectId, bot.publishTarget));
         updater && updater.restart(updateData);
       }
     }
   };
 
-  // CR: Changes a property but causes whole array re-mapped. Consider managing `selectedPublishTarget` separately.
-  //     selectedPublishTarget: Map<botProjectId, TargetId>;
+  // selectedPublishTarget: Map<botProjectId, TargetId>;
   const changePublishTarget = (publishTarget, currentBotStatus) => {
     const target = currentBotStatus.publishTargets.find((t) => t.name === publishTarget);
     if (currentBotList.some((targetMap) => targetMap.id === currentBotStatus.id)) {
@@ -298,6 +286,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
 
     getPublishHistory(currentBotStatus.id, target);
+    const updaterList = pollingUpdaterList;
+    const updater = updaterList.find((u) => u.beEqual(currentBotStatus.id, publishTarget));
+    if (!updater) {
+      const newUpdater = new PublishStatusPollingUpdater({
+        botProjectId: currentBotStatus.id,
+        targetName: publishTarget,
+      });
+      newUpdater.start(updateData);
+      updaterList.push(newUpdater);
+    }
   };
 
   return (
