@@ -1,28 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogSetting, PublishTarget } from '@bfc/shared';
+import { DialogSetting, PublishResult, PublishTarget } from '@bfc/shared';
 
 import { PublishType } from '../../recoilModel/types';
 
-export interface IStatus {
-  id: string;
-  time: string;
-  status: number;
-  message: string;
-  comment: string;
-  log?: string;
-  action?: {
-    href: string;
-    label: string;
-  };
-}
 export type IBotStatus = {
   id: string;
   name: string;
   publishTargets?: PublishTarget[];
   publishTarget?: string;
-  time?: string;
+  time?: Date;
   status?: number;
   message?: string;
   comment?: string;
@@ -50,5 +38,5 @@ export type IBotPublishType = {
 
 export type IBotPublishHistory = {
   projectId: string;
-  publishHistory: { [key: string]: IStatus[] };
+  publishHistory: { [key: string]: PublishResult[] };
 };

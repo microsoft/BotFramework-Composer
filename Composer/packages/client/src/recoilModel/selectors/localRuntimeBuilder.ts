@@ -101,7 +101,7 @@ export const runningBotsSelector = selector({
     const localProjects = get(localBotsWithoutErrorsSelector);
     const botsRunning = localProjects.filter((projectId: string) => {
       const result = get(botStatusState(projectId));
-      return result === BotStatus.connected;
+      return result === BotStatus.connected || result === BotStatus.stopping;
     });
     return {
       totalBots: localProjects.length,

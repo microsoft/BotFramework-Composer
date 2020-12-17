@@ -69,3 +69,21 @@ export const output = css`
   font-size: 14px;
   font-weight: 400;
 `;
+
+export const title = css`
+  margin-top: 0;
+`;
+
+export const buttonBar = css`
+  display: flex;
+  flex-flow: row nowrap;
+  margin-top: 16px;
+`;
+
+export const backButton = css`
+  margin-left: auto;
+`;
+
+export const saveButton = css`
+  margin-left: 8px;
+`;

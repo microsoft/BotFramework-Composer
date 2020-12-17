@@ -10,6 +10,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React, { useState, Fragment, useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { PublishResult } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
@@ -19,7 +20,7 @@ import { navigateTo } from '../../utils/navigation';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
-import { IBot, IBotPublishHistory, IBotPublishTargets, IBotPublishType, IBotStatus, IStatus } from './type';
+import { IBot, IBotPublishHistory, IBotPublishTargets, IBotPublishType, IBotStatus } from './type';
 
 export type IBotStatusListProps = {
   projectId: string;
@@ -29,10 +30,10 @@ export type IBotStatusListProps = {
   botPublishTypesList: IBotPublishType[];
   publishDisabled: boolean;
   updateItems: (items: IBotStatus[]) => void;
-  updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
+  updatePublishHistory: (items: PublishResult[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: IBotStatus) => void;
-  onRollbackClick: (selectedVersion: IStatus, item: IBotStatus) => void;
+  onRollbackClick: (selectedVersion: PublishResult, item: IBotStatus) => void;
 };
 
 const generateBotList = (
@@ -305,7 +306,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   ];
   const onRenderRow = (props, defaultRender) => {
     const { item }: { item: IBotStatus } = props;
-    const publishStatusList: IStatus[] = item.publishTarget
+    const publishStatusList: PublishResult[] = item.publishTarget
       ? botPublishHistoryList.find((list) => list.projectId === item.id)?.publishHistory[item.publishTarget] || []
       : [];
     const target = item.publishTargets?.find((target) => target.name === item.publishTarget);

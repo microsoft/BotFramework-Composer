@@ -38,6 +38,7 @@ import {
   customerLabel,
   iconStyle,
   textOr,
+  updateText,
 } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
@@ -215,10 +216,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           onRenderLabel={onRenderLabel}
         />
       </div>
-      <br />
       {needsUpdate && (
         <div>
-          <p>
+          <p css={updateText}>
             {formatMessage(
               'A newer version of the provisioning scripts has been found, and this project can be updated to the latest.'
             )}

@@ -12,18 +12,18 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
 import { useState } from 'react';
 import formatMessage from 'format-message';
+import { PublishResult } from '@botframework-composer/types';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { listRoot, tableView, detailList } from './styles';
 import { LogDialog } from './LogDialog';
-import { IStatus } from './type';
 
 export interface IStatusListProps {
-  items: IStatus[];
+  items: PublishResult[];
+  updateItems: (items: PublishResult[]) => void;
   isRollbackSupported: boolean;
-  onRollbackClick: (item: IStatus) => void;
-  updateItems: (items: IStatus[]) => void;
+  onRollbackClick: (item: PublishResult) => void;
 }
 
 function onRenderDetailsHeader(props, defaultRender) {
@@ -45,7 +45,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted && items) {
       column.isSortedDescending = !column.isSortedDescending;
-      const newItems: IStatus[] = items.slice().reverse();
+      const newItems: PublishResult[] = items.slice().reverse();
       props.updateItems(newItems);
     }
   };
@@ -59,7 +59,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 90,
       isRowHeader: true,
       data: 'string',
-      onRender: (item: IStatus) => {
+      onRender: (item: PublishResult) => {
         return <span>{moment(item.time).format('h:mm a')}</span>;
       },
       isPadded: true,
@@ -74,7 +74,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isRowHeader: true,
       onColumnClick: sortByDate,
       data: 'string',
-      onRender: (item: IStatus) => {
+      onRender: (item: PublishResult) => {
         return <span>{moment(item.time).format('MM-DD-YYYY')}</span>;
       },
       isPadded: true,
@@ -87,7 +87,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       minWidth: 40,
       maxWidth: 40,
       data: 'string',
-      onRender: (item: IStatus) => {
+      onRender: (item: PublishResult) => {
         if (item.status === 200) {
           return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
         } else if (item.status === 202) {
@@ -112,7 +112,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IStatus) => {
+      onRender: (item: PublishResult) => {
         return (
           <span>
             {item.message}
@@ -142,7 +142,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IStatus) => {
+      onRender: (item: PublishResult) => {
         return <span>{item.comment}</span>;
       },
       isPadded: true,
@@ -156,7 +156,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IStatus) => {
+      onRender: (item: PublishResult) => {
         return (
           <ActionButton
             allowDisabledFocus
@@ -182,7 +182,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IStatus) => {
+      onRender: (item: PublishResult) => {
         return (
           <ActionButton
             allowDisabledFocus

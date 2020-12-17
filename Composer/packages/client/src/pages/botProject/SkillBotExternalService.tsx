@@ -10,10 +10,7 @@ import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import {
   dispatcherState,
@@ -26,8 +23,9 @@ import {
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { TextFieldWithCustomButton } from '../../components/TextFieldWithCustomButton';
+import { FieldWithCustomButton } from '../../components/FieldWithCustomButton';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { LUIS_REGIONS } from '../../constants';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -41,30 +39,6 @@ const externalServiceContainerStyle = css`
   display: flex;
   flex-direction: column;
 `;
-
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.small};
-  margin-right: 5px;
-`;
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
 
 // -------------------- ExternalService -------------------- //
 
@@ -124,17 +98,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   useEffect(() => {
     setLocalSkillLuisName(skillLuisName);
   }, [projectId]);
-
-  const onRenderLabel = (props) => {
-    return (
-      <div css={labelContainer}>
-        <div css={customerLabel}> {props.label} </div>
-        <TooltipHost content={props.label}>
-          <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-        </TooltipHost>
-      </div>
-    );
-  };
 
   const handleSkillLUISNameOnChange = (e, value) => {
     setLocalSkillLuisName(value);
@@ -204,10 +167,9 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           value={localSkillLuisName}
           onBlur={handleSkillLUISNameOnBlur}
           onChange={handleSkillLUISNameOnChange}
-          onRenderLabel={onRenderLabel}
         />
         <div ref={luisKeyFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('LUIS authoring key')}
             buttonText={formatMessage('Use custom LUIS authoring key')}
             errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
@@ -218,11 +180,10 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             required={isLUISKeyNeeded}
             value={skillLuisKey}
             onBlur={handleLUISKeyOnBlur}
-            onRenderLabel={onRenderLabel}
           />
         </div>
         <div ref={luisEndpointKeyFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('LUIS endpoint key')}
             buttonText={formatMessage('Use custom LUIS endpoint key')}
             id={'luisEndpointKey'}
@@ -231,25 +192,24 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             placeholderOnDisable={rootLuisEndpointKey}
             value={skillLuisEndpointKey}
             onBlur={handleLUISEndpointKeyOnBlur}
-            onRenderLabel={onRenderLabel}
           />
         </div>
         <div ref={luisRegionFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('LUIS region')}
             buttonText={formatMessage('Use custom LUIS region')}
             errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
             label={formatMessage('LUIS region')}
+            options={LUIS_REGIONS}
             placeholder={formatMessage('Enter LUIS region')}
             placeholderOnDisable={rootLuisRegion}
             required={isLUISKeyNeeded}
             value={skillLuisRegion}
             onBlur={handleLUISRegionOnBlur}
-            onRenderLabel={onRenderLabel}
           />
         </div>
         <div ref={qnaKeyFieldRef}>
-          <TextFieldWithCustomButton
+          <FieldWithCustomButton
             ariaLabel={formatMessage('QnA Maker Subscription key')}
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
             errorMessage={!rootQnAKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
@@ -260,7 +220,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             required={isQnAKeyNeeded}
             value={skillQnAKey}
             onBlur={handleSkillQnAKeyOnBlur}
-            onRenderLabel={onRenderLabel}
           />
         </div>
       </div>

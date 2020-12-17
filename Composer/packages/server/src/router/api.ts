@@ -12,6 +12,7 @@ import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
 import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
+import { ProvisionController } from '../controllers/provision';
 import { FeatureFlagController } from '../controllers/featureFlags';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
@@ -63,8 +64,14 @@ router.get('/storages/:storageId/blobs', StorageController.getBlob);
 router.post('/storages/folder', StorageController.createFolder);
 router.put('/storages/folder', StorageController.updateFolder);
 
+// provision
+router.get('/provision/:projectId/status/:type/:target/:jobId', ProvisionController.getProvisionStatus);
+router.get('/provision/:projectId/:type/resources', ProvisionController.getResources);
+router.post('/provision/:projectId/:type', ProvisionController.provision);
+
 // publishing
 router.get('/publish/types', PublishController.getTypes);
+router.get('/publish/:projectId/status/:target/:jobId', PublishController.status);
 router.get('/publish/:projectId/status/:target', PublishController.status);
 router.post('/publish/:projectId/publish/:target', PublishController.publish);
 router.get('/publish/:projectId/history/:target', PublishController.history);
@@ -97,6 +104,7 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 
 // authentication from client
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
+router.get('/auth/logOut', AuthController.logOut);
 
 // FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
@@ -120,7 +128,7 @@ const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, 
   Promise.resolve(handler(req, res, next)).catch(next);
 };
 
-router.stack.forEach((layer) => {
+(router as any).stack.forEach((layer) => {
   if (layer.route == null) return;
   const fn: RequestHandler = layer.route.stack[0].handle;
   layer.route.stack[0].handle = errorHandler(fn);
