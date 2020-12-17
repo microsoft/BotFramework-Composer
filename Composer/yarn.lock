@@ -10082,6 +10082,11 @@ expect@^26.0.1:
     jest-message-util "^26.0.1"
     jest-regex-util "^26.0.0"
 
+express-serve-static-core@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/express-serve-static-core/-/express-serve-static-core-0.1.1.tgz#222358112a79bc9fbe00838232e8cd2e3132ef37"
+  integrity sha1-IiNYESp5vJ++AIOCMujNLjEy7zc=
+
 express-session@^1.17.0:
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.17.0.tgz#9b50dbb5e8a03c3537368138f072736150b7f9b3"
