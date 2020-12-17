@@ -890,7 +890,7 @@ export class BotProject implements IBotProject {
   private _createBotProjectFileForOldBots = async (files: Map<string, FileInfo>) => {
     const fileList = new Map<string, FileInfo>();
     try {
-      const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
+      const defaultBotProjectFile = await AssetService.manager.botProjectFileTemplate;
 
       for (const [, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
