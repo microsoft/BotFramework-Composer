@@ -12,25 +12,16 @@ import { File } from '../recoilModel/types';
 
 import httpClient from './httpUtil';
 
-export function getExtension(filename: string) {
-  if (typeof filename === 'string') {
-    return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
-  }
-  return filename;
+export function getExtension(filename: string): string {
+  return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
 }
 
-export function getBaseName(filename: string) {
-  if (typeof filename === 'string') {
-    return filename.substring(0, filename.lastIndexOf('.')) || filename;
-  }
-  return filename;
+export function getBaseName(filename: string): string {
+  return filename.substring(0, filename.lastIndexOf('.')) || filename;
 }
 
-export function upperCaseName(filename: string) {
-  if (typeof filename === 'string') {
-    return filename.charAt(0).toUpperCase() + filename.slice(1);
-  }
-  return filename;
+export function upperCaseName(filename: string): string {
+  return filename.charAt(0).toUpperCase() + filename.slice(1);
 }
 
 export function resolveToBasePath(base: string, relPath: string) {
