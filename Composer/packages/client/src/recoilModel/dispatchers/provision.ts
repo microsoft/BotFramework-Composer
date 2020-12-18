@@ -6,10 +6,10 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { provisionStatusState, settingsState } from '../atoms/botState';
 import { CardProps } from '../../components/Notifications/NotificationCard';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { addNotificationInternal, createNotification, updateNotificationInternal } from './notification';
 import httpClient from './../../utils/httpUtil';
-import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export const provisionDispatcher = () => {
   const getProvisionPendingNotification = (value: string): CardProps => {
