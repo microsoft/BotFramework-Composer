@@ -264,7 +264,7 @@ function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   }, {});
 }
 
-export function getFriendlyName(data) {
+export function getFriendlyName(data): string {
   const conceptLabels = conceptLabelsFn();
   if (data?.$designer?.name) {
     return data?.$designer?.name;

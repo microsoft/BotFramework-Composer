@@ -118,7 +118,7 @@ export const AppUpdater: React.FC<{}> = () => {
 
   // listen for app updater events from main process
   useEffect(() => {
-    ipcRenderer.on('app-update', (_event: IpcRendererEvent, name: string, payload: any) => {
+    ipcRenderer.on('app-update', (_event: IpcRendererEvent, name: string, payload) => {
       switch (name) {
         case 'update-available':
           setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
