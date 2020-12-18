@@ -6,7 +6,7 @@ import { CSSProperties } from 'react';
 export const root: CSSProperties = {
   display: 'flex',
   flexFlow: 'column nowrap',
-  height: 'auto',
+  height: '100vh', // fill the iframe
   position: 'relative',
   backgroundColor: 'white',
   padding: '0',
@@ -59,4 +59,13 @@ export const dropdown: CSSProperties = {
 export const label: CSSProperties = {
   display: 'block',
   marginTop: 12,
+};
+
+export const buttonBar: CSSProperties = {
+  borderTop: '1px solid #000',
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  marginTop: 'auto',
+  paddingTop: 16,
+  width: '100%',
 };
