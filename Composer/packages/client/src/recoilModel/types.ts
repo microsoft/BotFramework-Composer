@@ -40,6 +40,7 @@ export interface PublishType {
     pull: boolean;
     rollback: boolean;
     status: boolean;
+    provision: boolean;
   };
 }
 

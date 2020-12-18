@@ -11,54 +11,6 @@
       }
     }
   },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Inviare una risposta per porre una domanda",
-      "subtitle": "Attività richiesta"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Richiedi un file o un allegato",
-      "subtitle": "Input allegato"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Richiedi con scelta multipla",
-      "subtitle": "Input della scelta"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Richiedi conferma",
-      "subtitle": "Conferma input"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Richiedi una data o un'ora",
-      "subtitle": "Input data/ora"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Richiedi un numero",
-      "subtitle": "Input numero"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Accesso con OAuth",
-      "subtitle": "Input OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Richiedi testo",
-      "subtitle": "Input di testo"
-    }
-  },
   "Microsoft.BeginDialog": {
     "form": {
       "label": "Inizia un nuovo dialogo",
@@ -218,6 +170,54 @@
     "form": {
       "label": "Crea un evento traccia",
       "subtitle": "Attività di traccia"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Inviare una risposta per porre una domanda",
+      "subtitle": "Attività richiesta"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Richiedi un file o un allegato",
+      "subtitle": "Input allegato"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Richiedi con scelta multipla",
+      "subtitle": "Input della scelta"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Richiedi conferma",
+      "subtitle": "Conferma input"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Richiedi una data o un'ora",
+      "subtitle": "Input data/ora"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Richiedi un numero",
+      "subtitle": "Input numero"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Accesso con OAuth",
+      "subtitle": "Input OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Richiedi testo",
+      "subtitle": "Input di testo"
     }
   },
   "Microsoft.OnActivity": {

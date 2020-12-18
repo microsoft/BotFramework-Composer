@@ -4,6 +4,7 @@
 
 import { AxiosInstance } from 'axios';
 
+import { IDiagnostic } from './diagnostic';
 import type {
   DialogInfo,
   LuFile,
@@ -19,6 +20,7 @@ import { Skill } from './indexers';
 import type { ILUFeaturesConfig, SkillSetting, UserSettings, DialogSetting } from './settings';
 import { MicrosoftIDialog } from './sdk';
 import { FeatureFlagKey } from './featureFlags';
+import { TelemetryClient } from './telemetry';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
@@ -70,6 +72,7 @@ export type ApplicationContextApi = {
   isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
+  telemetryClient: TelemetryClient;
 };
 
 export type ApplicationContext = {
@@ -128,9 +131,23 @@ export type ProjectContextApi = {
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
 
+export type BotInProject = {
+  dialogs: DialogInfo[];
+  projectId: string;
+  name: string;
+  isRemote: boolean;
+  isRootBot: boolean;
+  diagnostics: IDiagnostic[];
+  error: { [key: string]: any };
+  buildEssentials: { [key: string]: any };
+  isPvaSchema: boolean;
+  setting: DialogSetting;
+};
+
 export type ProjectContext = {
   botName: string;
   projectId: string;
+  projectCollection: BotInProject[];
   dialogs: DialogInfo[];
   dialogSchemas: DialogSchemaFile[];
   lgFiles: LgFile[];

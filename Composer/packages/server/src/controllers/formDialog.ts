@@ -67,9 +67,14 @@ const generate = async (req: Request, res: Response) => {
 
     const templatesDirs = await getTemplateDirs();
 
-    await currentProject.generateDialog(name, templatesDirs);
-    const updatedProject = await BotProjectService.getProjectById(projectId, user);
-    res.status(200).json({ id: projectId, ...updatedProject.getProject() });
+    const result = await currentProject.generateDialog(name, templatesDirs);
+
+    if (!result.success) {
+      res.status(500).json({ id: projectId, errors: result.errors });
+      return;
+    }
+
+    res.status(200).json({ id: projectId });
   } else {
     res.status(404).json({
       message: `Could not generate form dialog. Project ${projectId} not found.`,
@@ -91,8 +96,7 @@ const deleteDialog = async (req: Request, res: Response) => {
         throw new Error('root dialog is not allowed to delete');
       }
       await currentProject.deleteFormDialog(dialogId);
-      const updatedProject = await BotProjectService.getProjectById(projectId, user);
-      res.status(200).json({ id: projectId, ...updatedProject.getProject() });
+      res.status(200).json({ id: projectId });
     } catch (e) {
       res.status(400).json({
         message: e.message,

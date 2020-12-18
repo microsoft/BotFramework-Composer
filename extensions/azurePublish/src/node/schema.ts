@@ -5,9 +5,6 @@ import { JSONSchema7 } from '@botframework-composer/types';
 const schema: JSONSchema7 = {
   type: 'object',
   properties: {
-    accessToken: {
-      type: 'string',
-    },
     name: {
       type: 'string',
       title: 'name',
@@ -57,14 +54,11 @@ const schema: JSONSchema7 = {
             databaseId: {
               type: 'string',
             },
-            collectionId: {
-              type: 'string',
-            },
             containerId: {
               type: 'string',
             },
           },
-          required: ['cosmosDBEndpoint', 'authKey', 'databaseId', 'collectionId', 'containerId'],
+          required: ['cosmosDBEndpoint', 'authKey', 'databaseId', 'containerId'],
         },
         blobStorage: {
           type: 'object',
@@ -109,9 +103,8 @@ const schema: JSONSchema7 = {
       required: ['MicrosoftAppId', 'MicrosoftAppPassword'],
     },
   },
-  required: ['subscriptionID', 'publishName', 'provision', 'accessToken'],
+  required: ['subscriptionID', 'publishName', 'provision'],
   default: {
-    accessToken: '<Access token from az account get-access-token>',
     name: '<unique name in your subscription>',
     environment: 'dev',
     runtimeIdentifier: 'win-x64',
@@ -123,7 +116,6 @@ const schema: JSONSchema7 = {
         cosmosDBEndpoint: '<endpoint url>',
         authKey: '<auth key>',
         databaseId: 'botstate-db',
-        collectionId: 'botstate-collection',
         containerId: 'botstate-container',
       },
       blobStorage: {

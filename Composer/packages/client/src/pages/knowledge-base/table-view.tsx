@@ -38,6 +38,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import {
   formCell,
@@ -348,6 +349,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                         iconProps: { iconName: 'CodeEdit' },
                         onClick: () => {
                           navigateTo(`${baseURL}knowledge-base/${dialogId}/edit?C=${containerId}`);
+                          TelemetryClient.track('EditModeToggled', { jsonView: true });
                         },
                       },
                       {
@@ -389,6 +391,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                 onClick={() => {
                   onCreateNewQnAPairsStart(props.group?.key);
                   actions.setMessage('item added');
+                  TelemetryClient.track('NewQnAPair');
                 }}
               >
                 {formatMessage('+ Add QnA Pair')}
@@ -446,7 +449,13 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             item.fileId === creatQnAPairSettings.groupKey && index === creatQnAPairSettings.sectionIndex;
 
           const addQuestionButton = (
-            <ActionButton styles={addAlternative} onClick={() => setCreatingQuestionInKthSection(item.sectionId)}>
+            <ActionButton
+              styles={addAlternative}
+              onClick={() => {
+                setCreatingQuestionInKthSection(item.sectionId);
+                TelemetryClient.track('AlternateQnAPhraseAdded');
+              }}
+            >
               {formatMessage('+ Add alternative phrasing')}
             </ActionButton>
           );
@@ -515,7 +524,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
                   ariaLabel={formatMessage('Question is empty now')}
                   depth={0}
                   disabled={isAllowEdit}
-                  id={'New Question'}
+                  id={'NewQuestion'}
                   name={'New Question'}
                   placeholder={formatMessage('Add new question')}
                   styles={editableField}
@@ -777,6 +786,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             text={formatMessage('Create new KB')}
             onClick={() => {
               actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId, dialogId });
+              TelemetryClient.track('AddNewKnowledgeBaseStarted');
             }}
           />
         </div>

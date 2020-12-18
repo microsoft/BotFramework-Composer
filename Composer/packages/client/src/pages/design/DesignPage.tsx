@@ -56,6 +56,7 @@ import { useBotOperations } from '../../components/BotRuntimeController/useBotOp
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
@@ -423,6 +424,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       onClick: () => {
         setCreationFlowType('Skill');
         setCreationFlowStatus(CreationFlowStatus.NEW);
+        TelemetryClient.track('AddNewSkillStarted', { method: 'newSkill' });
       },
     },
     {
@@ -431,6 +433,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       onClick: () => {
         setCreationFlowType('Skill');
         setCreationFlowStatus(CreationFlowStatus.OPEN);
+        TelemetryClient.track('AddNewSkillStarted', { method: 'existingSkill' });
       },
     },
     {
@@ -438,6 +441,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       label: formatMessage('Connect a remote skill'),
       onClick: () => {
         setAddSkillDialogModalVisibility(true);
+        TelemetryClient.track('AddNewSkillStarted', { method: 'remoteSkill' });
       },
     },
   ];
@@ -457,18 +461,27 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         iconProps: { iconName: 'Edit' },
       },
       menuProps: {
+        onMenuOpened: () => {
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'edit' });
+        },
         items: [
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
             disabled: !canUndo,
-            onClick: undo,
+            onClick: () => {
+              undo();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'undo' });
+            },
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
             disabled: !canRedo,
-            onClick: redo,
+            onClick: () => {
+              redo();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'redo' });
+            },
           },
           {
             key: 'edit.cut',
@@ -476,6 +489,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !actionSelected,
             onClick: () => {
               EditorAPI.Actions.CutSelection();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'cut' });
             },
           },
           {
@@ -484,6 +498,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !actionSelected,
             onClick: () => {
               EditorAPI.Actions.CopySelection();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'copy' });
             },
           },
           {
@@ -492,6 +507,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !actionSelected,
             onClick: () => {
               EditorAPI.Actions.MoveSelection();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'move' });
             },
           },
           {
@@ -500,6 +516,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !actionSelected,
             onClick: () => {
               EditorAPI.Actions.DeleteSelection();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'delete' });
             },
           },
         ],
@@ -514,6 +531,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         iconProps: { iconName: 'RemoveOccurrence' },
       },
       menuProps: {
+        onMenuOpened: () => {
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'disableDropdown' });
+        },
         items: [
           {
             key: 'disable',
@@ -521,6 +541,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !showDisableBtn,
             onClick: () => {
               EditorAPI.Actions.DisableSelection();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'disable' });
             },
           },
           {
@@ -529,6 +550,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             disabled: !showEnableBtn,
             onClick: () => {
               EditorAPI.Actions.EnableSelection();
+              TelemetryClient.track('ToolbarButtonClicked', { name: 'enable' });
             },
           },
         ],
@@ -560,6 +582,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <ActionButton
           onClick={() => {
             setDialogJsonVisibility((current) => !current);
+            TelemetryClient.track('EditModeToggled', { jsonView: dialogJsonVisible });
           }}
         >
           {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
@@ -609,23 +632,28 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
 
     if (content) {
-      updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
+      await updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
-      if (!current) return;
+      if (!current) {
+        commitChanges();
+        return;
+      }
       const currentIdx = parseInt(current);
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+          await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(skillId ?? projectId, dialogId);
+          await navTo(skillId ?? projectId, dialogId);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+        await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
+
+      commitChanges();
     }
   }
   const addNewBtnRef = useCallback((addNew) => {
@@ -635,7 +663,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const handleCreateQnA = async (data) => {
     const { projectId, dialogId } = creatQnAOnInfo;
     if (!projectId || !dialogId) return;
-    createQnATrigger(projectId, dialogId);
+    await createQnATrigger(projectId, dialogId);
 
     const { name, url, multiTurn } = data;
     if (url) {
@@ -643,6 +671,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     } else {
       await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
     }
+    commitChanges();
   };
 
   const handleCreateDialog = (projectId: string) => {
@@ -805,8 +834,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             dialogId={triggerModalInfo.dialogId}
             projectId={triggerModalInfo.projectId}
             onDismiss={onTriggerCreationDismiss}
-            onSubmit={(dialogId, formData) => {
-              createTrigger(triggerModalInfo.projectId, dialogId, formData);
+            onSubmit={async (dialogId, formData) => {
+              await createTrigger(triggerModalInfo.projectId, dialogId, formData);
+              commitChanges();
             }}
           />
         )}

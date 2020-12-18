@@ -30,7 +30,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   },
   PACKAGE_MANAGER: {
     displayName: formatMessage('Package manager'),
-    description: formatMessage('Discover and use components that can be installed into your bot.'),
+    description: formatMessage('Discover and use components that can be installed into your bot'),
     isHidden: false,
     enabled: false,
     documentationLink: 'https://aka.ms/composer-package-manager-readme',
