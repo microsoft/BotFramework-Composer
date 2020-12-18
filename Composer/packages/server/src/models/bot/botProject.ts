@@ -544,7 +544,7 @@ export class BotProject implements IBotProject {
     if (this.settings == null) return; // we shouldn't be able to get here without settings
     const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptionKey, {
       ...this.settings.luis,
-      qnaRegion: this.settings?.qna.qnaRegion ?? this.settings?.luis.authoringRegion ?? 'westus',
+      qnaRegion: this.settings.qna.qnaRegion ?? this.settings.luis.authoringRegion ?? 'westus',
       subscriptionKey,
     });
     return qnaEndpointKey;

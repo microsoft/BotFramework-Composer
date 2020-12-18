@@ -43,11 +43,12 @@ const migrations: Migration<any>[] = [
   {
     name: 'Re-init when version update',
     condition: (data) => !data?.version || data?.version != initData.version,
-    run: () => initData,
+    run: () => initData, // no argument needed here
   },
 ];
 
 export function runMigrations(initialData) {
+  // note: this 'any' type is because these elements are from data read from a JSON file
   const migrationsToRun: Migration<any>[] = migrations.filter((m) => m.condition(initialData));
   if (migrationsToRun.length > 0) {
     log('migration: running migrations...');
