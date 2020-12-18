@@ -11,7 +11,7 @@ import settings from '../settings';
 
 import initData from './data.template';
 
-interface Migration {
+interface Migration<D> {
   /**
    * Migration label. Will be printed to the console in debug.
    * @example 'Update Designer to Composer'
@@ -21,15 +21,15 @@ interface Migration {
    * Use to check if a condition exists that requires migration.
    * @example data => data.name === 'Designer';
    */
-  condition: (data: any) => boolean;
+  condition: (data: D) => boolean;
   /**
    * Data transform to run if condition is met.
    * @example data => ({ ...data, name: 'Composer' });
    */
-  run: (data: any) => any;
+  run: (data: D) => void;
 }
 
-const migrations: Migration[] = [
+const migrations: Migration<any>[] = [
   {
     name: 'Add defaultPath',
     condition: (data) => get(data, 'storageConnections.0.defaultPath') !== settings.botsFolder,
@@ -42,13 +42,14 @@ const migrations: Migration[] = [
   },
   {
     name: 'Re-init when version update',
-    condition: (data) => !data.version || data.version != initData.version,
-    run: (data) => initData,
+    condition: (data) => !data?.version || data?.version != initData.version,
+    run: () => initData, // no argument needed here
   },
 ];
 
-export function runMigrations(initialData: any): any {
-  const migrationsToRun: Migration[] = migrations.filter((m) => m.condition(initialData));
+export function runMigrations(initialData) {
+  // note: this 'any' type is because these elements are from data read from a JSON file
+  const migrationsToRun: Migration<any>[] = migrations.filter((m) => m.condition(initialData));
   if (migrationsToRun.length > 0) {
     log('migration: running migrations...');
 
