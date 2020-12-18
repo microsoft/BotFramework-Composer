@@ -11,9 +11,9 @@ import { ErrorPopup } from './ErrorPopup/ErrorPopup';
 
 const genericErrorTitle = 'Something went wrong!';
 
-const formatToStateError = (error: any): StateError => {
-  const message: string = typeof error === 'string' ? error : error?.message || error?.detail;
-  const summary: string = message || genericErrorTitle;
+const formatToStateError = (error): StateError => {
+  const message: string = typeof error === 'string' ? error : error?.message ?? error?.detail;
+  const summary: string = message ?? genericErrorTitle;
   return {
     message,
     summary,
