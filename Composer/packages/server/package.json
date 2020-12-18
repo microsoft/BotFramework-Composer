@@ -17,6 +17,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --noImplicitAny --watch",
     "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix"
   },

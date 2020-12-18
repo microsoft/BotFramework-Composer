@@ -8,7 +8,7 @@ import path from 'path';
  * @param parent parent directory
  * @param dir directory to test
  */
-export function isSubdirectory(parent, dir) {
+export function isSubdirectory(parent: string, dir: string) {
   const relative = path.relative(parent, dir);
   return Boolean(relative && !relative.startsWith('..') && !path.isAbsolute(relative));
 }
