@@ -20,6 +20,7 @@ import {
   Range,
   DiagnosticSeverity,
   ILUFeaturesConfig,
+  LuParseResource,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -63,7 +64,11 @@ export function convertLuDiagnostic(d: any, source: string, offset = 0): Diagnos
   return result;
 }
 
-export function convertLuParseResultToLuFile(id: string, resource, luFeatures: ILUFeaturesConfig): LuFile {
+export function convertLuParseResultToLuFile(
+  id: string,
+  resource: LuParseResource,
+  luFeatures: ILUFeaturesConfig
+): LuFile {
   // filter structured-object from LUParser result.
   const { Sections, Errors, Content } = resource;
   const intents: LuIntentSection[] = [];

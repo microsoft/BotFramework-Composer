@@ -118,8 +118,21 @@ export type LuFile = {
   [key: string]: any;
 };
 
+export type LuParseResourceSection = {
+  Name: string;
+  Body: string;
+  SectionType: string;
+  Path: string;
+  Id: string;
+  Description: string;
+  Answer: string;
+  Questions: string[];
+  ModelInfo: string;
+  [key: string]: any;
+};
+
 export type LuParseResource = {
-  Sections: any[];
+  Sections: LuParseResourceSection[];
   Errors: any[];
   Content: string;
 };
