@@ -34,7 +34,7 @@ export const ProvisionController = {
   },
   provision: async (req: Request, res) => {
     const accessToken = req.headers.authorization?.substring('Bearer '.length);
-    const graphToken = req.headers.graphtoken;
+    // const graphToken = req.headers.graphtoken;
     const user = await ExtensionContext.getUserFromRequest(req);
     const type = req.params.type; // type is webapp or functions
     const projectId = req.params.projectId;
@@ -48,7 +48,7 @@ export const ProvisionController = {
           // call the method
           const result = await pluginMethod.call(
             null,
-            { ...req.body, accessToken, graphToken },
+            { ...req.body, accessToken },
             currentProject,
             user,
             authService.getAccessToken.bind(authService)
