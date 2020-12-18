@@ -26,7 +26,6 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/failure',
     });
     cy.findByTitle(/^Start bot/).click();
-    cy.findByTitle('Open start bots panel').click();
     cy.findByText('See Details').click();
 
     cy.route({
