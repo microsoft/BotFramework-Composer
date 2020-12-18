@@ -155,7 +155,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     fieldRef.current?.focus();
   };
 
-  const handleChange = (_e: any, newValue?: string) => {
+  const handleChange = (_e, newValue?: string) => {
     if (isMultiLineText(newValue)) setMultiline(true);
     updateField('value', newValue);
     setHasBeenEdited(true);
