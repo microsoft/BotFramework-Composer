@@ -64,11 +64,9 @@ const generateComputedData = (botProjectData, publishHistoryList, currentBotPubl
       const currentPublishTarget =
         currentBotPublishTargetList &&
         currentBotPublishTargetList.find((targetMap) => targetMap.projectId === botStatus.id);
-      botStatus.publishTarget = (currentPublishTarget && currentPublishTarget.publishTarget
-        ? currentPublishTarget.publishTarget
-        : publishTargets[0].name) as string;
+      botStatus.publishTarget = (currentPublishTarget?.publishTarget ?? publishTargets[0].name) as string;
       botStatus.publishTargets = publishTargets;
-      if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
+      if (publishHistory[botStatus.publishTarget]?.length > 0) {
         const history = publishHistory[botStatus.publishTarget][0];
         botStatus.time = history.time;
         botStatus.comment = history.comment;
@@ -383,7 +381,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
         const botProjectId = bot.id;
         const setting = botSettingList.find((botsetting) => botsetting.projectId === bot.id)?.setting;
-        if (!(setting && setting.publishTargets)) {
+        if (!setting?.publishTargets) {
           return;
         }
         setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
@@ -505,12 +503,7 @@ const LogDialog = (props) => {
       modalProps={{ isBlocking: true }}
       onDismiss={props.onDismiss}
     >
-      <TextField
-        multiline
-        placeholder="Log Output"
-        style={{ minHeight: 300 }}
-        value={props && props.version ? props.version.log : ''}
-      />
+      <TextField multiline placeholder="Log Output" style={{ minHeight: 300 }} value={props?.version?.log ?? ''} />
     </Dialog>
   );
 };

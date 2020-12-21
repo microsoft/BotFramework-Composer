@@ -85,7 +85,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
           text={formatMessage('Cancel')}
           onClick={() => {
             actions.createQnAFromScratchDialogCancel({ projectId });
-            onDismiss && onDismiss();
+            onDismiss?.();
           }}
         />
         <PrimaryButton
