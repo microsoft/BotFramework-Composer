@@ -3,7 +3,7 @@
 
 import { selectorFamily } from 'recoil';
 import { validateDialog } from '@bfc/indexers';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo, BotSchemas, LgFile, LuFile, DialogSetting, RecognizerFile } from '@bfc/shared';
 
 import {
   botProjectIdsState,
@@ -23,11 +23,11 @@ const validateDialogSelectorFamily = selectorFamily({
   key: 'validateDialogSelectorFamily',
   get: ({ projectId, dialogId }: validateDialogSelectorFamilyParams) => ({ get }) => {
     const dialog: DialogInfo = get(dialogState({ projectId, dialogId }));
-    const schemas = get(schemasState(projectId));
-    const lgFiles = get(lgFilesState(projectId));
-    const luFiles = get(luFilesState(projectId));
-    const settings = get(settingsState(projectId));
-    const recognizers = get(recognizersSelectorFamily(projectId));
+    const schemas: BotSchemas = get(schemasState(projectId));
+    const lgFiles: LgFile[] = get(lgFilesState(projectId));
+    const luFiles: LuFile[] = get(luFilesState(projectId));
+    const settings: DialogSetting = get(settingsState(projectId));
+    const recognizers: RecognizerFile[] = get(recognizersSelectorFamily(projectId));
     const luProvider = getLuProvider(dialogId, recognizers);
     return {
       ...dialog,
