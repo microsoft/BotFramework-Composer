@@ -28,6 +28,7 @@ import { BotProject } from '../bot/botProject';
 // const removeDirAndFiles = promisify(rimraf);
 // const yeoman = require('yeoman-environment');
 
+// TODO: pass in working directory param to createEnv for desired location of local Yeomen Repo
 const yeomanEnv = yeoman.createEnv();
 yeomanEnv.lookupLocalPackages();
 
@@ -125,32 +126,33 @@ export class AssetManager {
     //   throw new Error(`no such template with id ${templateId}`);
     // }
     const npmPackageName = templateId;
-    const remoteTemplateAvailable = await this.installRemoteTemplate(npmPackageName, dstDir);
+    const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+
+    const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
 
     if (remoteTemplateAvailable) {
-      await this.instantiateRemoteTemplate(npmPackageName, dstDir);
+      await this.instantiateRemoteTemplate(generatorName, dstDir);
     }
 
-    // await this.copyDataFilesTo(templateId, dstDir, dstStorage, locale);
     return ref;
   }
 
-  private async installRemoteTemplate(npmPackageName: string, dstDir: string): Promise<boolean> {
+  private async installRemoteTemplate(generatorName: string, npmPackageName: string, dstDir: string): Promise<boolean> {
     const registeredGenerators: string[] = await yeomanEnv.getGeneratorNames();
-    const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
     if (registeredGenerators.indexOf(generatorName) !== -1) {
       return true;
     } else {
-      await yeomanEnv.installLocalGenerators({ [generatorName]: '*' });
+      // TODO fix install
+      await yeomanEnv.installLocalGenerators({ [npmPackageName]: '1.0.2' });
       await yeomanEnv.lookupLocalPackages();
       return true;
     }
   }
 
-  private async instantiateRemoteTemplate(npmPackageName: string, dstDir: string): Promise<boolean> {
-    process.chdir(dstDir);
-    await yeomanEnv.run('conversational-core', {}, () => {
+  private async instantiateRemoteTemplate(generatorName: string, dstDir: string): Promise<boolean> {
+    yeomanEnv.cwd = dstDir;
+    await yeomanEnv.run(generatorName, {}, () => {
       console.log('DONE');
     });
     return true;

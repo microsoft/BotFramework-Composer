@@ -522,7 +522,8 @@ function createProjectV2(req: Request, res: Response) {
 async function createProjectAsync(req: Request, jobId: string) {
   let { templateId } = req.body;
 
-  const { name, description, storageId, location, preserveRoot, templateDir, eTag, alias } = req.body;
+  // todo: add back templateDir, eTag, alias from req extraction for PVA scenarios
+  const { name, description, storageId, location, preserveRoot } = req.body;
 
   // get user from request
   const user = await ExtensionContext.getUserFromRequest(req);
@@ -541,18 +542,15 @@ async function createProjectAsync(req: Request, jobId: string) {
     BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
 
     const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, locationRef, user);
+    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
 
-    // clean up the temporary template directory -- fire and forget
-    remove(templateDir);
     const id = await BotProjectService.openProject(newProjRef, user);
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
-    BotProjectService.setProjectLocationData(id, { alias, eTag });
+    // BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
-    // if (!createFromRemoteTemplate) {
-    //   await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
-    // }
+    await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
       await ejectAndMerge(currentProject, jobId);
