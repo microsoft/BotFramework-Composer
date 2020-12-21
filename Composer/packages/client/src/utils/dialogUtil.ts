@@ -201,7 +201,7 @@ export function getTriggerTypes(): IDropdownOption[] {
       let name = t as string;
       const labelOverrides = conceptLabels[t];
 
-      if (labelOverrides && labelOverrides.title) {
+      if (labelOverrides?.title) {
         name = labelOverrides.title;
       }
 
@@ -222,7 +222,7 @@ export function getEventTypes(): IComboBoxOption[] {
       let name = t as string;
       const labelOverrides = conceptLabels[t];
 
-      if (labelOverrides && labelOverrides.title) {
+      if (labelOverrides?.title) {
         if (labelOverrides.subtitle) {
           name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
         } else {
@@ -243,7 +243,7 @@ export function getActivityTypes(): IDropdownOption[] {
       let name = t as string;
       const labelOverrides = conceptLabels[t];
 
-      if (labelOverrides && labelOverrides.title) {
+      if (labelOverrides?.title) {
         if (labelOverrides.subtitle) {
           name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
         } else {
@@ -292,7 +292,7 @@ export function getBreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, sele
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
     const dialog = dialogs.find((d) => d.id === dialogId);
-    label = (dialog && dialog.displayName) || '';
+    label = dialog?.displayName || '';
   } else {
     const dialogsMap = getDialogsMap(dialogs);
     const dialog = dialogsMap[dialogId];
