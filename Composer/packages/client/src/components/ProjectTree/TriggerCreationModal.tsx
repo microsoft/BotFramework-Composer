@@ -260,7 +260,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     return (
       <div css={optionRow}>
         {option.text}
-        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
+        {option.data?.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
       </div>
     );
   };
