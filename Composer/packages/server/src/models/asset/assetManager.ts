@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 import fs from 'fs';
-import path, { join } from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import path from 'path';
+// import { exec } from 'child_process';
+// import { promisify } from 'util';
 
 import find from 'lodash/find';
-import { UserIdentity, BotTemplate, FileExtensions } from '@bfc/extension';
+import { UserIdentity, FileExtensions } from '@bfc/extension';
 import { mkdirs, readFile } from 'fs-extra';
-import rimraf from 'rimraf';
+// import rimraf from 'rimraf';
+import yeoman from 'yeoman-environment';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -21,8 +24,12 @@ import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 
-const execAsync = promisify(exec);
-const removeDirAndFiles = promisify(rimraf);
+// const execAsync = promisify(exec);
+// const removeDirAndFiles = promisify(rimraf);
+// const yeoman = require('yeoman-environment');
+
+const yeomanEnv = yeoman.createEnv();
+yeomanEnv.lookupLocalPackages();
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -92,23 +99,80 @@ export class AssetManager {
     return ref;
   }
 
-  private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
-    // install package
-    if (template.package) {
-      const { stderr: initErr } = await execAsync(`dotnet new -i ${template.package.packageName}`);
-      if (initErr) {
-        throw new Error(initErr);
+  public async copyRemoteProjectTemplateToV2(
+    templateId: string,
+    ref: LocationRef,
+    user?: UserIdentity,
+    locale?: string
+  ): Promise<LocationRef> {
+    // user storage maybe diff from template storage
+    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
+    const dstDir = Path.resolve(ref.path);
+    if (await dstStorage.exists(dstDir)) {
+      log('Failed copying template to %s', dstDir);
+      throw new Error('already have this folder, please give another name');
+    }
+    await mkdirs(dstDir, (err) => {
+      if (err) {
+        throw new Error('Error creating destination directory for external template storage');
       }
-      const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
-        cwd: destinationPath,
-      });
-      if (initErr2) {
-        throw new Error(initErr2);
-      }
+    });
+
+    // find selected template
+    console.log(ExtensionContext.extensions.botTemplates);
+    // const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
+    // if (template === undefined || (template.path === undefined && template.package === undefined)) {
+    //   throw new Error(`no such template with id ${templateId}`);
+    // }
+    const npmPackageName = templateId;
+    const remoteTemplateAvailable = await this.installRemoteTemplate(npmPackageName, dstDir);
+
+    if (remoteTemplateAvailable) {
+      await this.instantiateRemoteTemplate(npmPackageName, dstDir);
+    }
+
+    // await this.copyDataFilesTo(templateId, dstDir, dstStorage, locale);
+    return ref;
+  }
+
+  private async installRemoteTemplate(npmPackageName: string, dstDir: string): Promise<boolean> {
+    const registeredGenerators: string[] = await yeomanEnv.getGeneratorNames();
+    const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+
+    if (registeredGenerators.indexOf(generatorName) !== -1) {
+      return true;
     } else {
-      throw new Error('selected template has no local or external address');
+      await yeomanEnv.installLocalGenerators({ [generatorName]: '*' });
+      await yeomanEnv.lookupLocalPackages();
+      return true;
     }
   }
+
+  private async instantiateRemoteTemplate(npmPackageName: string, dstDir: string): Promise<boolean> {
+    process.chdir(dstDir);
+    await yeomanEnv.run('conversational-core', {}, () => {
+      console.log('DONE');
+    });
+    return true;
+  }
+
+  // private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
+  //   // install package
+  //   if (template.package) {
+  //     const { stderr: initErr } = await execAsync(`dotnet new -i ${template.package.packageName}`);
+  //     if (initErr) {
+  //       throw new Error(initErr);
+  //     }
+  //     const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
+  //       cwd: destinationPath,
+  //     });
+  //     if (initErr2) {
+  //       throw new Error(initErr2);
+  //     }
+  //   } else {
+  //     throw new Error('selected template has no local or external address');
+  //   }
+  // }
 
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
     const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
@@ -116,34 +180,11 @@ export class AssetManager {
       throw new Error(`no such template with id ${templateId}`);
     }
 
-    let templateSrcPath = template.path;
-    const isHostedTemplate = !templateSrcPath;
-    if (isHostedTemplate) {
-      // create empty temp directory on server for holding externally hosted template src
-      const baseDir = process.env.COMPOSER_TEMP_DIR as string;
-      templateSrcPath = join(baseDir, 'feedBasedTemplates');
-      if (fs.existsSync(templateSrcPath)) {
-        await removeDirAndFiles(templateSrcPath);
-      }
-      await mkdirs(templateSrcPath, (err) => {
-        if (err) {
-          throw new Error('Error creating temp directory for external template storage');
-        }
-      });
-      await this.getRemoteTemplate(template, templateSrcPath);
-    }
+    const templateSrcPath = template.path;
 
     if (templateSrcPath) {
       // copy Composer data files
       await copyDir(templateSrcPath, this.templateStorage, dstDir, dstStorage);
-
-      if (isHostedTemplate) {
-        try {
-          await removeDirAndFiles(templateSrcPath);
-        } catch (err) {
-          throw new Error('Issue deleting temp generated file for external template assets');
-        }
-      }
     }
 
     // if we have a locale override, copy those files over too

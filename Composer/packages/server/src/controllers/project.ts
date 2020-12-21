@@ -521,49 +521,48 @@ function createProjectV2(req: Request, res: Response) {
 
 async function createProjectAsync(req: Request, jobId: string) {
   let { templateId } = req.body;
-  const {
-    name,
-    description,
-    storageId,
-    location,
-    schemaUrl,
-    locale,
-    preserveRoot,
-    templateDir,
-    eTag,
-    alias,
-  } = req.body;
+
+  const { name, description, storageId, location, preserveRoot, templateDir, eTag, alias } = req.body;
+
+  // get user from request
   const user = await ExtensionContext.getUserFromRequest(req);
+
+  // populate template if none was passed
   if (templateId === '') {
     templateId = 'EmptyBot';
   }
 
+  // location to store the bot project
   const locationRef = getLocationRef(location, storageId, name);
   try {
-    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
-    const createFromRemoteTemplate = !!templateDir;
-
     await BotProjectService.cleanProject(locationRef);
-    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
-    const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
 
+    // Update status for polling
+    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
+
+    const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, locationRef, user);
+
+    // clean up the temporary template directory -- fire and forget
+    remove(templateDir);
     const id = await BotProjectService.openProject(newProjRef, user);
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
-    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
+    BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
-    if (!createFromRemoteTemplate) {
-      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
-    }
+    // if (!createFromRemoteTemplate) {
+    //   await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    // }
 
     if (currentProject !== undefined) {
       await ejectAndMerge(currentProject, jobId);
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
       await currentProject.updateBotInfo(name, description, preserveRoot);
-      if (schemaUrl && !createFromRemoteTemplate) {
-        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-      }
+
+      // if (schemaUrl && !createFromRemoteTemplate) {
+      //   await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      // }
+
       await currentProject.init();
 
       const project = currentProject.getProject();

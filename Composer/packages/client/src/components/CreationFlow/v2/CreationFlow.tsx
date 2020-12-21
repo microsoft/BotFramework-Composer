@@ -80,7 +80,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
 
     // TODO: add optional feedUrl param if users has added a feed URL through the UI
     fetchTemplatesV2([
-      'https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+      'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
     ]);
     fetchRecentProjects();
   };

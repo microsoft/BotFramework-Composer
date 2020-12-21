@@ -72,6 +72,7 @@ export async function getCustomFeedTemplates(feedUrls: string[]): Promise<BotTem
       templates = templates.concat(feedTemplates);
     }
   }
+
   return templates;
 }
 
@@ -84,7 +85,6 @@ export async function getProjTemplatesV2(req: any, res: any) {
 
     // Grab templates from FeedURls
     if (feedUrls) {
-      // TODO: implement grabbing of templates from custom feed URLs
       // TODO: Current assumption is that the feed is an npm feed with given result structure (https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5)
       const feedTemplates = await getCustomFeedTemplates(feedUrls);
       templates = templates.concat(feedTemplates);
