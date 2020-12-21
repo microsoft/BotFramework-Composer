@@ -270,6 +270,7 @@ export class BotProjectProvision {
               displayName: config.hostname, // todo: this may be wrong!
               endpoint: `https://${provisionResults.webApp.hostname}/api/messages`,
               appId: provisionResults.appId,
+              webAppHostname: provisionResults.webApp.hostname
             });
             break;
 

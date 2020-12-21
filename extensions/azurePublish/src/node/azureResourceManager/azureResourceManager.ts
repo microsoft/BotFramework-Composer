@@ -51,11 +51,11 @@ export class AzureResourceMananger {
    */
   public async createResourceGroup(config: ResourceGroupConfig): Promise<ResourceGroupConfig> {
     if (!config.name) {
-      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,'You should provide a valid resource group name.');
+      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, 'You should provide a valid resource group name.');
     }
     // Create a new resource group
     if (!config.location) {
-      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,'You should provide a valid resource group name.');
+      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, 'You should provide a valid resource group name.');
     }
 
     try {
@@ -129,7 +129,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       // check location is validated
       let authoringLocation = config.location;
-      if(!LuisAuthoringSupportLocation.includes(config.location)){
+      if (!LuisAuthoringSupportLocation.includes(config.location)) {
         authoringLocation = 'westus'; // default as westus
       }
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
@@ -180,7 +180,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       // check luis publish location is validated
       let authoringLocation = config.location;
-      if(!LuisAuthoringSupportLocation.includes(config.location)){
+      if (!LuisAuthoringSupportLocation.includes(config.location)) {
         authoringLocation = 'westus'; // default as westus
       }
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
@@ -235,7 +235,7 @@ export class AzureResourceMananger {
       const qnaMakerServiceName = `${config.name}-qna`;
 
       // only support westus in qna
-      if(config.location !== 'westus'){
+      if (config.location !== 'westus') {
         config.location = 'westus';
       }
 
@@ -910,6 +910,9 @@ export class AzureResourceMananger {
         name: config.name,
         location: 'global',
         kind: 'bot',
+        tags: {
+          webapp: config.webAppHostname
+        }
       });
 
       if (botResult?._response?.status >= 300) {
