@@ -351,7 +351,7 @@ export class BotProject implements IBotProject {
         });
         writer.on('close', () => {
           if (!error) {
-            resolve();
+            resolve(null);
           }
         });
       });
@@ -492,7 +492,7 @@ export class BotProject implements IBotProject {
 
       this.builder.rootDir = this.dir;
       this.builder.setBuildConfig(
-        { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
+        { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey ?? '', qnaRegion: qnaConfig.qnaRegion ?? '' },
         this.settings.downsampling
       );
       await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[], emptyFiles);
