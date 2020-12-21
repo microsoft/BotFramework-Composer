@@ -53,7 +53,7 @@ export function getFileIconName(file: File) {
 }
 
 export function getFileEditDate(file: File) {
-  if (file && file.lastModified) {
+  if (file?.lastModified) {
     return new Date(file.lastModified).toLocaleDateString();
   }
 
