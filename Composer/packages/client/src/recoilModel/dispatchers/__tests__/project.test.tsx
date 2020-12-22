@@ -513,6 +513,7 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
+
     setImmediate(() => {
       expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
       expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');
@@ -527,7 +528,7 @@ describe('Project dispatcher', () => {
     newProjectDataClone.settings = {
       ...newProjectDataClone.settings,
       skill: {
-        oneNoteSync: {
+        'one-note-sync': {
           endpointUrl: 'https://azure-webservice.net/oneNoteSync/api/messages',
           manifestUrl: 'https://azure-webservice.net/oneNoteSnyc-manifest.json',
           msAppId: '123-234-234',
