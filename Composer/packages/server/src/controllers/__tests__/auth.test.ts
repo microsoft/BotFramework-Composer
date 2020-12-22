@@ -27,7 +27,7 @@ describe('auth controller', () => {
   };
 
   beforeEach(() => {
-    mockRes.status.mockClear();
+    mockRes.status?.mockClear();
     chainedRes.json.mockClear();
     chainedRes.send.mockClear();
   });

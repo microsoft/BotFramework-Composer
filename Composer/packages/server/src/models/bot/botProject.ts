@@ -460,7 +460,7 @@ export class BotProject implements IBotProject {
   };
 
   public createFiles = async (files) => {
-    const createdFiles: any = [];
+    const createdFiles: FileInfo[] = [];
     for (const { name, content } of files) {
       const file = await this.createFile(name, content);
       createdFiles.push(file);
@@ -541,9 +541,10 @@ export class BotProject implements IBotProject {
 
   // update qna endpointKey in settings
   public updateQnaEndpointKey = async (subscriptionKey: string) => {
+    if (this.settings == null) return; // we shouldn't be able to get here without settings
     const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptionKey, {
-      ...this.settings?.luis,
-      qnaRegion: this.settings?.qna.qnaRegion || this.settings?.luis.authoringRegion,
+      ...this.settings.luis,
+      qnaRegion: this.settings.qna.qnaRegion ?? this.settings.luis.authoringRegion ?? 'westus',
       subscriptionKey,
     });
     return qnaEndpointKey;
@@ -691,7 +692,7 @@ export class BotProject implements IBotProject {
     // instead of calling stat again which could be expensive
     const stats = await this.fileStorage.stat(absolutePath);
 
-    const file = {
+    const file: FileInfo = {
       name: Path.basename(relativePath),
       content: content,
       path: absolutePath,
@@ -889,7 +890,7 @@ export class BotProject implements IBotProject {
   private _createBotProjectFileForOldBots = async (files: Map<string, FileInfo>) => {
     const fileList = new Map<string, FileInfo>();
     try {
-      const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
+      const defaultBotProjectFile = await AssetService.manager.botProjectFileTemplate;
 
       for (const [, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {

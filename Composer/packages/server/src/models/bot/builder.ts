@@ -113,7 +113,7 @@ export class Builder {
     }
   };
 
-  public getQnaEndpointKey = async (subscriptionKey: string, config: IConfig | Record<string, any>) => {
+  public getQnaEndpointKey = async (subscriptionKey: string, config: IConfig) => {
     try {
       const subscriptionKeyEndpoint = `https://${config?.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
       const endpointKey = await this.qnaBuilder.getEndpointKeys(subscriptionKey, subscriptionKeyEndpoint);
@@ -174,7 +174,7 @@ export class Builder {
     const returnData = await this.orchestratorBuilder(luFiles, modelPath);
 
     // write snapshot data into /generated folder
-    const snapshots: any = {};
+    const snapshots: { [key: string]: string } = {};
     for (const dialog of returnData.outputs) {
       const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
       snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
@@ -183,13 +183,13 @@ export class Builder {
     }
 
     // write settings into /generated/orchestrator.settings.json
-    const orchestratorSettings: any = {
+    const orchestratorSettings = {
       orchestrator: {
         ModelPath: modelPath,
+        snapshots,
       },
     };
 
-    orchestratorSettings.orchestrator.snapshots = snapshots;
     const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
     await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
   };
@@ -269,7 +269,7 @@ export class Builder {
     if (!paths.length) return {};
 
     const qnaConfigFile = await this.storage.readFile(Path.join(this.generatedFolderPath, paths[0]));
-    const qna: any = {};
+    const qna = {};
 
     const qnaConfig = await JSON.parse(qnaConfigFile);
     const endpointKey = await this.qnaBuilder.getEndpointKeys(config.subscriptionKey, subscriptionKeyEndpoint);
