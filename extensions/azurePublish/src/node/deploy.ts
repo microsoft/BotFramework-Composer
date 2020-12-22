@@ -10,6 +10,8 @@ import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
 import archiver = require('archiver');
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
+import { AzureBotService } from '@azure/arm-botservice';
+import { TokenCredentials } from '@azure/ms-rest-js';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -43,9 +45,15 @@ export class BotProjectDeploy {
     name: string,
     environment: string,
     hostname?: string,
-    luisResource?: string
+    luisResource?: string,
+    absSettings?: any
   ) {
     try {
+      console.log(absSettings);
+      if (absSettings) {
+        await this.linkBotWithWebapp(absSettings, hostname);
+      }
+
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -161,9 +169,8 @@ export class BotProjectDeploy {
       message: 'Uploading zip file...',
     });
 
-    const publishEndpoint = `https://${
-      hostname ? hostname : name + (env ? '-' + env : '')
-    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    const publishEndpoint = `https://${hostname ? hostname : name + (env ? '-' + env : '')
+      }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
       this.logger('%O', err);
@@ -194,5 +201,48 @@ export class BotProjectDeploy {
         throw createCustomizeError(AzurePublishErrors.DEPLOY_ZIP_ERROR, stringifyError(err));
       }
     }
+  }
+
+  /**
+   * link the bot channel registration with azure web app service
+   * @param absSettings the abs settings
+   * @param hostname the hostname of webapp which bot service would be linked to
+   */
+  private async linkBotWithWebapp(absSettings: any, hostname: string) {
+    if (!absSettings.subscriptionId || !absSettings.resourceGroup || !absSettings.botName || !hostname) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'Abs settings incomplete, skip linking bot with webapp ...'
+      });
+      return;
+    }
+
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Linking bot with webapp ...'
+    });
+
+    const subscriptionId = absSettings.subscriptionId;
+    const resourceGroupName = absSettings.resourceGroup;
+    const botName = absSettings.botName;
+
+    const creds = new TokenCredentials(this.accessToken);
+    const azureBotSerivce = new AzureBotService(creds, subscriptionId);
+
+    const botUpdateResult = await azureBotSerivce.bots.update(resourceGroupName, botName, {
+      tags: {
+        webapp: hostname
+      }
+    });
+
+    if (botUpdateResult?._response?.status >= 300) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: botUpdateResult._response?.bodyAsText,
+      });
+      throw createCustomizeError(AzurePublishErrors.ABS_ERROR, botUpdateResult._response?.bodyAsText);
+    }
+
+    console.log(JSON.stringify(botUpdateResult, null, 2));
   }
 }
