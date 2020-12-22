@@ -32,6 +32,7 @@ interface DeployResources {
   hostname?: string;
   luisResource?: string;
   subscriptionID: string;
+  abs?: any;
 }
 
 interface PublishConfig {
@@ -249,8 +250,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       resourcekey: string,
       customizeConfiguration: DeployResources
     ) => {
-      const { subscriptionID, accessToken, name, environment, hostname, luisResource } = customizeConfiguration;
-
+      const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -265,7 +265,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       // Perform the deploy
-      await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource);
+      await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource, abs);
 
       // If we've made it this far, the deploy succeeded!
       BackgroundProcessManager.updateProcess(jobId, 200, 'Success');
@@ -302,6 +302,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         accessToken,
         luResources,
         qnaResources,
+        abs
       } = config;
       try{
           // get the appropriate runtime template which contains methods to build and configure the runtime
@@ -337,6 +338,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           environment,
           hostname,
           luisResource,
+          abs
         };
         await this.performDeploymentAction(
           project,
@@ -401,6 +403,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             MicrosoftAppId: provisionResults.appId,
             MicrosoftAppPassword: provisionResults.appPassword,
           },
+          bot: provisionResults.bot
         };
 
         this.logger(publishProfile);

@@ -57,4 +57,7 @@ export enum AzurePublishErrors {
   // zip and upload error
   ZIP_FOLDER_ERROR = 'ZIP_FOLDER_ERROR',
   DEPLOY_ZIP_ERROR = 'DEPLOY_ZIP_ERROR',
+
+  // abs error
+  ABS_ERROR = 'ABS_ERROR'
 }
