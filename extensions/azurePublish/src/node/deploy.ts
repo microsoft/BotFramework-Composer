@@ -229,10 +229,23 @@ export class BotProjectDeploy {
     const creds = new TokenCredentials(this.accessToken);
     const azureBotSerivce = new AzureBotService(creds, subscriptionId);
 
+    const botGetResult = await azureBotSerivce.bots.get(resourceGroupName, botName);
+    if (botGetResult?._response?.status >= 300) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: botGetResult._response?.bodyAsText,
+      });
+      throw createCustomizeError(AzurePublishErrors.ABS_ERROR, botGetResult._response?.bodyAsText);
+    }
+
+    const bot = botGetResult._response.parsedBody;
+    bot.properties.endpoint = `https://${hostname}.azurewebsites.net/api/messages`;
+
     const botUpdateResult = await azureBotSerivce.bots.update(resourceGroupName, botName, {
       tags: {
         webapp: hostname
-      }
+      },
+      properties: bot.properties
     });
 
     if (botUpdateResult?._response?.status >= 300) {
