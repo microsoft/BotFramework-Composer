@@ -528,7 +528,7 @@ describe('Project dispatcher', () => {
     newProjectDataClone.settings = {
       ...newProjectDataClone.settings,
       skill: {
-        oneNoteSync: {
+        'one-note-sync': {
           endpointUrl: 'https://azure-webservice.net/oneNoteSync/api/messages',
           manifestUrl: 'https://azure-webservice.net/oneNoteSnyc-manifest.json',
           msAppId: '123-234-234',
