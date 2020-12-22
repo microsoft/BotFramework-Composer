@@ -67,20 +67,20 @@ jest.mock('../../../utils/httpUtil');
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
-    flush: () => new Promise((resolve) => resolve()),
-    addProject: () => new Promise((resolve) => resolve()),
+    flush: () => new Promise((resolve) => resolve(null)),
+    addProject: () => new Promise((resolve) => resolve(null)),
   };
 });
 
 jest.mock('../../parsers/luWorker', () => {
   return {
-    flush: () => new Promise((resolve) => resolve()),
+    flush: () => new Promise((resolve) => resolve(null)),
   };
 });
 
 jest.mock('../../persistence/FilePersistence', () => {
   return jest.fn().mockImplementation(() => {
-    return { flush: () => new Promise((resolve) => resolve()) };
+    return { flush: () => new Promise((resolve) => resolve(null)) };
   });
 });
 

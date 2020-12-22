@@ -592,7 +592,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
   set(botProjectIdsState, [rootBotProjectId]);
   // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
-  if (botFiles.botProjectSpaceFile?.length) {
+  if (botFiles.botProjectSpaceFile && botFiles.botProjectSpaceFile?.length) {
     const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
 
     if (mergedSettings.skill) {
