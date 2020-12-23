@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import httpClient from '../../../utils/httpUtil';
 import { exportDispatcher } from '../export';
@@ -15,20 +15,24 @@ jest.mock('../../../utils/httpUtil');
 const projectId = '2345.32324';
 
 describe('Export dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher, prevDocumentCreateElement, prevCreateObjectURL, prevAppendChild;
+  const useRecoilTestHook = () => {
+    const botName = useRecoilValue(botDisplayNameState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
+    return {
+      botName,
+      currentDispatcher,
+    };
+  };
+
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>,
+    dispatcher: Dispatcher,
+    prevDocumentCreateElement,
+    prevCreateObjectURL,
+    prevAppendChild;
   beforeEach(() => {
     prevDocumentCreateElement = document.createElement;
     prevCreateObjectURL = window.URL.createObjectURL;
     prevAppendChild = document.body.appendChild;
-
-    const useRecoilTestHook = () => {
-      const botName = useRecoilValue(botDisplayNameState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
-      return {
-        botName,
-        currentDispatcher,
-      };
-    };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
