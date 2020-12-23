@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { dialogsDispatcher } from '../dialogs';
 import { triggerDispatcher } from '../trigger';
@@ -54,7 +54,7 @@ const chooseIntentTriggerData1 = {
 jest.mock('@bfc/indexers', () => {
   return {
     dialogIndexer: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
@@ -62,37 +62,37 @@ jest.mock('@bfc/indexers', () => {
     validateDialog: () => [],
     autofixReferInDialog: (_, content) => content,
     lgIndexer: {
-      parse: (content, id) => ({
+      parse: (content, id: string) => ({
         id,
         content,
       }),
     },
     luIndexer: {
-      parse: (content, id) => ({
+      parse: (content, id: string) => ({
         id,
         content,
       }),
     },
     qnaIndexer: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
     },
     lgUtil: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
     },
     luUtil: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
     },
     qnaUtil: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
@@ -101,28 +101,28 @@ jest.mock('@bfc/indexers', () => {
 });
 
 describe('trigger dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-      const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-      const luFiles = useRecoilValue(luFilesState(projectId));
-      const lgFiles = useRecoilValue(lgFilesState(projectId));
-      const actionsSeed = useRecoilValue(actionsSeedState(projectId));
-      const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
+  const useRecoilTestHook = () => {
+    const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+    const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+    const luFiles = useRecoilValue(luFilesState(projectId));
+    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const actionsSeed = useRecoilValue(actionsSeedState(projectId));
+    const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
 
-      return {
-        dialogs,
-        dialogSchemas,
-        luFiles,
-        lgFiles,
-        currentDispatcher,
-        actionsSeed,
-        qnaFiles,
-      };
+    return {
+      dialogs,
+      dialogSchemas,
+      luFiles,
+      lgFiles,
+      currentDispatcher,
+      actionsSeed,
+      qnaFiles,
     };
+  };
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         {
