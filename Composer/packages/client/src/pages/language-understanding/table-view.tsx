@@ -95,7 +95,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (isEmpty(luFiles)) return;
 
     const allIntents = luFiles
-      .filter(({ id }) => getExtension(id) === locale)
+      .filter(({ id }: { id: string }) => getExtension(id) === locale)
       .reduce((result: Intent[], luFile: LuFile) => {
         const items: Intent[] = [];
         const luDialog = dialogs.find((dialog) => luFile.id === `${dialog.id}.${locale}`);
