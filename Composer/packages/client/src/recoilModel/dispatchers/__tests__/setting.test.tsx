@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { settingsState, currentProjectIdState } from '../../atoms';
@@ -73,17 +73,18 @@ const settings = {
 };
 
 describe('setting dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const settings = useRecoilValue(settingsState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
-      return {
-        settings,
-        currentDispatcher,
-      };
+  const useRecoilTestHook = () => {
+    const settings = useRecoilValue(settingsState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
+    return {
+      settings,
+      currentDispatcher,
     };
+  };
 
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: settingsState(projectId), initialValue: settings },
