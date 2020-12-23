@@ -258,7 +258,7 @@ export function getActivityTypes(): IDropdownOption[] {
 }
 
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
-  return dialogs.reduce((result, dialog) => {
+  return dialogs.reduce((result: { [key: string]: {} }, dialog: DialogInfo) => {
     result[dialog.id] = dialog.content;
     return result;
   }, {});
@@ -274,11 +274,7 @@ export function getFriendlyName(data): string {
     return `${data?.intent}`;
   }
 
-  if (conceptLabels[data.$kind]?.title) {
-    return conceptLabels[data.$kind].title;
-  }
-
-  return data.$kind;
+  return conceptLabels[data.$kind]?.title ?? data.$kind;
 }
 
 const getLabel = (dialog: DialogInfo, dataPath: string) => {
@@ -312,7 +308,7 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
     return dialog;
   }
 
-  return conceptLabels[get(dialog, dataPath)] ? conceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
+  return conceptLabels[get(dialog, dataPath)]?.title ?? get(dialog, dataPath);
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
