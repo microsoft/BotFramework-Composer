@@ -181,7 +181,7 @@ export const getSensitiveProperties = (settings: DialogSetting) => {
   return sensitiveProperties;
 };
 
-export const getMergedSettings = (projectId, settings, botName): DialogSetting => {
+export const getMergedSettings = (projectId: string, settings: DialogSetting, botName: string): DialogSetting => {
   let mergedSettings = mergeLocalStorage(projectId, settings);
   mergedSettings = mergeLuisName(mergedSettings, botName);
   if (Array.isArray(mergedSettings.skill)) {
