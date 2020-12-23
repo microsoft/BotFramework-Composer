@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selectorFamily, useRecoilState, useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { skillDispatcher } from '../skill';
 import { botProjectFileDispatcher } from '../botProjectFile';
@@ -42,8 +42,6 @@ const projectId = '42345.23432';
 const skillIds = ['1234.123', '234.234'];
 
 describe('skill dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-
   const skillsDataSelector = selectorFamily({
     key: 'skillSelector-skill',
     get: (skillId: string) => ({ get }) => {
@@ -61,42 +59,44 @@ describe('skill dispatcher', () => {
     },
   });
 
+  const useRecoilTestHook = () => {
+    const projectId = useRecoilValue(currentProjectIdState);
+    const skillManifests = useRecoilValue(skillManifestsState(projectId));
+    const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState(projectId));
+    const settings = useRecoilValue(settingsState(projectId));
+    const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
+    const displaySkillManifest = useRecoilValue(displaySkillManifestState);
+    const skills = useRecoilValue(skillsStateSelector);
+    const [botEndpoints, setBotEndpoints] = useRecoilState(botEndpointsState);
+    const currentDispatcher = useRecoilValue(dispatcherState);
+
+    const [todoSkillData, setTodoSkillData] = useRecoilState(skillsDataSelector(skillIds[0]));
+    const [googleKeepData, setGoogleKeepData] = useRecoilState(skillsDataSelector(skillIds[1]));
+
+    return {
+      projectId,
+      skillManifests,
+      onAddSkillDialogComplete,
+      settings,
+      showAddSkillDialogModal,
+      displaySkillManifest,
+      currentDispatcher,
+      skills,
+      botEndpoints,
+      todoSkillData,
+      googleKeepData,
+      setters: {
+        setBotEndpoints,
+        setTodoSkillData,
+        setGoogleKeepData,
+      },
+    };
+  };
+
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
   beforeEach(() => {
     mockDialogComplete.mockClear();
-
-    const useRecoilTestHook = () => {
-      const projectId = useRecoilValue(currentProjectIdState);
-      const skillManifests = useRecoilValue(skillManifestsState(projectId));
-      const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState(projectId));
-      const settings = useRecoilValue(settingsState(projectId));
-      const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-      const displaySkillManifest = useRecoilValue(displaySkillManifestState);
-      const skills = useRecoilValue(skillsStateSelector);
-      const [botEndpoints, setBotEndpoints] = useRecoilState(botEndpointsState);
-      const currentDispatcher = useRecoilValue(dispatcherState);
-
-      const [todoSkillData, setTodoSkillData] = useRecoilState(skillsDataSelector(skillIds[0]));
-      const [googleKeepData, setGoogleKeepData] = useRecoilState(skillsDataSelector(skillIds[1]));
-
-      return {
-        projectId,
-        skillManifests,
-        onAddSkillDialogComplete,
-        settings,
-        showAddSkillDialogModal,
-        displaySkillManifest,
-        currentDispatcher,
-        skills,
-        botEndpoints,
-        todoSkillData,
-        googleKeepData,
-        setters: {
-          setBotEndpoints,
-          setTodoSkillData,
-          setGoogleKeepData,
-        },
-      };
-    };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
