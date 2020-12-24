@@ -21,6 +21,7 @@ import {
 import { dialogsSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
+import { DialogInfo } from '../../../../../types';
 
 const projectId = '42345.23432';
 
@@ -102,7 +103,7 @@ jest.mock('@bfc/indexers', () => {
 
 describe('trigger dispatcher', () => {
   const useRecoilTestHook = () => {
-    const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+    const dialogs: DialogInfo[] = useRecoilValue(dialogsSelectorFamily(projectId));
     const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
     const lgFiles = useRecoilValue(lgFilesState(projectId));
@@ -177,7 +178,7 @@ describe('trigger dispatcher', () => {
       await dispatcher.createTrigger(projectId, dialogId, QnATriggerData1);
     });
     const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
-    expect(updatedDialog.content.triggers.length).toEqual(1);
+    expect(updatedDialog?.triggers?.length).toEqual(1);
   });
 
   it('create a choose intent trigger', async () => {
@@ -186,7 +187,7 @@ describe('trigger dispatcher', () => {
       await dispatcher.createTrigger(projectId, dialogId, chooseIntentTriggerData1);
     });
     const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
-    expect(updatedDialog.content.triggers.length).toEqual(1);
+    expect(updatedDialog?.triggers?.length).toEqual(1);
   });
 
   it('create a intent trigger', async () => {
@@ -195,7 +196,7 @@ describe('trigger dispatcher', () => {
       await dispatcher.createTrigger(projectId, dialogId, intentTriggerData1);
     });
     const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
-    expect(updatedDialog.content.triggers.length).toEqual(1);
+    expect(updatedDialog?.triggers?.length).toEqual(1);
   });
 
   it('delete a trigger', async () => {
@@ -204,13 +205,15 @@ describe('trigger dispatcher', () => {
       await dispatcher.createTrigger(projectId, dialogId, QnATriggerData1);
     });
     const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
-    expect(updatedDialog.content.triggers.length).toEqual(1);
+    if (updatedDialog == null) fail();
+    expect(updatedDialog.triggers.length).toEqual(1);
 
-    const targetTrigger = updatedDialog.content.triggers[0];
+    const targetTrigger = updatedDialog.triggers[0];
     await act(async () => {
+      // @ts-ignore - targetTrigger should be an ITriggerCondition, but we give it an ITrigger
       await dispatcher.deleteTrigger(projectId, dialogId, targetTrigger);
     });
     const updatedDialog2 = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
-    expect(updatedDialog2.content.triggers.length).toEqual(1);
+    expect((updatedDialog2?.content.triggers as any[])?.length).toEqual(1);
   });
 });

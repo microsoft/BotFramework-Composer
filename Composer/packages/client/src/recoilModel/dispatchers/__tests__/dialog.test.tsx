@@ -169,7 +169,7 @@ describe('dialog dispatcher', () => {
     await act(async () => {
       dispatcher.updateDialog({ id: '1', content: 'new', projectId });
     });
-    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '1').content).toEqual('new');
+    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '1')?.content).toEqual('new');
   });
 
   it('creates a dialog file', async () => {
@@ -179,7 +179,7 @@ describe('dialog dispatcher', () => {
     expect(renderedComponent.current.luFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.lgFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.qnaFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
-    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100').content).toEqual('abcde');
+    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100')?.content).toEqual('abcde');
   });
 
   it('begins creating a dialog', async () => {

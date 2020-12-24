@@ -207,7 +207,7 @@ describe('QnA dispatcher', () => {
 
     const createdFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide.en-us');
     expect(createdFile).not.toBeFalsy();
-    expect(createdFile.content).toBe('> guide');
+    expect(createdFile!.content).toBe('> guide');
 
     await act(async () => {
       await dispatcher.removeQnAFile({
@@ -234,7 +234,7 @@ describe('QnA dispatcher', () => {
     expect(createdFile).not.toBeFalsy();
 
     const commonFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'common.en-us');
-    expect(commonFile.content).toContain('[import](guide.source.qna)');
+    expect(commonFile?.content).toContain('[import](guide.source.qna)');
   });
 
   it('should rename qna kb and re-create import', async () => {
@@ -271,7 +271,7 @@ describe('QnA dispatcher', () => {
     expect(createdFile2).not.toBeFalsy();
 
     const commonFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'common.en-us');
-    expect(commonFile.content).toContain('[import](guide2.source.qna)');
-    expect(commonFile.content).not.toContain('[import](guide.source.qna)');
+    expect(commonFile?.content).toContain('[import](guide2.source.qna)');
+    expect(commonFile?.content).not.toContain('[import](guide.source.qna)');
   });
 });

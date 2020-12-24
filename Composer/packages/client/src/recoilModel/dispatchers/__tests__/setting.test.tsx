@@ -64,6 +64,7 @@ const settings = {
     path: '',
     command: '',
     key: '',
+    name: '',
   },
   downsampling: {
     maxImbalanceRatio: 10,
@@ -130,8 +131,8 @@ describe('setting dispatcher', () => {
       );
     });
 
-    expect(renderedComponent.current.settings.publishTargets.length).toBe(1);
-    expect(renderedComponent.current.settings.publishTargets[0].name).toBe('new');
+    expect(renderedComponent.current.settings.publishTargets?.length).toBe(1);
+    expect(renderedComponent.current.settings.publishTargets?.[0].name).toBe('new');
   });
 
   it('should update RuntimeSettings', async () => {
@@ -143,6 +144,7 @@ describe('setting dispatcher', () => {
     expect(renderedComponent.current.settings.runtime.path).toBe('path');
     expect(renderedComponent.current.settings.runtime.command).toBe('command');
     expect(renderedComponent.current.settings.runtime.key).toBe('key');
+    // @ts-ignore - runtime has 'name' in practice and is of a type that has 'name', but TS isn't seeing it somehow
     expect(renderedComponent.current.settings.runtime.name).toBe('name');
   });
 
