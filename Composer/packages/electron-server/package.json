@@ -54,7 +54,6 @@
     "mock-fs": "^4.10.1",
     "ncp": "2.0.0",
     "nodemon": "^2.0.3",
-    "path": "^0.12.7",
     "rimraf": "^2.6.3",
     "source-map-explorer": "^2.4.2",
     "ts-node": "^8.4.1"
