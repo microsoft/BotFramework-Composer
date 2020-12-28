@@ -21,7 +21,7 @@ import {
   SelectTriggers,
 } from './content';
 
-export const VERSION_REGEX = /\d\.\d(\.(\d+|preview-\d+))?/i;
+export const VERSION_REGEX = /\d\.\d(\.\d+|preview-\d+)|\d\.\d/i;
 
 export const SCHEMA_URIS = [
   'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
