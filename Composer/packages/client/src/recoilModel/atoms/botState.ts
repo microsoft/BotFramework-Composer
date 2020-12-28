@@ -17,7 +17,6 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
-  Skill,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
@@ -346,13 +345,6 @@ export const botNameIdentifierState = atomFamily<string, string>({
 export const currentSkillManifestIndexState = atomFamily<number, string>({
   key: getFullyQualifiedKey('currentSkillManifestIndex'),
   default: 0,
-});
-
-export const skillsState = atomFamily<Skill[], string>({
-  key: getFullyQualifiedKey('skills'),
-  default: (id) => {
-    return [];
-  },
 });
 
 export const canUndoState = atomFamily<boolean, string>({
