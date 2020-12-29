@@ -599,7 +599,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   async function handleDeleteDialog(projectId: string, dialogId: string) {
     const refs = getAllRef(dialogId, dialogs);
-    let setting: Record<string, string> = {
+    let setting: Record<string, string | ((subTitle: string, style: any) => JSX.Element)> = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
     };
