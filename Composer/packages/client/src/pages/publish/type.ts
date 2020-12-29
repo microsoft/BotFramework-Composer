@@ -5,7 +5,7 @@ import { DialogSetting, PublishResult, PublishTarget } from '@bfc/shared';
 
 import { PublishType } from '../../recoilModel/types';
 
-export type IBotStatus = {
+export type BotStatus = {
   id: string;
   name: string;
   publishTargets?: PublishTarget[];
@@ -15,28 +15,28 @@ export type IBotStatus = {
   message?: string;
   comment?: string;
 };
-export type IBot = {
+export type Bot = {
   id: string;
   name: string;
   publishTarget: string;
 };
 
-export type IBotSetting = {
+export type BotSetting = {
   projectId: string;
   setting: DialogSetting;
 };
 
-export type IBotPublishTargets = {
+export type BotPublishTargets = {
   projectId: string;
   publishTargets: PublishTarget[];
 };
 
-export type IBotPublishType = {
+export type BotPublishType = {
   projectId: string;
   publishTypes: PublishType[];
 };
 
-export type IBotPublishHistory = {
+export type BotPublishHistory = {
   projectId: string;
-  publishHistory: { [key: string]: PublishResult[] };
+  publishHistory: Record<string, PublishResult[]>;
 };

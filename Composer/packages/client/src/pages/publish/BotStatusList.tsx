@@ -20,30 +20,29 @@ import { navigateTo } from '../../utils/navigation';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
-import { IBot, IBotPublishHistory, IBotPublishTargets, IBotPublishType, IBotStatus } from './type';
+import { Bot, BotPublishHistory, BotPublishTargets, BotPublishType, BotStatus } from './type';
 
 export type IBotStatusListProps = {
   projectId: string;
-  botList: IBot[];
-  botPublishTargetsList: IBotPublishTargets[];
-  botPublishHistoryList: IBotPublishHistory[];
-  botPublishTypesList: IBotPublishType[];
+  botList: Bot[];
+  botPublishTargetsList: BotPublishTargets[];
+  botPublishHistoryList: BotPublishHistory[];
+  botPublishTypesList: BotPublishType[];
   publishDisabled: boolean;
-  updateItems: (items: IBotStatus[]) => void;
-  updatePublishHistory: (items: PublishResult[], item: IBotStatus) => void;
-  updateSelectedBots: (items: IBotStatus[]) => void;
-  changePublishTarget: (PublishTarget: string, item: IBotStatus) => void;
-  onRollbackClick: (selectedVersion: PublishResult, item: IBotStatus) => void;
+  updateItems: (items: BotStatus[]) => void;
+  updatePublishHistory: (items: PublishResult[], item: BotStatus) => void;
+  updateSelectedBots: (items: BotStatus[]) => void;
+  changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
+  onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
 };
 
 const generateBotList = (
-  botList: IBot[],
-  botPublishTargetsList: IBotPublishTargets[],
-  botPublishHistoryList: IBotPublishHistory[]
-): IBotStatus[] => {
-  const bots: IBotStatus[] = [];
-  botList.forEach((bot) => {
-    const botStatus: IBotStatus = Object.assign({}, bot);
+  botList: Bot[],
+  botPublishTargetsList: BotPublishTargets[],
+  botPublishHistoryList: BotPublishHistory[]
+): BotStatus[] => {
+  const bots = botList.map((bot) => {
+    const botStatus: BotStatus = Object.assign({}, bot);
     const publishTargets =
       botPublishTargetsList.find((targetMap) => targetMap.projectId === bot.id)?.publishTargets || [];
     const publishHistory = botPublishHistoryList.find((historyMap) => historyMap.projectId === bot.id)?.publishHistory;
@@ -57,7 +56,7 @@ const generateBotList = (
         botStatus.status = history.status;
       }
     }
-    bots.push(botStatus);
+    return botStatus;
   });
   return bots;
 };
@@ -75,22 +74,22 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     updateSelectedBots,
     onRollbackClick,
   } = props;
-  const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
+  const [selectedBots, setSelectedBots] = useState<BotStatus[]>([]);
   const [showHistoryBots, setShowHistoryBots] = useState<string[]>([]);
 
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
-  const items: IBotStatus[] = useMemo(() => {
+  const items: BotStatus[] = useMemo(() => {
     return generateBotList(botList, botPublishTargetsList, botPublishHistoryList);
   }, [botList, botPublishTargetsList, botPublishHistoryList]);
   const sortByName = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
       column.isSortedDescending = !column.isSortedDescending;
-      const newItems: IBotStatus[] = items.reverse();
+      const newItems: BotStatus[] = items.reverse();
       updateItems(newItems);
     }
   };
-  const changeSelected = (item: IBotStatus, isChecked?: boolean) => {
-    let newSelectedBots: IBotStatus[];
+  const changeSelected = (item: BotStatus, isChecked?: boolean) => {
+    let newSelectedBots: BotStatus[];
     if (isChecked) {
       newSelectedBots = [...selectedBots, item];
     } else {
@@ -100,7 +99,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     updateSelectedBots(newSelectedBots);
   };
 
-  const publishTargetOptions = (item: IBotStatus): IDropdownOption[] => {
+  const publishTargetOptions = (item: BotStatus): IDropdownOption[] => {
     const options: IDropdownOption[] = [];
     item.publishTargets &&
       item.publishTargets.forEach((target, index) => {
@@ -127,7 +126,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     };
     return <div style={style}>{option.text}</div>;
   };
-  const onRenderStatus = (item: IBotStatus): JSX.Element | null => {
+  const onRenderStatus = (item: BotStatus): JSX.Element | null => {
     if (!item.status) {
       return null;
     } else if (item.status === 200) {
@@ -142,7 +141,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
     }
   };
-  const handleChangePublishTarget = (item: IBotStatus, option?: IDropdownOption): void => {
+  const handleChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
     if (option) {
       if (option.key === 'manageProfiles') {
         const url =
@@ -155,7 +154,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       changePublishTarget(option.text, item);
     }
   };
-  const changeShowHistoryBots = (item: IBotStatus) => {
+  const changeShowHistoryBots = (item: BotStatus) => {
     let newShowHistoryBots: string[];
     if (showHistoryBots.includes(item.id)) {
       newShowHistoryBots = showHistoryBots.filter((id) => id !== item.id);
@@ -175,7 +174,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isRowHeader: true,
       onColumnClick: sortByName,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return (
           <Checkbox
             disabled={publishDisabled}
@@ -204,7 +203,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       maxWidth: 200,
       isRowHeader: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return (
           <Dropdown
             defaultSelectedKey={item.publishTarget}
@@ -230,7 +229,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       maxWidth: 134,
       isRowHeader: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return <span>{item.time ? moment(item.time).format('MM-DD-YYYY') : null}</span>;
       },
       isPadded: true,
@@ -244,7 +243,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       maxWidth: 134,
       isRowHeader: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return onRenderStatus(item);
       },
       isPadded: true,
@@ -260,7 +259,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return <span>{item.message}</span>;
       },
       isPadded: true,
@@ -276,7 +275,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return <span>{item.comment}</span>;
       },
       isPadded: true,
@@ -292,7 +291,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return (
           <IconButton
             iconProps={{ iconName: showHistoryBots.includes(item.id) ? 'ChevronDown' : 'ChevronRight' }}
@@ -305,7 +304,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     },
   ];
   const onRenderRow = (props, defaultRender) => {
-    const { item }: { item: IBotStatus } = props;
+    const { item }: { item: BotStatus } = props;
     const publishStatusList: PublishResult[] = item.publishTarget
       ? botPublishHistoryList.find((list) => list.projectId === item.id)?.publishHistory[item.publishTarget] || []
       : [];

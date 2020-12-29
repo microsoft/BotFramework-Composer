@@ -3,7 +3,7 @@
 
 import httpClient from './httpUtil';
 
-enum CircuitBreakerStateEnum {
+enum PollingStateEnum {
   Closed,
   Open,
 }
@@ -29,9 +29,9 @@ export class PublishStatusPollingUpdater {
 
   async start(onData) {
     if (!(this.botProjectId && this.targetName)) return;
-    if (this.status === CircuitBreakerStateEnum.Open) return;
+    if (this.status === PollingStateEnum.Open) return;
     try {
-      this.status = CircuitBreakerStateEnum.Open;
+      this.status = PollingStateEnum.Open;
 
       const firstResponse = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
       onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: firstResponse });
@@ -40,27 +40,28 @@ export class PublishStatusPollingUpdater {
           const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
           onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
         } catch (err) {
-          console.log(this.timerId);
           onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
         }
       }, this.pollingInterval);
     } catch (err) {
-      console.log(this.timerId);
       onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
     }
   }
+
   stop() {
     if (this.timerId) {
       window.clearInterval(this.timerId);
     }
     this.timerId = 0;
-    this.status = CircuitBreakerStateEnum.Closed;
+    this.status = PollingStateEnum.Closed;
   }
+
   restart(onData) {
     this.stop();
     this.start(onData);
   }
-  beEqual(botProjectId, targetName) {
+
+  isSameUpdater(botProjectId, targetName) {
     return this.botProjectId === botProjectId && this.targetName === targetName;
   }
 }

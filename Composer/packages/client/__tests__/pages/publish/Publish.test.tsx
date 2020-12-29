@@ -106,16 +106,16 @@ describe('publish page', () => {
   it('should render status list in publish page', () => {
     const { getByText } = renderWithRecoil(
       <BotStatusList
+        botList={[]}
         botPublishHistoryList={[]}
+        botPublishTargetsList={[]}
         botPublishTypesList={[]}
         changePublishTarget={jest.fn()}
-        items={[]}
         projectId={rootState.projectId}
         publishDisabled={false}
         updateItems={jest.fn()}
         updatePublishHistory={jest.fn()}
         updateSelectedBots={jest.fn()}
-        onLogClick={jest.fn()}
         onRollbackClick={jest.fn()}
       />,
       initRecoilState

@@ -187,7 +187,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           <ActionButton
             allowDisabledFocus
             disabled={!(isRollbackSupported && item.status === 200)}
-            styles={{ root: { color: '#0078D4' } }}
+            styles={{ root: { color: SharedColors.cyanBlue10 } }}
             onClick={() => {
               onRollbackClick(item);
             }}

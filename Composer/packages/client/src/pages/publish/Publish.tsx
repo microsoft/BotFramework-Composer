@@ -26,16 +26,15 @@ import { BotStatusList } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
 import { PublishToolbar } from './PublishToolbar';
-import { IBot, IBotStatus, IBotPublishHistory, IBotPublishType, IBotPublishTargets, IBotSetting } from './type';
+import { Bot, BotStatus, BotPublishHistory, BotPublishType, BotPublishTargets, BotSetting } from './type';
 
 const deleteNotificationInterval = 5000;
 
-// CR: Data model. What is stable data? What is frequently changed data? Manage them separately rather than repeating them.
 const generateComputedData = (botProjectData) => {
-  const botSettingList: IBotSetting[] = [];
-  const botPublishTargetsList: IBotPublishTargets[] = [];
-  const botPublishTypesList: IBotPublishType[] = [];
-  const botList: IBot[] = [];
+  const botSettingList: BotSetting[] = [];
+  const botPublishTargetsList: BotPublishTargets[] = [];
+  const botPublishTypesList: BotPublishType[] = [];
+  const botList: Bot[] = [];
   botProjectData.forEach((bot) => {
     const botProjectId = bot.projectId;
     const publishTargets = bot.setting ? bot.setting.publishTargets || [] : [];
@@ -82,7 +81,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     botList
-      .filter((bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.beEqual(bot.id, bot.publishTarget)))
+      .filter(
+        (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
+      )
       .map((bot) => {
         const updater = new PublishStatusPollingUpdater({ botProjectId: bot.id, targetName: bot.publishTarget });
         updater.start(updateData);
@@ -92,7 +93,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   // updater onData function
   const updateData = async (data) => {
     const { botProjectId, targetName, apiResponse } = data;
-    const updater = pollingUpdaterList.find((i) => i.beEqual(botProjectId, targetName));
+    const updater = pollingUpdaterList.find((i) => i.isSameUpdater(botProjectId, targetName));
     const updatedBot = botList.find((bot) => bot.id === botProjectId);
     const publishTargets = botPublishTargetsList.find((targetsMap) => targetsMap.projectId === botProjectId)
       ?.publishTargets;
@@ -123,13 +124,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  const [botPublishHistoryList, setBotPublishHistoryList] = useState<IBotPublishHistory[]>(publishHistoryList);
-  const [currentBotList, setCurrentBotList] = useState<IBot[]>(botList);
+  const [botPublishHistoryList, setBotPublishHistoryList] = useState<BotPublishHistory[]>(publishHistoryList);
+  const [currentBotList, setCurrentBotList] = useState<Bot[]>(botList);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
-  const [selectedBots, setSelectedBots] = useState<IBot[]>([]);
+  const [selectedBots, setSelectedBots] = useState<Bot[]>([]);
   const publishDisabled = useMemo(() => {
     return selectedBots.some((bot) => {
       const publishTargets = botPublishTargetsList.find((targetsMap) => targetsMap.projectId === bot.id)
@@ -190,13 +191,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
     };
   }, []);
-  const updateBotStatusList = (statusList: IBotStatus[]) => {
+  const updateBotStatusList = (statusList: BotStatus[]) => {
     setCurrentBotList(
-      statusList.map((bot) => ({ id: bot.id, name: bot.name, publishTarget: bot.publishTarget } as IBot))
+      statusList.map((bot) => ({ id: bot.id, name: bot.name, publishTarget: bot.publishTarget } as Bot))
     );
   };
-  const updatePublishHistory = (publishHistories: PublishResult[], botStatus: IBotStatus) => {
-    const newPublishHistory: IBotPublishHistory[] = botPublishHistoryList.map((botPublishHistory) => {
+  const updatePublishHistory = (publishHistories: PublishResult[], botStatus: BotStatus) => {
+    const newPublishHistory: BotPublishHistory[] = botPublishHistoryList.map((botPublishHistory) => {
       if (botPublishHistory.projectId === botStatus.id && botStatus.publishTarget) {
         botPublishHistory = {
           projectId: botPublishHistory.projectId,
@@ -208,7 +209,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setBotPublishHistoryList(newPublishHistory);
   };
   const updateSelectedBots = (selectedBots) => {
-    const bots: IBot[] = [];
+    const bots: Bot[] = [];
     selectedBots.forEach((bot) => {
       bots.push({
         id: bot.id,
@@ -219,7 +220,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedBots(bots);
   };
 
-  const publish = async (items: IBotStatus[]) => {
+  const publish = async (items: BotStatus[]) => {
     // get token
     let token = '';
     if (isGetTokenFromUser()) {
@@ -267,7 +268,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
-        const updater = pollingUpdaterList.find((u) => u.beEqual(botProjectId, bot.publishTarget));
+        const updater = pollingUpdaterList.find((u) => u.isSameUpdater(botProjectId, bot.publishTarget));
         updater && updater.restart(updateData);
       }
     }
@@ -292,7 +293,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     getPublishHistory(currentBotStatus.id, target);
 
     // Add new updater
-    if (!pollingUpdaterList.some((u) => u.beEqual(currentBotStatus.id, publishTarget))) {
+    if (!pollingUpdaterList.some((u) => u.isSameUpdater(currentBotStatus.id, publishTarget))) {
       const newUpdater = new PublishStatusPollingUpdater({
         botProjectId: currentBotStatus.id,
         targetName: publishTarget,
