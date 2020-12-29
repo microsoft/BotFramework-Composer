@@ -5,7 +5,7 @@ import { ClientStorage } from './storage';
 const KEY = 'ProjectIdCache';
 
 class ProjectIdCache {
-  private storage: ClientStorage;
+  private storage: ClientStorage<string>;
   private currentProjectId;
 
   constructor() {
