@@ -271,13 +271,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const newResourceGroup = useMemo(
     () => (e, newName) => {
       setHostName(newName);
-      // validate existed or not
-      const existed = resourceGroups.find((t) => t.name === newName);
-      if (existed) {
-        setErrorHostName('this resource group already exist');
-      } else {
-        checkNameAvailability(newName);
-      }
+      checkNameAvailability(newName);
     },
     [resourceGroups, checkNameAvailability]
   );
@@ -411,7 +405,7 @@ export const AzureProvisionDialog: React.FC = () => {
             defaultValue={currentHostName}
             errorMessage={errorHostName}
             label={'HostName'}
-            placeholder={'Name of your new resource group'}
+            placeholder={'Name of your resource group and website/function'}
             onChange={newResourceGroup}
           />
           <Dropdown
