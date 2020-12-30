@@ -1,17 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Request, Response } from 'express';
+
 import { BotTemplateV2, FeedType } from '@bfc/shared';
 import cheerio from 'cheerio';
-// import { request } from 'request';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import { getNugetTemplates } from '../utility/nuget';
 
-async function getProjTemplates(res: any) {
+async function getProjTemplates(req: Request, res: Response) {
   try {
     const templates = await AssetService.manager.getProjectTemplates();
     res.status(200).json(templates);
@@ -117,32 +116,6 @@ export async function getTemplateReadMe(req: any, res: any) {
     const $ = cheerio.load(html); // Load the HTML string into cheerio
     const readMeDiv = $('#readme').html(); // Parse the HTML and extract just whatever code contains .statsTableContainer and has tr inside
     res.status(200).json(readMeDiv);
-
-    //OPTION 2
-    // const tr = trumpet();
-    // const test = tr.select('#readme').createStream();
-    // const moduleURL = 'http://npmjs.org/' + moduleName;
-    // const npmReq = request(moduleURL).pipe(tr);
-
-    // let readme = '';
-    // npmReq
-    //   .pipe(
-    //     through(
-    //       (data) => {
-    //         readme += data.toString();
-    //       },
-    //       () => {
-    //         // readmeCache[module] = readme;
-    //         // callback(null, readme);
-    //         // readMe = readme;
-    //         console.log(test);
-    //         res.status(200).json(readme);
-    //       }
-    //     )
-    //   )
-    //   .on('error', () => {
-    //     console.log('error');
-    //   });
   } catch (error) {
     res.status(400).json({
       message: error instanceof Error ? error.message : error,

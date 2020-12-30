@@ -359,7 +359,7 @@ async function build(req: Request, res: Response) {
   const user = await ExtensionContext.getUserFromRequest(req);
 
   // Disable Express' built in 2 minute timeout for requests. Otherwise, large models may fail to build.
-  req.setTimeout(0, () => {
+  (req as any).setTimeout(0, () => {
     throw new Error('LUIS publish process timed out.');
   });
 

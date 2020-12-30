@@ -42,9 +42,13 @@ export const provisionDispatcher = () => {
       graphToken = ''
     ) => {
       try {
-        const result = await httpClient.post(`/provision/${projectId}/${type}`, config, {
-          headers: { Authorization: `Bearer ${armToken}`, graphtoken: graphToken },
-        });
+        const result = await httpClient.post(
+          `/provision/${projectId}/${type}`,
+          { ...config, graphToken: graphToken },
+          {
+            headers: { Authorization: `Bearer ${armToken}` },
+          }
+        );
         // set notification
         const notification = createNotification(getProvisionPendingNotification(result.data.message));
         addNotificationInternal(callbackHelpers, notification);

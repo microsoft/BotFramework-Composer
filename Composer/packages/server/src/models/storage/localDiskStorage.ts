@@ -29,7 +29,7 @@ export class LocalDiskStorage implements IFileStorage {
     // test to see if this file is writable
     let writable = true;
     try {
-      fs.accessSync(path, fs.constants.W_OK);
+      fs.accessSync(path, fs.constants.W_OK); // lgtm [js/path-injection]
     } catch (err) {
       writable = false;
     }

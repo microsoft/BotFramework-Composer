@@ -88,7 +88,7 @@ const absh: AuthProviderInit = {
 
     const authorize: RequestHandler = (req, res, next) => {
       if (COMPOSER_AUTH_PROVIDER !== 'abs-h' || req.method === 'OPTIONS') {
-        next();
+        next && next();
         return;
       }
 
@@ -124,10 +124,10 @@ const absh: AuthProviderInit = {
             decodedToken: token,
             accessToken: bearer,
           };
-          next();
+          next && next();
         });
       } catch (err) {
-        next(err);
+        next && next(err);
       }
     };
 
