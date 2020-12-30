@@ -44,8 +44,8 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   app.set('view options', { delimiter: '?' });
   app.use(compression());
 
-  app.use(bodyParser.json({ limit: '50mb' }));
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json({ limit: '50mb' }) as any);
+  app.use(bodyParser.urlencoded({ extended: false }) as any);
   app.use(session({ secret: 'bot-framework-composer' }));
   app.use(ExtensionContext.passport.initialize());
   app.use(ExtensionContext.passport.session());
@@ -79,7 +79,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     'upgrade-insecure-requests;',
   ];
 
-  app.all('*', (req: Request, res: Response, next: NextFunction) => {
+  app.all('*', (req: Request, res: Response, next?: NextFunction) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -97,7 +97,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
       );
     }
 
-    next();
+    next && next();
   });
 
   app.use(`${BASEURL}/`, express.static(clientDirectory, { immutable: true, maxAge: 31536000 }));

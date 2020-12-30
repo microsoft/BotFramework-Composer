@@ -50,7 +50,8 @@ const getLastModified = (extensionPath) => {
   let last = new Date(0);
 
   try {
-    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`, {
+    // prettier-ignore
+    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`, { // lgtm [js/shell-command-injection-from-environment]
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'ignore'],
     }).trim();

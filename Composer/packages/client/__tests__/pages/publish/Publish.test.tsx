@@ -47,6 +47,7 @@ const rootState = {
         status: true,
         rollback: true,
         pull: true,
+        provision: true,
       },
     },
   ],

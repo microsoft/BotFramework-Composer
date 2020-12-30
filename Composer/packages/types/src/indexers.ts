@@ -114,7 +114,7 @@ export type LuFile = {
   intents: LuIntentSection[];
   empty: boolean;
   resource: LuParseResource;
-  [key: string]: any;
+  published?: boolean;
 };
 
 export type LuParseResource = {
@@ -140,7 +140,6 @@ export type QnAFile = {
   options: { id: string; name: string; value: string }[];
   empty: boolean;
   resource: LuParseResource;
-  [key: string]: any;
 };
 
 export type LgTemplate = {
@@ -187,8 +186,6 @@ export type Manifest = {
   version: string;
   description: string;
   endpoints: ManifestEndpoint[];
-  // Other props of manifest are not used in Composer.
-  [prop: string]: any;
 };
 
 export type ManifestEndpoint = {
@@ -196,8 +193,6 @@ export type ManifestEndpoint = {
   endpointUrl: string;
   msAppId: string;
   description: string;
-  // Other skill endpoint fields in the schema that Composer is not using presently
-  [prop: string]: any;
 };
 
 export type Skill = {
@@ -284,7 +279,6 @@ export type RecognizerFile = {
   id: string;
   content: {
     $kind: SDKKinds;
-    [key: string]: any;
   };
 };
 
