@@ -7,8 +7,6 @@ import { useState, Fragment, useEffect, useMemo } from 'react';
 import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
@@ -19,31 +17,17 @@ import {
   CheckboxVisibility,
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate, BotTemplateV2 } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../../constants';
-import { root } from '../../Page';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
 // -------------------- Styles -------------------- //
-
-const optionIcon = (checked) => css`
-  vertical-align: text-bottom;
-  font-size: 18px;
-  margin-right: 10px;
-  color: ${checked ? '#0078d4' : '#000'};
-`;
-
-const optionRoot = css`
-  width: 100%;
-  height: 100%;
-`;
 
 const detailListContainer = css`
   width: 50%;
@@ -127,8 +111,8 @@ type CreateOptionsProps = {
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
-  const [option, setOption] = useState(optionKeys.createFromTemplate);
-  const [disabled, setDisabled] = useState(false);
+  const [option] = useState(optionKeys.createFromTemplate);
+  const [disabled] = useState(false);
   const { templates, onDismiss, onNext, fetchReadMe, templateReadMe } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
@@ -202,13 +186,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [templates]);
 
   useEffect(() => {
-    if (selectedFeed?.props?.headerText?.toLowerCase() === 'c#') {
+    if (selectedFeed?.props?.headerText?.toLowerCase() === 'typescript') {
       props.fetchTemplates([
         'https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
       ]);
     } else {
       props.fetchTemplates([
-        'https://registry.npmjs.org/-/v1/search?text=bot&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+        'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
       ]);
     }
   }, [selectedFeed]);

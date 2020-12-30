@@ -152,7 +152,9 @@ export class AssetManager {
 
   private async instantiateRemoteTemplate(generatorName: string, dstDir: string): Promise<boolean> {
     yeomanEnv.cwd = dstDir;
-    await yeomanEnv.run(generatorName, {}, () => {
+    //TODO delete override
+    generatorName = 'C:\\Users\\pavolum\\source\\repos\\generator-conversational-core\\generators\\app\\index.js';
+    await yeomanEnv.run([generatorName, 'runtime'], {}, () => {
       console.log('DONE');
     });
     return true;

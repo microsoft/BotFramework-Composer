@@ -1,19 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 import { BotTemplateV2, FeedType } from '@bfc/shared';
+import cheerio from 'cheerio';
 // import { request } from 'request';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import { getNugetTemplates } from '../utility/nuget';
 
-const request = require('request'); // If server-side node code.
-const through = require('through');
-const trumpet = require('trumpet');
-
-async function getProjTemplates(req: any, res: any) {
+async function getProjTemplates(res: any) {
   try {
     const templates = await AssetService.manager.getProjectTemplates();
     res.status(200).json(templates);
@@ -24,7 +22,7 @@ async function getProjTemplates(req: any, res: any) {
   }
 }
 
-export function getFeedType(data: any): FeedType {
+export function getFeedType(): FeedType {
   // TODO: parse through data to detect for npm or nuget package schema and return respecive result
   return 'npm';
 }
@@ -33,7 +31,7 @@ export async function getFeedContents(feedUrl: string): Promise<BotTemplateV2[] 
   try {
     const res = await fetch(feedUrl);
     const data = await res.json();
-    const feedType = getFeedType(data);
+    const feedType = getFeedType();
     if (feedType === 'npm') {
       return data.objects.map((result) => {
         const { name, version, description = '', keywords = [] } = result.package;
@@ -110,32 +108,41 @@ export async function getProjTemplatesV2(req: any, res: any) {
 
 export async function getTemplateReadMe(req: any, res: any) {
   try {
-    // Get FeedUrl
-    // let readMe = '';
     const { moduleName } = req.body;
-    const tr = trumpet();
 
+    //OPTION 1
     const moduleURL = 'http://npmjs.org/' + moduleName;
-    const npmReq = request(moduleURL).pipe(tr);
+    const response = await fetch(moduleURL);
+    const html = await response.text();
+    const $ = cheerio.load(html); // Load the HTML string into cheerio
+    const readMeDiv = $('#readme').html(); // Parse the HTML and extract just whatever code contains .statsTableContainer and has tr inside
+    res.status(200).json(readMeDiv);
 
-    let readme = '';
-    npmReq
-      .pipe(
-        through(
-          (data) => {
-            readme += data.toString();
-          },
-          () => {
-            // readmeCache[module] = readme;
-            // callback(null, readme);
-            // readMe = readme;
-            res.status(200).json(readme);
-          }
-        )
-      )
-      .on('error', () => {
-        console.log('error');
-      });
+    //OPTION 2
+    // const tr = trumpet();
+    // const test = tr.select('#readme').createStream();
+    // const moduleURL = 'http://npmjs.org/' + moduleName;
+    // const npmReq = request(moduleURL).pipe(tr);
+
+    // let readme = '';
+    // npmReq
+    //   .pipe(
+    //     through(
+    //       (data) => {
+    //         readme += data.toString();
+    //       },
+    //       () => {
+    //         // readmeCache[module] = readme;
+    //         // callback(null, readme);
+    //         // readMe = readme;
+    //         console.log(test);
+    //         res.status(200).json(readme);
+    //       }
+    //     )
+    //   )
+    //   .on('error', () => {
+    //     console.log('error');
+    //   });
   } catch (error) {
     res.status(400).json({
       message: error instanceof Error ? error.message : error,
