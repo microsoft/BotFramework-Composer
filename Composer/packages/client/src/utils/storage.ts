@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export class ClientStorage {
+export class ClientStorage<T> {
   private storage: Storage;
   private _prefix = 'composer';
 
@@ -12,7 +12,7 @@ export class ClientStorage {
     }
   }
 
-  public set<T = any>(key: string, val: T): T | void {
+  public set(key: string, val: T): T | void {
     if (val === undefined) {
       return this.remove(this.prefix(key));
     }
@@ -20,7 +20,9 @@ export class ClientStorage {
     return val;
   }
 
-  public get<T = any>(key: string, def?: T): T {
+  public get(key: string): T | undefined;
+  public get(key: string, def: T): T;
+  public get(key: string, def?: T): T | undefined {
     const val = this.deserialize(this.storage.getItem(this.prefix(key)));
     return val === undefined ? def : val;
   }
@@ -37,7 +39,7 @@ export class ClientStorage {
     this.storage.clear();
   }
 
-  public getAll(): { [key: string]: any } {
+  public getAll(): { [key: string]: TextDecoderOptions } {
     const ret = {};
     this.forEach((key, val) => {
       ret[key] = val;
@@ -45,20 +47,21 @@ export class ClientStorage {
     return ret;
   }
 
-  private forEach(callback: (key: string, val: any) => void) {
+  private forEach(callback: (key: string, val: T) => void) {
     for (let i = 0; i < this.storage.length; i++) {
       const key = this.storage.key(i);
-      if (key) {
-        callback(key.replace(`${this._prefix}:`, ''), this.get(key));
+      if (key != null) {
+        const val = this.get(key);
+        if (val != null) callback(key.replace(`${this._prefix}:`, ''), val);
       }
     }
   }
 
-  private serialize(val: any): string {
+  private serialize(val: T): string {
     return JSON.stringify(val);
   }
 
-  private deserialize(val: any): any {
+  private deserialize(val: any): T | undefined {
     if (typeof val !== 'string') {
       return undefined;
     }
@@ -66,7 +69,7 @@ export class ClientStorage {
     try {
       return JSON.parse(val);
     } catch (error) {
-      return val || undefined;
+      return undefined;
     }
   }
 
@@ -75,6 +78,6 @@ export class ClientStorage {
   }
 }
 
-const storage = new ClientStorage();
+const storage = new ClientStorage<any>();
 
 export default storage;
