@@ -5,7 +5,7 @@ import { ClientStorage } from './storage';
 const KEY = 'RouterCache';
 
 class RouterCache {
-  private storage: ClientStorage;
+  private storage: ClientStorage<string | {}>;
   private _all;
 
   constructor() {

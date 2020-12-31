@@ -45,7 +45,7 @@ export function getUserTokenFromCache(): string | null {
 
   // next check to see if we have a token in session storage
   if (!token) {
-    const sessionToken = storage.get<string>(USER_TOKEN_STORAGE_KEY);
+    const sessionToken: string = storage.get(USER_TOKEN_STORAGE_KEY);
 
     if (sessionToken?.length > 0) {
       token = sessionToken;
