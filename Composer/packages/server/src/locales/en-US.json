@@ -2102,8 +2102,8 @@
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
-  "open_skills_page_for_configuration_details_a2a484ea": {
-    "message": "Open Skills page for configuration details"
+  "open_start_bots_panel_f7f87200": {
+    "message": "Open start bots panel"
   },
   "open_start_bots_panel_f7f87200": {
     "message": "Open start bots panel"
@@ -2212,9 +2212,6 @@
   },
   "populate_your_knowledge_base_bb2d3605": {
     "message": "Populate your Knowledge Base"
-  },
-  "powervirtualagents_logo_11858924": {
-    "message": "PowerVirtualAgents Logo"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
@@ -2726,6 +2723,9 @@
   "show_item_diagnostics_f6e902c7": {
     "message": "Show { item } Diagnostics"
   },
+  "show_item_diagnostics_f6e902c7": {
+    "message": "Show { item } Diagnostics"
+  },
   "show_keys_3072a5b8": {
     "message": "Show keys"
   },
@@ -2759,6 +2759,9 @@
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "Skill manifest endpoint is configured improperly"
   },
+  "skillhostendpoint_2e8f00ff": {
+    "message": "SkillHostEndPoint"
+  },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
@@ -2767,12 +2770,6 @@
   },
   "skip_this_step_to_add_questions_and_answers_manual_ed1b9f80": {
     "message": "Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. "
-  },
-  "something_happened_while_attempting_to_pull_e_952c7afe": {
-    "message": "Something happened while attempting to pull: { e }"
-  },
-  "something_went_wrong_d238c551": {
-    "message": "Something went wrong"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "Sorry, something went wrong with connecting bot runtime"
