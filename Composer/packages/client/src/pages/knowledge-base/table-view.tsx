@@ -17,6 +17,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { IconButton, ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -26,6 +27,7 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
+import flatMap from 'lodash/flatMap';
 import { QnASection, QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -143,19 +145,17 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) => id.endsWith('.source'));
   const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
 
-  const initializeQnASections = (qnaFiles, dialogId) => {
+  const initializeQnASections = (qnaFiles: QnAFile[], dialogId: string) => {
     if (isEmpty(qnaFiles)) return [];
 
-    const allSections = qnaFiles
-      .filter(({ id }) => id.endsWith('.source'))
-      .reduce((result: any[], qnaFile) => {
-        const res = generateQnASections(qnaFile);
-        return result.concat(res);
-      }, []);
+    const allSections = flatMap(
+      qnaFiles.filter(({ id }) => id.endsWith('.source')),
+      generateQnASections
+    );
     if (dialogId === 'all') {
       return allSections;
     } else {
-      const dialogSections = allSections.filter((t) => currentDialogImportedFileIds.includes(t.fileId));
+      const dialogSections = allSections.filter((t: QnASectionItem) => currentDialogImportedFileIds.includes(t.fileId));
       return dialogSections;
     }
   };
@@ -165,12 +165,10 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
 
-    const allSections = qnaFiles
-      .filter(({ id }) => id.endsWith('.source'))
-      .reduce((result: any[], qnaFile) => {
-        const res = generateQnASections(qnaFile);
-        return result.concat(res);
-      }, []);
+    const allSections = flatMap(
+      qnaFiles.filter(({ id }) => id.endsWith('.source')),
+      generateQnASections
+    );
     if (dialogId === 'all') {
       setQnASections(allSections);
     } else {
@@ -297,7 +295,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
         );
       };
 
-      const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
+      const onRenderOverflowButton = (overflowItems?: IContextualMenuItem[]): JSX.Element => {
         return (
           <IconButton
             hidden
