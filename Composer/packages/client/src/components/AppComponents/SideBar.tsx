@@ -14,7 +14,7 @@ import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { PageLink } from '../../types/window';
+import { PageLink } from '../../utils/pageLinks';
 
 import { useLinks } from './../../utils/hooks';
 

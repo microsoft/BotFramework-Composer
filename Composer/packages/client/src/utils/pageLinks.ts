@@ -4,9 +4,15 @@ import formatMessage from 'format-message';
 import { ExtensionPageContribution } from '@bfc/extension-client';
 import { checkForPVASchema } from '@bfc/shared';
 
-import { PageLink } from '../types/window';
-
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
+
+export type PageLink = {
+  to: string;
+  iconName: string;
+  labelName: string;
+  disabled: boolean;
+  match?: RegExp;
+};
 
 export const topLinks = (
   projectId: string,

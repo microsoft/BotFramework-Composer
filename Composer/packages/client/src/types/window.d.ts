@@ -36,11 +36,3 @@ declare global {
     __csrf__?: string;
   }
 }
-
-export type PageLink = {
-  to: string;
-  iconName: string;
-  labelName: string;
-  disabled: boolean;
-  match?: RegExp;
-};
