@@ -91,6 +91,22 @@ export const calculateTimeDiff = (time: any) => {
   return moment(time).fromNow();
 };
 
+function sanitizeString(str: string) {
+  if (str.match(/[}{']/g)) {
+    console.log('sanitizing ', str);
+    return `'${str.replace("'", "''")}'`;
+  }
+  return str;
+}
+
+function sanitizeLocale(data: { [key: string]: { message: string } }) {
+  const out = {};
+  for (const key of Object.keys(data)) {
+    out[key] = { message: sanitizeString(data[key].message) };
+  }
+  return out;
+}
+
 export async function loadLocale(locale: string) {
   // we're changing the locale, which might fail if we can't load it
   const resp = await httpClient.get(`/assets/locales/${locale}.json`);
@@ -101,13 +117,15 @@ export async function loadLocale(locale: string) {
     return null;
   } else {
     // We don't care about the return value except in our unit tests
+    console.log(data);
+
+    const sanitizedData = sanitizeLocale(data);
+
     return formatMessage.setup({
       locale: locale,
       generateId: generate.underscored_crc32,
       missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
-      translations: {
-        [locale]: data,
-      },
+      translations: sanitizedData,
     });
   }
 }
