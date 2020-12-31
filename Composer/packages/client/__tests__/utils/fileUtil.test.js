@@ -1,9 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import formatMessage from 'format-message';
-
-import { getExtension, getBaseName, upperCaseName, loadLocale } from '../../src/utils/fileUtil';
+import { getExtension, getBaseName, upperCaseName, loadLocale, getUniqueName } from '../../src/utils/fileUtil';
 import httpClient from '../../src/utils/httpUtil';
 
 jest.mock('../../src/utils/httpUtil');
@@ -66,5 +64,12 @@ describe('loadLocale', () => {
       missingTranslation: 'ignore',
       translations: { [LOCALE]: RESPONSE.data },
     });
+  });
+});
+
+describe('File utils', () => {
+  it('should get a unique name', () => {
+    const uniqueName = getUniqueName(['test', 'test-1', 'test-2', 'test-3'], 'test');
+    expect(uniqueName).toBe('test-4');
   });
 });

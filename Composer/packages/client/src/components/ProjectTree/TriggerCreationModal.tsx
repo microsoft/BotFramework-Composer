@@ -255,11 +255,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
   }
 
-  const onRenderOption = (option: IDropdownOption) => {
+  const onRenderOption = (option?: IDropdownOption) => {
+    if (option == null) return null;
     return (
       <div css={optionRow}>
         {option.text}
-        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
+        {option.data?.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
       </div>
     );
   };
@@ -287,7 +288,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     TelemetryClient.track('AddNewTriggerCompleted', { kind: formData.$kind });
   };
 
-  const onSelectTriggerType = (e, option) => {
+  const onSelectTriggerType = (e: React.FormEvent, option) => {
     setSelectedType(option.key || '');
     const compoundTypes = [activityTypeKey, eventTypeKey];
     const isCompound = compoundTypes.some((t) => option.key === t);
@@ -319,8 +320,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
   };
 
-  const onNameChange = (e, name) => {
+  const onNameChange = (e: React.FormEvent, name: string | undefined) => {
     const errors: TriggerFormDataErrors = {};
+    if (name == null) return;
     errors.intent = validateIntentName(selectedType, name);
     if (showTriggerPhrase && formData.triggerPhrases) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
@@ -328,8 +330,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
   };
 
-  const onChangeRegEx = (e, pattern) => {
+  const onChangeRegEx = (e: React.FormEvent, pattern: string | undefined) => {
     const errors: TriggerFormDataErrors = {};
+    if (pattern == null) return;
     errors.regEx = validateRegExPattern(selectedType, isRegEx, pattern);
     setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
@@ -371,7 +374,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
-            //@ts-ignore：
             onRenderOption={onRenderOption}
           />
           {showEventDropDown && (

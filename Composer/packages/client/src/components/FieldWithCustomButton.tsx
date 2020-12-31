@@ -172,7 +172,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
       if (!localValue) {
         setDisabled(true);
       }
-      onBlur && onBlur(localValue);
+      onBlur?.(localValue);
     },
   };
 
@@ -196,7 +196,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
         value={localValue}
         onChange={(e, value) => {
           setLocalValue(value ?? '');
-          onChange && onChange(e, value);
+          onChange?.(e, value);
         }}
       />
     ) : (
@@ -207,7 +207,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
         selectedKey={localValue}
         onChange={(e, option: IDropdownOption | undefined) => {
           setLocalValue((option?.key as string) ?? '');
-          onChange && onChange(e, option?.key);
+          onChange?.(e, option?.key);
         }}
       />
     );
