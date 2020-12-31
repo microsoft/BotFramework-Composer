@@ -6,14 +6,16 @@ import storage, { ClientStorage } from './storage';
 
 const KEY = 'LuFileStatus';
 
-interface ILuFileStatus {
+type LuFileStatus = {
   [fileId: string]: boolean;
-}
+};
+
+type LuFileRecord = { [projectId: string]: LuFileStatus };
 
 // add luis publish status to local storage
 class LuFileStatusStorage {
-  private storage: ClientStorage;
-  private _all: { [projectId: string]: ILuFileStatus };
+  private storage: ClientStorage<LuFileRecord>;
+  private _all: LuFileRecord;
 
   constructor() {
     this.storage = storage;

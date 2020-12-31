@@ -6,14 +6,16 @@ import storage, { ClientStorage } from './storage';
 
 const KEY = 'QnaFileStatus';
 
-interface IQnaFileStatus {
+type QnaFileStatus = {
   [fileId: string]: boolean;
-}
+};
+
+type QnaFileRecord = { [projectId: string]: QnaFileStatus };
 
 // add qna publish status to local storage
 class QnaFileStatusStorage {
-  private storage: ClientStorage;
-  private _all: { [projectId: string]: IQnaFileStatus };
+  private storage: ClientStorage<QnaFileRecord>;
+  private _all: QnaFileRecord;
 
   constructor() {
     this.storage = storage;
