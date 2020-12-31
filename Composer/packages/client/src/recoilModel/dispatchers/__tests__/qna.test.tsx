@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import { QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { qnaDispatcher } from '../qna';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -19,26 +19,26 @@ jest.mock('../../parsers/qnaWorker', () => {
     return cloned;
   };
   return {
-    parse: (id, content) => ({ id, content }),
-    removeSection: (projectId, qnaFile, sectionId) =>
+    parse: (id: string, content) => ({ id, content }),
+    removeSection: (projectId: string, qnaFile, sectionId: string) =>
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').removeSection(qnaFile, sectionId)),
-    insertSection: (projectId, qnaFile, position, sectionContent) =>
+    insertSection: (projectId: string, qnaFile, position, sectionContent) =>
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').insertSection(qnaFile, position, sectionContent)),
-    createQnAQuestion: (projectId, qnaFile, sectionId, questionContent) =>
+    createQnAQuestion: (projectId: string, qnaFile, sectionId: string, questionContent) =>
       filterParseResult(
         require('@bfc/indexers/lib/utils/qnaUtil').createQnAQuestion(qnaFile, sectionId, questionContent)
       ),
-    updateQnAQuestion: (projectId, qnaFile, sectionId, questionId, questionContent) =>
+    updateQnAQuestion: (projectId: string, qnaFile, sectionId: string, questionId: string, questionContent) =>
       filterParseResult(
         require('@bfc/indexers/lib/utils/qnaUtil').updateQnAQuestion(qnaFile, sectionId, questionId, questionContent)
       ),
-    removeQnAQuestion: (projectId, qnaFile, sectionId, questionId) =>
+    removeQnAQuestion: (projectId: string, qnaFile, sectionId: string, questionId: string) =>
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').removeQnAQuestion(qnaFile, sectionId, questionId)),
-    updateQnAAnswer: (projectId, qnaFile, sectionId, answerContent) =>
+    updateQnAAnswer: (projectId: string, qnaFile, sectionId: string, answerContent) =>
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').updateQnAAnswer(qnaFile, sectionId, answerContent)),
-    addImport: (projectId, qnaFile, path) =>
+    addImport: (projectId: string, qnaFile: string, path: string) =>
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').addImport(qnaFile, path)),
-    removeImport: (projectId, qnaFile, path) =>
+    removeImport: (projectId: string, qnaFile, path: string) =>
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').removeImport(qnaFile, path)),
   };
 });
@@ -55,19 +55,20 @@ const qna1 = qnaUtil.parse('common.en-us', content);
 const qnaFiles = [qna1];
 
 describe('QnA dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const [qnaFiles, setQnAFiles] = useRecoilState(qnaFilesState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
+  const useRecoilTestHook = () => {
+    const [qnaFiles, setQnAFiles] = useRecoilState(qnaFilesState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
 
-      return {
-        qnaFiles,
-        setQnAFiles,
-        currentDispatcher,
-      };
+    return {
+      qnaFiles,
+      setQnAFiles,
+      currentDispatcher,
     };
+  };
 
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: qnaFilesState(projectId), initialValue: qnaFiles },
@@ -206,7 +207,7 @@ describe('QnA dispatcher', () => {
 
     const createdFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide.en-us');
     expect(createdFile).not.toBeFalsy();
-    expect(createdFile.content).toBe('> guide');
+    expect(createdFile!.content).toBe('> guide');
 
     await act(async () => {
       await dispatcher.removeQnAFile({
@@ -233,7 +234,7 @@ describe('QnA dispatcher', () => {
     expect(createdFile).not.toBeFalsy();
 
     const commonFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'common.en-us');
-    expect(commonFile.content).toContain('[import](guide.source.qna)');
+    expect(commonFile?.content).toContain('[import](guide.source.qna)');
   });
 
   it('should rename qna kb and re-create import', async () => {
@@ -270,7 +271,7 @@ describe('QnA dispatcher', () => {
     expect(createdFile2).not.toBeFalsy();
 
     const commonFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'common.en-us');
-    expect(commonFile.content).toContain('[import](guide2.source.qna)');
-    expect(commonFile.content).not.toContain('[import](guide.source.qna)');
+    expect(commonFile?.content).toContain('[import](guide2.source.qna)');
+    expect(commonFile?.content).not.toContain('[import](guide.source.qna)');
   });
 });

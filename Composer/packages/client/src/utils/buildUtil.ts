@@ -71,7 +71,7 @@ export function needsBuild(dialogs) {
 //now CrossTrainedRecognizerSet and LuisRecognizer's recognizer is abbreviated
 //as recognizer: '***.lu.qna'
 export function getRecognizerTypes(dialogs: DialogInfo[]) {
-  return dialogs.reduce((result, { id, content }) => {
+  return dialogs.reduce((result: { [key: string]: any }, { id, content }) => {
     const { recognizer } = content;
     if (typeof recognizer === 'string') {
       if (recognizer.endsWith('.lu.qna')) {
