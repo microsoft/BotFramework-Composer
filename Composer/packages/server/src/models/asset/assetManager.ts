@@ -120,11 +120,6 @@ export class AssetManager {
     });
 
     // find selected template
-    console.log(ExtensionContext.extensions.botTemplates);
-    // const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
-    // if (template === undefined || (template.path === undefined && template.package === undefined)) {
-    //   throw new Error(`no such template with id ${templateId}`);
-    // }
     const npmPackageName = templateId;
     const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 

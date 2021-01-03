@@ -11,9 +11,11 @@ import {
   RuntimeTemplate,
   IBotProject,
   IExtensionContext,
+  FeatureFlagKey,
 } from '@botframework-composer/types';
 
 import { BotProjectService } from '../../services/project';
+import { FeatureFlagService } from '../../services/featureFlags';
 
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
@@ -48,6 +50,10 @@ class ExtensionContext implements IExtensionContext {
 
   public get botProjectService() {
     return BotProjectService;
+  }
+
+  public get featureFlagService() {
+    return FeatureFlagService;
   }
 
   // allow webserver to be set programmatically
@@ -98,6 +104,10 @@ class ExtensionContext implements IExtensionContext {
 
   public async getUserFromRequest(req): Promise<UserIdentity | undefined> {
     return req.user || undefined;
+  }
+
+  public async getFeatureFlagEnabledValue(featureFlagKey: FeatureFlagKey): Promise<boolean> {
+    return this.featureFlagService.getFeatureFlagValue(featureFlagKey);
   }
 
   public async getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject> {
