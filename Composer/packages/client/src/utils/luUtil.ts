@@ -36,14 +36,12 @@ export function getLuisBuildLuFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
 }
 
 function generateErrorMessage(invalidLuFile: LuFile[]) {
-  return invalidLuFile.reduce((msg, file) => {
-    const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
-      text += `\n ${createSingleMessage(diagnostic)}`;
-      return text;
-    }, `In ${file.id}.lu: `);
-    msg += `\n ${fileErrorText} \n`;
-    return msg;
-  }, '');
+  return invalidLuFile
+    .map((file) => {
+      const fileErrorText = `In ${file.id}.lu: ` + file.diagnostics.map(createSingleMessage).join('\n ');
+      return `\n ${fileErrorText} \n`;
+    })
+    .join();
 }
 
 export function checkLuisBuild(luFiles: LuFile[], dialogs: DialogInfo[]) {

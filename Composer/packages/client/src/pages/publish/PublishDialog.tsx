@@ -90,7 +90,7 @@ export const PublishDialog = (props) => {
     await props.onSubmit(showItems);
     cleanComments();
   };
-  return showItems && showItems.length > 0 ? (
+  return showItems?.length > 0 ? (
     <Dialog
       dialogContentProps={publishDialogProps}
       hidden={false}
