@@ -3,7 +3,7 @@
 
 import { useRecoilValue } from 'recoil';
 import test from '@bfc/indexers';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -26,7 +26,7 @@ const projectId = '42345.23432';
 jest.mock('@bfc/indexers', () => {
   return {
     dialogIndexer: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
@@ -34,37 +34,37 @@ jest.mock('@bfc/indexers', () => {
     validateDialog: () => [],
     autofixReferInDialog: (_, content) => content,
     lgIndexer: {
-      parse: (content, id) => ({
+      parse: (content, id: string) => ({
         id,
         content,
       }),
     },
     luIndexer: {
-      parse: (content, id) => ({
+      parse: (content, id: string) => ({
         id,
         content,
       }),
     },
     qnaIndexer: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
     },
     lgUtil: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
     },
     luUtil: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
     },
     qnaUtil: {
-      parse: (id, content) => ({
+      parse: (id: string, content) => ({
         id,
         content,
       }),
@@ -74,7 +74,7 @@ jest.mock('@bfc/indexers', () => {
 
 jest.mock('../../parsers/luWorker', () => {
   return {
-    parse: (id, content) => ({ id, content }),
+    parse: (id: string, content) => ({ id, content }),
     addIntent: require('@bfc/indexers/lib/utils/luUtil').addIntent,
     addIntents: require('@bfc/indexers/lib/utils/luUtil').addIntents,
     updateIntent: require('@bfc/indexers/lib/utils/luUtil').updateIntent,
@@ -85,7 +85,7 @@ jest.mock('../../parsers/luWorker', () => {
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
-    parse: (id, content) => ({ id, content }),
+    parse: (id: string, content) => ({ id, content }),
     addTemplate: require('../../../utils/lgUtil').addTemplate,
     addTemplates: require('../../../utils/lgUtil').addTemplates,
     updateTemplate: require('../../../utils/lgUtil').updateTemplate,
@@ -97,37 +97,38 @@ jest.mock('../../parsers/lgWorker', () => {
 
 jest.mock('../../parsers/qnaWorker', () => {
   return {
-    parse: (id, content) => ({ id, content }),
+    parse: (id: string, content) => ({ id, content }),
   };
 });
 
 describe('dialog dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-      const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-      const luFiles = useRecoilValue(luFilesState(projectId));
-      const lgFiles = useRecoilValue(lgFilesState(projectId));
-      const actionsSeed = useRecoilValue(actionsSeedState(projectId));
-      const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState(projectId));
-      const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-      const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
+  const useRecoilTestHook = () => {
+    const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+    const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+    const luFiles = useRecoilValue(luFilesState(projectId));
+    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const actionsSeed = useRecoilValue(actionsSeedState(projectId));
+    const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState(projectId));
+    const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
+    const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
 
-      return {
-        dialogs,
-        dialogSchemas,
-        luFiles,
-        lgFiles,
-        currentDispatcher,
-        actionsSeed,
-        onCreateDialogComplete,
-        showCreateDialogModal,
-        qnaFiles,
-      };
+    return {
+      dialogs,
+      dialogSchemas,
+      luFiles,
+      lgFiles,
+      currentDispatcher,
+      actionsSeed,
+      onCreateDialogComplete,
+      showCreateDialogModal,
+      qnaFiles,
     };
+  };
 
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
@@ -168,7 +169,7 @@ describe('dialog dispatcher', () => {
     await act(async () => {
       dispatcher.updateDialog({ id: '1', content: 'new', projectId });
     });
-    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '1').content).toEqual('new');
+    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '1')?.content).toEqual('new');
   });
 
   it('creates a dialog file', async () => {
@@ -178,7 +179,7 @@ describe('dialog dispatcher', () => {
     expect(renderedComponent.current.luFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.lgFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.qnaFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
-    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100').content).toEqual('abcde');
+    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100')?.content).toEqual('abcde');
   });
 
   it('begins creating a dialog', async () => {
