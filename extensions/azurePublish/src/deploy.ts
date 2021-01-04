@@ -101,7 +101,7 @@ export class BotProjectDeploy {
       // this returns a pathToArtifacts where the deployable version lives.
       const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, settings, profileName);
 
-      if (settings.httpProxy) {
+      if (proxySettings) {
         proxy.stop();
       }
       // STEP 4: ZIP THE ASSETS
@@ -132,7 +132,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_ERROR,
         message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       });
-      if (settings.httpProxy) {
+      if (proxySettings) {
         proxy.stop();
       }
       throw error;
@@ -209,6 +209,8 @@ export class BotProjectDeploy {
           },
           maxContentLength: Infinity,
           maxBodyLength: Infinity
+        }).catch(error => {
+          throw error;
         })
       }
       this.logger({
