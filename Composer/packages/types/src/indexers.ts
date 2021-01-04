@@ -116,7 +116,6 @@ export type LuFile = {
   resource: LuParseResource;
   imports: { id: string; path: string; description: string }[];
   published?: boolean;
-  [key: string]: any;
 };
 
 export type LuParseResourceSection = {
