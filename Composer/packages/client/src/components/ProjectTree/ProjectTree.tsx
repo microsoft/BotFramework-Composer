@@ -120,7 +120,7 @@ export type TreeMenuItem = {
   onClick?: (link: TreeLink) => void;
 };
 
-function getTriggerName(trigger: ITrigger) {
+function getTriggerName(trigger: ITrigger): string {
   return trigger.displayName || getFriendlyName({ $kind: trigger.type });
 }
 
@@ -221,8 +221,7 @@ export const ProjectTree: React.FC<Props> = ({
   const pageElements = useRecoilValue(pageElementState).dialogs;
   const leftSplitWidth = pageElements?.leftSplitWidth ?? treeRef?.current?.clientWidth ?? 0;
   const getPageElement = (name: string) => pageElements?.[name];
-  const setPageElement = (name: string, value: any) =>
-    setPageElementState('dialogs', { ...pageElements, [name]: value });
+  const setPageElement = (name: string, value) => setPageElementState('dialogs', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
@@ -408,7 +407,7 @@ export const ProjectTree: React.FC<Props> = ({
       projectId: rootProjectId,
       skillId: skillId === rootProjectId ? undefined : skillId,
     };
-    const menu: any[] = [
+    const menu: TreeMenuItem[] = [
       {
         label: formatMessage('Add a trigger'),
         icon: 'Add',
@@ -452,7 +451,7 @@ export const ProjectTree: React.FC<Props> = ({
       menu.push({
         label: formatMessage('Edit schema'),
         icon: 'Edit',
-        onClick: (link) =>
+        onClick: (link: TreeLink) =>
           navigateToFormDialogSchema({ projectId: link.skillId ?? link.projectId, schemaId: link.dialogId }),
       });
     }
@@ -513,7 +512,17 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderTrigger = (item: any, dialog: DialogInfo, projectId: string, dialogLink: TreeLink): React.ReactNode => {
+  const renderTrigger = (
+    item: ITrigger & {
+      index: number;
+      displayName: string;
+      warningContent: string | (() => string);
+      errorContent: boolean;
+    },
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink
+  ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
@@ -555,7 +564,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const onFilter = (_e?: any, newValue?: string): void => {
+  const onFilter = (_e, newValue?: string): void => {
     if (typeof newValue === 'string') {
       delayedSetFilter(newValue);
     }
