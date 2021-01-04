@@ -181,7 +181,7 @@ export const getSensitiveProperties = (settings: DialogSetting) => {
   return sensitiveProperties;
 };
 
-export const getMergedSettings = (projectId, settings, botName): DialogSetting => {
+export const getMergedSettings = (projectId: string, settings: DialogSetting, botName: string): DialogSetting => {
   let mergedSettings = mergeLocalStorage(projectId, settings);
   mergedSettings = mergeLuisName(mergedSettings, botName);
   if (Array.isArray(mergedSettings.skill)) {
@@ -592,7 +592,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
   set(botProjectIdsState, [rootBotProjectId]);
   // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
-  if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
+  if (botFiles?.botProjectSpaceFiles?.length) {
     const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
 
     if (mergedSettings.skill) {

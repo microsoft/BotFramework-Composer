@@ -185,7 +185,7 @@ export const PublishController = {
     // get the publish plugin key
     const extensionName = profile ? profile.type : '';
 
-    if (profile && extensionImplementsMethod(extensionName, 'history')) {
+    if (profile && extensionImplementsMethod(extensionName, 'getHistory')) {
       // get the externally defined method
       const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.getHistory;
       if (typeof pluginMethod === 'function') {
