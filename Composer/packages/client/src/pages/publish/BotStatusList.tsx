@@ -20,14 +20,13 @@ import { navigateTo } from '../../utils/navigation';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
-import { Bot, BotPublishHistory, BotPublishTargets, BotPublishType, BotStatus } from './type';
+import { Bot, BotPublishHistory, BotPropertyType, BotStatus } from './type';
 
 export type IBotStatusListProps = {
   projectId: string;
   botList: Bot[];
-  botPublishTargetsList: BotPublishTargets[];
-  botPublishHistoryList: BotPublishHistory[];
-  botPublishTypesList: BotPublishType[];
+  botPropertyData: BotPropertyType;
+  botPublishHistoryList: BotPublishHistory;
   publishDisabled: boolean;
   updateItems: (items: BotStatus[]) => void;
   updatePublishHistory: (items: PublishResult[], item: BotStatus) => void;
@@ -38,14 +37,13 @@ export type IBotStatusListProps = {
 
 const generateBotList = (
   botList: Bot[],
-  botPublishTargetsList: BotPublishTargets[],
-  botPublishHistoryList: BotPublishHistory[]
+  botPropertyData: BotPropertyType,
+  botPublishHistoryList: BotPublishHistory
 ): BotStatus[] => {
   const bots = botList.map((bot) => {
     const botStatus: BotStatus = Object.assign({}, bot);
-    const publishTargets =
-      botPublishTargetsList.find((targetMap) => targetMap.projectId === bot.id)?.publishTargets || [];
-    const publishHistory = botPublishHistoryList.find((historyMap) => historyMap.projectId === bot.id)?.publishHistory;
+    const publishTargets = botPropertyData[bot.id].publishTargets;
+    const publishHistory = botPublishHistoryList[bot.id];
     if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
       botStatus.publishTargets = publishTargets;
       if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
@@ -64,9 +62,8 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const {
     projectId,
     botList,
-    botPublishTargetsList,
+    botPropertyData,
     botPublishHistoryList,
-    botPublishTypesList,
     publishDisabled,
     updateItems,
     updatePublishHistory,
@@ -79,8 +76,8 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
 
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
   const items: BotStatus[] = useMemo(() => {
-    return generateBotList(botList, botPublishTargetsList, botPublishHistoryList);
-  }, [botList, botPublishTargetsList, botPublishHistoryList]);
+    return generateBotList(botList, botPropertyData, botPublishHistoryList);
+  }, [botList, botPropertyData, botPublishHistoryList]);
   const sortByName = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
       column.isSortedDescending = !column.isSortedDescending;
@@ -306,12 +303,10 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const onRenderRow = (props, defaultRender) => {
     const { item }: { item: BotStatus } = props;
     const publishStatusList: PublishResult[] = item.publishTarget
-      ? botPublishHistoryList.find((list) => list.projectId === item.id)?.publishHistory[item.publishTarget] || []
+      ? botPublishHistoryList[item.id][item.publishTarget] || []
       : [];
     const target = item.publishTargets?.find((target) => target.name === item.publishTarget);
-    const publishType = botPublishTypesList
-      .find((type) => type.projectId === item.id)
-      ?.publishTypes?.filter((t) => t.name === target?.type)[0];
+    const publishType = botPropertyData[item.id].publishTypes?.filter((t) => t.name === target?.type)[0];
     const isRollbackSupported = !!target && !!publishType?.features?.rollback;
     const handleRollbackClick = (selectedVersion) => {
       onRollbackClick(selectedVersion, item);

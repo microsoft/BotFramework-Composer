@@ -21,22 +21,13 @@ export type Bot = {
   publishTarget: string;
 };
 
-export type BotSetting = {
-  projectId: string;
+type BotProperty = {
   setting: DialogSetting;
-};
-
-export type BotPublishTargets = {
-  projectId: string;
   publishTargets: PublishTarget[];
-};
-
-export type BotPublishType = {
-  projectId: string;
   publishTypes: PublishType[];
 };
-
-export type BotPublishHistory = {
-  projectId: string;
-  publishHistory: Record<string, PublishResult[]>;
+export type BotPropertyType = {
+  [key: string]: BotProperty;
 };
+
+export type BotPublishHistory = Record<string, Record<string, PublishResult[]>>;
