@@ -115,6 +115,7 @@ export type LuFile = {
   empty: boolean;
   resource: LuParseResource;
   imports: { id: string; path: string; description: string }[];
+  published?: boolean;
   [key: string]: any;
 };
 
@@ -129,7 +130,6 @@ export type LuParseResourceSection = {
   Questions: string[];
   ModelInfo: string;
   [key: string]: any;
-  published?: boolean;
 };
 
 export type LuParseResource = {
