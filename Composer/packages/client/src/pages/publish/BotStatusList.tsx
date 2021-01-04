@@ -101,7 +101,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const onRenderOption = (option?: IDropdownOption): JSX.Element | null => {
     if (!option) return null;
     const style = {
-      ...(option.data && option.data.style),
+      ...option.data?.style,
       width: '80%',
       textOverflow: 'ellipsis',
       overflow: 'hidden',
