@@ -209,7 +209,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
       >
-        <Pivot aria-label="Basic Pivot Example" onLinkClick={setSelectedFeed}>
+        <Pivot onLinkClick={setSelectedFeed}>
           <PivotItem headerText="C#"></PivotItem>
           <PivotItem headerText="Typescript"></PivotItem>
         </Pivot>

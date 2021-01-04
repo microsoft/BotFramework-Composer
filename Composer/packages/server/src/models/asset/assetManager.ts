@@ -155,24 +155,6 @@ export class AssetManager {
     return true;
   }
 
-  // private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
-  //   // install package
-  //   if (template.package) {
-  //     const { stderr: initErr } = await execAsync(`dotnet new -i ${template.package.packageName}`);
-  //     if (initErr) {
-  //       throw new Error(initErr);
-  //     }
-  //     const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
-  //       cwd: destinationPath,
-  //     });
-  //     if (initErr2) {
-  //       throw new Error(initErr2);
-  //     }
-  //   } else {
-  //     throw new Error('selected template has no local or external address');
-  //   }
-  // }
-
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
     const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
     if (template === undefined || (template.path === undefined && template.package === undefined)) {
