@@ -10,7 +10,7 @@ import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 
-import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
+import { Split } from '../../components/Split/Split';
 import {
   dispatcherState,
   formDialogErrorState,
@@ -51,6 +51,8 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
+
+  //const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const generationStartedRef = React.useRef(false);
   const generationPendingNotificationIdRef = React.useRef<string | undefined>();
@@ -185,10 +187,20 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     [createFormDialogSchema, setCreateSchemaDialogOpen]
   );
 
+  // const onMeasuredSizesChanged = (_sizes: SplitMeasuredSizes) => {
+  //   console.log('form dialog page - onMeasuredSizesChanged');
+  //   //setPageElementState('forms', { leftSplitWidth: sizes.primary });
+  // };
+
   return (
     <>
       <Stack horizontal verticalFill>
-        <LeftRightSplit initialLeftGridWidth={320} minLeftPixels={320} minRightPixels={800} pageMode={'forms'}>
+        <Split
+          initialPrimarySize="320px"
+          minPrimarySize="320px"
+          minSecondarySize="800px"
+          //onMeasuredSizesChanged={onMeasuredSizesChanged}
+        >
           <FormDialogSchemaList
             items={formDialogSchemaIds}
             loading={formDialogGenerationProgressing}
@@ -220,7 +232,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
               </Text>
             </EmptyView>
           )}
-        </LeftRightSplit>
+        </Split>
       </Stack>
       {createSchemaDialogOpen ? (
         <CreateFormDialogSchemaModal

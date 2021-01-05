@@ -7,7 +7,7 @@ import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
-import { LeftRightSplit } from '../components/Split/LeftRightSplit';
+import { Split } from '../components/Split/Split';
 import { navigateTo, buildURL } from '../utils/navigation';
 import { PageMode } from '../recoilModel';
 
@@ -124,6 +124,13 @@ const Page: React.FC<IPageProps> = (props) => {
     fileId,
   } = props;
 
+  //const { setPageElementState } = useRecoilValue(dispatcherState);
+
+  // const onMeasuredSizesChanged = (_sizes: SplitMeasuredSizes) => {
+  //   console.log('page - onMeasuredSizesChanged');
+  //   //setPageElementState(pageMode, { leftSplitWidth: sizes.primary });
+  // };
+
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
@@ -133,7 +140,12 @@ const Page: React.FC<IPageProps> = (props) => {
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={pageMode}>
+          <Split
+            initialPrimarySize="20%"
+            minPrimarySize="200px"
+            minSecondarySize="800px"
+            //onMeasuredSizesChanged={onMeasuredSizesChanged}
+          >
             {useNewTree ? (
               <ProjectTree
                 defaultSelected={{
@@ -170,7 +182,7 @@ const Page: React.FC<IPageProps> = (props) => {
             >
               {children}
             </div>
-          </LeftRightSplit>
+          </Split>
         </div>
       </div>
     </div>
