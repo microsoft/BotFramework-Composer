@@ -27,7 +27,7 @@ export class PublishStatusPollingUpdater {
     this.targetName = targetName;
   }
 
-  async start(onData) {
+  async start(onData, onAction) {
     if (!(this.botProjectId && this.targetName)) return;
     if (this.status === PollingStateEnum.Open) return;
     try {
@@ -39,12 +39,16 @@ export class PublishStatusPollingUpdater {
         try {
           const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
           onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
+          onAction && onAction({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
         } catch (err) {
           onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
+          onAction &&
+            onAction({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
         }
       }, this.pollingInterval);
     } catch (err) {
       onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
+      onAction && onAction({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
     }
   }
 
@@ -56,9 +60,9 @@ export class PublishStatusPollingUpdater {
     this.status = PollingStateEnum.Closed;
   }
 
-  restart(onData) {
+  restart(onData, onAction) {
     this.stop();
-    this.start(onData);
+    this.start(onData, onAction);
   }
 
   isSameUpdater(botProjectId, targetName) {

@@ -77,7 +77,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       )
       .map((bot) => {
         const updater = new PublishStatusPollingUpdater({ botProjectId: bot.id, targetName: bot.publishTarget });
-        updater.start(updateData);
+        updater.start(updateData, changeNotificationStatus);
         pollingUpdaterList.push(updater);
       });
   }, [botList]);
@@ -85,18 +85,22 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   // updater onData function
   const updateData = async (data) => {
     const { botProjectId, targetName, apiResponse } = data;
-    const updater = pollingUpdaterList.find((i) => i.isSameUpdater(botProjectId, targetName));
-    const updatedBot = botList.find((bot) => bot.id === botProjectId);
     const publishTargets = botPropertyData[botProjectId].publishTargets;
-    if (!updatedBot || !publishTargets || !updater) return;
-    const responseData = apiResponse.data;
+    if (!publishTargets) return;
 
     const selectedTarget = publishTargets.find((target) => target.name === targetName);
     // set recoil value
     await getPublishStatusV2(botProjectId, selectedTarget, apiResponse);
+  };
 
-    // change notifications status
-    // This will move to an effect hook
+  // updater onAction function
+  const changeNotificationStatus = async (data) => {
+    const { botProjectId, targetName, apiResponse } = data;
+    const updater = pollingUpdaterList.find((i) => i.isSameUpdater(botProjectId, targetName));
+    const updatedBot = botList.find((bot) => bot.id === botProjectId);
+    if (!updatedBot || !updater) return;
+    const responseData = apiResponse.data;
+
     if (
       responseData.status === ApiStatus.Success ||
       responseData.status === ApiStatus.Unknow ||
@@ -257,7 +261,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
         const updater = pollingUpdaterList.find((u) => u.isSameUpdater(botProjectId, bot.publishTarget));
-        updater && updater.restart(updateData);
+        updater && updater.restart(updateData, changeNotificationStatus);
       }
     }
   };
