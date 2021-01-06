@@ -6,7 +6,6 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport } from '@bfc/shared';
 import debounce from 'lodash/debounce';
@@ -19,9 +18,10 @@ import isEqual from 'lodash/isEqual';
 import {
   dispatcherState,
   rootBotProjectIdSelector,
-  botProjectSpaceSelector,
+  TreeDataPerProject,
   jsonSchemaFilesByProjectIdSelector,
   pageElementState,
+  projectTreeSelector,
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -102,7 +102,7 @@ const sortTriggerGroups = (x: string, y: string): number => {
 export type TreeLink = {
   displayName: string;
   isRoot: boolean;
-  bot?: BotInProject;
+  bot?: TreeDataPerProject;
   diagnostics: Diagnostic[];
   projectId: string;
   skillId?: string;
@@ -123,33 +123,6 @@ export type TreeMenuItem = {
 function getTriggerName(trigger: ITrigger): string {
   return trigger.displayName || getFriendlyName({ $kind: trigger.type });
 }
-
-function sortDialog(dialogs: DialogInfo[]) {
-  const dialogsCopy = cloneDeep(dialogs);
-  return dialogsCopy.sort((x, y) => {
-    if (x.isRoot) {
-      return -1;
-    } else if (y.isRoot) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
-}
-
-type BotInProject = {
-  dialogs: DialogInfo[];
-  projectId: string;
-  name: string;
-  isRemote: boolean;
-  isRootBot: boolean;
-  diagnostics: Diagnostic[];
-  error: { [key: string]: any };
-  buildEssentials: { [key: string]: any };
-  isPvaSchema: boolean;
-  lgImports: Record<string, LanguageFileImport[]>;
-  luImports: Record<string, LanguageFileImport[]>;
-};
 
 type Props = {
   navLinks?: TreeLink[];
@@ -227,23 +200,24 @@ export const ProjectTree: React.FC<Props> = ({
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
+
   const debouncedTelemetry = useRef(debounce(() => TelemetryClient.track('ProjectTreeFilterUsed'), 1000)).current;
+
   const delayedSetFilter = throttle((newValue) => {
     setFilter(newValue);
     debouncedTelemetry();
   }, 200);
+
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
-    ...bot,
-    hasWarnings: false,
-  }));
 
   useEffect(() => {
-    setSelectedLink(defaultSelected);
+    if (!isEqual(selectedLink, defaultSelected)) {
+      setSelectedLink(defaultSelected);
+    }
   }, [defaultSelected]);
 
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
-  const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
+  const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelector);
 
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
@@ -263,10 +237,10 @@ export const ProjectTree: React.FC<Props> = ({
   for (const bot of projectCollection) {
     notificationMap[bot.projectId] = {};
 
-    const matchingBot = botProjectSpace?.filter((project) => project.projectId === bot.projectId)[0];
+    const matchingBot = projectCollection?.filter((project) => project.projectId === bot.projectId)[0];
     if (matchingBot == null) continue;
 
-    for (const dialog of matchingBot.dialogs) {
+    for (const dialog of matchingBot.sortedDialogs) {
       const dialogId = dialog.id;
       notificationMap[bot.projectId][dialogId] = dialog.diagnostics;
 
@@ -289,7 +263,7 @@ export const ProjectTree: React.FC<Props> = ({
   const formDialogSchemaExists = (projectId: string, dialog: DialogInfo) => {
     return (
       dialogIsFormDialog(dialog) &&
-      !!botProjectSpace?.find((s) => s.projectId === projectId)?.formDialogSchemas.find((fd) => fd.id === dialog.id)
+      !!projectCollection?.find((s) => s.projectId === projectId)?.formDialogSchemas.find((fd) => fd.id === dialog.id)
     );
   };
 
@@ -312,7 +286,7 @@ export const ProjectTree: React.FC<Props> = ({
     onSelect?.(link);
   };
 
-  const renderBotHeader = (bot: BotInProject) => {
+  const renderBotHeader = (bot: TreeDataPerProject) => {
     const displayName = `${bot.name} ${rootProjectId !== bot.projectId ? `(${formatMessage('Skill')})` : ''}`;
     const link: TreeLink = {
       displayName,
@@ -320,10 +294,10 @@ export const ProjectTree: React.FC<Props> = ({
       skillId: rootProjectId === bot.projectId ? undefined : bot.projectId,
       isRoot: true,
       bot,
-      diagnostics: bot.diagnostics,
+      diagnostics: [],
       onErrorClick: onErrorClick,
     };
-    const isRunning = bot.buildEssentials.status === BotStatus.connected;
+    const isRunning = bot.status === BotStatus.connected;
 
     const menu = [
       {
@@ -751,9 +725,9 @@ export const ProjectTree: React.FC<Props> = ({
       });
   };
 
-  const createDetailsTree = (bot: BotInProject, startDepth: number) => {
+  const createDetailsTree = (bot: TreeDataPerProject, startDepth: number) => {
     const { projectId } = bot;
-    const dialogs = sortDialog(bot.dialogs);
+    const dialogs = bot.sortedDialogs;
 
     const filteredDialogs =
       filter == null || filter.length === 0
@@ -808,7 +782,7 @@ export const ProjectTree: React.FC<Props> = ({
     }
   };
 
-  const createBotSubtree = (bot: BotInProject & { hasWarnings: boolean }) => {
+  const createBotSubtree = (bot: TreeDataPerProject) => {
     const key = 'bot-' + bot.projectId;
     if (options.showDialogs && !bot.isRemote) {
       return (

@@ -7,6 +7,7 @@ import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
 import { LanguageFileImport } from '../../../../types/src';
+import { BotStatus } from '../../constants';
 import {
   botDisplayNameState,
   botErrorState,
@@ -28,6 +29,7 @@ import {
   dialogIdsState,
   dialogState,
   schemasState,
+  botStatusState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
@@ -36,6 +38,21 @@ import {
   lgImportsSelectorFamily,
   luImportsSelectorFamily,
 } from '../selectors';
+
+// Selector return types
+export type TreeDataPerProject = {
+  isRemote: boolean;
+  isRootBot: boolean;
+  projectId: string;
+  sortedDialogs: DialogInfo[];
+  lgImports: Record<string, LanguageFileImport[]>;
+  luImports: Record<string, LanguageFileImport[]>;
+  name: string;
+  status: BotStatus;
+  isPvaSchema: boolean;
+  formDialogSchemas: FormDialogSchema[];
+  error: any;
+};
 
 // Actions
 export const localBotsWithoutErrorsSelector = selector({
@@ -131,18 +148,6 @@ export const botProjectSpaceSelector = selector({
         crossTrainConfig: {},
       };
 
-      const lgImports: Record<string, LanguageFileImport[]> = {};
-
-      dialogs.forEach((d) => {
-        lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
-      });
-
-      const luImports: Record<string, LanguageFileImport[]> = {};
-
-      dialogs.forEach((d) => {
-        luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
-      });
-
       const diagnostics = BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
       const publishTypes = get(publishTypesState(projectId));
 
@@ -159,8 +164,6 @@ export const botProjectSpaceSelector = selector({
         buildEssentials,
         isPvaSchema,
         publishTypes,
-        lgImports,
-        luImports,
       };
     });
     return result;
@@ -242,5 +245,57 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
       });
       return result;
     }, {});
+  },
+});
+
+export const projectTreeSelector = selector<TreeDataPerProject[]>({
+  key: 'projectTreeSelectorData',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    return projectIds.map((projectId: string) => {
+      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+      const dialogs = get(validateDialogsSelectorFamily(projectId));
+      const sortedDialogs = [...dialogs].sort((x, y) => {
+        if (x.isRoot) {
+          return -1;
+        } else if (y.isRoot) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      const botError = get(botErrorState(projectId));
+      const status = get(botStatusState(projectId));
+      const name = get(botDisplayNameState(projectId));
+
+      const lgImports: Record<string, LanguageFileImport[]> = {};
+      const luImports: Record<string, LanguageFileImport[]> = {};
+
+      debugger;
+      dialogs.forEach((d) => {
+        lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+      });
+
+      const schemas = get(schemasState(projectId));
+      const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
+
+      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+
+      return {
+        projectId,
+        isRemote,
+        isRootBot,
+        sortedDialogs,
+        luImports,
+        lgImports,
+        status,
+        name,
+        isPvaSchema,
+        formDialogSchemas,
+        error: botError,
+      };
+    });
   },
 });
