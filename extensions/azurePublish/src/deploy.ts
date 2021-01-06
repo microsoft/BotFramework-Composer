@@ -4,7 +4,7 @@
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-import * as rp from 'request-promise';
+import * as https from 'https';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
@@ -183,9 +183,13 @@ export class BotProjectDeploy {
           proxy: {
             host: host,
             port: port,
+            protocol: protocol
           },
           maxContentLength: Infinity,
-          maxBodyLength: Infinity
+          maxBodyLength: Infinity,
+          httpsAgent: new https.Agent({
+            rejectUnauthorized: false
+          })
         })
       }
       else {
@@ -199,8 +203,6 @@ export class BotProjectDeploy {
           },
           maxContentLength: Infinity,
           maxBodyLength: Infinity
-        }).catch(error => {
-          throw error;
         })
       }
       this.logger({
