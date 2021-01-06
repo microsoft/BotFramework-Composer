@@ -16,7 +16,6 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 
-import { navigateTo } from '../../utils/navigation';
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { PublishStatusList } from './PublishStatusList';
@@ -24,11 +23,11 @@ import { detailList, listRoot, tableView } from './styles';
 import { Bot, BotPublishHistory, BotPropertyType, BotStatus } from './type';
 
 export interface BotStatusListProps {
-  projectId: string;
   botList: Bot[];
   botPropertyData: BotPropertyType;
   botPublishHistoryList: BotPublishHistory;
   publishDisabled: boolean;
+  managePublishProfile: (skillId: string) => void;
   updateItems: (items: BotStatus[]) => void;
   updateSelectedBots: (items: BotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
@@ -60,11 +59,11 @@ const generateBotList = (
 };
 
 export const BotStatusList: React.FC<BotStatusListProps> = ({
-  projectId,
   botList,
   botPropertyData,
   botPublishHistoryList,
   publishDisabled,
+  managePublishProfile,
   updateItems,
   changePublishTarget,
   updateSelectedBots,
@@ -140,14 +139,10 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const handleChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
     if (option) {
       if (option.key === 'manageProfiles') {
-        const url =
-          item.id === projectId
-            ? `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`
-            : `bot/${projectId}/skill/${item.id}/botProjectsSettings/#addNewPublishProfile`;
-        navigateTo(url);
-        return;
+        managePublishProfile(item.id);
+      } else {
+        changePublishTarget(option.text, item);
       }
-      changePublishTarget(option.text, item);
     }
   };
   const changeShowHistoryBots = (item: BotStatus) => {

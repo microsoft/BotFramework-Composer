@@ -18,6 +18,7 @@ import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../u
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
+import { navigateTo } from '../../utils/navigation';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -331,7 +332,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             botPropertyData={botPropertyData}
             botPublishHistoryList={botPublishHistoryList}
             changePublishTarget={changePublishTarget}
-            projectId={projectId}
+            managePublishProfile={(skillId) => {
+              const url =
+                skillId === projectId
+                  ? `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`
+                  : `bot/${projectId}/skill/${skillId}/botProjectsSettings/#addNewPublishProfile`;
+              navigateTo(url);
+            }}
             publishDisabled={publishDisabled}
             updateItems={updateBotStatusList}
             updateSelectedBots={updateSelectedBots}
