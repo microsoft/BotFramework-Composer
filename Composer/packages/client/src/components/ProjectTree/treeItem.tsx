@@ -30,7 +30,7 @@ import { SUMMARY_ARROW_SPACE } from './constants';
 const projectTreeItemContainer = css`
   outline: none;
   :focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
     z-index: 1;
   }
   text-overflow: ellipsis;

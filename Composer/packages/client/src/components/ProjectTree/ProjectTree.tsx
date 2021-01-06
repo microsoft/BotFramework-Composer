@@ -26,7 +26,7 @@ import {
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
-import { BotStatus } from '../../constants';
+import { BotStatus, colors } from '../../constants';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -40,7 +40,7 @@ import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeade
 
 const searchBox: ISearchBoxStyles = {
   root: {
-    borderBottom: '1px solid #edebe9',
+    borderBottom: '1px solid ${colors.gray30}',
     height: '45px',
     borderRadius: '0px',
   },

@@ -5,6 +5,8 @@ import { FontWeights, mergeStyleSets } from '@uifabric/styling';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
+import { colors } from '../../constants';
+
 export const classNames = mergeStyleSets({
   groupHeader: {
     display: 'flex',
@@ -44,7 +46,7 @@ export const formCell = css`
   flex-direction: column;
   outline: none;
   :focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
   }
   white-space: pre-wrap;
   font-size: 14px;

@@ -12,6 +12,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
 import { useInterval } from '../../utils/hooks';
+import { colors } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -32,7 +33,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
   }
 
   return css`
-    border-left: 4px solid #0078d4;
+    border-left: 4px solid ${colors.blue};
     background: white;
     box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
     width: 340px;
@@ -49,7 +50,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
 
 const cancelButton = css`
   float: right;
-  color: #605e5c;
+  color: ${colors.gray130};
   margin-left: auto;
   width: 24px;
   height: 24px;
@@ -68,12 +69,12 @@ const cardDetail = css`
 
 const errorType = css`
   margin-top: 4px;
-  color: #a80000;
+  color: ${colors.red};
 `;
 
 const successType = css`
   margin-top: 4px;
-  color: #27ae60;
+  color: ${colors.green};
 `;
 
 const cardTitle = css`
@@ -91,7 +92,7 @@ const cardDescription = css`
 `;
 
 const linkButton = css`
-  color: #0078d4;
+  color: ${colors.blue};
   float: right;
   font-size: 12px;
   height: auto;
@@ -105,12 +106,12 @@ const getShimmerStyles = {
   },
   shimmerWrapper: [
     {
-      backgroundColor: '#EDEBE9',
+      backgroundColor: colors.gray30,
     },
   ],
   shimmerGradient: [
     {
-      backgroundImage: 'radial-gradient(at 50% 50%, #0078D4 0%, #EDEBE9 100%);',
+      backgroundImage: `radial-gradient(at 50% 50%, ${colors.blue} 0%, ${colors.gray30} 100%);`,
     },
   ],
 };
