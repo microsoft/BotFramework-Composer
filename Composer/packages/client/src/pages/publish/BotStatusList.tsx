@@ -11,7 +11,7 @@ import React, { useState, Fragment, useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishResult } from '@bfc/shared';
-import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
@@ -64,7 +64,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   botPublishHistoryList,
   publishDisabled,
   managePublishProfile,
-  updateItems,
   changePublishTarget,
   updateSelectedBots,
   onRollbackClick,
@@ -76,13 +75,13 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const items: BotStatus[] = useMemo(() => {
     return generateBotList(botList, botPropertyData, botPublishHistoryList);
   }, [botList, botPropertyData, botPublishHistoryList]);
-  const sortByName = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    if (column.isSorted) {
-      column.isSortedDescending = !column.isSortedDescending;
-      const newItems: BotStatus[] = items.reverse();
-      updateItems(newItems);
-    }
-  };
+
+  const displayedItems: BotStatus[] = useMemo(() => {
+    if (currentSort.key !== 'Bot') return items;
+    if (currentSort.descending) return items;
+    return items.slice().reverse();
+  }, [items, currentSort]);
+
   const changeSelected = (item: BotStatus, isChecked?: boolean) => {
     let newSelectedBots: BotStatus[];
     if (isChecked) {
@@ -163,7 +162,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       minWidth: 100,
       maxWidth: 200,
       isRowHeader: true,
-      onColumnClick: sortByName,
       data: 'string',
       onRender: (item: BotStatus) => {
         return (
@@ -338,7 +336,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
             isSortedDescending: currentSort.descending,
           }))}
           css={detailList}
-          items={items}
+          items={displayedItems}
           styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
