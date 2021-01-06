@@ -182,12 +182,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     };
   }, []);
 
-  const updateBotStatusList = (statusList: BotStatus[]) => {
-    setCurrentBotList(
-      statusList.map((bot) => ({ id: bot.id, name: bot.name, publishTarget: bot.publishTarget } as Bot))
-    );
-  };
-
   const updateSelectedBots = (selectedBots) => {
     const bots: Bot[] = [];
     selectedBots.forEach((bot) => {
@@ -340,7 +334,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               navigateTo(url);
             }}
             publishDisabled={publishDisabled}
-            updateItems={updateBotStatusList}
             updateSelectedBots={updateSelectedBots}
             onRollbackClick={() => null}
           />

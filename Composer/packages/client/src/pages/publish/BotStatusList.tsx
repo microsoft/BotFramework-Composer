@@ -28,7 +28,6 @@ export interface BotStatusListProps {
   botPublishHistoryList: BotPublishHistory;
   publishDisabled: boolean;
   managePublishProfile: (skillId: string) => void;
-  updateItems: (items: BotStatus[]) => void;
   updateSelectedBots: (items: BotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
