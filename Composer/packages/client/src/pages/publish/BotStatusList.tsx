@@ -30,7 +30,6 @@ export interface BotStatusListProps {
   botPublishHistoryList: BotPublishHistory;
   publishDisabled: boolean;
   updateItems: (items: BotStatus[]) => void;
-  updatePublishHistory: (items: PublishResult[], item: BotStatus) => void;
   updateSelectedBots: (items: BotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
@@ -67,7 +66,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   botPublishHistoryList,
   publishDisabled,
   updateItems,
-  updatePublishHistory,
   changePublishTarget,
   updateSelectedBots,
   onRollbackClick,
@@ -312,9 +310,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     const handleRollbackClick = (selectedVersion) => {
       onRollbackClick(selectedVersion, item);
     };
-    const hanldeUpdatePublishHistory = (publishHistories) => {
-      updatePublishHistory(publishHistories, item);
-    };
+
     return (
       <Fragment>
         {defaultRender(props)}
@@ -328,7 +324,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
             <PublishStatusList
               isRollbackSupported={isRollbackSupported}
               items={publishStatusList}
-              updateItems={hanldeUpdatePublishHistory}
               onRollbackClick={handleRollbackClick}
             />
           )}

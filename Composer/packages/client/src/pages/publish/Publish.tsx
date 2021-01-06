@@ -7,7 +7,6 @@ import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { PublishResult } from '@bfc/shared';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -187,16 +186,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       statusList.map((bot) => ({ id: bot.id, name: bot.name, publishTarget: bot.publishTarget } as Bot))
     );
   };
-  const updatePublishHistory = (publishHistories: PublishResult[], botStatus: BotStatus) => {
-    const newPublishHistory = Object.assign({}, botPublishHistoryList);
-    if (botStatus.publishTarget) {
-      newPublishHistory[botStatus.id] = {
-        ...botPublishHistoryList[botStatus.id],
-        [botStatus.publishTarget]: publishHistories,
-      };
-    }
-    setBotPublishHistoryList(newPublishHistory);
-  };
+
   const updateSelectedBots = (selectedBots) => {
     const bots: Bot[] = [];
     selectedBots.forEach((bot) => {
@@ -344,7 +334,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             projectId={projectId}
             publishDisabled={publishDisabled}
             updateItems={updateBotStatusList}
-            updatePublishHistory={updatePublishHistory}
             updateSelectedBots={updateSelectedBots}
             onRollbackClick={() => null}
           />
