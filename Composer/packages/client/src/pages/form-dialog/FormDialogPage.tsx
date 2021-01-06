@@ -9,8 +9,8 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { Split } from '../../components/Split/Split';
 import {
   dispatcherState,
   formDialogErrorState,
@@ -19,7 +19,6 @@ import {
   formDialogSchemaIdsState,
 } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
-import { SplitMeasuredSizes } from '../../components/Split/Split';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreateFormDialogSchemaModal from './CreateFormDialogSchemaModal';

@@ -14,8 +14,8 @@ import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { Split } from '../../components/Split/Split';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger, getDialogData } from '../../utils/dialogUtil';
@@ -57,7 +57,6 @@ import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { SplitMeasuredSizes } from '../../components/Split/Split';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreationModal from './creationModal';

@@ -7,14 +7,13 @@ import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { Split } from '../components/Split/Split';
 import { navigateTo, buildURL } from '../utils/navigation';
 import { dispatcherState, PageMode } from '../recoilModel';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
-import { SplitMeasuredSizes } from './Split/Split';
 import { renderThinSplitter } from './Split/ThinSplitter';
 
 // -------------------- Styles -------------------- //
