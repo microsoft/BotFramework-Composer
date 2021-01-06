@@ -3,14 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DetailsList, IColumn, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { PublishResult } from '@botframework-composer/types';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -23,7 +23,6 @@ import { LogDialog } from './LogDialog';
 
 export interface IStatusListProps {
   items: PublishResult[];
-  updateItems: (items: PublishResult[]) => void;
   isRollbackSupported: boolean;
   onRollbackClick: (item: PublishResult) => void;
 }
@@ -41,16 +40,13 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   const { items, isRollbackSupported, onRollbackClick } = props;
-  const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const [displayedLog, setDisplayedLog] = useState<string | null>(null);
+  const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
+  const displayedItems = useMemo(() => {
+    if (currentSort.descending) return items;
+    return items.slice().reverse();
+  }, [items, currentSort]);
 
-  const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    if (column.isSorted && items) {
-      column.isSortedDescending = !column.isSortedDescending;
-      const newItems: PublishResult[] = items.slice().reverse();
-      props.updateItems(newItems);
-    }
-  };
   const columns = [
     {
       key: 'PublishTime',
@@ -74,7 +70,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       minWidth: 70,
       maxWidth: 90,
       isRowHeader: true,
-      onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: PublishResult) => {
         return <span>{moment(item.time).format('MM-DD-YYYY')}</span>;
@@ -214,7 +209,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             isSortedDescending: currentSort.descending,
           }))}
           css={detailList}
-          items={items}
+          items={displayedItems}
           styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
