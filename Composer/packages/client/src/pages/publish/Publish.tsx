@@ -218,7 +218,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     let token = '';
     if (isGetTokenFromUser()) {
       token = getTokenFromCache('accessToken');
-      console.log(token);
     } else {
       token = await AuthClient.getAccessToken(armScopes);
     }
