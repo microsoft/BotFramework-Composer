@@ -18,6 +18,7 @@ import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
+import { IpcRendererEvent } from 'electron';
 
 import { AppUpdaterStatus } from '../constants';
 import { appUpdateState, dispatcherState } from '../recoilModel';
@@ -28,7 +29,7 @@ const updateAvailableDismissBtn: Partial<IButtonStyles> = {
   },
 };
 
-const optionIcon = (checked) => css`
+const optionIcon = (checked: boolean) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
@@ -60,8 +61,15 @@ const dialogContent: Partial<IDialogContentStyles> = {
 
 const { ipcRenderer } = window;
 
-function SelectOption(props) {
-  const { checked, text, key } = props;
+type SelectOptionProps = {
+  checked?: boolean;
+  text: string;
+  key: string;
+};
+
+function SelectOption(props: SelectOptionProps | undefined) {
+  if (props == null) return null;
+  const { checked = false, text, key } = props;
   return (
     <div key={key} css={optionRoot}>
       <Icon css={optionIcon(checked)} iconName={checked ? 'RadioBtnOn' : 'RadioBtnOff'} />
@@ -110,7 +118,7 @@ export const AppUpdater: React.FC<{}> = () => {
 
   // listen for app updater events from main process
   useEffect(() => {
-    ipcRenderer.on('app-update', (_event, name, payload) => {
+    ipcRenderer.on('app-update', (_event: IpcRendererEvent, name: string, payload) => {
       switch (name) {
         case 'update-available':
           setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
