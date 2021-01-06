@@ -5,7 +5,7 @@ import { DialogSetting, PublishResult, PublishTarget } from '@bfc/shared';
 
 import { PublishType } from '../../recoilModel/types';
 
-export type BotStatus = {
+export interface BotStatus {
   id: string;
   name: string;
   publishTargets?: PublishTarget[];
@@ -14,18 +14,19 @@ export type BotStatus = {
   status?: number;
   message?: string;
   comment?: string;
-};
-export type Bot = {
+}
+
+export interface Bot {
   id: string;
   name: string;
   publishTarget: string;
-};
+}
 
-type BotProperty = {
+interface BotProperty {
   setting: DialogSetting;
   publishTargets: PublishTarget[];
   publishTypes: PublishType[];
-};
+}
 export type BotPropertyType = {
   [key: string]: BotProperty;
 };

@@ -22,7 +22,7 @@ import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { Bot, BotPublishHistory, BotPropertyType, BotStatus } from './type';
 
-export type IBotStatusListProps = {
+export interface BotStatusListProps {
   projectId: string;
   botList: Bot[];
   botPropertyData: BotPropertyType;
@@ -33,7 +33,7 @@ export type IBotStatusListProps = {
   updateSelectedBots: (items: BotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
-};
+}
 
 const generateBotList = (
   botList: Bot[],
@@ -58,19 +58,19 @@ const generateBotList = (
   });
   return bots;
 };
-export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
-  const {
-    projectId,
-    botList,
-    botPropertyData,
-    botPublishHistoryList,
-    publishDisabled,
-    updateItems,
-    updatePublishHistory,
-    changePublishTarget,
-    updateSelectedBots,
-    onRollbackClick,
-  } = props;
+
+export const BotStatusList: React.FC<BotStatusListProps> = ({
+  projectId,
+  botList,
+  botPropertyData,
+  botPublishHistoryList,
+  publishDisabled,
+  updateItems,
+  updatePublishHistory,
+  changePublishTarget,
+  updateSelectedBots,
+  onRollbackClick,
+}) => {
   const [selectedBots, setSelectedBots] = useState<BotStatus[]>([]);
   const [showHistoryBots, setShowHistoryBots] = useState<string[]>([]);
 
