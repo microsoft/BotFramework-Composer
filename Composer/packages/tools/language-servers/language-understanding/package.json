@@ -20,7 +20,7 @@
   "dependencies": {
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
-    "@microsoft/bf-cli-command": "^4.10.0-preview.141651",
+    "@microsoft/bf-cli-command": "^4.11.1",
     "@microsoft/bf-lu": "^4.12.0-dev.20201209.a2ab9dd",
     "express": "^4.15.2",
     "monaco-languageclient": "^0.10.0",
