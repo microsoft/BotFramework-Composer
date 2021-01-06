@@ -17,6 +17,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 
 import { navigateTo } from '../../utils/navigation';
+import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
@@ -126,9 +127,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const onRenderStatus = (item: BotStatus): JSX.Element | null => {
     if (!item.status) {
       return null;
-    } else if (item.status === 200) {
+    } else if (item.status === ApiStatus.Success) {
       return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
-    } else if (item.status === 202) {
+    } else if (item.status === ApiStatus.Publishing) {
       return (
         <div style={{ display: 'flex' }}>
           <Spinner size={SpinnerSize.small} />

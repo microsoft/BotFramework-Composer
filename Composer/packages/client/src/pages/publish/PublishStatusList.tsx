@@ -16,6 +16,8 @@ import { PublishResult } from '@botframework-composer/types';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 
+import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+
 import { listRoot, tableView, detailList } from './styles';
 import { LogDialog } from './LogDialog';
 
@@ -88,9 +90,9 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 40,
       data: 'string',
       onRender: (item: PublishResult) => {
-        if (item.status === 200) {
+        if (item.status === ApiStatus.Success) {
           return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
-        } else if (item.status === 202) {
+        } else if (item.status === ApiStatus.Publishing) {
           return (
             <div style={{ display: 'flex' }}>
               <Spinner size={SpinnerSize.small} />
