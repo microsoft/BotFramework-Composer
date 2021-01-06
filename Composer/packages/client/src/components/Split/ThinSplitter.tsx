@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RenderSplitterProps } from '@geoffcox/react-splitter/build/RenderSplitterProps';
+import { RenderSplitterProps } from '@geoffcox/react-splitter';
 
 type Props = RenderSplitterProps & {
   color: string;
