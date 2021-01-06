@@ -123,32 +123,27 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  const [botPublishHistoryList, setBotPublishHistoryList] = useState<BotPublishHistory>(publishHistoryList);
-  const [currentBotList, setCurrentBotList] = useState<Bot[]>(botList);
+  const [botPublishHistoryList, setBotPublishHistoryList] = useState<BotPublishHistory>({});
+  const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const [selectedBots, setSelectedBots] = useState<Bot[]>([]);
   const publishDisabled = useMemo(() => {
-    return selectedBots.some((bot) => {
-      const publishTargets = botPropertyData[bot.id].publishTargets;
-      if (!(bot.publishTarget && publishTargets)) {
+    return botList.some((bot) => {
+      const botProjectId = bot.id;
+
+      const botPublishHistory = botPublishHistoryList?.[botProjectId]?.[bot.publishTarget] || [];
+
+      const latestPublishItem = botPublishHistory[0];
+      if (latestPublishItem && latestPublishItem.status === 202) {
+        return true;
+      } else {
         return false;
       }
-      const selectedTarget = publishTargets.find((target) => target.name === bot.publishTarget);
-      const botProjectId = bot.id;
-      if (!selectedTarget) return false;
-      const botPublishHistory = botPublishHistoryList[botProjectId][bot.publishTarget];
-      if (!botPublishHistory || botPublishHistory.length === 0) {
-        return;
-      }
-      const latestPublishItem = botPublishHistory[0];
-      if (latestPublishItem.status === 202) {
-        return true;
-      }
     });
-  }, [selectedBots]);
+  }, [botList]);
 
   const canPull = useMemo(() => {
     return !!selectedBots.find((bot) => {
@@ -163,7 +158,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       return false;
     });
   }, [selectedBots]);
-  const canPublish = selectedBots.length > 0 && !publishDisabled;
+  const canPublish = selectedBots.length > 0 && selectedBots.some((bot) => !!bot.publishTarget) && !publishDisabled;
 
   const pendingNotificationRef = useRef<Notification>();
 
@@ -186,6 +181,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
     };
   }, []);
+
   const updateBotStatusList = (statusList: BotStatus[]) => {
     setCurrentBotList(
       statusList.map((bot) => ({ id: bot.id, name: bot.name, publishTarget: bot.publishTarget } as Bot))
