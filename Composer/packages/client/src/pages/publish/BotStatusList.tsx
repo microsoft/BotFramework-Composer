@@ -15,6 +15,7 @@ import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/Deta
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
+import get from 'lodash/get';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
@@ -28,6 +29,7 @@ export interface BotStatusListProps {
   botPublishHistoryList: BotPublishHistory;
   publishDisabled: boolean;
   managePublishProfile: (skillId: string) => void;
+  // onCheck: (skillIds: string[]) => void
   updateSelectedBots: (items: BotStatus[]) => void;
   changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
@@ -65,7 +67,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   managePublishProfile,
   changePublishTarget,
   updateSelectedBots,
-  onRollbackClick,
 }) => {
   const [selectedBots, setSelectedBots] = useState<BotStatus[]>([]);
   const [showHistoryBots, setShowHistoryBots] = useState<string[]>([]);
@@ -293,16 +294,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   ];
   const onRenderRow = (props, defaultRender) => {
     const { item }: { item: BotStatus } = props;
-    const publishStatusList: PublishResult[] = item.publishTarget
-      ? botPublishHistoryList[item.id][item.publishTarget] || []
-      : [];
-    const target = item.publishTargets?.find((target) => target.name === item.publishTarget);
-    const publishType = botPropertyData[item.id].publishTypes?.filter((t) => t.name === target?.type)[0];
-    const isRollbackSupported = !!target && !!publishType?.features?.rollback;
-    const handleRollbackClick = (selectedVersion) => {
-      onRollbackClick(selectedVersion, item);
-    };
-
+    const publishStatusList: PublishResult[] = get(botPublishHistoryList, [item.id, item.publishTarget || ''], []);
     return (
       <Fragment>
         {defaultRender(props)}
@@ -313,11 +305,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
           {publishStatusList.length === 0 ? (
             <div style={{ fontSize: FontSizes.small, margin: '20px 0 0 50px' }}>No publish history</div>
           ) : (
-            <PublishStatusList
-              isRollbackSupported={isRollbackSupported}
-              items={publishStatusList}
-              onRollbackClick={handleRollbackClick}
-            />
+            <PublishStatusList isRollbackSupported={false} items={publishStatusList} onRollbackClick={() => null} />
           )}
         </div>
       </Fragment>
