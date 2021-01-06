@@ -343,7 +343,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          {/* CR: define a better data model for BotStatusList props */}
           <BotStatusList
             botList={currentBotList}
             botPropertyData={botPropertyData}
