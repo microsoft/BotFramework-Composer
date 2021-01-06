@@ -4,7 +4,7 @@
 export const defaultMenuOrder = [
   // root level
   'Send a response',
-  'Ask a question',
+  'Ask the user',
   'Create a condition',
   'Looping',
   'Dialog management',
@@ -12,12 +12,12 @@ export const defaultMenuOrder = [
   'Access external resources',
   'Debugging options',
   // submenu - Ask a question
-  'Text',
-  'Number',
-  'Confirmation',
-  'Multi-choice',
-  'File or attachment',
-  'Date or time',
+  'Ask for text',
+  'Ask for number',
+  'Ask for confirmation',
+  'Ask for multi-choice',
+  'Ask for file or attachment',
+  'Ask for date or time',
   // submenu - Create a condition
   'Branch: If/else',
   'Branch: Switch (multiple options)',

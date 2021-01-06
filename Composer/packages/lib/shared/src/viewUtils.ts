@@ -45,7 +45,7 @@ export const dialogGroups: DialogGroupsMap = {
     types: [SDKKinds.SendActivity],
   },
   [DialogGroup.INPUT]: {
-    label: formatMessage('Ask a question'),
+    label: formatMessage('Ask the user'),
     types: [
       SDKKinds.TextInput,
       SDKKinds.NumberInput,
