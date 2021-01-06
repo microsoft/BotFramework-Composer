@@ -103,7 +103,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
     if (
       responseData.status === ApiStatus.Success ||
-      responseData.status === ApiStatus.Unknow ||
+      responseData.status === ApiStatus.Unknown ||
       responseData.status === ApiStatus.Failed
     ) {
       // show result notifications
@@ -290,7 +290,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         botProjectId: currentBotStatus.id,
         targetName: publishTarget,
       });
-      newUpdater.start(updateData);
+      newUpdater.start(updateData, changeNotificationStatus);
       pollingUpdaterList.push(newUpdater);
     }
   };

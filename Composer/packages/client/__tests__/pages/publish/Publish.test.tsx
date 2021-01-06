@@ -107,9 +107,8 @@ describe('publish page', () => {
     const { getByText } = renderWithRecoil(
       <BotStatusList
         botList={[]}
-        botPublishHistoryList={[]}
-        botPublishTargetsList={[]}
-        botPublishTypesList={[]}
+        botPropertyData={{}}
+        botPublishHistoryList={{}}
         changePublishTarget={jest.fn()}
         projectId={rootState.projectId}
         publishDisabled={false}

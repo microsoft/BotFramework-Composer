@@ -12,7 +12,7 @@ export const ApiStatus = {
   Publishing: 202,
   Success: 200,
   Failed: 500,
-  Unknow: 404,
+  Unknown: 404,
 };
 
 export class PublishStatusPollingUpdater {
