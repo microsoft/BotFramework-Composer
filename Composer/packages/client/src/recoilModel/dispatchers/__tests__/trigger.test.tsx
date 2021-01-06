@@ -208,7 +208,7 @@ describe('trigger dispatcher', () => {
     if (updatedDialog == null) fail();
     expect(updatedDialog.content?.triggers.length).toEqual(1);
 
-    const targetTrigger = updatedDialog.content.triggers[0];
+    const targetTrigger = (updatedDialog?.content as any).triggers[0];
     await act(async () => {
       // @ts-ignore - targetTrigger should be an ITriggerCondition, but we give it an ITrigger
       await dispatcher.deleteTrigger(projectId, dialogId, targetTrigger);
