@@ -767,7 +767,11 @@ export const ProjectTree: React.FC<Props> = ({
           )}
           aria-live={'polite'}
         />
-        <div css={tree}>{projectTree}</div>
+        <div css={tree}>
+          {projectCollection.map((projectData) => {
+            return <TreeDialogs key={projectData.projectId} bot={projectData} />;
+          })}
+        </div>
       </FocusZone>
     </div>
   );

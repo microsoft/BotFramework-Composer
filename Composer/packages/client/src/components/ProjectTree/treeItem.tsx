@@ -364,7 +364,6 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
       aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
       css={projectTreeItemContainer}
       role="cell"
-      tabIndex={0}
       onBlur={item.onBlur}
       onFocus={item.onFocus}
     >
