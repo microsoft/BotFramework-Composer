@@ -22,9 +22,9 @@ export class PublishStatusPollingUpdater {
   private botProjectId;
   private pollingInterval = 10000;
 
-  constructor({ botProjectId, targetName }) {
+  constructor(botProjectId: string, publishTargetId: string) {
     this.botProjectId = botProjectId;
-    this.targetName = targetName;
+    this.targetName = publishTargetId;
   }
 
   async start(onData, onAction) {

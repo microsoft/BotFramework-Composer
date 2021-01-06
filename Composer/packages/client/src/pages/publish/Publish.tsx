@@ -76,7 +76,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
       )
       .map((bot) => {
-        const updater = new PublishStatusPollingUpdater({ botProjectId: bot.id, targetName: bot.publishTarget });
+        const updater = new PublishStatusPollingUpdater(bot.id, bot.publishTarget);
         updater.start(updateData, changeNotificationStatus);
         pollingUpdaterList.push(updater);
       });
@@ -285,10 +285,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
     // Add new updater
     if (!pollingUpdaterList.some((u) => u.isSameUpdater(currentBotStatus.id, publishTarget))) {
-      const newUpdater = new PublishStatusPollingUpdater({
-        botProjectId: currentBotStatus.id,
-        targetName: publishTarget,
-      });
+      const newUpdater = new PublishStatusPollingUpdater(currentBotStatus.id, publishTarget);
       newUpdater.start(updateData, changeNotificationStatus);
       pollingUpdaterList.push(newUpdater);
     }
