@@ -11,12 +11,12 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from '@uifabric/styling';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+import { colors } from '../../constants';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -42,7 +42,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: SharedColors.red10,
+          color: colors.red10,
           paddingRight: 3,
         },
       },

@@ -9,13 +9,14 @@ import React from 'react';
 import { LoadingTimeout } from '@bfc/adaptive-form/lib/components/LoadingTimeout';
 import { FieldLabel } from '@bfc/adaptive-form/lib/components/FieldLabel';
 import ErrorInfo from '@bfc/adaptive-form/lib/components/ErrorInfo';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { FontWeights } from '@uifabric/styling';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import get from 'lodash/get';
 
 import { SkillInfo } from '../../recoilModel';
+import { colors } from '../../constants';
 
 import { formEditor } from './styles';
 import { PropertyEditorHeader } from './PropertyEditorHeader';
@@ -26,7 +27,7 @@ const styles = {
   `,
 
   banner: css`
-    border-bottom: 1px solid #c8c6c4;
+    border-bottom: 1px solid ${colors.gray60};
     padding: 0 18px;
     margin-bottom: 0px;
   `,
@@ -41,7 +42,7 @@ const styles = {
     height: 15px;
     line-height: 15px;
     font-size: ${FontSizes.size12};
-    color: ${NeutralColors.gray130};
+    color: ${colors.gray130};
     font-weight: ${FontWeights.semibold};
     margin: 5px 0;
   `,

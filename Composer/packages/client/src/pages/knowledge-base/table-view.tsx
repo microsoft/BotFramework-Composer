@@ -30,7 +30,6 @@ import isEmpty from 'lodash/isEmpty';
 import flatMap from 'lodash/flatMap';
 import { QnASection, QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
@@ -41,6 +40,7 @@ import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { colors } from '../../constants';
 
 import {
   formCell,
@@ -286,7 +286,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             menuIconProps={{ iconName: 'Edit' }}
             styles={{
               root: {
-                color: NeutralColors.black,
+                color: colors.black,
                 visibility: isAllTab ? 'hidden' : 'visiable',
               },
             }}
@@ -305,7 +305,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             styles={{
               root: {
                 padding: 0,
-                color: NeutralColors.black,
+                color: colors.black,
                 visibility: isAllTab ? 'hidden' : 'visiable',
               },
             }}
@@ -422,7 +422,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
               iconProps={{ iconName: expandedIndex === index ? 'ChevronDown' : 'ChevronRight' }}
               styles={{
                 root: { ...icon.root, marginTop: 2, marginLeft: 7, fontSize: 12 },
-                icon: { fontSize: 8, color: NeutralColors.black },
+                icon: { fontSize: 8, color: colors.black },
               }}
               title={formatMessage('Toggle show all')}
               onClick={() => setExpandedIndex(expandedIndex === index ? -1 : index)}

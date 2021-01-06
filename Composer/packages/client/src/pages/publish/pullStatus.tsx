@@ -15,6 +15,7 @@ import { generateUniqueId } from '@bfc/shared';
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
 import dataTransferLine from '../../images/dataTransferLine.svg';
+import { colors } from '../../constants';
 
 type KnownPublishTargets = 'pva-publish-composer';
 
@@ -52,7 +53,7 @@ const serviceIcon = css`
 
 const boldBlueText = css`
   font-weight: ${FontWeights.semibold};
-  color: #106ebe;
+  color: ${colors.blue};
   word-break: break-work;
 `;
 

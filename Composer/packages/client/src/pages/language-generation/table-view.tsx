@@ -13,7 +13,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
@@ -31,6 +31,7 @@ import {
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { colors } from '../../constants';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId?: string;
@@ -380,7 +381,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   shouldFocusOnMount: true,
                   items: getTemplatesMoreButtons(item),
                 }}
-                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+                styles={{ menuIcon: { color: colors.black, fontSize: FontSizes.size16 } }}
               />
             </TooltipHost>
           );

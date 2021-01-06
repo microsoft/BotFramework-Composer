@@ -34,16 +34,16 @@ export const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
     },
   },
   primaryButton: {
-    background: '#ffffff',
+    background: palette.white,
     selectors: {
       ':active': {
-        background: '#dadada',
+        background: palette.neutralQuaternaryAlt,
       },
       ':hover': {
-        background: '#f4f4f4',
+        background: palette.neutralLighter,
       },
       ':focus': {
-        background: '#f4f4f4',
+        background: palette.neutralLighter,
       },
     },
   },

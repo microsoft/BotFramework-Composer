@@ -7,10 +7,9 @@ import { useRef, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
-import { SharedColors } from '@uifabric/fluent-theme';
 
 import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
-import { BotStatus, BotStatusesCopy } from '../../constants';
+import { BotStatus, BotStatusesCopy, colors } from '../../constants';
 
 import { ErrorCallout } from './errorCallout';
 import { useBotOperations } from './useBotOperations';
@@ -54,15 +53,15 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
   const botStatusText = useMemo(() => {
     if (botStatus === BotStatus.connected) {
       setBotStatusStyle({
-        color: SharedColors.green10,
+        color: colors.green10,
       });
     } else if (botStatus === BotStatus.failed) {
       setBotStatusStyle({
-        color: SharedColors.red10,
+        color: colors.red10,
       });
     } else {
       setBotStatusStyle({
-        color: SharedColors.gray20,
+        color: colors.gray20,
       });
     }
     return BotStatusesCopy[botStatus] ?? BotStatusesCopy.inactive;
@@ -77,7 +76,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
         <ActionButton
           styles={{
             root: {
-              color: '#0078d4',
+              color: colors.cyanBlue10,
               height: '20px',
             },
           }}

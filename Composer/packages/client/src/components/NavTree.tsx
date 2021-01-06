@@ -8,11 +8,11 @@ import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
 import { navigateTo } from '../utils/navigation';
+import { colors } from '../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -28,10 +28,10 @@ const root = css`
   .ProjectTreeItem {
     display: flex;
     .ms-Icon {
-      color: ${SharedColors.blue10};
+      color: ${colors.blue10};
     }
     &:hover .ms-Button {
-      background: ${NeutralColors.gray20};
+      background: ${colors.gray20};
       .ms-Icon {
         visibility: inherit;
       }
@@ -41,7 +41,7 @@ const root = css`
 
 const itemBase: IButtonStyles = {
   root: {
-    background: NeutralColors.white,
+    background: colors.white,
     fontWeight: FontWeights.semilight,
     height: '32px',
     width: '100%',
@@ -57,14 +57,14 @@ const itemBase: IButtonStyles = {
 
 const itemNotSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
-    background: NeutralColors.white,
+    background: colors.white,
     fontWeight: FontWeights.semilight,
   },
 });
 
 const itemSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
-    background: NeutralColors.gray20,
+    background: colors.gray20,
     fontWeight: FontWeights.semibold,
   },
 });
@@ -98,7 +98,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
         padding: '0 4px',
         alignSelf: 'stretch',
         height: 'auto',
-        background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
+        background: isSelected ? colors.gray20 : colors.white,
         selectors: {
           '.ms-Icon': {
             visibility: isSelected ? 'inherit' : 'hidden',

@@ -9,7 +9,6 @@ import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { css } from '@emotion/core';
-import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -20,7 +19,7 @@ import {
   allDiagnosticsSelectorFamily,
   rootBotProjectIdSelector,
 } from '../../recoilModel';
-import { BotStatus } from '../../constants';
+import { BotStatus, colors } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
@@ -31,14 +30,14 @@ const iconSectionContainer = css`
   display: flex;
   align-items: flex-end;
   flex-direction: row;
-  background: ${CommunicationColors.tint10};
+  background: ${colors.botControllerBg};
 
   :before {
     content: '';
     position: relative;
     margin: auto 0px;
     width: 1px;
-    background: ${NeutralColors.white};
+    background: ${colors.bg};
     height: 21px;
   }
 `;
@@ -54,7 +53,7 @@ const startPanelsContainer = css`
   display: flex;
 `;
 
-const transparentBackground = 'rgba(255, 255, 255, 0.5)';
+const transparentBackground = colors.transparentBg;
 
 const BotController: React.FC = () => {
   const runningBots = useRecoilValue(runningBotsSelector);
@@ -211,21 +210,21 @@ const BotController: React.FC = () => {
             iconName: statusIconClass,
             styles: {
               root: {
-                color: `${NeutralColors.white}`,
+                color: colors.bg,
               },
             },
           }}
           menuAs={() => null}
           styles={{
             root: {
-              backgroundColor: CommunicationColors.tint10,
+              backgroundColor: colors.botControllerBg,
               display: 'flex',
               alignItems: 'center',
               minWidth: '229px',
               height: '36px',
               flexDirection: 'row',
               padding: '0 7px',
-              border: `1px solid ${CommunicationColors.tint10}`,
+              border: `1px solid ${colors.botControllerBg}`,
               width: '100%',
             },
             rootHovered: {
@@ -233,8 +232,8 @@ const BotController: React.FC = () => {
             },
             rootDisabled: {
               opacity: 0.6,
-              backgroundColor: CommunicationColors.tint10,
-              color: `${NeutralColors.white}`,
+              backgroundColor: colors.botControllerBg,
+              color: colors.bg,
               border: 'none',
               font: '62px',
             },
@@ -263,18 +262,18 @@ const BotController: React.FC = () => {
             }}
             styles={{
               root: {
-                color: NeutralColors.white,
+                color: colors.bg,
                 height: '36px',
-                background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
+                background: isControllerHidden ? colors.botControllerBg : transparentBackground,
                 selectors: {
                   ':disabled .ms-Button-icon': {
                     opacity: 0.6,
-                    backgroundColor: CommunicationColors.tint10,
-                    color: `${NeutralColors.white}`,
+                    backgroundColor: colors.botControllerBg,
+                    color: colors.textOnColorButton,
                   },
                 },
               },
-              rootHovered: { background: transparentBackground, color: NeutralColors.white },
+              rootHovered: { background: transparentBackground, color: colors.textOnColorButton },
             }}
             title={formatMessage('Open start bots panel')}
             onClick={onSplitButtonClick}

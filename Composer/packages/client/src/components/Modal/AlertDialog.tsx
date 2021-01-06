@@ -8,6 +8,8 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import ReactDOM from 'react-dom';
 import formatMessage from 'format-message';
 
+import { colors } from '../../constants';
+
 import { dialogStyle } from './dialogStyle';
 
 // -------------------- Styles -------------------- //
@@ -19,12 +21,12 @@ const normalStyle = css`
 `;
 
 const consoleStyle = css`
-  background: #000;
+  background: ${colors.black};
   max-height: 90px;
   overflow-y: auto;
   font-size: 16px;
   line-height: 23px;
-  color: #fff;
+  color: ${colors.white};
   padding: 10px 15px;
   margin-bottom: 20px;
   white-space: pre-line;

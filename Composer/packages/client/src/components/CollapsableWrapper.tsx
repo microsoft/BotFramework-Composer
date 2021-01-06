@@ -3,8 +3,9 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from '@emotion/core';
 import React, { useState } from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+
+import { colors } from '../constants';
 
 type CollapsableComponentProps = {
   title: string;
@@ -29,7 +30,7 @@ export const CollapsableWrapper: React.FC<CollapsableComponentProps> = (props) =
       <div data-is-focusable css={header}>
         <IconButton
           iconProps={{ iconName: isCollapsed ? 'ChevronRight' : 'ChevronDown' }}
-          styles={{ root: { color: NeutralColors.gray150 } }}
+          styles={{ root: { color: colors.gray150 } }}
           onClick={() => setIsCollapsed(!isCollapsed)}
         />
         <div css={titleStyle}>{title}</div>

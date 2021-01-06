@@ -36,7 +36,7 @@ import {
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
 import { schemasState, userSettingsState } from '../../recoilModel/atoms';
-import { nameRegex } from '../../constants';
+import { nameRegex, colors } from '../../constants';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -95,7 +95,7 @@ const optionRow = {
 
 export const warningIcon = {
   marginLeft: 5,
-  color: '#BE880A',
+  color: colors.orangeYellow10,
   fontSize: 12,
 };
 

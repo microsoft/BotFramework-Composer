@@ -8,12 +8,12 @@ import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
+import { colors } from '../../../constants';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -138,7 +138,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             <div
               css={css`
                 font-size: 24px;
-                background: ${NeutralColors.gray20};
+                background: ${colors.gray20};
                 color: black;
                 padding: 4px;
               `}

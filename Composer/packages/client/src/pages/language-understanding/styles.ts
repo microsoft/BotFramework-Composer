@@ -4,6 +4,8 @@
 import { css } from '@emotion/core';
 import { FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
+import { colors } from '../../constants';
+
 export const actionButton = css`
   font-size: 16px;
   margin: 0;
@@ -26,7 +28,7 @@ export const codeEditorContainer = css`
 export const formCell = css`
   outline: none;
   :focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
   }
   white-space: pre-wrap;
   font-size: 14px;
@@ -36,7 +38,7 @@ export const formCell = css`
 export const luPhraseCell = css`
   outline: none;
   :focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
   }
   white-space: pre-wrap;
   font-size: 14px;
@@ -48,7 +50,7 @@ export const whiteButton = css`
   button {
     background: transparent;
     &:hover {
-      background: rgb(234, 234, 234);
+      background: ${colors.gray30};
     }
   }
 `;
@@ -63,8 +65,8 @@ export const navLinkText = css`
 export const navLinkBtns = css``;
 
 export const consoleStyle = css`
-  background: #000;
-  color: #fff;
+  background: ${colors.black};
+  color: ${colors.white};
   padding: 15px;
   margin-bottom: 20px;
 `;
@@ -72,7 +74,7 @@ export const consoleStyle = css`
 export const tableCell = css`
   outline: none;
   :focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
   }
 `;
 

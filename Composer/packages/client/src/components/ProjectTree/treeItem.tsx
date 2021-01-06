@@ -13,13 +13,14 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles, Callout } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
+
+import { colors } from '../../constants';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE } from './constants';
@@ -72,11 +73,11 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
       width: '16px',
-      color: '#000',
+      color: colors.black,
     },
     menuIcon: {
       fontSize: '12px',
-      color: '#000',
+      color: colors.black,
     },
   };
 };
@@ -93,8 +94,8 @@ const navItem = (
   height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
-  color: ${isActive ? NeutralColors.white : '#545454'};
-  background: ${isActive ? '#0078d4' : menuOpenHere ? '#f2f2f2' : 'transparent'};
+  color: ${isActive ? colors.white : colors.gray130};
+  background: ${isActive ? colors.blue : menuOpenHere ? colors.gray10 : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
 
@@ -105,8 +106,8 @@ const navItem = (
   ${isAnyMenuOpen
     ? ''
     : `&:hover {
-    color: #545454;
-    background: #f2f2f2;
+    color: ${colors.gray130};
+    background: ${colors.gray10};
 
     .dialog-more-btn {
       visibility: visible;
@@ -123,9 +124,9 @@ const navItem = (
       content: '';
       position: absolute;
       z-index: 1;
-      border: 1px solid ${NeutralColors.white};
+      border: 1px solid ${colors.white};
       border-image: initial;
-      outline: rgb(102, 102, 102) solid 1px;
+      outline: ${colors.gray130} solid 1px;
     }
   }
 `;
@@ -147,7 +148,7 @@ export const overflowSet = (isBroken: boolean) => css`
   justify-content: space-between;
   display: flex;
   i {
-    color: ${isBroken ? SharedColors.red20 : 'inherit'};
+    color: ${isBroken ? colors.darkRed : 'inherit'};
   }
 `;
 
@@ -164,12 +165,12 @@ const statusIcon = {
 
 const warningIcon = {
   ...statusIcon,
-  color: '#BE880A',
+  color: colors.orangeYellow10,
 };
 
 const errorIcon = {
   ...statusIcon,
-  color: '#CC3F3F',
+  color: colors.red10,
 };
 
 const diagnosticIcon = {
@@ -182,14 +183,14 @@ const diagnosticIcon = {
 
 const diagnosticErrorIcon = {
   ...diagnosticIcon,
-  color: '#A80000',
-  background: '#FED9CC',
+  color: colors.red10,
+  background: colors.paleRed,
 };
 
 const diagnosticWarningIcon = {
   ...diagnosticIcon,
-  color: '#8A8780',
-  background: '#FFF4CE',
+  color: colors.gray110,
+  background: colors.paleYellow,
 };
 const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;

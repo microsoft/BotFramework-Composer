@@ -9,7 +9,6 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import cloneDeep from 'lodash/cloneDeep';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
@@ -18,6 +17,7 @@ import { localeState, showAddLanguageModalState } from '../../recoilModel/atoms'
 import { AddLanguageModal } from '../../components/MultiLanguage';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+import { colors } from '../../constants';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -34,15 +34,15 @@ const botLanguageContainerStyle = css`
 
 const botLanguageDescriptionStyle = css`
   font-size: ${FontSizes.small};
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray130};
 `;
 
 const botLanguageFieldStyle = css`
   font-size: ${FontSizes.small};
-  color: ${NeutralColors.black};
+  color: ${colors.black};
   overflow-y: auto;
   max-height: 150px;
-  border: 1px solid #c4c4c4;
+  border: 1px solid ${colors.gray60};
   margin-top: 17px;
   padding: 10px;
 `;
@@ -52,14 +52,14 @@ const manageBotLanguage = {
     height: 30,
     fontSize: FontSizes.smallPlus,
     fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
+    color: colors.blue,
     paddingLeft: 0,
   },
 };
 
 const languageItem = css`
   &:hover {
-    background: #ebebeb;
+    background: ${colors.gray30};
   }
 `;
 
@@ -82,19 +82,19 @@ const languageButton = {
   root: {
     fontSize: FontSizes.small,
     fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
+    color: colors.blue,
     height: 30,
     visibility: 'hidden',
   },
 };
 
 const defaultLanguageTextStyle = css`
-  color: #898989;
+  color: colors.gray110;
   font-size: 8px;
 `;
 
 const languageTextStyle = css`
-  color: ${NeutralColors.black};
+  color: ${colors.black};
   font-size: 12px;
 `;
 

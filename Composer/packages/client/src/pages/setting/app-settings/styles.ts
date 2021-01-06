@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { ILinkStyles } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
+
+import { colors } from '../../../constants';
 
 export const container = css`
   label: SettingsContainer;
@@ -39,7 +41,7 @@ export const link: ILinkStyles = {
 
 export const settingsContainer = css`
   display: flex;
-  border-top: 1px solid ${NeutralColors.gray20};
+  border-top: 1px solid ${colors.gray20};
   padding: 20px 0px;
   width: 100%;
 `;

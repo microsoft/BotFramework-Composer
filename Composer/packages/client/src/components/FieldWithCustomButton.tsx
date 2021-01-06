@@ -6,21 +6,21 @@ import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useEffect } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../constants';
 
 const disabledTextFieldStyle = {
   root: {
     selectors: {
       '.ms-TextField-field': {
-        background: '#ddf3db',
+        background: colors.paleGreen,
       },
       '.ms-Dropdown-title': {
-        background: '#ddf3db',
+        background: colors.paleGreen,
       },
       'p > span': {
         width: '100%',
@@ -33,7 +33,7 @@ const actionButtonStyle = {
   root: {
     fontSize: '12px',
     fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
+    color: colors.blue,
     marginLeft: 0,
     marginTop: -12,
     paddingLeft: 0,
@@ -45,13 +45,13 @@ const errorContainer = css`
   width: 100%;
   height: 48px;
   line-height: 48px;
-  background: #fed9cc;
-  color: ${NeutralColors.black};
+  background: ${colors.paleRed};
+  color: ${colors.black};
 `;
 
 const errorIcon = {
   root: {
-    color: '#A80000',
+    color: colors.darkRed,
     marginRight: 8,
     paddingLeft: 12,
     fontSize: '12px',
@@ -78,7 +78,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: SharedColors.red10,
+          color: colors.red10,
           paddingRight: 3,
         },
       },

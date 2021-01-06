@@ -6,6 +6,9 @@ import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+
+import { colors } from '../../constants';
+
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -122,7 +125,7 @@ export const bluetitle = css`
   line-height: 24px;
   display: flex;
   font-weight: 600;
-  color: #0078d4;
+  color: ${colors.blue};
   margin: 0;
 `;
 
@@ -137,7 +140,7 @@ export const linkContainer = css`
 `;
 
 export const linkInfo = css`
-  color: #0078d4;
+  color: ${colors.blue};
   margin-top: 10px;
   text-decoration: underline;
 `;
@@ -161,15 +164,15 @@ export const button: IIconStyles = {
 
 export const disabledItem = {
   title: css`
-    background-color: #f2f2f2;
-    color: #a19f9d;
+    background-color: ${colors.gray20};
+    color: ${colors.gray90};
   `,
   content: css`
-    border: 2px solid #f2f2f2;
+    border: 2px solid ${colors.gray20};
     width: auto;
     font-size: smaller;
     word-wrap: break-word;
-    color: #a19f9d;
+    color: ${colors.gray90};
     background: white;
   `,
 };
@@ -190,28 +193,28 @@ const baseBotItem = {
     }
   `,
   content: css`
-    background-color: #f2f2f2;
+    background-color: ${colors.gray20};
   `,
 };
 
 export const newBotItem = {
   ...baseBotItem,
   title: css`
-    background-color: #0078d4;
+    background-color: ${colors.blue};
   `,
 };
 
 export const latestBotItem = {
   ...baseBotItem,
   title: css`
-    background-color: #56ccf2;
+    background-color: ${colors.latestBotItem};
   `,
 };
 
 export const tutorialTile = {
   ...baseBotItem,
   title: css`
-    background-color: #004c87;
+    background-color: ${colors.shade30};
   `,
 };
 
@@ -232,7 +235,7 @@ export const detailListContainer = css`
 `;
 
 export const exampleListContainer = css`
-  border: 1px solid #979797;
+  border: 1px solid ${colors.gray100};
   margin-top: 20px;
   position: relative;
   min-width: 260px;
@@ -253,7 +256,7 @@ export const exampleListCell = css`
   box-sizing: border-box;
   display: flex;
   &:focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
   }
   &:hover {
     background: ${palette.neutralLight};
@@ -287,7 +290,7 @@ export const tableCell = css`
   outline: none;
   width: auto;
   :focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
   }
 `;
 

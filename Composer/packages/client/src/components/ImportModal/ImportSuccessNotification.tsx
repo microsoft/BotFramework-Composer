@@ -10,6 +10,7 @@ import { useRef } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { CardProps } from '../Notifications/NotificationCard';
+import { colors } from '../../constants';
 
 const container = css`
   padding: 0 16px 16px 40px;
@@ -28,7 +29,7 @@ const copyContainer = css`
 
 const greenCheckMark = css`
   position: absolute;
-  color: #27ae60;
+  color: ${colors.green};
   font-size: 12px;
   top: 10px;
   left: 12px;
@@ -40,7 +41,7 @@ const iconContainer = css`
   top: 2px;
 `;
 
-const copyIconColor = '#005A9E';
+const copyIconColor = colors.shade30;
 const copyIconStyles: IButtonStyles = {
   root: { position: 'absolute', right: 0, color: copyIconColor },
   rootHovered: { backgroundColor: 'transparent', color: copyIconColor },

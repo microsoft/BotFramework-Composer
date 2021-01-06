@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
-import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
+
+import { colors } from '../../constants';
 
 export const styles = {
   dialog: {
@@ -45,12 +47,12 @@ export const textField = {
 };
 
 export const warning = {
-  color: SharedColors.red10,
+  color: colors.red10,
   fontSize: FontSizes.size10,
 };
 
 export const subText = css`
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray130};
   font-size: 14px;
   font-weight: 400;
 `;

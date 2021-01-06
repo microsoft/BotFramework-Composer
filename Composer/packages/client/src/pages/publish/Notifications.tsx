@@ -7,6 +7,7 @@ import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
+import { colors } from '../../constants';
 
 import { IBotStatus } from './BotStatusList';
 
@@ -24,7 +25,7 @@ const cardDetail = css`
 
 const infoType = css`
   margin-top: 4px;
-  color: #0078d4;
+  color: ${colors.blue};
 `;
 
 const cardDescription = css`
@@ -41,7 +42,7 @@ export const getPublishedNotificationCardProps = (item: IBotStatus): CardProps =
     width: '12px',
     height: '12px',
     fontSize: '12px',
-    color: item.status === 200 ? '#27AE60' : 'rgb(161, 159, 157)',
+    color: item.status === 200 ? colors.greenCyan10 : colors.gray90,
     transform: item.status !== 200 ? 'rotate(45deg)' : '',
   });
   return {

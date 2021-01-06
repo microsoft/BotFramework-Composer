@@ -11,7 +11,6 @@ import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DialogSetting } from '@bfc/shared';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
@@ -21,6 +20,7 @@ import { settingsState, userSettingsState, schemasState } from '../../recoilMode
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { colors } from '../../constants';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
@@ -45,7 +45,7 @@ const container = css`
 const botNameStyle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
-  color: ${NeutralColors.black};
+  color: ${colors.black};
 `;
 
 const mainContentHeader = css`

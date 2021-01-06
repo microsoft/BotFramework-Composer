@@ -3,12 +3,14 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+
+import { colors } from '../../constants';
 
 import { moreButton, overflowSet } from './treeItem';
 
@@ -23,7 +25,7 @@ const headerText = css`
 `;
 
 const headerWrapper = css`
-  background: ${NeutralColors.gray60};
+  background: ${colors.gray60};
 `;
 
 export interface ProjectTreeHeaderMenuItem {
@@ -62,7 +64,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) =>
             className="project-tree-header-more-btn"
             data-is-focusable={isActive}
             data-testid="projectTreeHeaderMoreButton"
-            menuIconProps={{ iconName: 'Add', style: { color: NeutralColors.black } }}
+            menuIconProps={{ iconName: 'Add', style: { color: colors.black } }}
             menuProps={{ items: overflowItems }}
             role="cell"
             styles={{ ...moreButton(true), rootHovered: { background: 'none' } }}

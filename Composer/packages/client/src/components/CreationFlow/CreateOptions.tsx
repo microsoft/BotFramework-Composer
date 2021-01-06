@@ -22,14 +22,13 @@ import {
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { MessageBar } from 'office-ui-fabric-react/lib/components/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId, colors } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
 import { featureFlagsState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -40,7 +39,7 @@ const optionIcon = (checked: boolean) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
-  color: ${checked ? '#0078d4' : '#000'};
+  color: ${checked ? colors.blue : colors.black};
 `;
 
 const optionRoot = css`
@@ -68,15 +67,15 @@ export const bannerClass = mergeStyles({
 const rowDetails = (disabled: boolean) => {
   return {
     root: {
-      color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+      color: disabled ? colors.gray80 : colors.black,
       selectors: {
         '&:hover': {
-          background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+          background: disabled ? colors.white : colors.gray30,
+          color: disabled ? colors.gray80 : colors.black,
         },
         '&.ms-DetailsRow.is-selected': {
-          background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+          background: disabled ? colors.white : colors.gray30,
+          color: disabled ? colors.gray80 : colors.black,
         },
       },
     },
@@ -86,11 +85,11 @@ const rowDetails = (disabled: boolean) => {
 const rowTitle = (disabled: boolean) => {
   return {
     cellTitle: {
-      color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+      color: disabled ? colors.gray80 : colors.black,
       selectors: {
         ':hover': {
-          background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+          background: disabled ? colors.white : colors.gray30,
+          color: disabled ? colors.gray80 : colors.black,
         },
       },
     },
@@ -100,7 +99,7 @@ const rowTitle = (disabled: boolean) => {
 const tableCell = css`
   outline: none;
   :focus {
-    outline: rgb(102, 102, 102) solid 1px;
+    outline: ${colors.gray130} solid 1px;
   }
 `;
 

@@ -5,7 +5,6 @@
 import { jsx, css } from '@emotion/core';
 import { Fragment, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
 import { EditorExtension, mergePluginConfigs, PluginConfig } from '@bfc/extension-client';
@@ -14,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import plugins from '../plugins';
 import { currentProjectIdState, schemasState } from '../recoilModel';
 import { useShell } from '../shell/useShell';
+import { colors } from '../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -22,7 +22,7 @@ export const headerSub = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${NeutralColors.gray30};
+  border-bottom: 1px solid ${colors.gray30};
 `;
 
 export const leftActions = css`

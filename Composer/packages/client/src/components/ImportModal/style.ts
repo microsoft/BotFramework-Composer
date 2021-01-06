@@ -4,6 +4,8 @@
 import { css } from '@emotion/core';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
+import { colors } from '../../constants';
+
 export const hidden = css`
   display: none;
 `;
@@ -15,7 +17,7 @@ export const dialogContent = css`
 
 export const boldBlueText = css`
   font-weight: ${FontWeights.semibold};
-  color: #106ebe;
+  color: ${colors.blue};
   word-break: break-work;
 `;
 

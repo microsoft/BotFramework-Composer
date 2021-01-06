@@ -2,11 +2,12 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../constants';
 
 export const settingsContainer = css`
   display: flex;
-  border-top: 1px solid ${NeutralColors.gray20};
+  border-top: 1px solid ${colors.gray20};
   padding: 20px 0px;
 `;
 
@@ -38,7 +39,7 @@ export const ContentStyle = css`
   margin-left: 2px;
   display: flex;
   height: 100%;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid ${colors.gray50};
   flex: 1;
   position: relative;
   nav {
@@ -55,7 +56,7 @@ export const contentEditor = css`
 `;
 
 export const publishDialogText = css`
-  background-color: #ddf3db;
+  background-color: ${colors.paleGreen};
   margin-bottom: 10px;
   font-size: medium;
   padding: 7px;
@@ -100,7 +101,7 @@ export const detailList = css`
 export const label = css`
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: ${colors.gray160};
   padding: 5px 0px;
 `;
 
@@ -112,11 +113,11 @@ export const overflowSet = css`
   line-height: 36px;
   padding-left: 16px;
   padding-right: 5px;
-  background: ${NeutralColors.white};
+  background: ${colors.white};
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.small};
   &:hover {
-    background: ${NeutralColors.gray20};
+    background: ${colors.gray20};
     font-weight: ${FontWeights.bold};
   }
 `;
@@ -128,7 +129,7 @@ export const targetSelected = css`
   justify-content: space-between;
   line-height: 36px;
   padding-left: 16px;
-  background: ${NeutralColors.gray20};
+  background: ${colors.gray20};
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
   padding-right: 5px;

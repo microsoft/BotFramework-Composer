@@ -5,8 +5,10 @@
 import { jsx } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 
+import { colors } from '../constants';
+
 const color = (active: boolean, disabled: boolean) => {
-  return active ? '#000' : disabled ? '#999' : '#4f4f4f';
+  return active ? colors.black : disabled ? colors.gray110 : colors.gray140;
 };
 
 type BotProjectsSettingsIconProps = {

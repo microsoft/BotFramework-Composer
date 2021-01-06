@@ -3,28 +3,27 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Button } from 'office-ui-fabric-react/lib/Button';
 
-import { triggerNotSupportedWarning } from '../../constants';
+import { triggerNotSupportedWarning, colors } from '../../constants';
 
 const warningIcon = {
   marginLeft: 5,
-  color: '#8A8780',
+  color: colors.orangeYellow20,
   fontSize: 20,
   cursor: 'pointer',
 };
 
 const warningRoot = {
   display: 'flex',
-  background: '#FFF4CE',
+  background: colors.paleYellow,
   height: 50,
   alignItems: 'center',
 };
 
 const warningFont = {
-  color: SharedColors.gray40,
+  color: colors.gray40,
   fontSize: 9,
   paddingLeft: 10,
 };

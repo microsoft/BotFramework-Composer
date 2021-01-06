@@ -17,10 +17,9 @@ import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import { IpcRendererEvent } from 'electron';
 
-import { AppUpdaterStatus } from '../constants';
+import { AppUpdaterStatus, colors } from '../constants';
 import { appUpdateState, dispatcherState } from '../recoilModel';
 
 const updateAvailableDismissBtn: Partial<IButtonStyles> = {
@@ -33,7 +32,7 @@ const optionIcon = (checked: boolean) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
-  color: ${checked ? SharedColors.cyanBlue10 : NeutralColors.black};
+  color: ${checked ? colors.blue : colors.black};
 `;
 
 const optionRoot = css`
@@ -43,7 +42,7 @@ const optionRoot = css`
 
 const dialogCopy = css`
   margin: 0px;
-  color: #000;
+  color: ${colors.black};
 `;
 
 const dialogFooter: Partial<IDialogFooterStyles> = {
@@ -53,7 +52,7 @@ const dialogFooter: Partial<IDialogFooterStyles> = {
 };
 
 const dialogContent: Partial<IDialogContentStyles> = {
-  subText: { color: NeutralColors.black },
+  subText: { color: colors.black },
   header: { paddingBottom: '6px' },
 };
 

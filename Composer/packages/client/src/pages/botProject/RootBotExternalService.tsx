@@ -15,7 +15,6 @@ import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import {
   dispatcherState,
@@ -29,7 +28,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { LUIS_REGIONS } from '../../constants';
+import { LUIS_REGIONS, colors } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -56,7 +55,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: SharedColors.red10,
+          color: colors.red10,
           paddingRight: 3,
         },
       },
@@ -74,8 +73,8 @@ const errorContainer = css`
   width: 100%;
   height: 48px;
   line-height: 48px;
-  background: #fed9cc;
-  color: ${NeutralColors.black};
+  background: ${colors.paleRed};
+  color: ${colors.black};
 `;
 
 const customError = {
@@ -90,7 +89,7 @@ const customError = {
 
 const errorIcon = {
   root: {
-    color: '#A80000',
+    color: colors.red10,
     marginRight: 8,
     paddingLeft: 12,
     fontSize: FontSizes.mediumPlus,
@@ -110,8 +109,8 @@ const luisRegionErrorContainerStyle = css`
   display: flex;
   width: 100%;
   height: 48px;
-  background: #fed9cc;
-  color: ${NeutralColors.black};
+  background: ${colors.paleRed};
+  color: ${colors.black};
   line-height: 48px;
   font-size: ${FontSizes.small};
   margin-top: 5px;

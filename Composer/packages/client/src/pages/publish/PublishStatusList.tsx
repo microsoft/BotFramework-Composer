@@ -14,7 +14,8 @@ import { useState } from 'react';
 import formatMessage from 'format-message';
 import { PublishResult } from '@botframework-composer/types';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../constants';
 
 import { listRoot, tableView, detailList } from './styles';
 
@@ -87,7 +88,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       data: 'string',
       onRender: (item: PublishResult) => {
         if (item.status === 200) {
-          return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
+          return <Icon iconName="Accept" style={{ color: colors.green, fontWeight: 600 }} />;
         } else if (item.status === 202) {
           return (
             <div style={{ display: 'flex' }}>
@@ -95,7 +96,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             </div>
           );
         } else {
-          return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
+          return <Icon iconName="Cancel" style={{ color: colors.red, fontWeight: 600 }} />;
         }
       },
       isPadded: true,
@@ -158,7 +159,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
         return (
           <ActionButton
             allowDisabledFocus
-            styles={{ root: { color: '#0078D4' } }}
+            styles={{ root: { color: colors.blue } }}
             onClick={() => {
               onLogClick(item);
             }}
@@ -185,7 +186,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           <ActionButton
             allowDisabledFocus
             disabled={!(isRollbackSupported && item.status === 200)}
-            styles={{ root: { color: '#0078D4' } }}
+            styles={{ root: { color: colors.blue } }}
             onClick={() => {
               onRollbackClick(item);
             }}

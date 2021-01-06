@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+
+import { colors } from '../../../constants';
+
 export const runtimeSettingsStyle = css`
   display: flex;
   flex-direction: column;
@@ -11,7 +13,7 @@ export const runtimeSettingsStyle = css`
 `;
 
 export const runtimeControls = css`
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray130};
   font-size: ${FontSizes.smallPlus};
   & > h1 {
     margin-top: 0;
@@ -27,7 +29,7 @@ export const runtimeToggle = css`
 `;
 
 export const modalControlGroup = css`
-  border: 1px solid rgb(237, 235, 233);
+  border: 1px solid ${colors.gray30};
   padding: 0.5rem 1rem 1rem 1rem;
 `;
 
@@ -49,17 +51,17 @@ export const labelContainer = css`
 export const customerLabel = (disabled) => css`
   font-size: ${FontSizes.small};
   margin-right: 5px;
-  color: ${disabled ? NeutralColors.gray90 : NeutralColors.gray160};
+  color: ${disabled ? colors.gray90 : colors.gray160};
 `;
 
 export const iconStyle = (disabled) => {
   return {
     root: {
-      color: disabled ? NeutralColors.gray90 : NeutralColors.gray160,
+      color: disabled ? colors.gray90 : colors.gray160,
       selectors: {
         '&::before': {
           content: " '*'",
-          color: SharedColors.red10,
+          color: colors.red10,
           paddingRight: 3,
         },
       },
@@ -73,5 +75,5 @@ export const textOr = css`
 
 export const updateText = css`
   font-size: ${FontSizes.smallPlus};
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray130};
 `;

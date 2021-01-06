@@ -10,11 +10,11 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Button } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
+import { colors } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -32,12 +32,12 @@ const deleteBotButton = {
   root: {
     height: 32,
     width: 82,
-    background: SharedColors.cyanBlue10,
-    color: NeutralColors.white,
+    background: colors.blue,
+    color: colors.white,
   },
   rootHovered: {
-    background: SharedColors.cyanBlue10,
-    color: NeutralColors.white,
+    background: colors.blue,
+    color: colors.white,
   },
 };
 
@@ -62,7 +62,7 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
         return (
           <div
             style={{
-              background: '#ffddcc',
+              background: colors.paleRed,
               display: 'flex',
               flexDirection: 'row',
               marginBottom: '24px',
@@ -71,7 +71,7 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
             <FontIcon
               iconName="Warning12"
               style={{
-                color: '#DD4400',
+                color: colors.redOrange10,
                 fontSize: 36,
                 padding: '32px',
               }}

@@ -4,11 +4,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 
+import { colors } from '../constants';
+
 // -------------------- Styles -------------------- //
 
 const container = css`
   width: 100%;
-  background-color: #ffffff;
+  background-color: ${colors.white};
   height: 100%;
   position: relative;
 `;
@@ -16,7 +18,7 @@ const container = css`
 const top = css`
   width: 100%;
   height: 10px;
-  background-color: #efeaf5;
+  background-color: ${colors.gray30};
 `;
 
 // -------------------- Conversation -------------------- //

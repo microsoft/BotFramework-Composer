@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { DefaultPalette } from '@uifabric/styling';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -17,6 +15,7 @@ import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { formDialogSchemaDialogExistsSelector, formDialogSchemaState } from '../../recoilModel';
+import { colors } from '../../constants';
 
 import { FormDialogSchemaListHeader } from './FormDialogSchemaListHeader';
 
@@ -36,7 +35,7 @@ const Root = styled(Stack)<{
     position: 'relative',
     width: '100%',
     height: '100%',
-    borderRight: '1px solid #c4c4c4',
+    borderRight: `1px solid ${colors.gray60}`,
     boxSizing: 'border-box',
     overflowY: 'auto',
     overflowX: 'hidden',
@@ -54,7 +53,7 @@ const Root = styled(Stack)<{
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'rgba(255,255,255, 0.6)',
+            background: colors.transparentBg,
             zIndex: 1,
           },
         }
@@ -142,7 +141,7 @@ const FormDialogSchemaItem = React.memo((props: FormDialogSchemaItemProps) => {
           data-is-focusable
           menuIconProps={{
             iconName: 'MoreVertical',
-            style: { color: NeutralColors.gray130 },
+            style: { color: colors.gray130 },
           }}
           menuProps={{ items: overflowItems || [] }}
           role="menuitem"

@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { currentUserState, dispatcherState } from '../recoilModel';
+import { colors } from '../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -24,8 +25,8 @@ const loading = css`
 `;
 
 const consoleStyle = css`
-  background: #000;
-  color: #fff;
+  background: ${colors.black};
+  color: ${colors.white};
   padding: 15px;
   margin-bottom: 20px;
 `;

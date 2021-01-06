@@ -33,7 +33,7 @@ const TeachingBubbles = () => {
   } = useContext(OnboardingContext);
 
   const [, forceRender] = useState();
-  const rerender = useRef(debounce(() => forceRender({}), 200)).current;
+  const rerender = useRef(debounce(() => forceRender(() => undefined), 200)).current;
 
   useEffect(() => {
     window.addEventListener('resize', rerender);

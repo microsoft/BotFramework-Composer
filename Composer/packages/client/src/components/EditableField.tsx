@@ -4,12 +4,12 @@
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { TextField, ITextFieldStyles, ITextFieldProps, ITextField } from 'office-ui-fabric-react/lib/TextField';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
+import { colors } from '../constants';
 
 const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'PageDown', 'PageUp', 'Home', 'End'];
 
@@ -17,12 +17,8 @@ const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'
 const defaultContainerStyle = (hasFocus, hasErrors) => css`
   display: flex;
   width: 100%;
-  outline: ${hasErrors
-    ? `2px solid ${SharedColors.red10}`
-    : hasFocus
-    ? `2px solid ${SharedColors.cyanBlue10}`
-    : undefined};
-  background: ${hasFocus || hasErrors ? NeutralColors.white : 'inherit'};
+  outline: ${hasErrors ? `2px solid ${colors.red10}` : hasFocus ? `2px solid ${colors.cyanBlue10}` : undefined};
+  background: ${hasFocus || hasErrors ? colors.white : 'inherit'};
   margin-top: 2px;
   :hover .ms-Button-icon {
     visibility: visible;
@@ -206,7 +202,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   let borderColor: string | undefined = undefined;
 
   if (!editing && !error) {
-    borderColor = formData.value || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
+    borderColor = formData.value || transparentBorder || depth > 1 ? 'transparent' : colors.gray30;
   }
 
   const hasEditingErrors = hasErrors && hasBeenEdited;
@@ -244,10 +240,10 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
                   transition: 'border-color 0.1s linear',
                   selectors: {
                     ':hover': {
-                      borderColor: hasFocus ? undefined : NeutralColors.gray30,
+                      borderColor: hasFocus ? undefined : colors.gray30,
                     },
                     '.ms-TextField-field': {
-                      background: hasFocus || hasEditingErrors ? NeutralColors.white : 'inherit',
+                      background: hasFocus || hasEditingErrors ? colors.white : 'inherit',
                     },
                   },
                 },
@@ -278,7 +274,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
               styles: mergeStyleSets(
                 {
                   root: {
-                    color: NeutralColors.black,
+                    color: colors.black,
                     visibility: 'hidden',
                   },
                 },
@@ -287,17 +283,15 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             }}
             styles={{
               root: {
-                background: hasFocus ? NeutralColors.white : 'inherit',
+                background: hasFocus ? colors.white : 'inherit',
               },
             }}
             onClick={iconProps?.onClick || resetValue}
           />
         )}
       </div>
-      {hasErrors && hasBeenEdited && (
-        <span style={{ color: SharedColors.red20 }}>{requiredMessage || formErrors.value}</span>
-      )}
-      {error && <span style={{ color: SharedColors.red20 }}>{error}</span>}
+      {hasErrors && hasBeenEdited && <span style={{ color: colors.red20 }}>{requiredMessage || formErrors.value}</span>}
+      {error && <span style={{ color: colors.red20 }}>{error}</span>}
     </Fragment>
   );
 };

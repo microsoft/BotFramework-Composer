@@ -9,10 +9,10 @@ import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
+import { colors } from '../../constants';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 
@@ -40,7 +40,7 @@ const publishTargetsHeaderText = css`
   width: 300px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.semibold};
-  border-bottom: 1px solid ${NeutralColors.gray30};
+  border-bottom: 1px solid ${colors.gray30};
   padding-top: 10px;
   padding-left: 10px;
 `;
@@ -55,7 +55,7 @@ const publishTargetsItemText = css`
   width: 200px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${NeutralColors.gray30};
+  border-bottom: 1px solid ${colors.gray30};
   padding-top: 10px;
   padding-left: 10px;
   text-overflow: ellipsis;
@@ -67,7 +67,7 @@ const addPublishProfile = {
   root: {
     fontSize: 12,
     fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
+    color: colors.blue,
     paddingLeft: 0,
     marginLeft: 5,
   },
@@ -77,7 +77,7 @@ const editPublishProfile = {
   root: {
     fontSize: 12,
     fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
+    color: colors.blue,
     paddingLeft: 0,
     paddingBottom: 5,
   },
@@ -87,7 +87,7 @@ const publishTargetsEditButton = css`
   width: 200px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${NeutralColors.gray30};
+  border-bottom: 1px solid ${colors.gray30};
   padding-top: 3px;
   padding-left: 10px;
 `;

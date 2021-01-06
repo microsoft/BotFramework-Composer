@@ -13,11 +13,11 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishTarget, PublishResult } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 
 import { navigateTo } from '../../utils/navigation';
 import { PublishType } from '../../recoilModel/types';
+import { colors } from '../../constants';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
@@ -94,7 +94,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     options.push({
       key: 'manageProfiles',
       text: formatMessage('Manage profiles'),
-      data: { style: { color: '#0078D4' } },
+      data: { style: { color: colors.blue } },
     });
     return options;
   };
@@ -113,7 +113,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     if (!item.status) {
       return null;
     } else if (item.status === 200) {
-      return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
+      return <Icon iconName="Accept" style={{ color: colors.green, fontWeight: 600 }} />;
     } else if (item.status === 202) {
       return (
         <div style={{ display: 'flex' }}>
@@ -121,7 +121,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
         </div>
       );
     } else {
-      return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
+      return <Icon iconName="Cancel" style={{ color: colors.red, fontWeight: 600 }} />;
     }
   };
   const handleChangePublishTarget = (item: IBotStatus, option?: IDropdownOption): void => {
@@ -306,7 +306,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       <Fragment>
         {defaultRender(props)}
         <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none', margin: '20px 0 38px 12px' }}>
-          <div css={{ fontSize: '14px', lineHeight: '20px', color: '#323130', fontWeight: 'bold' }}>
+          <div css={{ fontSize: '14px', lineHeight: '20px', color: colors.gray160, fontWeight: 'bold' }}>
             Publish history
           </div>
           {publishStatusList.length === 0 ? (

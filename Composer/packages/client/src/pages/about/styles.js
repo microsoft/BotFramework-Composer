@@ -3,12 +3,15 @@
 
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+
+import { colors } from '../../constants';
+
 export const outline = css`
   display: flex;
   flex-direction: column;
   height: 100%;
   margin: 32px 50px 0px 32px;
-  border: 1px solid #979797;
+  border: 1px solid ${colors.gray100};
   overflow-x: auto;
 `;
 
@@ -95,7 +98,7 @@ export const link = {
   root: {
     fontSize: FontSizes.mediumPlus,
     fontWeight: FontWeights.regular,
-    color: '#0078d4',
+    color: colors.blue,
     marginLeft: '10px',
     textDecoration: 'underline',
   },
@@ -105,7 +108,7 @@ export const helpLink = {
   root: {
     fontSize: FontSizes.mediumPlus,
     fontWeight: FontWeights.regular,
-    color: '#0078d4',
+    color: colors.blue,
     marginLeft: '60px',
     textDecoration: 'underline',
   },
@@ -113,7 +116,7 @@ export const helpLink = {
 
 export const icon = {
   root: {
-    color: '#0078d4',
+    color: colors.blue,
     fontSize: '20px',
   },
 };

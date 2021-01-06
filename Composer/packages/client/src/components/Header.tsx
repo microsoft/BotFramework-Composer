@@ -10,7 +10,7 @@ import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { checkForPVASchema } from '@bfc/shared';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
-import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
@@ -24,7 +24,7 @@ import {
   settingsState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
-import { AppUpdaterStatus } from '../constants';
+import { AppUpdaterStatus, colors } from '../constants';
 import { useLocation } from '../utils/hooks';
 
 import { languageListTemplates } from './MultiLanguage';
@@ -39,7 +39,7 @@ export const actionButton = css`
 
 const headerContainer = css`
   position: relative;
-  background: ${SharedColors.cyanBlue10};
+  background: ${colors.blue};
   height: 50px;
   display: flex;
   flex-direction: row;
@@ -50,15 +50,15 @@ const title = css`
   margin-left: 20px;
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.size16};
-  color: #fff;
+  color: ${colors.white};
 `;
 
 const botName = css`
   margin-left: 20px;
   font-size: 16px;
-  color: #fff;
+  color: ${colors.white};
   border-radius: 19px;
-  background: ${CommunicationColors.tint10};
+  background: ${colors.blue};
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
@@ -66,7 +66,7 @@ const botName = css`
 
 const divider = css`
   height: 24px;
-  border-right: 1px solid #979797;
+  border-right: 1px solid ${colors.gray100};
   margin: 0px 0px 0px 20px;
 `;
 
@@ -87,7 +87,7 @@ const rightSection = css`
 
 const buttonStyles: IButtonStyles = {
   icon: {
-    color: '#fff',
+    color: colors.white,
     fontSize: FontSizes.size20,
   },
   root: {
@@ -108,19 +108,19 @@ const teachingBubbleStyle = {
   root: {
     selectors: {
       '.ms-Callout-beak': {
-        background: NeutralColors.white,
+        background: colors.white,
       },
     },
   },
   bodyContent: {
-    background: NeutralColors.white,
+    background: colors.white,
     selectors: {
       '.ms-TeachingBubble-headline': {
-        color: NeutralColors.black,
+        color: colors.black,
         fontSize: FontSizes.size20,
       },
       '.ms-TeachingBubble-subText': {
-        color: NeutralColors.black,
+        color: colors.black,
         fontSize: FontSizes.size12,
       },
     },

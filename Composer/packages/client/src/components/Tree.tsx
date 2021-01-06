@@ -3,7 +3,8 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -25,10 +26,10 @@ const container = (variant) => {
 
   return css`
     width: 100%;
-    background-color: #ffffff;
+    background-color: ${colors.white};
     height: ${height};
     overflow: auto;
-    border-top: 2px solid ${SharedColors.cyanBlue10};
+    border-top: 2px solid ${colors.blue};
   `;
 };
 

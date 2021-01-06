@@ -5,7 +5,6 @@ import { JsonEditor } from '@bfc/code-editor';
 import { FormDialogSchemaEditor } from '@bfc/form-dialogs';
 import { FileExtensions } from '@bfc/shared';
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { IStackProps, IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -15,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 
 import { formDialogSchemaState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { colors } from '../../constants';
 
 const Root = styled(Stack)<{
   inProgress: boolean;
@@ -22,7 +22,7 @@ const Root = styled(Stack)<{
   {
     position: 'relative',
     width: '100%',
-    backgroundColor: NeutralColors.gray20,
+    backgroundColor: colors.gray20,
   },
   (props) =>
     props.inProgress
@@ -34,7 +34,7 @@ const Root = styled(Stack)<{
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'rgba(255,255,255, 0.6)',
+            background: colors.transparentBg,
           },
         }
       : null
@@ -44,7 +44,7 @@ const noop = () => {};
 const defaultValue: object = {};
 
 const editorTopBarStyles = classNamesFunction<IStackProps, IStackStyles>()({
-  root: { backgroundColor: '#fff', height: '45px', marginBottom: 1 },
+  root: { backgroundColor: colors.white, height: '45px', marginBottom: 1 },
 });
 
 type Props = {
@@ -109,7 +109,7 @@ export const VisualFormDialogSchemaEditor = React.memo((props: Props) => {
             flex: 1,
             position: 'relative',
             overflowY: 'auto',
-            backgroundColor: showEditor ? '#fff' : 'transparent',
+            backgroundColor: showEditor ? colors.white : 'transparent',
           },
         }}
       >

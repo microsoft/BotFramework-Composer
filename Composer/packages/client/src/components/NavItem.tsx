@@ -8,12 +8,12 @@ import { Link } from '@reach/router';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { FontSizes } from '@uifabric/fluent-theme';
-import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
 import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';
+import { colors } from '../constants';
 
 import { QnAIcon } from './QnAIcon';
 import { BotProjectsSettingsIcon } from './BotProjectsSettingsIcon';
@@ -23,15 +23,15 @@ const link = (active: boolean, disabled: boolean) => css`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: ${disabled ? '#999' : '#4f4f4f'};
+  color: ${disabled ? colors.gray110 : colors.gray140};
   position: relative;
 
   width: 220px;
 
   ${active
-    ? `background-color: ${NeutralColors.white};
+    ? `background-color: ${colors.white};
 
-     border-left: 3px solid ${CommunicationColors.primary};
+     border-left: 3px solid ${colors.blue};
     `
     : `
      background-color: transparent;
@@ -40,7 +40,7 @@ const link = (active: boolean, disabled: boolean) => css`
   ${disabled
     ? `pointer-events: none;`
     : `&:hover {
-      background-color: ${NeutralColors.gray50};
+      background-color: ${colors.gray50};
     }
     &:focus {
       outline: none;
@@ -48,9 +48,9 @@ const link = (active: boolean, disabled: boolean) => css`
         content: "";
         position: absolute;
         z-index: 1;
-        border: 1px solid ${NeutralColors.white};
+        border: 1px solid ${colors.white};
         border-image: initial;
-        outline: rgb(102, 102, 102) solid 1px;
+        outline: ${colors.gray130} solid 1px;
       }
     }
   `}
@@ -59,7 +59,7 @@ const link = (active: boolean, disabled: boolean) => css`
 const icon = (active: boolean, disabled: boolean) =>
   ({
     root: {
-      color: active ? '#000' : disabled ? '#999' : '#4f4f4f',
+      color: active ? colors.black : disabled ? colors.gray110 : colors.gray140,
       padding: '8px 12px',
       marginLeft: active ? '1px' : '4px',
       marginRight: '12px',

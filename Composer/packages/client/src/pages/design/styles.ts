@@ -3,7 +3,9 @@
 
 import { css } from '@emotion/core';
 import { mergeStyleSets, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
+
+import { colors } from '../../constants';
 
 export const pageRoot = css`
   height: 100%;
@@ -41,7 +43,7 @@ export const projectHeader = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${NeutralColors.gray20};
+  background-color: ${colors.gray20};
 
   label: DesignPageProjectHeader;
 `;
@@ -87,7 +89,7 @@ export const visualPanel = css`
 export const visualEditor = (hidden: boolean) => css`
   border: 0px;
   flex: 1;
-  background-color: #f6f6f6;
+  background-color: ${colors.gray20};
 
   display: ${hidden ? 'none' : 'block'};
   position: relative;
@@ -115,7 +117,7 @@ export const breadcrumbClass = mergeStyleSets({
         fontWeight: FontWeights.regular,
       },
     },
-    color: '#333',
+    color: colors.gray160,
     padding: '4px 8px',
   },
   chevron: {
@@ -124,14 +126,14 @@ export const breadcrumbClass = mergeStyleSets({
 });
 
 export const deleteDialogContent = css`
-  color: #000;
+  color ${colors.black};
 `;
 
 export const middleTriggerContainer = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f6f6f6;
+  background: ${colors.gray10};
   width: 100%;
   height: 100%;
   min-height: 285px;
@@ -143,12 +145,12 @@ export const middleTriggerElements = css`
   align-items: center;
   font-size: 18px;
   line-height: 24px;
-  color: #828282;
+  color: ${colors.gray110};
 `;
 
 export const triggerButton = css`
   font-size: 12px;
-  color: #0078d4;
+  color: ${colors.blue};
 `;
 
 export const styles = {

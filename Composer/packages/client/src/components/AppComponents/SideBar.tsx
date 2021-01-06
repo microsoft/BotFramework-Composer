@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { useState } from 'react';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -11,7 +11,7 @@ import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { resolveToBasePath } from '../../utils/fileUtil';
-import { BASEPATH } from '../../constants';
+import { BASEPATH, colors } from '../../constants';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { PageLink } from '../../utils/pageLinks';
@@ -27,17 +27,17 @@ const globalNav = css`
   line-height: 44px;
   cursor: pointer;
   font-size: ${FontSizes.size16};
-  color: #106ebe;
+  color: ${colors.blue};
   &:hover {
-    background: ${NeutralColors.gray50};
+    background: ${colors.sideBarHoverBg};
   }
 `;
 
 const sideBar = (isExpand: boolean) => css`
   width: ${isExpand ? '200' : '48'}px;
-  background-color: ${NeutralColors.gray20};
+  background-color: ${colors.sideBarBg};
   height: 100%;
-  border-right: 1px solid ${NeutralColors.gray50};
+  border-right: 1px solid ${colors.sideBarBorder};
   transition: width 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -48,7 +48,7 @@ const sideBar = (isExpand: boolean) => css`
 
 const dividerTop = css`
   width: 100%;
-  border-bottom: 1px solid ${NeutralColors.gray40};
+  border-bottom: 1px solid ${colors.sideBarDivider};
   margin: 0 auto;
 `;
 
@@ -58,7 +58,7 @@ const leftNavBottom = () => css`
 
 const divider = (isExpand: boolean) => css`
   width: ${isExpand ? '85%' : '40%'};
-  border-bottom: 1px solid ${NeutralColors.gray40};
+  border-bottom: 1px solid ${colors.sideBarDivider};
   margin: 0 auto;
 `;
 

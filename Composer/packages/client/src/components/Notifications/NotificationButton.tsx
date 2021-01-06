@@ -6,13 +6,13 @@ import { css, jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { notificationsSelector } from '../../recoilModel/selectors/notifications';
 import { dispatcherState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { colors } from '../../constants';
 
 import { NotificationPanel } from './NotificationPanel';
 
@@ -21,10 +21,10 @@ const styles = {
     position: relative;
   `,
   count: (visible?: boolean) => css`
-    background-color: ${NeutralColors.white};
-    border: 2px solid ${SharedColors.cyanBlue10};
+    background-color: ${colors.white};
+    border: 2px solid ${colors.cyanBlue10};
     border-radius: 100%;
-    color: ${SharedColors.cyanBlue10};
+    color: ${colors.cyanBlue10};
     font-size: 8px;
     font-weight: ${FontWeights.bold};
     height: 12px;

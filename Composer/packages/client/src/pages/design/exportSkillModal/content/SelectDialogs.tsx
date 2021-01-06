@@ -3,7 +3,6 @@
 
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { DialogInfo } from '@bfc/shared';
-import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
@@ -11,6 +10,7 @@ import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
+import { colors } from '../../../../constants';
 import { dispatcherState, validateDialogsSelectorFamily } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
@@ -23,7 +23,7 @@ const textFieldStyles = (focused: boolean) => ({
     backgroundColor: focused ? undefined : 'transparent',
     selectors: {
       ':hover': {
-        borderColor: NeutralColors.gray30,
+        borderColor: colors.gray30,
       },
     },
   },
