@@ -21,11 +21,10 @@ import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
-import { Bot, BotPublishHistory, BotPropertyType, BotStatus } from './type';
+import { BotPublishHistory, BotStatus } from './type';
 
 export interface BotStatusListProps {
-  botList: Bot[];
-  botPropertyData: BotPropertyType;
+  botStatusList: BotStatus[];
   botPublishHistoryList: BotPublishHistory;
   publishDisabled: boolean;
   managePublishProfile: (skillId: string) => void;
@@ -35,33 +34,8 @@ export interface BotStatusListProps {
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
 }
 
-const generateBotList = (
-  botList: Bot[],
-  botPropertyData: BotPropertyType,
-  botPublishHistoryList: BotPublishHistory
-): BotStatus[] => {
-  const bots = botList.map((bot) => {
-    const botStatus: BotStatus = Object.assign({}, bot);
-    const publishTargets = botPropertyData[bot.id].publishTargets;
-    const publishHistory = botPublishHistoryList[bot.id];
-    if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
-      botStatus.publishTargets = publishTargets;
-      if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
-        const history = publishHistory[botStatus.publishTarget][0];
-        botStatus.time = history.time;
-        botStatus.comment = history.comment;
-        botStatus.message = history.message;
-        botStatus.status = history.status;
-      }
-    }
-    return botStatus;
-  });
-  return bots;
-};
-
 export const BotStatusList: React.FC<BotStatusListProps> = ({
-  botList,
-  botPropertyData,
+  botStatusList,
   botPublishHistoryList,
   publishDisabled,
   managePublishProfile,
@@ -72,15 +46,11 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const [showHistoryBots, setShowHistoryBots] = useState<string[]>([]);
 
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
-  const items: BotStatus[] = useMemo(() => {
-    return generateBotList(botList, botPropertyData, botPublishHistoryList);
-  }, [botList, botPropertyData, botPublishHistoryList]);
-
   const displayedItems: BotStatus[] = useMemo(() => {
-    if (currentSort.key !== 'Bot') return items;
-    if (currentSort.descending) return items;
-    return items.slice().reverse();
-  }, [items, currentSort]);
+    if (currentSort.key !== 'Bot') return botStatusList;
+    if (currentSort.descending) return botStatusList;
+    return botStatusList.slice().reverse();
+  }, [botStatusList, currentSort]);
 
   const changeSelected = (item: BotStatus, isChecked?: boolean) => {
     let newSelectedBots: BotStatus[];

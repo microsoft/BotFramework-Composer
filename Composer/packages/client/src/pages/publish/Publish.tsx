@@ -130,6 +130,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const [selectedBots, setSelectedBots] = useState<Bot[]>([]);
+
+  const botStatusList = useMemo(() => {
+    return generateBotStatusList(currentBotList, botPropertyData, botPublishHistoryList);
+  }, [currentBotList, botPropertyData, botPublishHistoryList]);
+
   const publishDisabled = useMemo(() => {
     return botList.some((bot) => {
       const botProjectId = bot.id;
@@ -322,9 +327,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <BotStatusList
-            botList={currentBotList}
-            botPropertyData={botPropertyData}
             botPublishHistoryList={botPublishHistoryList}
+            botStatusList={botStatusList}
             changePublishTarget={changePublishTarget}
             managePublishProfile={(skillId) => {
               const url =
@@ -344,3 +348,27 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 };
 
 export default Publish;
+
+const generateBotStatusList = (
+  botList: Bot[],
+  botPropertyData: BotPropertyType,
+  botPublishHistoryList: BotPublishHistory
+): BotStatus[] => {
+  const bots = botList.map((bot) => {
+    const botStatus: BotStatus = Object.assign({}, bot);
+    const publishTargets = botPropertyData[bot.id].publishTargets;
+    const publishHistory = botPublishHistoryList[bot.id];
+    if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
+      botStatus.publishTargets = publishTargets;
+      if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
+        const history = publishHistory[botStatus.publishTarget][0];
+        botStatus.time = history.time;
+        botStatus.comment = history.comment;
+        botStatus.message = history.message;
+        botStatus.status = history.status;
+      }
+    }
+    return botStatus;
+  });
+  return bots;
+};
