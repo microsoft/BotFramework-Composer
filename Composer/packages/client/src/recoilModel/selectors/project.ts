@@ -7,7 +7,6 @@ import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
 import { LanguageFileImport } from '../../../../types/src';
-import { BotStatus } from '../../constants';
 import {
   botDisplayNameState,
   botErrorState,
@@ -29,7 +28,6 @@ import {
   dialogIdsState,
   dialogState,
   schemasState,
-  botStatusState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
@@ -48,10 +46,9 @@ export type TreeDataPerProject = {
   lgImports: Record<string, LanguageFileImport[]>;
   luImports: Record<string, LanguageFileImport[]>;
   name: string;
-  status: BotStatus;
   isPvaSchema: boolean;
   formDialogSchemas: FormDialogSchema[];
-  error: any;
+  botError: any;
 };
 
 // Actions
@@ -196,38 +193,45 @@ export const jsonSchemaFilesByProjectIdSelector = selector({
   },
 });
 
+export const botDiagnosticsSelectorFamily = selectorFamily({
+  key: 'botDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+    const dialogs = get(dialogsSelectorFamily(projectId));
+    const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+    const luFiles = get(luFilesState(projectId));
+    const lgFiles = get(lgFilesState(projectId));
+    const setting = get(settingsState(projectId));
+    const skillManifests = get(skillManifestsState(projectId));
+    const dialogSchemas = get(dialogSchemasState(projectId));
+    const qnaFiles = get(qnaFilesState(projectId));
+    const botProjectFile = get(botProjectFileState(projectId));
+    const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
+    const botAssets: BotAssets = {
+      projectId,
+      dialogs,
+      luFiles,
+      qnaFiles,
+      lgFiles,
+      skillManifests,
+      setting,
+      dialogSchemas,
+      formDialogSchemas,
+      botProjectFile,
+      jsonSchemaFiles,
+      recognizers: [],
+      crossTrainConfig: {},
+    };
+    return BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+  },
+});
+
 export const botProjectDiagnosticsSelector = selector({
   key: 'botProjectDiagnosticsSelector',
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
-      const dialogs = get(dialogsSelectorFamily(projectId));
-      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
-      const luFiles = get(luFilesState(projectId));
-      const lgFiles = get(lgFilesState(projectId));
-      const setting = get(settingsState(projectId));
-      const skillManifests = get(skillManifestsState(projectId));
-      const dialogSchemas = get(dialogSchemasState(projectId));
-      const qnaFiles = get(qnaFilesState(projectId));
-      const botProjectFile = get(botProjectFileState(projectId));
-      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
-      const botAssets: BotAssets = {
-        projectId,
-        dialogs,
-        luFiles,
-        qnaFiles,
-        lgFiles,
-        skillManifests,
-        setting,
-        dialogSchemas,
-        formDialogSchemas,
-        botProjectFile,
-        jsonSchemaFiles,
-        recognizers: [],
-        crossTrainConfig: {},
-      };
-      return BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+      return get(botDiagnosticsSelectorFamily(projectId));
     });
     return result;
   },
@@ -266,13 +270,11 @@ export const projectTreeSelector = selector<TreeDataPerProject[]>({
       });
 
       const botError = get(botErrorState(projectId));
-      const status = get(botStatusState(projectId));
       const name = get(botDisplayNameState(projectId));
 
       const lgImports: Record<string, LanguageFileImport[]> = {};
       const luImports: Record<string, LanguageFileImport[]> = {};
 
-      debugger;
       dialogs.forEach((d) => {
         lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
         luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
@@ -290,11 +292,10 @@ export const projectTreeSelector = selector<TreeDataPerProject[]>({
         sortedDialogs,
         luImports,
         lgImports,
-        status,
         name,
         isPvaSchema,
         formDialogSchemas,
-        error: botError,
+        botError,
       };
     });
   },
