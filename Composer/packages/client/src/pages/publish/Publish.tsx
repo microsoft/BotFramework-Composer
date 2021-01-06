@@ -144,7 +144,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         return;
       }
       const latestPublishItem = botPublishHistory[0];
-      if (latestPublishItem.status === 202) {
+      if (latestPublishItem.status === ApiStatus.Publishing) {
         return true;
       }
     });
