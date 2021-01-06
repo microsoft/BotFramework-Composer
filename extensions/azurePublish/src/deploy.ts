@@ -12,8 +12,6 @@ import { LuisAndQnaPublish } from './luisAndQnA';
 import * as axios from 'axios';
 import archiver = require('archiver');
 
-const proxy = require("node-global-proxy").default;
-
 export class BotProjectDeploy {
   private accessToken: string;
   private projPath: string;
@@ -56,8 +54,6 @@ export class BotProjectDeploy {
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
           message: `Remote deploy using http proxy: ${proxySettings}`,
         })
-        proxy.setConfig(proxySettings);
-        proxy.start();
       }
 
       // STEP 1: CLEAN UP PREVIOUS BUILDS
@@ -101,9 +97,6 @@ export class BotProjectDeploy {
       // this returns a pathToArtifacts where the deployable version lives.
       const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, settings, profileName);
 
-      if (proxySettings) {
-        proxy.stop();
-      }
       // STEP 4: ZIP THE ASSETS
       // Build a zip file of the project
       this.logger({
@@ -132,9 +125,6 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_ERROR,
         message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       });
-      if (proxySettings) {
-        proxy.stop();
-      }
       throw error;
     }
   }
