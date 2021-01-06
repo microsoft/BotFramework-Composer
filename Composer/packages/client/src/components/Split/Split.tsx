@@ -38,6 +38,7 @@ const Root = styled.div(
     width: '100%',
     height: '100%',
     display: 'grid',
+    label: 'Split',
     gridTemplateAreas: horizontal ? '"primary" "split" "secondary"' : '"primary split secondary"',
     gridTemplateColumns: horizontal
       ? '1fr'
@@ -55,6 +56,7 @@ const Primary = styled.div(({ horizontal }: { horizontal: boolean }) => ({
   height: horizontal ? 'auto' : '100%',
   width: horizontal ? '100%' : 'auto',
   gridArea: 'primary',
+  label: 'SplitPrimary',
 }));
 
 const Splitter = styled.div(({ horizontal }: { horizontal: boolean }) => ({
@@ -67,6 +69,7 @@ const Splitter = styled.div(({ horizontal }: { horizontal: boolean }) => ({
   gridArea: 'split',
   background: 'transparent',
   userSelect: 'none',
+  label: 'SplitSplitter',
 }));
 
 const Secondary = styled.div(({ horizontal }: { horizontal: boolean }) => ({
@@ -76,6 +79,7 @@ const Secondary = styled.div(({ horizontal }: { horizontal: boolean }) => ({
   height: horizontal ? 'auto' : '100%',
   width: horizontal ? '100%' : 'auto',
   gridArea: 'secondary',
+  label: 'SplitSecondary',
 }));
 
 export type SplitMeasuredSizes = {

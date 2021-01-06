@@ -19,6 +19,8 @@ import {
   formDialogSchemaIdsState,
 } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { SplitMeasuredSizes } from '../../components/Split/Split';
+import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreateFormDialogSchemaModal from './CreateFormDialogSchemaModal';
 import { FormDialogSchemaList } from './FormDialogSchemaList';
@@ -52,7 +54,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     deleteNotification,
   } = useRecoilValue(dispatcherState);
 
-  //const { setPageElementState } = useRecoilValue(dispatcherState);
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const generationStartedRef = React.useRef(false);
   const generationPendingNotificationIdRef = React.useRef<string | undefined>();
@@ -187,10 +189,9 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     [createFormDialogSchema, setCreateSchemaDialogOpen]
   );
 
-  // const onMeasuredSizesChanged = (_sizes: SplitMeasuredSizes) => {
-  //   console.log('form dialog page - onMeasuredSizesChanged');
-  //   //setPageElementState('forms', { leftSplitWidth: sizes.primary });
-  // };
+  const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
+    setPageElementState('forms', { leftSplitWidth: sizes.primary });
+  };
 
   return (
     <>
@@ -199,7 +200,8 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
           initialPrimarySize="320px"
           minPrimarySize="320px"
           minSecondarySize="800px"
-          //onMeasuredSizesChanged={onMeasuredSizesChanged}
+          renderSplitter={renderThinSplitter}
+          onMeasuredSizesChanged={onMeasuredSizesChanged}
         >
           <FormDialogSchemaList
             items={formDialogSchemaIds}

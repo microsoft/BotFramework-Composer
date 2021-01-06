@@ -57,6 +57,8 @@ import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { SplitMeasuredSizes } from '../../components/Split/Split';
+import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
@@ -198,7 +200,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
   const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
 
-  //const { setPageElementState } = useRecoilValue(dispatcherState);
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     if (!skillId) return;
@@ -701,10 +703,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
   const dialogCreateSource = dialogModalInfo ?? skillId ?? projectId;
 
-  // const onMeasuredSizesChanged = (_sizes: SplitMeasuredSizes) => {
-  //   console.log('design page- onMeasuredSizesChanged');
-  //   //setPageElementState('dialogs', { leftSplitWidth: sizes.primary });
-  // };
+  const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
+    setPageElementState('dialogs', { leftSplitWidth: sizes.primary });
+  };
 
   return (
     <React.Fragment>
@@ -713,7 +714,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           initialPrimarySize="20%"
           minPrimarySize="200px"
           minSecondarySize="800px"
-          //onMeasuredSizesChanged={onMeasuredSizesChanged}
+          renderSplitter={renderThinSplitter}
+          splitterSize="5px"
+          onMeasuredSizesChanged={onMeasuredSizesChanged}
         >
           <ProjectTree
             defaultSelected={{
@@ -748,7 +751,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <Split initialPrimarySize="65%" minPrimarySize="500px" minSecondarySize="350px">
+                <Split
+                  initialPrimarySize="65%"
+                  minPrimarySize="500px"
+                  minSecondarySize="350px"
+                  renderSplitter={renderThinSplitter}
+                >
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
                     {!isRemoteSkill ? breadcrumbItems : null}
                     {dialogJsonVisible ? (
