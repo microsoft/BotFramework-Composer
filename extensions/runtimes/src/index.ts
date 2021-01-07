@@ -319,15 +319,15 @@ export default async (composer: any): Promise<void> => {
       composer.log('Run dotnet user-secrets init...');
 
       // TODO: capture output of this and store it somewhere useful
-      // const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${_project.name}`, {
-      //   cwd: runtimePath,
-      // });
-      // if (initErr) {
-      //   throw new Error(initErr);
-      // }
+      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${_project.name}.csproj`, {
+        cwd: runtimePath,
+      });
+      if (initErr) {
+        throw new Error(initErr);
+      }
 
       composer.log('Run dotnet build...');
-      const { stderr: buildErr } = await execAsync(`dotnet build`, { cwd: runtimePath });
+      const { stderr: buildErr } = await execAsync(`dotnet build ${_project.name}.csproj`, { cwd: runtimePath });
       if (buildErr) {
         throw new Error(buildErr);
       }
