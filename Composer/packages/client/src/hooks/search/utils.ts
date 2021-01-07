@@ -22,7 +22,7 @@ export const fetchCommands = async (query: string) => {
   const queryParams = {
     'show-all-intents': true,
     verbose: true,
-    query,
+    query: query.replace(/ /g, '+'),
     'subscription-key': predictionKey,
   };
 
@@ -50,6 +50,7 @@ export const fetchDocumentations = async (query: string) => {
 };
 
 export const getAssetItemDeepLink = (item: AssetItem<BotBoundAssetData>) => {
+  const locale = 'en-us';
   const { botId } = item.data;
   const baseLink = `/bot/${botId}`;
   switch (item.kind) {
@@ -60,26 +61,21 @@ export const getAssetItemDeepLink = (item: AssetItem<BotBoundAssetData>) => {
       return `${baseLink}/dialogs/${item.id}`;
     case 'formSchema':
       return `${baseLink}/forms/${item.id}`;
-    case 'lg': {
-      const dialogId = (item.data as DialogBoundAssetData).dialogId;
-      const itemId = item.id.startsWith(dialogId) ? dialogId : item.id;
-      return `${baseLink}/language-generation/${itemId}`;
-    }
+    case 'lg':
+      return `${baseLink}/language-generation/${item.id.replace(`.${locale}`, '')}`;
     case 'lgImport': {
       const { dialogId } = item.data as DialogBoundAssetData;
-      return `${baseLink}/language-generation/${dialogId}/item/${item.id}`;
+      return `${baseLink}/language-generation/${dialogId}/item/${item.id.replace(`.${locale}`, '')}`;
     }
     case 'lu': {
-      const dialogId = (item.data as DialogBoundAssetData).dialogId;
-      const itemId = item.id.startsWith(dialogId) ? 'all' : item.id;
-      return `${baseLink}/language-understanding/${itemId}`;
+      return `${baseLink}/language-understanding/${item.id.replace(`.${locale}`, '')}`;
     }
     case 'luImport': {
       const { dialogId } = item.data as DialogBoundAssetData;
-      return `${baseLink}/language-understanding/${dialogId}/item/${item.id}`;
+      return `${baseLink}/language-understanding/${dialogId}/item/${item.id.replace(`.${locale}`, '')}`;
     }
     case 'qna':
-      return `${baseLink}/knowledge-base/${item.id}`;
+      return `${baseLink}/knowledge-base/${item.id.replace(`.${locale}`, '')}`;
     case 'trigger': {
       const dialogData = item.data as DialogBoundAssetData;
       return `${baseLink}/dialogs/${dialogData.dialogId}?selected=triggers["${item.id}"]`;

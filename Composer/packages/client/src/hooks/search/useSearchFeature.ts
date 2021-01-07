@@ -28,12 +28,12 @@ export const useSearchFeature = (query: string, minCharCountRequirement = 3) => 
     [assetItems]
   );
 
-  const searchCommands = async (_query: string, update = false) => {
+  const searchCommands = async (query: string, update = false) => {
     const commands = await fetchCommands(query);
     const results = commands.map<SearchResult<{ label: string }>>((command) => ({
       id: command,
       kind: 'command',
-      linkUrl: '',
+      linkUrl: command,
       icon: 'ChevronRight',
       data: {
         label: startCase(command)

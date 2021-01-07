@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { NodeEventTypes } from '@bfc/adaptive-flow';
 import styled from '@emotion/styled';
 import { navigate } from '@reach/router';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -17,7 +18,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { useSearchFeature } from '../../hooks/search/useSearchFeature';
-import { botOpeningState } from '../../recoilModel';
+import { botOpeningState, dispatcherState } from '../../recoilModel';
 import { useLocation } from '../../utils/hooks';
 
 import { renderAssetItem } from './renderAssetItem';
@@ -142,7 +143,7 @@ const SearchResultPane = <T,>(props: SearchResultPaneProps<T>) => {
   const { kind, label, items, onClickItem } = props;
 
   const {
-    location: { pathname },
+    location: { search },
   } = useLocation();
 
   return items.length ? (
@@ -150,7 +151,7 @@ const SearchResultPane = <T,>(props: SearchResultPaneProps<T>) => {
       <Label styles={{ root: { height: defaultItemHeight } }}>{label}</Label>
       <Root height={Math.min(items.length, maxResultCount) * defaultItemHeight + 8}>
         {items.map((item, idx) => {
-          const disabled = item.kind === 'command' && isCommandDisabled(item.id, pathname);
+          const disabled = item.kind === 'command' && isCommandDisabled(item.id, search);
           return (
             <ItemRow
               key={`item-${item.id}-${idx}`}
@@ -173,6 +174,8 @@ const SearchResultPane = <T,>(props: SearchResultPaneProps<T>) => {
 export const SearchFeature = () => {
   const botOpening = useRecoilValue(botOpeningState);
   const { 0: query, 1: setQuery } = React.useState('');
+
+  const { setVisualEditorExternalEvent } = useRecoilValue(dispatcherState);
 
   const debouncedQuery = useDebounce<string>(query, 300);
 
@@ -219,8 +222,10 @@ export const SearchFeature = () => {
           // eslint-disable-next-line security/detect-non-literal-fs-filename
           window.open(linkUrl)?.focus();
           break;
-        case 'command':
+        case 'command': {
+          setVisualEditorExternalEvent(NodeEventTypes.Insert, linkUrl);
           break;
+        }
       }
     },
     [setQuery, clear]
@@ -238,6 +243,7 @@ export const SearchFeature = () => {
               display: 'none',
             },
           }}
+          value={query}
           onChange={(_, value) => setQuery(value || '')}
         />
         {isSearching && (

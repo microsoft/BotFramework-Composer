@@ -88,14 +88,12 @@ export const visualDesignerQuickCommandTypes = [
   'ConnectToASkill',
   'SendAnHttpRequest',
   'EmitACustomEvent',
-  'OauthLogin',
   'ConnectToQnaKnowledgebase',
   'SignOutUser',
   'LogToConsole',
   'ThrowException',
   'EmitATraceEvent',
   'EmitATelemetryTrackEvent',
-  'AddAlternativePhrasing',
 ];
 
 export type VisualDesignerQuickCommandType = typeof visualDesignerQuickCommandTypes[number];
@@ -172,7 +170,7 @@ export const ActionKinds = {
   AskForFileOrAttachment: 'Microsoft.AttachmentInput',
   AskForDateOrTime: 'Microsoft.DateTimeInput',
   OauthLogin: 'Microsoft.OAuthInput',
-  AskActivity: 'Microsoft.OAuthInput',
+  AskActivity: 'Microsoft.Ask',
   IfCondition: 'Microsoft.IfCondition',
   SwitchCondition: 'Microsoft.SwitchCondition',
   LoopForEachItem: 'Microsoft.Foreach',
