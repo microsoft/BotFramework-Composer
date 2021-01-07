@@ -46,22 +46,13 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   changePublishTarget,
 }) => {
   const [expandedBotIds, setExpandedBotIds] = useState<{ [botId: string]: boolean }>({});
-
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
+
   const displayedItems: BotStatus[] = useMemo(() => {
     if (currentSort.key !== 'Bot') return botStatusList;
     if (currentSort.descending) return botStatusList;
     return botStatusList.slice().reverse();
   }, [botStatusList, currentSort]);
-
-  const onChangeCheckbox = (skillId: string, isChecked?: boolean) => {
-    if (isChecked) {
-      if (checkedIds.some((id) => id === skillId)) return;
-      onCheck([...checkedIds, skillId]);
-    } else {
-      onCheck(checkedIds.filter((id) => id !== skillId));
-    }
-  };
 
   const publishTargetOptions = (item: BotStatus): IDropdownOption[] => {
     const options: IDropdownOption[] = [];
@@ -79,7 +70,36 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     });
     return options;
   };
-  const onRenderOption = (option?: IDropdownOption): JSX.Element | null => {
+
+  const onChangeCheckbox = (skillId: string, isChecked?: boolean) => {
+    if (isChecked) {
+      if (checkedIds.some((id) => id === skillId)) return;
+      onCheck([...checkedIds, skillId]);
+    } else {
+      onCheck(checkedIds.filter((id) => id !== skillId));
+    }
+  };
+
+  const onChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
+    if (option) {
+      if (option.key === 'manageProfiles') {
+        managePublishProfile(item.id);
+      } else {
+        changePublishTarget(option.text, item);
+      }
+    }
+  };
+
+  const onChangeShowHistoryBots = (item: BotStatus) => {
+    const clickedBotId = item.id;
+    if (expandedBotIds[clickedBotId]) {
+      setExpandedBotIds({ ...expandedBotIds, [clickedBotId]: false });
+    } else {
+      setExpandedBotIds({ ...expandedBotIds, [clickedBotId]: true });
+    }
+  };
+
+  const renderDropdownOption = (option?: IDropdownOption): JSX.Element | null => {
     if (!option) return null;
     const style = {
       ...option.data?.style,
@@ -90,7 +110,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     };
     return <div style={style}>{option.text}</div>;
   };
-  const onRenderStatus = (item: BotStatus): JSX.Element | null => {
+
+  const renderPublishStatus = (item: BotStatus): JSX.Element | null => {
     if (!item.status) {
       return null;
     } else if (item.status === ApiStatus.Success) {
@@ -103,23 +124,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       );
     } else {
       return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
-    }
-  };
-  const handleChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
-    if (option) {
-      if (option.key === 'manageProfiles') {
-        managePublishProfile(item.id);
-      } else {
-        changePublishTarget(option.text, item);
-      }
-    }
-  };
-  const changeShowHistoryBots = (item: BotStatus) => {
-    const clickedBotId = item.id;
-    if (expandedBotIds[clickedBotId]) {
-      setExpandedBotIds({ ...expandedBotIds, [clickedBotId]: false });
-    } else {
-      setExpandedBotIds({ ...expandedBotIds, [clickedBotId]: true });
     }
   };
 
@@ -172,8 +176,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
               root: { width: '100%' },
               dropdownItems: { selectors: { '.ms-Button-flexContainer': { width: '100%' } } },
             }}
-            onChange={(_, option?: IDropdownOption) => handleChangePublishTarget(item, option)}
-            onRenderOption={onRenderOption}
+            onChange={(_, option?: IDropdownOption) => onChangePublishTarget(item, option)}
+            onRenderOption={renderDropdownOption}
           />
         );
       },
@@ -203,7 +207,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       isRowHeader: true,
       data: 'string',
       onRender: (item: BotStatus) => {
-        return onRenderStatus(item);
+        return renderPublishStatus(item);
       },
       isPadded: true,
     },
@@ -255,14 +259,15 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
           <IconButton
             iconProps={{ iconName: expandedBotIds[item.id] ? 'ChevronDown' : 'ChevronRight' }}
             styles={{ root: { float: 'right' } }}
-            onClick={() => changeShowHistoryBots(item)}
+            onClick={() => onChangeShowHistoryBots(item)}
           />
         );
       },
       isPadded: true,
     },
   ];
-  const onRenderRow = (props, defaultRender) => {
+
+  const renderTableRow = (props, defaultRender) => {
     const { item }: { item: BotStatus } = props;
     const publishStatusList: PublishResult[] = get(botPublishHistoryList, [item.id, item.publishTarget || ''], []);
     return (
@@ -281,6 +286,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       </Fragment>
     );
   };
+
   return (
     <div css={listRoot} data-testid={'bot-status-list'}>
       <div css={tableView}>
@@ -304,7 +310,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
               clickedCol.isSorted = false;
             }
           }}
-          onRenderRow={onRenderRow}
+          onRenderRow={renderTableRow}
         />
       </div>
     </div>
