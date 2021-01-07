@@ -54,6 +54,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
 
   const onChangeCheckbox = (skillId: string, isChecked?: boolean) => {
     if (isChecked) {
+      if (checkedIds.some((id) => id === skillId)) return;
       onCheck([...checkedIds, skillId]);
     } else {
       onCheck(checkedIds.filter((id) => id !== skillId));

@@ -138,7 +138,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     return generateBotStatusList(currentBotList, botPropertyData, botPublishHistoryList);
   }, [currentBotList, botPropertyData, botPublishHistoryList]);
 
-  const publishDisabled = useMemo(() => {
+  const isPublishPending = useMemo(() => {
     return botList.some((bot) => {
       const botProjectId = bot.id;
 
@@ -154,9 +154,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [botList]);
 
   const canPull = useMemo(() => {
-    return !!selectedBots.find((bot) => {
-      const publishTypes = botPropertyData[bot.id].publishTypes;
-      const publishTargets = botPropertyData[bot.id].publishTargets;
+    return selectedBots.some((bot) => {
+      const { publishTypes, publishTargets } = botPropertyData[bot.id];
       const type = publishTypes?.find(
         (t) => t.name === publishTargets?.find((target) => target.name === bot.publishTarget)?.type
       );
@@ -166,7 +165,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       return false;
     });
   }, [selectedBots]);
-  const canPublish = selectedBots.length > 0 && selectedBots.some((bot) => !!bot.publishTarget) && !publishDisabled;
+
+  const canPublish =
+    checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
 
   const pendingNotificationRef = useRef<Notification>();
 
@@ -335,7 +336,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             changePublishTarget={changePublishTarget}
             checkedIds={checkedSkillIds}
             managePublishProfile={manageSkillPublishProfile}
-            publishDisabled={publishDisabled}
+            publishDisabled={isPublishPending}
             onCheck={updateCheckedSkills}
             onRollbackClick={() => null}
           />
