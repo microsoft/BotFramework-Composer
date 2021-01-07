@@ -142,7 +142,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       });
   }, [botList]);
 
-  const [botPublishHistoryList, setBotPublishHistoryList] = useState<BotPublishHistory>({});
   const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
@@ -159,8 +158,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [checkedSkillIds]);
 
   const botStatusList = useMemo(() => {
-    return generateBotStatusList(currentBotList, botPropertyData, botPublishHistoryList);
-  }, [currentBotList, botPropertyData, botPublishHistoryList]);
+    return generateBotStatusList(currentBotList, botPropertyData, publishHistoryList);
+  }, [currentBotList, botPropertyData, publishHistoryList]);
 
   const canPull = useMemo(() => {
     return selectedBots.some((bot) => {
@@ -178,11 +177,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const canPublish =
     checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
 
-  // TOOD: clear these 2 anti-pattern hooks
-  useEffect(() => {
-    // init bot status list for the botProjectData is empty array when first mounted
-    setBotPublishHistoryList(publishHistoryList);
-  }, [publishHistoryList]);
+  // TODO: clear these 2 anti-pattern hooks
 
   useEffect(() => {
     // init bot status list for the botProjectData is empty array when first mounted
@@ -340,7 +335,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <BotStatusList
-            botPublishHistoryList={botPublishHistoryList}
+            botPublishHistoryList={publishHistoryList}
             botStatusList={botStatusList}
             changePublishTarget={changePublishTarget}
             checkedIds={checkedSkillIds}
