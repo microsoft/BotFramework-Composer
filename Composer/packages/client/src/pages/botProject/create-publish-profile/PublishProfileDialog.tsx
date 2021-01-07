@@ -138,7 +138,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         <DialogWrapper
           isOpen
           dialogType={DialogTypes.Customer}
-          minWidth={900}
+          minWidth={960}
           subText={dialogTitle.subText}
           title={dialogTitle.title}
           onDismiss={closeDialog}
