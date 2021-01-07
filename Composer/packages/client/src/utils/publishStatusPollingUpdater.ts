@@ -40,16 +40,16 @@ export class PublishStatusPollingUpdater {
       return;
     }
 
-    try {
-      const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.publishTargetName}`);
-      onData({
-        botProjectId,
-        targetName: publishTargetName,
-        apiResponse: response,
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    // TODO: DONT set HTTP Status code with 500 404 directly!
+    const response = await httpClient
+      .get(`/publish/${this.botProjectId}/status/${this.publishTargetName}`)
+      .catch((reason) => reason.response);
+
+    onData({
+      botProjectId,
+      targetName: publishTargetName,
+      apiResponse: response,
+    });
   }
 
   async start(onData: OnDataHandler) {
@@ -82,4 +82,5 @@ export class PublishStatusPollingUpdater {
     return this.botProjectId === botProjectId && this.publishTargetName === targetName;
   }
 }
+
 export const pollingUpdaterList: PublishStatusPollingUpdater[] = [];
