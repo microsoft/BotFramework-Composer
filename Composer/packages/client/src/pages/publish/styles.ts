@@ -150,5 +150,5 @@ export const pvaPublishSurface = css`
 export const azurePublishSurface = css`
   overflow-x: hidden;
   overflow-y: auto;
-  height: 600px;
+  height: 500px;
 `;

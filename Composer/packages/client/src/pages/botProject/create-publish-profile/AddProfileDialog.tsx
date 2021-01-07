@@ -123,16 +123,19 @@ export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
         />
       )}
       <Fragment>
-        <div style={{ width: '60%', minHeight: '300px' }}>
+        <div style={{ width: '49%', minHeight: '350px' }}>
           <form>
             <TextField
+              required
               defaultValue={name}
               errorMessage={errorMessage}
               label={formatMessage('Create profile name')}
               placeholder={formatMessage('My Staging Environment')}
+              styles={{ root: { paddingBottom: '8px' } }}
               onChange={updateName}
             />
             <Dropdown
+              required
               defaultSelectedKey={targetType}
               label={formatMessage('Select your publish target')}
               options={targetTypes}

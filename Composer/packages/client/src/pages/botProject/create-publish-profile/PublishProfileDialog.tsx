@@ -136,6 +136,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
       )}
       {page != Page.EditProfile && (
         <DialogWrapper
+          isBlocking
           isOpen
           dialogType={DialogTypes.Customer}
           minWidth={960}

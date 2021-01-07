@@ -80,7 +80,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
     subText = '',
     children,
     dialogType,
-    isBlocking,
+    isBlocking = true,
     customerStyle = { dialog: {}, modal: {} },
     minWidth,
   } = props;

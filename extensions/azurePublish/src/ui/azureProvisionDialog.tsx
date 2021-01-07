@@ -67,7 +67,7 @@ const DialogTitle = {
   REVIEW: {
     title: formatMessage('Review + Create'),
     subText: formatMessage(
-      'Please review the resources that will be created for your bot. Once these resources are provisioned, your resources will be available in your Azure profile'
+      'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
     ),
   },
 };
@@ -142,10 +142,9 @@ export const AzureProvisionDialog: React.FC = () => {
       minWidth: 300,
       maxWidth: 350,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: ResourcesItem & {name,icon}) => {
-        return <div>
+        return <div style={{whiteSpace: 'normal'}}>
             {item.name}
             <div>{item.text} | {item.tier}</div>
           </div>;
@@ -157,13 +156,12 @@ export const AzureProvisionDialog: React.FC = () => {
       name: formatMessage('Description'),
       className: 'description',
       fieldName: 'description',
-      minWidth: 300,
-      maxWidth: 350,
+      minWidth: 400,
+      maxWidth: 500,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: ResourcesItem & {name,icon}) => {
-        return <span>{item.description}</span>;
+        return <div style={{whiteSpace: 'normal'}}>{item.description}</div>;
       },
       isPadded: true,
     }
@@ -395,9 +393,9 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageFormConfig = (
     <Fragment>
-      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
+      <ChoiceGroup style={{}} defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       {subscriptionOption?.length > 0 && choice.key === 'create' && (
-        <form style={{ width: '60%', height:'100%' }}>
+        <form style={{ width: '50%' }}>
           <Dropdown
             required
             defaultSelectedKey={currentSubscription?.subscriptionId}
@@ -405,6 +403,7 @@ export const AzureProvisionDialog: React.FC = () => {
             options={subscriptionOption}
             placeholder={'Select your subscription'}
             onChange={updateCurrentSubscription}
+            styles={{ root: { paddingBottom: '8px', marginTop:'10px' } }}
           />
           <TextField
             required
@@ -413,6 +412,7 @@ export const AzureProvisionDialog: React.FC = () => {
             label={'HostName'}
             placeholder={'Name of your new resource group'}
             onChange={newResourceGroup}
+            styles={{ root: { paddingBottom: '8px' } }}
           />
           <Dropdown
             required
@@ -434,11 +434,16 @@ export const AzureProvisionDialog: React.FC = () => {
       )}
       {choice.key === 'create' && subscriptionOption.length < 1 && <Spinner label="Loading" />}
       {choice.key === 'import' && (
-        <div style={{ width: '60%', marginTop: '10px', height: '100%' }}>
-          <div>Publish Configuration</div>
+        <div style={{ width: '50%', marginTop: '10px', height: '100%' }}>
+          <div style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#323130',
+            padding: '5px 0px'
+          }}>{formatMessage('Publish Configuration')}</div>
           <JsonEditor
             id={publishType}
-            height={200}
+            height={300}
             value={importConfig}
             onChange={(value) => {
               setEditorError(false);
@@ -474,7 +479,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const PageReview = useMemo(() => {
     return (
       <Fragment>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 50px)'}}>
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 64px)'}}>
         <DetailsList
           isHeaderVisible
           checkboxVisibility={CheckboxVisibility.onHover}
@@ -571,13 +576,13 @@ export const AzureProvisionDialog: React.FC = () => {
       <div
         style={{
           background: '#FFFFFF',
-          borderTop: '1px solid #000',
+          borderTop: '1px solid #EDEBE9',
           position: 'fixed',
           width: '100%',
           bottom: '0',
           textAlign: 'right',
           height:'fit-content',
-          padding: '16px 0px 0px',
+          padding: '24px 0px 0px',
         }}
       >
         {PageFooter}
