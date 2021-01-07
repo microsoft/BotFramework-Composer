@@ -113,8 +113,18 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
+  const updateUpdaterStatus = (payload) => {
+    const { botProjectId, targetName, apiResponse } = payload;
+    const pending = apiResponse.data.status === ApiStatus.Publishing;
+    setUpdaterStatus({
+      ...updaterStatus,
+      [`${botProjectId}/${targetName}`]: pending,
+    });
+  };
+
   // updater onData function
   const onReceiveUpdaterPayload = (payload) => {
+    updateUpdaterStatus(payload);
     updatePublishStatus(payload);
     changeNotificationStatus(payload);
   };
@@ -138,6 +148,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
+  const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>({});
+  const isPublishPending = useMemo(() => {
+    return Object.values(updaterStatus).some(Boolean);
+  }, [updaterStatus]);
+
   const [checkedSkillIds, setCheckedSkillIds] = useState<string[]>([]);
   const selectedBots = useMemo(() => {
     return botList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
@@ -146,21 +161,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const botStatusList = useMemo(() => {
     return generateBotStatusList(currentBotList, botPropertyData, botPublishHistoryList);
   }, [currentBotList, botPropertyData, botPublishHistoryList]);
-
-  const isPublishPending = useMemo(() => {
-    return botList.some((bot) => {
-      const botProjectId = bot.id;
-
-      const botPublishHistory = botPublishHistoryList?.[botProjectId]?.[bot.publishTarget] || [];
-
-      const latestPublishItem = botPublishHistory[0];
-      if (latestPublishItem && latestPublishItem.status === ApiStatus.Publishing) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  }, [botList]);
 
   const canPull = useMemo(() => {
     return selectedBots.some((bot) => {
@@ -342,8 +342,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             botStatusList={botStatusList}
             changePublishTarget={changePublishTarget}
             checkedIds={checkedSkillIds}
+            disabled={isPublishPending}
             managePublishProfile={manageSkillPublishProfile}
-            publishDisabled={isPublishPending}
             onCheck={updateCheckedSkills}
             onRollbackClick={() => null}
           />

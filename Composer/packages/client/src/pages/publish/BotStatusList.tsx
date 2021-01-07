@@ -26,7 +26,9 @@ import { BotPublishHistory, BotStatus } from './type';
 export interface BotStatusListProps {
   botStatusList: BotStatus[];
   botPublishHistoryList: BotPublishHistory;
-  publishDisabled: boolean;
+
+  /** When set to true, disable the checkbox. */
+  disabled: boolean;
   managePublishProfile: (skillId: string) => void;
   checkedIds: string[];
   onCheck: (skillIds: string[]) => void;
@@ -37,7 +39,7 @@ export interface BotStatusListProps {
 export const BotStatusList: React.FC<BotStatusListProps> = ({
   botStatusList,
   botPublishHistoryList,
-  publishDisabled,
+  disabled,
   checkedIds,
   onCheck,
   managePublishProfile,
@@ -134,7 +136,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
-            disabled={publishDisabled}
+            disabled={disabled}
             label={item.name}
             styles={{
               label: { width: '100%' },
