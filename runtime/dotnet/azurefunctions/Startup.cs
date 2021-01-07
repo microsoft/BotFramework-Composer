@@ -13,6 +13,7 @@ using Microsoft.Bot.Builder.Azure.Blobs;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Testing;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
@@ -138,7 +139,8 @@ namespace Microsoft.BotFramework.Composer.Functions
                   .UseStorage(storage)
                   .UseBotState(userState, conversationState)
                   .Use(new RegisterClassMiddleware<IConfiguration>(config))
-                  .Use(telemetryInitializerMiddleware);
+                  .Use(telemetryInitializerMiddleware)
+                  .Use(new SetTestOptionsMiddleware());
 
                 // Configure Middlewares
                 ConfigureTranscriptLoggerMiddleware(adapter, settings);
