@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LanguageFileImport, LgFile, LuFile } from '@bfc/shared';
+import { LanguageFileImport, LgFile, LuFile, QnAFile } from '@bfc/shared';
 import uniqBy from 'lodash/uniqBy';
-import { selectorFamily } from 'recoil';
+import { selector, selectorFamily } from 'recoil';
 
 import { getBaseName, getFileName } from '../../utils/fileUtil';
-import { localeState, lgFilesState, luFilesState } from '../atoms';
+import { localeState, lgFilesState, luFilesState, botProjectIdsState, qnaFilesState } from '../atoms';
 
 // eslint-disable-next-line security/detect-unsafe-regex
 const importRegex = /\[(?<id>.*?)]\((?<importPath>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
@@ -90,4 +90,31 @@ export const luImportsSelectorFamily = selectorFamily<LanguageFileImport[], { pr
 
     return getLanguageFileImports(dialogId, getFile);
   },
+});
+
+export const allLgFilesSelector = selector<Record<string, LgFile[]>>({
+  key: 'allLgFiles',
+  get: ({ get }) =>
+    get(botProjectIdsState).reduce((acc, projectId) => {
+      acc[projectId] = get(lgFilesState(projectId));
+      return acc;
+    }, {} as Record<string, LgFile[]>),
+});
+
+export const allQnaFilesSelector = selector<Record<string, QnAFile[]>>({
+  key: 'allQnaFiles',
+  get: ({ get }) =>
+    get(botProjectIdsState).reduce((acc, projectId) => {
+      acc[projectId] = get(qnaFilesState(projectId));
+      return acc;
+    }, {} as Record<string, QnAFile[]>),
+});
+
+export const allLuFilesSelector = selector<Record<string, LuFile[]>>({
+  key: 'allLuFiles',
+  get: ({ get }) =>
+    get(botProjectIdsState).reduce((acc, projectId) => {
+      acc[projectId] = get(luFilesState(projectId));
+      return acc;
+    }, {} as Record<string, LuFile[]>),
 });

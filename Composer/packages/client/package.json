@@ -46,6 +46,7 @@
     "babel-plugin-extract-format-message": "^6.2.3",
     "format-message": "^6.2.3",
     "format-message-generate-id": "^6.2.3",
+    "fuse.js": "^6.4.6",
     "immer": "^5.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",

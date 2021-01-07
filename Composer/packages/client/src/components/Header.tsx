@@ -2,34 +2,36 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { checkForPVASchema } from '@bfc/shared';
+import { css, jsx } from '@emotion/core';
+import { CommunicationColors, FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { checkForPVASchema } from '@bfc/shared';
-import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
-import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
-import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { schemasState } from '../recoilModel/atoms';
+import { AppUpdaterStatus } from '../constants';
+import composerIcon from '../images/composerIcon.svg';
 import {
-  dispatcherState,
   appUpdateState,
   botDisplayNameState,
-  localeState,
   currentProjectIdState,
+  dispatcherState,
+  localeState,
   settingsState,
 } from '../recoilModel';
-import composerIcon from '../images/composerIcon.svg';
-import { AppUpdaterStatus } from '../constants';
+import { schemasState } from '../recoilModel/atoms';
 import { useLocation } from '../utils/hooks';
 
+import { BotController } from './BotRuntimeController/BotController';
 import { languageListTemplates } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
-import { BotController } from './BotRuntimeController/BotController';
+import { SearchFeature } from './Search/SearchFeature';
+
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;
@@ -215,6 +217,8 @@ export const Header = () => {
           </Fragment>
         )}
       </div>
+
+      {showStartBotsWidget && <SearchFeature />}
 
       <div css={rightSection}>
         {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && <BotController />}
