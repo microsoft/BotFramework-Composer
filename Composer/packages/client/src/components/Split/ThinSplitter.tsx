@@ -49,11 +49,5 @@ export const ThinSplitter = (props: RenderSplitterProps) => {
 };
 
 export const renderThinSplitter = (props: RenderSplitterProps) => {
-  return (
-    <ThinSplitter
-      {...props}
-      color={props.dragging ? 'black' : 'silver'}
-      hoverColor={props.dragging ? 'black' : 'gray'}
-    />
-  );
+  return <ThinSplitter {...props} />;
 };
