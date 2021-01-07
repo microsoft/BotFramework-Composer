@@ -7,7 +7,7 @@ import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
-import VisualDesigner, { NodeEventTypes } from '@bfc/adaptive-flow';
+import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
 import { useFormConfig, useShellApi } from '@bfc/extension-client';
 import cloneDeep from 'lodash/cloneDeep';
@@ -18,6 +18,7 @@ import {
   validateDialogsSelectorFamily,
   schemasState,
   designPageLocationState,
+  visualEditorExternalEventState,
 } from '../../recoilModel';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
@@ -71,9 +72,10 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { projectId, currentDialog } = shellData;
   const { openNewTriggerModal, onFocus, onBlur, isRemoteSkill } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-  const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, setVisualEditorExternalEvent } = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
+  const externalEvent = useRecoilValue(visualEditorExternalEventState);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { dialogId, selected } = designPageLocation;
 
@@ -102,7 +104,9 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
     setTriggerButtonVisibility(visible);
   }, [dialogs, dialogId]);
 
-  const handleCompleteExternalEvent = () => {};
+  const handleCompleteExternalEvent = () => {
+    setVisualEditorExternalEvent();
+  };
 
   return (
     <React.Fragment>
@@ -115,6 +119,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         {!isRemoteSkill ? (
           <VisualDesigner
             data={currentDialog.content ?? {}}
+            externalEvent={externalEvent}
             schema={overridedSDKSchema}
             onBlur={onBlur}
             onCompleteExternalEvent={handleCompleteExternalEvent}

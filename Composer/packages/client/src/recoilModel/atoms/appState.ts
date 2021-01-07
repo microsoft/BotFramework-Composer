@@ -4,6 +4,7 @@
 import { atom, atomFamily } from 'recoil';
 import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
+import { ExternalAction } from '@bfc/adaptive-flow';
 
 import {
   StorageFolder,
@@ -270,4 +271,9 @@ export const exportSkillModalInfoState = atom<undefined | string>({
 export const displaySkillManifestState = atom<undefined | string>({
   key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
+});
+
+export const visualEditorExternalEventState = atom<ExternalAction>({
+  key: getFullyQualifiedKey('visualEditorExternalEvent'),
+  default: {},
 });

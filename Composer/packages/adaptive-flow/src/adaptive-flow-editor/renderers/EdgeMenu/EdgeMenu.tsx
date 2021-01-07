@@ -3,11 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useState } from 'react';
+import { ChangeEvent, useContext, useMemo, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { useMenuConfig } from '@bfc/extension-client';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import debounce from 'lodash/debounce';
+import Fuse from 'fuse.js';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';
@@ -20,7 +23,7 @@ import { ObiColors } from '../../../adaptive-flow-renderer/constants/ElementColo
 import { IconMenu } from '../../components/IconMenu';
 import { NodeEventTypes } from '../../../adaptive-flow-renderer/constants/NodeEventTypes';
 
-import { createActionMenu } from './createSchemaMenu';
+import { createActionMenu, createDivider, createPasteButtonItem, createSearchBarItem } from './createSchemaMenu';
 
 interface EdgeMenuProps {
   id: string;
@@ -61,21 +64,77 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     }
   };
 
+  const [searchValue, setSearchValue] = useState('');
+
+  const debounceSetSearchValue = useRef(
+    debounce<(e?: ChangeEvent<HTMLInputElement>, value?: string) => void>(
+      (_, value) => setSearchValue(value || ''),
+      300
+    )
+  ).current;
+
+  const options = {
+    isSelfHosted: selfHosted,
+    enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
+  };
+
+  const handleClick = (item) => {
+    if (!item) return;
+    onClick(item.key);
+  };
+
   const { menuSchema, forceDisabledActions } = useMenuConfig();
-  const menuItems = createActionMenu(
-    (item) => {
-      if (!item) return;
-      onClick(item.key);
-    },
-    {
-      isSelfHosted: selfHosted,
-      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
-    },
-    forceDisabledActions,
-    menuSchema,
-    // Custom Action 'oneOf' arrays from schema file
-    customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
+  const menuItems = useMemo(
+    () =>
+      createActionMenu(
+        handleClick,
+        options,
+        forceDisabledActions,
+        menuSchema,
+        // Custom Action 'oneOf' arrays from schema file
+        customSchemas
+          .map((x) => x.oneOf)
+          .filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
+      ),
+    [forceDisabledActions, menuSchema, options]
   );
+
+  const subMenuItems = useMemo(() => {
+    return menuItems.reduce((acc, item) => {
+      if (item.subMenuProps && item.subMenuProps.items) {
+        return [...acc, ...item.subMenuProps.items];
+      }
+      return [...acc, item];
+    }, [] as IContextualMenuItem[]);
+  }, [menuItems]);
+
+  const fuse = useMemo(
+    () =>
+      new Fuse(subMenuItems, {
+        includeScore: true,
+        includeMatches: true,
+        isCaseSensitive: false,
+        threshold: 0.2,
+        useExtendedSearch: true,
+        findAllMatches: true,
+        keys: ['name', 'key'],
+      }),
+    [subMenuItems]
+  );
+
+  const items = useMemo(() => {
+    const items: IContextualMenuItem[] = searchValue ? fuse.search(searchValue).map(({ item }) => item) : menuItems;
+
+    // paste button
+    const pasteButtonDisabled = !options.enablePaste;
+    const pasteButton = createPasteButtonItem(items.length, pasteButtonDisabled, handleClick);
+
+    // search bar
+    const searchBar = createSearchBarItem(debounceSetSearchValue);
+
+    items.unshift(pasteButton, createDivider(), searchBar, createDivider());
+    return items;
+  }, [searchValue, subMenuItems, menuItems, options.enablePaste]);
 
   const moreLabel = !insertMode
     ? formatMessage('Add')
@@ -113,7 +172,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
             },
           }}
           label={moreLabel}
-          menuItems={menuItems}
+          menuItems={items}
           nodeSelected={nodeSelected}
         />
       </TooltipHost>

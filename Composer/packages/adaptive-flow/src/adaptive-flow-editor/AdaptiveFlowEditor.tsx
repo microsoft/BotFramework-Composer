@@ -195,7 +195,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
                 }}
               >
                 {formatMessage('Choose a location for your “{actionType}” action.', {
-                  actionType: 'Microsoft.SendActivity',
+                  actionType: externalEvent?.eventData?.kind,
                 })}
               </MessageBar>
             )}
