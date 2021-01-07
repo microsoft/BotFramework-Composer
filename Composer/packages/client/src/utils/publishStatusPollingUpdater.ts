@@ -4,8 +4,8 @@
 import httpClient from './httpUtil';
 
 enum PollingStateEnum {
-  Closed,
-  Open,
+  Stopped,
+  Running,
 }
 
 export enum ApiStatus {
@@ -15,41 +15,54 @@ export enum ApiStatus {
   Unknown = 404,
 }
 
+interface OnDataPayload {
+  botProjectId: string;
+  targetName: string;
+  apiResponse: any;
+}
+type OnDataHandler = (payload: OnDataPayload) => void;
+
 export class PublishStatusPollingUpdater {
-  private status;
-  private timerId;
-  private targetName;
-  private botProjectId;
+  private status: PollingStateEnum = PollingStateEnum.Stopped;
+  private timerId = 0;
+  private publishTargetName: string;
+  private botProjectId: string;
   private pollingInterval = 10000;
 
   constructor(botProjectId: string, publishTargetId: string) {
     this.botProjectId = botProjectId;
-    this.targetName = publishTargetId;
+    this.publishTargetName = publishTargetId;
   }
 
-  async start(onData, onAction) {
-    if (!(this.botProjectId && this.targetName)) return;
-    if (this.status === PollingStateEnum.Open) return;
-    try {
-      this.status = PollingStateEnum.Open;
-
-      const firstResponse = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
-      onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: firstResponse });
-      this.timerId = window.setInterval(async () => {
-        try {
-          const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.targetName}`);
-          onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
-          onAction && onAction({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: response });
-        } catch (err) {
-          onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
-          onAction &&
-            onAction({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
-        }
-      }, this.pollingInterval);
-    } catch (err) {
-      onData && onData({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
-      onAction && onAction({ botProjectId: this.botProjectId, targetName: this.targetName, apiResponse: err.response });
+  private async fetchPublishStatusData(botProjectId: string, publishTargetName: string, onData: OnDataHandler) {
+    if (typeof onData !== 'function') {
+      console.error(new Error('onData should be a function.'));
+      return;
     }
+
+    try {
+      const response = await httpClient.get(`/publish/${this.botProjectId}/status/${this.publishTargetName}`);
+      onData({
+        botProjectId,
+        targetName: publishTargetName,
+        apiResponse: response,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async start(onData: OnDataHandler) {
+    if (!this.botProjectId || !this.publishTargetName) return;
+    if (this.status === PollingStateEnum.Running) return;
+
+    this.status = PollingStateEnum.Running;
+
+    this.fetchPublishStatusData(this.botProjectId, this.publishTargetName, onData);
+    this.timerId = window.setInterval(
+      async () => this.fetchPublishStatusData(this.botProjectId, this.publishTargetName, onData),
+      this.pollingInterval
+    );
   }
 
   stop() {
@@ -57,16 +70,16 @@ export class PublishStatusPollingUpdater {
       window.clearInterval(this.timerId);
     }
     this.timerId = 0;
-    this.status = PollingStateEnum.Closed;
+    this.status = PollingStateEnum.Stopped;
   }
 
-  restart(onData, onAction) {
+  restart(onData: OnDataHandler) {
     this.stop();
-    this.start(onData, onAction);
+    this.start(onData);
   }
 
   isSameUpdater(botProjectId, targetName) {
-    return this.botProjectId === botProjectId && this.targetName === targetName;
+    return this.botProjectId === botProjectId && this.publishTargetName === targetName;
   }
 }
 export const pollingUpdaterList: PublishStatusPollingUpdater[] = [];
