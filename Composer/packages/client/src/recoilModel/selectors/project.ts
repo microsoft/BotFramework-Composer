@@ -193,8 +193,8 @@ export const jsonSchemaFilesByProjectIdSelector = selector({
   },
 });
 
-export const botDiagnosticsSelectorFamily = selectorFamily({
-  key: 'botDiagnosticsSelectorFamily',
+export const perProjectDiagnosticsSelectorFamily = selectorFamily({
+  key: 'perProjectDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
     const dialogs = get(dialogsSelectorFamily(projectId));
@@ -231,7 +231,7 @@ export const botProjectDiagnosticsSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      return get(botDiagnosticsSelectorFamily(projectId));
+      return get(perProjectDiagnosticsSelectorFamily(projectId));
     });
     return result;
   },

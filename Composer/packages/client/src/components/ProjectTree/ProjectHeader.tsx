@@ -10,7 +10,7 @@ import { useRecoilValue } from 'recoil';
 import { Diagnostic } from '@bfc/shared';
 
 import { BotStatus } from '../../constants';
-import { botDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSelector } from '../../recoilModel';
+import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSelector } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 
@@ -75,19 +75,20 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
 
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const status = useRecoilValue(botStatusState(projectId));
-  const diagnostics = useRecoilValue(botDiagnosticsSelectorFamily(projectId));
+  const diagnostics = useRecoilValue(perProjectDiagnosticsSelectorFamily(projectId));
   const isRunning = status === BotStatus.connected;
 
   const displayName = `${name} ${rootProjectId !== projectId ? `(${formatMessage('Skill')})` : ''}`;
 
   const link: TreeLink = {
     displayName,
-    projectId: rootProjectId,
+    projectId,
     skillId: rootProjectId === projectId ? undefined : projectId,
     isRoot: true,
     botError,
     diagnostics,
     onErrorClick: onErrorClick,
+    isRemote,
   };
 
   const generateMenuItems = useCallback(() => {

@@ -100,6 +100,7 @@ const sortTriggerGroups = (x: string, y: string): number => {
 export type TreeLink = {
   displayName: string;
   isRoot: boolean;
+  isRemote: boolean;
   diagnostics: Diagnostic[];
   projectId: string;
   skillId?: string;
@@ -283,6 +284,7 @@ export const ProjectTree: React.FC<Props> = ({
       diagnostics,
       projectId: rootProjectId,
       skillId: skillId === rootProjectId ? undefined : skillId,
+      isRemote: false,
     };
     const menu: TreeMenuItem[] = [
       {
@@ -369,6 +371,7 @@ export const ProjectTree: React.FC<Props> = ({
       diagnostics: [],
       projectId: rootProjectId,
       skillId: skillId === rootProjectId ? undefined : skillId,
+      isRemote: false,
     };
 
     return (
@@ -409,6 +412,7 @@ export const ProjectTree: React.FC<Props> = ({
       diagnostics: [],
       isRoot: false,
       parentLink: dialogLink,
+      isRemote: false,
     };
 
     return (
@@ -476,6 +480,7 @@ export const ProjectTree: React.FC<Props> = ({
       isRoot: false,
       diagnostics: [],
       projectId,
+      isRemote: false,
     };
     return (
       <span css={headerCSS('trigger-group-header')} role="grid">
@@ -509,6 +514,7 @@ export const ProjectTree: React.FC<Props> = ({
       isRoot: false,
       projectId,
       diagnostics: [],
+      isRemote: false,
     };
 
     return (
@@ -557,6 +563,7 @@ export const ProjectTree: React.FC<Props> = ({
       diagnostics: [],
       isRoot: false,
       parentLink: dialogLink,
+      isRemote: false,
     };
 
     return (
@@ -600,6 +607,7 @@ export const ProjectTree: React.FC<Props> = ({
       diagnostics: [],
       isRoot: false,
       parentLink: dialogLink,
+      isRemote: false,
     };
 
     return (

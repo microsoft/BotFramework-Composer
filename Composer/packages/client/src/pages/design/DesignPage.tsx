@@ -326,7 +326,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   function handleSelect(link: TreeLink) {
-    if (link.bot?.error) {
+    if (link.botError) {
       setBrokenSkillInfo(link);
     }
     const { skillId, dialogId, trigger, parentLink } = link;

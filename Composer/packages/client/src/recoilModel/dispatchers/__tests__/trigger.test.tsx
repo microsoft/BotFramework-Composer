@@ -177,8 +177,8 @@ describe('trigger dispatcher', () => {
     await act(async () => {
       await dispatcher.createTrigger(projectId, dialogId, QnATriggerData1);
     });
-    const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
-    expect(updatedDialog?.content?.triggers?.length).toEqual(1);
+    const updatedDialog: DialogInfo | undefined = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
+    expect((updatedDialog?.content as any)?.triggers?.length).toEqual(1);
   });
 
   it('create a choose intent trigger', async () => {
@@ -186,8 +186,8 @@ describe('trigger dispatcher', () => {
     await act(async () => {
       await dispatcher.createTrigger(projectId, dialogId, chooseIntentTriggerData1);
     });
-    const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
-    expect(updatedDialog?.content?.triggers?.length).toEqual(1);
+    const updatedDialog: DialogInfo | undefined = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
+    expect((updatedDialog?.content as any)?.triggers?.length).toEqual(1);
   });
 
   it('create a intent trigger', async () => {
@@ -195,7 +195,7 @@ describe('trigger dispatcher', () => {
     await act(async () => {
       await dispatcher.createTrigger(projectId, dialogId, intentTriggerData1);
     });
-    const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
+    const updatedDialog: any = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
     expect(updatedDialog?.content?.triggers?.length).toEqual(1);
   });
 
@@ -204,7 +204,7 @@ describe('trigger dispatcher', () => {
     await act(async () => {
       await dispatcher.createTrigger(projectId, dialogId, QnATriggerData1);
     });
-    const updatedDialog = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
+    const updatedDialog: any = renderedComponent.current.dialogs.find(({ id }) => id === dialogId);
     if (updatedDialog == null) fail();
     expect(updatedDialog.content?.triggers.length).toEqual(1);
 
