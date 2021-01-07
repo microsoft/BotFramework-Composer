@@ -64,7 +64,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) =>
             className="project-tree-header-more-btn"
             data-is-focusable={isActive}
             data-testid="projectTreeHeaderMoreButton"
-            menuIconProps={{ iconName: 'Add', style: { color: colors.black } }}
+            menuIconProps={{ iconName: 'Add', style: { color: colors.text } }}
             menuProps={{ items: overflowItems }}
             role="cell"
             styles={{ ...moreButton(true), rootHovered: { background: 'none' } }}

@@ -33,7 +33,7 @@ const actionButtonStyle = {
   root: {
     fontSize: '12px',
     fontWeight: FontWeights.regular,
-    color: colors.blue,
+    color: colors.main,
     marginLeft: 0,
     marginTop: -12,
     paddingLeft: 0,
@@ -46,7 +46,7 @@ const errorContainer = css`
   height: 48px;
   line-height: 48px;
   background: ${colors.errorBg};
-  color: ${colors.black};
+  color: ${colors.text};
 `;
 
 const errorIcon = {

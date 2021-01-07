@@ -54,7 +54,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
   const onRenderNavigationContent: IRenderFunction<IPanelProps> = useCallback(
     (props, defaultRender) => (
       <div css={styles.container}>
-        <ActionButton styles={{ root: { color: colors.blue } }} onClick={handleClearAll}>
+        <ActionButton styles={{ root: { color: colors.main } }} onClick={handleClearAll}>
           {formatMessage('Clear all')}
         </ActionButton>
         {defaultRender!(props)}

@@ -40,7 +40,7 @@ export const actionButton = css`
 
 const headerContainer = css`
   position: relative;
-  background: ${colors.blue};
+  background: ${colors.main};
   height: 50px;
   display: flex;
   flex-direction: row;
@@ -59,7 +59,7 @@ const botName = css`
   font-size: 16px;
   color: ${colors.textOnColor};
   border-radius: 19px;
-  background: ${colors.blue};
+  background: ${colors.main};
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;

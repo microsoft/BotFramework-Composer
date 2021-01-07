@@ -67,7 +67,7 @@ const addPublishProfile = {
   root: {
     fontSize: 12,
     fontWeight: FontWeights.regular,
-    color: colors.blue,
+    color: colors.main,
     paddingLeft: 0,
     marginLeft: 5,
   },
@@ -77,7 +77,7 @@ const editPublishProfile = {
   root: {
     fontSize: 12,
     fontWeight: FontWeights.regular,
-    color: colors.blue,
+    color: colors.main,
     paddingLeft: 0,
     paddingBottom: 5,
   },

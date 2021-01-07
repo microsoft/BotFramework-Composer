@@ -22,9 +22,9 @@ const styles = {
   `,
   count: (visible?: boolean) => css`
     background-color: ${colors.bg};
-    border: 2px solid ${colors.blue};
+    border: 2px solid ${colors.main};
     border-radius: 100%;
-    color: ${colors.blue};
+    color: ${colors.main};
     font-size: 8px;
     font-weight: ${FontWeights.bold};
     height: 12px;

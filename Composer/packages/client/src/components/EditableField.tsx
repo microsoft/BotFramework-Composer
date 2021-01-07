@@ -17,7 +17,7 @@ const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'
 const defaultContainerStyle = (hasFocus, hasErrors) => css`
   display: flex;
   width: 100%;
-  outline: ${hasErrors ? `2px solid ${colors.red}` : hasFocus ? `2px solid ${colors.blue}` : undefined};
+  outline: ${hasErrors ? `2px solid ${colors.red}` : hasFocus ? `2px solid ${colors.main}` : undefined};
   background: ${hasFocus || hasErrors ? colors.bg : 'inherit'};
   margin-top: 2px;
   :hover .ms-Button-icon {

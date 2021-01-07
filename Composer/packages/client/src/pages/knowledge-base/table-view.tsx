@@ -286,7 +286,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             menuIconProps={{ iconName: 'Edit' }}
             styles={{
               root: {
-                color: colors.black,
+                color: colors.text,
                 visibility: isAllTab ? 'hidden' : 'visiable',
               },
             }}
@@ -305,7 +305,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             styles={{
               root: {
                 padding: 0,
-                color: colors.black,
+                color: colors.text,
                 visibility: isAllTab ? 'hidden' : 'visiable',
               },
             }}
@@ -422,7 +422,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
               iconProps={{ iconName: expandedIndex === index ? 'ChevronDown' : 'ChevronRight' }}
               styles={{
                 root: { ...icon.root, marginTop: 2, marginLeft: 7, fontSize: 12 },
-                icon: { fontSize: 8, color: colors.black },
+                icon: { fontSize: 8, color: colors.text },
               }}
               title={formatMessage('Toggle show all')}
               onClick={() => setExpandedIndex(expandedIndex === index ? -1 : index)}

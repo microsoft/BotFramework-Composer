@@ -117,7 +117,7 @@ export const breadcrumbClass = mergeStyleSets({
         fontWeight: FontWeights.regular,
       },
     },
-    color: colors.gray(160),
+    color: colors.text,
     padding: '4px 8px',
   },
   chevron: {
@@ -126,7 +126,7 @@ export const breadcrumbClass = mergeStyleSets({
 });
 
 export const deleteDialogContent = css`
-  color ${colors.black};
+  color ${colors.text};
 `;
 
 export const middleTriggerContainer = css`
@@ -150,7 +150,7 @@ export const middleTriggerElements = css`
 
 export const triggerButton = css`
   font-size: 12px;
-  color: ${colors.blue};
+  color: ${colors.main};
 `;
 
 export const styles = {

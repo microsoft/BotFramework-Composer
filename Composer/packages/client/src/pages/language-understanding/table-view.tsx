@@ -378,7 +378,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   shouldFocusOnMount: true,
                   items: getTemplatesMoreButtons(item, index),
                 }}
-                styles={{ menuIcon: { color: colors.black, fontSize: FontSizes.size16 } }}
+                styles={{ menuIcon: { color: colors.text, fontSize: FontSizes.size16 } }}
               />
             </TooltipHost>
           );

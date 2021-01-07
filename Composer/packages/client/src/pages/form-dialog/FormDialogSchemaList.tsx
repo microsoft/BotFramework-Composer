@@ -71,7 +71,7 @@ const oneLinerStyles = classNamesFunction<IStackItemProps, IStackItemStyles>()({
 const ItemRoot = styled(Stack)(({ selected }: { selected: boolean }) => ({
   padding: '0 12px',
   cursor: 'pointer',
-  background: selected ? colors.blue : 'transparent',
+  background: selected ? colors.main : 'transparent',
 }));
 
 const EmptyView = styled(Stack)({

@@ -40,7 +40,7 @@ const optionIcon = (checked: boolean) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
-  color: ${checked ? colors.blue : colors.black};
+  color: ${checked ? colors.main : colors.text};
 `;
 
 const optionRoot = css`
@@ -68,15 +68,15 @@ export const bannerClass = mergeStyles({
 const rowDetails = (disabled: boolean) => {
   return {
     root: {
-      color: disabled ? colors.gray(80) : colors.black,
+      color: disabled ? colors.gray(120) : colors.text,
       selectors: {
         '&:hover': {
           background: disabled ? colors.bg : colors.gray(30),
-          color: disabled ? colors.gray(80) : colors.black,
+          color: disabled ? colors.gray(120) : colors.text,
         },
         '&.ms-DetailsRow.is-selected': {
           background: disabled ? colors.bg : colors.gray(30),
-          color: disabled ? colors.gray(80) : colors.black,
+          color: disabled ? colors.gray(120) : colors.text,
         },
       },
     },
@@ -86,11 +86,11 @@ const rowDetails = (disabled: boolean) => {
 const rowTitle = (disabled: boolean) => {
   return {
     cellTitle: {
-      color: disabled ? colors.gray(80) : colors.black,
+      color: disabled ? colors.gray(80) : colors.text,
       selectors: {
         ':hover': {
           background: disabled ? colors.bg : colors.gray(30),
-          color: disabled ? colors.gray(80) : colors.black,
+          color: disabled ? colors.gray(80) : colors.text,
         },
       },
     },

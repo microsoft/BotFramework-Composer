@@ -98,7 +98,7 @@ export const link = {
   root: {
     fontSize: FontSizes.mediumPlus,
     fontWeight: FontWeights.regular,
-    color: colors.blue,
+    color: colors.main,
     marginLeft: '10px',
     textDecoration: 'underline',
   },
@@ -108,7 +108,7 @@ export const helpLink = {
   root: {
     fontSize: FontSizes.mediumPlus,
     fontWeight: FontWeights.regular,
-    color: colors.blue,
+    color: colors.main,
     marginLeft: '60px',
     textDecoration: 'underline',
   },
@@ -116,7 +116,7 @@ export const helpLink = {
 
 export const icon = {
   root: {
-    color: colors.blue,
+    color: colors.main,
     fontSize: '20px',
   },
 };

@@ -33,7 +33,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
   }
 
   return css`
-    border-left: 4px solid ${colors.blue};
+    border-left: 4px solid ${colors.main};
     background: white;
     box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
     width: 340px;
@@ -92,7 +92,7 @@ const cardDescription = css`
 `;
 
 const linkButton = css`
-  color: ${colors.blue};
+  color: ${colors.main};
   float: right;
   font-size: 12px;
   height: auto;
@@ -111,7 +111,7 @@ const getShimmerStyles = {
   ],
   shimmerGradient: [
     {
-      backgroundImage: `radial-gradient(at 50% 50%, ${colors.blue} 0%, ${colors.gray(30)} 100%);`,
+      backgroundImage: `radial-gradient(at 50% 50%, ${colors.main} 0%, ${colors.gray(30)} 100%);`,
     },
   ],
 };

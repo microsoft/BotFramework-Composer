@@ -29,7 +29,7 @@ const container = (variant) => {
     background-color: ${colors.bg};
     height: ${height};
     overflow: auto;
-    border-top: 2px solid ${colors.blue};
+    border-top: 2px solid ${colors.main};
   `;
 };
 

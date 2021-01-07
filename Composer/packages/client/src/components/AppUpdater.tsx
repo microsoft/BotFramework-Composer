@@ -33,7 +33,7 @@ const optionIcon = (checked: boolean) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
-  color: ${checked ? colors.blue : colors.black};
+  color: ${checked ? colors.main : colors.text};
 `;
 
 const optionRoot = css`
@@ -43,7 +43,7 @@ const optionRoot = css`
 
 const dialogCopy = css`
   margin: 0px;
-  color: ${colors.black};
+  color: ${colors.text};
 `;
 
 const dialogFooter: Partial<IDialogFooterStyles> = {
@@ -53,7 +53,7 @@ const dialogFooter: Partial<IDialogFooterStyles> = {
 };
 
 const dialogContent: Partial<IDialogContentStyles> = {
-  subText: { color: colors.black },
+  subText: { color: colors.text },
   header: { paddingBottom: '6px' },
 };
 

@@ -211,7 +211,7 @@ const BotController: React.FC = () => {
             iconName: statusIconClass,
             styles: {
               root: {
-                color: colors.bg,
+                color: colors.text,
               },
             },
           }}
@@ -219,6 +219,7 @@ const BotController: React.FC = () => {
           styles={{
             root: {
               backgroundColor: colors.botControllerBg,
+              color: colors.text,
               display: 'flex',
               alignItems: 'center',
               minWidth: '229px',
@@ -230,11 +231,12 @@ const BotController: React.FC = () => {
             },
             rootHovered: {
               background: transparentBackground,
+              color: colors.text,
             },
             rootDisabled: {
               opacity: 0.6,
               backgroundColor: colors.botControllerBg,
-              color: colors.bg,
+              color: colors.text,
               border: 'none',
               font: '62px',
             },

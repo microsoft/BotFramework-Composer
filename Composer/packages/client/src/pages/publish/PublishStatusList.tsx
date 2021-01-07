@@ -159,7 +159,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
         return (
           <ActionButton
             allowDisabledFocus
-            styles={{ root: { color: colors.blue } }}
+            styles={{ root: { color: colors.main } }}
             onClick={() => {
               onLogClick(item);
             }}
@@ -186,7 +186,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           <ActionButton
             allowDisabledFocus
             disabled={!(isRollbackSupported && item.status === 200)}
-            styles={{ root: { color: colors.blue } }}
+            styles={{ root: { color: colors.main } }}
             onClick={() => {
               onRollbackClick(item);
             }}

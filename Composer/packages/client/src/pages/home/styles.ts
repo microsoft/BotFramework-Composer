@@ -125,7 +125,7 @@ export const bluetitle = css`
   line-height: 24px;
   display: flex;
   font-weight: 600;
-  color: ${colors.blue};
+  color: ${colors.main};
   margin: 0;
 `;
 
@@ -140,7 +140,7 @@ export const linkContainer = css`
 `;
 
 export const linkInfo = css`
-  color: ${colors.blue};
+  color: ${colors.main};
   margin-top: 10px;
   text-decoration: underline;
 `;
@@ -158,7 +158,7 @@ export const button: IIconStyles = {
   root: {
     fontSize: '24px',
     fontWeight: 600,
-    color: 'white',
+    color: colors.text,
   },
 };
 
@@ -200,21 +200,21 @@ const baseBotItem = {
 export const newBotItem = {
   ...baseBotItem,
   title: css`
-    background-color: ${colors.blue};
+    background-color: ${colors.main};
   `,
 };
 
 export const latestBotItem = {
   ...baseBotItem,
   title: css`
-    background-color: ${colors.latestBotItem};
+    background-color: ${colors.mainLight};
   `,
 };
 
 export const tutorialTile = {
   ...baseBotItem,
   title: css`
-    background-color: ${colors.shade30};
+    background-color: ${colors.mainDark};
   `,
 };
 

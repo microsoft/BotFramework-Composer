@@ -45,7 +45,7 @@ const container = css`
 const botNameStyle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
-  color: ${colors.black};
+  color: ${colors.text};
 `;
 
 const mainContentHeader = css`

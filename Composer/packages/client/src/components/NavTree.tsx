@@ -28,7 +28,7 @@ const root = css`
   .ProjectTreeItem {
     display: flex;
     .ms-Icon {
-      color: ${colors.blue};
+      color: ${colors.main};
     }
     &:hover .ms-Button {
       background: ${colors.gray(20)};

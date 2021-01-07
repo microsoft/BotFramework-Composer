@@ -75,7 +75,7 @@ const errorContainer = css`
   height: 48px;
   line-height: 48px;
   background: ${colors.errorBg};
-  color: ${colors.black};
+  color: ${colors.text};
 `;
 
 const customError = {
@@ -111,7 +111,7 @@ const luisRegionErrorContainerStyle = css`
   width: 100%;
   height: 48px;
   background: ${colors.errorBg};
-  color: ${colors.black};
+  color: ${colors.text};
   line-height: 48px;
   font-size: ${FontSizes.small};
   margin-top: 5px;

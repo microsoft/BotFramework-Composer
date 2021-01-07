@@ -32,11 +32,11 @@ const deleteBotButton = {
   root: {
     height: 32,
     width: 82,
-    background: colors.blue,
+    background: colors.main,
     color: colors.textOnColor,
   },
   rootHovered: {
-    background: colors.blue,
+    background: colors.main,
     color: colors.textOnColor,
   },
 };

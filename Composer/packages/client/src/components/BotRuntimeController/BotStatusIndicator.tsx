@@ -77,7 +77,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
         <ActionButton
           styles={{
             root: {
-              color: colors.blue,
+              color: colors.main,
               height: '20px',
             },
           }}

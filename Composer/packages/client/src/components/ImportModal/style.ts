@@ -17,7 +17,7 @@ export const dialogContent = css`
 
 export const boldBlueText = css`
   font-weight: ${FontWeights.semibold};
-  color: ${colors.blue};
+  color: ${colors.main};
   word-break: break-work;
 `;
 

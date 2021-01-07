@@ -73,11 +73,11 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
       width: '16px',
-      color: colors.black,
+      color: colors.text,
     },
     menuIcon: {
       fontSize: '12px',
-      color: colors.black,
+      color: colors.text,
     },
   };
 };
@@ -94,8 +94,8 @@ const navItem = (
   height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
-  color: ${isActive ? colors.textOnColor : colors.gray(130)};
-  background: ${isActive ? colors.blue : menuOpenHere ? colors.gray(10) : 'transparent'};
+  color: ${isActive ? colors.textOnColor : colors.inactiveText};
+  background: ${isActive ? colors.main : menuOpenHere ? colors.gray(10) : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
 

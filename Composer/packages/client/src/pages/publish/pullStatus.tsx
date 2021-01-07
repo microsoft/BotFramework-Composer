@@ -53,7 +53,7 @@ const serviceIcon = css`
 
 const boldBlueText = css`
   font-weight: ${FontWeights.semibold};
-  color: ${colors.blue};
+  color: ${colors.main};
   word-break: break-work;
 `;
 

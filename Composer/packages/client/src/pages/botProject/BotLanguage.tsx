@@ -39,7 +39,7 @@ const botLanguageDescriptionStyle = css`
 
 const botLanguageFieldStyle = css`
   font-size: ${FontSizes.small};
-  color: ${colors.black};
+  color: ${colors.text};
   overflow-y: auto;
   max-height: 150px;
   border: 1px solid ${colors.gray(60)};
@@ -52,7 +52,7 @@ const manageBotLanguage = {
     height: 30,
     fontSize: FontSizes.smallPlus,
     fontWeight: FontWeights.regular,
-    color: colors.blue,
+    color: colors.main,
     paddingLeft: 0,
   },
 };
@@ -82,7 +82,7 @@ const languageButton = {
   root: {
     fontSize: FontSizes.small,
     fontWeight: FontWeights.regular,
-    color: colors.blue,
+    color: colors.main,
     height: 30,
     visibility: 'hidden',
   },
@@ -94,7 +94,7 @@ const defaultLanguageTextStyle = css`
 `;
 
 const languageTextStyle = css`
-  color: ${colors.black};
+  color: ${colors.text};
   font-size: 12px;
 `;
 

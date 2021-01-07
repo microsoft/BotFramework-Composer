@@ -5,6 +5,8 @@
 import { jsx, css } from '@emotion/core';
 import { useState, MouseEvent, KeyboardEvent } from 'react';
 
+import { colors } from '../../colors';
+
 import { INDENT_PER_LEVEL } from './constants';
 
 type Props = {
@@ -21,6 +23,7 @@ const summaryStyle = css`
   display: flex;
   padding-left: 12px;
   padding-top: 6px;
+  color: ${colors.text};
 `;
 
 const nodeStyle = (depth: number) => css`

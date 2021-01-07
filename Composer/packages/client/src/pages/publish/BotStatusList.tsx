@@ -94,7 +94,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     options.push({
       key: 'manageProfiles',
       text: formatMessage('Manage profiles'),
-      data: { style: { color: colors.blue } },
+      data: { style: { color: colors.main } },
     });
     return options;
   };

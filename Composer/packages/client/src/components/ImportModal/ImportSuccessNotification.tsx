@@ -41,7 +41,7 @@ const iconContainer = css`
   top: 2px;
 `;
 
-const copyIconColor = colors.shade30;
+const copyIconColor = colors.mainDark;
 const copyIconStyles: IButtonStyles = {
   root: { position: 'absolute', right: 0, color: copyIconColor },
   rootHovered: { backgroundColor: 'transparent', color: copyIconColor },

@@ -31,7 +31,7 @@ const link = (active: boolean, disabled: boolean) => css`
   ${active
     ? `background-color: ${colors.bg};
 
-     border-left: 3px solid ${colors.blue};
+     border-left: 3px solid ${colors.main};
     `
     : `
      background-color: transparent;
@@ -59,7 +59,7 @@ const link = (active: boolean, disabled: boolean) => css`
 const icon = (active: boolean, disabled: boolean) =>
   ({
     root: {
-      color: active ? colors.black : disabled ? colors.gray(110) : colors.gray(140),
+      color: active ? colors.text : disabled ? colors.gray(110) : colors.gray(140),
       padding: '8px 12px',
       marginLeft: active ? '1px' : '4px',
       marginRight: '12px',

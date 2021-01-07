@@ -28,7 +28,7 @@ const globalNav = css`
   line-height: 44px;
   cursor: pointer;
   font-size: ${FontSizes.size16};
-  color: ${colors.blue};
+  color: ${colors.main};
   &:hover {
     background: ${colors.gray(50)};
   }

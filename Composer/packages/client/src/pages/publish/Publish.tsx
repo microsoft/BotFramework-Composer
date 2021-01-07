@@ -160,7 +160,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           >
             <path
               d="M16 4.28906V15H5V0H11.7109L16 4.28906ZM12 4H14.2891L12 1.71094V4ZM15 14V5H11V1H6V14H15ZM0 5H4V6H0V5ZM1 7H4V8H1V7ZM2 9H4V10H2V9Z"
-              fill={selectedBots.length > 0 && !publishDisabled ? colors.blue : colors.gray(90)}
+              fill={selectedBots.length > 0 && !publishDisabled ? colors.main : colors.gray(90)}
             />
           </svg>
           <span css={{ margin: '0 4px' }}>{formatMessage('Publish selected bots')}</span>

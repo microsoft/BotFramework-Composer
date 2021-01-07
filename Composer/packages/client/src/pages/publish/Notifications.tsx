@@ -25,7 +25,7 @@ const cardDetail = css`
 
 const infoType = css`
   margin-top: 4px;
-  color: ${colors.blue};
+  color: ${colors.main};
 `;
 
 const cardDescription = css`
