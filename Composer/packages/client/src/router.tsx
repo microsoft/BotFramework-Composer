@@ -20,7 +20,7 @@ import {
   pluginPagesSelector,
   botOpeningMessage,
 } from './recoilModel';
-import { localBotsDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
+import { localBotsSettingDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -132,7 +132,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-  const localBots = useRecoilValue(localBotsDataSelector);
+  const localBots = useRecoilValue(localBotsSettingDataSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));
