@@ -5,6 +5,8 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { RenderSplitterProps } from '@geoffcox/react-splitter';
 
+const splitVisualClassName = 'thin-split-visual';
+
 const HitArea = styled.div(({ horizontal, dragging }: { horizontal: boolean; dragging: boolean }) => ({
   boxSizing: 'border-box',
   outline: 'none',
@@ -13,7 +15,7 @@ const HitArea = styled.div(({ horizontal, dragging }: { horizontal: boolean; dra
   width: '100%',
   cursor: horizontal ? 'row-resize' : 'col-resize',
   background: 'transparent',
-  '&:hover .thin-split-visual': {
+  [`&:hover .${splitVisualClassName}`]: {
     background: dragging ? 'black' : 'gray',
   },
   userSelect: 'none',
@@ -43,7 +45,7 @@ export const ThinSplitter = (props: RenderSplitterProps) => {
 
   return (
     <HitArea dragging={dragging} horizontal={horizontal}>
-      <Splitter className="thin-split-visual" dragging={dragging} horizontal={horizontal} splitterSize={pixelSize} />
+      <Splitter className={splitVisualClassName} dragging={dragging} horizontal={horizontal} splitterSize={pixelSize} />
     </HitArea>
   );
 };
