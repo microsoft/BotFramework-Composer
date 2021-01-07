@@ -31,6 +31,7 @@ import { Bot, BotStatus, BotPublishHistory, BotPropertyType } from './type';
 const deleteNotificationInterval = 5000;
 
 const generateComputedData = (botProjectData) => {
+  // fill Settings, status, publishType, publish target for bot from botProjectMeta
   const botPropertyData: BotPropertyType = {};
   const botList: Bot[] = [];
   botProjectData.forEach((bot) => {
@@ -50,8 +51,33 @@ const generateComputedData = (botProjectData) => {
   return { botPropertyData, botList };
 };
 
+const generateBotStatusList = (
+  botList: Bot[],
+  botPropertyData: BotPropertyType,
+  botPublishHistoryList: BotPublishHistory
+): BotStatus[] => {
+  const bots = botList.map((bot) => {
+    const botStatus: BotStatus = Object.assign({}, bot);
+    const publishTargets = botPropertyData[bot.id].publishTargets;
+    const publishHistory = botPublishHistoryList[bot.id];
+    if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
+      botStatus.publishTargets = publishTargets;
+      if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
+        const history = publishHistory[botStatus.publishTarget][0];
+        botStatus.time = history.time;
+        botStatus.comment = history.comment;
+        botStatus.message = history.message;
+        botStatus.status = history.status;
+      }
+    }
+    return botStatus;
+  });
+  return bots;
+};
+
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
+
   const botProjectData = useRecoilValue(localBotsDataSelector);
   const publishHistoryList = useRecoilValue(localBotPublishHistorySelector);
   const {
@@ -63,13 +89,76 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
-  // fill Settings, status, publishType, publish target for bot from botProjectMeta
+
+  const pendingNotificationRef = useRef<Notification>();
+  const showNotificationsRef = useRef<Record<string, boolean>>({});
+
+  const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
+  const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
+  const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>({});
+  const [checkedSkillIds, setCheckedSkillIds] = useState<string[]>([]);
+
   const { botPropertyData, botList } = useMemo(() => {
     return generateComputedData(botProjectData);
   }, [botProjectData]);
 
-  const pendingNotificationRef = useRef<Notification>();
-  const showNotificationsRef = useRef<Record<string, boolean>>({});
+  const botStatusList = useMemo(() => {
+    return generateBotStatusList(currentBotList, botPropertyData, publishHistoryList);
+  }, [currentBotList, botPropertyData, publishHistoryList]);
+
+  const isPublishPending = useMemo(() => {
+    return Object.values(updaterStatus).some(Boolean);
+  }, [updaterStatus]);
+
+  const selectedBots = useMemo(() => {
+    return botList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
+  }, [checkedSkillIds]);
+
+  const canPull = useMemo(() => {
+    return selectedBots.some((bot) => {
+      const { publishTypes, publishTargets } = botPropertyData[bot.id];
+      const type = publishTypes?.find(
+        (t) => t.name === publishTargets?.find((target) => target.name === bot.publishTarget)?.type
+      );
+      if (type?.features?.pull) {
+        return true;
+      }
+      return false;
+    });
+  }, [selectedBots]);
+
+  const canPublish =
+    checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
+
+  useEffect(() => {
+    // init bot status list for the botProjectData is empty array when first mounted
+    setCurrentBotList(botList);
+
+    // Start updaters
+    botList
+      .filter(
+        (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
+      )
+      .forEach((bot) => {
+        if (pollingUpdaterList.some((updater) => updater.isSameUpdater(bot.id, bot.publishTarget))) return;
+        const updater = new PublishStatusPollingUpdater(bot.id, bot.publishTarget);
+        pollingUpdaterList.push(updater);
+        updater.start(onReceiveUpdaterPayload);
+      });
+  }, [botList]);
+
+  useEffect(() => {
+    // Clear intervals when unmount
+    return () => {
+      if (pollingUpdaterList) {
+        pollingUpdaterList.forEach((updater) => {
+          updater.stop();
+        });
+      }
+    };
+  }, []);
 
   const updatePublishStatus = async (data) => {
     const { botProjectId, targetName, apiResponse } = data;
@@ -128,69 +217,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     updatePublishStatus(payload);
     changeNotificationStatus(payload);
   };
-
-  useEffect(() => {
-    botList
-      .filter(
-        (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
-      )
-      .forEach((bot) => {
-        if (pollingUpdaterList.some((updater) => updater.isSameUpdater(bot.id, bot.publishTarget))) return;
-        const updater = new PublishStatusPollingUpdater(bot.id, bot.publishTarget);
-        pollingUpdaterList.push(updater);
-        updater.start(onReceiveUpdaterPayload);
-      });
-  }, [botList]);
-
-  const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
-  const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
-  const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-
-  const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>({});
-  const isPublishPending = useMemo(() => {
-    return Object.values(updaterStatus).some(Boolean);
-  }, [updaterStatus]);
-
-  const [checkedSkillIds, setCheckedSkillIds] = useState<string[]>([]);
-  const selectedBots = useMemo(() => {
-    return botList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
-  }, [checkedSkillIds]);
-
-  const botStatusList = useMemo(() => {
-    return generateBotStatusList(currentBotList, botPropertyData, publishHistoryList);
-  }, [currentBotList, botPropertyData, publishHistoryList]);
-
-  const canPull = useMemo(() => {
-    return selectedBots.some((bot) => {
-      const { publishTypes, publishTargets } = botPropertyData[bot.id];
-      const type = publishTypes?.find(
-        (t) => t.name === publishTargets?.find((target) => target.name === bot.publishTarget)?.type
-      );
-      if (type?.features?.pull) {
-        return true;
-      }
-      return false;
-    });
-  }, [selectedBots]);
-
-  const canPublish =
-    checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
-
-  useEffect(() => {
-    // init bot status list for the botProjectData is empty array when first mounted
-    setCurrentBotList(botList);
-  }, [botList]);
-
-  useEffect(() => {
-    return () => {
-      if (pollingUpdaterList) {
-        pollingUpdaterList.forEach((updater) => {
-          updater.stop();
-        });
-      }
-    };
-  }, []);
 
   const updateCheckedSkills = (checkedIds: string[]) => {
     setCheckedSkillIds(checkedIds);
@@ -347,27 +373,3 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 };
 
 export default Publish;
-
-const generateBotStatusList = (
-  botList: Bot[],
-  botPropertyData: BotPropertyType,
-  botPublishHistoryList: BotPublishHistory
-): BotStatus[] => {
-  const bots = botList.map((bot) => {
-    const botStatus: BotStatus = Object.assign({}, bot);
-    const publishTargets = botPropertyData[bot.id].publishTargets;
-    const publishHistory = botPublishHistoryList[bot.id];
-    if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
-      botStatus.publishTargets = publishTargets;
-      if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
-        const history = publishHistory[botStatus.publishTarget][0];
-        botStatus.time = history.time;
-        botStatus.comment = history.comment;
-        botStatus.message = history.message;
-        botStatus.status = history.status;
-      }
-    }
-    return botStatus;
-  });
-  return bots;
-};
