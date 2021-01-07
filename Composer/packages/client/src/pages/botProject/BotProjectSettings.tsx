@@ -20,7 +20,7 @@ import { settingsState, userSettingsState, schemasState } from '../../recoilMode
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 

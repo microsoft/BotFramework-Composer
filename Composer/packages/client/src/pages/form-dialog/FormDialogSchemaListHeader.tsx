@@ -15,7 +15,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 const TitleBar = styled(Stack)({
   flex: 1,
@@ -27,7 +27,7 @@ const helpIconStyles = classNamesFunction<IIconStyleProps, IIconStyles>()({
     width: '16px',
     minWidth: '16px',
     height: '16px',
-    color: colors.gray160,
+    color: colors.gray(160),
     fontSize: FontSizes.size12,
     marginBottom: '-2px',
     paddingLeft: '4px',
@@ -47,7 +47,7 @@ const LoadingIndicator = styled(ProgressIndicator)({
 
 const searchBoxStyles = classNamesFunction<ISearchBoxProps, ISearchBoxStyles>()({
   root: {
-    borderBottom: '1px solid ${colors.gray30}',
+    borderBottom: '1px solid ${colors.gray(30)}',
     width: '100%',
   },
   clearButton: { display: 'none' },

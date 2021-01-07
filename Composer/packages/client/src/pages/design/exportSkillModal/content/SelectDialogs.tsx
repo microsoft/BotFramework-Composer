@@ -10,7 +10,7 @@ import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { colors } from '../../../../constants';
+import { colors } from '../../../../colors';
 import { dispatcherState, validateDialogsSelectorFamily } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
@@ -23,7 +23,7 @@ const textFieldStyles = (focused: boolean) => ({
     backgroundColor: focused ? undefined : 'transparent',
     selectors: {
       ':hover': {
-        borderColor: colors.gray30,
+        borderColor: colors.gray(30),
       },
     },
   },

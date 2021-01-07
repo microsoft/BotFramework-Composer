@@ -17,7 +17,7 @@ import { localeState, showAddLanguageModalState } from '../../recoilModel/atoms'
 import { AddLanguageModal } from '../../components/MultiLanguage';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -34,7 +34,7 @@ const botLanguageContainerStyle = css`
 
 const botLanguageDescriptionStyle = css`
   font-size: ${FontSizes.small};
-  color: ${colors.gray130};
+  color: ${colors.gray(130)};
 `;
 
 const botLanguageFieldStyle = css`
@@ -42,7 +42,7 @@ const botLanguageFieldStyle = css`
   color: ${colors.black};
   overflow-y: auto;
   max-height: 150px;
-  border: 1px solid ${colors.gray60};
+  border: 1px solid ${colors.gray(60)};
   margin-top: 17px;
   padding: 10px;
 `;
@@ -59,7 +59,7 @@ const manageBotLanguage = {
 
 const languageItem = css`
   &:hover {
-    background: ${colors.gray30};
+    background: ${colors.gray(30)};
   }
 `;
 
@@ -89,7 +89,7 @@ const languageButton = {
 };
 
 const defaultLanguageTextStyle = css`
-  color: colors.gray110;
+  color: colors.gray(110);
   font-size: 8px;
 `;
 

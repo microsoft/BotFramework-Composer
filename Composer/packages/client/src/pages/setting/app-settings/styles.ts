@@ -6,7 +6,7 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import { ILinkStyles } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
 
-import { colors } from '../../../constants';
+import { colors } from '../../../colors';
 
 export const container = css`
   label: SettingsContainer;
@@ -41,7 +41,7 @@ export const link: ILinkStyles = {
 
 export const settingsContainer = css`
   display: flex;
-  border-top: 1px solid ${colors.gray20};
+  border-top: 1px solid ${colors.gray(20)};
   padding: 20px 0px;
   width: 100%;
 `;

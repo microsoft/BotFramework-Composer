@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 const styles = {
   errorLoading: css`
@@ -18,10 +18,10 @@ const styles = {
   `,
 
   propertyEditorHeaderStyle: css`
-    border-top: 1px solid ${colors.gray10};
+    border-top: 1px solid ${colors.gray(10)};
     padding: 0 18px;
     margin-bottom: 0px;
-    border-bottom: 1px solid ${colors.gray60};
+    border-bottom: 1px solid ${colors.gray(60)};
   `,
 
   title: css`
@@ -34,7 +34,7 @@ const styles = {
     height: 15px;
     line-height: 15px;
     font-size: ${FontSizes.size12};
-    color: ${colors.gray130};
+    color: ${colors.gray(130)};
     font-weight: ${FontWeights.semibold};
   `,
 

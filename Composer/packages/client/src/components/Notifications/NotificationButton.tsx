@@ -12,7 +12,7 @@ import formatMessage from 'format-message';
 import { notificationsSelector } from '../../recoilModel/selectors/notifications';
 import { dispatcherState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { NotificationPanel } from './NotificationPanel';
 
@@ -21,10 +21,10 @@ const styles = {
     position: relative;
   `,
   count: (visible?: boolean) => css`
-    background-color: ${colors.white};
-    border: 2px solid ${colors.cyanBlue10};
+    background-color: ${colors.bg};
+    border: 2px solid ${colors.blue};
     border-radius: 100%;
-    color: ${colors.cyanBlue10};
+    color: ${colors.blue};
     font-size: 8px;
     font-weight: ${FontWeights.bold};
     height: 12px;

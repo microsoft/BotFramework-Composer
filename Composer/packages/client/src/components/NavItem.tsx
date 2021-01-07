@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 
 import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 import { QnAIcon } from './QnAIcon';
 import { BotProjectsSettingsIcon } from './BotProjectsSettingsIcon';
@@ -23,13 +23,13 @@ const link = (active: boolean, disabled: boolean) => css`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: ${disabled ? colors.gray110 : colors.gray140};
+  color: ${disabled ? colors.gray(110) : colors.gray(140)};
   position: relative;
 
   width: 220px;
 
   ${active
-    ? `background-color: ${colors.white};
+    ? `background-color: ${colors.bg};
 
      border-left: 3px solid ${colors.blue};
     `
@@ -40,7 +40,7 @@ const link = (active: boolean, disabled: boolean) => css`
   ${disabled
     ? `pointer-events: none;`
     : `&:hover {
-      background-color: ${colors.gray50};
+      background-color: ${colors.gray(50)};
     }
     &:focus {
       outline: none;
@@ -48,9 +48,9 @@ const link = (active: boolean, disabled: boolean) => css`
         content: "";
         position: absolute;
         z-index: 1;
-        border: 1px solid ${colors.white};
+        border: 1px solid ${colors.bg};
         border-image: initial;
-        outline: ${colors.gray130} solid 1px;
+        outline: ${colors.gray(130)} solid 1px;
       }
     }
   `}
@@ -59,7 +59,7 @@ const link = (active: boolean, disabled: boolean) => css`
 const icon = (active: boolean, disabled: boolean) =>
   ({
     root: {
-      color: active ? colors.black : disabled ? colors.gray110 : colors.gray140,
+      color: active ? colors.black : disabled ? colors.gray(110) : colors.gray(140),
       padding: '8px 12px',
       marginLeft: active ? '1px' : '4px',
       marginRight: '12px',

@@ -10,7 +10,7 @@ import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { moreButton, overflowSet } from './treeItem';
 
@@ -25,7 +25,7 @@ const headerText = css`
 `;
 
 const headerWrapper = css`
-  background: ${colors.gray60};
+  background: ${colors.gray(60)};
 `;
 
 export interface ProjectTreeHeaderMenuItem {

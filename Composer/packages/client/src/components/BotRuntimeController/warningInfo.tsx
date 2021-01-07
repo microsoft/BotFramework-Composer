@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 // -------------------- Styles -------------------- //
 

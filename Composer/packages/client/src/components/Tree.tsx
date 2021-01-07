@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -26,7 +26,7 @@ const container = (variant) => {
 
   return css`
     width: 100%;
-    background-color: ${colors.white};
+    background-color: ${colors.bg};
     height: ${height};
     overflow: auto;
     border-top: 2px solid ${colors.blue};

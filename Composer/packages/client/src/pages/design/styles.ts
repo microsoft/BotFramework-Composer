@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { mergeStyleSets, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 export const pageRoot = css`
   height: 100%;
@@ -43,7 +43,7 @@ export const projectHeader = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${colors.gray20};
+  background-color: ${colors.gray(20)};
 
   label: DesignPageProjectHeader;
 `;
@@ -89,7 +89,7 @@ export const visualPanel = css`
 export const visualEditor = (hidden: boolean) => css`
   border: 0px;
   flex: 1;
-  background-color: ${colors.gray20};
+  background-color: ${colors.gray(20)};
 
   display: ${hidden ? 'none' : 'block'};
   position: relative;
@@ -117,7 +117,7 @@ export const breadcrumbClass = mergeStyleSets({
         fontWeight: FontWeights.regular,
       },
     },
-    color: colors.gray160,
+    color: colors.gray(160),
     padding: '4px 8px',
   },
   chevron: {
@@ -133,7 +133,7 @@ export const middleTriggerContainer = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${colors.gray10};
+  background: ${colors.gray(10)};
   width: 100%;
   height: 100%;
   min-height: 285px;
@@ -145,7 +145,7 @@ export const middleTriggerElements = css`
   align-items: center;
   font-size: 18px;
   line-height: 24px;
-  color: ${colors.gray110};
+  color: ${colors.gray(110)};
 `;
 
 export const triggerButton = css`

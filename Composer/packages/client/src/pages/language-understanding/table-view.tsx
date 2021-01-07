@@ -31,7 +31,7 @@ import {
   settingsState,
   validateDialogsSelectorFamily,
 } from '../../recoilModel';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {

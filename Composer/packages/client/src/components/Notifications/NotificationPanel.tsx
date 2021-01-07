@@ -10,7 +10,7 @@ import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import formatMessage from 'format-message';
 
 import { Notification } from '../../recoilModel/types';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { NotificationCard } from './NotificationCard';
 
@@ -22,7 +22,7 @@ const styles = {
     top: 18px;
   `,
   empty: css`
-    color: ${colors.gray130};
+    color: ${colors.gray(130)};
     height: 100%;
     margin: 24px 0;
     text-align: center;
@@ -54,7 +54,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
   const onRenderNavigationContent: IRenderFunction<IPanelProps> = useCallback(
     (props, defaultRender) => (
       <div css={styles.container}>
-        <ActionButton styles={{ root: { color: colors.cyanBlue10 } }} onClick={handleClearAll}>
+        <ActionButton styles={{ root: { color: colors.blue } }} onClick={handleClearAll}>
           {formatMessage('Clear all')}
         </ActionButton>
         {defaultRender!(props)}

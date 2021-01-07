@@ -10,7 +10,7 @@ import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 import { navigateTo, buildURL } from '../utils/navigation';
 import { PageMode } from '../recoilModel';
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
@@ -62,7 +62,7 @@ export const main = css`
   margin-left: 2px;
   height: calc(100vh - 165px);
   display: flex;
-  border-top: 1px solid ${colors.gray50};
+  border-top: 1px solid ${colors.gray(50)};
   position: relative;
   nav {
     ul {

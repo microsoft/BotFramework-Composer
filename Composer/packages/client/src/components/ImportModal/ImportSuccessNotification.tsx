@@ -10,7 +10,7 @@ import { useRef } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { CardProps } from '../Notifications/NotificationCard';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 const container = css`
   padding: 0 16px 16px 40px;

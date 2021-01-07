@@ -28,7 +28,8 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { LUIS_REGIONS, colors } from '../../constants';
+import { LUIS_REGIONS } from '../../constants';
+import { colors } from '../../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -55,7 +56,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: colors.red10,
+          color: colors.red,
           paddingRight: 3,
         },
       },
@@ -73,7 +74,7 @@ const errorContainer = css`
   width: 100%;
   height: 48px;
   line-height: 48px;
-  background: ${colors.paleRed};
+  background: ${colors.errorBg};
   color: ${colors.black};
 `;
 
@@ -89,7 +90,7 @@ const customError = {
 
 const errorIcon = {
   root: {
-    color: colors.red10,
+    color: colors.red,
     marginRight: 8,
     paddingLeft: 12,
     fontSize: FontSizes.mediumPlus,
@@ -109,7 +110,7 @@ const luisRegionErrorContainerStyle = css`
   display: flex;
   width: 100%;
   height: 48px;
-  background: ${colors.paleRed};
+  background: ${colors.errorBg};
   color: ${colors.black};
   line-height: 48px;
   font-size: ${FontSizes.small};

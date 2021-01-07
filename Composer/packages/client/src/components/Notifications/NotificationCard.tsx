@@ -12,7 +12,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
 import { useInterval } from '../../utils/hooks';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -50,7 +50,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
 
 const cancelButton = css`
   float: right;
-  color: ${colors.gray130};
+  color: ${colors.gray(130)};
   margin-left: auto;
   width: 24px;
   height: 24px;
@@ -106,12 +106,12 @@ const getShimmerStyles = {
   },
   shimmerWrapper: [
     {
-      backgroundColor: colors.gray30,
+      backgroundColor: colors.gray(30),
     },
   ],
   shimmerGradient: [
     {
-      backgroundImage: `radial-gradient(at 50% 50%, ${colors.blue} 0%, ${colors.gray30} 100%);`,
+      backgroundImage: `radial-gradient(at 50% 50%, ${colors.blue} 0%, ${colors.gray(30)} 100%);`,
     },
   ],
 };

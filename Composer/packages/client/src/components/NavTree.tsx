@@ -12,7 +12,7 @@ import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
 import { navigateTo } from '../utils/navigation';
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -28,10 +28,10 @@ const root = css`
   .ProjectTreeItem {
     display: flex;
     .ms-Icon {
-      color: ${colors.blue10};
+      color: ${colors.blue};
     }
     &:hover .ms-Button {
-      background: ${colors.gray20};
+      background: ${colors.gray(20)};
       .ms-Icon {
         visibility: inherit;
       }
@@ -41,7 +41,7 @@ const root = css`
 
 const itemBase: IButtonStyles = {
   root: {
-    background: colors.white,
+    background: colors.bg,
     fontWeight: FontWeights.semilight,
     height: '32px',
     width: '100%',
@@ -57,14 +57,14 @@ const itemBase: IButtonStyles = {
 
 const itemNotSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
-    background: colors.white,
+    background: colors.bg,
     fontWeight: FontWeights.semilight,
   },
 });
 
 const itemSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
-    background: colors.gray20,
+    background: colors.gray(20),
     fontWeight: FontWeights.semibold,
   },
 });
@@ -98,7 +98,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
         padding: '0 4px',
         alignSelf: 'stretch',
         height: 'auto',
-        background: isSelected ? colors.gray20 : colors.white,
+        background: isSelected ? colors.gray(20) : colors.bg,
         selectors: {
           '.ms-Icon': {
             visibility: isSelected ? 'inherit' : 'hidden',

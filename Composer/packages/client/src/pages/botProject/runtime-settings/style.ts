@@ -4,7 +4,7 @@
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-import { colors } from '../../../constants';
+import { colors } from '../../../colors';
 
 export const runtimeSettingsStyle = css`
   display: flex;
@@ -13,7 +13,7 @@ export const runtimeSettingsStyle = css`
 `;
 
 export const runtimeControls = css`
-  color: ${colors.gray130};
+  color: ${colors.gray(130)};
   font-size: ${FontSizes.smallPlus};
   & > h1 {
     margin-top: 0;
@@ -29,7 +29,7 @@ export const runtimeToggle = css`
 `;
 
 export const modalControlGroup = css`
-  border: 1px solid ${colors.gray30};
+  border: 1px solid ${colors.gray(30)};
   padding: 0.5rem 1rem 1rem 1rem;
 `;
 
@@ -51,17 +51,17 @@ export const labelContainer = css`
 export const customerLabel = (disabled) => css`
   font-size: ${FontSizes.small};
   margin-right: 5px;
-  color: ${disabled ? colors.gray90 : colors.gray160};
+  color: ${disabled ? colors.gray(90) : colors.gray(160)};
 `;
 
 export const iconStyle = (disabled) => {
   return {
     root: {
-      color: disabled ? colors.gray90 : colors.gray160,
+      color: disabled ? colors.gray(90) : colors.gray(160),
       selectors: {
         '&::before': {
           content: " '*'",
-          color: colors.red10,
+          color: colors.red,
           paddingRight: 3,
         },
       },
@@ -75,5 +75,5 @@ export const textOr = css`
 
 export const updateText = css`
   font-size: ${FontSizes.smallPlus};
-  color: ${colors.gray130};
+  color: ${colors.gray(130)};
 `;

@@ -9,7 +9,8 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
-import { BotStatus, BotStatusesCopy, colors } from '../../constants';
+import { BotStatus, BotStatusesCopy } from '../../constants';
+import { colors } from '../../colors';
 
 import { ErrorCallout } from './errorCallout';
 import { useBotOperations } from './useBotOperations';
@@ -53,15 +54,15 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
   const botStatusText = useMemo(() => {
     if (botStatus === BotStatus.connected) {
       setBotStatusStyle({
-        color: colors.green10,
+        color: colors.green,
       });
     } else if (botStatus === BotStatus.failed) {
       setBotStatusStyle({
-        color: colors.red10,
+        color: colors.red,
       });
     } else {
       setBotStatusStyle({
-        color: colors.gray20,
+        color: colors.gray(20),
       });
     }
     return BotStatusesCopy[botStatus] ?? BotStatusesCopy.inactive;
@@ -76,7 +77,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({
         <ActionButton
           styles={{
             root: {
-              color: colors.cyanBlue10,
+              color: colors.blue,
               height: '20px',
             },
           }}

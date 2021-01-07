@@ -12,7 +12,7 @@ import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 
@@ -40,7 +40,7 @@ const publishTargetsHeaderText = css`
   width: 300px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.semibold};
-  border-bottom: 1px solid ${colors.gray30};
+  border-bottom: 1px solid ${colors.gray(30)};
   padding-top: 10px;
   padding-left: 10px;
 `;
@@ -55,7 +55,7 @@ const publishTargetsItemText = css`
   width: 200px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${colors.gray30};
+  border-bottom: 1px solid ${colors.gray(30)};
   padding-top: 10px;
   padding-left: 10px;
   text-overflow: ellipsis;
@@ -87,7 +87,7 @@ const publishTargetsEditButton = css`
   width: 200px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${colors.gray30};
+  border-bottom: 1px solid ${colors.gray(30)};
   padding-top: 3px;
   padding-left: 10px;
 `;

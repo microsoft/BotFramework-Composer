@@ -7,7 +7,7 @@ import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 export const outline = css`
   display: flex;
@@ -164,15 +164,15 @@ export const button: IIconStyles = {
 
 export const disabledItem = {
   title: css`
-    background-color: ${colors.gray20};
-    color: ${colors.gray90};
+    background-color: ${colors.gray(20)};
+    color: ${colors.gray(90)};
   `,
   content: css`
-    border: 2px solid ${colors.gray20};
+    border: 2px solid ${colors.gray(20)};
     width: auto;
     font-size: smaller;
     word-wrap: break-word;
-    color: ${colors.gray90};
+    color: ${colors.gray(90)};
     background: white;
   `,
 };
@@ -193,7 +193,7 @@ const baseBotItem = {
     }
   `,
   content: css`
-    background-color: ${colors.gray20};
+    background-color: ${colors.gray(20)};
   `,
 };
 
@@ -235,7 +235,7 @@ export const detailListContainer = css`
 `;
 
 export const exampleListContainer = css`
-  border: 1px solid ${colors.gray100};
+  border: 1px solid ${colors.gray(100)};
   margin-top: 20px;
   position: relative;
   min-width: 260px;
@@ -256,7 +256,7 @@ export const exampleListCell = css`
   box-sizing: border-box;
   display: flex;
   &:focus {
-    outline: ${colors.gray130} solid 1px;
+    outline: ${colors.gray(130)} solid 1px;
   }
   &:hover {
     background: ${palette.neutralLight};
@@ -290,7 +290,7 @@ export const tableCell = css`
   outline: none;
   width: auto;
   :focus {
-    outline: ${colors.gray130} solid 1px;
+    outline: ${colors.gray(130)} solid 1px;
   }
 `;
 

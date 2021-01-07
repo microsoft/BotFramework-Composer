@@ -24,7 +24,8 @@ import {
   settingsState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
-import { AppUpdaterStatus, colors } from '../constants';
+import { AppUpdaterStatus } from '../constants';
+import { colors } from '../colors';
 import { useLocation } from '../utils/hooks';
 
 import { languageListTemplates } from './MultiLanguage';
@@ -50,13 +51,13 @@ const title = css`
   margin-left: 20px;
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.size16};
-  color: ${colors.white};
+  color: ${colors.textOnColor};
 `;
 
 const botName = css`
   margin-left: 20px;
   font-size: 16px;
-  color: ${colors.white};
+  color: ${colors.textOnColor};
   border-radius: 19px;
   background: ${colors.blue};
   padding-left: 10px;
@@ -66,7 +67,7 @@ const botName = css`
 
 const divider = css`
   height: 24px;
-  border-right: 1px solid ${colors.gray100};
+  border-right: 1px solid ${colors.gray(100)};
   margin: 0px 0px 0px 20px;
 `;
 
@@ -87,7 +88,7 @@ const rightSection = css`
 
 const buttonStyles: IButtonStyles = {
   icon: {
-    color: colors.white,
+    color: colors.textOnColor,
     fontSize: FontSizes.size20,
   },
   root: {
@@ -108,12 +109,12 @@ const teachingBubbleStyle = {
   root: {
     selectors: {
       '.ms-Callout-beak': {
-        background: colors.white,
+        background: colors.bg,
       },
     },
   },
   bodyContent: {
-    background: colors.white,
+    background: colors.bg,
     selectors: {
       '.ms-TeachingBubble-headline': {
         color: colors.black,

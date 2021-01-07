@@ -30,7 +30,7 @@ import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FileTypes, nameRegex } from '../../constants';
 import { StorageFolder, File } from '../../recoilModel/types';
 import { getFileIconName, calculateTimeDiff } from '../../utils/fileUtil';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -68,7 +68,7 @@ const detailListClass = mergeStyleSets({
 const tableCell = css`
   outline: none;
   :focus {
-    outline: ${colors.gray130} solid 1px;
+    outline: ${colors.gray(130)} solid 1px;
   }
 `;
 

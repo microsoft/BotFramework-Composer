@@ -11,16 +11,16 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 const disabledTextFieldStyle = {
   root: {
     selectors: {
       '.ms-TextField-field': {
-        background: colors.paleGreen,
+        background: colors.successBg,
       },
       '.ms-Dropdown-title': {
-        background: colors.paleGreen,
+        background: colors.successBg,
       },
       'p > span': {
         width: '100%',
@@ -45,7 +45,7 @@ const errorContainer = css`
   width: 100%;
   height: 48px;
   line-height: 48px;
-  background: ${colors.paleRed};
+  background: ${colors.errorBg};
   color: ${colors.black};
 `;
 
@@ -78,7 +78,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: colors.red10,
+          color: colors.red,
           paddingRight: 3,
         },
       },

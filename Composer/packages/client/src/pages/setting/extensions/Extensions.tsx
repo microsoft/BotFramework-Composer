@@ -23,7 +23,7 @@ import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client'
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { dispatcherState, extensionsState } from '../../../recoilModel';
-import { colors } from '../../../constants';
+import { colors } from '../../../colors';
 
 import { InstallExtensionDialog } from './InstallExtensionDialog';
 
@@ -200,7 +200,7 @@ const Extensions: React.FC<RouteComponentProps> = () => {
 
             const customStyles: Partial<IDetailsRowStyles> = {
               root: {
-                color: rowProps.item?.enabled ? undefined : colors.gray90,
+                color: rowProps.item?.enabled ? undefined : colors.gray(90),
               },
             };
 

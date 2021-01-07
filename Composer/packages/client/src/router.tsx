@@ -11,7 +11,8 @@ import formatMessage from 'format-message';
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
-import { BASEPATH, colors } from './constants';
+import { BASEPATH } from './constants';
+import { colors } from './colors';
 import {
   dispatcherState,
   schemasState,

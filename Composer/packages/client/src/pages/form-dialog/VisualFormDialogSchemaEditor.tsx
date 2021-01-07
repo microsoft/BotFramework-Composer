@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 
 import { formDialogSchemaState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 const Root = styled(Stack)<{
   inProgress: boolean;
@@ -22,7 +22,7 @@ const Root = styled(Stack)<{
   {
     position: 'relative',
     width: '100%',
-    backgroundColor: colors.gray20,
+    backgroundColor: colors.gray(20),
   },
   (props) =>
     props.inProgress
@@ -44,7 +44,7 @@ const noop = () => {};
 const defaultValue: object = {};
 
 const editorTopBarStyles = classNamesFunction<IStackProps, IStackStyles>()({
-  root: { backgroundColor: colors.white, height: '45px', marginBottom: 1 },
+  root: { backgroundColor: colors.bg, height: '45px', marginBottom: 1 },
 });
 
 type Props = {
@@ -109,7 +109,7 @@ export const VisualFormDialogSchemaEditor = React.memo((props: Props) => {
             flex: 1,
             position: 'relative',
             overflowY: 'auto',
-            backgroundColor: showEditor ? colors.white : 'transparent',
+            backgroundColor: showEditor ? colors.bg : 'transparent',
           },
         }}
       >

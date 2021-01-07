@@ -15,7 +15,7 @@ import { generateUniqueId } from '@bfc/shared';
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
 import dataTransferLine from '../../images/dataTransferLine.svg';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 type KnownPublishTargets = 'pva-publish-composer';
 

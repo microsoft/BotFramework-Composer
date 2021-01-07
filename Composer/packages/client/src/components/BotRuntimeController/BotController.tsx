@@ -19,7 +19,8 @@ import {
   allDiagnosticsSelectorFamily,
   rootBotProjectIdSelector,
 } from '../../recoilModel';
-import { BotStatus, colors } from '../../constants';
+import { BotStatus } from '../../constants';
+import { colors } from '../../colors';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
@@ -269,11 +270,11 @@ const BotController: React.FC = () => {
                   ':disabled .ms-Button-icon': {
                     opacity: 0.6,
                     backgroundColor: colors.botControllerBg,
-                    color: colors.textOnColorButton,
+                    color: colors.textOnColor,
                   },
                 },
               },
-              rootHovered: { background: transparentBackground, color: colors.textOnColorButton },
+              rootHovered: { background: transparentBackground, color: colors.textOnColor },
             }}
             title={formatMessage('Open start bots panel')}
             onClick={onSplitButtonClick}

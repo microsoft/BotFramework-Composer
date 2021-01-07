@@ -17,7 +17,7 @@ import { FontSizes } from '@uifabric/styling';
 
 import { navigateTo } from '../../utils/navigation';
 import { PublishType } from '../../recoilModel/types';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
@@ -306,7 +306,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       <Fragment>
         {defaultRender(props)}
         <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none', margin: '20px 0 38px 12px' }}>
-          <div css={{ fontSize: '14px', lineHeight: '20px', color: colors.gray160, fontWeight: 'bold' }}>
+          <div css={{ fontSize: '14px', lineHeight: '20px', color: colors.gray(160), fontWeight: 'bold' }}>
             Publish history
           </div>
           {publishStatusList.length === 0 ? (

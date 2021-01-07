@@ -20,7 +20,7 @@ import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE } from './constants';
@@ -30,7 +30,7 @@ import { SUMMARY_ARROW_SPACE } from './constants';
 const projectTreeItemContainer = css`
   outline: none;
   :focus {
-    outline: ${colors.gray130} solid 1px;
+    outline: ${colors.gray(130)} solid 1px;
     z-index: 1;
   }
   text-overflow: ellipsis;
@@ -94,8 +94,8 @@ const navItem = (
   height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
-  color: ${isActive ? colors.white : colors.gray130};
-  background: ${isActive ? colors.blue : menuOpenHere ? colors.gray10 : 'transparent'};
+  color: ${isActive ? colors.textOnColor : colors.gray(130)};
+  background: ${isActive ? colors.blue : menuOpenHere ? colors.gray(10) : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
 
@@ -106,8 +106,8 @@ const navItem = (
   ${isAnyMenuOpen
     ? ''
     : `&:hover {
-    color: ${colors.gray130};
-    background: ${colors.gray10};
+    color: ${colors.gray(130)};
+    background: ${colors.gray(10)};
 
     .dialog-more-btn {
       visibility: visible;
@@ -124,9 +124,9 @@ const navItem = (
       content: '';
       position: absolute;
       z-index: 1;
-      border: 1px solid ${colors.white};
+      border: 1px solid ${colors.bg};
       border-image: initial;
-      outline: ${colors.gray130} solid 1px;
+      outline: ${colors.gray(130)} solid 1px;
     }
   }
 `;
@@ -165,12 +165,12 @@ const statusIcon = {
 
 const warningIcon = {
   ...statusIcon,
-  color: colors.orangeYellow10,
+  color: colors.amber,
 };
 
 const errorIcon = {
   ...statusIcon,
-  color: colors.red10,
+  color: colors.red,
 };
 
 const diagnosticIcon = {
@@ -183,14 +183,14 @@ const diagnosticIcon = {
 
 const diagnosticErrorIcon = {
   ...diagnosticIcon,
-  color: colors.red10,
-  background: colors.paleRed,
+  color: colors.red,
+  background: colors.errorBg,
 };
 
 const diagnosticWarningIcon = {
   ...diagnosticIcon,
-  color: colors.gray110,
-  background: colors.paleYellow,
+  color: colors.gray(110),
+  background: colors.warningBg,
 };
 const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;

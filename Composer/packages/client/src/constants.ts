@@ -3,7 +3,6 @@
 
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { NeutralColors, CommunicationColors, SharedColors } from '@uifabric/fluent-theme';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -367,37 +366,3 @@ export const triggerNotSupportedWarning = () =>
   formatMessage(
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
-
-export const colors = {
-  bg: NeutralColors.white,
-  transparentBg: 'rgba(255, 255, 255, 0.5)',
-  transparent: 'transparent',
-
-  textOnColorButton: NeutralColors.white,
-
-  sideBarBg: NeutralColors.gray20,
-  sideBarHoverBg: NeutralColors.gray50,
-  sideBarDivider: NeutralColors.gray40,
-  sideBarBorder: NeutralColors.gray50,
-
-  botControllerBg: CommunicationColors.tint10,
-
-  ...SharedColors,
-  ...NeutralColors,
-
-  green: SharedColors.green10,
-  red: SharedColors.red10,
-  darkRed: SharedColors.red20,
-  gray: SharedColors.gray20,
-  blue: SharedColors.cyanBlue10,
-
-  paleRed: '#FED9CC',
-  paleYellow: '#FFF4CE',
-  paleGreen: '#DDF3DB',
-
-  error: SharedColors.red20,
-  warning: SharedColors.yellow10,
-
-  latestBotItem: '#56ccf2',
-  shade30: '#004578',
-};

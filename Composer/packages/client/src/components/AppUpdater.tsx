@@ -19,7 +19,8 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IpcRendererEvent } from 'electron';
 
-import { AppUpdaterStatus, colors } from '../constants';
+import { AppUpdaterStatus } from '../constants';
+import { colors } from '../colors';
 import { appUpdateState, dispatcherState } from '../recoilModel';
 
 const updateAvailableDismissBtn: Partial<IButtonStyles> = {

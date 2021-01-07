@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 interface QnAIconProps {
   active: boolean;
@@ -17,7 +17,7 @@ export const QnAIcon: React.FC<QnAIconProps> = (props) => {
 
   return (
     <svg
-      fill={active ? colors.black : disabled ? colors.gray110 : colors.gray140}
+      fill={active ? colors.black : disabled ? colors.gray(110) : colors.gray(140)}
       height="15"
       style={{
         padding: '8px 12px',

@@ -16,7 +16,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import get from 'lodash/get';
 
 import { SkillInfo } from '../../recoilModel';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { formEditor } from './styles';
 import { PropertyEditorHeader } from './PropertyEditorHeader';
@@ -27,7 +27,7 @@ const styles = {
   `,
 
   banner: css`
-    border-bottom: 1px solid ${colors.gray60};
+    border-bottom: 1px solid ${colors.gray(60)};
     padding: 0 18px;
     margin-bottom: 0px;
   `,
@@ -42,7 +42,7 @@ const styles = {
     height: 15px;
     line-height: 15px;
     font-size: ${FontSizes.size12};
-    color: ${colors.gray130};
+    color: ${colors.gray(130)};
     font-weight: ${FontWeights.semibold};
     margin: 5px 0;
   `,

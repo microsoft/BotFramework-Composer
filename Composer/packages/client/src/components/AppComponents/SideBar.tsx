@@ -11,7 +11,8 @@ import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { resolveToBasePath } from '../../utils/fileUtil';
-import { BASEPATH, colors } from '../../constants';
+import { BASEPATH } from '../../constants';
+import { colors } from '../../colors';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { PageLink } from '../../utils/pageLinks';
@@ -29,15 +30,15 @@ const globalNav = css`
   font-size: ${FontSizes.size16};
   color: ${colors.blue};
   &:hover {
-    background: ${colors.sideBarHoverBg};
+    background: ${colors.gray(50)};
   }
 `;
 
 const sideBar = (isExpand: boolean) => css`
   width: ${isExpand ? '200' : '48'}px;
-  background-color: ${colors.sideBarBg};
+  background-color: ${colors.gray(20)};
   height: 100%;
-  border-right: 1px solid ${colors.sideBarBorder};
+  border-right: 1px solid ${colors.gray(50)};
   transition: width 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -48,7 +49,7 @@ const sideBar = (isExpand: boolean) => css`
 
 const dividerTop = css`
   width: 100%;
-  border-bottom: 1px solid ${colors.sideBarDivider};
+  border-bottom: 1px solid ${colors.gray(40)};
   margin: 0 auto;
 `;
 
@@ -58,7 +59,7 @@ const leftNavBottom = () => css`
 
 const divider = (isExpand: boolean) => css`
   width: ${isExpand ? '85%' : '40%'};
-  border-bottom: 1px solid ${colors.sideBarDivider};
+  border-bottom: 1px solid ${colors.gray(40)};
   margin: 0 auto;
 `;
 

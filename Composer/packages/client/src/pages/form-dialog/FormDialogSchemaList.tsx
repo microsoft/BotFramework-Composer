@@ -15,7 +15,7 @@ import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { formDialogSchemaDialogExistsSelector, formDialogSchemaState } from '../../recoilModel';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { FormDialogSchemaListHeader } from './FormDialogSchemaListHeader';
 
@@ -35,7 +35,7 @@ const Root = styled(Stack)<{
     position: 'relative',
     width: '100%',
     height: '100%',
-    borderRight: `1px solid ${colors.gray60}`,
+    borderRight: `1px solid ${colors.gray(60)}`,
     boxSizing: 'border-box',
     overflowY: 'auto',
     overflowX: 'hidden',
@@ -71,7 +71,7 @@ const oneLinerStyles = classNamesFunction<IStackItemProps, IStackItemStyles>()({
 const ItemRoot = styled(Stack)(({ selected }: { selected: boolean }) => ({
   padding: '0 12px',
   cursor: 'pointer',
-  background: selected ? DefaultPalette.neutralLighter : 'transparent',
+  background: selected ? colors.blue : 'transparent',
 }));
 
 const EmptyView = styled(Stack)({
@@ -141,7 +141,7 @@ const FormDialogSchemaItem = React.memo((props: FormDialogSchemaItemProps) => {
           data-is-focusable
           menuIconProps={{
             iconName: 'MoreVertical',
-            style: { color: colors.gray130 },
+            style: { color: colors.gray(130) },
           }}
           menuProps={{ items: overflowItems || [] }}
           role="menuitem"

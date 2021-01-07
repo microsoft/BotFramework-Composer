@@ -28,7 +28,8 @@ import { MessageBar } from 'office-ui-fabric-react/lib/components/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId, colors } from '../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { colors } from '../../colors';
 import { creationFlowTypeState } from '../../recoilModel';
 import { featureFlagsState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -67,15 +68,15 @@ export const bannerClass = mergeStyles({
 const rowDetails = (disabled: boolean) => {
   return {
     root: {
-      color: disabled ? colors.gray80 : colors.black,
+      color: disabled ? colors.gray(80) : colors.black,
       selectors: {
         '&:hover': {
-          background: disabled ? colors.white : colors.gray30,
-          color: disabled ? colors.gray80 : colors.black,
+          background: disabled ? colors.bg : colors.gray(30),
+          color: disabled ? colors.gray(80) : colors.black,
         },
         '&.ms-DetailsRow.is-selected': {
-          background: disabled ? colors.white : colors.gray30,
-          color: disabled ? colors.gray80 : colors.black,
+          background: disabled ? colors.bg : colors.gray(30),
+          color: disabled ? colors.gray(80) : colors.black,
         },
       },
     },
@@ -85,11 +86,11 @@ const rowDetails = (disabled: boolean) => {
 const rowTitle = (disabled: boolean) => {
   return {
     cellTitle: {
-      color: disabled ? colors.gray80 : colors.black,
+      color: disabled ? colors.gray(80) : colors.black,
       selectors: {
         ':hover': {
-          background: disabled ? colors.white : colors.gray30,
-          color: disabled ? colors.gray80 : colors.black,
+          background: disabled ? colors.bg : colors.gray(30),
+          color: disabled ? colors.gray(80) : colors.black,
         },
       },
     },
@@ -99,7 +100,7 @@ const rowTitle = (disabled: boolean) => {
 const tableCell = css`
   outline: none;
   :focus {
-    outline: ${colors.gray130} solid 1px;
+    outline: ${colors.gray(130)} solid 1px;
   }
 `;
 

@@ -24,15 +24,15 @@ import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
 import { diagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { IDiagnosticInfo } from './types';
 
 // -------------------- Styles -------------------- //
 
 const icons = {
-  Error: { iconName: 'ErrorBadge', color: colors.red20, background: colors.paleRed },
-  Warning: { iconName: 'Warning', color: colors.orangeYellow20, background: colors.paleYellow },
+  Error: { iconName: 'ErrorBadge', color: colors.red, background: colors.errorBg },
+  Warning: { iconName: 'Warning', color: colors.amber, background: colors.warningBg },
 };
 
 const diagnostic = mergeStyleSets({
@@ -81,7 +81,7 @@ const detailList = css`
 const tableCell = css`
   outline: none;
   :focus {
-    outline: ${colors.gray130} solid 1px;
+    outline: ${colors.gray(130)} solid 1px;
   }
 `;
 

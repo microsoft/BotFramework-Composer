@@ -3,11 +3,11 @@
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 export const settingsContainer = css`
   display: flex;
-  border-top: 1px solid ${colors.gray20};
+  border-top: 1px solid ${colors.gray(20)};
   padding: 20px 0px;
 `;
 
@@ -39,7 +39,7 @@ export const ContentStyle = css`
   margin-left: 2px;
   display: flex;
   height: 100%;
-  border-top: 1px solid ${colors.gray50};
+  border-top: 1px solid ${colors.gray(50)};
   flex: 1;
   position: relative;
   nav {
@@ -56,7 +56,7 @@ export const contentEditor = css`
 `;
 
 export const publishDialogText = css`
-  background-color: ${colors.paleGreen};
+  background-color: ${colors.successBg};
   margin-bottom: 10px;
   font-size: medium;
   padding: 7px;
@@ -101,7 +101,7 @@ export const detailList = css`
 export const label = css`
   font-size: 14px;
   font-weight: 600;
-  color: ${colors.gray160};
+  color: ${colors.gray(160)};
   padding: 5px 0px;
 `;
 
@@ -113,11 +113,11 @@ export const overflowSet = css`
   line-height: 36px;
   padding-left: 16px;
   padding-right: 5px;
-  background: ${colors.white};
+  background: ${colors.bg};
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.small};
   &:hover {
-    background: ${colors.gray20};
+    background: ${colors.gray(20)};
     font-weight: ${FontWeights.bold};
   }
 `;
@@ -129,7 +129,7 @@ export const targetSelected = css`
   justify-content: space-between;
   line-height: 36px;
   padding-left: 16px;
-  background: ${colors.gray20};
+  background: ${colors.gray(20)};
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
   padding-right: 5px;

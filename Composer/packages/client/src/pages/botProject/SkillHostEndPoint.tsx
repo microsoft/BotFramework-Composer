@@ -15,7 +15,7 @@ import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -42,7 +42,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: colors.red10,
+          color: colors.red,
           paddingRight: 3,
         },
       },

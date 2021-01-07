@@ -4,7 +4,7 @@ import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 export const styles = {
   dialog: {
@@ -47,12 +47,12 @@ export const textField = {
 };
 
 export const warning = {
-  color: colors.red10,
+  color: colors.red,
   fontSize: FontSizes.size10,
 };
 
 export const subText = css`
-  color: ${colors.gray130};
+  color: ${colors.gray(130)};
   font-size: 14px;
   font-weight: 400;
 `;

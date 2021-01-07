@@ -4,7 +4,7 @@
 import { css } from '@emotion/core';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 export const hidden = css`
   display: none;

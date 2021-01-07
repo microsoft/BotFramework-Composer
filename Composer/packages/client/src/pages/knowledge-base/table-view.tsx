@@ -40,7 +40,7 @@ import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import {
   formCell,

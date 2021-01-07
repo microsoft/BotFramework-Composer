@@ -6,24 +6,25 @@ import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Button } from 'office-ui-fabric-react/lib/Button';
 
-import { triggerNotSupportedWarning, colors } from '../../constants';
+import { triggerNotSupportedWarning } from '../../constants';
+import { colors } from '../../colors';
 
 const warningIcon = {
   marginLeft: 5,
-  color: colors.orangeYellow20,
+  color: colors.amber,
   fontSize: 20,
   cursor: 'pointer',
 };
 
 const warningRoot = {
   display: 'flex',
-  background: colors.paleYellow,
+  background: colors.warningBg,
   height: 50,
   alignItems: 'center',
 };
 
 const warningFont = {
-  color: colors.gray40,
+  color: colors.gray(40),
   fontSize: 9,
   paddingLeft: 10,
 };

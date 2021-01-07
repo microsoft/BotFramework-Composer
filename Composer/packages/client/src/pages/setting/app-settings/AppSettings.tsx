@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
-import { colors } from '../../../constants';
+import { colors } from '../../../colors';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -138,7 +138,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             <div
               css={css`
                 font-size: 24px;
-                background: ${colors.gray20};
+                background: ${colors.gray(20)};
                 color: black;
                 padding: 4px;
               `}

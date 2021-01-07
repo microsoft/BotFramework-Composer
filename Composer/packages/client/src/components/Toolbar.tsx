@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 import plugins from '../plugins';
 import { currentProjectIdState, schemasState } from '../recoilModel';
 import { useShell } from '../shell/useShell';
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -22,7 +22,7 @@ export const headerSub = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${colors.gray30};
+  border-bottom: 1px solid ${colors.gray(30)};
 `;
 
 export const leftActions = css`

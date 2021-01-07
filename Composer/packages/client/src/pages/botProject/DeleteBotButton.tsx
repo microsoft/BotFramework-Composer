@@ -14,7 +14,7 @@ import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 // -------------------- Styles -------------------- //
 
@@ -33,11 +33,11 @@ const deleteBotButton = {
     height: 32,
     width: 82,
     background: colors.blue,
-    color: colors.white,
+    color: colors.textOnColor,
   },
   rootHovered: {
     background: colors.blue,
-    color: colors.white,
+    color: colors.textOnColor,
   },
 };
 
@@ -62,7 +62,7 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
         return (
           <div
             style={{
-              background: colors.paleRed,
+              background: colors.errorBg,
               display: 'flex',
               flexDirection: 'row',
               marginBottom: '24px',
@@ -71,7 +71,7 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
             <FontIcon
               iconName="Warning12"
               style={{
-                color: colors.redOrange10,
+                color: colors.error,
                 fontSize: 36,
                 padding: '32px',
               }}

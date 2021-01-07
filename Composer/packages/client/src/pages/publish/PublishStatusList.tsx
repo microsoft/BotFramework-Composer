@@ -15,7 +15,7 @@ import formatMessage from 'format-message';
 import { PublishResult } from '@botframework-composer/types';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 import { listRoot, tableView, detailList } from './styles';
 

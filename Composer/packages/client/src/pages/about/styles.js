@@ -4,14 +4,14 @@
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 export const outline = css`
   display: flex;
   flex-direction: column;
   height: 100%;
   margin: 32px 50px 0px 32px;
-  border: 1px solid ${colors.gray100};
+  border: 1px solid ${colors.gray(100)};
   overflow-x: auto;
 `;
 

@@ -4,11 +4,11 @@
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-import { colors } from '../../constants';
+import { colors } from '../../colors';
 
 export const consoleStyle = css`
   background: ${colors.black};
-  color: ${colors.white};
+  color: ${colors.textOnColor};
   padding: 15px;
   margin-bottom: 20px;
 `;

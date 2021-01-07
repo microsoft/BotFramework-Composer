@@ -9,7 +9,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
-import { colors } from '../constants';
+import { colors } from '../colors';
 
 const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'PageDown', 'PageUp', 'Home', 'End'];
 
@@ -17,8 +17,8 @@ const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'
 const defaultContainerStyle = (hasFocus, hasErrors) => css`
   display: flex;
   width: 100%;
-  outline: ${hasErrors ? `2px solid ${colors.red10}` : hasFocus ? `2px solid ${colors.cyanBlue10}` : undefined};
-  background: ${hasFocus || hasErrors ? colors.white : 'inherit'};
+  outline: ${hasErrors ? `2px solid ${colors.red}` : hasFocus ? `2px solid ${colors.blue}` : undefined};
+  background: ${hasFocus || hasErrors ? colors.bg : 'inherit'};
   margin-top: 2px;
   :hover .ms-Button-icon {
     visibility: visible;
@@ -202,7 +202,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   let borderColor: string | undefined = undefined;
 
   if (!editing && !error) {
-    borderColor = formData.value || transparentBorder || depth > 1 ? 'transparent' : colors.gray30;
+    borderColor = formData.value || transparentBorder || depth > 1 ? 'transparent' : colors.gray(30);
   }
 
   const hasEditingErrors = hasErrors && hasBeenEdited;
@@ -240,10 +240,10 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
                   transition: 'border-color 0.1s linear',
                   selectors: {
                     ':hover': {
-                      borderColor: hasFocus ? undefined : colors.gray30,
+                      borderColor: hasFocus ? undefined : colors.gray(30),
                     },
                     '.ms-TextField-field': {
-                      background: hasFocus || hasEditingErrors ? colors.white : 'inherit',
+                      background: hasFocus || hasEditingErrors ? colors.bg : 'inherit',
                     },
                   },
                 },
@@ -283,15 +283,15 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             }}
             styles={{
               root: {
-                background: hasFocus ? colors.white : 'inherit',
+                background: hasFocus ? colors.bg : 'inherit',
               },
             }}
             onClick={iconProps?.onClick || resetValue}
           />
         )}
       </div>
-      {hasErrors && hasBeenEdited && <span style={{ color: colors.red20 }}>{requiredMessage || formErrors.value}</span>}
-      {error && <span style={{ color: colors.red20 }}>{error}</span>}
+      {hasErrors && hasBeenEdited && <span style={{ color: colors.error }}>{requiredMessage || formErrors.value}</span>}
+      {error && <span style={{ color: colors.error }}>{error}</span>}
     </Fragment>
   );
 };
