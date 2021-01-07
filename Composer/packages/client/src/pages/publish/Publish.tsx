@@ -177,8 +177,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const canPublish =
     checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
 
-  // TODO: clear these 2 anti-pattern hooks
-
   useEffect(() => {
     // init bot status list for the botProjectData is empty array when first mounted
     setCurrentBotList(botList);
@@ -258,8 +256,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  // TODO: computed publish history.
-  // selectedPublishTarget: Map<botProjectId, TargetId>;
   const changePublishTarget = (publishTarget, currentBotStatus) => {
     const target = currentBotStatus.publishTargets.find((t) => t.name === publishTarget);
     if (currentBotList.some((targetMap) => targetMap.id === currentBotStatus.id)) {
