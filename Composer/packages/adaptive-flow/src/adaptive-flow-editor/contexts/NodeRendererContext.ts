@@ -4,6 +4,8 @@
 import React from 'react';
 import { DialogFactory, JSONSchema7 } from '@bfc/shared';
 
+import { ExternalAction } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
+
 export interface NodeRendererContextValue {
   focusedId?: string;
   focusedEvent?: string;
@@ -11,6 +13,8 @@ export interface NodeRendererContextValue {
   clipboardActions: any[];
   dialogFactory: DialogFactory;
   customSchemas: JSONSchema7[];
+  externalEvent?: ExternalAction;
+  onCompleteExternalEvent: () => void;
 }
 
 export const defaultRendererContextValue = {
@@ -20,5 +24,6 @@ export const defaultRendererContextValue = {
   clipboardActions: [],
   dialogFactory: new DialogFactory({}),
   customSchemas: [],
+  onCompleteExternalEvent: () => {},
 };
 export const NodeRendererContext = React.createContext<NodeRendererContextValue>(defaultRendererContextValue);
