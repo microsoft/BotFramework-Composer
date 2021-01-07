@@ -142,6 +142,7 @@ const Page: React.FC<IPageProps> = (props) => {
         </div>
         <div css={main} role="main">
           <Split
+            resetOnDoubleClick
             initialPrimarySize="20%"
             minPrimarySize="200px"
             minSecondarySize="800px"

@@ -710,6 +710,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     <React.Fragment>
       <div css={pageRoot}>
         <Split
+          resetOnDoubleClick
           initialPrimarySize="20%"
           minPrimarySize="200px"
           minSecondarySize="800px"
@@ -751,6 +752,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
                 <Split
+                  resetOnDoubleClick
                   initialPrimarySize="65%"
                   minPrimarySize="500px"
                   minSecondarySize="350px"

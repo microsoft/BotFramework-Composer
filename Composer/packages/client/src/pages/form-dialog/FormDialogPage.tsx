@@ -196,6 +196,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     <>
       <Stack horizontal verticalFill>
         <Split
+          resetOnDoubleClick
           initialPrimarySize="320px"
           minPrimarySize="320px"
           minSecondarySize="800px"
