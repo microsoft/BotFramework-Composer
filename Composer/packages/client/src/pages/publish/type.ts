@@ -6,7 +6,9 @@ import { DialogSetting, PublishResult, PublishTarget } from '@bfc/shared';
 import { PublishType } from '../../recoilModel/types';
 
 export interface BotStatus {
+  /** Skill id. */
   id: string;
+  /** Skill name. */
   name: string;
   publishTargets?: PublishTarget[];
   publishTarget?: string;

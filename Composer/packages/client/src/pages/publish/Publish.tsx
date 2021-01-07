@@ -129,7 +129,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
-  const [selectedBots, setSelectedBots] = useState<Bot[]>([]);
+  const [checkedSkillIds, setCheckedSkillIds] = useState<string[]>([]);
+  const selectedBots = useMemo(() => {
+    return botList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
+  }, [checkedSkillIds]);
 
   const botStatusList = useMemo(() => {
     return generateBotStatusList(currentBotList, botPropertyData, botPublishHistoryList);
@@ -187,16 +190,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     };
   }, []);
 
-  const updateSelectedBots = (selectedBots) => {
-    const bots: Bot[] = [];
-    selectedBots.forEach((bot) => {
-      bots.push({
-        id: bot.id,
-        name: bot.name,
-        publishTarget: bot.publishTarget,
-      });
-    });
-    setSelectedBots(bots);
+  const updateCheckedSkills = (checkedIds: string[]) => {
+    setCheckedSkillIds(checkedIds);
+  };
+
+  const manageSkillPublishProfile = (skillId: string) => {
+    const url =
+      skillId === projectId
+        ? `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`
+        : `bot/${projectId}/skill/${skillId}/botProjectsSettings/#addNewPublishProfile`;
+    navigateTo(url);
   };
 
   const publish = async (items: BotStatus[]) => {
@@ -330,15 +333,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             botPublishHistoryList={botPublishHistoryList}
             botStatusList={botStatusList}
             changePublishTarget={changePublishTarget}
-            managePublishProfile={(skillId) => {
-              const url =
-                skillId === projectId
-                  ? `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`
-                  : `bot/${projectId}/skill/${skillId}/botProjectsSettings/#addNewPublishProfile`;
-              navigateTo(url);
-            }}
+            checkedIds={checkedSkillIds}
+            managePublishProfile={manageSkillPublishProfile}
             publishDisabled={publishDisabled}
-            updateSelectedBots={updateSelectedBots}
+            onCheck={updateCheckedSkills}
             onRollbackClick={() => null}
           />
         </div>

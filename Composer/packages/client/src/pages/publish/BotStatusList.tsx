@@ -28,8 +28,8 @@ export interface BotStatusListProps {
   botPublishHistoryList: BotPublishHistory;
   publishDisabled: boolean;
   managePublishProfile: (skillId: string) => void;
-  // onCheck: (skillIds: string[]) => void
-  updateSelectedBots: (items: BotStatus[]) => void;
+  checkedIds: string[];
+  onCheck: (skillIds: string[]) => void;
   changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
 }
@@ -38,11 +38,11 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   botStatusList,
   botPublishHistoryList,
   publishDisabled,
+  checkedIds,
+  onCheck,
   managePublishProfile,
   changePublishTarget,
-  updateSelectedBots,
 }) => {
-  const [selectedBots, setSelectedBots] = useState<BotStatus[]>([]);
   const [expandedBotIds, setExpandedBotIds] = useState<{ [botId: string]: boolean }>({});
 
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
@@ -52,15 +52,12 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     return botStatusList.slice().reverse();
   }, [botStatusList, currentSort]);
 
-  const changeSelected = (item: BotStatus, isChecked?: boolean) => {
-    let newSelectedBots: BotStatus[];
+  const onChangeCheckbox = (skillId: string, isChecked?: boolean) => {
     if (isChecked) {
-      newSelectedBots = [...selectedBots, item];
+      onCheck([...checkedIds, skillId]);
     } else {
-      newSelectedBots = selectedBots.filter((bot) => bot.id !== item.id);
+      onCheck(checkedIds.filter((id) => id !== skillId));
     }
-    setSelectedBots(newSelectedBots);
-    updateSelectedBots(newSelectedBots);
   };
 
   const publishTargetOptions = (item: BotStatus): IDropdownOption[] => {
@@ -147,7 +144,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
                 whiteSpace: 'nowrap',
               },
             }}
-            onChange={(_, isChecked) => changeSelected(item, isChecked)}
+            onChange={(_, isChecked) => onChangeCheckbox(item.id, isChecked)}
           />
         );
       },
