@@ -43,7 +43,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   updateSelectedBots,
 }) => {
   const [selectedBots, setSelectedBots] = useState<BotStatus[]>([]);
-  const [showHistoryBots, setShowHistoryBots] = useState<string[]>([]);
+  const [expandedBotIds, setExpandedBotIds] = useState<{ [botId: string]: boolean }>({});
 
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
   const displayedItems: BotStatus[] = useMemo(() => {
@@ -115,14 +115,14 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     }
   };
   const changeShowHistoryBots = (item: BotStatus) => {
-    let newShowHistoryBots: string[];
-    if (showHistoryBots.includes(item.id)) {
-      newShowHistoryBots = showHistoryBots.filter((id) => id !== item.id);
+    const clickedBotId = item.id;
+    if (expandedBotIds[clickedBotId]) {
+      setExpandedBotIds({ ...expandedBotIds, [clickedBotId]: false });
     } else {
-      newShowHistoryBots = [...showHistoryBots, item.id];
+      setExpandedBotIds({ ...expandedBotIds, [clickedBotId]: true });
     }
-    setShowHistoryBots(newShowHistoryBots);
   };
+
   const columns = [
     {
       key: 'Bot',
@@ -253,7 +253,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <IconButton
-            iconProps={{ iconName: showHistoryBots.includes(item.id) ? 'ChevronDown' : 'ChevronRight' }}
+            iconProps={{ iconName: expandedBotIds[item.id] ? 'ChevronDown' : 'ChevronRight' }}
             styles={{ root: { float: 'right' } }}
             onClick={() => changeShowHistoryBots(item)}
           />
@@ -268,7 +268,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     return (
       <Fragment>
         {defaultRender(props)}
-        <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none', margin: '20px 0 38px 12px' }}>
+        <div css={{ display: expandedBotIds[item.id] ? 'block' : 'none', margin: '20px 0 38px 12px' }}>
           <div css={{ fontSize: '14px', lineHeight: '20px', color: '#323130', fontWeight: 'bold' }}>
             Publish history
           </div>
