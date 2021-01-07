@@ -22,7 +22,7 @@ export const LogDialog: React.FC<LogDialogProps> = ({ value = '', onDismiss }) =
       modalProps={{ isBlocking: true }}
       onDismiss={onDismiss}
     >
-      <TextField multiline placeholder="Log Output" style={{ minHeight: 300 }} value={value} />
+      <TextField multiline readOnly placeholder="Log Output" style={{ minHeight: 300 }} value={value} />
     </Dialog>
   );
 };
