@@ -19,6 +19,7 @@ using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Testing;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
@@ -105,12 +106,13 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var adapter = IsSkill(settings)
                 ? new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>())
                 : new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
-            
+
             adapter
               .UseStorage(storage)
               .UseBotState(userState, conversationState)
               .Use(new RegisterClassMiddleware<IConfiguration>(Configuration))
-              .Use(s.GetService<TelemetryInitializerMiddleware>());
+              .Use(s.GetService<TelemetryInitializerMiddleware>())
+              .Use(new SetTestOptionsMiddleware());
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
