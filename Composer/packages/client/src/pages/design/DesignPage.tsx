@@ -127,28 +127,28 @@ const parseTriggerId = (triggerId: string | undefined): number | undefined => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
 ) => {
-  const { location, dialogId, projectId = '', skillId = null } = props;
+  const { location, dialogId, projectId: currentRootProjectId = '', skillId = null } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
-  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
-  const schemas = useRecoilValue(schemasState(skillId ?? projectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? currentRootProjectId));
+  const schemas = useRecoilValue(schemasState(skillId ?? currentRootProjectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? currentRootProjectId));
   const skills = useRecoilValue(skillsStateSelector);
   const displaySkillManifestNameIdentifier = useRecoilValue(displaySkillManifestState);
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useBotOperations();
-  const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
+  const focusPath = useRecoilValue(focusPathState(skillId ?? currentRootProjectId));
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-  const locale = useRecoilValue(localeState(skillId ?? projectId));
-  const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
-  const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
-  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
+  const locale = useRecoilValue(localeState(skillId ?? currentRootProjectId));
+  const undoFunction = useRecoilValue(undoFunctionState(skillId ?? currentRootProjectId));
+  const undoVersion = useRecoilValue(undoVersionState(skillId ?? currentRootProjectId));
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? currentRootProjectId;
   const [showAddSkillDialogModal, setAddSkillDialogModalVisibility] = useState(false);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
-  const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(skillId ?? projectId));
-  const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(skillId ?? projectId));
+  const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(skillId ?? currentRootProjectId));
+  const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(skillId ?? currentRootProjectId));
 
   const {
     removeDialog,
@@ -221,7 +221,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const dialogContent = currentDialog?.content ? Object.assign({}, currentDialog.content) : null;
     if (dialogContent !== null && !dialogContent.id) {
       dialogContent.id = dialogId;
-      updateDialog({ id: dialogId, content: dialogContent, projectId });
+      updateDialog({ id: dialogId, content: dialogContent, projectId: currentRootProjectId });
     }
   }, [dialogId]);
 
@@ -337,15 +337,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       breadcrumbArray.push({
         key: 'dialog-' + parentLink?.dialogId,
         label: parentLink?.displayName ?? link.displayName,
-        link: { projectId, skillId, dialogId },
-        onClick: () => navTo(skillId ?? projectId, dialogId),
+        link: { projectId: currentRootProjectId, skillId, dialogId },
+        onClick: () => navTo(skillId ?? currentRootProjectId, dialogId),
       });
     }
     if (trigger != null) {
       breadcrumbArray.push({
         key: 'trigger-' + parentLink?.trigger,
         label: link.displayName,
-        link: { projectId, skillId, dialogId, trigger },
+        link: { projectId: currentRootProjectId, skillId, dialogId, trigger },
         onClick: () => selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`),
       });
     }
@@ -355,10 +355,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (trigger != null) {
       selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`);
     } else if (dialogId != null) {
-      navTo(skillId ?? projectId, dialogId);
+      navTo(skillId ?? currentRootProjectId, dialogId);
     } else {
       // with no dialog or ID, we must be looking at a bot link
-      navTo(skillId ?? projectId, null);
+      navTo(skillId ?? currentRootProjectId, null);
     }
   }
 
@@ -697,7 +697,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
-  const dialogCreateSource = dialogModalInfo ?? skillId ?? projectId;
+  const dialogCreateSource = dialogModalInfo ?? skillId ?? currentRootProjectId;
 
   return (
     <React.Fragment>
@@ -705,7 +705,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={'dialogs'}>
           <ProjectTree
             defaultSelected={{
-              projectId,
+              projectId: currentRootProjectId,
               skillId: skillId ?? undefined,
               dialogId,
               trigger: parseTriggerId(selectedTrigger?.id),
@@ -752,7 +752,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                         schema={schemas.sdk.content}
                         value={currentDialog.content || undefined}
                         onChange={(data) => {
-                          updateDialog({ id: currentDialog.id, content: data, projectId: skillId ?? projectId });
+                          updateDialog({
+                            id: currentDialog.id,
+                            content: data,
+                            projectId: skillId ?? currentRootProjectId,
+                          });
                         }}
                       />
                     ) : withWarning ? (
@@ -762,16 +766,20 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                           onCancel={() => {
                             setWarningIsVisible(false);
                           }}
-                          onOk={() => navigateTo(`/bot/${projectId}/dialogs/${dialogId}`)}
+                          onOk={() => navigateTo(`/bot/${currentRootProjectId}/dialogs/${dialogId}`)}
                         />
                       )
                     ) : (
-                      <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
+                      <EditorExtension
+                        plugins={pluginConfig}
+                        projectId={currentRootProjectId}
+                        shell={shellForFlowEditor}
+                      >
                         <VisualEditor
                           isRemoteSkill={isRemoteSkill}
                           openNewTriggerModal={() => {
                             if (!dialogId) return;
-                            openNewTriggerModal(projectId, dialogId);
+                            openNewTriggerModal(currentRootProjectId, dialogId);
                           }}
                           onBlur={() => onBlurFlowEditor()}
                           onFocus={() => onFocusFlowEditor()}
@@ -779,7 +787,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       </EditorExtension>
                     )}
                   </div>
-                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
+                  <EditorExtension
+                    plugins={pluginConfig}
+                    projectId={currentRootProjectId}
+                    shell={shellForPropertyEditor}
+                  >
                     {isRemoteSkill && skillManifestFile ? (
                       <ManifestEditor formData={skillManifestFile} />
                     ) : (
@@ -803,14 +815,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 setDialogModalInfo(undefined);
               }}
               onSubmit={(dialogName, dialogData) => {
-                handleCreateDialogSubmit(dialogModalInfo ?? skillId ?? projectId, dialogName, dialogData);
+                handleCreateDialogSubmit(dialogModalInfo ?? skillId ?? currentRootProjectId, dialogName, dialogData);
               }}
             />
           </EditorExtension>
         )}
         {showAddSkillDialogModal && (
           <CreateSkillModal
-            projectId={projectId}
+            projectId={currentRootProjectId}
             onDismiss={() => {
               setAddSkillDialogModalVisibility(false);
             }}
