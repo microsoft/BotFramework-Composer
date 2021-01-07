@@ -5,12 +5,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { RenderSplitterProps } from '@geoffcox/react-splitter';
 
-type Props = RenderSplitterProps & {
-  color: string;
-  hoverColor: string;
-};
-
-const HitArea = styled.div(({ horizontal, hoverColor }: { horizontal: boolean; hoverColor: string }) => ({
+const HitArea = styled.div(({ horizontal, dragging }: { horizontal: boolean; dragging: boolean }) => ({
   boxSizing: 'border-box',
   outline: 'none',
   overflow: 'hidden',
@@ -18,8 +13,8 @@ const HitArea = styled.div(({ horizontal, hoverColor }: { horizontal: boolean; h
   width: '100%',
   cursor: horizontal ? 'row-resize' : 'col-resize',
   background: 'transparent',
-  '%:hover .thin-split-visual': {
-    background: `${hoverColor}`,
+  '&:hover .thin-split-visual': {
+    background: dragging ? 'black' : 'gray',
   },
   userSelect: 'none',
 }));
@@ -27,7 +22,7 @@ const HitArea = styled.div(({ horizontal, hoverColor }: { horizontal: boolean; h
 const getCenteredMargin = (size: number) => `${Math.max(0, Math.floor(size / 2) - 1)}px`;
 
 const Splitter = styled.div(
-  ({ horizontal, splitterSize, color }: { horizontal: boolean; splitterSize: number; color: string }) => ({
+  ({ horizontal, splitterSize, dragging }: { horizontal: boolean; splitterSize: number; dragging: boolean }) => ({
     boxSizing: 'border-box',
     outline: 'none',
     overflow: 'hidden',
@@ -35,7 +30,7 @@ const Splitter = styled.div(
     width: horizontal ? '100%' : '1px',
     marginLeft: horizontal ? '0' : getCenteredMargin(splitterSize),
     marginTop: horizontal ? getCenteredMargin(splitterSize) : '0',
-    background: `${color}`,
+    background: dragging ? 'black' : 'silver',
   })
 );
 
@@ -43,12 +38,12 @@ const Splitter = styled.div(
  * The default splitter which provides a thin line within a possibly larger mouse hit area.
  * @param props
  */
-export const ThinSplitter = (props: Props) => {
-  const { horizontal, pixelSize, color, hoverColor } = props;
+export const ThinSplitter = (props: RenderSplitterProps) => {
+  const { horizontal, pixelSize, dragging } = props;
 
   return (
-    <HitArea horizontal={horizontal} hoverColor={hoverColor}>
-      <Splitter className="thin-split-visual" color={color} horizontal={horizontal} splitterSize={pixelSize} />
+    <HitArea dragging={dragging} horizontal={horizontal}>
+      <Splitter className="thin-split-visual" dragging={dragging} horizontal={horizontal} splitterSize={pixelSize} />
     </HitArea>
   );
 };
