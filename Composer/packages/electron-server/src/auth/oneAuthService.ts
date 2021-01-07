@@ -4,6 +4,7 @@ import path from 'path';
 
 import { ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
+import { v4 as uuid } from 'uuid';
 
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac } from '../utility/platform';
@@ -14,6 +15,7 @@ import { isDevelopment } from '../utility/env';
 import { OneAuth } from './oneauth';
 import { OneAuthShim } from './oneAuthShim';
 import { OneAuthBase } from './oneAuthBase';
+import { telemetryDispatcher } from './telemetry/oneDSTelemetryLogger';
 
 const log = logger.extend('one-auth');
 
@@ -29,7 +31,7 @@ const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // wo
 
 export class OneAuthInstance extends OneAuthBase {
   private initialized: boolean;
-  private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
+  private _oneAuth: typeof OneAuth | null = null; // eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
 
   constructor() {
@@ -63,7 +65,13 @@ export class OneAuthInstance extends OneAuthBase {
         GRAPH_RESOURCE,
         false // prefer broker
       );
-      this.oneAuth.initialize(appConfig, undefined, aadConfig, undefined);
+      const telemetryConfig = {
+        audienceType: this.oneAuth.AudienceType.Production, // not an internal application
+        sessionId: uuid(), // session id
+        telemetryDispatcher, // telemetry dispatcher
+        allowedResources: [], // allowed resources
+      };
+      this.oneAuth.initialize(appConfig, undefined, aadConfig, telemetryConfig as any);
       this.initialized = true;
       log('Service initialized.');
     } else {
