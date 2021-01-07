@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo, buildURL } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { dialogIdsState } from '../../recoilModel';
 
 import TableView from './table-view';
 
@@ -24,14 +24,14 @@ const LUPage: React.FC<RouteComponentProps<{
   luFileId?: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
+  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    const activeDialog = dialogs.find((id) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length && !luFileId) {
       navigateTo(buildURL('language-understanding', { projectId, skillId }));
     }

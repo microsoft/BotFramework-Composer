@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { dialogIdsState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
@@ -25,8 +25,7 @@ const LGPage: React.FC<RouteComponentProps<{
   lgFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
-
+  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId ?? ''));
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
@@ -34,7 +33,7 @@ const LGPage: React.FC<RouteComponentProps<{
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    const activeDialog = dialogs.find((id) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'common' && !lgFileId) {
       navigateTo(`${baseURL}language-generation/common`);
     }

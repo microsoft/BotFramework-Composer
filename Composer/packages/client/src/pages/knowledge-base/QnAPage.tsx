@@ -12,7 +12,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogsSelectorFamily, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
+import { dialogIdsState, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -31,7 +31,7 @@ const QnAPage: React.FC<RouteComponentProps<{
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   //To do: support other languages
   const locale = 'en-us';
@@ -44,7 +44,7 @@ const QnAPage: React.FC<RouteComponentProps<{
   const isRoot = dialogId === 'all';
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    const activeDialog = dialogs.find((id) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
       navigateTo(`${baseURL}knowledge-base/${dialogId}`);
     }
