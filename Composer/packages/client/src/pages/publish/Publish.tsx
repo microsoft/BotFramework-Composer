@@ -75,6 +75,22 @@ const generateBotStatusList = (
   return bots;
 };
 
+// Recover the loading status when switching back to publish page.
+const initUpdaterStatus = (history: BotPublishHistory) => {
+  const status = {};
+  Object.keys(history).forEach((skillId) => {
+    const targetHistory = history[skillId];
+    Object.keys(targetHistory).forEach((targetName) => {
+      const historyData = targetHistory[targetName];
+      if (Array.isArray(historyData) && historyData[0] && historyData[0].status === ApiStatus.Publishing) {
+        status[`${skillId}/${targetName}`] = true;
+      }
+    });
+  });
+
+  return status;
+};
+
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
 
@@ -97,7 +113,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>({});
+  const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>(
+    initUpdaterStatus(publishHistoryList)
+  );
   const [checkedSkillIds, setCheckedSkillIds] = useState<string[]>([]);
 
   const { botPropertyData, botList } = useMemo(() => {
