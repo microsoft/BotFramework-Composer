@@ -16,8 +16,9 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { useSearchFeature } from '../../hooks/useSearchFeature';
+import { useSearchFeature } from '../../hooks/search/useSearchFeature';
 import { botOpeningState } from '../../recoilModel';
+import { useLocation } from '../../utils/hooks';
 
 import { renderAssetItem } from './renderAssetItem';
 import {
@@ -27,12 +28,18 @@ import {
   SearchKind,
   SearchResult,
   SearchResultKind,
+  visualDesignerQuickCommandTypes,
 } from './types';
 import { useDebounce } from './useDebounce';
 
 const defaultItemHeight = 32;
 const maxResultCount = 5;
 const minCharCountRequirement = 3;
+
+const isCommandDisabled = (command: string, pathname: string) => {
+  const visualDesignerCommand = visualDesignerQuickCommandTypes.includes(command);
+  return visualDesignerCommand && !pathname.includes('selected=triggers');
+};
 
 const ItemRoot = styled(Stack)({
   '&>label': {
@@ -56,13 +63,26 @@ const Root = styled(Stack)(({ height }: { height: number }) => ({
   height,
 }));
 
-const ItemRow = styled(Stack)({
+const ItemRow = styled(Stack)(({ disabled }: { disabled: boolean }) => ({
   fontSize: 12,
   height: defaultItemHeight,
   lineHeight: `${defaultItemHeight}px`,
-  cursor: 'pointer',
-  '&:hover': {
-    position: 'relative',
+  cursor: disabled ? 'default' : 'pointer',
+  position: 'relative',
+  '&::before': disabled
+    ? {
+        position: 'absolute',
+        content: '""',
+        height: '100%',
+        width: 'calc(100% + 32px)',
+        left: -16,
+        right: 16,
+        pointerEvents: 'none',
+        zIndex: 1,
+        background: 'rgba(255,255,255,0.6)',
+      }
+    : null,
+  '&:hover': !disabled && {
     '&::after': {
       position: 'absolute',
       content: '""',
@@ -75,7 +95,7 @@ const ItemRow = styled(Stack)({
       background: NeutralColors.gray40,
     },
   },
-});
+}));
 
 const SmartSearchBox = styled(SearchBox)({
   width: 600,
@@ -107,7 +127,7 @@ const renderItem = (item: SearchResult<any>): React.ReactNode => {
     case 'asset':
       return renderAssetItem(item.data as Fuse.FuseResult<AssetItem<BotBoundAssetData>>);
     case 'command':
-      return <ItemText>{item.id}</ItemText>;
+      return <ItemText>{(item.data as { label: string }).label}</ItemText>;
   }
 };
 
@@ -121,22 +141,30 @@ type SearchResultPaneProps<T> = {
 const SearchResultPane = <T,>(props: SearchResultPaneProps<T>) => {
   const { kind, label, items, onClickItem } = props;
 
+  const {
+    location: { pathname },
+  } = useLocation();
+
   return items.length ? (
     <ItemRoot tokens={{ childrenGap: 8, padding: '0 16px' }}>
       <Label styles={{ root: { height: defaultItemHeight } }}>{label}</Label>
       <Root height={Math.min(items.length, maxResultCount) * defaultItemHeight + 8}>
-        {items.map((item, idx) => (
-          <ItemRow
-            key={`item-${item.id}-${idx}`}
-            horizontal
-            tokens={{ childrenGap: 16 }}
-            verticalAlign="center"
-            onClick={() => onClickItem(kind, item.linkUrl)}
-          >
-            <Icon iconName={item.icon} />
-            {renderItem(item)}
-          </ItemRow>
-        ))}
+        {items.map((item, idx) => {
+          const disabled = item.kind === 'command' && isCommandDisabled(item.id, pathname);
+          return (
+            <ItemRow
+              key={`item-${item.id}-${idx}`}
+              horizontal
+              disabled={disabled}
+              tokens={{ childrenGap: 8 }}
+              verticalAlign="center"
+              onClick={() => !disabled && onClickItem(kind, item.linkUrl)}
+            >
+              <Icon iconName={item.icon} />
+              {renderItem(item)}
+            </ItemRow>
+          );
+        })}
       </Root>
     </ItemRoot>
   ) : null;
@@ -179,11 +207,21 @@ export const SearchFeature = () => {
   ]) as SearchResult<any>[];
 
   const clickItem = React.useCallback(
-    (_: SearchKind, link: string) => {
-      console.log(link);
-      navigate(link);
+    (kind: SearchKind, linkUrl: string) => {
       clear();
       setQuery('');
+
+      switch (kind) {
+        case 'asset':
+          navigate(linkUrl);
+          break;
+        case 'documentation':
+          // eslint-disable-next-line security/detect-non-literal-fs-filename
+          window.open(linkUrl)?.focus();
+          break;
+        case 'command':
+          break;
+      }
     },
     [setQuery, clear]
   );
@@ -225,19 +263,22 @@ export const SearchFeature = () => {
             },
           }}
         >
-          <SearchResultPane<SearchDocumentResult>
+          <SearchResultPane<any>
+            key="command-results"
             items={commandItems}
             kind="command"
             label={formatMessage('Commands')}
             onClickItem={clickItem}
           />
           <SearchResultPane<AssetItem<any>>
+            key="asset-results"
             items={assetItems}
             kind="asset"
             label={formatMessage('Bot assets')}
             onClickItem={clickItem}
           />
-          <SearchResultPane<any>
+          <SearchResultPane<SearchDocumentResult>
+            key="documentation-results"
             items={documentationItems}
             kind="documentation"
             label={formatMessage('Looking for documentation?')}

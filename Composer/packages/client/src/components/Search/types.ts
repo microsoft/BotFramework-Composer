@@ -55,7 +55,53 @@ export type SearchDocumentResult = {
   Caption: string;
 };
 
+export const visualDesignerQuickCommandTypes = [
+  'AskForText',
+  'AskForNumber',
+  'AskForConfirmation',
+  'AskForMultichoice',
+  'AskForFileOrAttachment',
+  'AskForDateOrTime',
+  'OauthLogin',
+  'AskActivity',
+  'IfCondition',
+  'SwitchCondition',
+  'LoopForEachItem',
+  'LoopForEachPage',
+  'ContinueLoop',
+  'BreakOutOfLoop',
+  'BeginNewDialog',
+  'EndDialog',
+  'CancelAllActiveDialogs',
+  'EndTurn',
+  'RepeatThisDialog',
+  'ReplaceDialog',
+  'SetAProperty',
+  'SetProperties',
+  'DeleteAProperty',
+  'DeleteProperties',
+  'EditAnArrayProperty',
+  'UpdateActivity',
+  'DeleteActivity',
+  'GetActivityMembers',
+  'GetConversationMembers',
+  'ConnectToASkill',
+  'SendAnHttpRequest',
+  'EmitACustomEvent',
+  'OauthLogin',
+  'ConnectToQnaKnowledgebase',
+  'SignOutUser',
+  'LogToConsole',
+  'ThrowException',
+  'EmitATraceEvent',
+  'EmitATelemetryTrackEvent',
+  'AddAlternativePhrasing',
+];
+
+export type VisualDesignerQuickCommandType = typeof visualDesignerQuickCommandTypes[number];
+
 export type QuickCommandType =
+  | VisualDesignerQuickCommandType
   | 'Undo'
   | 'Redo'
   | 'SelectAll'
@@ -102,46 +148,6 @@ export type QuickCommandType =
   | 'Delete'
   | 'Paste'
   | 'MoveToNewDialog'
-  | 'AskForText'
-  | 'AskForNumber'
-  | 'AskForConfirmation'
-  | 'AskForMultichoice'
-  | 'AskForFileOrAttachment'
-  | 'AskForDateOrTime'
-  | 'OauthLogin'
-  | 'AskActivity'
-  | 'IfCondition'
-  | 'SwitchCondition'
-  | 'LoopForEachItem'
-  | 'LoopForEachPage'
-  | 'ContinueLoop'
-  | 'BreakOutOfLoop'
-  | 'BeginNewDialog'
-  | 'EndDialog'
-  | 'CancelAllActiveDialogs'
-  | 'EndTurn'
-  | 'RepeatThisDialog'
-  | 'ReplaceDialog'
-  | 'SetAProperty'
-  | 'SetProperties'
-  | 'DeleteAProperty'
-  | 'DeleteProperties'
-  | 'EditAnArrayProperty'
-  | 'UpdateActivity'
-  | 'DeleteActivity'
-  | 'GetActivityMembers'
-  | 'GetConversationMembers'
-  | 'ConnectToASkill'
-  | 'SendAnHttpRequest'
-  | 'EmitACustomEvent'
-  | 'OauthLogin'
-  | 'ConnectToQnaKnowledgebase'
-  | 'SignOutUser'
-  | 'LogToConsole'
-  | 'ThrowException'
-  | 'EmitATraceEvent'
-  | 'EmitATelemetryTrackEvent'
-  | 'AddAlternativePhrasing'
   | 'PublishSelectedBots'
   | 'PullFromSelectedProfile'
   | 'ManageProfile'
