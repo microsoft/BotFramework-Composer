@@ -219,9 +219,10 @@ export const ProjectTree: React.FC<Props> = ({
 
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
+  // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
   const createSubtree = useCallback(() => {
     return projectCollection.map(createBotSubtree);
-  }, [projectCollection]);
+  }, [projectCollection, selectedLink]);
 
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
