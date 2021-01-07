@@ -16,7 +16,7 @@ import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 
-import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../../constants';
+import { DialogCreationCopy, QnABotTemplateId, nameRegex, invalidNameCharRegex } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -103,13 +103,21 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   } = props;
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
+
+  // template ID is populated by npm package name which needs to be formatted
+  const normalizeTemplateId = (templateId?: string) => {
+    if (templateId) {
+      return templateId.replace(invalidNameCharRegex, '_');
+    }
+  };
+
   const getDefaultName = () => {
     let i = -1;
-    const bot = templateId;
+    const bot = normalizeTemplateId(templateId);
     let defaultName = '';
     do {
       i++;
-      defaultName = `${bot}-${i}`;
+      defaultName = `${bot}_${i}`;
     } while (
       files.some((file) => {
         return file.name.toLowerCase() === defaultName.toLowerCase();
@@ -125,7 +133,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
       required: true,
       validate: (value) => {
         if (!value || !nameRegex.test(`${value}`)) {
-          return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+          // botName is used as used when generating runtime namespaces which cannot start with a number
+          if (value && !isNaN(+value.toString().charAt(0))) {
+            return formatMessage('Bot name cannot not start with a number');
+          } else {
+            return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, or _.');
+          }
         }
 
         const newBotPath =

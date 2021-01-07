@@ -102,6 +102,7 @@ export class AssetManager {
 
   public async copyRemoteProjectTemplateToV2(
     templateId: string,
+    projectName: string,
     ref: LocationRef,
     user?: UserIdentity,
     locale?: string
@@ -126,8 +127,10 @@ export class AssetManager {
     const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
 
     if (remoteTemplateAvailable) {
-      await this.instantiateRemoteTemplate(generatorName, dstDir);
+      await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
     }
+
+    ref.path = ref.path + `/${projectName}`;
 
     return ref;
   }
@@ -145,11 +148,15 @@ export class AssetManager {
     }
   }
 
-  private async instantiateRemoteTemplate(generatorName: string, dstDir: string): Promise<boolean> {
+  private async instantiateRemoteTemplate(
+    generatorName: string,
+    dstDir: string,
+    projectName: string
+  ): Promise<boolean> {
     yeomanEnv.cwd = dstDir;
     //TODO delete override
     generatorName = 'C:\\Users\\pavolum\\source\\repos\\generator-conversational-core\\generators\\app\\index.js';
-    await yeomanEnv.run([generatorName, 'runtime'], {}, () => {
+    await yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });
     return true;

@@ -335,7 +335,9 @@ export const EmptyBotTemplateId = 'EmptyBot';
 
 export const QnABotTemplateId = 'QnASample';
 
-export const nameRegex = /^[a-zA-Z0-9-_]+$/;
+export const nameRegex = /^[a-zA-Z0-9_]+$/;
+
+export const invalidNameCharRegex = /[^a-z^A-Z^0-9^_]/g;
 
 export const authConfig = {
   // for web login

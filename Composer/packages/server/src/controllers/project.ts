@@ -541,7 +541,7 @@ async function createProjectAsync(req: Request, jobId: string) {
     // Update status for polling
     BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
 
-    const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, locationRef, user);
+    const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, name, locationRef, user);
     BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
 
     const id = await BotProjectService.openProject(newProjRef, user);
