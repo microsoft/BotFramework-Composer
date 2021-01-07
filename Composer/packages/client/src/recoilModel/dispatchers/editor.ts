@@ -3,8 +3,9 @@
 // Licensed under the MIT License.
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { NodeEventTypes } from '@bfc/adaptive-flow';
 
-import { clipboardActionsState, visualEditorSelectionState } from '../atoms/appState';
+import { clipboardActionsState, visualEditorExternalEventState, visualEditorSelectionState } from '../atoms/appState';
 
 export const editorDispatcher = () => {
   const setVisualEditorClipboard = useRecoilCallback(
@@ -21,7 +22,14 @@ export const editorDispatcher = () => {
     reset(visualEditorSelectionState);
   });
 
+  const setVisualEditorExternalEvent = useRecoilCallback(
+    ({ set }: CallbackInterface) => (eventType?: NodeEventTypes, kind?: string) => {
+      set(visualEditorExternalEventState, { eventType, eventData: { kind } });
+    }
+  );
+
   return {
+    setVisualEditorExternalEvent,
     setVisualEditorClipboard,
     resetVisualEditor,
     setVisualEditorSelection,

@@ -158,6 +158,47 @@ export type QuickCommandType =
   | 'ClearAll'
   | 'GenerateDialog';
 
+export const ActionKinds = {
+  AskForText: 'Microsoft.TextInput',
+  AskForNumber: 'Microsoft.NumberInput',
+  AskForConfirmation: 'Microsoft.ConfirmInput',
+  AskForMultichoice: 'Microsoft.ChoiceInput',
+  AskForFileOrAttachment: 'Microsoft.AttachmentInput',
+  AskForDateOrTime: 'Microsoft.DateTimeInput',
+  OauthLogin: 'Microsoft.OAuthInput',
+  AskActivity: 'Microsoft.OAuthInput',
+  IfCondition: 'Microsoft.IfCondition',
+  SwitchCondition: 'Microsoft.SwitchCondition',
+  LoopForEachItem: 'Microsoft.Foreach',
+  LoopForEachPage: 'Microsoft.ForeachPage',
+  ContinueLoop: 'Microsoft.ContinueLoop',
+  BreakOutOfLoop: 'Microsoft.BreakLoop',
+  BeginNewDialog: 'Microsoft.BeginDialog',
+  EndDialog: 'Microsoft.EndDialog',
+  CancelAllActiveDialogs: 'Microsoft.CancelAllDialogs',
+  EndTurn: 'Microsoft.EndTurn',
+  RepeatThisDialog: 'Microsoft.RepeatDialog',
+  ReplaceDialog: 'Microsoft.ReplaceDialog',
+  SetAProperty: 'Microsoft.SetProperty',
+  SetProperties: 'Microsoft.SetProperties',
+  DeleteAProperty: 'Microsoft.DeleteProperty',
+  DeleteProperties: 'Microsoft.DeleteProperties',
+  EditAnArrayProperty: 'Microsoft.EditArray',
+  UpdateActivity: 'Microsoft.UpdateActivity',
+  DeleteActivity: 'Microsoft.DeleteActivity',
+  GetActivityMembers: 'Microsoft.GetActivityMembers',
+  GetConversationMembers: 'Microsoft.GetConversationMembers',
+  ConnectToASkill: 'Microsoft.BeginSkill',
+  SendAnHttpRequest: 'Microsoft.HttpRequest',
+  EmitACustomEvent: 'Microsoft.EmitEvent',
+  ConnectToQnaKnowledgebase: 'Microsoft.QnAMakerDialog',
+  SignOutUser: 'Microsoft.SignOutUser',
+  LogToConsole: 'Microsoft.LogAction',
+  ThrowException: 'Microsoft.ThrowException',
+  EmitATraceEvent: 'Microsoft.TraceActivity',
+  EmitATelemetryTrackEvent: 'Microsoft.TelemetryTrackEvent',
+};
+
 export type QuickCommandPredictionIntent = 'Commands' | 'None';
 
 export type QuickCommandPredictionEntity = {

@@ -23,6 +23,6 @@ export enum NodeEventTypes {
   Redo = 'event.operation.redo',
 }
 
-export type ExternalAction = { eventType?: NodeEventTypes; eventData?: { kind: string } };
+export type ExternalAction = { eventType?: NodeEventTypes; eventData?: { kind?: string } };
 
 export type EditorEventHandler = (eventType: NodeEventTypes, eventData: any) => any;

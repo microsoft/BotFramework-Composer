@@ -220,7 +220,7 @@ export const SearchFeature = () => {
               top: 32,
               width: '100%',
               background: NeutralColors.white,
-              zIndex: 1,
+              zIndex: 102,
               boxShadow: DefaultEffects.elevation8,
             },
           }}
