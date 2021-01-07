@@ -224,6 +224,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={displayName}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue === item.name) return;
                   if (newValue) {
                     handleTemplateUpdate(item.name, { ...item, name: newValue });
                   }
@@ -254,6 +255,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body
@@ -289,6 +291,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body
@@ -323,6 +326,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body
