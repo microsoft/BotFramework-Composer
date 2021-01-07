@@ -68,6 +68,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     return generateComputedData(botProjectData);
   }, [botProjectData]);
 
+  const pendingNotificationRef = useRef<Notification>();
   const showNotificationsRef = useRef<Record<string, boolean>>({});
 
   const updatePublishStatus = async (data) => {
@@ -80,7 +81,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     await getPublishStatusV2(botProjectId, selectedTarget, apiResponse);
   };
 
-  // updater onAction function
   const changeNotificationStatus = async (data) => {
     const { botProjectId, targetName, apiResponse } = data;
     const updater = pollingUpdaterList.find((i) => i.isSameUpdater(botProjectId, targetName));
@@ -93,20 +93,23 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       responseData.status === ApiStatus.Unknown ||
       responseData.status === ApiStatus.Failed
     ) {
-      // show result notifications
+      updater.stop();
+
+      // Remove pending notification
       const pendingNotification = pendingNotificationRef.current;
       pendingNotification && (await deleteNotification(pendingNotification.id));
       pendingNotificationRef.current = undefined;
-      const showNotifications = showNotificationsRef.current;
-      if (showNotifications[botProjectId]) {
+
+      // Show result notifications
+      const displayedNotifications = showNotificationsRef.current;
+      if (displayedNotifications[botProjectId]) {
         const resultNotification = createNotification(getPublishedNotificationCardProps(updatedBot));
         addNotification(resultNotification);
         setTimeout(() => {
           deleteNotification(resultNotification.id);
-          showNotificationsRef.current = { ...showNotifications, [botProjectId]: false };
+          showNotificationsRef.current = { ...displayedNotifications, [botProjectId]: false };
         }, deleteNotificationInterval);
       }
-      updater.stop();
     }
   };
 
@@ -121,10 +124,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       .filter(
         (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
       )
-      .map((bot) => {
+      .forEach((bot) => {
+        if (pollingUpdaterList.some((updater) => updater.isSameUpdater(bot.id, bot.publishTarget))) return;
         const updater = new PublishStatusPollingUpdater(bot.id, bot.publishTarget);
-        updater.start(onReceiveUpdaterPayload);
         pollingUpdaterList.push(updater);
+        updater.start(onReceiveUpdaterPayload);
       });
   }, [botList]);
 
@@ -173,8 +177,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const canPublish =
     checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
-
-  const pendingNotificationRef = useRef<Notification>();
 
   useEffect(() => {
     // init bot status list for the botProjectData is empty array when first mounted
