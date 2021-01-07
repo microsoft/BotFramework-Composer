@@ -1,16 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as path from 'path';
-
+import archiver from 'archiver';
+import axios from 'axios';
 import * as fs from 'fs-extra';
-import * as https from 'https';
+import * as path from 'path';
+import * as tunnel from 'tunnel';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { LuisAndQnaPublish } from './luisAndQnA';
-import * as axios from 'axios';
-import archiver = require('archiver');
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -157,7 +156,7 @@ export class BotProjectDeploy {
     });
 
     const publishEndpoint = `https://${hostname ? hostname : name + '-' + env
-      }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+      }.scm.azurewebsites.net:443/zipdeploy/?isAsync=true`;
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
       this.logger('%O', err);
@@ -172,7 +171,13 @@ export class BotProjectDeploy {
         const host = other.split(':')[0]
         const port = parseInt(other.split(':')[1]);
         console.log(`protocol : ${protocol}, host: ${host}, port: ${port}, publishEndpoint: ${publishEndpoint}, proxy: ${proxySettings}`);
-        response = await axios.default({
+        const agent = tunnel.httpsOverHttp({
+          proxy: {
+            host,
+            port
+          }
+        });
+        response = await axios({
           url: publishEndpoint,
           method: 'post',
           data: fileReadStream,
@@ -180,20 +185,14 @@ export class BotProjectDeploy {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/zip'
           },
-          proxy: {
-            host: host,
-            port: port,
-            protocol: protocol
-          },
+          httpsAgent: agent,
+          proxy: false,
           maxContentLength: Infinity,
-          maxBodyLength: Infinity,
-          httpsAgent: new https.Agent({
-            rejectUnauthorized: false
-          })
+          maxBodyLength: Infinity
         })
       }
       else {
-        response = await axios.default({
+        response = await axios({
           url: publishEndpoint,
           method: 'post',
           data: fileReadStream,
