@@ -18,6 +18,7 @@ import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { ObiColors } from '../../../adaptive-flow-renderer/constants/ElementColors';
 import { IconMenu } from '../../components/IconMenu';
+import { NodeEventTypes } from '../../../adaptive-flow-renderer/constants/NodeEventTypes';
 
 import { createActionMenu } from './createSchemaMenu';
 
@@ -27,7 +28,7 @@ interface EdgeMenuProps {
 }
 
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
-  const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
+  const { clipboardActions, customSchemas, externalEvent, onCompleteExternalEvent } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
@@ -39,16 +40,25 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     };
   };
 
+  const insertMode = externalEvent?.eventType === NodeEventTypes.Insert && externalEvent.eventData?.kind;
+
   const [menuSelected, setMenuSelected] = useState<boolean>(false);
   let boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
-  boxShadow += menuSelected
+  boxShadow += insertMode
+    ? `,0 0 10px 3px ${ObiColors.AzureBlue}`
+    : menuSelected
     ? `,0 0 0 2px ${ObiColors.AzureBlue}`
     : nodeSelected
     ? `, 0 0 0 2px ${ObiColors.Black}`
     : '';
 
   const handleMenuShow = (menuSelected) => {
-    setMenuSelected(menuSelected);
+    if (insertMode && menuSelected) {
+      onCompleteExternalEvent();
+      externalEvent?.eventData?.kind && onClick(externalEvent.eventData.kind);
+    } else {
+      setMenuSelected(menuSelected);
+    }
   };
 
   const { menuSchema, forceDisabledActions } = useMenuConfig();
@@ -67,7 +77,9 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
   );
 
-  const moreLabel = formatMessage('Add');
+  const moreLabel = !insertMode
+    ? formatMessage('Add')
+    : formatMessage('Add “{actionType}” action here.', { actionType: 'Microsoft.SendActivity' });
 
   return (
     <div

@@ -7,7 +7,7 @@ import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
-import VisualDesigner from '@bfc/adaptive-flow';
+import VisualDesigner, { NodeEventTypes } from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
 import { useFormConfig, useShellApi } from '@bfc/extension-client';
 import cloneDeep from 'lodash/cloneDeep';
@@ -102,6 +102,8 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
     setTriggerButtonVisibility(visible);
   }, [dialogs, dialogId]);
 
+  const handleCompleteExternalEvent = () => {};
+
   return (
     <React.Fragment>
       <div
@@ -115,6 +117,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
             data={currentDialog.content ?? {}}
             schema={overridedSDKSchema}
             onBlur={onBlur}
+            onCompleteExternalEvent={handleCompleteExternalEvent}
             onFocus={onFocus}
           />
         ) : null}

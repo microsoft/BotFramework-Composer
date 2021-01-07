@@ -34,6 +34,7 @@
     "d3": "^5.9.1",
     "dagre": "^0.8.4",
     "dagre-d3": "^0.6.3",
+    "fuse.js": "^6.4.6",
     "lodash": "^4.17.19",
     "office-ui-fabric-react": "^7.88.1",
     "prop-types": "^15.7.2",

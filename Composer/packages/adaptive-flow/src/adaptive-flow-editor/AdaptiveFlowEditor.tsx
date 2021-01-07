@@ -10,8 +10,9 @@ import formatMessage from 'format-message';
 import { DialogFactory, MicrosoftIDialog, SchemaDefinitions } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowUISchema, FlowWidget } from '@bfc/extension-client';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 
-import { NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
+import { ExternalAction, NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
 import { AdaptiveDialog } from '../adaptive-flow-renderer/adaptive/AdaptiveDialog';
 
 import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRendererContext';
@@ -60,8 +61,17 @@ export interface VisualDesignerProps {
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
   schema?: JSONSchema7;
   data?: any;
+  externalEvent?: ExternalAction;
+  onCompleteExternalEvent: () => void;
 }
-const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema, data: inputData }): JSX.Element => {
+const VisualDesigner: React.FC<VisualDesignerProps> = ({
+  onFocus,
+  onBlur,
+  schema,
+  data: inputData,
+  externalEvent,
+  onCompleteExternalEvent,
+}): JSX.Element => {
   const { shellApi, ...shellData } = useShellApi();
   const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = useFlowUIOptions();
   const {
@@ -74,8 +84,21 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     schemas,
     flowZoomRate,
   } = shellData;
-
   const { updateFlowZoomRate } = shellApi;
+
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        onCompleteExternalEvent();
+      }
+    };
+
+    window.addEventListener('keydown', handleEsc);
+
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
 
   const dataCache = useRef({});
 
@@ -104,6 +127,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
     customSchemas: customActionSchema ? [customActionSchema] : [],
+    externalEvent,
+    onCompleteExternalEvent,
   };
 
   const customFlowSchema: FlowUISchema = nodeContext.customSchemas.reduce((result, s) => {
@@ -131,6 +156,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
   };
 
+  const insertMode = externalEvent?.eventType === NodeEventTypes.Insert && externalEvent.eventData?.kind;
+
   const marqueeStyles = (_) => {
     return {
       root: {
@@ -152,6 +179,26 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >
+            {insertMode && (
+              <MessageBar
+                messageBarIconProps={{ iconName: 'Location' }}
+                styles={{
+                  root: {
+                    backgroundColor: '#3B3A39',
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    zIndex: 101,
+                  },
+                  text: { color: 'white' },
+                  icon: { color: 'white' },
+                }}
+              >
+                {formatMessage('Choose a location for your “{actionType}” action.', {
+                  actionType: 'Microsoft.SendActivity',
+                })}
+              </MessageBar>
+            )}
             <SelectionContext.Provider value={selectionContext}>
               <MarqueeSelection isDraggingConstrainedToRoot selection={selection} styles={marqueeStyles}>
                 <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>

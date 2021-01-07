@@ -3,6 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import {
   IContextualMenuItem,
   ContextualMenuItemType,
@@ -12,8 +13,11 @@ import { SDKKinds, DefinitionSummary, DisabledMenuActions } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { MenuUISchema, MenuOptions } from '@bfc/extension-client';
-import set from 'lodash/set';
 import { ITooltipHostStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import debounce from 'lodash/debounce';
+import set from 'lodash/set';
+import Fuse from 'fuse.js';
 
 import { MenuEventTypes } from '../../constants/MenuTypes';
 
@@ -181,6 +185,26 @@ const createPasteButtonItem = (
   };
 };
 
+const createSearchBarItem = (onChange): IContextualMenuItem => {
+  return {
+    key: 'Search',
+    name: formatMessage('Search'),
+    ariaLabel: formatMessage('Search actions'),
+    onRender: () => {
+      return (
+        <SearchBox
+          autoFocus
+          disableAnimation
+          underlined
+          autoComplete="off"
+          placeholder={formatMessage('Search')}
+          onChange={onChange}
+        />
+      );
+    },
+  };
+};
+
 interface ActionMenuOptions {
   isSelfHosted: boolean;
   enablePaste: boolean;
@@ -236,6 +260,7 @@ export const createActionMenu = (
   menuSchema?: MenuUISchema,
   customActionGroups?: DefinitionSummary[][]
 ) => {
+  const [searchValue, setSearchValue] = useState('');
   const resultItems: IContextualMenuItem[] = [];
   const menuOptions = menuSchema || {};
 
@@ -267,10 +292,49 @@ export const createActionMenu = (
     }
   }
 
-  // paste button
-  const pasteButtonDisabled = !options.enablePaste;
-  const pasteButton = createPasteButtonItem(resultItems.length, pasteButtonDisabled, onClick);
-  resultItems.unshift(pasteButton, createDivider());
+  const subMenuItems = useMemo(
+    () =>
+      resultItems.reduce((acc, item) => {
+        if (item.subMenuProps && item.subMenuProps.items) {
+          return [...acc, ...item.subMenuProps.items];
+        }
+        return [...acc, item];
+      }, [] as IContextualMenuItem[]),
+    []
+  );
 
-  return resultItems;
+  const fuse = useMemo(
+    () =>
+      new Fuse(subMenuItems, {
+        includeScore: true,
+        includeMatches: true,
+        isCaseSensitive: false,
+        threshold: 0.2,
+        useExtendedSearch: true,
+        findAllMatches: true,
+        keys: ['name', 'key'],
+      }),
+    [subMenuItems]
+  );
+
+  const debounceSetSearchValue = useRef(
+    debounce<(e: ChangeEvent<HTMLInputElement>, value?: string) => void>((_, value) => setSearchValue(value || ''), 300)
+  ).current;
+
+  const items = useMemo(() => {
+    const items = searchValue ? fuse.search(searchValue).map(({ item }) => item) : resultItems;
+
+    // paste button
+    const pasteButtonDisabled = !options.enablePaste;
+    const pasteButton = createPasteButtonItem(resultItems.length, pasteButtonDisabled, onClick);
+
+    // search bar
+    const searchBar = createSearchBarItem(debounceSetSearchValue);
+
+    items.unshift(pasteButton, createDivider(), searchBar, createDivider());
+
+    return items;
+  }, [fuse, searchValue, options.enablePaste]);
+
+  return items;
 };

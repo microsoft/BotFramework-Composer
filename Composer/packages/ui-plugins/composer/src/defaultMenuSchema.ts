@@ -6,7 +6,7 @@ import { MenuUISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
 const SubmenuNames = {
-  AskQuestion: formatMessage('Ask a question'),
+  AskQuestion: formatMessage('Ask the user'),
   CreateCondition: formatMessage('Create a condition'),
   Looping: formatMessage('Looping'),
   DialogManagement: formatMessage('Dialog management'),
@@ -23,31 +23,31 @@ export const DefaultMenuSchema: MenuUISchema = {
   },
   // Ask a question
   [SDKKinds.TextInput]: {
-    label: formatMessage('Text'),
+    label: formatMessage('Ask for text'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.NumberInput]: {
-    label: formatMessage('Number'),
+    label: formatMessage('Ask for number'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.ConfirmInput]: {
-    label: formatMessage('Confirmation'),
+    label: formatMessage('Ask for confirmation'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.ChoiceInput]: {
-    label: formatMessage('Multi-choice'),
+    label: formatMessage('Ask for multi-choice'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.AttachmentInput]: {
-    label: formatMessage('File or attachment'),
+    label: formatMessage('Ask for file or attachment'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.DateTimeInput]: {
-    label: formatMessage('Date or time'),
+    label: formatMessage('Ask for date or time'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.Ask]: {
-    label: formatMessage('Ask Activity'),
+    label: formatMessage('Ask for Activity'),
     submenu: [SubmenuNames.AskQuestion],
   },
   // OAuthInput appears twice
