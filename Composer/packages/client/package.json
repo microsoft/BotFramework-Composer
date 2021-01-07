@@ -42,7 +42,7 @@
     "@uifabric/icons": "^7.3.59",
     "@uifabric/react-hooks": "^7.4.12",
     "@uifabric/styling": "^7.13.7",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "babel-plugin-extract-format-message": "^6.2.3",
     "format-message": "^6.2.3",
     "format-message-generate-id": "^6.2.3",
