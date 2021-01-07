@@ -40,7 +40,7 @@ import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeade
 
 const searchBox: ISearchBoxStyles = {
   root: {
-    borderBottom: '1px solid ${colors.gray30}',
+    borderBottom: `1px solid ${colors.gray30}`,
     height: '45px',
     borderRadius: '0px',
   },
