@@ -29,7 +29,6 @@ import {
   createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
-  locationState,
   projectMetaDataState,
   settingsState,
   showCreateQnAFromUrlDialogState,
