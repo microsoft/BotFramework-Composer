@@ -202,6 +202,10 @@ export const ProjectTree: React.FC<Props> = ({
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
 
+  const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
+  const lgImportsByProjectByDialog: Record<string, Record<string, LanguageFileImport[]>> = {};
+  const luImportsByProjectByDialog: Record<string, Record<string, LanguageFileImport[]>> = {};
+
   const debouncedTelemetry = useRef(debounce(() => TelemetryClient.track('ProjectTreeFilterUsed'), 1000)).current;
 
   const delayedSetFilter = throttle((newValue) => {
@@ -228,32 +232,6 @@ export const ProjectTree: React.FC<Props> = ({
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
     return <LoadingSpinner />;
-  }
-
-  const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
-  const lgImportsByProjectByDialog: Record<string, Record<string, LanguageFileImport[]>> = {};
-  const luImportsByProjectByDialog: Record<string, Record<string, LanguageFileImport[]>> = {};
-
-  for (const bot of projectCollection) {
-    notificationMap[bot.projectId] = {};
-
-    const matchingBot = projectCollection?.filter((project) => project.projectId === bot.projectId)[0];
-    if (matchingBot == null) continue;
-
-    for (const dialog of matchingBot.sortedDialogs) {
-      const dialogId = dialog.id;
-      notificationMap[bot.projectId][dialogId] = dialog.diagnostics;
-
-      if (!lgImportsByProjectByDialog[bot.projectId]) {
-        lgImportsByProjectByDialog[bot.projectId] = {};
-      }
-      lgImportsByProjectByDialog[bot.projectId][dialogId] = bot.lgImports[dialog.id];
-
-      if (!luImportsByProjectByDialog[bot.projectId]) {
-        luImportsByProjectByDialog[bot.projectId] = {};
-      }
-      luImportsByProjectByDialog[bot.projectId][dialogId] = bot.luImports[dialog.id];
-    }
   }
 
   const dialogIsFormDialog = (dialog: DialogInfo) => {
@@ -694,6 +672,26 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const createBotSubtree = (bot: TreeDataPerProject) => {
+    notificationMap[bot.projectId] = {};
+
+    const matchingBot = projectCollection?.filter((project) => project.projectId === bot.projectId)[0];
+    if (matchingBot) {
+      for (const dialog of matchingBot.sortedDialogs) {
+        const dialogId = dialog.id;
+        notificationMap[bot.projectId][dialogId] = dialog.diagnostics;
+
+        if (!lgImportsByProjectByDialog[bot.projectId]) {
+          lgImportsByProjectByDialog[bot.projectId] = {};
+        }
+        lgImportsByProjectByDialog[bot.projectId][dialogId] = bot.lgImports[dialog.id];
+
+        if (!luImportsByProjectByDialog[bot.projectId]) {
+          luImportsByProjectByDialog[bot.projectId] = {};
+        }
+        luImportsByProjectByDialog[bot.projectId][dialogId] = bot.luImports[dialog.id];
+      }
+    }
+
     const key = 'bot-' + bot.projectId;
     const projectHeader = (
       <ProjectHeader
