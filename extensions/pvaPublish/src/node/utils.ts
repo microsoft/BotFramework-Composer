@@ -1,3 +1,4 @@
+import { URL } from 'url';
 import { logger } from './logger';
 
 import { AUTH_CREDENTIALS, BASE_URLS } from './constants';
@@ -37,11 +38,15 @@ export const getBaseUrl = () => {
  * to get an access token for the resource.
  */
 export const getAuthCredentials = (baseUrl: string = '') => {
-  if (baseUrl.startsWith('https://bots.int.customercareintelligence.net')) {
-    return AUTH_CREDENTIALS.INT;
-  }
-  if (baseUrl.startsWith('https://bots.ppe.customercareintelligence.net')) {
-    return AUTH_CREDENTIALS.PPE;
+  if (baseUrl) {
+    const host = new URL(baseUrl).host;
+
+    if (host === 'bots.int.customercareintelligence.net') {
+      return AUTH_CREDENTIALS.INT;
+    }
+    if (host === 'bots.ppe.customercareintelligence.net') {
+      return AUTH_CREDENTIALS.PPE;
+    }
   }
   // fall back to prod
   return AUTH_CREDENTIALS.PROD;

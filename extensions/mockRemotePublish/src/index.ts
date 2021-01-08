@@ -60,7 +60,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const response = {
       status: 202,
       result: {
-        time: new Date(),
+        time: new Date().toString(),
         message: 'Accepted for publishing.',
         log: 'Publish starting...',
         id: uuid(),

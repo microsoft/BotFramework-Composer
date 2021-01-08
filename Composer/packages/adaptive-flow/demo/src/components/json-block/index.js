@@ -38,6 +38,7 @@ export class JsonBlock extends Component {
 
   onReset() {
     this.setState({
+      // lgtm [js/react/inconsistent-state-update]
       displayedText: JSON.stringify(this.state.defaultValue, null, '\t'),
     });
   }

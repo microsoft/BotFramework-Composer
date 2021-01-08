@@ -39,4 +39,10 @@
   <ItemGroup>
     <ProjectReference Include="..\core\Microsoft.BotFramework.Composer.Core.csproj" />
   </ItemGroup>
+
+  <!-- onnxruntime.pdb is dummied out for publishing due to its size. If you need these debug symbols in your published deployment, please comment out the section below. -->
+  <Target Name="RemoveOnnxRuntimePdb" AfterTargets="Publish">
+    <WriteLinesToFile File="$(PublishDir)\onnxruntime.pdb" Lines="" Overwrite="true" Encoding="Unicode" />
+  </Target>
+
 </Project>

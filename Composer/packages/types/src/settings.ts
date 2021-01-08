@@ -69,7 +69,8 @@ export type ILuisConfig = {
   authoringKey: string;
   endpointKey: string;
   authoringEndpoint: string;
-  authoringRegion: string | 'westus';
+  authoringRegion?: string | 'westus';
+  region?: string;
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
 };
@@ -85,10 +86,11 @@ export type ILUFeaturesConfig = {
 };
 
 export type IQnAConfig = {
-  subscriptionKey: string;
+  subscriptionKey: string | undefined;
   endpointKey: string;
-  qnaRegion: string;
-  [key: string]: string;
+  qnaRegion?: string;
+  knowledgebaseid?: string;
+  hostname?: string;
 };
 
 export type IConfig = ILuisConfig & {

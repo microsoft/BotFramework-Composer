@@ -8,7 +8,7 @@ import { BotProjectService } from '../../services/project';
 import { Path } from '../../utility/path';
 import { PublishController } from '../../controllers/publisher';
 
-jest.mock('@bfc/extension', () => {
+jest.mock('../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
       extensions: {

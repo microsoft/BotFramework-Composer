@@ -44,6 +44,7 @@ function templateToLgTemplate(templates: Template[]): LgTemplate[] {
   });
 }
 
+// get parsed resource from lgFile, if not exist do reparse
 function getLgResource(lgFile: LgFile, importResolver?: ImportResolverDelegate) {
   const { content, parseResult } = lgFile;
 
