@@ -267,6 +267,8 @@ export const exampleListCell = css`
   &:hover {
     background: ${palette.neutralLight};
   }
+  background: ${colors.gray(30)};
+  color: ${colors.text};
 `;
 
 export const exampleListCellIcon = css`

@@ -5,7 +5,11 @@ import Color from 'color';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 class Colors {
-  bg = '#323130';
+  // main background color
+  bg = '#ddddff';
+  // main theming color (BFC default is SharedColors.cyanBlue10)
+  main = 'rebeccapurple';
+
   private bgColor = Color(this.bg);
 
   isDark = this.bgColor.isDark();
@@ -24,10 +28,9 @@ class Colors {
 
   textOnColor = '#fff';
 
-  main = SharedColors.cyanBlue10;
   mainLight = Color(this.main).lighten(0.5).hex();
   mainDark = Color(this.main).darken(0.5).hex();
-  botControllerBg = Color(this.main).darken(0.2).hex();
+  botControllerBg = Color(this.main).darken(0.3).hex();
 
   green = SharedColors.green10;
   red = SharedColors.red10;

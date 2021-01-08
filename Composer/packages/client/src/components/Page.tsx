@@ -23,6 +23,7 @@ export const root = css`
   flex-direction: row;
 
   label: Page;
+  color: ${colors.text};
 `;
 
 export const pageWrapper = css`
@@ -42,6 +43,7 @@ export const header = css`
   align-items: center;
 
   label: PageHeader;
+  color: ${colors.text};
 `;
 
 export const headerTitle = css`

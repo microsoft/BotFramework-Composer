@@ -18,6 +18,7 @@ import {
 import formatMessage from 'format-message';
 
 import { calculateTimeDiff } from '../../utils/fileUtil';
+import { colors } from '../../colors';
 
 import { detailListContainer, tableCell, content } from './styles';
 
@@ -28,7 +29,7 @@ interface RecentBotListProps {
 export function RecentBotList(props: RecentBotListProps): JSX.Element {
   const { onItemChosen, recentProjects } = props;
   // for detail file list in open panel
-  const tableColums = [
+  const tableColumns = [
     {
       key: 'column1',
       name: formatMessage('Name'),
@@ -121,12 +122,17 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
         <DetailsList
           isHeaderVisible
           checkboxVisibility={CheckboxVisibility.hidden}
-          columns={tableColums}
+          columns={tableColumns}
           compact={false}
           getKey={(item) => `${item.path}/${item.name}`}
           items={recentProjects}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.single}
+          styles={{
+            contentWrapper: {
+              background: colors.bg,
+            },
+          }}
           onItemInvoked={onItemChosen}
           onRenderDetailsHeader={onRenderDetailsHeader}
         />
