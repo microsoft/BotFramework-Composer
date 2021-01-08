@@ -4,13 +4,22 @@
 import Fuse from 'fuse.js';
 import startCase from 'lodash/startCase';
 import { useEffect, useMemo, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { AssetItem, SearchDocumentResult, SearchKind, SearchResult } from '../../components/Search/types';
+import {
+  AssetItem,
+  QuickCommandType,
+  SearchDocumentResult,
+  SearchKind,
+  SearchResult,
+} from '../../components/Search/types';
+import { rootBotProjectIdSelector } from '../../recoilModel';
 import { useProjectAssetItems } from '../useProjectAssetItems';
 
-import { fetchCommands, fetchDocumentations, getAssetItemDeepLink, getAssetItemIcon } from './utils';
+import { fetchCommands, fetchDocumentations, getAssetItemDeepLink, getAssetItemIcon, getCommandLink } from './utils';
 
 export const useSearchFeature = (query: string, minCharCountRequirement = 3) => {
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector) || '';
   const [items, setItems] = useState<SearchResult<any>[]>([]);
   const { 0: isSearching, 1: setSearching } = useState(false);
   const assetItems = useProjectAssetItems<any>();
@@ -33,7 +42,7 @@ export const useSearchFeature = (query: string, minCharCountRequirement = 3) => 
     const results = commands.map<SearchResult<{ label: string }>>((command) => ({
       id: command,
       kind: 'command',
-      linkUrl: command,
+      linkUrl: getCommandLink(rootBotId, command as QuickCommandType),
       icon: 'ChevronRight',
       data: {
         label: startCase(command)

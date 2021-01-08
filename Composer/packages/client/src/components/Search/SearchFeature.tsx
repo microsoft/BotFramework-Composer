@@ -25,6 +25,7 @@ import { renderAssetItem } from './renderAssetItem';
 import {
   AssetItem,
   BotBoundAssetData,
+  QuickCommandType,
   SearchDocumentResult,
   SearchKind,
   SearchResult,
@@ -136,7 +137,7 @@ type SearchResultPaneProps<T> = {
   kind: SearchResultKind;
   label: string;
   items: SearchResult<T>[];
-  onClickItem: (kind: SearchResultKind, link: string) => void;
+  onClickItem: (id: string, kind: SearchResultKind, link: string) => void;
 };
 
 const SearchResultPane = <T,>(props: SearchResultPaneProps<T>) => {
@@ -159,7 +160,7 @@ const SearchResultPane = <T,>(props: SearchResultPaneProps<T>) => {
               disabled={disabled}
               tokens={{ childrenGap: 8 }}
               verticalAlign="center"
-              onClick={() => !disabled && onClickItem(kind, item.linkUrl)}
+              onClick={() => !disabled && onClickItem(item.id, kind, item.linkUrl)}
             >
               <Icon iconName={item.icon} />
               {renderItem(item)}
@@ -210,7 +211,7 @@ export const SearchFeature = () => {
   ]) as SearchResult<any>[];
 
   const clickItem = React.useCallback(
-    (kind: SearchKind, linkUrl: string) => {
+    (id: string, kind: SearchKind, linkUrl: string) => {
       clear();
       setQuery('');
 
@@ -223,7 +224,17 @@ export const SearchFeature = () => {
           window.open(linkUrl)?.focus();
           break;
         case 'command': {
-          setVisualEditorExternalEvent(NodeEventTypes.Insert, linkUrl);
+          if (visualDesignerQuickCommandTypes.includes(linkUrl)) {
+            setVisualEditorExternalEvent(NodeEventTypes.Insert, linkUrl);
+          } else {
+            const commandType = id as QuickCommandType;
+            switch (commandType) {
+              case 'ProjectSettings':
+              case 'ComposerSettings':
+                navigate(linkUrl);
+                break;
+            }
+          }
           break;
         }
       }

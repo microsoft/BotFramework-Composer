@@ -9,7 +9,9 @@ import {
   BotBoundAssetData,
   DialogBoundAssetData,
   QuickCommandPredictionResult,
+  QuickCommandType,
   SearchDocumentResult,
+  visualDesignerQuickCommandTypes,
 } from '../../components/Search/types';
 
 export const documentationSearchUrl = 'https://composerdocsearch20210106.azurewebsites.net/search';
@@ -81,6 +83,21 @@ export const getAssetItemDeepLink = (item: AssetItem<BotBoundAssetData>) => {
       return `${baseLink}/dialogs/${dialogData.dialogId}?selected=triggers["${item.id}"]`;
     }
   }
+};
+
+export const getCommandLink = (botId: string, commandType: QuickCommandType) => {
+  if (visualDesignerQuickCommandTypes.includes(commandType)) {
+    return commandType;
+  }
+
+  switch (commandType) {
+    case 'ComposerSettings':
+      return '/settings';
+    case 'ProjectSettings':
+      return `/bot/${botId}/botProjectsSettings`;
+  }
+
+  return commandType;
 };
 
 export const getAssetItemIcon = (kind: AssetItemKind) => {
