@@ -80,7 +80,7 @@ export const getAssetItemDeepLink = (item: AssetItem<BotBoundAssetData>) => {
       return `${baseLink}/knowledge-base/${item.id.replace(`.${locale}`, '')}`;
     case 'trigger': {
       const dialogData = item.data as DialogBoundAssetData;
-      return `${baseLink}/dialogs/${dialogData.dialogId}?selected=triggers["${item.id}"]`;
+      return `${baseLink}/dialogs/${dialogData.dialogId}?selected=${item.id}`;
     }
   }
 };
