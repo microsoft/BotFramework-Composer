@@ -24,7 +24,7 @@ export const fetchCommands = async (query: string) => {
   const queryParams = {
     'show-all-intents': true,
     verbose: true,
-    query: query.replace(/ /g, '+'),
+    query,
     'subscription-key': predictionKey,
   };
 
