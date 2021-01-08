@@ -685,23 +685,20 @@ export const ProjectTree: React.FC<Props> = ({
   const createBotSubtree = (bot: TreeDataPerProject) => {
     notificationMap[bot.projectId] = {};
 
-    const matchingBot = projectCollection?.filter((project) => project.projectId === bot.projectId)[0];
-    if (matchingBot) {
-      for (const dialog of matchingBot.sortedDialogs) {
-        const dialogId = dialog.id;
-        notificationMap[bot.projectId][dialogId] = dialog.diagnostics;
+    for (const dialog of bot.sortedDialogs) {
+      const dialogId = dialog.id;
+      notificationMap[bot.projectId][dialogId] = dialog.diagnostics;
 
-        if (!lgImportsByProjectByDialog[bot.projectId]) {
-          lgImportsByProjectByDialog[bot.projectId] = {};
-        }
-
-        lgImportsByProjectByDialog[bot.projectId][dialogId] = bot.lgImports[dialog.id];
-
-        if (!luImportsByProjectByDialog[bot.projectId]) {
-          luImportsByProjectByDialog[bot.projectId] = {};
-        }
-        luImportsByProjectByDialog[bot.projectId][dialogId] = bot.luImports[dialog.id];
+      if (!lgImportsByProjectByDialog[bot.projectId]) {
+        lgImportsByProjectByDialog[bot.projectId] = {};
       }
+
+      lgImportsByProjectByDialog[bot.projectId][dialogId] = bot.lgImports[dialog.id];
+
+      if (!luImportsByProjectByDialog[bot.projectId]) {
+        luImportsByProjectByDialog[bot.projectId] = {};
+      }
+      luImportsByProjectByDialog[bot.projectId][dialogId] = bot.luImports[dialog.id];
     }
 
     const key = 'bot-' + bot.projectId;
