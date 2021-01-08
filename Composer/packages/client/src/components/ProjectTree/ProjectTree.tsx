@@ -239,10 +239,8 @@ export const ProjectTree: React.FC<Props> = ({
   }));
 
   useEffect(() => {
-    if (!isEqual(selectedLink, defaultSelected)) {
-      setSelectedLink(defaultSelected);
-    }
-  }, [defaultSelected]);
+    setSelectedLink(defaultSelected);
+  }, [defaultSelected?.projectId, defaultSelected?.skillId, defaultSelected?.dialogId, defaultSelected?.trigger]);
 
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
