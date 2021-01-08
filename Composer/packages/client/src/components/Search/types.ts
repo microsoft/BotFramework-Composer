@@ -94,6 +94,7 @@ export const visualDesignerQuickCommandTypes = [
   'ThrowException',
   'EmitATraceEvent',
   'EmitATelemetryTrackEvent',
+  'SendAResponse',
 ];
 
 export type VisualDesignerQuickCommandType = typeof visualDesignerQuickCommandTypes[number];
@@ -202,6 +203,7 @@ export const ActionKinds = {
   ThrowException: 'Microsoft.ThrowException',
   EmitATraceEvent: 'Microsoft.TraceActivity',
   EmitATelemetryTrackEvent: 'Microsoft.TelemetryTrackEvent',
+  SendAResponse: 'Microsoft.SendActivity',
 };
 
 export type QuickCommandPredictionIntent = 'Commands' | 'None';
