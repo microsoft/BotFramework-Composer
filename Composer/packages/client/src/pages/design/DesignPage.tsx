@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic, getFriendlyName } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
@@ -24,7 +24,6 @@ import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { createDiagnosticsPageUrl, getFocusPath, navigateTo, createBotSettingUrl } from '../../utils/navigation';
-import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
@@ -308,6 +307,30 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [location]);
 
+  // get newest label for breadcrumbs
+  useEffect(() => {
+    if (currentDialog.content) {
+      setBreadcrumbs((prev) => {
+        return prev.map((b) => {
+          const separatorIndex = b.key.indexOf('-');
+          const type = b.key.substr(0, separatorIndex);
+          const name = b.key.substr(separatorIndex + 1);
+          switch (type) {
+            case 'dialog':
+              b.label = getFriendlyName(currentDialog.content);
+              break;
+            case 'trigger':
+              b.label = getFriendlyName(get(currentDialog.content, `triggers[${name}]`));
+              break;
+            case 'action':
+              b.label = getActionName(get(currentDialog.content, name));
+              break;
+          }
+          return b;
+        });
+      });
+    }
+  }, [currentDialog?.content]);
   useEffect(() => {
     registerEditorAPI('Editing', {
       Undo: () => undo(),
@@ -403,13 +426,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
-
-    if (selectedActions.length === 1 && selectedActions[0] != null) {
-      const action = selectedActions[0] as any;
-      const actionName = getActionName(action);
-
-      setBreadcrumbs((prev) => [...prev.slice(0, 2), { key: 'action-' + actionName, label: actionName }]);
-    }
 
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection, currentDialog?.content]);
