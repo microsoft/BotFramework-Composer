@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import Color from 'color';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 class Colors {
   //bg = NeutralColors.white;
