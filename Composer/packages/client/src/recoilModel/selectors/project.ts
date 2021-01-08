@@ -252,9 +252,12 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
   },
 });
 
-export const projectTreeSelector = selector<TreeDataPerProject[]>({
-  key: 'projectTreeSelectorData',
-  get: ({ get }) => {
+export const projectTreeSelectorFamily = selectorFamily<
+  TreeDataPerProject[],
+  { showLgImports: boolean; showLuImports: boolean }
+>({
+  key: 'projectTreeSelectorFamily',
+  get: (options) => ({ get }) => {
     const projectIds = get(botProjectIdsState);
     return projectIds.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
@@ -276,13 +279,17 @@ export const projectTreeSelector = selector<TreeDataPerProject[]>({
       const luImports: Record<string, LanguageFileImport[]> = {};
 
       dialogs.forEach((d) => {
-        lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
-        luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        if (options.showLgImports) {
+          lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        }
+
+        if (options.showLuImports) {
+          luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        }
       });
 
       const schemas = get(schemasState(projectId));
       const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
-
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
 
       return {

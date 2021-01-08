@@ -21,7 +21,7 @@ import {
   TreeDataPerProject,
   jsonSchemaFilesByProjectIdSelector,
   pageElementState,
-  projectTreeSelector,
+  projectTreeSelectorFamily,
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -220,7 +220,11 @@ export const ProjectTree: React.FC<Props> = ({
   }, [defaultSelected]);
 
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
-  const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelector);
+  const selectorOptions = {
+    showLgImports: options.showLgImports ?? false,
+    showLuImports: options.showLuImports ?? false,
+  };
+  const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelectorFamily(selectorOptions));
 
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
@@ -633,8 +637,15 @@ export const ProjectTree: React.FC<Props> = ({
         ...filteredDialogs.map((dialog: DialogInfo) => {
           const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
           const key = 'dialog-' + dialog.id;
-          const lgImports = renderLgImports(dialog, projectId, dialogLink);
-          const luImports = renderLuImports(dialog, projectId, dialogLink);
+          let lgImports, luImports;
+          if (options.showLgImports) {
+            lgImports = renderLgImports(dialog, projectId, dialogLink);
+          }
+
+          if (options.showLuImports) {
+            luImports = renderLuImports(dialog, projectId, dialogLink);
+          }
+
           const showExpanded =
             options.showTriggers ||
             (options.showLgImports && lgImports.length > 0) ||
@@ -683,6 +694,7 @@ export const ProjectTree: React.FC<Props> = ({
         if (!lgImportsByProjectByDialog[bot.projectId]) {
           lgImportsByProjectByDialog[bot.projectId] = {};
         }
+
         lgImportsByProjectByDialog[bot.projectId][dialogId] = bot.lgImports[dialog.id];
 
         if (!luImportsByProjectByDialog[bot.projectId]) {
