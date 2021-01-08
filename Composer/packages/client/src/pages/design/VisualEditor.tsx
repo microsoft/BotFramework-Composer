@@ -13,6 +13,13 @@ import { useFormConfig, useShellApi } from '@bfc/extension-client';
 import cloneDeep from 'lodash/cloneDeep';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
+import bot from '../../images/bot.png';
+import botAndUser from '../../images/bot-user.png';
+import condition from '../../images/condition.png';
+import loop from '../../images/loop.png';
+import node from '../../images/node.png';
+import nodeWithTwoInputs from '../../images/node.png';
+import skills from '../../images/skills.png';
 import {
   dispatcherState,
   validateDialogsSelectorFamily,
@@ -120,6 +127,15 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
           <VisualDesigner
             data={currentDialog.content ?? {}}
             externalEvent={externalEvent}
+            images={{
+              bot,
+              botAndUser,
+              condition,
+              loop,
+              node,
+              nodeWithTwoInputs,
+              skills,
+            }}
             schema={overridedSDKSchema}
             onBlur={onBlur}
             onCompleteExternalEvent={handleCompleteExternalEvent}

@@ -11,8 +11,10 @@ import { useMenuConfig } from '@bfc/extension-client';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import debounce from 'lodash/debounce';
 import Fuse from 'fuse.js';
+import startCase from 'lodash/startCase';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
+
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';
 import { NodeRendererContext } from '../../contexts/NodeRendererContext';
 import { SelectionContext } from '../../contexts/SelectionContext';
@@ -43,7 +45,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     };
   };
 
-  const insertMode = externalEvent?.eventType === NodeEventTypes.Insert && externalEvent.eventData?.kind;
+  const insertMode = externalEvent?.eventType === NodeEventTypes.Insert && externalEvent.eventData?.command;
 
   const [menuSelected, setMenuSelected] = useState<boolean>(false);
   let boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
@@ -123,7 +125,8 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
   );
 
   const items = useMemo(() => {
-    const items: IContextualMenuItem[] = searchValue ? fuse.search(searchValue).map(({ item }) => item) : menuItems;
+    const items: IContextualMenuItem[] =
+      searchValue && searchValue.length > 2 ? fuse.search(searchValue).map(({ item }) => item) : menuItems;
 
     // paste button
     const pasteButtonDisabled = !options.enablePaste;
@@ -138,7 +141,12 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
 
   const moreLabel = !insertMode
     ? formatMessage('Add')
-    : formatMessage('Add “{actionType}” action here.', { actionType: 'Microsoft.SendActivity' });
+    : formatMessage('Add “{actionType}” action here.', {
+        actionType: startCase(externalEvent?.eventData?.command)
+          .split(' ')
+          .map((c, i) => (i === 0 ? c : c.toLocaleLowerCase()))
+          .join(' '),
+      });
 
   return (
     <div
@@ -153,7 +161,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
       }}
       {...declareElementAttributes(id)}
     >
-      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
+      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.leftCenter}>
         <IconMenu
           handleMenuShow={handleMenuShow}
           iconName="Add"

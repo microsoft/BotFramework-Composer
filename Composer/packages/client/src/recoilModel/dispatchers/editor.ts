@@ -6,6 +6,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { NodeEventTypes } from '@bfc/adaptive-flow';
 
 import { clipboardActionsState, visualEditorExternalEventState, visualEditorSelectionState } from '../atoms/appState';
+import { ActionKinds } from '../../components/Search/types';
 
 export const editorDispatcher = () => {
   const setVisualEditorClipboard = useRecoilCallback(
@@ -23,8 +24,8 @@ export const editorDispatcher = () => {
   });
 
   const setVisualEditorExternalEvent = useRecoilCallback(
-    ({ set }: CallbackInterface) => (eventType?: NodeEventTypes, kind?: string) => {
-      set(visualEditorExternalEventState, { eventType, eventData: { kind } });
+    ({ set }: CallbackInterface) => (eventType?: NodeEventTypes, command?: string) => {
+      set(visualEditorExternalEventState, { eventType, eventData: { kind: ActionKinds[command || ''], command } });
     }
   );
 

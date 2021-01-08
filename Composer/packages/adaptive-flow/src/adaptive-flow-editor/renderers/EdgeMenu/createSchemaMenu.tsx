@@ -188,7 +188,6 @@ export const createSearchBarItem = (onChange): IContextualMenuItem => {
     name: formatMessage('Search'),
     ariaLabel: formatMessage('Search actions'),
     onRender: () => {
-      console.log('bfc', 'render search box');
       return (
         <SearchBox
           autoFocus

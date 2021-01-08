@@ -4,13 +4,14 @@
 /** @jsx jsx */
 import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory, MicrosoftIDialog, SchemaDefinitions } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowUISchema, FlowWidget } from '@bfc/extension-client';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
+import startCase from 'lodash/startCase';
 
 import { ExternalAction, NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
 import { AdaptiveDialog } from '../adaptive-flow-renderer/adaptive/AdaptiveDialog';
@@ -31,6 +32,7 @@ import {
 } from './renderers';
 import { useFlowUIOptions } from './hooks/useFlowUIOptions';
 import { ZoomZone } from './components/ZoomZone';
+import { Cursor } from './components/Cursor';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -57,6 +59,7 @@ const styles = css`
 `;
 
 export interface VisualDesignerProps {
+  images?: any;
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
   schema?: JSONSchema7;
@@ -67,6 +70,7 @@ export interface VisualDesignerProps {
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   onFocus,
   onBlur,
+  images,
   schema,
   data: inputData,
   externalEvent,
@@ -166,82 +170,119 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       },
     };
   };
+
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [cursorVisible, setCursorVisible] = useState(false);
+
+  const handleMouseEnter = (e) => {
+    setCursorVisible(true);
+    const boundingBox = containerRef.current?.getBoundingClientRect();
+    if (boundingBox && cursorRef.current) {
+      cursorRef.current.style.left = `${e.clientX - boundingBox.left + 10}px`;
+      cursorRef.current.style.top = `${e.clientY - boundingBox.top + 10}px`;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setCursorVisible(false);
+  };
+
+  const handleMouseMove = (e) => {
+    const boundingBox = containerRef.current?.getBoundingClientRect();
+    if (boundingBox && cursorRef.current) {
+      cursorRef.current.style.left = `${e.clientX - boundingBox.left + 10}px`;
+      cursorRef.current.style.top = `${e.clientY - boundingBox.top + 10}px`;
+    }
+  };
+
   return (
-    <CacheProvider value={emotionCache}>
-      <NodeRendererContext.Provider value={nodeContext}>
-        <SelfHostContext.Provider value={hosted}>
-          <div
-            ref={divRef}
-            css={styles}
-            tabIndex={0}
-            onBlur={onBlur}
-            onFocus={onFocus}
-            {...enableKeyboardCommandAttributes(handleCommand)}
-            data-testid="visualdesigner-container"
-          >
-            {insertMode && (
-              <MessageBar
-                messageBarIconProps={{ iconName: 'Location' }}
-                styles={{
-                  root: {
-                    backgroundColor: '#3B3A39',
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    zIndex: 101,
-                  },
-                  text: { color: 'white' },
-                  icon: { color: 'white' },
-                }}
-              >
-                {formatMessage('Choose a location for your “{actionType}” action.', {
-                  actionType: externalEvent?.eventData?.kind,
-                })}
-              </MessageBar>
-            )}
-            <SelectionContext.Provider value={selectionContext}>
-              <MarqueeSelection isDraggingConstrainedToRoot selection={selection} styles={marqueeStyles}>
-                <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
-                  <div
-                    className="flow-editor-container"
-                    css={{
-                      width: '100%',
-                      height: '100%',
-                      padding: '48px 20px',
-                      boxSizing: 'border-box',
-                    }}
-                    data-testid="flow-editor-container"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditorEvent(NodeEventTypes.Focus, { id: '' });
-                    }}
-                  >
-                    <AdaptiveDialog
-                      activeTrigger={focusedEvent}
-                      dialogData={data}
-                      dialogId={dialogId}
-                      renderers={{
-                        EdgeMenu: VisualEditorEdgeMenu,
-                        NodeMenu: VisualEditorNodeMenu,
-                        NodeWrapper: VisualEditorNodeWrapper,
-                        ElementWrapper: VisualEditorElementWrapper,
+    <div
+      ref={containerRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+    >
+      <CacheProvider value={emotionCache}>
+        <NodeRendererContext.Provider value={nodeContext}>
+          <SelfHostContext.Provider value={hosted}>
+            <div
+              ref={divRef}
+              css={styles}
+              tabIndex={0}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              {...enableKeyboardCommandAttributes(handleCommand)}
+              data-testid="visualdesigner-container"
+            >
+              {insertMode && (
+                <MessageBar
+                  messageBarIconProps={{ iconName: 'Location' }}
+                  styles={{
+                    root: {
+                      backgroundColor: '#3B3A39',
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                      zIndex: 101,
+                    },
+                    text: { color: 'white' },
+                    icon: { color: 'white' },
+                  }}
+                >
+                  {formatMessage('Choose a location for your “{actionType}” action. Press ESC to cancel.', {
+                    actionType: startCase(externalEvent?.eventData?.command)
+                      .split(' ')
+                      .map((c, i) => (i === 0 ? c : c.toLocaleLowerCase()))
+                      .join(' '),
+                  })}
+                </MessageBar>
+              )}
+              <SelectionContext.Provider value={selectionContext}>
+                <MarqueeSelection isDraggingConstrainedToRoot selection={selection} styles={marqueeStyles}>
+                  <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
+                    <div
+                      className="flow-editor-container"
+                      css={{
+                        width: '100%',
+                        height: '100%',
+                        padding: '48px 20px',
+                        boxSizing: 'border-box',
                       }}
-                      sdkschema={schema?.definitions as SchemaDefinitions}
-                      uischema={{ ...customFlowSchema, ...schemaFromPlugins }}
-                      widgets={widgetsFromPlugins}
-                      onEvent={(eventName, eventData) => {
-                        divRef.current?.focus({ preventScroll: true });
-                        handleEditorEvent(eventName, eventData);
+                      data-testid="flow-editor-container"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditorEvent(NodeEventTypes.Focus, { id: '' });
                       }}
-                    />
-                  </div>
-                </ZoomZone>
-              </MarqueeSelection>
-            </SelectionContext.Provider>
-          </div>
-        </SelfHostContext.Provider>
-      </NodeRendererContext.Provider>
-    </CacheProvider>
+                    >
+                      <AdaptiveDialog
+                        activeTrigger={focusedEvent}
+                        dialogData={data}
+                        dialogId={dialogId}
+                        renderers={{
+                          EdgeMenu: VisualEditorEdgeMenu,
+                          NodeMenu: VisualEditorNodeMenu,
+                          NodeWrapper: VisualEditorNodeWrapper,
+                          ElementWrapper: VisualEditorElementWrapper,
+                        }}
+                        sdkschema={schema?.definitions as SchemaDefinitions}
+                        uischema={{ ...customFlowSchema, ...schemaFromPlugins }}
+                        widgets={widgetsFromPlugins}
+                        onEvent={(eventName, eventData) => {
+                          divRef.current?.focus({ preventScroll: true });
+                          handleEditorEvent(eventName, eventData);
+                        }}
+                      />
+                    </div>
+                  </ZoomZone>
+                </MarqueeSelection>
+              </SelectionContext.Provider>
+              <Cursor ref={cursorRef} externalEvent={externalEvent} images={images} visible={cursorVisible} />
+            </div>
+          </SelfHostContext.Provider>
+        </NodeRendererContext.Provider>
+      </CacheProvider>
+    </div>
   );
 };
 
