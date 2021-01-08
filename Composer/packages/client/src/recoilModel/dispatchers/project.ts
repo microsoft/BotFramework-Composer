@@ -209,19 +209,9 @@ export const projectDispatcher = () => {
       navigate = true,
       callback?: (projectId: string) => void
     ) => {
-      const { set, snapshot } = callbackHelpers;
+      const { set } = callbackHelpers;
       try {
         set(botOpeningState, true);
-        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
-
-        if (rootBotId) {
-          const rootBotLocation = await snapshot.getPromise(locationState(rootBotId));
-          // Reloading the same bot. No need to fetch resources again.
-          if (rootBotLocation === path) {
-            navigateToBot(callbackHelpers, rootBotId);
-            return;
-          }
-        }
 
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
