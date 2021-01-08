@@ -19,7 +19,7 @@ export type BaseSchema = {
   /** If 'disabled' equals to or be evaluated as 'true', runtime will skip this action. */
   disabled?: boolean | string;
 
-  [key: string]: unknown;
+  [key: string]: any;
 };
 
 /* Union of components which implement the IActivityTemplate interface */

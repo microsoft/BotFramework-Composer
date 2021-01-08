@@ -67,20 +67,20 @@ jest.mock('../../../utils/httpUtil');
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
-    flush: () => new Promise((resolve) => resolve()),
-    addProject: () => new Promise((resolve) => resolve()),
+    flush: () => new Promise((resolve) => resolve(null)),
+    addProject: () => new Promise((resolve) => resolve(null)),
   };
 });
 
 jest.mock('../../parsers/luWorker', () => {
   return {
-    flush: () => new Promise((resolve) => resolve()),
+    flush: () => new Promise((resolve) => resolve(null)),
   };
 });
 
 jest.mock('../../persistence/FilePersistence', () => {
   return jest.fn().mockImplementation(() => {
-    return { flush: () => new Promise((resolve) => resolve()) };
+    return { flush: () => new Promise((resolve) => resolve(null)) };
   });
 });
 
@@ -513,6 +513,7 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
+
     setImmediate(() => {
       expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
       expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');

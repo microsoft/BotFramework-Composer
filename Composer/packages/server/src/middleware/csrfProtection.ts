@@ -8,7 +8,7 @@ import { authService } from '../services/auth/auth';
 /**
  * Middleware that verifies if the server-generated CSRF token is sent with the incoming request via header.
  */
-export const csrfProtection = (req: Request, res: Response, next: NextFunction) => {
+export const csrfProtection = (req: Request, res: Response, next?: NextFunction) => {
   // the CSRF token will only be generated in the production environment
   if (authService.csrfToken) {
     const csrfToken = req.get('X-CSRF-Token');
@@ -23,5 +23,5 @@ export const csrfProtection = (req: Request, res: Response, next: NextFunction) 
   }
 
   // check passed, continue to next handler
-  next();
+  next && next();
 };

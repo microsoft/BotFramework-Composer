@@ -116,9 +116,7 @@ export function convertLuParseResultToLuFile(id: string, resource, luFeatures: I
 }
 
 export function isValid(diagnostics: any[]) {
-  return diagnostics.every((item) => {
-    item.Severity !== 'ERROR';
-  });
+  return diagnostics.every((item) => item.Severity !== 'ERROR');
 }
 
 export function escapeBodyText(body: string, nestedLevel = 1): string {

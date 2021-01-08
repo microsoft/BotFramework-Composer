@@ -47,7 +47,7 @@ export const settingsContainer = css`
 export const settingsContent = css`
   width: 245px;
   margin-left: 32px;
-  margin-right: 300px;
+  margin-right: 295px;
   font-size: ${FontSizes.size14};
 `;
 

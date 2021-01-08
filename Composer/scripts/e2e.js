@@ -86,7 +86,7 @@ async function run() {
 }
 
 function cleanup() {
-  execSync(`node ${path.resolve(__dirname, 'clean-e2e.js')}`);
+  execSync(`node ${path.resolve(__dirname, 'clean-e2e.js')}`); // lgtm [js/shell-command-injection-from-environment]
 }
 
 console.clear();

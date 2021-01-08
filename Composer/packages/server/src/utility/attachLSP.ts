@@ -8,7 +8,7 @@ import * as net from 'net';
 import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 
-export function createSocketHandler(webSocket: any): rpc.IWebSocket {
+export function createSocketHandler(webSocket): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
     send: (content) => webSocket.send(content),
     onMessage: (cb) => webSocket.on('message', cb),
