@@ -48,8 +48,7 @@ export const actionButton = css`
 
 export type IToolbarItem = {
   type: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  element?: any;
+  element?: React.ReactElement;
   text?: string;
   buttonProps?: {
     iconProps?: IIconProps;
