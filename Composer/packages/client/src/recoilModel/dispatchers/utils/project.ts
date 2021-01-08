@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { indexer, validateDialog } from '@bfc/indexers';
+import { indexer } from '@bfc/indexers';
 import {
   BotProjectFile,
   BotProjectSpace,
@@ -20,6 +20,7 @@ import {
   SensitiveProperties,
   RootBotManagedProperties,
   defaultPublishConfig,
+  Diagnostic,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -83,6 +84,7 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
+import validateWorker from '../../parsers/validateWorker';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -357,14 +359,25 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   let mainDialog = '';
   const dialogIds: string[] = [];
-  dialogs.forEach((dialog) => {
+
+  for (const dialog of dialogs) {
     if (dialog.isRoot) {
       mainDialog = dialog.id;
     }
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
-    set(dialogState({ projectId, dialogId: dialog.id }), dialog);
-    dialogIds.push(dialog.id);
-  });
+    try {
+      dialog.diagnostics = (await validateWorker.validateDialog({
+        dialog,
+        schema: schemas.sdk.content,
+        settings,
+        lgFiles,
+        luFiles,
+      })) as Diagnostic[];
+      set(dialogState({ projectId, dialogId: dialog.id }), dialog);
+      dialogIds.push(dialog.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   set(dialogIdsState(projectId), dialogIds);
   set(recognizersSelectorFamily(projectId), recognizers);

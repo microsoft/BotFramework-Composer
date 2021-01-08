@@ -1,6 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection, LgFile, LuFile, QnASection, FileInfo, LgTemplate, ILUFeaturesConfig } from '@bfc/shared';
+import {
+  LuIntentSection,
+  LgFile,
+  LuFile,
+  QnASection,
+  FileInfo,
+  LgTemplate,
+  ILUFeaturesConfig,
+  DialogInfo,
+  DialogSetting,
+  SchemaDefinitions,
+} from '@bfc/shared';
 
 export type LuParsePayload = {
   id: string;
@@ -143,4 +154,16 @@ export enum QnAActionType {
   AddSection = 'add-section',
   UpdateSection = 'update-section',
   RemoveSection = 'remove-section',
+}
+
+export type ValidatorPayload = {
+  dialog: DialogInfo;
+  schema: SchemaDefinitions;
+  settings: DialogSetting;
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+};
+
+export enum ValidateActionType {
+  DialogValidator = 'dialog',
 }

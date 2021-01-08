@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dialogIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
-import { DialogInfo, checkForPVASchema } from '@bfc/shared';
+import { dialogIndexer, autofixReferInDialog } from '@bfc/indexers';
+import { DialogInfo, checkForPVASchema, Diagnostic } from '@bfc/shared';
 
 import {
   lgFilesState,
@@ -18,6 +18,7 @@ import {
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
+import validateWorker from './../parsers/validateWorker';
 import { createLgFileState, removeLgFileState } from './lg';
 import { createLuFileState, removeLuFileState } from './lu';
 import { createQnAFileState, removeQnAFileState } from './qna';
@@ -87,7 +88,14 @@ export const dialogsDispatcher = () => {
     const luFiles = await snapshot.getPromise(luFilesState(projectId));
     const settings = await snapshot.getPromise(settingsState(projectId));
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
+    dialog.diagnostics = (await validateWorker.validateDialog({
+      dialog,
+      schema: schemas.sdk.content,
+      settings,
+      lgFiles,
+      luFiles,
+    })) as Diagnostic[];
+
     if (typeof dialog.content === 'object') {
       dialog.content.id = id;
     }

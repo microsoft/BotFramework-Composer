@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { selectorFamily } from 'recoil';
-import { validateDialog } from '@bfc/indexers';
-import { DialogInfo, BotSchemas, LgFile, LuFile, DialogSetting, RecognizerFile } from '@bfc/shared';
+import { DialogInfo, BotSchemas, LgFile, LuFile, DialogSetting, RecognizerFile, Diagnostic } from '@bfc/shared';
 
 import {
   botProjectIdsState,
@@ -17,11 +16,12 @@ import {
 import { getLuProvider } from '../../utils/dialogUtil';
 
 import { recognizersSelectorFamily } from './recognizers';
+import validateWorker from './../parsers/validateWorker';
 
 type validateDialogSelectorFamilyParams = { projectId: string; dialogId: string };
 const validateDialogSelectorFamily = selectorFamily({
   key: 'validateDialogSelectorFamily',
-  get: ({ projectId, dialogId }: validateDialogSelectorFamilyParams) => ({ get }) => {
+  get: ({ projectId, dialogId }: validateDialogSelectorFamilyParams) => async ({ get }) => {
     const dialog: DialogInfo = get(dialogState({ projectId, dialogId }));
     const schemas: BotSchemas = get(schemasState(projectId));
     const lgFiles: LgFile[] = get(lgFilesState(projectId));
@@ -31,7 +31,13 @@ const validateDialogSelectorFamily = selectorFamily({
     const luProvider = getLuProvider(dialogId, recognizers);
     return {
       ...dialog,
-      diagnostics: validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles),
+      diagnostics: (await validateWorker.validateDialog({
+        dialog,
+        schema: schemas.sdk.content,
+        settings,
+        lgFiles,
+        luFiles,
+      })) as Diagnostic[],
       luProvider,
     };
   },
