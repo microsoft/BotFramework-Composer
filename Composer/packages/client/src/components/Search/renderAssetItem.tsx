@@ -44,7 +44,7 @@ export const renderAssetItem = (itemData: Fuse.FuseResult<AssetItem<BotBoundAsse
     >
       {nameMatches?.length ? (
         renderFuseResult(nameMatches, {
-          matchedStyle: { color: DefaultPalette.black, fontWeight: 'bold' },
+          matchedStyle: { color: DefaultPalette.black, fontWeight: 600 },
           normalStyle: {},
         })
       ) : (
@@ -58,14 +58,14 @@ export const renderAssetItem = (itemData: Fuse.FuseResult<AssetItem<BotBoundAsse
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             marginTop: -1,
-            color: NeutralColors.gray70,
+            color: NeutralColors.gray90,
           },
         }}
       >
         {pathMatches?.length ? (
           slicedPath?.reduce((acc, p, idx) => {
             if (p.kind === 'string') {
-              acc.push(<ItemText styles={{ root: { color: NeutralColors.gray70 } }}>{p.data.join(' > ')}</ItemText>);
+              acc.push(<ItemText styles={{ root: { color: NeutralColors.gray90 } }}>{p.data.join(' > ')}</ItemText>);
             } else {
               acc.push(
                 <ItemText styles={{ root: { color: NeutralColors.gray90 } }}>&nbsp;&gt;&nbsp;</ItemText>,
