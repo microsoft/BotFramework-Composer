@@ -28,8 +28,9 @@ export function resolveTriggerWidget(
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile) || isPVARecognizerType(dialogFile);
   const showTriggerPhrase = selectedType === SDKKinds.OnIntent && !isRegEx;
 
-  const onNameChange = (e, name) => {
+  const onNameChange = (e: React.FormEvent, name: string | undefined) => {
     const errors: TriggerFormDataErrors = {};
+    if (name == null) return;
     errors.intent = validateIntentName(selectedType, name);
     if (showTriggerPhrase && formData.triggerPhrases) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
@@ -37,8 +38,9 @@ export function resolveTriggerWidget(
     setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
   };
 
-  const onChangeRegEx = (e, pattern) => {
+  const onChangeRegEx = (e: React.FormEvent, pattern: string | undefined) => {
     const errors: TriggerFormDataErrors = {};
+    if (pattern == null) return;
     errors.regEx = validateRegExPattern(selectedType, isRegEx, pattern);
     setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
