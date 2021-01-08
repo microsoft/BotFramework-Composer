@@ -5,13 +5,15 @@ import Color from 'color';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 class Colors {
-  //bg = NeutralColors.white;
-  bg = '#ffffff';
-  bgColor = Color(this.bg);
+  bg = '#323130';
+  private bgColor = Color(this.bg);
+
+  isDark = this.bgColor.isDark();
   transparentBg = 'rgba(255, 255, 255, 0.5)';
   transparent = 'transparent';
-  text = this.bgColor.isDark() ? '#fff' : '#000';
-  textColor = Color(this.text);
+  text = this.isDark ? '#fff' : '#000';
+
+  private textColor = Color(this.text);
   inactiveText = Color({
     r: (this.bgColor.red() + this.textColor.red()) / 2,
     g: (this.bgColor.green() + this.textColor.green()) / 2,
@@ -22,7 +24,7 @@ class Colors {
 
   textOnColor = '#fff';
 
-  main = '#ff8000';
+  main = SharedColors.cyanBlue10;
   mainLight = Color(this.main).lighten(0.5).hex();
   mainDark = Color(this.main).darken(0.5).hex();
   botControllerBg = Color(this.main).darken(0.2).hex();
@@ -33,8 +35,13 @@ class Colors {
   amber = SharedColors.orangeYellow10;
 
   gray = (value: number) => {
-    const red = 255 - value;
-    return `rgb(${red}, ${red - 2}, ${red - 4})`;
+    if (this.isDark) {
+      const red = value;
+      return `rgb(${red}, ${red - 2}, ${red - 4})`;
+    } else {
+      const red = 255 - value;
+      return `rgb(${red}, ${red - 2}, ${red - 4})`;
+    }
   };
 
   // copied from https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/messaging

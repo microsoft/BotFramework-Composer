@@ -28,6 +28,7 @@ const errorCount = css`
   font-size 16px;
   cursor: pointer;
   display:inline-block;
+  color: ${colors.text}
 `;
 
 // -------------------- ErrorInfo -------------------- //

@@ -73,6 +73,7 @@ const renderItemList = (item: IToolbarItem, index: number) => {
         {...item.buttonProps}
         data-testid={item.dataTestid}
         disabled={item.disabled}
+        styles={{ label: { color: item.disabled ? colors.inactiveText : colors.text } }}
       >
         {item.text}
       </ActionButton>
@@ -86,6 +87,7 @@ const renderItemList = (item: IToolbarItem, index: number) => {
         disabled={item.disabled}
         iconProps={item.buttonProps?.iconProps}
         menuProps={item.menuProps}
+        styles={{ label: { color: item.disabled ? colors.inactiveText : colors.text } }}
         text={item.text}
       />
     );

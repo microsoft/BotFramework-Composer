@@ -28,6 +28,7 @@ import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
+import { colors } from '../../colors';
 import {
   visualEditorSelectionState,
   userSettingsState,
@@ -580,6 +581,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       />
       <div style={{ padding: '10px' }}>
         <ActionButton
+          styles={{
+            label: {
+              color: colors.main,
+            },
+          }}
           onClick={() => {
             setDialogJsonVisibility((current) => !current);
             TelemetryClient.track('EditModeToggled', { jsonView: dialogJsonVisible });

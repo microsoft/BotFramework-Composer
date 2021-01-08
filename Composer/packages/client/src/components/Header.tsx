@@ -117,11 +117,11 @@ const teachingBubbleStyle = {
     background: colors.bg,
     selectors: {
       '.ms-TeachingBubble-headline': {
-        color: colors.black,
+        color: colors.text,
         fontSize: FontSizes.size20,
       },
       '.ms-TeachingBubble-subText': {
-        color: colors.black,
+        color: colors.text,
         fontSize: FontSizes.size12,
       },
     },

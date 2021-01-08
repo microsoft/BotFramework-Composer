@@ -274,7 +274,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
               styles: mergeStyleSets(
                 {
                   root: {
-                    color: colors.black,
+                    color: colors.text,
                     visibility: 'hidden',
                   },
                 },

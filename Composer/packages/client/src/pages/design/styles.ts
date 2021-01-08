@@ -122,6 +122,8 @@ export const breadcrumbClass = mergeStyleSets({
   },
   chevron: {
     fontSize: FontSizes.size10,
+
+    color: colors.text,
   },
 });
 

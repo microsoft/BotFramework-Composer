@@ -27,6 +27,7 @@ const warningCount = css`
   font-size 16px;
   cursor: pointer;
   display:inline-block;
+  color: ${colors.text}
 `;
 
 // -------------------- warningInfo -------------------- //

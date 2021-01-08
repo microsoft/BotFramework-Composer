@@ -42,6 +42,7 @@ export const title = css`
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
   margin: 0;
+  color: ${colors.text};
 `;
 
 export const introduction = css`
@@ -53,6 +54,7 @@ export const introduction = css`
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 18px;
+  color: ${colors.text};
 `;
 
 export const newBotContainer = css`
@@ -110,6 +112,7 @@ export const itemContainerContent = css`
   text-overflow: ellipsis;
   word-break: break-word;
   outline: none;
+  color: ${colors.text};
 `;
 
 export const subtitle = css`
@@ -118,6 +121,7 @@ export const subtitle = css`
   display: flex;
   font-weight: 600;
   margin: 0;
+  color: ${colors.text};
 `;
 
 export const bluetitle = css`
@@ -131,12 +135,14 @@ export const bluetitle = css`
 
 export const examplesDescription = css`
   margin: 0;
+  color: ${colors.text};
 `;
 
 export const linkContainer = css`
   width: 50%;
   margin-top: 10px;
   font-weight: 600;
+  color: ${colors.text};
 `;
 
 export const linkInfo = css`
@@ -165,7 +171,7 @@ export const button: IIconStyles = {
 export const disabledItem = {
   title: css`
     background-color: ${colors.gray(20)};
-    color: ${colors.gray(90)};
+    color: ${colors.inactiveText};
   `,
   content: css`
     border: 2px solid ${colors.gray(20)};
