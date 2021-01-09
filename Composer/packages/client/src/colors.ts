@@ -6,9 +6,10 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 class Colors {
   // main background color
-  bg = '#ddddff';
+  bg = '#004';
   // main theming color (BFC default is SharedColors.cyanBlue10)
-  main = 'rebeccapurple';
+  main = '#DDD';
+  textOnColor = '#000';
 
   private bgColor = Color(this.bg);
 
@@ -25,8 +26,6 @@ class Colors {
   }).hex();
 
   black = '#000';
-
-  textOnColor = '#fff';
 
   mainLight = Color(this.main).lighten(0.5).hex();
   mainDark = Color(this.main).darken(0.5).hex();
