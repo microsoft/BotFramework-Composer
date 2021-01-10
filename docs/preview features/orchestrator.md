@@ -4,26 +4,25 @@ Orchestrator is a powerful new language model that is optimized for conversation
 - [Technical Overview](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/Overview.md)
 - [Samples](https://github.com/microsoft/BotBuilder-Samples/tree/main/experimental/orchestrator)
 
-TODO: mention selling points here
-- Easy to use - Use your existing LU files from LUIS
-- State of the Art - BERT model
-- Extremely fast Inference Time: Written in C++ native code
-- Cross-platform Support: Runs on Windows, Linux and Mac OS X
-- Free to use: Deploy the language models alongside your bot, there are no service charges or usage fees
+## Orchestrator Features
+- Easy to use - Use your existing LU files from LUIS without modification
+- State of the Art - Extensive pre-trained transformer-based model for conversational applications
+- Extremely fast Inference Time: Written in C++ for performance
+- Cross-platform Support: Runs on Windows, Linux and Mac OS X, including Cloud platforms
+- Free to use: Language models are deployed alongside your bot, there are no usage fees
 
 ## Getting Started
 ------------------
+### Limitations
+For this preview release, please be aware of these limitations:
 
-For this preview, please be aware of these limitations:
+1. Orchestrator has to be deployed on an x64 platform. If you are deploying your bot to a cloud service, please be aware that you need to publish your bot with `win-x64` enabled, and enable x64.
 
-1. Orchestrator has to be deployed on an x64 platform. If you are deploying your bot from Visual Studio or from a pipeline, please be aware that you need to publish your bot with `win-x64` enabled
+1. We are supporting English-only for this release.
 
-1. We are supporting English only at this point in time.  Multi-Lingual support is scheduled for 2nd Quarter of 2021.
+1. Orchestrator does not support Entity extraction for this release. Any Entities declared in your LU file will be ignored.
 
-1. Orchestrator supports intents only.
-
-Please see the schedule for when new features will be added to Orchestrator
-
+Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/Overview.md#Roadmap) for when these features will be added to Orchestrator.
 
 
 ### Adding Orchestrator to a new bot in Composer
@@ -67,23 +66,9 @@ Please see the schedule for when new features will be added to Orchestrator
                 ```
                 **Important: All packages starting with `Microsoft.Bot.Builder` must have the same version numbers. For example, if your ejected runtime `Microsoft.Bot.Builder` version is `4.11.0` like above, set the `Microsoft.Bot.Builder.AI.Orchestrator` version to `4.11.0-preview`.**
 
-            - Find these lines:
+            - Restrict platform target to the `x64` platform by adding these lines:
                 ```xml
-                <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-                    <CodeAnalysisRuleSet>..\core\Microsoft.BotFramework.Composer.Core.ruleset</ CodeAnalysisRuleSet>
-                </PropertyGroup>
-                <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-                    <CodeAnalysisRuleSet>..\core\Microsoft.BotFramework.Composer.Core.ruleset</CodeAnalysisRuleSet>
-                </PropertyGroup>
-                ```
-                Modify these lines by adding the x64 `PlatformTarget` so they look like this:
-                ```xml
-                <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-                    <CodeAnalysisRuleSet>..\core\Microsoft.BotFramework.Composer.Core.ruleset</ CodeAnalysisRuleSet>
-                    <PlatformTarget>x64</PlatformTarget>
-                </PropertyGroup>
-                <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-                    <CodeAnalysisRuleSet>..\core\Microsoft.BotFramework.Composer.Core.ruleset</CodeAnalysisRuleSet>
+                <PropertyGroup>
                     <PlatformTarget>x64</PlatformTarget>
                 </PropertyGroup>
                 ```
@@ -107,6 +92,45 @@ Please see the schedule for when new features will be added to Orchestrator
                 builder.AddJsonFile(orchestratorSettingsFile.FullName, optional: false, reloadOnChange: true);
             }
             ```
-    1. Return back to Composer.  Click the `Start Bot` button to start the bot and Orchestrator locally and test the bot in the emulator. When the dialog is hit, Orchestrator will show up in the logs as `Orchestrator Recognition`.
+    1. Return back to Composer.  Click the `Start Bot` button to start the bot and Orchestrator locally and test the bot in the emulator. When the dialog is hit and Orchestrator is loaded successfully, Orchestrator will show up in the logs as `Orchestrator Recognition`.
+
     ![orchestrator recognizer in emulator](orchestrator-assets/emulator.png)
 
+## Publishing an Orchestrator-based Bot to Azure
+While it is possible to deploy your bot using your own scripts, it is strongly recommended to use Composer to publish your bot to Azure. Please see the documentation [here](https://docs.microsoft.com/en-us/composer/how-to-publish-bot).
+
+The Composer deployment will create an S1 Tier 64-bit WebApp, bundle the Orchestrator language models, update bot settings to use these models, and upload the artifacts automatically to Azure.
+
+## Troubleshooting Guide
+
+1. When I use Orchestrator, clicking `Start Bot` in Composer, or deploying to Azure takes a lot longer. Why?
+
+    Orchestrator runs completely offline. Its language models are anywhere from 200MB-300MB, and they are automatically downloaded and packaged with your bot.
+
+1. I am getting a `BadImageFormatException` when I click `Start Bot`.
+
+   Orchestrator has to run on a 64-bit platform. A `BadImageFormatException` indicates that a 32-bit dotnet SDK was used to compile the bot, or that the bot was run on a 32-bit or unsupported platform.
+
+   Please *uninstall* any 32-bit dotnet SDKs that are on your local machine. Download the latest [v3.1 x64 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1) for your platform.
+
+   Finally, be sure that you're deploying and running your bot on a 64-bit capable machine.  If you've deployed your bot via Composer to Azure, this is automatically taken care of for you.
+
+1. How do I run Orchestrator on a NodeJS-based bot?
+
+   Please see the instructions [here](https://aka.ms/bf-orchestrator#in-a-javascript-bot).  Then eject a `NodeJS` runtime instead of a `C#` one.
+
+1. How do I migrate from LUIS to Orchestrator for simple Dispatch scenarios?
+
+   First, see the [limitations](#limitations) for this release. In any dialog that you use LUIS, you can use Orchestrator. For this release, intents will be parsed out of your existing LU file, leaving entities and other advanced LU features unprocessed, when you switch the `Recognizer Type` to `Orchestrator recognizer`.
+
+1. How do I switch back to LUIS?
+
+   You can easily switch back to LUIS by changing the `Recognizer Type` dropdown option back to the `Default recognizer` in your dialog.
+
+1. Can a Orchestrator be used alongside LUIS in the same bot?
+
+   Yes. Every dialog can only have one Recognizer, but you can have LUIS providing understanding for some of your dialogs, while Orchestrator provides understanding for others.
+
+1. How does Orchestrator perform compared to other Language Understanding offerings?
+
+   Coming Soon.
