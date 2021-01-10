@@ -53,8 +53,12 @@ describe('parse', () => {
 
     const result = parse('a.qna', content);
     expect(result.imports.length).toEqual(2);
-    expect(result.imports[0]).toEqual({ id: 'windows-guide.source.qna', path: 'windows-guide.source.qna' });
-    expect(result.imports[1]).toEqual({ id: 'aks.qna', path: '../common/aks.qna' });
+    expect(result.imports[0]).toEqual({
+      id: 'windows-guide.source.qna',
+      path: 'windows-guide.source.qna',
+      description: 'import',
+    });
+    expect(result.imports[1]).toEqual({ id: 'aks.qna', path: '../common/aks.qna', description: 'import' });
     expect(result.empty).toEqual(false);
     expect(result.qnaSections.length).toEqual(0);
   });
