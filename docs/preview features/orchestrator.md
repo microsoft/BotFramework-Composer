@@ -123,7 +123,7 @@ The Composer deployment will create an S1 Tier 64-bit WebApp, bundle the Orchest
 
 1. How do I run Orchestrator on a Node.js-based bot?
 
-   Please see the instructions [here](https://aka.ms/bf-orchestrator#in-a-javascript-bot).  Then eject a `NodeJS` runtime instead of a `C#` one.
+   Please see the instructions [here](https://aka.ms/bf-orchestrator#in-a-javascript-bot).  Then eject a `Node.js` runtime instead of a `C#` one.
 
 1. How do I migrate from LUIS to Orchestrator for simple Dispatch scenarios?
 
@@ -133,7 +133,7 @@ The Composer deployment will create an S1 Tier 64-bit WebApp, bundle the Orchest
 
    You can easily switch back to LUIS by changing the `Recognizer Type` dropdown option back to the `Default recognizer` in your dialog.
 
-1. Can a Orchestrator be used alongside LUIS in the same bot?
+1. Can Orchestrator be used alongside LUIS in the same bot?
 
    Yes. Every dialog can only have one Recognizer, but you can have LUIS providing understanding for some of your dialogs, while Orchestrator provides understanding for others.
 
