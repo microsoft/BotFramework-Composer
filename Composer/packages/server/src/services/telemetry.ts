@@ -58,6 +58,10 @@ if (instrumentationKey) {
       if (typeof data.baseData.name === 'string') {
         data.baseData.name = data.baseData.name.replace(/\/\d+.\d+/, '/XXXXX.XXXXXXXXXX');
       }
+
+      if (typeof data.baseData.name === 'string') {
+        data.baseData.name = data.baseData.name.replace(/\/\d+.\d+/, '/XXXXX.XXXXXXXXXX');
+      }
     }
 
     if (AppInsights.Contracts.domainSupportsProperties(data.baseData)) {
