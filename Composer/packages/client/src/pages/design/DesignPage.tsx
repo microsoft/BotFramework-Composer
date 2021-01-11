@@ -191,13 +191,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
   const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0] as DialogInfo);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
   const [breadcrumbs, setBreadcrumbs] = useState<Array<BreadcrumbItem>>([]);
 
   const shell = useShell('DesignPage', skillId ?? rootProjectId);
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
   const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
+  const currentDialog = (dialogs.find(({ id }) => id === dialogId) ?? dialogs[0]) as DialogInfo;
 
   const { setPageElementState } = useRecoilValue(dispatcherState);
 
@@ -210,11 +210,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [skills, skillId]);
 
   useEffect(() => {
-    const currentDialog = dialogs.find(({ id }) => id === dialogId) as DialogInfo | undefined;
-    if (currentDialog) {
-      setCurrentDialog(currentDialog);
+    if (!warningIsVisible) {
+      setWarningIsVisible(true);
     }
-    setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 
   // migration: add id to dialog when dialog doesn't have id
