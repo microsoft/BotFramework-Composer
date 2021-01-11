@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 
-import { conceptLabels } from '@bfc/shared';
+import { conceptLabels, getFriendlyName } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
@@ -24,20 +24,8 @@ function getLabel(data: any): string {
   return data.$kind;
 }
 
-function getName(data: any): string {
-  if (data?.$designer?.name) {
-    return data?.$designer?.name;
-  }
-
-  if (data?.intent) {
-    return `${data?.intent}`;
-  }
-
-  return conceptLabels()[data.$kind]?.title ?? data.$kind;
-}
-
 export const TriggerSummary = ({ data, onClick = () => {} }): JSX.Element => {
-  const name = getName(data);
+  const name = getFriendlyName(data);
   const label = getLabel(data);
 
   return (
