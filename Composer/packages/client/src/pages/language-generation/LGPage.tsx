@@ -25,7 +25,7 @@ const LGPage: React.FC<RouteComponentProps<{
   lgFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
-  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId ?? ''));
+  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId));
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
