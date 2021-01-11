@@ -29,7 +29,7 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
 1. Enable Orchestrator from the preview features list:
     - Navigate to `Application Settings` (
     <img src="orchestrator-assets/application-settings.png" alt="drawing" width="30"/> icon)
-    - Enable Orchestrator preview feature under `Applicatio Updates -> Preview features`
+    - Enable Orchestrator preview feature under `Application Updates -> Preview features`
 
       ![orchestrator flight](orchestrator-assets/preview-flag-orchestrator.png)
 
@@ -45,14 +45,14 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
         - In the flow diagram for the newly created trigger, click on the `+` button and select `Send a Response` from the dropdown, then add a sample response in the `Language Generation` textbox.
 
 1. Modify the runtime to support Orchestrator
-    1. Eject the runtime to add Orchestrator libraries to the runtime
+    1. Eject the runtime
         1. Navigate to `Application Settings` (
             <img src="orchestrator-assets/application-settings.png" alt="drawing" width="30"/>) and toggle the `Use custom runtime` switch. Then click on `Get a new copy of the runtime code` and select `C#` to eject a copy of the dotnet runtime for your bot. Click `Okay`.
 
             ![eject-runtime](orchestrator-assets/eject-runtime.png)
         1. The runtime will be ejected into the `<Bot Project Folder>/runtime/azurewebapp` folder of your bot project.
 
-    1. Perform these modifications to add Orchestrator Recognizer support to your newly ejected runtime:
+    1. Perform these modifications to add Orchestrator libraries to your newly ejected runtime:
         1. Open `<Bot Project Folder>/runtime/azurewebapp/Microsoft.BotFramework.Composer.WebApp.csproj`:
 
             - Add `Microsoft.Bot.Builder.AI.Orchestrator` after `Microsoft.Bot.Builder.AI.Luis`
@@ -108,7 +108,7 @@ The Composer deployment will create an S1 Tier 64-bit WebApp, bundle the Orchest
 
 1. I am getting a `BadImageFormatException` when I click `Start Bot`.
 
-   Orchestrator has to run on a 64-bit platform. A `BadImageFormatException` indicates that a 32-bit dotnet SDK was used to compile the bot, or that the bot was run on a 32-bit or unsupported platform.
+   Orchestrator has to run on a 64-bit platform. A `BadImageFormatException` either indicates that a 32-bit dotnet SDK was used to compile the bot, or that the bot was run on a 32-bit or unsupported platform.
 
    Please *uninstall* any 32-bit dotnet SDKs that are on your local machine. Download the latest [v3.1 x64 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1) for your platform.
 
