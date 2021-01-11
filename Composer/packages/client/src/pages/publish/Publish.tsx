@@ -76,7 +76,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [updaterStatus]);
 
   const selectedBots = useMemo(() => {
-    return botList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
+    return currentBotList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
   }, [checkedSkillIds]);
 
   const canPull = useMemo(() => {
@@ -96,20 +96,22 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
 
   useEffect(() => {
-    // init bot status list for the botProjectData is empty array when first mounted
-    setCurrentBotList(botList);
+    if (currentBotList.length < botList.length) {
+      // init bot status list for the botProjectData is empty array when first mounted
+      setCurrentBotList(botList);
 
-    // Start updaters
-    botList
-      .filter(
-        (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
-      )
-      .forEach((bot) => {
-        if (pollingUpdaterList.some((updater) => updater.isSameUpdater(bot.id, bot.publishTarget))) return;
-        const updater = new PublishStatusPollingUpdater(bot.id, bot.publishTarget);
-        pollingUpdaterList.push(updater);
-        updater.start(onReceiveUpdaterPayload);
-      });
+      // Start updaters
+      botList
+        .filter(
+          (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
+        )
+        .forEach((bot) => {
+          if (pollingUpdaterList.some((updater) => updater.isSameUpdater(bot.id, bot.publishTarget))) return;
+          const updater = new PublishStatusPollingUpdater(bot.id, bot.publishTarget);
+          pollingUpdaterList.push(updater);
+          updater.start(onReceiveUpdaterPayload);
+        });
+    }
   }, [botList]);
 
   useEffect(() => {
