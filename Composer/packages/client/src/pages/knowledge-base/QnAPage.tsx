@@ -24,8 +24,9 @@ const QnAPage: React.FC<RouteComponentProps<{
   dialogId: string;
   projectId: string;
   skillId: string;
+  qnaFileId: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
+  const { dialogId = '', projectId = '', skillId, qnaFileId = '' } = props;
 
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
@@ -87,8 +88,8 @@ const QnAPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} skillId={skillId} />
-          <TableView path="/" projectId={projectId} />
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
+          <TableView dialogId={dialogId} path="/" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
         </Router>
         <CreateQnAModal
           dialogId={creatQnAOnInfo.dialogId}

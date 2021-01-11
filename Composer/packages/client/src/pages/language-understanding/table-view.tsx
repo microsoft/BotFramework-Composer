@@ -34,7 +34,7 @@ import {
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
   luFileId?: string;
@@ -52,7 +52,7 @@ interface Intent {
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, luFileId } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const { updateLuIntent } = useRecoilValue(dispatcherState);

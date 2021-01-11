@@ -71,6 +71,8 @@ const Routes = (props) => {
             <LGPage path="language-generation/common/*" />
             <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/all/*" />
+            <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <BotProjectSettings path="botProjectsSettings" />
             <Diagnostics path="diagnostics" />

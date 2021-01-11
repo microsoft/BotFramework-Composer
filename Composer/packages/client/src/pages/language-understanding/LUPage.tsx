@@ -20,8 +20,8 @@ const CodeEditor = React.lazy(() => import('./code-editor'));
 const LUPage: React.FC<RouteComponentProps<{
   dialogId: string;
   projectId: string;
-  skillId?: string;
-  luFileId?: string;
+  skillId: string;
+  luFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
   const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId ?? ''));
@@ -73,7 +73,7 @@ const LUPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} luFileId={luFileId} path="/edit" projectId={projectId} skillId={skillId} />
-          <TableView path="/" />
+          <TableView dialogId={dialogId} luFileId={luFileId} path="/" projectId={projectId} skillId={skillId} />
         </Router>
       </Suspense>
     </Page>

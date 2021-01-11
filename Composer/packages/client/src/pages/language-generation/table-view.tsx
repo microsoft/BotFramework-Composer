@@ -33,7 +33,7 @@ import { languageListTemplates } from '../../components/MultiLanguage';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
   lgFileId?: string;
@@ -42,7 +42,7 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, lgFileId } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
 
   const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));

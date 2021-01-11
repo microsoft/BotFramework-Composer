@@ -77,7 +77,7 @@ const LGPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} lgFileId={lgFileId} path="/edit/*" projectId={projectId} skillId={skillId} />
-          <TableView dialogId={dialogId} lgFileId={lgFileId} path="/" projectId={projectId} />
+          <TableView dialogId={dialogId} lgFileId={lgFileId} path="/" projectId={projectId} skillId={skillId} />
         </Router>
       </Suspense>
     </Page>
