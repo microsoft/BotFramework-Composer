@@ -7,6 +7,7 @@ import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { PublishResult } from '@bfc/shared';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -33,7 +34,6 @@ import {
   generateBotStatusList,
   deleteNotificationInterval,
 } from './publishPageUtils';
-import { PublishResult } from '@bfc/shared';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -95,6 +95,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const canPublish =
     checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
 
+  // stop polling updater & delete pending notification
+  const stopUpdater = async (updater) => {
+    updater.stop();
+
+    // Remove pending notification
+    const pendingNotification = pendingNotificationRef.current;
+    pendingNotification && (await deleteNotification(pendingNotification.id));
+    pendingNotificationRef.current = undefined;
+  };
+
   useEffect(() => {
     if (currentBotList.length < botList.length) {
       // init bot status list for the botProjectData is empty array when first mounted
@@ -119,8 +129,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     return () => {
       if (pollingUpdaterList) {
         pollingUpdaterList.forEach((updater) => {
-          updater.stop();
+          stopUpdater(updater);
         });
+        while (pollingUpdaterList.length) {
+          pollingUpdaterList.pop();
+        }
       }
     };
   }, []);
@@ -161,12 +174,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       responseData.status === ApiStatus.Unknown ||
       responseData.status === ApiStatus.Failed
     ) {
-      updater.stop();
-
-      // Remove pending notification
-      const pendingNotification = pendingNotificationRef.current;
-      pendingNotification && (await deleteNotification(pendingNotification.id));
-      pendingNotificationRef.current = undefined;
+      stopUpdater(updater);
 
       // Show result notifications
       const displayedNotifications = showNotificationsRef.current;
