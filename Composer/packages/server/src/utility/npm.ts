@@ -6,7 +6,7 @@ import { promisify } from 'util';
 import { mkdir, remove } from 'fs-extra';
 import fetch from 'node-fetch';
 import tar from 'tar';
-import { ExtensionSearchResult } from '@botframework-composer/types';
+import { BotTemplateV2, ExtensionSearchResult } from '@botframework-composer/types';
 
 import logger from '../logger';
 
@@ -14,13 +14,30 @@ const streamPipeline = promisify(require('stream').pipeline);
 
 const log = logger.extend('extension-manager:npm');
 
+export async function getNpmTemplates(): Promise<BotTemplateV2[]> {
+  const publicNpmTemplatePackages = await search('', ['bot']);
+  const templates: BotTemplateV2[] = publicNpmTemplatePackages.map((value) => {
+    return {
+      id: value.id,
+      name: value.id,
+      description: value.description,
+      package: {
+        packageName: value.id,
+        packageSource: 'npm',
+      },
+    } as BotTemplateV2;
+  });
+  return templates;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function search(query = ''): Promise<ExtensionSearchResult[]> {
+export async function search(query = '', keywords = ['botframework-composer']): Promise<ExtensionSearchResult[]> {
   try {
     log('Searching for %s', query);
     const queryString = query.replace(' ', '+');
+    const keyWordString = keywords.join('+');
     const res = await fetch(
-      `https://registry.npmjs.org/-/v1/search?text=${queryString}+keywords:botframework-composer&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5`
+      `https://registry.npmjs.org/-/v1/search?text=${queryString}+keywords:${keyWordString}&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5`
     );
     const data = await res.json();
 

@@ -14,7 +14,12 @@ import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
-import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
+import {
+  recentProjectsState,
+  templateIdState,
+  currentProjectIdState,
+  featureFlagsState,
+} from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import * as home from './styles';
@@ -69,6 +74,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowType,
   } = useRecoilValue(dispatcherState);
 
+  const featureFlags = useRecoilValue(featureFlagsState);
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
@@ -90,6 +96,14 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
+  const onClickNewBot = () => {
+    setCreationFlowType('Bot');
+    setCreationFlowStatus(CreationFlowStatus.NEW);
+    featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
+    TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+    TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
+  };
+
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
@@ -99,11 +113,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           iconName: 'CirclePlus',
         },
         onClick: () => {
-          setCreationFlowType('Bot');
-          setCreationFlowStatus(CreationFlowStatus.NEW);
-          navigate(`projects/create`);
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
-          TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
+          onClickNewBot();
         },
       },
       align: 'left',
@@ -163,9 +173,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.newBotItem}
                 title={addButton}
                 onClick={() => {
-                  TelemetryClient.track('CreateNewBotProject', { method: 'newCallToAction' });
-                  setCreationFlowStatus(CreationFlowStatus.NEW);
-                  navigate('projects/create');
+                  onClickNewBot();
                 }}
               />
             </div>
