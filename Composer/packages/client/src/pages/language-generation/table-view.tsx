@@ -28,7 +28,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
   lgFileId?: string;
@@ -37,7 +37,7 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, lgFileId } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
 
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
@@ -219,6 +219,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={displayName}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue === item.name) return;
                   if (newValue) {
                     handleTemplateUpdate(item.name, { ...item, name: newValue });
                   }
@@ -249,6 +250,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body
@@ -284,6 +286,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body
@@ -318,6 +321,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body

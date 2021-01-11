@@ -73,6 +73,22 @@ export const localBotsDataSelector = selector({
   },
 });
 
+export const localBotsSettingDataSelector = selector({
+  key: 'localBotsSettingDataSelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+
+    const result = botProjectIds.map((projectId: string) => {
+      const setting = get(settingsState(projectId));
+      return {
+        projectId,
+        setting,
+      };
+    });
+    return result;
+  },
+});
+
 export const formDialogSchemasSelectorFamily = selectorFamily<FormDialogSchema[], string>({
   key: 'formDialogSchemasSelector',
   get: (projectId: string) => ({ get }) => {
