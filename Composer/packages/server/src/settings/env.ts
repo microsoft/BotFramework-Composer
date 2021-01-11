@@ -16,7 +16,7 @@ if (folder && folder.endsWith(':')) {
 }
 
 let names: string[] = [];
-const getDiskNames = (text) => {
+const getDiskNames = (text: string) => {
   names = text
     .split('\r\r\n')
     .filter((token) => token.indexOf(':') > -1)

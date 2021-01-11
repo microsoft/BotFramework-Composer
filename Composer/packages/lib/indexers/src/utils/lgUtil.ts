@@ -15,6 +15,8 @@ import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
 
 import { lgIndexer } from '../lgIndexer';
 
+import { getFileName } from './help';
+
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   const result = new Diagnostic(d.message, source, d.severity);
@@ -44,6 +46,7 @@ function templateToLgTemplate(templates: Template[]): LgTemplate[] {
   });
 }
 
+// get parsed resource from lgFile, if not exist do reparse
 function getLgResource(lgFile: LgFile, importResolver?: ImportResolverDelegate) {
   const { content, parseResult } = lgFile;
 
@@ -57,8 +60,15 @@ export function convertTemplatesToLgFile(id = '', content: string, parseResult: 
 
   const templates = templateToLgTemplate(parseResult.toArray());
   const allTemplates = templateToLgTemplate(parseResult.allTemplates);
+  const imports = parseResult.imports.map((item) => {
+    return {
+      id: getFileName(item.id),
+      path: item.id,
+      description: item.description,
+    };
+  });
 
-  return { id, content, templates, allTemplates, diagnostics, options: parseResult.options, parseResult };
+  return { id, content, templates, allTemplates, diagnostics, imports, options: parseResult.options, parseResult };
 }
 
 export function increaseNameUtilNotExist(templates: LgTemplate[], name: string): string {
