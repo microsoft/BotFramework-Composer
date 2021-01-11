@@ -95,7 +95,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (isEmpty(luFiles)) return;
 
     const allIntents = luFiles
-      .filter(({ id }) => getExtension(id) === locale)
+      .filter(({ id }: { id: string }) => getExtension(id) === locale)
       .reduce((result: Intent[], luFile: LuFile) => {
         const items: Intent[] = [];
         const luDialog = dialogs.find((dialog) => luFile.id === `${dialog.id}.${locale}`);
@@ -106,7 +106,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             phrases,
             fileId: luFile.id,
             dialogId: luDialog?.id || '',
-            used: !!luDialog && luDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+            used: luDialog?.referredLuIntents.some((lu) => lu.name === name) ?? false, // used by it's dialog or not
             state,
           });
         });
@@ -124,7 +124,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           phrases,
           fileId: file.id,
           dialogId: activeDialog?.id || '',
-          used: !!activeDialog && activeDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+          used: activeDialog?.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
           state,
         });
       });

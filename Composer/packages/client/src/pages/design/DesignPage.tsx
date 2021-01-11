@@ -14,8 +14,8 @@ import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger, getDialogData } from '../../utils/dialogUtil';
@@ -57,6 +57,7 @@ import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
@@ -197,6 +198,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shell = useShell('DesignPage', skillId ?? rootProjectId);
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
   const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
+
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     if (!skillId) return;
@@ -599,7 +602,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   async function handleDeleteDialog(projectId: string, dialogId: string) {
     const refs = getAllRef(dialogId, dialogs);
-    let setting: any = {
+    let setting: Record<string, string | ((subTitle: string, style: any) => JSX.Element)> = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
     };
@@ -632,23 +635,28 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
 
     if (content) {
-      updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
+      await updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
       const match = /\[(\d+)\]/g.exec(selected);
-      const current = match && match[1];
-      if (!current) return;
+      const current = match?.[1];
+      if (!current) {
+        commitChanges();
+        return;
+      }
       const currentIdx = parseInt(current);
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+          await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(skillId ?? projectId, dialogId);
+          await navTo(skillId ?? projectId, dialogId);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+        await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
+
+      commitChanges();
     }
   }
   const addNewBtnRef = useCallback((addNew) => {
@@ -658,7 +666,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const handleCreateQnA = async (data) => {
     const { projectId, dialogId } = creatQnAOnInfo;
     if (!projectId || !dialogId) return;
-    createQnATrigger(projectId, dialogId);
+    await createQnATrigger(projectId, dialogId);
 
     const { name, url, multiTurn } = data;
     if (url) {
@@ -666,6 +674,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     } else {
       await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
     }
+    commitChanges();
   };
 
   const handleCreateDialog = (projectId: string) => {
@@ -693,10 +702,22 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
   const dialogCreateSource = dialogModalInfo ?? skillId ?? projectId;
 
+  const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
+    setPageElementState('dialogs', { leftSplitWidth: sizes.primary });
+  };
+
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={'dialogs'}>
+        <Split
+          resetOnDoubleClick
+          initialPrimarySize="20%"
+          minPrimarySize="200px"
+          minSecondarySize="800px"
+          renderSplitter={renderThinSplitter}
+          splitterSize="5px"
+          onMeasuredSizesChanged={onMeasuredSizesChanged}
+        >
           <ProjectTree
             defaultSelected={{
               projectId,
@@ -730,11 +751,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <LeftRightSplit
-                  initialLeftGridWidth="65%"
-                  minLeftPixels={500}
-                  minRightPixels={350}
-                  pageMode={'dialogs'}
+                <Split
+                  resetOnDoubleClick
+                  initialPrimarySize="65%"
+                  minPrimarySize="500px"
+                  minSecondarySize="350px"
+                  renderSplitter={renderThinSplitter}
                 >
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
                     {!isRemoteSkill ? breadcrumbItems : null}
@@ -780,11 +802,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       <PropertyEditor key={focusPath + undoVersion} />
                     )}
                   </EditorExtension>
-                </LeftRightSplit>
+                </Split>
               </div>
             </Conversation>
           </div>
-        </LeftRightSplit>
+        </Split>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (
@@ -828,8 +850,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             dialogId={triggerModalInfo.dialogId}
             projectId={triggerModalInfo.projectId}
             onDismiss={onTriggerCreationDismiss}
-            onSubmit={(dialogId, formData) => {
-              createTrigger(triggerModalInfo.projectId, dialogId, formData);
+            onSubmit={async (dialogId, formData) => {
+              await createTrigger(triggerModalInfo.projectId, dialogId, formData);
+              commitChanges();
             }}
           />
         )}

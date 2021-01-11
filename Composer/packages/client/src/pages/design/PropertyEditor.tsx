@@ -74,7 +74,7 @@ const PropertyEditor: React.FC = () => {
     if (schemas?.sdk?.content && localData) {
       return resolveBaseSchema(schemas.sdk.content, localData.$kind);
     }
-  }, [schemas?.sdk?.content, localData.$kind]);
+  }, [schemas?.sdk?.content, localData?.$kind]);
 
   const $uiOptions = useMemo(() => {
     return getUIOptions($schema, formUIOptions);

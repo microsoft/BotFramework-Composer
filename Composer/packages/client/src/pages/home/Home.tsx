@@ -72,7 +72,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
-    if (item && item.path) {
+    if (item?.path) {
       await openProject(item.path, 'default', true, (projectId) => {
         TelemetryClient.track('BotProjectOpened', { method: 'list', projectId });
       });

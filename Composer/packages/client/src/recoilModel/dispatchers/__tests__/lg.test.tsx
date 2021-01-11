@@ -4,7 +4,7 @@
 import { useRecoilState } from 'recoil';
 import { LgFile, LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -42,6 +42,7 @@ const lgFiles = [
     content: `\r\n# Hello\r\n-hi`,
     templates: [{ name: 'Hello', body: '-hi', parameters: [] }],
     diagnostics: [],
+    imports: [],
     allTemplates: [{ name: 'Hello', body: '-hi', parameters: [] }],
   },
 ] as LgFile[];
@@ -55,19 +56,20 @@ const getLgTemplate = (name, body): LgTemplate =>
   } as LgTemplate);
 
 describe('Lg dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
+  const useRecoilTestHook = () => {
+    const [lgFiles, setLgFiles] = useRecoilState(lgFilesState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
 
-      return {
-        lgFiles,
-        setLgFiles,
-        currentDispatcher,
-      };
+    return {
+      lgFiles,
+      setLgFiles,
+      currentDispatcher,
     };
+  };
 
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: lgFilesState(projectId), initialValue: lgFiles },

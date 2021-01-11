@@ -114,11 +114,25 @@ export type LuFile = {
   intents: LuIntentSection[];
   empty: boolean;
   resource: LuParseResource;
+  imports: { id: string; path: string; description: string }[];
+  published?: boolean;
+};
+
+export type LuParseResourceSection = {
+  Name: string;
+  Body: string;
+  SectionType: string;
+  Path: string;
+  Id: string;
+  Description: string;
+  Answer: string;
+  Questions: string[];
+  ModelInfo: string;
   [key: string]: any;
 };
 
 export type LuParseResource = {
-  Sections: any[];
+  Sections: LuParseResourceSection[];
   Errors: any[];
   Content: string;
 };
@@ -136,11 +150,10 @@ export type QnAFile = {
   content: string;
   diagnostics: IDiagnostic[];
   qnaSections: QnASection[];
-  imports: { id: string; path: string }[];
+  imports: { id: string; path: string; description: string }[];
   options: { id: string; name: string; value: string }[];
   empty: boolean;
   resource: LuParseResource;
-  [key: string]: any;
 };
 
 export type LgTemplate = {
@@ -178,6 +191,7 @@ export type LgFile = {
   diagnostics: IDiagnostic[];
   templates: LgTemplate[];
   allTemplates: LgTemplate[];
+  imports: { id: string; path: string; description: string }[];
   options?: string[];
   parseResult?: any;
 };
@@ -187,8 +201,6 @@ export type Manifest = {
   version: string;
   description: string;
   endpoints: ManifestEndpoint[];
-  // Other props of manifest are not used in Composer.
-  [prop: string]: any;
 };
 
 export type ManifestEndpoint = {
@@ -196,8 +208,6 @@ export type ManifestEndpoint = {
   endpointUrl: string;
   msAppId: string;
   description: string;
-  // Other skill endpoint fields in the schema that Composer is not using presently
-  [prop: string]: any;
 };
 
 export type Skill = {
@@ -284,7 +294,6 @@ export type RecognizerFile = {
   id: string;
   content: {
     $kind: SDKKinds;
-    [key: string]: any;
   };
 };
 

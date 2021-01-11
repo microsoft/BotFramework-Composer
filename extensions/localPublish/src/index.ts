@@ -168,11 +168,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           },
         };
       } else {
-        const status = {
+        const publishResult = {
           status: LocalPublisher.runningBots[botId].status,
           result: LocalPublisher.runningBots[botId].result,
         };
-        return status;
+        if (LocalPublisher.runningBots[botId].status === 500) {
+          // after we return the 500 status once, delete it out of the running bots list.
+          delete LocalPublisher.runningBots[botId];
+        }
+        return publishResult;
       }
     } else {
       return {

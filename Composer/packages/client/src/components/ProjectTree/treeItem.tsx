@@ -215,7 +215,7 @@ interface ITreeItemProps {
   padLeft?: number;
   hasChildren?: boolean;
   menu?: TreeMenuItem[];
-  menuOpenCallback?: (boolean) => void;
+  menuOpenCallback?: (cb: boolean) => void;
   isMenuOpen?: boolean;
   showErrors?: boolean;
 }
@@ -348,8 +348,10 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
   let errorContent = '';
 
   if (showErrors) {
-    const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
-    const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
+    const warnings: Diagnostic[] = diagnostics.filter(
+      (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Warning
+    );
+    const errors: Diagnostic[] = diagnostics.filter((diag: Diagnostic) => diag.severity === DiagnosticSeverity.Error);
 
     warningContent = warnings.map((diag) => diag.message).join(',');
 
@@ -396,8 +398,8 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
 
 const onRenderOverflowButton = (
   isActive: boolean,
-  menuOpenCallback: (boolean) => void,
-  setThisItemSelected: (boolean) => void
+  menuOpenCallback: (cb: boolean) => void,
+  setThisItemSelected: (sel: boolean) => void
 ) => {
   const moreLabel = formatMessage('Actions');
   return (overflowItems: IContextualMenuItem[] | undefined) => {

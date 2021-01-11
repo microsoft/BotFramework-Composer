@@ -14,7 +14,8 @@ const defaultFile = sampleFileNames[1];
 
 const getEventData = (obiJson) => transformRootDialog(obiJson).ruleGroup;
 
-export class EventsEditorDemo extends Component {
+// prettier-ignore
+export class EventsEditorDemo extends Component { // lgtm [js/react/unused-or-undefined-state-property]
   state = {
     selectedFile: defaultFile,
     data: getEventData(ObiExamples[defaultFile]),
@@ -42,7 +43,8 @@ export class EventsEditorDemo extends Component {
 
   onFocus(id) {
     console.log('focus node', id);
-    this.setState({
+    // prettier-ignore
+    this.setState({ // lgtm [js/react/inconsistent-state-update]
       focusPath: this.state.selectedFile + id,
       data: getEventData(this.state.data),
     });
