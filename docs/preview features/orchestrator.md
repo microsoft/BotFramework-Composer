@@ -102,7 +102,7 @@ While it is possible to deploy your bot using your own scripts, it is strongly r
 
 The Composer deployment will create an S1 Tier 64-bit WebApp, bundle the Orchestrator language models, update bot settings to use these models, and upload the artifacts automatically to Azure.
 
-## Troubleshooting Guide
+## Troubleshooting guide
 
 1. When I use Orchestrator, clicking `Start Bot` in Composer, or deploying to Azure takes a lot longer. Why?
 
