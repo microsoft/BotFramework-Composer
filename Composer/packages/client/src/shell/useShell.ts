@@ -27,7 +27,6 @@ import {
   settingsState,
   clipboardActionsState,
   schemasState,
-  dialogsSelectorFamily,
   focusPathState,
   localeState,
   qnaFilesState,
@@ -40,7 +39,7 @@ import {
   featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
-import { skillsStateSelector } from '../recoilModel/selectors';
+import { dialogsWithLuProviderSelectorFamily, skillsStateSelector } from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
@@ -79,7 +78,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));

@@ -155,15 +155,3 @@ export enum QnAActionType {
   UpdateSection = 'update-section',
   RemoveSection = 'remove-section',
 }
-
-export type ValidatorPayload = {
-  dialog: DialogInfo;
-  schema: SchemaDefinitions;
-  settings: DialogSetting;
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-};
-
-export enum ValidateActionType {
-  DialogValidator = 'dialog',
-}

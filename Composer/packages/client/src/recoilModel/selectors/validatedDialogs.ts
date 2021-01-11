@@ -9,13 +9,20 @@ import { schemasState, dialogState, settingsState, localeState, lgFileState } fr
 import { getLuProvider } from '../../utils/dialogUtil';
 
 import { recognizersSelectorFamily } from './recognizers';
+import { dialogsSelectorFamily } from './dialogs';
 
 type validateDialogSelectorFamilyParams = { projectId: string; dialogId: string };
-export const dialogLuProviderSelectorFamily = selectorFamily({
+export const dialogsWithLuProviderSelectorFamily = selectorFamily({
   key: 'dialogLuProviderSelectorFamily',
-  get: ({ projectId, dialogId }: validateDialogSelectorFamilyParams) => ({ get }) => {
+  get: (projectId: string) => ({ get }) => {
+    const dialogs = get(dialogsSelectorFamily(projectId));
     const recognizers: RecognizerFile[] = get(recognizersSelectorFamily(projectId));
-    return getLuProvider(dialogId, recognizers);
+    return dialogs.map((dialog) => {
+      return {
+        ...dialog,
+        luProvider: getLuProvider(dialog.id, recognizers),
+      };
+    });
   },
 });
 
