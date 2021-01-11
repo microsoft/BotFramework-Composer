@@ -10,15 +10,8 @@ import { lgDispatcher } from '../lg';
 import { luDispatcher } from '../lu';
 import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import {
-  lgFilesState,
-  luFilesState,
-  schemasState,
-  dialogSchemasState,
-  actionsSeedState,
-  qnaFilesState,
-} from '../../atoms';
-import { dialogsSelectorFamily } from '../../selectors';
+import { luFilesState, schemasState, dialogSchemasState, actionsSeedState, qnaFilesState } from '../../atoms';
+import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { DialogInfo } from '../../../../../types';
@@ -106,7 +99,7 @@ describe('trigger dispatcher', () => {
     const dialogs: DialogInfo[] = useRecoilValue(dialogsSelectorFamily(projectId));
     const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
-    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const actionsSeed = useRecoilValue(actionsSeedState(projectId));
     const qnaFiles = useRecoilValue(qnaFilesState(projectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
@@ -135,7 +128,7 @@ describe('trigger dispatcher', () => {
         },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         {
-          recoilState: lgFilesState(projectId),
+          recoilState: lgFilesSelectorFamily(projectId),
           initialValue: [
             { id: '1.en-us', content: '' },
             { id: '2.en-us', content: '' },
