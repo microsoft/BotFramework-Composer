@@ -1,6 +1,8 @@
 # Orchestrator preview
 Orchestrator is a powerful LU solution optimized for conversational AI applications.
 
+Read more about Orchestrator [here](https://aka.ms/bf-orchestrator).
+
 - [Technical Overview](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/Overview.md)
 - [Samples](https://github.com/microsoft/BotBuilder-Samples/tree/main/experimental/orchestrator)
 
@@ -9,18 +11,20 @@ Orchestrator is a powerful LU solution optimized for conversational AI applicati
 - State of the art - Extensive pre-trained transformer-based models for conversational applications
 - Extremely fast inference time: Written in C++ for performance
 - Cross-platform support: Runs on Windows, Linux and Mac OS X, including Cloud platforms
-- Free to use: Language models are deployed alongside your bot and runs in memory. No external services required.
+- Free to use: Language models are deployed alongside your bot and runs in memory. No external services required
 
 ## Getting started
 
 ### Limitations
 For this preview release, please be aware of these limitations:
 
-1. Orchestrator has to be deployed on an x64 platform. If you are deploying your bot to a cloud service, please be aware that you need to publish your bot with `win-x64` enabled, and enable x64.
+1. Orchestrator has to be deployed on an x64 platform. If you are deploying your bot to a cloud service, please be aware that you need to publish your bot with a `win-x64` [runtime identifier](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish), or use Composer's built-in Azure deployment.
 
 1. We are supporting English-only for this release.
 
 1. Orchestrator does not support entity extraction for this release. Any entities declared in your LU file will be ignored.
+
+1. A default base model is provided with this release. Future models will be made available for Composer users at a later date.
 
 Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/Overview.md#Roadmap) for when these features will be added to Orchestrator.
 
@@ -33,7 +37,7 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
 
       ![orchestrator flight](orchestrator-assets/preview-flag-orchestrator.png)
 
-1. Create a new bot or open an existing bot project. Select a dialog in the bot project that you would like to try Orchestrator with. Select `Orchestrator recognizer` from the `Recognizer Type` drop-down menu.
+1. Create a new bot or open an existing bot project. Select a dialog in the bot project that you would like to try with Orchestrator. Select `Orchestrator recognizer` from the `Recognizer Type` drop-down menu.
 
    <img src="orchestrator-assets/orchestrator-recognizer-dropdown.png" alt="recognizer dropdown options" width="300">
 
@@ -41,6 +45,9 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
     - Click on the waffle menu on a dialog to add a new trigger
     ![add a trigger](orchestrator-assets/add-trigger.png)
     - Create a new `Intent recognized` trigger, and fill in the intents for your dialog in LU format. For more details on the LU format, please see [here](https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lu-file-format?view=azure-bot-service-4.0).
+
+        <img src="orchestrator-assets/create-intent-trigger.png" alt="recognizer dropdown options" width="300">
+
     - Add a response to the new `Intent Recognized` trigger to test that Orchestrator is working
         - In the flow diagram for the newly created trigger, click on the `+` button and select `Send a Response` from the dropdown, then add a sample response in the `Language Generation` textbox.
 
@@ -50,7 +57,7 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
             <img src="orchestrator-assets/application-settings.png" alt="drawing" width="30"/>) and toggle the `Use custom runtime` switch. Then click on `Get a new copy of the runtime code` and select `C#` to eject a copy of the dotnet runtime for your bot. Click `Okay`.
 
             ![eject-runtime](orchestrator-assets/eject-runtime.png)
-        1. The runtime will be ejected into the `<Bot Project Folder>/runtime/azurewebapp` folder of your bot project.
+        1. The runtime will be ejected into the `<Bot Project Folder>/runtime/azurewebapp` folder.
 
     1. Perform these modifications to add Orchestrator libraries to your newly ejected runtime:
         1. Open `<Bot Project Folder>/runtime/azurewebapp/Microsoft.BotFramework.Composer.WebApp.csproj`:
@@ -91,7 +98,7 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
                 builder.AddJsonFile(orchestratorSettingsFile.FullName, optional: false, reloadOnChange: true);
             }
             ```
-    1. Return back to Composer.  Click the `Start Bot` button to start the bot and Orchestrator locally and test the bot in the emulator. When the dialog is hit and Orchestrator is loaded successfully, Orchestrator will show up in the logs as `Orchestrator Recognition`.
+    1. Return back to Composer.  Click the `Start Bot` button to start the bot locally and test the bot in the emulator. When the dialog is hit and Orchestrator is loaded successfully, Orchestrator will show up in the logs as `Orchestrator Recognition`.
 
     ![orchestrator recognizer in emulator](orchestrator-assets/emulator.png)
 
