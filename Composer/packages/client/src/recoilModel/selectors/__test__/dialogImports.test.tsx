@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { lgUtil } from '@bfc/indexers';
+
 import { getBaseName } from '../../../utils/fileUtil';
 import { getLanguageFileImports } from '../dialogImports';
 
@@ -37,7 +39,14 @@ const files = [
 
 describe('dialogImports selectors', () => {
   it('should follow all imports and list all unique imports', () => {
-    const getFile = (id) => files.find((f) => getBaseName(f.id) === id) as { id: string; content: string };
+    const getFile = (id) => {
+      const file = files.find((f) => getBaseName(f.id) === id);
+      if (file) {
+        return lgUtil.parse(file.id, file.content, []);
+      } else {
+        throw new Error(`file ${id} not found`);
+      }
+    };
 
     const fileImports = getLanguageFileImports('name1', getFile);
     expect(fileImports).toEqual([
