@@ -24,13 +24,7 @@ import { EditableField } from '../../components/EditableField';
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { navigateTo } from '../../utils/navigation';
-import {
-  dispatcherState,
-  luFilesState,
-  localeState,
-  settingsState,
-  validateDialogsSelectorFamily,
-} from '../../recoilModel';
+import { dispatcherState, luFilesState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
@@ -60,7 +54,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const luFiles = useRecoilValue(luFilesState(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
 

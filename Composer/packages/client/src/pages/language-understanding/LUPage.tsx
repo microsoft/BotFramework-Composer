@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo, buildURL } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { dialogsSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 
@@ -24,7 +24,7 @@ const LUPage: React.FC<RouteComponentProps<{
   luFileId?: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);

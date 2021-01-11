@@ -22,15 +22,10 @@ import { lgUtil } from '@bfc/indexers';
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, editableFieldContainer } from '../language-understanding/styles';
-import {
-  dispatcherState,
-  lgFilesState,
-  localeState,
-  settingsState,
-  validateDialogsSelectorFamily,
-} from '../../recoilModel';
+import { dispatcherState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId?: string;
@@ -44,10 +39,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const actualProjectId = skillId ?? projectId ?? '';
 
-  const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
   );

@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
-import { botDisplayNameState, qnaFilesState } from '../atoms/botState';
+import { botDisplayNameState, dialogIdsState, qnaFilesState } from '../atoms/botState';
 import {
   DialogDiagnostic,
   LgDiagnostic,
@@ -25,7 +25,6 @@ import {
   botProjectIdsState,
   dialogSchemasState,
   jsonSchemaFilesState,
-  lgFilesState,
   luFilesState,
   projectMetaDataState,
   settingsState,
@@ -34,8 +33,10 @@ import {
 
 import { crossTrainConfigState } from './../atoms/botState';
 import { formDialogSchemasSelectorFamily, rootBotProjectIdSelector } from './project';
-import { validateDialogsSelectorFamily } from './validatedDialogs';
+import { dialogsSelectorFamily } from './dialogs';
 import { recognizersSelectorFamily } from './recognizers';
+import { dialogDiagnosticsSelectorFamily } from './validatedDialogs';
+import { lgFilesSelectorFamily } from './lg';
 
 export const botAssetsSelectFamily = selectorFamily({
   key: 'botAssetsSelectFamily',
@@ -43,9 +44,9 @@ export const botAssetsSelectFamily = selectorFamily({
     const projectsMetaData = get(projectMetaDataState(projectId));
     if (!projectsMetaData || projectsMetaData.isRemote) return null;
 
-    const dialogs = get(validateDialogsSelectorFamily(projectId));
+    const dialogs = get(dialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
-    const lgFiles = get(lgFilesState(projectId));
+    const lgFiles = get(lgFilesSelectorFamily(projectId));
     const setting = get(settingsState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
@@ -151,24 +152,24 @@ export const settingDiagnosticsSelectorFamily = selectorFamily({
   },
 });
 
-export const dialogDiagnosticsSelectorFamily = selectorFamily({
-  key: 'dialogDiagnosticsSelectorFamily',
+export const dialogsDiagnosticsSelectorFamily = selectorFamily({
+  key: 'dialogsDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
     if (botAssets === null) return [];
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const dialogIds = get(dialogIdsState(projectId));
     const diagnosticList: DiagnosticInfo[] = [];
-    const { dialogs } = botAssets;
 
-    dialogs.forEach((dialog) => {
-      dialog.diagnostics.forEach((diagnostic) => {
-        const location = `${dialog.id}.dialog`;
-        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialog.id, location, diagnostic));
+    dialogIds.forEach((dialogId: string) => {
+      get(dialogDiagnosticsSelectorFamily({ projectId, dialogId })).forEach((diagnostic) => {
+        const location = `${dialogId}.dialog`;
+        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic));
       });
     });
 
-    return diagnosticList;
+    return [];
   },
 });
 
@@ -242,7 +243,7 @@ export const qnaDiagnosticsSelectorFamily = selectorFamily({
 export const diagnosticsSelectorFamily = selectorFamily({
   key: 'diagnosticsSelector',
   get: (projectId: string) => ({ get }) => [
-    ...get(dialogDiagnosticsSelectorFamily(projectId)),
+    ...get(dialogsDiagnosticsSelectorFamily(projectId)),
     ...get(botDiagnosticsSelectorFamily(projectId)),
     ...get(skillSettingDiagnosticsSelectorFamily(projectId)),
     ...get(settingDiagnosticsSelectorFamily(projectId)),

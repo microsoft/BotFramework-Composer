@@ -59,7 +59,6 @@ import {
   formDialogSchemaIdsState,
   formDialogSchemaState,
   jsonSchemaFilesState,
-  lgFilesState,
   localeState,
   locationState,
   luFilesState,
@@ -84,7 +83,7 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
-import validateWorker from '../../parsers/validateWorker';
+import { lgFilesSelectorFamily } from '../../selectors/lg';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -364,19 +363,9 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     if (dialog.isRoot) {
       mainDialog = dialog.id;
     }
-    try {
-      dialog.diagnostics = (await validateWorker.validateDialog({
-        dialog,
-        schema: schemas.sdk.content,
-        settings,
-        lgFiles,
-        luFiles,
-      })) as Diagnostic[];
-      set(dialogState({ projectId, dialogId: dialog.id }), dialog);
-      dialogIds.push(dialog.id);
-    } catch (error) {
-      console.log(error);
-    }
+
+    set(dialogState({ projectId, dialogId: dialog.id }), dialog);
+    dialogIds.push(dialog.id);
   }
 
   set(dialogIdsState(projectId), dialogIds);
@@ -396,7 +385,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   set(skillManifestsState(projectId), skillManifests);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
-  set(lgFilesState(projectId), lgFiles);
+  set(lgFilesSelectorFamily(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
 
   set(dialogSchemasState(projectId), dialogSchemas);

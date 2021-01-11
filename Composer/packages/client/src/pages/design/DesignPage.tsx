@@ -33,7 +33,7 @@ import {
   userSettingsState,
   dispatcherState,
   schemasState,
-  validateDialogsSelectorFamily,
+  dialogsSelectorFamily,
   focusPathState,
   showCreateDialogModalState,
   localeState,
@@ -133,7 +133,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const displaySkillManifestNameIdentifier = useRecoilValue(displaySkillManifestState);
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);

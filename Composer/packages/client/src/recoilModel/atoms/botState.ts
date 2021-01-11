@@ -47,6 +47,22 @@ const emptyDialog: DialogInfo = {
   skills: [],
   isFormDialog: false,
 };
+type lgStateParams = { projectId: string; lgFileId: string };
+
+export const lgFileState = atomFamily<LgFile, lgStateParams>({
+  key: getFullyQualifiedKey('lg'),
+  default: () => {
+    return {} as LgFile;
+  },
+});
+
+export const lgFileIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('lgFileIds'),
+  default: () => {
+    return [];
+  },
+});
+
 type dialogStateParams = { projectId: string; dialogId: string };
 export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
   key: getFullyQualifiedKey('dialog'),
@@ -121,13 +137,6 @@ export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };
-  },
-});
-
-export const lgFilesState = atomFamily<LgFile[], string>({
-  key: getFullyQualifiedKey('lgFiles'),
-  default: (id) => {
-    return [];
   },
 });
 

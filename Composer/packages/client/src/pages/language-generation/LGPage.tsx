@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { dialogsSelectorFamily } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
@@ -25,7 +25,7 @@ const LGPage: React.FC<RouteComponentProps<{
   lgFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
 

@@ -3,14 +3,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dialogIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { DialogInfo, checkForPVASchema, Diagnostic } from '@bfc/shared';
+import { DialogInfo, checkForPVASchema } from '@bfc/shared';
 
 import {
-  lgFilesState,
-  luFilesState,
   dialogIdsState,
   schemasState,
-  settingsState,
   onCreateDialogCompleteState,
   actionsSeedState,
   showCreateDialogModalState,
@@ -18,7 +15,6 @@ import {
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
-import validateWorker from './../parsers/validateWorker';
 import { createLgFileState, removeLgFileState } from './lg';
 import { createLuFileState, removeLuFileState } from './lu';
 import { createQnAFileState, removeQnAFileState } from './qna';
@@ -84,17 +80,7 @@ export const dialogsDispatcher = () => {
     const { set, snapshot } = callbackHelpers;
     const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
     const schemas = await snapshot.getPromise(schemasState(projectId));
-    const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
-    const luFiles = await snapshot.getPromise(luFilesState(projectId));
-    const settings = await snapshot.getPromise(settingsState(projectId));
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
-    dialog.diagnostics = (await validateWorker.validateDialog({
-      dialog,
-      schema: schemas.sdk.content,
-      settings,
-      lgFiles,
-      luFiles,
-    })) as Diagnostic[];
 
     if (typeof dialog.content === 'object') {
       dialog.content.id = id;
