@@ -33,6 +33,7 @@ import {
   generateBotStatusList,
   deleteNotificationInterval,
 } from './publishPageUtils';
+import { PublishResult } from '@bfc/shared';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -45,6 +46,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setPublishTargets,
     publishToTarget,
     setQnASettings,
+    rollbackToVersion: rollbackToVersionDispatcher,
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
@@ -120,6 +122,20 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
     };
   }, []);
+
+  // roll back
+  const rollbackToVersion = (version: PublishResult, item: BotStatus) => {
+    const setting = botPropertyData[item.id].setting;
+    const selectedTarget = item.publishTargets?.find((target) => target.name === item.publishTarget);
+    if (setting) {
+      const sensitiveSettings = getSensitiveProperties(setting);
+      rollbackToVersionDispatcher(item.id, selectedTarget, version.id, sensitiveSettings);
+    }
+  };
+
+  const onRollbackToVersion = (selectedVersion: PublishResult, item: BotStatus) => {
+    item.publishTarget && item.publishTargets && rollbackToVersion(selectedVersion, item);
+  };
 
   const updatePublishStatus = async (data) => {
     const { botProjectId, targetName, apiResponse } = data;
@@ -280,7 +296,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         />
       )}
       {publishDialogVisible && (
-        <PublishDialog items={selectedBots} onDismiss={() => setPublishDialogVisiblity(false)} onSubmit={publish} />
+        <PublishDialog
+          items={selectedBots.filter((bot) => !!bot.publishTarget)}
+          onDismiss={() => setPublishDialogVisiblity(false)}
+          onSubmit={publish}
+        />
       )}
       {pullDialogVisible &&
         selectedBots.map((bot, index) => {
@@ -325,7 +345,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             disabled={isPublishPending}
             managePublishProfile={manageSkillPublishProfile}
             onCheck={updateCheckedSkills}
-            onRollbackClick={() => null}
+            onRollbackClick={onRollbackToVersion}
           />
         </div>
       </div>

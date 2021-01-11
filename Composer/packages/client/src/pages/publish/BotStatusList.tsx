@@ -44,6 +44,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   onCheck,
   managePublishProfile,
   changePublishTarget,
+  onRollbackClick,
 }) => {
   const [expandedBotIds, setExpandedBotIds] = useState<{ [botId: string]: boolean }>({});
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
@@ -270,6 +271,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const renderTableRow = (props, defaultRender) => {
     const { item }: { item: BotStatus } = props;
     const publishStatusList: PublishResult[] = get(botPublishHistoryList, [item.id, item.publishTarget || ''], []);
+    const handleRollbackClick = (selectedVersion) => {
+      onRollbackClick(selectedVersion, item);
+    };
     return (
       <Fragment>
         {defaultRender(props)}
@@ -280,7 +284,11 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
           {publishStatusList.length === 0 ? (
             <div style={{ fontSize: FontSizes.small, margin: '20px 0 0 50px' }}>No publish history</div>
           ) : (
-            <PublishStatusList isRollbackSupported={false} items={publishStatusList} onRollbackClick={() => null} />
+            <PublishStatusList
+              isRollbackSupported={false}
+              items={publishStatusList}
+              onRollbackClick={handleRollbackClick}
+            />
           )}
         </div>
       </Fragment>
