@@ -100,7 +100,7 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
             ```
     1. Return back to Composer.  Click the `Start Bot` button to start the bot locally and test the bot in the emulator. When the dialog is hit and Orchestrator is loaded successfully, Orchestrator will show up in the logs as `Orchestrator Recognition`.
 
-    ![orchestrator recognizer in emulator](orchestrator-assets/emulator.png)
+        ![orchestrator recognizer in emulator](orchestrator-assets/emulator.png)
 
 ## Publishing an Orchestrator-based bot to Azure
 While it is possible to deploy your bot using your own scripts, it is strongly recommended to use Composer to publish your bot to Azure. Please see the documentation [here](https://docs.microsoft.com/en-us/composer/how-to-publish-bot).
