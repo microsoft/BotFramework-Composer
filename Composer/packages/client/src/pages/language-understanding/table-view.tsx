@@ -34,7 +34,7 @@ import {
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
   luFileId?: string;
@@ -52,7 +52,7 @@ interface Intent {
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, luFileId } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const { updateLuIntent } = useRecoilValue(dispatcherState);
@@ -209,6 +209,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={displayName}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue === item.name) return;
                   if (newValue) {
                     handleIntentUpdate(item.fileId, item.name, { Name: newValue, Body: item.phrases });
                   }
@@ -239,6 +240,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
@@ -272,6 +274,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
@@ -304,6 +307,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
