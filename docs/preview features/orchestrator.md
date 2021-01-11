@@ -73,8 +73,6 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
                     <PlatformTarget>x64</PlatformTarget>
                 </PropertyGroup>
                 ```
-
-        1. Compile the project for x64. Look for these lines
         1. Open `<Bot Project Folder>/runtime/azurewebapp/Startup.cs` and add these lines:
             1. Add the Orchestrator dependency after `Microsoft.Bot.Builder.AI.Luis`:
                 ```csharp
