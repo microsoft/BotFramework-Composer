@@ -68,7 +68,7 @@ class ExtensionContext implements IExtensionContext {
           return this.extensions.authentication.middleware(req, res, next);
         }
       }
-      next && next();
+      next?.();
     });
   }
 

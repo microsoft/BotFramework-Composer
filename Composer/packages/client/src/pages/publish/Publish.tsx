@@ -61,9 +61,9 @@ const generateComputedData = (botProjectData, publishHistoryList, currentBotPubl
     };
     const publishHistory = publishHistoryList.find((item) => item.projectId === bot.projectId)?.publishHistory;
     if (publishTargets.length > 0) {
-      const currentPublishTarget =
-        currentBotPublishTargetList &&
-        currentBotPublishTargetList.find((targetMap) => targetMap.projectId === botStatus.id);
+      const currentPublishTarget = currentBotPublishTargetList?.find(
+        (targetMap) => targetMap.projectId === botStatus.id
+      );
       botStatus.publishTarget = (currentPublishTarget?.publishTarget ?? publishTargets[0].name) as string;
       botStatus.publishTargets = publishTargets;
       if (publishHistory[botStatus.publishTarget]?.length > 0) {
