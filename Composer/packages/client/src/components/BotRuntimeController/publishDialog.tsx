@@ -15,7 +15,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { IConfig, IPublishConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig, IQnAConfig } from '@bfc/shared';
 import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { Text, Tips, Links, nameRegex, LUIS_REGIONS } from '../../constants';
@@ -156,13 +156,13 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
       const qnaRegion = formData.qnaRegion;
       delete newValue.subscriptionKey;
       delete newValue.qnaRegion;
-      const publishConfig = {
+      const publishConfig: IPublishConfig = {
         luis: newValue,
         qna: {
           subscriptionKey,
           qnaRegion,
           endpointKey: '',
-        },
+        } as IQnAConfig,
       };
       onPublish(publishConfig);
     },
