@@ -24,10 +24,6 @@ import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 
-// const execAsync = promisify(exec);
-// const removeDirAndFiles = promisify(rimraf);
-// const yeoman = require('yeoman-environment');
-
 // TODO: pass in working directory param to createEnv for desired location of local Yeomen Repo
 const yeomanEnv = yeoman.createEnv();
 yeomanEnv.lookupLocalPackages();
@@ -141,8 +137,7 @@ export class AssetManager {
     if (registeredGenerators.indexOf(generatorName) !== -1) {
       return true;
     } else {
-      // TODO fix install
-      await yeomanEnv.installLocalGenerators({ [npmPackageName]: '1.0.2' });
+      await yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
       await yeomanEnv.lookupLocalPackages();
       return true;
     }
@@ -154,8 +149,7 @@ export class AssetManager {
     projectName: string
   ): Promise<boolean> {
     yeomanEnv.cwd = dstDir;
-    //TODO delete override
-    generatorName = 'C:\\Users\\pavolum\\source\\repos\\generator-conversational-core\\generators\\app\\index.js';
+
     await yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });

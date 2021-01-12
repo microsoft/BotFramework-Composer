@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-
 import { BotTemplateV2, FeedType } from '@bfc/shared';
 import cheerio from 'cheerio';
 
@@ -78,7 +77,7 @@ export async function getProjTemplatesV2(req: any, res: any) {
     let templates: BotTemplateV2[] = [];
 
     // Get FeedUrl
-    const { feedUrls, getFirstPartyNuget, getFirstPartyNpm } = req.body;
+    const { feedUrls, getFirstPartyNpm } = req.body;
 
     // Grab templates from FeedURls
     if (feedUrls) {
@@ -90,10 +89,6 @@ export async function getProjTemplatesV2(req: any, res: any) {
     if (getFirstPartyNpm) {
       // Grab templates from public npm
       templates = templates.concat(await getNpmTemplates());
-    }
-    if (getFirstPartyNuget) {
-      // Grab templates from public NuGet
-      templates = templates.concat(await getNugetTemplates());
     }
 
     // return templates
