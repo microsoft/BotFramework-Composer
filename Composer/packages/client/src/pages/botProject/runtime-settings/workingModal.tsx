@@ -6,8 +6,7 @@ import { jsx } from '@emotion/core';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-
-import { modalControlGroup } from './style';
+import { modalControlGroup } from '../common';
 
 export type WorkingModalProps = {
   isOpen: boolean;

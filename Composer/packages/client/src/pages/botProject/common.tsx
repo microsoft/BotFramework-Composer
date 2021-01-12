@@ -82,6 +82,11 @@ export const tableItem = css`
   white-space: nowrap;
 `;
 
+export const modalControlGroup = css`
+  border: 1px solid rgb(237, 235, 233);
+  padding: 0.5rem 1rem 1rem 1rem;
+`;
+
 // Functions
 
 export function onRenderLabel(props: { label?: string; required?: boolean } | undefined) {

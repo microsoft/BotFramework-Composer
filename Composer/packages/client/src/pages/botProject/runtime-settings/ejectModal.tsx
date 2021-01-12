@@ -11,8 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { runtimeTemplatesState, dispatcherState } from '../../../recoilModel';
-
-import { modalControlGroup } from './style';
+import { modalControlGroup } from '../common';
 
 export type EjectModalProps = {
   ejectRuntime: (templateKey: string) => Promise<void>;

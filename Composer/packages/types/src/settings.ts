@@ -38,6 +38,12 @@ export type SkillSetting = {
   endpointUrl: string;
 };
 
+export type AdapterConfig = {
+  name: string;
+  type: string;
+  data: { [key: string]: string | number };
+};
+
 export type DialogSetting = {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
@@ -60,7 +66,9 @@ export type DialogSetting = {
   botId?: string;
   skillHostEndpoint?: string;
   customFunctions: string[];
-  adapters?: string[];
+  adapters?: AdapterConfig[];
+  feature?: { [key: string]: boolean };
+  [key: string]: any;
 };
 
 export type ILuisConfig = {

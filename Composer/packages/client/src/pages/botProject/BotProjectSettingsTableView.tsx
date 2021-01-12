@@ -16,7 +16,7 @@ import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
 import { DeleteBotButton } from './DeleteBotButton';
-import { Adapters } from './Adapters';
+import { Adapters } from './adapters/Adapters';
 
 // -------------------- Styles -------------------- //
 
