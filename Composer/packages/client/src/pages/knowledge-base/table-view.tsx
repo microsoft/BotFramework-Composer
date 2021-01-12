@@ -527,7 +527,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               {kthSectionIsCreatingQuestion === item.sectionId ? (
                 <EditableField
                   key={''}
-                  componentFocusOnmount
+                  componentFocusOnMount
                   required
                   ariaLabel={formatMessage('Question is empty now')}
                   depth={0}
