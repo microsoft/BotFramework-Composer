@@ -94,7 +94,7 @@ const absh: AuthProviderInit = {
 
       // validate bearer token exists
       const authHeader = req.header('Authorization');
-      const bearer = authHeader && authHeader.startsWith(BEARER_PREFIX) && authHeader.substr(BEARER_PREFIX.length);
+      const bearer = authHeader?.startsWith(BEARER_PREFIX) && authHeader.substr(BEARER_PREFIX.length);
 
       if (!bearer || bearer.length === 0) {
         res.status(401).json({ error: 'Unauthorized' });
