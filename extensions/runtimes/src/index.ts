@@ -20,13 +20,13 @@ export default async (composer: any): Promise<void> => {
   composer.addRuntimeTemplate({
     key: 'csharp-azurewebapp',
     name: 'C#',
-    startCommand: 'dotnet run',
+    startCommand: 'dotnet run --project azurewebapp',
     path: dotnetTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
       // TODO: capture output of this and store it somewhere useful
-      const { stderr: initErr } = await execAsync('dotnet user-secrets init', {
+      const { stderr: initErr } = await execAsync('dotnet user-secrets init --project azurewebapp', {
         cwd: runtimePath,
       });
       if (initErr) {
@@ -63,7 +63,7 @@ export default async (composer: any): Promise<void> => {
       return installOutput;
     },
     identifyManifest: (runtimePath: string): string => {
-      return path.join(runtimePath, 'runtime.csproj');
+      return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
