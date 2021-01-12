@@ -100,7 +100,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     onFocus: () => setFieldFocused(true),
     onBlur: () => {
       setFieldFocused(false);
-      onBlur && onBlur(id);
+      onBlur?.(id);
     },
   };
 
