@@ -12,7 +12,6 @@ import {
   getTriggerTypes,
   getEventTypes,
   getActivityTypes,
-  getFriendlyName,
   getBreadcrumbLabel,
   getSelected,
 } from '../../src/utils/dialogUtil';
@@ -224,13 +223,6 @@ describe('getActivityTypes', () => {
       { key: 'Microsoft.OnMessageReactionActivity', text: 'Message reaction (Message reaction activity)' },
       { key: 'Microsoft.OnMessageUpdateActivity', text: 'Message updated (Message updated activity)' },
     ]);
-  });
-});
-
-describe('getFriendlyName', () => {
-  it('return friendly name', () => {
-    const name = getFriendlyName(dialogs[0].content);
-    expect(name).toBe('kind1');
   });
 });
 

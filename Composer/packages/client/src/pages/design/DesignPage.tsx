@@ -80,6 +80,13 @@ type BreadcrumbItem = {
   onClick?: () => void;
 };
 
+// field types
+const Types = {
+  Dialog: 'dialog',
+  Trigger: 'trigger',
+  Action: 'action',
+};
+
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
@@ -250,7 +257,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const breadcrumbArray: Array<BreadcrumbItem> = [];
 
       breadcrumbArray.push({
-        key: 'dialog-' + props.dialogId,
+        key: `${Types.Dialog}-${props.dialogId}`,
         label: dialogMap[props.dialogId]?.$designer?.name ?? dialogMap[props.dialogId]?.$designer?.$designer?.name,
         link: {
           projectId: props.projectId,
@@ -260,7 +267,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       });
       if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
-          key: 'trigger-' + triggerIndex,
+          key: `${Types.Trigger}-${triggerIndex}`,
           label: trigger.$designer?.name || getFriendlyName(trigger),
           link: {
             projectId: props.projectId,
@@ -277,7 +284,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (params.get('focused') != null) {
         // we've linked to an action, so put that in too
         breadcrumbArray.push({
-          key: 'action-' + focusPath,
+          key: `${Types.Action}-${focusPath}`,
           label: getActionName(possibleAction),
         });
       }
@@ -315,17 +322,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (currentDialog.content) {
       setBreadcrumbs((prev) => {
         return prev.map((b) => {
-          const separatorIndex = b.key.indexOf('-');
-          const type = b.key.substr(0, separatorIndex);
-          const name = b.key.substr(separatorIndex + 1);
+          // eslint-disable-next-line security/detect-unsafe-regex
+          const regexp = new RegExp(/(?<type>[a-z]+)-(?<name>.*)/);
+          const { type, name } = b.key.match(regexp)?.groups || {};
           switch (type) {
-            case 'dialog':
+            case Types.Dialog:
               b.label = getFriendlyName(currentDialog.content);
               break;
-            case 'trigger':
+            case Types.Trigger:
               b.label = getFriendlyName(get(currentDialog.content, `triggers[${name}]`));
               break;
-            case 'action':
+            case Types.Action:
               b.label = getActionName(get(currentDialog.content, name));
               break;
           }
