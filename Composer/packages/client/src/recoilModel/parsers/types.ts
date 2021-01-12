@@ -1,17 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import {
-  LuIntentSection,
-  LgFile,
-  LuFile,
-  QnASection,
-  FileInfo,
-  LgTemplate,
-  ILUFeaturesConfig,
-  DialogInfo,
-  DialogSetting,
-  SchemaDefinitions,
-} from '@bfc/shared';
+import { LuIntentSection, LgFile, LuFile, QnASection, FileInfo, LgTemplate, ILUFeaturesConfig } from '@bfc/shared';
 
 export type LuParsePayload = {
   id: string;

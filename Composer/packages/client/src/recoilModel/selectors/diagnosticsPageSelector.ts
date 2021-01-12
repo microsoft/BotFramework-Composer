@@ -163,7 +163,8 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
     const diagnosticList: DiagnosticInfo[] = [];
 
     dialogIds.forEach((dialogId: string) => {
-      get(dialogDiagnosticsSelectorFamily({ projectId, dialogId })).forEach((diagnostic) => {
+      const diagnostics = get(dialogDiagnosticsSelectorFamily({ projectId, dialogId })) || [];
+      diagnostics.forEach((diagnostic) => {
         const location = `${dialogId}.dialog`;
         diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic));
       });

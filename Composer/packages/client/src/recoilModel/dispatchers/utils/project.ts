@@ -20,7 +20,6 @@ import {
   SensitiveProperties,
   RootBotManagedProperties,
   defaultPublishConfig,
-  Diagnostic,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';

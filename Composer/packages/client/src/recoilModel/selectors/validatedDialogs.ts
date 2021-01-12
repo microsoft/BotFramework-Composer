@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selectorFamily } from 'recoil';
-import { DialogInfo, BotSchemas, LgFile, DialogSetting, RecognizerFile, Diagnostic } from '@bfc/shared';
+import { DialogInfo, BotSchemas, LgFile, DialogSetting, RecognizerFile } from '@bfc/shared';
 import { validateDialog } from '@bfc/indexers';
 
 import { schemasState, dialogState, settingsState, localeState, lgFileState } from '../atoms';
