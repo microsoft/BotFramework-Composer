@@ -10,7 +10,7 @@ import path from 'path';
 
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions } from '@bfc/extension';
-import { mkdirs, readFile } from 'fs-extra';
+import { mkdirSync, readFile } from 'fs-extra';
 // import rimraf from 'rimraf';
 import yeoman from 'yeoman-environment';
 
@@ -23,10 +23,6 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
-
-// const execAsync = promisify(exec);
-// const removeDirAndFiles = promisify(rimraf);
-// const yeoman = require('yeoman-environment');
 
 // TODO: pass in working directory param to createEnv for desired location of local Yeomen Repo
 const yeomanEnv = yeoman.createEnv();
@@ -102,34 +98,38 @@ export class AssetManager {
 
   public async copyRemoteProjectTemplateToV2(
     templateId: string,
+    projectName: string,
     ref: LocationRef,
     user?: UserIdentity,
     locale?: string
   ): Promise<LocationRef> {
-    // user storage maybe diff from template storage
-    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
-    const dstDir = Path.resolve(ref.path);
-    if (await dstStorage.exists(dstDir)) {
-      log('Failed copying template to %s', dstDir);
-      throw new Error('already have this folder, please give another name');
-    }
-    await mkdirs(dstDir, (err) => {
-      if (err) {
-        throw new Error('Error creating destination directory for external template storage');
+    try {
+      // user storage maybe diff from template storage
+      const dstStorage = StorageService.getStorageClient(ref.storageId, user);
+      const dstDir = Path.resolve(ref.path);
+      if (await dstStorage.exists(dstDir)) {
+        log('Failed copying template to %s', dstDir);
+        throw new Error('already have this folder, please give another name');
       }
-    });
 
-    // find selected template
-    const npmPackageName = templateId;
-    const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+      mkdirSync(dstDir, { recursive: true });
 
-    const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
+      // find selected template
+      const npmPackageName = templateId;
+      const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-    if (remoteTemplateAvailable) {
-      await this.instantiateRemoteTemplate(generatorName, dstDir);
+      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
+
+      if (remoteTemplateAvailable) {
+        await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+      }
+
+      ref.path = ref.path + `/${projectName}`;
+
+      return ref;
+    } catch {
+      throw new Error('error hit when copying remote template');
     }
-
-    return ref;
   }
 
   private async installRemoteTemplate(generatorName: string, npmPackageName: string, dstDir: string): Promise<boolean> {
@@ -138,18 +138,20 @@ export class AssetManager {
     if (registeredGenerators.indexOf(generatorName) !== -1) {
       return true;
     } else {
-      // TODO fix install
-      await yeomanEnv.installLocalGenerators({ [npmPackageName]: '1.0.2' });
+      await yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
       await yeomanEnv.lookupLocalPackages();
       return true;
     }
   }
 
-  private async instantiateRemoteTemplate(generatorName: string, dstDir: string): Promise<boolean> {
+  private async instantiateRemoteTemplate(
+    generatorName: string,
+    dstDir: string,
+    projectName: string
+  ): Promise<boolean> {
     yeomanEnv.cwd = dstDir;
-    //TODO delete override
-    generatorName = 'C:\\Users\\pavolum\\source\\repos\\generator-conversational-core\\generators\\app\\index.js';
-    await yeomanEnv.run([generatorName, 'runtime'], {}, () => {
+
+    await yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });
     return true;

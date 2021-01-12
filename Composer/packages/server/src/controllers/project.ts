@@ -517,7 +517,7 @@ function createProjectV2(req: Request, res: Response) {
 }
 
 async function createProjectAsync(req: Request, jobId: string) {
-  let { templateId } = req.body;
+  const { templateId } = req.body;
 
   // todo: add back templateDir, eTag, alias from req extraction for PVA scenarios
   const { name, description, storageId, location, preserveRoot } = req.body;
@@ -527,7 +527,8 @@ async function createProjectAsync(req: Request, jobId: string) {
 
   // populate template if none was passed
   if (templateId === '') {
-    templateId = 'EmptyBot';
+    // TODO: Replace with default template once one is determined
+    throw Error('empty templateID passed');
   }
 
   // location to store the bot project
@@ -538,7 +539,7 @@ async function createProjectAsync(req: Request, jobId: string) {
     // Update status for polling
     BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
 
-    const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, locationRef, user);
+    const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, name, locationRef, user);
     BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
 
     const id = await BotProjectService.openProject(newProjRef, user);

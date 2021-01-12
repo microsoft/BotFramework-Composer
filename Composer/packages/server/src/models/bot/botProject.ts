@@ -205,10 +205,20 @@ export class BotProject implements IBotProject {
     // Resolve relative path for custom runtime if the path is relative
     if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
       const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
+
       if (fs.existsSync(absolutePath)) {
         settings.runtime.path = absolutePath;
         await this.updateEnvSettings(settings);
       }
+    }
+
+    if (
+      settings?.runtime?.customRuntime &&
+      settings?.runtime?.command &&
+      settings?.runtime?.command.indexOf('{projName}') != -1
+    ) {
+      settings.runtime.command = settings.runtime.command.replace('{projName}', `${this.name}.csproj`);
+      await this.updateEnvSettings(settings);
     }
 
     // fix old bot have no language settings
@@ -796,6 +806,8 @@ export class BotProject implements IBotProject {
           pattern,
           '!(generated/**)',
           '!(runtime/**)',
+          '!(bin/**)',
+          '!(obj/**)',
           '!(scripts/**)',
           '!(settings/appsettings.json)',
           '!(**/luconfig.json)',

@@ -8,7 +8,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   NEW_CREATION_FLOW: {
     displayName: formatMessage('New Creation Experience'),
     description: formatMessage('Component templates populated from npm feeds'),
-    isHidden: false,
+    isHidden: true,
     enabled: false,
   },
   FORM_DIALOG: {
@@ -24,7 +24,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     displayName: formatMessage('Conversational Core Template'),
     description: formatMessage('Enable the new conversational core template built on the component model'),
     documentationLink: 'https://aka.ms/AAabzf9',
-    isHidden: false,
+    isHidden: true,
     enabled: false,
   },
   ORCHESTRATOR: {

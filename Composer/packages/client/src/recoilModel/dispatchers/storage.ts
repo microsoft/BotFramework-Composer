@@ -160,7 +160,6 @@ export const storageDispatcher = () => {
     try {
       const response = await httpClient.post(`v2/assets/projectTemplates`, {
         feedUrls: feedUrls,
-        getFirstPartyNuget: false,
         getFirstPartyNpm: false,
       });
 

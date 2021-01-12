@@ -63,7 +63,7 @@ export type RuntimeTemplate = {
 
   uninstallComponent: (runtimePath: string, componentName: string) => Promise<string>;
 
-  identifyManifest: (runtimePath: string) => string;
+  identifyManifest: (runtimePath: string, projName?: string) => string;
 
   /** build for deploy method */
   buildDeploy: (
