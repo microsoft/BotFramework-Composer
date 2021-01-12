@@ -51,7 +51,7 @@ const updateLgFiles = (
 
   // deletes
   if (deletes?.length) {
-    set(lgFileIdsState(projectId), (ids) => ids.filter((id) => !deletes.includes(id)));
+    set(lgFileIdsState(projectId), (ids) => ids.filter((id) => !deletes.map((file) => file.id).includes(id)));
   }
 
   // adds
