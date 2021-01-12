@@ -12,7 +12,7 @@ import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 // import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 // import { dispatcherState, settingsState } from '../../recoilModel';
 
-import { titleStyle, sectionHeader, tableRow, tableItem } from './common';
+import { titleStyle, sectionHeader, tableRow, tableItem, tableHeader, tableHeaderText } from './common';
 
 // -------------------- SkillHostEndPoint -------------------- //
 
@@ -46,6 +46,10 @@ export const Adapters: React.FC = () => {
     <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={titleStyle}>
       {header()}
       {addAdapterButton(/* setSettings */)}
+      <div css={tableHeader}>
+        <div css={tableHeaderText}>{formatMessage('Name')} </div>
+        <div css={tableHeaderText}>{formatMessage('Type')} </div>
+      </div>
       {adapters.map((p, index) => {
         return (
           <div key={index} css={tableRow}>

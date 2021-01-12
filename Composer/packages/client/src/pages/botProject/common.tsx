@@ -49,6 +49,21 @@ export const sectionHeader = css`
   }
 `;
 
+export const tableHeader = css`
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+`;
+
+export const tableHeaderText = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 10px;
+  padding-left: 10px;
+`;
+
 export const tableRow = css`
   display: flex;
   flex-direction: row;

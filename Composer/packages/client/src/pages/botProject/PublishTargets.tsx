@@ -15,28 +15,13 @@ import { dispatcherState, settingsState, publishTypesState } from '../../recoilM
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { titleStyle, tableRow, tableItem } from './common';
+import { titleStyle, tableRow, tableItem, tableHeader, tableHeaderText } from './common';
 
 // -------------------- Styles -------------------- //
 
 const publishTargetsContainer = css`
   display: flex;
   flex-direction: column;
-`;
-
-const publishTargetsHeader = css`
-  display: flex;
-  flex-direction: row;
-  height: 42px;
-`;
-
-const publishTargetsHeaderText = css`
-  width: 300px;
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  border-bottom: 1px solid ${NeutralColors.gray30};
-  padding-top: 10px;
-  padding-left: 10px;
 `;
 
 const addPublishProfile = {
@@ -102,10 +87,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     <Fragment>
       <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={titleStyle}>
         <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
-          <div css={publishTargetsHeader}>
-            <div css={publishTargetsHeaderText}>{formatMessage('Name')} </div>
-            <div css={publishTargetsHeaderText}>{formatMessage('Type')} </div>
-            <div css={publishTargetsHeaderText}> </div>
+          <div css={tableHeader}>
+            <div css={tableHeaderText}>{formatMessage('Name')} </div>
+            <div css={tableHeaderText}>{formatMessage('Type')} </div>
+            <div css={tableHeaderText}> </div>
           </div>
           {publishTargets?.map((p, index) => {
             return (
