@@ -10,7 +10,7 @@ import path from 'path';
 
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions } from '@bfc/extension';
-import { mkdirs, readFile } from 'fs-extra';
+import { mkdirSync, readFile } from 'fs-extra';
 // import rimraf from 'rimraf';
 import yeoman from 'yeoman-environment';
 
@@ -103,32 +103,33 @@ export class AssetManager {
     user?: UserIdentity,
     locale?: string
   ): Promise<LocationRef> {
-    // user storage maybe diff from template storage
-    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
-    const dstDir = Path.resolve(ref.path);
-    if (await dstStorage.exists(dstDir)) {
-      log('Failed copying template to %s', dstDir);
-      throw new Error('already have this folder, please give another name');
-    }
-    await mkdirs(dstDir, (err) => {
-      if (err) {
-        throw new Error('Error creating destination directory for external template storage');
+    try {
+      // user storage maybe diff from template storage
+      const dstStorage = StorageService.getStorageClient(ref.storageId, user);
+      const dstDir = Path.resolve(ref.path);
+      if (await dstStorage.exists(dstDir)) {
+        log('Failed copying template to %s', dstDir);
+        throw new Error('already have this folder, please give another name');
       }
-    });
 
-    // find selected template
-    const npmPackageName = templateId;
-    const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+      mkdirSync(dstDir, { recursive: true });
 
-    const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
+      // find selected template
+      const npmPackageName = templateId;
+      const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-    if (remoteTemplateAvailable) {
-      await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
+
+      if (remoteTemplateAvailable) {
+        await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+      }
+
+      ref.path = ref.path + `/${projectName}`;
+
+      return ref;
+    } catch {
+      throw new Error('error hit when copying remote template');
     }
-
-    ref.path = ref.path + `/${projectName}`;
-
-    return ref;
   }
 
   private async installRemoteTemplate(generatorName: string, npmPackageName: string, dstDir: string): Promise<boolean> {

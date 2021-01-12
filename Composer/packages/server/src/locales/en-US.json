@@ -395,6 +395,9 @@
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
   },
+  "bot_name_cannot_not_start_with_a_number_d70239": {
+    "message": "Bot name cannot not start with a number"
+  },
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot name is { botName }"
   },
@@ -667,6 +670,9 @@
   },
   "create_a_trigger_40e74743": {
     "message": "Create a trigger"
+  },
+  "create_bot_from_template_or_scratch_92f0fefa": {
+    "message": "Create bot from template or scratch?"
   },
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Create copy to translate bot content"
@@ -2600,6 +2606,9 @@
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
   },
+  "spaces_and_special_characters_are_not_allowed_use__9f354fe3": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, or _."
+  },
   "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
@@ -3130,6 +3139,9 @@
   },
   "you_are_about_to_pull_project_files_from_the_selec_15786351": {
     "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+  },
+  "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
+    "message": "You can create a new bot from scratch with Composer, or start with a template."
   },
   "you_can_define_and_manage_b_intents_b_here_each_in_721b8a0c": {
     "message": "You can define and manage <b>intents</b> here. Each intent describes a particular user intention through utterances (i.e. user says). <b>Intents are often triggers of your bot.</b>"

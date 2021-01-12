@@ -7,7 +7,6 @@ import cheerio from 'cheerio';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
-import { getNugetTemplates } from '../utility/nuget';
 
 async function getProjTemplates(req: Request, res: Response) {
   try {
