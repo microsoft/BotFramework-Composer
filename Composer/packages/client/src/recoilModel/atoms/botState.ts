@@ -47,12 +47,22 @@ const emptyDialog: DialogInfo = {
   skills: [],
   isFormDialog: false,
 };
-type lgStateParams = { projectId: string; lgFileId: string };
 
-export const lgFileState = atomFamily<LgFile, lgStateParams>({
+const emptyLg: LgFile = {
+  id: '',
+  content: '',
+  diagnostics: [],
+  templates: [],
+  allTemplates: [],
+  imports: [],
+};
+
+type LgStateParams = { projectId: string; lgFileId: string };
+
+export const lgFileState = atomFamily<LgFile, LgStateParams>({
   key: getFullyQualifiedKey('lg'),
   default: () => {
-    return {} as LgFile;
+    return emptyLg;
   },
 });
 

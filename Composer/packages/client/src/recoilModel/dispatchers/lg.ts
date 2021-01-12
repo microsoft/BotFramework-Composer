@@ -30,7 +30,7 @@ const initialBody = '- ';
  *
  */
 
-const lgFilesAtomUpdate = (
+const updateLgFiles = (
   { set }: CallbackInterface,
   projectId: string,
   oldList: LgFile[],
@@ -153,7 +153,7 @@ export const createLgFileState = async (
       });
     });
 
-    lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { adds: changes });
+    updateLgFiles(callbackHelpers, projectId, lgFiles, { adds: changes });
   } catch (error) {
     setError(callbackHelpers, error);
   }
@@ -173,7 +173,7 @@ export const removeLgFileState = async (
     return;
   }
 
-  lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { deletes: [targetLgFile] });
+  updateLgFiles(callbackHelpers, projectId, lgFiles, { deletes: [targetLgFile] });
 };
 
 export const lgDispatcher = () => {
@@ -228,10 +228,10 @@ export const lgDispatcher = () => {
         // compare to drop expired change on current id lg file.
         /**
          * Why other methods do not need double check content?
-         * Because this method already did set content before call lgFilesAtomUpdater.
+         * Because this method already did set content before call updateLgFiles.
          */
 
-        lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: updatedFiles }, (prevLgFiles) => {
+        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles }, (prevLgFiles) => {
           const targetInState = prevLgFiles.find((file) => file.id === updatedFile.id);
           const targetInCurrentChange = updatedFiles.find((file) => file.id === updatedFile.id);
           // compare to drop expired content already setted above.
@@ -293,7 +293,7 @@ export const lgDispatcher = () => {
             )) as LgFile;
             changes.push(updatedFile);
           }
-          lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: changes });
+          updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: changes });
         } else {
           // body change, only update current locale file
           const updatedFile = (await LgWorker.updateTemplate(
@@ -303,7 +303,7 @@ export const lgDispatcher = () => {
             { body: template.body },
             lgFiles
           )) as LgFile;
-          lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: [updatedFile] });
+          updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: [updatedFile] });
         }
       } catch (error) {
         setError(callbackHelpers, error);
@@ -334,7 +334,7 @@ export const lgDispatcher = () => {
       if (!lgFile) return lgFiles;
       const updatedFile = (await LgWorker.addTemplate(projectId, lgFile, template, lgFiles)) as LgFile;
       const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-      lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+      updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
     }
   );
 
@@ -355,7 +355,7 @@ export const lgDispatcher = () => {
         if (!lgFile) return lgFiles;
         const updatedFile = (await LgWorker.addTemplates(projectId, lgFile, templates, lgFiles)) as LgFile;
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -380,7 +380,7 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
 
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -406,7 +406,7 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
 
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -438,7 +438,7 @@ export const lgDispatcher = () => {
           lgFiles
         )) as LgFile;
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -455,7 +455,7 @@ export const lgDispatcher = () => {
           const reparsedFile = (await LgDiagnosticWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
           reparsedLgFiles.push({ ...file, diagnostics: reparsedFile.diagnostics });
         }
-        lgFilesAtomUpdate(callbackHelpers, projectId, lgFiles, { updates: reparsedLgFiles }, (prevLgFiles) => {
+        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: reparsedLgFiles }, (prevLgFiles) => {
           // compare to drop expired content already setted above.
           return (target) => {
             const targetInState = prevLgFiles.find((file) => file.id === target.id);

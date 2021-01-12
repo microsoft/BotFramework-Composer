@@ -31,7 +31,7 @@ export function validateDialog(
      * @return boolean, true to stop walk
      * */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
-      if (has(value, '$kind')) {
+      if (has(value, '$kind') && value.$kind) {
         const allChecks = [...validateFuncs['.']];
         const checkerFunc = validateFuncs[value.$kind];
         if (checkerFunc) {

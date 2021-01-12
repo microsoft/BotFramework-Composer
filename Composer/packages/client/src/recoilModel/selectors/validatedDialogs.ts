@@ -5,7 +5,7 @@ import { selectorFamily } from 'recoil';
 import { DialogInfo, BotSchemas, LgFile, DialogSetting, RecognizerFile } from '@bfc/shared';
 import { validateDialog } from '@bfc/indexers';
 
-import { schemasState, dialogState, settingsState, localeState, lgFileState } from '../atoms';
+import { schemasState, dialogState, settingsState, localeState, lgFileState, projectMetaDataState } from '../atoms';
 import { getLuProvider } from '../../utils/dialogUtil';
 
 import { recognizersSelectorFamily } from './recognizers';
@@ -31,6 +31,8 @@ export const dialogsWithLuProviderSelectorFamily = selectorFamily({
 export const dialogDiagnosticsSelectorFamily = selectorFamily({
   key: 'dialogDiagnosticsSelectorFamily',
   get: ({ projectId, dialogId }: validateDialogSelectorFamilyParams) => ({ get }) => {
+    if (get(projectMetaDataState(projectId)).isRemote) return [];
+
     const dialog: DialogInfo = get(dialogState({ projectId, dialogId }));
     const schemas: BotSchemas = get(schemasState(projectId));
     const locale = get(localeState(projectId));
