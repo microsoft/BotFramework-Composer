@@ -9,9 +9,9 @@ import { lgFileIdsState, lgFileState } from '../atoms';
 export const lgFilesSelectorFamily = selectorFamily<LgFile[], string>({
   key: 'lgFiles',
   get: (projectId: string) => ({ get }) => {
-    const dialogIds = get(lgFileIdsState(projectId));
+    const lgFileIds = get(lgFileIdsState(projectId));
 
-    return dialogIds.map((lgFileId) => {
+    return lgFileIds.map((lgFileId) => {
       return get(lgFileState({ projectId, lgFileId }));
     });
   },
