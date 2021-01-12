@@ -18,11 +18,6 @@ export const runtimeToggle = css`
   }
 `;
 
-export const modalControlGroup = css`
-  border: 1px solid rgb(237, 235, 233);
-  padding: 0.5rem 1rem 1rem 1rem;
-`;
-
 export const runtimeControlsTitle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};

@@ -102,7 +102,7 @@ export class DefaultSettingManager extends FileSettingManager {
       languages: ['en-us'],
       customFunctions: [],
       importedLibraries: [],
-      adapters: [{ name: 'test', type: 'TestType', data: { key: '12345' } }],
+      adapters: [],
     };
   };
 

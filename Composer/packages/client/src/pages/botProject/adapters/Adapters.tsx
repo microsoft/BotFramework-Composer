@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
+import React, { useState } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -13,6 +13,8 @@ import { rootBotProjectIdSelector } from '../../../recoilModel/selectors/project
 import { dispatcherState, settingsState } from '../../../recoilModel';
 import { titleStyle, sectionHeader, tableRow, tableItem, tableHeader, tableHeaderText } from '../common';
 
+import { AdapterModal } from './AdapterModal';
+
 // -------------------- SkillHostEndPoint -------------------- //
 
 const header = () => (
@@ -20,20 +22,23 @@ const header = () => (
     {formatMessage('Adapters are installed by the package manager. Add adapters to connect your bot to channels.')}
   </div>
 );
-
-const addAdapterButton = (setSettings) => (
-  <ActionButton iconProps={{ iconName: 'Add' }}>{formatMessage('Add adapter')}</ActionButton>
-);
-
 export const Adapters: React.FC = () => {
+  const [isModalOpen, showModal] = useState<boolean>(false);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) ?? '';
   const { setSettings } = useRecoilValue(dispatcherState);
-  const { adapters } = useRecoilValue(settingsState(rootBotProjectId));
+  const settings = useRecoilValue(settingsState(rootBotProjectId));
+  const { adapters } = settings;
+
+  const addAdapterButton = () => (
+    <ActionButton iconProps={{ iconName: 'Add' }} onClick={() => showModal(true)}>
+      {formatMessage('Add adapter')}
+    </ActionButton>
+  );
 
   return (
     <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={titleStyle}>
       {header()}
-      {addAdapterButton(setSettings)}
+      {addAdapterButton()}
       <div css={tableHeader}>
         <div css={tableHeaderText}>{formatMessage('Name')} </div>
         <div css={tableHeaderText}>{formatMessage('Type')} </div>
@@ -50,6 +55,21 @@ export const Adapters: React.FC = () => {
           </div>
         );
       })}
+      <AdapterModal
+        handleSettings={(data) =>
+          setSettings(rootBotProjectId, { ...settings, adapters: adapters == null ? [data] : [...adapters, data] })
+        }
+        isOpen={isModalOpen}
+        title={formatMessage('Add adapter')}
+        onConfirm={() => {
+          console.log('Confirm');
+          showModal(false);
+        }}
+        onDismiss={() => {
+          console.log('Dismiss');
+          showModal(false);
+        }}
+      />
     </CollapsableWrapper>
   );
 };
