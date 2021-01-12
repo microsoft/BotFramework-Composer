@@ -109,9 +109,10 @@ describe('publish page', () => {
         botPublishHistoryList={{}}
         botStatusList={[]}
         changePublishTarget={jest.fn()}
+        checkedIds={[]}
+        disabled={false}
         managePublishProfile={jest.fn()}
-        publishDisabled={false}
-        updateSelectedBots={jest.fn()}
+        onCheck={jest.fn()}
         onRollbackClick={jest.fn()}
       />,
       initRecoilState
