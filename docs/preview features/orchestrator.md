@@ -35,7 +35,7 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
     <img src="orchestrator-assets/application-settings.png" alt="drawing" width="30"/> icon)
     - Enable Orchestrator preview feature under `Application Updates -> Preview features`
 
-      ![orchestrator flight](orchestrator-assets/preview-flag-orchestrator.png)
+      <img src="orchestrator-assets/preview-flag-orchestrator.png" alt="preview flag orchestrator" width="600">
 
 1. Create a new bot or open an existing bot project. Select a dialog in the bot project that you would like to try with Orchestrator. Select `Orchestrator recognizer` from the `Recognizer Type` drop-down menu.
 
@@ -43,7 +43,9 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
 
 1. Create an intent trigger
     - Click on the waffle menu on a dialog to add a new trigger
-    ![add a trigger](orchestrator-assets/add-trigger.png)
+
+        ![add a trigger](orchestrator-assets/add-trigger.png)
+
     - Create a new `Intent recognized` trigger, and fill in the intents for your dialog in LU format. For more details on the LU format, please see [here](https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lu-file-format?view=azure-bot-service-4.0).
 
         <img src="orchestrator-assets/create-intent-trigger.png" alt="recognizer dropdown options" width="300">
