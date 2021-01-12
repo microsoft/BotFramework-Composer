@@ -33,37 +33,34 @@ const initialBody = '- ';
 const updateLgFiles = (
   { set }: CallbackInterface,
   projectId: string,
-  oldList: LgFile[],
   changes: {
     adds?: LgFile[];
     deletes?: LgFile[];
     updates?: LgFile[];
   },
-  filter?: (oldList: LgFile[]) => (changeItem: LgFile) => boolean
+  needUpdate?: (current: LgFile, changed: LgFile) => boolean
 ) => {
-  const updates = changes.updates ? (filter ? changes.updates.filter(filter(oldList)) : changes.updates) : [];
-  const adds = changes.adds ? (filter ? changes.adds.filter(filter(oldList)) : changes.adds) : [];
-  const deletes = changes.deletes
-    ? filter
-      ? changes.deletes.filter(filter(oldList)).map(({ id }) => id)
-      : changes.deletes.map(({ id }) => id)
-    : [];
+  const { updates, adds, deletes } = changes;
 
   // updates
-  updates.forEach((lgFile) => {
-    set(lgFileState({ projectId, lgFileId: lgFile.id }), lgFile);
+  updates?.forEach((lgFile) => {
+    set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
+      needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
+    );
   });
 
   // deletes
-  if (deletes.length) {
+  if (deletes?.length) {
     set(lgFileIdsState(projectId), (ids) => ids.filter((id) => !deletes.includes(id)));
   }
 
   // adds
-  if (adds.length) {
+  if (adds?.length) {
     set(lgFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
     adds.forEach((lgFile) => {
-      set(lgFileState({ projectId, lgFileId: lgFile.id }), lgFile);
+      set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
+        needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
+      );
     });
   }
 };
@@ -153,7 +150,7 @@ export const createLgFileState = async (
       });
     });
 
-    updateLgFiles(callbackHelpers, projectId, lgFiles, { adds: changes });
+    updateLgFiles(callbackHelpers, projectId, { adds: changes });
   } catch (error) {
     setError(callbackHelpers, error);
   }
@@ -173,7 +170,7 @@ export const removeLgFileState = async (
     return;
   }
 
-  updateLgFiles(callbackHelpers, projectId, lgFiles, { deletes: [targetLgFile] });
+  updateLgFiles(callbackHelpers, projectId, { deletes: [targetLgFile] });
 };
 
 export const lgDispatcher = () => {
@@ -231,15 +228,9 @@ export const lgDispatcher = () => {
          * Because this method already did set content before call updateLgFiles.
          */
 
-        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles }, (prevLgFiles) => {
-          const targetInState = prevLgFiles.find((file) => file.id === updatedFile.id);
-          const targetInCurrentChange = updatedFiles.find((file) => file.id === updatedFile.id);
+        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
           // compare to drop expired content already setted above.
-          if (targetInState?.content !== targetInCurrentChange?.content) {
-            return (lgFile) => lgFile.id !== updatedFile.id;
-          } else {
-            return () => true;
-          }
+          return current?.content === changed?.content;
         });
 
         // if changes happen on common.lg, async re-parse all.
@@ -293,7 +284,7 @@ export const lgDispatcher = () => {
             )) as LgFile;
             changes.push(updatedFile);
           }
-          updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: changes });
+          updateLgFiles(callbackHelpers, projectId, { updates: changes });
         } else {
           // body change, only update current locale file
           const updatedFile = (await LgWorker.updateTemplate(
@@ -303,7 +294,7 @@ export const lgDispatcher = () => {
             { body: template.body },
             lgFiles
           )) as LgFile;
-          updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: [updatedFile] });
+          updateLgFiles(callbackHelpers, projectId, { updates: [updatedFile] });
         }
       } catch (error) {
         setError(callbackHelpers, error);
@@ -334,7 +325,7 @@ export const lgDispatcher = () => {
       if (!lgFile) return lgFiles;
       const updatedFile = (await LgWorker.addTemplate(projectId, lgFile, template, lgFiles)) as LgFile;
       const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-      updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+      updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
     }
   );
 
@@ -355,7 +346,7 @@ export const lgDispatcher = () => {
         if (!lgFile) return lgFiles;
         const updatedFile = (await LgWorker.addTemplates(projectId, lgFile, templates, lgFiles)) as LgFile;
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -380,7 +371,7 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
 
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -406,7 +397,7 @@ export const lgDispatcher = () => {
         const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
 
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -438,7 +429,7 @@ export const lgDispatcher = () => {
           lgFiles
         )) as LgFile;
         const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: updatedFiles });
+        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -455,13 +446,9 @@ export const lgDispatcher = () => {
           const reparsedFile = (await LgDiagnosticWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
           reparsedLgFiles.push({ ...file, diagnostics: reparsedFile.diagnostics });
         }
-        updateLgFiles(callbackHelpers, projectId, lgFiles, { updates: reparsedLgFiles }, (prevLgFiles) => {
+        updateLgFiles(callbackHelpers, projectId, { updates: reparsedLgFiles }, (current, changed) => {
           // compare to drop expired content already setted above.
-          return (target) => {
-            const targetInState = prevLgFiles.find((file) => file.id === target.id);
-            const targetInCurrentChange = reparsedLgFiles.find((file) => file.id === target.id);
-            return targetInState?.content === targetInCurrentChange?.content;
-          };
+          return current?.content === changed?.content;
         });
       } catch (error) {
         setError(callbackHelpers, error);

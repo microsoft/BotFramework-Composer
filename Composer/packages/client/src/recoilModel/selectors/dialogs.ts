@@ -4,16 +4,11 @@
 import { DialogInfo } from '@bfc/shared';
 import { selectorFamily } from 'recoil';
 
-import { botProjectIdsState, dialogIdsState, dialogState } from '../atoms';
+import { dialogIdsState, dialogState } from '../atoms';
 
 export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   key: 'dialogs',
   get: (projectId: string) => ({ get }) => {
-    const loadedProjects = get(botProjectIdsState);
-    if (!loadedProjects.includes(projectId)) {
-      return [];
-    }
-
     const dialogIds = get(dialogIdsState(projectId));
 
     return dialogIds.map((dialogId) => {
