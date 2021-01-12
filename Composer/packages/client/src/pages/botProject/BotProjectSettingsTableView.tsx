@@ -16,6 +16,7 @@ import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
 import { DeleteBotButton } from './DeleteBotButton';
+import { Adapters } from './Adapters';
 
 // -------------------- Styles -------------------- //
 
@@ -46,6 +47,7 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
       <AppIdAndPassword projectId={projectId} />
       <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <BotLanguage projectId={projectId} />
+      {isRootBot && <Adapters />}
       <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <div css={publishTargetsWrap(!isRootBot)}>
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />

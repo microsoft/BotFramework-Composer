@@ -18,14 +18,9 @@ import { localeState, showAddLanguageModalState } from '../../recoilModel/atoms'
 import { AddLanguageModal } from '../../components/MultiLanguage';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-// -------------------- Styles -------------------- //
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+import { titleStyle } from './common';
+// -------------------- Styles -------------------- //
 
 const botLanguageContainerStyle = css`
   display: flex;

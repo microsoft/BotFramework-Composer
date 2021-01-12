@@ -6,49 +6,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from '@uifabric/styling';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+
+import { titleStyle, onRenderLabel } from './common';
 // -------------------- Styles -------------------- //
-
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
-
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.small};
-  margin-right: 5px;
-`;
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
 
 const appIdAndPasswordStyle = css`
   display: flex;
@@ -69,17 +36,6 @@ const customError = {
 
 type AppIdAndPasswordProps = {
   projectId: string;
-};
-
-const onRenderLabel = (props) => {
-  return (
-    <div css={labelContainer}>
-      <div css={customerLabel}> {props.label} </div>
-      <TooltipHost content={props.label}>
-        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
 };
 
 export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {

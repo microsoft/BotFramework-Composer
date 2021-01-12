@@ -9,7 +9,6 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import {
@@ -26,14 +25,9 @@ import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { FieldWithCustomButton } from '../../components/FieldWithCustomButton';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
-// -------------------- Styles -------------------- //
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+import { titleStyle } from './common';
+// -------------------- Styles -------------------- //
 
 const externalServiceContainerStyle = css`
   display: flex;
