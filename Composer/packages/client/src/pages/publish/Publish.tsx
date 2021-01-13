@@ -264,7 +264,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
         const updater = pollingUpdaterList.find((u) => u.isSameUpdater(botProjectId, bot.publishTarget));
-        updater && updater.restart(onReceiveUpdaterPayload);
+        updater?.restart(onReceiveUpdaterPayload);
       }
     }
   };

@@ -22,7 +22,7 @@ import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
 
-const linksButtom = [
+const linksBottom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
     text: formatMessage('Getting Started'),
@@ -228,7 +228,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                     'Bot Framework provides the most comprehensive experience for building conversational applications.'
                   )}
                 </div>
-                {linksButtom.map((link) => {
+                {linksBottom.map((link) => {
                   return (
                     <Link
                       key={'homePageLeftLinks-' + link.text}
