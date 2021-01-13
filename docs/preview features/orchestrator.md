@@ -83,11 +83,11 @@ Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main
                 </PropertyGroup>
                 ```
         1. Open `<Bot Project Folder>/runtime/azurewebapp/Startup.cs` and add these lines:
-            1. Add the Orchestrator dependency after `Microsoft.Bot.Builder.AI.Luis`:
+            - Add the Orchestrator dependency after `Microsoft.Bot.Builder.AI.Luis`:
                 ```csharp
                 using Microsoft.Bot.Builder.AI.Orchestrator;
                 ```
-            1. Add registration for Orchestrator after `ComponentRegistration.Add(new LuisComponentRegistration());`:
+            - Add registration for Orchestrator after `ComponentRegistration.Add(new LuisComponentRegistration());`:
                 ```csharp
                 ComponentRegistration.Add(new OrchestratorComponentRegistration());
                 ```
