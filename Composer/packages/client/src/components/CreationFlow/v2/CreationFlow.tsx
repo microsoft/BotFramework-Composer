@@ -17,7 +17,6 @@ import {
   currentProjectIdState,
   userSettingsState,
   templateProjectsState,
-  templateReadMeHtml,
 } from '../../../recoilModel';
 import Home from '../../../pages/home/Home';
 import { useProjectIdCache } from '../../../utils/hooks';
@@ -44,14 +43,12 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     saveProjectAs,
     fetchProjectById,
     createNewBotV2,
-    fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
-  const templateReadMe = useRecoilValue(templateReadMeHtml);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
   const cachedProjectId = useProjectIdCache();
@@ -158,10 +155,8 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onSubmit={handleSubmit}
         />
         <CreateOptionsV2
-          fetchReadMe={fetchReadMe}
           fetchTemplates={fetchTemplatesV2}
           path="create"
-          templateReadMe={templateReadMe}
           templates={templateProjects}
           onDismiss={handleDismiss}
           onNext={handleCreateNext}
