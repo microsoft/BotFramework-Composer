@@ -82,7 +82,7 @@ const PropertyEditor: React.FC = () => {
   }, [$schema, formUIOptions]);
 
   const errors = useMemo(() => {
-    if (diagnostics && diagnostics.length) {
+    if (diagnostics?.length) {
       const currentPath = focusPath.replace('#', '');
 
       return diagnostics.reduce((errors, d) => {

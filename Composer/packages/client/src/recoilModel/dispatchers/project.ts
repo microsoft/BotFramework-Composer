@@ -251,7 +251,6 @@ export const projectDispatcher = () => {
           callback(projectId);
         }
       } catch (ex) {
-        console.log(ex);
         set(botProjectIdsState, []);
         removeRecentProject(callbackHelpers, path);
         handleProjectFailure(callbackHelpers, ex);
