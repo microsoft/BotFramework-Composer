@@ -49,7 +49,7 @@ export const validateExpressions: ValidateFunc = (
     let errorMessage = '';
 
     try {
-      newCache[value] = cache && cache[value] ? cache[value] : checkExpression(value, required);
+      newCache[value] = cache?.[value] ? cache[value] : checkExpression(value, required);
       errorMessage = checkReturnType(newCache[value], types);
     } catch (error) {
       errorMessage = filterCustomFunctionError(error.message, customFunctions);
