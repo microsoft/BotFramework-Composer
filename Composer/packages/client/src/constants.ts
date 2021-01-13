@@ -371,3 +371,10 @@ export const triggerNotSupportedWarning = () =>
   formatMessage(
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
+
+export const feedDictionary: { [name: string]: string } = {
+  csharp:
+    'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+  node:
+    'https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+};

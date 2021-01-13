@@ -23,7 +23,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId, feedDictionary } from '../../../constants';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
@@ -186,14 +186,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [templates]);
 
   useEffect(() => {
-    if (selectedFeed?.props?.headerText?.toLowerCase() === 'typescript') {
-      props.fetchTemplates([
-        'https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-      ]);
+    if (selectedFeed?.props?.itemKey?.toLowerCase() === 'typescript') {
+      props.fetchTemplates([feedDictionary.node]);
     } else {
-      props.fetchTemplates([
-        'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-      ]);
+      props.fetchTemplates([feedDictionary.csharp]);
     }
   }, [selectedFeed]);
 
@@ -210,8 +206,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         onDismiss={onDismiss}
       >
         <Pivot onLinkClick={setSelectedFeed}>
-          <PivotItem headerText="C#"></PivotItem>
-          <PivotItem headerText="Typescript"></PivotItem>
+          <PivotItem headerText="C#" itemKey="C#"></PivotItem>
+          <PivotItem headerText="Typescript" itemKey="Typescript"></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">

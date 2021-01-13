@@ -11,7 +11,6 @@ import path from 'path';
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-// import rimraf from 'rimraf';
 import yeoman from 'yeoman-environment';
 
 import { ExtensionContext } from '../extension/extensionContext';
@@ -25,7 +24,6 @@ import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
 
-// TODO: pass in working directory param to createEnv for desired location of local Yeomen Repo
 const yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
 yeomanEnv.lookupLocalPackages();
 
