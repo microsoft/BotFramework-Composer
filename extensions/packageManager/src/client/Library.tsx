@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import { Link, Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility, Stack } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
 import { ImportDialog } from './importDialog';
@@ -20,6 +20,19 @@ const DEFAULT_CATEGORY = formatMessage('Available');
 
 const docsUrl = `https://aka.ms/composer-package-manager-readme`;
 
+const feeds = [
+  {
+    "key": "npm",
+    "text": "npm",
+    "url": "https://registry.npmjs.org/-/v1/search?text=keywords:botframework&size=100&from=0"
+  },
+  {
+    "key": "nuget",
+    "text": "nuget",
+    "url": "https://azuresearch-usnc.nuget.org/query?q=botframework"
+  },
+]
+
 
 
 const Library: React.FC = () => {
@@ -29,12 +42,12 @@ const Library: React.FC = () => {
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
-  const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[]>([]);
+  const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[]|undefined>(undefined);
   const [installedComponents, updateInstalledComponents] = useState<LibraryRef[]>([]);
   const [recentlyUsed, setRecentlyUsed] = useState<LibraryRef[]>([]);
-  const [programmingLanguageSelection, setProgrammingLanguageSelection] = useState<string>('c#');
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
-
+  const [feed, setFeed] = useState(feeds[0].key);
+  const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
   const [working, setWorking] = useState(false);
@@ -71,21 +84,11 @@ const Library: React.FC = () => {
     importError: formatMessage('Install Error'),
   }
 
-  const programmingLanguages = [
-    {
-      key: 'c#',
-      text: 'C#',
-    },
-    {
-      key: 'js',
-      text: 'Javascript',
-    }
-  ];
-
-  const onChangeLanguage = (ev, op, idx) => {
-    setProgrammingLanguageSelection(op.key);
+  const onChangeFeed = (ev, op, idx) => {
+    setFeed(op.key);
     return true;
   }
+
 
   const installComponentAPI = (projectId: string, packageName: string, version: string, isUpdating: boolean) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/import`, {
@@ -96,7 +99,8 @@ const Library: React.FC = () => {
   };
 
   const getLibraryAPI = () => {
-    return httpClient.get(`${API_ROOT}/library`);
+    const feed_url = `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f)=>f.key==feed).url);
+    return httpClient.get(feed_url);
   };
 
   const getInstalledComponentsAPI = (projectId: string) => {
@@ -110,13 +114,16 @@ const Library: React.FC = () => {
   };
 
   const isCompatible = (component) => {
-    return (component.language === programmingLanguageSelection);
+    return (component.language === runtimeLanguage);
   }
 
   useEffect(() => {
-    getLibraries();
     setCurrentProjectId(projectId);
   },[]);
+
+  useEffect(() => {
+    getLibraries();
+  },[feed]);
 
   useEffect(() => {
     const settings = projectCollection.find((b) =>  b.projectId === currentProjectId).setting;
@@ -128,10 +135,10 @@ const Library: React.FC = () => {
       // should one day be a dynamic property of the runtime or at least stored in the settings?
       if (settings.runtime.key === 'node-azurewebapp') {
         setRuntimeLanguage('js');
-        setProgrammingLanguageSelection('js');
+        setFeed('npm');
       } else {
         setRuntimeLanguage('c#');
-        setProgrammingLanguageSelection('c#');
+        setFeed('nuget');
       }
     } else {
       setEjectedRuntime(false);
@@ -146,11 +153,12 @@ const Library: React.FC = () => {
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
     if (availableLibraries) {
-      const availableCompatibleLibraries = availableLibraries.filter(component => isCompatible(component));
+      const availableCompatibleLibraries = availableLibraries; // .filter(component => isCompatible(component));
       availableCompatibleLibraries.forEach((item) => {
         if (!item.category) {
           item.category = DEFAULT_CATEGORY;
         }
+        item.isCompatible = isCompatible(item);
         if (item.category && categories.indexOf(item.category) == -1) {
           categories.push(item.category);
         }
@@ -188,7 +196,7 @@ const Library: React.FC = () => {
 
     setItems(items);
     setGroups(groups);
-  }, [installedComponents, availableLibraries, recentlyUsed, programmingLanguageSelection]);
+  }, [installedComponents, availableLibraries, recentlyUsed]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -256,9 +264,13 @@ const Library: React.FC = () => {
 
   const getLibraries = async () => {
     try {
+      updateAvailableLibraries(undefined);
+      setLoading(true);
       const response = await getLibraryAPI();
       updateAvailableLibraries(response.data.available);
       setRecentlyUsed(response.data.recentlyUsed);
+      setLoading(false);
+
     } catch (err) {
       setApplicationLevelError({
         status: err.response.status,
@@ -384,37 +396,42 @@ const Library: React.FC = () => {
             <section style={{paddingRight: '20px', display: 'grid', justifyContent: 'end'}}>
               <Dropdown
                 placeholder="Format"
-                selectedKey={programmingLanguageSelection}
-                options={programmingLanguages}
-                onChange={onChangeLanguage}
+                selectedKey={feed}
+                options={feeds}
+                onChange={onChangeFeed}
                 styles={{
                 root: { width: '200px',  },
               }}
               >
               </Dropdown>
             </section>
-            <LibraryList
-                disabled={!ejectedRuntime || runtimeLanguage !== programmingLanguageSelection}
-                groups={groups}
-                install={install}
-                isInstalled={isInstalled}
-                items={items}
-                redownload={redownload}
-                removeLibrary={removeComponent}
-                updateItems={setItems}
-                onItemClick={selectItem}
-              />
-              {!items || items.length === 0 ? (
-                <div
-                  style={{
-                    marginLeft: '50px',
-                    fontSize: 'smaller',
-                    marginTop: '20px',
-                  }}
-                >
-                  {strings.noComponentsFound}
-                </div>
-              ) : null}
+            {loading && (
+              <LoadingSpinner />
+            )}
+            {items && items.length && (
+              <LibraryList
+                  disabled={!ejectedRuntime}
+                  groups={groups}
+                  install={install}
+                  isInstalled={isInstalled}
+                  items={items}
+                  redownload={redownload}
+                  removeLibrary={removeComponent}
+                  updateItems={setItems}
+                  onItemClick={selectItem}
+                />
+            )}
+            {items && !items.length && (
+              <div
+                style={{
+                  marginLeft: '50px',
+                  fontSize: 'smaller',
+                  marginTop: '20px',
+                }}
+              >
+                {strings.noComponentsFound}
+              </div>
+            )}
           </PivotItem>
           <PivotItem headerText={strings.installHeader}>
           <LibraryList
