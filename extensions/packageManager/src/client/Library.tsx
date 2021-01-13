@@ -20,21 +20,6 @@ const DEFAULT_CATEGORY = formatMessage('Available');
 
 const docsUrl = `https://aka.ms/composer-package-manager-readme`;
 
-const feeds = [
-  {
-    "key": "npm",
-    "text": "npm",
-    "url": "https://registry.npmjs.org/-/v1/search?text=keywords:botframework&size=100&from=0"
-  },
-  {
-    "key": "nuget",
-    "text": "nuget",
-    "url": "https://azuresearch-usnc.nuget.org/query?q=botframework"
-  },
-]
-
-
-
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
@@ -46,7 +31,8 @@ const Library: React.FC = () => {
   const [installedComponents, updateInstalledComponents] = useState<LibraryRef[]>([]);
   const [recentlyUsed, setRecentlyUsed] = useState<LibraryRef[]>([]);
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
-  const [feed, setFeed] = useState(feeds[0].key);
+  const [feeds, updateFeeds] = useState([]);
+  const [feed, setFeed] = useState<string|undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
@@ -103,6 +89,10 @@ const Library: React.FC = () => {
     return httpClient.get(feed_url);
   };
 
+  const getFeeds = () => {
+    return httpClient.get(`${API_ROOT}/feeds`);
+  }
+
   const getInstalledComponentsAPI = (projectId: string) => {
     return httpClient.get(`${API_ROOT}/projects/${projectId}/installedComponents`);
   };
@@ -119,10 +109,23 @@ const Library: React.FC = () => {
 
   useEffect(() => {
     setCurrentProjectId(projectId);
+    getFeeds().then((feeds)=>updateFeeds(feeds.data));
   },[]);
 
   useEffect(() => {
-    getLibraries();
+    if (!feed && feeds.length) {
+      if (runtimeLanguage==='js') {
+        setFeed('npm');
+      } else {
+        setFeed('nuget');
+      }
+    }
+  },[feeds]);
+
+  useEffect(() => {
+    if (feed && feeds.length) {
+      getLibraries();
+    }
   },[feed]);
 
   useEffect(() => {
@@ -130,15 +133,12 @@ const Library: React.FC = () => {
     if (settings && settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       getInstalledLibraries();
-
       // detect programming language.
       // should one day be a dynamic property of the runtime or at least stored in the settings?
       if (settings.runtime.key === 'node-azurewebapp') {
         setRuntimeLanguage('js');
-        setFeed('npm');
       } else {
         setRuntimeLanguage('c#');
-        setFeed('nuget');
       }
     } else {
       setEjectedRuntime(false);
@@ -408,7 +408,7 @@ const Library: React.FC = () => {
             {loading && (
               <LoadingSpinner />
             )}
-            {items && items.length && (
+            {(items && items.length) ? (
               <LibraryList
                   disabled={!ejectedRuntime}
                   groups={groups}
@@ -420,8 +420,8 @@ const Library: React.FC = () => {
                   updateItems={setItems}
                   onItemClick={selectItem}
                 />
-            )}
-            {items && !items.length && (
+            ) : null}
+            {(items && !items.length && !loading) && (
               <div
                 style={{
                   marginLeft: '50px',
@@ -451,7 +451,7 @@ const Library: React.FC = () => {
                 updateItems={setItems}
                 onItemClick={selectItem}
               />
-              {!installedComponents || installedComponents.length === 0 ? (
+              {(!installedComponents || installedComponents.length === 0) && (
                 <div
                   style={{
                     marginLeft: '50px',
@@ -461,7 +461,7 @@ const Library: React.FC = () => {
                 >
                   {strings.noComponentsInstalled}
                 </div>
-              ) : null}
+              )}
           </PivotItem>
         </Pivot>
       </Fragment>

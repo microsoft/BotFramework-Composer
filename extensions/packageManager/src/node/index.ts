@@ -57,6 +57,29 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
   }
 
   const LibraryController = {
+    getFeeds: async function(req, res) {
+        // read the list of sources from the config file.
+        let packageSources = composer.store.read('feeds') as {key: string, text: string, url: string}[];
+
+        // if no sources are in the config file, set the default list to our 1st party feed.
+        if (!packageSources) {
+          packageSources = [
+            {
+              "key": "npm",
+              "text": "npm",
+              "url": "https://registry.npmjs.org/-/v1/search?text=keywords:botframework&size=100&from=0"
+            },
+            {
+              "key": "nuget",
+              "text": "nuget",
+              "url": "https://azuresearch-usnc.nuget.org/query?q=botframework"
+            },
+          ];
+          composer.store.write('feeds', packageSources);
+        }
+
+        res.json(packageSources);
+    },
     getLibrary: async function (req, res) {
       // read the list of sources from the config file.
       let packageSources = composer.store.read('sources') as string[];
@@ -359,5 +382,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
   composer.addWebRoute('post', `${API_ROOT}/projects/:projectId/unimport`, LibraryController.removeImported);
   composer.addWebRoute('get', `${API_ROOT}/projects/:projectId/installedComponents`, LibraryController.getComponents);
   composer.addWebRoute('get', `${API_ROOT}/library`, LibraryController.getLibrary);
+  composer.addWebRoute('get', `${API_ROOT}/feeds`, LibraryController.getFeeds);
   composer.addWebRoute('get', `${API_ROOT}/feed`, LibraryController.getFeed);
 };
