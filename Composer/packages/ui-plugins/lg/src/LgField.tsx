@@ -61,11 +61,9 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     [lgName, lgFileId]
   );
 
-  const template = (lgFile &&
-    lgFile.templates &&
-    lgFile.templates.find((template) => {
-      return template.name === lgName;
-    })) || {
+  const template = lgFile?.templates?.find((template) => {
+    return template.name === lgName;
+  }) || {
     name: lgName,
     parameters: [],
     body: getInitialTemplate(name, value),
