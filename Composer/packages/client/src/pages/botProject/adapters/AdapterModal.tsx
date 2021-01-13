@@ -14,41 +14,42 @@ import formatMessage from 'format-message';
 export type AdapterModal = {
   isOpen: boolean;
   title: string;
-  onDismiss: () => void;
-  onConfirm: () => void;
+  onClose: () => void;
   handleSettings: (data: AdapterConfig) => void;
 };
 
 export const AdapterModal: React.FC<AdapterModal> = (props) => {
-  const { isOpen, title, onDismiss, onConfirm, handleSettings } = props;
-  const [currentSettings, setCurrentSettings] = useState<AdapterConfig>({ name: '', type: '', data: {} });
+  const { isOpen, title, onClose, handleSettings } = props;
+  const [currentSettings, setCurrentSettings] = useState<AdapterConfig>({ key: '', name: '', type: '', data: {} });
 
   const nameLabel = formatMessage('Name');
   const typeLabel = formatMessage('Type');
 
   return (
     <DialogWrapper dialogType={DialogTypes.Customer} isOpen={isOpen} title={title}>
+      <TextField
+        ariaLabel={nameLabel}
+        label={nameLabel}
+        onChange={(_e, val) =>
+          setCurrentSettings({ ...currentSettings, name: val ?? '', key: 'key_' + (val ?? 'null') })
+        }
+      />
+      <TextField
+        ariaLabel={typeLabel}
+        label={typeLabel}
+        onChange={(_e, val) => setCurrentSettings({ ...currentSettings, type: val ?? '' })}
+      />
+      <TextField
+        ariaLabel={'Misc'}
+        label={'Misc'}
+        onChange={(_e, val) => setCurrentSettings({ ...currentSettings, data: { misc: val ?? '' } })}
+      />
       <DialogFooter>
-        <TextField
-          ariaLabel={nameLabel}
-          label={nameLabel}
-          onChange={(_e, val) => setCurrentSettings({ ...currentSettings, name: val ?? '' })}
-        />
-        <TextField
-          ariaLabel={typeLabel}
-          label={typeLabel}
-          onChange={(_e, val) => setCurrentSettings({ ...currentSettings, type: val ?? '' })}
-        />
-        <TextField
-          ariaLabel={'Misc'}
-          label={'Misc'}
-          onChange={(_e, val) => setCurrentSettings({ ...currentSettings, data: { misc: val ?? '' } })}
-        />
-        <DefaultButton onClick={onDismiss}>{formatMessage('Cancel')}</DefaultButton>
+        <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
         <PrimaryButton
           onClick={() => {
             handleSettings(currentSettings);
-            onConfirm();
+            onClose();
           }}
         >
           {formatMessage('Okay')}

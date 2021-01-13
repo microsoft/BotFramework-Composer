@@ -39,6 +39,7 @@ export type SkillSetting = {
 };
 
 export type AdapterConfig = {
+  key: string;
   name: string;
   type: string;
   data: { [key: string]: string | number };

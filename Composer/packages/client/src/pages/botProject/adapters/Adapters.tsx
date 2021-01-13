@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
 import { rootBotProjectIdSelector } from '../../../recoilModel/selectors/project';
@@ -52,6 +52,14 @@ export const Adapters: React.FC = () => {
             <div css={tableItem} title={p.type}>
               {p.type}
             </div>
+            <IconButton
+              ariaLabel="Delete"
+              iconProps={{ iconName: 'Delete' }}
+              title="Delete"
+              onClick={() => {
+                setSettings(rootBotProjectId, { ...settings, adapters: adapters.filter((a) => a.key !== p.key) });
+              }}
+            />
           </div>
         );
       })}
@@ -61,12 +69,7 @@ export const Adapters: React.FC = () => {
         }
         isOpen={isModalOpen}
         title={formatMessage('Add adapter')}
-        onConfirm={() => {
-          console.log('Confirm');
-          showModal(false);
-        }}
-        onDismiss={() => {
-          console.log('Dismiss');
+        onClose={() => {
           showModal(false);
         }}
       />
