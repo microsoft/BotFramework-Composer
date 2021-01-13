@@ -9,6 +9,41 @@ import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 const API_ROOT = '/api';
 
+
+const normalizeFeed = (feed) => {
+  if (feed.objects) {
+    // this is an NPM feed
+    return feed.objects.map((i) => {
+      return {
+      name: i.package.name,
+      version: i.package.version,
+      authors: i.package?.author?.name,
+      keywords: i.package.keywords,
+      repository: i.package?.links.repository,
+      description: i.package.description,
+      language: 'js',
+      source: 'npm',
+    }});
+
+  } else if (feed.data) {
+    // this is a nuget feed
+    return feed.data.map((i) => { return {
+      name: i.id,
+      version: i.version,
+      authors: i.authors[0],
+      keywords: i.tags,
+      repository: i.projectUrl,
+      description: i.description,
+      language: 'c#',
+      source: 'nuget',
+    }});
+
+  } else {
+    return null;
+  }
+
+}
+
 export default async (composer: IExtensionRegistration): Promise<void> => {
 
   const updateRecentlyUsed = (componentList, runtimeLanguage) => {
@@ -38,6 +73,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       for (let s = 0; s < packageSources.length; s++) {
         const url = packageSources[s];
         try {
+          composer.log('Get feed: ', url);
           const raw = await axios.get(url);
           if (Array.isArray(raw.data)) {
             combined = combined.concat(raw.data);
@@ -51,6 +87,35 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
 
       // add recently used
+      const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+
+      res.json({
+        available: combined,
+        recentlyUsed: recentlyUsed,
+      });
+    },
+    getFeed: async function (req, res) {
+      // read the list of sources from the config file.
+      const packageSources = [req.query.url];
+
+
+      let combined = [];
+      for (let s = 0; s < packageSources.length; s++) {
+        const url = packageSources[s];
+        try {
+          const raw = await axios.get(url);
+          const feed = normalizeFeed(raw.data);
+          if (Array.isArray(feed)) {
+            combined = combined.concat(feed);
+          } else {
+            composer.log('Received non-JSON response from ', url);
+          }
+        } catch (err) {
+          composer.log('Could not load library from URL');
+          composer.log(err);
+        }
+      }
+
       const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
 
       res.json({
@@ -294,4 +359,5 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
   composer.addWebRoute('post', `${API_ROOT}/projects/:projectId/unimport`, LibraryController.removeImported);
   composer.addWebRoute('get', `${API_ROOT}/projects/:projectId/installedComponents`, LibraryController.getComponents);
   composer.addWebRoute('get', `${API_ROOT}/library`, LibraryController.getLibrary);
+  composer.addWebRoute('get', `${API_ROOT}/feed`, LibraryController.getFeed);
 };

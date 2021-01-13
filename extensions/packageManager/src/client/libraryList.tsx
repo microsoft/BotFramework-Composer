@@ -38,6 +38,7 @@ export interface LibraryRef {
   type?: string;
   category?: string;
   source?: string;
+  isCompatible?: boolean;
 }
 
 
@@ -160,7 +161,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
               <DefaultButton
                 text={formatMessage("Install")}
                 onClick={props.install}
-                disabled={disabled}
+                disabled={!item.isCompatible}
               />
             )}
           </Fragment>
