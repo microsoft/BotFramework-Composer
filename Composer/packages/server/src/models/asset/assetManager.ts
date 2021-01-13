@@ -23,9 +23,10 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
+import { templateGeneratorPath } from '../../settings/env';
 
 // TODO: pass in working directory param to createEnv for desired location of local Yeomen Repo
-const yeomanEnv = yeoman.createEnv();
+const yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
 yeomanEnv.lookupLocalPackages();
 
 export class AssetManager {
@@ -133,6 +134,7 @@ export class AssetManager {
   }
 
   private async installRemoteTemplate(generatorName: string, npmPackageName: string, dstDir: string): Promise<boolean> {
+    yeomanEnv.cwd = templateGeneratorPath;
     const registeredGenerators: string[] = await yeomanEnv.getGeneratorNames();
 
     if (registeredGenerators.indexOf(generatorName) !== -1) {
