@@ -32,6 +32,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',
     '@typescript-eslint/no-use-before-define': 'warn',
+    '@typescript-eslint/prefer-optional-chain': 'error',
 
     // eslint rules
     'no-dupe-class-members': 'off',
