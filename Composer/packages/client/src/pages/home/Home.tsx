@@ -100,8 +100,6 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
     featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
-    TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
-    TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
   };
 
   const toolbarItems: IToolbarItem[] = [
@@ -114,6 +112,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           onClickNewBot();
+          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
         },
       },
       align: 'left',
@@ -174,6 +173,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 title={addButton}
                 onClick={() => {
                   onClickNewBot();
+                  TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
                 }}
               />
             </div>

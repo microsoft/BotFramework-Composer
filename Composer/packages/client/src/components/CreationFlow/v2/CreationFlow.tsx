@@ -58,7 +58,6 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-  // const [formData, setFormData] = useState({ name: '', description: '', location: '' });
 
   useEffect(() => {
     if (storages && storages.length) {

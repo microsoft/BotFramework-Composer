@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 import fs from 'fs';
 import path from 'path';
-// import { exec } from 'child_process';
-// import { promisify } from 'util';
 
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions } from '@bfc/extension';
@@ -99,8 +95,7 @@ export class AssetManager {
     templateId: string,
     projectName: string,
     ref: LocationRef,
-    user?: UserIdentity,
-    locale?: string
+    user?: UserIdentity
   ): Promise<LocationRef> {
     try {
       // user storage maybe diff from template storage
@@ -117,7 +112,7 @@ export class AssetManager {
       const npmPackageName = templateId;
       const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
+      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName);
 
       if (remoteTemplateAvailable) {
         await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
@@ -131,7 +126,7 @@ export class AssetManager {
     }
   }
 
-  private async installRemoteTemplate(generatorName: string, npmPackageName: string, dstDir: string): Promise<boolean> {
+  private async installRemoteTemplate(generatorName: string, npmPackageName: string): Promise<boolean> {
     yeomanEnv.cwd = templateGeneratorPath;
     const registeredGenerators: string[] = await yeomanEnv.getGeneratorNames();
 
