@@ -8,9 +8,10 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { lgFilesState, currentProjectIdState } from '../../atoms';
+import { currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
+import { lgFilesSelectorFamily } from '../../selectors';
 
 const projectId = '123asad.123sad';
 
@@ -57,7 +58,7 @@ const getLgTemplate = (name, body): LgTemplate =>
 
 describe('Lg dispatcher', () => {
   const useRecoilTestHook = () => {
-    const [lgFiles, setLgFiles] = useRecoilState(lgFilesState(projectId));
+    const [lgFiles, setLgFiles] = useRecoilState(lgFilesSelectorFamily(projectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
 
     return {
@@ -72,7 +73,7 @@ describe('Lg dispatcher', () => {
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: lgFilesState(projectId), initialValue: lgFiles },
+        { recoilState: lgFilesSelectorFamily(projectId), initialValue: lgFiles },
         { recoilState: currentProjectIdState, initialValue: projectId },
       ],
       dispatcher: {
