@@ -1124,9 +1124,6 @@
   "error_fetching_runtime_templates_5e8a4701": {
     "message": "Error fetching runtime templates"
   },
-  "error_fetching_template_readme_3a59bae9": {
-    "message": "Error fetching template readMe"
-  },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "Error in UI schema for { title }: { errorMsg }\n{ options }"
   },

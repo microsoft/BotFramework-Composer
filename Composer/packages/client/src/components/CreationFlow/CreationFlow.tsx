@@ -17,6 +17,7 @@ import {
   currentProjectIdState,
   userSettingsState,
   filteredTemplatesSelector,
+  featureFlagsState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
@@ -48,6 +49,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(filteredTemplatesSelector);
+  const featureFlags = useRecoilValue(featureFlagsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
@@ -73,8 +75,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
-    fetchTemplates();
-    fetchRecentProjects();
+    !featureFlags.NEW_CREATION_FLOW.enabled ?? fetchTemplates();
   };
 
   useEffect(() => {

@@ -22,9 +22,9 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types/src';
+import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, QnABotTemplateId } from '../../../constants';
 import httpClient from '../../../utils/httpUtil';
 
 import { TemplateDetailView } from './TemplateDetailView';
@@ -117,7 +117,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [templateReadMe, setTemplateReadMe] = useState('');
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
-  const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps } | undefined>(undefined);
+  const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
 
   const selection = useMemo(() => {
     return new Selection({
@@ -202,7 +202,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   useEffect(() => {
     if (selectedFeed?.props?.itemKey) {
-      props.fetchTemplates([selectedFeed.props.itemKey]);
+      props.fetchTemplates([feedDictionary[selectedFeed.props.itemKey]]);
     }
   }, [selectedFeed]);
 
@@ -218,7 +218,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
       >
-        <Pivot onLinkClick={setSelectedFeed}>
+        <Pivot defaultSelectedKey={csharpFeedKey} onLinkClick={setSelectedFeed}>
           <PivotItem headerText="C#" itemKey={csharpFeedKey}></PivotItem>
           <PivotItem headerText="Typescript" itemKey={nodeFeedKey}></PivotItem>
         </Pivot>
