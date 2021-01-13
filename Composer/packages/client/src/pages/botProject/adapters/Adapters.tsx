@@ -57,7 +57,10 @@ export const Adapters: React.FC = () => {
               iconProps={{ iconName: 'Delete' }}
               title="Delete"
               onClick={() => {
-                setSettings(rootBotProjectId, { ...settings, adapters: adapters.filter((a) => a.key !== p.key) });
+                setSettings(rootBotProjectId, {
+                  ...settings,
+                  adapters: adapters.filter((a) => a.key !== p.key),
+                });
               }}
             />
           </div>
