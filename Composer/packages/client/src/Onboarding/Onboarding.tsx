@@ -9,7 +9,7 @@ import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import onboardingStorage from '../utils/onboardingStorage';
 import { useLocation } from '../utils/hooks';
-import { dispatcherState, onboardingState, botProjectIdsState, validateDialogsSelectorFamily } from '../recoilModel';
+import { dispatcherState, onboardingState, botProjectIdsState, dialogsSelectorFamily } from '../recoilModel';
 
 import OnboardingContext from './OnboardingContext';
 import TeachingBubbles from './TeachingBubbles/TeachingBubbles';
@@ -22,7 +22,7 @@ const Onboarding: React.FC = () => {
   const didMount = useRef(false);
   const botProjects = useRecoilValue(botProjectIdsState);
   const rootBotProjectId = botProjects[0];
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(rootBotProjectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(rootBotProjectId));
   const { onboardingSetComplete } = useRecoilValue(dispatcherState);
   const onboarding = useRecoilValue(onboardingState);
   const complete = onboarding.complete;
