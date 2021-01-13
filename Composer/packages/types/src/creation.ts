@@ -11,15 +11,13 @@ export type BotTemplateV2 = {
   support?: string[];
   package?: {
     packageName: string;
-    packageSource: FeedType;
+    packageSource: FeedName;
     packageVersion?: string;
   };
   index?: number;
 };
 
-export type FeedType = 'npm' | 'nuget';
-
-export type FetchTemplateBody = {
-  feedType: FeedType;
-  feedUrl?: string;
-};
+export const csharpFeedKey = 'firstPartyCsharp';
+export const nodeFeedKey = 'firstPartyNode';
+export const defaultFeeds = [nodeFeedKey, csharpFeedKey] as const; // TS3.4 syntax
+export type FeedName = typeof defaultFeeds[number]; // 'a'|'b'|'c';
