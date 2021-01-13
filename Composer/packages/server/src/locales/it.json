@@ -903,7 +903,7 @@
     "message": "Schema mancante in DialogFactory."
   },
   "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  altri {# bots}\n} sono stati trovati.\n            { dialogNum, select,\n      0 {}\n  altro {Press down arrow key to navigate the search results}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  other {# bots}\n} sono stati trovati.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "disable_a5c05db3": {
     "message": "Disabilita"

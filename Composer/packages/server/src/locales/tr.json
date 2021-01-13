@@ -903,7 +903,7 @@
     "message": "DialogFactory’de şema eksik."
   },
   "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {Sıfır bot}\n     = 1 {Bir bot}\n  other {# bot}\n} bulundu.\n            { dialogNum, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {Sıfır bot}\n     =1 {Bir bot}\n  other {# bot}\n} bulundu.\n            { dialogNum, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
   },
   "disable_a5c05db3": {
     "message": "Devre Dışı Bırak"

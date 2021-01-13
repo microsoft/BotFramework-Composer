@@ -903,7 +903,7 @@
     "message": "DialogFactory a un schéma manquant."
   },
   "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {Aucun bot}\n     =1 {Un bot}\n  autre {nombre de bots}\n}.\n            { dialogNum, select,\n      0 {}\n  autre {Appuyer sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {Aucun bot}\n     =1 {Un bot}\n  other {nombre de bots}\n}.\n            { dialogNum, select,\n      0 {}\n  other {Appuyer sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
   },
   "disable_a5c05db3": {
     "message": "Désactiver"
@@ -1329,7 +1329,7 @@
     "message": "Je veux supprimer ce bot"
   },
   "icon_name_is_file_c80dacae": {
-    "message": "le nom d'{ icon } est { file }"
+    "message": "le nom d’{ icon } est { file }"
   },
   "iconname_file_icon_29976c8e": {
     "message": "Icône de fichier { iconName }"
@@ -3090,7 +3090,7 @@
     "message": "You can turn data collection on or off at any time in the Application Settings."
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
-    "message": "Vous n’’êtes pas autorisé à enregistrer les bots ici"
+    "message": "Vous n’êtes pas autorisé à enregistrer les bots ici"
   },
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
     "message": "You have successfully published { name } to { publishTarget }"
