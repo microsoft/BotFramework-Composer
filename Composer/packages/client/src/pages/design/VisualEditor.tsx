@@ -13,12 +13,7 @@ import { useFormConfig, useShellApi } from '@bfc/extension-client';
 import cloneDeep from 'lodash/cloneDeep';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
-import {
-  dispatcherState,
-  validateDialogsSelectorFamily,
-  schemasState,
-  designPageLocationState,
-} from '../../recoilModel';
+import { dispatcherState, dialogsSelectorFamily, schemasState, designPageLocationState } from '../../recoilModel';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -72,7 +67,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { openNewTriggerModal, onFocus, onBlur, isRemoteSkill } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { dialogId, selected } = designPageLocation;
