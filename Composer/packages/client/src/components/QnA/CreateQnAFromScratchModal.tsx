@@ -42,8 +42,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
 
   formConfig.name.validate = validateName(qnaFiles);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
-  const disabled = hasErrors;
-
+  const disabled = hasErrors || !formData.name;
   return (
     <Dialog
       dialogContentProps={{
