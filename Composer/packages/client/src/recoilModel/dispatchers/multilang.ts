@@ -9,9 +9,9 @@ import difference from 'lodash/difference';
 import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../selectors/project';
+import { lgFilesSelectorFamily } from '../selectors/lg';
 
 import {
-  lgFilesState,
   luFilesState,
   localeState,
   settingsState,
@@ -93,7 +93,7 @@ export const multilangDispatcher = () => {
       const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesState(projectId), (prevlgFiles) => {
+      set(lgFilesSelectorFamily(projectId), (prevlgFiles) => {
         const addedLgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
         return [...prevlgFiles, ...addedLgFiles];
       });
@@ -136,7 +136,7 @@ export const multilangDispatcher = () => {
       const onDelLanguageDialogComplete = (await snapshot.getPromise(onDelLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesState(projectId), (prevlgFiles) => {
+      set(lgFilesSelectorFamily(projectId), (prevlgFiles) => {
         const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
         return leftLgFiles;
       });

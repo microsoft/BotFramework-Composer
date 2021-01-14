@@ -9,7 +9,6 @@ import { HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { UndoRoot, undoFunctionState, undoHistoryState } from '../history';
 import {
-  lgFilesState,
   luFilesState,
   projectMetaDataState,
   currentProjectIdState,
@@ -18,7 +17,7 @@ import {
   canUndoState,
   canRedoState,
 } from '../../atoms';
-import { dialogsSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
 import { undoStatusSelectorFamily } from '../../selectors/undo';
@@ -72,7 +71,7 @@ describe('<UndoRoot/>', () => {
       states: [
         { recoilState: botProjectIdsState, initialValue: [projectId] },
         { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1', content: '' }] },
-        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
+        { recoilState: lgFilesSelectorFamily(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: undoHistoryState(projectId), initialValue: new UndoHistory(projectId) },

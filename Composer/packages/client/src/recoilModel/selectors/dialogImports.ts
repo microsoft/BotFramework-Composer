@@ -6,7 +6,9 @@ import uniqBy from 'lodash/uniqBy';
 import { selectorFamily } from 'recoil';
 
 import { getBaseName } from '../../utils/fileUtil';
-import { localeState, lgFilesState, luFilesState } from '../atoms';
+import { localeState, luFilesState } from '../atoms';
+
+import { lgFilesSelectorFamily } from './lg';
 
 // Finds all the file imports starting from a given dialog file.
 export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
@@ -57,7 +59,7 @@ export const lgImportsSelectorFamily = selectorFamily<LanguageFileImport[], { pr
     const locale = get(localeState(projectId));
 
     const getFile = (fileId: string) =>
-      get(lgFilesState(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
+      get(lgFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
 
     // Have to exclude common as a special case
     return getLanguageFileImports(dialogId, getFile).filter((i) => i.id !== 'common');

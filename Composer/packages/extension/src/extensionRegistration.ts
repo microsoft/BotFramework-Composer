@@ -185,7 +185,7 @@ export class ExtensionRegistration implements IExtensionRegistration {
     // bind a basic auth middleware. this can be overridden. see setAuthMiddleware below
     this.context.extensions.authentication.middleware = (req, res, next) => {
       if (req.isAuthenticated()) {
-        next && next();
+        next?.();
       } else {
         log('Rejecting access to ', req.url);
         res.redirect(this.context.loginUri);
