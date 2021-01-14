@@ -54,7 +54,7 @@ const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
 
 const stringifyError = (error: any): string => {
   if (error instanceof Error) {
-    return `${error.name} - ${error.message}`;
+    return error.toString();
   } else if (typeof error === 'object') {
     return JSON.stringify(error, Object.getOwnPropertyNames(error));
   } else {
