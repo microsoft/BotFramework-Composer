@@ -12,11 +12,11 @@ export const DOC_EXTENSIONS = ['.pdf', '.tsv', '.doc', '.docx', '.xlsx'];
 export enum ClaimNames {
   upn = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn',
   name = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
-  expiration = 'exp',
+  expiration = 'exp'
 }
 
 export const APPINSIGHTS_INSTRUMENTATIONKEY = process.env.APPINSIGHTS_INSTRUMENTATIONKEY;
 
 export const piiProperties = ['projectId', 'rootProjectId', 'url'];
 
-export const COMPOSER_VERSION = '1.3.0';
+export const COMPOSER_VERSION = '1.3.1';
