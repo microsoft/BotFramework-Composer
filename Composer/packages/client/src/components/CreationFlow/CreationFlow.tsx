@@ -7,8 +7,9 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { csharpFeedKey } from '@bfc/shared';
 
-import { CreationFlowStatus } from '../../constants';
+import { CreationFlowStatus, feedDictionary } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -33,6 +34,7 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
+    fetchTemplatesV2,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -75,7 +77,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
-    !featureFlags.NEW_CREATION_FLOW.enabled ?? fetchTemplates();
+    featureFlags.NEW_CREATION_FLOW.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
   };
 
   useEffect(() => {
