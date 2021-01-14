@@ -12,7 +12,7 @@
     "build": "tsc -p tsconfig.build.json && node scripts/build.js",
     "clean": "rimraf build",
     "prep:dist:electron": "yarn build --outDir ../electron-server/dist && node scripts/copyAssets.js",
-    "start": "node build/init.js",
+    "start": "node --max-http-header-size=16000 build/init.js",
     "start:dev": "nodemon",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -23,7 +23,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node --max-http-header-size=16000 --inspect=9228 -r ts-node/register src/init.ts",
     "watch": [
       "src",
       "../extension/lib"
