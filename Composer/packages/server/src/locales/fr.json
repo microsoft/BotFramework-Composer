@@ -1446,7 +1446,7 @@
     "message": "élément ajouté"
   },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
-    "message": "{ itemCount, plural,\n     =0 {aucun schéma}\n     =1 {un schéma}\n  autre {nombre de schémas}\n}.\n            { itemCount, select,\n      0 {}\n  autre {Appuyez sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
+    "message": "{ itemCount, plural,\n     =0 {aucun schéma}\n     =1 {un schéma}\n  other {nombre de schémas}\n}.\n            { itemCount, select,\n      0 {}\n  autre {Appuyez sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
   },
   "jan_28_2020_8beb36dc": {
     "message": "28 jan. 2020"
