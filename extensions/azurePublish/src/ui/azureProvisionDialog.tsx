@@ -23,6 +23,7 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
 import { ResourcesItem, authConfig} from '../types';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -44,6 +45,7 @@ import {
   PersonaSize,
   Selection,
   SelectionMode,
+  DetailsRow,
 } from 'office-ui-fabric-react';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
@@ -66,7 +68,7 @@ const DialogTitle = {
     ),
   },
   REVIEW: {
-    title: formatMessage('Review & Create'),
+    title: formatMessage('Review & create'),
     subText: formatMessage(
       'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
     ),
@@ -157,9 +159,8 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const columns: IColumn[] = [
     {
-      key: 'icon',
+      key: 'Icon',
       name: 'File Type',
-      iconName: 'Page',
       isIconOnly: true,
       fieldName: 'name',
       minWidth: 16,
@@ -178,8 +179,8 @@ export const AzureProvisionDialog: React.FC = () => {
       data: 'string',
       onRender: (item: ResourcesItem & {name,icon}) => {
         return <div style={{whiteSpace: 'normal'}}>
-            {item.name}
-            <div>{item.text} | {item.tier}</div>
+            <div style={{fontSize: '14px', color: NeutralColors.gray190}}>{item.name}</div>
+            <div style={{fontSize: '12px', color: NeutralColors.gray130}}>{item.text} | {item.tier}</div>
           </div>;
       },
       isPadded: true,
@@ -193,7 +194,7 @@ export const AzureProvisionDialog: React.FC = () => {
       isRowHeader: true,
       data: 'string',
       onRender: (item: ResourcesItem & {name,icon}) => {
-        return <div style={{whiteSpace: 'normal'}}>{item.description}</div>;
+        return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.description}</div>;
       },
       isPadded: true,
     }
@@ -427,22 +428,24 @@ export const AzureProvisionDialog: React.FC = () => {
     <Fragment>
       <ChoiceGroup style={{}} defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       {subscriptionOption?.length > 0 && choice.key === 'create' && (
-        <form style={{ width: '50%' }}>
+        <form style={{ width: '50%', marginTop: '16px' }}>
           <Dropdown
             required
             defaultSelectedKey={currentSubscription?.subscriptionId}
-            label={'Subscription'}
+            label={formatMessage('Subscription')}
+            ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
             options={subscriptionOption}
             placeholder={'Select one'}
             onChange={updateCurrentSubscription}
-            styles={{ root: { paddingBottom: '8px', marginTop:'10px' } }}
+            styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
           />
           <TextField
             required
             defaultValue={currentHostName}
             errorMessage={errorHostName}
-            label={'Resource group name'}
+            label={formatMessage('Resource group name')}
+            ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
             placeholder={'Name of your new resource group'}
             onChange={newResourceGroup}
             styles={{ root: { paddingBottom: '8px' } }}
@@ -454,8 +457,8 @@ export const AzureProvisionDialog: React.FC = () => {
             label={'Region'}
             options={deployLocationsOption}
             placeholder={'Select one'}
+            styles={{ root: { paddingBottom: '8px' } }}
             onChange={updateCurrentLocation}
-            onRenderLabel={onRenderLabel}
           />
           {currentLocation && luisLocations.length>0 && !luisLocations.includes(currentLocation.name) ?
           <Dropdown
@@ -464,7 +467,6 @@ export const AzureProvisionDialog: React.FC = () => {
             options={luisLocationsOption}
             placeholder={'Select one'}
             onChange={updateLuisLocation}
-            onRenderLabel={onRenderLabel}
           />: null}
         </form>
       )}
@@ -516,19 +518,18 @@ export const AzureProvisionDialog: React.FC = () => {
     return (
       <Fragment>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 64px)'}}>
-        <DetailsList
-          isHeaderVisible
-          checkboxVisibility={CheckboxVisibility.onHover}
-          selectionMode={SelectionMode.multiple}
-          selection={selection}
-          columns={columns}
-          getKey={(item) => item.key}
-          groups={group}
-          items={listItems}
-          layoutMode={DetailsListLayoutMode.justified}
-          setKey="none"
-          onRenderDetailsHeader={onRenderDetailsHeader}
-        />
+          <DetailsList
+            isHeaderVisible
+            checkboxVisibility={CheckboxVisibility.onHover}
+            selectionMode={SelectionMode.multiple}
+            selection={selection}
+            columns={columns}
+            getKey={(item) => item.key}
+            groups={group}
+            items={listItems}
+            layoutMode={DetailsListLayoutMode.justified}
+            setKey="none"
+          />
         </ScrollablePane>
       </Fragment>
     );
