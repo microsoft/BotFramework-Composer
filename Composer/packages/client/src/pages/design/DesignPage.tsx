@@ -82,9 +82,9 @@ type BreadcrumbItem = {
 
 // field types
 const Types = {
-  Dialog: 'dialog',
-  Trigger: 'trigger',
-  Action: 'action',
+  Dialog: 'D',
+  Trigger: 'T',
+  Action: 'A',
 };
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
@@ -320,9 +320,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (currentDialog.content) {
       setBreadcrumbs((prev) => {
         return prev.map((b) => {
-          // eslint-disable-next-line security/detect-unsafe-regex
-          const regexp = new RegExp(/(?<type>[a-z]+)-(?<name>.*)/);
-          const { type, name } = b.key.match(regexp)?.groups || {};
+          const type = b.key.charAt(0);
+          const name = b.key.substr(2);
+
           switch (type) {
             case Types.Dialog:
               b.label = getFriendlyName(currentDialog.content);
