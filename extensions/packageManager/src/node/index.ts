@@ -67,12 +67,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             {
               "key": "npm",
               "text": "npm",
-              "url": "https://registry.npmjs.org/-/v1/search?text=keywords:botframework&size=100&from=0"
+              "url": "https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0"
             },
             {
               "key": "nuget",
               "text": "nuget",
-              "url": "https://azuresearch-usnc.nuget.org/query?q=botframework"
+              "url": "https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true"
+              // only ours
+              // https://azuresearch-usnc.nuget.org/query?q={search keyword}+preview.bot.component+Tags:%22bf-component%22&prerelease=true
             },
           ];
           composer.store.write('feeds', packageSources);
