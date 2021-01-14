@@ -8,7 +8,6 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
-  lgFilesState,
   luFilesState,
   schemasState,
   dialogSchemasState,
@@ -17,7 +16,7 @@ import {
   showCreateDialogModalState,
   qnaFilesState,
 } from '../../atoms';
-import { dialogsSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
@@ -106,7 +105,7 @@ describe('dialog dispatcher', () => {
     const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
     const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
-    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const actionsSeed = useRecoilValue(actionsSeedState(projectId));
     const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState(projectId));
     const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
@@ -133,7 +132,7 @@ describe('dialog dispatcher', () => {
       states: [
         { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
+        { recoilState: lgFilesSelectorFamily(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
         { recoilState: qnaFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
         { recoilState: schemasState(projectId), initialValue: { sdk: { content: '' } } },

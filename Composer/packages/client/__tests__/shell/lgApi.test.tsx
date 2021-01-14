@@ -6,7 +6,7 @@ import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { useLgApi } from '../../src/shell/lgApi';
-import { lgFilesState, localeState, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
+import { lgFilesSelectorFamily, localeState, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
 const state = {
@@ -42,7 +42,7 @@ describe('use lgApi hooks', () => {
     initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
       set(localeState(state.projectId), 'en-us');
-      set(lgFilesState(state.projectId), state.lgFiles);
+      set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
         updateLgTemplate: updateLgTemplateMock,
