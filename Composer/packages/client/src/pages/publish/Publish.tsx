@@ -169,11 +169,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     if (!updatedBot || !updater) return;
     const responseData = apiResponse.data;
 
-    if (
-      responseData.status === ApiStatus.Success ||
-      responseData.status === ApiStatus.Unknown ||
-      responseData.status === ApiStatus.Failed
-    ) {
+    if (responseData.status !== ApiStatus.Publishing) {
       stopUpdater(updater);
 
       // Show result notifications

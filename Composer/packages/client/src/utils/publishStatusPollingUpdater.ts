@@ -13,6 +13,8 @@ export enum ApiStatus {
   Success = 200,
   Failed = 500,
   Unknown = 404,
+  HeaderTooLarge = 431,
+  BadRequest = 400,
 }
 
 interface OnDataPayload {
