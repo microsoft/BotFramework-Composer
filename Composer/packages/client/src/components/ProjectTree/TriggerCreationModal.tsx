@@ -38,7 +38,7 @@ import {
 import { schemasState, userSettingsState } from '../../recoilModel/atoms';
 import { nameRegex } from '../../constants';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { dialogsSelectorFamily } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 // -------------------- Styles -------------------- //
 
@@ -210,7 +210,7 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
