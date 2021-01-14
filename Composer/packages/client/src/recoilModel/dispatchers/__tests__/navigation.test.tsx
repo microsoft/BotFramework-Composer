@@ -112,6 +112,8 @@ describe('navigation dispatcher', () => {
       await act(async () => {
         await dispatcher.setDesignPageLocation(projectId, {
           dialogId: 'dialogId',
+          selected: '',
+          focused: '',
           promptTab: undefined,
         });
       });
@@ -130,6 +132,7 @@ describe('navigation dispatcher', () => {
         await dispatcher.setDesignPageLocation(projectId, {
           dialogId: 'dialogId',
           selected: 'select',
+          focused: '',
           promptTab: undefined,
         });
       });
