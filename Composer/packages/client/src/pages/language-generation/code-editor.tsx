@@ -15,9 +15,10 @@ import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { LgFile } from '@bfc/extension-client';
 
-import { localeState, lgFilesState, settingsState } from '../../recoilModel/atoms/botState';
+import { localeState, settingsState } from '../../recoilModel/atoms/botState';
 import { userSettingsState, dispatcherState } from '../../recoilModel';
 import { DiffCodeEditor } from '../language-understanding/diff-editor';
+import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 
 const lspServerPath = '/lg-language-server';
 
@@ -34,7 +35,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   const userSettings = useRecoilValue(userSettingsState);
   const locale = useRecoilValue(localeState(actualProjectId));
-  const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
 
   const { languages, defaultLanguage } = settings;

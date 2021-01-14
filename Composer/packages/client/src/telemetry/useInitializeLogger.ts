@@ -17,7 +17,7 @@ export const useInitializeLogger = () => {
   const rootProjectId = useRecoilValue(currentProjectIdState);
   const { telemetry } = useRecoilValue(userSettingsState);
   const {
-    location: { pathname, href: url },
+    location: { pathname },
   } = useLocation();
   const page = useMemo<PageNames>(() => getPageName(pathname), [pathname]);
 
@@ -40,8 +40,10 @@ export const useInitializeLogger = () => {
   }, []);
 
   useEffect(() => {
-    TelemetryClient.track('NavigateTo', { sectionName: page, url });
-    TelemetryClient.pageView(page, url);
+    // We're currently setting the url to the page name since the url
+    // could contain sensitive data such as dialog names
+    TelemetryClient.track('NavigateTo', { sectionName: page, url: page });
+    TelemetryClient.pageView(page, page);
   }, [page]);
 
   const handleBeforeUnload = useCallback(() => {
