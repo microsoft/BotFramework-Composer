@@ -19,13 +19,16 @@ for (;;) {
   for (const [key, val] of Object.entries(json)) {
     const msg = val.message;
     const src = `${dirent.name} at ${key}:`;
-    if (/=\s[01]/.exec(msg)) {
-      console.log(src, `whitespace between 0/1 and =`);
-      errorCount += 1;
-    }
-    if (/=[01]/.exec(msg) && !/other/.exec(msg)) {
-      console.log(src, `missing 'other' clause`);
-      errorCount += 1;
+    if (/\{.*plural.*}/.exec(msg)) {
+      // if we're in a "plural" rules section...
+      if (/=\s+\d+/.exec(msg)) {
+        console.log(src, `whitespace between number and =`);
+        errorCount += 1;
+      }
+      if (/=\d+/.exec(msg) && !/other/.exec(msg)) {
+        console.log(src, `missing 'other' clause`);
+        errorCount += 1;
+      }
     }
     if (/[^'{}]'[^'{}]/.exec(msg)) {
       console.log(src, `single quote between letters`);
