@@ -18,6 +18,7 @@ import {
   ScrollablePane,
   ScrollbarVisibility,
   Stack,
+  SearchBox,
 } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
@@ -45,6 +46,7 @@ const Library: React.FC = () => {
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
   const [feeds, updateFeeds] = useState([]);
   const [feed, setFeed] = useState<string | undefined>(undefined);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
@@ -79,7 +81,7 @@ const Library: React.FC = () => {
     ),
     ejectRuntime: formatMessage('Eject Runtime'),
     noComponentsInstalled: formatMessage('No packages installed'),
-    noComponentsFound: formatMessage('No packages found. Check extension configuration.'),
+    noComponentsFound: formatMessage('No packages found'),
     browseHeader: formatMessage('Browse'),
     installHeader: formatMessage('Installed'),
     libraryError: formatMessage('Package Manager Error'),
@@ -101,6 +103,14 @@ const Library: React.FC = () => {
 
   const getLibraryAPI = () => {
     const feedUrl = `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    return httpClient.get(feedUrl);
+  };
+
+  const getSearchResults = () => {
+    const feedUrl = feeds.find((f) => f.key == feed).searchUrl
+      ? `${API_ROOT}/feed?url=` +
+        encodeURIComponent(feeds.find((f) => f.key == feed).searchUrl.replace(/\{\{keyword\}\}/g, searchTerm))
+      : `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
     return httpClient.get(feedUrl);
   };
 
@@ -141,7 +151,7 @@ const Library: React.FC = () => {
     if (feed && feeds.length) {
       getLibraries();
     }
-  }, [feed, feeds]);
+  }, [feed, feeds, searchTerm]);
 
   useEffect(() => {
     const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
@@ -276,13 +286,33 @@ const Library: React.FC = () => {
     }
   };
 
+  // return true if the name, description or any of the keywords match the search term
+  const applySearchTerm = (i): boolean => {
+    const term = searchTerm.trim().toLocaleLowerCase();
+    return (
+      i.name.toLowerCase().match(term) ||
+      i.description.toLowerCase().match(term) ||
+      i.keywords.filter((tag) => tag.toLowerCase().match(term)).length
+    );
+  };
+
   const getLibraries = async () => {
     try {
       updateAvailableLibraries(undefined);
       setLoading(true);
-      const response = await getLibraryAPI();
-      updateAvailableLibraries(response.data.available);
-      setRecentlyUsed(response.data.recentlyUsed);
+      if (searchTerm) {
+        const response = await getSearchResults();
+        // if we are searching, but there is not a searchUrl, apply a local filter
+        if (!feeds.find((f) => f.key === feed).searchUrl) {
+          response.data.available = response.data.available.filter(applySearchTerm);
+        }
+        updateAvailableLibraries(response.data.available);
+        setRecentlyUsed(response.data.recentlyUsed);
+      } else {
+        const response = await getLibraryAPI();
+        updateAvailableLibraries(response.data.available);
+        setRecentlyUsed(response.data.recentlyUsed);
+      }
       setLoading(false);
     } catch (err) {
       setApplicationLevelError({
@@ -421,6 +451,14 @@ const Library: React.FC = () => {
                       root: { width: '200px' },
                     }}
                   ></Dropdown>
+                </section>
+                <section>
+                  <SearchBox
+                    placeholder="Search"
+                    onClear={() => setSearchTerm('')}
+                    onSearch={setSearchTerm}
+                    disabled={!feeds || !feed}
+                  />
                 </section>
                 {loading && <LoadingSpinner />}
                 {items?.length ? (
