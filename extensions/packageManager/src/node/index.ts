@@ -2,85 +2,83 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
+
 import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
-
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 const API_ROOT = '/api';
-
 
 const normalizeFeed = (feed) => {
   if (feed.objects) {
     // this is an NPM feed
     return feed.objects.map((i) => {
       return {
-      name: i.package.name,
-      version: i.package.version,
-      authors: i.package?.author?.name,
-      keywords: i.package.keywords,
-      repository: i.package?.links.repository,
-      description: i.package.description,
-      language: 'js',
-      source: 'npm',
-    }});
-
+        name: i.package.name,
+        version: i.package.version,
+        authors: i.package?.author?.name,
+        keywords: i.package.keywords,
+        repository: i.package?.links.repository,
+        description: i.package.description,
+        language: 'js',
+        source: 'npm',
+      };
+    });
   } else if (feed.data) {
     // this is a nuget feed
-    return feed.data.map((i) => { return {
-      name: i.id,
-      version: i.version,
-      authors: i.authors[0],
-      keywords: i.tags,
-      repository: i.projectUrl,
-      description: i.description,
-      language: 'c#',
-      source: 'nuget',
-    }});
-
+    return feed.data.map((i) => {
+      return {
+        name: i.id,
+        version: i.version,
+        authors: i.authors[0],
+        keywords: i.tags,
+        repository: i.projectUrl,
+        description: i.description,
+        language: 'c#',
+        source: 'nuget',
+      };
+    });
   } else {
     return null;
   }
-
-}
+};
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
-
   const updateRecentlyUsed = (componentList, runtimeLanguage) => {
-    const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+    const recentlyUsed = (composer.store.read('recentlyUsed') as any[]) || [];
     componentList.forEach((component) => {
       if (!recentlyUsed.find((used) => used.name === component.name)) {
-        recentlyUsed.unshift({...component, language: runtimeLanguage });
+        recentlyUsed.unshift({ ...component, language: runtimeLanguage });
       }
     });
     composer.store.write('recentlyUsed', recentlyUsed);
-  }
+  };
 
   const LibraryController = {
-    getFeeds: async function(req, res) {
-        // read the list of sources from the config file.
-        let packageSources = composer.store.read('feeds') as {key: string, text: string, url: string}[];
+    getFeeds: async function (req, res) {
+      // read the list of sources from the config file.
+      let packageSources = composer.store.read('feeds') as { key: string; text: string; url: string }[];
 
-        // if no sources are in the config file, set the default list to our 1st party feed.
-        if (!packageSources) {
-          packageSources = [
-            {
-              "key": "npm",
-              "text": "npm",
-              "url": "https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0"
-            },
-            {
-              "key": "nuget",
-              "text": "nuget",
-              "url": "https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true"
-              // only ours
-              // https://azuresearch-usnc.nuget.org/query?q={search keyword}+preview.bot.component+Tags:%22bf-component%22&prerelease=true
-            },
-          ];
-          composer.store.write('feeds', packageSources);
-        }
+      // if no sources are in the config file, set the default list to our 1st party feed.
+      if (!packageSources) {
+        packageSources = [
+          {
+            key: 'npm',
+            text: 'npm',
+            url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
+          },
+          {
+            key: 'nuget',
+            text: 'nuget',
+            url: 'https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true',
+            // only ours
+            // https://azuresearch-usnc.nuget.org/query?q={search keyword}+preview.bot.component+Tags:%22bf-component%22&prerelease=true
+          },
+        ];
+        composer.store.write('feeds', packageSources);
+      }
 
-        res.json(packageSources);
+      res.json(packageSources);
     },
     getLibrary: async function (req, res) {
       // read the list of sources from the config file.
@@ -112,7 +110,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
 
       // add recently used
-      const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+      const recentlyUsed = (composer.store.read('recentlyUsed') as any[]) || [];
 
       res.json({
         available: combined,
@@ -122,7 +120,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     getFeed: async function (req, res) {
       // read the list of sources from the config file.
       const packageSources = [req.query.url];
-
 
       let combined = [];
       for (let s = 0; s < packageSources.length; s++) {
@@ -141,7 +138,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         }
       }
 
-      const recentlyUsed = composer.store.read('recentlyUsed') as any[] || [];
+      const recentlyUsed = (composer.store.read('recentlyUsed') as any[]) || [];
 
       res.json({
         available: combined,
@@ -160,11 +157,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-
-
       let runtimePath = currentProject.settings?.runtime?.path;
       if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, runtimePath)
+        runtimePath = path.resolve(currentProject.dir, runtimePath);
       }
 
       if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
@@ -218,17 +213,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
       let runtimePath = currentProject.settings?.runtime?.path;
       if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, runtimePath)
+        runtimePath = path.resolve(currentProject.dir, runtimePath);
       }
 
       if (packageName && runtimePath) {
         try {
           // Call the runtime's component install mechanism.
-          const installOutput = await runtime.installComponent(
-            runtimePath,
-            packageName,
-            version
-          );
+          const installOutput = await runtime.installComponent(runtimePath, packageName, version);
 
           const manifestFile = runtime.identifyManifest(runtimePath);
 
@@ -254,12 +245,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
 
           // check the results to see if we have any problems
-          if (
-            dryRunMergeResults &&
-            dryRunMergeResults.conflicts &&
-            dryRunMergeResults.conflicts.length &&
-            !isUpdating
-          ) {
+          if (dryRunMergeResults?.conflicts?.length && !isUpdating) {
             // we need to prompt the user to confirm the changes before proceeding
             res.json({
               success: false,
@@ -290,8 +276,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
                 runtimeLanguage = 'js';
               }
               updateRecentlyUsed(installedComponents, runtimeLanguage);
-
-
             } else {
               res.json({
                 success: false,
@@ -335,7 +319,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
       let runtimePath = currentProject.settings?.runtime?.path;
       if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, runtimePath)
+        runtimePath = path.resolve(currentProject.dir, runtimePath);
       }
 
       // get URL or package name
