@@ -3,23 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
 import { PluginConfig } from '@bfc/extension-client';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo, getFriendlyName } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { TreeLink } from '../../components/ProjectTree/ProjectTree';
-import {
-  designPageLocationState,
-  dialogsSelectorFamily,
-  dispatcherState,
-  visualEditorSelectionState,
-} from '../../recoilModel';
-import { getDialogData, getFriendlyName } from '../../utils/dialogUtil';
+import { designPageLocationState, dialogsSelectorFamily, dispatcherState } from '../../recoilModel';
+import { getDialogData } from '../../utils/dialogUtil';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { getFocusPath } from '../../utils/navigation';
 

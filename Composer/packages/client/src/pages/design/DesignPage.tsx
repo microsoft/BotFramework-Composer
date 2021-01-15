@@ -7,7 +7,7 @@ import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'reac
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic, getFriendlyName } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic } from '@bfc/shared';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -64,13 +64,6 @@ import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 import { ManifestEditor } from './ManifestEditor';
 import VisualEditorHeader from './VisualEditorHeader';
-
-// field types
-const Types = {
-  Dialog: 'D',
-  Trigger: 'T',
-  Action: 'A',
-};
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
@@ -261,30 +254,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [location]);
 
-  // get newest label for breadcrumbs
-  useEffect(() => {
-    if (currentDialog.content) {
-      setBreadcrumbs((prev) => {
-        return prev.map((b) => {
-          const type = b.key.charAt(0);
-          const name = b.key.substr(2);
-
-          switch (type) {
-            case Types.Dialog:
-              b.label = getFriendlyName(currentDialog.content);
-              break;
-            case Types.Trigger:
-              b.label = getFriendlyName(get(currentDialog.content, `triggers[${name}]`));
-              break;
-            case Types.Action:
-              b.label = getActionName(get(currentDialog.content, name));
-              break;
-          }
-          return b;
-        });
-      });
-    }
-  }, [currentDialog?.content]);
   useEffect(() => {
     registerEditorAPI('Editing', {
       Undo: () => undo(),
