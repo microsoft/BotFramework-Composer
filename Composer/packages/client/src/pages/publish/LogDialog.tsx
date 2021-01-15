@@ -26,7 +26,7 @@ export const LogDialog: React.FC<LogDialogProps> = ({ value = '', onDismiss }) =
       <TextField
         multiline
         readOnly
-        placeholder={formatMessage('Log Output')}
+        placeholder={formatMessage('Log output')}
         style={{ minHeight: 300 }}
         value={value}
       />
