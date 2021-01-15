@@ -2,15 +2,12 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dialogIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
+import { dialogIndexer, autofixReferInDialog } from '@bfc/indexers';
 import { DialogInfo, checkForPVASchema } from '@bfc/shared';
 
 import {
-  lgFilesState,
-  luFilesState,
   dialogIdsState,
   schemasState,
-  settingsState,
   onCreateDialogCompleteState,
   actionsSeedState,
   showCreateDialogModalState,
@@ -83,11 +80,8 @@ export const dialogsDispatcher = () => {
     const { set, snapshot } = callbackHelpers;
     const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
     const schemas = await snapshot.getPromise(schemasState(projectId));
-    const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
-    const luFiles = await snapshot.getPromise(luFilesState(projectId));
-    const settings = await snapshot.getPromise(settingsState(projectId));
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
+
     if (typeof dialog.content === 'object') {
       dialog.content.id = id;
     }

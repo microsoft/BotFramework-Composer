@@ -13,7 +13,7 @@ import {
   dialogState,
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
-  lgFilesState,
+  lgFilesSelectorFamily,
   luFilesState,
   qnaFilesState,
   schemasState,
@@ -142,7 +142,7 @@ describe('<Diagnostics/>', () => {
     set(dialogIdsState(state.projectId), ['test']);
     set(dialogState({ projectId: state.projectId, dialogId: 'test' }), state.dialogs[0]);
     set(luFilesState(state.projectId), state.luFiles);
-    set(lgFilesState(state.projectId), state.lgFiles);
+    set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
     set(qnaFilesState(state.projectId), state.qnaFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
     set(botDiagnosticsState(state.projectId), state.diagnostics);
