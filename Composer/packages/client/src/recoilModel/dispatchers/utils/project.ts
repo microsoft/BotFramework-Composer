@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { indexer, validateDialog } from '@bfc/indexers';
+import { indexer } from '@bfc/indexers';
 import {
   BotProjectFile,
   BotProjectSpace,
@@ -58,7 +58,6 @@ import {
   formDialogSchemaIdsState,
   formDialogSchemaState,
   jsonSchemaFilesState,
-  lgFilesState,
   localeState,
   locationState,
   luFilesState,
@@ -83,6 +82,7 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
+import { lgFilesSelectorFamily } from '../../selectors/lg';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -357,14 +357,15 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   let mainDialog = '';
   const dialogIds: string[] = [];
-  dialogs.forEach((dialog) => {
+
+  for (const dialog of dialogs) {
     if (dialog.isRoot) {
       mainDialog = dialog.id;
     }
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
+
     set(dialogState({ projectId, dialogId: dialog.id }), dialog);
     dialogIds.push(dialog.id);
-  });
+  }
 
   set(dialogIdsState(projectId), dialogIds);
   set(recognizersSelectorFamily(projectId), recognizers);
@@ -383,7 +384,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   set(skillManifestsState(projectId), skillManifests);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
-  set(lgFilesState(projectId), lgFiles);
+  set(lgFilesSelectorFamily(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
 
   set(dialogSchemasState(projectId), dialogSchemas);

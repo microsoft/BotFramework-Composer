@@ -15,14 +15,14 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { IConfig, IPublishConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig, IQnAConfig } from '@bfc/shared';
 import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { Text, Tips, Links, nameRegex, LUIS_REGIONS } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { getLuisBuildLuFiles } from '../../utils/luUtil';
-import { luFilesState, qnaFilesState, validateDialogsSelectorFamily } from '../../recoilModel';
+import { luFilesState, qnaFilesState, dialogsSelectorFamily } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`
@@ -90,7 +90,7 @@ interface IPublishDialogProps {
 
 export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName, config, projectId } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const qnaConfigShow = getReferredQnaFiles(qnaFiles, dialogs).length > 0;
@@ -156,13 +156,13 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
       const qnaRegion = formData.qnaRegion;
       delete newValue.subscriptionKey;
       delete newValue.qnaRegion;
-      const publishConfig = {
+      const publishConfig: IPublishConfig = {
         luis: newValue,
         qna: {
           subscriptionKey,
           qnaRegion,
           endpointKey: '',
-        },
+        } as IQnAConfig,
       };
       onPublish(publishConfig);
     },

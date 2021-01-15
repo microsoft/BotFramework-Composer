@@ -18,7 +18,7 @@ const getTemplatesRootDir = () =>
 const getTemplateDirs = async () => {
   const templatesRootDir = getTemplatesRootDir();
   const dirs: string[] = [];
-  if (templatesRootDir && templatesRootDir.length) {
+  if (templatesRootDir?.length) {
     for (const dirName of await fs.readdir(templatesRootDir)) {
       const dir = path.join(templatesRootDir, dirName);
       if ((await fs.lstat(dir)).isDirectory() && dir.endsWith('standard')) {
