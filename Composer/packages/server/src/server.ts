@@ -97,7 +97,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
       );
     }
 
-    next && next();
+    next?.();
   });
 
   app.use(`${BASEURL}/`, express.static(clientDirectory, { immutable: true, maxAge: 31536000 }));

@@ -77,8 +77,15 @@ const createQnASectionItem = (fileId: string): QnASectionItem => {
   };
 };
 
-const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
+  projectId: string;
+  dialogId: string;
+  skillId?: string;
+  qnaFileId?: string;
+}
+
+const TableView: React.FC<TableViewProps> = (props) => {
+  const { dialogId, projectId, skillId, qnaFileId } = props;
 
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
@@ -98,7 +105,10 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   } = useRecoilValue(dispatcherState);
 
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
-  const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
+  const qnaFile = qnaFileId
+    ? qnaFiles.find(({ id }) => id === qnaFileId)
+    : qnaFiles.find(({ id }) => id === targetFileId);
+
   const generateQnASections = (file: QnAFile): QnASectionItem[] => {
     if (!file) return [];
     const usedInDialog: any[] = [];
@@ -517,7 +527,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
               {kthSectionIsCreatingQuestion === item.sectionId ? (
                 <EditableField
                   key={''}
-                  componentFocusOnmount
+                  componentFocusOnMount
                   required
                   ariaLabel={formatMessage('Question is empty now')}
                   depth={0}
