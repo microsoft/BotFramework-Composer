@@ -48,6 +48,7 @@ import {
   handleProjectFailure,
   initBotState,
   loadProjectData,
+  mergePropertiesManagedByRootBot,
   navigateToBot,
   navigateToSkillBot,
   openLocalSkill,
@@ -190,6 +191,13 @@ export const projectDispatcher = () => {
           isRootBot: false,
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
+        set(settingsState(projectId), (current) => {
+          return {
+            ...mergePropertiesManagedByRootBot(projectId, rootBotProjectId, current),
+            ...current,
+          };
+        });
+
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
         navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
         return projectId;
