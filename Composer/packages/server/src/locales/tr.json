@@ -1446,7 +1446,7 @@
     "message": "öğe eklendi"
   },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
-    "message": "{ itemCount, plural,\n     = 0 {Sıfır şema}\n     =1 {Bir şema}\n  other {# şema}\n} bulundu.\n            { itemCount, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
+    "message": "{ itemCount, plural,\n     =0 {Sıfır şema}\n     =1 {Bir şema}\n  other {# şema}\n} bulundu.\n            { itemCount, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
   },
   "jan_28_2020_8beb36dc": {
     "message": "28 Oca 2020"
