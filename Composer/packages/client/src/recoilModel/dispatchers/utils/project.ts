@@ -165,7 +165,9 @@ export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjec
       }
       if (projectId !== rootBotProjectId) {
         const skillValue = objectGet(localSetting, property, {})[projectId];
-        objectSet(mergedSettings, property, skillValue ?? '');
+        if (skillValue) {
+          objectSet(mergedSettings, property, skillValue);
+        }
       }
     }
   }
