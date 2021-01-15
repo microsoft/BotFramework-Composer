@@ -903,7 +903,7 @@
     "message": "DialogFactory a un schéma manquant."
   },
   "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {Aucun bot}\n     =1 {Un bot}\n  other {nombre de bots}\n}.\n            { dialogNum, select,\n      0 {}\n  other {Appuyer sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {Aucun bot}\n     =1 {Un bot}\n  other {# bots}\n}.\n            { dialogNum, select,\n      0 {}\n  other {Appuyer sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
   },
   "disable_a5c05db3": {
     "message": "Désactiver"
@@ -1446,7 +1446,7 @@
     "message": "élément ajouté"
   },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
-    "message": "{ itemCount, plural,\n     =0 {aucun schéma}\n     =1 {un schéma}\n  autre {nombre de schémas}\n}.\n            { itemCount, select,\n      0 {}\n  autre {Appuyez sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
+    "message": "{ itemCount, plural,\n     =0 {aucun schéma}\n     =1 {un schéma}\n  other {# schémas}\n}.\n            { itemCount, select,\n      0 {}\n  autre {Appuyez sur la flèche bas pour naviguer dans les résultats de recherche}\n}"
   },
   "jan_28_2020_8beb36dc": {
     "message": "28 jan. 2020"

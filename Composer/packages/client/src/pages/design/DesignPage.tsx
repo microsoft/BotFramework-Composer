@@ -4,12 +4,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'react';
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic, getFriendlyName } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -44,6 +42,7 @@ import {
   SkillInfo,
   projectMetaDataState,
   displaySkillManifestState,
+  designPageLocationState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -60,25 +59,11 @@ import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
-import {
-  breadcrumbClass,
-  contentWrapper,
-  deleteDialogContent,
-  editorContainer,
-  editorWrapper,
-  pageRoot,
-  visualPanel,
-} from './styles';
+import { contentWrapper, deleteDialogContent, editorContainer, editorWrapper, pageRoot, visualPanel } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 import { ManifestEditor } from './ManifestEditor';
-
-type BreadcrumbItem = {
-  key: string;
-  label: string;
-  link?: Partial<TreeLink>;
-  onClick?: () => void;
-};
+import VisualEditorHeader from './VisualEditorHeader';
 
 // field types
 const Types = {
@@ -119,9 +104,7 @@ function getAllRef(targetId, dialogs) {
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
 
-  if (Object.values<string>(PromptTab).includes(tab)) {
-    return tab;
-  }
+  return Object.values(PromptTab).find((value) => tab === value);
 };
 
 const parseTriggerId = (triggerId: string | undefined): number | undefined => {
@@ -156,6 +139,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(skillId ?? projectId));
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(skillId ?? projectId));
+  const designPageLocation = useRecoilValue(designPageLocationState(skillId ?? projectId));
 
   const {
     removeDialog,
@@ -181,10 +165,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
 
-  const params = new URLSearchParams(location?.search);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === props.dialogId)?.content,
-    params.get('selected') || ''
+    designPageLocation.selected || ''
   );
 
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
@@ -198,7 +181,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
-  const [breadcrumbs, setBreadcrumbs] = useState<Array<BreadcrumbItem>>([]);
 
   const shell = useShell('DesignPage', skillId ?? rootProjectId);
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
@@ -245,47 +227,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const selected = decodeDesignerPathToArrayPath(dialogData, params.get('selected') ?? '');
       const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
-      // TODO: get these from a second return value from decodeDesignerPathToArrayPath
-      const triggerIndex = parseTriggerId(selected);
-
       //make sure focusPath always valid
       const focusPath = getFocusPath(selected, focused);
-      const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
-
-      const breadcrumbArray: Array<BreadcrumbItem> = [];
-
-      breadcrumbArray.push({
-        key: `${Types.Dialog}-${props.dialogId}`,
-        label: dialogMap[props.dialogId]?.$designer?.name ?? dialogMap[props.dialogId]?.$designer?.$designer?.name,
-        link: {
-          projectId: props.projectId,
-          dialogId: props.dialogId,
-        },
-        onClick: () => navTo(skillId ?? null, dialogId),
-      });
-      if (triggerIndex != null && trigger != null) {
-        breadcrumbArray.push({
-          key: `${Types.Trigger}-${triggerIndex}`,
-          label: trigger.$designer?.name || getFriendlyName(trigger),
-          link: {
-            projectId: props.projectId,
-            dialogId: props.dialogId,
-            trigger: triggerIndex,
-          },
-          onClick: () => navTo(skillId ?? null, dialogId, `${triggerIndex}`),
-        });
-      }
 
       // getDialogData returns whatever's at the end of the path, which could be a trigger or an action
       const possibleAction = getDialogData(dialogMap, dialogId, focusPath);
-
-      if (params.get('focused') != null) {
-        // we've linked to an action, so put that in too
-        breadcrumbArray.push({
-          key: `${Types.Action}-${focusPath}`,
-          label: getActionName(possibleAction),
-        });
-      }
 
       if (typeof possibleAction === 'undefined') {
         const { id: foundId } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
@@ -307,7 +253,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         focused,
         promptTab: getTabFromFragment(),
       });
-      setBreadcrumbs(breadcrumbArray);
+
       /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       globalHistory._onTransitionComplete();
@@ -360,28 +306,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (link.botError) {
       setBrokenSkillInfo(link);
     }
-    const { skillId, dialogId, trigger, parentLink } = link;
+    const { skillId, dialogId, trigger } = link;
 
     updateZoomRate({ currentRate: 1 });
-    const breadcrumbArray: Array<BreadcrumbItem> = [];
-    if (dialogId != null) {
-      breadcrumbArray.push({
-        key: 'dialog-' + parentLink?.dialogId,
-        label: parentLink?.displayName ?? link.displayName,
-        link: { projectId, skillId, dialogId },
-        onClick: () => navTo(skillId ?? projectId, dialogId),
-      });
-    }
-    if (trigger != null) {
-      breadcrumbArray.push({
-        key: 'trigger-' + parentLink?.trigger,
-        label: link.displayName,
-        link: { projectId, skillId, dialogId, trigger },
-        onClick: () => selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`),
-      });
-    }
-
-    setBreadcrumbs(breadcrumbArray);
 
     if (trigger != null) {
       selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`);
@@ -405,26 +332,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const userUISchema = schemas?.uiOverrides?.content ?? {};
     return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
-
-  const getActionName = (action) => {
-    const nameFromAction = action?.$designer?.name as string | undefined;
-    let detectedActionName: string;
-
-    if (typeof nameFromAction === 'string') {
-      detectedActionName = nameFromAction;
-    } else {
-      const kind: string = action?.$kind as string;
-      const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
-      if (typeof actionNameFromSchema === 'string') {
-        detectedActionName = actionNameFromSchema;
-      } else if (typeof actionNameFromSchema === 'function') {
-        detectedActionName = actionNameFromSchema();
-      } else {
-        detectedActionName = formatMessage('Unknown');
-      }
-    }
-    return detectedActionName;
-  };
 
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
@@ -581,39 +488,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       },
     },
   ];
-
-  const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
-    return {
-      key: breadcrumb.key,
-      text: breadcrumb.label,
-      onClick: () => breadcrumb.onClick?.(),
-    };
-  };
-
-  const items = breadcrumbs.map(createBreadcrumbItem);
-
-  const breadcrumbItems = (
-    <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
-      <Breadcrumb
-        ariaLabel={formatMessage('Navigation Path')}
-        data-testid="Breadcrumb"
-        items={items}
-        maxDisplayedItems={3}
-        styles={breadcrumbClass}
-        onReduceData={() => undefined}
-      />
-      <div style={{ padding: '10px' }}>
-        <ActionButton
-          onClick={() => {
-            setDialogJsonVisibility((current) => !current);
-            TelemetryClient.track('EditModeToggled', { jsonView: dialogJsonVisible });
-          }}
-        >
-          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-        </ActionButton>
-      </div>
-    </div>
-  );
 
   async function handleCreateDialogSubmit(projectId, dialogName, dialogData) {
     setDialogModalInfo(undefined);
@@ -780,7 +654,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   renderSplitter={renderThinSplitter}
                 >
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                    {!isRemoteSkill ? breadcrumbItems : null}
+                    <VisualEditorHeader
+                      pluginConfig={pluginConfig}
+                      projectId={skillId ?? projectId}
+                      showCode={dialogJsonVisible}
+                      visible={!isRemoteSkill}
+                      onShowCodeClick={() => {
+                        setDialogJsonVisibility((current) => !current);
+                        TelemetryClient.track('EditModeToggled', { jsonView: dialogJsonVisible });
+                      }}
+                    />
                     {dialogJsonVisible ? (
                       <JsonEditor
                         key={'dialogjson'}
