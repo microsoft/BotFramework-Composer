@@ -29,19 +29,15 @@ export class PublishStatusPollingUpdater {
   private timerId = 0;
   private publishTargetName: string;
   private botProjectId: string;
-  private pollingInterval = 10000;
+  private pollingInterval;
 
-  constructor(botProjectId: string, publishTargetId: string) {
+  constructor(botProjectId: string, publishTargetId: string, pollingInterval = 10000) {
     this.botProjectId = botProjectId;
     this.publishTargetName = publishTargetId;
+    this.pollingInterval = pollingInterval;
   }
 
   private async fetchPublishStatusData(botProjectId: string, publishTargetName: string, onData: OnDataHandler) {
-    if (typeof onData !== 'function') {
-      console.error(new Error('onData should be a function.'));
-      return;
-    }
-
     // TODO: DONT set HTTP Status code with 500 404 directly!
     const response = await httpClient
       .get(`/publish/${this.botProjectId}/status/${this.publishTargetName}`)
@@ -55,7 +51,14 @@ export class PublishStatusPollingUpdater {
   }
 
   async start(onData: OnDataHandler) {
-    if (!this.botProjectId || !this.publishTargetName) return;
+    if (!this.botProjectId || !this.publishTargetName) {
+      console.error(new Error('botProjectId & publishTargetName should not be empty.'));
+      return;
+    }
+    if (typeof onData !== 'function') {
+      console.error(new Error('onData should be a function.'));
+      return;
+    }
     if (this.status === PollingStateEnum.Running) return;
 
     this.status = PollingStateEnum.Running;
@@ -80,7 +83,7 @@ export class PublishStatusPollingUpdater {
     this.start(onData);
   }
 
-  isSameUpdater(botProjectId, targetName) {
+  isSameUpdater(botProjectId: string, targetName: string) {
     return this.botProjectId === botProjectId && this.publishTargetName === targetName;
   }
 }

@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-export interface LogDialogProps {
-  value?: string;
+export type LogDialogProps = {
+  value: string;
   onDismiss: () => void;
-}
+};
 
 export const LogDialog: React.FC<LogDialogProps> = ({ value = '', onDismiss }) => {
   const logDialogProps = {
@@ -22,7 +23,13 @@ export const LogDialog: React.FC<LogDialogProps> = ({ value = '', onDismiss }) =
       modalProps={{ isBlocking: true }}
       onDismiss={onDismiss}
     >
-      <TextField multiline readOnly placeholder="Log Output" style={{ minHeight: 300 }} value={value} />
+      <TextField
+        multiline
+        readOnly
+        placeholder={formatMessage('Log Output')}
+        style={{ minHeight: 300 }}
+        value={value}
+      />
     </Dialog>
   );
 };

@@ -23,30 +23,30 @@ import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
 
-export interface BotStatusListProps {
+export type BotStatusListProps = {
   botStatusList: BotStatus[];
   botPublishHistoryList: BotPublishHistory;
 
   /** When set to true, disable the checkbox. */
-  disabled: boolean;
-  managePublishProfile: (skillId: string) => void;
+  disableCheckbox: boolean;
+  onManagePublishProfile: (skillId: string) => void;
   checkedIds: string[];
   onCheck: (skillIds: string[]) => void;
-  changePublishTarget: (PublishTarget: string, item: BotStatus) => void;
+  onChangePublishTarget: (PublishTarget: string, item: BotStatus) => void;
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
-}
+};
 
 export const BotStatusList: React.FC<BotStatusListProps> = ({
   botStatusList,
   botPublishHistoryList,
-  disabled,
+  disableCheckbox,
   checkedIds,
   onCheck,
-  managePublishProfile,
-  changePublishTarget,
+  onManagePublishProfile,
+  onChangePublishTarget,
   onRollbackClick,
 }) => {
-  const [expandedBotIds, setExpandedBotIds] = useState<{ [botId: string]: boolean }>({});
+  const [expandedBotIds, setExpandedBotIds] = useState<Record<string, boolean>>({});
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
 
   const displayedItems: BotStatus[] = useMemo(() => {
@@ -55,7 +55,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     return botStatusList.slice().reverse();
   }, [botStatusList, currentSort]);
 
-  const publishTargetOptions = (item: BotStatus): IDropdownOption[] => {
+  const getPublishTargetOptions = (item: BotStatus): IDropdownOption[] => {
     const options: IDropdownOption[] = [];
     item.publishTargets &&
       item.publishTargets.forEach((target, index) => {
@@ -81,12 +81,12 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     }
   };
 
-  const onChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
+  const handleChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
     if (option) {
       if (option.key === 'manageProfiles') {
-        managePublishProfile(item.id);
+        onManagePublishProfile(item.id);
       } else {
-        changePublishTarget(option.text, item);
+        onChangePublishTarget(option.text, item);
       }
     }
   };
@@ -141,7 +141,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
-            disabled={disabled}
+            disabled={disableCheckbox}
             label={item.name}
             styles={{
               label: { width: '100%' },
@@ -171,13 +171,13 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
         return (
           <Dropdown
             defaultSelectedKey={item.publishTarget}
-            options={publishTargetOptions(item)}
+            options={getPublishTargetOptions(item)}
             placeholder={formatMessage('Select a publish target')}
             styles={{
               root: { width: '100%' },
               dropdownItems: { selectors: { '.ms-Button-flexContainer': { width: '100%' } } },
             }}
-            onChange={(_, option?: IDropdownOption) => onChangePublishTarget(item, option)}
+            onChange={(_, option?: IDropdownOption) => handleChangePublishTarget(item, option)}
             onRenderOption={renderDropdownOption}
           />
         );

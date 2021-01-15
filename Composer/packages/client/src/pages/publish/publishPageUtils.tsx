@@ -3,17 +3,17 @@
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
-import { Bot, BotStatus, BotPublishHistory, BotPropertyType } from './type';
+import { Bot, BotStatus, BotPublishHistory, BotProjectType, BotPropertyType } from './type';
 
 export const deleteNotificationInterval = 5000;
 
-export const generateComputedData = (botProjectData) => {
+export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
   const botPropertyData: BotPropertyType = {};
   const botList: Bot[] = [];
   botProjectData.forEach((bot) => {
     const botProjectId = bot.projectId;
-    const publishTargets = bot.setting ? bot.setting.publishTargets || [] : [];
+    const publishTargets = bot.setting?.publishTargets || [];
     botPropertyData[botProjectId] = {
       setting: bot.setting,
       publishTargets,

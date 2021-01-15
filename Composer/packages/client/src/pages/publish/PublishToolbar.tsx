@@ -11,12 +11,12 @@ import { FontSizes } from '@uifabric/fluent-theme';
 
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
-export interface PublishToolbarProps {
+export type PublishToolbarProps = {
   canPublish: boolean;
   canPull: boolean;
   onPublish: () => void;
   onPull: () => void;
-}
+};
 
 export const PublishToolbar: React.FC<PublishToolbarProps> = ({ canPublish, canPull, onPublish, onPull }) => {
   const toolbarItems: IToolbarItem[] = [

@@ -30,7 +30,7 @@ import { PublishToolbar } from './PublishToolbar';
 import { Bot, BotStatus } from './type';
 import {
   initUpdaterStatus,
-  generateComputedData,
+  generateBotPropertyData,
   generateBotStatusList,
   deleteNotificationInterval,
 } from './publishPageUtils';
@@ -64,7 +64,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [checkedSkillIds, setCheckedSkillIds] = useState<string[]>([]);
 
   const { botPropertyData, botList } = useMemo(() => {
-    return generateComputedData(botProjectData);
+    return generateBotPropertyData(botProjectData);
   }, [botProjectData]);
 
   const botStatusList = useMemo(() => {
@@ -259,7 +259,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
-        const updater = pollingUpdaterList.find((u) => u.isSameUpdater(botProjectId, bot.publishTarget));
+        const updater = pollingUpdaterList.find((u) => u.isSameUpdater(botProjectId, bot.publishTarget || ''));
         updater?.restart(onReceiveUpdaterPayload);
       }
     }
@@ -346,11 +346,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <BotStatusList
             botPublishHistoryList={publishHistoryList}
             botStatusList={botStatusList}
-            changePublishTarget={changePublishTarget}
             checkedIds={checkedSkillIds}
-            disabled={isPublishPending}
-            managePublishProfile={manageSkillPublishProfile}
+            disableCheckbox={isPublishPending}
+            onChangePublishTarget={changePublishTarget}
             onCheck={updateCheckedSkills}
+            onManagePublishProfile={manageSkillPublishProfile}
             onRollbackClick={onRollbackToVersion}
           />
         </div>

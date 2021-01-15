@@ -21,11 +21,11 @@ import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 import { listRoot, tableView, detailList } from './styles';
 import { LogDialog } from './LogDialog';
 
-export interface IStatusListProps {
+export type StatusListProps = {
   items: PublishResult[];
   isRollbackSupported: boolean;
   onRollbackClick: (item: PublishResult) => void;
-}
+};
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
@@ -38,7 +38,7 @@ function onRenderDetailsHeader(props, defaultRender) {
   );
 }
 
-export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
+export const PublishStatusList: React.FC<StatusListProps> = (props) => {
   const { items, isRollbackSupported, onRollbackClick } = props;
   const [displayedLog, setDisplayedLog] = useState<string | null>(null);
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
