@@ -135,13 +135,13 @@ const Library: React.FC = () => {
         setFeed('nuget');
       }
     }
-  }, [feeds]);
+  }, [feeds, feeds, runtimeLanguage]);
 
   useEffect(() => {
     if (feed && feeds.length) {
       getLibraries();
     }
-  }, [feed]);
+  }, [feed, feeds]);
 
   useEffect(() => {
     const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
@@ -174,7 +174,7 @@ const Library: React.FC = () => {
           item.category = DEFAULT_CATEGORY;
         }
         item.isCompatible = isCompatible(item);
-        if (item.category && categories.indexOf(item.category) == -1) {
+        if (item.category && categories.indexOf(item.category) === -1) {
           categories.push(item.category);
         }
       });

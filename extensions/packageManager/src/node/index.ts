@@ -118,12 +118,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
     },
     getFeed: async function (req, res) {
-      // read the list of sources from the config file.
+      // why an array? In the future it is feasible we would want to mix several feeds together...
       const packageSources = [req.query.url];
 
       let combined = [];
-      for (let s = 0; s < packageSources.length; s++) {
-        const url = packageSources[s];
+      for (const url of packageSources) {
         try {
           const raw = await axios.get(url);
           const feed = normalizeFeed(raw.data);
