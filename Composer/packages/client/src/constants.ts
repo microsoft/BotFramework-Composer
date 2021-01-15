@@ -51,8 +51,8 @@ export const LUIS_REGIONS: IDropdownOption[] = [
     text: formatMessage('westeurope'),
   },
   {
-    key: 'australia',
-    text: formatMessage('australia'),
+    key: 'australiaeast',
+    text: formatMessage('australiaeast'),
   },
 ];
 
@@ -173,6 +173,9 @@ export const BotStatusesCopy = {
   },
   get stopping() {
     return formatMessage('Stopping');
+  },
+  get pending() {
+    return formatMessage('Status pending');
   },
 };
 

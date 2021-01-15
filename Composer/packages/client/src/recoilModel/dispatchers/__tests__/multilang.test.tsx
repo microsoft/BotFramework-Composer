@@ -2,12 +2,11 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   luFilesState,
-  lgFilesState,
   settingsState,
   localeState,
   actionsSeedState,
@@ -15,7 +14,7 @@ import {
   onDelLanguageDialogCompleteState,
   currentProjectIdState,
 } from '../../atoms';
-import { dialogsSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';
@@ -39,39 +38,40 @@ const state = {
 };
 
 describe('Multilang dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const actionsSeed = useRecoilValue(actionsSeedState(state.projectId));
-      const dialogs = useRecoilValue(dialogsSelectorFamily(state.projectId));
-      const locale = useRecoilValue(localeState(state.projectId));
-      const settings = useRecoilValue(settingsState(state.projectId));
-      const luFiles = useRecoilValue(luFilesState(state.projectId));
-      const lgFiles = useRecoilValue(lgFilesState(state.projectId));
-      const onAddLanguageDialogComplete = useRecoilValue(onAddLanguageDialogCompleteState(state.projectId));
-      const onDelLanguageDialogComplete = useRecoilValue(onDelLanguageDialogCompleteState(state.projectId));
+  const useRecoilTestHook = () => {
+    const actionsSeed = useRecoilValue(actionsSeedState(state.projectId));
+    const dialogs = useRecoilValue(dialogsSelectorFamily(state.projectId));
+    const locale = useRecoilValue(localeState(state.projectId));
+    const settings = useRecoilValue(settingsState(state.projectId));
+    const luFiles = useRecoilValue(luFilesState(state.projectId));
+    const lgFiles = useRecoilValue(lgFilesSelectorFamily(state.projectId));
+    const onAddLanguageDialogComplete = useRecoilValue(onAddLanguageDialogCompleteState(state.projectId));
+    const onDelLanguageDialogComplete = useRecoilValue(onDelLanguageDialogCompleteState(state.projectId));
 
-      const currentDispatcher = useRecoilValue(dispatcherState);
+    const currentDispatcher = useRecoilValue(dispatcherState);
 
-      return {
-        dialogs,
-        locale,
-        settings,
-        luFiles,
-        lgFiles,
-        currentDispatcher,
-        actionsSeed,
-        onAddLanguageDialogComplete,
-        onDelLanguageDialogComplete,
-      };
+    return {
+      dialogs,
+      locale,
+      settings,
+      luFiles,
+      lgFiles,
+      currentDispatcher,
+      actionsSeed,
+      onAddLanguageDialogComplete,
+      onDelLanguageDialogComplete,
     };
+  };
 
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: currentProjectIdState, initialValue: state.projectId },
         { recoilState: dialogsSelectorFamily(state.projectId), initialValue: state.dialogs },
         { recoilState: localeState(state.projectId), initialValue: state.locale },
-        { recoilState: lgFilesState(state.projectId), initialValue: state.lgFiles },
+        { recoilState: lgFilesSelectorFamily(state.projectId), initialValue: state.lgFiles },
         { recoilState: luFilesState(state.projectId), initialValue: state.luFiles },
         { recoilState: settingsState(state.projectId), initialValue: state.settings },
       ],

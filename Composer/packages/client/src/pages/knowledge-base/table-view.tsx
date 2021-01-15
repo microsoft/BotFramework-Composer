@@ -17,6 +17,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { IconButton, ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -26,6 +27,7 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
+import flatMap from 'lodash/flatMap';
 import { QnASection, QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -75,8 +77,15 @@ const createQnASectionItem = (fileId: string): QnASectionItem => {
   };
 };
 
-const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
+  projectId: string;
+  dialogId: string;
+  skillId?: string;
+  qnaFileId?: string;
+}
+
+const TableView: React.FC<TableViewProps> = (props) => {
+  const { dialogId, projectId, skillId, qnaFileId } = props;
 
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
@@ -96,7 +105,10 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   } = useRecoilValue(dispatcherState);
 
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
-  const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
+  const qnaFile = qnaFileId
+    ? qnaFiles.find(({ id }) => id === qnaFileId)
+    : qnaFiles.find(({ id }) => id === targetFileId);
+
   const generateQnASections = (file: QnAFile): QnASectionItem[] => {
     if (!file) return [];
     const usedInDialog: any[] = [];
@@ -143,19 +155,17 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) => id.endsWith('.source'));
   const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
 
-  const initializeQnASections = (qnaFiles, dialogId) => {
+  const initializeQnASections = (qnaFiles: QnAFile[], dialogId: string) => {
     if (isEmpty(qnaFiles)) return [];
 
-    const allSections = qnaFiles
-      .filter(({ id }) => id.endsWith('.source'))
-      .reduce((result: any[], qnaFile) => {
-        const res = generateQnASections(qnaFile);
-        return result.concat(res);
-      }, []);
+    const allSections = flatMap(
+      qnaFiles.filter(({ id }) => id.endsWith('.source')),
+      generateQnASections
+    );
     if (dialogId === 'all') {
       return allSections;
     } else {
-      const dialogSections = allSections.filter((t) => currentDialogImportedFileIds.includes(t.fileId));
+      const dialogSections = allSections.filter((t: QnASectionItem) => currentDialogImportedFileIds.includes(t.fileId));
       return dialogSections;
     }
   };
@@ -165,12 +175,10 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
 
-    const allSections = qnaFiles
-      .filter(({ id }) => id.endsWith('.source'))
-      .reduce((result: any[], qnaFile) => {
-        const res = generateQnASections(qnaFile);
-        return result.concat(res);
-      }, []);
+    const allSections = flatMap(
+      qnaFiles.filter(({ id }) => id.endsWith('.source')),
+      generateQnASections
+    );
     if (dialogId === 'all') {
       setQnASections(allSections);
     } else {
@@ -297,7 +305,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
         );
       };
 
-      const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
+      const onRenderOverflowButton = (overflowItems?: IContextualMenuItem[]): JSX.Element => {
         return (
           <IconButton
             hidden
@@ -519,7 +527,7 @@ const TableView: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
               {kthSectionIsCreatingQuestion === item.sectionId ? (
                 <EditableField
                   key={''}
-                  componentFocusOnmount
+                  componentFocusOnMount
                   required
                   ariaLabel={formatMessage('Question is empty now')}
                   depth={0}

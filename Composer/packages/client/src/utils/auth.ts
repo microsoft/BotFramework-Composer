@@ -38,7 +38,7 @@ export function getUserTokenFromCache(): string | null {
   // first see if there is a token in the hash
   const { access_token } = querystring.parse(location.hash);
 
-  if (access_token && access_token.length > 0) {
+  if (access_token?.length) {
     location.hash = '';
     token = Array.isArray(access_token) ? access_token[0] : access_token;
   }
@@ -47,7 +47,7 @@ export function getUserTokenFromCache(): string | null {
   if (!token) {
     const sessionToken = storage.get<string>(USER_TOKEN_STORAGE_KEY);
 
-    if (sessionToken && sessionToken.length > 0) {
+    if (sessionToken?.length > 0) {
       token = sessionToken;
     }
   }
@@ -68,7 +68,7 @@ export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
 
     httpClient.interceptors.request.use((config) => {
       // only attach cancellation token to api requests
-      if (config.url && config.url.includes('/api/')) {
+      if (config.url?.includes('/api/')) {
         config.cancelToken = cancelSource.token;
       }
 
@@ -84,7 +84,7 @@ export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
         return res;
       },
       (err) => {
-        if (err.response && err.response.status === 401) {
+        if (err.response?.status === 401) {
           // cancel all other requests
           cancelSource.cancel('Unauthorized');
 
@@ -160,7 +160,7 @@ export async function refreshToken(): Promise<string> {
     const iframeTimer = setInterval(() => {
       try {
         if (iframe) {
-          if (iframe.contentWindow && iframe.contentWindow.location.href.includes(windowLoc.hostname)) {
+          if (iframe.contentWindow?.location.href.includes(windowLoc.hostname)) {
             const { access_token } = querystring.parse(iframe.contentWindow.location.hash);
 
             if (access_token) {

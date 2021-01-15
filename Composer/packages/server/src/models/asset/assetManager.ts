@@ -197,7 +197,7 @@ export class AssetManager {
       if (await project.fileStorage.exists(location)) {
         const raw = await project.fileStorage.readFile(location);
         const json = JSON.parse(raw);
-        if (json && json.version) {
+        if (json?.version) {
           return json.version;
         } else {
           return undefined;
@@ -222,7 +222,7 @@ export class AssetManager {
           const raw = await readFile(location, 'utf8');
 
           const json = JSON.parse(raw);
-          if (json && json.version) {
+          if (json?.version) {
             return json.version;
           } else {
             return undefined;

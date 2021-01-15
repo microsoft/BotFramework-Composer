@@ -201,7 +201,7 @@ export function getTriggerTypes(): IDropdownOption[] {
       let name = t as string;
       const labelOverrides = conceptLabels[t];
 
-      if (labelOverrides && labelOverrides.title) {
+      if (labelOverrides?.title) {
         name = labelOverrides.title;
       }
 
@@ -222,7 +222,7 @@ export function getEventTypes(): IComboBoxOption[] {
       let name = t as string;
       const labelOverrides = conceptLabels[t];
 
-      if (labelOverrides && labelOverrides.title) {
+      if (labelOverrides?.title) {
         if (labelOverrides.subtitle) {
           name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
         } else {
@@ -243,7 +243,7 @@ export function getActivityTypes(): IDropdownOption[] {
       let name = t as string;
       const labelOverrides = conceptLabels[t];
 
-      if (labelOverrides && labelOverrides.title) {
+      if (labelOverrides?.title) {
         if (labelOverrides.subtitle) {
           name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
         } else {
@@ -258,27 +258,23 @@ export function getActivityTypes(): IDropdownOption[] {
 }
 
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
-  return dialogs.reduce((result, dialog) => {
+  return dialogs.reduce((result: { [key: string]: {} }, dialog: DialogInfo) => {
     result[dialog.id] = dialog.content;
     return result;
   }, {});
 }
 
-export function getFriendlyName(data) {
+export function getFriendlyName(data): string {
   const conceptLabels = conceptLabelsFn();
-  if (get(data, '$designer.name')) {
-    return get(data, '$designer.name');
+  if (data?.$designer?.name) {
+    return data?.$designer?.name;
   }
 
-  if (get(data, 'intent')) {
-    return `${get(data, 'intent')}`;
+  if (data?.intent) {
+    return `${data?.intent}`;
   }
 
-  if (conceptLabels[data.$kind] && conceptLabels[data.$kind].title) {
-    return conceptLabels[data.$kind].title;
-  }
-
-  return data.$kind;
+  return conceptLabels[data.$kind]?.title ?? data.$kind;
 }
 
 const getLabel = (dialog: DialogInfo, dataPath: string) => {
@@ -292,7 +288,7 @@ export function getBreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, sele
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
     const dialog = dialogs.find((d) => d.id === dialogId);
-    label = (dialog && dialog.displayName) || '';
+    label = dialog?.displayName || '';
   } else {
     const dialogsMap = getDialogsMap(dialogs);
     const dialog = dialogsMap[dialogId];
@@ -312,7 +308,7 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
     return dialog;
   }
 
-  return conceptLabels[get(dialog, dataPath)] ? conceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
+  return conceptLabels[get(dialog, dataPath)]?.title ?? get(dialog, dataPath);
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
