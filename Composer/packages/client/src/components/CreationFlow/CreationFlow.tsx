@@ -42,7 +42,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    fetchRecentProjects,
     openProject,
     createNewBot,
     saveProjectAs,
