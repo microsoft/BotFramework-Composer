@@ -9,7 +9,7 @@ import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 const API_ROOT = '/api';
 
-const normalizeFeed = (feed) => {
+const normalizeFeed = async (feed) => {
   if (feed.objects) {
     // this is an NPM feed
     return feed.objects.map((i) => {
@@ -38,6 +38,15 @@ const normalizeFeed = (feed) => {
         source: 'nuget',
       };
     });
+  } else if (feed.resources) {
+    // this is actually a myget feed that points to the feed we want...
+    const queryEndpoint = feed.resources.find((resource) => resource['@type'] === 'SearchQueryService');
+    if (queryEndpoint) {
+      const raw = await axios.get(queryEndpoint['@id']);
+      return normalizeFeed(raw.data);
+    } else {
+      return [];
+    }
   } else {
     return null;
   }
@@ -132,7 +141,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       for (const url of packageSources) {
         try {
           const raw = await axios.get(url);
-          const feed = normalizeFeed(raw.data);
+          const feed = await normalizeFeed(raw.data);
           if (Array.isArray(feed)) {
             combined = combined.concat(feed);
           } else {
