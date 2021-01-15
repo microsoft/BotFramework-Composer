@@ -39,7 +39,7 @@ export type SkillSetting = {
 };
 
 export type AdapterConfig = {
-  key: string;
+  key: number;
   name: string;
   type: string;
   data: { [key: string]: string | number };
@@ -67,7 +67,7 @@ export type DialogSetting = {
   botId?: string;
   skillHostEndpoint?: string;
   customFunctions: string[];
-  adapters?: AdapterConfig[];
+  adapters?: { [key: number]: AdapterConfig };
   feature?: { [key: string]: boolean };
   [key: string]: any;
 };

@@ -12,15 +12,19 @@ import { AdapterConfig } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
 
 export type AdapterModal = {
+  key: number;
+  initData?: AdapterConfig;
   isOpen: boolean;
   title: string;
   onClose: () => void;
-  handleSettings: (data: AdapterConfig) => void;
+  handleConfirm: (data: AdapterConfig) => void;
 };
 
 export const AdapterModal: React.FC<AdapterModal> = (props) => {
-  const { isOpen, title, onClose, handleSettings } = props;
-  const [currentSettings, setCurrentSettings] = useState<AdapterConfig>({ key: '', name: '', type: '', data: {} });
+  const { isOpen, title, onClose, handleConfirm, initData, key } = props;
+  const [currentSettings, setCurrentSettings] = useState<AdapterConfig>(
+    initData ?? { key, name: '', type: '', data: {} }
+  );
 
   const nameLabel = formatMessage('Name');
   const typeLabel = formatMessage('Type');
@@ -30,9 +34,7 @@ export const AdapterModal: React.FC<AdapterModal> = (props) => {
       <TextField
         ariaLabel={nameLabel}
         label={nameLabel}
-        onChange={(_e, val) =>
-          setCurrentSettings({ ...currentSettings, name: val ?? '', key: 'key_' + (val ?? 'null') })
-        }
+        onChange={(_e, val) => setCurrentSettings({ ...currentSettings, name: val ?? '' })}
       />
       <TextField
         ariaLabel={typeLabel}
@@ -48,7 +50,7 @@ export const AdapterModal: React.FC<AdapterModal> = (props) => {
         <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
         <PrimaryButton
           onClick={() => {
-            handleSettings(currentSettings);
+            handleConfirm(currentSettings);
             onClose();
           }}
         >

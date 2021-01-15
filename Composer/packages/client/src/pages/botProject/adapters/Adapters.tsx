@@ -24,16 +24,25 @@ const header = () => (
 );
 export const Adapters: React.FC = () => {
   const [isModalOpen, showModal] = useState<boolean>(false);
+  const [modalKey, setModalKey] = useState<number>(0);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) ?? '';
   const { setSettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(rootBotProjectId));
   const { adapters } = settings;
 
   const addAdapterButton = () => (
-    <ActionButton iconProps={{ iconName: 'Add' }} onClick={() => showModal(true)}>
+    <ActionButton
+      iconProps={{ iconName: 'Add' }}
+      onClick={() => {
+        setModalKey(modalKey + 1);
+        showModal(true);
+      }}
+    >
       {formatMessage('Add adapter')}
     </ActionButton>
   );
+
+  let initData: AdapterConfig | undefined = undefined;
 
   return (
     <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={titleStyle}>
@@ -43,33 +52,49 @@ export const Adapters: React.FC = () => {
         <div css={tableHeaderText}>{formatMessage('Name')} </div>
         <div css={tableHeaderText}>{formatMessage('Type')} </div>
       </div>
-      {adapters?.map((p, index) => {
-        return (
-          <div key={index} css={tableRow}>
-            <div css={tableItem} title={p.name}>
-              {p.name}
+      {adapters &&
+        Object.entries(adapters).map((entry, index) => {
+          const [key, adapter] = entry;
+          return (
+            <div key={index} css={tableRow}>
+              <div css={tableItem} title={adapter.name}>
+                {adapter.name}
+              </div>
+              <div css={tableItem} title={adapter.type}>
+                {adapter.type}
+              </div>
+              <IconButton
+                ariaLabel="Edit"
+                iconProps={{ iconName: 'Edit' }}
+                title="Edit"
+                onClick={() => {
+                  initData = adapter;
+                  showModal(true);
+                }}
+              />
+              <IconButton
+                ariaLabel="Delete"
+                iconProps={{ iconName: 'Delete' }}
+                title="Delete"
+                onClick={() => {
+                  setSettings(rootBotProjectId, {
+                    ...settings,
+                    adapters: adapters.filter((a) => a.key !== key),
+                  });
+                }}
+              />
             </div>
-            <div css={tableItem} title={p.type}>
-              {p.type}
-            </div>
-            <IconButton
-              ariaLabel="Delete"
-              iconProps={{ iconName: 'Delete' }}
-              title="Delete"
-              onClick={() => {
-                setSettings(rootBotProjectId, {
-                  ...settings,
-                  adapters: adapters.filter((a) => a.key !== p.key),
-                });
-              }}
-            />
-          </div>
-        );
-      })}
+          );
+        })}
       <AdapterModal
-        handleSettings={(data) =>
-          setSettings(rootBotProjectId, { ...settings, adapters: adapters == null ? [data] : [...adapters, data] })
+        key={modalKey}
+        handleConfirm={(data) =>
+          setSettings(rootBotProjectId, {
+            ...settings,
+            adapters: adapters == null ? { [modalKey]: data } : { ...adapters, [modalKey]: data },
+          })
         }
+        initData={initData}
         isOpen={isModalOpen}
         title={formatMessage('Add adapter')}
         onClose={() => {
