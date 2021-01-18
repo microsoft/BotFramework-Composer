@@ -13,7 +13,7 @@ import { loadLocale } from './utils/fileUtil';
 import { dispatcherState } from './recoilModel/DispatcherWrapper';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
 
-initializeIcons(undefined, { disableWarnings: true });
+initializeIcons('/fonts/', { disableWarnings: true });
 
 const Logger = () => {
   useInitializeLogger();

@@ -11,7 +11,7 @@ import { EventsEditorDemo } from './stories/EventsEditorDemo';
 import { VisualSDKDemo } from './stories/VisualSDKDemo';
 import './index.css';
 
-initializeIcons(undefined, { disableWarnings: true });
+initializeIcons('/fonts/', { disableWarnings: true });
 
 EditorConfig.features.showEvents = true;
 
