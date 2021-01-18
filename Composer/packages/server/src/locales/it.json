@@ -1446,7 +1446,7 @@
     "message": "elemento aggiunto"
   },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
-    "message": "{ itemCount, plural,\n     =0 {No schemas}\n     =1 {One schema}\n  altri {# schemas}\n} sono stati trovati.\n            { itemCount, select,\n      0 {}\n  altro {Press down arrow key to navigate the search results}\n}"
+    "message": "{ itemCount, plural,\n     =0 {No schemas}\n     =1 {One schema}\n  other {# schemas}\n} sono stati trovati.\n            { itemCount, select,\n      0 {}\n  altro {Press down arrow key to navigate the search results}\n}"
   },
   "jan_28_2020_8beb36dc": {
     "message": "28 gen 2020"
