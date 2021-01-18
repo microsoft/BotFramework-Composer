@@ -3,6 +3,12 @@
 
 import { monaco } from '@monaco-editor/react';
 
+monaco.config({
+  urls: {
+    monacoLoader: '/min/vs/loader.js',
+    monacoBase: '/min/vs',
+  },
+});
 // initialize moanco api as early as possible
 monaco.init();
 

@@ -10,7 +10,7 @@ import { syncStore, Shell } from '@bfc/extension-client';
 
 import './index.css';
 
-Fabric.initializeIcons(undefined, { disableWarnings: true });
+Fabric.initializeIcons('/fonts/', { disableWarnings: true });
 
 if (!document.head.title) {
   const title = document.createElement('title');
