@@ -46,21 +46,16 @@ window.ReactDOM = ReactDOM;
 window.ExtensionClient = ExtensionClient;
 window.Fabric = Fabric;
 window.Composer = {
+  __extensionId: '',
   __pluginType: '',
-  render: (type: string, shell: Shell, component: React.ReactElement) => {
-    // eslint-disable-next-line no-underscore-dangle
-    window.Composer.__pluginType = type;
-
-    if (shell) {
-      syncStore(shell);
-    }
-
+  render: (component: React.ReactElement) => {
     ReactDOM.render(component, document.getElementById('root'));
     window.parent?.postMessage('plugin-rendered', '*');
   },
   sync: (shell: Shell) => {
     syncStore(shell);
   },
+  settings: {},
 };
 
 // signal to the host that we are ready to accept the plugin bundle

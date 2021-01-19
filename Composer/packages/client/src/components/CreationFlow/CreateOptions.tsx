@@ -8,7 +8,7 @@ import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
@@ -32,10 +32,11 @@ import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
 import { featureFlagsState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
-const optionIcon = (checked) => css`
+const optionIcon = (checked: boolean) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
@@ -64,7 +65,7 @@ export const bannerClass = mergeStyles({
   marginTop: '5px',
 });
 
-const rowDetails = (disabled) => {
+const rowDetails = (disabled: boolean) => {
   return {
     root: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
@@ -82,7 +83,7 @@ const rowDetails = (disabled) => {
   };
 };
 
-const rowTitle = (disabled) => {
+const rowTitle = (disabled: boolean) => {
   return {
     cellTitle: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
@@ -140,17 +141,19 @@ export function CreateOptions(props: CreateOptionsProps) {
     });
   }, []);
 
-  function SelectOption(props) {
+  function SelectOption(props?: { checked?: boolean; text: string; key: string }) {
+    if (props == null) return null;
     const { checked, text, key } = props;
     return (
       <div key={key} css={optionRoot}>
-        <Icon css={optionIcon(checked)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
+        <Icon css={optionIcon(checked ?? false)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
         <span>{text}</span>
       </div>
     );
   }
 
-  const handleChange = (event, option) => {
+  const handleChange = (event, option?: IChoiceGroupOption) => {
+    if (option == null) return;
     setOption(option.key);
     if (option.key === optionKeys.createFromTemplate) {
       setDisabled(false);
@@ -163,16 +166,18 @@ export function CreateOptions(props: CreateOptionsProps) {
     let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
       routeToTemplate = currentTemplate;
+      TelemetryClient.track('CreateNewBotProjectFromExample', { template: routeToTemplate });
     }
 
     if (option === optionKeys.createFromQnA) {
       routeToTemplate = QnABotTemplateId;
     }
 
-    if (props.location && props.location.search) {
+    if (props.location?.search) {
       routeToTemplate += props.location.search;
     }
 
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
     onNext(routeToTemplate);
   };
 

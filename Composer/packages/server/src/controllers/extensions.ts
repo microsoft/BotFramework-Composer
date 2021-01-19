@@ -47,6 +47,12 @@ interface ExtensionFetchRequest extends Request {
   };
 }
 
+interface ExtensionSettingsRequest extends Request {
+  query: {
+    _all?: boolean;
+  };
+}
+
 const presentExtension = (e?: ExtensionMetadata) => (e ? { ...e, bundles: undefined, path: undefined } : undefined);
 
 export async function listExtensions(req: Request, res: Response) {
@@ -116,7 +122,7 @@ export async function removeExtension(req: RemoveExtensionRequest, res: Response
 export async function searchExtensions(req: SearchExtensionsRequest, res: Response) {
   const { q } = req.query;
 
-  const results = await ExtensionManager.search(q ?? '');
+  const results = await ExtensionManager.search(q ?? ''); // lgtm [js/regex-injection]
   res.json(results);
 }
 
@@ -162,10 +168,27 @@ export async function performExtensionFetch(req: ExtensionFetchRequest, res: Res
     const json = await response.json();
     res.json(json);
   } catch (e) {
-    let error = e;
-    if (e && e.json) {
-      error = await e.json();
+    if (e?.json) {
+      const error = await e.json();
+      res.status(500).json(error);
+    } else {
+      // re-throw error to be handled by our error handler
+      throw e;
     }
-    res.status(500).send(error);
   }
+}
+
+export async function getSettingsSchema(req: Request, res: Response) {
+  res.json(ExtensionManager.settingsSchema);
+}
+
+export async function getSettings(req: ExtensionSettingsRequest, res: Response) {
+  const includeDefaults = '_all' in req.query;
+
+  res.json(ExtensionManager.getSettings(includeDefaults));
+}
+
+export async function updateSettings(req: Request, res: Response) {
+  ExtensionManager.updateSettings(req.body ?? {});
+  res.json(ExtensionManager.getSettings(true));
 }

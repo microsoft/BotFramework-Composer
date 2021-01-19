@@ -8,11 +8,13 @@ import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { checkForPVASchema } from '@bfc/shared';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
+import { schemasState } from '../recoilModel/atoms';
 import {
   dispatcherState,
   appUpdateState,
@@ -135,6 +137,7 @@ export const Header = () => {
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
   const settings = useRecoilValue(settingsState(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
@@ -175,6 +178,17 @@ export const Header = () => {
     }
   };
 
+  const handleActiveLanguageButtonOnDismiss = () => {
+    setTeachingBubbleVisibility(false);
+  };
+
+  const handleActiveLanguageButtonOnKeyDown = (e) => {
+    if (e.key.toLowerCase() === 'enter') {
+      e.preventDefault();
+      setTeachingBubbleVisibility(true);
+    }
+  };
+
   return (
     <div css={headerContainer} role="banner">
       <img
@@ -194,6 +208,7 @@ export const Header = () => {
               role={'button'}
               tabIndex={0}
               onClick={() => setTeachingBubbleVisibility(true)}
+              onKeyDown={handleActiveLanguageButtonOnKeyDown}
             >
               {`${projectName} (${locale})`}
             </span>
@@ -202,7 +217,7 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {showStartBotsWidget && <BotController />}
+        {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && <BotController />}
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
@@ -214,26 +229,28 @@ export const Header = () => {
         <NotificationButton buttonStyles={buttonStyles} />
       </div>
       {teachingBubbleVisibility && (
-        <TeachingBubble
-          isWide
-          calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
-          headline={formatMessage('Active language')}
-          styles={teachingBubbleStyle}
-          target="#targetButton"
-          onDismiss={() => setTeachingBubbleVisibility(false)}
-        >
-          {formatMessage(
-            'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
-          )}
-          <Dropdown
-            disabled={languageListOptions.length === 1}
-            options={languageListOptions}
-            placeholder="Select an option"
-            selectedKey={locale}
-            styles={{ root: { marginTop: 12 } }}
-            onChange={onLanguageChange}
-          />
-        </TeachingBubble>
+        <div onBlur={handleActiveLanguageButtonOnDismiss}>
+          <TeachingBubble
+            isWide
+            calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
+            headline={formatMessage('Active language')}
+            styles={teachingBubbleStyle}
+            target="#targetButton"
+            onDismiss={handleActiveLanguageButtonOnDismiss}
+          >
+            {formatMessage(
+              'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
+            )}
+            <Dropdown
+              disabled={languageListOptions.length === 1}
+              options={languageListOptions}
+              placeholder="Select an option"
+              selectedKey={locale}
+              styles={{ root: { marginTop: 12 } }}
+              onChange={onLanguageChange}
+            />
+          </TeachingBubble>
+        </div>
       )}
     </div>
   );

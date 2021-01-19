@@ -12,8 +12,9 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogsSelectorFamily, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
+import { dialogIdsState, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
 
@@ -23,14 +24,15 @@ const QnAPage: React.FC<RouteComponentProps<{
   dialogId: string;
   projectId: string;
   skillId: string;
+  qnaFileId: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
+  const { dialogId = '', projectId = '', skillId, qnaFileId = '' } = props;
 
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   //To do: support other languages
   const locale = 'en-us';
@@ -43,7 +45,7 @@ const QnAPage: React.FC<RouteComponentProps<{
   const isRoot = dialogId === 'all';
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    const activeDialog = dialogs.find((id) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
       navigateTo(`${baseURL}knowledge-base/${dialogId}`);
     }
@@ -54,6 +56,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       let url = `${baseURL}knowledge-base/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
+      TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
     [dialogId, actualProjectId, edit]
   );
@@ -85,8 +88,8 @@ const QnAPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} skillId={skillId} />
-          <TableView path="/" projectId={projectId} />
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
+          <TableView dialogId={dialogId} path="/" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
         </Router>
         <CreateQnAModal
           dialogId={creatQnAOnInfo.dialogId}

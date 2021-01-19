@@ -6,57 +6,9 @@
       "properties": {
         "recognizer": {
           "description": "A felhasználó által mondottak megértéséhez a párbeszédnek olyan értelmezőre van szüksége, amely a felhasználók által használható példaszavakat és -mondatokat tartalmaz.",
-          "label": "Language Understanding"
+          "label": "Nyelvtanulás"
         }
       }
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Válasz küldése kérdés feltevéséhez",
-      "subtitle": "Tevékenység kérése"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Fájl vagy melléklet kérése",
-      "subtitle": "Melléklet bemenete"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Adatkérés több választási lehetőséggel",
-      "subtitle": "Választási lehetőség bemenete"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Megerősítés kérése",
-      "subtitle": "Bemenet megerősítése"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Dátum vagy idő kérése",
-      "subtitle": "Dátum- és időbevitel"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Szám kérése",
-      "subtitle": "Számbevitel"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth-bejelentkezés",
-      "subtitle": "OAuth-bemenet"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Szöveg kérése",
-      "subtitle": "Szövegbevitel"
     }
   },
   "Microsoft.BeginDialog": {
@@ -218,6 +170,54 @@
     "form": {
       "label": "Nyomkövetési esemény továbbítása",
       "subtitle": "Nyomkövetési tevékenység"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Válasz küldése kérdés feltevéséhez",
+      "subtitle": "Tevékenység kérése"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Fájl vagy melléklet kérése",
+      "subtitle": "Melléklet bemenete"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Adatkérés több választási lehetőséggel",
+      "subtitle": "Választási lehetőség bemenete"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Megerősítés kérése",
+      "subtitle": "Bemenet megerősítése"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Dátum vagy idő kérése",
+      "subtitle": "Dátum- és időbevitel"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Szám kérése",
+      "subtitle": "Számbevitel"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth-bejelentkezés",
+      "subtitle": "OAuth-bemenet"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Szöveg kérése",
+      "subtitle": "Szövegbevitel"
     }
   },
   "Microsoft.OnActivity": {

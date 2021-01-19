@@ -11,12 +11,12 @@ export const absHostRoot = process.env.WEBSITE_HOSTNAME
   : 'http://localhost:3978';
 
 let folder = process.env.COMPOSER_BOTS_FOLDER;
-if (folder && folder.endsWith(':')) {
+if (folder?.endsWith(':')) {
   folder = folder + '/';
 }
 
 let names: string[] = [];
-const getDiskNames = (text) => {
+const getDiskNames = (text: string) => {
   names = text
     .split('\r\r\n')
     .filter((token) => token.indexOf(':') > -1)
@@ -48,7 +48,9 @@ export const runtimeFolder = process.env.COMPOSER_RUNTIME_FOLDER || resolveFromR
 export const runtimeFrameworkVersion = process.env.COMPOSER_RUNTIME_VERSION || 'netcoreapp3.1';
 export const extensionManifestPath =
   process.env.COMPOSER_EXTENSION_MANIFEST || resolveFromRoot('.composer/extensions.json');
+export const extensionSettingsPath =
+  process.env.COMPOSER_EXTENSION_SETTINGS || resolveFromRoot('.composer/settings.json');
 export const extensionDataDir = process.env.COMPOSER_EXTENSION_DATA_DIR || resolveFromRoot('.composer/extension-data');
-export const extensionsbuiltinDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || resolveFromRoot('../extensions');
+export const extensionsBuiltinDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || resolveFromRoot('../extensions');
 export const extensionsRemoteDir =
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR || resolveFromRoot('.composer/extensions');

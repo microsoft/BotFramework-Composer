@@ -8,5 +8,7 @@ export * from './useRecognizerConfig';
 export * from './useShellApi';
 
 export * from './useApplicationApi';
-export * from './useProjectApi';
+export * from './useExtensionSettings';
 export * from './useHttpClient';
+export * from './useProjectApi';
+export * from './useTelemetryClient';

@@ -5,4 +5,10 @@ module.exports = withNodeDefaults({
     extension: './src/index.ts',
   },
   context: __dirname,
+  resolve: {
+    alias: {
+      // Support lsp code editor
+      vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
+    },
+  },
 });

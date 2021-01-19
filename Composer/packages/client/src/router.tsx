@@ -20,7 +20,7 @@ import {
   pluginPagesSelector,
   botOpeningMessage,
 } from './recoilModel';
-import { localBotsDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
+import { localBotsSettingDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -36,6 +36,7 @@ const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
 const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
 const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
+const ExtensionsPage = React.lazy(() => import('./pages/extensions/ExtensionsPage'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
@@ -64,8 +65,15 @@ const Routes = (props) => {
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId/skill/:skillId">
             <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/all/*" />
+            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/all/*" />
+            <LGPage path="language-generation/common/*" />
+            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/all/*" />
+            <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <BotProjectSettings path="botProjectsSettings" />
             <Diagnostics path="diagnostics" />
@@ -73,7 +81,11 @@ const Routes = (props) => {
           </ProjectRouter>
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/all/*" />
+            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/all/*" />
+            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <Publish path="publish/:targetName" />
@@ -92,6 +104,7 @@ const Routes = (props) => {
             ))}
           </ProjectRouter>
           <SettingPage path="settings/*" />
+          <ExtensionsPage path="extensions/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
           <NotFound default />
@@ -123,7 +136,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-  const localBots = useRecoilValue(localBotsDataSelector);
+  const localBots = useRecoilValue(localBotsSettingDataSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));

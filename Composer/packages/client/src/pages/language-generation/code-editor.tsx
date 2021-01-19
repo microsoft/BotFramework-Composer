@@ -15,9 +15,10 @@ import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { LgFile } from '@bfc/extension-client';
 
-import { localeState, lgFilesState, settingsState } from '../../recoilModel/atoms/botState';
+import { localeState, settingsState } from '../../recoilModel/atoms/botState';
 import { userSettingsState, dispatcherState } from '../../recoilModel';
 import { DiffCodeEditor } from '../language-understanding/diff-editor';
+import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 
 const lspServerPath = '/lg-language-server';
 
@@ -25,15 +26,16 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
   skillId?: string;
+  lgFileId?: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { dialogId, projectId, skillId } = props;
+  const { dialogId, projectId, skillId, lgFileId } = props;
   const actualProjectId = skillId ?? projectId;
 
   const userSettings = useRecoilValue(userSettingsState);
   const locale = useRecoilValue(localeState(actualProjectId));
-  const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
@@ -45,8 +47,13 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     setLocale,
   } = useRecoilValue(dispatcherState);
 
-  const file: LgFile | undefined = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file: LgFile | undefined = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId)
+    : lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const diagnostics = get(file, 'diagnostics', []);
   const [errorMsg, setErrorMsg] = useState('');

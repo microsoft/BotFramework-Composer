@@ -17,7 +17,6 @@ import createDispatchers, { Dispatcher } from './dispatchers';
 import {
   luFilesState,
   qnaFilesState,
-  lgFilesState,
   skillManifestsState,
   dialogSchemasState,
   settingsState,
@@ -29,11 +28,12 @@ import {
 import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from './selectors';
 import { Recognizer } from './Recognizers';
 import { recognizersSelectorFamily } from './selectors/recognizers';
+import { lgFilesSelectorFamily } from './selectors/lg';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
   const luFiles = await snapshot.getPromise(luFilesState(projectId));
-  const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+  const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
   const skillManifests = await snapshot.getPromise(skillManifestsState(projectId));
   const setting = await snapshot.getPromise(settingsState(projectId));
   const botProjectFile = await snapshot.getPromise(botProjectFileState(projectId));
@@ -69,7 +69,7 @@ export const dispatcherState = atom<Dispatcher>({
 const wrapDispatcher = (dispatchers, forceUpdate) => {
   return Object.keys(dispatchers).reduce((boundDispatchers, dispatcherName) => {
     const dispatcher = async (...args) => {
-      forceUpdate([]); //gurarantee the snapshot get the latset state
+      forceUpdate([]); //guarantee the snapshot get the latest state
       await dispatchers[dispatcherName](...args);
     };
     boundDispatchers[dispatcherName] = dispatcher;

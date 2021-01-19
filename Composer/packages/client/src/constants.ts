@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -38,6 +39,21 @@ export const Tips = {
     );
   },
 };
+
+export const LUIS_REGIONS: IDropdownOption[] = [
+  {
+    key: 'westus',
+    text: formatMessage('westus'),
+  },
+  {
+    key: 'westeurope',
+    text: formatMessage('westeurope'),
+  },
+  {
+    key: 'australiaeast',
+    text: formatMessage('australiaeast'),
+  },
+];
 
 export const Links = {
   LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
@@ -105,7 +121,7 @@ export enum BotStatus {
   inactive = 'inactive',
   publishing = 'publishing',
   published = 'published',
-  reloading = 'loading',
+  starting = 'starting',
   pending = 'pending',
   failed = 'failed',
   stopping = 'stopping',
@@ -151,11 +167,14 @@ export const BotStatusesCopy = {
   get queued() {
     return formatMessage('Queued');
   },
-  get reloading() {
+  get starting() {
     return formatMessage('Starting');
   },
   get stopping() {
     return formatMessage('Stopping');
+  },
+  get pending() {
+    return formatMessage('Status pending');
   },
 };
 
@@ -320,6 +339,28 @@ export const EmptyBotTemplateId = 'EmptyBot';
 export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
+
+export const authConfig = {
+  // for web login
+  clientId: process.env.WEBLOGIN_CLIENTID,
+  scopes: [
+    'https://management.core.windows.net/user_impersonation',
+    'https://graph.microsoft.com/Application.ReadWrite.All',
+  ],
+  tenantId: process.env.WEBLOGIN_TENANTID,
+  redirectUrl: process.env.WEBLOGIN_REDIRECTURL,
+};
+
+export const armScopes = {
+  scopes: ['https://management.core.windows.net/user_impersonation'],
+  targetResource: 'https://management.core.windows.net/',
+};
+export const graphScopes = {
+  scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
+  targetResource: 'https://graph.microsoft.com/',
+};
+
+export const authUrl = `https://login.microsoftonline.com/${authConfig.tenantId}/oauth2/v2.0/authorize`;
 
 export const triggerNotSupportedWarning = () =>
   formatMessage(

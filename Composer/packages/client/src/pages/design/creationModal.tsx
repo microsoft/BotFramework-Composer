@@ -18,6 +18,7 @@ import {
   filteredTemplatesSelector,
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -52,7 +53,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const [templateId, setTemplateId] = useState('');
 
   useEffect(() => {
-    if (storages && storages.length) {
+    if (storages?.length) {
       const storageId = storage.id;
       const path = storage.path;
       const formattedPath = Path.normalize(path);
@@ -90,6 +91,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     };
     if (creationFlowType === 'Skill') {
       addNewSkillToBotProject(newBotData);
+      TelemetryClient.track('AddNewSkillCompleted');
     } else {
       createNewBot(newBotData);
     }
@@ -97,7 +99,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const handleDismiss = () => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    props.onDismiss && props.onDismiss();
+    props.onDismiss?.();
   };
 
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
@@ -124,6 +126,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     handleDismiss();
     if (creationFlowType === 'Skill') {
       addExistingSkillToBotProject(botFolder);
+      TelemetryClient.track('AddNewSkillCompleted');
     } else {
       openProject(botFolder);
     }

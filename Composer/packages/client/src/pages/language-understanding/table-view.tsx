@@ -24,19 +24,14 @@ import { EditableField } from '../../components/EditableField';
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { navigateTo } from '../../utils/navigation';
-import {
-  dispatcherState,
-  luFilesState,
-  localeState,
-  settingsState,
-  validateDialogsSelectorFamily,
-} from '../../recoilModel';
+import { dispatcherState, luFilesState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
+  luFileId?: string;
 }
 
 interface Intent {
@@ -49,9 +44,9 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId } = props;
+  const { dialogId, projectId, skillId, luFileId } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const { updateLuIntent } = useRecoilValue(dispatcherState);
@@ -59,14 +54,19 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const luFiles = useRecoilValue(luFilesState(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
-  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const defaultLangFile = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const file = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const defaultLangFile = luFileId
+    ? luFiles.find(({ id }) => id === luFileId)
+    : luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
@@ -89,7 +89,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (isEmpty(luFiles)) return;
 
     const allIntents = luFiles
-      .filter(({ id }) => getExtension(id) === locale)
+      .filter(({ id }: { id: string }) => getExtension(id) === locale)
       .reduce((result: Intent[], luFile: LuFile) => {
         const items: Intent[] = [];
         const luDialog = dialogs.find((dialog) => luFile.id === `${dialog.id}.${locale}`);
@@ -100,7 +100,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             phrases,
             fileId: luFile.id,
             dialogId: luDialog?.id || '',
-            used: !!luDialog && luDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+            used: luDialog?.referredLuIntents.some((lu) => lu.name === name) ?? false, // used by it's dialog or not
             state,
           });
         });
@@ -109,11 +109,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
     if (!activeDialog) {
       setIntents(allIntents);
+    } else if (luFileId && file) {
+      const luIntents: Intent[] = [];
+      get(file, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
+        const state = getIntentState(file);
+        luIntents.push({
+          name,
+          phrases,
+          fileId: file.id,
+          dialogId: activeDialog?.id || '',
+          used: activeDialog?.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+          state,
+        });
+      });
+      setIntents(luIntents);
     } else {
       const dialogIntents = allIntents.filter((t) => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog, actualProjectId]);
+  }, [luFiles, activeDialog, actualProjectId, luFileId]);
 
   const handleIntentUpdate = useCallback(
     (fileId: string, intentName: string, intent: LuIntentSection) => {
@@ -125,7 +139,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
       updateLuIntent(payload);
     },
-    [intents, projectId]
+    [actualProjectId]
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -140,7 +154,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLuIntent(payload);
       }
     },
-    [intents, file, projectId]
+    [defaultLangFile, actualProjectId]
   );
 
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
@@ -189,6 +203,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={displayName}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue === item.name) return;
                   if (newValue) {
                     handleIntentUpdate(item.fileId, item.name, { Name: newValue, Body: item.phrases });
                   }
@@ -219,9 +234,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim();
                   if (newValue) {
-                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
+                    const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
@@ -251,9 +268,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
-                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
+                    const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
@@ -282,11 +301,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
+                    const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
                     handleTemplateUpdateDefaultLocale(item.name, {
                       Name: item.name,
-                      Body: newValue,
+                      Body: fixedBody,
                     });
                   }
                 }}

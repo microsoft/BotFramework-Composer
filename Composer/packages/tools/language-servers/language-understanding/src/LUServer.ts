@@ -473,7 +473,7 @@ export class LUServer {
 
     //suggest a regex pattern for seperated line definition
     if (util.isSeperatedEntityDef(curLineContent)) {
-      const seperatedEntityDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
+      const seperatedEntityDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/; //lgtm [js/redos]
       let entityName = '';
       const matchGroup = curLineContent.match(seperatedEntityDef);
       if (matchGroup && matchGroup.length >= 2) {
@@ -607,11 +607,11 @@ export class LUServer {
 
   protected validate(document: TextDocument): void {
     this.cleanPendingValidation(document);
-    document.uri,
-      setTimeout(() => {
-        this.pendingValidationRequests.delete(document.uri);
-        this.doValidate(document);
-      });
+
+    setTimeout(() => {
+      this.pendingValidationRequests.delete(document.uri);
+      this.doValidate(document);
+    });
   }
 
   protected cleanPendingValidation(document: TextDocument): void {

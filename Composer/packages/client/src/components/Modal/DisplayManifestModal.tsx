@@ -38,6 +38,7 @@ const styles: { content: any; dialog: Partial<IDialogContentStyles>; modal: Part
       height: '800px !important',
       maxWidth: '80% !important',
       width: '600px !important',
+      overflowY: 'hidden',
     },
   },
 };

@@ -123,7 +123,6 @@ function handleSwitchCasePrevMoveFilter(
   elements: SelectorElement[]
 ): SelectorElement[] {
   const currentElementSelectors = parseSelector(transformDefaultBranch(currentElement.selectedId)) as string[];
-  let candidateElements = elements;
   let swicthPosition = -1;
   swicthPosition = currentElementSelectors.lastIndexOf('cases');
   const samePath = currentElementSelectors.slice(0, swicthPosition).join('.');
@@ -142,7 +141,7 @@ function handleSwitchCasePrevMoveFilter(
     });
   const minSwitchCasesElement = parseSelector(transformDefaultBranch(sortedElement[0].selectedId)) as string[];
   const minSwitchCasesIndex = Number(minSwitchCasesElement[swicthPosition + 1]);
-  candidateElements = elements.filter((ele) => {
+  const candidateElements = elements.filter((ele) => {
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     return Number(eleSelectors[swicthPosition + 1]) === minSwitchCasesIndex;
   });
@@ -151,7 +150,6 @@ function handleSwitchCasePrevMoveFilter(
 
 function handleSwitchCaseNextMoveFilter(currentElement: SelectorElement, elements: SelectorElement[]) {
   const currentElementSelectors = parseSelector(transformDefaultBranch(currentElement.selectedId)) as string[];
-  let candidateElements = elements;
   let swicthPosition = -1;
   if (currentElementSelectors.lastIndexOf('default') > currentElementSelectors.lastIndexOf('cases')) {
     swicthPosition = currentElementSelectors.lastIndexOf('default');
@@ -174,7 +172,7 @@ function handleSwitchCaseNextMoveFilter(currentElement: SelectorElement, element
     });
   const minSwitchCasesElement = parseSelector(transformDefaultBranch(sortedElement[0].selectedId)) as string[];
   const minSwitchCasesIndex = Number(minSwitchCasesElement[swicthPosition + 1]);
-  candidateElements = elements.filter((ele) => {
+  const candidateElements = elements.filter((ele) => {
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     return Number(eleSelectors[swicthPosition + 1]) === minSwitchCasesIndex;
   });

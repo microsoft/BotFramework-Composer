@@ -59,7 +59,7 @@ export function useSmartLayout<T extends string>(
   }, [nodeMap, boundaryMap]);
 
   useEffect(() => {
-    onResize && onResize(layout.boundary);
+    onResize?.(layout.boundary);
   }, [layout]);
 
   return {
