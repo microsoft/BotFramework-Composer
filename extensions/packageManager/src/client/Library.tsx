@@ -7,6 +7,7 @@ import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import {
   Link,
+  DefaultButton,
   Pivot,
   PivotItem,
   Dialog,
@@ -19,6 +20,7 @@ import {
   ScrollbarVisibility,
   Stack,
   SearchBox,
+  IDropdownOption,
 } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
@@ -27,11 +29,20 @@ import { ContentHeaderStyle, HeaderText } from './styles';
 import { ImportDialog } from './importDialog';
 import { LibraryRef, LibraryList } from './libraryList';
 import { WorkingModal } from './workingModal';
+import { FeedModal } from './feedModal';
 import { ProjectList } from './projectList/ProjectList';
 
 const DEFAULT_CATEGORY = formatMessage('Available');
 
 const docsUrl = `https://aka.ms/composer-package-manager-readme`;
+
+export interface PackageSourceFeed extends IDropdownOption {
+  name: string;
+  key: string;
+  url: string;
+  searchUrl?: string;
+  readonly?: boolean;
+}
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
@@ -44,7 +55,7 @@ const Library: React.FC = () => {
   const [installedComponents, updateInstalledComponents] = useState<LibraryRef[]>([]);
   const [recentlyUsed, setRecentlyUsed] = useState<LibraryRef[]>([]);
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
-  const [feeds, updateFeeds] = useState([]);
+  const [feeds, updateFeeds] = useState<PackageSourceFeed[]>([]);
   const [feed, setFeed] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -52,6 +63,7 @@ const Library: React.FC = () => {
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const httpClient = useHttpClient();
   const API_ROOT = '';
 
@@ -391,6 +403,20 @@ const Library: React.FC = () => {
     navigateTo(`/bot/${currentProjectId}/botProjectsSettings/#runtimeSettings`);
   };
 
+  const showFeedModal = (evt: any): void => {
+    setModalVisible(true);
+  };
+
+  const updateFeed = async (key: string, updatedItem: PackageSourceFeed) => {
+    const response = await httpClient.post(`${API_ROOT}/feeds`, {
+      key: key,
+      updatedItem: updatedItem,
+    });
+
+    // update the list of feeds in the component state
+    updateFeeds(response.data);
+  };
+
   return (
     <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
       <Dialog
@@ -406,6 +432,13 @@ const Library: React.FC = () => {
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
       </Dialog>
       <WorkingModal hidden={!working} title={strings.installProgress} />
+      <FeedModal
+        hidden={!isModalVisible}
+        title={strings.installProgress}
+        feeds={feeds}
+        closeDialog={() => setModalVisible(false)}
+        onUpdateFeed={updateFeed}
+      />
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
@@ -451,6 +484,7 @@ const Library: React.FC = () => {
                       root: { width: '200px' },
                     }}
                   ></Dropdown>
+                  <DefaultButton onClick={showFeedModal}>Feeds</DefaultButton>
                 </section>
                 <section>
                   <SearchBox

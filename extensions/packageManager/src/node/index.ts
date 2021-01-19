@@ -71,6 +71,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         text: string;
         url: string;
         searchUrl?: string;
+        readonly?: boolean;
       }[];
 
       // if no sources are in the config file, set the default list to our 1st party feed.
@@ -81,12 +82,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             text: 'npm',
             url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
             searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bf-component&size=100&from=0',
+            readonly: true,
           },
           {
             key: 'nuget',
             text: 'nuget',
             url: 'https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true',
             searchUrl: 'https://azuresearch-usnc.nuget.org/query?q={{keyword}}+Tags:%22bf-component%22&prerelease=true',
+            readonly: true,
             // only ours
             // https://azuresearch-usnc.nuget.org/query?q={search keyword}+preview.bot.component+Tags:%22bf-component%22&prerelease=true
           },
@@ -95,6 +98,33 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
 
       res.json(packageSources);
+    },
+    updateFeeds: async function (req, res) {
+      const { key, updatedItem } = req.body;
+
+      let feeds = composer.store.read('feeds') as {
+        key: string;
+        text: string;
+        url: string;
+        searchUrl?: string;
+      }[];
+
+      if (!updatedItem) {
+        // remove this
+        console.log('remove item');
+        // update component state
+        feeds = feeds.filter((f) => f.key !== key);
+      } else if (feeds.filter((f) => f.key === key).length) {
+        // item found
+        feeds = feeds.map((f) => (f.key === key ? updatedItem : f));
+      } else {
+        // new item to be appended
+        console.log('add item');
+        feeds = feeds.concat([updatedItem]);
+      }
+
+      composer.store.write('feeds', feeds);
+      res.json(feeds);
     },
     getLibrary: async function (req, res) {
       // read the list of sources from the config file.
@@ -384,5 +414,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
   composer.addWebRoute('get', `${API_ROOT}/projects/:projectId/installedComponents`, LibraryController.getComponents);
   composer.addWebRoute('get', `${API_ROOT}/library`, LibraryController.getLibrary);
   composer.addWebRoute('get', `${API_ROOT}/feeds`, LibraryController.getFeeds);
+  composer.addWebRoute('post', `${API_ROOT}/feeds`, LibraryController.updateFeeds);
   composer.addWebRoute('get', `${API_ROOT}/feed`, LibraryController.getFeed);
 };
