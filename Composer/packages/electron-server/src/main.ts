@@ -184,10 +184,6 @@ async function main(show = false) {
       waitForMainWindowToShow
         .then(async () => {
           log('[Windows] Main window is now showing. Processing deep link if any.');
-          // TODO: remove for testing
-          // process.argv.push(
-          //   'bfcomposer://import?source=pva&payload=%7B%22botId%22%3A%2256a069f6-b4f4-45fa-a405-48bf59bf5372%22%2C%22envId%22%3A%22839eace6-59ab-4243-97ec-a5b8fcc104e4%22%2C%22tenantId%22%3A%2272f988bf-86f1-41af-91ab-2d7cd011db47%22%2C%22name%22%3A%22pvatestbottwo%22%2C%22baseUrl%22%3A%22https%3A%2F%2Fpowerva.microsoft.com%2Fapi%2Fbotmanagement%2Fv1%22%7D'
-          // );
           const deeplinkUrl = processArgsForWindows(process.argv);
           if (deeplinkUrl) {
             log('[Windows] Loading deeplink: %s', deeplinkUrl);

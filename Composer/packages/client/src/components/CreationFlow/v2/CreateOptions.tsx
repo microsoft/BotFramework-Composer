@@ -218,7 +218,14 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
       >
-        <Pivot defaultSelectedKey={csharpFeedKey} onLinkClick={setSelectedFeed}>
+        <Pivot
+          defaultSelectedKey={csharpFeedKey}
+          onLinkClick={(item) => {
+            if (item) {
+              setSelectedFeed(item);
+            }
+          }}
+        >
           <PivotItem headerText="C#" itemKey={csharpFeedKey}></PivotItem>
           <PivotItem headerText="Typescript" itemKey={nodeFeedKey}></PivotItem>
         </Pivot>
