@@ -212,6 +212,8 @@ export const perProjectDiagnosticsSelectorFamily = selectorFamily({
   key: 'perProjectDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
+    const rootBotId = get(rootBotProjectIdSelector) || projectId;
+    const rootSetting = get(settingsState(rootBotId));
     const dialogs = get(dialogsSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
@@ -237,7 +239,7 @@ export const perProjectDiagnosticsSelectorFamily = selectorFamily({
       recognizers: [],
       crossTrainConfig: {},
     };
-    return BotIndexer.validate({ ...botAssets, isRemote, isRootBot });
+    return BotIndexer.validate({ ...botAssets, isRemote, isRootBot }, rootSetting);
   },
 });
 
