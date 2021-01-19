@@ -20,7 +20,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import {
   DialogCreationCopy,
   QnABotTemplateId,
-  nameRegex,
+  nameRegexV2,
   invalidNameCharRegex,
   mockLanguageOptions,
   runtimeOptions,
@@ -144,7 +144,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!value || !nameRegex.test(`${value}`)) {
+        if (!value || !nameRegexV2.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {
             return formatMessage('Bot name cannot not start with a number');

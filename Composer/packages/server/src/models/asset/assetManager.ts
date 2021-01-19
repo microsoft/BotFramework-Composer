@@ -20,15 +20,15 @@ import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
 
-const yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
-yeomanEnv.lookupLocalPackages();
-
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
+  public yeomanEnv: any;
   private _botProjectFileTemplate;
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
+    this.yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
+    this.yeomanEnv.lookupLocalPackages();
   }
 
   public get botProjectFileTemplate() {
@@ -127,14 +127,14 @@ export class AssetManager {
   }
 
   private async installRemoteTemplate(generatorName: string, npmPackageName: string): Promise<boolean> {
-    yeomanEnv.cwd = templateGeneratorPath;
-    const registeredGenerators: string[] = await yeomanEnv.getGeneratorNames();
+    this.yeomanEnv.cwd = templateGeneratorPath;
+    const registeredGenerators: string[] = await this.yeomanEnv.getGeneratorNames();
 
     if (registeredGenerators.indexOf(generatorName) !== -1) {
       return true;
     } else {
-      await yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
-      await yeomanEnv.lookupLocalPackages();
+      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
+      await this.yeomanEnv.lookupLocalPackages();
       return true;
     }
   }
@@ -144,9 +144,9 @@ export class AssetManager {
     dstDir: string,
     projectName: string
   ): Promise<boolean> {
-    yeomanEnv.cwd = dstDir;
+    this.yeomanEnv.cwd = dstDir;
 
-    await yeomanEnv.run([generatorName, projectName], {}, () => {
+    await this.yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });
     return true;
