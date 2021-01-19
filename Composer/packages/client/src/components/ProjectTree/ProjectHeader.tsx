@@ -82,7 +82,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
 
   const link: TreeLink = {
     displayName,
-    projectId,
+    projectId: rootProjectId,
     skillId: rootProjectId === projectId ? undefined : projectId,
     isRoot: true,
     botError,
