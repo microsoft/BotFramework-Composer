@@ -382,3 +382,18 @@ export const feedDictionary: { [key in FeedName]: string } = {
   firstPartyNode:
     'https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
 };
+
+// TODO: replace language options with available languages pertinent to the selected template (issue #5554)
+export const defaultPrimaryLanguage = 'english';
+
+export const mockLanguageOptions: IDropdownOption[] = [
+  { key: defaultPrimaryLanguage, text: 'English' },
+  { key: 'spanish', text: 'Spanish' },
+];
+
+export const defaultRuntime = 'azureWebApp';
+
+export const runtimeOptions: IDropdownOption[] = [
+  { key: defaultRuntime, text: 'Azure Web App' },
+  { key: 'azureFunctions', text: 'Azure Functions' },
+];

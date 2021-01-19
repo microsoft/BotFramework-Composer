@@ -520,7 +520,18 @@ async function createProjectAsync(req: Request, jobId: string) {
   const { templateId } = req.body;
 
   // todo: add back templateDir, eTag, alias from req extraction for PVA scenarios
-  const { name, description, storageId, location, preserveRoot, templateDir, eTag, alias, locale } = req.body;
+  const {
+    name,
+    description,
+    storageId,
+    location,
+    preserveRoot,
+    templateDir,
+    eTag,
+    alias,
+    locale,
+    schemaUrl,
+  } = req.body;
 
   // get user from request
   const user = await ExtensionContext.getUserFromRequest(req);
@@ -562,9 +573,9 @@ async function createProjectAsync(req: Request, jobId: string) {
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
       await currentProject.updateBotInfo(name, description, preserveRoot);
 
-      // if (schemaUrl && !createFromPva) {
-      //   await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-      // }
+      if (schemaUrl && !createFromPva) {
+        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      }
 
       await currentProject.init();
 
