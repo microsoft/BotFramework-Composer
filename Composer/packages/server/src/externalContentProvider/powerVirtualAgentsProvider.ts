@@ -79,7 +79,7 @@ function prettyPrintError(err: string | Error): string {
   if (typeof err === 'string') {
     return err;
   }
-  if (err && err.message) {
+  if (err?.message) {
     return err.message;
   }
   return '';
@@ -110,7 +110,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       }
 
       // write the zip to disk
-      if (result && result.body) {
+      if (result?.body) {
         ensureDirSync(this.tempBotAssetsDir);
         const zipPath = join(this.tempBotAssetsDir, `bot-assets-${Date.now()}.zip`);
         const writeStream = createWriteStream(zipPath);

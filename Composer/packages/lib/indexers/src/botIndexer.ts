@@ -76,29 +76,31 @@ const shouldUseQnA = (dialogs: DialogInfo[], qnaFiles: QnAFile[]): boolean => {
  * 1. Missing LUIS key
  * 2. Missing QnA Maker subscription key.
  */
-const checkSetting = (assets: {
-  dialogs: DialogInfo[];
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  qnaFiles: QnAFile[];
-  setting: DialogSetting;
-}): Diagnostic[] => {
+const checkSetting = (
+  assets: {
+    dialogs: DialogInfo[];
+    lgFiles: LgFile[];
+    luFiles: LuFile[];
+    qnaFiles: QnAFile[];
+    setting: DialogSetting;
+  },
+  rootSetting?: DialogSetting
+): Diagnostic[] => {
   const { dialogs, setting, luFiles, qnaFiles } = assets;
   const diagnostics: Diagnostic[] = [];
-
   const useLUIS = shouldUseLuis(dialogs, luFiles);
   const useQnA = shouldUseQnA(dialogs, qnaFiles);
 
   // if use LUIS, check LUIS authoring key
   if (useLUIS) {
-    if (!get(setting, 'luis.authoringKey')) {
+    if (!get(setting, 'luis.authoringKey') && !get(rootSetting, 'luis.authoringKey')) {
       diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error, '#luisKey'));
     }
   }
 
   // if use LUIS, check LUIS authoring region
   if (useLUIS) {
-    if (!get(setting, 'luis.authoringRegion')) {
+    if (!get(setting, 'luis.authoringRegion') && !get(rootSetting, 'luis.authoringRegion')) {
       diagnostics.push(
         new Diagnostic('Missing LUIS region', 'appsettings.json', DiagnosticSeverity.Error, '#luisRegion')
       );
@@ -107,7 +109,7 @@ const checkSetting = (assets: {
 
   // if use QnA, check QnA subscription key
   if (useQnA) {
-    if (!get(setting, 'qna.subscriptionKey')) {
+    if (!get(setting, 'qna.subscriptionKey') && !get(rootSetting, 'qna.subscriptionKey')) {
       diagnostics.push(
         new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error, '#qnaKey')
       );
@@ -164,19 +166,26 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; botProjectFile: BotP
   return diagnostics;
 };
 
-const validate = (assets: {
-  dialogs: DialogInfo[];
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  qnaFiles: QnAFile[];
-  setting: DialogSetting;
-  skillManifests: SkillManifestFile[];
-  botProjectFile: BotProjectFile;
-  isRemote?: boolean;
-  isRootBot?: boolean;
-}): Diagnostic[] => {
+const validate = (
+  assets: {
+    dialogs: DialogInfo[];
+    lgFiles: LgFile[];
+    luFiles: LuFile[];
+    qnaFiles: QnAFile[];
+    setting: DialogSetting;
+    skillManifests: SkillManifestFile[];
+    botProjectFile: BotProjectFile;
+    isRemote?: boolean;
+    isRootBot?: boolean;
+  },
+  rootSetting?: DialogSetting
+): Diagnostic[] => {
   if (assets.isRemote) return [];
-  const settingDiagnostics = [...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
+  const settingDiagnostics = [
+    ...checkSetting(assets, rootSetting),
+    ...checkLUISLocales(assets),
+    ...checkSkillSetting(assets),
+  ];
   if (assets.isRootBot) return settingDiagnostics;
   return [...checkManifest(assets), ...settingDiagnostics];
 };

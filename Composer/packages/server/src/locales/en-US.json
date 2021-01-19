@@ -6,7 +6,7 @@
     "message": "5 Minute Intro"
   },
   "ErrorInfo_part1": {
-    "message": "An error occured in the form editor!"
+    "message": "An error occurred in the form editor!"
   },
   "ErrorInfo_part2": {
     "message": "This is likely due to malformed data or missing functionality in Composer."
@@ -284,8 +284,8 @@
   "attachment_input_e0ece49c": {
     "message": "Attachment Input"
   },
-  "australia_6a25c95b": {
-    "message": "australia"
+  "australiaeast_f3227a31": {
+    "message": "australiaeast"
   },
   "authoring_canvas_18802e39": {
     "message": "Authoring canvas"
@@ -2620,6 +2620,9 @@
   },
   "status_e7fdbe06": {
     "message": "Status"
+  },
+  "status_pending_4c90cbc5": {
+    "message": "Status pending"
   },
   "step_of_setlength_43c73821": {
     "message": "{ step } of { setLength }"

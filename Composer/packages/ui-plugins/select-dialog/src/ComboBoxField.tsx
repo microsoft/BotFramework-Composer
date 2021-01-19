@@ -52,8 +52,8 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
         id={id}
         options={options}
         selectedKey={comboboxTitle ? 'customTitle' : value}
-        onBlur={() => onBlur && onBlur(id, value)}
-        onFocus={() => onFocus && onFocus(id, value)}
+        onBlur={() => onBlur?.(id, value)}
+        onFocus={() => onFocus?.(id, value)}
         onItemClick={onChange}
         onRenderOption={onRenderOption}
       />

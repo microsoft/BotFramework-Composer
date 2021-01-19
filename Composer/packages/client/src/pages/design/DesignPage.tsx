@@ -4,18 +4,16 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'react';
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Diagnostic } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger, getDialogData } from '../../utils/dialogUtil';
@@ -24,7 +22,6 @@ import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { createDiagnosticsPageUrl, getFocusPath, navigateTo, createBotSettingUrl } from '../../utils/navigation';
-import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
@@ -33,7 +30,7 @@ import {
   userSettingsState,
   dispatcherState,
   schemasState,
-  validateDialogsSelectorFamily,
+  dialogsSelectorFamily,
   focusPathState,
   showCreateDialogModalState,
   localeState,
@@ -45,6 +42,7 @@ import {
   SkillInfo,
   projectMetaDataState,
   displaySkillManifestState,
+  designPageLocationState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -57,28 +55,15 @@ import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
-import {
-  breadcrumbClass,
-  contentWrapper,
-  deleteDialogContent,
-  editorContainer,
-  editorWrapper,
-  pageRoot,
-  visualPanel,
-} from './styles';
+import { contentWrapper, deleteDialogContent, editorContainer, editorWrapper, pageRoot, visualPanel } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 import { ManifestEditor } from './ManifestEditor';
-
-type BreadcrumbItem = {
-  key: string;
-  label: string;
-  link?: Partial<TreeLink>;
-  onClick?: () => void;
-};
+import VisualEditorHeader from './VisualEditorHeader';
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
@@ -112,9 +97,7 @@ function getAllRef(targetId, dialogs) {
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
 
-  if (Object.values<string>(PromptTab).includes(tab)) {
-    return tab;
-  }
+  return Object.values(PromptTab).find((value) => tab === value);
 };
 
 const parseTriggerId = (triggerId: string | undefined): number | undefined => {
@@ -132,7 +115,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const displaySkillManifestNameIdentifier = useRecoilValue(displaySkillManifestState);
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
@@ -149,6 +132,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(skillId ?? projectId));
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(skillId ?? projectId));
+  const designPageLocation = useRecoilValue(designPageLocationState(skillId ?? projectId));
 
   const {
     removeDialog,
@@ -174,10 +158,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
 
-  const params = new URLSearchParams(location?.search);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === props.dialogId)?.content,
-    params.get('selected') || ''
+    designPageLocation.selected || ''
   );
 
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
@@ -190,13 +173,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
   const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0] as DialogInfo);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
-  const [breadcrumbs, setBreadcrumbs] = useState<Array<BreadcrumbItem>>([]);
 
   const shell = useShell('DesignPage', skillId ?? rootProjectId);
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
   const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
+  const currentDialog = (dialogs.find(({ id }) => id === dialogId) ?? dialogs[0]) as DialogInfo;
+
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     if (!skillId) return;
@@ -207,11 +191,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [skills, skillId]);
 
   useEffect(() => {
-    const currentDialog = dialogs.find(({ id }) => id === dialogId) as DialogInfo | undefined;
-    if (currentDialog) {
-      setCurrentDialog(currentDialog);
+    if (!warningIsVisible) {
+      setWarningIsVisible(true);
     }
-    setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 
   // migration: add id to dialog when dialog doesn't have id
@@ -238,47 +220,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const selected = decodeDesignerPathToArrayPath(dialogData, params.get('selected') ?? '');
       const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
-      // TODO: get these from a second return value from decodeDesignerPathToArrayPath
-      const triggerIndex = parseTriggerId(selected);
-
       //make sure focusPath always valid
       const focusPath = getFocusPath(selected, focused);
-      const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
-
-      const breadcrumbArray: Array<BreadcrumbItem> = [];
-
-      breadcrumbArray.push({
-        key: 'dialog-' + props.dialogId,
-        label: dialogMap[props.dialogId]?.$designer?.name ?? dialogMap[props.dialogId]?.$designer?.$designer?.name,
-        link: {
-          projectId: props.projectId,
-          dialogId: props.dialogId,
-        },
-        onClick: () => navTo(skillId ?? null, dialogId),
-      });
-      if (triggerIndex != null && trigger != null) {
-        breadcrumbArray.push({
-          key: 'trigger-' + triggerIndex,
-          label: trigger.$designer?.name || getFriendlyName(trigger),
-          link: {
-            projectId: props.projectId,
-            dialogId: props.dialogId,
-            trigger: triggerIndex,
-          },
-          onClick: () => navTo(skillId ?? null, dialogId, `${triggerIndex}`),
-        });
-      }
 
       // getDialogData returns whatever's at the end of the path, which could be a trigger or an action
       const possibleAction = getDialogData(dialogMap, dialogId, focusPath);
-
-      if (params.get('focused') != null) {
-        // we've linked to an action, so put that in too
-        breadcrumbArray.push({
-          key: 'action-' + focusPath,
-          label: getActionName(possibleAction),
-        });
-      }
 
       if (typeof possibleAction === 'undefined') {
         const { id: foundId } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
@@ -300,7 +246,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         focused,
         promptTab: getTabFromFragment(),
       });
-      setBreadcrumbs(breadcrumbArray);
+
       /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       globalHistory._onTransitionComplete();
@@ -326,31 +272,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   function handleSelect(link: TreeLink) {
-    if (link.bot?.error) {
+    if (link.botError) {
       setBrokenSkillInfo(link);
     }
-    const { skillId, dialogId, trigger, parentLink } = link;
+    const { skillId, dialogId, trigger } = link;
 
     updateZoomRate({ currentRate: 1 });
-    const breadcrumbArray: Array<BreadcrumbItem> = [];
-    if (dialogId != null) {
-      breadcrumbArray.push({
-        key: 'dialog-' + parentLink?.dialogId,
-        label: parentLink?.displayName ?? link.displayName,
-        link: { projectId, skillId, dialogId },
-        onClick: () => navTo(skillId ?? projectId, dialogId),
-      });
-    }
-    if (trigger != null) {
-      breadcrumbArray.push({
-        key: 'trigger-' + parentLink?.trigger,
-        label: link.displayName,
-        link: { projectId, skillId, dialogId, trigger },
-        onClick: () => selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`),
-      });
-    }
-
-    setBreadcrumbs(breadcrumbArray);
 
     if (trigger != null) {
       selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`);
@@ -375,26 +302,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
-  const getActionName = (action) => {
-    const nameFromAction = action?.$designer?.name as string | undefined;
-    let detectedActionName: string;
-
-    if (typeof nameFromAction === 'string') {
-      detectedActionName = nameFromAction;
-    } else {
-      const kind: string = action?.$kind as string;
-      const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
-      if (typeof actionNameFromSchema === 'string') {
-        detectedActionName = actionNameFromSchema;
-      } else if (typeof actionNameFromSchema === 'function') {
-        detectedActionName = actionNameFromSchema();
-      } else {
-        detectedActionName = formatMessage('Unknown');
-      }
-    }
-    return detectedActionName;
-  };
-
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
@@ -403,13 +310,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
-
-    if (selectedActions.length === 1 && selectedActions[0] != null) {
-      const action = selectedActions[0] as any;
-      const actionName = getActionName(action);
-
-      setBreadcrumbs((prev) => [...prev.slice(0, 2), { key: 'action-' + actionName, label: actionName }]);
-    }
 
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection, currentDialog?.content]);
@@ -558,39 +458,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     },
   ];
 
-  const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
-    return {
-      key: breadcrumb.key,
-      text: breadcrumb.label,
-      onClick: () => breadcrumb.onClick?.(),
-    };
-  };
-
-  const items = breadcrumbs.map(createBreadcrumbItem);
-
-  const breadcrumbItems = (
-    <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
-      <Breadcrumb
-        ariaLabel={formatMessage('Navigation Path')}
-        data-testid="Breadcrumb"
-        items={items}
-        maxDisplayedItems={3}
-        styles={breadcrumbClass}
-        onReduceData={() => undefined}
-      />
-      <div style={{ padding: '10px' }}>
-        <ActionButton
-          onClick={() => {
-            setDialogJsonVisibility((current) => !current);
-            TelemetryClient.track('EditModeToggled', { jsonView: dialogJsonVisible });
-          }}
-        >
-          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-        </ActionButton>
-      </div>
-    </div>
-  );
-
   async function handleCreateDialogSubmit(projectId, dialogName, dialogData) {
     setDialogModalInfo(undefined);
     await createDialog({ id: dialogName, content: dialogData, projectId });
@@ -599,7 +466,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   async function handleDeleteDialog(projectId: string, dialogId: string) {
     const refs = getAllRef(dialogId, dialogs);
-    let setting: any = {
+    let setting: Record<string, string | ((subTitle: string, style: any) => JSX.Element)> = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
     };
@@ -632,9 +499,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
 
     if (content) {
-      await updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
+      await updateDialog({ id: dialogId, content, projectId });
       const match = /\[(\d+)\]/g.exec(selected);
-      const current = match && match[1];
+      const current = match?.[1];
       if (!current) {
         commitChanges();
         return;
@@ -643,14 +510,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+          await selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          await navTo(skillId ?? projectId, dialogId);
+          await navTo(projectId, dialogId);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+        await selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
 
       commitChanges();
@@ -699,10 +566,22 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
   const dialogCreateSource = dialogModalInfo ?? skillId ?? projectId;
 
+  const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
+    setPageElementState('dialogs', { leftSplitWidth: sizes.primary });
+  };
+
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={'dialogs'}>
+        <Split
+          resetOnDoubleClick
+          initialPrimarySize="20%"
+          minPrimarySize="200px"
+          minSecondarySize="800px"
+          renderSplitter={renderThinSplitter}
+          splitterSize="5px"
+          onMeasuredSizesChanged={onMeasuredSizesChanged}
+        >
           <ProjectTree
             defaultSelected={{
               projectId,
@@ -736,14 +615,24 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <LeftRightSplit
-                  initialLeftGridWidth="65%"
-                  minLeftPixels={500}
-                  minRightPixels={350}
-                  pageMode={'dialogs'}
+                <Split
+                  resetOnDoubleClick
+                  initialPrimarySize="65%"
+                  minPrimarySize="500px"
+                  minSecondarySize="350px"
+                  renderSplitter={renderThinSplitter}
                 >
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                    {!isRemoteSkill ? breadcrumbItems : null}
+                    <VisualEditorHeader
+                      pluginConfig={pluginConfig}
+                      projectId={skillId ?? projectId}
+                      showCode={dialogJsonVisible}
+                      visible={!isRemoteSkill}
+                      onShowCodeClick={() => {
+                        setDialogJsonVisibility((current) => !current);
+                        TelemetryClient.track('EditModeToggled', { jsonView: dialogJsonVisible });
+                      }}
+                    />
                     {dialogJsonVisible ? (
                       <JsonEditor
                         key={'dialogjson'}
@@ -786,11 +675,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       <PropertyEditor key={focusPath + undoVersion} />
                     )}
                   </EditorExtension>
-                </LeftRightSplit>
+                </Split>
               </div>
             </Conversation>
           </div>
-        </LeftRightSplit>
+        </Split>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (

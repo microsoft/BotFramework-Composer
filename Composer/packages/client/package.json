@@ -8,13 +8,14 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "node --max_old_space_size=4096 scripts/start.js",
+    "start": "node --max_old_space_size=4096 --max-http-header-size=16000 scripts/start.js",
     "build": "node --max_old_space_size=4096 scripts/build.js",
     "clean": "rimraf build",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch"
   },
   "proxy": "http://localhost:5000",
   "dependencies": {
@@ -36,12 +37,13 @@
     "@bfc/ui-plugin-select-skill-dialog": "*",
     "@botframework-composer/types": "*",
     "@emotion/core": "^10.0.27",
+    "@geoffcox/react-splitter": "^2.0.3",
     "@reach/router": "^1.2.1",
     "@uifabric/fluent-theme": "^7.1.107",
     "@uifabric/icons": "^7.3.59",
     "@uifabric/react-hooks": "^7.4.12",
     "@uifabric/styling": "^7.13.7",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "babel-plugin-extract-format-message": "^6.2.3",
     "format-message": "^6.2.3",
     "format-message-generate-id": "^6.2.3",

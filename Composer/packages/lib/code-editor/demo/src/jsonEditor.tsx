@@ -31,7 +31,7 @@ const content = {
 export default function App() {
   const [value, setValue] = useState(content);
 
-  const onChange = value => {
+  const onChange = (value) => {
     setValue(value);
   };
 
