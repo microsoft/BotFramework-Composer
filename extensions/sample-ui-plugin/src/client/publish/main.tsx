@@ -2,15 +2,16 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useCallback, useState } from 'react';
-import { setConfigIsValid, setPublishConfig, useConfigBeingEdited } from '@bfc/extension-client';
+import { closeDialog, onBack, savePublishConfig, useConfigBeingEdited } from '@bfc/extension-client';
 
-import { column, label, publishRoot, textField } from '../styles';
+import { backButton, buttonBar, column, label, publishRoot, saveButton, textField, title } from '../styles';
 
 export const Main: React.FC<{ title: string }> = (props) => {
   const [configBeingEdited] = useConfigBeingEdited();
   const [val1, setVal1] = useState(configBeingEdited ? configBeingEdited.val1 : '');
   const [val2, setVal2] = useState(configBeingEdited ? configBeingEdited.val2 : '');
   const [val3, setVal3] = useState(configBeingEdited ? configBeingEdited.val3 : '');
+  const [configIsValid, setConfigIsValid] = useState(false);
 
   const updateVal1 = useCallback((ev) => {
     setVal1(ev.target.value);
@@ -25,7 +26,6 @@ export const Main: React.FC<{ title: string }> = (props) => {
   }, []);
 
   useEffect(() => {
-    setPublishConfig({ val1, val2, val3 });
     if (val1 && val2 && val3) {
       setConfigIsValid(true);
     } else {
@@ -33,9 +33,14 @@ export const Main: React.FC<{ title: string }> = (props) => {
     }
   }, [val1, val2, val3]);
 
+  const onSave = useCallback(() => {
+    savePublishConfig({ val1, val2, val3 });
+    closeDialog();
+  }, [val1, val2, val3]);
+
   return (
     <div className={publishRoot}>
-      <h3>{props.title}</h3>
+      <h3 className={title}>{props.title}</h3>
       <div className={column}>
         <label className={label} htmlFor={'val1'}>
           Value 1
@@ -71,6 +76,14 @@ export const Main: React.FC<{ title: string }> = (props) => {
           value={val3}
           onChange={updateVal3}
         ></input>
+      </div>
+      <div className={buttonBar}>
+        <button className={backButton} onClick={onBack}>
+          Back
+        </button>
+        <button className={saveButton} onClick={onSave} disabled={!configIsValid}>
+          Save
+        </button>
       </div>
     </div>
   );

@@ -25,12 +25,12 @@ export abstract class ExternalContentProvider<T extends IContentProviderMetadata
   /**
    * Downloads bot content and returns a path to the downloaded content.
    */
-  abstract async downloadBotContent(): Promise<BotContentInfo>;
+  abstract downloadBotContent(): Promise<BotContentInfo>;
 
   /**
    * Cleans up any leftover downloaded bot content and performs any other needed cleanup.
    */
-  abstract async cleanUp(): Promise<void>;
+  abstract cleanUp(): Promise<void>;
 
   /**
    * Returns a custom identifier defined by the service that will allow Composer
@@ -47,10 +47,10 @@ export abstract class ExternalContentProvider<T extends IContentProviderMetadata
    * is being imported. Composer can now prompt the user and ask if they want to save the
    * updated content to the existing project.
    */
-  abstract async getAlias?(): Promise<string>;
+  abstract getAlias?(): Promise<string>;
 
   /**
    * (Optional) Performs any necessary authentication for the service and returns an access token.
    */
-  abstract async authenticate?(): Promise<string>;
+  abstract authenticate?(): Promise<string>;
 }

@@ -240,7 +240,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 
-  if (ipcMain && ipcMain.on) {
+  if (ipcMain?.on) {
     ipcMain.on('composer-state-change', (e, state) => {
       const toggleEditingMode = (menu: Menu, mode: 'native' | 'action') => {
         ['Cut', 'Copy', 'Delete'].forEach((label) => {

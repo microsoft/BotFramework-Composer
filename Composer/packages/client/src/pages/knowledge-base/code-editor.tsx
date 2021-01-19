@@ -19,11 +19,15 @@ import { getBaseName } from '../../utils/fileUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { backIcon } from './styles';
+interface CodeEditorProps extends RouteComponentProps<{}> {
+  dialogId: string;
+  projectId: string;
+  skillId?: string;
+  qnaFileId?: string;
+}
 
 const lspServerPath = '/lu-language-server';
-const CodeEditor: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
-  props
-) => {
+const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { projectId = '', dialogId = '', skillId } = props;
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;

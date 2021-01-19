@@ -19,7 +19,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
     <PackageReference Include="Microsoft.Bot.Builder" Version="4.11.0" />
     <PackageReference Include="Microsoft.Bot.Builder.AI.Luis" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Bot.Builder.AI.Orchestrator" Version="4.11.0-preview" />
     <PackageReference Include="Microsoft.Bot.Builder.AI.QnA" Version="4.11.0" />
     <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.11.0" />
     <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.11.0" />
@@ -39,10 +38,4 @@
   <ItemGroup>
     <ProjectReference Include="..\core\Microsoft.BotFramework.Composer.Core.csproj" />
   </ItemGroup>
-
-  <!-- onnxruntime.pdb is dummied out for publishing due to its size. If you need these debug symbols in your published deployment, please comment out the section below. -->
-  <Target Name="RemoveOnnxRuntimePdb" AfterTargets="Publish">
-    <WriteLinesToFile File="$(PublishDir)\onnxruntime.pdb" Lines="" Overwrite="true" Encoding="Unicode" />
-  </Target>
-
 </Project>
