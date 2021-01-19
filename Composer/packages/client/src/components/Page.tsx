@@ -151,7 +151,7 @@ const Page: React.FC<IPageProps> = (props) => {
           >
             {useNewTree ? (
               <ProjectTree
-                defaultSelected={{
+                selectedLink={{
                   projectId,
                   skillId,
                   dialogId,

@@ -583,7 +583,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onMeasuredSizesChanged={onMeasuredSizesChanged}
         >
           <ProjectTree
-            defaultSelected={{
+            selectedLink={{
               projectId,
               skillId: skillId ?? undefined,
               dialogId,
