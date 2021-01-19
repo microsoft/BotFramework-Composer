@@ -3,6 +3,7 @@ const path = require('path');
 const merge = require('merge-options');
 const TerserPlugin = require('terser-webpack-plugin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require('esbuild-loader');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -45,18 +46,24 @@ function withNodeDefaults(extConfig) {
       mainFields: ['main'],
     },
     externals: serverDeps,
+    plugins: [new ESBuildPlugin()],
     optimization: {
       minimize: !isDevelopment,
       minimizer: [
-        new TerserPlugin({
-          extractComments: false,
-          terserOptions: {
-            keep_fnames: /AbortSignal/,
-            format: {
-              comments: false,
-            },
-          },
+        new ESBuildMinifyPlugin({
+          minify: !isDevelopment,
+          minifyIdentifiers: false,
+          target: 'es2015',
         }),
+        // new TerserPlugin({
+        //   extractComments: false,
+        //   terserOptions: {
+        //     keep_fnames: /AbortSignal/,
+        //     format: {
+        //       comments: false,
+        //     },
+        //   },
+        // }),
       ],
     },
   };
@@ -80,8 +87,11 @@ function withBrowserDefaults(extConfig) {
       rules: [
         {
           test: /\.tsx?$/,
-          use: ['cache-loader', { loader: 'ts-loader', options: { compilerOptions: { sourceMaps: true } } }],
-          exclude: [/node_modules/],
+          loader: 'esbuild-loader',
+          options: {
+            loader: 'tsx',
+            target: 'es2015',
+          },
         },
         {
           test: /\.svg$/i,
@@ -102,16 +112,14 @@ function withBrowserDefaults(extConfig) {
       'react-dom': 'ReactDOM',
       '@bfc/extension-client': 'ExtensionClient',
     },
+    plugins: [new ESBuildPlugin()],
     optimization: {
       minimize: !isDevelopment,
       minimizer: [
-        new TerserPlugin({
-          extractComments: false,
-          terserOptions: {
-            format: {
-              comments: false,
-            },
-          },
+        new ESBuildMinifyPlugin({
+          minify: !isDevelopment,
+          minifyIdentifiers: false,
+          target: 'es2015',
         }),
       ],
     },
