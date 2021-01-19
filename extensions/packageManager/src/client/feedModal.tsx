@@ -43,6 +43,9 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
           setSelectedItem(undefined);
         }
       },
+      // canSelectItem: (item: PackageSourceFeed) => {
+      //   return !item.readonly;
+      // },
     })
   );
 
@@ -120,8 +123,6 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
         />
         <DialogFooter>
           <TextField
-            // defaultValue={name}
-            // errorMessage={errorMessage}
             label={formatMessage('Name')}
             placeholder={formatMessage('Feed Name')}
             value={selectedItem ? selectedItem.text : ''}
@@ -129,8 +130,6 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
             onChange={updateSelected('text')}
           />
           <TextField
-            // defaultValue={name}
-            // errorMessage={errorMessage}
             label={formatMessage('URL')}
             placeholder={formatMessage('URL')}
             value={selectedItem ? selectedItem.url : ''}
