@@ -5,10 +5,10 @@
 import { jsx } from '@emotion/core';
 import { act } from 'react-test-renderer';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import { HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { UndoRoot, undoFunctionState, undoHistoryState } from '../history';
 import {
-  lgFilesState,
   luFilesState,
   projectMetaDataState,
   currentProjectIdState,
@@ -17,11 +17,14 @@ import {
   canUndoState,
   canRedoState,
 } from '../../atoms';
-import { dialogsSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
 import { undoStatusSelectorFamily } from '../../selectors/undo';
 import { dispatcherState } from '../../DispatcherWrapper';
+
+import { mockDialog } from './mockDialog';
+
 const projectId = '123-asd';
 
 export const UndoRedoWrapper = () => {
@@ -31,31 +34,31 @@ export const UndoRedoWrapper = () => {
 };
 
 describe('<UndoRoot/>', () => {
-  let renderedComponent;
+  const useRecoilTestHook = () => {
+    const { undo, redo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState(projectId));
+    const [dialogs, setDialogs] = useRecoilState(dialogsSelectorFamily(projectId));
+    const setProjectIdState = useSetRecoilState(currentProjectIdState);
+    const setDesignPageLocation = useSetRecoilState(designPageLocationState(projectId));
+    const history = useRecoilValue(undoHistoryState(projectId));
+    const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
+    return {
+      undo,
+      redo,
+      canRedo,
+      canUndo,
+      commitChanges,
+      clearUndo,
+      setProjectIdState,
+      setDialogs,
+      dialogs,
+      history,
+      setDesignPageLocation,
+    };
+  };
+
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>;
 
   beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const { undo, redo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState(projectId));
-      const [dialogs, setDialogs] = useRecoilState(dialogsSelectorFamily(projectId));
-      const setProjectIdState = useSetRecoilState(currentProjectIdState);
-      const setDesignPageLocation = useSetRecoilState(designPageLocationState(projectId));
-      const history = useRecoilValue(undoHistoryState(projectId));
-      const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
-      return {
-        undo,
-        redo,
-        canRedo,
-        canUndo,
-        commitChanges,
-        clearUndo,
-        setProjectIdState,
-        setDialogs,
-        dialogs,
-        history,
-        setDesignPageLocation,
-      };
-    };
-
     const { result } = renderRecoilHook(useRecoilTestHook, {
       wrapper: ({ children }) => {
         return (
@@ -68,7 +71,7 @@ describe('<UndoRoot/>', () => {
       states: [
         { recoilState: botProjectIdsState, initialValue: [projectId] },
         { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1', content: '' }] },
-        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
+        { recoilState: lgFilesSelectorFamily(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: undoHistoryState(projectId), initialValue: new UndoHistory(projectId) },
@@ -128,7 +131,7 @@ describe('<UndoRoot/>', () => {
 
   it('should remove the items from present when commit a new change', () => {
     act(() => {
-      renderedComponent.current.setDialogs([{ id: '2' }]);
+      renderedComponent.current.setDialogs([mockDialog('2')]);
     });
 
     act(() => {
@@ -136,16 +139,16 @@ describe('<UndoRoot/>', () => {
     });
 
     expect(renderedComponent.current.history.stack.length).toBe(2);
-    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '2' }]);
+    expect(renderedComponent.current.dialogs).toStrictEqual([mockDialog('2')]);
   });
 
   it('should redo', () => {
     act(() => {
-      renderedComponent.current.setDialogs([{ id: '2', content: '' }]);
+      renderedComponent.current.setDialogs([mockDialog('2')]);
     });
 
     act(() => {
-      renderedComponent.current.setDesignPageLocation({ dialogId: '2' });
+      renderedComponent.current.setDesignPageLocation({ dialogId: '2', selected: '', focused: '' });
     });
 
     act(() => {
@@ -164,7 +167,7 @@ describe('<UndoRoot/>', () => {
       renderedComponent.current.redo();
     });
     expect(renderedComponent.current.history.stack.length).toBe(2);
-    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '2', content: '' }]);
+    expect(renderedComponent.current.dialogs).toStrictEqual([mockDialog('2')]);
   });
 
   it('should clear undo history', () => {

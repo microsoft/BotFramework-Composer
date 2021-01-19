@@ -178,6 +178,17 @@ export const Header = () => {
     }
   };
 
+  const handleActiveLanguageButtonOnDismiss = () => {
+    setTeachingBubbleVisibility(false);
+  };
+
+  const handleActiveLanguageButtonOnKeyDown = (e) => {
+    if (e.key.toLowerCase() === 'enter') {
+      e.preventDefault();
+      setTeachingBubbleVisibility(true);
+    }
+  };
+
   return (
     <div css={headerContainer} role="banner">
       <img
@@ -197,7 +208,7 @@ export const Header = () => {
               role={'button'}
               tabIndex={0}
               onClick={() => setTeachingBubbleVisibility(true)}
-              onKeyDown={() => setTeachingBubbleVisibility(true)}
+              onKeyDown={handleActiveLanguageButtonOnKeyDown}
             >
               {`${projectName} (${locale})`}
             </span>
@@ -218,26 +229,28 @@ export const Header = () => {
         <NotificationButton buttonStyles={buttonStyles} />
       </div>
       {teachingBubbleVisibility && (
-        <TeachingBubble
-          isWide
-          calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
-          headline={formatMessage('Active language')}
-          styles={teachingBubbleStyle}
-          target="#targetButton"
-          onDismiss={() => setTeachingBubbleVisibility(false)}
-        >
-          {formatMessage(
-            'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
-          )}
-          <Dropdown
-            disabled={languageListOptions.length === 1}
-            options={languageListOptions}
-            placeholder="Select an option"
-            selectedKey={locale}
-            styles={{ root: { marginTop: 12 } }}
-            onChange={onLanguageChange}
-          />
-        </TeachingBubble>
+        <div onBlur={handleActiveLanguageButtonOnDismiss}>
+          <TeachingBubble
+            isWide
+            calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
+            headline={formatMessage('Active language')}
+            styles={teachingBubbleStyle}
+            target="#targetButton"
+            onDismiss={handleActiveLanguageButtonOnDismiss}
+          >
+            {formatMessage(
+              'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
+            )}
+            <Dropdown
+              disabled={languageListOptions.length === 1}
+              options={languageListOptions}
+              placeholder="Select an option"
+              selectedKey={locale}
+              styles={{ root: { marginTop: 12 } }}
+              onChange={onLanguageChange}
+            />
+          </TeachingBubble>
+        </div>
       )}
     </div>
   );

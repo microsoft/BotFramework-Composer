@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { SDKKinds } from '@bfc/shared';
 
 import { navigationDispatcher } from '../navigation';
@@ -33,7 +33,23 @@ function expectNavTo(location: string) {
 }
 
 describe('navigation dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
+  const useRecoilTestHook = () => {
+    const focusPath = useRecoilValue(focusPathState(projectId));
+    const designPageLocation = useRecoilValue(designPageLocationState(projectId));
+    const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
+
+    return {
+      dialogs,
+      focusPath,
+      designPageLocation,
+      projectId,
+      currentDispatcher,
+    };
+  };
+
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
   beforeEach(() => {
     mockCheckUrl.mockClear();
     mockNavigateTo.mockClear();
@@ -41,21 +57,6 @@ describe('navigation dispatcher', () => {
     mockCreateSelectedPath.mockClear();
 
     mockCheckUrl.mockReturnValue(false);
-
-    const useRecoilTestHook = () => {
-      const focusPath = useRecoilValue(focusPathState(projectId));
-      const designPageLocation = useRecoilValue(designPageLocationState(projectId));
-      const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
-
-      return {
-        dialogs,
-        focusPath,
-        designPageLocation,
-        projectId,
-        currentDispatcher,
-      };
-    };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
@@ -111,6 +112,8 @@ describe('navigation dispatcher', () => {
       await act(async () => {
         await dispatcher.setDesignPageLocation(projectId, {
           dialogId: 'dialogId',
+          selected: '',
+          focused: '',
           promptTab: undefined,
         });
       });
@@ -129,6 +132,7 @@ describe('navigation dispatcher', () => {
         await dispatcher.setDesignPageLocation(projectId, {
           dialogId: 'dialogId',
           selected: 'select',
+          focused: '',
           promptTab: undefined,
         });
       });

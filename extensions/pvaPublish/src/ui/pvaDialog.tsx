@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState, FC } from 'react';
 import * as React from 'react';
-import { getAccessToken, setConfigIsValid, setPublishConfig, fetch } from '@bfc/extension-client';
+import { closeDialog, getAccessToken, savePublishConfig, fetch, onBack } from '@bfc/extension-client';
 import {
+  DefaultButton,
   Dropdown,
   IDropdownOption,
   ResponsiveMode,
@@ -14,7 +15,7 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
-import { root } from './styles';
+import { buttonBar as buttonBarStyles, root } from './styles';
 import { Bot, BotEnvironment } from './types';
 
 const PVABotIcon = require('./media/pva-bot-icon.svg');
@@ -38,6 +39,7 @@ export const PVADialog: FC = () => {
   const [loggingIn, setLoggingIn] = useState(false);
   const [fetchingEnvironments, setFetchingEnvironments] = useState(false);
   const [fetchingBots, setFetchingBots] = useState(false);
+  const [configIsValid, setConfigIsValid] = useState(false);
 
   const login = useCallback(() => {
     setLoggingIn(true);
@@ -87,7 +89,7 @@ export const PVADialog: FC = () => {
         setFetchingEnvironments(false);
         setEnvs(envs);
         if (envs && envs.length) {
-          setEnv(envs[0]);
+          setEnv(envs[0].id);
         }
       };
       fetchEnvs();
@@ -137,7 +139,11 @@ export const PVADialog: FC = () => {
     } else {
       setConfigIsValid(false);
     }
-    setPublishConfig({ botId: (bot || {}).id, envId: env, tenantId, deleteMissingComponents: true });
+  }, [env, bot, tenantId]);
+
+  const onSave = useCallback(() => {
+    savePublishConfig({ botId: (bot || {}).id, envId: env, tenantId, deleteMissingComponents: true });
+    closeDialog();
   }, [env, bot, tenantId]);
 
   const loggedIn = useMemo(() => {
@@ -274,11 +280,36 @@ export const PVADialog: FC = () => {
     }
   }, [loggedIn, loggingIn]);
 
+  const buttonBar = useMemo(() => {
+    if (loggedIn) {
+      return (
+        <div style={buttonBarStyles}>
+          <DefaultButton
+            text="Back"
+            onClick={onBack}
+            styles={{
+              root: { marginLeft: 'auto' },
+            }}
+          />
+          <PrimaryButton
+            text="Save"
+            onClick={onSave}
+            disabled={!configIsValid}
+            styles={{
+              root: { marginLeft: 8 },
+            }}
+          />
+        </div>
+      );
+    }
+  }, [configIsValid, loggedIn]);
+
   return (
     <div style={root}>
       {loginSplash}
       {envPicker}
       {botPicker}
+      {buttonBar}
     </div>
   );
 };
