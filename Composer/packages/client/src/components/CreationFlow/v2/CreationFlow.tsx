@@ -57,7 +57,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const currentStorageId = storage ? storage.id : 'default';
 
   useEffect(() => {
-    if (storages && storages.length) {
+    if (storages?.length) {
       const storageId = storage.id;
       const path = storage.path;
       const formattedPath = Path.normalize(path);
