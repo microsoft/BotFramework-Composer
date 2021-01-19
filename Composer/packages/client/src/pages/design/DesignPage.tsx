@@ -499,7 +499,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
 
     if (content) {
-      await updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
+      await updateDialog({ id: dialogId, content, projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match?.[1];
       if (!current) {
@@ -510,14 +510,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+          await selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          await navTo(skillId ?? projectId, dialogId);
+          await navTo(projectId, dialogId);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        await selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
+        await selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
 
       commitChanges();
