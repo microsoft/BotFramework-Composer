@@ -2,7 +2,7 @@
   "name": "authtest",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/extension.js",
+  "main": "dist/node/index.js",
   "scripts": {
     "build": "webpack"
   },

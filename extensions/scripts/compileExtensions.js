@@ -4,10 +4,12 @@
 /* eslint-disable no-console */
 /* eslint-disable security/detect-non-literal-fs-filename */
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
+
+const esbuild = require('esbuild');
 
 const FORCE = process.argv.includes('--force') || process.argv.includes('-f');
 
@@ -91,19 +93,86 @@ const hasChanges = (name, lastModified) => {
   return buildCache[name] ? new Date(buildCache[name]) < lastModified : true;
 };
 
+const getBundleConfigs = (extPath, packageJSON) => {
+  const buildConfigs = [];
+
+  const defaultConfig = Object.assign(
+    {
+      bundle: true,
+      logLevel: 'error',
+    },
+    packageJSON.esbuild
+  );
+
+  // check for node entry
+  for (const nodeEntry of ['', 'src', 'src/node']) {
+    const p = path.join(extPath, nodeEntry, 'index.ts');
+    if (fs.pathExistsSync(p)) {
+      buildConfigs.push(
+        Object.assign(
+          { ...defaultConfig },
+          {
+            entryPoints: [p],
+            outfile: path.join(extPath, 'dist/extension.js'),
+            platform: 'node',
+            target: ['node12.13.0'],
+          }
+        )
+      );
+    }
+  }
+
+  // for each contrib, create entry for each file
+  const contribs = ['pages', 'publish'];
+
+  for (const contribDir of contribs) {
+    const p = path.join(extPath, 'src', contribDir);
+
+    if (fs.pathExistsSync(p)) {
+      for (const contrib of fs.readdirSync(p, { withFileTypes: true })) {
+        const cPath = path.join(p, contrib.name);
+
+        buildConfigs.push(
+          Object.assign(
+            { ...defaultConfig },
+            {
+              outdir: path.join(extPath, './dist'),
+              entryPoints: [cPath],
+              target: ['es2015'],
+            }
+          )
+        );
+      }
+    }
+  }
+
+  return buildConfigs;
+};
+
+const cleanDist = async (name, extPath) => {
+  console.log('[%s] cleaning dist', name);
+  await fs.emptyDir(path.join(extPath, 'dist'));
+};
+
 const compile = async (name, extPath) => {
   const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
   const hasBuild = packageJSON && packageJSON.scripts && packageJSON.scripts.build;
 
   console.log('[%s] compiling', name);
   console.log('[%s] yarn install', name);
-  execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
+  // execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
 
-  if (hasBuild) {
-    console.log('[%s] yarn build', name);
-    execSync('yarn build', { cwd: extPath, stdio: 'inherit' });
-  } else {
-    console.log('[%s] no build script found.', name);
+  const service = await esbuild.startService();
+  const work = [];
+
+  try {
+    for (const config of getBundleConfigs(extPath, packageJSON)) {
+      work.push(service.build(config));
+    }
+
+    await Promise.all(work);
+  } finally {
+    await service.stop();
   }
 };
 
@@ -113,7 +182,7 @@ async function main() {
   const errors = [];
 
   for (const entry of allExtensions) {
-    if (entry.isDirectory()) {
+    if (entry.isDirectory() && entry.name === 'sample-ui-plugin') {
       const extPath = path.join(extensionsDir, entry.name);
       const packageJSONPath = path.join(extPath, 'package.json');
       if (!fs.existsSync(packageJSONPath)) {
@@ -125,6 +194,7 @@ async function main() {
       const lastModified = getLastModified(extPath);
       if (FORCE || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
         try {
+          await cleanDist(entry.name, extPath);
           await compile(entry.name, extPath);
           writeToCache(entry.name, lastModified);
         } catch (err) {
