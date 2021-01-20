@@ -185,6 +185,7 @@ export const settingsState = atomFamily<DialogSetting, string>({
     languages: ['en-us'],
     luis: {},
     qna: {},
+    adapters: new Set<{ name: string; enabled: boolean }>(),
   } as DialogSetting,
 });
 

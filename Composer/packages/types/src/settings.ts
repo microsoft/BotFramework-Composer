@@ -61,6 +61,7 @@ export type DialogSetting = {
   skillHostEndpoint?: string;
   customFunctions: string[];
   feature?: { [key: string]: boolean };
+  adapters: Set<string>;
   [key: string]: any;
 };
 

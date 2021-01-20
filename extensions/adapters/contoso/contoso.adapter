@@ -1,0 +1,6 @@
+{
+  "$kind": "Contoso.ContosoAdapter",
+  "contosoSkillId": "contoso-test-skill",
+  "contosoSecretKey": "superSecret.123",
+  "allowSuggestedActions": true
+}

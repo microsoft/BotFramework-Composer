@@ -5,23 +5,23 @@ import { AuthParameters } from '@botframework-composer/types';
 
 import { AuthClient } from '../utils/authClient';
 
-interface IAPI {
+type IAPI = {
   auth: AuthAPI;
   page?: {};
   publish: PublishAPI;
   storage?: {};
-}
+};
 
-interface PublishConfig {
+type PublishConfig = {
   [key: string]: any;
-}
+};
 
-interface AuthAPI {
+type AuthAPI = {
   getAccessToken: (options: AuthParameters) => Promise<string>; // returns an access token
   logOut: () => Promise<void>;
-}
+};
 
-interface PublishAPI {
+type PublishAPI = {
   useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
   startProvision?: (config: any) => void;
   currentProjectId?: () => string;
@@ -33,11 +33,17 @@ interface PublishAPI {
   savePublishConfig?: (config: PublishConfig) => void;
   getTokenFromCache?: () => { accessToken: string; graphToken: string };
   isGetTokenFromUser?: () => boolean;
-}
+};
+
+type AdapterAPI = {
+  getSchema?: () => any;
+  getUiSchema?: () => any;
+};
 
 class API implements IAPI {
   auth: AuthAPI;
   publish: PublishAPI;
+  adapter: AdapterAPI;
 
   constructor() {
     this.auth = {
@@ -59,6 +65,10 @@ class API implements IAPI {
       savePublishConfig: undefined,
       getTokenFromCache: undefined,
       isGetTokenFromUser: undefined,
+    };
+    this.adapter = {
+      getSchema: undefined,
+      getUiSchema: undefined,
     };
   }
 }
