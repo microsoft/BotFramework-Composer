@@ -93,6 +93,32 @@ const hasChanges = (name, lastModified) => {
   return buildCache[name] ? new Date(buildCache[name]) < lastModified : true;
 };
 
+const ComposerGlobalsPlugin = {
+  name: 'composer-global',
+  setup(build) {
+    const globals = {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      '@bfc/extension-client': 'ExtensionClient',
+      'office-ui-fabric-react': 'Fabric',
+      '@bfc/code-editor': 'CodeEditors',
+      '@bfc/ui-shared': 'UIShared',
+    };
+
+    Object.keys(globals).forEach((moduleName) => {
+      build.onResolve({ filter: new RegExp(`^${moduleName}$`) }, (args) => ({
+        path: args.path,
+        namespace: 'composer-global',
+      }));
+      build.onLoad({ filter: /.*/, namespace: 'composer-global' }, (args) => {
+        const name = args.path;
+        const contents = `module.exports = ${globals[name]}`;
+        return { contents };
+      });
+    });
+  },
+};
+
 const getBundleConfigs = (extPath, packageJSON) => {
   const buildConfigs = [];
 
@@ -139,6 +165,14 @@ const getBundleConfigs = (extPath, packageJSON) => {
               outdir: path.join(extPath, './dist'),
               entryPoints: [cPath],
               target: ['es2015'],
+              plugins: [ComposerGlobalsPlugin],
+              loader: {
+                '.svg': 'dataurl',
+                '.png': 'file',
+              },
+              define: {
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+              },
             }
           )
         );
@@ -160,7 +194,7 @@ const compile = async (name, extPath) => {
 
   console.log('[%s] compiling', name);
   console.log('[%s] yarn install', name);
-  // execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
+  execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
 
   const service = await esbuild.startService();
   const work = [];
@@ -182,7 +216,7 @@ async function main() {
   const errors = [];
 
   for (const entry of allExtensions) {
-    if (entry.isDirectory() && entry.name === 'sample-ui-plugin') {
+    if (entry.isDirectory()) {
       const extPath = path.join(extensionsDir, entry.name);
       const packageJSONPath = path.join(extPath, 'package.json');
       if (!fs.existsSync(packageJSONPath)) {

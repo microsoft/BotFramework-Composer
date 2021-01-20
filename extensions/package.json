@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Shared dependency and scripts used by internal Composer extensions.",
   "scripts": {
-    "build:all": "node scripts/compileExtensions.js"
+    "build:all": "cross-env NODE_ENV=production node scripts/compileExtensions.js"
   },
   "keywords": [],
   "author": "",

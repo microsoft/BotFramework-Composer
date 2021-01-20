@@ -2,7 +2,7 @@
   "name": "package-manager",
   "version": "1.0.0",
   "description": "Discover and use components that can be installed into your bot.",
-  "main": "lib/node/index.js",
+  "main": "dist/extension.js",
   "scripts": {
     "build": "yarn clean && webpack --config webpack.config.js",
     "clean": "rimraf dist"
@@ -15,7 +15,7 @@
     "bundles": [
       {
         "id": "package-manager",
-        "path": "./lib/pages/package-manager.js"
+        "path": "./dist/Library.js"
       }
     ],
     "contributes": {

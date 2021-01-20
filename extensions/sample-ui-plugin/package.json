@@ -7,19 +7,19 @@
     "clean": "rimraf dist"
   },
   "composer": {
-    "enabled": false,
+    "enabled": true,
     "bundles": [
       {
         "id": "publish",
-        "path": "dist/ui/publish1.js"
+        "path": "dist/publish1.js"
       },
       {
         "id": "publish2",
-        "path": "dist/ui/publish2.js"
+        "path": "dist/publish2.js"
       },
       {
         "id": "page",
-        "path": "dist/ui/page.js"
+        "path": "dist/page.js"
       }
     ],
     "contributes": {

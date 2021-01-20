@@ -210,7 +210,7 @@ export class ExtensionManagerImp {
       log('Removing %s', id);
 
       if (metadata.builtIn) {
-        this.manifest.updateExtensionConfig(id, { enabled: false });
+        this.updateManifest(id, { enabled: false });
         return;
       }
 
