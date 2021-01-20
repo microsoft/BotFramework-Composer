@@ -5,10 +5,22 @@
 import { jsx } from '@emotion/core';
 import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Link, Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility, Stack } from 'office-ui-fabric-react';
+import {
+  Link,
+  Pivot,
+  PivotItem,
+  Dialog,
+  DialogType,
+  Dropdown,
+  MessageBar,
+  MessageBarType,
+  MessageBarButton,
+  ScrollablePane,
+  ScrollbarVisibility,
+  Stack,
+} from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
-
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
 import { ImportDialog } from './importDialog';
@@ -20,8 +32,6 @@ const DEFAULT_CATEGORY = formatMessage('Available');
 
 const docsUrl = `https://aka.ms/composer-package-manager-readme`;
 
-
-
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
@@ -29,12 +39,13 @@ const Library: React.FC = () => {
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
-  const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[]>([]);
+  const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[] | undefined>(undefined);
   const [installedComponents, updateInstalledComponents] = useState<LibraryRef[]>([]);
   const [recentlyUsed, setRecentlyUsed] = useState<LibraryRef[]>([]);
-  const [programmingLanguageSelection, setProgrammingLanguageSelection] = useState<string>('c#');
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
-
+  const [feeds, updateFeeds] = useState([]);
+  const [feed, setFeed] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
   const [working, setWorking] = useState(false);
@@ -51,7 +62,9 @@ const Library: React.FC = () => {
     installProgress: formatMessage('Installing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
     installedCategory: formatMessage('Installed'),
-    updateConfirmationPrompt: formatMessage('Any changes you made to this package will be lost! Are you sure you want to continue?'),
+    updateConfirmationPrompt: formatMessage(
+      'Any changes you made to this package will be lost! Are you sure you want to continue?'
+    ),
     updateConfirmationTitle: formatMessage('Update Package'),
     conflictConfirmationTitle: formatMessage('Conflicting changes detected'),
     conflictConfirmationPrompt: formatMessage(
@@ -59,9 +72,11 @@ const Library: React.FC = () => {
     ),
     removeConfirmationTitle: formatMessage('Remove Package'),
     removeConfirmationPrompt: formatMessage(
-        'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
+      'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
     ),
-    requireEject: formatMessage('To install components, this project must have an ejected runtime. Please navigate to the project settings page, custom runtime section.'),
+    requireEject: formatMessage(
+      'To install components, this project must have an ejected runtime. Please navigate to the project settings page, custom runtime section.'
+    ),
     ejectRuntime: formatMessage('Eject Runtime'),
     noComponentsInstalled: formatMessage('No packages installed'),
     noComponentsFound: formatMessage('No packages found. Check extension configuration.'),
@@ -69,23 +84,12 @@ const Library: React.FC = () => {
     installHeader: formatMessage('Installed'),
     libraryError: formatMessage('Package Manager Error'),
     importError: formatMessage('Install Error'),
-  }
+  };
 
-  const programmingLanguages = [
-    {
-      key: 'c#',
-      text: 'C#',
-    },
-    {
-      key: 'js',
-      text: 'Javascript',
-    }
-  ];
-
-  const onChangeLanguage = (ev, op, idx) => {
-    setProgrammingLanguageSelection(op.key);
+  const onChangeFeed = (ev, op, idx) => {
+    setFeed(op.key);
     return true;
-  }
+  };
 
   const installComponentAPI = (projectId: string, packageName: string, version: string, isUpdating: boolean) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/import`, {
@@ -96,7 +100,12 @@ const Library: React.FC = () => {
   };
 
   const getLibraryAPI = () => {
-    return httpClient.get(`${API_ROOT}/library`);
+    const feedUrl = `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    return httpClient.get(feedUrl);
+  };
+
+  const getFeeds = () => {
+    return httpClient.get(`${API_ROOT}/feeds`);
   };
 
   const getInstalledComponentsAPI = (projectId: string) => {
@@ -110,28 +119,41 @@ const Library: React.FC = () => {
   };
 
   const isCompatible = (component) => {
-    return (component.language === programmingLanguageSelection);
-  }
+    return component.language === runtimeLanguage;
+  };
 
   useEffect(() => {
-    getLibraries();
     setCurrentProjectId(projectId);
-  },[]);
+    getFeeds().then((feeds) => updateFeeds(feeds.data));
+  }, []);
 
   useEffect(() => {
-    const settings = projectCollection.find((b) =>  b.projectId === currentProjectId).setting;
-    if (settings && settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
+    if (!feed && feeds.length) {
+      if (runtimeLanguage === 'js') {
+        setFeed('npm');
+      } else {
+        setFeed('nuget');
+      }
+    }
+  }, [feeds, feeds, runtimeLanguage]);
+
+  useEffect(() => {
+    if (feed && feeds.length) {
+      getLibraries();
+    }
+  }, [feed, feeds]);
+
+  useEffect(() => {
+    const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
+    if (settings?.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       getInstalledLibraries();
-
       // detect programming language.
       // should one day be a dynamic property of the runtime or at least stored in the settings?
       if (settings.runtime.key === 'node-azurewebapp') {
         setRuntimeLanguage('js');
-        setProgrammingLanguageSelection('js');
       } else {
         setRuntimeLanguage('c#');
-        setProgrammingLanguageSelection('c#');
       }
     } else {
       setEjectedRuntime(false);
@@ -146,12 +168,13 @@ const Library: React.FC = () => {
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
     if (availableLibraries) {
-      const availableCompatibleLibraries = availableLibraries.filter(component => isCompatible(component));
+      const availableCompatibleLibraries = availableLibraries;
       availableCompatibleLibraries.forEach((item) => {
         if (!item.category) {
           item.category = DEFAULT_CATEGORY;
         }
-        if (item.category && categories.indexOf(item.category) == -1) {
+        item.isCompatible = isCompatible(item);
+        if (item.category && categories.indexOf(item.category) === -1) {
           categories.push(item.category);
         }
       });
@@ -172,7 +195,7 @@ const Library: React.FC = () => {
     }
 
     if (recentlyUsed) {
-      const recentlyUsedCompatible = recentlyUsed.filter(component => isCompatible(component));
+      const recentlyUsedCompatible = recentlyUsed.filter((component) => isCompatible(component));
       if (recentlyUsedCompatible.length) {
         groups.push({
           key: 'recently',
@@ -185,10 +208,9 @@ const Library: React.FC = () => {
       }
     }
 
-
     setItems(items);
     setGroups(groups);
-  }, [installedComponents, availableLibraries, recentlyUsed, programmingLanguageSelection]);
+  }, [installedComponents, availableLibraries, recentlyUsed]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -256,9 +278,12 @@ const Library: React.FC = () => {
 
   const getLibraries = async () => {
     try {
+      updateAvailableLibraries(undefined);
+      setLoading(true);
       const response = await getLibraryAPI();
       updateAvailableLibraries(response.data.available);
       setRecentlyUsed(response.data.recentlyUsed);
+      setLoading(false);
     } catch (err) {
       setApplicationLevelError({
         status: err.response.status,
@@ -354,100 +379,109 @@ const Library: React.FC = () => {
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
-        <p>{strings.description} <Link href={docsUrl} target="_new">{strings.descriptionLink }</Link></p>
+        <p>
+          {strings.description}{' '}
+          <Link href={docsUrl} target="_new">
+            {strings.descriptionLink}
+          </Link>
+        </p>
       </div>
-      <Stack horizontal disableShrink styles={{root: { borderTop: '1px solid #CCC'}}}>
-        <Stack.Item styles={{root: { width:"300px", borderRight: "1px solid #CCC"}}}>
-        <ProjectList
+      <Stack horizontal disableShrink styles={{ root: { borderTop: '1px solid #CCC' } }}>
+        <Stack.Item styles={{ root: { width: '300px', borderRight: '1px solid #CCC' } }}>
+          <ProjectList
             defaultSelected={projectId}
             projectCollection={projectCollection}
             onSelect={(link) => setCurrentProjectId(link.projectId)}
           />
         </Stack.Item>
-        <Stack.Item styles={{root: { flexGrow: 1}}}>
-        {!ejectedRuntime && (
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          isMultiline={false}
-          actions={
-            <div>
-              <MessageBarButton onClick={navigateToEject}>{strings.ejectRuntime}</MessageBarButton>
-            </div>
-          }
-        >
-          {strings.requireEject}
-        </MessageBar>
-      )}
-      <Fragment>
-        <Pivot aria-label="Library Views" style={{paddingLeft: '12px'}}>
-          <PivotItem headerText={strings.browseHeader}>
-            <section style={{paddingRight: '20px', display: 'grid', justifyContent: 'end'}}>
-              <Dropdown
-                placeholder="Format"
-                selectedKey={programmingLanguageSelection}
-                options={programmingLanguages}
-                onChange={onChangeLanguage}
-                styles={{
-                root: { width: '200px',  },
-              }}
-              >
-              </Dropdown>
-            </section>
-            <LibraryList
-                disabled={!ejectedRuntime || runtimeLanguage !== programmingLanguageSelection}
-                groups={groups}
-                install={install}
-                isInstalled={isInstalled}
-                items={items}
-                redownload={redownload}
-                removeLibrary={removeComponent}
-                updateItems={setItems}
-                onItemClick={selectItem}
-              />
-              {!items || items.length === 0 ? (
-                <div
-                  style={{
-                    marginLeft: '50px',
-                    fontSize: 'smaller',
-                    marginTop: '20px',
-                  }}
-                >
-                  {strings.noComponentsFound}
+        <Stack.Item styles={{ root: { flexGrow: 1 } }}>
+          {!ejectedRuntime && (
+            <MessageBar
+              messageBarType={MessageBarType.warning}
+              isMultiline={false}
+              actions={
+                <div>
+                  <MessageBarButton onClick={navigateToEject}>{strings.ejectRuntime}</MessageBarButton>
                 </div>
-              ) : null}
-          </PivotItem>
-          <PivotItem headerText={strings.installHeader}>
-          <LibraryList
-                disabled={!ejectedRuntime}
-                groups={[{
-                  key: 'installed',
-                  name: strings.installedCategory,
-                  startIndex: 0,
-                  count: installedComponents ? installedComponents.length : 0,
-                  level: 0,
-                }]}
-                install={install}
-                isInstalled={isInstalled}
-                items={installedComponents}
-                redownload={redownload}
-                removeLibrary={removeComponent}
-                updateItems={setItems}
-                onItemClick={selectItem}
-              />
-              {!installedComponents || installedComponents.length === 0 ? (
-                <div
-                  style={{
-                    marginLeft: '50px',
-                    fontSize: 'smaller',
-                    marginTop: '20px',
-                  }}
-                >
-                  {strings.noComponentsInstalled}
-                </div>
-              ) : null}
-          </PivotItem>
-        </Pivot>
-      </Fragment>
+              }
+            >
+              {strings.requireEject}
+            </MessageBar>
+          )}
+          <Fragment>
+            <Pivot aria-label="Library Views" style={{ paddingLeft: '12px' }}>
+              <PivotItem headerText={strings.browseHeader}>
+                <section style={{ paddingRight: '20px', display: 'grid', justifyContent: 'end' }}>
+                  <Dropdown
+                    placeholder="Format"
+                    selectedKey={feed}
+                    options={feeds}
+                    onChange={onChangeFeed}
+                    styles={{
+                      root: { width: '200px' },
+                    }}
+                  ></Dropdown>
+                </section>
+                {loading && <LoadingSpinner />}
+                {items?.length ? (
+                  <LibraryList
+                    disabled={!ejectedRuntime}
+                    groups={groups}
+                    install={install}
+                    isInstalled={isInstalled}
+                    items={items}
+                    redownload={redownload}
+                    removeLibrary={removeComponent}
+                    updateItems={setItems}
+                    onItemClick={selectItem}
+                  />
+                ) : null}
+                {items && !items.length && !loading && (
+                  <div
+                    style={{
+                      marginLeft: '50px',
+                      fontSize: 'smaller',
+                      marginTop: '20px',
+                    }}
+                  >
+                    {strings.noComponentsFound}
+                  </div>
+                )}
+              </PivotItem>
+              <PivotItem headerText={strings.installHeader}>
+                <LibraryList
+                  disabled={!ejectedRuntime}
+                  groups={[
+                    {
+                      key: 'installed',
+                      name: strings.installedCategory,
+                      startIndex: 0,
+                      count: installedComponents ? installedComponents.length : 0,
+                      level: 0,
+                    },
+                  ]}
+                  install={install}
+                  isInstalled={isInstalled}
+                  items={installedComponents}
+                  redownload={redownload}
+                  removeLibrary={removeComponent}
+                  updateItems={setItems}
+                  onItemClick={selectItem}
+                />
+                {(!installedComponents || installedComponents.length === 0) && (
+                  <div
+                    style={{
+                      marginLeft: '50px',
+                      fontSize: 'smaller',
+                      marginTop: '20px',
+                    }}
+                  >
+                    {strings.noComponentsInstalled}
+                  </div>
+                )}
+              </PivotItem>
+            </Pivot>
+          </Fragment>
         </Stack.Item>
       </Stack>
     </ScrollablePane>
