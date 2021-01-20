@@ -583,13 +583,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onMeasuredSizesChanged={onMeasuredSizesChanged}
         >
           <ProjectTree
+            headerMenu={projectTreeHeaderMenuItems}
             selectedLink={{
               projectId,
               skillId: skillId ?? undefined,
               dialogId,
               trigger: parseTriggerId(selectedTrigger?.id),
             }}
-            headerMenu={projectTreeHeaderMenuItems}
             onBotCreateDialog={handleCreateDialog}
             onBotDeleteDialog={handleDeleteDialog}
             onBotEditManifest={handleDisplayManifestModal}
