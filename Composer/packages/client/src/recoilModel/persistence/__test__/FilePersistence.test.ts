@@ -32,26 +32,42 @@ describe('test persistence layer', () => {
   it('test notify update', async () => {
     const previous = {
       projectId: 'test',
-      dialogs: ([{ id: 'a', content: { a: 'old' } }] as unknown) as DialogInfo[],
+      dialogs: [] as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'old schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: '' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: '' }] as LuFile[],
+      crossTrainConfig: { 'cross-train.config.json': { rootBot: false } } as any,
     } as BotAssets;
 
     const current = {
       projectId: 'test',
-      dialogs: ([{ id: 'a', content: { a: 'new' } }] as unknown) as DialogInfo[],
+      dialogs: ([{ id: 'a', content: { a: 'create' } }] as unknown) as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'new schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a.lg' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
+      crossTrainConfig: { 'cross-train.config.json': { rootBot: true } } as any,
+    } as BotAssets;
+
+    const last = {
+      projectId: 'test',
+      dialogs: ([{ id: 'a', content: { a: 'update' } }] as unknown) as DialogInfo[],
+      dialogSchemas: [{ id: 'a', content: { a: 'new schema' } }] as DialogSchemaFile[],
+      lgFiles: [{ id: 'a.en-us', content: 'a.lg' }] as LgFile[],
+      luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
+      crossTrainConfig: { 'cross-train.config.json': { rootBot: true } } as any,
     } as BotAssets;
 
     const result = await filePersistence.getAssetsChanges(current, previous);
     filePersistence.createTaskQueue(result);
-    expect(JSON.parse(filePersistence.taskQueue['a.dialog'][0].change).a).toBe('new');
+    expect(JSON.parse(filePersistence.taskQueue['a.dialog'][0].change).a).toBe('create');
     expect(JSON.parse(filePersistence.taskQueue['a.dialog.schema'][0].change).a).toBe('new schema');
     expect(filePersistence.taskQueue['a.en-us.lg'][0].change).toBe('a.lg');
     expect(filePersistence.taskQueue['a.en-us.lu'][0].change).toBe('a.lu');
+    const result1 = await filePersistence.getAssetsChanges(last, current);
+    filePersistence.createTaskQueue(result1);
+    filePersistence.flush();
+    filePersistence.flush();
+    expect(filePersistence.taskQueue['a.en-us.lu'].length).toBe(0);
   });
 
   it('test notify create', async () => {
@@ -126,5 +142,7 @@ describe('test persistence layer', () => {
     expect(JSON.parse(filePersistence.taskQueue['b.dialog'][0].change).b).toBe('b.pre');
     expect(filePersistence.taskQueue['b.en-us.lg'][0].change).toBe('b.pre.lg');
     expect(filePersistence.taskQueue['b.en-us.lu'][0].change).toBe('b.pre.lu');
+    await filePersistence.flush();
+    expect(filePersistence.taskQueue['b.en-us.lu'].length).toBe(0);
   });
 });
