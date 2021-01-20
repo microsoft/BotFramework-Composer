@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "Discover and use components that can be installed into your bot.",
   "main": "dist/extension.js",
-  "scripts": {
-    "build": "yarn clean && webpack --config webpack.config.js",
-    "clean": "rimraf dist"
-  },
   "keywords": [],
   "author": "",
   "license": "MIT",

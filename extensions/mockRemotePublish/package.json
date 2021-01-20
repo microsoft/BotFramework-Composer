@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "publish assets to a remote URL",
   "main": "dist/extension.js",
-  "scripts": {
-    "build": "webpack"
-  },
   "composer": {
     "enabled": false
   },

@@ -2,10 +2,6 @@
   "name": "sample-ui-plugin",
   "version": "1.0.0",
   "license": "ISC",
-  "scripts": {
-    "build": "yarn clean && webpack",
-    "clean": "rimraf dist"
-  },
   "composer": {
     "enabled": true,
     "bundles": [

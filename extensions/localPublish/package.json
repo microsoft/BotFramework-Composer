@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "start and update the local test bot runtime",
   "main": "dist/extension.js",
-  "scripts": {
-    "build": "webpack"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
