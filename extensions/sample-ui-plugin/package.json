@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "ISC",
   "composer": {
-    "enabled": true,
+    "enabled": false,
     "bundles": [
       {
         "id": "publish",
