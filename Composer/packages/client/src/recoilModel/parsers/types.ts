@@ -1,20 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import {
-  LuIntentSection,
-  LgFile,
-  LuFile,
-  QnASection,
-  FileInfo,
-  LgTemplate,
-  ILUFeaturesConfig,
-  DialogInfo,
-  DialogSchemaFile,
-  QnAFile,
-  SkillManifestFile,
-  RecognizerFile,
-  FormDialogSchema,
-} from '@bfc/shared';
+import { LuIntentSection, LgFile, LuFile, QnASection, FileInfo, LgTemplate, ILUFeaturesConfig } from '@bfc/shared';
 
 import { FileAsset } from '../persistence/types';
 

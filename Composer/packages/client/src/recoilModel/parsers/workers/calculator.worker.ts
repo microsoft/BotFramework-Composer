@@ -17,7 +17,7 @@ type MessageEvent = DifferenceMessage;
 
 const ctx: Worker = self as any;
 
-function getDifferenceItems(target: FileAsset[], origin: FileAsset[]) {
+export function getDifferenceItems(target: FileAsset[], origin: FileAsset[]) {
   const changes1 = differenceWith(target, origin, isEqual);
   const changes2 = differenceWith(origin, target, isEqual);
   const deleted = changes2.filter((change) => !target.some((file) => change.id === file.id));

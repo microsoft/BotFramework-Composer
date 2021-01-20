@@ -35,13 +35,18 @@ class FilePersistence {
   public async notify(currentAssets: BotAssets, previousAssets: BotAssets) {
     const fileChanges: IFileChange[] = await this.getAssetsChanges(currentAssets, previousAssets);
 
+    this.createTaskQueue(fileChanges);
+
+    await this.flush();
+  }
+
+  public createTaskQueue(fileChanges: IFileChange[]) {
     for (const change of fileChanges) {
       if (!this._taskQueue[change.id]) {
         this._taskQueue[change.id] = [];
       }
       this._taskQueue[change.id].push(change);
     }
-    await this.flush();
   }
 
   public async flush(): Promise<boolean> {
@@ -170,7 +175,7 @@ class FilePersistence {
     return [];
   }
 
-  private async getAssetsChanges(currentAssets: BotAssets, previousAssets: BotAssets): Promise<IFileChange[]> {
+  public async getAssetsChanges(currentAssets: BotAssets, previousAssets: BotAssets): Promise<IFileChange[]> {
     const files: [FileAsset[], FileAsset[], FileExtensions][] = [
       [currentAssets.dialogs, previousAssets.dialogs, FileExtensions.Dialog],
       [currentAssets.dialogSchemas, previousAssets.dialogSchemas, FileExtensions.DialogSchema],

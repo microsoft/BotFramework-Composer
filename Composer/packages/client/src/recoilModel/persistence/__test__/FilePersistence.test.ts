@@ -17,6 +17,12 @@ jest.mock('axios', () => {
   };
 });
 
+jest.mock('../../parsers/calculator', () => {
+  return {
+    difference: require('../../parsers/workers/calculator.worker').getDifferenceItems,
+  };
+});
+
 describe('test persistence layer', () => {
   let filePersistence: FilePersistence;
   beforeEach(() => {
@@ -40,8 +46,8 @@ describe('test persistence layer', () => {
       luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
     } as BotAssets;
 
-    filePersistence.notify(current, previous);
-    filePersistence.notify(current, previous);
+    const result = await filePersistence.getAssetsChanges(current, previous);
+    filePersistence.createTaskQueue(result);
     expect(JSON.parse(filePersistence.taskQueue['a.dialog'][0].change).a).toBe('new');
     expect(JSON.parse(filePersistence.taskQueue['a.dialog.schema'][0].change).a).toBe('new schema');
     expect(filePersistence.taskQueue['a.en-us.lg'][0].change).toBe('a.lg');
@@ -77,8 +83,8 @@ describe('test persistence layer', () => {
       ] as LuFile[],
     } as BotAssets;
 
-    filePersistence.notify(current, previous);
-    filePersistence.notify(current, previous);
+    const result = await filePersistence.getAssetsChanges(current, previous);
+    filePersistence.createTaskQueue(result);
     expect(JSON.parse(filePersistence.taskQueue['b.dialog'][0].change).b).toBe('b');
     expect(JSON.parse(filePersistence.taskQueue['b.dialog.schema'][0].change).b).toBe('b');
     expect(filePersistence.taskQueue['b.en-us.lg'][0].change).toBe('b.lg');
@@ -113,8 +119,8 @@ describe('test persistence layer', () => {
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
     } as BotAssets;
-    filePersistence.notify(current, previous);
-    filePersistence.notify(current, previous);
+    const result = await filePersistence.getAssetsChanges(current, previous);
+    filePersistence.createTaskQueue(result);
     expect(JSON.parse(filePersistence.taskQueue['b.dialog'][0].change).b).toBe('b.pre');
     expect(filePersistence.taskQueue['b.en-us.lg'][0].change).toBe('b.pre.lg');
     expect(filePersistence.taskQueue['b.en-us.lu'][0].change).toBe('b.pre.lu');
