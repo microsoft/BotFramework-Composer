@@ -89,7 +89,8 @@ describe('test persistence layer', () => {
     expect(JSON.parse(filePersistence.taskQueue['b.dialog.schema'][0].change).b).toBe('b');
     expect(filePersistence.taskQueue['b.en-us.lg'][0].change).toBe('b.lg');
     expect(filePersistence.taskQueue['b.en-us.lu'][0].change).toBe('b.lu');
-    filePersistence.flush();
+    await filePersistence.flush();
+    expect(filePersistence.taskQueue['b.en-us.lu'].length).toBe(0);
   });
 
   it('test notify remove', async () => {
