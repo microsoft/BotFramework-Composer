@@ -121,7 +121,7 @@ const onRenderLabel = (props) => {
         fontWeight: 600,
         fontSize: '14px'
       }}> {props.label} </div>
-      <TooltipHost content={props.label}>
+      <TooltipHost content={props.ariaLabel}>
         <Icon iconName="Info" styles={iconStyle(props.required)} />
       </TooltipHost>
     </div>
