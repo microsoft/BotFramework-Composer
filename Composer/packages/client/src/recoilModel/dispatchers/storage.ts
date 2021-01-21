@@ -144,7 +144,7 @@ export const storageDispatcher = () => {
     try {
       const response = await httpClient.get(`/assets/projectTemplates`);
 
-      const data = response && response.data;
+      const data = response?.data;
 
       if (data && Array.isArray(data) && data.length > 0) {
         callbackHelpers.set(templateProjectsState, data);
@@ -192,7 +192,7 @@ export const storageDispatcher = () => {
       // update server
       await httpClient.post(`/featureFlags`, { featureFlags: newFeatureFlags });
 
-      TelemetryClient.log('FeatureFlagChanged', { featureFlag: featureName, enabled });
+      TelemetryClient.track('FeatureFlagChanged', { featureFlag: featureName, enabled });
     }
   );
 

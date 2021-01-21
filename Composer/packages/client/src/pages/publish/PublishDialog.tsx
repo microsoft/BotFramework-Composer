@@ -35,8 +35,8 @@ export const PublishDialog = (props) => {
       name: formatMessage('Publish target'),
       className: 'publishtarget',
       fieldName: 'publishTarget',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 180,
+      maxWidth: 200,
       isMultiline: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
@@ -90,7 +90,7 @@ export const PublishDialog = (props) => {
     await props.onSubmit(showItems);
     cleanComments();
   };
-  return showItems && showItems.length > 0 ? (
+  return showItems?.length > 0 ? (
     <Dialog
       dialogContentProps={publishDialogProps}
       hidden={false}

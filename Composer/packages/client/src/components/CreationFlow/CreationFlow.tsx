@@ -21,6 +21,7 @@ import {
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
 import { ImportModal } from '../ImportModal/ImportModal';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -57,7 +58,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
   useEffect(() => {
-    if (storages && storages.length) {
+    if (storages?.length) {
       const storageId = storage.id;
       const path = storage.path;
       const formattedPath = Path.normalize(path);
@@ -97,7 +98,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openProject(botFolder);
+    await openProject(botFolder, 'default', true, (projectId) => {
+      TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
+    });
   };
 
   const handleCreateNew = async (formData, templateId: string) => {

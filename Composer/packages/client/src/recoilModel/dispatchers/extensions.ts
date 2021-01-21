@@ -6,15 +6,19 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import httpClient from '../../utils/httpUtil';
-import { extensionsState } from '../atoms';
+import { extensionsState, extensionSettingsState } from '../atoms';
 
 export const extensionsDispatcher = () => {
   const fetchExtensions = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
-      const res = await httpClient.get('/extensions');
+      const [extensionsRes, settingsRes] = await Promise.all([
+        httpClient.get('/extensions'),
+        httpClient.get('/extensions/settings?_all'),
+      ]);
 
-      set(extensionsState, res.data);
+      set(extensionsState, extensionsRes.data);
+      set(extensionSettingsState, settingsRes.data);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -70,14 +74,28 @@ export const extensionsDispatcher = () => {
         const toggledExtension: ExtensionMetadata = res.data;
 
         set(extensionsState, (extensions) => {
-          return (extensions = extensions.map((p) => {
+          return extensions.map((p) => {
             if (p.id === toggledExtension.id) {
               // update the toggled extension
               return toggledExtension;
             }
             return p;
-          }));
+          });
         });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
+    }
+  );
+
+  const updateExtensionSettings = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (newSettings: any) => {
+      const { set } = callbackHelpers;
+
+      try {
+        const res = await httpClient.patch('/extensions/settings', newSettings);
+        set(extensionSettingsState, res.data);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
@@ -90,5 +108,6 @@ export const extensionsDispatcher = () => {
     addExtension,
     removeExtension,
     toggleExtension,
+    updateExtensionSettings,
   };
 };

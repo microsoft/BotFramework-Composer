@@ -11,26 +11,27 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo, buildURL } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { dialogIdsState } from '../../recoilModel';
 
 import TableView from './table-view';
+
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LUPage: React.FC<RouteComponentProps<{
   dialogId: string;
   projectId: string;
-  skillId?: string;
-  luFileId?: string;
+  skillId: string;
+  luFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
+  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    const activeDialog = dialogs.find((id) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length && !luFileId) {
       navigateTo(buildURL('language-understanding', { projectId, skillId }));
     }
@@ -59,6 +60,7 @@ const LUPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LUPage"
       dialogId={dialogId}
+      fileId={luFileId}
       mainRegionName={formatMessage('LU editor')}
       navRegionName={formatMessage('LU Navigation Pane')}
       pageMode={'language-understanding'}
@@ -71,7 +73,7 @@ const LUPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} luFileId={luFileId} path="/edit" projectId={projectId} skillId={skillId} />
-          <TableView path="/" />
+          <TableView dialogId={dialogId} luFileId={luFileId} path="/" projectId={projectId} skillId={skillId} />
         </Router>
       </Suspense>
     </Page>

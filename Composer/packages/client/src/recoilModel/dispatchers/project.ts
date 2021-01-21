@@ -30,6 +30,7 @@ import {
   currentProjectIdState,
   filePersistenceState,
   projectMetaDataState,
+  settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
@@ -114,7 +115,7 @@ export const projectDispatcher = () => {
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
           throw new Error(
-            formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
+            formatMessage('This operation cannot be completed. The bot is already part of the Bot Project')
           );
         }
         const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
@@ -201,10 +202,16 @@ export const projectDispatcher = () => {
   );
 
   const openProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', navigate = true) => {
+    (callbackHelpers: CallbackInterface) => async (
+      path: string,
+      storageId = 'default',
+      navigate = true,
+      callback?: (projectId: string) => void
+    ) => {
       const { set } = callbackHelpers;
       try {
         set(botOpeningState, true);
+
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
 
@@ -227,6 +234,10 @@ export const projectDispatcher = () => {
 
         if (navigate) {
           navigateToBot(callbackHelpers, projectId, mainDialog);
+        }
+
+        if (typeof callback === 'function') {
+          callback(projectId);
         }
       } catch (ex) {
         set(botProjectIdsState, []);
@@ -444,8 +455,12 @@ export const projectDispatcher = () => {
 
   /** Resets the file persistence of a project, and then reloads the bot state. */
   const reloadProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { snapshot } = callbackHelpers;
     callbackHelpers.reset(filePersistenceState(projectId));
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
+
+    // Reload needs to pull the settings from the local storage persisted in the current settingsState of the project
+    botFiles.mergedSettings = await snapshot.getPromise(settingsState(projectId));
     await initBotState(callbackHelpers, projectData, botFiles);
   });
 

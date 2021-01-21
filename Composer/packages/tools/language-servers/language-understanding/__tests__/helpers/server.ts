@@ -23,7 +23,7 @@ const luImportResolver = (_source, id) => {
   };
 };
 
-function createSocketHandler(webSocket: any): rpc.IWebSocket {
+function createSocketHandler(webSocket): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
     send: (content) =>
       webSocket.send(content, (error) => {

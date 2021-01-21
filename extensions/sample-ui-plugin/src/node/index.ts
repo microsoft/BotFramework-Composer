@@ -63,7 +63,7 @@ async function getStatus(config, project, user) {
   const response = {
     status: 200,
     result: {
-      time: new Date(),
+      time: new Date().toString(),
       message: 'Publish successful.',
       log: '',
     },
@@ -75,7 +75,7 @@ async function publish(config, project, metadata, user) {
   const response = {
     status: 202,
     result: {
-      time: new Date(),
+      time: new Date().toString(),
       message: 'Publish accepted.',
       log: '',
       comment: metadata.comment,

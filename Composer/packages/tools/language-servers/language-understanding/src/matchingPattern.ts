@@ -72,12 +72,12 @@ export function isPrebuiltEntity(content: string): boolean {
 }
 
 export function isRegexEntity(content: string): boolean {
-  const regexPrebuiltEntifyDef = /^\s*@\s*regex\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
+  const regexPrebuiltEntifyDef = /^\s*@\s*regex\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/; // lgtm [js/redos]
   return regexPrebuiltEntifyDef.test(content);
 }
 
 export function isSeperatedEntityDef(content: string): boolean {
-  const regexPrebuiltEntifyDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
+  const regexPrebuiltEntifyDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/; // lgtm [js/redos]
   return regexPrebuiltEntifyDef.test(content);
 }
 
@@ -136,7 +136,7 @@ export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: stri
     suggestionEntityTypes.forEach((entityType) => {
       if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
         luisJson[entityType].forEach((entity) => {
-          if (entity && entity.name) {
+          if (entity?.name) {
             suggestionEntityList.push(entity.name);
           }
         });

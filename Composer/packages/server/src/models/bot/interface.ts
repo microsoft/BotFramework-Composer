@@ -23,7 +23,6 @@ export interface IOperationLUFile {
   relativePath?: string;
   content?: string;
   intents: [];
-  [key: string]: any;
 }
 
 export interface ILuisStatusOperation {
@@ -47,13 +46,6 @@ export interface IOrchestratorNLRList {
 export interface IOrchestratorProgress {
   (status: string): void;
 }
-
-export interface IOrchestratorRecognizer extends BaseSchema {
-  modelPath: string;
-  snapshotPath: string;
-  entityRecognizers: any[];
-}
-
 export interface IOrchestratorBuildOutput {
   outputs: [{ id: string; snapshot: Uint8Array; recognizer: Record<string, BaseSchema> }];
   settings: {

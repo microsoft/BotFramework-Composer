@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { indexer, validateDialog } from '@bfc/indexers';
+import { indexer } from '@bfc/indexers';
 import {
   BotProjectFile,
   BotProjectSpace,
@@ -58,7 +58,6 @@ import {
   formDialogSchemaIdsState,
   formDialogSchemaState,
   jsonSchemaFilesState,
-  lgFilesState,
   localeState,
   locationState,
   luFilesState,
@@ -78,11 +77,12 @@ import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { rootBotProjectIdSelector } from '../../selectors';
+import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
+import { lgFilesSelectorFamily } from '../../selectors/lg';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -112,15 +112,18 @@ export const setErrorOnBotProject = async (
 
 export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => {
   const { snapshot, reset } = callbackHelpers;
-  reset(botProjectSpaceLoadedState);
   const projectIds = await snapshot.getPromise(botProjectIdsState);
+  const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
+  reset(botProjectSpaceLoadedState);
   reset(botProjectIdsState);
+
   for (const projectId of projectIds) {
+    botRuntimeOperations?.stopBot(projectId);
     resetBotStates(callbackHelpers, projectId);
   }
-  const workers = [lgWorker, luWorker, qnaWorker];
 
+  const workers = [lgWorker, luWorker, qnaWorker];
   return Promise.all([workers.map((w) => w.flush())]);
 };
 
@@ -178,7 +181,7 @@ export const getSensitiveProperties = (settings: DialogSetting) => {
   return sensitiveProperties;
 };
 
-export const getMergedSettings = (projectId, settings, botName): DialogSetting => {
+export const getMergedSettings = (projectId: string, settings: DialogSetting, botName: string): DialogSetting => {
   let mergedSettings = mergeLocalStorage(projectId, settings);
   mergedSettings = mergeLuisName(mergedSettings, botName);
   if (Array.isArray(mergedSettings.skill)) {
@@ -191,13 +194,16 @@ export const getMergedSettings = (projectId, settings, botName): DialogSetting =
 export const navigateToBot = (
   callbackHelpers: CallbackInterface,
   projectId: string,
-  mainDialog: string,
+  mainDialog?: string,
   urlSuffix?: string
 ) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    let url = `/bot/${projectId}`;
+    if (mainDialog) {
+      url += `/dialogs/${mainDialog}`;
+    }
     if (urlSuffix) {
       // deep link was provided to creation flow (base64 encoded to make query string parsing easier)
       urlSuffix = atob(urlSuffix);
@@ -351,14 +357,15 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   let mainDialog = '';
   const dialogIds: string[] = [];
-  dialogs.forEach((dialog) => {
+
+  for (const dialog of dialogs) {
     if (dialog.isRoot) {
       mainDialog = dialog.id;
     }
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles);
+
     set(dialogState({ projectId, dialogId: dialog.id }), dialog);
     dialogIds.push(dialog.id);
-  });
+  }
 
   set(dialogIdsState(projectId), dialogIds);
   set(recognizersSelectorFamily(projectId), recognizers);
@@ -377,7 +384,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   set(skillManifestsState(projectId), skillManifests);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
-  set(lgFilesState(projectId), lgFiles);
+  set(lgFilesSelectorFamily(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
 
   set(dialogSchemasState(projectId), dialogSchemas);
@@ -586,7 +593,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
   set(botProjectIdsState, [rootBotProjectId]);
   // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
-  if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
+  if (botFiles?.botProjectSpaceFiles?.length) {
     const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
 
     if (mergedSettings.skill) {
@@ -714,6 +721,10 @@ export const checkIfBotExistsInBotProjectFile = async (
   }
   const rootBotLocation = await snapshot.getPromise(locationState(rootBotProjectId));
   const { content: botProjectFile } = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
+
+  if (rootBotLocation === pathOrManifest) {
+    return true;
+  }
 
   for (const uniqueSkillName in botProjectFile.skills) {
     const { manifest, workspace } = botProjectFile.skills[uniqueSkillName];

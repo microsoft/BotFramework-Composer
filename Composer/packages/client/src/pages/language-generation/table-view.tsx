@@ -22,17 +22,13 @@ import { lgUtil } from '@bfc/indexers';
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, editableFieldContainer } from '../language-understanding/styles';
-import {
-  dispatcherState,
-  lgFilesState,
-  localeState,
-  settingsState,
-  validateDialogsSelectorFamily,
-} from '../../recoilModel';
+import { dispatcherState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
+import TelemetryClient from '../../telemetry/TelemetryClient';
+import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
   lgFileId?: string;
@@ -41,12 +37,12 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, lgFileId } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
 
-  const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
   );
@@ -223,6 +219,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={displayName}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue === item.name) return;
                   if (newValue) {
                     handleTemplateUpdate(item.name, { ...item, name: newValue });
                   }
@@ -253,9 +250,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
-                    handleTemplateUpdate(item.name, { ...item, body: newValue });
+                    // prefix with - to body
+                    const fixedBody =
+                      !newValue.startsWith('-') && !newValue.startsWith('[') ? `- ${newValue}` : newValue;
+                    handleTemplateUpdate(item.name, { ...item, body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
@@ -285,7 +286,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
-                  handleTemplateUpdate(item.name, { ...item, body: value });
+                  if (value === item.body) return;
+                  const newValue = value?.trim();
+                  if (newValue) {
+                    // prefix with - to body
+                    const fixedBody =
+                      !newValue.startsWith('-') && !newValue.startsWith('[') ? `- ${newValue}` : newValue;
+                    handleTemplateUpdate(item.name, { ...item, body: fixedBody });
+                  }
                 }}
                 onChange={() => {}}
               />
@@ -313,9 +321,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
-                    handleTemplateUpdateDefaultLocale(item.name, { ...item, body: newValue });
+                    // prefix with - to body
+                    const fixedBody =
+                      !newValue.startsWith('-') && !newValue.startsWith('[') ? `- ${newValue}` : newValue;
+                    handleTemplateUpdateDefaultLocale(item.name, { ...item, body: fixedBody });
                   }
                 }}
                 onChange={() => {}}
@@ -422,6 +434,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onClick={() => {
             onCreateNewTemplate();
             setMessage(formatMessage('item added'));
+            TelemetryClient.track('NewTemplateAdded');
           }}
         >
           {formatMessage('New template')}

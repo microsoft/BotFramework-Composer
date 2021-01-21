@@ -8,6 +8,7 @@ import {
   Shell,
   DialogSchemaFile,
   DialogInfo,
+  BotInProject,
   FeatureFlagKey,
   SDKKinds,
 } from '@botframework-composer/types';
@@ -20,27 +21,28 @@ import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../ut
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
 import {
+  botProjectSpaceSelector,
   dispatcherState,
   userSettingsState,
   settingsState,
   clipboardActionsState,
   schemasState,
-  validateDialogsSelectorFamily,
   focusPathState,
   localeState,
   qnaFilesState,
   designPageLocationState,
   botDisplayNameState,
   dialogSchemasState,
-  lgFilesState,
   luFilesState,
   rateInfoState,
   rootBotProjectIdSelector,
   featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
-import { skillsStateSelector } from '../recoilModel/selectors';
+import { dialogsWithLuProviderSelectorFamily, skillsStateSelector } from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
+import TelemetryClient from '../telemetry/TelemetryClient';
+import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -76,7 +78,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
@@ -85,13 +87,17 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { undo, redo, commitChanges } = undoFunction;
   const luFiles = useRecoilValue(luFilesState(projectId));
-  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const isRootBot = rootBotProjectId === projectId;
+  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
+    ...bot,
+    hasWarnings: false,
+  }));
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState(projectId));
@@ -264,6 +270,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     setApplicationLevelError,
     updateUserSettings,
     confirm: OpenConfirmModal,
+    telemetryClient: TelemetryClient,
   };
 
   const currentDialog = useMemo(() => {
@@ -285,6 +292,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     locale,
     botName,
     projectId,
+    projectCollection,
     dialogs,
     dialogSchemas,
     dialogId,

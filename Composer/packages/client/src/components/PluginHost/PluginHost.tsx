@@ -1,14 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable no-underscore-dangle */
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
-import { Shell } from '@botframework-composer/types';
+import { Shell, ExtensionSettings } from '@botframework-composer/types';
 import { PluginType } from '@bfc/extension-client';
+import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../LoadingSpinner';
 import { PluginAPI } from '../../plugins/api';
+import { extensionSettingsState } from '../../recoilModel';
 
 const containerStyles = css`
   position: relative;
@@ -39,16 +42,23 @@ interface PluginHostProps {
 }
 
 /** Binds closures around Composer client code to plugin iframe's window object */
-function attachPluginAPI(win: Window, type: PluginType, shell?: object) {
+async function attachPluginAPI(
+  win: Window,
+  id: string,
+  type: PluginType,
+  shell?: object,
+  settings?: ExtensionSettings
+) {
   const api = { ...PluginAPI[type], ...PluginAPI.auth };
 
   for (const method in api) {
     win.Composer[method] = (...args) => api[method](...args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-  win.Composer.render = win.Composer.render.bind(null, type, shell);
+  win.Composer.__extensionId = id;
+  win.Composer.__pluginType = type;
+  win.Composer.settings = settings ?? {};
+  win.Composer.sync(shell);
 }
 
 function injectScript(doc: Document, id: string, src: string, async: boolean, onload?: () => any) {
@@ -66,6 +76,7 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
   const targetRef = useRef<HTMLIFrameElement>(null);
   const { pluginType, pluginName, bundleId, shell } = props;
   const [isLoading, setIsLoading] = useState(true);
+  const extensionSettings = useRecoilValue(extensionSettingsState);
 
   useEffect(() => {
     const isReady = (ev) => {
@@ -81,11 +92,11 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
     };
   }, []);
 
-  const loadBundle = (name: string, bundle: string, type: PluginType) => {
+  const loadBundle = async (name: string, bundle: string, type: PluginType) => {
     const iframeWindow = targetRef.current?.contentWindow as Window;
     const iframeDocument = targetRef.current?.contentDocument as Document;
 
-    attachPluginAPI(iframeWindow, type, shell);
+    await attachPluginAPI(iframeWindow, name, type, shell, extensionSettings);
 
     //load the bundle for the specified plugin
     const pluginScriptId = `plugin-${type}-${name}`;

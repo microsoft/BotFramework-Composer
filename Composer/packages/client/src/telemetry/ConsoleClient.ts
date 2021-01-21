@@ -4,7 +4,7 @@
 import { LogData } from '@botframework-composer/types';
 
 export default class ConsoleClient {
-  public static logEvent(name: string, properties: LogData) {
+  public static trackEvent(name: string, properties: LogData) {
     console.log('bfc-telemetry', { name, properties });
   }
 

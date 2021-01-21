@@ -12,7 +12,8 @@ import { useRecoilValue } from 'recoil';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { dialogIdsState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -24,8 +25,7 @@ const LGPage: React.FC<RouteComponentProps<{
   lgFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
-
+  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId));
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
@@ -33,7 +33,7 @@ const LGPage: React.FC<RouteComponentProps<{
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    const activeDialog = dialogs.find((id) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'common' && !lgFileId) {
       navigateTo(`${baseURL}language-generation/common`);
     }
@@ -45,6 +45,7 @@ const LGPage: React.FC<RouteComponentProps<{
       if (lgFileId) url += `/item/${lgFileId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
+      TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
     [dialogId, projectId, edit, lgFileId]
   );
@@ -63,6 +64,7 @@ const LGPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LGPage"
       dialogId={dialogId}
+      fileId={lgFileId}
       mainRegionName={formatMessage('LG editor')}
       navRegionName={formatMessage('LG Navigation Pane')}
       pageMode={'language-generation'}
@@ -75,7 +77,7 @@ const LGPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} lgFileId={lgFileId} path="/edit/*" projectId={projectId} skillId={skillId} />
-          <TableView dialogId={dialogId} lgFileId={lgFileId} path="/" projectId={projectId} />
+          <TableView dialogId={dialogId} lgFileId={lgFileId} path="/" projectId={projectId} skillId={skillId} />
         </Router>
       </Suspense>
     </Page>

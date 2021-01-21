@@ -16,6 +16,7 @@ import StorageService from '../services/storage';
 import settings from '../settings';
 import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
+import { TelemetryService } from '../services/telemetry';
 
 import { Path } from './../utility/path';
 
@@ -72,10 +73,12 @@ async function createProject(req: Request, res: Response) {
         ...project,
       });
     }
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
   } catch (err) {
     res.status(404).json({
       message: err instanceof Error ? err.message : err,
     });
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 404 });
   }
 }
 
@@ -357,7 +360,7 @@ async function build(req: Request, res: Response) {
   const user = await ExtensionContext.getUserFromRequest(req);
 
   // Disable Express' built in 2 minute timeout for requests. Otherwise, large models may fail to build.
-  req.setTimeout(0, () => {
+  (req as any).setTimeout(0, () => {
     throw new Error('LUIS publish process timed out.');
   });
 
@@ -406,10 +409,7 @@ async function checkBoilerplateVersion(req: Request, res: Response) {
   if (currentProject !== undefined) {
     const latestVersion = await AssetService.manager.getBoilerplateCurrentVersion();
     const currentVersion = await AssetService.manager.getBoilerplateVersionFromProject(currentProject);
-    const updateRequired =
-      (latestVersion && currentVersion && latestVersion > currentVersion) || // versions are present in both locations, latest is newer
-      (latestVersion && !currentVersion); // latest version exists, but is mssing from project
-
+    const updateRequired = latestVersion && currentVersion && latestVersion > currentVersion; // versions are present in both locations, latest is newer
     res.status(200).json({
       currentVersion,
       latestVersion,
@@ -570,8 +570,10 @@ async function createProjectAsync(req: Request, jobId: string) {
         ...project,
       });
     }
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
   } catch (err) {
     BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
+    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
   }
 }
 

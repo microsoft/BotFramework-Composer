@@ -28,6 +28,18 @@
           }
         ]
       }
+    },
+    "configuration": {
+      "sources": {
+        "description": "Array of library sources.",
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "default": [
+          "https://raw.githubusercontent.com/microsoft/botframework-components/main/experimental/feeds/components.json"
+        ]
+      }
     }
   },
   "resolutions": {
