@@ -17,9 +17,8 @@ export type BotTemplateV2 = {
   index?: number;
 };
 
+export const csharpFeedKey = 'firstPartyCsharp';
+export const nodeFeedKey = 'firstPartyNode';
+export const defaultFeeds = [nodeFeedKey, csharpFeedKey] as const;
+export type FeedName = typeof defaultFeeds[number];
 export type FeedType = 'npm' | 'nuget';
-
-export type FetchTemplateBody = {
-  feedType: FeedType;
-  feedUrl?: string;
-};

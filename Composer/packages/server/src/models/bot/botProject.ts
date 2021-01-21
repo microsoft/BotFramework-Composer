@@ -212,15 +212,6 @@ export class BotProject implements IBotProject {
       }
     }
 
-    if (
-      settings?.runtime?.customRuntime &&
-      settings?.runtime?.command &&
-      settings?.runtime?.command.indexOf('{projName}') != -1
-    ) {
-      settings.runtime.command = settings.runtime.command.replace('{projName}', `${this.name}.csproj`);
-      await this.updateEnvSettings(settings);
-    }
-
     // fix old bot have no language settings
     if (!settings?.defaultLanguage) {
       settings.defaultLanguage = defaultLanguage;

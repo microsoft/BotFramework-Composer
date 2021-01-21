@@ -17,7 +17,6 @@ import {
   currentProjectIdState,
   userSettingsState,
   templateProjectsState,
-  templateReadMeHtml,
 } from '../../../recoilModel';
 import Home from '../../../pages/home/Home';
 import { useProjectIdCache } from '../../../utils/hooks';
@@ -44,24 +43,21 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     saveProjectAs,
     fetchProjectById,
     createNewBotV2,
-    fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
-  const templateReadMe = useRecoilValue(templateReadMeHtml);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
   const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-  // const [formData, setFormData] = useState({ name: '', description: '', location: '' });
 
   useEffect(() => {
-    if (storages && storages.length) {
+    if (storages?.length) {
       const storageId = storage.id;
       const path = storage.path;
       const formattedPath = Path.normalize(path);
@@ -159,10 +155,8 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onSubmit={handleSubmit}
         />
         <CreateOptionsV2
-          fetchReadMe={fetchReadMe}
           fetchTemplates={fetchTemplatesV2}
           path="create"
-          templateReadMe={templateReadMe}
           templates={templateProjects}
           onDismiss={handleDismiss}
           onNext={handleCreateNext}

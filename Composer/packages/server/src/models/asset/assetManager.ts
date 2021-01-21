@@ -1,17 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 import fs from 'fs';
 import path from 'path';
-// import { exec } from 'child_process';
-// import { promisify } from 'util';
 
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-// import rimraf from 'rimraf';
 import yeoman from 'yeoman-environment';
 
 import { ExtensionContext } from '../extension/extensionContext';
@@ -23,17 +18,20 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
-
-// TODO: pass in working directory param to createEnv for desired location of local Yeomen Repo
-const yeomanEnv = yeoman.createEnv();
-yeomanEnv.lookupLocalPackages();
+import { templateGeneratorPath } from '../../settings/env';
+import { FeatureFlagService } from '../../services/featureFlags';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
+  public yeomanEnv: any;
   private _botProjectFileTemplate;
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
+    if (FeatureFlagService.getFeatureFlagValue('NEW_CREATION_FLOW')) {
+      this.yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
+      this.yeomanEnv.lookupLocalPackages();
+    }
   }
 
   public get botProjectFileTemplate() {
@@ -100,8 +98,7 @@ export class AssetManager {
     templateId: string,
     projectName: string,
     ref: LocationRef,
-    user?: UserIdentity,
-    locale?: string
+    user?: UserIdentity
   ): Promise<LocationRef> {
     try {
       // user storage maybe diff from template storage
@@ -118,7 +115,7 @@ export class AssetManager {
       const npmPackageName = templateId;
       const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, dstDir);
+      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName);
 
       if (remoteTemplateAvailable) {
         await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
@@ -132,14 +129,15 @@ export class AssetManager {
     }
   }
 
-  private async installRemoteTemplate(generatorName: string, npmPackageName: string, dstDir: string): Promise<boolean> {
-    const registeredGenerators: string[] = await yeomanEnv.getGeneratorNames();
+  private async installRemoteTemplate(generatorName: string, npmPackageName: string): Promise<boolean> {
+    this.yeomanEnv.cwd = templateGeneratorPath;
+    const registeredGenerators: string[] = await this.yeomanEnv.getGeneratorNames();
 
     if (registeredGenerators.indexOf(generatorName) !== -1) {
       return true;
     } else {
-      await yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
-      await yeomanEnv.lookupLocalPackages();
+      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
+      await this.yeomanEnv.lookupLocalPackages();
       return true;
     }
   }
@@ -149,9 +147,9 @@ export class AssetManager {
     dstDir: string,
     projectName: string
   ): Promise<boolean> {
-    yeomanEnv.cwd = dstDir;
+    this.yeomanEnv.cwd = dstDir;
 
-    await yeomanEnv.run([generatorName, projectName], {}, () => {
+    await this.yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });
     return true;
@@ -202,7 +200,7 @@ export class AssetManager {
       if (await project.fileStorage.exists(location)) {
         const raw = await project.fileStorage.readFile(location);
         const json = JSON.parse(raw);
-        if (json && json.version) {
+        if (json?.version) {
           return json.version;
         } else {
           return undefined;
@@ -227,7 +225,7 @@ export class AssetManager {
           const raw = await readFile(location, 'utf8');
 
           const json = JSON.parse(raw);
-          if (json && json.version) {
+          if (json?.version) {
             return json.version;
           } else {
             return undefined;

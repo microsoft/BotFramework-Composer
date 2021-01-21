@@ -22,8 +22,10 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, QnABotTemplateId } from '../../../constants';
+import httpClient from '../../../utils/httpUtil';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
@@ -106,17 +108,16 @@ type CreateOptionsProps = {
   onDismiss: () => void;
   onNext: (data: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
-  fetchReadMe: (moduleName: string) => Promise<void>;
-  templateReadMe: string;
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
-  const { templates, onDismiss, onNext, fetchReadMe, templateReadMe } = props;
+  const { templates, onDismiss, onNext } = props;
+  const [templateReadMe, setTemplateReadMe] = useState('');
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
-  const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps } | undefined>(undefined);
+  const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
 
   const selection = useMemo(() => {
     return new Selection({
@@ -175,6 +176,20 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     return null;
   };
 
+  const fetchReadMe = async (moduleName: string) => {
+    try {
+      const response = await httpClient.post(`assets/templateReadme`, {
+        moduleName: moduleName,
+      });
+      const data = response?.data;
+      if (data) {
+        setTemplateReadMe(data);
+      }
+    } catch (ex) {
+      setTemplateReadMe('');
+    }
+  };
+
   useEffect(() => {
     if (templates.length > 1) {
       const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
@@ -186,14 +201,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [templates]);
 
   useEffect(() => {
-    if (selectedFeed?.props?.headerText?.toLowerCase() === 'typescript') {
-      props.fetchTemplates([
-        'https://registry.npmjs.org/-/v1/search?text=docker&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-      ]);
-    } else {
-      props.fetchTemplates([
-        'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-      ]);
+    if (selectedFeed?.props?.itemKey) {
+      props.fetchTemplates([feedDictionary[selectedFeed.props.itemKey]]);
     }
   }, [selectedFeed]);
 
@@ -209,9 +218,16 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
       >
-        <Pivot onLinkClick={setSelectedFeed}>
-          <PivotItem headerText="C#"></PivotItem>
-          <PivotItem headerText="Typescript"></PivotItem>
+        <Pivot
+          defaultSelectedKey={csharpFeedKey}
+          onLinkClick={(item) => {
+            if (item) {
+              setSelectedFeed(item);
+            }
+          }}
+        >
+          <PivotItem headerText="C#" itemKey={csharpFeedKey}></PivotItem>
+          <PivotItem headerText="Typescript" itemKey={nodeFeedKey}></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">

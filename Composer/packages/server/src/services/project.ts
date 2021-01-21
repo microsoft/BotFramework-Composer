@@ -182,8 +182,8 @@ export class BotProjectService {
       BotProjectService.deleteRecentProject(locationRef.path);
       throw new Error(`file ${locationRef.path} does not exist`);
     }
-    const isBotFolder = await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user);
-    if (!isBotFolder) {
+
+    if (!(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))) {
       throw new Error(`${locationRef.path} is not a bot project folder`);
     }
 

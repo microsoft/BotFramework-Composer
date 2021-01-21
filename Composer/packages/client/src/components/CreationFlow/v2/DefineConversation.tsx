@@ -15,8 +15,18 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DialogCreationCopy, QnABotTemplateId, nameRegex, invalidNameCharRegex } from '../../../constants';
+import {
+  DialogCreationCopy,
+  QnABotTemplateId,
+  nameRegexV2,
+  invalidNameCharRegex,
+  mockLanguageOptions,
+  runtimeOptions,
+  defaultPrimaryLanguage,
+  defaultRuntime,
+} from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -68,6 +78,8 @@ interface DefineConversationFormData {
   name: string;
   description: string;
   schemaUrl: string;
+  primaryLanguage: string;
+  runtimeChoice: string;
   location?: string;
 
   templateDir?: string; // location of the imported template
@@ -132,7 +144,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!value || !nameRegex.test(`${value}`)) {
+        if (!value || !nameRegexV2.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {
             return formatMessage('Bot name cannot not start with a number');
@@ -156,6 +168,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     },
     description: {
       required: false,
+    },
+    primaryLanguage: {
+      required: true,
+    },
+    runtimeChoice: {
+      required: true,
     },
     schemaUrl: {
       required: false,
@@ -181,6 +199,8 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
+      primaryLanguage: defaultPrimaryLanguage,
+      runtimeChoice: defaultRuntime,
       description: '',
       schemaUrl: '',
       location:
@@ -307,6 +327,26 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 styles={description}
                 value={formData.description}
                 onChange={(_e, val) => updateField('description', val)}
+              />
+            </StackItem>
+          </Stack>
+          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+            <StackItem grow={0} styles={halfstack}>
+              <Dropdown
+                data-testid="NewDialogPrimaryLanguage"
+                label={formatMessage('Primary Language')}
+                options={mockLanguageOptions}
+                selectedKey={formData.primaryLanguage}
+                onChange={(_e, option) => updateField('primaryLanguage', option?.key.toString())}
+              />
+            </StackItem>
+            <StackItem grow={0} styles={halfstack}>
+              <Dropdown
+                data-testid="NewDialogRuntimeType"
+                label={formatMessage('Runtime type')}
+                options={runtimeOptions}
+                selectedKey={formData.runtimeChoice}
+                onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
               />
             </StackItem>
           </Stack>
