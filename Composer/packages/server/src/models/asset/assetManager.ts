@@ -19,7 +19,6 @@ import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
-import { FeatureFlagService } from '../../services/featureFlags';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -28,10 +27,8 @@ export class AssetManager {
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
-    if (FeatureFlagService.getFeatureFlagValue('NEW_CREATION_FLOW')) {
-      this.yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
-      this.yeomanEnv.lookupLocalPackages();
-    }
+    this.yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
+    this.yeomanEnv.lookupLocalPackages();
   }
 
   public get botProjectFileTemplate() {
