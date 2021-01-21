@@ -48,13 +48,16 @@ export class AppUpdater extends EventEmitter {
    * and we will show UI if there are no available updates.
    */
   public checkForUpdates(explicit = false) {
-    if (!(this.checkingForUpdate || this.downloadingUpdate)) {
-      this.explicitCheck = explicit;
-      this.setFeedURL();
-      this.determineUpdatePath();
-      autoUpdater.autoDownload = this.settings.autoDownload;
-      autoUpdater.checkForUpdates();
+    this.explicitCheck = explicit;
+    if (this.downloadingUpdate || this.checkingForUpdate) {
+      this.emit('update-in-progress');
+      return;
     }
+
+    this.setFeedURL();
+    this.determineUpdatePath();
+    autoUpdater.autoDownload = this.settings.autoDownload;
+    autoUpdater.checkForUpdates();
   }
 
   public downloadUpdate() {
@@ -108,6 +111,7 @@ export class AppUpdater extends EventEmitter {
 
   private onDownloadProgress(progress: any) {
     log('Got update progress: %O', progress);
+    this.downloadingUpdate = true;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('progress', progress);
     }
@@ -116,10 +120,10 @@ export class AppUpdater extends EventEmitter {
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
     log('Update downloaded: %O', updateInfo);
     this._downloadedUpdate = true;
-    this.resetToIdle();
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-downloaded', updateInfo);
     }
+    this.resetToIdle();
   }
 
   private resetToIdle() {
