@@ -20,8 +20,7 @@ import {
   Stack,
 } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
-
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 
 import { ContentHeaderStyle, HeaderText } from '../components/styles';
 import { ImportDialog } from '../components/importDialog';
@@ -40,12 +39,13 @@ const Library: React.FC = () => {
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
-  const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[]>([]);
+  const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[] | undefined>(undefined);
   const [installedComponents, updateInstalledComponents] = useState<LibraryRef[]>([]);
   const [recentlyUsed, setRecentlyUsed] = useState<LibraryRef[]>([]);
-  const [programmingLanguageSelection, setProgrammingLanguageSelection] = useState<string>('c#');
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
-
+  const [feeds, updateFeeds] = useState([]);
+  const [feed, setFeed] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
   const [working, setWorking] = useState(false);
@@ -86,19 +86,8 @@ const Library: React.FC = () => {
     importError: formatMessage('Install Error'),
   };
 
-  const programmingLanguages = [
-    {
-      key: 'c#',
-      text: 'C#',
-    },
-    {
-      key: 'js',
-      text: 'Javascript',
-    },
-  ];
-
-  const onChangeLanguage = (ev, op, idx) => {
-    setProgrammingLanguageSelection(op.key);
+  const onChangeFeed = (ev, op, idx) => {
+    setFeed(op.key);
     return true;
   };
 
@@ -111,7 +100,12 @@ const Library: React.FC = () => {
   };
 
   const getLibraryAPI = () => {
-    return httpClient.get(`${API_ROOT}/library`);
+    const feedUrl = `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    return httpClient.get(feedUrl);
+  };
+
+  const getFeeds = () => {
+    return httpClient.get(`${API_ROOT}/feeds`);
   };
 
   const getInstalledComponentsAPI = (projectId: string) => {
@@ -125,28 +119,41 @@ const Library: React.FC = () => {
   };
 
   const isCompatible = (component) => {
-    return component.language === programmingLanguageSelection;
+    return component.language === runtimeLanguage;
   };
 
   useEffect(() => {
-    getLibraries();
     setCurrentProjectId(projectId);
+    getFeeds().then((feeds) => updateFeeds(feeds.data));
   }, []);
 
   useEffect(() => {
+    if (!feed && feeds.length) {
+      if (runtimeLanguage === 'js') {
+        setFeed('npm');
+      } else {
+        setFeed('nuget');
+      }
+    }
+  }, [feeds, feeds, runtimeLanguage]);
+
+  useEffect(() => {
+    if (feed && feeds.length) {
+      getLibraries();
+    }
+  }, [feed, feeds]);
+
+  useEffect(() => {
     const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
-    if (settings && settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
+    if (settings?.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       getInstalledLibraries();
-
       // detect programming language.
       // should one day be a dynamic property of the runtime or at least stored in the settings?
       if (settings.runtime.key === 'node-azurewebapp') {
         setRuntimeLanguage('js');
-        setProgrammingLanguageSelection('js');
       } else {
         setRuntimeLanguage('c#');
-        setProgrammingLanguageSelection('c#');
       }
     } else {
       setEjectedRuntime(false);
@@ -161,12 +168,13 @@ const Library: React.FC = () => {
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
     if (availableLibraries) {
-      const availableCompatibleLibraries = availableLibraries.filter((component) => isCompatible(component));
+      const availableCompatibleLibraries = availableLibraries;
       availableCompatibleLibraries.forEach((item) => {
         if (!item.category) {
           item.category = DEFAULT_CATEGORY;
         }
-        if (item.category && categories.indexOf(item.category) == -1) {
+        item.isCompatible = isCompatible(item);
+        if (item.category && categories.indexOf(item.category) === -1) {
           categories.push(item.category);
         }
       });
@@ -202,7 +210,7 @@ const Library: React.FC = () => {
 
     setItems(items);
     setGroups(groups);
-  }, [installedComponents, availableLibraries, recentlyUsed, programmingLanguageSelection]);
+  }, [installedComponents, availableLibraries, recentlyUsed]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -270,9 +278,12 @@ const Library: React.FC = () => {
 
   const getLibraries = async () => {
     try {
+      updateAvailableLibraries(undefined);
+      setLoading(true);
       const response = await getLibraryAPI();
       updateAvailableLibraries(response.data.available);
       setRecentlyUsed(response.data.recentlyUsed);
+      setLoading(false);
     } catch (err) {
       setApplicationLevelError({
         status: err.response.status,
@@ -403,26 +414,29 @@ const Library: React.FC = () => {
                 <section style={{ paddingRight: '20px', display: 'grid', justifyContent: 'end' }}>
                   <Dropdown
                     placeholder="Format"
-                    selectedKey={programmingLanguageSelection}
-                    options={programmingLanguages}
-                    onChange={onChangeLanguage}
+                    selectedKey={feed}
+                    options={feeds}
+                    onChange={onChangeFeed}
                     styles={{
                       root: { width: '200px' },
                     }}
                   ></Dropdown>
                 </section>
-                <LibraryList
-                  disabled={!ejectedRuntime || runtimeLanguage !== programmingLanguageSelection}
-                  groups={groups}
-                  install={install}
-                  isInstalled={isInstalled}
-                  items={items}
-                  redownload={redownload}
-                  removeLibrary={removeComponent}
-                  updateItems={setItems}
-                  onItemClick={selectItem}
-                />
-                {!items || items.length === 0 ? (
+                {loading && <LoadingSpinner />}
+                {items?.length ? (
+                  <LibraryList
+                    disabled={!ejectedRuntime}
+                    groups={groups}
+                    install={install}
+                    isInstalled={isInstalled}
+                    items={items}
+                    redownload={redownload}
+                    removeLibrary={removeComponent}
+                    updateItems={setItems}
+                    onItemClick={selectItem}
+                  />
+                ) : null}
+                {items && !items.length && !loading && (
                   <div
                     style={{
                       marginLeft: '50px',
@@ -432,7 +446,7 @@ const Library: React.FC = () => {
                   >
                     {strings.noComponentsFound}
                   </div>
-                ) : null}
+                )}
               </PivotItem>
               <PivotItem headerText={strings.installHeader}>
                 <LibraryList
@@ -454,7 +468,7 @@ const Library: React.FC = () => {
                   updateItems={setItems}
                   onItemClick={selectItem}
                 />
-                {!installedComponents || installedComponents.length === 0 ? (
+                {(!installedComponents || installedComponents.length === 0) && (
                   <div
                     style={{
                       marginLeft: '50px',
@@ -464,7 +478,7 @@ const Library: React.FC = () => {
                   >
                     {strings.noComponentsInstalled}
                   </div>
-                ) : null}
+                )}
               </PivotItem>
             </Pivot>
           </Fragment>
