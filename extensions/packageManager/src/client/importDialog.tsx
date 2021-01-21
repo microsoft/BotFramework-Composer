@@ -2,30 +2,21 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
-import React, { Fragment, useState } from "react";
-import formatMessage from "format-message";
-import {
-  TextField,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-} from "office-ui-fabric-react";
+import { jsx } from '@emotion/core';
+import React, { Fragment, useState } from 'react';
+import formatMessage from 'format-message';
+import { TextField, DialogFooter, PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
 
 interface ImportDialogProps {
   closeDialog: () => void;
-  doImport: (
-    packageName: string,
-    version: string | undefined,
-    isUpdating: boolean
-  ) => void;
+  doImport: (packageName: string, version: string | undefined, isUpdating: boolean) => void;
   name?: string;
   version?: string;
 }
 
 const ImportDialog: React.FC<ImportDialogProps> = (props) => {
-  const [name, setName] = useState(props.name || "");
-  const [version, setVersion] = useState(props.version || "");
+  const [name, setName] = useState(props.name || '');
+  const [version, setVersion] = useState(props.version || '');
 
   const isDisable = () => {
     if (!name) {
@@ -41,7 +32,7 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
     setVersion(val);
   };
   const submit = (e) => {
-    e && e.preventDefault();
+    e?.preventDefault();
     props.doImport(name, version, false);
     return false;
   };
@@ -51,27 +42,20 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
       <form onSubmit={submit}>
         <TextField
           required
-          defaultValue={props.name || ""}
-          label={formatMessage("Package Name")}
-          placeholder={formatMessage("super-dialog-bundle")}
+          defaultValue={props.name || ''}
+          label={formatMessage('Package Name')}
+          placeholder={formatMessage('super-dialog-bundle')}
           onChange={updateName}
         />
         <TextField
-          defaultValue={props.version || ""}
-          label={formatMessage("Version (optional)")}
-          placeholder={formatMessage("1.0.0")}
+          defaultValue={props.version || ''}
+          label={formatMessage('Version (optional)')}
+          placeholder={formatMessage('1.0.0')}
           onChange={updateVersion}
         />
         <DialogFooter>
-          <DefaultButton onClick={props.closeDialog}>
-            {formatMessage("Cancel")}
-          </DefaultButton>
-          <PrimaryButton
-            disabled={isDisable()}
-            text={formatMessage("Import")}
-            type="submit"
-            onClick={submit}
-          />
+          <DefaultButton onClick={props.closeDialog}>{formatMessage('Cancel')}</DefaultButton>
+          <PrimaryButton disabled={isDisable()} text={formatMessage('Import')} type="submit" onClick={submit} />
         </DialogFooter>
       </form>
     </Fragment>
