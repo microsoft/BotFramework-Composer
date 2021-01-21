@@ -19,7 +19,7 @@ import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
-import { FeatureFlagService } from '../../services/featureFlags';
+// import { FeatureFlagService } from '../../services/featureFlags';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -28,10 +28,10 @@ export class AssetManager {
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
-    if (FeatureFlagService.getFeatureFlagValue('NEW_CREATION_FLOW')) {
-      this.yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
-      this.yeomanEnv.lookupLocalPackages();
-    }
+    // if (FeatureFlagService.getFeatureFlagValue('NEW_CREATION_FLOW')) {
+    this.yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
+    this.yeomanEnv.lookupLocalPackages();
+    // }
   }
 
   public get botProjectFileTemplate() {
@@ -136,7 +136,10 @@ export class AssetManager {
     if (registeredGenerators.indexOf(generatorName) !== -1) {
       return true;
     } else {
+      log('Installing generator', npmPackageName);
       await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
+
+      log('Looking up local pacakges');
       await this.yeomanEnv.lookupLocalPackages();
       return true;
     }
@@ -149,6 +152,7 @@ export class AssetManager {
   ): Promise<boolean> {
     this.yeomanEnv.cwd = dstDir;
 
+    log('About to instantiate a template!', dstDir, generatorName, projectName);
     await this.yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });
