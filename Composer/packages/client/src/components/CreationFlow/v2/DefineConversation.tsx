@@ -170,10 +170,10 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
       required: false,
     },
     primaryLanguage: {
-      required: true,
+      required: false,
     },
     runtimeChoice: {
-      required: true,
+      required: false,
     },
     schemaUrl: {
       required: false,
