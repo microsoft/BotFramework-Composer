@@ -18,23 +18,13 @@ import { localeState, showAddLanguageModalState } from '../../recoilModel/atoms'
 import { AddLanguageModal } from '../../components/MultiLanguage';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-// -------------------- Styles -------------------- //
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+import { title, subtitle } from './styles';
+// -------------------- Styles -------------------- //
 
 const botLanguageContainerStyle = css`
   display: flex;
   flex-direction: column;
-`;
-
-const botLanguageDescriptionStyle = css`
-  font-size: ${FontSizes.small};
-  color: ${NeutralColors.gray130};
 `;
 
 const botLanguageFieldStyle = css`
@@ -162,9 +152,9 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Bot language')} titleStyle={titleStyle}>
+      <CollapsableWrapper title={formatMessage('Bot language')} titleStyle={title}>
         <div css={botLanguageContainerStyle}>
-          <div css={botLanguageDescriptionStyle}>
+          <div css={subtitle}>
             {formatMessage(
               'List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language.'
             )}

@@ -15,15 +15,9 @@ import { dispatcherState, settingsState, publishTypesState } from '../../recoilM
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
+import { title } from './styles';
 
 // -------------------- Styles -------------------- //
-
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
 
 const publishTargetsContainer = css`
   display: flex;
@@ -124,7 +118,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={titleStyle}>
+      <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={title}>
         <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
           <div css={publishTargetsHeader}>
             <div css={publishTargetsHeaderText}>{formatMessage('Name')} </div>
