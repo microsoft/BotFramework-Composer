@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -36,7 +36,7 @@ type VisualEditorHeaderProps = {
 };
 
 // field types
-const Types = {
+const BreadcrumbKeyPrefix = {
   Dialog: 'D',
   Trigger: 'T',
   Action: 'A',
@@ -86,10 +86,10 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   const focusPath = getFocusPath(selected, focused);
   const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
 
-  let breadcrumbArray: Array<BreadcrumbItem> = [];
+  const array: Array<BreadcrumbItem> = [];
 
-  breadcrumbArray.push({
-    key: `${Types.Dialog}-${dialogId}`,
+  array.push({
+    key: `${BreadcrumbKeyPrefix.Dialog}-${dialogId}`,
     label: dialogMap[dialogId]?.$designer?.name ?? dialogMap[dialogId]?.$designer?.$designer?.name,
     link: {
       projectId: projectId,
@@ -99,8 +99,8 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   });
 
   if (triggerIndex != null && trigger != null) {
-    breadcrumbArray.push({
-      key: `${Types.Trigger}-${triggerIndex}`,
+    array.push({
+      key: `${BreadcrumbKeyPrefix.Trigger}-${triggerIndex}`,
       label: trigger.$designer?.name || getFriendlyName(trigger),
       link: {
         projectId: projectId,
@@ -116,8 +116,8 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
 
   if (encodedFocused) {
     // we've linked to an action, so put that in too
-    breadcrumbArray.push({
-      key: `${Types.Action}-${focusPath}`,
+    array.push({
+      key: `${BreadcrumbKeyPrefix.Action}-${focusPath}`,
       label: getActionName(possibleAction, pluginConfig),
     });
   }
@@ -125,27 +125,28 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   const currentDialog = (dialogs.find(({ id }) => id === dialogId) ?? dialogs[0]) as DialogInfo;
 
   // get newest label for breadcrumbs
-  useEffect(() => {
+  const breadcrumbArray = useMemo(() => {
     if (currentDialog.content) {
-      breadcrumbArray = breadcrumbArray.map((b) => {
-        const type = b.key.charAt(0);
+      array.map((b) => {
+        const prefix = b.key.charAt(0);
         const name = b.key.substr(2);
 
-        switch (type) {
-          case Types.Dialog:
+        switch (prefix) {
+          case BreadcrumbKeyPrefix.Dialog:
             b.label = getFriendlyName(currentDialog.content);
             break;
-          case Types.Trigger:
+          case BreadcrumbKeyPrefix.Trigger:
             b.label = getFriendlyName(get(currentDialog.content, `triggers[${name}]`));
             break;
-          case Types.Action:
+          case BreadcrumbKeyPrefix.Action:
             b.label = getActionName(get(currentDialog.content, name));
             break;
         }
         return b;
       });
     }
-  }, [currentDialog?.content]);
+    return array;
+  }, [currentDialog?.content, array]);
   return breadcrumbArray;
 };
 
