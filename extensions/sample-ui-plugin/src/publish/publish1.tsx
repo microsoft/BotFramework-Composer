@@ -4,6 +4,6 @@
 import * as React from 'react';
 import { render } from '@bfc/extension-client';
 
-import { Main } from './main';
+import { Main } from '../components/main';
 
 render(<Main title="Publish 1" />);

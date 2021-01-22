@@ -13,8 +13,8 @@ import {
   TextField,
 } from '@fluentui/react';
 
-import { SampleUIPluginSettings } from '../../shared/types';
-import { defaultSettings } from '../../shared/settings';
+import { SampleUIPluginSettings } from '../shared/types';
+import { defaultSettings } from '../shared/settings';
 
 const Main: React.FC = () => {
   const { filter = [] } = useExtensionSettings<SampleUIPluginSettings>(defaultSettings);
