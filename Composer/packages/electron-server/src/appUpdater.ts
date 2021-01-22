@@ -17,6 +17,7 @@ export class AppUpdater extends EventEmitter {
   private downloadingUpdate = false;
   private _downloadedUpdate = false;
   private explicitCheck = false;
+  private updateInfo: UpdateInfo | undefined = undefined;
   private settings: AppUpdaterSettings = { autoDownload: false, useNightly: false };
 
   constructor() {
@@ -50,7 +51,7 @@ export class AppUpdater extends EventEmitter {
   public checkForUpdates(explicit = false) {
     this.explicitCheck = explicit;
     if (this.downloadingUpdate || this.checkingForUpdate) {
-      this.emit('update-in-progress');
+      this.emit('update-in-progress', this.updateInfo);
       return;
     }
 
@@ -96,6 +97,7 @@ export class AppUpdater extends EventEmitter {
   private onUpdateAvailable(updateInfo: UpdateInfo) {
     log('Update available: %O', updateInfo);
     this.checkingForUpdate = false;
+    this.updateInfo = updateInfo;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-available', updateInfo);
     }
@@ -103,6 +105,7 @@ export class AppUpdater extends EventEmitter {
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
     log('Update not available: %O', updateInfo);
+    this.updateInfo = updateInfo;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-not-available', this.explicitCheck);
     }
@@ -120,6 +123,7 @@ export class AppUpdater extends EventEmitter {
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
     log('Update downloaded: %O', updateInfo);
     this._downloadedUpdate = true;
+    this.updateInfo = updateInfo;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-downloaded', updateInfo);
     }
