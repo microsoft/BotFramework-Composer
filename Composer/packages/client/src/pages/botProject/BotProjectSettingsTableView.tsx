@@ -47,7 +47,7 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
       <AppIdAndPassword projectId={projectId} />
       <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <BotLanguage projectId={projectId} />
-      {isRootBot && <AdapterSettings />}
+      {isRootBot && <AdapterSettings projectId={projectId} />}
       <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <div css={publishTargetsWrap(!isRootBot)}>
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />

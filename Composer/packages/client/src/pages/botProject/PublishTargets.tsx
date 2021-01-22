@@ -15,7 +15,7 @@ import { dispatcherState, settingsState, publishTypesState } from '../../recoilM
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { title } from './styles';
+import { title, tableRow, tableRowItem } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -37,24 +37,6 @@ const publishTargetsHeaderText = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
-`;
-
-const publishTargetsItem = css`
-  display: flex;
-  flex-direction: row;
-  height: 42px;
-`;
-
-const publishTargetsItemText = css`
-  width: 200px;
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${NeutralColors.gray30};
-  padding-top: 10px;
-  padding-left: 10px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 `;
 
 const addPublishProfile = {
@@ -127,11 +109,11 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           </div>
           {publishTargets?.map((p, index) => {
             return (
-              <div key={index} css={publishTargetsItem}>
-                <div css={publishTargetsItemText} title={p.name}>
+              <div key={index} css={tableRow}>
+                <div css={tableRowItem} title={p.name}>
                   {p.name}
                 </div>
-                <div css={publishTargetsItemText} title={p.type}>
+                <div css={tableRowItem} title={p.type}>
                   {p.type}
                 </div>
                 <div css={publishTargetsEditButton}>

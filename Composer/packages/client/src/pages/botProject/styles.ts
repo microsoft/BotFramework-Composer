@@ -19,3 +19,26 @@ export const subtitle = css`
     margin-top: 0;
   }
 `;
+
+export const sectionHeader = css`
+  font-weight: ${FontWeights.semibold};
+  font-size: ${FontSizes.small};
+`;
+
+export const tableRow = css`
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+`;
+
+export const tableRowItem = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.regular};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 10px;
+  padding-left: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;

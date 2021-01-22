@@ -1,4 +1,17 @@
 {
+    "Adapters.Contoso": {
+        "$schema": "https://schemas.botframework.com/schemas/ui/v1.0/ui.schema",
+        "form": {
+            "label": "Connect to Contoso Chat Client",
+            "subtitle": "Connect to Contoso Chat Client",
+            "helpLink": "https://aka.ms/contoso-chat-client",
+            "order": [
+                "contosoSkillId",
+                "contosoSecretKey",
+                "allowSuggestedActions"
+            ]
+        }
+    },
     "Microsoft.AdaptiveDialog": {
         "form": {
             "description": "This configures a data driven dialog via a collection of events and actions.",
