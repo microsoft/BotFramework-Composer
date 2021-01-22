@@ -6,6 +6,8 @@ import ReactDOM from 'react-dom';
 // eslint-disable-next-line @bfc/bfcomposer/office-ui-import-scope
 import * as Fabric from 'office-ui-fabric-react';
 import * as ExtensionClient from '@bfc/extension-client';
+import * as CodeEditors from '@bfc/code-editor';
+import * as UIShared from '@bfc/ui-shared';
 import { syncStore, Shell } from '@bfc/extension-client';
 
 import './index.css';
@@ -45,6 +47,8 @@ window.React = React;
 window.ReactDOM = ReactDOM;
 window.ExtensionClient = ExtensionClient;
 window.Fabric = Fabric;
+window.CodeEditors = CodeEditors;
+window.UIShared = UIShared;
 window.Composer = {
   __extensionId: '',
   __pluginType: '',

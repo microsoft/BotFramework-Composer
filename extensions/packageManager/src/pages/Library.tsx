@@ -22,11 +22,11 @@ import {
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 
-import { ContentHeaderStyle, HeaderText } from './styles';
-import { ImportDialog } from './importDialog';
-import { LibraryRef, LibraryList } from './libraryList';
-import { WorkingModal } from './workingModal';
-import { ProjectList } from './projectList/ProjectList';
+import { ContentHeaderStyle, HeaderText } from '../components/styles';
+import { ImportDialog } from '../components/importDialog';
+import { LibraryRef, LibraryList } from '../components/libraryList';
+import { WorkingModal } from '../components/workingModal';
+import { ProjectList } from '../components/projectList/ProjectList';
 
 const DEFAULT_CATEGORY = formatMessage('Available');
 
