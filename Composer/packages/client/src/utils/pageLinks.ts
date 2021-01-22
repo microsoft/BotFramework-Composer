@@ -125,7 +125,6 @@ export const bottomLinks: PageLink[] = [
     to: `/extensions`,
     iconName: 'OEM',
     labelName: formatMessage('Extensions'),
-    exact: true,
     disabled: false,
   },
 ];
