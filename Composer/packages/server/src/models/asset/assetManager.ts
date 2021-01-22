@@ -121,8 +121,8 @@ export class AssetManager {
       ref.path = ref.path + `/${projectName}`;
 
       return ref;
-    } catch {
-      throw new Error('error hit when copying remote template');
+    } catch (err) {
+      throw new Error(`error hit when instantiating remote template: ${err?.message}`);
     }
   }
 
@@ -133,12 +133,16 @@ export class AssetManager {
     if (registeredGenerators.indexOf(generatorName) !== -1) {
       return true;
     } else {
-      log('Installing generator', npmPackageName);
-      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
+      try {
+        log('Installing generator', npmPackageName);
+        await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
 
-      log('Looking up local pacakges');
-      await this.yeomanEnv.lookupLocalPackages();
-      return true;
+        log('Looking up local packages');
+        await this.yeomanEnv.lookupLocalPackages();
+        return true;
+      } catch (err) {
+        throw new Error(`error hit when installing remote template: ${err?.message}`);
+      }
     }
   }
 

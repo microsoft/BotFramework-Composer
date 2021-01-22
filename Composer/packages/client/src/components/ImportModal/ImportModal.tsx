@@ -70,8 +70,8 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
       templateDir,
       urlSuffix,
     };
-    // TODO: remove after testing
-    let creationUrl = `v2/projects/create/${encodeURIComponent(source)}`;
+
+    let creationUrl = `/projects/create/${encodeURIComponent(source)}`;
 
     const searchParams = new URLSearchParams();
     if (name) {
