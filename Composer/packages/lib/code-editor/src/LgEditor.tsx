@@ -1,18 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect } from 'react';
-import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import get from 'lodash/get';
-import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
+import { LgTemplate } from '@botframework-composer/types';
 import { EditorDidMount } from '@monaco-editor/react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+import get from 'lodash/get';
+import * as monacoEditor from 'monaco-editor';
+import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import React, { useEffect, useState } from 'react';
+import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 
-import { registerLGLanguage } from './languages';
-import { createUrl, createWebSocket, createLanguageClient, SendRequestWithRetry } from './utils/lspUtil';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
-import { LGOption } from './utils';
 import { LG_HELP } from './constants';
+import { registerLGLanguage } from './languages';
+import { ToolbarButtonMenu } from './lg/ToolbarButtonMenu';
+import { useLgEditorToolbarItems } from './lg/useLgEditorToolbarItems';
+import { computeRequiredEdits } from './lg/utils';
+import { LGOption } from './utils';
+import { createLanguageClient, createUrl, createWebSocket, SendRequestWithRetry } from './utils/lspUtil';
 
 const placeholder = formatMessage(
   `> To learn more about the LG file format, read the documentation at
@@ -20,7 +27,15 @@ const placeholder = formatMessage(
   { lgHelp: LG_HELP }
 );
 
+const toolbarContainerStyle = {
+  root: {
+    border: `1px solid ${NeutralColors.gray120}`,
+    borderBottom: 'none',
+  },
+};
+
 export interface LGLSPEditorProps extends BaseEditorProps {
+  allTemplates?: readonly LgTemplate[];
   lgOption?: LGOption;
   languageServer?:
     | {
@@ -49,7 +64,7 @@ export function LgEditor(props: LGLSPEditorProps) {
     ...props.options,
   };
 
-  const { lgOption, languageServer, onInit: onInitProp, ...restProps } = props;
+  const { lgOption, languageServer, onInit: onInitProp, allTemplates, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
   let editorId = '';
@@ -58,7 +73,8 @@ export function LgEditor(props: LGLSPEditorProps) {
     editorId = [projectId, fileId, templateId].join('/');
   }
 
-  const [editor, setEditor] = useState<any>();
+  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor>();
+  const [properties, setProperties] = useState<string[] | undefined>();
 
   useEffect(() => {
     if (!editor) return;
@@ -84,6 +100,18 @@ export function LgEditor(props: LGLSPEditorProps) {
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLGEditorInstance = languageClient;
+
+          connection.sendNotification('fetch/properties', { projectId: lgOption?.projectId });
+          connection.onNotification((method: string, params: any) => {
+            switch (method) {
+              case 'properties':
+                {
+                  const { result }: { result: string[] } = params;
+                  setProperties(result);
+                }
+                break;
+            }
+          });
         },
       });
     } else {
@@ -106,17 +134,42 @@ export function LgEditor(props: LGLSPEditorProps) {
     }
   };
 
+  const selectToolbarMenuItem = React.useCallback(
+    (text: string) => {
+      if (editor) {
+        const edits = computeRequiredEdits(text, editor);
+        if (edits?.length) {
+          editor.executeEdits('toolbarMenu', edits);
+        }
+      }
+    },
+    [editor]
+  );
+
+  const { functionRefPayload, propertyRefPayload, templateRefPayload } = useLgEditorToolbarItems(
+    allTemplates ?? [],
+    properties ?? [],
+    selectToolbarMenuItem
+  );
+
   return (
-    <BaseEditor
-      helpURL={LG_HELP}
-      id={editorId}
-      placeholder={placeholder}
-      {...restProps}
-      editorDidMount={editorDidMount}
-      language="botbuilderlg"
-      options={options}
-      theme="lgtheme"
-      onInit={onInit}
-    />
+    <Stack>
+      <Stack horizontal styles={toolbarContainerStyle}>
+        <ToolbarButtonMenu key="templateRef" payload={templateRefPayload} />
+        <ToolbarButtonMenu key="propertyRef" payload={propertyRefPayload} />
+        <ToolbarButtonMenu key="functionRef" payload={functionRefPayload} />
+      </Stack>
+      <BaseEditor
+        helpURL={LG_HELP}
+        id={editorId}
+        placeholder={placeholder}
+        {...restProps}
+        editorDidMount={editorDidMount}
+        language="botbuilderlg"
+        options={options}
+        theme="lgtheme"
+        onInit={onInit}
+      />
+    </Stack>
   );
 }

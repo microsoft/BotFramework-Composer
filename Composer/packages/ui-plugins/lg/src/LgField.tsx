@@ -54,6 +54,14 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   const lgFile = relatedLgFile ?? lgFiles.find((f) => f.id === fallbackLgFileId);
   const lgFileId = lgFile?.id ?? fallbackLgFileId;
 
+  const allTemplates = React.useMemo(
+    () =>
+      (lgFiles.find((lgFile) => lgFile.id === lgFileId)?.allTemplates || [])
+        .filter((t) => t.name !== lgTemplateRef?.name)
+        .sort(),
+    [lgFileId, lgFiles]
+  );
+
   const updateLgTemplate = useCallback(
     async (body: string) => {
       await shellApi.debouncedUpdateLgTemplate(lgFileId, lgName, body);
@@ -103,6 +111,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <LgEditor
         hidePlaceholder
+        allTemplates={allTemplates}
         diagnostics={diagnostics}
         editorSettings={userSettings.codeEditor}
         height={225}

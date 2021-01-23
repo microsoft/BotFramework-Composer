@@ -95,6 +95,17 @@ export class LGServer {
         }
       }
     });
+
+    this.connection.onNotification((method: string, params: any) => {
+      switch (method) {
+        case 'fetch/properties':
+          {
+            const { projectId }: { projectId: string } = params;
+            this.connection.sendNotification('properties', { result: this.memoryResolver?.(projectId) });
+          }
+          break;
+      }
+    });
   }
 
   start() {
@@ -228,9 +239,9 @@ export class LGServer {
 
   private removeParamFormat(params: string): string {
     const resultArr = params.split(',').map((element) => {
-      return element.trim().split(':')[0];
+      return element.trim().split(/\??:/)[0];
     });
-    return resultArr.join(' ,');
+    return resultArr.join(', ');
   }
 
   private matchLineState(
