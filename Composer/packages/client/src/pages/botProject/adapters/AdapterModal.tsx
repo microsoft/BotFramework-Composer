@@ -15,10 +15,11 @@ type Props = {
   onCancel: () => void;
   onConfirm: () => void;
   schema: JSONSchema7;
+  uiSchema: JSONSchema7;
 };
 
 const AdapterModal = (props: Props) => {
-  const { isOpen, onCancel, onConfirm, schema } = props;
+  const { isOpen, onCancel, onConfirm, schema, uiSchema } = props;
 
   return (
     <DialogWrapper
@@ -27,7 +28,7 @@ const AdapterModal = (props: Props) => {
       title={formatMessage('Configure adapter')}
       onDismiss={onCancel}
     >
-      <AdaptiveForm schema={schema} uiOptions={{}} onChange={console.log} />
+      <AdaptiveForm schema={schema} uiOptions={uiSchema} onChange={console.log} />
       <DialogFooter>
         <DefaultButton onClick={onCancel}>{formatMessage('Cancel')}</DefaultButton>
         <PrimaryButton onClick={onConfirm}>{formatMessage('Okay')}</PrimaryButton>

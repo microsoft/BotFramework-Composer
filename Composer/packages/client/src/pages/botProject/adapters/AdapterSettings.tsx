@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 import { BotSchemas } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import { schemasState, botProjectFileState } from '../../../recoilModel/atoms';
+import { schemasState } from '../../../recoilModel/atoms';
 import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
 import { title, subtitle, sectionHeader, tableRow, tableRowItem } from '../styles';
 import { JSONSchema7 } from '../../../../../types';
@@ -23,24 +23,22 @@ type Props = {
 const AdapterSettings = (props: Props) => {
   const { projectId } = props;
 
-  const { default: sdk } = useRecoilValue<BotSchemas>(schemasState(projectId));
-  const { definitions } = sdk ?? {};
+  const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
 
-  const fileState = useRecoilValue(botProjectFileState(projectId));
-  console.log(fileState);
+  const { definitions: schemaDefinitions } = schemas?.default ?? {};
+  const uiSchemas = schemas?.ui?.content ?? {};
 
   const [connected, setConnected] = useState<Array<string>>([]);
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
-  const [currentSchema, setCurrentSchema] = useState<JSONSchema7 | undefined>();
-  const [currentCallback, setCurrentCallback] = useState<() => void | undefined>();
+  const [currentKey, setKey] = useState<string | undefined>();
+  const [currentCallback, setCurrentCallback] = useState<(() => void) | undefined>();
 
-  const openModal = (sch: JSONSchema7 & { key: string }, onClose: () => void) => {
-    setCurrentSchema(sch);
+  const openModal = (key: string | undefined, onClose: (() => void) | undefined) => {
+    setKey(key);
     setCurrentCallback(onClose);
-    setModalOpen(true);
   };
-  const closeModal = () => setModalOpen(false);
+  console.log('k', currentKey);
+  const closeModal = () => openModal(undefined, undefined);
 
   function addConnection(name: string) {
     setConnected([...connected, name]);
@@ -54,7 +52,7 @@ const AdapterSettings = (props: Props) => {
     return connected.includes(name);
   }
 
-  if (definitions == null) return null;
+  if (schemaDefinitions == null) return null;
 
   const header = () => <div css={subtitle}>{formatMessage('Connect your bot to other messaging services.')}</div>;
 
@@ -68,34 +66,41 @@ const AdapterSettings = (props: Props) => {
     <div>
       <div css={sectionHeader}>{formatMessage('External service adapters')}</div>
 
-      {schemas.map((sch) => (
-        <div key={sch.key} css={tableRow}>
-          <div css={tableRowItem}>{sch.title}</div>
-          <div css={tableRowItem}>
-            {isConnected(sch.key) ? (
-              <ActionButton
-                iconProps={{ iconName: 'PlugDisconnected' }}
-                onClick={() => openModal(sch, () => removeConnection(sch.key))}
-              >
-                {formatMessage('Disconnect')}
-              </ActionButton>
-            ) : (
-              <ActionButton
-                iconProps={{ iconName: 'PlugConnected' }}
-                onClick={() => openModal(sch, () => addConnection(sch.key))}
-              >
-                {formatMessage('Connect')}
-              </ActionButton>
-            )}
+      {schemas.map((sch) => {
+        return (
+          <div key={sch.key} css={tableRow}>
+            <div css={tableRowItem}>{sch.title}</div>
+            <div css={tableRowItem}>
+              {isConnected(sch.key) ? (
+                <ActionButton
+                  iconProps={{ iconName: 'PlugDisconnected' }}
+                  onClick={() => openModal(sch.key, () => removeConnection(sch.key))}
+                >
+                  {formatMessage('Disconnect')}
+                </ActionButton>
+              ) : (
+                <ActionButton
+                  iconProps={{ iconName: 'PlugConnected' }}
+                  onClick={() => openModal(sch.key, () => addConnection(sch.key))}
+                >
+                  {formatMessage('Connect')}
+                </ActionButton>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 
-  const adapterSchemas = Object.entries(definitions)
-    .filter(([_, value]) => value?.$role != null && /IAdapter/.test(value.$role))
-    .map(([key, value]) => ({ ...value, key }));
+  const adapterSchemas = Object.entries(schemaDefinitions)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .filter(([key, value]: [string, JSONSchema7]) => value?.$role != null && /IAdapter/.test(value.$role))
+    .map(([key, value]: [string, JSONSchema7]) => ({ ...value, key }));
+
+  console.log(`'${currentKey ?? ''}'`, schemaDefinitions[currentKey ?? ''], uiSchemas?.[currentKey ?? '']?.form);
+
+  console.log(schemaDefinitions, uiSchemas);
 
   return (
     <Fragment>
@@ -104,10 +109,11 @@ const AdapterSettings = (props: Props) => {
         {azureServices()}
         {externalServices(adapterSchemas)}
       </CollapsableWrapper>
-      {currentSchema != null && (
+      {currentKey != null && schemaDefinitions[currentKey] != null && (
         <AdapterModal
-          isOpen={isModalOpen}
-          schema={currentSchema}
+          isOpen
+          schema={schemaDefinitions[currentKey]}
+          uiSchema={uiSchemas?.form[currentKey]}
           onCancel={closeModal}
           onConfirm={() => {
             closeModal();
