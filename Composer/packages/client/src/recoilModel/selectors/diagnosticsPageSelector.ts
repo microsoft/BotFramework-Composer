@@ -129,12 +129,13 @@ export const settingDiagnosticsSelectorFamily = selectorFamily({
     if (botAssets === null) return [];
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const rootSetting = get(settingsState(rootProjectId));
     const diagnosticList: DiagnosticInfo[] = [];
 
     //1. Missing LUIS key
     //2. Missing QnA Maker subscription key.
     //appsettings.json
-    const settingDiagnostic = BotIndexer.checkSetting(botAssets);
+    const settingDiagnostic = BotIndexer.checkSetting(botAssets, rootSetting);
     settingDiagnostic.forEach((item) => {
       diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
