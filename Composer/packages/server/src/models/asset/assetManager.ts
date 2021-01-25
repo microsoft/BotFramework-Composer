@@ -27,7 +27,7 @@ export class AssetManager {
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
-    this.yeomanEnv = yeoman.createEnv(undefined, { cwd: templateGeneratorPath }, undefined);
+    this.yeomanEnv = yeoman.createEnv();
     this.yeomanEnv.lookupLocalPackages();
   }
 
