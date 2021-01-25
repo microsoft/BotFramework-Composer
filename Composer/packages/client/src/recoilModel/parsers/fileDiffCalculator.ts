@@ -8,11 +8,11 @@ import { BaseWorker } from './baseWorker';
 import { FilesDifferencePayload, CalculatorType } from './types';
 
 // Wrapper class
-class Calculator extends BaseWorker<CalculatorType> {
+class FileDiffCalculator extends BaseWorker<CalculatorType> {
   difference(target: FileAsset[], origin: FileAsset[]) {
     const payload = { target, origin };
     return this.sendMsg<FilesDifferencePayload>('difference', payload);
   }
 }
 
-export default new Calculator(new Worker());
+export default new FileDiffCalculator(new Worker());

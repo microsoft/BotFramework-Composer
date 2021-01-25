@@ -17,7 +17,7 @@ jest.mock('axios', () => {
   };
 });
 
-jest.mock('../../parsers/calculator', () => {
+jest.mock('../../parsers/fileDiffCalculator', () => {
   return {
     difference: require('../../parsers/workers/calculator.worker').getDifferenceItems,
   };

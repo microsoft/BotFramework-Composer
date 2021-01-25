@@ -4,9 +4,10 @@ import isEqual from 'lodash/isEqual';
 import { DialogSetting, BotAssets, BotProjectFile, CrosstrainConfig } from '@bfc/shared';
 import keys from 'lodash/keys';
 
+import fileDiffCalculator from '../parsers/fileDiffCalculator';
+
 import * as client from './http';
-import calculator from './../parsers/calculator';
-import { ChangeType, Difference, FileExtensions, IFileChange, FileAsset } from './types';
+import { ChangeType, FileDifference, FileExtensions, IFileChange, FileAsset } from './types';
 
 class FilePersistence {
   private _taskQueue: { [id: string]: IFileChange[] } = {};
@@ -127,7 +128,7 @@ class FilePersistence {
   }
 
   private async getFilesChanges(current: FileAsset[], previous: FileAsset[], fileExtension: FileExtensions) {
-    const changes = (await calculator.difference(current, previous)) as Difference;
+    const changes = (await fileDiffCalculator.difference(current, previous)) as FileDifference;
     const updated = changes.updated.map((file) => this.createChange(file, fileExtension, ChangeType.UPDATE));
     const added = changes.added.map((file) => this.createChange(file, fileExtension, ChangeType.CREATE));
     const deleted = changes.deleted.map((file) => this.createChange(file, fileExtension, ChangeType.DELETE));

@@ -52,7 +52,7 @@ export type FileAsset =
   | RecognizerFile
   | FormDialogSchema;
 
-export type Difference = {
+export type FileDifference = {
   updated: FileAsset[];
   added: FileAsset[];
   deleted: FileAsset[];
