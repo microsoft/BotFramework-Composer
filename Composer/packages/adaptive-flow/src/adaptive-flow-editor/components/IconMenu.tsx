@@ -50,6 +50,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       buttonRef.current && buttonRef.current.focus();
     }
   }, [nodeSelected]);
+
   const onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = (overflowItems) => {
     if (!overflowItems) {
       return null;
