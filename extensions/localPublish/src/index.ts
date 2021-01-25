@@ -16,7 +16,6 @@ import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframew
 
 import killPort from 'kill-port';
 import map from 'lodash/map';
-import range from 'lodash/range';
 import * as tcpPortUsed from 'tcp-port-used';
 
 const stat = promisify(fs.stat);
@@ -52,6 +51,15 @@ const isLocalhostUrl = (matchUrl: string) => {
 const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
+
+const stringifyError = (error: any): string => {
+  if (typeof error === 'object') {
+    return JSON.stringify(error, Object.getOwnPropertyNames(error));
+  } else {
+    return error.toString();
+  }
+}
+
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   public name = 'localpublish';
   public description = 'Publish bot to local runtime';
@@ -114,7 +122,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       this.setBotStatus(botId, {
         status: 500,
         result: {
-          message: error.message,
+          message: stringifyError(error),
         },
       });
     }
@@ -149,7 +157,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       return {
         status: 500,
         result: {
-          message: error,
+          message: stringifyError(error),
         },
       };
     }
@@ -279,7 +287,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     } catch (error) {
       // delete the folder to make sure build again.
       await removeDirAndFiles(this.getBotDir(botId));
-      throw new Error(error.toString());
+      throw error;
     }
   };
 
@@ -324,12 +332,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // start the bot process
       await this.startBot(botId, port, settings, project);
     } catch (error) {
-      console.error('Error in startbot: ', error);
       await this.stopBot(botId);
       this.setBotStatus(botId, {
         status: 500,
         result: {
-          message: error,
+          message: stringifyError(error),
         },
       });
     }
