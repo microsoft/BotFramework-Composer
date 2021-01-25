@@ -17,6 +17,7 @@ export class AppUpdater extends EventEmitter {
   private downloadingUpdate = false;
   private _downloadedUpdate = false;
   private explicitCheck = false;
+  private updateInfo: UpdateInfo | undefined = undefined;
   private settings: AppUpdaterSettings = { autoDownload: false, useNightly: false };
 
   constructor() {
@@ -48,13 +49,16 @@ export class AppUpdater extends EventEmitter {
    * and we will show UI if there are no available updates.
    */
   public checkForUpdates(explicit = false) {
-    if (!(this.checkingForUpdate || this.downloadingUpdate)) {
-      this.explicitCheck = explicit;
-      this.setFeedURL();
-      this.determineUpdatePath();
-      autoUpdater.autoDownload = this.settings.autoDownload;
-      autoUpdater.checkForUpdates();
+    this.explicitCheck = explicit;
+    if (this.downloadingUpdate || this.checkingForUpdate) {
+      this.emit('update-in-progress', this.updateInfo);
+      return;
     }
+
+    this.setFeedURL();
+    this.determineUpdatePath();
+    autoUpdater.autoDownload = this.settings.autoDownload;
+    autoUpdater.checkForUpdates();
   }
 
   public downloadUpdate() {
@@ -93,6 +97,7 @@ export class AppUpdater extends EventEmitter {
   private onUpdateAvailable(updateInfo: UpdateInfo) {
     log('Update available: %O', updateInfo);
     this.checkingForUpdate = false;
+    this.updateInfo = updateInfo;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-available', updateInfo);
     }
@@ -100,6 +105,7 @@ export class AppUpdater extends EventEmitter {
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
     log('Update not available: %O', updateInfo);
+    this.updateInfo = updateInfo;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-not-available', this.explicitCheck);
     }
@@ -108,6 +114,7 @@ export class AppUpdater extends EventEmitter {
 
   private onDownloadProgress(progress: any) {
     log('Got update progress: %O', progress);
+    this.downloadingUpdate = true;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('progress', progress);
     }
@@ -116,10 +123,11 @@ export class AppUpdater extends EventEmitter {
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
     log('Update downloaded: %O', updateInfo);
     this._downloadedUpdate = true;
-    this.resetToIdle();
+    this.updateInfo = updateInfo;
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-downloaded', updateInfo);
     }
+    this.resetToIdle();
   }
 
   private resetToIdle() {
