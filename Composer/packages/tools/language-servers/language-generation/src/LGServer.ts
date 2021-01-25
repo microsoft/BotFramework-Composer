@@ -96,7 +96,7 @@ export class LGServer {
       }
     });
 
-    this.connection.onNotification((method: string, params: any) => {
+    this.connection.onRequest((method: string, params: any) => {
       switch (method) {
         case 'fetch/properties':
           {

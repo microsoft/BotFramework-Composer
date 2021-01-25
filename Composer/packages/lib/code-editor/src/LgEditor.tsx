@@ -19,7 +19,7 @@ import { ToolbarButtonMenu } from './lg/ToolbarButtonMenu';
 import { useLgEditorToolbarItems } from './lg/useLgEditorToolbarItems';
 import { computeRequiredEdits } from './lg/utils';
 import { LGOption } from './utils';
-import { createLanguageClient, createUrl, createWebSocket, SendRequestWithRetry } from './utils/lspUtil';
+import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry } from './utils/lspUtil';
 
 const placeholder = formatMessage(
   `> To learn more about the LG file format, read the documentation at
@@ -76,6 +76,17 @@ export function LgEditor(props: LGLSPEditorProps) {
   const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor>();
   const [properties, setProperties] = useState<string[] | undefined>();
 
+  const fetchAvailableProperties = React.useCallback(async () => {
+    if (window.monacoLGEditorInstance) {
+      await window.monacoLGEditorInstance.onReady();
+      window.monacoLGEditorInstance.sendRequest('fetch/properties', { projectId: lgOption?.projectId });
+      window.monacoLGEditorInstance.onNotification('properties', (params: { result: string[] }) => {
+        const { result } = params;
+        setProperties(result);
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (!editor) return;
 
@@ -96,26 +107,16 @@ export function LgEditor(props: LGLSPEditorProps) {
             ['botbuilderlg'],
             connection
           );
-          SendRequestWithRetry(languageClient, 'initializeDocuments', { lgOption, uri });
+          sendRequestWithRetry(languageClient, 'initializeDocuments', { lgOption, uri });
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLGEditorInstance = languageClient;
-
-          connection.sendNotification('fetch/properties', { projectId: lgOption?.projectId });
-          connection.onNotification((method: string, params: any) => {
-            switch (method) {
-              case 'properties':
-                {
-                  const { result }: { result: string[] } = params;
-                  setProperties(result);
-                }
-                break;
-            }
-          });
+          (async () => await fetchAvailableProperties())();
         },
       });
     } else {
-      SendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      (async () => await fetchAvailableProperties())();
     }
   }, [editor]);
 

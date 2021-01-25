@@ -15,8 +15,8 @@ const templateStartRegex = /\s*-\s*.*$/;
  */
 const getCursorContext = (editor: monacoEditor.editor.IStandaloneCodeEditor) => {
   const state: LgLanguageContext[] = [];
-  const position = editor.getPosition() ?? new monacoEditor.Position(0, 0);
-  const range = new monacoEditor.Range(position.lineNumber, 0, position.lineNumber, position.column);
+  const position = editor.getPosition() ?? new monacoEditor.Position(1, 1);
+  const range = new monacoEditor.Range(position.lineNumber, 1, position.lineNumber, position.column);
   let lineContent = editor.getModel()?.getValueInRange(range) ?? '';
 
   if (!lineContent.startsWith('-')) {
