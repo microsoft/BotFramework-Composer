@@ -29,20 +29,23 @@ import {
   schemasState,
   focusPathState,
   localeState,
-  qnaFilesState,
   designPageLocationState,
   botDisplayNameState,
   dialogSchemasState,
-  luFilesState,
   rateInfoState,
   rootBotProjectIdSelector,
   featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
-import { dialogsWithLuProviderSelectorFamily, skillsStateSelector } from '../recoilModel/selectors';
+import {
+  dialogsWithLuProviderSelectorFamily,
+  skillsStateSelector,
+  lgFilesSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+} from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
 import TelemetryClient from '../telemetry/TelemetryClient';
-import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -82,11 +85,11 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { undo, redo, commitChanges } = undoFunction;
-  const luFiles = useRecoilValue(luFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));

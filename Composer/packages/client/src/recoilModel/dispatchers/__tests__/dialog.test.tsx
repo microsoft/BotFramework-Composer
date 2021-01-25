@@ -8,15 +8,18 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
-  luFilesState,
   schemasState,
   dialogSchemasState,
   actionsSeedState,
   onCreateDialogCompleteState,
   showCreateDialogModalState,
-  qnaFilesState,
 } from '../../atoms';
-import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
+import {
+  dialogsSelectorFamily,
+  lgFilesSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+} from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
@@ -104,12 +107,12 @@ describe('dialog dispatcher', () => {
   const useRecoilTestHook = () => {
     const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
     const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-    const luFiles = useRecoilValue(luFilesState(projectId));
+    const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
     const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const actionsSeed = useRecoilValue(actionsSeedState(projectId));
     const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState(projectId));
     const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-    const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+    const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
 
     return {
@@ -133,8 +136,8 @@ describe('dialog dispatcher', () => {
         { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: lgFilesSelectorFamily(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
-        { recoilState: luFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
-        { recoilState: qnaFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
+        { recoilState: luFilesSelectorFamily(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
+        { recoilState: qnaFilesSelectorFamily(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
         { recoilState: schemasState(projectId), initialValue: { sdk: { content: '' } } },
       ],
       dispatcher: {

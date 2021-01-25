@@ -10,8 +10,13 @@ import { lgDispatcher } from '../lg';
 import { luDispatcher } from '../lu';
 import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { luFilesState, schemasState, dialogSchemasState, actionsSeedState, qnaFilesState } from '../../atoms';
-import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
+import { schemasState, dialogSchemasState, actionsSeedState } from '../../atoms';
+import {
+  dialogsSelectorFamily,
+  lgFilesSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+} from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { DialogInfo } from '../../../../../types';
@@ -98,10 +103,10 @@ describe('trigger dispatcher', () => {
   const useRecoilTestHook = () => {
     const dialogs: DialogInfo[] = useRecoilValue(dialogsSelectorFamily(projectId));
     const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-    const luFiles = useRecoilValue(luFilesState(projectId));
+    const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
     const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const actionsSeed = useRecoilValue(actionsSeedState(projectId));
-    const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+    const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
 
     return {
@@ -135,14 +140,14 @@ describe('trigger dispatcher', () => {
           ],
         },
         {
-          recoilState: luFilesState(projectId),
+          recoilState: luFilesSelectorFamily(projectId),
           initialValue: [
             { id: '1.en-us', content: '' },
             { id: '2.en-us', content: '' },
           ],
         },
         {
-          recoilState: qnaFilesState(projectId),
+          recoilState: qnaFilesSelectorFamily(projectId),
           initialValue: [
             { id: '1.en-us', content: '' },
             { id: '2.en-us', content: '' },

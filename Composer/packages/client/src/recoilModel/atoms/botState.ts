@@ -17,6 +17,7 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
+  LuParseResource,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
@@ -57,6 +58,27 @@ const emptyLg: LgFile = {
   imports: [],
 };
 
+const emptyLu: LuFile = {
+  id: '',
+  content: '',
+  diagnostics: [],
+  intents: [],
+  imports: [],
+  empty: true,
+  resource: {} as LuParseResource,
+};
+
+const emptyQnA: QnAFile = {
+  id: '',
+  content: '',
+  diagnostics: [],
+  qnaSections: [],
+  imports: [],
+  options: [],
+  empty: true,
+  resource: {} as LuParseResource,
+};
+
 type LgStateParams = { projectId: string; lgFileId: string };
 
 export const lgFileState = atomFamily<LgFile, LgStateParams>({
@@ -68,6 +90,38 @@ export const lgFileState = atomFamily<LgFile, LgStateParams>({
 
 export const lgFileIdsState = atomFamily<string[], string>({
   key: getFullyQualifiedKey('lgFileIds'),
+  default: () => {
+    return [];
+  },
+});
+
+type LuStateParams = { projectId: string; luFileId: string };
+
+export const luFileState = atomFamily<LuFile, LuStateParams>({
+  key: getFullyQualifiedKey('lu'),
+  default: () => {
+    return emptyLu;
+  },
+});
+
+export const luFileIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('luFileIds'),
+  default: () => {
+    return [];
+  },
+});
+
+type QnAStateParams = { projectId: string; qnaFileId: string };
+
+export const qnaFileState = atomFamily<QnAFile, QnAStateParams>({
+  key: getFullyQualifiedKey('qna'),
+  default: () => {
+    return emptyQnA;
+  },
+});
+
+export const qnaFileIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('qnaFileIds'),
   default: () => {
     return [];
   },
@@ -147,13 +201,6 @@ export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };
-  },
-});
-
-export const luFilesState = atomFamily<LuFile[], string>({
-  key: getFullyQualifiedKey('luFiles'),
-  default: (id) => {
-    return [];
   },
 });
 
@@ -309,11 +356,6 @@ export const onCreateQnAFromScratchDialogCompleteState = atomFamily<{ func: unde
 export const isEjectRuntimeExistState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('isEjectRuntimeExist'),
   default: false,
-});
-
-export const qnaFilesState = atomFamily<QnAFile[], string>({
-  key: getFullyQualifiedKey('qnaFiles'),
-  default: [],
 });
 
 export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({

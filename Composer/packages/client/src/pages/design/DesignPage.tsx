@@ -34,7 +34,7 @@ import {
   focusPathState,
   showCreateDialogModalState,
   localeState,
-  qnaFilesState,
+  qnaFilesSelectorFamily,
   skillsStateSelector,
   rootBotProjectIdSelector,
   projectDialogsMapSelector,
@@ -113,7 +113,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { location, dialogId, projectId = '', skillId = null } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
-  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(skillId ?? projectId));
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);

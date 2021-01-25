@@ -9,7 +9,8 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { qnaDispatcher } from '../qna';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { qnaFilesState, currentProjectIdState, localeState } from '../../atoms';
+import { currentProjectIdState, localeState } from '../../atoms';
+import { qnaFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
@@ -56,7 +57,7 @@ const qnaFiles = [qna1];
 
 describe('QnA dispatcher', () => {
   const useRecoilTestHook = () => {
-    const [qnaFiles, setQnAFiles] = useRecoilState(qnaFilesState(projectId));
+    const [qnaFiles, setQnAFiles] = useRecoilState(qnaFilesSelectorFamily(projectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
 
     return {
@@ -71,7 +72,7 @@ describe('QnA dispatcher', () => {
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: qnaFilesState(projectId), initialValue: qnaFiles },
+        { recoilState: qnaFilesSelectorFamily(projectId), initialValue: qnaFiles },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: localeState(projectId), initialValue: locale },
       ],

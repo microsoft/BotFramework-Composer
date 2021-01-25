@@ -9,10 +9,9 @@ import difference from 'lodash/difference';
 import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../selectors/project';
-import { lgFilesSelectorFamily } from '../selectors/lg';
+import { lgFilesSelectorFamily, luFilesSelectorFamily } from '../selectors';
 
 import {
-  luFilesState,
   localeState,
   settingsState,
   showAddLanguageModalState,
@@ -97,7 +96,7 @@ export const multilangDispatcher = () => {
         const addedLgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
         return [...prevlgFiles, ...addedLgFiles];
       });
-      set(luFilesState(projectId), (prevluFiles) => {
+      set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
         return [...prevluFiles, ...addedLuFiles];
       });
@@ -140,7 +139,7 @@ export const multilangDispatcher = () => {
         const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
         return leftLgFiles;
       });
-      set(luFilesState(projectId), (prevluFiles) => {
+      set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const { left: leftLuFiles } = deleteLanguageResources(prevluFiles, languages);
         return leftLuFiles;
       });

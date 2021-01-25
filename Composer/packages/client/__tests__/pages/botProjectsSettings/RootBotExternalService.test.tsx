@@ -6,14 +6,14 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import { RootBotExternalService } from '../../../src/pages/botProject/RootBotExternalService';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
-import { dispatcherState } from '../../../src/recoilModel';
 import {
+  dispatcherState,
   settingsState,
   currentProjectIdState,
   projectMetaDataState,
   botProjectIdsState,
   dialogState,
-  luFilesState,
+  luFilesSelectorFamily,
 } from '../../../src/recoilModel';
 
 const state = {
@@ -63,7 +63,7 @@ describe('Root Bot External Service', () => {
       set(dialogState({ projectId: state.projectId, dialogId: state.dialogs[0].id }), state.dialogs[0]);
       set(dialogState({ projectId: state.projectId, dialogId: state.dialogs[1].id }), state.dialogs[1]);
       set(botProjectIdsState, state.botProjectIdsState);
-      set(luFilesState(state.projectId), state.luFiles);
+      set(luFilesSelectorFamily(state.projectId), state.luFiles);
       set(projectMetaDataState(state.projectId), state.projectMetaDataState);
       set(settingsState(state.projectId), state.settings);
       set(dispatcherState, {

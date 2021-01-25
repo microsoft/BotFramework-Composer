@@ -8,7 +8,8 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { luUtil } from '@bfc/indexers';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { luFilesState, currentProjectIdState } from '../../atoms';
+import { currentProjectIdState } from '../../atoms';
+import { luFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { luDispatcher } from '../lu';
@@ -41,7 +42,7 @@ const getLuIntent = (Name, Body): LuIntentSection =>
 
 describe('Lu dispatcher', () => {
   const useRecoilTestHook = () => {
-    const [luFiles, setLuFiles] = useRecoilState(luFilesState(projectId));
+    const [luFiles, setLuFiles] = useRecoilState(luFilesSelectorFamily(projectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
 
     return {
@@ -56,7 +57,7 @@ describe('Lu dispatcher', () => {
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: luFilesState(projectId), initialValue: luFiles },
+        { recoilState: luFilesSelectorFamily(projectId), initialValue: luFiles },
         { recoilState: currentProjectIdState, initialValue: projectId },
       ],
       dispatcher: {

@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
-import { botDisplayNameState, dialogIdsState, qnaFilesState } from '../atoms/botState';
+import { botDisplayNameState, dialogIdsState } from '../atoms/botState';
 import {
   DialogDiagnostic,
   LgDiagnostic,
@@ -25,7 +25,6 @@ import {
   botProjectIdsState,
   dialogSchemasState,
   jsonSchemaFilesState,
-  luFilesState,
   projectMetaDataState,
   settingsState,
   skillManifestsState,
@@ -36,7 +35,8 @@ import { formDialogSchemasSelectorFamily, rootBotProjectIdSelector } from './pro
 import { dialogsSelectorFamily } from './dialogs';
 import { recognizersSelectorFamily } from './recognizers';
 import { dialogDiagnosticsSelectorFamily } from './validatedDialogs';
-import { lgFilesSelectorFamily } from './lg';
+
+import { lgFilesSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from './index';
 
 export const botAssetsSelectFamily = selectorFamily({
   key: 'botAssetsSelectFamily',
@@ -45,12 +45,12 @@ export const botAssetsSelectFamily = selectorFamily({
     if (!projectsMetaData || projectsMetaData.isRemote) return null;
 
     const dialogs = get(dialogsSelectorFamily(projectId));
-    const luFiles = get(luFilesState(projectId));
+    const luFiles = get(luFilesSelectorFamily(projectId));
     const lgFiles = get(lgFilesSelectorFamily(projectId));
     const setting = get(settingsState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
-    const qnaFiles = get(qnaFilesState(projectId));
+    const qnaFiles = get(qnaFilesSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
     const botProjectFile = get(botProjectFileState(projectId));
     const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
