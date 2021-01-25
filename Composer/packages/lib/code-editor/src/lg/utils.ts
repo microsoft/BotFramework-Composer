@@ -197,6 +197,10 @@ export const getAllNodes = <T extends { id: string; children?: T[] }>(
   const paths: Record<string, string> = {};
   const descendantCount: Record<string, number> = {};
 
+  if (options?.skipRoot && options?.expanded) {
+    options.expanded[root.id] = true;
+  }
+
   const addNode = (node: T, parent: T | null, level = 0) => {
     if (!options?.skipRoot || node.id !== root.id) {
       nodes.push(node);
