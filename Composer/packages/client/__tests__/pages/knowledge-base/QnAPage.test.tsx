@@ -10,7 +10,7 @@ import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
   dialogsSelectorFamily,
-  qnaFilesState,
+  qnaFilesSelectorFamily,
   settingsState,
   schemasState,
   dispatcherState,
@@ -59,7 +59,7 @@ const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
   set(dialogsSelectorFamily(state.projectId), state.dialogs);
-  set(qnaFilesState(state.projectId), state.qnaFiles);
+  set(qnaFilesSelectorFamily(state.projectId), state.qnaFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
   set(dispatcherState, {

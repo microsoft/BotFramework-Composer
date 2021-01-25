@@ -34,7 +34,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
-import { dialogsSelectorFamily, qnaFilesState, localeState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFilesSelectorFamily, localeState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
@@ -92,7 +92,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const {
     removeQnAImport,

@@ -24,7 +24,6 @@ import {
   runtimeTemplatesState,
   currentProjectIdState,
   skillManifestsState,
-  luFilesState,
   settingsState,
   botEnvironmentState,
   botDiagnosticsState,
@@ -40,7 +39,7 @@ import {
   botErrorState,
   botProjectSpaceLoadedState,
 } from '../../atoms';
-import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily, luFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
@@ -113,7 +112,7 @@ describe('Project dispatcher', () => {
     const location = useRecoilValue(locationState(projectId));
     const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
-    const luFiles = useRecoilValue(luFilesState(projectId));
+    const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
     const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const settings = useRecoilValue(settingsState(projectId));
     const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));

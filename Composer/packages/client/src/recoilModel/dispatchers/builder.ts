@@ -10,8 +10,8 @@ import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, botStatusState, botRuntimeErrorState } from '../atoms';
-import { dialogsSelectorFamily } from '../selectors';
+import { botStatusState, botRuntimeErrorState } from '../atoms';
+import { dialogsSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from '../selectors';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
@@ -25,8 +25,8 @@ export const builderDispatcher = () => {
       qnaConfig: IQnAConfig
     ) => {
       const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
       const errorMsg = qnaFiles.reduce(
         (result, file) => {

@@ -7,21 +7,15 @@ import { checkForPVASchema } from '@bfc/shared';
 
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
-import {
-  botDisplayNameState,
-  botStatusState,
-  luFilesState,
-  qnaFilesState,
-  schemasState,
-  settingsState,
-} from '../atoms';
+import { botDisplayNameState, botStatusState, schemasState, settingsState } from '../atoms';
 import { Dispatcher } from '../dispatchers';
 import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 import { getSensitiveProperties } from '../dispatchers/utils/project';
 
-import { dialogsSelectorFamily } from './dialogs';
 import { localBotsWithoutErrorsSelector, rootBotProjectIdSelector } from './project';
+
+import { dialogsSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from './index';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',
@@ -54,8 +48,8 @@ export const buildEssentialsSelector = selectorFamily({
       qna: settings.qna,
     };
     const dialogs = get(dialogsSelectorFamily(projectId));
-    const luFiles = get(luFilesState(projectId));
-    const qnaFiles = get(qnaFilesState(projectId));
+    const luFiles = get(luFilesSelectorFamily(projectId));
+    const qnaFiles = get(qnaFilesSelectorFamily(projectId));
     const buildRequired = get(botBuildRequiredSelector(projectId));
     const status = get(botStatusState(projectId));
 

@@ -15,8 +15,6 @@ import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
-  luFilesState,
-  qnaFilesState,
   skillManifestsState,
   dialogSchemasState,
   settingsState,
@@ -25,14 +23,19 @@ import {
   jsonSchemaFilesState,
   crossTrainConfigState,
 } from './atoms';
-import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from './selectors';
+import {
+  localBotsWithoutErrorsSelector,
+  formDialogSchemasSelectorFamily,
+  luFilesSelectorFamily,
+  lgFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+} from './selectors';
 import { Recognizer } from './Recognizers';
 import { recognizersSelectorFamily } from './selectors/recognizers';
-import { lgFilesSelectorFamily } from './selectors/lg';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-  const luFiles = await snapshot.getPromise(luFilesState(projectId));
+  const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
   const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
   const skillManifests = await snapshot.getPromise(skillManifestsState(projectId));
   const setting = await snapshot.getPromise(settingsState(projectId));
@@ -42,7 +45,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
   const jsonSchemaFiles = await snapshot.getPromise(jsonSchemaFilesState(projectId));
   const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
   const crossTrainConfig = await snapshot.getPromise(crossTrainConfigState(projectId));
-  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
 
   return {
     projectId,

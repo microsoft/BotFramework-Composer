@@ -9,7 +9,8 @@ import formatMessage from 'format-message';
 import luWorker from '../parsers/luWorker';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { luFilesState, localeState, settingsState } from '../atoms/botState';
+import { localeState, settingsState } from '../atoms/botState';
+import { luFilesSelectorFamily } from '../selectors/lu';
 
 import { setError } from './shared';
 
@@ -120,7 +121,7 @@ export const createLuFileState = async (
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const luFiles = await snapshot.getPromise(luFilesState(projectId));
+  const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
   const locale = await snapshot.getPromise(localeState(projectId));
   const { languages, luFeatures } = await snapshot.getPromise(settingsState(projectId));
   const createdLuId = `${id}.${locale}`;
@@ -141,7 +142,7 @@ export const createLuFileState = async (
     });
   });
 
-  set(luFilesState(projectId), luFilesAtomUpdater({ adds: changes }));
+  set(luFilesSelectorFamily(projectId), luFilesAtomUpdater({ adds: changes }));
 };
 
 export const removeLuFileState = async (
@@ -149,7 +150,7 @@ export const removeLuFileState = async (
   { id, projectId }: { id: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const luFiles = await snapshot.getPromise(luFilesState(projectId));
+  const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
   const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetLuFile = luFiles.find((item) => item.id === id) || luFiles.find((item) => item.id === `${id}.${locale}`);
@@ -164,7 +165,7 @@ export const removeLuFileState = async (
       luFileStatusStorage.removeFileStatus(projectId, targetLuFile.id);
     }
   });
-  set(luFilesState(projectId), luFilesAtomUpdater({ deletes: [targetLuFile] }));
+  set(luFilesSelectorFamily(projectId), luFilesAtomUpdater({ deletes: [targetLuFile] }));
 };
 
 export const luDispatcher = () => {
@@ -180,7 +181,7 @@ export const luDispatcher = () => {
     }) => {
       const { set, snapshot } = callbackHelpers;
       //set content first
-      set(luFilesState(projectId), (prevLuFiles) => {
+      set(luFilesSelectorFamily(projectId), (prevLuFiles) => {
         return prevLuFiles.map((file) => {
           if (file.id === id) {
             return {
@@ -192,7 +193,7 @@ export const luDispatcher = () => {
         });
       });
 
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       try {
@@ -204,7 +205,7 @@ export const luDispatcher = () => {
          * Because this method already did set content before call luFilesAtomUpdater.
          */
         set(
-          luFilesState(projectId),
+          luFilesSelectorFamily(projectId),
           luFilesAtomUpdater({ updates: updatedFiles }, (prevLuFiles) => {
             const targetInState = prevLuFiles.find((file) => file.id === updatedFile.id);
             const targetInCurrentChange = updatedFiles.find((file) => file.id === updatedFile.id);
@@ -235,7 +236,7 @@ export const luDispatcher = () => {
       projectId: string;
     }) => {
       const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       const luFile = luFiles.find((temp) => temp.id === id);
@@ -263,7 +264,7 @@ export const luDispatcher = () => {
             )) as LuFile;
             changes.push(updatedFile);
           }
-          set(luFilesState(projectId), luFilesAtomUpdater({ updates: changes }));
+          set(luFilesSelectorFamily(projectId), luFilesAtomUpdater({ updates: changes }));
 
           // body change, only update current locale file
         } else {
@@ -273,7 +274,7 @@ export const luDispatcher = () => {
             { Body: intent.Body },
             luFeatures
           )) as LuFile;
-          set(luFilesState(projectId), luFilesAtomUpdater({ updates: [updatedFile] }));
+          set(luFilesSelectorFamily(projectId), luFilesAtomUpdater({ updates: [updatedFile] }));
         }
       } catch (error) {
         setError(callbackHelpers, error);
@@ -292,7 +293,7 @@ export const luDispatcher = () => {
       projectId: string;
     }) => {
       const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       const file = luFiles.find((temp) => temp.id === id);
@@ -300,7 +301,7 @@ export const luDispatcher = () => {
       try {
         const updatedFile = (await luWorker.addIntent(file, intent, luFeatures)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        set(luFilesState(projectId), luFilesAtomUpdater({ updates: updatedFiles }));
+        set(luFilesSelectorFamily(projectId), luFilesAtomUpdater({ updates: updatedFiles }));
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -318,7 +319,7 @@ export const luDispatcher = () => {
       projectId: string;
     }) => {
       const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       const file = luFiles.find((temp) => temp.id === id);
@@ -326,7 +327,7 @@ export const luDispatcher = () => {
       try {
         const updatedFile = (await luWorker.removeIntent(file, intentName, luFeatures)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        set(luFilesState(projectId), luFilesAtomUpdater({ updates: updatedFiles }));
+        set(luFilesSelectorFamily(projectId), luFilesAtomUpdater({ updates: updatedFiles }));
       } catch (error) {
         setError(callbackHelpers, error);
       }

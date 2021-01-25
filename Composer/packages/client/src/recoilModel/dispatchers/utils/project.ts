@@ -60,9 +60,7 @@ import {
   jsonSchemaFilesState,
   localeState,
   locationState,
-  luFilesState,
   projectMetaDataState,
-  qnaFilesState,
   recentProjectsState,
   schemasState,
   settingsState,
@@ -72,6 +70,7 @@ import {
   createQnAOnState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
+import { lgFilesSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../DispatcherWrapper';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
@@ -82,7 +81,6 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
-import { lgFilesSelectorFamily } from '../../selectors/lg';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -383,14 +381,14 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   });
 
   set(skillManifestsState(projectId), skillManifests);
-  set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
+  set(luFilesSelectorFamily(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesSelectorFamily(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
 
   set(dialogSchemasState(projectId), dialogSchemas);
   set(botEnvironmentState(projectId), botEnvironment);
   set(botDisplayNameState(projectId), botName);
-  set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
+  set(qnaFilesSelectorFamily(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
   set(botStatusState(projectId), BotStatus.inactive);
   set(locationState(projectId), location);
   set(schemasState(projectId), schemas);
