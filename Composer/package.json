@@ -68,7 +68,7 @@
     "typecheck:server": "yarn workspace @bfc/server typecheck",
     "typecheck:client": "yarn workspace @bfc/client typecheck",
     "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build",
-    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
+    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json \"l10ntemp/**/*.js\"",
     "l10n:extractJson": "node scripts/l10n-extractJson.js",
     "l10n:transform": "node scripts/l10n-transform.js",
     "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp ./packages",
