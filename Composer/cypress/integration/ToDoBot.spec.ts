@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 context('ToDo Bot', () => {
-  before(() => {
+  beforeEach(() => {
     window.localStorage.setItem('composer:userSettings', JSON.stringify({ telemetry: { allowDataCollection: false } }));
     cy.visit('/home');
     cy.createBot('TodoSample');
