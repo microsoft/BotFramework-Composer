@@ -4,7 +4,8 @@
 import { join } from 'path';
 
 import merge from 'lodash/merge';
-import { defaultPublishConfig, PublishResult, LocationRef } from '@bfc/shared';
+import { defaultPublishConfig, PublishResult } from '@bfc/shared';
+import { LocationRef } from '@botframework-composer/types';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
