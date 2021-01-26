@@ -85,6 +85,9 @@ function getLgTemplateDetails(template: Template) {
       case LgStructuredType.ATTACHMENT.toString().toLowerCase():
         structuredType = LgStructuredType.ATTACHMENT;
         break;
+      case LgStructuredType.CARDACTION.toString().toLowerCase():
+        structuredType = LgStructuredType.CARDACTION;
+        break;
       case LgStructuredType.HEROCARD.toString().toLowerCase():
         structuredType = LgStructuredType.HEROCARD;
         break;
