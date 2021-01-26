@@ -218,12 +218,33 @@ export class LGServer {
         contents: [
           `Parameters: ${get(functionEntity, 'Params', []).join(', ')}`,
           `Documentation: ${get(functionEntity, 'Introduction', '')}`,
-          `ReturnType: ${get(functionEntity, 'Returntype', '').valueOf()}`,
+          `ReturnType: ${this.getExplicitReturnType(get(functionEntity, 'Returntype', '').valueOf() as number).join(
+            ' | '
+          )}`,
         ],
       };
       return Promise.resolve(hoveritem);
     }
     return Promise.resolve(null);
+  }
+
+  private getExplicitReturnType(numReturnType: number): string[] {
+    const result: string[] = [];
+    const mapping = [
+      { value: 16, name: 'Array' },
+      { value: 8, name: 'String' },
+      { value: 4, name: 'Object' },
+      { value: 2, name: 'Number' },
+      { value: 1, name: 'Boolean' },
+    ];
+    for (const obj of mapping) {
+      if (numReturnType >= obj.value) {
+        numReturnType -= obj.value;
+        result.push(obj.name);
+      }
+    }
+
+    return result;
   }
 
   private removeParamFormat(params: string): string {
