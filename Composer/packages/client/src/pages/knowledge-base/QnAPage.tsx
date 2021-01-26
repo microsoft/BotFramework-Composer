@@ -12,7 +12,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogIdsState, qnaFilesSelectorFamily, dispatcherState, createQnAOnState } from '../../recoilModel';
+import { dialogIdsState, dispatcherState, createQnAOnState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -33,7 +33,6 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
-  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(actualProjectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
@@ -94,7 +93,6 @@ const QnAPage: React.FC<RouteComponentProps<{
         <CreateQnAModal
           dialogId={creatQnAOnInfo.dialogId}
           projectId={creatQnAOnInfo.projectId}
-          qnaFiles={qnaFiles}
           onDismiss={() => {
             actions.createQnAFromUrlDialogCancel({ projectId: creatQnAOnInfo.projectId });
           }}
