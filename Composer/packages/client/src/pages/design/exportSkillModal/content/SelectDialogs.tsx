@@ -11,7 +11,7 @@ import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dispatcherState, validateDialogsSelectorFamily } from '../../../../recoilModel';
+import { dispatcherState, dialogsSelectorFamily } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
@@ -35,7 +35,7 @@ interface DescriptionColumnProps extends DialogInfo {
 
 const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
   const { id, displayName, projectId } = props;
-  const items = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const items = useRecoilValue(dialogsSelectorFamily(projectId));
   const { content } = items.find(({ id: dialogId }) => dialogId === id) || {};
 
   const [value, setValue] = useState(content?.$designer?.description);
@@ -94,7 +94,7 @@ const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
 };
 
 export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, projectId }) => {
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), [
     projectId,
   ]);
