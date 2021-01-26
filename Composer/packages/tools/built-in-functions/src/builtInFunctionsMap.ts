@@ -72,7 +72,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     'concat',
     new FunctionEntity(
       ['...strings: string[]'],
-      ReturnType.String,
+      ReturnType.String + ReturnType.Array,
       'Combine two or more strings and return the resulting string. E.g. concat(‘hello’, ‘world’, ‘…’)'
     ),
   ],
