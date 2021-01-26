@@ -11,16 +11,15 @@ import {
   RuntimeTemplate,
   IBotProject,
   IExtensionContext,
-  ComposerEvent,
-  Disposable,
 } from '@botframework-composer/types';
 
 import { BotProjectService } from '../../services/project';
-import { AsyncEventEmitter } from '../../services/eventEmitter';
+
+import { ComposerEventEmitter } from './composerEventEmitter';
 
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
-class ExtensionContext implements IExtensionContext {
+class ExtensionContext extends ComposerEventEmitter implements IExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
   public loginUri = '/login';
@@ -28,6 +27,7 @@ class ExtensionContext implements IExtensionContext {
   public extensions: ExtensionCollection;
 
   constructor() {
+    super();
     this.extensions = {
       storage: {},
       publish: {},
@@ -109,14 +109,6 @@ class ExtensionContext implements IExtensionContext {
     } else {
       throw new Error('No BotProjectService available');
     }
-  }
-
-  public on(event: ComposerEvent, listener: (...args: any[]) => void | Promise<void>): Disposable {
-    return AsyncEventEmitter.addListener(event, listener);
-  }
-
-  public async emit(event: ComposerEvent, ...args: any[]) {
-    await AsyncEventEmitter.emit(event, ...args);
   }
 }
 

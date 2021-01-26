@@ -62,7 +62,7 @@ async function createProject(req: Request, res: Response) {
       if (schemaUrl && !createFromRemoteTemplate) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
-      await ExtensionContext.emit('project:created', currentProject);
+      await ExtensionContext.emit('project:created', { user, project: currentProject });
       await currentProject.init();
 
       const project = currentProject.getProject();
@@ -175,6 +175,7 @@ async function openProject(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.init();
+      await ExtensionContext.emit('project:opened', { user, project: currentProject });
       const project = currentProject.getProject();
       res.status(200).json({
         id: currentProject.id,

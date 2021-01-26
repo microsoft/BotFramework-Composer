@@ -272,7 +272,6 @@ export class BotProjectService {
       project.id = projectId;
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
-      await ExtensionContext.emit('project:opened', project);
       return project;
     }
   };
