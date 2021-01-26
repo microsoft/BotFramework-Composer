@@ -49,7 +49,7 @@
           "$designer": {
             "id": "622462"
           },
-          "condition": "(user.result - 4.4) < 0.0000001",
+          "condition": "((user.result - 4.4) < 0.0000001) && ((user.result - 4.4) > -0.0000001)",
           "actions": [
             {
               "$kind": "Microsoft.SendActivity",
