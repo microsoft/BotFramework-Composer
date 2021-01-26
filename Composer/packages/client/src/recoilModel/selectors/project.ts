@@ -67,12 +67,10 @@ export const localBotPublishHistorySelector = selector({
   key: 'localBotPublishHistorySelector',
   get: ({ get }) => {
     const botProjectIds = get(localBotsWithoutErrorsSelector);
-    const result = botProjectIds.map((projectId: string) => {
+    const result = {};
+    botProjectIds.map((projectId: string) => {
       const publishHistory = get(publishHistoryState(projectId));
-      return {
-        projectId,
-        publishHistory,
-      };
+      result[projectId] = publishHistory;
     });
     return result;
   },
