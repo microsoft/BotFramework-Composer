@@ -15,7 +15,7 @@ import { dispatcherState, settingsState, publishTypesState } from '../../recoilM
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { title, tableRow, tableRowItem } from './styles';
+import { title, tableRow, tableRowItem, tableColumnHeader } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -103,20 +103,20 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={title}>
         <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
           <div css={publishTargetsHeader}>
-            <div css={publishTargetsHeaderText}>{formatMessage('Name')} </div>
-            <div css={publishTargetsHeaderText}>{formatMessage('Type')} </div>
-            <div css={publishTargetsHeaderText}> </div>
+            <div css={tableColumnHeader(20)}>{formatMessage('Name')} </div>
+            <div css={tableColumnHeader(70)}>{formatMessage('Type')} </div>
+            <div css={tableColumnHeader(10)}> </div>
           </div>
           {publishTargets?.map((p, index) => {
             return (
               <div key={index} css={tableRow}>
-                <div css={tableRowItem} title={p.name}>
+                <div css={tableRowItem(25)} title={p.name}>
                   {p.name}
                 </div>
-                <div css={tableRowItem} title={p.type}>
+                <div css={tableRowItem(75)} title={p.type}>
                   {p.type}
                 </div>
-                <div css={publishTargetsEditButton}>
+                <div css={tableRowItem(10)}>
                   <ActionButton
                     styles={editPublishProfile}
                     onClick={() => {

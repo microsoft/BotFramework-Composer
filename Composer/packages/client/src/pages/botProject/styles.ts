@@ -31,9 +31,8 @@ export const tableRow = css`
   height: 42px;
 `;
 
-export const tableRowItem = css`
-  width: 200px;
-  font-size: ${FontSizes.medium};
+export const tableRowItem = (width?: number) => css`
+  font-size: ${FontSizes.small};
   font-weight: ${FontWeights.regular};
   border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
@@ -41,4 +40,17 @@ export const tableRowItem = css`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  ${width != null ? `flex-basis: ${width}%;` : ''}
+`;
+
+export const tableColumnHeader = (width?: number) => css`
+  font-size: ${FontSizes.small};
+  font-weight: ${FontWeights.bold};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 10px;
+  padding-left: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  ${width != null ? `flex-basis: ${width}%;` : ''}
 `;

@@ -7,11 +7,14 @@ import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { BotSchemas } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { schemasState } from '../../../recoilModel/atoms';
 import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
-import { title, subtitle, sectionHeader, tableRow, tableRowItem } from '../styles';
+import { title, subtitle, sectionHeader, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 import { JSONSchema7 } from '../../../../../types';
 
 import AdapterModal from './AdapterModal';
@@ -62,27 +65,32 @@ const AdapterSettings = (props: Props) => {
     </div>
   );
 
+  const columnWidths = [50, 25, 25];
+
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
       <div css={sectionHeader}>{formatMessage('External service adapters')}</div>
+      <div css={tableRow}>
+        <div css={tableColumnHeader(columnWidths[0])}>{formatMessage('Name')}</div>
+        <div css={tableColumnHeader(columnWidths[1])}>{formatMessage('Configured')}</div>
+        <div css={tableColumnHeader(columnWidths[2])}>{formatMessage('Enabled')}</div>
+      </div>
 
       {schemas.map((sch) => {
         return (
           <div key={sch.key} css={tableRow}>
-            <div css={tableRowItem}>{sch.title}</div>
-            <div css={tableRowItem}>
+            <div css={tableRowItem(columnWidths[0])}>{sch.title}</div>
+            <div css={tableRowItem(columnWidths[1])}>
               {isConnected(sch.key) ? (
-                <ActionButton iconProps={{ iconName: 'PlugDisconnected' }} onClick={() => removeConnection(sch.key)}>
-                  {formatMessage('Disconnect')}
-                </ActionButton>
+                <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10 } }} />
               ) : (
-                <ActionButton
-                  iconProps={{ iconName: 'PlugConnected' }}
-                  onClick={() => openModal(sch.key, () => addConnection(sch.key))}
-                >
-                  {formatMessage('Connect')}
-                </ActionButton>
+                <Link onClick={() => openModal(sch.key, () => addConnection(sch.key))}>
+                  {formatMessage('Configure')}
+                </Link>
               )}
+            </div>
+            <div css={tableRowItem(columnWidths[2])}>
+              <Toggle />
             </div>
           </div>
         );

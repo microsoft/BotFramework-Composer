@@ -40,14 +40,14 @@ const AdapterModal = (props: Props) => {
         }}
       />
       <DialogFooter>
-        <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
+        <DefaultButton onClick={onClose}>{formatMessage('Back')}</DefaultButton>
         <PrimaryButton
           onClick={() => {
             console.log(value);
             onClose();
           }}
         >
-          {formatMessage('Okay')}
+          {formatMessage('Create')}
         </PrimaryButton>
       </DialogFooter>
     </DialogWrapper>
