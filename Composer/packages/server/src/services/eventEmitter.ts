@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Disposable } from '@botframework-composer/types';
+import { Disposable, EventListener } from '@botframework-composer/types';
 
 import logger from '../logger';
 
