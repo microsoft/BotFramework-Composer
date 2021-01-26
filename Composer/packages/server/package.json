@@ -88,7 +88,6 @@
     "format-message": "^6.2.3",
     "globby": "^11.0.1",
     "http-errors": "^1.7.2",
-    "immer": "^5.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.0",
     "lodash": "^4.17.19",
