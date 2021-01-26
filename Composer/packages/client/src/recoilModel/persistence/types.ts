@@ -1,6 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  FormDialogSchema,
+  LgFile,
+  LuFile,
+  QnAFile,
+  RecognizerFile,
+  SkillManifestFile,
+} from '@bfc/shared';
+
 export enum ChangeType {
   DELETE = 1,
   UPDATE,
@@ -30,3 +41,19 @@ export interface IFileChange {
   change: string;
   type: ChangeType;
 }
+
+export type FileAsset =
+  | DialogInfo
+  | DialogSchemaFile
+  | LuFile
+  | QnAFile
+  | LgFile
+  | SkillManifestFile
+  | RecognizerFile
+  | FormDialogSchema;
+
+export type FileDifference = {
+  updated: FileAsset[];
+  added: FileAsset[];
+  deleted: FileAsset[];
+};
