@@ -8,6 +8,8 @@ import find from 'lodash/find';
 import { UserIdentity, FileExtensions } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
 import yeoman from 'yeoman-environment';
+import Environment from 'yeoman-environment';
+import TerminalAdapter from 'yeoman-environment/lib/adapter';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -22,12 +24,12 @@ import { templateGeneratorPath } from '../../settings/env';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
-  public yeomanEnv: any;
+  public yeomanEnv: Environment;
   private _botProjectFileTemplate;
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
-    this.yeomanEnv = yeoman.createEnv();
+    this.yeomanEnv = yeoman.createEnv('', { cwd: templateGeneratorPath }, new TerminalAdapter({ console: console }));
     this.yeomanEnv.lookupLocalPackages();
   }
 
