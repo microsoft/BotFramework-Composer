@@ -25,7 +25,7 @@
     "typescript": "3.9.2"
   },
   "dependencies": {
-    "botbuilder-lg": "4.12.0-dev-20201119.9afa93623c3e",
+    "botbuilder-lg": "4.12.0-dev-20210122.97d737c40f77",
     "debug": "^4.1.1",
     "lodash": "^4.17.19"
   }
