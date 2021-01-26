@@ -130,21 +130,15 @@ export class AssetManager {
 
   private async installRemoteTemplate(generatorName: string, npmPackageName: string): Promise<boolean> {
     this.yeomanEnv.cwd = templateGeneratorPath;
-    const registeredGenerators: string[] = await this.yeomanEnv.getGeneratorNames();
+    try {
+      log('Installing generator', npmPackageName);
+      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
 
-    if (registeredGenerators.indexOf(generatorName) !== -1) {
+      log('Looking up local packages');
+      await this.yeomanEnv.lookupLocalPackages();
       return true;
-    } else {
-      try {
-        log('Installing generator', npmPackageName);
-        await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
-
-        log('Looking up local packages');
-        await this.yeomanEnv.lookupLocalPackages();
-        return true;
-      } catch (err) {
-        throw new Error(`error hit when installing remote template: ${err?.message}`);
-      }
+    } catch (err) {
+      throw new Error(`error hit when installing remote template: ${err?.message}`);
     }
   }
 
