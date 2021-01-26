@@ -78,7 +78,7 @@ class FilePersistence {
     } catch (error) {
       if (this._handleError && error) {
         const payload = new Error(error?.message ?? error?.response?.data?.message ?? JSON.stringify(error));
-        payload.name = formatMessage('Failed to save bot');
+        payload.name = formatMessage('Fail to save bot');
         this._handleError(payload);
       }
       return Promise.resolve(false);
