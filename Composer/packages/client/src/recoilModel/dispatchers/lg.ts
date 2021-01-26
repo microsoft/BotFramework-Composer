@@ -42,31 +42,26 @@ const updateLgFiles = (
 ) => {
   const { updates, adds, deletes } = changes;
 
-  // updates
   updates?.forEach((lgFile) => {
     set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
       needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
     );
   });
 
-  // deletes
   if (deletes?.length) {
     set(lgFileIdsState(projectId), (ids) => ids.filter((id) => !deletes.map((file) => file.id).includes(id)));
   }
 
-  // adds
   if (adds?.length) {
     set(lgFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
     adds.forEach((lgFile) => {
-      set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
-        needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
-      );
+      set(lgFileState({ projectId, lgFileId: lgFile.id }), lgFile);
     });
   }
 };
 
 // sync lg file structure across locales, it take times, computed changes may be expired at next tick.
-export const getRelatedLgFileChanges = async (
+const getRelatedLgFileChanges = async (
   projectId: string,
   lgFiles: LgFile[],
   updatedLgFile: LgFile
