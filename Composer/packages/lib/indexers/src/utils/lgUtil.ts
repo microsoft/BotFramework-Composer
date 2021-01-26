@@ -7,7 +7,17 @@
  *
  */
 
-import { Templates, Template, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
+import {
+  Templates,
+  Template,
+  Diagnostic as LGDiagnostic,
+  ImportResolverDelegate,
+  StructuredBodyContext,
+  NormalBodyContext,
+  NormalTemplateStringContext,
+  IfElseBodyContext,
+  SwitchCaseBodyContext,
+} from 'botbuilder-lg';
 import { LgTemplate, lgImportResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import isEmpty from 'lodash/isEmpty';
@@ -16,6 +26,10 @@ import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
 import { lgIndexer } from '../lgIndexer';
 
 import { getFileName } from './help';
+
+import { LgTemplateType } from './lgTemplateType';
+
+import { LgStructuredType } from './lgStructuredType';
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -37,13 +51,138 @@ function convertLGRange(s: SourceRange): Range {
 
 function templateToLgTemplate(templates: Template[]): LgTemplate[] {
   return templates.map((t) => {
+    let templateDetails = getLgTemplateDetails(t);
+
     return {
       name: t.name,
       body: t.body,
       parameters: t.parameters || [],
       range: convertLGRange(t.sourceRange),
+      templateType: templateDetails.templateType,
+      structuredType: templateDetails.structuredType,
+      speakEnabled: templateDetails.speakEnabled,
+      expressionsUsed: templateDetails.expressionsUsed,
     };
   });
+}
+
+function getLgTemplateDetails(template: Template) {
+  let templateType = LgTemplateType.PLAIN_TEXT;
+  let structuredType = LgStructuredType.NONE;
+  let speakEnabled = false;
+  let expressionsUsed: string[] = [];
+
+  if (template.templateBodyParseTree instanceof StructuredBodyContext) {
+    templateType = LgTemplateType.STRUCTURED;
+    const structureName = template.templateBodyParseTree
+      .structuredTemplateBody()
+      .structuredBodyNameLine()
+      .STRUCTURE_NAME()?.text;
+    switch (structureName?.toLowerCase()) {
+      case LgStructuredType.ACTIVITY.toString().toLowerCase():
+        structuredType = LgStructuredType.ACTIVITY;
+        break;
+      case LgStructuredType.ATTACHMENT.toString().toLowerCase():
+        structuredType = LgStructuredType.ATTACHMENT;
+        break;
+      case LgStructuredType.HEROCARD.toString().toLowerCase():
+        structuredType = LgStructuredType.HEROCARD;
+        break;
+      case LgStructuredType.THUMBNAILCARD.toString().toLowerCase():
+        structuredType = LgStructuredType.THUMBNAILCARD;
+        break;
+      case LgStructuredType.SIGNINCARD.toString().toLowerCase():
+        structuredType = LgStructuredType.SIGNINCARD;
+        break;
+      case LgStructuredType.ANIMATIONCARD.toString().toLowerCase():
+        structuredType = LgStructuredType.ANIMATIONCARD;
+        break;
+      case LgStructuredType.VIDEOCARD.toString().toLowerCase():
+        structuredType = LgStructuredType.VIDEOCARD;
+        break;
+      case LgStructuredType.AUDIOCARD.toString().toLowerCase():
+        structuredType = LgStructuredType.AUDIOCARD;
+        break;
+    }
+
+    const structuredContentLines = template.templateBodyParseTree.structuredTemplateBody().structuredBodyContentLine();
+    (structuredContentLines || []).forEach((contentLine) => {
+      if (contentLine.keyValueStructureLine()) {
+        if (contentLine.keyValueStructureLine()?.STRUCTURE_IDENTIFIER().text.toLowerCase() === 'speak') {
+          speakEnabled = true;
+        }
+
+        const keyValueStructureValues = contentLine.keyValueStructureLine()?.keyValueStructureValue();
+        (keyValueStructureValues || []).forEach((structureValue) => {
+          const expressionsInStructure = structureValue.expressionInStructure();
+          (expressionsInStructure || []).forEach((expressionInStructure) => {
+            const expressionText = expressionInStructure.EXPRESSION_IN_STRUCTURE_BODY().text;
+            expressionsUsed.push(expressionText);
+          });
+        });
+      }
+
+      if (contentLine.expressionInStructure()) {
+        const expressionText = contentLine.expressionInStructure()?.EXPRESSION_IN_STRUCTURE_BODY().text;
+        if (expressionText) {
+          expressionsUsed.push(expressionText);
+        }
+      }
+    });
+  } else if (template.templateBodyParseTree instanceof NormalBodyContext) {
+    const normalTemplateStrings = template.templateBodyParseTree.normalTemplateBody().templateString();
+    (normalTemplateStrings || []).forEach((normalTemplateString) => {
+      if (normalTemplateString instanceof NormalTemplateStringContext) {
+        const expressionsContext = normalTemplateString.expression();
+        (expressionsContext || []).forEach((expressionContext) => {
+          const expressionText = expressionContext.EXPRESSION().text;
+          expressionsUsed.push(expressionText);
+        });
+      }
+    });
+  } else if (template.templateBodyParseTree instanceof IfElseBodyContext) {
+    const ifConditionRules = template.templateBodyParseTree.ifElseTemplateBody().ifConditionRule();
+    (ifConditionRules || []).forEach((ifConditionRule) => {
+      const expressionsContext = ifConditionRule.ifCondition().expression();
+      (expressionsContext || []).forEach((expressionContext) => {
+        const expressionText = expressionContext.EXPRESSION().text;
+        expressionsUsed.push(expressionText);
+      });
+
+      const normalTemplateStrings = ifConditionRule.normalTemplateBody()?.templateString();
+      (normalTemplateStrings || []).forEach((normalTemplateString) => {
+        if (normalTemplateString instanceof NormalTemplateStringContext) {
+          const expressionsContext = normalTemplateString.expression();
+          (expressionsContext || []).forEach((expressionContext) => {
+            const expressionText = expressionContext.EXPRESSION().text;
+            expressionsUsed.push(expressionText);
+          });
+        }
+      });
+    });
+  } else if (template.templateBodyParseTree instanceof SwitchCaseBodyContext) {
+    const switchCaseRules = template.templateBodyParseTree.switchCaseTemplateBody().switchCaseRule();
+    (switchCaseRules || []).forEach((switchCaseRule) => {
+      const expressionsContext = switchCaseRule.switchCaseStat().expression();
+      (expressionsContext || []).forEach((expressionContext) => {
+        const expressionText = expressionContext.EXPRESSION().text;
+        expressionsUsed.push(expressionText);
+      });
+
+      const normalTemplateStrings = switchCaseRule.normalTemplateBody()?.templateString();
+      (normalTemplateStrings || []).forEach((normalTemplateString) => {
+        if (normalTemplateString instanceof NormalTemplateStringContext) {
+          const expressionsContext = normalTemplateString.expression();
+          (expressionsContext || []).forEach((expressionContext) => {
+            const expressionText = expressionContext.EXPRESSION().text;
+            expressionsUsed.push(expressionText);
+          });
+        }
+      });
+    });
+  }
+
+  return { templateType, structuredType, speakEnabled, expressionsUsed };
 }
 
 // get parsed resource from lgFile, if not exist do reparse

@@ -6,7 +6,7 @@ import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaF
 import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
-import { LanguageFileImport } from '../../../../types/src';
+import { LanguageFileImport, LgFile } from '../../../../types/src';
 import {
   botDisplayNameState,
   botErrorState,
@@ -16,6 +16,7 @@ import {
   formDialogSchemaIdsState,
   formDialogSchemaState,
   luFilesState,
+  lgFileIdsState,
   qnaFilesState,
   skillManifestsState,
   dialogSchemasState,
@@ -27,6 +28,7 @@ import {
   dialogIdsState,
   dialogState,
   schemasState,
+  lgFileState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
@@ -263,6 +265,21 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
       const dialogIds = get(dialogIdsState(projectId));
       result[projectId] = dialogIds.map((dialogId) => {
         return get(dialogState({ projectId, dialogId }));
+      });
+      return result;
+    }, {});
+  },
+});
+
+export const projectLgFilesMapSelector = selector<{ [key: string]: LgFile[] }>({
+  key: 'projectLgFilesMap',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+
+    return projectIds.reduce((result, projectId) => {
+      const lgFiles = get(lgFileIdsState(projectId));
+      result[projectId] = lgFiles.map((lgFileId) => {
+        return get(lgFileState({ projectId, lgFileId }));
       });
       return result;
     }, {});
