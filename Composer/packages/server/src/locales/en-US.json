@@ -1394,6 +1394,15 @@
   "input_1d1d9b8e": {
     "message": "Input"
   },
+  "insert_prebuilt_functions_22b05f8": {
+    "message": "Insert prebuilt functions"
+  },
+  "insert_property_reference_38f0605": {
+    "message": "Insert property reference"
+  },
+  "insert_template_reference_bb33720e": {
+    "message": "Insert template reference"
+  },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
@@ -1594,6 +1603,9 @@
   },
   "location_is_location_8c17b5de": {
     "message": "location is { location }"
+  },
+  "log_output_64a4dbec": {
+    "message": "Log output"
   },
   "log_to_console_4fc23e34": {
     "message": "Log to console"
@@ -1862,6 +1874,9 @@
   "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
     "message": "No form dialog schema matches your filtering criteria!"
   },
+  "no_functions_found_e0db426b": {
+    "message": "No functions found"
+  },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NO LU FILE WITH NAME { id }"
   },
@@ -1871,11 +1886,17 @@
   "no_name_e082310e": {
     "message": "[no name]"
   },
+  "no_properties_found_6f777f6e": {
+    "message": "No properties found"
+  },
   "no_qna_file_with_name_id_7cb89755": {
     "message": "NO QNA FILE WITH NAME { id }"
   },
   "no_search_results_1ba50423": {
     "message": "No search results"
+  },
+  "no_templates_found_d8dca69b": {
+    "message": "No templates found"
   },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
@@ -2413,6 +2434,15 @@
   },
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Search for extensions on npm"
+  },
+  "search_functions_4a1afbc3": {
+    "message": "Search functions"
+  },
+  "search_properties_5bf3d868": {
+    "message": "Search properties"
+  },
+  "search_templates_669eab41": {
+    "message": "Search templates"
   },
   "see_details_da74090e": {
     "message": "See Details"
