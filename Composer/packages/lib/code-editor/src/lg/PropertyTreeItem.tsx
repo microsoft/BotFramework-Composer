@@ -33,22 +33,6 @@ const toggleExpandIconStyle: IIconStyles = {
 
 const Root = styled(Stack)({
   height: DEFAULT_TREE_ITEM_HEIGHT,
-  userSelect: 'none',
-  position: 'relative',
-  zIndex: 0,
-  cursor: 'pointer',
-  '&:hover': {
-    '&:before': {
-      content: '""',
-      position: 'absolute',
-      height: DEFAULT_TREE_ITEM_HEIGHT,
-      lineHeight: `${DEFAULT_TREE_ITEM_HEIGHT}px`,
-      width: '100%',
-      left: 0,
-      background: NeutralColors.gray40,
-      zIndex: -1,
-    },
-  },
 });
 
 const Content = styled(Stack)<{
@@ -81,7 +65,7 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
   const isExpandable = !!item.children?.length && onToggleExpand;
 
   return (
-    <Root horizontal data-is-focusable="true" style={{ paddingLeft }} title={item.id} verticalAlign="center">
+    <Root horizontal style={{ paddingLeft }} title={item.id} verticalAlign="center">
       {isExpandable ? (
         <Icon
           iconName={expanded ? 'CaretDownSolid8' : 'CaretRightSolid8'}
