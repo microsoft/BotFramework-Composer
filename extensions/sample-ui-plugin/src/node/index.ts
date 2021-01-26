@@ -27,6 +27,37 @@ function initialize(registration: IExtensionRegistration) {
 
   registration.store.replace({ some: 'data' });
   registration.log('Reading from store:\n%O', registration.store.readAll());
+
+  registration.context.on('project:opened', async ({ project, user }) => {
+    return new Promise((resolve) => {
+      registration.log('project:opened %O', user);
+      setTimeout(() => {
+        registration.log('project:opened %O', project.id);
+        resolve();
+      }, 2000);
+    });
+  });
+
+  registration.context.on('project:created', async ({ project }) => {
+    registration.log('In project created handler');
+    const lg = `
+# my_func
+- hello
+- world
+`;
+    await project.updateFile('common.lg', lg);
+    await project.init();
+  });
+
+  registration.context.on('project:created', async ({ project }) => {
+    registration.log('Checking lg content');
+    const f = project.getFile('common.en-us.lg');
+    if (f) {
+      registration.log('common.lg content:\n%s', f.content);
+    } else {
+      registration.log('common.lg not found');
+    }
+  });
 }
 
 async function getStatus(config, project, user) {

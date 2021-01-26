@@ -9,7 +9,7 @@ import { IExtensionContext, ExtensionSettings } from './extension';
 import { PublishPlugin } from './publish';
 import { RuntimeTemplate, BotTemplate } from './runtime';
 import { UserIdentity } from './user';
-import { IBotProject } from './server';
+import { IBotProject } from './project';
 
 export type ExtensionStore<T = any> = {
   readAll(): Partial<T>;
@@ -20,7 +20,7 @@ export type ExtensionStore<T = any> = {
   destroy(): void;
 };
 
-export type IExtensionRegistration = {
+export interface IExtensionRegistration {
   readonly context: IExtensionContext;
   readonly passport: PassportStatic;
   readonly name: string;
@@ -87,4 +87,4 @@ export type IExtensionRegistration = {
   useAuthMiddleware(middleware: RequestHandler): void;
   useUserSerializers(serialize: any, deserialize: any): void;
   addAllowedUrl(url: string): void;
-};
+}

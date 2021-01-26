@@ -15,9 +15,11 @@ import {
 
 import { BotProjectService } from '../../services/project';
 
+import { ComposerEventEmitter } from './composerEventEmitter';
+
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
-class ExtensionContext implements IExtensionContext {
+class ExtensionContext extends ComposerEventEmitter implements IExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
   public loginUri = '/login';
@@ -25,6 +27,7 @@ class ExtensionContext implements IExtensionContext {
   public extensions: ExtensionCollection;
 
   constructor() {
+    super();
     this.extensions = {
       storage: {},
       publish: {},

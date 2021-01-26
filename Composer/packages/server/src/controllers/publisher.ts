@@ -5,6 +5,7 @@ import { join } from 'path';
 
 import merge from 'lodash/merge';
 import { defaultPublishConfig, PublishResult } from '@bfc/shared';
+import { LocationRef } from '@botframework-composer/types';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
@@ -13,7 +14,6 @@ import { BotProjectService } from '../services/project';
 import { authService } from '../services/auth/auth';
 import AssetService from '../services/asset';
 import logger from '../logger';
-import { LocationRef } from '../models/bot/interface';
 import { TelemetryService } from '../services/telemetry';
 
 const log = logger.extend('publisher-controller');

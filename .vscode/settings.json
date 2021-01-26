@@ -7,9 +7,7 @@
   },
   "files.exclude": {
     "**/.git": true,
-    "**/.DS_Store": true,
-    "**/node_modules": true,
-    "**/build": true
+    "**/.DS_Store": true
   },
   "eslint.packageManager": "yarn",
   "eslint.validate": [

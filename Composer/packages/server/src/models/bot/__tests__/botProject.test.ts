@@ -6,12 +6,10 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import endsWith from 'lodash/endsWith';
+import { LocationRef, BuildResource } from '@botframework-composer/types';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
-import { LocationRef } from '../interface';
-
-import { Resource } from './../interface';
 
 jest.mock('azure-storage', () => {
   return {};
@@ -288,12 +286,12 @@ describe('buildFiles', () => {
       qnaRegion: 'westus',
       subscriptionKey: '21640b8e2110449abfdfccf2f6bbee02',
     };
-    const luResource: Resource[] = [
+    const luResource: BuildResource[] = [
       { id: 'a.en-us', isEmpty: false },
       { id: 'b.en-us', isEmpty: false },
       { id: 'bot1.en-us', isEmpty: false },
     ];
-    const qnaResource: Resource[] = [
+    const qnaResource: BuildResource[] = [
       { id: 'a.en-us', isEmpty: false },
       { id: 'b.en-us', isEmpty: false },
       { id: 'bot1.en-us', isEmpty: false },

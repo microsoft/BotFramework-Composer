@@ -1,21 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, ILuisConfig, IQnAConfig } from '@bfc/shared';
-
-export type Resource = { id: string; isEmpty: boolean };
-
-export interface LocationRef {
-  storageId: string;
-  path: string;
-}
-
-export interface IBuildConfig {
-  luisConfig: ILuisConfig;
-  qnaConfig: IQnAConfig;
-  luResource: Resource[];
-  qnaResource: Resource[];
-}
+import { BaseSchema } from '@bfc/shared';
 
 export interface ILuisSettings {
   luis: {

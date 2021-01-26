@@ -8,13 +8,13 @@ import { promisify } from 'util';
 
 import find from 'lodash/find';
 import { UserIdentity, BotTemplate, FileExtensions } from '@bfc/extension';
+import { LocationRef } from '@botframework-composer/types';
 import { mkdirs, readFile } from 'fs-extra';
 import rimraf from 'rimraf';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
-import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
