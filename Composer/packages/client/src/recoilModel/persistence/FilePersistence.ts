@@ -3,6 +3,7 @@
 import isEqual from 'lodash/isEqual';
 import { DialogSetting, BotAssets, BotProjectFile, CrosstrainConfig } from '@bfc/shared';
 import keys from 'lodash/keys';
+import formatMessage from 'format-message';
 
 import fileDiffCalculator from '../parsers/fileDiffCalculator';
 
@@ -75,8 +76,10 @@ class FilePersistence {
       }
       return Promise.resolve(true);
     } catch (error) {
-      if (this._handleError) {
-        this._handleError(error);
+      if (this._handleError && error) {
+        const payload = new Error(error?.message ?? error?.response?.data?.message ?? JSON.stringify(error));
+        payload.name = formatMessage('Failed to save bot');
+        this._handleError(payload);
       }
       return Promise.resolve(false);
     } finally {
