@@ -12,54 +12,17 @@ import {
   IBotProject,
   IExtensionContext,
   ComposerEvent,
+  Disposable,
 } from '@botframework-composer/types';
 
 import { BotProjectService } from '../../services/project';
+import { AsyncEventEmitter } from '../../services/eventEmitter';
 
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
-
-type Listener = (...args: any[]) => Promise<void> | void;
-class AsyncEventEmitter {
-  private listeners: Map<string, Listener[]> = new Map();
-
-  public addListener(event: string, listener: Listener) {
-    if (!this.listeners.has(event)) {
-      this.listeners.set(event, []);
-    }
-
-    this.listeners.get(event)?.push(listener);
-  }
-
-  public removeListener(event: string, listener: Listener) {
-    const eventListeners = this.listeners.get(event);
-
-    if (eventListeners && eventListeners.length > 0) {
-      const newListeners = eventListeners.filter((l) => l !== listener);
-      this.listeners.set(event, newListeners);
-    }
-  }
-
-  public on(event: string, listener: Listener) {
-    this.addListener(event, listener);
-  }
-
-  public async emit(event: string, ...args: any[]) {
-    const listeners = this.listeners.get(event) ?? [];
-
-    for (const l of listeners) {
-      try {
-        await l(...args);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }
-}
 
 class ExtensionContext implements IExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
-  private _emitter = new AsyncEventEmitter();
   public loginUri = '/login';
 
   public extensions: ExtensionCollection;
@@ -148,12 +111,12 @@ class ExtensionContext implements IExtensionContext {
     }
   }
 
-  public on(event: ComposerEvent, listener: (...args: any[]) => void | Promise<void>) {
-    this._emitter.addListener(event, listener);
+  public on(event: ComposerEvent, listener: (...args: any[]) => void | Promise<void>): Disposable {
+    return AsyncEventEmitter.addListener(event, listener);
   }
 
   public async emit(event: ComposerEvent, ...args: any[]) {
-    await this._emitter.emit(event, ...args);
+    await AsyncEventEmitter.emit(event, ...args);
   }
 }
 
