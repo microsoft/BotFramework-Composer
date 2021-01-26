@@ -11,6 +11,8 @@ import formatMessage from 'format-message';
 import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { useBoolean } from '@uifabric/react-hooks';
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
@@ -19,6 +21,7 @@ import {
   runningBotsSelector,
   allDiagnosticsSelectorFamily,
   rootBotProjectIdSelector,
+  botEndpointsState,
 } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
@@ -26,6 +29,7 @@ import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
 import { BotRuntimeStatus } from './BotRuntimeStatus';
+import { WebChatPanel } from './WebChatPanel';
 
 const iconSectionContainer = css`
   display: flex;
@@ -73,6 +77,8 @@ const BotController: React.FC = () => {
   const [startPanelButtonText, setStartPanelButtonText] = useState('');
   const { startAllBots, stopAllBots } = useBotOperations();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
+  const [isOpen, { setTrue: openWebChatPanel, setFalse: dismissPanel }] = useBoolean(false);
+  const botEndpoints = useRecoilValue(botEndpointsState);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -281,6 +287,33 @@ const BotController: React.FC = () => {
           />
         </div>
       </div>
+      <IconButton
+        ariaDescription={formatMessage('Open web chat')}
+        disabled={disableStartBots}
+        iconProps={{
+          iconName: 'ChatSolid',
+        }}
+        styles={{
+          root: {
+            color: NeutralColors.white,
+            height: '36px',
+            background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
+            selectors: {
+              ':disabled .ms-Button-icon': {
+                opacity: 0.6,
+                backgroundColor: CommunicationColors.tint10,
+                color: `${NeutralColors.white}`,
+              },
+            },
+          },
+          rootHovered: { background: transparentBackground, color: NeutralColors.white },
+        }}
+        title={formatMessage('Open Web Chat')}
+        onClick={openWebChatPanel}
+      />
+      <Panel closeButtonAriaLabel="Close" headerText="Web Chat" isOpen={isOpen} onDismiss={dismissPanel}>
+        <WebChatPanel botUrl={rootBotId ? botEndpoints[rootBotId] : ''} />
+      </Panel>
       <BotControllerMenu
         ref={startPanelTarget}
         hidden={isControllerHidden}

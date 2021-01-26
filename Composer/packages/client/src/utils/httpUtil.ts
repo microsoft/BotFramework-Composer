@@ -3,10 +3,14 @@
 
 import axios from 'axios';
 
-import { BASEURL } from '../constants';
+import { BASEPATH, BASEURL } from '../constants';
 
 const httpClient = axios.create({
   baseURL: BASEURL,
+});
+
+export const composerServerExtensionClient = axios.create({
+  baseURL: BASEPATH,
 });
 
 export default httpClient;
