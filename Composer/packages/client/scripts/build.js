@@ -1,5 +1,5 @@
 'use strict';
-
+const path = require('path');
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
@@ -34,6 +34,16 @@ const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 const isInteractive = process.stdout.isTTY;
+
+//copy monaco editor resouce to public folder to support offline usage
+const monacoEditor = path.resolve(__dirname, '../../../node_modules/monaco-editor/min');
+const monacoEditorInPublicFolder = path.resolve(__dirname, '../public/min');
+fs.copySync(monacoEditor, monacoEditorInPublicFolder);
+
+//copy fabric fonts to public folder to support offline usage
+const fabricFonts = path.resolve(__dirname, '../../../node_modules/@uifabric/icons/fonts');
+const fabricFontsInPublicFolder = path.resolve(__dirname, '../public/fonts');
+fs.copySync(fabricFonts, fabricFontsInPublicFolder);
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
