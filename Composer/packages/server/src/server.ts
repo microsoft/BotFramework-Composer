@@ -30,6 +30,9 @@ import log from './logger';
 import { setEnvDefault } from './utility/setEnvDefault';
 import { ElectronContext, setElectronContext } from './utility/electronContext';
 import { authService } from './services/auth/auth';
+import { mountConversationsRoutes } from './directline/mountConversationRoutes';
+import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
+import DLServerContext from './directline/store/DLServerState';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -116,6 +119,34 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   // always authorize all api routes, it will be a no-op if no auth provider set
   app.use(`${BASEURL}/api`, authorize, apiRouter);
 
+  const preferredPort = toNumber(process.env.PORT) || 5000;
+  const DLServerState = DLServerContext.getInstance(preferredPort);
+  const conversationRouter = mountConversationsRoutes(DLServerState);
+  const directlineRouter = mountDirectLineRoutes(DLServerState);
+
+  conversationRouter.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-ms-bot-agent'
+    );
+    next?.();
+  });
+
+  conversationRouter.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-ms-bot-agent'
+    );
+    next?.();
+  });
+
+  app.use(`/`, conversationRouter);
+  app.use(`/`, directlineRouter);
+
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
@@ -139,7 +170,6 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     });
   });
 
-  const preferredPort = toNumber(process.env.PORT) || 5000;
   let port = preferredPort;
   if (process.env.NODE_ENV === 'production') {
     // Dynamically search for an open PORT starting with PORT or 5000, so that
