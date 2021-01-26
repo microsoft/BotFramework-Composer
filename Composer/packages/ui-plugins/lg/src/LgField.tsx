@@ -54,7 +54,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   const lgFile = relatedLgFile ?? lgFiles.find((f) => f.id === fallbackLgFileId);
   const lgFileId = lgFile?.id ?? fallbackLgFileId;
 
-  const allTemplates = React.useMemo(
+  const availableLgTemplates = React.useMemo(
     () =>
       (lgFiles.find((lgFile) => lgFile.id === lgFileId)?.allTemplates || [])
         .filter((t) => t.name !== lgTemplateRef?.name)
@@ -111,7 +111,6 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <LgEditor
         hidePlaceholder
-        allTemplates={allTemplates}
         diagnostics={diagnostics}
         editorSettings={userSettings.codeEditor}
         height={225}
@@ -119,6 +118,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
           path: lspServerPath,
         }}
         lgOption={lgOption}
+        lgTemplates={availableLgTemplates}
         value={template.body}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}

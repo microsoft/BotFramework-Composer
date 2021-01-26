@@ -3,7 +3,6 @@
 
 import { LgTemplate } from '@botframework-composer/types';
 import { EditorDidMount } from '@monaco-editor/react';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import * as monacoEditor from 'monaco-editor';
@@ -15,9 +14,8 @@ import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 import { LG_HELP } from './constants';
 import { registerLGLanguage } from './languages';
-import { ToolbarButtonMenu } from './lg/ToolbarButtonMenu';
-import { useLgEditorToolbarItems } from './lg/useLgEditorToolbarItems';
 import { computeRequiredEdits } from './lg/utils';
+import { LgEditorToolbar } from './lg/LgEditorToolbar';
 import { LGOption } from './utils';
 import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry } from './utils/lspUtil';
 
@@ -27,15 +25,8 @@ const placeholder = formatMessage(
   { lgHelp: LG_HELP }
 );
 
-const toolbarContainerStyle = {
-  root: {
-    border: `1px solid ${NeutralColors.gray120}`,
-    borderBottom: 'none',
-  },
-};
-
 export interface LGLSPEditorProps extends BaseEditorProps {
-  allTemplates?: readonly LgTemplate[];
+  lgTemplates?: readonly LgTemplate[];
   lgOption?: LGOption;
   languageServer?:
     | {
@@ -64,7 +55,7 @@ export function LgEditor(props: LGLSPEditorProps) {
     ...props.options,
   };
 
-  const { lgOption, languageServer, onInit: onInitProp, allTemplates, ...restProps } = props;
+  const { lgOption, languageServer, onInit: onInitProp, lgTemplates, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
   let editorId = '';
@@ -147,19 +138,13 @@ export function LgEditor(props: LGLSPEditorProps) {
     [editor]
   );
 
-  const { functionRefPayload, propertyRefPayload, templateRefPayload } = useLgEditorToolbarItems(
-    allTemplates ?? [],
-    properties ?? [],
-    selectToolbarMenuItem
-  );
-
   return (
     <Stack>
-      <Stack horizontal styles={toolbarContainerStyle}>
-        <ToolbarButtonMenu key="templateRef" payload={templateRefPayload} />
-        <ToolbarButtonMenu key="propertyRef" payload={propertyRefPayload} />
-        <ToolbarButtonMenu key="functionRef" payload={functionRefPayload} />
-      </Stack>
+      <LgEditorToolbar
+        lgTemplates={lgTemplates}
+        properties={properties}
+        onSelectToolbarMenuItem={selectToolbarMenuItem}
+      />
       <BaseEditor
         helpURL={LG_HELP}
         id={editorId}

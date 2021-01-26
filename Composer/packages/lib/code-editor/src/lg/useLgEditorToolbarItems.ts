@@ -8,7 +8,7 @@ import * as React from 'react';
 import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload } from './types';
 
 export const useLgEditorToolbarItems = (
-  templates: readonly LgTemplate[],
+  lgTemplates: readonly LgTemplate[],
   properties: readonly string[],
   selectToolbarMenuItem: (text: string) => void
 ) => {
@@ -16,9 +16,9 @@ export const useLgEditorToolbarItems = (
     () =>
       ({
         kind: 'templateRef',
-        data: { templates, onSelectTemplate: selectToolbarMenuItem },
+        data: { templates: lgTemplates, onSelectTemplate: selectToolbarMenuItem },
       } as TemplateRefPayload),
-    [templates, selectToolbarMenuItem]
+    [lgTemplates, selectToolbarMenuItem]
   );
 
   const propertyRefPayload = React.useMemo(

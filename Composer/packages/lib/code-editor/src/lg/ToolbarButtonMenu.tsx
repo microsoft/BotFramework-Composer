@@ -67,6 +67,7 @@ const itemsContainerStyles = { root: { overflowY: 'auto', maxHeight: 216, width:
 
 type ToolbarButtonMenuProps = {
   payload: ToolbarButtonPayload;
+  disabled?: boolean;
 };
 
 const getIcon = (kind: ToolbarButtonPayload['kind']) => {
@@ -110,7 +111,7 @@ const TooltipItem = React.memo(({ text, tooltip }: { text?: string; tooltip?: st
 ));
 
 export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
-  const { payload } = props;
+  const { payload, disabled = false } = props;
 
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
   const [query, setQuery] = React.useState<string | undefined>();
@@ -418,6 +419,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
   return (
     <IconButton
       componentRef={buttonRef}
+      disabled={disabled}
       iconProps={{ iconName: getIcon(payload.kind) }}
       menuProps={menuProps}
       styles={buttonStyles}
