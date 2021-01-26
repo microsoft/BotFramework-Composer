@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
@@ -149,7 +149,7 @@ type Props = {
   onDialogCreateTrigger?: (projectId: string, dialogId: string) => void;
   onDialogDeleteTrigger?: (projectId: string, dialogId: string, index: number) => void;
   onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
-  defaultSelected?: Partial<TreeLink>;
+  selectedLink?: Partial<TreeLink>;
   options?: ProjectTreeOptions;
 };
 
@@ -169,7 +169,7 @@ export const ProjectTree: React.FC<Props> = ({
   onBotRemoveSkill = () => {},
   onDialogCreateTrigger = () => {},
   onErrorClick = () => {},
-  defaultSelected,
+  selectedLink,
   options = {
     showDelete: true,
     showDialogs: true,
@@ -199,7 +199,6 @@ export const ProjectTree: React.FC<Props> = ({
   const [filter, setFilter] = useState('');
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
-  const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
 
   const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
   const lgImportsByProjectByDialog: Record<string, Record<string, LanguageFileImport[]>> = {};
@@ -213,10 +212,6 @@ export const ProjectTree: React.FC<Props> = ({
   }, 200);
 
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-
-  useEffect(() => {
-    setSelectedLink(defaultSelected);
-  }, [defaultSelected?.projectId, defaultSelected?.skillId, defaultSelected?.dialogId, defaultSelected?.trigger]);
 
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const selectorOptions = {
@@ -252,7 +247,6 @@ export const ProjectTree: React.FC<Props> = ({
     // Skip state change when link not changed.
     if (isEqual(link, selectedLink)) return;
 
-    setSelectedLink(link);
     onSelect?.(link);
   };
 
