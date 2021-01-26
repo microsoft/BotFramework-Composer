@@ -131,6 +131,12 @@ export const AppUpdater: React.FC<{}> = () => {
           break;
         }
 
+        case 'update-in-progress': {
+          setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
+          setAppUpdateShowing(true);
+          break;
+        }
+
         case 'update-not-available': {
           const explicit = payload;
           if (explicit) {
