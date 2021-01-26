@@ -184,3 +184,141 @@ describe('extract option by key', () => {
     expect(strict).toBe('false');
   });
 });
+
+describe('extract lg template details', () => {
+  it('should extract normal lg template details', () => {
+    const content = `# Exit
+-Thanks for using todo bot.`;
+
+    const templates = parse('a.lg', content, []).templates;
+    const templateDetails: any = templates[0];
+
+    expect(templates.length).toEqual(1);
+    expect(templateDetails.templateType).toEqual('plainText');
+    expect(templateDetails.structuredType).toEqual('None');
+    expect(templateDetails.speakEnabled).toEqual(false);
+    expect(templateDetails.expressionsUsed).toEqual([]);
+  });
+
+  it('should extract structured template details of Activity', () => {
+    const content = `# Exit
+[Activity
+  Text = exit
+  SuggestedActions = a | b
+]`;
+
+    const templates = parse('a.lg', content, []).templates;
+    const templateDetails: any = templates[0];
+
+    expect(templates.length).toEqual(1);
+    expect(templateDetails.templateType).toEqual('structured');
+    expect(templateDetails.structuredType).toEqual('Activity');
+    expect(templateDetails.speakEnabled).toEqual(false);
+    expect(templateDetails.expressionsUsed).toEqual([]);
+  });
+
+  it('should extract structured template details of HeroCard', () => {
+    const content = `# Exit
+[HeroCard
+  Text = exit
+  SuggestedActions = a | b
+]`;
+
+    const templates = parse('a.lg', content, []).templates;
+    const templateDetails: any = templates[0];
+
+    expect(templates.length).toEqual(1);
+    expect(templateDetails.templateType).toEqual('structured');
+    expect(templateDetails.structuredType).toEqual('HeroCard');
+    expect(templateDetails.speakEnabled).toEqual(false);
+    expect(templateDetails.expressionsUsed).toEqual([]);
+  });
+
+  it('should extract structured template details of Attachment', () => {
+    const content = `# Exit
+[Attachment
+  contenttype = type
+  content = content
+]`;
+
+    const templates = parse('a.lg', content, []).templates;
+    const templateDetails: any = templates[0];
+
+    expect(templates.length).toEqual(1);
+    expect(templateDetails.templateType).toEqual('structured');
+    expect(templateDetails.structuredType).toEqual('Attachment');
+    expect(templateDetails.speakEnabled).toEqual(false);
+    expect(templateDetails.expressionsUsed).toEqual([]);
+  });
+
+  it('should extract structured template details of CardAction', () => {
+    const content = `# Exit
+[CardAction
+  Type = yyy
+  Title = title
+  Value = value
+  Text = text
+]`;
+
+    const templates = parse('a.lg', content, []).templates;
+    const templateDetails: any = templates[0];
+
+    expect(templates.length).toEqual(1);
+    expect(templateDetails.templateType).toEqual('structured');
+    expect(templateDetails.structuredType).toEqual('CardAction');
+    expect(templateDetails.speakEnabled).toEqual(false);
+    expect(templateDetails.expressionsUsed).toEqual([]);
+  });
+
+  it('should extract structured template details with speak enabled', () => {
+    const content = `# Exit
+[Activity
+  Text = exit
+  Speak = please exit
+  SuggestedActions = a | b
+]`;
+
+    const templates = parse('a.lg', content, []).templates;
+    const templateDetails: any = templates[0];
+
+    expect(templates.length).toEqual(1);
+    expect(templateDetails.templateType).toEqual('structured');
+    expect(templateDetails.structuredType).toEqual('Activity');
+    expect(templateDetails.speakEnabled).toEqual(true);
+    expect(templateDetails.expressionsUsed).toEqual([]);
+  });
+
+  it('should extract structured template details of expressions', () => {
+    const content = `# Exit
+[Activity
+  Text = \${exit}
+  Speak = please exit
+  SuggestedActions = a | b
+]
+
+# Greeting
+- IF: \${who.length > 0}
+  -What's up \${who}
+- ELSE
+  -What's up friend
+
+# greetInAWeek
+-SWITCH: \${day}
+  -CASE: ${'Saturday'}
+      -Happy Saturday!
+  -CASE: ${'Sunday'}
+      -Happy Sunday!
+  -DEFAULT:
+      -Work Hard!`;
+
+    const templates = parse('a.lg', content, []).templates;
+    const templateDetails0: any = templates[0];
+    const templateDetails1: any = templates[0];
+    const templateDetails2: any = templates[0];
+
+    expect(templates.length).toEqual(3);
+    expect(templateDetails0.expressionsUsed).toEqual(['${exit}']);
+    expect(templateDetails1.expressionsUsed).toEqual(['${who.length > 0}', '${who}']);
+    expect(templateDetails2.expressionsUsed).toEqual(['${day}', "${'Saturday'}", "${'Sunday'}"]);
+  });
+});

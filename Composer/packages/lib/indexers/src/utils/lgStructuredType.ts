@@ -4,6 +4,7 @@
 export enum LgStructuredType {
   ACTIVITY = 'Activity',
   ATTACHMENT = 'Attachment',
+  CARDACTION = 'CardAction',
   HEROCARD = 'HeroCard',
   THUMBNAILCARD = 'ThumbnailCard',
   SIGNINCARD = 'SigninCard',
