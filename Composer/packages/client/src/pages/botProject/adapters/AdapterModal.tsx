@@ -6,32 +6,39 @@ import formatMessage from 'format-message';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import AdaptiveForm from '@bfc/adaptive-form';
+import { ObjectField } from '@bfc/adaptive-form';
 
 import { JSONSchema7 } from '../../../../../types';
 
 type Props = {
+  key: string;
   isOpen: boolean;
-  onCancel: () => void;
-  onConfirm: () => void;
+  onClose: () => void;
   schema: JSONSchema7;
   uiSchema: JSONSchema7;
 };
 
 const AdapterModal = (props: Props) => {
-  const { isOpen, onCancel, onConfirm, schema, uiSchema } = props;
+  const { isOpen, onClose, schema, uiSchema } = props;
 
   return (
     <DialogWrapper
       dialogType={DialogTypes.Customer}
       isOpen={isOpen}
       title={formatMessage('Configure adapter')}
-      onDismiss={onCancel}
+      onDismiss={onClose}
     >
-      <AdaptiveForm schema={schema} uiOptions={uiSchema} onChange={console.log} />
+      <ObjectField schema={schema} uiOptions={uiSchema} onChange={console.log} />
       <DialogFooter>
-        <DefaultButton onClick={onCancel}>{formatMessage('Cancel')}</DefaultButton>
-        <PrimaryButton onClick={onConfirm}>{formatMessage('Okay')}</PrimaryButton>
+        <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
+        <PrimaryButton
+          onClick={() => {
+            // save these values to settings somewhere, using the key given in props
+            onClose();
+          }}
+        >
+          {formatMessage('Okay')}
+        </PrimaryButton>
       </DialogFooter>
     </DialogWrapper>
   );

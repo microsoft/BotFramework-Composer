@@ -58,7 +58,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
         <AdaptiveFormContext.Provider value={{ focusedTab, onFocusedTab, baseSchema: schema }}>
           <FormTitle
             formData={formData}
-            id={formData.$designer?.id || 'unknown'}
+            id={formData?.$designer?.id || 'unknown'}
             schema={schema}
             uiOptions={uiOptions}
             onChange={(newData) => onChange({ ...formData, ...newData })}
@@ -66,7 +66,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
           <SchemaField
             definitions={schema?.definitions}
             depth={-1}
-            id={formData.$designer?.id ? `root[${formData.$designer?.id}]` : 'root'}
+            id={formData?.$designer?.id ? `root[${formData?.$designer?.id}]` : 'root'}
             name="root"
             rawErrors={errors}
             schema={schema}

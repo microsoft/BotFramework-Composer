@@ -324,6 +324,9 @@
     },
     {
       "$ref": "#/definitions/Microsoft.UrlEntityRecognizer"
+    },
+    {
+      "$ref": "#/definitions/Adapters.Contoso"
     }
   ],
   "definitions": {
@@ -334,21 +337,26 @@
       "description": "Connect your bot to Contoso Chat Client",
       "type": "object",
       "properties": {
-          "contosoSkillId": {
-              "type": "string",
-              "title": "Contoso Skill Id",
-              "description": "SkillId from Contoso portal"
-          },
-          "contosoSecretKey": {
-              "type": "string",
-              "title": "Contoso Secret Key",
-              "description": "Secret Key obtained in Contoso portal."
-          },
-          "allowSuggestedActions": {
-              "type": "boolean",
-              "title": "Allow Suggested Actions",
-              "description": "Optional condition which if true will allow suggested actions."
-          }
+        "contosoSkillId": {
+            "type": "string",
+            "title": "Contoso Skill Id",
+            "description": "SkillId from Contoso portal"
+        },
+        "contosoSecretKey": {
+            "type": "string",
+            "title": "Contoso Secret Key",
+            "description": "Secret Key obtained in Contoso portal."
+        },
+        "allowSuggestedActions": {
+            "type": "boolean",
+            "title": "Allow Suggested Actions",
+            "description": "Optional condition which if true will allow suggested actions."
+        },
+        "$designer": {
+          "title": "Contoso parameters",
+          "type": "object",
+          "description": "Parameter values for the Contoso adapter."
+        }
       },
       "required": [
           "contosoSkillId",

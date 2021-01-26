@@ -30,15 +30,16 @@ const AdapterSettings = (props: Props) => {
 
   const [connected, setConnected] = useState<Array<string>>([]);
 
-  const [currentKey, setKey] = useState<string | undefined>();
-  const [currentCallback, setCurrentCallback] = useState<(() => void) | undefined>();
+  const [currentModalProps, setModalProps] = useState<{ key: string; callback?: () => void } | undefined>();
 
-  const openModal = (key: string | undefined, onClose: (() => void) | undefined) => {
-    setKey(key);
-    setCurrentCallback(onClose);
+  const openModal = (key: string | undefined, callback?: () => void) => {
+    if (key == null) {
+      setModalProps(undefined);
+    } else {
+      setModalProps({ key, callback });
+    }
   };
-  console.log('k', currentKey);
-  const closeModal = () => openModal(undefined, undefined);
+  console.log('k', currentModalProps);
 
   function addConnection(name: string) {
     setConnected([...connected, name]);
@@ -72,10 +73,7 @@ const AdapterSettings = (props: Props) => {
             <div css={tableRowItem}>{sch.title}</div>
             <div css={tableRowItem}>
               {isConnected(sch.key) ? (
-                <ActionButton
-                  iconProps={{ iconName: 'PlugDisconnected' }}
-                  onClick={() => openModal(sch.key, () => removeConnection(sch.key))}
-                >
+                <ActionButton iconProps={{ iconName: 'PlugDisconnected' }} onClick={() => removeConnection(sch.key)}>
                   {formatMessage('Disconnect')}
                 </ActionButton>
               ) : (
@@ -98,10 +96,6 @@ const AdapterSettings = (props: Props) => {
     .filter(([key, value]: [string, JSONSchema7]) => value?.$role != null && /IAdapter/.test(value.$role))
     .map(([key, value]: [string, JSONSchema7]) => ({ ...value, key }));
 
-  console.log(`'${currentKey ?? ''}'`, schemaDefinitions[currentKey ?? ''], uiSchemas?.[currentKey ?? '']?.form);
-
-  console.log(schemaDefinitions, uiSchemas);
-
   return (
     <Fragment>
       <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
@@ -109,15 +103,14 @@ const AdapterSettings = (props: Props) => {
         {azureServices()}
         {externalServices(adapterSchemas)}
       </CollapsableWrapper>
-      {currentKey != null && schemaDefinitions[currentKey] != null && (
+      {currentModalProps != null && schemaDefinitions[currentModalProps.key] != null && (
         <AdapterModal
+          key={currentModalProps.key}
           isOpen
-          schema={schemaDefinitions[currentKey]}
-          uiSchema={uiSchemas?.form[currentKey]}
-          onCancel={closeModal}
-          onConfirm={() => {
-            closeModal();
-            currentCallback?.();
+          schema={schemaDefinitions[currentModalProps.key]}
+          uiSchema={uiSchemas?.[currentModalProps.key]?.form}
+          onClose={() => {
+            openModal(undefined);
           }}
         />
       )}
