@@ -113,7 +113,13 @@ export type IBotProject = {
   exists(): Promise<boolean>;
   deleteAllFiles(): Promise<boolean>;
   updateQnaEndpointKey: (subscriptionKey: string) => Promise<any>;
-  generateDialog(name: string, templateDirs?: string[]): Promise<void>;
+  generateDialog(
+    name: string,
+    templateDirs?: string[]
+  ): Promise<{
+    success: boolean;
+    errors: string[];
+  }>;
   deleteFormDialog(dialogId: string): Promise<void>;
   updateETag(eTag: string): void;
 };
