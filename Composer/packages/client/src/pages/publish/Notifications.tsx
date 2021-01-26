@@ -8,7 +8,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
-import { IBotStatus } from './BotStatusList';
+import { BotStatus } from './type';
 
 const cardContent = css`
   display: flex;
@@ -35,7 +35,7 @@ const cardDescription = css`
   word-break: break-word;
 `;
 
-export const getPublishedNotificationCardProps = (item: IBotStatus): CardProps => {
+export const getPublishedNotificationCardProps = (item: BotStatus): CardProps => {
   const statusIconStyle = css({
     margin: '12px 0 0 -1px',
     width: '12px',
@@ -68,7 +68,7 @@ export const getPublishedNotificationCardProps = (item: IBotStatus): CardProps =
     ),
   };
 };
-export const getPendingNotificationCardProps = (items: IBotStatus[]): CardProps => {
+export const getPendingNotificationCardProps = (items: BotStatus[]): CardProps => {
   return {
     title: '',
     description: formatMessage(`Publishing {count} bots`, { count: items.length }),
