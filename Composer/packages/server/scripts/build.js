@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license.
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs-extra');
 
 function getBuildEnvironment() {
   return {
@@ -17,3 +17,23 @@ async function writeToDist(fileName) {
 }
 
 writeToDist('env.json');
+
+//copy monaco editor resouce to public folder to support offline usage
+const monacoEditor = path.resolve(__dirname, '../../../node_modules/monaco-editor/min');
+const monacoEditorInPublicFolder = path.resolve(__dirname, '../../client/public/min');
+fs.copy(monacoEditor, monacoEditorInPublicFolder, function (err) {
+  if (err) {
+    console.log('An error occured while copying monaco-editor resource to public folder.');
+    return console.error(err);
+  }
+});
+
+//copy fabric fonts to public folder to support offline usage
+const fabricFonts = path.resolve(__dirname, '../../../node_modules/@uifabric/icons/fonts');
+const fabricFontsInPublicFolder = path.resolve(__dirname, '../../client/public/fonts');
+fs.copy(fabricFonts, fabricFontsInPublicFolder, function (err) {
+  if (err) {
+    console.log('An error occured while copying fabric fonts resource to public folder.');
+    return console.error(err);
+  }
+});
