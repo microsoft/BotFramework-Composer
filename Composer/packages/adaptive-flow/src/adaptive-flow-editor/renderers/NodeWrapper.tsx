@@ -71,7 +71,6 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
   return (
     <div
       ref={actionRef}
-      tabIndex={0}
       css={css`
         user-select: none;
         position: relative;
@@ -84,6 +83,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
         }
       `}
       data-testid="ActionNodeWrapper"
+      tabIndex={0}
       {...declareElementAttributes(selectableId, id)}
       aria-label={generateActionTitle(data, '', '', tab)}
       onClick={(e) => {
