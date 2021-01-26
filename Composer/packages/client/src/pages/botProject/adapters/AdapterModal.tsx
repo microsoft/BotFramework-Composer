@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -16,10 +16,13 @@ type Props = {
   onClose: () => void;
   schema: JSONSchema7;
   uiSchema: JSONSchema7;
+  value?: { [key: string]: any };
 };
 
 const AdapterModal = (props: Props) => {
   const { isOpen, onClose, schema, uiSchema } = props;
+
+  const [value, setValue] = useState(props.value);
 
   return (
     <DialogWrapper
@@ -28,12 +31,19 @@ const AdapterModal = (props: Props) => {
       title={formatMessage('Configure adapter')}
       onDismiss={onClose}
     >
-      <ObjectField schema={schema} uiOptions={uiSchema} onChange={console.log} />
+      <ObjectField
+        schema={schema}
+        uiOptions={uiSchema}
+        value={value}
+        onChange={(update: { [key: string]: any }) => {
+          setValue({ ...value, ...update });
+        }}
+      />
       <DialogFooter>
         <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
         <PrimaryButton
           onClick={() => {
-            // save these values to settings somewhere, using the key given in props
+            console.log(value);
             onClose();
           }}
         >

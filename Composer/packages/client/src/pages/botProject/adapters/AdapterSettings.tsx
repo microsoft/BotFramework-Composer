@@ -39,7 +39,6 @@ const AdapterSettings = (props: Props) => {
       setModalProps({ key, callback });
     }
   };
-  console.log('k', currentModalProps);
 
   function addConnection(name: string) {
     setConnected([...connected, name]);
