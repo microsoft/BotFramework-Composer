@@ -104,7 +104,16 @@ type BotSettingsEvents = {
   GetNewRuntime: { runtimeType: string };
 };
 
-type OtherEvents = {};
+type OtherEvents = {
+  LgTemplateLogged: {
+    templateName: string;
+    templateType: string;
+    structuredType: string;
+    speakEnabled: string;
+    expressions: string[];
+    projectId: string;
+  };
+};
 
 type PageView = {
   [PageNames.Design]: undefined;

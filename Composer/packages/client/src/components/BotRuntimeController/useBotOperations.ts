@@ -7,9 +7,15 @@ import { useRecoilValue } from 'recoil';
 
 import { BotStatus } from '../../constants';
 import { dispatcherState, rootBotProjectIdSelector } from '../../recoilModel';
-import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../recoilModel/selectors';
+import {
+  botRuntimeOperationsSelector,
+  buildConfigurationSelector,
+  projectLgFilesMapSelector,
+} from '../../recoilModel/selectors';
 
 import { useStartedRuntimesTracker } from './useStartedRuntimesTracker';
+
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export function useBotOperations() {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
@@ -19,6 +25,8 @@ export function useBotOperations() {
   const { updateSettingsForSkillsWithoutManifest, resetBotRuntimeError, setBotStatus } = useRecoilValue(
     dispatcherState
   );
+
+  const projectLgFilesMap = useRecoilValue(projectLgFilesMapSelector);
 
   const handleBotStart = async (
     projectId: string,
@@ -42,6 +50,7 @@ export function useBotOperations() {
     } else {
       // Regex recognizer
       await botRuntimeOperations?.startBot(projectId, sensitiveSettings);
+      logLgTemplates(projectId);
     }
   };
 
@@ -107,6 +116,27 @@ export function useBotOperations() {
 
   const stopSingleBot = (projectId: string) => {
     botRuntimeOperations?.stopBot(projectId);
+  };
+
+  const logLgTemplates = (projectId: string) => {
+    // log lg templates to telemetry based on lgFiles
+    // first get lg templates of current projectId
+    // track each template as a record
+    // TelemetryClient.track('LgTemplateSaved', {templateName, templateType, structuredType, projectId})
+    // projectId + templateName can be used as an unique ID to deduplicate records from same bot and same template
+    let lgFiles = projectLgFilesMap[projectId];
+    lgFiles.forEach((lgFile) => {
+      lgFile.templates.forEach((template: any) => {
+        TelemetryClient.track('LgTemplateLogged', {
+          templateName: template.name,
+          templateType: template.templateType,
+          structuredType: template.structuredType,
+          speakEnabled: template.speakEnabled,
+          expressions: template.expressionsUsed,
+          projectId,
+        });
+      });
+    });
   };
 
   return {
