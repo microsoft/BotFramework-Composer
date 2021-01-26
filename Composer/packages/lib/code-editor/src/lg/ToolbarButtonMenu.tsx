@@ -72,8 +72,8 @@ const OneLiner = styled.div({
   padding: '0 8px',
 });
 
-const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px' };
-const iconStyles = { root: { color: NeutralColors.black, '& > i': { margin: '0 4px' } } };
+const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
+const iconStyles = { root: { color: NeutralColors.black, margin: '0 4px', width: 16, height: 16 } };
 const searchFieldStyles = { root: { borderRadius: 0 }, iconContainer: { display: 'none' } };
 const calloutProps = { styles: { calloutMain: { overflowY: 'hidden' } } };
 const itemsContainerStyles = { root: { overflowY: 'auto', maxHeight: 216, width: 200, overflowX: 'hidden' } };
