@@ -34,7 +34,6 @@ import {
   focusPathState,
   showCreateDialogModalState,
   localeState,
-  qnaFilesSelectorFamily,
   skillsStateSelector,
   rootBotProjectIdSelector,
   projectDialogsMapSelector,
@@ -113,7 +112,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { location, dialogId, projectId = '', skillId = null } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
-  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(skillId ?? projectId));
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);
@@ -733,7 +731,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <CreateQnAModal
           dialogId={creatQnAOnInfo.dialogId}
           projectId={creatQnAOnInfo.projectId}
-          qnaFiles={qnaFiles}
           onSubmit={handleCreateQnA}
         />
 
