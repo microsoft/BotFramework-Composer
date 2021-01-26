@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import URI from 'vscode-uri';
-import { IConnection, TextDocuments } from 'vscode-languageserver';
+import { FoldingRangeParams, IConnection, TextDocuments } from 'vscode-languageserver';
 import {
   TextDocument,
   Diagnostic,
@@ -14,14 +14,25 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import {
+  TextDocumentPositionParams,
+  DocumentOnTypeFormattingParams,
+  FoldingRange,
+} from 'vscode-languageserver-protocol';
 import { updateIntent, isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
-import { LUImportResolverDelegate, LUOption, LUDocument, generageDiagnostic, convertDiagnostics } from './utils';
+import {
+  LUImportResolverDelegate,
+  LUOption,
+  LUDocument,
+  generageDiagnostic,
+  convertDiagnostics,
+  getCurrLine,
+} from './utils';
 
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
@@ -69,7 +80,7 @@ export class LUServer {
             resolveProvider: true,
             triggerCharacters: ['@', ' ', '{', ':', '[', '('],
           },
-          foldingRangeProvider: false,
+          foldingRangeProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -78,6 +89,9 @@ export class LUServer {
     });
     this.connection.onCompletion((params) => this.completion(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
+      this.foldingRangeHandler(foldingRangeParams)
+    );
     this.connection.onRequest((method, params) => {
       if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
@@ -95,6 +109,39 @@ export class LUServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
+    const document = this.documents.get(params.textDocument.uri);
+    const items: FoldingRange[] = [];
+    if (!document) {
+      return items;
+    }
+
+    const lineCount = document.lineCount;
+    for (let i = 0; i < lineCount; i++) {
+      const currLine = getCurrLine(document, lineCount, i);
+      if (currLine?.startsWith('>>')) {
+        let j = i + 1;
+        for (j = i + 1; j < lineCount; j++) {
+          if (getCurrLine(document, lineCount, j)?.startsWith('>>')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j;
+            break;
+          }
+        }
+      }
+    }
+
+    const luResource = parseFile.parse(document.getText());
+    const sections = luResource.Sections;
+    for (const section in luResource.Sections) {
+      const start = sections[section].Range.Start.Line - 1;
+      const end = sections[section].Range.End.Line - 1;
+      items.push(FoldingRange.create(start, end));
+    }
+
+    return items;
   }
 
   protected validateLuOption(document: TextDocument, luOption?: LUOption) {

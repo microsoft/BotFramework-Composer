@@ -70,3 +70,19 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
   });
   return diagnostics;
 }
+
+export function getCurrLine(document: TextDocument, lineCount: number, line: number) {
+  if (line == lineCount) return null;
+  const startPosition = { line: line, character: 0 };
+  let endPosition;
+  if (line == lineCount - 1) {
+    endPosition = document.positionAt(document.getText().length - 1);
+  } else {
+    endPosition = document.positionAt(document.offsetAt({ line: line + 1, character: 0 }) - 1);
+  }
+
+  return document.getText({
+    start: startPosition,
+    end: endPosition,
+  });
+}

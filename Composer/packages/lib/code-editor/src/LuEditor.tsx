@@ -65,6 +65,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     formatOnType: true,
     autoClosingBrackets: 'always' as const,
     autoIndent: 'full' as const,
+    folding: true,
     lightbulb: {
       enabled: true,
     },
