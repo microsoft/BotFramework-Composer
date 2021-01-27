@@ -5,8 +5,7 @@ import { KeyVaultApiConfig } from "./keyvaultApiConfig";
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { BotProjectDeployLoggerType } from "../types";
 import { createCustomizeError, ProvisionErrors } from "../utils/errorHandler";
-import { KeyVaultManagementClient } from "@azure/arm-keyvault";
-import { SecretClient } from '@azure/keyvault-secrets';
+import { KeyVaultManagementClient } from "@azure/arm-keyvault-profile-2020-09-01-hybrid";
 
 export class KeyVaultApi {
     private creds: any;
@@ -54,13 +53,6 @@ export class KeyVaultApi {
             properties: {
                 accessPolicies: [
                     {
-                        objectId: email,
-                        permissions: {
-                            secrets: ['get', 'list']
-                        },
-                        tenantId: tenantId
-                    },
-                    {
                         objectId: objectId,
                         permissions: {
                             secrets: ['get', 'list']
@@ -80,10 +72,21 @@ export class KeyVaultApi {
     }
 
     public async KeyVaultGetSecret(resourceGroupName: string, vaultName: string, secretName: string) {
-        const vaultUrl = `https://${vaultName}.vault.azure.net/`;
-        const keyVaultClient = new SecretClient(vaultUrl, this.creds);
-        const getResult = await keyVaultClient.getSecret(secretName);
-        return getResult.properties.id;
+        // const vaultUrl = `https://${vaultName}.vault.azure.net/`;
+        // const keyVaultClient = new SecretClient(vaultUrl, this.creds);
+        // const getResult = await keyVaultClient.getSecret(secretName);
+        // return getResult.properties.id;
+        const keyVaultManagementClient = new KeyVaultManagementClient(this.creds, this.subscriptionId);
+        const secretResult = await keyVaultManagementClient.secrets.get(resourceGroupName, vaultName, secretName);
+        if (secretResult._response.status >= 300) {
+            this.logger({
+                status: BotProjectDeployLoggerType.PROVISION_ERROR,
+                message: secretResult._response.bodyAsText,
+            });
+            throw createCustomizeError(ProvisionErrors.KEYVAULT_ERROR, secretResult._response.bodyAsText);
+        }
+        console.log(JSON.stringify(secretResult._response.parsedBody, null, 2));
+        return secretResult._response.parsedBody.properties.secretUri;
     }
 
     public async UpdateKeyVaultAppSettings(resourceGroupName: string, webAppName: string, secretUri: string) {
