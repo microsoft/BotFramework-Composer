@@ -120,6 +120,7 @@ class FilePersistence {
       FileExtensions.Setting,
       FileExtensions.Recognizer,
       FileExtensions.CrossTrainConfig,
+      FileExtensions.Adapter,
     ].includes(fileExtension);
     if (isJson) {
       content = JSON.stringify(content, null, 2) + '\n';
@@ -186,6 +187,7 @@ class FilePersistence {
       [currentAssets.skillManifests, previousAssets.skillManifests, FileExtensions.Manifest],
       [currentAssets.formDialogSchemas, previousAssets.formDialogSchemas, FileExtensions.FormDialogSchema],
       [currentAssets.recognizers, previousAssets.recognizers, FileExtensions.Recognizer],
+      [currentAssets.adapters, previousAssets.adapters, FileExtensions.Adapter],
     ];
 
     const changes = await Promise.all(
