@@ -2,10 +2,14 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
-
+import * as semverSort from 'semver-sort';
 import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
+import { readdirSync, readFileSync } from 'fs';
+import {parseStringPromise} from 'xml2js'
+import { get } from 'https';
+
 
 const API_ROOT = '/api';
 
@@ -48,9 +52,75 @@ const normalizeFeed = async (feed) => {
       return [];
     }
   } else {
+    console.error('Unknown feed format!', feed);
     return null;
   }
 };
+
+
+const getPackageInfo = async (name, url) => {
+
+  // available versions should be folders underneath this folder
+  let versions;
+  try {
+    versions = readdirSync(url, {withFileTypes: true}).filter(f=>f.isDirectory()).map(f=>f.name);
+    if (versions.length === 0) {
+      throw new Error('version list is empty');
+    }
+
+    versions = semverSort.desc(versions);
+  } catch(err) {
+    throw new Error(`Could not find versions of local package ${ name } at ${ url }`)
+  }
+
+  // can read from the nuspec file in the latest to get other info
+  let metadata = {};
+  try {
+    const pathToNuspec = path.join(url, versions[0], `${ name }.nuspec`);
+
+    const xml = readFileSync(pathToNuspec,'utf8');
+
+    const parsed = await parseStringPromise(xml);
+    metadata = {
+      id: parsed.package.metadata[0].id[0],
+      version: parsed.package.metadata[0].version[0],
+      authors: parsed.package.metadata[0].authors,
+      projectUrl: parsed.package.metadata[0].projectUrl[0],
+      description: parsed.package.metadata[0].description[0],
+      tags: parsed.package.metadata[0].tags[0].split(/\s/),
+      versions: versions,
+      source: 'local',
+      language: 'c#',
+    }
+  } catch(err) {
+    console.error(err);
+    throw new Error(`Could not parse nuspec for local package ${ name } at ${ url }`);
+  }
+
+  return metadata;
+
+}
+
+const crawlLocalFeed = async(url) => {
+
+  // get a list of all the files at the feed URL
+
+ // the local feed is expected to be in folders using the structure defined here:
+ // https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds
+ // the line below will:
+ // * get a list of all the files at the specified url
+ // * extract only folders from that list
+ // * pass each one through the getPackageInfo function, which extracts metadata from the package
+ // * return a feed in the form that is used by nuget search API
+ const packages = readdirSync(url, { withFileTypes: true}).filter(f=>f.isDirectory());
+ const feed = [];
+ for (const p of packages) {
+  feed.push(await getPackageInfo(p.name, path.join(url, p.name)));
+ }
+ return feed;
+
+}
+
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
   const updateRecentlyUsed = (componentList, runtimeLanguage) => {
@@ -111,7 +181,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
       if (!updatedItem) {
         // remove this
-        console.log('remove item');
         // update component state
         feeds = feeds.filter((f) => f.key !== key);
       } else if (feeds.filter((f) => f.key === key).length) {
@@ -119,7 +188,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         feeds = feeds.map((f) => (f.key === key ? updatedItem : f));
       } else {
         // new item to be appended
-        console.log('add item');
         feeds = feeds.concat([updatedItem]);
       }
 
@@ -170,8 +238,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       let combined = [];
       for (const url of packageSources) {
         try {
-          const raw = await axios.get(url);
+          let raw;
+          if (url.match(/^[\\\/]/)) {
+            const rawlocal = await crawlLocalFeed(url);
+            // caste this to the form of the http response from nuget
+            raw = {data: { data: rawlocal } };
+          } else {
+            raw = await axios.get(url);
+          }
+
+
           const feed = await normalizeFeed(raw.data);
+
+
           if (Array.isArray(feed)) {
             combined = combined.concat(feed);
           } else {

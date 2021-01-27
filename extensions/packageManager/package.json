@@ -46,7 +46,9 @@
     "office-ui-fabric-react": "7.71.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "uuid": "^8.3.2"
+    "semver-sort": "^0.0.4",
+    "uuid": "^8.3.2",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
