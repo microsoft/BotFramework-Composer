@@ -72,6 +72,15 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
+"@azure/arm-keyvault-profile-2020-09-01-hybrid@^1.0.0":
+  version "1.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-keyvault-profile-2020-09-01-hybrid/-/@azure/arm-keyvault-profile-2020-09-01-hybrid-1.0.0.tgz#92820b8ed6380f4f0f0b3f070a5ca71ee4191dd9"
+  integrity sha1-koILjtY4D08PCz8HClynHuQZHdk=
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
 "@azure/arm-keyvault@^1.2.1":
   version "1.2.1"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-keyvault/-/@azure/arm-keyvault-1.2.1.tgz#0dfb3335bda59fa70549c728114de2dc9ef8be9e"
