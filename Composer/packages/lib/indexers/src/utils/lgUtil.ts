@@ -26,9 +26,7 @@ import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
 import { lgIndexer } from '../lgIndexer';
 
 import { getFileName } from './help';
-
 import { LgTemplateType } from './lgTemplateType';
-
 import { LgStructuredType } from './lgStructuredType';
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
@@ -51,7 +49,7 @@ function convertLGRange(s: SourceRange): Range {
 
 function templateToLgTemplate(templates: Template[]): LgTemplate[] {
   return templates.map((t) => {
-    let templateDetails = getLgTemplateDetails(t);
+    const templateDetails = getLgTemplateDetails(t);
 
     return {
       name: t.name,
@@ -70,7 +68,7 @@ function getLgTemplateDetails(template: Template) {
   let templateType = LgTemplateType.PLAIN_TEXT;
   let structuredType = LgStructuredType.NONE;
   let speakEnabled = false;
-  let expressionsUsed: string[] = [];
+  const expressionsUsed: string[] = [];
 
   if (template.templateBodyParseTree instanceof StructuredBodyContext) {
     templateType = LgTemplateType.STRUCTURED;
@@ -154,8 +152,8 @@ function getLgTemplateDetails(template: Template) {
 
       const normalTemplateStrings = ifConditionRule.normalTemplateBody()?.templateString();
       (normalTemplateStrings || []).forEach((normalTemplateString) => {
-        if (normalTemplateString instanceof NormalTemplateStringContext) {
-          const expressionsContext = normalTemplateString.expression();
+        if (normalTemplateString.normalTemplateString()) {
+          const expressionsContext = normalTemplateString.normalTemplateString()?.expression();
           (expressionsContext || []).forEach((expressionContext) => {
             const expressionText = expressionContext.EXPRESSION().text;
             expressionsUsed.push(expressionText);
@@ -174,8 +172,8 @@ function getLgTemplateDetails(template: Template) {
 
       const normalTemplateStrings = switchCaseRule.normalTemplateBody()?.templateString();
       (normalTemplateStrings || []).forEach((normalTemplateString) => {
-        if (normalTemplateString instanceof NormalTemplateStringContext) {
-          const expressionsContext = normalTemplateString.expression();
+        if (normalTemplateString.normalTemplateString()) {
+          const expressionsContext = normalTemplateString.normalTemplateString()?.expression();
           (expressionsContext || []).forEach((expressionContext) => {
             const expressionText = expressionContext.EXPRESSION().text;
             expressionsUsed.push(expressionText);

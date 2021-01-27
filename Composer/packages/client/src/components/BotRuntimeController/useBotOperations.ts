@@ -12,10 +12,9 @@ import {
   buildConfigurationSelector,
   projectLgFilesMapSelector,
 } from '../../recoilModel/selectors';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { useStartedRuntimesTracker } from './useStartedRuntimesTracker';
-
-import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export function useBotOperations() {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
@@ -124,7 +123,7 @@ export function useBotOperations() {
     // track each template as a record
     // TelemetryClient.track('LgTemplateSaved', {templateName, templateType, structuredType, projectId})
     // projectId + templateName can be used as an unique ID to deduplicate records from same bot and same template
-    let lgFiles = projectLgFilesMap[projectId];
+    const lgFiles = projectLgFilesMap[projectId];
     lgFiles.forEach((lgFile) => {
       lgFile.templates.forEach((template: any) => {
         TelemetryClient.track('LgTemplateLogged', {

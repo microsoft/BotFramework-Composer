@@ -299,22 +299,22 @@ describe('extract lg template details', () => {
 # Greeting
 - IF: \${who.length > 0}
   -What's up \${who}
-- ELSE
+- ELSE:
   -What's up friend
 
 # greetInAWeek
 -SWITCH: \${day}
-  -CASE: ${'Saturday'}
+  -CASE: \${'Saturday'}
       -Happy Saturday!
-  -CASE: ${'Sunday'}
+  -CASE: \${'Sunday'}
       -Happy Sunday!
   -DEFAULT:
       -Work Hard!`;
 
     const templates = parse('a.lg', content, []).templates;
     const templateDetails0: any = templates[0];
-    const templateDetails1: any = templates[0];
-    const templateDetails2: any = templates[0];
+    const templateDetails1: any = templates[1];
+    const templateDetails2: any = templates[2];
 
     expect(templates.length).toEqual(3);
     expect(templateDetails0.expressionsUsed).toEqual(['${exit}']);
