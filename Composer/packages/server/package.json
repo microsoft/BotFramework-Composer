@@ -104,7 +104,6 @@
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
     "portfinder": "^1.0.28",
-    "restify": "^8.4.0",
     "rimraf": "^3.0.2",
     "rsa-pem-from-mod-exp": "^0.8.4",
     "simple-update-in": "^2.2.0",
