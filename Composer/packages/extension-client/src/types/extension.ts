@@ -6,6 +6,7 @@ import { SDKKinds } from '@botframework-composer/types';
 import { UIOptions } from './formSchema';
 import { FlowEditorWidgetMap, FlowWidget } from './flowSchema';
 import { MenuOptions } from './menuSchema';
+import { TriggerUIOption } from './triggerSchema';
 import { RecognizerOptions } from './recognizerSchema';
 import { FieldWidget } from './form';
 
@@ -22,6 +23,7 @@ export type UISchema = {
     flow?: FlowWidget;
     form?: UIOptions;
     menu?: MenuOptions | MenuOptions[];
+    trigger?: TriggerUIOption;
     recognizer?: RecognizerOptions;
   };
 };
