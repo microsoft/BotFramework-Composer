@@ -5,9 +5,9 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
+import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
 import { checkForPVASchema } from '@bfc/shared';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
@@ -104,28 +104,26 @@ const buttonStyles: IButtonStyles = {
   },
 };
 
-const teachingBubbleStyle = {
+const calloutStyle = {
   root: {
-    selectors: {
-      '.ms-Callout-beak': {
-        background: NeutralColors.white,
-      },
-    },
+    padding: 24,
   },
-  bodyContent: {
-    background: NeutralColors.white,
-    selectors: {
-      '.ms-TeachingBubble-headline': {
-        color: NeutralColors.black,
-        fontSize: FontSizes.size20,
-      },
-      '.ms-TeachingBubble-subText': {
-        color: NeutralColors.black,
-        fontSize: FontSizes.size12,
-      },
-    },
+  calloutMain: {
+    width: 330,
+    height: 120,
   },
 };
+
+const calloutHeader = css`
+  color: ${NeutralColors.black};
+  font-size: ${FontSizes.size20};
+`;
+
+const calloutDescription = css`
+  padding-top: 12px;
+  color: ${NeutralColors.black};
+  font-size: ${FontSizes.size12};
+`;
 
 // -------------------- Header -------------------- //
 
@@ -229,25 +227,28 @@ export const Header = () => {
         <NotificationButton buttonStyles={buttonStyles} />
       </div>
       {teachingBubbleVisibility && (
-        <TeachingBubble
-          isWide
-          calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
-          headline={formatMessage('Active language')}
-          styles={teachingBubbleStyle}
+        <Callout
+          directionalHint={DirectionalHint.bottomLeftEdge}
+          styles={calloutStyle}
           target="#targetButton"
           onDismiss={handleActiveLanguageButtonOnDismiss}
         >
-          {formatMessage(
-            'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
-          )}
-          <Dropdown
-            options={languageListOptions}
-            placeholder="Select an option"
-            selectedKey={locale}
-            styles={{ root: { marginTop: 12 } }}
-            onChange={onLanguageChange}
-          />
-        </TeachingBubble>
+          <div css={calloutHeader}> {formatMessage('Active language')}</div>
+          <div css={calloutDescription}>
+            {formatMessage(
+              'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
+            )}
+          </div>
+          <FocusTrapZone>
+            <Dropdown
+              options={languageListOptions}
+              placeholder="Select an option"
+              selectedKey={locale}
+              styles={{ root: { marginTop: 12 } }}
+              onChange={onLanguageChange}
+            />
+          </FocusTrapZone>
+        </Callout>
       )}
     </div>
   );
