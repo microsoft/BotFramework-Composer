@@ -10,21 +10,14 @@ import { CodeEditorSettings, LgMetaData, LgTemplateRef, LgType } from '@bfc/shar
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React, { useCallback } from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { locateLgTemplatePosition } from './locateLgTemplatePosition';
 
 const linkStyles = {
   root: { fontSize: 12, ':hover': { textDecoration: 'none' }, ':active': { textDecoration: 'none' } },
 };
-
-const fontSize12Style = { root: { fontSize: 12 } };
-const grayTextStyle = { root: { color: NeutralColors.gray60, fontSize: 12 } };
 
 const lspServerPath = '/lg-language-server';
 
@@ -126,9 +119,12 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     setEditorMode(editorMode === 'codeEditor' ? 'responseEditor' : 'codeEditor');
   }, [editorMode]);
 
-  const editTemplateInResponseView = React.useCallback(() => {
-    shellApi.navigateTo(`/bot/${projectId}/language-generation/${lgFileId}`);
-  }, [shellApi, projectId, lgFileId]);
+  const navigateToLgPage = React.useCallback(
+    (lgFileId: string) => {
+      shellApi.navigateTo(`/bot/${projectId}/language-generation/${lgFileId}`);
+    },
+    [shellApi, projectId]
+  );
 
   return (
     <React.Fragment>
@@ -160,28 +156,8 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
         value={template.body}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
+        onNavigateToLgPage={navigateToLgPage}
       />
-      <Stack horizontal verticalAlign="center">
-        <Text styles={grayTextStyle}>{formatMessage('Template name: ')}</Text>
-        <TooltipHost
-          content={
-            <Stack horizontal styles={fontSize12Style}>
-              {formatMessage.rich('Edit this template in <a>Bot Response view</a>', {
-                a: ({ children }) => (
-                  <Stack key="pageLink" horizontal tokens={{ childrenGap: 4, padding: '0 0 0 4px' }}>
-                    <Icon iconName="Robot" styles={fontSize12Style} />
-                    <Text styles={fontSize12Style}>{children}</Text>
-                  </Stack>
-                ),
-              })}
-            </Stack>
-          }
-        >
-          <Link as="button" styles={linkStyles} onClick={editTemplateInResponseView}>
-            #{lgName}()
-          </Link>
-        </TooltipHost>
-      </Stack>
     </React.Fragment>
   );
 };
