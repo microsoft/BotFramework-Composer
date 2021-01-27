@@ -22,7 +22,7 @@ const dotenvFiles = [
   // since normally you expect tests to produce the same
   // results for everyone
   NODE_ENV !== 'test' && `${paths.dotenv}.local`,
-  paths.dotenv
+  paths.dotenv,
 ].filter(Boolean);
 
 // Load environment variables from .env* files. Suppress warnings using silent
@@ -30,11 +30,11 @@ const dotenvFiles = [
 // that have already been set.  Variable expansion is supported in .env files.
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
-dotenvFiles.forEach(dotenvFile => {
+dotenvFiles.forEach((dotenvFile) => {
   if (fs.existsSync(dotenvFile)) {
     require('dotenv-expand')(
       require('dotenv').config({
-        path: dotenvFile
+        path: dotenvFile,
       })
     );
   }
@@ -61,8 +61,8 @@ function getGitSha() {
 const appDirectory = fs.realpathSync(process.cwd());
 process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .split(path.delimiter)
-  .filter(folder => folder && !path.isAbsolute(folder))
-  .map(folder => path.resolve(appDirectory, folder))
+  .filter((folder) => folder && !path.isAbsolute(folder))
+  .map((folder) => path.resolve(appDirectory, folder))
   .join(path.delimiter);
 
 // Grab NODE_ENV and COMPOSER_* environment variables and prepare them to be
@@ -71,7 +71,7 @@ const COMPOSER = /^COMPOSER_/i;
 
 function getClientEnvironment(publicUrl) {
   const raw = Object.keys(process.env)
-    .filter(key => COMPOSER.test(key))
+    .filter((key) => COMPOSER.test(key))
     .reduce(
       (env, key) => {
         env[key] = process.env[key];
@@ -86,16 +86,14 @@ function getClientEnvironment(publicUrl) {
         // This should only be used as an escape hatch. Normally you would put
         // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
-        GIT_SHA: getGitSha()
-          .toString()
-          .replace('\n', ''),
+        GIT_SHA: getGitSha().toString().replace('\n', ''),
         SDK_PACKAGE_VERSION: '4.11.0', // TODO: change this when Composer supports custom schema/custom runtime
         COMPOSER_VERSION: '1.3.1',
         LOCAL_PUBLISH_PATH:
           process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../../extensions/localPublish/hostedBots'),
         WEBLOGIN_CLIENTID: process.env.WEBLOGIN_CLIENTID,
         WEBLOGIN_TENANTID: process.env.WEBLOGIN_TENANTID,
-        WEBLOGIN_REDIRECTURL: process.env.WEBLOGIN_REDIRECTURL
+        WEBLOGIN_REDIRECTURL: process.env.WEBLOGIN_REDIRECTURL,
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
@@ -103,7 +101,7 @@ function getClientEnvironment(publicUrl) {
     'process.env': Object.keys(raw).reduce((env, key) => {
       env[key] = JSON.stringify(raw[key]);
       return env;
-    }, {})
+    }, {}),
   };
 
   return { raw, stringified };

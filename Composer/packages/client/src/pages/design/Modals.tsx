@@ -36,7 +36,7 @@ const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillMo
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
-const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
+const TriggerCreationModal = React.lazy(() => import('../../components/TriggerCreationModal'));
 
 type ModalsProps = {
   projectId: string;
@@ -146,16 +146,18 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
         />
       )}
       {triggerModalInfo && (
-        <TriggerCreationModal
-          isOpen
-          dialogId={triggerModalInfo.dialogId}
-          projectId={triggerModalInfo.projectId}
-          onDismiss={onTriggerCreationDismiss}
-          onSubmit={async (dialogId, formData) => {
-            await createTrigger(triggerModalInfo.projectId, dialogId, formData);
-            commitChanges();
-          }}
-        />
+        <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
+          <TriggerCreationModal
+            isOpen
+            dialogId={triggerModalInfo.dialogId}
+            projectId={triggerModalInfo.projectId}
+            onDismiss={onTriggerCreationDismiss}
+            onSubmit={async (dialogId, formData) => {
+              await createTrigger(triggerModalInfo.projectId, dialogId, formData);
+              commitChanges();
+            }}
+          />
+        </EditorExtension>
       )}
 
       <CreateQnAModal
