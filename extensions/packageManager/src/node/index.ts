@@ -220,6 +220,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
+          res.status(500).json({message: 'Could load feed. Please check the feed URL and format.'})
+          return;
         }
       }
 
@@ -246,11 +248,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           } else {
             raw = await axios.get(url);
           }
-
-
           const feed = await normalizeFeed(raw.data);
-
-
           if (Array.isArray(feed)) {
             combined = combined.concat(feed);
           } else {
@@ -259,6 +257,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
+          res.status(500).json({message: 'Could load feed. Please check the feed URL and format.'})
         }
       }
 
