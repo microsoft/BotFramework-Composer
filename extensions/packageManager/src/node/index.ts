@@ -220,7 +220,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          res.status(500).json({message: 'Could load feed. Please check the feed URL and format.'})
+          res.status(500).json({message: 'Could not load feed. Please check the feed URL and format.'})
           return;
         }
       }
@@ -257,7 +257,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          res.status(500).json({message: 'Could load feed. Please check the feed URL and format.'})
+          res.status(500).json({message: 'Could not load feed. Please check the feed URL and format.'})
         }
       }
 
