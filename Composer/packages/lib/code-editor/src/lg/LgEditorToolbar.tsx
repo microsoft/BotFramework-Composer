@@ -5,6 +5,9 @@ import { LgTemplate } from '@botframework-composer/types';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import * as React from 'react';
+import formatMessage from 'format-message';
+
+import { withTooltip } from '../utils/withTooltip';
 
 import { ToolbarButtonMenu } from './ToolbarButtonMenu';
 import { useLgEditorToolbarItems } from './useLgEditorToolbarItems';
@@ -31,19 +34,32 @@ export const LgEditorToolbar = React.memo((props: Props) => {
     onSelectToolbarMenuItem
   );
 
+  const TooltipTemplateButton = withTooltip(
+    { content: formatMessage('Insert a template reference') },
+    ToolbarButtonMenu
+  );
+  const TooltipPropertyButton = withTooltip(
+    { content: formatMessage('Insert a property reference in memory') },
+    ToolbarButtonMenu
+  );
+  const TooltipFunctionButton = withTooltip(
+    { content: formatMessage('Insert an adaptive expression pre-built function') },
+    ToolbarButtonMenu
+  );
+
   return (
     <Stack horizontal styles={toolbarContainerStyle}>
-      <ToolbarButtonMenu
+      <TooltipTemplateButton
         key="templateRef"
         disabled={!templateRefPayload?.data?.templates?.length}
         payload={templateRefPayload}
       />
-      <ToolbarButtonMenu
+      <TooltipPropertyButton
         key="propertyRef"
         disabled={!propertyRefPayload?.data?.properties?.length}
         payload={propertyRefPayload}
       />
-      <ToolbarButtonMenu key="functionRef" payload={functionRefPayload} />
+      <TooltipFunctionButton key="functionRef" payload={functionRefPayload} />
     </Stack>
   );
 });
