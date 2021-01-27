@@ -9,6 +9,7 @@ import { RouteComponentProps } from '@reach/router';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 
+import { ABSChannels } from './ABSChannels';
 import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
@@ -45,6 +46,7 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
       {isRootBot && <SkillHostEndPoint projectId={projectId} />}
       <AppIdAndPassword projectId={projectId} />
       <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
+      <ABSChannels projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <BotLanguage projectId={projectId} />
       <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <div css={publishTargetsWrap(!isRootBot)}>
