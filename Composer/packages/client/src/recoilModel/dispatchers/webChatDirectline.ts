@@ -10,6 +10,7 @@ export const webChatDirectlineDispatcher = () => {
   const bootstrapChat = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { snapshot } = callbackHelpers;
     const botUrl = await snapshot.getPromise(botEndpointsState[projectId]);
+    return botUrl;
   });
 
   return {
