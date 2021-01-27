@@ -356,3 +356,13 @@ export const isProfileComplete = (profile) => {
     throw Error('Required field `MicrosoftAppPassword` is missing from publishing profile.');
   }
 }
+
+export const getAbsSettings = (config)=>{
+  return {
+    appPasswordHint: config.appPasswordHint,
+    subscriptionId: config.subscriptionId,
+    resourceGroup: config.resourceGroup,
+    resourceId: config.resourceId,
+    botName: config.botName
+  };
+}

@@ -309,17 +309,18 @@ export const projectDispatcher = () => {
       if (profile) {
         // ABS Create Flow, update publishProfile after create project
         const dispatcher = await snapshot.getPromise(dispatcherState);
+        const appId = profile.appId;
+        delete profile.appId;
         const newProfile = {
           name: `abs-${profile.botName}`,
           type: 'azurePublish',
           configuration: JSON.stringify({
-            hostname: profile.tag?.webapp,
+            hostname: profile.tag?.webapp || '',
             runtimeIdentifier: 'win-x64',
             settings: {
-              MicrosoftAppId: profile.appId,
-              MicrosoftAppPassword: profile.appPassword,
+              MicrosoftAppId: appId,
             },
-            abs: profile,
+            ...profile,
           }),
         };
         dispatcher.setPublishTargets([newProfile], projectId);
