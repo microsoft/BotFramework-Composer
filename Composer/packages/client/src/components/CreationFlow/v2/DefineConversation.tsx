@@ -268,12 +268,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
         }
       }
 
-      onSubmit(
-        {
-          ...dataToSubmit,
-        },
-        templateId || ''
-      );
+      onSubmit({ ...dataToSubmit }, templateId || '');
     },
     [hasErrors, formData]
   );

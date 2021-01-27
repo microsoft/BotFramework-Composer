@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, FileExtensions } from '@bfc/extension';
+import { UserIdentity, FileExtensions, BotTemplateV2, FeedType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
 import yeoman from 'yeoman-environment';
 import Environment from 'yeoman-environment';
@@ -120,7 +120,7 @@ export class AssetManager {
         await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
       }
 
-      ref.path = ref.path + `/${projectName}`;
+      ref.path = `${ref.path}/${projectName}`;
 
       return ref;
     } catch (err) {
@@ -256,5 +256,57 @@ export class AssetManager {
         return '';
       }
     }
+  }
+
+  private getFeedType(): FeedType {
+    // TODO: parse through data to detect for npm or nuget package schema and return respecive result
+    return 'npm';
+  }
+
+  private async getFeedContents(feedUrl: string): Promise<BotTemplateV2[] | undefined | null> {
+    try {
+      const res = await fetch(feedUrl);
+      const data = await res.json();
+      const feedType = this.getFeedType();
+      if (feedType === 'npm') {
+        return data.objects.map((result) => {
+          const { name, version, description = '', keywords = [] } = result.package;
+
+          return {
+            id: name,
+            name: name,
+            description: description,
+            keywords: keywords,
+            package: {
+              packageName: name,
+              packageSource: 'npm',
+              packageVersion: version,
+            },
+          } as BotTemplateV2;
+        });
+      } else if (feedType === 'nuget') {
+        // TODO: handle nuget processing
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  public async getCustomFeedTemplates(feedUrls: string[]): Promise<BotTemplateV2[]> {
+    let templates: BotTemplateV2[] = [];
+    const invalidFeedUrls: string[] = [];
+
+    for (const feed of feedUrls) {
+      const feedTemplates = await this.getFeedContents(feed);
+      if (feedTemplates === null) {
+        invalidFeedUrls.push(feed);
+      } else if (feedTemplates && Array.isArray(feedTemplates) && feedTemplates.length > 0) {
+        templates = templates.concat(feedTemplates);
+      }
+    }
+
+    return templates;
   }
 }
