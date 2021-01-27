@@ -3,6 +3,7 @@
 
 import http from 'http';
 
+import portfinder from 'portfinder';
 import express, { Response } from 'express';
 import { Activity } from 'botframework-schema';
 import { Server as WSServer } from 'ws';
@@ -69,8 +70,9 @@ export class WebSocketServer {
         return app(req, res as Response);
       });
 
-      server.listen(5001);
-      this.port = 5001;
+      const port = await portfinder.getPortPromise();
+      this.port = port;
+      server.listen(port);
 
       app.use('/ws/:conversationId', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {

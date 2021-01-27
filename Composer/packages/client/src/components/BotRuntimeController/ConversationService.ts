@@ -36,7 +36,16 @@ interface StartConversationPayload {
   msaPassword?: string;
 }
 
+type ChatData = {
+  chatMode: 'conversation' | 'transcript';
+  conversationId: string;
+  directline: any;
+  user: any;
+};
+
 export const ConversationService = () => {
+  const chats: Record<string, ChatData> = {};
+
   const startConversation = (payload: StartConversationPayload): Promise<Response> => {
     return composerServerExtensionClient.post(
       `v3/conversations`,
@@ -86,12 +95,12 @@ export const ConversationService = () => {
     };
   };
 
-  const conversationUpdate = (conversationId, userId) => {
-    const url = `${BASEPATH}conversations/${conversationId}/updateConversation`;
+  const conversationUpdate = (oldConversationId, newConversationId, userId) => {
+    const url = `${BASEPATH}conversations/${oldConversationId}/updateConversation`;
     return axios.put(
       url,
       {
-        conversationId,
+        conversationId: newConversationId,
         userId,
       },
       {
@@ -116,11 +125,24 @@ export const ConversationService = () => {
     });
   };
 
+  const generateUniqueId = () => {
+    return uuidv4().toString();
+  };
+
+  const saveChatData = (data: ChatData) => {
+    chats[data.conversationId] = {
+      ...data,
+    };
+  };
+
   return {
     startConversation,
     getUser,
     fetchDirectLineObject,
     conversationUpdate,
     sendInitialActivity,
+    generateUniqueId,
+    saveChatData,
+    getChatData: (conversationId) => chats[conversationId],
   };
 };
