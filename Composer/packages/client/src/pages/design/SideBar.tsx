@@ -244,13 +244,13 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
   return (
     <React.Fragment>
       <ProjectTree
-        defaultSelected={{
+        headerMenu={projectTreeHeaderMenuItems}
+        selectedLink={{
           projectId: rootProjectId,
           skillId: rootProjectId === projectId ? undefined : projectId,
           dialogId,
           trigger: parseTriggerId(selectedTrigger?.id),
         }}
-        headerMenu={projectTreeHeaderMenuItems}
         onBotCreateDialog={handleCreateDialog}
         onBotDeleteDialog={handleDeleteDialog}
         onBotEditManifest={handleDisplayManifestModal}
