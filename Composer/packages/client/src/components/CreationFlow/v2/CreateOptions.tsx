@@ -119,10 +119,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
 
-  const selection = useMemo(() => {
+  const selectedTemplate = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
-        const t = selection.getSelection()[0] as BotTemplate;
+        const t = selectedTemplate.getSelection()[0] as BotTemplate;
         if (t) {
           setCurrentTemplate(t.id);
         }
@@ -147,7 +147,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     onNext(routeToTemplate);
   };
 
-  const tableColums = [
+  const tableColumns = [
     {
       key: 'name',
       name: formatMessage('Name'),
@@ -168,12 +168,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   ];
 
   const onRenderRow = (props) => {
-    if (props) {
-      return (
-        <DetailsRow {...props} data-testid={props.item.id} styles={rowDetails(disabled)} tabIndex={props.itemIndex} />
-      );
-    }
-    return null;
+    if (!props) return null;
+    return (
+      <DetailsRow {...props} data-testid={props.item.id} styles={rowDetails(disabled)} tabIndex={props.itemIndex} />
+    );
   };
 
   const fetchReadMe = async (moduleName: string) => {
@@ -237,13 +235,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             >
               <DetailsList
                 checkboxVisibility={CheckboxVisibility.hidden}
-                columns={tableColums}
+                columns={tableColumns}
                 compact={false}
                 getKey={(item) => item.name}
                 isHeaderVisible={false}
                 items={templates}
                 layoutMode={DetailsListLayoutMode.justified}
-                selection={selection}
+                selection={selectedTemplate}
                 selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
                 onRenderRow={onRenderRow}
               />

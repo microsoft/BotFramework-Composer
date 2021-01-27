@@ -74,7 +74,7 @@ const stackinput = {
 
 const MAXTRYTIMES = 10000;
 
-interface DefineConversationFormData {
+type DefineConversationFormData = {
   name: string;
   description: string;
   schemaUrl: string;
@@ -82,18 +82,16 @@ interface DefineConversationFormData {
   runtimeChoice: string;
   location?: string;
 
-  templateDir?: string; // location of the imported template
-  eTag?: string; // e tag used for content sync between composer and imported bot content
-  urlSuffix?: string; // url to deep link to after creation
-  alias?: string; // identifier that is used to track bots between imports
-  preserveRoot?: boolean; // identifier that is used to determine ay project file renames upon creation
-}
+  pvaData?: {
+    templateDir?: string; // location of the imported template
+    eTag?: string; // e tag used for content sync between composer and imported bot content
+    urlSuffix?: string; // url to deep link to after creation
+    alias?: string; // identifier that is used to track bots between imports
+    preserveRoot?: boolean; // identifier that is used to determine ay project file renames upon creation
+  };
+};
 
-interface DefineConversationProps
-  extends RouteComponentProps<{
-    templateId: string;
-    location: string;
-  }> {
+type DefineConversationProps = {
   createFolder: (path: string, name: string) => void;
   updateFolder: (path: string, oldName: string, newName: string) => void;
   onSubmit: (formData: DefineConversationFormData, templateId: string) => void;
@@ -101,7 +99,10 @@ interface DefineConversationProps
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
   focusedStorageFolder: StorageFolder;
-}
+} & RouteComponentProps<{
+  templateId: string;
+  location: string;
+}>;
 
 const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const {
@@ -247,11 +248,13 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
         const { alias, eTag, imported, templateDir, urlSuffix } = props.location.state;
 
         if (imported) {
-          dataToSubmit.templateDir = templateDir;
-          dataToSubmit.eTag = eTag;
-          dataToSubmit.urlSuffix = urlSuffix;
-          dataToSubmit.alias = alias;
-          dataToSubmit.preserveRoot = true;
+          dataToSubmit.pvaData = {
+            templateDir: templateDir,
+            eTag: eTag,
+            urlSuffix: urlSuffix,
+            alias: alias,
+            preserveRoot: true,
+          };
 
           // create a notification to indicate import success
           const notification = createNotification({

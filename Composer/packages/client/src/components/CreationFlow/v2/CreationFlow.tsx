@@ -110,12 +110,13 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       schemaUrl: formData.schemaUrl,
       appLocale,
       qnaKbUrls,
-      templateDir: formData.templateDir,
-      eTag: formData.eTag,
-      urlSuffix: formData.urlSuffix,
-      alias: formData.alias,
-      preserveRoot: formData.preserveRoot,
+      templateDir: formData.pvaData.templateDir,
+      eTag: formData.pvaData.eTag,
+      urlSuffix: formData.pvaData.urlSuffix,
+      alias: formData.pvaData.alias,
+      preserveRoot: formData.pvaData.preserveRoot,
     };
+
     createNewBotV2(newBotData);
   };
 
