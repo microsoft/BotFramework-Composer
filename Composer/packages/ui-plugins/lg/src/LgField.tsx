@@ -2,15 +2,29 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React, { useCallback } from 'react';
-import { LgEditor } from '@bfc/code-editor';
-import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { FieldLabel, useFormData } from '@bfc/adaptive-form';
-import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
+import { LgEditor, LgEditorMode } from '@bfc/code-editor';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
+import { CodeEditorSettings, LgMetaData, LgTemplateRef, LgType } from '@bfc/shared';
+import { jsx } from '@emotion/core';
+import formatMessage from 'format-message';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import React, { useCallback } from 'react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { locateLgTemplatePosition } from './locateLgTemplatePosition';
+
+const linkStyles = {
+  root: { fontSize: 10, ':hover': { textDecoration: 'none' }, ':active': { textDecoration: 'none' } },
+};
+
+const fontSize10Style = { root: { fontSize: 10 } };
+const grayTextStyle = { root: { color: NeutralColors.gray60, fontSize: 10 } };
 
 const lspServerPath = '/lg-language-server';
 
@@ -38,6 +52,8 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   const { label, id, description, value, name, uiOptions, required } = props;
   const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
   const formData = useFormData();
+
+  const [editorMode, setEditorMode] = React.useState<LgEditorMode>('codeEditor');
 
   let lgType = name;
   const $kind = formData?.$kind;
@@ -106,9 +122,30 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     shellApi.updateUserSettings({ codeEditor: settings });
   };
 
+  const modeChange = React.useCallback(() => {
+    setEditorMode(editorMode === 'codeEditor' ? 'responseEditor' : 'codeEditor');
+  }, [editorMode]);
+
+  const editTemplateInResponseView = React.useCallback(() => {
+    shellApi.navigateTo(`/bot/${projectId}/language-generation/${lgFileId}`);
+  }, [shellApi, projectId, lgFileId]);
+
   return (
     <React.Fragment>
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
+      <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
+        <FieldLabel
+          description={description}
+          helpLink={uiOptions?.helpLink}
+          id={id}
+          label={label}
+          required={required}
+        />
+        <Link as="button" styles={linkStyles} onClick={modeChange}>
+          {editorMode === 'codeEditor'
+            ? formatMessage('switch to response editor')
+            : formatMessage('switch to code editor')}
+        </Link>
+      </Stack>
       <LgEditor
         hidePlaceholder
         diagnostics={diagnostics}
@@ -119,10 +156,36 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
         }}
         lgOption={lgOption}
         lgTemplates={availableLgTemplates}
+        mode={editorMode}
         value={template.body}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
       />
+      <Stack horizontal verticalAlign="center">
+        <Text styles={grayTextStyle}>{formatMessage('Template name: ')}</Text>
+        <TooltipHost
+          content={
+            <Stack horizontal styles={fontSize10Style}>
+              {
+                // eslint-disable-next-line format-message/no-missing-params
+                (formatMessage.rich('Edit this template in <pageLink>Bot Response view</pageLink>'),
+                {
+                  pageLink: ({ children }) => (
+                    <Stack horizontal tokens={{ childrenGap: 8 }}>
+                      <Icon iconName="Robot" styles={fontSize10Style} />
+                      <Text styles={fontSize10Style}>{children}</Text>
+                    </Stack>
+                  ),
+                })
+              }
+            </Stack>
+          }
+        >
+          <Link as="button" styles={linkStyles} onClick={editTemplateInResponseView}>
+            #{lgTemplateRef?.name}
+          </Link>
+        </TooltipHost>
+      </Stack>
     </React.Fragment>
   );
 };
