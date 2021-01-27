@@ -169,6 +169,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           path: lspServerPath,
         }}
         lgOption={lgOption}
+        mode="codeEditor"
         value={content}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
@@ -183,6 +184,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         lgOption={{
           fileId: dialogId,
         }}
+        mode="codeEditor"
         options={{
           readOnly: true,
         }}

@@ -20,11 +20,11 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { locateLgTemplatePosition } from './locateLgTemplatePosition';
 
 const linkStyles = {
-  root: { fontSize: 10, ':hover': { textDecoration: 'none' }, ':active': { textDecoration: 'none' } },
+  root: { fontSize: 12, ':hover': { textDecoration: 'none' }, ':active': { textDecoration: 'none' } },
 };
 
-const fontSize10Style = { root: { fontSize: 10 } };
-const grayTextStyle = { root: { color: NeutralColors.gray60, fontSize: 10 } };
+const fontSize12Style = { root: { fontSize: 12 } };
+const grayTextStyle = { root: { color: NeutralColors.gray60, fontSize: 12 } };
 
 const lspServerPath = '/lg-language-server';
 
@@ -165,24 +165,20 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
         <Text styles={grayTextStyle}>{formatMessage('Template name: ')}</Text>
         <TooltipHost
           content={
-            <Stack horizontal styles={fontSize10Style}>
-              {
-                // eslint-disable-next-line format-message/no-missing-params
-                (formatMessage.rich('Edit this template in <pageLink>Bot Response view</pageLink>'),
-                {
-                  pageLink: ({ children }) => (
-                    <Stack horizontal tokens={{ childrenGap: 8 }}>
-                      <Icon iconName="Robot" styles={fontSize10Style} />
-                      <Text styles={fontSize10Style}>{children}</Text>
-                    </Stack>
-                  ),
-                })
-              }
+            <Stack horizontal styles={fontSize12Style}>
+              {formatMessage.rich('Edit this template in <a>Bot Response view</a>', {
+                a: ({ children }) => (
+                  <Stack key="pageLink" horizontal tokens={{ childrenGap: 4, padding: '0 0 0 4px' }}>
+                    <Icon iconName="Robot" styles={fontSize12Style} />
+                    <Text styles={fontSize12Style}>{children}</Text>
+                  </Stack>
+                ),
+              })}
             </Stack>
           }
         >
           <Link as="button" styles={linkStyles} onClick={editTemplateInResponseView}>
-            #{lgTemplateRef?.name}
+            #{lgName}()
           </Link>
         </TooltipHost>
       </Stack>
