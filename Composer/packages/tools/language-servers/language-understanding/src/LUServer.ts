@@ -111,7 +111,7 @@ export class LUServer {
     this.connection.listen();
   }
 
-  protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
+  protected async foldingRangeHandler(params: FoldingRangeParams): Promise<FoldingRange[]> {
     const document = this.documents.get(params.textDocument.uri);
     const items: FoldingRange[] = [];
     if (!document) {
@@ -119,21 +119,28 @@ export class LUServer {
     }
 
     const lineCount = document.lineCount;
-    for (let i = 0; i < lineCount; i++) {
+    let i = 0;
+    while (i < lineCount) {
       const currLine = getCurrLine(document, lineCount, i);
       if (currLine?.startsWith('>>')) {
-        let j = i + 1;
-        for (j = i + 1; j < lineCount; j++) {
+        for (let j = i + 1; j < lineCount; j++) {
           if (getCurrLine(document, lineCount, j)?.startsWith('>>')) {
             items.push(FoldingRange.create(i, j - 1));
-            i = j;
+            i = j - 1;
             break;
+          }
+
+          if (j === lineCount - 1) {
+            items.push(FoldingRange.create(i, j));
+            i = j;
           }
         }
       }
+
+      i = i + 1;
     }
 
-    const luResource = parseFile.parse(document.getText());
+    const luResource = parse(document.getText(), undefined, {}).resource;
     const sections = luResource.Sections;
     for (const section in luResource.Sections) {
       const start = sections[section].Range.Start.Line - 1;

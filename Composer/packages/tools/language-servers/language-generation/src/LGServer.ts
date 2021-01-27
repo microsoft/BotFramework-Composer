@@ -117,18 +117,27 @@ export class LGServer {
       return items;
     }
     const lineCount = document.lineCount;
-    for (let i = 0; i < lineCount; i++) {
+    let i = 0;
+    while (i < lineCount) {
       const currLine = getCurrLine(document, lineCount, i);
       if (currLine?.startsWith('>>')) {
         for (let j = i + 1; j < lineCount; j++) {
           if (getCurrLine(document, lineCount, j)?.startsWith('>>')) {
             items.push(FoldingRange.create(i, j - 1));
-            i = j;
+            i = j - 1;
             break;
+          }
+
+          if (j === lineCount - 1) {
+            items.push(FoldingRange.create(i, j));
+            i = j;
           }
         }
       }
+
+      i = i + 1;
     }
+
     for (let i = 0; i < lineCount; i++) {
       const currLine = getCurrLine(document, lineCount, i);
       if (currLine?.startsWith('#')) {
