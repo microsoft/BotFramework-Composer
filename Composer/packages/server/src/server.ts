@@ -134,7 +134,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     next?.();
   });
 
-  conversationRouter.use((req, res, next) => {
+  directlineRouter.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
     res.header(
@@ -144,8 +144,8 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     next?.();
   });
 
-  app.use(`/`, conversationRouter);
-  app.use(`/`, directlineRouter);
+  app.use(`/test`, conversationRouter);
+  app.use(`/test`, directlineRouter);
 
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

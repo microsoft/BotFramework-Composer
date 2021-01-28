@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
     "esModuleInterop": true,
-    "jsx": "react",
+    "importHelpers": true,
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "moduleResolution": "node",
+    "target": "ES6",
+    "outDir": "lib",
   },
   "include": [
     "src/**/*",
