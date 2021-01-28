@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { RequestHandler } from 'express-serve-static-core';
+import { RequestHandler, Router } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 import { PassportStatic } from 'passport';
 
@@ -82,6 +82,12 @@ export type IExtensionRegistration = {
 
   addWebMiddleware(middleware: RequestHandler): void;
   addWebRoute(type: string, url: string, ...handlers: RequestHandler[]): void;
+  /**
+   * Add a express Router which contains a group of webRoute, middleware implementations.
+   * @param routerPath Prefix path of the Router, by default '/'.
+   * @param routerInstance Instance of the Router which is created from express.Router().
+   */
+  addRouter(routerPath: string, routerInstance: Router): void;
   usePassportStrategy(passportStrategy: any): void;
   useAuthMiddleware(middleware: RequestHandler): void;
   useUserSerializers(serialize: any, deserialize: any): void;
