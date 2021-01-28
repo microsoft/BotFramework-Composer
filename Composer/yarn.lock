@@ -2773,6 +2773,16 @@
     "@uifabric/utilities" "^7.23.0"
     tslib "^1.10.0"
 
+"@fluentui/react-icons@^0.3.9":
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-0.3.9.tgz#72f282740939c8204a852e38c3b5e98fbf2ff68f"
+  integrity sha512-xGisio0Ds8/TWkbERtg6akoegp68/Vop3n6eD7X+0HqVL0rOl44iW+cmQrnOh1xIWiz7EqLVQU0w70bL2oLCGw==
+  dependencies:
+    "@microsoft/load-themed-styles" "^1.10.26"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
 "@fluentui/react-stylesheets@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@fluentui/react-stylesheets/-/react-stylesheets-0.2.4.tgz#65cc6136f84ff3fd3d1c9188bed0a34b9573f589"
