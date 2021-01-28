@@ -32,7 +32,7 @@ context('Creating a new trigger', () => {
     cy.findAllByText('Add a trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Dialog events"]').click();
-    cy.findByTestId('eventTypeDropDown').click();
+    cy.findByText('Select an event type').click();
     cy.findByText('Dialog started (Begin dialog event)').click();
     cy.findByTestId('triggerFormSubmit').click();
     cy.findAllByText('Begin dialog event').should('exist');
@@ -55,7 +55,7 @@ context('Creating a new trigger', () => {
     cy.findAllByText('Add a trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Activities"]').click();
-    cy.findByTestId('activityTypeDropDown').click();
+    cy.findByText('Select an activity type').click();
     cy.findByText('Activities (Activity received)').click();
     cy.findByTestId('triggerFormSubmit').click();
     cy.findAllByText('Activities').should('exist');
