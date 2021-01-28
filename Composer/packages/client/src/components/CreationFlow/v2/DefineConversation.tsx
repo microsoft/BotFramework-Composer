@@ -81,6 +81,7 @@ type DefineConversationFormData = {
   primaryLanguage: string;
   runtimeChoice: string;
   location?: string;
+  templateVersion?: string;
 
   pvaData?: {
     templateDir?: string; // location of the imported template

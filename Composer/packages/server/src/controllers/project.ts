@@ -517,10 +517,9 @@ function createProjectV2(req: Request, res: Response) {
 }
 
 async function createProjectAsync(req: Request, jobId: string) {
-  const { templateId } = req.body;
-
-  // todo: add back templateDir, eTag, alias from req extraction for PVA scenarios
   const {
+    templateId,
+    templateVersion,
     name,
     description,
     storageId,
@@ -554,7 +553,7 @@ async function createProjectAsync(req: Request, jobId: string) {
 
     const newProjRef = createFromPva
       ? await getNewProjRef(templateDir, templateId, locationRef, user, locale)
-      : await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, name, locationRef, user);
+      : await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, templateVersion, name, locationRef, user);
 
     BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
 

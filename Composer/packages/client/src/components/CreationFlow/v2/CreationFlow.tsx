@@ -7,6 +7,7 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { BotTemplate } from '@bfc/shared';
 
 import { CreationFlowStatus } from '../../../constants';
 import {
@@ -102,8 +103,12 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
+    const templateVersion = templateProjects.find((template: BotTemplate) => {
+      return template.id == templateId;
+    })?.package?.packageVersion;
     const newBotData = {
       templateId: templateId || '',
+      templateVersion: templateVersion || '',
       name: formData.name,
       description: formData.description,
       location: formData.location,

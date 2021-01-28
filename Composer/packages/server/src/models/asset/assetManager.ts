@@ -95,6 +95,7 @@ export class AssetManager {
 
   public async copyRemoteProjectTemplateToV2(
     templateId: string,
+    templateVersion: string,
     projectName: string,
     ref: LocationRef,
     user?: UserIdentity
@@ -114,7 +115,7 @@ export class AssetManager {
       const npmPackageName = templateId;
       const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName);
+      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, templateVersion);
 
       if (remoteTemplateAvailable) {
         await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
@@ -128,11 +129,16 @@ export class AssetManager {
     }
   }
 
-  private async installRemoteTemplate(generatorName: string, npmPackageName: string): Promise<boolean> {
+  private async installRemoteTemplate(
+    generatorName: string,
+    npmPackageName: string,
+    templateVersion: string
+  ): Promise<boolean> {
     this.yeomanEnv.cwd = templateGeneratorPath;
     try {
       log('Installing generator', npmPackageName);
-      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: '*' });
+      templateVersion = templateVersion ? templateVersion : '*';
+      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
 
       log('Looking up local packages');
       await this.yeomanEnv.lookupLocalPackages();

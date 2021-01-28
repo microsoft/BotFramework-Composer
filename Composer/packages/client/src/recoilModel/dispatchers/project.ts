@@ -329,6 +329,7 @@ export const projectDispatcher = () => {
       set(botOpeningState, true);
       const {
         templateId,
+        templateVersion,
         name,
         description,
         location,
@@ -344,6 +345,7 @@ export const projectDispatcher = () => {
       const response = await createNewBotFromTemplateV2(
         callbackHelpers,
         templateId,
+        templateVersion,
         name,
         description,
         location,
