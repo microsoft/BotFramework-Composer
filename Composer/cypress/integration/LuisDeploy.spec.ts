@@ -9,6 +9,7 @@ context('Luis Deploy', () => {
     cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything', status: 404 });
     cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
+    cy.visitPage('Design');
   });
 
   it('can deploy luis success', () => {
