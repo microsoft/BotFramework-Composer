@@ -239,7 +239,7 @@ export const Header = () => {
               'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
             )}
           </div>
-          <FocusTrapZone>
+          <FocusTrapZone isClickableOutsideFocusTrap>
             <Dropdown
               options={languageListOptions}
               placeholder="Select an option"
