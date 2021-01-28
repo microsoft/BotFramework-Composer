@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as monacoEditor from 'monaco-editor';
 import uniq from 'lodash/uniq';
 
 import { LgLanguageContext, PropertyItem } from './types';
@@ -13,10 +12,15 @@ const templateStartRegex = /\s*-\s*.*$/;
  * This function returns the context of the current cursor position in an LG document.
  * @param editor LG editor instance.
  */
-const getCursorContext = (editor: monacoEditor.editor.IStandaloneCodeEditor) => {
+const getCursorContext = (editor: any) => {
   const state: LgLanguageContext[] = [];
-  const position = editor.getPosition() ?? new monacoEditor.Position(1, 1);
-  const range = new monacoEditor.Range(position.lineNumber, 1, position.lineNumber, position.column);
+  const position = editor.getPosition() ?? { lineNumber: 1, column: 1 };
+  const range = {
+    startLineNumber: position.lineNumber,
+    startColumn: 1,
+    endLineNumber: position.lineNumber,
+    endColumn: position.column,
+  };
   let lineContent = editor.getModel()?.getValueInRange(range) ?? '';
 
   if (!lineContent.startsWith('-')) {
@@ -82,10 +86,10 @@ const getCursorContext = (editor: monacoEditor.editor.IStandaloneCodeEditor) => 
  */
 export const computeRequiredEdits = (
   text: string,
-  editor: monacoEditor.editor.IStandaloneCodeEditor
-): monacoEditor.editor.IIdentifiedSingleEditOperation[] | undefined => {
+  editor: any
+): { range: any; text: string; forceMoveMarkers: boolean }[] | undefined => {
   if (editor) {
-    const position = editor.getPosition() ?? new monacoEditor.Position(1, 1);
+    const position = editor.getPosition() ?? { lineNumber: 1, column: 1 };
     let value = editor.getModel()?.getLineContent(position.lineNumber) ?? '';
     const selection = editor.getSelection();
     const textSelected = selection?.startColumn !== editor.getSelection()?.endColumn;
@@ -103,14 +107,24 @@ export const computeRequiredEdits = (
 
     const insertText = context === 'expression' ? text : `\${${text}}`;
 
-    const edits: monacoEditor.editor.IIdentifiedSingleEditOperation[] = [];
+    const edits: { range: any; text: string; forceMoveMarkers: boolean }[] = [];
 
     if (!hasDash) {
       edits.push({
         range:
           textSelected && selection
-            ? new monacoEditor.Range(selection.startLineNumber, 1, selection.startLineNumber, templateStart.length)
-            : new monacoEditor.Range(position.lineNumber, 1, position.lineNumber, templateStart.length),
+            ? {
+                startLineNumber: selection.startLineNumber,
+                startColumn: 1,
+                endLineNumber: selection.startLineNumber,
+                endColumn: templateStart.length,
+              }
+            : {
+                startLineNumber: position.lineNumber,
+                startColumn: 1,
+                endLineNumber: position.lineNumber,
+                endColumn: templateStart.length,
+              },
         text: templateStart,
         forceMoveMarkers: textSelected,
       });
@@ -119,18 +133,18 @@ export const computeRequiredEdits = (
     edits.push({
       range:
         textSelected && selection
-          ? new monacoEditor.Range(
-              selection.startLineNumber,
-              selection.startColumn + (hasDash ? 0 : templateStart.length),
-              selection.endLineNumber,
-              selection.endColumn
-            )
-          : new monacoEditor.Range(
-              position.lineNumber,
-              position.column + (hasDash ? 0 : templateStart.length),
-              position.lineNumber,
-              position.column
-            ),
+          ? {
+              startLineNumber: selection.startLineNumber,
+              startColumn: selection.startColumn + (hasDash ? 0 : templateStart.length),
+              endLineNumber: selection.endLineNumber,
+              endColumn: selection.endColumn,
+            }
+          : {
+              startLineNumber: position.lineNumber,
+              startColumn: position.column + (hasDash ? 0 : templateStart.length),
+              endLineNumber: position.lineNumber,
+              endColumn: position.column,
+            },
       text: insertText,
       forceMoveMarkers: textSelected,
     });

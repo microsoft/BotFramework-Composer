@@ -5,7 +5,6 @@ import { LgTemplate } from '@botframework-composer/types';
 import { EditorDidMount } from '@monaco-editor/react';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
-import * as monacoEditor from 'monaco-editor';
 import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -79,7 +78,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     editorId = [projectId, fileId, templateId].join('/');
   }
 
-  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor>();
+  const [editor, setEditor] = useState<any>();
   const [properties, setProperties] = useState<string[] | undefined>();
 
   const fetchAvailableProperties = React.useCallback(async () => {
