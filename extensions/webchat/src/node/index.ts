@@ -36,11 +36,6 @@ function initialize(registration: IExtensionRegistration) {
 
   registration.addRouter('/', conversationRouter);
   registration.addRouter('/', directlineRouter);
-
-  registration.addWebRoute('get', '/okok', (req, res) => {
-    res.status(200);
-    res.send('ok??');
-  })
 }
 
 module.exports = {
