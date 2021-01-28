@@ -61,7 +61,6 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.27",
-    "@emotion/styled": "^10.0.27",
     "@monaco-editor/react": "^3.1.0",
     "json-schema-defaults": "^0.4.0",
     "lodash": "^4.17.19",
@@ -70,7 +69,6 @@
     "normalize-url": "^4.5.0",
     "reconnecting-websocket": "^3.2.2",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "@uifabric/fluent-theme": "^7.1.4",
-    "@fluentui/react-icons": "^0.3.9"
+    "@uifabric/fluent-theme": "^7.1.4"
   }
 }
