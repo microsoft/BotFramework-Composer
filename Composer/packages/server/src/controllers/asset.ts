@@ -3,7 +3,6 @@
 
 import { Request, Response } from 'express';
 import { BotTemplateV2 } from '@bfc/shared';
-import cheerio from 'cheerio';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
@@ -49,15 +48,18 @@ export async function getProjTemplatesV2(req: any, res: any) {
 
 export async function getTemplateReadMe(req: any, res: any) {
   try {
-    const { moduleName } = req.body;
+    const moduleName = req.query?.moduleName;
 
-    //OPTION 1
-    const moduleURL = 'http://npmjs.org/' + moduleName;
-    const response = await fetch(moduleURL);
-    const html = await response.text();
-    const $ = cheerio.load(html); // Load the HTML string into cheerio
-    const readMeDiv = $('#readme').html(); // Parse the HTML and extract just whatever code contains .statsTableContainer and has tr inside
-    res.status(200).json(readMeDiv);
+    if (!moduleName) {
+      res.status(400).json({
+        message: 'missing module name on request',
+      });
+    } else {
+      const moduleURL = 'https://registry.npmjs.org/' + moduleName;
+      const response = await fetch(moduleURL);
+      const data = await response.json();
+      res.status(200).json(data?.readme || '');
+    }
   } catch (error) {
     res.status(400).json({
       message: error instanceof Error ? error.message : error,

@@ -23,9 +23,10 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, QnABotTemplateId } from '../../../constants';
-import httpClient from '../../../utils/httpUtil';
+import { selectedTemplateReadMeState } from '../../../recoilModel';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
@@ -108,16 +109,17 @@ type CreateOptionsProps = {
   onDismiss: () => void;
   onNext: (data: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
+  fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
   const { templates, onDismiss, onNext } = props;
-  const [templateReadMe, setTemplateReadMe] = useState('');
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
+  const readMe = useRecoilValue(selectedTemplateReadMeState);
 
   const selectedTemplate = useMemo(() => {
     return new Selection({
@@ -174,20 +176,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     );
   };
 
-  const fetchReadMe = async (moduleName: string) => {
-    try {
-      const response = await httpClient.post(`assets/templateReadme`, {
-        moduleName: moduleName,
-      });
-      const data = response?.data;
-      if (data) {
-        setTemplateReadMe(data);
-      }
-    } catch (ex) {
-      setTemplateReadMe('');
-    }
-  };
-
   useEffect(() => {
     if (templates.length > 1) {
       const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
@@ -205,7 +193,9 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [selectedFeed]);
 
   useEffect(() => {
-    fetchReadMe(currentTemplate);
+    if (currentTemplate) {
+      props.fetchReadMe(currentTemplate);
+    }
   }, [currentTemplate]);
 
   return (
@@ -248,7 +238,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            <TemplateDetailView readMe={templateReadMe} templateId={currentTemplate} />
+            <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
           </div>
         </div>
         <DialogFooter>

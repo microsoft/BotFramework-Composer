@@ -5,12 +5,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import MarkdownIt from 'markdown-it';
 
 type TemplateDetailViewProps = {
   templateId: string;
   readMe: string;
 };
 
+const md = new MarkdownIt();
+
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  return <div className="content" dangerouslySetInnerHTML={{ __html: props.readMe }}></div>;
+  return <div className="content">{md.render(props.readMe)}</div>;
 };

@@ -44,6 +44,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     saveProjectAs,
     fetchProjectById,
     createNewBotV2,
+    fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(templateProjectsState);
@@ -161,6 +162,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onSubmit={handleSubmit}
         />
         <CreateOptionsV2
+          fetchReadMe={fetchReadMe}
           fetchTemplates={fetchTemplatesV2}
           path="create"
           templates={templateProjects}
