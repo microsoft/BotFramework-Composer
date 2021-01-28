@@ -84,7 +84,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   const fetchAvailableProperties = React.useCallback(async () => {
     if (window.monacoLGEditorInstance) {
       await window.monacoLGEditorInstance.onReady();
-      window.monacoLGEditorInstance.sendRequest('fetch/properties', { projectId: lgOption?.projectId });
+      window.monacoLGEditorInstance.sendRequest('fetchProperties', { projectId: lgOption?.projectId });
       window.monacoLGEditorInstance.onNotification('properties', (params: { result: string[] }) => {
         const { result } = params;
         setProperties(result);

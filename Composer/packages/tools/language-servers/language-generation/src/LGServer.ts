@@ -33,7 +33,8 @@ import {
 } from './utils';
 
 // define init methods call from client
-const InitializeDocumentsMethodName = 'initializeDocuments';
+const fetchPropertiesMethodName = 'fetchProperties';
+const initializeDocumentsMethodName = 'initializeDocuments';
 
 const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
 
@@ -85,7 +86,7 @@ export class LGServer {
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
 
     this.connection.onRequest((method, params) => {
-      if (InitializeDocumentsMethodName === method) {
+      if (initializeDocumentsMethodName === method) {
         const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
         const textDocument = this.documents.get(uri);
         if (textDocument) {
@@ -93,17 +94,9 @@ export class LGServer {
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
         }
-      }
-    });
-
-    this.connection.onRequest((method: string, params: any) => {
-      switch (method) {
-        case 'fetch/properties':
-          {
-            const { projectId }: { projectId: string } = params;
-            this.connection.sendNotification('properties', { result: this.memoryResolver?.(projectId) });
-          }
-          break;
+      } else if (fetchPropertiesMethodName === method) {
+        const { projectId }: { projectId: string } = params;
+        this.connection.sendNotification('properties', { result: this.memoryResolver?.(projectId) });
       }
     });
   }
