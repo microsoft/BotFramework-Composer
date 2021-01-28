@@ -157,7 +157,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   }, [onNavigateToLgPage]);
 
   return (
-    <Stack>
+    <Stack verticalFill>
       <LgEditorToolbar
         lgTemplates={lgTemplates}
         properties={properties}
