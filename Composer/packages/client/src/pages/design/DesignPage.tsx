@@ -43,12 +43,14 @@ import {
   projectMetaDataState,
   displaySkillManifestState,
   designPageLocationState,
+  botDisplayNameState,
+  skillUsedInBotsSelector,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
-import { CreationFlowStatus } from '../../constants';
+import { CreationFlowStatus, RemoveSkillDialog } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
@@ -56,6 +58,7 @@ import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
+import { openAlertModal } from '../../components/Modal/AlertDialog';
 
 import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
@@ -127,6 +130,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
   const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
+  const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
   const [showAddSkillDialogModal, setAddSkillDialogModalVisibility] = useState(false);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
@@ -562,6 +566,23 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
+  async function handleRemoveSkill(skillId: string) {
+    // check if skill used in rootBot or not
+    const usedInRootBot = skillUsedInBotsMap[skillId].find(({ projectId }) => projectId === rootProjectId);
+    if (usedInRootBot) {
+      const confirmRemove = await openAlertModal(
+        formatMessage('Warning'),
+        RemoveSkillDialog(usedInRootBot.name).subText,
+        {
+          confirmText: formatMessage('Yes'),
+          cancelText: formatMessage('Cancel'),
+        }
+      );
+      if (!confirmRemove) return;
+    }
+    removeSkillFromBotProject(skillId);
+  }
+
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
   const dialogCreateSource = dialogModalInfo ?? skillId ?? projectId;
@@ -594,7 +615,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onBotDeleteDialog={handleDeleteDialog}
             onBotEditManifest={handleDisplayManifestModal}
             onBotExportZip={exportToZip}
-            onBotRemoveSkill={removeSkillFromBotProject}
+            onBotRemoveSkill={handleRemoveSkill}
             onBotStart={startSingleBot}
             onBotStop={stopSingleBot}
             onDialogCreateTrigger={(projectId, dialogId) => {
@@ -759,10 +780,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 setCreationFlowType('Skill');
                 setCreationFlowStatus(CreationFlowStatus.OPEN);
                 setBrokenSkillRepairCallback(() => {
-                  removeSkillFromBotProject(skillIdToRemove);
+                  handleRemoveSkill(skillIdToRemove);
                 });
               } else if (option === RepairSkillModalOptionKeys.removeSkill) {
-                removeSkillFromBotProject(skillIdToRemove);
+                handleRemoveSkill(skillIdToRemove);
               }
               setBrokenSkillInfo(undefined);
             }}
