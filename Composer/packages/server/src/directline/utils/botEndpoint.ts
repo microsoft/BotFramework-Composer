@@ -41,7 +41,6 @@ export class BotEndpoint {
         };
       }
     }
-
     const response = await axios.post(url, reqOptions.body, {
       headers: reqOptions.headers,
     });

@@ -27,7 +27,7 @@ export const WebChatPanel = (props: { botUrl: string }) => {
     }
     chatObj.directline.end();
 
-    const resp = await conversationService.conversationUpdate(oldConversationId, conversationId, chatObj.user);
+    const resp = await conversationService.conversationUpdate(oldConversationId, conversationId, chatObj.user.id);
     const { endpointId } = resp.data;
     const dl = await conversationService.fetchDirectLineObject(conversationId, {
       mode: 'conversation',
@@ -43,8 +43,8 @@ export const WebChatPanel = (props: { botUrl: string }) => {
       channelServiceType: 'public',
       members: [user],
       mode: 'conversation',
-      msaAppId: '',
-      msaPassword: '',
+      msaAppId: '3611fd9f-5a51-4e53-bb62-9f846bc9423a',
+      msaPassword: 'v3.q12uhd5x-5v7HCx72rO.8DBc03r-z71',
     });
 
     // await conversationService.conversationUpdate(resp.data.conversationId, user.id)
