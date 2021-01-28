@@ -154,7 +154,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
       if (process.env.NODE_ENV === 'production') {
         // We don't use the debug logger here because we always want it to be shown.
         // eslint-disable-next-line no-console
-        console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
+        console.log(`\n\n${chalk.green('Composer now running a:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
       }
       resolve();
     });

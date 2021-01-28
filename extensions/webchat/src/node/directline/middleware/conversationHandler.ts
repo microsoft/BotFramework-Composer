@@ -66,8 +66,7 @@ export function createNewConversationHandler(state: DLServerState) {
 
 export function sendActivityToConversation(
   req: express.Request,
-  res: express.Response,
-  next?: express.NextFunction
+  res: express.Response
 ): any {
   let activity = req.body as Activity;
   try {
@@ -77,15 +76,13 @@ export function sendActivityToConversation(
 
     activity = conversation.prepActivityToBeSentToUser(conversation.user.id, activity);
     WebSocketServer.sendToSubscribers(conversation.conversationId, activity);
-    res.send(StatusCodes.OK, { id: activity.id });
-    res.end();
+    res.status(StatusCodes.OK).json({ id: activity.id });
   } catch (err) {
     sendErrorResponse(req, res, err);
   }
-  next?.();
 }
 
-export function createReplyToActivityHandler(req: express.Request, res: express.Response, next?: express.NextFunction) {
+export function createReplyToActivityHandler(req: express.Request, res: express.Response) {
   let activity = req.body as Activity;
   try {
     activity.id = undefined;
@@ -94,29 +91,23 @@ export function createReplyToActivityHandler(req: express.Request, res: express.
 
     activity = conversation.prepActivityToBeSentToUser(conversation.user.id, activity);
     WebSocketServer.sendToSubscribers(conversation.conversationId, activity);
-    res.send(StatusCodes.OK, { id: activity.id });
-    res.end();
+    res.status(StatusCodes.OK).json({ id: activity.id })
   } catch (err) {
     sendErrorResponse(req, res, err);
   }
-  next?.();
 }
 
 export function createUploadAttachmentHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response, next?: express.NextFunction) => {
+  return (req: express.Request, res: express.Response) => {
     const attachmentData = req.body as AttachmentData;
 
     try {
       const resourceId = state.attachments.uploadAttachment(attachmentData);
       const resourceResponse = { id: resourceId };
-
-      res.send(StatusCodes.OK, resourceResponse);
-      res.end();
+      res.status(StatusCodes.OK).json(resourceResponse)
     } catch (err) {
       sendErrorResponse(req, res, err);
     }
-
-    next?.();
   };
 }
 
@@ -146,8 +137,7 @@ export function createGetConversationsHandler(state: DLServerState) {
       response.conversations = conversations.map((convo) => ({ id: convo.conversationId, members: convo.members }));
     }
     try {
-      res.send(StatusCodes.OK, response);
-      res.end();
+      res.status(StatusCodes.OK).json(response);
     } catch (err) {
       sendErrorResponse(req, res, err);
     }
@@ -167,7 +157,6 @@ export function createPostActivityHandler(state: DLServerState) {
       const logItem = textItem('Error', 'Cannot post activity. Conversation not found.');
 
       logToDocument(req.params.conversationId, logItem);
-      next?.();
       return;
     }
 
@@ -202,46 +191,34 @@ export function createPostActivityHandler(state: DLServerState) {
         res.send(statusCode || StatusCodes.INTERNAL_SERVER_ERROR, err);
       } else {
         activity = updatedActivity;
-        res.send(statusCode, { id: activity.id });
-
-        // (filter out the /INSPECT open command because it doesn't originate from Web Chat)
-        if (activity.type === 'message' && activity.text === '/INSPECT open') {
-          res.end();
-          return next?.();
-        }
+        res.status(statusCode).json({ id: activity.id });
         WebSocketServer.sendToSubscribers(conversation.conversationId, activity);
       }
     } catch (err) {
       sendErrorResponse(req, res, err);
     }
-
-    res.end();
-    next?.();
   };
 }
 
 export function createUploadHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response, next?: express.NextFunction): any => {
+  return (req: express.Request, res: express.Response): any => {
     if (req.params.conversationId.includes('transcript')) {
       res.end();
-      next?.();
       return;
     }
 
     const conversation: Conversation = (req as any).conversation;
 
     if (!conversation) {
-      res.send(StatusCodes.NOT_FOUND, 'conversation not found');
-      res.end();
+      res.status(StatusCodes.NOT_FOUND).send('conversation not found');
       const logItem = textItem('Error', 'Cannot upload file. Conversation not found.');
       state.dispatchers.logToDocument(req.params.conversationId, logItem);
-      next?.();
       return;
     }
 
     // TODO: Check if request is chunked when contnt length is 0
     if (!req.is('multipart/form-data') || Number(req.headers['content-length']) === 0) {
-      next?.();
+      res.status(StatusCodes.BAD_REQUEST).send('Cannot parse attachment.');
       return;
     }
 
@@ -301,26 +278,22 @@ export function createUploadHandler(state: DLServerState) {
             sendErrorResponse(req, res, err);
           }
         } else {
-          res.send(StatusCodes.BAD_REQUEST, 'no file uploaded');
-          res.end();
+          res.status(StatusCodes.BAD_REQUEST).send('no file uploaded');
         }
       } catch (err) {
         sendErrorResponse(req, res, err);
       }
-
-      next?.();
     });
   };
 }
 
 export function createUpdateConversationHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response, next?: express.NextFunction) => {
+  return (req: express.Request, res: express.Response) => {
     const currentConversationId = req.params.conversationId;
     const { conversationId, userId } = req.body;
     const currentConversation = state.conversations.conversationById(currentConversationId);
     if (!currentConversationId) {
       res.send(StatusCodes.NOT_FOUND);
-      return next?.();
     }
 
     // update the conversation object and reset as much as we can to resemble a new conversation
@@ -329,14 +302,15 @@ export function createUpdateConversationHandler(state: DLServerState) {
     currentConversation.user.id = userId;
     const user: User | undefined = currentConversation.members.find((member) => member.name === 'User');
     if (!user) {
-      return next?.(new Error(`Conversation ${currentConversationId} is missing the user in the members array.`));
+      const err = new Error(`Conversation ${currentConversationId} is missing the user in the members array.`);
+      return res.status(StatusCodes.BAD_REQUEST).json(err);
     }
     user.id = userId;
     currentConversation.normalize();
     currentConversation.nextWatermark = 0;
     state.conversations.conversations[conversationId] = currentConversation;
 
-    res.send(StatusCodes.OK, {
+    res.status(StatusCodes.OK).json({
       // can't return the conversation object because event emitters are circular JSON
       botEndpoint: currentConversation.botEndpoint,
       conversationId: currentConversation.conversationId,
@@ -345,6 +319,5 @@ export function createUpdateConversationHandler(state: DLServerState) {
       members: currentConversation.members,
       nextWatermark: currentConversation.nextWatermark,
     });
-    next?.();
   };
 }

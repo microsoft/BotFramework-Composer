@@ -8,14 +8,15 @@ import { WebSocketServer } from './websocketServer';
 
 export async function getWebSocketPort(
   req: express.Request,
-  res: express.Response,
-  next?: express.NextFunction
+  res: express.Response
 ): Promise<any> {
   try {
-    res.send(StatusCodes.OK, WebSocketServer.port || (await WebSocketServer.init()));
+    let socketPort = WebSocketServer.port;
+    if(!socketPort) {
+      socketPort = await WebSocketServer.init()
+    }
+    res.status(StatusCodes.OK).json(socketPort);
   } catch (e) {
-    res.send(StatusCodes.INTERNAL_SERVER_ERROR, e);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(e);
   }
-  res.end();
-  next?.();
 }

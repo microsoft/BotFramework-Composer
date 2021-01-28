@@ -43,8 +43,8 @@ export const WebChatPanel = (props: { botUrl: string }) => {
       channelServiceType: 'public',
       members: [user],
       mode: 'conversation',
-      msaAppId: '3611fd9f-5a51-4e53-bb62-9f846bc9423a',
-      msaPassword: 'v3.q12uhd5x-5v7HCx72rO.8DBc03r-z71',
+      msaAppId: '',
+      msaPassword: '',
     });
 
     // await conversationService.conversationUpdate(resp.data.conversationId, user.id)
@@ -57,9 +57,7 @@ export const WebChatPanel = (props: { botUrl: string }) => {
   }
 
   useEffect(() => {
-    if (props.botUrl) {
-      fetchDLEssentials();
-    }
+    fetchDLEssentials();
   }, []);
 
   const webchatMemo = useMemo(() => {

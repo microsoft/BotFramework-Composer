@@ -3,9 +3,19 @@
   "version": "1.0.0",
   "scripts": {
     "build": "yarn clean && tsc",
-    "clean": "rimraf lib"
+    "clean": "rimraf lib",
+    "start:dev": "nodemon"
   },
   "main": "lib/index.js",
+  "nodemonConfig": {
+    "exec": "yarn build",
+    "watch": [
+      "src",
+      "../extension/lib"
+    ],
+    "ext": "ts",
+    "delay": 2
+  },
   "dependencies": {
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@botframework-composer/types": "file:../../Composer/packages/types",
@@ -19,6 +29,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.19",
     "moment": "^2.29.1",
+    "portfinder": "^1.0.28",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "rsa-pem-from-mod-exp": "^0.8.4",
@@ -40,6 +51,7 @@
     "cross-env": "^7.0.2",
     "jest": "^26.6.0",
     "mini-svg-data-uri": "^1.2.3",
+    "nodemon": "^2.0.7",
     "rimraf": "^3.0.2",
     "ts-loader": "^8.0.0",
     "typescript": "^3.9.6",
