@@ -43,7 +43,6 @@ import {
   projectMetaDataState,
   displaySkillManifestState,
   designPageLocationState,
-  botDisplayNameState,
   skillUsedInBotsSelector,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
