@@ -3,28 +3,29 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DetailsList, IColumn, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { PublishResult } from '@botframework-composer/types';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 
-import { listRoot, tableView, detailList } from './styles';
+import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
-export interface IStatusListProps {
+import { listRoot, tableView, detailList } from './styles';
+import { LogDialog } from './LogDialog';
+
+export type StatusListProps = {
   items: PublishResult[];
-  updateItems: (items: PublishResult[]) => void;
   isRollbackSupported: boolean;
-  onLogClick: (item: PublishResult) => void;
   onRollbackClick: (item: PublishResult) => void;
-}
+};
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
@@ -37,16 +38,15 @@ function onRenderDetailsHeader(props, defaultRender) {
   );
 }
 
-export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
-  const { items, isRollbackSupported, onLogClick, onRollbackClick } = props;
+export const PublishStatusList: React.FC<StatusListProps> = (props) => {
+  const { items, isRollbackSupported, onRollbackClick } = props;
+  const [displayedLog, setDisplayedLog] = useState<string | null>(null);
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
-  const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    if (column.isSorted && items) {
-      column.isSortedDescending = !column.isSortedDescending;
-      const newItems: PublishResult[] = items.slice().reverse();
-      props.updateItems(newItems);
-    }
-  };
+  const displayedItems = useMemo(() => {
+    if (currentSort.descending) return items;
+    return items.slice().reverse();
+  }, [items, currentSort]);
+
   const columns = [
     {
       key: 'PublishTime',
@@ -70,7 +70,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       minWidth: 70,
       maxWidth: 90,
       isRowHeader: true,
-      onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: PublishResult) => {
         return <span>{moment(item.time).format('MM-DD-YYYY')}</span>;
@@ -86,9 +85,9 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       maxWidth: 40,
       data: 'string',
       onRender: (item: PublishResult) => {
-        if (item.status === 200) {
+        if (item.status === ApiStatus.Success) {
           return <Icon iconName="Accept" style={{ color: SharedColors.green10, fontWeight: 600 }} />;
-        } else if (item.status === 202) {
+        } else if (item.status === ApiStatus.Publishing) {
           return (
             <div style={{ display: 'flex' }}>
               <Spinner size={SpinnerSize.small} />
@@ -160,7 +159,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             allowDisabledFocus
             styles={{ root: { color: '#0078D4' } }}
             onClick={() => {
-              onLogClick(item);
+              setDisplayedLog(item.log || '');
             }}
           >
             {formatMessage('View log')}
@@ -185,7 +184,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           <ActionButton
             allowDisabledFocus
             disabled={!(isRollbackSupported && item.status === 200)}
-            styles={{ root: { color: '#0078D4' } }}
+            styles={{ root: { color: SharedColors.cyanBlue10 } }}
             onClick={() => {
               onRollbackClick(item);
             }}
@@ -210,7 +209,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             isSortedDescending: currentSort.descending,
           }))}
           css={detailList}
-          items={items}
+          items={displayedItems}
           styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
@@ -224,6 +223,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </div>
+      {displayedLog !== null ? <LogDialog value={displayedLog} onDismiss={() => setDisplayedLog(null)} /> : null}
     </div>
   );
 };
