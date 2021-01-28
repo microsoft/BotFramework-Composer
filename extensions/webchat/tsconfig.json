@@ -5,6 +5,7 @@
     "importHelpers": true,
     "noImplicitAny": false,
     "noUnusedLocals": true,
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "moduleResolution": "node",
