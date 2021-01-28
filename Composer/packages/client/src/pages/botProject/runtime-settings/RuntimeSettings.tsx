@@ -41,6 +41,11 @@ import {
   updateText,
 } from './style';
 
+const RuntimeType = {
+  Path: 'path',
+  Command: 'commad',
+};
+
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
   const botName = useRecoilValue(botDisplayNameState(projectId));
@@ -63,6 +68,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [ejecting, setEjecting] = useState(false);
   const [needsUpdate, setNeedsUpdate] = useState(false);
   const [templateKey, setTemplateKey] = useState('');
+  const [runtimePath, setRuntimePath] = useState(settings.runtime ? settings.runtime.path : '');
+  const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime ? settings.runtime.command : '');
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
@@ -94,6 +101,12 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
 
     setRuntimeField(projectId, field, newValue);
+
+    if (field === RuntimeType.Path) {
+      setRuntimePath(newValue);
+    } else {
+      setRuntimeCommand(newValue);
+    }
 
     if (valid) {
       setFormDataErrors({ ...formDataErrors, [field]: '' });
@@ -191,8 +204,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           errorMessage={formDataErrors.path}
           label={formatMessage('Runtime code location')}
           styles={name}
-          value={settings.runtime ? settings.runtime.path : ''}
-          onChange={updateSetting('path')}
+          value={runtimePath}
+          onChange={updateSetting(RuntimeType.Path)}
           onRenderLabel={onRenderLabel}
         />
         <span css={textOr}>{formatMessage('Or: ')}</span>
@@ -211,8 +224,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           errorMessage={formDataErrors.command}
           label={formatMessage('Start command')}
           styles={name}
-          value={settings.runtime ? settings.runtime.command : ''}
-          onChange={updateSetting('command')}
+          value={runtimeCommand}
+          onChange={updateSetting(RuntimeType.Command)}
           onRenderLabel={onRenderLabel}
         />
       </div>
