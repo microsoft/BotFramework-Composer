@@ -151,13 +151,6 @@ const Page: React.FC<IPageProps> = (props) => {
           >
             {useNewTree ? (
               <ProjectTree
-                defaultSelected={{
-                  projectId,
-                  skillId,
-                  dialogId,
-                  lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
-                  luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
-                }}
                 options={{
                   showDelete: false,
                   showTriggers: false,
@@ -169,6 +162,13 @@ const Page: React.FC<IPageProps> = (props) => {
                   showQnAMenu: title === 'QnA',
                   showErrors: false,
                   showCommonLinks,
+                }}
+                selectedLink={{
+                  projectId,
+                  skillId,
+                  dialogId,
+                  lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
+                  luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
                 }}
                 onSelect={(link) => {
                   navigateTo(buildURL(pageMode, link));
