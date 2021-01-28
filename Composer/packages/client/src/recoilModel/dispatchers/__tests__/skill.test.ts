@@ -17,7 +17,7 @@ import {
   locationState,
   projectMetaDataState,
   botDisplayNameState,
-} from '../../atoms/botState';
+} from '../../atoms';
 import { dispatcherState } from '../../DispatcherWrapper';
 import { botEndpointsState, botProjectIdsState, currentProjectIdState, displaySkillManifestState } from '../../atoms';
 import { Dispatcher } from '..';
@@ -64,7 +64,7 @@ describe('skill dispatcher', () => {
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
     const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState(projectId));
     const settings = useRecoilValue(settingsState(projectId));
-    const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
+    const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
     const displaySkillManifest = useRecoilValue(displaySkillManifestState);
     const skills = useRecoilValue(skillsStateSelector);
     const [botEndpoints, setBotEndpoints] = useRecoilState(botEndpointsState);
@@ -109,7 +109,7 @@ describe('skill dispatcher', () => {
         },
         { recoilState: onAddSkillDialogCompleteState(projectId), initialValue: { func: undefined } },
         { recoilState: settingsState(projectId), initialValue: {} },
-        { recoilState: showAddSkillDialogModalState(projectId), initialValue: false },
+        { recoilState: showAddSkillDialogModalState, initialValue: false },
         { recoilState: displaySkillManifestState, initialValue: undefined },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: botProjectIdsState, initialValue: [projectId, ...skillIds] },

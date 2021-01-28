@@ -3,10 +3,10 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
-import { getEditorAPI } from '@bfc/shared';
+import { getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
@@ -26,12 +26,21 @@ type CommandBarProps = { dialogId?: string; projectId: string };
 
 const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
-  const { undo, redo } = useRecoilValue(undoFunctionState(projectId));
+  const { undo, redo, clearUndo } = useRecoilValue(undoFunctionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
 
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
+
+  useEffect(() => {
+    registerEditorAPI('Editing', {
+      Undo: () => undo(),
+      Redo: () => redo(),
+    });
+    //leave design page should clear the history
+    return clearUndo;
+  }, []);
 
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
@@ -47,117 +56,120 @@ const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
 
   const EditorAPI = getEditorAPI();
 
-  const toolbarItems: IToolbarItem[] = [
-    {
-      type: 'element',
-      element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
-      align: 'right',
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Edit'),
-      align: 'left',
-      dataTestid: 'EditFlyout',
-      buttonProps: {
-        iconProps: { iconName: 'Edit' },
+  const toolbarItems: IToolbarItem[] = useMemo(
+    () => [
+      {
+        type: 'element',
+        element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
+        align: 'right',
       },
-      menuProps: {
-        onMenuOpened: () => {
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'edit' });
+      {
+        type: 'dropdown',
+        text: formatMessage('Edit'),
+        align: 'left',
+        dataTestid: 'EditFlyout',
+        buttonProps: {
+          iconProps: { iconName: 'Edit' },
         },
-        items: [
-          {
-            key: 'edit.undo',
-            text: formatMessage('Undo'),
-            disabled: !canUndo,
-            onClick: () => {
-              undo();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'undo' });
-            },
+        menuProps: {
+          onMenuOpened: () => {
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'edit' });
           },
-          {
-            key: 'edit.redo',
-            text: formatMessage('Redo'),
-            disabled: !canRedo,
-            onClick: () => {
-              redo();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'redo' });
+          items: [
+            {
+              key: 'edit.undo',
+              text: formatMessage('Undo'),
+              disabled: !canUndo,
+              onClick: () => {
+                undo();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'undo' });
+              },
             },
-          },
-          {
-            key: 'edit.cut',
-            text: formatMessage('Cut'),
-            disabled: !actionSelected,
-            onClick: () => {
-              EditorAPI.Actions.CutSelection();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'cut' });
+            {
+              key: 'edit.redo',
+              text: formatMessage('Redo'),
+              disabled: !canRedo,
+              onClick: () => {
+                redo();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'redo' });
+              },
             },
-          },
-          {
-            key: 'edit.copy',
-            text: formatMessage('Copy'),
-            disabled: !actionSelected,
-            onClick: () => {
-              EditorAPI.Actions.CopySelection();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'copy' });
+            {
+              key: 'edit.cut',
+              text: formatMessage('Cut'),
+              disabled: !actionSelected,
+              onClick: () => {
+                EditorAPI.Actions.CutSelection();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'cut' });
+              },
             },
-          },
-          {
-            key: 'edit.move',
-            text: formatMessage('Move'),
-            disabled: !actionSelected,
-            onClick: () => {
-              EditorAPI.Actions.MoveSelection();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'move' });
+            {
+              key: 'edit.copy',
+              text: formatMessage('Copy'),
+              disabled: !actionSelected,
+              onClick: () => {
+                EditorAPI.Actions.CopySelection();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'copy' });
+              },
             },
-          },
-          {
-            key: 'edit.delete',
-            text: formatMessage('Delete'),
-            disabled: !actionSelected,
-            onClick: () => {
-              EditorAPI.Actions.DeleteSelection();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'delete' });
+            {
+              key: 'edit.move',
+              text: formatMessage('Move'),
+              disabled: !actionSelected,
+              onClick: () => {
+                EditorAPI.Actions.MoveSelection();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'move' });
+              },
             },
-          },
-        ],
-      },
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Disable'),
-      align: 'left',
-      disabled: !actionSelected,
-      buttonProps: {
-        iconProps: { iconName: 'RemoveOccurrence' },
-      },
-      menuProps: {
-        onMenuOpened: () => {
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'disableDropdown' });
+            {
+              key: 'edit.delete',
+              text: formatMessage('Delete'),
+              disabled: !actionSelected,
+              onClick: () => {
+                EditorAPI.Actions.DeleteSelection();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'delete' });
+              },
+            },
+          ],
         },
-        items: [
-          {
-            key: 'disable',
-            text: formatMessage('Disable'),
-            disabled: !showDisableBtn,
-            onClick: () => {
-              EditorAPI.Actions.DisableSelection();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'disable' });
-            },
-          },
-          {
-            key: 'enable',
-            text: formatMessage('Enable'),
-            disabled: !showEnableBtn,
-            onClick: () => {
-              EditorAPI.Actions.EnableSelection();
-              TelemetryClient.track('ToolbarButtonClicked', { name: 'enable' });
-            },
-          },
-        ],
       },
-    },
-  ];
+      {
+        type: 'dropdown',
+        text: formatMessage('Disable'),
+        align: 'left',
+        disabled: !actionSelected,
+        buttonProps: {
+          iconProps: { iconName: 'RemoveOccurrence' },
+        },
+        menuProps: {
+          onMenuOpened: () => {
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'disableDropdown' });
+          },
+          items: [
+            {
+              key: 'disable',
+              text: formatMessage('Disable'),
+              disabled: !showDisableBtn,
+              onClick: () => {
+                EditorAPI.Actions.DisableSelection();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'disable' });
+              },
+            },
+            {
+              key: 'enable',
+              text: formatMessage('Enable'),
+              disabled: !showEnableBtn,
+              onClick: () => {
+                EditorAPI.Actions.EnableSelection();
+                TelemetryClient.track('ToolbarButtonClicked', { name: 'enable' });
+              },
+            },
+          ],
+        },
+      },
+    ],
+    [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo]
+  );
 
   const addNewBtnRef = useCallback((addNew) => {
     onboardingAddCoachMarkRef({ addNew });

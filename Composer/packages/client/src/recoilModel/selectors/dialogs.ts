@@ -26,13 +26,14 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   },
 });
 
-export const currentDialogState = selectorFamily<DialogInfo, { projectId: string; dialogId?: string }>({
+export const currentDialogState = selectorFamily<DialogInfo | undefined, { projectId: string; dialogId?: string }>({
   key: 'currentDialog',
   get: ({ projectId, dialogId }) => ({ get }) => {
-    if (dialogId) {
+    const dialogIds = get(dialogIdsState(projectId));
+    if (dialogId && dialogIds.includes(dialogId)) {
       return get(dialogState({ projectId, dialogId }));
     }
 
-    return get(dialogsSelectorFamily(projectId))[0];
+    return get(dialogsSelectorFamily(projectId))?.[0];
   },
 });
