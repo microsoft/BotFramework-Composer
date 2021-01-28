@@ -27,6 +27,7 @@ const Listener: React.FC<RouteComponentProps<{ dialogId: string; projectId: stri
 
   // migration: add id to dialog when dialog doesn't have id
   useEffect(() => {
+    if (!currentDialog) return;
     const { id, content } = currentDialog;
     const dialogContent = content ? Object.assign({}, content) : null;
 

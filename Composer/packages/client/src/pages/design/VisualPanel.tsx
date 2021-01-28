@@ -41,7 +41,7 @@ const VisualPanel: React.FC<VisualPanelProps> = ({ projectId, dialogId }) => {
 
   const { updateDialog, navTo } = useRecoilValue(dispatcherState);
 
-  const selected = decodeDesignerPathToArrayPath(currentDialog.content, designPageLocation.selected || '');
+  const selected = decodeDesignerPathToArrayPath(currentDialog?.content, designPageLocation.selected || '');
 
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
@@ -75,7 +75,7 @@ const VisualPanel: React.FC<VisualPanelProps> = ({ projectId, dialogId }) => {
         visible={!isRemoteSkill}
         onShowCodeClick={handleShowCodeClick}
       />
-      {dialogJsonVisible ? (
+      {dialogJsonVisible && currentDialog ? (
         <JsonEditor
           key={'dialogjson'}
           editorSettings={userSettings.codeEditor}
