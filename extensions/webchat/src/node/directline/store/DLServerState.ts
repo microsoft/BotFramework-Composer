@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import logger from '../../logger';
+// import logger from '../../logger';
 import { BotEndpoint } from '../utils/botEndpoint';
 
 import { Attachments } from './entities/Attachments';
@@ -9,7 +9,7 @@ import { ConversationSet } from './entities/ConversationSet';
 import { EndpointSet } from './entities/EndpointSet';
 import { LoggerLevel, LogItem } from './types';
 
-export const mockDLLog = logger.extend('mock-directline');
+// export const mockDLLog = logger.extend('mock-directline');
 
 export type DLServerState = {
   conversations: ConversationSet;
