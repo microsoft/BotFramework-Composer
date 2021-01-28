@@ -18,10 +18,10 @@ function getWebpackConfigs() {
         devtoolModuleFilenameTemplate: isDevelopment ? '[absolute-resource-path]' : undefined,
       },
       module: {
-        rules: [{ test: /\.tsx?$/, use: 'ts-loader', exclude: [/node_modules/] }],
+        rules: [{ test: /\.ts$/, use: 'ts-loader', exclude: [/node_modules/] }],
       },
       resolve: {
-        extensions: ['.js', '.ts', '.tsx'],
+        extensions: ['.js', '.ts'],
       },
     },
   ];

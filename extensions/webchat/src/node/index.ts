@@ -1,4 +1,4 @@
-import { IExtensionRegistration } from '@botframework-composer/types';
+import { IExtensionRegistration } from '@botframework-composer/types'
 
 function initialize(registration: IExtensionRegistration) {
   registration.addWebRoute('get', '/webchat', (req, res) => {
