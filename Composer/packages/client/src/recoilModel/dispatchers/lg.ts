@@ -15,8 +15,8 @@ import LgWorker from './../parsers/lgWorker';
 import LgDiagnosticWorker from './../parsers/lgDiagnosticWorker';
 import { lgFileIdsState, lgFileState, localeState, settingsState } from './../atoms/botState';
 
-const templateIsNotEmpty = ({ name, body }) => {
-  return !!name && !!body;
+const templateIsNotEmpty = ({ name }) => {
+  return !!name;
 };
 
 // fill other locale lgFile new added template with '- '
@@ -230,7 +230,7 @@ export const lgDispatcher = () => {
 
         updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
           // compare to drop expired content already setted above.
-          return current?.content === changed?.content;
+          return current.id === id ? current?.content === changed?.content : true;
         });
 
         // if changes happen on common.lg, async re-parse all.
