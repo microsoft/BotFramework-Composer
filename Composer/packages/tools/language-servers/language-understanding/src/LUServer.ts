@@ -21,7 +21,7 @@ import { parser } from '@microsoft/bf-lu/lib/parser';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
-import { LUImportResolverDelegate, LUOption, LUDocument, generageDiagnostic, convertDiagnostics } from './utils';
+import { LUImportResolverDelegate, LUOption, LUDocument, generateDiagnostic, convertDiagnostics } from './utils';
 
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
@@ -118,7 +118,7 @@ export class LUServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map((errorMsg) => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
     );
   }
 
@@ -138,7 +138,7 @@ export class LUServer {
         const plainLuFile = resolver(source, id, projectId);
         if (!plainLuFile) {
           this.sendDiagnostics(document, [
-            generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
+            generateDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
           ]);
         }
         const luFile = luIndexer.parse(plainLuFile.content, plainLuFile.id, luFeatures);
