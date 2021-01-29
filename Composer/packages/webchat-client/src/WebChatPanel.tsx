@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as React from 'react';
+import React, { useMemo, useEffect } from 'react';
 import ReactWebChat from 'botframework-webchat';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 
 import { ConversationService } from './ConversationService';

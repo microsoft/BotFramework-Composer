@@ -8,8 +8,8 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "node --max_old_space_size=4096 --max-http-header-size=16000 scripts/start.js",
-    "build": "node --max_old_space_size=4096 scripts/build.js",
+    "start": "node --max_old_space_size=10240 --max-http-header-size=16000 scripts/start.js",
+    "build": "node --max_old_space_size=10240 scripts/build.js",
     "clean": "rimraf build",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
@@ -35,6 +35,7 @@
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/ui-plugin-select-skill-dialog": "*",
+    "@bfc/webchat-client": "*",
     "@botframework-composer/types": "*",
     "@emotion/core": "^10.0.27",
     "@geoffcox/react-splitter": "^2.0.3",

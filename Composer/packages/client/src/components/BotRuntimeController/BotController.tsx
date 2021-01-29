@@ -13,6 +13,7 @@ import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { useBoolean } from '@uifabric/react-hooks';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
+import { WebChatPanel } from '@bfc/webchat-client';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
@@ -29,7 +30,6 @@ import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
 import { BotRuntimeStatus } from './BotRuntimeStatus';
-import { WebChatPanel } from './WebChatPanel';
 
 const iconSectionContainer = css`
   display: flex;
