@@ -231,8 +231,6 @@ export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;
 
-export type Adapter = { [key: string]: string | boolean | number };
-
 export type SkillManifestFile = {
   content: any;
   id: string;
@@ -254,7 +252,6 @@ export type BotAssets = {
   jsonSchemaFiles: JsonSchemaFile[];
   recognizers: RecognizerFile[];
   crossTrainConfig: CrosstrainConfig;
-  adapters: Adapter[];
 };
 
 export type BotInfo = {

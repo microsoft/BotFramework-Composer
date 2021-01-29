@@ -17,7 +17,6 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
-  Adapter,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
@@ -188,13 +187,6 @@ export const actionsSeedState = atomFamily<any, string>({
 
 export const skillManifestsState = atomFamily<SkillManifestFile[], string>({
   key: getFullyQualifiedKey('skillManifests'),
-  default: (id) => {
-    return [];
-  },
-});
-
-export const adaptersState = atomFamily<Adapter[], string>({
-  key: getFullyQualifiedKey('adapters'),
   default: (id) => {
     return [];
   },

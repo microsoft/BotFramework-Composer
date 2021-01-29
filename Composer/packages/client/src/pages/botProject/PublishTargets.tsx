@@ -8,8 +8,8 @@ import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
@@ -28,15 +28,6 @@ const publishTargetsHeader = css`
   display: flex;
   flex-direction: row;
   height: 42px;
-`;
-
-const publishTargetsHeaderText = css`
-  width: 300px;
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  border-bottom: 1px solid ${NeutralColors.gray30};
-  padding-top: 10px;
-  padding-left: 10px;
 `;
 
 const addPublishProfile = {
@@ -58,15 +49,6 @@ const editPublishProfile = {
     paddingBottom: 5,
   },
 };
-
-const publishTargetsEditButton = css`
-  width: 200px;
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${NeutralColors.gray30};
-  padding-top: 3px;
-  padding-left: 10px;
-`;
 
 // -------------------- PublishTargets -------------------- //
 

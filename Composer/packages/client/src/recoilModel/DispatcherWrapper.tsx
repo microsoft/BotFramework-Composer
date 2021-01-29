@@ -24,7 +24,6 @@ import {
   botProjectFileState,
   jsonSchemaFilesState,
   crossTrainConfigState,
-  adaptersState,
 } from './atoms';
 import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from './selectors';
 import { Recognizer } from './Recognizers';
@@ -44,7 +43,6 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
   const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
   const crossTrainConfig = await snapshot.getPromise(crossTrainConfigState(projectId));
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const adapters = await snapshot.getPromise(adaptersState(projectId));
 
   return {
     projectId,
@@ -60,7 +58,6 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     jsonSchemaFiles,
     recognizers,
     crossTrainConfig,
-    adapters,
   };
 };
 

@@ -31,7 +31,6 @@ export enum FileExtensions {
   BotProject = '.botproj',
   Recognizer = '',
   CrossTrainConfig = 'cross-train.config.json',
-  Adapter = '.adapter',
 }
 
 export type FileErrorHandler = (error) => void;
