@@ -35,7 +35,6 @@ import { exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { deleteDialogContent } from './styles';
-import Modals from './Modals';
 
 function onRenderContent(subTitle, style) {
   return (
