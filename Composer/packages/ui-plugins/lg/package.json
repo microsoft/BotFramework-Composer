@@ -24,16 +24,16 @@
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "format-message": "^6.2.3",
+    "office-ui-fabric-react": "^7.121.11"
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
     "@botframework-composer/test-utils": "*",
     "@types/react": "16.9.23",
-    "@types/react-dom": "16.9.5",
-    "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "@types/react-dom": "16.9.5"
   },
   "dependencies": {
     "@bfc/shared": "*",
