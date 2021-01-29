@@ -71,7 +71,7 @@ export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSever
   return severityMap[severity];
 }
 
-export function generageDiagnostic(message: string, severity: DiagnosticSeverity, document: TextDocument): Diagnostic {
+export function generateDiagnostic(message: string, severity: DiagnosticSeverity, document: TextDocument): Diagnostic {
   return {
     severity,
     range: Range.create(Position.create(0, 0), Position.create(0, 0)),

@@ -29,7 +29,7 @@ import {
   LUImportResolverDelegate,
   LUOption,
   LUDocument,
-  generageDiagnostic,
+  generateDiagnostic,
   convertDiagnostics,
   getCurrLine,
 } from './utils';
@@ -172,7 +172,7 @@ export class LUServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map((errorMsg) => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
     );
   }
 
@@ -192,7 +192,7 @@ export class LUServer {
         const plainLuFile = resolver(source, id, projectId);
         if (!plainLuFile) {
           this.sendDiagnostics(document, [
-            generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
+            generateDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
           ]);
         }
         const luFile = luIndexer.parse(plainLuFile.content, plainLuFile.id, luFeatures);

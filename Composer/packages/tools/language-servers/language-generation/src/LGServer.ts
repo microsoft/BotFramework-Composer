@@ -29,7 +29,7 @@ import {
   getRangeAtPosition,
   LGDocument,
   convertDiagnostics,
-  generageDiagnostic,
+  generateDiagnostic,
   LGOption,
   LGCursorState,
   cardTypes,
@@ -39,7 +39,8 @@ import {
 } from './utils';
 
 // define init methods call from client
-const InitializeDocumentsMethodName = 'initializeDocuments';
+const fetchPropertiesMethodName = 'fetchProperties';
+const initializeDocumentsMethodName = 'initializeDocuments';
 
 const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
 
@@ -94,7 +95,7 @@ export class LGServer {
     );
 
     this.connection.onRequest((method, params) => {
-      if (InitializeDocumentsMethodName === method) {
+      if (initializeDocumentsMethodName === method) {
         const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
         const textDocument = this.documents.get(uri);
         if (textDocument) {
@@ -102,6 +103,9 @@ export class LGServer {
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
         }
+      } else if (fetchPropertiesMethodName === method) {
+        const { projectId }: { projectId: string } = params;
+        this.connection.sendNotification('properties', { result: this.memoryResolver?.(projectId) });
       }
     });
   }
@@ -209,7 +213,7 @@ export class LGServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map((errorMsg) => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
     );
   }
 
@@ -307,9 +311,9 @@ export class LGServer {
 
   private removeParamFormat(params: string): string {
     const resultArr = params.split(',').map((element) => {
-      return element.trim().split(':')[0];
+      return element.trim().split(/\??:/)[0];
     });
-    return resultArr.join(' ,');
+    return resultArr.join(', ');
   }
 
   private matchLineState(
@@ -806,7 +810,7 @@ export class LGServer {
       const payload = await this._lgParser.parse(fileId || uri, text, projectId ? this.getLgResources(projectId) : []);
       lgDiagnostics = payload.diagnostics;
     } catch (error) {
-      lgDiagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));
+      lgDiagnostics.push(generateDiagnostic(error.message, DiagnosticSeverity.Error, document));
     }
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);
