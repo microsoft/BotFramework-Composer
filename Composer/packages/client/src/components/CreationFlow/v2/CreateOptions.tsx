@@ -29,6 +29,7 @@ import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, QnABotTemplateI
 import { selectedTemplateReadMeState } from '../../../recoilModel';
 
 import { TemplateDetailView } from './TemplateDetailView';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -145,6 +146,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     if (props.location && props.location.search) {
       routeToTemplate += props.location.search;
     }
+
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
     onNext(routeToTemplate);
   };

@@ -23,6 +23,7 @@ import Home from '../../../pages/home/Home';
 import { useProjectIdCache } from '../../../utils/hooks';
 import { ImportModal } from '../../ImportModal/ImportModal';
 import { OpenProject } from '../OpenProject';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { CreateOptionsV2 } from './CreateOptions';
 import DefineConversationV2 from './DefineConversation';
@@ -100,7 +101,9 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openProject(botFolder);
+    await openProject(botFolder, 'default', true, (projectId) => {
+      TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
+    });
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
@@ -122,6 +125,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       alias: formData?.pvaData?.alias,
       preserveRoot: formData?.pvaData?.preserveRoot,
     };
+    TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
 
     createNewBotV2(newBotData);
   };
