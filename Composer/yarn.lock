@@ -3224,10 +3224,10 @@
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
 
-"@microsoft/bf-lu@^4.12.0-dev.20201209.a2ab9dd", "@microsoft/bf-lu@next":
-  version "4.12.0-dev.20201209.a2ab9dd"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20201209.a2ab9dd.tgz#edf04d5f7eab1bad05c759e9e8fde8acb7e3dd5e"
-  integrity sha512-w7gr7w4yOfXpooFNGEcKC+WC6WYxRK5SLQBbZzL2lWPwp+3P+d7Yih/HgnZPpFIg//IK6v/b/JfySYZUe0+fBA==
+"@microsoft/bf-lu@^4.12.0-dev.20210129.82760de", "@microsoft/bf-lu@next":
+  version "4.12.0-dev.20210129.82760de"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20210129.82760de.tgz#f3b4c932b1fb6b3e69e6d0cba3356fc3ba61ade8"
+  integrity sha512-nlzKjMAvr/bgjqVNXh/v4ns7aP4L5d6UT51keXa7k6+XGtHcQQkwXxwgWvo8CQXjZE5Aju8DTbxbIBY0bXcq6A==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"

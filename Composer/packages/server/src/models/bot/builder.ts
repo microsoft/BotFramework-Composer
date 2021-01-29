@@ -444,6 +444,7 @@ export class Builder {
       keptVersionCount: 10,
       isStaging: false,
       region: config.region,
+      directVersionPublish: true,
     });
 
     await this.luBuilder.writeDialogAssets(buildResult, {
