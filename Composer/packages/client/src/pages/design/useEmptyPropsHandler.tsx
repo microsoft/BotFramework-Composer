@@ -55,7 +55,7 @@ export const useEmptyPropsHandler = (
     // getDialogData returns whatever's at the end of the path, which could be a trigger or an action
     const possibleAction = getDialogData({ [id]: content }, id, focusPath);
 
-    if (typeof possibleAction === 'undefined') {
+    if (typeof possibleAction === 'undefined' || dialogId !== currentDialog.id) {
       /**
        * It's improper to fallback to `dialogId` directly:
        *   - If 'action' does not exist at `focused` path, fallback to trigger path;
@@ -78,7 +78,7 @@ export const useEmptyPropsHandler = (
     // @ts-ignore
     globalHistory._onTransitionComplete();
     /* eslint-enable */
-  }, [location, activeBot, currentDialog]);
+  }, [location, activeBot, currentDialog, dialogId]);
 };
 
 export default useEmptyPropsHandler;
