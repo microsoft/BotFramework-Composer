@@ -144,7 +144,12 @@ export class LUServer {
     const sections = luResource.Sections;
     for (const section in luResource.Sections) {
       const start = sections[section].Range.Start.Line - 1;
-      const end = sections[section].Range.End.Line - 1;
+      let end = sections[section].Range.End.Line - 1;
+      const sectionLastLine = getCurrLine(document, lineCount, end);
+      if (sectionLastLine?.startsWith('>>')) {
+        end = end - 1;
+      }
+
       items.push(FoldingRange.create(start, end));
     }
 
