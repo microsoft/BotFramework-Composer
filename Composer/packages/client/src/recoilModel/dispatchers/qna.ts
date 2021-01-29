@@ -92,7 +92,7 @@ const updateQnAFileState = async (
      */
     updateQnAFiles(callbackHelpers, projectId, { updates: [updatedQnAFile] }, (current, changed) => {
       // compare to drop expired content already setted above.
-      return current?.content === changed?.content;
+      return current.id === id ? current?.content === changed?.content : true;
     });
   } catch (error) {
     setError(callbackHelpers, error);
