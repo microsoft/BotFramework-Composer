@@ -265,7 +265,6 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
         onErrorClick={handleErrorClick}
         onSelect={handleSelect}
       />
-      <Modals projectId={projectId} />
     </React.Fragment>
   );
 };

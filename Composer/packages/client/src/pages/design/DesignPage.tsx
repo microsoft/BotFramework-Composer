@@ -15,14 +15,15 @@ import SideBar from './SideBar';
 import CommandBar from './CommandBar';
 import VisualPanel from './VisualPanel';
 import PropertyPanel from './PropertyPanel';
-import Listener from './Listener';
+import useEmptyPropsHandler from './useEmptyPropsHandler';
 import { contentWrapper, editorContainer, editorWrapper, pageRoot } from './styles';
+import Modals from './Modals';
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
 ) => {
-  const { dialogId, projectId = '', skillId = null } = props;
-
+  const { dialogId, projectId = '', skillId, location } = props;
+  useEmptyPropsHandler(projectId, location, skillId, dialogId);
   const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
@@ -33,7 +34,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   return (
     <div css={pageRoot}>
-      <Listener {...props} />
       <Split
         resetOnDoubleClick
         initialPrimarySize="20%"
@@ -62,6 +62,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </Conversation>
         </div>
       </Split>
+      <Modals projectId={activeBot} />
     </div>
   );
 };
