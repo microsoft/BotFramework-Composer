@@ -18,7 +18,6 @@ context('Luis Deploy', () => {
     cy.findAllByTestId('rootLUISRegion').click();
     cy.findByText('westus').click();
     cy.visitPage('User Input');
-    cy.url().should('contain', 'language-understanding/all');
     cy.visitPage('Design');
     cy.route({
       method: 'POST',
