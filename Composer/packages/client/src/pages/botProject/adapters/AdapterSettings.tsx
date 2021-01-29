@@ -47,9 +47,9 @@ const AdapterSettings = (props: Props) => {
     setConnected([...connected, name]);
   }
 
-  function removeConnection(name: string) {
-    setConnected(connected.filter((conn) => conn !== name));
-  }
+  // function removeConnection(name: string) {
+  //   setConnected(connected.filter((conn) => conn !== name));
+  // }
 
   function isConnected(name: string) {
     return connected.includes(name);

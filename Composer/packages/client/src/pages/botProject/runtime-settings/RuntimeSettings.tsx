@@ -26,7 +26,7 @@ import {
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { title, subtitle } from '../styles';
+import { subtitle } from '../styles';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';

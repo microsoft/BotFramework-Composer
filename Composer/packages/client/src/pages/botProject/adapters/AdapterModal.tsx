@@ -32,11 +32,15 @@ const AdapterModal = (props: Props) => {
       onDismiss={onClose}
     >
       <ObjectField
+        definitions={{}}
+        depth={0}
+        id={''}
+        name={''}
         schema={schema}
         uiOptions={uiSchema}
         value={value}
-        onChange={(update: { [key: string]: any }) => {
-          setValue({ ...value, ...update });
+        onChange={(update?: { [key: string]: any }) => {
+          if (update != null) setValue({ ...value, ...update });
         }}
       />
       <DialogFooter>
