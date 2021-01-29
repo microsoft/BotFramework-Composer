@@ -10,7 +10,11 @@ import { ConversationService } from './ConversationService';
 
 const conversationService = ConversationService();
 
-export const WebChatPanel = (props: { botUrl: string }) => {
+export interface WebChatPanelProps {
+  botUrl: string;
+}
+
+export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl }) => {
   const [directlineObj, setDirectline] = React.useState<any>(undefined);
   const user = useMemo(() => {
     return conversationService.getUser();
@@ -38,7 +42,7 @@ export const WebChatPanel = (props: { botUrl: string }) => {
 
   async function fetchDLEssentials() {
     const resp: any = await conversationService.startConversation({
-      botUrl: props.botUrl,
+      botUrl,
       channelServiceType: 'public',
       members: [user],
       mode: 'conversation',
