@@ -271,7 +271,8 @@ describe('buildFiles', () => {
       // ignore
     }
   });
-  it('should build lu & qna file successfully', async () => {
+
+  xit('should build lu & qna file successfully', async () => {
     proj.init();
     const luisConfig = {
       authoringEndpoint: '',
@@ -308,7 +309,7 @@ describe('buildFiles', () => {
     } catch (err) {
       // ignore
     }
-  }, 30000);
+  });
 });
 
 describe('dialog operations', () => {
