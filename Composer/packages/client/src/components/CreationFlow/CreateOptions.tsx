@@ -172,7 +172,6 @@ export function CreateOptions(props: CreateOptionsProps) {
     if (option === optionKeys.createFromQnA) {
       routeToTemplate = QnABotTemplateId;
     }
-
     if (props.location?.search) {
       routeToTemplate += props.location.search;
     }
