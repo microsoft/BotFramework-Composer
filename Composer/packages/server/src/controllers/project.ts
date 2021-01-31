@@ -50,7 +50,7 @@ async function createProject(req: Request, res: Response) {
 
     const id = await BotProjectService.openProject(newProjRef, user);
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
-    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
+    BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
