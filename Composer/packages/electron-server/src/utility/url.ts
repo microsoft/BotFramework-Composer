@@ -17,7 +17,13 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
       }
 
       case 'create': {
-        return `projects/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
+        const source = convertedUrl.searchParams.get('source');
+        const payload = convertedUrl.searchParams.get('payload');
+        if (!source || !payload) {
+          return `projects/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
+        } else {
+          return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+        }
       }
 
       // process the import and load the URL at the server
