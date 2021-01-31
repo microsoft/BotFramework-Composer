@@ -118,7 +118,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       preserveRoot: formData.preserveRoot,
       profile: formData.profile,
     };
-    console.log(newBotData);
     if (templateId === 'conversationalcore') {
       createNewBotV2(newBotData);
     } else {
@@ -132,7 +131,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const handleSubmit = async (formData, templateId: string) => {
     handleDismiss();
-    console.log(formData);
     switch (creationFlowStatus) {
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
