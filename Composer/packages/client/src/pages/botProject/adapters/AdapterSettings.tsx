@@ -12,10 +12,11 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { SharedColors } from '@uifabric/fluent-theme';
 
-import { schemasState } from '../../../recoilModel/atoms';
+import { schemasState, settingsState } from '../../../recoilModel/atoms';
 import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
 import { title, subtitle, sectionHeader, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 import { JSONSchema7 } from '../../../../../types';
+import dispatcher from '../../../recoilModel/dispatchers';
 
 import AdapterModal from './AdapterModal';
 
@@ -25,8 +26,11 @@ type Props = {
 
 const AdapterSettings = (props: Props) => {
   const { projectId } = props;
+  const { setSettings } = dispatcher();
 
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
+  const currentSettings = useRecoilValue(settingsState(projectId));
+  const adapters: string[] = currentSettings.adapters ?? [];
 
   const { definitions: schemaDefinitions } = schemas?.default ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
@@ -76,21 +80,29 @@ const AdapterSettings = (props: Props) => {
         <div css={tableColumnHeader(columnWidths[2])}>{formatMessage('Enabled')}</div>
       </div>
 
-      {schemas.map((sch) => {
+      {schemas.map((schema) => {
+        const { key, title } = schema;
         return (
-          <div key={sch.key} css={tableRow}>
-            <div css={tableRowItem(columnWidths[0])}>{sch.title}</div>
+          <div key={key} css={tableRow}>
+            <div css={tableRowItem(columnWidths[0])}>{title}</div>
             <div css={tableRowItem(columnWidths[1])}>
-              {isConnected(sch.key) ? (
+              {isConnected(key) ? (
                 <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10 } }} />
               ) : (
-                <Link onClick={() => openModal(sch.key, () => addConnection(sch.key))}>
-                  {formatMessage('Configure')}
-                </Link>
+                <Link onClick={() => openModal(key, () => addConnection(key))}>{formatMessage('Configure')}</Link>
               )}
             </div>
             <div css={tableRowItem(columnWidths[2])}>
-              <Toggle />
+              <Toggle
+                checked={adapters.includes(key)}
+                onChange={(ev, val?: boolean) => {
+                  if (val) {
+                    setSettings(projectId, { ...currentSettings, adapters: [...adapters, key] });
+                  } else {
+                    setSettings(projectId, { ...currentSettings, adapters: adapters.filter((a) => a !== key) });
+                  }
+                }}
+              />
             </div>
           </div>
         );
@@ -98,10 +110,10 @@ const AdapterSettings = (props: Props) => {
     </div>
   );
 
-  const adapterSchemas = Object.entries(schemaDefinitions)
+  const adapterSchemas = Object.entries(schemaDefinitions as { [key: string]: JSONSchema7 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([key, value]: [string, JSONSchema7]) => value?.$role != null && /IAdapter/.test(value.$role))
-    .map(([key, value]: [string, JSONSchema7]) => ({ ...value, key }));
+    .filter(([key, value]) => value?.$role != null && /IAdapter/.test(value.$role))
+    .map(([key, value]) => ({ ...value, key }));
 
   return (
     <Fragment>
@@ -112,8 +124,9 @@ const AdapterSettings = (props: Props) => {
       </CollapsableWrapper>
       {currentModalProps != null && schemaDefinitions[currentModalProps.key] != null && (
         <AdapterModal
-          key={currentModalProps.key}
           isOpen
+          adapterKey={currentModalProps.key}
+          projectId={projectId}
           schema={schemaDefinitions[currentModalProps.key]}
           uiSchema={uiSchemas?.[currentModalProps.key]?.form}
           onClose={() => {

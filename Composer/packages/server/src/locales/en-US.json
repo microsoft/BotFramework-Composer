@@ -110,6 +110,9 @@
   "activity_received_2f20fa9d": {
     "message": "Activity received"
   },
+  "adapters_fd4173b1": {
+    "message": "Adapters"
+  },
   "adaptive_dialog_61a05dde": {
     "message": "Adaptive dialog"
   },
@@ -301,6 +304,9 @@
   },
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
     "message": "Automatically generate dialogs that collect information from a user to manage conversations."
+  },
+  "azure_bot_service_adapters_ea8540d2": {
+    "message": "Azure Bot Service adapters"
   },
   "back_2900f52a": {
     "message": "Back"
@@ -548,8 +554,17 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
+  "configure_adapter_2f621249": {
+    "message": "Configure adapter"
+  },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Configure Composer to start your bot using runtime code you can customize and control."
+  },
+  "configure_ecb97e30": {
+    "message": "Configure"
+  },
+  "configured_8d0f4dc8": {
+    "message": "Configured"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
@@ -580,6 +595,9 @@
   },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
+  },
+  "connect_your_bot_to_other_messaging_services_c7f6aed6": {
+    "message": "Connect your bot to other messaging services."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -1178,6 +1196,9 @@
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "External resources will not be changed."
   },
+  "external_service_adapters_5218e6a3": {
+    "message": "External service adapters"
+  },
   "external_services_da7820ce": {
     "message": "External services"
   },
@@ -1594,6 +1615,9 @@
   },
   "location_is_location_8c17b5de": {
     "message": "location is { location }"
+  },
+  "log_output_64a4dbec": {
+    "message": "Log output"
   },
   "log_to_console_4fc23e34": {
     "message": "Log to console"
