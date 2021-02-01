@@ -70,6 +70,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
   // text selection effect when pressing Shift + Click.
   return (
     <div
+      id={nodeId}
       ref={actionRef}
       css={css`
         user-select: none;
