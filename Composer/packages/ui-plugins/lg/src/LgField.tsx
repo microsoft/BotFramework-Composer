@@ -2,15 +2,22 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React, { useCallback } from 'react';
-import { LgEditor } from '@bfc/code-editor';
-import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { FieldLabel, useFormData } from '@bfc/adaptive-form';
-import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
+import { LgEditor, LgEditorMode } from '@bfc/code-editor';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
+import { CodeEditorSettings, LgMetaData, LgTemplateRef, LgType } from '@bfc/shared';
+import { jsx } from '@emotion/core';
+import formatMessage from 'format-message';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import React, { useCallback } from 'react';
 
 import { locateLgTemplatePosition } from './locateLgTemplatePosition';
+
+const linkStyles = {
+  root: { fontSize: 12, ':hover': { textDecoration: 'none' }, ':active': { textDecoration: 'none' } },
+};
 
 const lspServerPath = '/lg-language-server';
 
@@ -39,6 +46,8 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
   const formData = useFormData();
 
+  const [editorMode, setEditorMode] = React.useState<LgEditorMode>('codeEditor');
+
   let lgType = name;
   const $kind = formData?.$kind;
   if ($kind) {
@@ -53,6 +62,14 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   const fallbackLgFileId = `${currentDialog.lgFile}.${locale}`;
   const lgFile = relatedLgFile ?? lgFiles.find((f) => f.id === fallbackLgFileId);
   const lgFileId = lgFile?.id ?? fallbackLgFileId;
+
+  const availableLgTemplates = React.useMemo(
+    () =>
+      (lgFiles.find((lgFile) => lgFile.id === lgFileId)?.allTemplates || [])
+        .filter((t) => t.name !== lgTemplateRef?.name)
+        .sort(),
+    [lgFileId, lgFiles]
+  );
 
   const updateLgTemplate = useCallback(
     async (body: string) => {
@@ -98,9 +115,33 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     shellApi.updateUserSettings({ codeEditor: settings });
   };
 
+  const modeChange = React.useCallback(() => {
+    setEditorMode(editorMode === 'codeEditor' ? 'responseEditor' : 'codeEditor');
+  }, [editorMode]);
+
+  const navigateToLgPage = React.useCallback(
+    (lgFileId: string) => {
+      shellApi.navigateTo(`/bot/${projectId}/language-generation/${lgFileId}`);
+    },
+    [shellApi, projectId]
+  );
+
   return (
     <React.Fragment>
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
+      <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
+        <FieldLabel
+          description={description}
+          helpLink={uiOptions?.helpLink}
+          id={id}
+          label={label}
+          required={required}
+        />
+        <Link as="button" styles={linkStyles} onClick={modeChange}>
+          {editorMode === 'codeEditor'
+            ? formatMessage('switch to response editor')
+            : formatMessage('switch to code editor')}
+        </Link>
+      </Stack>
       <LgEditor
         hidePlaceholder
         diagnostics={diagnostics}
@@ -110,9 +151,12 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
           path: lspServerPath,
         }}
         lgOption={lgOption}
+        lgTemplates={availableLgTemplates}
+        mode={editorMode}
         value={template.body}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
+        onNavigateToLgPage={navigateToLgPage}
       />
     </React.Fragment>
   );
