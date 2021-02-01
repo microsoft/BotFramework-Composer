@@ -42,6 +42,14 @@ const BreadcrumbKeyPrefix = {
   Action: 'A',
 };
 
+const buildKey = (prefix: string, name: string | number): string => {
+  return `${prefix}-${name}`;
+};
+
+const parseKey = (key: string): { prefix: string; name: string } => {
+  return { prefix: key.charAt(0), name: key.substr(2) };
+};
+
 const parseTriggerId = (triggerId: string | undefined): number | undefined => {
   if (triggerId == null) return undefined;
   const indexString = triggerId.match(/\d+/)?.[0];
@@ -86,10 +94,10 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   const focusPath = getFocusPath(selected, focused);
   const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
 
-  const array: Array<BreadcrumbItem> = [];
+  const initialBreadcrumbArray: Array<BreadcrumbItem> = [];
 
-  array.push({
-    key: `${BreadcrumbKeyPrefix.Dialog}-${dialogId}`,
+  initialBreadcrumbArray.push({
+    key: buildKey(BreadcrumbKeyPrefix.Dialog, dialogId),
     label: dialogMap[dialogId]?.$designer?.name ?? dialogMap[dialogId]?.$designer?.$designer?.name,
     link: {
       projectId: projectId,
@@ -99,8 +107,8 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   });
 
   if (triggerIndex != null && trigger != null) {
-    array.push({
-      key: `${BreadcrumbKeyPrefix.Trigger}-${triggerIndex}`,
+    initialBreadcrumbArray.push({
+      key: buildKey(BreadcrumbKeyPrefix.Trigger, triggerIndex),
       label: trigger.$designer?.name || getFriendlyName(trigger),
       link: {
         projectId: projectId,
@@ -116,8 +124,8 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
 
   if (encodedFocused) {
     // we've linked to an action, so put that in too
-    array.push({
-      key: `${BreadcrumbKeyPrefix.Action}-${focusPath}`,
+    initialBreadcrumbArray.push({
+      key: buildKey(BreadcrumbKeyPrefix.Action, focusPath),
       label: getActionName(possibleAction, pluginConfig),
     });
   }
@@ -127,9 +135,8 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   // get newest label for breadcrumbs
   const breadcrumbArray = useMemo(() => {
     if (currentDialog.content) {
-      array.map((b) => {
-        const prefix = b.key.charAt(0);
-        const name = b.key.substr(2);
+      initialBreadcrumbArray.map((b) => {
+        const { prefix, name } = parseKey(b.key);
 
         switch (prefix) {
           case BreadcrumbKeyPrefix.Dialog:
@@ -145,8 +152,8 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
         return b;
       });
     }
-    return array;
-  }, [currentDialog?.content, array]);
+    return initialBreadcrumbArray;
+  }, [currentDialog?.content, initialBreadcrumbArray]);
   return breadcrumbArray;
 };
 
