@@ -9,7 +9,7 @@ import { EditorDidMount, Monaco } from '@monaco-editor/react';
 import formatMessage from 'format-message';
 
 import { registerLULanguage } from './languages';
-import { createUrl, createWebSocket, createLanguageClient, SendRequestWithRetry } from './utils/lspUtil';
+import { createUrl, createWebSocket, createLanguageClient, sendRequestWithRetry } from './utils/lspUtil';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 import { defaultPlaceholder, LU_HELP } from './constants';
 import { LUOption } from './utils';
@@ -112,11 +112,11 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
             // eslint-disable-next-line no-bitwise
             editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, () => {
               const position = editor.getPosition();
-              SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
+              sendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
             });
           }
 
-          SendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
+          sendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
 
           languageClient.onReady().then(() =>
             languageClient.onNotification('addUnlabelUtterance', (result) => {
@@ -139,10 +139,10 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         // eslint-disable-next-line no-bitwise
         editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, () => {
           const position = editor.getPosition();
-          SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
+          sendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
         });
       }
-      SendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
+      sendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
     }
   }, [editor]);
   const onInit: OnInit = (monaco) => {
