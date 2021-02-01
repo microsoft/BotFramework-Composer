@@ -2,14 +2,8 @@
 // Licensed under the MIT License.
 
 import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { createDirectLine } from 'botframework-webchat';
-
-const BASEPATH = 'http://localhost:3000/';
-
-const composerServerExtensionClient = axios.create({
-  baseURL: BASEPATH,
-});
 
 export const headers = {
   'Content-Accept': 'application/json',
@@ -43,11 +37,20 @@ type ChatData = {
   user: any;
 };
 
-export const ConversationService = () => {
-  const chats: Record<string, ChatData> = {};
+export class ConversationService {
+  private chats: Record<string, ChatData> = {};
+  private directlineHostUrl: string;
+  private composerApiClient: AxiosInstance;
 
-  const startConversation = (payload: StartConversationPayload): Promise<Response> => {
-    return composerServerExtensionClient.post(
+  constructor(directlineHostUrl: string) {
+    this.directlineHostUrl = directlineHostUrl.endsWith('/') ? directlineHostUrl.slice(0, -1) : directlineHostUrl;
+    this.composerApiClient = axios.create({
+      baseURL: directlineHostUrl,
+    });
+  }
+
+  startConversation = (payload: StartConversationPayload): Promise<Response> => {
+    return this.composerApiClient.post(
       `v3/conversations`,
       {
         ...payload,
@@ -65,11 +68,11 @@ export const ConversationService = () => {
     );
   };
 
-  const fetchDirectLineObject = async (
+  fetchDirectLineObject = async (
     conversationId: string,
     directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
   ) => {
-    const resp = await composerServerExtensionClient.get(`conversations/ws/port`);
+    const resp = await this.composerApiClient.get(`conversations/ws/port`);
     const options = {
       conversationId,
       ...directLineOptions,
@@ -80,14 +83,14 @@ export const ConversationService = () => {
       token: 'emulatorToken',
       conversationId,
       secret,
-      domain: `${BASEPATH}v3/directline`,
+      domain: `${this.directlineHostUrl}/v3/directline`,
       webSocket: true,
       streamUrl: `ws://localhost:${resp.data}/ws/${conversationId}`,
     });
     return directLine;
   };
 
-  const getUser = () => {
+  getUser = () => {
     return {
       id: uuidv4(), // use custom id or generate new one
       name: 'User',
@@ -95,8 +98,8 @@ export const ConversationService = () => {
     };
   };
 
-  const conversationUpdate = (oldConversationId, newConversationId, userId) => {
-    const url = `${BASEPATH}conversations/${oldConversationId}/updateConversation`;
+  conversationUpdate = (oldConversationId, newConversationId, userId) => {
+    const url = `${this.directlineHostUrl}/conversations/${oldConversationId}/updateConversation`;
     return axios.put(
       url,
       {
@@ -111,8 +114,8 @@ export const ConversationService = () => {
     );
   };
 
-  const sendInitialActivity = (conversationId, members) => {
-    const url = `${BASEPATH}v3/directline/conversations/${conversationId}/activities`;
+  sendInitialActivity = (conversationId, members) => {
+    const url = `${this.directlineHostUrl}/v3/directline/conversations/${conversationId}/activities`;
     const activity = {
       type: 'conversationUpdate',
       membersAdded: members,
@@ -125,24 +128,17 @@ export const ConversationService = () => {
     });
   };
 
-  const generateUniqueId = () => {
+  generateUniqueId = () => {
     return uuidv4().toString();
   };
 
-  const saveChatData = (data: ChatData) => {
-    chats[data.conversationId] = {
+  saveChatData = (data: ChatData) => {
+    this.chats[data.conversationId] = {
       ...data,
     };
   };
 
-  return {
-    startConversation,
-    getUser,
-    fetchDirectLineObject,
-    conversationUpdate,
-    sendInitialActivity,
-    generateUniqueId,
-    saveChatData,
-    getChatData: (conversationId) => chats[conversationId],
+  getChatData = (conversationId: string) => {
+    return this.chats[conversationId];
   };
-};
+}

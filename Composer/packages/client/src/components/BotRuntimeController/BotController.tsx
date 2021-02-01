@@ -12,7 +12,8 @@ import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { useBoolean } from '@uifabric/react-hooks';
-import { Panel } from 'office-ui-fabric-react/lib/Panel';
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
+import { WebChatPanel } from '@bfc/webchat-client';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
@@ -22,14 +23,15 @@ import {
   allDiagnosticsSelectorFamily,
   rootBotProjectIdSelector,
   botEndpointsState,
+  currentProjectIdState,
+  botDisplayNameState,
 } from '../../recoilModel';
-import { BotStatus } from '../../constants';
+import { BASEPATH, BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
 import { BotRuntimeStatus } from './BotRuntimeStatus';
-import { WebChatPanel } from './WebChatPanel';
 
 const iconSectionContainer = css`
   display: flex;
@@ -79,6 +81,10 @@ const BotController: React.FC = () => {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const [isOpen, { setTrue: openWebChatPanel, setFalse: dismissPanel }] = useBoolean(false);
   const botEndpoints = useRecoilValue(botEndpointsState);
+
+  const projectId = useRecoilValue(currentProjectIdState);
+  const projectName = useRecoilValue(botDisplayNameState(projectId));
+  const isCurrentBotRunning = runningBots.projectIds.some((id) => id === projectId);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -289,7 +295,7 @@ const BotController: React.FC = () => {
       </div>
       <IconButton
         ariaDescription={formatMessage('Open web chat')}
-        disabled={disableStartBots}
+        disabled={!isCurrentBotRunning}
         iconProps={{
           iconName: 'ChatSolid',
         }}
@@ -311,8 +317,31 @@ const BotController: React.FC = () => {
         title={formatMessage('Open Web Chat')}
         onClick={openWebChatPanel}
       />
-      <Panel closeButtonAriaLabel="Close" headerText="Web Chat" isOpen={isOpen} onDismiss={dismissPanel}>
-        <WebChatPanel botUrl={rootBotId ? botEndpoints[rootBotId] : ''} />
+      <Panel
+        closeButtonAriaLabel={formatMessage('Close')}
+        customWidth={'390px'}
+        headerText={projectName}
+        isBlocking={false}
+        isOpen={isOpen}
+        styles={{
+          root: {
+            marginTop: '50px',
+          },
+          scrollableContent: {
+            width: '100%',
+            height: '100%',
+          },
+          content: {
+            width: '100%',
+            height: '100%',
+            padding: 0,
+            margin: 0,
+          },
+        }}
+        type={PanelType.custom}
+        onDismiss={dismissPanel}
+      >
+        <WebChatPanel botUrl={rootBotId ? botEndpoints[rootBotId] : ''} directlineHostUrl={BASEPATH} />
       </Panel>
       <BotControllerMenu
         ref={startPanelTarget}

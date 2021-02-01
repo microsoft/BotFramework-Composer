@@ -1,18 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as React from 'react';
+import React, { useMemo, useEffect, useState, useRef } from 'react';
 import ReactWebChat from 'botframework-webchat';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 
-import { ConversationService } from './ConversationService';
+import { ConversationService } from './utils/ConversationService';
 
-const conversationService = ConversationService();
+const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 
-export const WebChatPanel = (props: { botUrl: string }) => {
-  const [directlineObj, setDirectline] = React.useState<any>(undefined);
+export interface WebChatPanelProps {
+  /** Bot runtime url. */
+  botUrl: string;
+
+  /** Directline host url. By default, set to Composer host url. */
+  directlineHostUrl?: string;
+}
+
+export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHostUrl = BASEPATH }) => {
+  const [directlineObj, setDirectline] = useState<any>(undefined);
+  const conversationServiceRef = useRef<ConversationService>(new ConversationService(directlineHostUrl));
+  const conversationService = conversationServiceRef.current;
+
   const user = useMemo(() => {
     return conversationService.getUser();
   }, []);
@@ -60,7 +70,7 @@ export const WebChatPanel = (props: { botUrl: string }) => {
     fetchDLEssentials();
   }, []);
 
-  const webchatMemo = useMemo(() => {
+  const webchatContent = useMemo(() => {
     if (directlineObj?.conversationId) {
       conversationService.sendInitialActivity(directlineObj.conversationId, [user]);
       conversationService.saveChatData({
@@ -74,6 +84,8 @@ export const WebChatPanel = (props: { botUrl: string }) => {
           key={directlineObj.conversationId}
           directLine={directlineObj}
           disabled={false}
+          // reference: https://github.com/microsoft/BotFramework-WebChat/blob/master/packages/component/src/Styles/defaultStyleOptions.js
+          styleOptions={{}}
           userID={user.id}
           username={'User'}
         />
@@ -87,7 +99,7 @@ export const WebChatPanel = (props: { botUrl: string }) => {
   } else {
     return (
       <>
-        <div>
+        <div data-testid="Webchat-Header" style={{ height: 36 }}>
           <DefaultButton type="button" onClick={() => handleRestartConversation(directlineObj.conversationId, false)}>
             {formatMessage('Restart with same')}
           </DefaultButton>
@@ -95,7 +107,9 @@ export const WebChatPanel = (props: { botUrl: string }) => {
             {formatMessage('Restart with new')}
           </DefaultButton>
         </div>
-        {webchatMemo}
+        <div data-testid="WebChat-Content" style={{ height: 'calc(100% - 36px)' }}>
+          {webchatContent}
+        </div>
       </>
     );
   }
