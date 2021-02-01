@@ -60,8 +60,9 @@ const styles: {
   },
 };
 
-interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss' | 'isBlocking'> {
+interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss'> {
   isOpen: boolean;
+  isBlocking?: boolean;
   title?: string;
   subText?: string;
   dialogType: DialogTypes;
@@ -110,7 +111,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
       hidden={false}
       minWidth={minWidth}
       modalProps={{
-        isBlocking: Boolean(isBlocking),
+        isBlocking: isBlocking,
         styles: currentStyle.modal,
       }}
       onDismiss={onDismiss}
