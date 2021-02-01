@@ -274,7 +274,7 @@ export const AzureProvisionDialog: React.FC = () => {
       // validate existed or not
       const existed = resourceGroups.find((t) => t.name === newName);
       if (existed) {
-        setErrorHostName('this resource group already exist');
+        setErrorHostName('This resource group already exists');
       } else {
         checkNameAvailability(newName);
       }
