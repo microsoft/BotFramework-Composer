@@ -6,9 +6,9 @@ import ReactWebChat from 'botframework-webchat';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
-import { ConversationService } from './ConversationService';
+import { ConversationService } from './utils/ConversationService';
 
-const conversationService = ConversationService();
+const conversationService = new ConversationService();
 
 export interface WebChatPanelProps {
   botUrl: string;

@@ -43,10 +43,10 @@ type ChatData = {
   user: any;
 };
 
-export const ConversationService = () => {
-  const chats: Record<string, ChatData> = {};
+export class ConversationService {
+  private chats: Record<string, ChatData> = {};
 
-  const startConversation = (payload: StartConversationPayload): Promise<Response> => {
+  startConversation = (payload: StartConversationPayload): Promise<Response> => {
     return composerServerExtensionClient.post(
       `v3/conversations`,
       {
@@ -65,7 +65,7 @@ export const ConversationService = () => {
     );
   };
 
-  const fetchDirectLineObject = async (
+  fetchDirectLineObject = async (
     conversationId: string,
     directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
   ) => {
@@ -87,7 +87,7 @@ export const ConversationService = () => {
     return directLine;
   };
 
-  const getUser = () => {
+  getUser = () => {
     return {
       id: uuidv4(), // use custom id or generate new one
       name: 'User',
@@ -95,7 +95,7 @@ export const ConversationService = () => {
     };
   };
 
-  const conversationUpdate = (oldConversationId, newConversationId, userId) => {
+  conversationUpdate = (oldConversationId, newConversationId, userId) => {
     const url = `${BASEPATH}conversations/${oldConversationId}/updateConversation`;
     return axios.put(
       url,
@@ -111,7 +111,7 @@ export const ConversationService = () => {
     );
   };
 
-  const sendInitialActivity = (conversationId, members) => {
+  sendInitialActivity = (conversationId, members) => {
     const url = `${BASEPATH}v3/directline/conversations/${conversationId}/activities`;
     const activity = {
       type: 'conversationUpdate',
@@ -125,24 +125,17 @@ export const ConversationService = () => {
     });
   };
 
-  const generateUniqueId = () => {
+  generateUniqueId = () => {
     return uuidv4().toString();
   };
 
-  const saveChatData = (data: ChatData) => {
-    chats[data.conversationId] = {
+  saveChatData = (data: ChatData) => {
+    this.chats[data.conversationId] = {
       ...data,
     };
   };
 
-  return {
-    startConversation,
-    getUser,
-    fetchDirectLineObject,
-    conversationUpdate,
-    sendInitialActivity,
-    generateUniqueId,
-    saveChatData,
-    getChatData: (conversationId) => chats[conversationId],
+  getChatData = (conversationId: string) => {
+    return this.chats[conversationId];
   };
-};
+}
