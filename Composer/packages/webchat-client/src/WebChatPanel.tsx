@@ -70,7 +70,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
     fetchDLEssentials();
   }, []);
 
-  const webchatMemo = useMemo(() => {
+  const webchatContent = useMemo(() => {
     if (directlineObj?.conversationId) {
       conversationService.sendInitialActivity(directlineObj.conversationId, [user]);
       conversationService.saveChatData({
@@ -84,6 +84,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
           key={directlineObj.conversationId}
           directLine={directlineObj}
           disabled={false}
+          // reference: https://github.com/microsoft/BotFramework-WebChat/blob/master/packages/component/src/Styles/defaultStyleOptions.js
+          styleOptions={{}}
           userID={user.id}
           username={'User'}
         />
@@ -97,7 +99,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
   } else {
     return (
       <>
-        <div>
+        <div data-testid="Webchat-Header" style={{ height: 36 }}>
           <DefaultButton type="button" onClick={() => handleRestartConversation(directlineObj.conversationId, false)}>
             {formatMessage('Restart with same')}
           </DefaultButton>
@@ -105,7 +107,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
             {formatMessage('Restart with new')}
           </DefaultButton>
         </div>
-        {webchatMemo}
+        <div data-testid="WebChat-Content" style={{ height: 'calc(100% - 36px)' }}>
+          {webchatContent}
+        </div>
       </>
     );
   }
