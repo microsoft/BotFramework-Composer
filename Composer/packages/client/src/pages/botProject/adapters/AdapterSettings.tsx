@@ -96,7 +96,7 @@ const AdapterSettings = (props: Props) => {
               <Toggle
                 checked={adapters.includes(key)}
                 onChange={(ev, val?: boolean) => {
-                  if (val) {
+                  if (val && !adapters.includes(key)) {
                     setSettings(projectId, { ...currentSettings, adapters: [...adapters, key] });
                   } else {
                     setSettings(projectId, { ...currentSettings, adapters: adapters.filter((a) => a !== key) });
