@@ -13,6 +13,7 @@ import {
   showCreateQnAFromUrlDialogState,
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
+  localeState,
 } from '../atoms/botState';
 import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
@@ -73,9 +74,9 @@ export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
-  const { set } = callbackHelpers;
-  //To do: support other languages on qna
-  id = id.endsWith('.source') ? id : `${getBaseName(id)}.en-us`;
+  const { set, snapshot } = callbackHelpers;
+  const locale = await snapshot.getPromise(localeState(projectId));
+  id = id.endsWith('.source') ? id : `${getBaseName(id)}.${locale}`;
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
 
   set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedQnAFile] }));
@@ -87,9 +88,7 @@ export const createQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  //const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages on qna
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
   const { languages } = await snapshot.getPromise(settingsState(projectId));
   const createdQnaId = `${id}.${locale}`;
   const createdQnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
@@ -122,9 +121,7 @@ export const removeQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  //const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages on qna
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -182,9 +179,7 @@ export const removeKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  // const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages on qna
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -206,9 +201,7 @@ export const renameKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  //const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -373,8 +366,9 @@ export const qnaDispatcher = () => {
       multiTurn: boolean;
       projectId: string;
     }) => {
-      //To do: support other languages on qna
-      id = `${getBaseName(id)}.en-us`;
+      const { snapshot } = callbackHelpers;
+      const locale = await snapshot.getPromise(localeState(projectId));
+      id = `${getBaseName(id)}.${locale}`;
       await dismissCreateQnAModal({ projectId });
       const notification = createNotification(getQnaPendingNotification(url));
       addNotificationInternal(callbackHelpers, notification);
@@ -438,8 +432,9 @@ ${response.data}
       content?: string;
       projectId: string;
     }) => {
-      //To do: support other languages on qna
-      id = `${getBaseName(id)}.en-us`;
+      const { snapshot } = callbackHelpers;
+      const locale = await snapshot.getPromise(localeState(projectId));
+      id = `${getBaseName(id)}.${locale}`;
       await dismissCreateQnAModal({ projectId });
 
       await createKBFileState(callbackHelpers, {
