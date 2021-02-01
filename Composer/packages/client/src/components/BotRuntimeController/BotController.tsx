@@ -23,6 +23,8 @@ import {
   allDiagnosticsSelectorFamily,
   rootBotProjectIdSelector,
   botEndpointsState,
+  currentProjectIdState,
+  botDisplayNameState,
 } from '../../recoilModel';
 import { BASEPATH, BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
@@ -79,6 +81,10 @@ const BotController: React.FC = () => {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const [isOpen, { setTrue: openWebChatPanel, setFalse: dismissPanel }] = useBoolean(false);
   const botEndpoints = useRecoilValue(botEndpointsState);
+
+  const projectId = useRecoilValue(currentProjectIdState);
+  const projectName = useRecoilValue(botDisplayNameState(projectId));
+  const isCurrentBotRunning = runningBots.projectIds.some((id) => id === projectId);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -289,7 +295,7 @@ const BotController: React.FC = () => {
       </div>
       <IconButton
         ariaDescription={formatMessage('Open web chat')}
-        disabled={disableStartBots}
+        disabled={!isCurrentBotRunning}
         iconProps={{
           iconName: 'ChatSolid',
         }}
@@ -314,7 +320,7 @@ const BotController: React.FC = () => {
       <Panel
         closeButtonAriaLabel={formatMessage('Close')}
         customWidth={'390px'}
-        headerText={formatMessage('Web Chat')}
+        headerText={projectName}
         isBlocking={false}
         isOpen={isOpen}
         styles={{
