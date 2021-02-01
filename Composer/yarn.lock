@@ -2773,6 +2773,16 @@
     "@uifabric/utilities" "^7.23.0"
     tslib "^1.10.0"
 
+"@fluentui/react-icons@^0.3.9":
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-0.3.9.tgz#72f282740939c8204a852e38c3b5e98fbf2ff68f"
+  integrity sha512-xGisio0Ds8/TWkbERtg6akoegp68/Vop3n6eD7X+0HqVL0rOl44iW+cmQrnOh1xIWiz7EqLVQU0w70bL2oLCGw==
+  dependencies:
+    "@microsoft/load-themed-styles" "^1.10.26"
+    "@uifabric/set-version" "^7.0.23"
+    "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
 "@fluentui/react-stylesheets@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@fluentui/react-stylesheets/-/react-stylesheets-0.2.4.tgz#65cc6136f84ff3fd3d1c9188bed0a34b9573f589"
@@ -3214,10 +3224,10 @@
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
 
-"@microsoft/bf-lu@^4.12.0-dev.20201209.a2ab9dd", "@microsoft/bf-lu@next":
-  version "4.12.0-dev.20201209.a2ab9dd"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20201209.a2ab9dd.tgz#edf04d5f7eab1bad05c759e9e8fde8acb7e3dd5e"
-  integrity sha512-w7gr7w4yOfXpooFNGEcKC+WC6WYxRK5SLQBbZzL2lWPwp+3P+d7Yih/HgnZPpFIg//IK6v/b/JfySYZUe0+fBA==
+"@microsoft/bf-lu@^4.12.0-dev.20210129.82760de", "@microsoft/bf-lu@next":
+  version "4.12.0-dev.20210129.82760de"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20210129.82760de.tgz#f3b4c932b1fb6b3e69e6d0cba3356fc3ba61ade8"
+  integrity sha512-nlzKjMAvr/bgjqVNXh/v4ns7aP4L5d6UT51keXa7k6+XGtHcQQkwXxwgWvo8CQXjZE5Aju8DTbxbIBY0bXcq6A==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
