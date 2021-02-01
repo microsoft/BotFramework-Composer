@@ -92,15 +92,13 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     TelemetryClient.track('CustomRuntimeToggleChanged', { enabled: isOn });
   };
 
-  const updateSetting = (field) => (e, newValue) => {
+  const handleRuntimeSettingOnChange = (field) => (e, newValue) => {
     let valid = true;
     let error = formatMessage('There was an error');
     if (newValue === '') {
       valid = false;
       error = formatMessage('This is a required field.');
     }
-
-    setRuntimeField(projectId, field, newValue);
 
     if (field === RuntimeType.Path) {
       setRuntimePath(newValue);
@@ -112,6 +110,14 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
       setFormDataErrors({ ...formDataErrors, [field]: '' });
     } else {
       setFormDataErrors({ ...formDataErrors, [field]: error });
+    }
+  };
+
+  const handleRuntimeSettingOnBlur = (field) => {
+    if (field === RuntimeType.Path) {
+      setRuntimeField(projectId, field, runtimePath);
+    } else {
+      setRuntimeField(projectId, field, runtimeCommand);
     }
   };
 
@@ -205,7 +211,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           label={formatMessage('Runtime code location')}
           styles={name}
           value={runtimePath}
-          onChange={updateSetting(RuntimeType.Path)}
+          onChange={handleRuntimeSettingOnChange(RuntimeType.Path)}
+          onBlur={() => handleRuntimeSettingOnBlur(RuntimeType.Path)}
           onRenderLabel={onRenderLabel}
         />
         <span css={textOr}>{formatMessage('Or: ')}</span>
@@ -225,7 +232,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           label={formatMessage('Start command')}
           styles={name}
           value={runtimeCommand}
-          onChange={updateSetting(RuntimeType.Command)}
+          onChange={handleRuntimeSettingOnChange(RuntimeType.Command)}
+          onBlur={() => handleRuntimeSettingOnBlur(RuntimeType.Command)}
           onRenderLabel={onRenderLabel}
         />
       </div>
