@@ -12,7 +12,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { useBoolean } from '@uifabric/react-hooks';
-import { Panel } from 'office-ui-fabric-react/lib/Panel';
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { WebChatPanel } from '@bfc/webchat-client';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -311,7 +311,20 @@ const BotController: React.FC = () => {
         title={formatMessage('Open Web Chat')}
         onClick={openWebChatPanel}
       />
-      <Panel closeButtonAriaLabel="Close" headerText="Web Chat" isOpen={isOpen} onDismiss={dismissPanel}>
+      <Panel
+        closeButtonAriaLabel={formatMessage('Close')}
+        customWidth={'390px'}
+        headerText={formatMessage('Web Chat')}
+        isBlocking={false}
+        isOpen={isOpen}
+        styles={{
+          root: {
+            marginTop: '50px',
+          },
+        }}
+        type={PanelType.custom}
+        onDismiss={dismissPanel}
+      >
         <WebChatPanel botUrl={rootBotId ? botEndpoints[rootBotId] : ''} />
       </Panel>
       <BotControllerMenu
