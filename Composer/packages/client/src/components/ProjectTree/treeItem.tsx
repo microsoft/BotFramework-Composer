@@ -459,7 +459,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
-  const isBroken = !!link.bot?.error;
+  const isBroken = !!link.botError;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   return (

@@ -47,7 +47,7 @@
     "babel-plugin-extract-format-message": "^6.2.3",
     "format-message": "^6.2.3",
     "format-message-generate-id": "^6.2.3",
-    "immer": "^5.2.0",
+    "immer": "^8.0.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.19",
