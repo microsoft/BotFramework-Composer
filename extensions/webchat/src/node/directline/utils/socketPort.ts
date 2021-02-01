@@ -6,14 +6,11 @@ import * as express from 'express';
 
 import { WebSocketServer } from './websocketServer';
 
-export async function getWebSocketPort(
-  req: express.Request,
-  res: express.Response
-): Promise<any> {
+export async function getWebSocketPort(req: express.Request, res: express.Response): Promise<void> {
   try {
     let socketPort = WebSocketServer.port;
-    if(!socketPort) {
-      socketPort = await WebSocketServer.init()
+    if (!socketPort) {
+      socketPort = await WebSocketServer.init();
     }
     res.status(StatusCodes.OK).json(socketPort);
   } catch (e) {

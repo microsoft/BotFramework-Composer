@@ -27,9 +27,7 @@ export function createBotFrameworkAuthenticationMiddleware() {
 
     if (!decoded) {
       // Token not provided so
-      res.status(StatusCodes.UNAUTHORIZED);
-      res.end();
-
+      res.status(StatusCodes.UNAUTHORIZED).end();
       return;
     }
 
@@ -45,9 +43,7 @@ export function createBotFrameworkAuthenticationMiddleware() {
         issuer = usGovernmentAuthentication.tokenIssuerV2;
       } else {
         // unknown token format
-        res.status(401);
-        res.end();
-
+        res.status(401).end();
         return;
       }
 
@@ -65,9 +61,7 @@ export function createBotFrameworkAuthenticationMiddleware() {
           // jwtId: botId
         });
       } catch (err) {
-        res.status(StatusCodes.UNAUTHORIZED);
-        res.end();
-
+        res.status(StatusCodes.UNAUTHORIZED).end();
         return;
       }
     } else {
@@ -89,9 +83,7 @@ export function createBotFrameworkAuthenticationMiddleware() {
         issuer = v32Authentication.tokenIssuerV2;
       } else {
         // unknown token format
-        res.status(StatusCodes.UNAUTHORIZED);
-        res.end();
-
+        res.status(StatusCodes.UNAUTHORIZED).end();
         return;
       }
 
@@ -126,9 +118,7 @@ export function createBotFrameworkAuthenticationMiddleware() {
             // jwtId: botId
           });
         } catch (err) {
-          res.status(StatusCodes.UNAUTHORIZED);
-          res.end();
-
+          res.status(StatusCodes.UNAUTHORIZED).end();
           return;
         }
       }

@@ -17,7 +17,7 @@ export const WebChatPanel = (props: { botUrl: string }) => {
     return conversationService.getUser();
   }, []);
 
-  const handleRestartConversation = async (oldConversationId, requireNewConversationId) => {
+  const handleRestartConversation = async (oldConversationId: string, requireNewConversationId: boolean) => {
     const chatObj = conversationService.getChatData(oldConversationId);
     let conversationId;
     if (requireNewConversationId) {
@@ -39,12 +39,12 @@ export const WebChatPanel = (props: { botUrl: string }) => {
 
   async function fetchDLEssentials() {
     const resp: any = await conversationService.startConversation({
-      botUrl: props.botUrl,
+      botUrl: props.botUrl || 'http://localhost:3978/api/messages',
       channelServiceType: 'public',
       members: [user],
       mode: 'conversation',
-      msaAppId: '',
-      msaPassword: '',
+      msaAppId: 'd59f97db-99a4-4bda-bcf9-426781af07ce',
+      msaPassword: 'PLo4VN4~vS-C~9-i059Qa-vf~mavG1iBB~',
     });
 
     // await conversationService.conversationUpdate(resp.data.conversationId, user.id)
@@ -65,7 +65,7 @@ export const WebChatPanel = (props: { botUrl: string }) => {
       conversationService.sendInitialActivity(directlineObj.conversationId, [user]);
       conversationService.saveChatData({
         conversationId: directlineObj.conversationId,
-        chatMode: 'conversation',
+        chatMode: 'livechat',
         directline: directlineObj,
         user,
       });

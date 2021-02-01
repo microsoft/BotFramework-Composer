@@ -2,7 +2,8 @@
 // Licensed under the MIT License
 
 import toNumber from 'lodash/toNumber';
-import { IExtensionRegistration } from '@botframework-composer/types'
+import { IExtensionRegistration } from '@botframework-composer/types';
+
 import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import DLServerContext from './directline/store/DLServerState';

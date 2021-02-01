@@ -4,17 +4,22 @@
 import { Activity, ConversationAccount } from 'botframework-schema';
 import { StatusCodes } from 'http-status-codes';
 import moment from 'moment';
-import updateIn from 'simple-update-in';
 
-import { BotErrorCodes, createAPIException } from '../../utils/apiErrorException';
 import { BotEndpoint } from '../../utils/botEndpoint';
 import { generateUniqueId } from '../../utils/helpers';
 import { DLServerState } from '../DLServerState';
 import { User, WebChatMode } from '../types';
 
+import { DataUrlEncoder } from './DataUrlEncoder';
+
 type ActivityBucket = {
   activity: Activity;
   watermark: number;
+};
+
+export type TranscriptRecord = {
+  type: string;
+  activity: Activity;
 };
 
 export class Conversation {
@@ -25,7 +30,7 @@ export class Conversation {
   public user: User;
   public nextWatermark = 0;
   public codeVerifier: string | undefined;
-
+  private transcript: TranscriptRecord[] = [];
   private activities: ActivityBucket[] = [];
 
   constructor(botEndpoint: BotEndpoint, conversationId: string, user: User, webChatMode: WebChatMode) {
@@ -62,11 +67,7 @@ export class Conversation {
     }
   }
 
-  public async prepActivityToBeSentToBot(
-    state: DLServerState,
-    activity: Activity,
-    recordInConversation?: boolean
-  ): Promise<Activity> {
+  public async prepActivityToBeSentToBot(state: DLServerState, activity: Activity): Promise<Activity> {
     // Do not make a shallow copy here before modifying
     activity = this.postage(this.botEndpoint.botId, activity);
     activity.from = activity.from || this.user;
@@ -81,9 +82,10 @@ export class Conversation {
     if (!activity.recipient.role) {
       activity.recipient.role = 'bot';
     }
-
     activity.serviceUrl = state.serviceUrl;
 
+    this.addActivityToQueue(activity);
+    this.transcript = [...this.transcript, { type: 'activity add', activity }];
     return { ...activity };
   }
 
@@ -109,31 +111,15 @@ export class Conversation {
       activity.recipient.role = 'user';
     }
 
-    // internal tracking
     this.addActivityToQueue(activity);
+    this.transcript = [...this.transcript, { type: 'activity add', activity }];
     return activity;
-  }
-
-  public updateActivity(updatedActivity: Activity) {
-    const { id } = updatedActivity;
-    const index = this.activities.findIndex((entry) => entry.activity.id === id);
-
-    if (index === -1) {
-      throw createAPIException(StatusCodes.NOT_FOUND, BotErrorCodes.BadArgument, 'not a known activity id');
-    }
-
-    this.activities = updateIn(this.activities, [index, 'activity'], (activity) => ({
-      ...activity,
-      ...updatedActivity,
-    }));
-    updatedActivity = this.activities[index].activity;
-    return { id };
   }
 
   /**
    * Sends the activity to the conversation's bot.
    */
-  public async postActivityToBot(state: DLServerState, activity: Activity, recordInConversation: boolean) {
+  public async postActivityToBot(state: DLServerState, activity: Activity) {
     let updatedActivity = {
       ...activity,
     };
@@ -146,8 +132,7 @@ export class Conversation {
       };
     }
 
-    updatedActivity = await this.prepActivityToBeSentToBot(state, updatedActivity, recordInConversation);
-
+    updatedActivity = await this.prepActivityToBeSentToBot(state, updatedActivity);
     const options = {
       body: updatedActivity,
       headers: {
@@ -155,13 +140,8 @@ export class Conversation {
       },
     };
 
-    let status = 200;
-
-    // TODO Handle conversation isTranscript
-    // if (!this.conversationIsTranscript) {
     const resp = await this.botEndpoint.fetchWithAuth(this.botEndpoint.botUrl, options);
-    status = resp.status;
-    //}
+    const status = resp.status;
 
     return {
       updatedActivity,
@@ -170,7 +150,29 @@ export class Conversation {
     };
   }
 
-  public normalize(): void {
+  public clearConversation(): void {
+    this.transcript.length = 0;
     this.activities.length = 0;
+  }
+
+  public async processActivityForDataUrls(activity: Activity): Promise<Activity> {
+    const visitor = new DataUrlEncoder();
+    activity = { ...activity };
+    await visitor.traverseActivity(activity);
+    return activity;
+  }
+
+  public async getTranscript(): Promise<Activity[]> {
+    const activities = this.transcript
+      .filter((record) => record.type === 'activity add')
+      .map((record) => {
+        const { activity } = record;
+        return activity;
+      });
+
+    for (let i = 0; i < activities.length; i++) {
+      await this.processActivityForDataUrls(activities[i]);
+    }
+    return activities;
   }
 }

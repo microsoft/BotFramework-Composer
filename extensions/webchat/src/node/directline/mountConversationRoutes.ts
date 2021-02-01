@@ -13,11 +13,12 @@ import {
   createUploadAttachmentHandler,
   sendActivityToConversation,
   createUpdateConversationHandler,
+  saveTranscriptHandler,
 } from './middleware';
 import DLServerContext from './store/DLServerState';
 import { getWebSocketPort } from './utils/socketPort';
 
-export function mountConversationsRoutes(dLServerState: DLServerContext) {
+export function mountConversationsRoutes(dLServerState: DLServerContext): express.Router {
   const router = express.Router();
   const { state } = dLServerState;
   const verifyBotFramework = createBotFrameworkAuthenticationMiddleware();
@@ -59,6 +60,8 @@ export function mountConversationsRoutes(dLServerState: DLServerContext) {
     fetchConversation,
     createUpdateConversationHandler(state)
   );
+
+  router.post('/conversations/:conversationId/saveTranscript', fetchConversation, saveTranscriptHandler(state));
 
   return router;
 }

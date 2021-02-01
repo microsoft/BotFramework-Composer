@@ -37,7 +37,7 @@ interface StartConversationPayload {
 }
 
 type ChatData = {
-  chatMode: 'conversation' | 'transcript';
+  chatMode: 'livechat' | 'transcript';
   conversationId: string;
   directline: any;
   user: any;

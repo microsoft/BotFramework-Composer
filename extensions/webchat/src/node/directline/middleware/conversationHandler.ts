@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
-
 import { StatusCodes } from 'http-status-codes';
 import { Activity, AttachmentData, ConversationMembers, Attachment } from 'botframework-schema';
 import * as express from 'express';
@@ -15,8 +13,9 @@ import { BotEndpoint } from '../utils/botEndpoint';
 import { Conversation } from '../store/entities/Conversation';
 import { WebSocketServer } from '../utils/websocketServer';
 import { textItem, statusCodeFamily } from '../utils/helpers';
+import { writeFile, mkdirp, readFile } from '../utils/fileOperations';
 
-function validateRequest(payload): any {
+function validateRequest(payload): Error | undefined {
   if (!payload.bot) {
     return new Error('Missing bot object in request.');
   } else if (!payload.botEndpoint) {
@@ -40,7 +39,7 @@ export function createGetConversationHandler(state: DLServerState) {
 }
 
 export function createNewConversationHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response) => {
+  return (req: express.Request, res: express.Response): void => {
     const validationResult = validateRequest({
       ...req.body,
       botEndpoint: (req as any).botEndpoint,
@@ -64,10 +63,7 @@ export function createNewConversationHandler(state: DLServerState) {
   };
 }
 
-export function sendActivityToConversation(
-  req: express.Request,
-  res: express.Response
-): any {
+export function sendActivityToConversation(req: express.Request, res: express.Response): any {
   let activity = req.body as Activity;
   try {
     activity.id = undefined;
@@ -82,7 +78,7 @@ export function sendActivityToConversation(
   }
 }
 
-export function createReplyToActivityHandler(req: express.Request, res: express.Response) {
+export function createReplyToActivityHandler(req: express.Request, res: express.Response): void {
   let activity = req.body as Activity;
   try {
     activity.id = undefined;
@@ -91,20 +87,20 @@ export function createReplyToActivityHandler(req: express.Request, res: express.
 
     activity = conversation.prepActivityToBeSentToUser(conversation.user.id, activity);
     WebSocketServer.sendToSubscribers(conversation.conversationId, activity);
-    res.status(StatusCodes.OK).json({ id: activity.id })
+    res.status(StatusCodes.OK).json({ id: activity.id });
   } catch (err) {
     sendErrorResponse(req, res, err);
   }
 }
 
 export function createUploadAttachmentHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response) => {
+  return (req: express.Request, res: express.Response): void => {
     const attachmentData = req.body as AttachmentData;
 
     try {
       const resourceId = state.attachments.uploadAttachment(attachmentData);
       const resourceResponse = { id: resourceId };
-      res.status(StatusCodes.OK).json(resourceResponse)
+      res.status(StatusCodes.OK).json(resourceResponse);
     } catch (err) {
       sendErrorResponse(req, res, err);
     }
@@ -145,9 +141,10 @@ export function createGetConversationsHandler(state: DLServerState) {
   };
 }
 
-export function createPostActivityHandler(state: DLServerState) {
+export function createPostActivityHandler(state: DLServerState): any {
   const { logToDocument } = state.dispatchers;
-  return async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
+
+  return async (req: express.Request, res: express.Response): Promise<void> => {
     const conversation: Conversation = (req as any).conversation;
 
     if (!conversation) {
@@ -163,7 +160,7 @@ export function createPostActivityHandler(state: DLServerState) {
     let activity = req.body as Activity;
 
     try {
-      const { updatedActivity, response, statusCode } = await conversation.postActivityToBot(state, activity, true);
+      const { updatedActivity, response, statusCode } = await conversation.postActivityToBot(state, activity);
 
       if (!statusCodeFamily(statusCode, 200) || !updatedActivity) {
         if (statusCode === StatusCodes.UNAUTHORIZED || statusCode === StatusCodes.FORBIDDEN) {
@@ -201,14 +198,8 @@ export function createPostActivityHandler(state: DLServerState) {
 }
 
 export function createUploadHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response): any => {
-    if (req.params.conversationId.includes('transcript')) {
-      res.end();
-      return;
-    }
-
+  return async (req: express.Request, res: express.Response): Promise<void> => {
     const conversation: Conversation = (req as any).conversation;
-
     if (!conversation) {
       res.status(StatusCodes.NOT_FOUND).send('conversation not found');
       const logItem = textItem('Error', 'Cannot upload file. Conversation not found.');
@@ -227,22 +218,21 @@ export function createUploadHandler(state: DLServerState) {
     form.multiples = true;
     form.keepExtensions = true;
     // TODO: Override form.onPart handler so it doesn't write temp files to disk.
-    form.parse(req as any, async (err: any, fields: any, files: any) => {
+    form.parse(req as any, async (err, fields, files: any) => {
       try {
-        const activity = JSON.parse(fs.readFileSync(files.activity.path, 'utf8'));
+        const activity = JSON.parse((files.activity.path, 'utf8'));
         let uploads = files.file;
 
         if (!Array.isArray(uploads)) {
           uploads = [uploads];
         }
         if (uploads?.length) {
-          //const serviceUrl = await state.dispatchers.getServiceUrl(botEndpoint.botUrl);
           activity.attachments = [];
-          uploads.forEach((upload1) => {
+          for (const upload1 of uploads) {
             const name = (upload1 as any).name || 'file.dat';
             const type = upload1.type;
             const path = upload1.path;
-            const base64EncodedContent = fs.readFileSync(path, { encoding: 'base64' });
+            const base64EncodedContent = await readFile(path, 'base64');
             const base64Buf = Buffer.from(base64EncodedContent, 'base64');
             const attachmentData: AttachmentData = {
               type,
@@ -258,14 +248,10 @@ export function createUploadHandler(state: DLServerState) {
             };
 
             activity.attachments.push(attachment);
-          });
+          }
 
           try {
-            const { updatedActivity, statusCode, response } = await conversation.postActivityToBot(
-              state,
-              activity,
-              true
-            );
+            const { updatedActivity, statusCode, response } = await conversation.postActivityToBot(state, activity);
 
             if (!statusCodeFamily(statusCode, 200)) {
               res.send(statusCode || StatusCodes.INTERNAL_SERVER_ERROR, await response.text());
@@ -288,7 +274,7 @@ export function createUploadHandler(state: DLServerState) {
 }
 
 export function createUpdateConversationHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response) => {
+  return (req: express.Request, res: express.Response): void => {
     const currentConversationId = req.params.conversationId;
     const { conversationId, userId } = req.body;
     const currentConversation = state.conversations.conversationById(currentConversationId);
@@ -303,10 +289,14 @@ export function createUpdateConversationHandler(state: DLServerState) {
     const user: User | undefined = currentConversation.members.find((member) => member.name === 'User');
     if (!user) {
       const err = new Error(`Conversation ${currentConversationId} is missing the user in the members array.`);
-      return res.status(StatusCodes.BAD_REQUEST).json(err);
+      res.status(StatusCodes.BAD_REQUEST).json(err);
     }
-    user.id = userId;
-    currentConversation.normalize();
+
+    if (user) {
+      user.id = userId;
+    }
+
+    currentConversation.clearConversation();
     currentConversation.nextWatermark = 0;
     state.conversations.conversations[conversationId] = currentConversation;
 
@@ -319,5 +309,33 @@ export function createUpdateConversationHandler(state: DLServerState) {
       members: currentConversation.members,
       nextWatermark: currentConversation.nextWatermark,
     });
+  };
+}
+
+export function saveTranscriptHandler(state: DLServerState) {
+  return async (req: express.Request, res: express.Response): Promise<void> => {
+    const fileSavePath = req.query.fileSavePath;
+    const conversation: Conversation = (req as any).conversation;
+    if (!conversation) {
+      res.status(StatusCodes.NOT_FOUND).send('Conversation not found');
+      const logItem = textItem('Error', 'Cannot find a matching conversation.');
+      state.dispatchers.logToDocument(req.params.conversationId, logItem);
+      return;
+    }
+
+    try {
+      if (fileSavePath?.length) {
+        mkdirp(fileSavePath);
+        const transcripts = await conversation.getTranscript();
+        const contentsToWrite = typeof transcripts === 'object' ? JSON.stringify(transcripts, null, 2) : transcripts;
+        writeFile(fileSavePath, contentsToWrite);
+        res.status(StatusCodes.CREATED).json({
+          path: req.query.fileSavePath,
+          message: 'Transcript has been saved to disk sunccesfully',
+        });
+      }
+    } catch (ex) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ex);
+    }
   };
 }
