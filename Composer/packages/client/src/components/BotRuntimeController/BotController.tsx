@@ -24,7 +24,7 @@ import {
   rootBotProjectIdSelector,
   botEndpointsState,
 } from '../../recoilModel';
-import { BotStatus } from '../../constants';
+import { BASEPATH, BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
@@ -325,7 +325,7 @@ const BotController: React.FC = () => {
         type={PanelType.custom}
         onDismiss={dismissPanel}
       >
-        <WebChatPanel botUrl={rootBotId ? botEndpoints[rootBotId] : ''} />
+        <WebChatPanel botUrl={rootBotId ? botEndpoints[rootBotId] : ''} directlineHostUrl={BASEPATH} />
       </Panel>
       <BotControllerMenu
         ref={startPanelTarget}

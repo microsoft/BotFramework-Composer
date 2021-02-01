@@ -1,21 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState, useRef } from 'react';
 import ReactWebChat from 'botframework-webchat';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { ConversationService } from './utils/ConversationService';
 
-const conversationService = new ConversationService();
+const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 
 export interface WebChatPanelProps {
+  /** Bot runtime url. */
   botUrl: string;
+
+  /** Directline host url. By default, set to Composer host url. */
+  directlineHostUrl?: string;
 }
 
-export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl }) => {
-  const [directlineObj, setDirectline] = React.useState<any>(undefined);
+export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHostUrl = BASEPATH }) => {
+  const [directlineObj, setDirectline] = useState<any>(undefined);
+  const conversationServiceRef = useRef<ConversationService>(new ConversationService(directlineHostUrl));
+  const conversationService = conversationServiceRef.current;
+
   const user = useMemo(() => {
     return conversationService.getUser();
   }, []);

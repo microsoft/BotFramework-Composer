@@ -2,14 +2,8 @@
 // Licensed under the MIT License.
 
 import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { createDirectLine } from 'botframework-webchat';
-
-const BASEPATH = 'http://localhost:3000/';
-
-const composerServerExtensionClient = axios.create({
-  baseURL: BASEPATH,
-});
 
 export const headers = {
   'Content-Accept': 'application/json',
@@ -45,9 +39,18 @@ type ChatData = {
 
 export class ConversationService {
   private chats: Record<string, ChatData> = {};
+  private directlineHostUrl: string;
+  private composerApiClient: AxiosInstance;
+
+  constructor(directlineHostUrl: string) {
+    this.directlineHostUrl = directlineHostUrl.endsWith('/') ? directlineHostUrl.slice(0, -1) : directlineHostUrl;
+    this.composerApiClient = axios.create({
+      baseURL: directlineHostUrl,
+    });
+  }
 
   startConversation = (payload: StartConversationPayload): Promise<Response> => {
-    return composerServerExtensionClient.post(
+    return this.composerApiClient.post(
       `v3/conversations`,
       {
         ...payload,
@@ -69,7 +72,7 @@ export class ConversationService {
     conversationId: string,
     directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
   ) => {
-    const resp = await composerServerExtensionClient.get(`conversations/ws/port`);
+    const resp = await this.composerApiClient.get(`conversations/ws/port`);
     const options = {
       conversationId,
       ...directLineOptions,
@@ -80,7 +83,7 @@ export class ConversationService {
       token: 'emulatorToken',
       conversationId,
       secret,
-      domain: `${BASEPATH}v3/directline`,
+      domain: `${this.directlineHostUrl}/v3/directline`,
       webSocket: true,
       streamUrl: `ws://localhost:${resp.data}/ws/${conversationId}`,
     });
@@ -96,7 +99,7 @@ export class ConversationService {
   };
 
   conversationUpdate = (oldConversationId, newConversationId, userId) => {
-    const url = `${BASEPATH}conversations/${oldConversationId}/updateConversation`;
+    const url = `${this.directlineHostUrl}/conversations/${oldConversationId}/updateConversation`;
     return axios.put(
       url,
       {
@@ -112,7 +115,7 @@ export class ConversationService {
   };
 
   sendInitialActivity = (conversationId, members) => {
-    const url = `${BASEPATH}v3/directline/conversations/${conversationId}/activities`;
+    const url = `${this.directlineHostUrl}/v3/directline/conversations/${conversationId}/activities`;
     const activity = {
       type: 'conversationUpdate',
       membersAdded: members,
