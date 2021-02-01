@@ -163,6 +163,10 @@ export class Builder {
     const defaultNLR = nlrList.default;
     const modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
 
+    let multilangModelName = 'pretrained.20201210.microsoft.dte.00.12.unicoder_multilingual.onnx';
+    let multilangModelPath = Path.resolve(await this.getModelPathAsync(), multilangModelName.replace('.onnx', ''));
+    let hasMultiLang = luFiles.some((file: FileInfo) => file.name.split('.')?.[1] != 'en-us' || false);
+
     if (!(await pathExists(modelPath))) {
       const handler: IOrchestratorProgress = (status) => {
         log(status);
@@ -171,7 +175,10 @@ export class Builder {
     }
 
     // build snapshots from LU files
-    const returnData = await this.orchestratorBuilder(luFiles, modelPath);
+    const returnData = await this.orchestratorBuilder(
+      luFiles.filter((file) => file.name.split('.')?.[1] == 'en-us'),
+      modelPath
+    );
 
     // write snapshot data into /generated folder
     const snapshots: { [key: string]: string } = {};
@@ -185,10 +192,36 @@ export class Builder {
     // write settings into /generated/orchestrator.settings.json
     const orchestratorSettings = {
       orchestrator: {
-        ModelPath: modelPath,
+        models: {
+          en_us: modelPath,
+        },
         snapshots,
       },
     };
+
+    //same process for multilang
+    if (hasMultiLang) {
+      // build snapshots from LU files
+      const returnData = await this.orchestratorBuilder(
+        luFiles.filter((file) => file.name.split('.')?.[1] != 'en-us'),
+        multilangModelPath
+      );
+
+      // write snapshot data into /generated folder
+      const snapshots: { [key: string]: string } = {};
+      for (const dialog of returnData.outputs) {
+        const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
+        snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
+
+        await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
+      }
+
+      orchestratorSettings.orchestrator.models['multilang'] = multilangModelPath.replace('.onnx', '');
+
+      for (var snap in snapshots) {
+        orchestratorSettings.orchestrator.snapshots[snap.replace(/[-.]/g, '_')] = snapshots[snap];
+      }
+    }
 
     const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
     await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
