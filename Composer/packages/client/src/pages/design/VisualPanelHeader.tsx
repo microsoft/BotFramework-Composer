@@ -27,7 +27,7 @@ type BreadcrumbItem = {
   onClick?: () => void;
 };
 
-type VisualEditorHeaderProps = {
+type VisualPanelHeaderProps = {
   projectId: string;
   visible: boolean;
   showCode: boolean;
@@ -150,7 +150,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   return breadcrumbArray;
 };
 
-const VisualEditorHeader: React.FC<VisualEditorHeaderProps> = (props) => {
+const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) => {
   const { visible, showCode, projectId, onShowCodeClick, pluginConfig } = props;
   const breadcrumbs = useBreadcrumbs(projectId, pluginConfig);
 
@@ -181,6 +181,6 @@ const VisualEditorHeader: React.FC<VisualEditorHeaderProps> = (props) => {
       </div>
     </div>
   ) : null;
-};
+});
 
-export default VisualEditorHeader;
+export default VisualPanelHeader;
