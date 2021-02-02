@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotEndpoint } from '../../utils/botEndpoint';
-import { User } from '../types';
-
-import { ConversationSet } from './ConversationSet';
+import { BotEndpoint } from '../BotEndpoint';
+import { User } from '../../types';
+import { ConversationSet } from '../ConversationSet';
 
 describe('ConversationSet', () => {
   let conversationSet = new ConversationSet();

@@ -3,7 +3,7 @@
 
 import * as express from 'express';
 
-import { BotEndpoint } from '../utils/botEndpoint';
+import { BotEndpoint } from '../store/entities/BotEndpoint';
 import { DLServerState } from '../store/DLServerState';
 
 export function createCreateBotEndpointHandler(state: DLServerState) {

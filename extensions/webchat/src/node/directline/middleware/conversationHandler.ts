@@ -9,7 +9,7 @@ import * as Formidable from 'formidable';
 import { BotErrorCodes, createAPIException, sendErrorResponse } from '../utils/apiErrorException';
 import { DLServerState } from '../store/DLServerState';
 import { ConversationAPIPathParameters, User } from '../store/types';
-import { BotEndpoint } from '../utils/botEndpoint';
+import { BotEndpoint } from '../store/entities/BotEndpoint';
 import { Conversation } from '../store/entities/Conversation';
 import { WebSocketServer } from '../utils/websocketServer';
 import { textItem, statusCodeFamily } from '../utils/helpers';
@@ -54,6 +54,7 @@ export function createNewConversationHandler(state: DLServerState) {
     const { conversations } = state;
 
     const conversation = conversations.newConversation(botEndpoint, members[0], mode);
+    state.endpoints.set(conversation.botEndpoint.id, conversation.botEndpoint);
     res.status(StatusCodes.CREATED).json({
       conversationId: conversation.conversationId,
       endpointId: botEndpoint.id,

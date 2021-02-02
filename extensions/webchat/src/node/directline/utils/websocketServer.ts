@@ -7,14 +7,14 @@ import portfinder from 'portfinder';
 import express, { Response } from 'express';
 import { Activity } from 'botframework-schema';
 import { Server as WSServer } from 'ws';
-// can't import WebSocket type from ws types :|
+
 interface WebSocket {
   close(): void;
   send(data: any, cb?: (err?: Error) => void): void;
 }
 
 export class WebSocketServer {
-  private static restServer;
+  private static restServer: http.Server;
   private static servers: { [conversationId: string]: WSServer } = {};
   private static sockets: { [conversationId: string]: WebSocket } = {};
   private static queuedMessages: { [conversationId: string]: Activity[] } = {};
@@ -29,7 +29,7 @@ export class WebSocketServer {
     }
   }
 
-  public static port;
+  public static port: number;
 
   public static getSocketByConversationId(conversationId: string): WebSocket {
     return this.sockets[conversationId];
@@ -53,15 +53,12 @@ export class WebSocketServer {
     }
   }
 
-  /** Initializes the server and returns the port it is listening on, or if already initialized,
-   *  is a no-op.
-   */
   public static async init(): Promise<number | void> {
     if (!this.restServer) {
       const app = express();
-      const server = http.createServer(app);
+      this.restServer = http.createServer(app);
 
-      server.on('upgrade', (req, socket, head) => {
+      this.restServer.on('upgrade', (req, socket, head) => {
         req.claimUpgrade = () => ({
           head,
           socket,
@@ -72,7 +69,7 @@ export class WebSocketServer {
 
       const port = await portfinder.getPortPromise();
       this.port = port;
-      server.listen(port);
+      this.restServer.listen(port);
 
       app.use('/ws/:conversationId', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {
@@ -101,7 +98,6 @@ export class WebSocketServer {
           this.servers[conversationId] = wsServer;
         }
       });
-
       // eslint-disable-next-line no-console
       console.log(`Web Socket host server listening on ${this.port}...`);
       return this.port;

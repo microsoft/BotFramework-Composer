@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotEndpoint } from '../../utils/botEndpoint';
 import { generateUniqueId } from '../../utils/helpers';
 import { User, WebChatMode } from '../types';
 
+import { BotEndpoint } from './BotEndpoint';
 import { Conversation } from './Conversation';
 
 export class ConversationSet {

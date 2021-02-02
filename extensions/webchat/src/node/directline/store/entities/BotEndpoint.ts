@@ -4,16 +4,14 @@
 import { StatusCodes } from 'http-status-codes';
 import axios from 'axios';
 
-import { statusCodeFamily } from './helpers';
-import { authentication } from './constants';
+import { statusCodeFamily } from '../../utils/helpers';
+import { authentication } from '../../utils/constants';
 
 const TIME_TO_REFRESH = 5 * 60 * 1000;
 
 export class BotEndpoint {
   public accessToken?: string;
   public accessTokenExpires?: number;
-  public appId?: string;
-  public appPassword?: string;
 
   constructor(
     public id: string,
@@ -21,12 +19,9 @@ export class BotEndpoint {
     public botUrl: string,
     public msaAppId?: string,
     public msaPassword?: string
-  ) {
-    this.appId = msaAppId;
-    this.appPassword = msaPassword;
-  }
+  ) {}
 
-  public async fetchWithAuth(url: string, reqOptions: { body: any; headers: any }, forceRefresh = false) {
+  public async fetchWithAuth(url: string, reqOptions: { body: any; headers: any }, forceRefresh = false): Promise<any> {
     if (this.msaAppId) {
       try {
         reqOptions.headers = {

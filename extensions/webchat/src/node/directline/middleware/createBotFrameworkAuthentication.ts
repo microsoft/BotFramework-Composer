@@ -6,9 +6,13 @@ import * as express from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { authentication, usGovernmentAuthentication, v31Authentication, v32Authentication } from '../utils/constants';
-import { OpenIdMetadata } from '../utils/openIdMetaData';
+import { OpenIdMetadata } from '../utils/OpenIdMetaData';
 
-export function createBotFrameworkAuthenticationMiddleware() {
+export function createBotFrameworkAuthenticationMiddleware(): (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => void {
   const openIdMetadata = new OpenIdMetadata(authentication.openIdMetadata);
   const usGovOpenIdMetadata = new OpenIdMetadata(usGovernmentAuthentication.openIdMetadata);
 

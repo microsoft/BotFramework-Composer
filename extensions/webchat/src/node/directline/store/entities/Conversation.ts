@@ -5,11 +5,11 @@ import { Activity, ConversationAccount } from 'botframework-schema';
 import { StatusCodes } from 'http-status-codes';
 import moment from 'moment';
 
-import { BotEndpoint } from '../../utils/botEndpoint';
 import { generateUniqueId } from '../../utils/helpers';
 import { DLServerState } from '../DLServerState';
 import { User, WebChatMode } from '../types';
 
+import { BotEndpoint } from './BotEndpoint';
 import { DataUrlEncoder } from './DataUrlEncoder';
 
 type ActivityBucket = {

@@ -4,30 +4,21 @@
 import base64url from 'base64url';
 
 import { generateUniqueId } from '../../utils/helpers';
-import { BotEndpoint } from '../../utils/botEndpoint';
+
+import { BotEndpoint } from './BotEndpoint';
 
 export class EndpointSet {
-  private _endpoints: Record<string, BotEndpoint> = {};
+  private endpoints: Record<string, BotEndpoint> = {};
 
   public set(id: string, botEndpoint: BotEndpoint): BotEndpoint {
     id = id || botEndpoint.botUrl || generateUniqueId();
-
-    const botEndpointInstance = new BotEndpoint(
-      id,
-      botEndpoint.botId,
-      botEndpoint.botUrl,
-      botEndpoint.msaAppId,
-      botEndpoint.msaPassword
-    );
-
-    this._endpoints[id] = botEndpointInstance;
-
-    return botEndpointInstance;
+    this.endpoints[id] = botEndpoint;
+    return botEndpoint;
   }
 
   public get(id: string): BotEndpoint | undefined {
     try {
-      const savedEndpoint = this._endpoints[id];
+      const savedEndpoint = this.endpoints[id];
       if (savedEndpoint) {
         return savedEndpoint;
       }
@@ -38,7 +29,7 @@ export class EndpointSet {
     }
   }
 
-  public clear() {
-    this._endpoints = {};
+  public clear(): void {
+    this.endpoints = {};
   }
 }

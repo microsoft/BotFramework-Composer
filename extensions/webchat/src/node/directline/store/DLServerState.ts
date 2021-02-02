@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 // import logger from '../../logger';
-import { BotEndpoint } from '../utils/botEndpoint';
-
+import { BotEndpoint } from './entities/BotEndpoint';
 import { Attachments } from './entities/Attachments';
 import { ConversationSet } from './entities/ConversationSet';
 import { EndpointSet } from './entities/EndpointSet';

@@ -11,7 +11,7 @@ import {
 } from './middleware';
 import DLServerContext from './store/DLServerState';
 
-export function mountDirectLineRoutes(dLServerState: DLServerContext) {
+export function mountDirectLineRoutes(dLServerState: DLServerContext): express.Router {
   const router = express.Router();
   const { state } = dLServerState;
   const getBotEndpoint = createGetEndpointHandler(state);

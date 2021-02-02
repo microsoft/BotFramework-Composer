@@ -106,7 +106,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, secrets, dir
           store={webchatStore}
           // reference: https://github.com/microsoft/BotFramework-WebChat/blob/master/packages/component/src/Styles/defaultStyleOptions.js
           styleOptions={{}}
-          userID={user.id}
+          userID={conversationService.getUser().id}
         />
       );
     }

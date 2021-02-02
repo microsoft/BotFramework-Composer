@@ -3,7 +3,7 @@
 
 import { AttachmentData } from 'botframework-schema';
 
-import { Attachments } from './Attachments';
+import { Attachments } from '../Attachments';
 
 describe('Attachments', () => {
   let attachment = new Attachments();
