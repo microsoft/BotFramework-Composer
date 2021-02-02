@@ -254,7 +254,7 @@ export class BotProjectService {
       if (!(await StorageService.checkBlob('default', path, user))) {
         BotProjectService.deleteRecentProject(path);
         BotProjectService.removeProjectIdFromCache(projectId);
-        throw new Error(`file ${path} does not exist`);
+        throw new Error(`${path} doesn't seems to be exists anymore`);
       }
       const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
       await project.init();
@@ -304,7 +304,7 @@ export class BotProjectService {
         if (!(await StorageService.checkBlob('default', path, user))) {
           BotProjectService.deleteRecentProject(path);
           BotProjectService.removeProjectIdFromCache(matchingProjectId);
-          throw new Error(`file ${path} does not exist`);
+          throw new Error(`${path} doesn't seems to be exists anymore`);
         }
         const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
         await project.init();
