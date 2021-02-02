@@ -136,7 +136,7 @@ export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: stri
     suggestionEntityTypes.forEach((entityType) => {
       if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
         luisJson[entityType].forEach((entity) => {
-          if (entity && entity.name) {
+          if (entity?.name) {
             suggestionEntityList.push(entity.name);
           }
         });
