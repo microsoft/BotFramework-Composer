@@ -14,7 +14,7 @@ export interface AttachmentWithId extends AttachmentData {
 export class Attachments {
   private attachments: Record<string, AttachmentWithId> = {};
 
-  public getAttachmentData(id: string): AttachmentData {
+  public getAttachmentData(id: string): AttachmentWithId {
     return this.attachments[id];
   }
 
