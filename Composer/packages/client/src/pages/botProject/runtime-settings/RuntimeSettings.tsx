@@ -211,8 +211,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           label={formatMessage('Runtime code location')}
           styles={name}
           value={runtimePath}
-          onChange={handleRuntimeSettingOnChange(RuntimeType.Path)}
           onBlur={() => handleRuntimeSettingOnBlur(RuntimeType.Path)}
+          onChange={handleRuntimeSettingOnChange(RuntimeType.Path)}
           onRenderLabel={onRenderLabel}
         />
         <span css={textOr}>{formatMessage('Or: ')}</span>
@@ -232,8 +232,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           label={formatMessage('Start command')}
           styles={name}
           value={runtimeCommand}
-          onChange={handleRuntimeSettingOnChange(RuntimeType.Command)}
           onBlur={() => handleRuntimeSettingOnBlur(RuntimeType.Command)}
+          onChange={handleRuntimeSettingOnChange(RuntimeType.Command)}
           onRenderLabel={onRenderLabel}
         />
       </div>
