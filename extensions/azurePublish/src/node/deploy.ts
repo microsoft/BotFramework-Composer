@@ -346,14 +346,11 @@ export const isProfileComplete = (profile) => {
   if (!profile) {
     throw new Error('Required field `settings` is missing from publishing profile.');
   }
-  if (!profile.hostname) {
-    throw new Error("Required field `hostname` is missing from publishing profile.");
+  if (!profile.hostname && !profile.name) {
+    throw new Error("Required field `name` or `hostname` is missing from publishing profile.");
   }
   if (!profile.settings?.MicrosoftAppId) {
     throw Error('Required field `MicrosoftAppId` is missing from publishing profile.');
-  }
-  if (!profile.settings?.MicrosoftAppPassword) {
-    throw Error('Required field `MicrosoftAppPassword` is missing from publishing profile.');
   }
 }
 
