@@ -24,17 +24,19 @@ jest.mock('../../parsers/lgWorker', () => {
   return {
     parse: (projectId, id, content) => ({ id, content }),
     addTemplate: (projectId, lgFile, template) =>
-      filterParseResult(require('../../../utils/lgUtil').addTemplate(lgFile, template)),
+      filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').addTemplate(lgFile, template)),
     addTemplates: (projectId, lgFile, templates) =>
-      filterParseResult(require('../../../utils/lgUtil').addTemplates(lgFile, templates)),
+      filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').addTemplates(lgFile, templates)),
     updateTemplate: (projectId, lgFile, templateName, template) =>
-      filterParseResult(require('../../../utils/lgUtil').updateTemplate(lgFile, templateName, template)),
+      filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').updateTemplate(lgFile, templateName, template)),
     removeTemplate: (projectId, lgFile, templateName) =>
-      filterParseResult(require('../../../utils/lgUtil').removeTemplate(lgFile, templateName)),
+      filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').removeTemplate(lgFile, templateName)),
     removeTemplates: (projectId, lgFile, templateNames) =>
-      filterParseResult(require('../../../utils/lgUtil').removeTemplates(lgFile, templateNames)),
+      filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').removeTemplates(lgFile, templateNames)),
     copyTemplate: (projectId, lgFile, fromTemplateName, toTemplateName) =>
-      filterParseResult(require('../../../utils/lgUtil').copyTemplate(lgFile, fromTemplateName, toTemplateName)),
+      filterParseResult(
+        require('@bfc/indexers/lib/utils/lgUtil').copyTemplate(lgFile, fromTemplateName, toTemplateName)
+      ),
   };
 });
 const lgFiles = [
