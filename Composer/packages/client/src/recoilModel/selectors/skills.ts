@@ -98,7 +98,6 @@ export const skillUsedInBotsSelector = selector({
           let beenUsed = false;
           dialogIds.forEach((dialogId) => {
             const dialog = get(dialogState({ projectId, dialogId }));
-            console.log(dialog);
             if (dialog.skills.includes(skillNameIdentifier)) beenUsed = true;
           });
           if (beenUsed) {

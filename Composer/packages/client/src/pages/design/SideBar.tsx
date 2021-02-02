@@ -10,7 +10,7 @@ import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import { useSetRecoilState } from 'recoil';
 import React from 'react';
 
-import { DialogDeleting, RemoveSkillDialog } from '../../constants';
+import { DialogDeleting, removeSkillDialog } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { navigateTo, createBotSettingUrl } from '../../utils/navigation';
@@ -242,18 +242,18 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
     // check if skill used in current project workspace
     const usedInBots = skillUsedInBotsMap[skillId];
     const confirmRemove = usedInBots.length
-      ? await OpenConfirmModal(formatMessage('Warning'), RemoveSkillDialog().subText, {
+      ? await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subText, {
           onRenderContent: () => {
             return (
               <div css={removeSkillDialogStyle}>
-                <div> {RemoveSkillDialog().subText} </div>
-                <div css={removeSkillDialogContentStyle}> {usedInBots.map(({ name }) => name).join('\r\n')} </div>
-                <div> {RemoveSkillDialog().footerText} </div>
+                <div> {removeSkillDialog().subText} </div>
+                <div css={removeSkillDialogContentStyle}> {usedInBots.map(({ name }) => name).join('\n')} </div>
+                <div> {removeSkillDialog().footerText} </div>
               </div>
             );
           },
         })
-      : await OpenConfirmModal(formatMessage('Warning'), RemoveSkillDialog().subTextNoUse);
+      : await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subTextNoUse);
 
     if (!confirmRemove) return;
     removeSkillFromBotProject(skillId);

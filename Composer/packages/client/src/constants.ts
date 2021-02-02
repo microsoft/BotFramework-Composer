@@ -305,7 +305,7 @@ export const repairSkillDialog = (name: string) => {
   };
 };
 
-export const RemoveSkillDialog = () => {
+export const removeSkillDialog = () => {
   return {
     title: formatMessage('Warning'),
     subText: formatMessage(
