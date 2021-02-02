@@ -70,7 +70,6 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
   // text selection effect when pressing Shift + Click.
   return (
     <div
-      id={nodeId}
       ref={actionRef}
       css={css`
         user-select: none;
@@ -84,6 +83,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
         }
       `}
       data-testid="ActionNodeWrapper"
+      id={nodeId}
       tabIndex={0}
       {...declareElementAttributes(selectableId, id)}
       aria-label={generateActionTitle(data, '', '', tab)}
