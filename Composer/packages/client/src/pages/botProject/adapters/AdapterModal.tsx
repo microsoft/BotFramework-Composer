@@ -57,7 +57,7 @@ const AdapterModal = (props: Props) => {
               const currentAdapters: string[] = currentSettings.adapters ?? [];
               setSettings(projectId, {
                 ...currentSettings,
-                adapters: [...currentAdapters, adapterKey],
+                adapters: currentAdapters.includes(adapterKey) ? currentAdapters : [...currentAdapters, adapterKey],
                 [adapterKey]: value,
               });
             }

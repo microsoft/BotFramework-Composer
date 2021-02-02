@@ -10,6 +10,8 @@ import { BotSchemas } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { schemasState, settingsState } from '../../../recoilModel/atoms';
@@ -19,6 +21,27 @@ import { JSONSchema7 } from '../../../../../types';
 import dispatcher from '../../../recoilModel/dispatchers';
 
 import AdapterModal from './AdapterModal';
+
+////////// STYLES
+
+export const moreButton = (isActive: boolean): IButtonStyles => {
+  return {
+    root: {
+      padding: '4px 4px 0 4px',
+      alignSelf: 'stretch',
+      visibility: isActive ? 'visible' : 'hidden',
+      height: 'auto',
+      width: '16px',
+      color: '#000',
+    },
+    menuIcon: {
+      fontSize: '12px',
+      color: '#000',
+    },
+  };
+};
+
+//////////
 
 type Props = {
   projectId: string;
@@ -47,18 +70,6 @@ const AdapterSettings = (props: Props) => {
     }
   };
 
-  function addConnection(name: string) {
-    setConnected([...connected, name]);
-  }
-
-  // function removeConnection(name: string) {
-  //   setConnected(connected.filter((conn) => conn !== name));
-  // }
-
-  function isConnected(name: string) {
-    return connected.includes(name);
-  }
-
   if (schemaDefinitions == null) return null;
 
   const header = () => <div css={subtitle}>{formatMessage('Connect your bot to other messaging services.')}</div>;
@@ -69,7 +80,7 @@ const AdapterSettings = (props: Props) => {
     </div>
   );
 
-  const columnWidths = [50, 25, 25];
+  const columnWidths = ['300px', '150px', '150px'];
 
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
@@ -87,10 +98,10 @@ const AdapterSettings = (props: Props) => {
           <div key={key} css={tableRow}>
             <div css={tableRowItem(columnWidths[0])}>{title}</div>
             <div css={tableRowItem(columnWidths[1])}>
-              {isConnected(key) ? (
-                <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10 } }} />
+              {key in currentSettings ? (
+                <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
               ) : (
-                <Link onClick={() => openModal(key, () => addConnection(key))}>{formatMessage('Configure')}</Link>
+                <Link onClick={() => openModal(key)}>{formatMessage('Configure')}</Link>
               )}
             </div>
             <div css={tableRowItem(columnWidths[2])}>
@@ -105,6 +116,31 @@ const AdapterSettings = (props: Props) => {
                 }}
               />
             </div>
+            <TooltipHost content={formatMessage('Actions')} directionalHint={DirectionalHint.rightCenter}>
+              <IconButton
+                ariaLabel={formatMessage('Actions')}
+                className="dialog-more-btn"
+                data-testid="dialogMoreButton"
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                menuProps={{
+                  items: [
+                    {
+                      key: 'edit',
+                      text: formatMessage('Edit'),
+                      iconProps: { iconName: 'Edit' },
+                      onClick: () => openModal(key),
+                    },
+                  ],
+                }}
+                role="cell"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.stopPropagation();
+                  }
+                }}
+                styles={{ root: { paddingTop: '10px' } }}
+              />
+            </TooltipHost>
           </div>
         );
       })}

@@ -12,6 +12,18 @@
         ]
     }
   },
+  "Adapters.FakeChat": {
+    "form": {
+        "label": "Connect to fake client",
+        "subtitle": "Connect to fake client",
+        "helpLink": "https://aka.ms/who",
+        "order": [
+            "exampleName",
+            "emojiTest",
+            "longLongName"
+        ]
+    }
+  },
   "Microsoft.AdaptiveDialog": {
     "form": {
       "description": "This configures a data driven dialog via a collection of events and actions.",

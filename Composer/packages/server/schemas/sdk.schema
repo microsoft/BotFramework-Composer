@@ -363,6 +363,37 @@
           "contosoSecretKey"
       ]
     },
+    "Adapters.FakeChat": {
+      "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
+      "$role": "implements(Microsoft.IAdapter)",
+      "title": "Fake Chat Client Adapter",
+      "description": "Connect your bot to Contoso Chat Client",
+      "type": "object",
+      "properties": {
+        "exampleName": {
+            "type": "string",
+            "title": "Example Name",
+            "description": "fake skill used for testing"
+        },
+        "emojiTest": {
+            "type": "number",
+            "title": "🥍🦈",
+            "description": "Number of sharks playing lacrosse."
+        },
+        "longLongName": {
+            "type": "boolean",
+            "title": "This field has a really long name - let's see what the dialog does with it",
+            "description": "Set to true if this field is true."
+        },
+        "$designer": {
+          "title": "Contoso parameters",
+          "type": "object",
+          "description": "Parameter values for the Contoso adapter."
+        }
+      },
+      "required": [
+      ]
+    },
     "Microsoft.ActivityTemplate": {
       "$role": "implements(Microsoft.IActivityTemplate)",
       "title": "Microsoft activity template",

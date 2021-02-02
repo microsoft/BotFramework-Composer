@@ -110,7 +110,6 @@ export const settingsDispatcher = () => {
       const { snapshot } = callbackHelpers;
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (projectId === rootBotProjectId) {
-        console.log(settings);
         setRootBotSettingState(callbackHelpers, projectId, settings);
       } else {
         setSkillBotSettingState(callbackHelpers, projectId, settings);
