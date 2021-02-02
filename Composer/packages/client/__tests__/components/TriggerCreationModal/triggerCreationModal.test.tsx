@@ -3,9 +3,10 @@
 
 import * as React from 'react';
 import { fireEvent, waitFor } from '@botframework-composer/test-utils';
+import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 
-import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
-import { renderWithRecoil } from '../testUtils';
+import { TriggerCreationModal } from '../../../src/components/TriggerCreationModal';
+import { renderWithRecoil } from '../../testUtils';
 
 const projectId = '123a-bv3c4';
 
@@ -13,15 +14,34 @@ describe('<TriggerCreationModal/>', () => {
   const onSubmitMock = jest.fn();
   const onDismissMock = jest.fn();
 
+  const pluginsStub: PluginConfig = {
+    uiSchema: {
+      'Microsoft.OnIntent': {
+        trigger: {
+          label: 'Intent recognized',
+          order: 1,
+        },
+      },
+      'Microsoft.OnQnAMatch': {
+        trigger: {
+          label: 'QnA Intent recognized',
+          order: 2,
+        },
+      },
+    },
+  };
+
   function renderComponent() {
     return renderWithRecoil(
-      <TriggerCreationModal
-        isOpen
-        dialogId={'todobot'}
-        projectId={projectId}
-        onDismiss={onDismissMock}
-        onSubmit={onSubmitMock}
-      />
+      <EditorExtension plugins={pluginsStub} projectId={''} shell={{ api: {} as any, data: {} as any }}>
+        <TriggerCreationModal
+          isOpen
+          dialogId={'todobot'}
+          projectId={projectId}
+          onDismiss={onDismissMock}
+          onSubmit={onSubmitMock}
+        />
+      </EditorExtension>
     );
   }
 
@@ -30,7 +50,7 @@ describe('<TriggerCreationModal/>', () => {
     expect(component.container).toBeDefined();
   });
 
-  it('hould create a Luis Intent recognized', async () => {
+  it('should create a Luis Intent recognized', async () => {
     const component = renderComponent();
     const triggerType = component.getByTestId('triggerTypeDropDown');
     fireEvent.click(triggerType);
