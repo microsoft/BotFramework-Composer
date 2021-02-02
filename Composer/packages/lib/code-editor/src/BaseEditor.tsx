@@ -146,7 +146,10 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.
-  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
+  // if editor is readOnly, we can take external value updates.
+  const initialValue = editorOptions?.readOnly
+    ? value
+    : useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     editorRef.current = editor;
