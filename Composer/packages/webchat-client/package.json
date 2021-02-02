@@ -20,7 +20,8 @@
     "prepublishOnly": "npm run build",
     "test": "jest --no-cache",
     "lint": "eslint --quiet ./src ./__tests__",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "start": "tsc --watch --preserveWatchOutput"
   },
   "license": "MIT",
   "dependencies": {

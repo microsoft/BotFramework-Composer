@@ -84,7 +84,7 @@ const BotController: React.FC = () => {
 
   const projectId = useRecoilValue(currentProjectIdState);
   const projectName = useRecoilValue(botDisplayNameState(projectId));
-  const isCurrentBotRunning = runningBots.projectIds.some((id) => id === projectId);
+  const isRootBotRunning = runningBots.projectIds.find((id) => id === rootBotId);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -198,15 +198,28 @@ const BotController: React.FC = () => {
   };
 
   const items = useMemo<IContextualMenuItem[]>(() => {
-    return projectCollection.map(({ name: displayName, projectId }) => ({
-      key: projectId,
-      displayName,
-      projectId,
-      isRoot: projectId === rootBotId,
-      setGlobalErrorCalloutVisibility,
-      isRootBot: projectId === rootBotId,
-    }));
+    return projectCollection.map(({ name: displayName, projectId }) => {
+      const isRootBot = projectId === rootBotId;
+      return {
+        key: projectId,
+        displayName,
+        projectId,
+        setGlobalErrorCalloutVisibility,
+        isRootBot,
+      };
+    });
   }, [projectCollection, rootBotId]);
+
+  const getBotSecrets = (botId: string) => {
+    const matchedProject = projectCollection.find((project) => project.projectId === botId);
+    if (matchedProject) {
+      return matchedProject.secrets;
+    }
+    return {
+      msAppId: '',
+      msPassword: '',
+    };
+  };
 
   return (
     <React.Fragment>
@@ -295,7 +308,7 @@ const BotController: React.FC = () => {
       </div>
       <IconButton
         ariaDescription={formatMessage('Open web chat')}
-        disabled={!isCurrentBotRunning}
+        disabled={!isRootBotRunning}
         iconProps={{
           iconName: 'ChatSolid',
         }}
@@ -341,7 +354,11 @@ const BotController: React.FC = () => {
         type={PanelType.custom}
         onDismiss={dismissPanel}
       >
-        <WebChatPanel botUrl={rootBotId ? botEndpoints[rootBotId] : ''} directlineHostUrl={BASEPATH} />
+        <WebChatPanel
+          botUrl={rootBotId ? botEndpoints[rootBotId] : ''}
+          directlineHostUrl={BASEPATH}
+          secrets={getBotSecrets(rootBotId || '')}
+        />
       </Panel>
       <BotControllerMenu
         ref={startPanelTarget}

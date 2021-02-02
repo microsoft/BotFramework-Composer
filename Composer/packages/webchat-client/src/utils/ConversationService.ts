@@ -37,6 +37,8 @@ type ChatData = {
   user: any;
 };
 
+let iterator = 1;
+
 export class ConversationService {
   private chats: Record<string, ChatData> = {};
   private directlineHostUrl: string;
@@ -76,9 +78,11 @@ export class ConversationService {
     const options = {
       conversationId,
       ...directLineOptions,
+      test: iterator++,
     };
 
     const secret = btoa(JSON.stringify(options));
+    console.log(secret);
     const directLine = createDirectLine({
       token: 'emulatorToken',
       conversationId,
@@ -140,5 +144,15 @@ export class ConversationService {
 
   getChatData = (conversationId: string) => {
     return this.chats[conversationId];
+  };
+
+  saveTranscriptToDisk = async (conversationId: string, fileSavePath: string) => {
+    try {
+      await this.composerApiClient.post(`/conversations/${conversationId}/saveTranscript`, {
+        fileSavePath,
+      });
+    } catch (ex) {
+      // TODO: Transcript save failure
+    }
   };
 }

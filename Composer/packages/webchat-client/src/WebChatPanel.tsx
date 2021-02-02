@@ -5,6 +5,7 @@ import React, { useMemo, useEffect, useState, useRef } from 'react';
 import ReactWebChat from 'botframework-webchat';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { createStore as createWebChatStore } from 'botframework-webchat-core';
 
 import { ConversationService } from './utils/ConversationService';
 
@@ -13,12 +14,12 @@ const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 export interface WebChatPanelProps {
   /** Bot runtime url. */
   botUrl: string;
-
+  secrets: { msAppId: string; msPassword: string };
   /** Directline host url. By default, set to Composer host url. */
   directlineHostUrl?: string;
 }
 
-export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHostUrl = BASEPATH }) => {
+export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, secrets, directlineHostUrl = BASEPATH }) => {
   const [directlineObj, setDirectline] = useState<any>(undefined);
   const conversationServiceRef = useRef<ConversationService>(new ConversationService(directlineHostUrl));
   const conversationService = conversationServiceRef.current;
@@ -27,7 +28,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
     return conversationService.getUser();
   }, []);
 
-  const handleRestartConversation = async (oldConversationId: string, requireNewConversationId: boolean) => {
+  const onRestartConversationClick = async (oldConversationId: string, requireNewConversationId: boolean) => {
+    const newUser = conversationService.getUser();
     const chatObj = conversationService.getChatData(oldConversationId);
     let conversationId;
     if (requireNewConversationId) {
@@ -37,27 +39,30 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
     }
     chatObj.directline.end();
 
-    const resp = await conversationService.conversationUpdate(oldConversationId, conversationId, chatObj.user.id);
+    const resp = await conversationService.conversationUpdate(oldConversationId, conversationId, newUser.id);
     const { endpointId } = resp.data;
     const dl = await conversationService.fetchDirectLineObject(conversationId, {
       mode: 'conversation',
       endpointId: endpointId,
-      userId: user.id,
+      userId: newUser.id,
     });
     setDirectline(dl);
   };
 
+  const onSaveTranscriptClick = (conversationId: string) => {
+    conversationService.saveTranscriptToDisk(conversationId, 'transcripts.transcript');
+  };
+
   async function fetchDLEssentials() {
     const resp: any = await conversationService.startConversation({
-      botUrl: props.botUrl || 'http://localhost:3978/api/messages',
+      botUrl: botUrl || 'http://localhost:3978/api/messages',
       channelServiceType: 'public',
       members: [user],
       mode: 'conversation',
-      msaAppId: 'd59f97db-99a4-4bda-bcf9-426781af07ce',
-      msaPassword: 'PLo4VN4~vS-C~9-i059Qa-vf~mavG1iBB~',
+      msaAppId: secrets.msAppId,
+      msaPassword: secrets.msPassword,
     });
 
-    // await conversationService.conversationUpdate(resp.data.conversationId, user.id)
     const dl = await conversationService.fetchDirectLineObject(resp.data.conversationId, {
       mode: 'conversation',
       endpointId: resp.data.endpointId,
@@ -79,15 +84,16 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
         directline: directlineObj,
         user,
       });
+      const webchatStore = createWebChatStore({});
       return (
         <ReactWebChat
           key={directlineObj.conversationId}
           directLine={directlineObj}
           disabled={false}
+          store={webchatStore}
           // reference: https://github.com/microsoft/BotFramework-WebChat/blob/master/packages/component/src/Styles/defaultStyleOptions.js
           styleOptions={{}}
           userID={user.id}
-          username={'User'}
         />
       );
     }
@@ -100,11 +106,14 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, directlineHo
     return (
       <>
         <div data-testid="Webchat-Header" style={{ height: 36 }}>
-          <DefaultButton type="button" onClick={() => handleRestartConversation(directlineObj.conversationId, false)}>
-            {formatMessage('Restart with same')}
+          <DefaultButton type="button" onClick={() => onSaveTranscriptClick(directlineObj.conversationId)}>
+            {formatMessage('Save')}
           </DefaultButton>
-          <DefaultButton type="button" onClick={() => handleRestartConversation(directlineObj.conversationId, true)}>
-            {formatMessage('Restart with new')}
+          <DefaultButton type="button" onClick={() => onRestartConversationClick(directlineObj.conversationId, false)}>
+            {formatMessage('ReS')}
+          </DefaultButton>
+          <DefaultButton type="button" onClick={() => onRestartConversationClick(directlineObj.conversationId, true)}>
+            {formatMessage('ReD')}
           </DefaultButton>
         </div>
         <div data-testid="WebChat-Content" style={{ height: 'calc(100% - 36px)' }}>

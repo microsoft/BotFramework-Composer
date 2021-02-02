@@ -86,11 +86,16 @@ export const buildConfigurationSelector = selector({
         const name = get(botDisplayNameState(projectId));
         const dialogs = get(dialogsSelectorFamily(projectId));
         const settings = get(settingsState(projectId));
+        const secrets = {
+          msAppId: settings.MicrosoftAppId || '',
+          msPassword: settings.MicrosoftAppPassword || '',
+        };
+
         let sensitiveSettings = {};
         if (rootBotId) {
           sensitiveSettings = getSensitiveProperties(settings);
         }
-        return { ...result, name, dialogs, sensitiveSettings };
+        return { ...result, name, dialogs, sensitiveSettings, secrets };
       });
   },
 });

@@ -11,12 +11,14 @@ const mkdirpPromisify = promisify(fs.mkdir);
 const readFilePromisify = promisify(fs.readFile);
 
 export const writeFile = async (path: string, content: any): Promise<void> => {
-  await writeFilePromisify(path, content);
+  await writeFilePromisify(path, content, { encoding: 'utf8', flag: 'w' });
 };
 
 export const mkdirp = async (filePath: string): Promise<void> => {
   const folderPath = path.dirname(filePath);
-  await mkdirpPromisify(folderPath);
+  if (!fs.existsSync(folderPath)) {
+    await mkdirpPromisify(folderPath);
+  }
 };
 
 export const readFile = async (path: string, encoding: BufferEncoding = 'base64'): Promise<string> => {

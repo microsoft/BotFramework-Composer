@@ -314,7 +314,7 @@ export function createUpdateConversationHandler(state: DLServerState) {
 
 export function saveTranscriptHandler(state: DLServerState) {
   return async (req: express.Request, res: express.Response): Promise<void> => {
-    const fileSavePath = req.query.fileSavePath;
+    const { fileSavePath } = req.body;
     const conversation: Conversation = (req as any).conversation;
     if (!conversation) {
       res.status(StatusCodes.NOT_FOUND).send('Conversation not found');
@@ -324,16 +324,17 @@ export function saveTranscriptHandler(state: DLServerState) {
     }
 
     try {
-      if (fileSavePath?.length) {
-        mkdirp(fileSavePath);
-        const transcripts = await conversation.getTranscript();
-        const contentsToWrite = typeof transcripts === 'object' ? JSON.stringify(transcripts, null, 2) : transcripts;
-        writeFile(fileSavePath, contentsToWrite);
-        res.status(StatusCodes.CREATED).json({
-          path: req.query.fileSavePath,
-          message: 'Transcript has been saved to disk sunccesfully',
-        });
+      if (!fileSavePath?.length) {
+        res.status(StatusCodes.BAD_REQUEST).send('Invalid file path to save the transcript.');
       }
+      await mkdirp(fileSavePath);
+      const transcripts = await conversation.getTranscript();
+      const contentsToWrite = typeof transcripts === 'object' ? JSON.stringify(transcripts, null, 2) : transcripts;
+      writeFile(fileSavePath, contentsToWrite);
+      res.status(StatusCodes.CREATED).json({
+        path: req.query.fileSavePath,
+        message: 'Transcript has been saved to disk sunccesfully',
+      });
     } catch (ex) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ex);
     }
