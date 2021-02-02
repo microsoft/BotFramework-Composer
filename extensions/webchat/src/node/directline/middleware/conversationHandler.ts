@@ -340,3 +340,22 @@ export function saveTranscriptHandler(state: DLServerState) {
     }
   };
 }
+
+export function getTranscriptHandler(state: DLServerState) {
+  return async (req: express.Request, res: express.Response): Promise<any> => {
+    const conversation: Conversation = (req as any).conversation;
+    if (!conversation) {
+      res.status(StatusCodes.NOT_FOUND).send('Conversation not found');
+      const logItem = textItem('Error', 'Cannot find a matching conversation.');
+      state.dispatchers.logToDocument(req.params.conversationId, logItem);
+      return;
+    }
+
+    try {
+      const transcripts = await conversation.getTranscript();
+      res.status(StatusCodes.OK).json(transcripts);
+    } catch (ex) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ex);
+    }
+  };
+}

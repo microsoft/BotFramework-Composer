@@ -14,6 +14,7 @@ import {
   sendActivityToConversation,
   createUpdateConversationHandler,
   saveTranscriptHandler,
+  getTranscriptHandler,
 } from './middleware';
 import DLServerContext from './store/DLServerState';
 import { getWebSocketPort } from './utils/socketPort';
@@ -62,6 +63,7 @@ export function mountConversationsRoutes(dLServerState: DLServerContext): expres
   );
 
   router.post('/conversations/:conversationId/saveTranscript', fetchConversation, saveTranscriptHandler(state));
+  router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler(state));
 
   return router;
 }

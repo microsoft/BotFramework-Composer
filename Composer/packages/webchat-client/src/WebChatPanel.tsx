@@ -24,6 +24,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, secrets, dir
   const conversationServiceRef = useRef<ConversationService>(new ConversationService(directlineHostUrl));
   const conversationService = conversationServiceRef.current;
 
+  const downloadLinkRef = useRef<HTMLAnchorElement>(null);
+
   const user = useMemo(() => {
     return conversationService.getUser();
   }, []);
@@ -49,8 +51,19 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, secrets, dir
     setDirectline(dl);
   };
 
-  const onSaveTranscriptClick = (conversationId: string) => {
-    conversationService.saveTranscriptToDisk(conversationId, 'transcripts.transcript');
+  const onSaveTranscriptClick = async (conversationId: string) => {
+    const downloadLink = downloadLinkRef.current;
+    if (!downloadLink) return;
+
+    const resp = await conversationService.getTranscriptsData(conversationId);
+    const transcripts = resp.data;
+
+    const blob = new Blob([JSON.stringify(transcripts, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    downloadLink.download = 'transcripts.transcript';
+    downloadLink.href = url;
+    downloadLink.click();
   };
 
   async function fetchDLEssentials() {
@@ -109,6 +122,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, secrets, dir
           <DefaultButton type="button" onClick={() => onSaveTranscriptClick(directlineObj.conversationId)}>
             {formatMessage('Save')}
           </DefaultButton>
+          {/* A shadow download link to trigger browser native API on saving transcript JSON.  */}
+          <a ref={downloadLinkRef} href="#save" style={{ display: 'none' }}>
+            {formatMessage('Save')}
+          </a>
           <DefaultButton type="button" onClick={() => onRestartConversationClick(directlineObj.conversationId, false)}>
             {formatMessage('ReS')}
           </DefaultButton>

@@ -146,6 +146,10 @@ export class ConversationService {
     return this.chats[conversationId];
   };
 
+  getTranscriptsData = async (conversationId: string) => {
+    return await this.composerApiClient.get(`/conversations/${conversationId}/transcripts`);
+  };
+
   saveTranscriptToDisk = async (conversationId: string, fileSavePath: string) => {
     try {
       await this.composerApiClient.post(`/conversations/${conversationId}/saveTranscript`, {
