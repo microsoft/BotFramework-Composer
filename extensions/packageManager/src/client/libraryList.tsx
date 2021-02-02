@@ -9,14 +9,12 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
-  IGroup,
-  DefaultButton,
   IconButton,
   Sticky,
   StickyPositionType,
   TooltipHost,
   Selection,
-  OverflowSet,
+  FontIcon,
   IOverflowSetItemProps,
 } from 'office-ui-fabric-react';
 import React, { useState, useEffect, useMemo, Fragment } from 'react';
@@ -36,6 +34,7 @@ export interface LibraryRef {
   description: string;
   type?: string;
   category?: string;
+  language: string;
   source?: string;
   isCompatible?: boolean;
 }
@@ -43,7 +42,7 @@ export interface LibraryRef {
 export interface ILibraryListProps {
   disabled: boolean;
   items: LibraryRef[];
-  groups: IGroup[];
+  // groups: IGroup[];
   redownload: (evt: any) => void;
   install: (evt: any) => void;
   isInstalled: (item: LibraryRef) => boolean;
@@ -52,80 +51,53 @@ export interface ILibraryListProps {
   updateItems: (items: LibraryRef[]) => void;
 }
 
-function onRenderDetailsHeader(props, defaultRender) {
-  return (
-    <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
-      {defaultRender({
-        ...props,
-        onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
-      })}
-    </Sticky>
-  );
+interface ILetterIconProps {
+  letter: string;
+}
+
+const LetterIcon: React.FC<ILetterIconProps> = (props) => {
+  return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: '#FFF', backgroundColor: 'rgb(0, 120, 212)', fontSize: '30px'}}>
+    <span>{ props.letter }</span>
+  </div>
 }
 
 export const LibraryList: React.FC<ILibraryListProps> = (props) => {
-  const { items, groups, disabled } = props;
+  const { items, disabled } = props;
   const [selectIndex, setSelectedIndex] = useState<number>();
-  const [currentSort, setSort] = useState({
-    key: 'ItemName',
-    descending: true,
-  });
-
-  const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
-    return (
-      <IconButton
-        menuIconProps={{ iconName: 'MoreVertical' }}
-        menuProps={{ items: overflowItems! }}
-        role="menuitem"
-        title="More options"
-      />
-    );
-  };
-  const onRenderItem = (item: IOverflowSetItemProps) => {
-    const { name, key } = item;
-    return <div key={key}>{name}</div>;
-  };
 
   const columns = [
+    {
+      key: 'icon',
+      name: 'Icon',
+      fieldName: 'icon',
+      minWidth: 50,
+      maxWidth: 50,
+      isResizable: false,
+      data: 'string',
+      onRender: (item: LibraryRef) => {
+        return <Fragment>
+          {item.icon ? (
+            <img src={item.icon} width="50" height="50" alt="icon" />
+          ): (
+            <LetterIcon letter={item.name[0]} />
+          )}
+        </Fragment>;
+      },
+      isPadded: true,
+    },
     {
       key: 'ItemName',
       name: 'Name',
       fieldName: 'name',
-      minWidth: 150,
-      maxWidth: 300,
-      isRowHeader: true,
+      minWidth: 300,
+      maxWidth: 800,
       isResizable: true,
       data: 'string',
       onRender: (item: LibraryRef) => {
-        return <span>{item.name}</span>;
-      },
-      isPadded: true,
-    },
-    {
-      key: 'Version',
-      name: 'Version',
-      fieldName: 'version',
-      minWidth: 70,
-      maxWidth: 90,
-      isRowHeader: true,
-      isResizable: true,
-      data: 'string',
-      onRender: (item: LibraryRef) => {
-        return <span>{item.version}</span>;
-      },
-      isPadded: true,
-    },
-    {
-      key: 'Description',
-      name: 'Description',
-      fieldName: 'description',
-      minWidth: 150,
-      maxWidth: 600,
-      isRowHeader: true,
-      isResizable: true,
-      data: 'string',
-      onRender: (item: LibraryRef) => {
-        return <span>{item.description}</span>;
+        return <Fragment>
+          <span style={{display: 'block', fontWeight: 'bold'}}>{item.name}</span>
+          <span>{item.description}</span>
+          </Fragment>;
       },
       isPadded: true,
     },
@@ -134,31 +106,15 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       name: '',
       minWidth: 90,
       maxWidth: 60,
-      isRowHeader: true,
-      isResizable: true,
+      isResizable: false,
       data: 'string',
       onRender: (item: LibraryRef) => {
         return (
           <Fragment>
             {props.isInstalled(item) && (
-              <OverflowSet
-                overflowItems={[
-                  {
-                    key: 'remove',
-                    name: 'Remove',
-                    onClick: () => props.removeLibrary(item),
-                  },
-                ]}
-                onRenderItem={onRenderItem}
-                onRenderOverflowButton={onRenderOverflowButton}
-              />
-            )}
-            {!props.isInstalled(item) && (
-              <DefaultButton
-                text={formatMessage('Install')}
-                onClick={props.install}
-                disabled={disabled || !item.isCompatible}
-              />
+              <span  style={{color: '#219653'}}>
+                <FontIcon iconName={'CheckMark'} style={{color: '#219653', fontSize: '1rem', position: 'relative', top: '3px'}}/> Installed
+              </span>
             )}
           </Fragment>
         );
@@ -190,37 +146,16 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
     <div css={listRoot}>
       <div css={tableView}>
         <DetailsList
-          isHeaderVisible
+          isHeaderVisible={false}
           checkboxVisibility={CheckboxVisibility.hidden}
-          columns={columns.map((col) => ({
-            ...col,
-            isSorted: col.key === currentSort.key,
-            isSortedDescending: currentSort.descending,
-          }))}
+          columns={columns}
           css={detailList}
           getKey={(item) => item.id}
-          groupProps={{
-            showEmptyGroups: true,
-          }}
-          groups={groups}
           items={items}
           layoutMode={DetailsListLayoutMode.justified}
           selection={selection}
           selectionMode={SelectionMode.single}
           setKey="none"
-          onColumnHeaderClick={(_, clickedCol) => {
-            if (!clickedCol) return;
-            if (clickedCol.key === currentSort.key) {
-              clickedCol.isSortedDescending = !currentSort.descending;
-              setSort({
-                key: clickedCol.key,
-                descending: !currentSort.descending,
-              });
-            } else {
-              clickedCol.isSorted = false;
-            }
-          }}
-          onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </div>
     </div>

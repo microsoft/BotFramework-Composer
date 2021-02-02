@@ -134,6 +134,24 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
   };
 
   const LibraryController = {
+    getReadme: async (req: any, res: any) => {
+      try {
+        const moduleName = req.params.packageName;
+        if (!moduleName) {
+          res.status(400).json({
+            message: 'missing module name on request',
+          });
+        } else {
+          const moduleURL = 'https://registry.npmjs.org/' + moduleName;
+          const raw = await axios.get(moduleURL);
+          res.status(200).json(raw.data);
+        }
+      } catch (error) {
+        res.status(400).json({
+          message: error instanceof Error ? error.message : error,
+        });
+      }
+    },
     getFeeds: async function (req, res) {
       // read the list of sources from the config file.
       let packageSources = composer.store.read('feeds') as {
@@ -494,4 +512,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
   composer.addWebRoute('get', `${API_ROOT}/feeds`, LibraryController.getFeeds);
   composer.addWebRoute('post', `${API_ROOT}/feeds`, LibraryController.updateFeeds);
   composer.addWebRoute('get', `${API_ROOT}/feed`, LibraryController.getFeed);
+  composer.addWebRoute('get', `${API_ROOT}/readme/:packageName`, LibraryController.getReadme);
+
 };

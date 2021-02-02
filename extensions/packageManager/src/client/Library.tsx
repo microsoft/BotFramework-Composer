@@ -7,7 +7,7 @@ import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import {
   Link,
-  DefaultButton,
+  PrimaryButton,
   Pivot,
   PivotItem,
   Dialog,
@@ -31,6 +31,7 @@ import { LibraryRef, LibraryList } from './libraryList';
 import { WorkingModal } from './workingModal';
 import { FeedModal } from './feedModal';
 import { ProjectList } from './projectList/ProjectList';
+import ReactMarkdown from 'react-markdown';
 
 const DEFAULT_CATEGORY = formatMessage('Available');
 
@@ -64,11 +65,13 @@ const Library: React.FC = () => {
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [readmeContent, setReadmeContent] = useState<string>('');
   const httpClient = useHttpClient();
   const API_ROOT = '';
 
   const strings = {
     title: formatMessage('Package Manager'),
+    editFeeds: formatMessage('Edit feeds'),
     description: formatMessage('Discover and use components that can be installed into your bot.'),
     descriptionLink: formatMessage('Learn more'),
     installButton: formatMessage('Install Package'),
@@ -133,6 +136,11 @@ const Library: React.FC = () => {
   const getInstalledComponentsAPI = (projectId: string) => {
     return httpClient.get(`${API_ROOT}/projects/${projectId}/installedComponents`);
   };
+
+  const getReadmeAPI = (packageName: string) => {
+    return httpClient.get(`${API_ROOT}/readme/${ packageName }`);
+  };
+
 
   const uninstallComponentAPI = (projectId: string, packageName: string) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/unimport`, {
@@ -215,24 +223,49 @@ const Library: React.FC = () => {
         }
       });
     }
-
-    if (recentlyUsed) {
-      const recentlyUsedCompatible = recentlyUsed.filter((component) => isCompatible(component));
-      if (recentlyUsedCompatible.length) {
-        groups.push({
-          key: 'recently',
-          name: strings.recentlyUsedCategory,
-          startIndex: items.length,
-          count: recentlyUsedCompatible.length,
-          level: 0,
-        });
-        items = items.concat(recentlyUsedCompatible || []);
-      }
-    }
+    // if (recentlyUsed) {
+    //   const recentlyUsedCompatible = recentlyUsed.filter((component) => isCompatible(component));
+    //   if (recentlyUsedCompatible.length) {
+    //     groups.push({
+    //       key: 'recently',
+    //       name: strings.recentlyUsedCategory,
+    //       startIndex: items.length,
+    //       count: recentlyUsedCompatible.length,
+    //       level: 0,
+    //     });
+    //     items = items.concat(recentlyUsedCompatible || []);
+    //   }
+    // }
 
     setItems(items);
     setGroups(groups);
   }, [installedComponents, availableLibraries, recentlyUsed]);
+
+  useEffect(() => {
+    if (selectedItem) {
+      if (selectedItem.language === 'js') {
+        // fetch the extended readme from npm
+        try {
+          getReadmeAPI(selectedItem.name).then((res) =>{
+            if (res.data.readme) {
+              setReadmeContent(res.data.readme);
+            } else {
+              setReadmeContent(selectedItem.description);
+            }
+          });
+        } catch(err) {
+          console.error(err);
+          setReadmeContent(selectedItem.description);
+        }
+      } else {
+          setReadmeContent(selectedItem.description);
+      }
+    } else {
+      setReadmeContent('');
+    }
+
+  },[selectedItem]);
+
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -248,6 +281,18 @@ const Library: React.FC = () => {
       dataTestid: 'publishPage-ToolBar-Add',
       disabled: !ejectedRuntime,
     },
+    {
+      type: 'action',
+      text: strings.editFeeds,
+      buttonProps: {
+        iconProps: {
+          iconName: 'SingleColumnEdit',
+        },
+        onClick: () => setModalVisible(true),
+      },
+      align: 'left',
+      dataTestid: 'publishPage-ToolBar-EditFeeds'
+    }
   ];
 
   const closeDialog = () => {
@@ -403,10 +448,6 @@ const Library: React.FC = () => {
     navigateTo(`/bot/${currentProjectId}/botProjectsSettings/#runtimeSettings`);
   };
 
-  const showFeedModal = (evt: any): void => {
-    setModalVisible(true);
-  };
-
   const updateFeed = async (key: string, updatedItem: PackageSourceFeed) => {
     const response = await httpClient.post(`${API_ROOT}/feeds`, {
       key: key,
@@ -450,14 +491,14 @@ const Library: React.FC = () => {
         </p>
       </div>
       <Stack horizontal disableShrink styles={{ root: { borderTop: '1px solid #CCC' } }}>
-        <Stack.Item styles={{ root: { width: '300px', borderRight: '1px solid #CCC' } }}>
+        {/* <Stack.Item styles={{ root: { width: '300px', borderRight: '1px solid #CCC' } }}>
           <ProjectList
             defaultSelected={projectId}
             projectCollection={projectCollection}
             onSelect={(link) => setCurrentProjectId(link.projectId)}
           />
-        </Stack.Item>
-        <Stack.Item styles={{ root: { flexGrow: 1 } }}>
+        </Stack.Item> */}
+        <Stack.Item styles={{ root: { flexGrow: 1, flexShrink: 1, } }}>
           {!ejectedRuntime && (
             <MessageBar
               messageBarType={MessageBarType.warning}
@@ -475,6 +516,12 @@ const Library: React.FC = () => {
             <Pivot aria-label="Library Views" style={{ paddingLeft: '12px' }}>
               <PivotItem headerText={strings.browseHeader}>
                 <section style={{ paddingRight: '20px', display: 'grid', justifyContent: 'end' }}>
+                <SearchBox
+                    placeholder="Search"
+                    onClear={() => setSearchTerm('')}
+                    onSearch={setSearchTerm}
+                    disabled={!feeds || !feed}
+                  />
                   <Dropdown
                     placeholder="Format"
                     selectedKey={feed}
@@ -484,21 +531,11 @@ const Library: React.FC = () => {
                       root: { width: '200px' },
                     }}
                   ></Dropdown>
-                  <DefaultButton onClick={showFeedModal}>Feeds</DefaultButton>
-                </section>
-                <section>
-                  <SearchBox
-                    placeholder="Search"
-                    onClear={() => setSearchTerm('')}
-                    onSearch={setSearchTerm}
-                    disabled={!feeds || !feed}
-                  />
                 </section>
                 {loading && <LoadingSpinner />}
                 {items?.length ? (
                   <LibraryList
                     disabled={!ejectedRuntime}
-                    groups={groups}
                     install={install}
                     isInstalled={isInstalled}
                     items={items}
@@ -523,15 +560,6 @@ const Library: React.FC = () => {
               <PivotItem headerText={strings.installHeader}>
                 <LibraryList
                   disabled={!ejectedRuntime}
-                  groups={[
-                    {
-                      key: 'installed',
-                      name: strings.installedCategory,
-                      startIndex: 0,
-                      count: installedComponents ? installedComponents.length : 0,
-                      level: 0,
-                    },
-                  ]}
                   install={install}
                   isInstalled={isInstalled}
                   items={installedComponents}
@@ -553,7 +581,27 @@ const Library: React.FC = () => {
                 )}
               </PivotItem>
             </Pivot>
+
           </Fragment>
+        </Stack.Item>
+        <Stack.Item styles={{ root: { flexShrink: 1, width: '400px', padding: '20px', borderLeft: '1px solid #CCC' } }}>
+          {selectedItem ? (
+            <Fragment>
+              <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible}>{ strings.installButton }</PrimaryButton>
+              This is the readme sidebar
+              ejected: {ejectedRuntime} compatible: { selectedItem.isCompatible}
+
+              <h3>{ selectedItem.name }</h3>
+
+              {readmeContent && (
+                <ReactMarkdown>{readmeContent}</ReactMarkdown>
+              )}
+            </Fragment>
+          ) : (
+            <Fragment>
+              <p>Select an item from the list to view a detailed description.</p>
+            </Fragment>
+          )}
         </Stack.Item>
       </Stack>
     </ScrollablePane>
