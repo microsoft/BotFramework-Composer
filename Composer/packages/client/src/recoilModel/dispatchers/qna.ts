@@ -97,7 +97,7 @@ export const createQnAFileState = async (
   }
   const changes: QnAFile[] = [];
 
-  // copy to other locales
+  // create same qna file on all locales
   languages.forEach((lang) => {
     const fileId = `${id}.${lang}`;
     qnaFileStatusStorage.updateFileStatus(projectId, fileId);
@@ -143,13 +143,14 @@ export const createKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const createdSourceQnAId = `${name}.source`;
+  const locale = await snapshot.getLoadable(localeState(projectId));
+  const createdSourceQnAId = `${name}.source.${locale}`;
 
   if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
     throw new Error(`source qna file ${createdSourceQnAId}.qna already exist`);
   }
 
-  const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
+  //const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
 
   let updatedQnAFiles: QnAFile[] = [];
 
@@ -167,10 +168,13 @@ export const createKBFileState = async (
       });
 
     qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
+    set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles }));
   }
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
-  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles, adds: [createdQnAFile] }));
+
+  //need to create other locale qna files
+  await createQnAFileState(callbackHelpers, { id: name, content, projectId });
 };
 
 export const removeKBFileState = async (
