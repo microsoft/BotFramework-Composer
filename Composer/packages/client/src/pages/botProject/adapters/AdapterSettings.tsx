@@ -82,6 +82,7 @@ const AdapterSettings = (props: Props) => {
 
       {schemas.map((schema) => {
         const { key, title } = schema;
+        const keyEnabled = adapters.includes(key);
         return (
           <div key={key} css={tableRow}>
             <div css={tableRowItem(columnWidths[0])}>{title}</div>
@@ -94,9 +95,9 @@ const AdapterSettings = (props: Props) => {
             </div>
             <div css={tableRowItem(columnWidths[2])}>
               <Toggle
-                checked={adapters.includes(key)}
+                checked={keyEnabled}
                 onChange={(ev, val?: boolean) => {
-                  if (val && !adapters.includes(key)) {
+                  if (val && !keyEnabled) {
                     setSettings(projectId, { ...currentSettings, adapters: [...adapters, key] });
                   } else {
                     setSettings(projectId, { ...currentSettings, adapters: adapters.filter((a) => a !== key) });
@@ -115,6 +116,8 @@ const AdapterSettings = (props: Props) => {
     .filter(([key, value]) => value?.$role != null && /IAdapter/.test(value.$role))
     .map(([key, value]) => ({ ...value, key }));
 
+  const currentKey = currentModalProps?.key;
+
   return (
     <Fragment>
       <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
@@ -122,13 +125,14 @@ const AdapterSettings = (props: Props) => {
         {azureServices()}
         {externalServices(adapterSchemas)}
       </CollapsableWrapper>
-      {currentModalProps != null && schemaDefinitions[currentModalProps.key] != null && (
+      {currentKey != null && schemaDefinitions[currentKey] != null && (
         <AdapterModal
           isOpen
-          adapterKey={currentModalProps.key}
+          adapterKey={currentKey}
           projectId={projectId}
-          schema={schemaDefinitions[currentModalProps.key]}
-          uiSchema={uiSchemas?.[currentModalProps.key]?.form}
+          schema={schemaDefinitions[currentKey]}
+          uiSchema={uiSchemas?.[currentKey]?.form}
+          value={currentSettings[currentKey]}
           onClose={() => {
             openModal(undefined);
           }}
