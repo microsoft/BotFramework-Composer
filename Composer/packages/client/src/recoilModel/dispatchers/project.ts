@@ -525,6 +525,10 @@ export const projectDispatcher = () => {
     set(currentProjectIdState, projectId);
   });
 
+  const setProjectError = useRecoilCallback((callbackHelpers: CallbackInterface) => (error) => {
+    setError(callbackHelpers, error);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -545,5 +549,6 @@ export const projectDispatcher = () => {
     reloadProject,
     updateCreationMessage,
     setCurrentProjectId,
+    setProjectError,
   };
 };
