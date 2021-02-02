@@ -77,7 +77,6 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const formConfig = useFormConfig();
   const overridedSDKSchema = useMemo(() => {
     if (!dialogId) return {};
-    console.time('test');
     const sdkSchema = schemas.sdk?.content ?? {};
     const sdkDefinitions = clone(sdkSchema.definitions);
     // Override the sdk.schema 'title' field with form ui option 'label' field
@@ -88,7 +87,6 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         sdkDefinitions[$kind] = { ...sdkOptions, title: formOptions.label };
       }
     });
-    console.timeEnd('test');
     return { ...sdkSchema, definitions: sdkDefinitions };
   }, [formConfig, schemas, dialogId]);
   useEffect(() => {
