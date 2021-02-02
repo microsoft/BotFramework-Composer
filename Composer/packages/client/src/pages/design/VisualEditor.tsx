@@ -78,7 +78,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const overridedSDKSchema = useMemo(() => {
     if (!dialogId) return {};
     const sdkSchema = schemas.sdk?.content ?? {};
-    const sdkDefinitions = clone(sdkSchema.definitions);
+    const sdkDefinitions = clone(sdkSchema.definitions) ?? {};
     // Override the sdk.schema 'title' field with form ui option 'label' field
     // to make sure the title is consistent with Form Editor.
     Object.entries(formConfig).forEach(([$kind, formOptions]) => {
