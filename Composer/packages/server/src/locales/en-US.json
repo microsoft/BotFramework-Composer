@@ -35,6 +35,9 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
   },
+  "a_publishing_profile_provides_the_secure_connectiv_e203980e": {
+    "message": "A publishing profile provides the secure connectivity required to publish your bot. "
+  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
   },
@@ -104,6 +107,9 @@
   "activities_125193f7": {
     "message": "Activities"
   },
+  "activities_activity_received_cff408b2": {
+    "message": "Activities (Activity received)"
+  },
   "activity_13915493": {
     "message": "Activity"
   },
@@ -128,8 +134,8 @@
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
   },
-  "add_a_publish_profile_fca2263a": {
-    "message": "Add a publish profile"
+  "add_a_publishing_profile_e926460e": {
+    "message": "Add a publishing profile"
   },
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
@@ -152,6 +158,9 @@
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Add multiple comma-separated synonyms"
   },
+  "add_new_916f2665": {
+    "message": "Add new"
+  },
   "add_new_answer_9de3808e": {
     "message": "Add new answer"
   },
@@ -163,9 +172,6 @@
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
-  },
-  "add_new_publish_profile_93345a07": {
-    "message": "Add new publish profile"
   },
   "add_new_question_85612b7f": {
     "message": "Add new question"
@@ -596,8 +602,14 @@
   "conversation_ended_a8bd37dd": {
     "message": "Conversation ended"
   },
+  "conversation_ended_endofconversation_activity_41d0c83f": {
+    "message": "Conversation ended (EndOfConversation activity)"
+  },
   "conversation_invoked_e960884e": {
     "message": "Conversation invoked"
+  },
+  "conversation_invoked_invoke_activity_71efde42": {
+    "message": "Conversation invoked (Invoke activity)"
   },
   "conversational_core_preview_template_is_available__ba9b43b8": {
     "message": "Conversational Core preview template is available since you have that feature turned on."
@@ -712,9 +724,6 @@
   },
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
-  },
-  "create_profile_name_b85e8c2d": {
-    "message": "Create profile name"
   },
   "creating_your_knowledge_base_ef4f9872": {
     "message": "Creating your knowledge base"
@@ -869,6 +878,9 @@
   "dialog_cancelled_767b512a": {
     "message": "Dialog cancelled"
   },
+  "dialog_cancelled_cancel_dialog_event_3eba3d7e": {
+    "message": "Dialog cancelled (Cancel dialog event)"
+  },
   "dialog_data_61d5539b": {
     "message": "Dialog data"
   },
@@ -901,6 +913,9 @@
   },
   "dialog_started_912507c": {
     "message": "Dialog started"
+  },
+  "dialog_started_begin_dialog_event_751dc07e": {
+    "message": "Dialog started (Begin dialog event)"
   },
   "dialog_with_the_name_value_already_exists_62838518": {
     "message": "Dialog with the name: { value } already exists."
@@ -962,6 +977,9 @@
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
   },
+  "e_g_azurebot_e09f6769": {
+    "message": "e.g. AzureBot"
+  },
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
@@ -1000,6 +1018,9 @@
   },
   "edit_source_45af68b4": {
     "message": "Edit source"
+  },
+  "edit_this_template_in_a_bot_response_view_a_53d982f6": {
+    "message": "Edit this template in <a>Bot Response view</a>"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Ejecting runtime..."
@@ -1118,6 +1139,9 @@
   "error_occurred_5549a6b4": {
     "message": "Error occurred"
   },
+  "error_occurred_error_event_3e7f8ad0": {
+    "message": "Error occurred (Error event)"
+  },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Please add unknown functions to setting''s customFunctions field."
   },
@@ -1135,6 +1159,9 @@
   },
   "event_received_457f99d6": {
     "message": "Event received"
+  },
+  "event_received_event_activity_45ffed05": {
+    "message": "Event received (Event activity)"
   },
   "events_cf7a8c50": {
     "message": "Events"
@@ -1310,6 +1337,9 @@
   "got_it_2c06b54a": {
     "message": "Got it!"
   },
+  "greeting_conversationupdate_activity_3eb99c15": {
+    "message": "Greeting (ConversationUpdate activity)"
+  },
   "greeting_f906f962": {
     "message": "Greeting"
   },
@@ -1321,6 +1351,9 @@
   },
   "handover_to_human_1a619574": {
     "message": "Handover to human"
+  },
+  "handover_to_human_handoff_activity_477a71fe": {
+    "message": "Handover to human (Handoff activity)"
   },
   "help_us_improve_468828c5": {
     "message": "Help us improve?"
@@ -1393,6 +1426,24 @@
   },
   "input_1d1d9b8e": {
     "message": "Input"
+  },
+  "insert_a_property_reference_in_memory_95d27746": {
+    "message": "Insert a property reference in memory"
+  },
+  "insert_a_template_reference_b1d4203e": {
+    "message": "Insert a template reference"
+  },
+  "insert_an_adaptive_expression_pre_built_function_32b1583a": {
+    "message": "Insert an adaptive expression pre-built function"
+  },
+  "insert_prebuilt_functions_22b05f8": {
+    "message": "Insert prebuilt functions"
+  },
+  "insert_property_reference_38f0605": {
+    "message": "Insert property reference"
+  },
+  "insert_template_reference_bb33720e": {
+    "message": "Insert template reference"
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
@@ -1595,6 +1646,9 @@
   "location_is_location_8c17b5de": {
     "message": "location is { location }"
   },
+  "log_output_64a4dbec": {
+    "message": "Log output"
+  },
   "log_to_console_4fc23e34": {
     "message": "Log to console"
   },
@@ -1715,11 +1769,17 @@
   "message_deleted_activity_85dd8915": {
     "message": "Message deleted activity"
   },
+  "message_deleted_message_deleted_activity_dd2d4b9f": {
+    "message": "Message deleted (Message deleted activity)"
+  },
   "message_reaction_3704d790": {
     "message": "Message reaction"
   },
   "message_reaction_activity_379944e7": {
     "message": "Message reaction activity"
+  },
+  "message_reaction_message_reaction_activity_b9ac1076": {
+    "message": "Message reaction (Message reaction activity)"
   },
   "message_received_5abfe9a0": {
     "message": "Message received"
@@ -1727,11 +1787,17 @@
   "message_received_activity_1ff7c2a4": {
     "message": "Message received activity"
   },
+  "message_received_message_received_activity_4ef515f5": {
+    "message": "Message received (Message received activity)"
+  },
   "message_updated_4f2e37fe": {
     "message": "Message updated"
   },
   "message_updated_activity_4997737e": {
     "message": "Message updated activity"
+  },
+  "message_updated_message_updated_activity_eacdb6bd": {
+    "message": "Message updated (Message updated activity)"
   },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft App Id"
@@ -1853,6 +1919,9 @@
   "next_40e12421": {
     "message": "Next"
   },
+  "next_configure_resources_2ea29fdf": {
+    "message": "Next: Configure resources"
+  },
   "no_editor_for_type_8b5593c5": {
     "message": "No Editor for { type }"
   },
@@ -1861,6 +1930,9 @@
   },
   "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
     "message": "No form dialog schema matches your filtering criteria!"
+  },
+  "no_functions_found_e0db426b": {
+    "message": "No functions found"
   },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NO LU FILE WITH NAME { id }"
@@ -1871,11 +1943,17 @@
   "no_name_e082310e": {
     "message": "[no name]"
   },
+  "no_properties_found_6f777f6e": {
+    "message": "No properties found"
+  },
   "no_qna_file_with_name_id_7cb89755": {
     "message": "NO QNA FILE WITH NAME { id }"
   },
   "no_search_results_1ba50423": {
     "message": "No search results"
+  },
+  "no_templates_found_d8dca69b": {
+    "message": "No templates found"
   },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
@@ -2042,9 +2120,6 @@
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
     "message": "Please return to Design View to start the Onboarding tutorial."
   },
-  "please_select_a_event_type_200c4c9f": {
-    "message": "Please select a event type"
-  },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
     "message": "Please select a specific qna file to import QnA"
   },
@@ -2056,9 +2131,6 @@
   },
   "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
     "message": "Please select a version of the manifest schema"
-  },
-  "please_select_an_activity_type_92f4a8a1": {
-    "message": "Please select an activity type"
   },
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logo"
@@ -2180,17 +2252,14 @@
   "publish_models_9a36752a": {
     "message": "Publish models"
   },
-  "publish_profile_informs_your_bot_where_to_use_reso_b5fc0308": {
-    "message": "Publish profile informs your bot where to use resources from. The resoruces you provision for your bot will live within this profile"
+  "publish_profiles_36fb522d": {
+    "message": "Publish profiles"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
   },
   "publish_target_388f6adf": {
     "message": "Publish target"
-  },
-  "publish_targets_8afc4467": {
-    "message": "Publish targets"
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Publish your bots"
@@ -2206,6 +2275,9 @@
   },
   "publishing_name_to_publishtarget_failed_8677b68d": {
     "message": "Publishing { name } to { publishTarget } failed."
+  },
+  "publishing_target_46605bc5": {
+    "message": "Publishing target"
   },
   "pull_d1c3e8fe": {
     "message": "Pull"
@@ -2257,6 +2329,9 @@
   },
   "re_prompt_for_input_c3b5b3ab": {
     "message": "Re-prompt for input"
+  },
+  "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
+    "message": "Re-prompt for input (Reprompt dialog event)"
   },
   "recent_bots_53585911": {
     "message": "Recent Bots"
@@ -2414,6 +2489,15 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Search for extensions on npm"
   },
+  "search_functions_4a1afbc3": {
+    "message": "Search functions"
+  },
+  "search_properties_5bf3d868": {
+    "message": "Search properties"
+  },
+  "search_templates_669eab41": {
+    "message": "Search templates"
+  },
   "see_details_da74090e": {
     "message": "See Details"
   },
@@ -2425,6 +2509,9 @@
   },
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "Select a trigger on the left"
+  },
+  "select_a_trigger_type_219bb52f": {
+    "message": "Select a trigger type"
   },
   "select_all_f73344a8": {
     "message": "Select all"
@@ -2444,6 +2531,9 @@
   "select_manifest_version_4f5b1230": {
     "message": "Select manifest version"
   },
+  "select_one_8e0af564": {
+    "message": "Select One"
+  },
   "select_options_9ee7b227": {
     "message": "Select options"
   },
@@ -2461,9 +2551,6 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
-  },
-  "select_your_publish_target_de531f7f": {
-    "message": "Select your publish target"
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -2648,11 +2735,23 @@
   "submit_a3cc6859": {
     "message": "Submit"
   },
+  "switch_to_code_editor_3dcbe16f": {
+    "message": "switch to code editor"
+  },
+  "switch_to_response_editor_7b20b0e9": {
+    "message": "switch to response editor"
+  },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
   },
+  "target_da92f4e6": {
+    "message": "Target"
+  },
   "tb_149f379c": {
     "message": "TB"
+  },
+  "template_name_c37cf8d9": {
+    "message": "Template name: "
   },
   "templatename_is_missing_or_empty_23e6b06e": {
     "message": "templateName is missing or empty"
@@ -2687,6 +2786,9 @@
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "The manifest can be edited and refined manually if and where needed."
   },
+  "the_name_of_your_publishing_file_cefbe3a1": {
+    "message": "The name of your publishing file"
+  },
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
     "message": "The page you are looking for can''t be found."
   },
@@ -2698,6 +2800,9 @@
   },
   "the_root_bot_is_not_a_bot_project_d1495cf6": {
     "message": "The root bot is not a bot project"
+  },
+  "the_target_where_you_publish_your_bot_3132ef47": {
+    "message": "The target where you publish your bot"
   },
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
     "message": "The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:"
@@ -2983,6 +3088,9 @@
   },
   "user_is_typing_790cb502": {
     "message": "User is typing"
+  },
+  "user_is_typing_typing_activity_cd938615": {
+    "message": "User is typing (Typing activity)"
   },
   "validating_35b79a96": {
     "message": "Validating..."

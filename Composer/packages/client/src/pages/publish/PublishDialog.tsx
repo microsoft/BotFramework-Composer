@@ -10,11 +10,11 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { IBotStatus } from './BotStatusList';
+import { BotStatus } from './type';
 
 export const PublishDialog = (props) => {
   const { items } = props;
-  const [showItems, setShowItems] = useState<IBotStatus[]>(items);
+  const [showItems, setShowItems] = useState<BotStatus[]>(items);
   const columns = [
     {
       key: 'name',
@@ -25,7 +25,7 @@ export const PublishDialog = (props) => {
       maxWidth: 90,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return <span>{item.name}</span>;
       },
       isPadded: true,
@@ -39,7 +39,7 @@ export const PublishDialog = (props) => {
       maxWidth: 200,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return <span>{item.publishTarget}</span>;
       },
       isPadded: true,
@@ -52,7 +52,7 @@ export const PublishDialog = (props) => {
       minWidth: 70,
       maxWidth: 90,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         // message for each publish bot
         return (
           <TextField
