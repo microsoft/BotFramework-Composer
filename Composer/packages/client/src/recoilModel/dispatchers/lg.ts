@@ -101,6 +101,13 @@ export const getRelatedLgFileChanges = async (
   const onlyAdds = addedTemplates.length && !deletedTemplates.length;
   const onlyDeletes = !addedTemplates.length && deletedTemplates.length;
 
+  //TODO(zhixzhan): do completed comparation to find all template updates to sync.
+  const singleNameUpdate =
+    addedTemplates.length === 1 && deletedTemplates.length === 1
+      ? updatedLgFile.templates.findIndex(({ name }) => name === addedTemplates[0].name) ===
+        originLgFile.templates.findIndex(({ name }) => name === deletedTemplates[0].name)
+      : false;
+
   // sync add/remove templates
   if (onlyAdds || onlyDeletes) {
     for (const file of sameIdOtherLocaleFiles) {
@@ -109,6 +116,18 @@ export const getRelatedLgFileChanges = async (
         projectId,
         newLgFile,
         deletedTemplates.map(({ name }) => name),
+        lgFiles
+      )) as LgFile;
+      changes.push(newLgFile);
+    }
+    // sync name change
+  } else if (singleNameUpdate) {
+    for (const file of sameIdOtherLocaleFiles) {
+      const newLgFile = (await LgWorker.updateTemplate(
+        projectId,
+        file,
+        deletedTemplates[0].name,
+        addedTemplates[0],
         lgFiles
       )) as LgFile;
       changes.push(newLgFile);
