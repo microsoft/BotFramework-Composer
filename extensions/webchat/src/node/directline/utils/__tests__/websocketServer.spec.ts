@@ -1,12 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Activity } from 'botframework-schema';
-
 import { WebSocketServer } from '../websocketServer';
-
-const mockExpressRequest = jest.fn();
-const mockExpressRes = jest.fn();
 
 const mockWSServer = {
   handleUpgrade: jest.fn(),

@@ -8,7 +8,7 @@ import { WebSocketServer } from './websocketServer';
 
 export async function getWebSocketPort(req: express.Request, res: express.Response): Promise<void> {
   try {
-    let socketPort = WebSocketServer.port;
+    let socketPort: any = WebSocketServer.port;
     if (!socketPort) {
       socketPort = await WebSocketServer.init();
     }
