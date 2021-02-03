@@ -297,3 +297,8 @@ export const showAddSkillDialogModalState = atom<boolean>({
   key: getFullyQualifiedKey('showAddSkillDialogModal'),
   default: false,
 });
+
+export const debugPanelExpansionState = atom<boolean>({
+  key: getFullyQualifiedKey('debugPanelExpansion'),
+  default: false,
+});
