@@ -7,6 +7,7 @@ import { useMemo, useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
 import { debugPanelExpansionState } from '../../../recoilModel';
 
@@ -20,20 +21,22 @@ export interface DebugPanelProps {
 export const DebugPanel = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
 
-  const [activeTab, setActiveTab] = useState<string>(debugExtensions[0].key);
+  const [activeTab] = useState<string>(debugExtensions[0].key);
 
-  const renderTabHeader = useCallback((tabHeaderKey: string, tabHeaderComponent: React.FC | string) => {
+  const buildTabHeaders = useCallback((tabHeaderKey: string, tabHeaderComponent: React.FC | string) => {
+    let element: JSX.Element;
     if (typeof tabHeaderComponent === 'string') {
-      return <span key={`tabHeader-${tabHeaderKey}`}>{tabHeaderComponent}</span>;
+      element = <span key={`tabHeader-${tabHeaderKey}`}>{tabHeaderComponent}</span>;
     } else {
       const CollapsedTabHeader = tabHeaderComponent;
-      return <CollapsedTabHeader key={`tabHeader-${tabHeaderKey}`} />;
+      element = <CollapsedTabHeader key={`tabHeader-${tabHeaderKey}`} />;
     }
+    return { key: tabHeaderKey, element };
   }, []);
 
   const collapsedContent = useMemo(() => {
-    const tabHeadersCollapsed = debugExtensions.map(({ key, headerCollapsed }) =>
-      renderTabHeader(key, headerCollapsed)
+    const tabHeadersCollapsed = debugExtensions.map(
+      ({ key, headerCollapsed }) => buildTabHeaders(key, headerCollapsed).element
     );
 
     return (
@@ -65,7 +68,14 @@ export const DebugPanel = () => {
   }, [activeTab]);
 
   const expandedContent = useMemo(() => {
-    const tabHeadersExpanded = debugExtensions.map(({ key, headerExpanded }) => renderTabHeader(key, headerExpanded));
+    const tabHeadersExpanded = (
+      <Pivot aria-label="Debug Panel Header" selectedKey={activeTab}>
+        {debugExtensions.map(({ key: tabKey, headerExpanded }) => {
+          const { key, element } = buildTabHeaders(tabKey, headerExpanded);
+          return <PivotItem key={`tabHeader-pivot-${key}`} itemKey={key} onRenderItemLink={() => element} />;
+        })}
+      </Pivot>
+    );
 
     return (
       <div css={debugPaneExpandedStyle} data-testid="debug-panel--expanded">
