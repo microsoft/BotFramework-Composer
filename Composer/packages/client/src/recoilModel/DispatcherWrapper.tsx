@@ -103,11 +103,15 @@ export const DispatcherWrapper = ({ children }) => {
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
     const botsForFilePersistence = await snapshot.getPromise(localBotsWithoutErrorsSelector);
+    const { setProjectError } = await snapshot.getPromise(dispatcherState);
     for (const projectId of botsForFilePersistence) {
       const assets = await getBotAssets(projectId, snapshot);
       const previousAssets = await getBotAssets(projectId, previousSnapshot);
       const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
       if (!isEmpty(filePersistence)) {
+        if (filePersistence.isErrorHandlerEmpty()) {
+          filePersistence.registerErrorHandler(setProjectError);
+        }
         filePersistence.notify(assets, previousAssets);
       }
     }
