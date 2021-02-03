@@ -17,10 +17,11 @@ export const getFileLocale = (fileName: string) => {
   //file name = 'a.en-us.qna'
   return getExtension(getBaseName(fileName));
 };
-export const getReferredQnaFiles = (qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
+export const getReferredQnaFiles = (qnaFiles: QnAFile[], dialogs: DialogInfo[], checkContent = true) => {
   return qnaFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale && !!file.content);
+    const contentNotEmpty = (checkContent && !!file.content) || !checkContent;
+    return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale && contentNotEmpty);
   });
 };
 // substring text file by lines
