@@ -131,12 +131,12 @@ const AdapterSettings = (props: Props) => {
                   ],
                 }}
                 role="cell"
+                styles={{ root: { paddingTop: '10px' } }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.stopPropagation();
                   }
                 }}
-                styles={{ root: { paddingTop: '10px' } }}
               />
             </TooltipHost>
           </div>
@@ -162,19 +162,17 @@ const AdapterSettings = (props: Props) => {
         </CollapsableWrapper>
       </div>
       {currentKey != null && schemaDefinitions[currentKey] != null && (
-        <div data-testid="adapterModal">
-          <AdapterModal
-            isOpen
-            adapterKey={currentKey}
-            projectId={projectId}
-            schema={schemaDefinitions[currentKey]}
-            uiSchema={uiSchemas?.[currentKey]?.form}
-            value={currentSettings[currentKey]}
-            onClose={() => {
-              openModal(undefined);
-            }}
-          />
-        </div>
+        <AdapterModal
+          isOpen
+          adapterKey={currentKey}
+          projectId={projectId}
+          schema={schemaDefinitions[currentKey]}
+          uiSchema={uiSchemas?.[currentKey]?.form}
+          value={currentSettings[currentKey]}
+          onClose={() => {
+            openModal(undefined);
+          }}
+        />
       )}
     </Fragment>
   );
