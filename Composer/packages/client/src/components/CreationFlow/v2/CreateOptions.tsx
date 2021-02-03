@@ -27,9 +27,9 @@ import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, QnABotTemplateId } from '../../../constants';
 import { selectedTemplateReadMeState } from '../../../recoilModel';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
-import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
