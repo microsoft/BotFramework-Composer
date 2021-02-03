@@ -699,6 +699,7 @@ export const ProjectTree: React.FC<Props> = ({
     const projectHeader = (
       <ProjectHeader
         botError={bot.botError}
+        key={`${key}-header`}
         handleOnSelect={handleOnSelect}
         isMenuOpen={isMenuOpen}
         isRemote={bot.isRemote}
