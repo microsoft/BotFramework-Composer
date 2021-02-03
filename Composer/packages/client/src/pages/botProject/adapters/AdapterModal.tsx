@@ -36,6 +36,7 @@ const AdapterModal = (props: Props) => {
       isOpen={isOpen}
       title={formatMessage('Configure adapter')}
       onDismiss={onClose}
+      data-testid={'adapterModal'}
     >
       <ObjectField
         definitions={{}}

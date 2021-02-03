@@ -15,7 +15,7 @@ const state = {
 };
 
 describe('AdapterSettings', () => {
-  it('should submit settings', () => {
+  it('brings up the modal', () => {
     const setSettingsMock = jest.fn();
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
@@ -24,21 +24,16 @@ describe('AdapterSettings', () => {
         setSettings: setSettingsMock,
       });
     };
-    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
+    const { getByTestId, getByText } = renderWithRecoilAndCustomDispatchers(
       <AdapterSettings projectId={state.projectId} />,
       initRecoilState
     );
-    const defaultLanguageContainer = getByTestId('defaultLanguage');
-    expect(within(defaultLanguageContainer).getByText('English (United States)')).toBeInTheDocument();
-    const setDefaultLanguage = getByTestId('setDefaultLanguage');
+    const container = getByTestId('adapterSettings');
+    expect(getByText('External service adapters')).toBeInTheDocument();
+    const configureButton = within(container).getAllByText('Configure')[0];
     act(() => {
-      fireEvent.click(setDefaultLanguage);
+      fireEvent.click(configureButton);
     });
-    expect(setLocaleMock).toBeCalledWith('fr-fr', 'test');
-    const remove = getByTestId('remove');
-    act(() => {
-      fireEvent.click(remove);
-    });
-    expect(deleteLanguages).toBeCalledWith({ languages: ['fr-fr'], projectId: 'test' });
+    expect(getByTestId('adapterModal')).toBeInTheDocument();
   });
 });

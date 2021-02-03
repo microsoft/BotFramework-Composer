@@ -58,8 +58,6 @@ const AdapterSettings = (props: Props) => {
   const { definitions: schemaDefinitions } = schemas?.default ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
 
-  const [connected, setConnected] = useState<Array<string>>([]);
-
   const [currentModalProps, setModalProps] = useState<{ key: string; callback?: () => void } | undefined>();
 
   const openModal = (key: string | undefined, callback?: () => void) => {
@@ -156,23 +154,27 @@ const AdapterSettings = (props: Props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
-        {header()}
-        {azureServices()}
-        {externalServices(adapterSchemas)}
-      </CollapsableWrapper>
+      <div data-testid="adapterSettings">
+        <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
+          {header()}
+          {azureServices()}
+          {externalServices(adapterSchemas)}
+        </CollapsableWrapper>
+      </div>
       {currentKey != null && schemaDefinitions[currentKey] != null && (
-        <AdapterModal
-          isOpen
-          adapterKey={currentKey}
-          projectId={projectId}
-          schema={schemaDefinitions[currentKey]}
-          uiSchema={uiSchemas?.[currentKey]?.form}
-          value={currentSettings[currentKey]}
-          onClose={() => {
-            openModal(undefined);
-          }}
-        />
+        <div data-testid="adapterModal">
+          <AdapterModal
+            isOpen
+            adapterKey={currentKey}
+            projectId={projectId}
+            schema={schemaDefinitions[currentKey]}
+            uiSchema={uiSchemas?.[currentKey]?.form}
+            value={currentSettings[currentKey]}
+            onClose={() => {
+              openModal(undefined);
+            }}
+          />
+        </div>
       )}
     </Fragment>
   );

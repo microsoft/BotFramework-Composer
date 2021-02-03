@@ -85,20 +85,19 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={title}>
         <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
           <div css={publishTargetsHeader}>
-            <div css={tableColumnHeader(20)}>{formatMessage('Name')} </div>
-            <div css={tableColumnHeader(70)}>{formatMessage('Type')} </div>
-            <div css={tableColumnHeader(10)}> </div>
+            <div css={tableColumnHeader('200px')}>{formatMessage('Name')} </div>
+            <div css={tableColumnHeader('400px')}>{formatMessage('Type')} </div>
           </div>
           {publishTargets?.map((p, index) => {
             return (
               <div key={index} css={tableRow}>
-                <div css={tableRowItem(25)} title={p.name}>
+                <div css={tableRowItem('200px')} title={p.name}>
                   {p.name}
                 </div>
-                <div css={tableRowItem(75)} title={p.type}>
+                <div css={tableRowItem('350px')} title={p.type}>
                   {p.type}
                 </div>
-                <div css={tableRowItem(10)}>
+                <div css={tableRowItem('50px')}>
                   <ActionButton
                     styles={editPublishProfile}
                     onClick={() => {
