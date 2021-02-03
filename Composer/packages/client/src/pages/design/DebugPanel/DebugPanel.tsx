@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -11,6 +11,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { debugPanelExpansionState } from '../../../recoilModel';
 
 import { debugPaneCollapsedStyle, debugPaneExpandedStyle, debugPaneHeaderStyle } from './styles';
+import debugExtensions from './TabExtensions';
 
 export interface DebugPanelProps {
   expanded: boolean;
@@ -19,8 +20,21 @@ export interface DebugPanelProps {
 export const DebugPanel = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
 
-  const collapsedContent = useMemo(
-    () => (
+  const renderTabHeader = useCallback((tabHeaderKey: string, tabHeaderComponent: React.FC | string) => {
+    if (typeof tabHeaderComponent === 'string') {
+      return <span key={`tabHeader-${tabHeaderKey}`}>{tabHeaderComponent}</span>;
+    } else {
+      const CollapsedTabHeader = tabHeaderComponent;
+      return <CollapsedTabHeader key={`tabHeader-${tabHeaderKey}`} />;
+    }
+  }, []);
+
+  const collapsedContent = useMemo(() => {
+    const tabHeadersCollapsed = debugExtensions.map(({ key, headerCollapsed }) =>
+      renderTabHeader(key, headerCollapsed)
+    );
+
+    return (
       <div
         css={css`
           ${debugPaneCollapsedStyle}
@@ -28,7 +42,7 @@ export const DebugPanel = () => {
         `}
         data-testid="debug-panel--collapsed"
       >
-        <div>Debug Pane: Tabs Preview</div>
+        <div>{tabHeadersCollapsed}</div>
         <IconButton
           iconProps={{ iconName: 'ChevronUp' }}
           title={formatMessage('Expand debug panel')}
@@ -37,15 +51,16 @@ export const DebugPanel = () => {
           }}
         />
       </div>
-    ),
-    []
-  );
+    );
+  }, []);
 
-  const expandedContent = useMemo(
-    () => (
+  const expandedContent = useMemo(() => {
+    const tabHeadersExpanded = debugExtensions.map(({ key, headerExpanded }) => renderTabHeader(key, headerExpanded));
+
+    return (
       <div css={debugPaneExpandedStyle} data-testid="debug-panel--expanded">
         <div css={debugPaneHeaderStyle} data-testid="debug-panel__header">
-          <div>Debug Pane: Expanded</div>
+          <div>{tabHeadersExpanded}</div>
           <IconButton
             iconProps={{ iconName: 'Cancel' }}
             title={formatMessage('Collapse debug panel')}
@@ -56,9 +71,8 @@ export const DebugPanel = () => {
         </div>
         Expanded Pane
       </div>
-    ),
-    []
-  );
+    );
+  }, []);
 
   return expanded ? expandedContent : collapsedContent;
 };
