@@ -21,6 +21,7 @@ import {
   RootBotManagedProperties,
   defaultPublishConfig,
   LgFile,
+  LuParseResource,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -34,7 +35,7 @@ import isEmpty from 'lodash/isEmpty';
 
 import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
-import { getUniqueName } from '../../../utils/fileUtil';
+import { getBaseName, getExtension, getUniqueName } from '../../../utils/fileUtil';
 import httpClient from '../../../utils/httpUtil';
 import languageStorage from '../../../utils/languageStorage';
 import luFileStatusStorage from '../../../utils/luFileStatusStorage';
@@ -235,11 +236,75 @@ export const navigateToSkillBot = (rootProjectId: string, skillId: string, mainD
   }
 };
 
-export const loadProjectData = (data) => {
+export const loadProjectData = (data, withLayback) => {
   const { files, botName, settings, id: projectId } = data;
   const mergedSettings = getMergedSettings(projectId, settings, botName);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
+
+  if (withLayback) {
+    const basicFiles = files.filter(({ name }) => !['lg', 'lu', 'qna'].includes(getExtension(name)));
+    const lgFiles = files
+      .filter(({ name }) => name.endsWith('.lg'))
+      .map((file) => {
+        return {
+          id: getBaseName(file.name),
+          content: file.content,
+          diagnostics: [],
+          templates: [],
+          allTemplates: [],
+          imports: [],
+          options: [],
+        } as LgFile;
+      });
+
+    const luFiles = files
+      .filter(({ name }) => name.endsWith('.lu'))
+      .map((file) => {
+        return {
+          id: getBaseName(file.name),
+          content: file.content,
+          diagnostics: [],
+          intents: [],
+          imports: [],
+          options: [],
+          empty: false,
+          resource: {} as LuParseResource,
+        } as LuFile;
+      });
+
+    const qnaFiles = files
+      .filter(({ name }) => name.endsWith('.qna'))
+      .map((file) => {
+        return {
+          id: getBaseName(file.name),
+          content: file.content,
+          diagnostics: [],
+          qnaSections: [],
+          imports: [],
+          options: [],
+          empty: false,
+          resource: {} as LuParseResource,
+        } as QnAFile;
+      });
+
+    console.time('index bot files');
+    const indexedFiles = indexer.index(basicFiles, botName, locale, mergedSettings);
+    console.timeEnd('index bot files');
+
+    const laybackFullIndex = () => {
+      return new Promise((resolve) => {
+        const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
+        resolve(indexedFiles);
+      });
+    };
+    return {
+      botFiles: { ...indexedFiles, qnaFiles, lgFiles, luFiles, mergedSettings },
+      projectData: { ...data, laybackFullIndex },
+      error: undefined,
+    };
+  }
+
   const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
 
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
@@ -259,7 +324,7 @@ export const fetchProjectDataByPath = async (
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.put(`/projects/open`, { path, storageId });
-    const projectData = loadProjectData(response.data);
+    const projectData = loadProjectData(response.data, true);
     return projectData;
   } catch (ex) {
     return {
@@ -273,7 +338,7 @@ export const fetchProjectDataByPath = async (
 export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const projectData = loadProjectData(response.data);
+    const projectData = loadProjectData(response.data, true);
     return projectData;
   } catch (ex) {
     return {
@@ -416,8 +481,20 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
 
-  // async repair bot assets, add missing lg templates
-  repairBotProject(callbackHelpers, { projectId, botFiles });
+  // async excute layback resource indexing
+  if (data.laybackFullIndex) {
+    setTimeout(() => {
+      data.laybackFullIndex().then((botFiles) => {
+        const { lgFiles, luFiles, qnaFiles, dialogs } = botFiles;
+        set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
+        set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
+        set(lgFilesSelectorFamily(projectId), lgFiles);
+
+        // async repair bot assets, add missing lg templates
+        repairBotProject(callbackHelpers, { projectId, botFiles });
+      });
+    }, 10000); // TODO: instead of set a delay time, we should find client idle timing, render done.
+  }
 
   return mainDialog;
 };
@@ -526,7 +603,7 @@ export const createNewBotFromTemplate = async (
     alias,
     preserveRoot,
   });
-  const { botFiles, projectData } = loadProjectData(response.data);
+  const { botFiles, projectData } = loadProjectData(response.data, false);
   const projectId = response.data.id;
   if (settingStorage.get(projectId)) {
     settingStorage.remove(projectId);
@@ -706,7 +783,7 @@ export const saveProject = async (callbackHelpers, oldProjectData) => {
     description,
     location,
   });
-  const data = loadProjectData(response.data);
+  const data = loadProjectData(response.data, false);
   if (data.error) {
     throw data.error;
   }
