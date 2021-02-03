@@ -61,6 +61,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
       },
     ],
   };
+  // Consider using the <CommandBar /> component in FluentUI.
   return (
     <div data-testid="Webchat-Header" style={{ height: 36 }}>
       <DefaultButton
