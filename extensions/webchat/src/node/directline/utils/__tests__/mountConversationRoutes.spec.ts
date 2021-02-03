@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { mountConversationsRoutes } from './mountConversationRoutes';
-import DLServerContext from './store/DLServerState';
+import { mountConversationsRoutes } from '../../mountConversationRoutes';
+import DLServerContext from '../../store/DLServerState';
 
 jest.mock('express', () => ({
   Router: () => ({

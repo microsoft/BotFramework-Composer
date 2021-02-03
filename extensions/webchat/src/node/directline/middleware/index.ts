@@ -3,4 +3,4 @@
 
 export * from './createBotFrameworkAuthentication';
 export * from './conversationHandler';
-export * from './createGetBotEndpoint';
+export * from './createBotEndpoint';
