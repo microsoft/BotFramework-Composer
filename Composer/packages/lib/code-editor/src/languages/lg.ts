@@ -80,7 +80,7 @@ export function registerLGLanguage(monaco: Monaco) {
         // structure_lg
         [/^\s*\[/, { token: 'structure-lg-identifier', goBack: 1, next: '@structure_lg' }],
         //parameter in template name
-        [/([a-zA-Z0-9_][a-zA-Z0-9_-]*)(,|\))/, ['parameter', 'delimeter']],
+        [/([a-zA-Z0-9_][a-zA-Z0-9_-]*)(,|\))/, ['parameter', 'delimiter']],
         // other
         [/[^\()]/, 'template-name'],
       ],
@@ -106,17 +106,17 @@ export function registerLGLanguage(monaco: Monaco) {
       expression: [
         [/\}/, 'expression', '@pop'],
         [/(\s*[a-zA-Z_][a-zA-Z0-9_-]*)(\s*\()/, [{ token: 'function-name' }, { token: 'param_identifier' }]],
-        [/(\s*[a-zA-Z_][a-zA-Z0-9_.-]*\s*)(,|\))/, ['parameter', 'delimeter']],
+        [/(\s*[a-zA-Z_][a-zA-Z0-9_.-]*\s*)(,|\))/, ['parameter', 'delimiter']],
         [/\s*[0-9.]+\s*/, 'number'],
-        [/(\s*'[^']*?'\s*)(,|\))/, ['string', 'delimeter']],
-        [/(\s*"[^"]*?"\s*)(,|\))/, ['string', 'delimeter']],
-        [/(\s*[^},'"(]*\s*)(,|\))/, ['other-expression', 'delimeter']],
+        [/(\s*'[^']*?'\s*)(,|\))/, ['string', 'delimiter']],
+        [/(\s*"[^"]*?"\s*)(,|\))/, ['string', 'delimiter']],
+        [/(\s*[^},'"(]*\s*)(,|\))/, ['other-expression', 'delimiter']],
         [/[^$}]*$/, { token: 'expression.content', next: '@pop' }],
       ],
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],
         [/\]\s*\(.*\)$/, 'imports', '@pop'],
-        [/(\s*\[\s*)([a-zA-Z0-9_-]+\s*$)/, ['stucture-lg-identifier', 'structure-name']],
+        [/(\s*\[\s*)([a-zA-Z0-9_-]+\s*$)/, ['structure-lg-identifier', 'structure-name']],
         [/^\s*>[\s\S]*$/, 'comments'],
         [/\|/, { token: 'alternative' }],
         [/\$\{/, { token: 'expression', next: '@expression' }],

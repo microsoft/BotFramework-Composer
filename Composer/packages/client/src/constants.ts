@@ -305,6 +305,19 @@ export const repairSkillDialog = (name: string) => {
   };
 };
 
+export const removeSkillDialog = () => {
+  return {
+    title: formatMessage('Warning'),
+    subText: formatMessage(
+      'The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action.'
+    ),
+    subTextNoUse: formatMessage(
+      'You are about to remove the skill from this project. Removing this skill won’t delete the files.'
+    ),
+    footerText: formatMessage('Do you wish to continue?'),
+  };
+};
+
 export const SupportedFileTypes = [
   'accdb',
   'csv',
