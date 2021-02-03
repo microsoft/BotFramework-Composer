@@ -4,12 +4,14 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { currentProjectIdState, diagnosticsSelectorFamily } from '../../../../../recoilModel';
+import { currentProjectIdState } from '../../../../../recoilModel';
 import { DiagnosticList } from '../../../../diagnostics/DiagnosticList';
+
+import { useDiagnosticsData } from './useDiagnosticsData';
 
 export const DiagnosticsContent = () => {
   const skillId = useRecoilValue(currentProjectIdState);
-  const diagnostics = useRecoilValue(diagnosticsSelectorFamily(skillId));
+  const diagnostics = useDiagnosticsData();
 
   return <DiagnosticList diagnosticItems={diagnostics} skillId={skillId} onItemClick={() => {}} />;
 };

@@ -4,12 +4,12 @@
 import { TabExtensionConfig } from '../types';
 
 import { DiagnosticsContent } from './DiagnosticsTabContent';
-import { DiagnosticsHeader } from './DiagnosticsTabHeader';
+import { DiagnosticsHeaderCollapsed, DiagnosticsHeaderExpanded } from './DiagnosticsTabHeader';
 
 export const DiagnoticsTabConfig: TabExtensionConfig = {
   key: 'DiagnosticsTab',
   description: 'Diagnostics tab which shows errors and warnings.',
-  headerCollapsed: DiagnosticsHeader,
-  headerExpanded: DiagnosticsHeader,
+  headerCollapsed: DiagnosticsHeaderCollapsed,
+  headerExpanded: DiagnosticsHeaderExpanded,
   content: DiagnosticsContent,
 };
