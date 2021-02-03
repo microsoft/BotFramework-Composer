@@ -2,19 +2,22 @@
 // Licensed under the MIT License.
 
 import { DialogInfo, LuFile, QnAFile, SDKKinds, RecognizerFile } from '@bfc/shared';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useRecoilValue } from 'recoil';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 
 import { getBaseName, getExtension } from '../utils/fileUtil';
+import { getLuProvider } from '../utils/dialogUtil';
 
 import * as luUtil from './../utils/luUtil';
 import * as buildUtil from './../utils/buildUtil';
 import { crossTrainConfigState, filePersistenceState, luFilesState, qnaFilesState, settingsState } from './atoms';
 import { dialogsSelectorFamily } from './selectors';
 import { recognizersSelectorFamily } from './selectors/recognizers';
+
+type LuProvide = SDKKinds.OrchestratorRecognizer | SDKKinds.LuisRecognizer;
 
 export const LuisRecognizerTemplate = (target: string, fileName: string) => ({
   $kind: SDKKinds.LuisRecognizer,
@@ -80,6 +83,12 @@ export const getLuisRecognizerDialogs = (target: string, luFiles: LuFile[]) => {
     .map((item) => ({ id: `${item.id}.lu.dialog`, content: LuisRecognizerTemplate(target, item.id) }));
 };
 
+export const getOrchestratorRecognizerDialogs = (target: string, luFiles: LuFile[]) => {
+  return luFiles
+    .filter((item) => getBaseName(item.id) === target)
+    .map((item) => ({ id: `${item.id}.lu.dialog`, content: OrchestratorRecognizerTemplate(target, item.id) }));
+};
+
 export const getQnAMakerRecognizerDialogs = (target: string, qnaFiles: QnAFile[]) => {
   return qnaFiles
     .filter((item) => !item.empty)
@@ -109,9 +118,17 @@ export const isCrossTrainedRecognizerSet = (dialog: DialogInfo) =>
 export const isLuisRecognizer = (dialog: DialogInfo) =>
   typeof dialog.content.recognizer === 'string' && dialog.content.recognizer.endsWith('lu');
 
-export const generateRecognizers = (dialog: DialogInfo, luFiles: LuFile[], qnaFiles: QnAFile[]) => {
+export const generateRecognizers = (
+  dialog: DialogInfo,
+  luFiles: LuFile[],
+  qnaFiles: QnAFile[],
+  luProvide?: LuProvide
+) => {
   const isCrossTrain = isCrossTrainedRecognizerSet(dialog);
-  const luisRecognizers = getLuisRecognizerDialogs(dialog.id, luFiles);
+  const luisRecognizers =
+    luProvide === SDKKinds.OrchestratorRecognizer
+      ? getOrchestratorRecognizerDialogs(dialog.id, luFiles)
+      : getLuisRecognizerDialogs(dialog.id, luFiles);
   const luMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu');
 
   const crossTrainedRecognizer = getCrossTrainedRecognizerDialog(dialog.id, luFiles, qnaFiles);
@@ -148,40 +165,43 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
+  const curRecognizersRef = useRef(curRecognizers);
   const filePersistence = useRecoilValue(filePersistenceState(projectId));
+  curRecognizersRef.current = curRecognizers;
 
   useEffect(() => {
-    if (!isEmpty(filePersistence)) {
-      let recognizers: RecognizerFile[] = [];
-      dialogs
-        .filter((dialog) => isCrossTrainedRecognizerSet(dialog) || isLuisRecognizer(dialog))
-        .forEach((dialog) => {
-          const filtedLus = luFiles.filter((item) => getBaseName(item.id) === dialog.id);
-          const filtedQnas = qnaFiles.filter((item) => getBaseName(item.id) === dialog.id);
-          const {
-            isCrossTrain,
-            luisRecognizers,
-            luMultiLanguagueRecognizer,
-            crossTrainedRecognizer,
-            qnaMultiLanguagueRecognizer,
-            qnaMakeRecognizers,
-          } = generateRecognizers(dialog, filtedLus, filtedQnas);
+    if (isEmpty(filePersistence)) return;
+    let recognizers: RecognizerFile[] = [];
 
-          if (luisRecognizers.length) {
-            recognizers.push(luMultiLanguagueRecognizer);
-            recognizers = [...recognizers, ...preserveRecognizer(luisRecognizers, curRecognizers)];
-          }
-          if (isCrossTrain) {
-            recognizers.push(crossTrainedRecognizer);
-          }
-          if (isCrossTrain && qnaMakeRecognizers.length) {
-            recognizers.push(qnaMultiLanguagueRecognizer);
-            recognizers = [...recognizers, ...preserveRecognizer(qnaMakeRecognizers, curRecognizers)];
-          }
-        });
-      if (!isEqual([...recognizers].sort(), [...curRecognizers].sort())) {
-        setRecognizers(recognizers);
-      }
+    dialogs
+      .filter((dialog) => isCrossTrainedRecognizerSet(dialog) || isLuisRecognizer(dialog))
+      .forEach((dialog) => {
+        const luProvide = getLuProvider(dialog.id, curRecognizersRef.current);
+        const filtedLus = luFiles.filter((item) => getBaseName(item.id) === dialog.id);
+        const filtedQnas = qnaFiles.filter((item) => getBaseName(item.id) === dialog.id);
+        const {
+          isCrossTrain,
+          luisRecognizers,
+          luMultiLanguagueRecognizer,
+          crossTrainedRecognizer,
+          qnaMultiLanguagueRecognizer,
+          qnaMakeRecognizers,
+        } = generateRecognizers(dialog, filtedLus, filtedQnas, luProvide);
+
+        if (luisRecognizers.length) {
+          recognizers.push(luMultiLanguagueRecognizer);
+          recognizers = [...recognizers, ...preserveRecognizer(luisRecognizers, curRecognizersRef.current)];
+        }
+        if (isCrossTrain) {
+          recognizers.push(crossTrainedRecognizer);
+        }
+        if (isCrossTrain && qnaMakeRecognizers.length) {
+          recognizers.push(qnaMultiLanguagueRecognizer);
+          recognizers = [...recognizers, ...preserveRecognizer(qnaMakeRecognizers, curRecognizersRef.current)];
+        }
+      });
+    if (!isEqual([...recognizers].sort(), [...curRecognizersRef.current].sort())) {
+      setRecognizers(recognizers);
     }
   }, [dialogs, luFiles, qnaFiles, filePersistence]);
 
