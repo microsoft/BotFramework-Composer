@@ -3,11 +3,11 @@
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import ReactWebChat from 'botframework-webchat';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
 
 import { ConversationService } from './utils/ConversationService';
+import { WebChatHeader } from './WebChatHeader';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 
@@ -118,24 +118,19 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({ botUrl, secrets, dir
   } else {
     return (
       <>
-        <div data-testid="Webchat-Header" style={{ height: 36 }}>
-          <DefaultButton type="button" onClick={() => onSaveTranscriptClick(directlineObj.conversationId)}>
-            {formatMessage('Save')}
-          </DefaultButton>
-          {/* A shadow download link to trigger browser native API on saving transcript JSON.  */}
-          <a ref={downloadLinkRef} href="#save" style={{ display: 'none' }}>
-            {formatMessage('Save')}
-          </a>
-          <DefaultButton type="button" onClick={() => onRestartConversationClick(directlineObj.conversationId, false)}>
-            {formatMessage('ReS')}
-          </DefaultButton>
-          <DefaultButton type="button" onClick={() => onRestartConversationClick(directlineObj.conversationId, true)}>
-            {formatMessage('ReD')}
-          </DefaultButton>
-        </div>
+        <WebChatHeader
+          conversationId={directlineObj.conversationId}
+          onRestartConversation={() => onRestartConversationClick(directlineObj.conversationId, false)}
+          onSaveTranscript={onSaveTranscriptClick}
+          onStartNewConversation={() => onRestartConversationClick(directlineObj.conversationId, true)}
+        />
         <div data-testid="WebChat-Content" style={{ height: 'calc(100% - 36px)' }}>
           {webchatContent}
         </div>
+        {/* A shadow download link to trigger browser native API on saving transcript JSON.  */}
+        <a ref={downloadLinkRef} href="#save" style={{ display: 'none' }}>
+          {formatMessage('Save')}
+        </a>
       </>
     );
   }
