@@ -15,7 +15,7 @@ import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnost
 import { exportSkillModalInfoState } from '../../recoilModel';
 import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 
-import { DiagnosticList } from './DiagnosticList';
+import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
 
@@ -55,7 +55,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
     >
-      <DiagnosticList showType={showType} skillId={skillId ?? projectId} onItemClick={handleItemClick} />
+      <DiagnosticsTable showType={showType} skillId={skillId ?? projectId} onItemClick={handleItemClick} />
     </Page>
   );
 };
