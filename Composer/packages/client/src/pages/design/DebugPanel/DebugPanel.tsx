@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -19,6 +19,8 @@ export interface DebugPanelProps {
 }
 export const DebugPanel = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
+
+  const [activeTab, setActiveTab] = useState<string>(debugExtensions[0].key);
 
   const renderTabHeader = useCallback((tabHeaderKey: string, tabHeaderComponent: React.FC | string) => {
     if (typeof tabHeaderComponent === 'string') {
@@ -54,6 +56,14 @@ export const DebugPanel = () => {
     );
   }, []);
 
+  const activeTabContent = useMemo(() => {
+    const configOfActiveTab = debugExtensions.find((ext) => ext.key === activeTab);
+    if (!configOfActiveTab || !configOfActiveTab.content) return null;
+
+    const TabContent = configOfActiveTab.content;
+    return <TabContent key={`tabContent-${configOfActiveTab.key}`} />;
+  }, [activeTab]);
+
   const expandedContent = useMemo(() => {
     const tabHeadersExpanded = debugExtensions.map(({ key, headerExpanded }) => renderTabHeader(key, headerExpanded));
 
@@ -69,10 +79,10 @@ export const DebugPanel = () => {
             }}
           />
         </div>
-        Expanded Pane
+        <div data-testid="debug-panel__content">{activeTabContent}</div>
       </div>
     );
-  }, []);
+  }, [activeTabContent]);
 
   return expanded ? expandedContent : collapsedContent;
 };
