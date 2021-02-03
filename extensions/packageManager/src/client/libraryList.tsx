@@ -9,13 +9,8 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
-  IconButton,
-  Sticky,
-  StickyPositionType,
-  TooltipHost,
   Selection,
   FontIcon,
-  IOverflowSetItemProps,
 } from 'office-ui-fabric-react';
 import React, { useState, useEffect, useMemo, Fragment } from 'react';
 
@@ -42,7 +37,6 @@ export interface LibraryRef {
 export interface ILibraryListProps {
   disabled: boolean;
   items: LibraryRef[];
-  // groups: IGroup[];
   redownload: (evt: any) => void;
   install: (evt: any) => void;
   isInstalled: (item: LibraryRef) => boolean;

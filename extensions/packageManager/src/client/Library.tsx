@@ -69,6 +69,14 @@ const Library: React.FC = () => {
   const httpClient = useHttpClient();
   const API_ROOT = '';
 
+
+  const TABS = {
+    INSTALL: 'INSTALL',
+    BROWSE: 'BROWSE",'
+  };
+  const [currentTab, setCurrentTab] = useState<string>(TABS.BROWSE);
+
+
   const strings = {
     title: formatMessage('Package Manager'),
     editFeeds: formatMessage('Edit feeds'),
@@ -490,7 +498,7 @@ const Library: React.FC = () => {
           </Link>
         </p>
       </div>
-      <Stack horizontal disableShrink styles={{ root: { borderTop: '1px solid #CCC' } }}>
+      <Stack horizontal styles={{ root: { borderTop: '1px solid #CCC' } }}>
         {/* <Stack.Item styles={{ root: { width: '300px', borderRight: '1px solid #CCC' } }}>
           <ProjectList
             defaultSelected={projectId}
@@ -498,7 +506,7 @@ const Library: React.FC = () => {
             onSelect={(link) => setCurrentProjectId(link.projectId)}
           />
         </Stack.Item> */}
-        <Stack.Item styles={{ root: { flexGrow: 1, flexShrink: 1, } }}>
+        <Stack.Item  align="stretch" styles={{ root: { flexGrow: 1, } }}>
           {!ejectedRuntime && (
             <MessageBar
               messageBarType={MessageBarType.warning}
@@ -512,79 +520,116 @@ const Library: React.FC = () => {
               {strings.requireEject}
             </MessageBar>
           )}
-          <Fragment>
-            <Pivot aria-label="Library Views" style={{ paddingLeft: '12px' }}>
-              <PivotItem headerText={strings.browseHeader}>
-                <section style={{ paddingRight: '20px', display: 'grid', justifyContent: 'end' }}>
-                <SearchBox
-                    placeholder="Search"
-                    onClear={() => setSearchTerm('')}
-                    onSearch={setSearchTerm}
-                    disabled={!feeds || !feed}
-                  />
+
+{/* ***************************************************************************
+  *  This is the top nav that includes the tabs and search bar
+  ****************************************************************************/}
+
+          <Stack horizontal styles={{root:{paddingLeft: '12px', paddingRight: '12px'}}}>
+              <Stack.Item align="stretch">
+                <Pivot aria-label="Library Views" onLinkClick={(item:PivotItem)=>setCurrentTab(item.props.itemKey)}>
+                  <PivotItem headerText={strings.browseHeader} itemKey={TABS.BROWSE}  />
+                  <PivotItem headerText={strings.installHeader} itemKey={TABS.INSTALL} />
+                </Pivot>
+              </Stack.Item>
+              <Stack.Item align="end" grow={1}>
+                <Stack horizontal tokens={{childrenGap:10}} horizontalAlign="end" >
+                  <Stack.Item>
                   <Dropdown
                     placeholder="Format"
                     selectedKey={feed}
                     options={feeds}
+                    hidden={currentTab !== TABS.BROWSE}
                     onChange={onChangeFeed}
                     styles={{
-                      root: { width: '200px' },
+                      root: { width: '200px', display: 'inline-block', },
                     }}
                   ></Dropdown>
-                </section>
-                {loading && <LoadingSpinner />}
-                {items?.length ? (
-                  <LibraryList
-                    disabled={!ejectedRuntime}
-                    install={install}
-                    isInstalled={isInstalled}
-                    items={items}
-                    redownload={redownload}
-                    removeLibrary={removeComponent}
-                    updateItems={setItems}
-                    onItemClick={selectItem}
-                  />
-                ) : null}
-                {items && !items.length && !loading && (
-                  <div
-                    style={{
-                      marginLeft: '50px',
-                      fontSize: 'smaller',
-                      marginTop: '20px',
-                    }}
-                  >
-                    {strings.noComponentsFound}
-                  </div>
-                )}
-              </PivotItem>
-              <PivotItem headerText={strings.installHeader}>
+                    </Stack.Item>
+                    <Stack.Item>
+                    <SearchBox
+                          placeholder="Search"
+                          onClear={() => setSearchTerm('')}
+                          onSearch={setSearchTerm}
+                          disabled={!feeds || !feed || items.length===0}
+                          styles={{
+                            root: { width: '200px' },
+                          }}
+                      />
+                    </Stack.Item>
+                </Stack>
+              </Stack.Item>
+          </Stack>
+
+{/* ***************************************************************************
+  *  This is the browse tab
+  ****************************************************************************/}
+
+          {(currentTab === TABS.BROWSE) && (
+            <Fragment>
+              {loading && <LoadingSpinner />}
+              {items?.length ? (
                 <LibraryList
                   disabled={!ejectedRuntime}
                   install={install}
                   isInstalled={isInstalled}
-                  items={installedComponents}
+                  items={items}
                   redownload={redownload}
                   removeLibrary={removeComponent}
                   updateItems={setItems}
                   onItemClick={selectItem}
                 />
-                {(!installedComponents || installedComponents.length === 0) && (
-                  <div
-                    style={{
-                      marginLeft: '50px',
-                      fontSize: 'smaller',
-                      marginTop: '20px',
-                    }}
-                  >
-                    {strings.noComponentsInstalled}
-                  </div>
-                )}
-              </PivotItem>
-            </Pivot>
+              ) : null}
+              {items && !items.length && !loading && (
+                <div
+                  style={{
+                    marginLeft: '50px',
+                    fontSize: 'smaller',
+                    marginTop: '20px',
+                  }}
+                >
+                  {strings.noComponentsFound}
+                </div>
+              )}
+            </Fragment>
+          )}
 
-          </Fragment>
+{/* ***************************************************************************
+  *  This is the installed tab
+  ****************************************************************************/}
+
+          {(currentTab === TABS.INSTALL) && (
+            <Fragment>
+              <LibraryList
+                disabled={!ejectedRuntime}
+                install={install}
+                isInstalled={isInstalled}
+                items={installedComponents}
+                redownload={redownload}
+                removeLibrary={removeComponent}
+                updateItems={setItems}
+                onItemClick={selectItem}
+              />
+              {(!installedComponents || installedComponents.length === 0) && (
+                <div
+                 style={{
+                   marginLeft: '50px',
+                   fontSize: 'smaller',
+                   marginTop: '20px',
+                 }}
+               >
+                 {strings.noComponentsInstalled}
+               </div>
+              )}
+            </Fragment>
+          )}
         </Stack.Item>
-        <Stack.Item styles={{ root: { flexShrink: 1, width: '400px', padding: '20px', borderLeft: '1px solid #CCC' } }}>
+
+{/* ***************************************************************************
+  *  This is the details pane
+  ****************************************************************************/}
+
+        <Stack.Item grow={0} shrink={0} disableShrink styles={{ root: { width: '400px', padding: '20px', borderLeft: '1px solid #CCC' } }}>
           {selectedItem ? (
             <Fragment>
               <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible}>{ strings.installButton }</PrimaryButton>
