@@ -75,7 +75,12 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         title="restart-conversation"
         onClick={() => onRestartConversation(conversationId)}
       />
-      <IconButton iconProps={{ iconName: 'Save' }} onClick={() => onSaveTranscript(conversationId)} />
+      <IconButton
+        ariaLabel="save-transcripts"
+        iconProps={{ iconName: 'Save' }}
+        title="Save chat transcripts"
+        onClick={() => onSaveTranscript(conversationId)}
+      />
     </div>
   );
 };
