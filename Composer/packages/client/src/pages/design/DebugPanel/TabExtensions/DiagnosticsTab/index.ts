@@ -3,8 +3,8 @@
 
 import { TabExtensionConfig } from '../types';
 
-import { DiagnosticsContent } from './DiagnosticsContent';
-import { DiagnosticsHeader } from './DiagnosticsHeader';
+import { DiagnosticsContent } from './DiagnosticsTabContent';
+import { DiagnosticsHeader } from './DiagnosticsTabHeader';
 
 export const DiagnoticsTabConfig: TabExtensionConfig = {
   key: 'DiagnosticsTab',
