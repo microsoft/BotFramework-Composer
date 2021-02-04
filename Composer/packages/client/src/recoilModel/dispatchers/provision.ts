@@ -126,31 +126,38 @@ export const provisionDispatcher = () => {
           notification = getProvisionSuccessNotification(response.data.message);
           isCleanTimer = true;
         } else {
+          console.log(response.data.status);
           if (response.data.status !== 500) {
             notification = getProvisionPendingNotification(response.data.message);
+            // update provision status
+            const statObj = await callbackHelpers.snapshot.getPromise(provisionStatusState(projectId));
+            const stat = statObj[targetName];
+            const newStat = { ...stat, ...response.data, notificationId };
+            callbackHelpers.set(provisionStatusState(projectId), (status) => ({
+              ...status,
+              [targetName]: newStat,
+            }));
           } else {
             notification = getProvisionFailureNotification(response.data.message);
             isCleanTimer = true;
+            // delete provision status
+            callbackHelpers.set(provisionStatusState(projectId), (status) => {
+              const newStatus = { ...status };
+              delete newStatus[targetName];
+              return newStatus;
+            });
           }
-
-          // update provision status
-          const statObj = await callbackHelpers.snapshot.getPromise(provisionStatusState(projectId));
-          const stat = statObj[targetName];
-          const newStat = { ...stat, ...response.data, notificationId };
-          callbackHelpers.set(provisionStatusState(projectId), (status) => ({
-            ...status,
-            [targetName]: newStat,
-          }));
         }
       } catch (err) {
         // update notification
         notification = getProvisionFailureNotification(err.response?.data?.message || 'Error');
-        const newStat = { ...err.response?.data, notificationId };
-        // update provision status
-        callbackHelpers.set(provisionStatusState(projectId), (status) => ({
-          ...status,
-          [targetName]: newStat,
-        }));
+        // delete provision status
+        callbackHelpers.set(provisionStatusState(projectId), (status) => {
+          const newStatus = { ...status };
+          delete newStatus[targetName];
+          return newStatus;
+        });
+
         isCleanTimer = true;
       } finally {
         if (isCleanTimer) {

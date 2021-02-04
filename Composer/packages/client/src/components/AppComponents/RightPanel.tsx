@@ -9,6 +9,7 @@ import { forwardRef } from 'react';
 import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { Conversation } from '../Conversation';
+import { WarningDialog } from '../WarningDialog';
 
 import Routes from './../../router';
 import { applicationErrorState, dispatcherState, currentProjectIdState } from './../../recoilModel';
@@ -53,7 +54,9 @@ export const RightPanel = () => {
         setApplicationLevelError={setApplicationLevelError}
       >
         <RequireAuth>
-          <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>{conversation}</div>
+          <WarningDialog projectId={projectId}>
+            <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>{conversation}</div>{' '}
+          </WarningDialog>
         </RequireAuth>
       </ErrorBoundary>
     </div>
