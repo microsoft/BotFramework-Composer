@@ -39,7 +39,6 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
   const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);
   const nodeId = `action-${selectableId}`;
-  const actionNode = document.getElementById(nodeId);
 
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
@@ -62,6 +61,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
 
   useEffect(() => {
     if (nodeSelected || nodeDoubleSelected) {
+      const actionNode = document.getElementById(nodeId);
       actionNode?.focus();
     }
   }, [nodeSelected, tab, nodeDoubleSelected]);
