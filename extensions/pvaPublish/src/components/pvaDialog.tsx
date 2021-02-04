@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, FC } from 'react';
 import * as React from 'react';
-import { closeDialog, getAccessToken, savePublishConfig, fetch, onBack } from '@bfc/extension-client';
+import { getAccessToken, fetch, usePublishApi } from '@bfc/extension-client';
 import {
   DefaultButton,
   Dropdown,
@@ -29,15 +29,8 @@ const pvaBranding = '#0F677B';
 const pvaBrandingHover = '#0A4A5C';
 const pvaBrandingClick = '#073845';
 
-type PVAPublishConfig = {
-  botId?: string;
-  envId?: string;
-  tenantId: string;
-  deleteMissingComponents: boolean;
-};
-
 export const PVADialog: FC = () => {
-  const { setConfigIsValid, setPublishConfig } = usePublishApi<PVAPublishConfig>();
+  const { closeDialog, savePublishConfig, onBack } = usePublishApi();
   const [token, setToken] = useState('');
   const [tenantId, setTenantId] = useState('');
   const [envs, setEnvs] = useState<BotEnvironment[]>([]);
