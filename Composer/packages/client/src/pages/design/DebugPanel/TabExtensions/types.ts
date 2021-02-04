@@ -24,4 +24,7 @@ export interface TabExtensionConfig {
 
   /** Tab content component used when debug panel is expanded. */
   content: FC;
+
+  /** Extra component displayed on the right side of tab header. */
+  toolbar?: FC;
 }

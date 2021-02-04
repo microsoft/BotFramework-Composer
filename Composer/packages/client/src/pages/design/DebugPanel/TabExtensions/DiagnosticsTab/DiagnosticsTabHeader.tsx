@@ -16,7 +16,14 @@ const Severity = {
   Warning: DiagnosticSeverity[1],
 };
 
-export const DiagnosticsHeaderCollapsed = () => {
+export const DiagnosticsHeaderCollapsed = 'Issues';
+
+export const DiagnosticsHeaderExpanded = 'Issues';
+
+/**
+ * Displays how many errors and warnings in current project.
+ */
+export const DiagnosticsStatus = () => {
   const [, setExpansion] = useRecoilState(debugPanelExpansionState);
   const diagnosticsData = useDiagnosticsData();
 
@@ -57,5 +64,3 @@ export const DiagnosticsHeaderCollapsed = () => {
     </div>
   );
 };
-
-export const DiagnosticsHeaderExpanded = 'Problems';

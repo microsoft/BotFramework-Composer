@@ -4,7 +4,7 @@
 import { TabExtensionConfig } from '../types';
 
 import { DiagnosticsContent } from './DiagnosticsTabContent';
-import { DiagnosticsHeaderCollapsed, DiagnosticsHeaderExpanded } from './DiagnosticsTabHeader';
+import { DiagnosticsHeaderCollapsed, DiagnosticsHeaderExpanded, DiagnosticsStatus } from './DiagnosticsTabHeader';
 
 export const DiagnoticsTabConfig: TabExtensionConfig = {
   key: 'DiagnosticsTab',
@@ -12,4 +12,5 @@ export const DiagnoticsTabConfig: TabExtensionConfig = {
   headerCollapsed: DiagnosticsHeaderCollapsed,
   headerExpanded: DiagnosticsHeaderExpanded,
   content: DiagnosticsContent,
+  toolbar: DiagnosticsStatus,
 };

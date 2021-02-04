@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, FC } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -11,7 +11,13 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
 import { debugPanelExpansionState } from '../../../recoilModel';
 
-import { debugPaneCollapsedStyle, debugPaneExpandedStyle, debugPaneHeaderStyle } from './styles';
+import {
+  debugPaneCollapsedStyle,
+  debugPaneExpandedStyle,
+  debugPaneHeaderStyle,
+  leftHeaderStyle,
+  rightHeaderStyle,
+} from './styles';
 import debugExtensions from './TabExtensions';
 
 export interface DebugPanelProps {
@@ -21,43 +27,80 @@ export interface DebugPanelProps {
 export const DebugPanel = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
 
-  const [activeTab] = useState<string>(debugExtensions[0].key);
+  const [activeTab, setActiveTab] = useState<string>(debugExtensions[0].key);
 
-  const buildTabHeaders = useCallback((tabHeaderKey: string, tabHeaderComponent: React.FC | string) => {
+  const buildTabTitle = useCallback((tabKey: string, tabHeaderComponent: React.FC | string) => {
+    if (!tabHeaderComponent) return { key: tabKey, element: null };
+
     let element: JSX.Element;
     if (typeof tabHeaderComponent === 'string') {
-      element = <span key={`tabHeader-${tabHeaderKey}`}>{tabHeaderComponent}</span>;
-    } else {
-      const CollapsedTabHeader = tabHeaderComponent;
-      element = <CollapsedTabHeader key={`tabHeader-${tabHeaderKey}`} />;
-    }
-    return { key: tabHeaderKey, element };
-  }, []);
-
-  const collapsedContent = useMemo(() => {
-    const tabHeadersCollapsed = debugExtensions.map(
-      ({ key, headerCollapsed }) => buildTabHeaders(key, headerCollapsed).element
-    );
-
-    return (
-      <div
-        css={css`
-          ${debugPaneCollapsedStyle}
-          ${debugPaneHeaderStyle}
-        `}
-        data-testid="debug-panel--collapsed"
-      >
-        <div>{tabHeadersCollapsed}</div>
-        <IconButton
-          iconProps={{ iconName: 'ChevronUp' }}
-          title={formatMessage('Expand debug panel')}
+      element = (
+        <span
+          key={`tabHeader-${tabKey}`}
           onClick={() => {
             setExpansion(true);
+            setActiveTab(tabKey);
           }}
-        />
+        >
+          {tabHeaderComponent}
+        </span>
+      );
+    } else {
+      const CollapsedTabHeader = tabHeaderComponent;
+      // TODO: add toggle control / focus control apis for customized tab extension
+      element = <CollapsedTabHeader key={`tabHeader-${tabKey}`} />;
+    }
+    return { key: tabKey, element };
+  }, []);
+
+  const buildTabToolbar = useCallback((tabKey: string, tabToolbarComponent?: React.FC) => {
+    if (!tabToolbarComponent) return { key: tabKey, element: null };
+
+    const Toolbar = tabToolbarComponent;
+    return { key: tabKey, element: <Toolbar /> };
+  }, []);
+
+  const toolbar = useMemo(() => {
+    const toolbarItems = debugExtensions
+      .map(({ key, toolbar }) => buildTabToolbar(key, toolbar).element)
+      .filter(Boolean);
+    return <div data-testid="debug-panel__header__toolbar">{toolbarItems}</div>;
+  }, []);
+
+  const header = useMemo(() => {
+    const tabTitles = debugExtensions
+      .map(({ key, headerExpanded }) => buildTabTitle(key, headerExpanded))
+      .filter(({ element }) => Boolean(element))
+      .map(({ key, element }) => {
+        return (
+          <PivotItem
+            key={`tabHeader-pivot-${key}${expanded ? '--expanded' : ''}`}
+            itemKey={key}
+            onRenderItemLink={() => element}
+          />
+        );
+      });
+
+    return (
+      <div css={debugPaneHeaderStyle} data-testid="debug-panel__header">
+        <div css={leftHeaderStyle} data-testid="header__left">
+          <Pivot aria-label="Debug Panel Header" selectedKey={activeTab}>
+            {tabTitles}
+          </Pivot>
+        </div>
+        <div css={rightHeaderStyle} data-testid="header__right">
+          {toolbar}
+          <IconButton
+            iconProps={{ iconName: expanded ? 'Cancel' : 'ChevronUp' }}
+            title={expanded ? formatMessage('Collapse debug panel') : formatMessage('Expand debug panel')}
+            onClick={() => {
+              setExpansion(!expanded);
+            }}
+          />
+        </div>
       </div>
     );
-  }, []);
+  }, [expanded]);
 
   const activeTabContent = useMemo(() => {
     const configOfActiveTab = debugExtensions.find((ext) => ext.key === activeTab);
@@ -67,32 +110,15 @@ export const DebugPanel = () => {
     return <TabContent key={`tabContent-${configOfActiveTab.key}`} />;
   }, [activeTab]);
 
-  const expandedContent = useMemo(() => {
-    const tabHeadersExpanded = (
-      <Pivot aria-label="Debug Panel Header" selectedKey={activeTab}>
-        {debugExtensions.map(({ key: tabKey, headerExpanded }) => {
-          const { key, element } = buildTabHeaders(tabKey, headerExpanded);
-          return <PivotItem key={`tabHeader-pivot-${key}`} itemKey={key} onRenderItemLink={() => element} />;
-        })}
-      </Pivot>
-    );
-
-    return (
-      <div css={debugPaneExpandedStyle} data-testid="debug-panel--expanded">
-        <div css={debugPaneHeaderStyle} data-testid="debug-panel__header">
-          <div>{tabHeadersExpanded}</div>
-          <IconButton
-            iconProps={{ iconName: 'Cancel' }}
-            title={formatMessage('Collapse debug panel')}
-            onClick={() => {
-              setExpansion(false);
-            }}
-          />
-        </div>
-        <div data-testid="debug-panel__content">{activeTabContent}</div>
-      </div>
-    );
-  }, [activeTabContent]);
-
-  return expanded ? expandedContent : collapsedContent;
+  return (
+    <div
+      css={css`
+        ${expanded ? debugPaneExpandedStyle : debugPaneCollapsedStyle}
+      `}
+      data-testid="debug-panel--expanded"
+    >
+      {header}
+      {expanded ? <div data-testid="debug-panel__content">{activeTabContent}</div> : null}
+    </div>
+  );
 };

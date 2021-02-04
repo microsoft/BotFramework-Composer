@@ -13,5 +13,13 @@ export const DiagnosticsContent = () => {
   const skillId = useRecoilValue(currentProjectIdState);
   const diagnostics = useDiagnosticsData();
 
-  return <DiagnosticList diagnosticItems={diagnostics} skillId={skillId} onItemClick={() => {}} />;
+  return (
+    <DiagnosticList
+      diagnosticItems={diagnostics}
+      skillId={skillId}
+      onItemClick={() => {
+        // TODO: migrate the navigation logic
+      }}
+    />
+  );
 };
