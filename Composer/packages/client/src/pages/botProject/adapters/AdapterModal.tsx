@@ -57,11 +57,13 @@ const AdapterModal = (props: Props) => {
               if (value != null) {
                 const currentAdapters: string[] = currentSettings.adapters ?? [];
 
-                await setSettings(projectId, {
-                  ...currentSettings,
-                  adapters: currentAdapters.includes(adapterKey) ? currentAdapters : [...currentAdapters, adapterKey],
-                  [adapterKey]: value,
-                });
+                if (!currentAdapters.includes(adapterKey)) {
+                  await setSettings(projectId, {
+                    ...currentSettings,
+                    adapters: [...currentAdapters, adapterKey],
+                    [adapterKey]: value,
+                  });
+                }
               }
               onClose();
             }}

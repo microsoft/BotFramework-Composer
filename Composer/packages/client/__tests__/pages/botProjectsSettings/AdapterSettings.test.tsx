@@ -10,10 +10,9 @@ import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import { settingsState, currentProjectIdState, schemasState } from '../../../src/recoilModel';
 
-const state = {
-  projectId: 'test',
-  settings: {},
-};
+const PROJECT_ID = 'test';
+
+const defaultSettings = {};
 
 const mockSchemas = {
   default: {
@@ -48,23 +47,26 @@ const mockSchemas = {
 
 const setSettingsMock = jest.fn();
 
+const makeInitialState = (newSettings: {}) => ({ set }) => {
+  set(currentProjectIdState, PROJECT_ID);
+  set(settingsState(PROJECT_ID), newSettings);
+  set(dispatcherState, {
+    setSettings: setSettingsMock,
+  });
+  set(schemasState(PROJECT_ID), mockSchemas);
+};
+
 describe('AdapterSettings', () => {
   let initRecoilState;
 
   beforeEach(() => {
-    initRecoilState = ({ set }) => {
-      set(currentProjectIdState, state.projectId);
-      set(settingsState(state.projectId), state.settings);
-      set(dispatcherState, {
-        setSettings: setSettingsMock,
-      });
-      set(schemasState(state.projectId), mockSchemas);
-    };
+    initRecoilState = makeInitialState(defaultSettings);
+    setSettingsMock.mockClear();
   });
 
   it('brings up the modal', () => {
     const { getByTestId, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AdapterSettings projectId={state.projectId} />,
+      <AdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
     const container = getByTestId('adapterSettings');
@@ -84,7 +86,7 @@ describe('AdapterSettings', () => {
 
   it('sets settings on an adapter', async () => {
     const { getByTestId, getByLabelText, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AdapterSettings projectId={state.projectId} />,
+      <AdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
     const container = getByTestId('adapterSettings');
@@ -100,30 +102,65 @@ describe('AdapterSettings', () => {
 
     const modal = queryByTestId('adapterModal');
     expect(modal).not.toBeInTheDocument();
-    expect(setSettingsMock).toHaveBeenCalledWith(state.projectId, {
+    expect(setSettingsMock).toHaveBeenCalledWith(PROJECT_ID, {
       adapters: ['Adapter.Mock'],
       'Adapter.Mock': { exampleName: 'test text 12345' },
     });
+  });
 
-    // test disable/enable now that we have this adapter set up
+  it('disables an adapter', async () => {
+    const initStateWithAdapter = {
+      adapters: ['Adapter.Mock'],
+      'Adapter.Mock': {
+        exampleName: 'example',
+      },
+    };
 
-    // setSettingsMock.mockClear();
-    // const toggle = queryByTestId('toggle_Adapter.Mock');
-    // expect(toggle).not.toBeNull();
+    const { queryByTestId } = renderWithRecoilAndCustomDispatchers(
+      <AdapterSettings projectId={PROJECT_ID} />,
+      makeInitialState(initStateWithAdapter)
+    );
 
-    // await act(async () => {
-    //   fireEvent.click(toggle!);
-    // });
-    // // expect(setSettingsMock).toHaveBeenLastCalledWith(state.projectId, {
-    // //   adapters: [],
-    // // });
+    const toggle = queryByTestId('toggle_Adapter.Mock');
+    expect(toggle).not.toBeNull();
 
-    // await act(async () => {
-    //   fireEvent.click(toggle!);
-    // });
-    // console.log(setSettingsMock.mock.calls.map((c) => c[1]));
-    // expect(setSettingsMock).toHaveBeenLastCalledWith(state.projectId, {
-    //   adapters: ['Adapter.Mock'],
-    // });
+    await act(async () => {
+      fireEvent.click(toggle!);
+    });
+
+    expect(setSettingsMock).toHaveBeenLastCalledWith(
+      PROJECT_ID,
+      expect.objectContaining({
+        adapters: [],
+      })
+    );
+  });
+
+  it('enables an adapter', async () => {
+    const initStateWithAdapter = {
+      adapters: [],
+      'Adapter.Mock': {
+        exampleName: 'example',
+      },
+    };
+
+    const { queryByTestId } = renderWithRecoilAndCustomDispatchers(
+      <AdapterSettings projectId={PROJECT_ID} />,
+      makeInitialState(initStateWithAdapter)
+    );
+
+    const toggle = queryByTestId('toggle_Adapter.Mock');
+    expect(toggle).not.toBeNull();
+
+    await act(async () => {
+      fireEvent.click(toggle!);
+    });
+
+    expect(setSettingsMock).toHaveBeenLastCalledWith(
+      PROJECT_ID,
+      expect.objectContaining({
+        adapters: ['Adapter.Mock'],
+      })
+    );
   });
 });
