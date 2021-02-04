@@ -34,6 +34,7 @@ type AddProfileDialogProps = {
   updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
   projectId: string;
   setType: (value) => void;
+  current?: { index: number; item: PublishTarget } | null;
 };
 const labelContainer = css`
   display: flex;
@@ -73,10 +74,10 @@ const onRenderLabel = (props) => {
 };
 
 export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
-  const { onDismiss, targets, types, onNext, updateSettings, projectId, setType } = props;
-  const [name, setName] = useState('');
+  const { onDismiss, targets, types, onNext, updateSettings, projectId, setType, current } = props;
+  const [name, setName] = useState(current?.item.name || '');
   const [errorMessage, setErrorMsg] = useState('');
-  const [targetType, setTargetType] = useState<string>('');
+  const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const { provisionToTarget } = useRecoilValue(dispatcherState);
 
@@ -168,6 +169,7 @@ export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
               required
               ariaLabel={formatMessage('The name of your publishing file')}
               defaultValue={name}
+              disabled={current?.item.name ? true : false}
               errorMessage={errorMessage}
               label={formatMessage('Name')}
               placeholder={formatMessage('e.g. AzureBot')}
