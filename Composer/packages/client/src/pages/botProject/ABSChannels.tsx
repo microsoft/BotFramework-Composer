@@ -8,7 +8,6 @@ import formatMessage from 'format-message';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-
 import { useRecoilValue } from 'recoil';
 
 import { settingsState } from '../../recoilModel';
@@ -48,28 +47,22 @@ type AzureResourcePointer = {
 };
 
 type AzureChannelStatus = {
-  [CHANNELS.TEAMS]: {
-    enabled: boolean;
-    configured: boolean;
-    data: any;
+  enabled: boolean;
+  configured: boolean;
+  data: {
+    [key: string]: any;
   };
-  webchat: {
-    enabled: boolean;
-    configured: boolean;
-    data: any;
-  };
-  speech: {
-    enabled: boolean;
-    configured: boolean;
-    data: any;
-  };
+};
+
+type AzureChannelsStatus = {
+  [key: string]: AzureChannelStatus;
 };
 
 export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const { projectId, scrollToSectionId } = props;
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [currentResource, setCurrentResource] = useState<AzureResourcePointer | undefined>();
-  const [channelStatus, setChannelStatus] = useState<AzureChannelStatus | undefined>();
+  const [channelStatus, setChannelStatus] = useState<AzureChannelsStatus | undefined>();
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const [token, setToken] = useState<string | undefined>();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -120,36 +113,42 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   }, [channelStatus]);
 
   const fetchChannelStatus = async (channelId: string) => {
-    try {
-      const url = `https://management.azure.com/subscriptions/${currentResource.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
-      const res = await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
-      console.log(`status of ${channelId}`, channelId, res.data);
-      return {
-        enabled: true,
-        configured: true,
-        data: res.data,
-      };
-    } catch (err) {
-      switch (err?.response.data?.error.code) {
-        case 'AuthenticationFailed':
-        // the auth failed for some reason.
-        case 'ResourceNotFound':
-          // this channel has not yet been created, should display as disabled
-          console.log('RESOURCe NOT FOUND == NOT ENABLED, RETURN FALSE');
-          return {
-            enabled: false,
-            configured: false,
-            data: {},
-          };
-        case 'ResourceGroupNotFound':
-        // this resource group is not found - in other words, can't find a channel registration in the expected spot.
-        case 'SubscriptionNotFound':
-        // the subscription is not found or invalid
-        default:
-          // handle error.
-          break;
+    if (currentResource) {
+      try {
+        const url = `https://management.azure.com/subscriptions/${currentResource.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
+        const res = await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
+        console.log(`status of ${channelId}`, channelId, res.data);
+        return {
+          enabled: true,
+          configured: true,
+          data: res.data,
+        };
+      } catch (err) {
+        switch (err?.response.data?.error.code) {
+          case 'AuthenticationFailed':
+            // the auth failed for some reason.
+            break;
+          case 'ResourceNotFound':
+            // this channel has not yet been created, should display as disabled
+            console.log('RESOURCe NOT FOUND == NOT ENABLED, RETURN FALSE');
+            return {
+              enabled: false,
+              configured: false,
+              data: {},
+            };
+            break;
+          case 'ResourceGroupNotFound':
+            // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+            break;
+          case 'SubscriptionNotFound':
+            // the subscription is not found or invalid
+            break;
+          default:
+            // handle error.
+            break;
+        }
+        throw new Error(`Failed to retrieve status for ${channelId}`, err?.data?.error.message);
       }
-      throw new Error(`Failed to retrieve status for ${channelId}`, err?.data?.error.message);
     }
   };
 
@@ -235,11 +234,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     } catch (err) {
       switch (err?.response.data?.error.code) {
         case 'AuthenticationFailed':
-        // the auth failed for some reason.
+          // the auth failed for some reason.
+          break;
         case 'ResourceGroupNotFound':
-        // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+          // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+          break;
         case 'SubscriptionNotFound':
-        // the subscription is not found or invalid
+          // the subscription is not found or invalid
+          break;
         default:
           // handle error.
           break;
@@ -270,11 +272,17 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     } catch (err) {
       switch (err?.response.data?.error.code) {
         case 'AuthenticationFailed':
-        // the auth failed for some reason.
+          // the auth failed for some reason.
+          break;
+
         case 'ResourceGroupNotFound':
-        // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+          // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+          break;
+
         case 'SubscriptionNotFound':
-        // the subscription is not found or invalid
+          // the subscription is not found or invalid
+          break;
+
         default:
           // handle error.
           break;
@@ -308,11 +316,17 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     } catch (err) {
       switch (err?.response?.data?.error.code) {
         case 'AuthenticationFailed':
-        // the auth failed for some reason.
+          // the auth failed for some reason.
+          break;
+
         case 'ResourceGroupNotFound':
-        // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+          // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+          break;
+
         case 'SubscriptionNotFound':
-        // the subscription is not found or invalid
+          // the subscription is not found or invalid
+          break;
+
         default:
           // handle error.
           break;
@@ -333,12 +347,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const webchat = await fetchChannelStatus(CHANNELS.WEBCHAT);
         const speech = await fetchChannelStatus(CHANNELS.SPEECH);
 
-        console.log({ teams, webchat, speech });
-        setChannelStatus({
-          [CHANNELS.TEAMS]: teams,
-          [CHANNELS.WEBCHAT]: webchat,
-          [CHANNELS.SPEECH]: speech,
-        });
+        if (teams && webchat && speech) {
+          console.log({ teams, webchat, speech });
+          setChannelStatus({
+            [CHANNELS.TEAMS]: teams,
+            [CHANNELS.WEBCHAT]: webchat,
+            [CHANNELS.SPEECH]: speech,
+          });
+        }
       } catch (err) {
         console.error(err);
       }
@@ -352,7 +368,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const toggleTeams = async (evt, enabled) => {
     console.log('toggle tams to', enabled, channelStatus[CHANNELS.TEAMS]);
     if (enabled) {
-      if (channelStatus[CHANNELS.TEAMS].configured) {
+      if (channelStatus?.[CHANNELS.TEAMS].configured) {
         // enable an already existing service
         console.log('ENABLE EXISTING SERVICE');
         const res = await setEnabledChannelService(CHANNELS.TEAMS, true);
@@ -362,7 +378,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const res = await createChannelService(CHANNELS.TEAMS);
       }
     } else {
-      if (channelStatus[CHANNELS.TEAMS].configured) {
+      if (channelStatus?.[CHANNELS.TEAMS].configured) {
         // enable an already existing service
         console.log('DISABLE AN EXISTING SERVICE');
         const res = await deleteChannelService(CHANNELS.TEAMS);
