@@ -128,6 +128,7 @@ const state = {
         name: 'Email-Skill',
       },
     },
+    languages: ['en-us'],
   },
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
