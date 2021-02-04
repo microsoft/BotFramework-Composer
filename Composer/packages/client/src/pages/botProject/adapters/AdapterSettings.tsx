@@ -34,7 +34,6 @@ const AdapterSettings = (props: Props) => {
   const currentSettings = useRecoilValue(settingsState(projectId));
   const { setSettings } = useRecoilValue(dispatcherState);
   const adapters: string[] = currentSettings.adapters ?? [];
-  console.log('adapters =', adapters);
 
   const { definitions: schemaDefinitions } = schemas?.default ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
@@ -89,10 +88,8 @@ const AdapterSettings = (props: Props) => {
                 data-testid={`toggle_${key}`}
                 onChange={(ev, val?: boolean) => {
                   if (val && !keyEnabled) {
-                    console.log('toggle on', key);
                     setSettings(projectId, { ...currentSettings, adapters: [...adapters, key] });
                   } else {
-                    console.log('toggle off', key);
                     setSettings(projectId, { ...currentSettings, adapters: adapters.filter((a) => a !== key) });
                   }
                 }}
