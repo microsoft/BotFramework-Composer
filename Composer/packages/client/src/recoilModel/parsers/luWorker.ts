@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection, LuFile } from '@bfc/shared';
+import { LuIntentSection, LuFile, FileInfo } from '@bfc/shared';
 
 import Worker from './workers/luParser.worker.ts';
 import { BaseWorker } from './baseWorker';
 import {
   LuActionType,
   LuParsePayload,
+  LuIndexPayload,
   LuAddIntentPayload,
   LuAddIntentsPayload,
   LuRemoveIntentsPayload,
@@ -18,6 +19,10 @@ class LuWorker extends BaseWorker<LuActionType> {
   parse(id: string, content: string, luFeatures) {
     const payload = { id, content, luFeatures };
     return this.sendMsg<LuParsePayload>(LuActionType.Parse, payload);
+  }
+
+  index(projectId: string, rawLuFiles: FileInfo[], luFeatures) {
+    return this.sendMsg<LuIndexPayload>(LuActionType.Index, { id: projectId, rawLuFiles, projectId, luFeatures });
   }
 
   addIntent(luFile: LuFile, intent: LuIntentSection, luFeatures) {

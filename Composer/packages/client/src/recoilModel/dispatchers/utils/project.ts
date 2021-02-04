@@ -244,62 +244,75 @@ export const loadProjectData = (data, withLayback) => {
 
   if (withLayback) {
     const basicFiles = files.filter(({ name }) => !['lg', 'lu', 'qna'].includes(getExtension(name)));
-    const lgFiles = files
-      .filter(({ name }) => name.endsWith('.lg'))
-      .map((file) => {
-        return {
-          id: getBaseName(file.name),
-          content: file.content,
-          diagnostics: [],
-          templates: [],
-          allTemplates: [],
-          imports: [],
-          options: [],
-        } as LgFile;
-      });
+    const lgFiles = files.filter(({ name }) => name.endsWith('.lg'));
+    const luFiles = files.filter(({ name }) => name.endsWith('.lu'));
+    const qnaFiles = files.filter(({ name }) => name.endsWith('.qna'));
 
-    const luFiles = files
-      .filter(({ name }) => name.endsWith('.lu'))
-      .map((file) => {
-        return {
-          id: getBaseName(file.name),
-          content: file.content,
-          diagnostics: [],
-          intents: [],
-          imports: [],
-          options: [],
-          empty: false,
-          resource: {} as LuParseResource,
-        } as LuFile;
-      });
+    const indexedLgFiles = lgFiles.map((file) => {
+      return {
+        id: getBaseName(file.name),
+        content: file.content,
+        diagnostics: [],
+        templates: [],
+        allTemplates: [],
+        imports: [],
+        options: [],
+      } as LgFile;
+    });
 
-    const qnaFiles = files
-      .filter(({ name }) => name.endsWith('.qna'))
-      .map((file) => {
-        return {
-          id: getBaseName(file.name),
-          content: file.content,
-          diagnostics: [],
-          qnaSections: [],
-          imports: [],
-          options: [],
-          empty: false,
-          resource: {} as LuParseResource,
-        } as QnAFile;
-      });
+    const indexedLuFiles = luFiles.map((file) => {
+      return {
+        id: getBaseName(file.name),
+        content: file.content,
+        diagnostics: [],
+        intents: [],
+        imports: [],
+        options: [],
+        empty: true,
+        resource: {} as LuParseResource,
+      } as LuFile;
+    });
 
-    console.time('index bot files');
+    const indexedQnAFiles = qnaFiles.map((file) => {
+      return {
+        id: getBaseName(file.name),
+        content: file.content,
+        diagnostics: [],
+        qnaSections: [],
+        imports: [],
+        options: [],
+        empty: true,
+        resource: { Sections: [], Errors: [], Content: file.content } as LuParseResource,
+      } as QnAFile;
+    });
+
+    console.time('index bot basic files');
     const indexedFiles = indexer.index(basicFiles, botName, locale, mergedSettings);
-    console.timeEnd('index bot files');
+    console.timeEnd('index bot basic files');
 
-    const laybackFullIndex = () => {
-      return new Promise((resolve) => {
-        const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
-        resolve(indexedFiles);
-      });
+    // use worker thread do other resources indexing, so not block UI
+    const laybackFullIndex = async () => {
+      console.time('index bot resource files');
+      const fullIndexedLgFiles = await lgWorker.index(projectId, lgFiles);
+      const fullIndexedQnAFiles = await qnaWorker.index(projectId, qnaFiles);
+      const fullIndexedLuFiles = await luWorker.index(projectId, luFiles, mergedSettings.luFeatures);
+      console.timeEnd('index bot resource files');
+      return {
+        lgFiles: fullIndexedLgFiles,
+        luFiles: fullIndexedLuFiles,
+        qnaFiles: fullIndexedQnAFiles,
+        dialogs: indexedFiles.dialogs,
+      };
     };
+
     return {
-      botFiles: { ...indexedFiles, qnaFiles, lgFiles, luFiles, mergedSettings },
+      botFiles: {
+        ...indexedFiles,
+        qnaFiles: indexedQnAFiles,
+        lgFiles: indexedLgFiles,
+        luFiles: indexedLuFiles,
+        mergedSettings,
+      },
       projectData: { ...data, laybackFullIndex },
       error: undefined,
     };
@@ -483,17 +496,19 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   // async excute layback resource indexing
   if (data.laybackFullIndex) {
-    setTimeout(() => {
-      data.laybackFullIndex().then((botFiles) => {
-        const { lgFiles, luFiles, qnaFiles, dialogs } = botFiles;
-        set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
-        set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
-        set(lgFilesSelectorFamily(projectId), lgFiles);
+    data.laybackFullIndex().then((botFiles) => {
+      console.log(botFiles);
 
-        // async repair bot assets, add missing lg templates
-        repairBotProject(callbackHelpers, { projectId, botFiles });
-      });
-    }, 10000); // TODO: instead of set a delay time, we should find client idle timing, render done.
+      const { luFiles, qnaFiles, dialogs } = botFiles;
+      set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
+      set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
+
+      // lg set already included in repairBotProject
+      // set(lgFilesSelectorFamily(projectId), lgFiles);
+
+      // async repair bot assets, add missing lg templates
+      repairBotProject(callbackHelpers, { projectId, botFiles });
+    });
   }
 
   return mainDialog;

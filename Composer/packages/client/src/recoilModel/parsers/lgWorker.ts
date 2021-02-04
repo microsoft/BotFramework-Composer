@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { LgFile, LgTemplate } from '@bfc/shared';
+import { FileInfo } from '@bfc/shared';
 
 import Worker from './workers/lgParser.worker.ts';
 import { BaseWorker } from './baseWorker';
 import {
   LgActionType,
   LgParsePayload,
+  LgIndexPayload,
   LgUpdateTemplatePayload,
   LgCreateTemplatePayload,
   LgCreateTemplatesPayload,
@@ -25,6 +27,10 @@ class LgWorker extends BaseWorker<LgActionType> {
 
   removeProject(projectId: string) {
     return this.sendMsg<LgCleanCachePayload>(LgActionType.CleanCache, { projectId });
+  }
+
+  index(projectId: string, rawLgFiles: FileInfo[]) {
+    return this.sendMsg<LgIndexPayload>(LgActionType.Index, { rawLgFiles, projectId, id: projectId });
   }
 
   parse(projectId: string, id: string, content: string, lgFiles: LgFile[]) {

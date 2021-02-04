@@ -476,7 +476,7 @@ export const projectDispatcher = () => {
             // Bot creation successful
             clearInterval(timer);
             callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
-            const { botFiles, projectData } = loadProjectData(response.data.result);
+            const { botFiles, projectData } = loadProjectData(response.data.result, false);
             const projectId = response.data.result.id;
             if (settingStorage.get(projectId)) {
               settingStorage.remove(projectId);

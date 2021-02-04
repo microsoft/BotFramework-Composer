@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import * as qnaUtil from '@bfc/indexers/lib/utils/qnaUtil';
+import { qnaUtil } from '@bfc/indexers';
+
+import { getBaseName } from '../../../utils/fileUtil';
 
 import { QnAActionType } from './../types';
 const ctx: Worker = self as any;
@@ -13,6 +15,13 @@ ctx.onmessage = function (msg) {
     switch (type) {
       case QnAActionType.Parse: {
         result = qnaUtil.parse(id, content);
+        break;
+      }
+      case QnAActionType.Index: {
+        const { rawQnAFiles } = payload;
+        result = rawQnAFiles.map((file) => {
+          return qnaUtil.parse(getBaseName(file.name), file.content);
+        });
         break;
       }
       case QnAActionType.AddSection: {

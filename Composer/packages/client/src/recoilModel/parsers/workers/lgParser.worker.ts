@@ -3,9 +3,11 @@
 import { lgUtil } from '@bfc/indexers';
 import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
 
+import { getBaseName } from '../../../utils/fileUtil';
 import {
   LgActionType,
   LgParsePayload,
+  LgIndexPayload,
   LgUpdateTemplatePayload,
   LgCreateTemplatePayload,
   LgCreateTemplatesPayload,
@@ -22,6 +24,11 @@ interface ParseMessage {
   id: string;
   type: LgActionType.Parse;
   payload: LgParsePayload;
+}
+interface IndexMessage {
+  id: string;
+  type: LgActionType.Index;
+  payload: LgIndexPayload;
 }
 
 interface AddMessage {
@@ -82,6 +89,7 @@ type LgMessageEvent =
   | NewCacheMessage
   | CleanCacheMeassage
   | ParseMessage
+  | IndexMessage
   | AddMessage
   | AddsMessage
   | UpdateMessage
@@ -176,6 +184,21 @@ export const handleMessage = (msg: LgMessageEvent) => {
       const lgFile = lgUtil.parse(id, content, lgFiles);
       cache.set(projectId, lgFile);
       payload = filterParseResult(lgFile);
+      break;
+    }
+
+    case LgActionType.Index: {
+      const { rawLgFiles } = msg.payload;
+      const lgIdFiles = rawLgFiles.map((file) => {
+        return {
+          id: getBaseName(file.name),
+          content: file.content,
+        };
+      });
+      payload = lgIdFiles.map((file) => {
+        const result = lgUtil.parse(file.id, file.content, lgIdFiles);
+        return filterParseResult(result);
+      });
       break;
     }
 

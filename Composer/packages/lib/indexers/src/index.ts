@@ -80,6 +80,7 @@ class Indexer {
     return lgImportResolverGenerator(lgFiles, '.lg', locale);
   };
 
+  //TODO: specify locale to index is not work for multilang bot
   public index(files: FileInfo[], botName: string, locale: string, settings: DialogSetting) {
     const result = this.classifyFile(files);
     const luFeatures = settings.luFeatures;

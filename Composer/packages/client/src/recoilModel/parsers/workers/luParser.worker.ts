@@ -3,9 +3,11 @@
 
 import { luUtil } from '@bfc/indexers';
 
+import { getBaseName } from '../../../utils/fileUtil';
 import {
   LuActionType,
   LuParsePayload,
+  LuIndexPayload,
   LuRemoveIntentsPayload,
   LuRemoveIntentPayload,
   LuUpdateIntentPayload,
@@ -18,6 +20,12 @@ interface ParseMessage {
   id: string;
   type: LuActionType.Parse;
   payload: LuParsePayload;
+}
+
+interface IndexMessage {
+  id: string;
+  type: LuActionType.Index;
+  payload: LuIndexPayload;
 }
 
 interface AddMessage {
@@ -50,7 +58,14 @@ interface RemoveIntentsMessage {
   payload: LuRemoveIntentsPayload;
 }
 
-type LuMessageEvent = ParseMessage | AddMessage | AddsMessage | UpdateMessage | RemoveMessage | RemoveIntentsMessage;
+type LuMessageEvent =
+  | ParseMessage
+  | IndexMessage
+  | AddMessage
+  | AddsMessage
+  | UpdateMessage
+  | RemoveMessage
+  | RemoveIntentsMessage;
 
 export const handleMessage = (msg: LuMessageEvent) => {
   let result: any = null;
@@ -58,6 +73,14 @@ export const handleMessage = (msg: LuMessageEvent) => {
     case LuActionType.Parse: {
       const { id, content, luFeatures } = msg.payload;
       result = luUtil.parse(id, content, luFeatures);
+      break;
+    }
+
+    case LuActionType.Index: {
+      const { rawLuFiles, luFeatures } = msg.payload;
+      result = rawLuFiles.map((file) => {
+        return luUtil.parse(getBaseName(file.name), file.content, luFeatures);
+      });
       break;
     }
 

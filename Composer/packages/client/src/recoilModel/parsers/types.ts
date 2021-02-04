@@ -10,6 +10,13 @@ export type LuParsePayload = {
   luFeatures: ILUFeaturesConfig;
 };
 
+export type LuIndexPayload = {
+  projectId: string;
+  id: string;
+  rawLuFiles: FileInfo[];
+  luFeatures: ILUFeaturesConfig;
+};
+
 export type LuAddIntentPayload = {
   luFile: LuFile;
   intent: LuIntentSection;
@@ -46,6 +53,12 @@ export type LgParsePayload = {
   id: string;
   content: string;
   lgFiles: LgFile[];
+};
+
+export type LgIndexPayload = {
+  projectId: string;
+  id: string;
+  rawLgFiles: FileInfo[];
 };
 
 export interface LgCreateTemplatePayload {
@@ -115,8 +128,15 @@ export type QnAPayload = {
   section?: QnASection;
 };
 
+export type QnAIndexPayload = {
+  projectId: string;
+  id: string;
+  rawQnAFiles: FileInfo[];
+};
+
 export enum LuActionType {
   Parse = 'parse',
+  Index = 'index',
   AddIntent = 'add-intent',
   UpdateIntent = 'update-intent',
   RemoveIntent = 'remove-intent',
@@ -128,6 +148,7 @@ export enum LgActionType {
   CleanCache = 'clean',
   NewCache = 'new',
   Parse = 'parse',
+  Index = 'index',
   AddTemplate = 'add-template',
   AddTemplates = 'add-templates',
   UpdateTemplate = 'update-template',
@@ -142,6 +163,7 @@ export enum IndexerActionType {
 
 export enum QnAActionType {
   Parse = 'parse',
+  Index = 'index',
   AddSection = 'add-section',
   UpdateSection = 'update-section',
   RemoveSection = 'remove-section',
