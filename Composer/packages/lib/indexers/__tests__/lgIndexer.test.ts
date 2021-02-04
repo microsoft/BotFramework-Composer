@@ -2,10 +2,8 @@
 // Licensed under the MIT License.
 
 import { FileInfo, lgImportResolverGenerator, ResolverResource } from '@bfc/shared';
-import { LGResource } from 'botbuilder-lg';
 
 import { lgIndexer } from '../src/lgIndexer';
-import { getBaseName } from '../src/utils/help';
 
 const { parse, index } = lgIndexer;
 

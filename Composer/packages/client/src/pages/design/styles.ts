@@ -206,3 +206,19 @@ export const description = {
 export const manifestUrl = {
   subComponentStyles: textFieldlabel,
 };
+
+export const removeSkillDialogStyle = css`
+  white-space: pre-line;
+`;
+
+export const removeSkillDialogContentStyle = css`
+  background: #000;
+  max-height: 90px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 23px;
+  color: #fff;
+  padding: 10px 15px;
+  margin: 10px 0;
+  white-space: pre-line;
+`;
