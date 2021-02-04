@@ -90,6 +90,13 @@ describe('<CreationFlowV2/>', () => {
       name: 'generator_conversational_core_0',
       schemaUrl: '',
       templateId: 'generator-conversational-core',
+      templateVersion: '',
+      alias: undefined,
+      eTag: undefined,
+      preserveRoot: undefined,
+      qnqKbUrls: undefined,
+      templateDir: undefined,
+      urlSuffix: undefined,
     });
   });
 });
