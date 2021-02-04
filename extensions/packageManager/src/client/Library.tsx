@@ -20,6 +20,7 @@ import {
   ScrollbarVisibility,
   Stack,
   SearchBox,
+  IContextualMenuProps,
   IDropdownOption,
 } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
@@ -45,7 +46,6 @@ export interface PackageSourceFeed extends IDropdownOption {
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
-  const [groups, setGroups] = useState<any[]>([]);
   const { projectId, reloadProject, projectCollection } = useProjectApi();
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
 
@@ -66,6 +66,8 @@ const Library: React.FC = () => {
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [readmeContent, setReadmeContent] = useState<string>('');
+  const [versionOptions, setVersionOptions] = useState<IContextualMenuProps|undefined>(undefined);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const httpClient = useHttpClient();
   const API_ROOT = '';
   const TABS = {
@@ -79,6 +81,8 @@ const Library: React.FC = () => {
     description: formatMessage('Discover and use components that can be installed into your bot.'),
     descriptionLink: formatMessage('Learn more'),
     installButton: formatMessage('Install'),
+    updateButton: formatMessage('Update to'),
+    installed: formatMessage('installed'),
     importDialogTitle: formatMessage('Install a Package'),
     installProgress: formatMessage('Installing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
@@ -216,6 +220,7 @@ const Library: React.FC = () => {
         // fetch the extended readme from npm
         try {
           getReadmeAPI(selectedItem.name).then((res) =>{
+            // TODO: also process available versions, should be in payload
             if (res.data.readme) {
               setReadmeContent(res.data.readme);
             } else {
@@ -228,21 +233,70 @@ const Library: React.FC = () => {
         }
       } else {
           setReadmeContent(selectedItem.description);
+          let availversions;
+          let setversion;
+
           if (selectedItem.versions && selectedItem.versions.length) {
-            setSelectedItemVersions(selectedItem.versions);
-            setSelectedVersion(selectedItem.versions[0]);
+            availversions = selectedItem.versions;
           } else {
-            setSelectedItemVersions([selectedItem.version]);
-            setSelectedVersion(selectedItem.version);
+            availversions = [selectedItem.version];
           }
+
+          setversion = availversions[0];
+
+          // default is that this not an update
+          setIsUpdate(false);
+
+          // is this item already installed?  If so, set the selectedVersion to the INSTALLED version
+          if (isInstalled(selectedItem)) {
+
+            // Check if this is the newest, or if an update might be available
+            const indexOfVersion = availversions.indexOf(installedVersion(selectedItem));
+
+            if (indexOfVersion > 0) {
+              // there is an update!
+              setversion = availversions[0];
+              setIsUpdate(true);
+            } else {
+              // this is the latest version
+              setversion = installedVersion(selectedItem);
+            }
+          }
+
+          setSelectedItemVersions(availversions);
+          setSelectedVersion(setversion);
       }
-
-
     } else {
       setReadmeContent('');
     }
+  },[selectedItem, installedComponents]);
 
-  },[selectedItem]);
+  useEffect(() => {
+    if (selectedItemVersions.length > 1) {
+      let installed = null;
+      if (isInstalled(selectedItem)) {
+        installed = installedVersion(selectedItem);
+        const indexOfInstalledVersion = selectedItemVersions.indexOf(installed);
+        const indexOfSelectedVersion = selectedItemVersions.indexOf(selectedVersion);
+
+        if (indexOfInstalledVersion > 0) {
+          if (indexOfInstalledVersion > indexOfSelectedVersion) {
+            setIsUpdate(true);
+          } else {
+            setIsUpdate(false);
+          }
+        }
+
+      }
+      setVersionOptions({
+        items: selectedItemVersions.map(v =>{ return { key: v, text: installed && installed === v ? `${ v } (${ strings.installed })` : v,  disabled: (installed && installed ===v), iconProps: { iconName: v===selectedVersion ? 'Checkmark' : ''}}}),
+        onItemClick: (ev, item) => setSelectedVersion(item.key)
+      });
+    } else {
+      setVersionOptions(undefined);
+    }
+  },[selectedItemVersions, selectedVersion, installedComponents]);
+
 
 
   const toolbarItems: IToolbarItem[] = [
@@ -414,6 +468,13 @@ const Library: React.FC = () => {
   const isInstalled = (item: LibraryRef): boolean => {
     return installedComponents?.find((l) => l.name === item.name) != undefined;
   };
+
+  const installedVersion = (item: LibraryRef): string => {
+    const installedItem = installedComponents?.find((l) => l.name === item.name);
+    if (installedItem) return installedItem.version;
+    return '';
+  };
+
   const selectItem = (item: LibraryRef | null) => {
     if (item) {
       setSelectedItem(item);
@@ -602,15 +663,16 @@ const Library: React.FC = () => {
         <Stack.Item grow={0} shrink={0} disableShrink styles={{ root: { width: '400px', padding: '20px', borderLeft: '1px solid #CCC' } }}>
           {selectedItem ? (
             <Fragment>
-              {isInstalled(selectedItem) && (
-                <PrimaryButton disabled={true}>{selectedItem.version} {formatMessage('installed')}</PrimaryButton>
-              )}
-              {(!selectedItem.versions || selectedItem.versions.length === 1) && (
-                <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible}>{ strings.installButton }</PrimaryButton>
-              )}
-              {(selectedItem.versions && selectedItem.versions.length > 1) && (
-                <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible} split menuProps={{items: selectedItemVersions.map(v =>{ return { key: v, text: v, iconProps: { iconName: v===selectedVersion ? 'Checkmark' : ''}}}), onItemClick: (ev, item) => setSelectedVersion(item.key)}}>{ strings.installButton } {selectedVersion}</PrimaryButton>
-              )}
+              <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible} split={versionOptions!=undefined} menuProps={versionOptions}>
+                {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
+                {(isInstalled(selectedItem) && selectedVersion===installedVersion(selectedItem)) ? (
+                  <span>{selectedVersion} {strings.installed}</span>
+                ) : (isUpdate) ? (
+                  <span>{strings.updateButton} {selectedVersion}</span>
+                ) : (
+                  <span>{strings.installButton} {selectedVersion}</span>
+                )}
+              </PrimaryButton>
 
               <h3>{ selectedItem.name }</h3>
 
