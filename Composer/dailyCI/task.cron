@@ -1,0 +1,1 @@
+30 3 * * * /bin/sh /home/azureuser/LuisE2E/runAndSendMail.sh >> ./e2etest.log 2>&1

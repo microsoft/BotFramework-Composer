@@ -1,0 +1,74 @@
+{
+    "feature": {
+      "UseShowTypingMiddleware": false,
+      "UseInspectionMiddleware": false,
+      "RemoveRecipientMention": false
+    },
+    "MicrosoftAppPassword": "",
+    "MicrosoftAppId": "",
+    "cosmosDb": {
+      "authKey": "",
+      "containerId": "botstate-container",
+      "cosmosDBEndpoint": "",
+      "databaseId": "botstate-db"
+    },
+    "applicationInsights": {
+      "InstrumentationKey": ""
+    },
+    "blobStorage": {
+      "connectionString": "",
+      "container": "transcripts"
+    },
+    "luis": {
+      "name": "",
+      "authoringKey": "",
+      "authoringEndpoint": "",
+      "endpointKey": "",
+      "endpoint": "",
+      "authoringRegion": "",
+      "defaultLanguage": "en-us",
+      "environment": "composer"
+    },
+    "luFeatures": {
+      "enablePattern": true,
+      "enableMLEntities": true,
+      "enableListEntities": true,
+      "enableCompositeEntities": true,
+      "enablePrebuiltEntities": true,
+      "enableRegexEntities": true,
+      "enablePhraseLists": true
+    },
+    "publishTargets": [
+    ],
+    "qna": {
+      "subscriptionKey": "",
+      "knowledgebaseid": "",
+      "endpointKey": "",
+      "hostname": "",
+      "qnaRegion": "westus"
+    },
+    "telemetry": {
+      "logPersonalInformation": false,
+      "logActivities": true
+    },
+    "runtime": {
+      "customRuntime": false,
+      "path": "",
+      "command": "",
+      "key": ""
+    },
+    "downsampling": {
+      "maxImbalanceRatio": -1
+    },
+    "skillConfiguration": {
+      "isSkill": true,
+      "allowedCallers": []
+    },
+    "skill": {},
+    "defaultLanguage": "en-us",
+    "languages": [
+      "en-us"
+    ],
+    "customFunctions": [],
+    "importedLibraries": []
+  }

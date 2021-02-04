@@ -1,0 +1,8 @@
+{
+  "$kind": "Microsoft.LuisRecognizer",
+  "id": "LUIS_ToDoBotWithLuisSample-37",
+  "applicationId": "=settings.luis.ToDoBotWithLuisSample_37_en_us_lu.appId",
+  "version": "=settings.luis.ToDoBotWithLuisSample_37_en_us_lu.version",
+  "endpoint": "=settings.luis.endpoint",
+  "endpointKey": "=settings.luis.endpointKey"
+}

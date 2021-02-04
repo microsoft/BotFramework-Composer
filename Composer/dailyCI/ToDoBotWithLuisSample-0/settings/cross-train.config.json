@@ -1,0 +1,28 @@
+{
+  "ToDoBotWithLuisSample-37.en-us": {
+    "rootDialog": true,
+    "triggers": {
+      "Add": [
+        "additem.en-us"
+      ],
+      "Delete": [
+        "deleteitem.en-us"
+      ],
+      "View": [
+        "viewitem.en-us"
+      ],
+      "UserProfile": [
+        "userprofile.en-us"
+      ],
+      "cancel": []
+    }
+  },
+  "userprofile.en-us": {
+    "rootDialog": false,
+    "triggers": {
+      "Cancel": [],
+      "Why": [],
+      "NoValue": []
+    }
+  }
+}
