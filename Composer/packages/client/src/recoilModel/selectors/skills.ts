@@ -12,6 +12,8 @@ import {
   projectMetaDataState,
   locationState,
   botProjectIdsState,
+  dialogIdsState,
+  dialogState,
 } from '../atoms';
 
 export const skillsProjectIdSelector = selector({
@@ -77,5 +79,39 @@ export const skillNameIdentifierByProjectIdSelector = selector({
       return result;
     }, {});
     return skills;
+  },
+});
+
+export const skillUsedInBotsSelector = selector({
+  key: 'skillUsedInBotSelector',
+  get: ({ get }) => {
+    const botIds = get(botProjectIdsState);
+    const skillsProjectIds = get(skillsProjectIdSelector);
+
+    const skillInBots: Record<string, { projectId: string; name: string }[]> = skillsProjectIds.reduce(
+      (result, skillId: string) => {
+        const usedInBots: { projectId: string; name: string }[] = [];
+        const skillNameIdentifier = get(botNameIdentifierState(skillId));
+
+        botIds.forEach((projectId: string) => {
+          const dialogIds = get(dialogIdsState(projectId));
+          let beenUsed = false;
+          dialogIds.forEach((dialogId) => {
+            const dialog = get(dialogState({ projectId, dialogId }));
+            if (dialog.skills.includes(skillNameIdentifier)) beenUsed = true;
+          });
+          if (beenUsed) {
+            usedInBots.push({
+              projectId,
+              name: get(botDisplayNameState(projectId)),
+            });
+          }
+        });
+        result[skillId] = usedInBots;
+        return result;
+      },
+      {}
+    );
+    return skillInBots;
   },
 });
