@@ -114,13 +114,13 @@ try {
 
     for (const lib of dylibs) {
       log.info(`codesign -s ******* --timestamp=none --force "${path.join(fwPath, lib)}"`);
-      execSync(`codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force "${path.join(fwPath, lib)}"`, {
+      execSync(`codesign -s $DEV_CERT_ID --timestamp=none --force "${path.join(fwPath, lib)}"`, {
         stdio: 'inherit',
       });
     }
 
     log.info(`codesign -s ******* --timestamp=none --force "${fwPath}"`);
-    execSync(`codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force "${fwPath}"`, {
+    execSync(`codesign -s $DEV_CERT_ID --timestamp=none --force "${fwPath}"`, {
       stdio: 'inherit',
     });
   }
@@ -136,7 +136,7 @@ try {
       `codesign -s ******* --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
     );
     execSync(
-      `codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
+      `codesign -s $DEV_CERT_ID --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
       { stdio: 'inherit' }
     );
   }
