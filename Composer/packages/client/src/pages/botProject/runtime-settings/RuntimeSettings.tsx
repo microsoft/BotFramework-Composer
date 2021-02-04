@@ -41,10 +41,7 @@ import {
   updateText,
 } from './style';
 
-const RuntimeType = {
-  Path: 'path',
-  Command: 'commad',
-};
+type RuntimeType = 'path' | 'command';
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -92,7 +89,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     TelemetryClient.track('CustomRuntimeToggleChanged', { enabled: isOn });
   };
 
-  const handleRuntimeSettingOnChange = (field) => (e, newValue) => {
+  const handleRuntimeSettingOnChange = (field: RuntimeType) => (e, newValue) => {
     let valid = true;
     let error = formatMessage('There was an error');
     if (newValue === '') {
@@ -100,7 +97,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
       error = formatMessage('This is a required field.');
     }
 
-    if (field === RuntimeType.Path) {
+    if (field === 'path') {
       setRuntimePath(newValue);
     } else {
       setRuntimeCommand(newValue);
@@ -113,8 +110,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
   };
 
-  const handleRuntimeSettingOnBlur = (field) => {
-    if (field === RuntimeType.Path) {
+  const handleRuntimeSettingOnBlur = (field: RuntimeType) => {
+    if (field === 'path') {
       setRuntimeField(projectId, field, runtimePath);
     } else {
       setRuntimeField(projectId, field, runtimeCommand);
@@ -211,8 +208,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           label={formatMessage('Runtime code location')}
           styles={name}
           value={runtimePath}
-          onBlur={() => handleRuntimeSettingOnBlur(RuntimeType.Path)}
-          onChange={handleRuntimeSettingOnChange(RuntimeType.Path)}
+          onBlur={() => handleRuntimeSettingOnBlur('path')}
+          onChange={handleRuntimeSettingOnChange('path')}
           onRenderLabel={onRenderLabel}
         />
         <span css={textOr}>{formatMessage('Or: ')}</span>
@@ -232,8 +229,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           label={formatMessage('Start command')}
           styles={name}
           value={runtimeCommand}
-          onBlur={() => handleRuntimeSettingOnBlur(RuntimeType.Command)}
-          onChange={handleRuntimeSettingOnChange(RuntimeType.Command)}
+          onBlur={() => handleRuntimeSettingOnBlur('command')}
+          onChange={handleRuntimeSettingOnChange('command')}
           onRenderLabel={onRenderLabel}
         />
       </div>
