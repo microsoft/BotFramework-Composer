@@ -510,10 +510,11 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
 
 function createProjectV2(req: Request, res: Response) {
   const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Creating Bot Project');
-  createProjectAsync(req, jobId);
+  const createProjPromise = createProjectAsync(req, jobId);
   res.status(202).json({
     jobId: jobId,
   });
+  return createProjPromise;
 }
 
 async function createProjectAsync(req: Request, jobId: string) {
@@ -585,10 +586,12 @@ async function createProjectAsync(req: Request, jobId: string) {
         ...project,
       });
     }
+    return true;
     TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
   } catch (err) {
     BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
     TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+    return false;
   }
 }
 

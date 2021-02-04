@@ -172,6 +172,29 @@ describe('should get recent projects', () => {
   });
 });
 
+describe('create a component model conversational core bot project', () => {
+  it('should start to create a new project', async () => {
+    const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
+    const name = 'newConversationalCoreBot';
+    const mockReq = {
+      params: {},
+      query: {},
+      body: {
+        storageId: 'default',
+        location: newBotDir,
+        description: '',
+        name: name,
+        templateId: 'generator-conversational-core',
+        templateVersion: '1.0.9',
+      },
+    } as Request;
+    const createProjPromise = ProjectController.createProjectV2(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(202);
+    const projCreatedSuccessfully = await createProjPromise;
+    expect(projCreatedSuccessfully).toBe(true);
+  });
+});
+
 describe('create a Empty Bot project', () => {
   it('should create a new project', async () => {
     const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
