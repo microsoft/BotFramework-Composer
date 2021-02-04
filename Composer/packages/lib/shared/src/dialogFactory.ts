@@ -10,6 +10,7 @@ import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { FieldProcessorAsync } from './copyUtils/ExternalApi';
 import { generateDesignerId } from './generateUniqueId';
+import { conceptLabels } from './labelMap';
 
 interface DesignerAttributes {
   name: string;
@@ -23,6 +24,18 @@ const initialInputDialog = {
   invalidPrompt: '',
   defaultValueResponse: '',
 };
+
+export function getFriendlyName(data): string {
+  if (data?.$designer?.name) {
+    return data?.$designer?.name;
+  }
+
+  if (data?.intent) {
+    return `${data?.intent}`;
+  }
+
+  return conceptLabels()[data.$kind]?.title ?? data.$kind;
+}
 
 export function getNewDesigner(name: string, description: string) {
   return {
