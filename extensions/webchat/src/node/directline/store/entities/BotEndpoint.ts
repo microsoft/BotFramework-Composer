@@ -23,17 +23,10 @@ export class BotEndpoint {
 
   public async fetchWithAuth(url: string, reqOptions: { body: any; headers: any }, forceRefresh = false): Promise<any> {
     if (this.msaAppId) {
-      try {
-        reqOptions.headers = {
-          ...reqOptions.headers,
-          Authorization: `Bearer ${await this.getAccessToken(forceRefresh)}`,
-        };
-      } catch (e) {
-        return {
-          status: e.status,
-          message: "The bot's Microsoft App ID or Microsoft App Password is incorrect.",
-        };
-      }
+      reqOptions.headers = {
+        ...reqOptions.headers,
+        Authorization: `Bearer ${await this.getAccessToken(forceRefresh)}`,
+      };
     }
     const response = await axios.post(url, reqOptions.body, {
       headers: reqOptions.headers,

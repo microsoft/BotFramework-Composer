@@ -29,19 +29,18 @@ import VisualEditorWrapper from './VisualEditorWrapper';
 
 type VisualPanelProps = {
   projectId: string;
-  dialogId?: string;
 };
 
-const VisualPanel: React.FC<VisualPanelProps> = ({ projectId, dialogId }) => {
+const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
+  const { dialogId, selected: encodedSelected } = useRecoilValue(designPageLocationState(projectId));
   const userSettings = useRecoilValue(userSettingsState);
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const schemas = useRecoilValue(schemasState(projectId));
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(projectId));
-  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
 
   const { updateDialog, navTo } = useRecoilValue(dispatcherState);
 
-  const selected = decodeDesignerPathToArrayPath(currentDialog?.content, designPageLocation.selected || '');
+  const selected = decodeDesignerPathToArrayPath(currentDialog?.content, encodedSelected || '');
 
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
@@ -50,7 +49,7 @@ const VisualPanel: React.FC<VisualPanelProps> = ({ projectId, dialogId }) => {
     if (!warningIsVisible) {
       setWarningIsVisible(true);
     }
-  }, [dialogId, designPageLocation]);
+  }, [dialogId, encodedSelected]);
 
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
@@ -100,6 +99,6 @@ const VisualPanel: React.FC<VisualPanelProps> = ({ projectId, dialogId }) => {
       )}
     </div>
   );
-};
+});
 
 export default VisualPanel;

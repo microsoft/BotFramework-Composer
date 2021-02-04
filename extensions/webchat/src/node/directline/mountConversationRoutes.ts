@@ -11,7 +11,6 @@ import {
   createNewConversationHandler,
   createReplyToActivityHandler,
   createUploadAttachmentHandler,
-  sendActivityToConversation,
   createUpdateConversationHandler,
   saveTranscriptHandler,
   getTranscriptHandler,
@@ -30,13 +29,6 @@ export function mountConversationsRoutes(dLServerState: DLServerContext): expres
     verifyBotFramework,
     createCreateBotEndpointHandler(state),
     createNewConversationHandler(state)
-  );
-
-  router.post(
-    '/v3/conversations/:conversationId/activities',
-    verifyBotFramework,
-    fetchConversation,
-    sendActivityToConversation
   );
 
   router.post(

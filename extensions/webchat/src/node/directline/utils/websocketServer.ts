@@ -8,6 +8,8 @@ import express, { Response } from 'express';
 import { Activity } from 'botframework-schema';
 import { Server as WSServer } from 'ws';
 
+import log from './logger';
+
 interface WebSocket {
   close(): void;
   send(data: any, cb?: (err?: Error) => void): void;
@@ -15,8 +17,8 @@ interface WebSocket {
 
 export class WebSocketServer {
   private static restServer: http.Server;
-  private static servers: { [conversationId: string]: WSServer } = {};
-  private static sockets: { [conversationId: string]: WebSocket } = {};
+  private static servers: Record<string, WSServer> = {};
+  private static sockets: Record<string, WebSocket> = {};
   private static queuedMessages: { [conversationId: string]: Activity[] } = {};
 
   private static sendBackedUpMessages(conversationId: string, socket: WebSocket) {
@@ -66,8 +68,8 @@ export class WebSocketServer {
         const res = new http.ServerResponse(req);
         return app(req, res as Response);
       });
-
       const port = await portfinder.getPortPromise();
+
       this.port = port;
       this.restServer.listen(port);
 
@@ -82,8 +84,10 @@ export class WebSocketServer {
           const wsServer = new WSServer({
             noServer: true,
           });
+
           wsServer.on('connection', (socket, req) => {
             this.sendBackedUpMessages(conversationId, socket);
+
             this.sockets[conversationId] = socket;
             socket.on('close', () => {
               delete this.servers[conversationId];
@@ -98,19 +102,27 @@ export class WebSocketServer {
           this.servers[conversationId] = wsServer;
         }
       });
-      // eslint-disable-next-line no-console
-      console.log(`Web Socket host server listening on ${this.port}...`);
+      log(`Web Socket host server listening on ${this.port}...`);
       return this.port;
     }
   }
 
-  public static cleanup(): void {
+  public static cleanUpConversation(conversationId: string): void {
+    if (this.sockets[conversationId]) {
+      this.sockets[conversationId]?.close();
+    }
+
+    if (this.servers[conversationId]) {
+      this.servers[conversationId]?.close();
+    }
+  }
+
+  public static cleanUpAll(): void {
     for (const conversationId in this.sockets) {
-      this.sockets[conversationId].close();
+      this.cleanUpConversation(conversationId);
     }
-    for (const conversationId in this.servers) {
-      this.servers[conversationId].close();
+    if (this.restServer) {
+      this.restServer.close();
     }
-    this.restServer.close();
   }
 }

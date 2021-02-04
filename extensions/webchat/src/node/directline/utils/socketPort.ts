@@ -4,7 +4,7 @@
 import StatusCodes from 'http-status-codes';
 import * as express from 'express';
 
-import { WebSocketServer } from './websocketServer';
+import { WebSocketServer } from './WebSocketServer';
 
 export async function getWebSocketPort(req: express.Request, res: express.Response): Promise<void> {
   try {
@@ -16,4 +16,8 @@ export async function getWebSocketPort(req: express.Request, res: express.Respon
   } catch (e) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(e);
   }
+}
+
+export function cleanUpAllConversations(): void {
+  WebSocketServer.cleanUpAll();
 }

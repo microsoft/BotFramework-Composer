@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export * from './WebChatPanel';
+import debug from 'debug';
+export default debug('webchat-directline');

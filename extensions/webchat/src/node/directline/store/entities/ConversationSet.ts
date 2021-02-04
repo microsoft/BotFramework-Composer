@@ -8,7 +8,7 @@ import { BotEndpoint } from './BotEndpoint';
 import { Conversation } from './Conversation';
 
 export class ConversationSet {
-  public conversations: { [conversationId: string]: Conversation } = {};
+  public conversations: Record<string, Conversation> = {};
 
   // TODO: May be we want to move "bot" back to the constructor
   public newConversation(

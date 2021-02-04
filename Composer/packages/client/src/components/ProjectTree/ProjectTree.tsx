@@ -7,7 +7,7 @@ import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport } from '@bfc/shared';
+import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
@@ -23,7 +23,6 @@ import {
   pageElementState,
   projectTreeSelectorFamily,
 } from '../../recoilModel';
-import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
@@ -698,6 +697,7 @@ export const ProjectTree: React.FC<Props> = ({
     const key = 'bot-' + bot.projectId;
     const projectHeader = (
       <ProjectHeader
+        key={`${key}-header`}
         botError={bot.botError}
         handleOnSelect={handleOnSelect}
         isMenuOpen={isMenuOpen}

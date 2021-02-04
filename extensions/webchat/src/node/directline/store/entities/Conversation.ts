@@ -119,14 +119,21 @@ export class Conversation {
   /**
    * Sends the activity to the conversation's bot.
    */
-  public async postActivityToBot(state: DLServerState, activity: Activity) {
+  public async postActivityToBot(
+    state: DLServerState,
+    activity: Activity
+  ): Promise<{
+    updatedActivity: Activity | undefined;
+    response: any | undefined;
+    status: number;
+  }> {
     let updatedActivity = {
       ...activity,
     };
 
     if (!this.botEndpoint) {
       return {
-        statusCode: StatusCodes.NOT_FOUND,
+        status: StatusCodes.NOT_FOUND,
         response: undefined,
         updatedActivity: undefined,
       };
@@ -140,13 +147,13 @@ export class Conversation {
       },
     };
 
-    const resp = await this.botEndpoint.fetchWithAuth(this.botEndpoint.botUrl, options);
-    const status = resp.status;
+    const response = await this.botEndpoint.fetchWithAuth(this.botEndpoint.botUrl, options);
+    const status = response.status;
 
     return {
       updatedActivity,
-      response: resp,
-      statusCode: status,
+      response,
+      status,
     };
   }
 

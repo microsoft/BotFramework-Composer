@@ -4,6 +4,6 @@
 const { createConfig } = require('@botframework-composer/test-utils');
 
 module.exports = createConfig('webchat-directline', 'node', {
-  testMatch: ['**/?(*.)+(spec).ts'],
+  testMatch: ['**/?(*.)+(spec).ts', '**/?(*.)+(test).ts'],
   verbose: true,
 });

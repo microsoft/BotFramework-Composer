@@ -29,3 +29,13 @@ export function statusCodeFamily(statusCode: number | string, expectedFamily: nu
   }
   return Math.floor(statusCode / 100) === Math.floor(expectedFamily / 100);
 }
+
+export function validateRequest(payload): Error | undefined {
+  if (!payload.bot) {
+    return new Error('Missing bot object in request.');
+  } else if (!payload.botEndpoint) {
+    return new Error('Missing botEndpoint object in request.');
+  } else if (payload.members.length !== 1 || payload.members[0].role !== 'user') {
+    return new Error('Missing user inside of members array in request.');
+  }
+}

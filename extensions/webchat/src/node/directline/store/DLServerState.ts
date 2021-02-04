@@ -1,14 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import logger from '../../logger';
 import { BotEndpoint } from './entities/BotEndpoint';
 import { Attachments } from './entities/Attachments';
 import { ConversationSet } from './entities/ConversationSet';
 import { EndpointSet } from './entities/EndpointSet';
 import { LoggerLevel, LogItem } from './types';
-
-// export const mockDLLog = logger.extend('mock-directline');
+import { Conversation } from './entities/Conversation';
 
 export type DLServerState = {
   conversations: ConversationSet;
@@ -24,6 +22,7 @@ export type DLServerState = {
       }>
     ) => void;
     getDefaultEndpoint: () => BotEndpoint;
+    updateConversation: (conversationId: string, updatedConversation: Conversation) => void;
   };
 };
 
@@ -40,6 +39,7 @@ class DLServerContext {
       dispatchers: {
         logToDocument: this.logToDocument,
         getDefaultEndpoint: this.getDefaultEndpoint,
+        updateConversation: this.updateConversation,
       },
     };
   }
@@ -56,7 +56,12 @@ class DLServerContext {
     console.log(conversationId + logItem.payload.text);
   }
 
-  public getDefaultEndpoint(): BotEndpoint {
+  private updateConversation(conversationId: string, updatedConversation: Conversation) {
+    const currentState = DLServerContext.getInstance().state;
+    currentState.conversations.conversations[conversationId] = updatedConversation;
+  }
+
+  private getDefaultEndpoint(): BotEndpoint {
     const currentState = DLServerContext.getInstance().state;
     return currentState.endpoints[Object.keys(currentState.endpoints)[0]];
   }
@@ -65,7 +70,6 @@ class DLServerContext {
     if (!DLServerContext.instance) {
       DLServerContext.instance = new DLServerContext(serverPort);
     }
-
     return DLServerContext.instance;
   }
 }

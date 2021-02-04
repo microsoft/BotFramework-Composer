@@ -7,7 +7,7 @@ import { BotEndpoint } from '../store/entities/BotEndpoint';
 import { DLServerState } from '../store/DLServerState';
 
 export function createCreateBotEndpointHandler(state: DLServerState) {
-  return (req: express.Request, res: express.Response, next) => {
+  return (req: express.Request, res: express.Response, next?: express.NextFunction): void => {
     const request = req as any;
     const { endpoints } = state;
 
@@ -20,7 +20,7 @@ export function createCreateBotEndpointHandler(state: DLServerState) {
       endpoint.msaPassword = msaPassword;
     }
     request.botEndpoint = endpoint;
-    next();
+    next?.();
   };
 }
 

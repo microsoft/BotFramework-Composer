@@ -8,8 +8,8 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "node --max_old_space_size=10240 --max-http-header-size=16000 scripts/start.js",
-    "build": "node --max_old_space_size=10240 scripts/build.js",
+    "start": "node --max_old_space_size=4096 --max-http-header-size=16000 scripts/start.js",
+    "build": "node --max_old_space_size=4096 scripts/build.js",
     "clean": "rimraf build",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
@@ -35,7 +35,6 @@
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/ui-plugin-select-skill-dialog": "*",
-    "@bfc/webchat-client": "*",
     "@botframework-composer/types": "*",
     "@emotion/core": "^10.0.27",
     "@geoffcox/react-splitter": "^2.0.3",
@@ -46,7 +45,6 @@
     "@uifabric/styling": "^7.13.7",
     "axios": "^0.21.1",
     "babel-plugin-extract-format-message": "^6.2.3",
-    "botframework-webchat": "^4.11.0",
     "format-message": "^6.2.3",
     "format-message-generate-id": "^6.2.3",
     "immer": "^8.0.1",
@@ -78,7 +76,6 @@
   "devDependencies": {
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
-    "@babel/helper-module-imports": "^7.12.5",
     "@babel/runtime": "7.3.4",
     "@botframework-composer/test-utils": "*",
     "@emotion/babel-preset-css-prop": "^10.0.14",

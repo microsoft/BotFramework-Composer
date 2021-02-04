@@ -20,6 +20,7 @@ import {
   SensitiveProperties,
   RootBotManagedProperties,
   defaultPublishConfig,
+  LgFile,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -83,9 +84,22 @@ import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
 import { lgFilesSelectorFamily } from '../../selectors/lg';
+import { createMissingLgTemplatesForDialogs } from '../../../utils/lgUtil';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
+
+const repairBotProject = async (
+  callbackHelpers: CallbackInterface,
+  { projectId, botFiles }: { projectId: string; botFiles: any }
+) => {
+  const { set } = callbackHelpers;
+  const lgFiles: LgFile[] = botFiles.lgFiles;
+  const dialogs: DialogInfo[] = botFiles.dialogs;
+
+  const updatedLgFiles = await createMissingLgTemplatesForDialogs(projectId, dialogs, lgFiles);
+  set(lgFilesSelectorFamily(projectId), updatedLgFiles);
+};
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -401,6 +415,10 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
+
+  // async repair bot assets, add missing lg templates
+  repairBotProject(callbackHelpers, { projectId, botFiles });
+
   return mainDialog;
 };
 

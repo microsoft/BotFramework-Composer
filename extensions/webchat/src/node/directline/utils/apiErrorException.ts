@@ -29,7 +29,7 @@ type ErrorResponse = {
 
 type APIException = {
   error: ErrorResponse;
-  statusCode: number;
+  status: number;
 };
 
 const createErrorResponse = (code: string, message: string): ErrorResponse => {
@@ -42,26 +42,28 @@ const createErrorResponse = (code: string, message: string): ErrorResponse => {
 };
 
 function exceptionToAPIException(exception: any): APIException {
-  if (exception.error && exception.statusCode) {
-    return exception;
+  if (exception?.data && exception?.status) {
+    return {
+      error: exception.data,
+      status: exception?.status,
+    };
   } else {
     return {
       error: createErrorResponse(BotErrorCodes.ServiceError, exception.message),
-      statusCode: StatusCodes.BAD_REQUEST,
+      status: StatusCodes.BAD_REQUEST,
     };
   }
 }
 
 export function createAPIException(statusCode: number, code: string, message: string): APIException {
   return {
-    statusCode,
+    status: statusCode,
     error: createErrorResponse(code, message),
   };
 }
 
-export function sendErrorResponse(req: express.Request, res: express.Response, exception: any): ErrorResponse {
-  const apiException = exceptionToAPIException(exception);
-  res.send(apiException.statusCode, apiException.error);
-  res.end();
+export function sendErrorResponse(req: express.Request, res: express.Response, exceptionObj: any): ErrorResponse {
+  const apiException = exceptionToAPIException(exceptionObj);
+  res.status(apiException.status).json(apiException.error);
   return apiException.error;
 }
