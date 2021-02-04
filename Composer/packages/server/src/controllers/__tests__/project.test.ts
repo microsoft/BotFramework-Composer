@@ -174,6 +174,7 @@ describe('should get recent projects', () => {
 
 describe('create a component model conversational core bot project', () => {
   it('should start to create a new project', async () => {
+    jest.setTimeout(300000);
     const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
     const name = 'newConversationalCoreBot';
     const mockReq = {
