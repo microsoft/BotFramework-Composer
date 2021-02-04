@@ -104,5 +104,26 @@ describe('AdapterSettings', () => {
       adapters: ['Adapter.Mock'],
       'Adapter.Mock': { exampleName: 'test text 12345' },
     });
+
+    // test disable/enable now that we have this adapter set up
+
+    // setSettingsMock.mockClear();
+    // const toggle = queryByTestId('toggle_Adapter.Mock');
+    // expect(toggle).not.toBeNull();
+
+    // await act(async () => {
+    //   fireEvent.click(toggle!);
+    // });
+    // // expect(setSettingsMock).toHaveBeenLastCalledWith(state.projectId, {
+    // //   adapters: [],
+    // // });
+
+    // await act(async () => {
+    //   fireEvent.click(toggle!);
+    // });
+    // console.log(setSettingsMock.mock.calls.map((c) => c[1]));
+    // expect(setSettingsMock).toHaveBeenLastCalledWith(state.projectId, {
+    //   adapters: ['Adapter.Mock'],
+    // });
   });
 });

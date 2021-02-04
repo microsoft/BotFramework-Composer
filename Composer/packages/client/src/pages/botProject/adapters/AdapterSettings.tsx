@@ -10,36 +10,16 @@ import { BotSchemas } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors } from '@uifabric/fluent-theme';
 
-import { schemasState, settingsState } from '../../../recoilModel/atoms';
+import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
 import { title, subtitle, sectionHeader, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 import { JSONSchema7 } from '../../../../../types';
-import dispatcher from '../../../recoilModel/dispatchers';
 
 import AdapterModal from './AdapterModal';
-
-////////// STYLES
-
-export const moreButton = (isActive: boolean): IButtonStyles => {
-  return {
-    root: {
-      padding: '4px 4px 0 4px',
-      alignSelf: 'stretch',
-      visibility: isActive ? 'visible' : 'hidden',
-      height: 'auto',
-      width: '16px',
-      color: '#000',
-    },
-    menuIcon: {
-      fontSize: '12px',
-      color: '#000',
-    },
-  };
-};
 
 //////////
 
@@ -49,11 +29,12 @@ type Props = {
 
 const AdapterSettings = (props: Props) => {
   const { projectId } = props;
-  const { setSettings } = dispatcher();
 
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
   const currentSettings = useRecoilValue(settingsState(projectId));
+  const { setSettings } = useRecoilValue(dispatcherState);
   const adapters: string[] = currentSettings.adapters ?? [];
+  console.log('adapters =', adapters);
 
   const { definitions: schemaDefinitions } = schemas?.default ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
@@ -105,10 +86,13 @@ const AdapterSettings = (props: Props) => {
             <div css={tableRowItem(columnWidths[2])}>
               <Toggle
                 checked={keyEnabled}
+                data-testid={`toggle_${key}`}
                 onChange={(ev, val?: boolean) => {
                   if (val && !keyEnabled) {
+                    console.log('toggle on', key);
                     setSettings(projectId, { ...currentSettings, adapters: [...adapters, key] });
                   } else {
+                    console.log('toggle off', key);
                     setSettings(projectId, { ...currentSettings, adapters: adapters.filter((a) => a !== key) });
                   }
                 }}
