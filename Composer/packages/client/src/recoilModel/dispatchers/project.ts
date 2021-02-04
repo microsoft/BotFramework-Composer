@@ -264,6 +264,9 @@ export const projectDispatcher = () => {
       });
       projectIdCache.set(projectId);
     } catch (ex) {
+      if (projectId === projectIdCache.get()) {
+        projectIdCache.clear();
+      }
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
