@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
+
 const glob = require('globby');
 
 const { log } = require('./common');
@@ -86,13 +87,12 @@ try {
   execSync(`security unlock-keychain -p pwd ${keychainPath}`, { stdio: 'inherit' });
 
   log.info(`echo ********* | base64 -D > ${certPath}`);
-  execSync(`echo ${process.env.DEV_CERT} | base64 -D > ${certPath}`, { stdio: 'inherit' });
+  execSync(`echo "$DEV_CERT" | base64 -D > ${certPath}`, { stdio: 'inherit' });
 
   log.info(`security import ${certPath} -k ${keychainPath} -P "*********" -T /usr/bin/codesign`);
-  execSync(
-    `security import ${certPath} -k ${keychainPath} -P "${process.env.DEV_CERT_PASSWORD}" -T /usr/bin/codesign`,
-    { stdio: 'inherit' }
-  );
+  execSync(`security import ${certPath} -k ${keychainPath} -P "$DEV_CERT_PASSWORD" -T /usr/bin/codesign`, {
+    stdio: 'inherit',
+  });
 
   log.info(`security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k pwd ${keychainPath}`);
   execSync(`security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k pwd ${keychainPath}`, {
