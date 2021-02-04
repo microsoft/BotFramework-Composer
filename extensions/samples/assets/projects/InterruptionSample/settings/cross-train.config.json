@@ -1,0 +1,11 @@
+{
+  "interruptionsample.en-us": {
+    "rootDialog": true,
+    "triggers": {
+      "ResetProfile": [],
+      "Cancel": [],
+      "ShowProfile": [],
+      "Help": []
+    }
+  }
+}
