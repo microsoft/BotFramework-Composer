@@ -35,6 +35,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
     fetchTemplatesV2,
+    fetchRecentProjects,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -76,6 +77,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
+    fetchRecentProjects();
     featureFlags.NEW_CREATION_FLOW.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
   };
 

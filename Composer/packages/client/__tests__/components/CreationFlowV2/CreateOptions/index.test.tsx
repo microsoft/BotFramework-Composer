@@ -42,8 +42,8 @@ describe('<CreateOptionsV2/>', () => {
 
   it('should save echo bot template id', async () => {
     const component = renderComponent();
-    const echoBot = await component.findByText('conversational-core');
-    fireEvent.click(echoBot);
+    const conversationalCoreBot = await component.findByText('conversational-core');
+    fireEvent.click(conversationalCoreBot);
     const nextButton = await component.findByText('Next');
     fireEvent.click(nextButton);
     expect(handleCreateNextMock).toBeCalledWith('generator-conversational-core');

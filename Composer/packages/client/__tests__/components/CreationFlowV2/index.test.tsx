@@ -82,7 +82,6 @@ describe('<CreationFlowV2/>', () => {
     if (process.platform === 'win32') {
       expectedLocation = '\\test-folder\\Desktop';
     }
-
     expect(createProjectMock).toHaveBeenCalledWith({
       appLocale: 'en-US',
       description: '',
