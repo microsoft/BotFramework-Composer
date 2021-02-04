@@ -19,6 +19,7 @@ import { listRoot, tableView, detailList } from './styles';
 export interface LibraryRef {
   name: string;
   version: string;
+  versions: string[],
   authors?: string[];
   releaseNotes?: string;
   keywords?: string[];
@@ -81,7 +82,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
     },
     {
       key: 'ItemName',
-      name: 'Name',
+      name: formatMessage('Name'),
       fieldName: 'name',
       minWidth: 300,
       maxWidth: 800,
@@ -107,7 +108,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
           <Fragment>
             {props.isInstalled(item) && (
               <span  style={{color: '#219653'}}>
-                <FontIcon iconName={'CheckMark'} style={{color: '#219653', fontSize: '1rem', position: 'relative', top: '3px'}}/> Installed
+                <FontIcon iconName={'CheckMark'} style={{color: '#219653', fontSize: '1rem', position: 'relative', top: '3px'}}/> { formatMessage('Installed') }
               </span>
             )}
           </Fragment>

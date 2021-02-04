@@ -8,7 +8,6 @@ import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 import { readdirSync, readFileSync } from 'fs';
 import {parseStringPromise} from 'xml2js'
-import { get } from 'https';
 
 
 const API_ROOT = '/api';
@@ -34,6 +33,7 @@ const normalizeFeed = async (feed) => {
       return {
         name: i.id,
         version: i.version,
+        versions: i.versions ? semverSort.desc(i.versions.map(v => v.version)) : [i.version],
         authors: i.authors[0],
         keywords: i.tags,
         repository: i.projectUrl,
@@ -67,7 +67,6 @@ const getPackageInfo = async (name, url) => {
     if (versions.length === 0) {
       throw new Error('version list is empty');
     }
-
     versions = semverSort.desc(versions);
   } catch(err) {
     throw new Error(`Could not find versions of local package ${ name } at ${ url }`)
@@ -88,7 +87,7 @@ const getPackageInfo = async (name, url) => {
       projectUrl: parsed.package.metadata[0].projectUrl[0],
       description: parsed.package.metadata[0].description[0],
       tags: parsed.package.metadata[0].tags[0].split(/\s/),
-      versions: versions,
+      versions: versions.map(v=> {return {version: v}}),
       source: 'local',
       language: 'c#',
     }

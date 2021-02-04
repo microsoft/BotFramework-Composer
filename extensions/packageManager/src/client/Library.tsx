@@ -33,8 +33,6 @@ import { FeedModal } from './feedModal';
 import { ProjectList } from './projectList/ProjectList';
 import ReactMarkdown from 'react-markdown';
 
-const DEFAULT_CATEGORY = formatMessage('Available');
-
 const docsUrl = `https://aka.ms/composer-package-manager-readme`;
 
 export interface PackageSourceFeed extends IDropdownOption {
@@ -61,6 +59,8 @@ const Library: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
+  const [selectedItemVersions, setSelectedItemVersions] = useState<string[]>([]);
+  const [selectedVersion, setSelectedVersion] = useState<string>('');
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
@@ -68,21 +68,17 @@ const Library: React.FC = () => {
   const [readmeContent, setReadmeContent] = useState<string>('');
   const httpClient = useHttpClient();
   const API_ROOT = '';
-
-
   const TABS = {
     INSTALL: 'INSTALL',
     BROWSE: 'BROWSE",'
   };
   const [currentTab, setCurrentTab] = useState<string>(TABS.BROWSE);
-
-
   const strings = {
     title: formatMessage('Package Manager'),
     editFeeds: formatMessage('Edit feeds'),
     description: formatMessage('Discover and use components that can be installed into your bot.'),
     descriptionLink: formatMessage('Learn more'),
-    installButton: formatMessage('Install Package'),
+    installButton: formatMessage('Install'),
     importDialogTitle: formatMessage('Install a Package'),
     installProgress: formatMessage('Installing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
@@ -200,53 +196,18 @@ const Library: React.FC = () => {
   }, [projectCollection, currentProjectId]);
 
   useEffect(() => {
-    const groups: any[] = [];
     let items: any[] = [];
 
     // find all categories listed in the available libraries
-    const categories = [DEFAULT_CATEGORY];
     if (availableLibraries) {
       const availableCompatibleLibraries = availableLibraries;
       availableCompatibleLibraries.forEach((item) => {
-        if (!item.category) {
-          item.category = DEFAULT_CATEGORY;
-        }
         item.isCompatible = isCompatible(item);
-        if (item.category && categories.indexOf(item.category) === -1) {
-          categories.push(item.category);
-        }
-      });
-
-      categories.forEach((category) => {
-        const categoryItems = availableCompatibleLibraries.filter((i) => i.category === category);
-        if (categoryItems.length) {
-          groups.push({
-            key: category,
-            name: category,
-            startIndex: items.length,
-            count: categoryItems.length,
-            level: 0,
-          });
-          items = items.concat(categoryItems || []);
-        }
+        items.push(item);
       });
     }
-    // if (recentlyUsed) {
-    //   const recentlyUsedCompatible = recentlyUsed.filter((component) => isCompatible(component));
-    //   if (recentlyUsedCompatible.length) {
-    //     groups.push({
-    //       key: 'recently',
-    //       name: strings.recentlyUsedCategory,
-    //       startIndex: items.length,
-    //       count: recentlyUsedCompatible.length,
-    //       level: 0,
-    //     });
-    //     items = items.concat(recentlyUsedCompatible || []);
-    //   }
-    // }
 
     setItems(items);
-    setGroups(groups);
   }, [installedComponents, availableLibraries, recentlyUsed]);
 
   useEffect(() => {
@@ -267,7 +228,16 @@ const Library: React.FC = () => {
         }
       } else {
           setReadmeContent(selectedItem.description);
+          if (selectedItem.versions && selectedItem.versions.length) {
+            setSelectedItemVersions(selectedItem.versions);
+            setSelectedVersion(selectedItem.versions[0]);
+          } else {
+            setSelectedItemVersions([selectedItem.version]);
+            setSelectedVersion(selectedItem.version);
+          }
       }
+
+
     } else {
       setReadmeContent('');
     }
@@ -403,11 +373,11 @@ const Library: React.FC = () => {
   };
 
   const install = async () => {
-    return importFromWeb(selectedItem?.name, selectedItem?.version, false);
+    return importFromWeb(selectedItem?.name, selectedVersion, false);
   };
 
   const redownload = async () => {
-    return importFromWeb(selectedItem?.name, selectedItem?.version, true);
+    return importFromWeb(selectedItem?.name, selectedVersion, true);
   };
 
   const removeComponent = async () => {
@@ -542,7 +512,7 @@ const Library: React.FC = () => {
                     hidden={currentTab !== TABS.BROWSE}
                     onChange={onChangeFeed}
                     styles={{
-                      root: { width: '200px', display: 'inline-block', },
+                      root: { width: '200px' },
                     }}
                   ></Dropdown>
                     </Stack.Item>
@@ -632,9 +602,15 @@ const Library: React.FC = () => {
         <Stack.Item grow={0} shrink={0} disableShrink styles={{ root: { width: '400px', padding: '20px', borderLeft: '1px solid #CCC' } }}>
           {selectedItem ? (
             <Fragment>
-              <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible}>{ strings.installButton }</PrimaryButton>
-              This is the readme sidebar
-              ejected: {ejectedRuntime} compatible: { selectedItem.isCompatible}
+              {isInstalled(selectedItem) && (
+                <PrimaryButton disabled={true}>{selectedItem.version} {formatMessage('installed')}</PrimaryButton>
+              )}
+              {(!selectedItem.versions || selectedItem.versions.length === 1) && (
+                <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible}>{ strings.installButton }</PrimaryButton>
+              )}
+              {(selectedItem.versions && selectedItem.versions.length > 1) && (
+                <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible} split menuProps={{items: selectedItemVersions.map(v =>{ return { key: v, text: v, iconProps: { iconName: v===selectedVersion ? 'Checkmark' : ''}}}), onItemClick: (ev, item) => setSelectedVersion(item.key)}}>{ strings.installButton } {selectedVersion}</PrimaryButton>
+              )}
 
               <h3>{ selectedItem.name }</h3>
 
