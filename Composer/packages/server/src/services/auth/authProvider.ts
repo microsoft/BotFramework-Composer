@@ -9,4 +9,5 @@ export abstract class AuthProvider {
   constructor(protected config: AuthConfig) {}
 
   abstract async getAccessToken(params: AuthParameters): Promise<string>;
+  abstract logOut(): void;
 }

@@ -210,9 +210,11 @@ export class ExtensionManagerImp {
       log('Removing %s', id);
 
       if (metadata.builtIn) {
+        this.updateManifest(id, { enabled: false });
         return;
       }
 
+      log('Removing %s', id);
       await remove(metadata.path);
       this.updateManifest(id, undefined);
     } else {

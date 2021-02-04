@@ -6,7 +6,7 @@ import has from 'lodash/has';
 import { JsonWalk, VisitorFunc } from '..';
 
 import { validateExpressions } from './expressionValidation/index';
-import { ValidateFunc } from './expressionValidation/types';
+import { ExpressionParseResult, ValidateFunc } from './expressionValidation/types';
 
 export const validateFuncs: { [type: string]: ValidateFunc[] } = {
   '.': [validateExpressions], //this will check all types
@@ -17,11 +17,13 @@ export function validateDialog(
   schema: SchemaDefinitions,
   settings: DialogSetting,
   lgFiles: LgFile[],
-  luFiles: LuFile[]
-): Diagnostic[] {
+  luFiles: LuFile[],
+  cache?: ExpressionParseResult
+): { diagnostics: Diagnostic[] | null; cache?: ExpressionParseResult } {
   const { id, content } = dialog;
   try {
     const diagnostics: Diagnostic[] = [];
+    let newCache: ExpressionParseResult = {};
     /**
      *
      * @param path , jsonPath string
@@ -29,7 +31,7 @@ export function validateDialog(
      * @return boolean, true to stop walk
      * */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
-      if (has(value, '$kind')) {
+      if (has(value, '$kind') && value.$kind) {
         const allChecks = [...validateFuncs['.']];
         const checkerFunc = validateFuncs[value.$kind];
         if (checkerFunc) {
@@ -37,35 +39,33 @@ export function validateDialog(
         }
 
         allChecks.forEach((func) => {
-          const result = func(path, value, value.$kind, schema.definitions[value.$kind], settings, lgFiles, luFiles);
-          if (result) {
-            diagnostics.push(...result);
+          const result = func(
+            path,
+            value,
+            value.$kind,
+            schema.definitions[value.$kind],
+            settings,
+            lgFiles,
+            luFiles,
+            cache
+          );
+          if (result.diagnostics) {
+            diagnostics.push(...result.diagnostics);
           }
+          newCache = { ...newCache, ...result.cache };
         });
       }
       return false;
     };
     JsonWalk(id, content, visitor);
-    return diagnostics.map((e) => {
-      e.source = id;
-      return e;
-    });
+    return {
+      diagnostics: diagnostics.map((e) => {
+        e.source = id;
+        return e;
+      }),
+      cache: newCache,
+    };
   } catch (error) {
-    return [new Diagnostic(error.message, id)];
+    return { diagnostics: [new Diagnostic(error.message, id)], cache };
   }
-}
-
-export function validateDialogs(
-  dialogs: DialogInfo[],
-  schema: SchemaDefinitions,
-  lgFiles: LgFile[],
-  luFiles: LuFile[],
-  settings: DialogSetting
-): { [id: string]: Diagnostic[] } {
-  const diagnosticsMap = {};
-  dialogs.forEach((dialog) => {
-    diagnosticsMap[dialog.id] = validateDialog(dialog, schema, settings, lgFiles, luFiles);
-  });
-
-  return diagnosticsMap;
 }

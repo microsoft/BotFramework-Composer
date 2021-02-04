@@ -76,6 +76,7 @@ async function createAppDataDir() {
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   process.env.COMPOSER_EXTENSION_MANIFEST = join(composerAppDataPath, 'extensions.json');
+  process.env.COMPOSER_EXTENSION_SETTINGS = join(composerAppDataPath, 'extension-settings.json');
   process.env.COMPOSER_EXTENSION_DATA_DIR = join(composerAppDataPath, 'extension-data');
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
   process.env.COMPOSER_TEMP_DIR = join(composerAppDataPath, 'temp');
@@ -101,6 +102,9 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     });
     appUpdater.on('progress', (progress) => {
       mainWindow.webContents.send('app-update', 'progress', progress);
+    });
+    appUpdater.on('update-in-progress', (updateInfo: UpdateInfo) => {
+      mainWindow.webContents.send('app-update', 'update-in-progress', updateInfo);
     });
     appUpdater.on('update-not-available', (explicitCheck: boolean) => {
       mainWindow.webContents.send('app-update', 'update-not-available', explicitCheck);
@@ -155,6 +159,7 @@ async function loadServer() {
   const { start } = await import('@bfc/server');
   serverPort = await start({
     getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
+    logOut: OneAuthService.signOut.bind(OneAuthService),
     machineId,
     sessionId,
     composerVersion: app.getVersion(),

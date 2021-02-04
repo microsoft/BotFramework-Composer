@@ -29,8 +29,8 @@ import {
   createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
-  locationState,
   projectMetaDataState,
+  settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
@@ -208,19 +208,9 @@ export const projectDispatcher = () => {
       navigate = true,
       callback?: (projectId: string) => void
     ) => {
-      const { set, snapshot } = callbackHelpers;
+      const { set } = callbackHelpers;
       try {
         set(botOpeningState, true);
-        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
-
-        if (rootBotId) {
-          const rootBotLocation = await snapshot.getPromise(locationState(rootBotId));
-          // Reloading the same bot. No need to fetch resources again.
-          if (rootBotLocation === path) {
-            navigateToBot(callbackHelpers, rootBotId);
-            return;
-          }
-        }
 
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
@@ -245,7 +235,6 @@ export const projectDispatcher = () => {
         if (navigate) {
           navigateToBot(callbackHelpers, projectId, mainDialog);
         }
-        set(botOpeningState, false);
 
         if (typeof callback === 'function') {
           callback(projectId);
@@ -255,6 +244,7 @@ export const projectDispatcher = () => {
         removeRecentProject(callbackHelpers, path);
         handleProjectFailure(callbackHelpers, ex);
         navigateTo('/home');
+      } finally {
         set(botOpeningState, false);
       }
     }
@@ -274,6 +264,9 @@ export const projectDispatcher = () => {
       });
       projectIdCache.set(projectId);
     } catch (ex) {
+      if (projectId === projectIdCache.get()) {
+        projectIdCache.clear();
+      }
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
@@ -465,8 +458,12 @@ export const projectDispatcher = () => {
 
   /** Resets the file persistence of a project, and then reloads the bot state. */
   const reloadProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { snapshot } = callbackHelpers;
     callbackHelpers.reset(filePersistenceState(projectId));
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
+
+    // Reload needs to pull the settings from the local storage persisted in the current settingsState of the project
+    botFiles.mergedSettings = await snapshot.getPromise(settingsState(projectId));
     await initBotState(callbackHelpers, projectData, botFiles);
   });
 
@@ -531,6 +528,10 @@ export const projectDispatcher = () => {
     set(currentProjectIdState, projectId);
   });
 
+  const setProjectError = useRecoilCallback((callbackHelpers: CallbackInterface) => (error) => {
+    setError(callbackHelpers, error);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -551,5 +552,6 @@ export const projectDispatcher = () => {
     reloadProject,
     updateCreationMessage,
     setCurrentProjectId,
+    setProjectError,
   };
 };

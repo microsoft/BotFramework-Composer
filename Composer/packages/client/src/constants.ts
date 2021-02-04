@@ -50,8 +50,8 @@ export const LUIS_REGIONS: IDropdownOption[] = [
     text: formatMessage('westeurope'),
   },
   {
-    key: 'australia',
-    text: formatMessage('australia'),
+    key: 'australiaeast',
+    text: formatMessage('australiaeast'),
   },
 ];
 
@@ -172,6 +172,9 @@ export const BotStatusesCopy = {
   },
   get stopping() {
     return formatMessage('Stopping');
+  },
+  get pending() {
+    return formatMessage('Status pending');
   },
 };
 
@@ -302,6 +305,19 @@ export const repairSkillDialog = (name: string) => {
   };
 };
 
+export const removeSkillDialog = () => {
+  return {
+    title: formatMessage('Warning'),
+    subText: formatMessage(
+      'The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action.'
+    ),
+    subTextNoUse: formatMessage(
+      'You are about to remove the skill from this project. Removing this skill won’t delete the files.'
+    ),
+    footerText: formatMessage('Do you wish to continue?'),
+  };
+};
+
 export const SupportedFileTypes = [
   'accdb',
   'csv',
@@ -336,6 +352,28 @@ export const EmptyBotTemplateId = 'EmptyBot';
 export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
+
+export const authConfig = {
+  // for web login
+  clientId: process.env.WEBLOGIN_CLIENTID,
+  scopes: [
+    'https://management.core.windows.net/user_impersonation',
+    'https://graph.microsoft.com/Application.ReadWrite.All',
+  ],
+  tenantId: process.env.WEBLOGIN_TENANTID,
+  redirectUrl: process.env.WEBLOGIN_REDIRECTURL,
+};
+
+export const armScopes = {
+  scopes: ['https://management.core.windows.net/user_impersonation'],
+  targetResource: 'https://management.core.windows.net/',
+};
+export const graphScopes = {
+  scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
+  targetResource: 'https://graph.microsoft.com/',
+};
+
+export const authUrl = `https://login.microsoftonline.com/${authConfig.tenantId}/oauth2/v2.0/authorize`;
 
 export const triggerNotSupportedWarning = () =>
   formatMessage(

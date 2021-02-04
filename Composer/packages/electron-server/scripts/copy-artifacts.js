@@ -66,7 +66,7 @@ async function copyArtifacts(source, dest, opts = {}) {
   log.info('-------- %s --------', dest);
   log.info('Copying %s from: %s', dest, source);
   for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
-    if (opts.force || entry.isDirectory()) {
+    if (opts.force || (entry.isDirectory() && entry.name !== 'node_modules')) {
       const extPath = path.join(source, entry.name);
       const output = path.join(destinationDir, dest, entry.name);
       log.info('Copying %s', entry.name);

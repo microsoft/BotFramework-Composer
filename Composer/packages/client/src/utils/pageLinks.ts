@@ -6,6 +6,14 @@ import { checkForPVASchema } from '@bfc/shared';
 
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
+export type PageLink = {
+  to: string;
+  iconName: string;
+  labelName: string;
+  disabled: boolean;
+  match?: RegExp;
+};
+
 export const topLinks = (
   projectId: string,
   openedDialogId: string,
@@ -20,7 +28,7 @@ export const topLinks = (
       ? `/bot/${projectId}/`
       : `/bot/${rootProjectId}/skill/${projectId}/`;
 
-  let links = [
+  let links: PageLink[] = [
     {
       to: '/home',
       iconName: 'Home',
@@ -106,7 +114,7 @@ export const topLinks = (
   return links;
 };
 
-export const bottomLinks = [
+export const bottomLinks: PageLink[] = [
   {
     to: `/settings`,
     iconName: 'Settings',
@@ -117,7 +125,6 @@ export const bottomLinks = [
     to: `/extensions`,
     iconName: 'OEM',
     labelName: formatMessage('Extensions'),
-    exact: true,
     disabled: false,
   },
 ];

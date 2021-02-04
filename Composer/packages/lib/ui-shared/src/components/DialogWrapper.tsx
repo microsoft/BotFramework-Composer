@@ -62,6 +62,7 @@ const styles: {
 
 interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss'> {
   isOpen: boolean;
+  isBlocking?: boolean;
   title?: string;
   subText?: string;
   dialogType: DialogTypes;
@@ -80,14 +81,14 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
     subText = '',
     children,
     dialogType,
+    isBlocking,
     customerStyle = { dialog: {}, modal: {} },
     minWidth,
   } = props;
-  const [currentStyle, setStyle] = useState(styles[dialogType]);
+  /* add customer styles to the array */
+  styles[DialogTypes.Customer] = customerStyle;
 
-  if (dialogType === DialogTypes.Customer) {
-    styles[DialogTypes.Customer] = customerStyle;
-  }
+  const [currentStyle, setStyle] = useState(styles[dialogType]);
 
   useEffect(() => {
     if (dialogType) {
@@ -110,7 +111,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
       hidden={false}
       minWidth={minWidth}
       modalProps={{
-        isBlocking: false,
+        isBlocking: isBlocking,
         styles: currentStyle.modal,
       }}
       onDismiss={onDismiss}

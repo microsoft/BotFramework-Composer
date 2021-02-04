@@ -49,7 +49,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const handleCommit = () => {
     setHasFocus(false);
     setEditing(false);
-    onBlur && onBlur(id, value);
+    onBlur?.(id, value);
   };
 
   let borderColor: string | undefined = undefined;

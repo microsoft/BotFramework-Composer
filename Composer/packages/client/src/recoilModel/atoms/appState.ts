@@ -16,6 +16,7 @@ import {
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
 import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
+import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 
 export type BotProject = {
   readonly id: string;
@@ -23,7 +24,7 @@ export type BotProject = {
 };
 
 export type CurrentUser = {
-  token: string | null;
+  token: string | null; // aad token
   email?: string;
   name?: string;
   expiration?: number;
@@ -82,6 +83,11 @@ export const applicationErrorState = atom<StateError | undefined>({
 
 export const currentUserState = atom<CurrentUser>({
   key: getFullyQualifiedKey('currentUser'),
+  default: {} as CurrentUser,
+});
+
+export const grahpTokenState = atom<CurrentUser>({
+  key: getFullyQualifiedKey('grahpToken'),
   default: {} as CurrentUser,
 });
 
@@ -240,7 +246,9 @@ export const formDialogGenerationProgressingState = atom({
   default: false,
 });
 
-export const formDialogErrorState = atom<(Error & { kind: 'templateFetch' | 'generation' | 'deletion' }) | undefined>({
+export const formDialogErrorState = atom<
+  (Error & { kind: 'templateFetch' | 'generation' | 'deletion'; logs?: string[] }) | undefined
+>({
   key: getFullyQualifiedKey('formDialogError'),
   default: undefined,
 });
@@ -268,4 +276,29 @@ export const exportSkillModalInfoState = atom<undefined | string>({
 export const displaySkillManifestState = atom<undefined | string>({
   key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
+});
+
+export const triggerModalInfoState = atom<undefined | { projectId: string; dialogId: string }>({
+  key: getFullyQualifiedKey('triggerModalInfo'),
+  default: undefined,
+});
+
+export const brokenSkillInfoState = atom<undefined | TreeLink>({
+  key: getFullyQualifiedKey('brokenSkillInfo'),
+  default: undefined,
+});
+
+export const brokenSkillRepairCallbackState = atom<undefined | (() => void)>({
+  key: getFullyQualifiedKey('brokenSkillRepairCallback'),
+  default: undefined,
+});
+
+export const dialogModalInfoState = atom<undefined | string>({
+  key: getFullyQualifiedKey('dialogModalInfo'),
+  default: undefined,
+});
+
+export const showAddSkillDialogModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showAddSkillDialogModal'),
+  default: false,
 });

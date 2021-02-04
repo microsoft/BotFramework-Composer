@@ -9,8 +9,8 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import {
   dispatcherState,
   formDialogErrorState,
@@ -19,6 +19,7 @@ import {
   formDialogSchemaIdsState,
 } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreateFormDialogSchemaModal from './CreateFormDialogSchemaModal';
 import { FormDialogSchemaList } from './FormDialogSchemaList';
@@ -33,6 +34,10 @@ type Props = RouteComponentProps<{ projectId: string; schemaId: string }>;
 
 const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const { projectId = '', schemaId = '' } = props;
+
+  const [generatingSchemaId, setGeneratingSchemaId] = React.useState(schemaId || '');
+  React.useEffect(() => setGeneratingSchemaId(schemaId), [schemaId]);
+
   const formDialogSchemaIds = useRecoilValue(formDialogSchemaIdsState(projectId));
   const formDialogError = useRecoilValue(formDialogErrorState);
   const formDialogLibraryTemplates = useRecoilValue(formDialogLibraryTemplatesState);
@@ -47,6 +52,8 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
+
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const generationStartedRef = React.useRef(false);
   const generationPendingNotificationIdRef = React.useRef<string | undefined>();
@@ -88,10 +95,12 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const generateDialog = React.useCallback(
     (schemaId: string) => {
       if (schemaId) {
+        setGeneratingSchemaId(schemaId);
         generationStartedRef.current = true;
 
         const notification = createNotification({
-          title: formatMessage('Generating your dialog using "{schemaId}" schema, please wait...', { schemaId }),
+          title: formatMessage('Generating dialog for "{schemaId}"', { schemaId }),
+          description: formatMessage('Generating your dialog using "{schemaId}" schema, please wait...', { schemaId }),
           type: 'pending',
         });
         generationPendingNotificationIdRef.current = notification.id;
@@ -128,8 +137,13 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
           createNotification({
             type: 'success',
             title: formatMessage('Dialog generation was successful.'),
-            description: formatMessage('Your dialog was generated successfully.'),
-            link: { label: formatMessage('View dialog'), onClick: () => schemaId && viewDialog(schemaId) },
+            description: formatMessage('Your dialog for "{schemaId}" was generated successfully.', {
+              schemaId: generatingSchemaId,
+            }),
+            link: {
+              label: formatMessage('View dialog'),
+              onClick: () => generatingSchemaId && viewDialog(generatingSchemaId),
+            },
           })
         );
       } else {
@@ -137,7 +151,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         addNotification(
           createNotification({
             type: 'error',
-            title: formatMessage('Dialog generation failed.'),
+            title: formatMessage('Dialog generation has failed.'),
             description: formDialogError.message,
           })
         );
@@ -155,7 +169,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         );
       }
     }
-  }, [formDialogError, formDialogGenerationProgressing, schemaId]);
+  }, [formDialogError, formDialogGenerationProgressing]);
 
   const updateItem = React.useCallback(
     (id: string, content: string) => {
@@ -174,10 +188,21 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     [createFormDialogSchema, setCreateSchemaDialogOpen]
   );
 
+  const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
+    setPageElementState('forms', { leftSplitWidth: sizes.primary });
+  };
+
   return (
     <>
       <Stack horizontal verticalFill>
-        <LeftRightSplit initialLeftGridWidth={320} minLeftPixels={320} minRightPixels={800} pageMode={'forms'}>
+        <Split
+          resetOnDoubleClick
+          initialPrimarySize="320px"
+          minPrimarySize="320px"
+          minSecondarySize="800px"
+          renderSplitter={renderThinSplitter}
+          onMeasuredSizesChanged={onMeasuredSizesChanged}
+        >
           <FormDialogSchemaList
             items={formDialogSchemaIds}
             loading={formDialogGenerationProgressing}
@@ -209,7 +234,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
               </Text>
             </EmptyView>
           )}
-        </LeftRightSplit>
+        </Split>
       </Stack>
       {createSchemaDialogOpen ? (
         <CreateFormDialogSchemaModal
