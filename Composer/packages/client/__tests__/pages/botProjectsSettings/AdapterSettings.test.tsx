@@ -27,6 +27,12 @@ const mockSchemas = {
             title: 'Example Name',
             description: 'fake skill used for testing',
           },
+          route: {
+            type: 'string',
+            title: 'Route',
+            description: 'Route',
+            default: 'mockRoute',
+          },
         },
       },
     },
@@ -38,7 +44,7 @@ const mockSchemas = {
           label: 'Connect to Fake Chat Client',
           subtitle: 'Connect to Fake Chat Client',
           helpLink: 'https://example.com/',
-          order: ['exampleName'],
+          order: ['route', 'exampleName'],
         },
       },
     },
@@ -103,16 +109,23 @@ describe('AdapterSettings', () => {
     const modal = queryByTestId('adapterModal');
     expect(modal).not.toBeInTheDocument();
     expect(setSettingsMock).toHaveBeenCalledWith(PROJECT_ID, {
-      adapters: ['Adapter.Mock'],
-      'Adapter.Mock': { exampleName: 'test text 12345' },
+      adapters: [
+        {
+          name: 'Adapter.Mock',
+          route: 'mockRoute',
+          enabled: true,
+        },
+      ],
+      'Adapter.Mock': { exampleName: 'test text 12345', route: 'mockRoute' },
     });
   });
 
   it('disables an adapter', async () => {
     const initStateWithAdapter = {
-      adapters: ['Adapter.Mock'],
+      adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }],
       'Adapter.Mock': {
         exampleName: 'example',
+        route: 'mock',
       },
     };
 
@@ -131,16 +144,17 @@ describe('AdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        adapters: [],
+        adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }],
       })
     );
   });
 
   it('enables an adapter', async () => {
     const initStateWithAdapter = {
-      adapters: [],
+      adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }],
       'Adapter.Mock': {
         exampleName: 'example',
+        route: 'mock',
       },
     };
 
@@ -159,7 +173,7 @@ describe('AdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        adapters: ['Adapter.Mock'],
+        adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }],
       })
     );
   });
