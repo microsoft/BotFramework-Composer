@@ -100,9 +100,10 @@ export class ComposerApi {
         try {
             const endpoint = `http://localhost:3000/api/projects/${botId}/files/appsettings.json`;
 
-            const publishProfilePath = path.resolve(__dirname, 'profile.json');
-            const publishProfile = await fs.readJSON(publishProfilePath);
-            
+            // const publishProfilePath = path.resolve(__dirname, 'profile.json');
+            // const publishProfile = await fs.readJSON(publishProfilePath);
+
+            const publishProfile = this.GetPublishProfile();
             publishProfile.accessToken = token;
             const publishProfileStr = JSON.stringify(publishProfile);
 
@@ -233,6 +234,41 @@ export class ComposerApi {
         catch (error) {
             console.log("%O", error);
             return undefined;
+        }
+    }
+
+    private GetPublishProfile() {
+        const luisResource = process.env.luisResource ?? '';
+        const hostname = process.env.hostname ?? '';
+        const qnaEndpoint = process.env.qnaEndpoint ?? '';
+        const qnaSubscriptionKey = process.env.qnaSubscriptionKey ?? '';
+        const microsoftAppId = process.env.MicrosoftAppId ?? '';
+        const microsoftAppPassword = process.env.MicrosoftAppPassword ?? '';
+        const luisAuthoringKey = process.env.luisAuthoringKey ?? '';
+        const luisAuthoringEndpoint = process.env.luisAuthoringEndpoint ?? '';
+        const luisEndpointKey = process.env.luisEndpointKey ?? '';
+        const luisEndpoint = process.env.luisEndpoint ?? '';
+        const luisRegion = process.env.luisRegion ?? '';
+        return {
+            accessToken: '',
+            runtimeIdentifier: "win-x64",
+            settings: {
+                luis: {
+                    authoringKey: luisAuthoringKey,
+                    authoringEndpoint: luisAuthoringEndpoint,
+                    endpointKey: luisEndpointKey,
+                    endpoint: luisEndpoint,
+                    region: luisRegion
+                },
+                MicrosoftAppId: microsoftAppId,
+                MicrosoftAppPassword: microsoftAppPassword,
+                qna: {
+                    endpoint: qnaEndpoint,
+                    subscriptionKey: qnaSubscriptionKey
+                }
+            },
+            hostname: hostname,
+            luisResource: luisResource
         }
     }
 }
