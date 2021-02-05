@@ -3,6 +3,7 @@
 import isEqual from 'lodash/isEqual';
 import { DialogSetting, BotAssets, BotProjectFile, CrosstrainConfig } from '@bfc/shared';
 import keys from 'lodash/keys';
+import formatMessage from 'format-message';
 
 import fileDiffCalculator from '../parsers/fileDiffCalculator';
 
@@ -12,7 +13,7 @@ import { ChangeType, FileDifference, FileExtensions, IFileChange, FileAsset } fr
 class FilePersistence {
   private _taskQueue: { [id: string]: IFileChange[] } = {};
   private _projectId = '';
-  private _handleError = (name) => (error) => {};
+  private _handleError?: (err) => void;
   private _isFlushing = false;
 
   private _operator = {
@@ -75,7 +76,11 @@ class FilePersistence {
       }
       return Promise.resolve(true);
     } catch (error) {
-      this._handleError('')(error);
+      if (this._handleError && error) {
+        const payload = new Error(error?.response?.data?.message ?? error?.message ?? JSON.stringify(error));
+        payload.name = formatMessage('Fail to save bot');
+        this._handleError(payload);
+      }
       return Promise.resolve(false);
     } finally {
       this._isFlushing = false;
@@ -209,6 +214,14 @@ class FilePersistence {
     const fileChanges: IFileChange[] = [...settingChanges, ...botProjectFileChanges, ...crossTrainFileChanges];
     changes.forEach((item) => fileChanges.push(...item));
     return fileChanges;
+  }
+
+  public registerErrorHandler(fun: (error) => void) {
+    this._handleError = fun;
+  }
+
+  public isErrorHandlerEmpty() {
+    return !this._handleError;
   }
 }
 

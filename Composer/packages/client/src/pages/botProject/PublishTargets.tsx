@@ -82,11 +82,12 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={title}>
+      <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={title}>
         <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
           <div css={publishTargetsHeader}>
             <div css={tableColumnHeader('200px')}>{formatMessage('Name')} </div>
-            <div css={tableColumnHeader('400px')}>{formatMessage('Type')} </div>
+            <div css={tableColumnHeader('350px')}>{formatMessage('Target')} </div>
+            <div css={tableColumnHeader('50px')}> </div>
           </div>
           {publishTargets?.map((p, index) => {
             return (
@@ -116,7 +117,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
             styles={addPublishProfile}
             onClick={() => setDialogHidden(false)}
           >
-            {formatMessage('Add new publish profile')}
+            {formatMessage('Add new')}
           </ActionButton>
         </div>
       </CollapsableWrapper>

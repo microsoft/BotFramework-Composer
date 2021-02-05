@@ -6,7 +6,8 @@ import { jsx } from '@emotion/core';
 import { Fragment, useState, useEffect, useCallback } from 'react';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
@@ -39,10 +40,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
 
   const [dialogTitle, setTitle] = useState({
-    title: formatMessage('Add a publish profile'),
-    subText: formatMessage(
-      'Publish profile informs your bot where to use resources from. The resoruces you provision for your bot will live within this profile'
-    ),
+    title: formatMessage('Add a publishing profile'),
+    subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
   });
 
   const [selectedType, setSelectType] = useState<PublishType | undefined>();
@@ -135,33 +134,45 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         />
       )}
       {page != Page.EditProfile && (
-        <DialogWrapper
-          isOpen
-          dialogType={DialogTypes.Customer}
-          minWidth={900}
-          subText={dialogTitle.subText}
-          title={dialogTitle.title}
+        <Dialog
+          dialogContentProps={{
+            title: dialogTitle.title,
+            subText: page !== Page.AddProfile ? dialogTitle.subText : '',
+          }}
+          hidden={false}
+          minWidth={960}
+          modalProps={{
+            isBlocking: true,
+          }}
           onDismiss={closeDialog}
         >
           {page === Page.AddProfile && (
-            <AddProfileDialog
-              projectId={projectId}
-              setType={setSelectType}
-              targets={targets}
-              types={types}
-              updateSettings={savePublishTarget}
-              onDismiss={closeDialog}
-              onNext={() => {
-                setPage(Page.ConfigProvision);
-              }}
-            />
+            <div>
+              <div style={{ marginBottom: '16px' }}>
+                {dialogTitle.subText}
+                <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
+                  {formatMessage('Learn More.')}
+                </Link>
+              </div>
+              <AddProfileDialog
+                projectId={projectId}
+                setType={setSelectType}
+                targets={targets}
+                types={types}
+                updateSettings={savePublishTarget}
+                onDismiss={closeDialog}
+                onNext={() => {
+                  setPage(Page.ConfigProvision);
+                }}
+              />
+            </div>
           )}
           {page === Page.ConfigProvision && selectedType?.bundleId && (
             <div css={publishSurfaceStyles}>
               <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
             </div>
           )}
-        </DialogWrapper>
+        </Dialog>
       )}
     </Fragment>
   );
