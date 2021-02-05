@@ -42,8 +42,6 @@ const QnAPage: React.FC<RouteComponentProps<{
   const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
-  const settings = useRecoilValue(settingsState(actualProjectId));
-  const { languages } = settings.languages;
   const creatQnAOnInfo = useRecoilValue(createQnAOnState);
 
   const path = props.location?.pathname ?? '';
