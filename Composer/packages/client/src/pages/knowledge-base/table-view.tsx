@@ -34,7 +34,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
-import { dialogsSelectorFamily, qnaFilesState, localeState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFilesState, localeState, settingsState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
@@ -55,6 +55,7 @@ import {
   detailsHeaderStyle,
   classNames,
 } from './styles';
+import { TabHeader } from './TabHeader';
 
 interface QnASectionItem extends QnASection {
   fileId: string;
@@ -96,6 +97,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
+  const settings = useRecoilValue(settingsState(actualProjectId));
+  const { languages } = settings;
   const {
     removeQnAImport,
     removeQnAFile,
@@ -190,7 +193,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       setQnASections(dialogSections);
     }
-  }, [qnaFiles, dialogId, actualProjectId]);
+  }, [qnaFiles, dialogId, actualProjectId, locale]);
 
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
@@ -807,25 +810,32 @@ const TableView: React.FC<TableViewProps> = (props) => {
       </div>
     );
   }
+
+  const onChangeLocale = (currentLocale) => {
+    actions.setLocale(currentLocale, actualProjectId);
+  };
+
   return (
     <div data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <DetailsList
-          checkboxVisibility={CheckboxVisibility.hidden}
-          columns={getTableColums()}
-          componentRef={detailListRef}
-          groupProps={{
-            onRenderHeader: onRenderGroupHeader,
-            collapseAllVisibility: CollapseAllVisibility.hidden,
-            showEmptyGroups: true,
-          }}
-          groups={groups}
-          items={qnaSections}
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.single}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          onRenderRow={onRenderRow}
-        />
+        <TabHeader languages={languages} locale={locale} onChangeLocale={onChangeLocale}>
+          <DetailsList
+            checkboxVisibility={CheckboxVisibility.hidden}
+            columns={getTableColums()}
+            componentRef={detailListRef}
+            groupProps={{
+              onRenderHeader: onRenderGroupHeader,
+              collapseAllVisibility: CollapseAllVisibility.hidden,
+              showEmptyGroups: true,
+            }}
+            groups={groups}
+            items={qnaSections}
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionMode={SelectionMode.single}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+            onRenderRow={onRenderRow}
+          />
+        </TabHeader>
       </ScrollablePane>
       {editQnAFile && (
         <EditQnAModal
