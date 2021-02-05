@@ -30,12 +30,13 @@ export const tableRow = css`
   display: flex;
   flex-direction: row;
   height: 42px;
+  width: 750px;
+  border-bottom: 1px solid ${NeutralColors.gray30};
 `;
 
 export const tableRowItem = (width?: string) => css`
   font-size: ${FontSizes.small};
   font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
   text-overflow: ellipsis;
@@ -47,7 +48,6 @@ export const tableRowItem = (width?: string) => css`
 export const tableColumnHeader = (width?: string) => css`
   font-size: ${FontSizes.small};
   font-weight: ${FontWeights.bold};
-  border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
   text-overflow: ellipsis;
