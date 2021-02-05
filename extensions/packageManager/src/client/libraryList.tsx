@@ -20,7 +20,7 @@ export interface LibraryRef {
   name: string;
   version: string;
   versions: string[],
-  authors?: string[];
+  authors?: string;
   releaseNotes?: string;
   keywords?: string[];
   license?: string;
@@ -50,7 +50,7 @@ interface ILetterIconProps {
   letter: string;
 }
 
-const LetterIcon: React.FC<ILetterIconProps> = (props) => {
+export const LetterIcon: React.FC<ILetterIconProps> = (props) => {
   return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: '#FFF', backgroundColor: 'rgb(0, 120, 212)', fontSize: '30px'}}>
     <span>{ props.letter }</span>
   </div>

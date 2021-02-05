@@ -28,7 +28,7 @@ import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
 import { ImportDialog } from './importDialog';
-import { LibraryRef, LibraryList } from './libraryList';
+import { LibraryRef, LibraryList, LetterIcon } from './libraryList';
 import { WorkingModal } from './workingModal';
 import { FeedModal } from './feedModal';
 import { ProjectList } from './projectList/ProjectList';
@@ -80,6 +80,7 @@ const Library: React.FC = () => {
     editFeeds: formatMessage('Edit feeds'),
     description: formatMessage('Discover and use components that can be installed into your bot.'),
     descriptionLink: formatMessage('Learn more'),
+    viewDocumentation: formatMessage('View documentation'),
     installButton: formatMessage('Install'),
     updateButton: formatMessage('Update to'),
     installed: formatMessage('installed'),
@@ -664,22 +665,41 @@ const Library: React.FC = () => {
         <Stack.Item grow={0} shrink={0} disableShrink styles={{ root: { width: '400px', padding: '20px', borderLeft: '1px solid #CCC' } }}>
           {selectedItem ? (
             <Fragment>
-              <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible} split={versionOptions!=undefined} menuProps={versionOptions}>
-                {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
-                {(isInstalled(selectedItem) && selectedVersion===installedVersion(selectedItem)) ? (
-                  <span>{selectedVersion} {strings.installed}</span>
-                ) : (isUpdate) ? (
-                  <span>{strings.updateButton} {selectedVersion}</span>
-                ) : (
-                  <span>{strings.installButton} {selectedVersion}</span>
-                )}
-              </PrimaryButton>
+              <Stack horizontal tokens={{childrenGap:10}} >
+                <Stack.Item  grow={0} align="center" styles={{root:{width:50}}}>
+                  {selectedItem.icon ? (
+                    <img src={selectedItem.icon} width="50" height="50" alt="icon" />
+                  ): (
+                    <LetterIcon letter={selectedItem.name[0]} />
+                  )}
+                </Stack.Item>
+                <Stack.Item align="center" grow={1}>
+                  { selectedItem.authors }
+                </Stack.Item>
+                <Stack.Item align="center" grow={1} styles={{root:{textAlign:"right"}}}>
+                    <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible} split={versionOptions!=undefined} menuProps={versionOptions}>
+                    {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
+                    {(isInstalled(selectedItem) && selectedVersion===installedVersion(selectedItem)) ? (
+                      <span>{selectedVersion} {strings.installed}</span>
+                    ) : (isUpdate) ? (
+                      <span>{strings.updateButton} {selectedVersion}</span>
+                    ) : (
+                      <span>{strings.installButton} {selectedVersion}</span>
+                    )}
+                  </PrimaryButton>
+                </Stack.Item>
+              </Stack>
 
               <h3>{ selectedItem.name }</h3>
 
               {readmeContent && (
                 <ReactMarkdown>{readmeContent}</ReactMarkdown>
               )}
+
+              {selectedItem.repository && (
+                <p><Link href={selectedItem.repository} target="_docs">{ strings.viewDocumentation }</Link></p>
+              )}
+
             </Fragment>
           ) : (
             <Fragment>
