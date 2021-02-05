@@ -19,7 +19,7 @@ import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
 import { title, subtitle, sectionHeader, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 import { JSONSchema7 } from '../../../../../types';
 
-import AdapterModal from './AdapterModal';
+import AdapterModal, { AdapterRecord } from './AdapterModal';
 
 //////////
 
@@ -33,7 +33,7 @@ const AdapterSettings = (props: Props) => {
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
   const currentSettings = useRecoilValue(settingsState(projectId));
   const { setSettings } = useRecoilValue(dispatcherState);
-  const adapters: string[] = currentSettings.adapters ?? [];
+  const adapters: AdapterRecord[] = currentSettings.adapters ?? [];
 
   const { definitions: schemaDefinitions } = schemas?.default ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
@@ -71,7 +71,10 @@ const AdapterSettings = (props: Props) => {
 
       {schemas.map((schema) => {
         const { key, title } = schema;
-        const keyEnabled = adapters.includes(key);
+
+        const keyConfigured = adapters.some((ad) => ad.name === key);
+        const keyEnabled = adapters.some((ad) => ad.name === key && ad.enabled);
+
         return (
           <div key={key} css={tableRow}>
             <div css={tableRowItem(columnWidths[0])}>{title}</div>
@@ -86,11 +89,18 @@ const AdapterSettings = (props: Props) => {
               <Toggle
                 checked={keyEnabled}
                 data-testid={`toggle_${key}`}
+                disabled={!keyConfigured}
                 onChange={(ev, val?: boolean) => {
-                  if (val && !keyEnabled) {
-                    setSettings(projectId, { ...currentSettings, adapters: [...adapters, key] });
-                  } else {
-                    setSettings(projectId, { ...currentSettings, adapters: adapters.filter((a) => a !== key) });
+                  if (val != null) {
+                    const oldAdapters = currentSettings.adapters ?? [];
+                    setSettings(projectId, {
+                      ...currentSettings,
+                      adapters: oldAdapters.map((ad: AdapterRecord) => {
+                        if (ad.name == key) {
+                          return { ...ad, enabled: val };
+                        } else return ad;
+                      }),
+                    });
                   }
                 }}
               />

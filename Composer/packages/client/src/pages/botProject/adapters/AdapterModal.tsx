@@ -12,6 +12,12 @@ import { useRecoilValue } from 'recoil';
 import { JSONSchema7 } from '../../../../../types';
 import { settingsState, dispatcherState } from '../../../recoilModel';
 
+export type AdapterRecord = {
+  name: string;
+  route: string;
+  enabled: boolean;
+};
+
 type Props = {
   adapterKey: string;
   isOpen: boolean;
@@ -55,15 +61,13 @@ const AdapterModal = (props: Props) => {
           <PrimaryButton
             onClick={async () => {
               if (value != null) {
-                const currentAdapters: string[] = currentSettings.adapters ?? [];
+                const currentAdapters: AdapterRecord[] = currentSettings.adapters ?? [];
 
-                if (!currentAdapters.includes(adapterKey)) {
-                  await setSettings(projectId, {
-                    ...currentSettings,
-                    adapters: [...currentAdapters, adapterKey],
-                    [adapterKey]: value,
-                  });
-                }
+                await setSettings(projectId, {
+                  ...currentSettings,
+                  adapters: [...currentAdapters, { name: adapterKey, enabled: true, route: value.route }],
+                  [adapterKey]: value,
+                });
               }
               onClose();
             }}

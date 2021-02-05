@@ -6,6 +6,7 @@
         "subtitle": "Connect to Contoso Chat Client",
         "helpLink": "https://aka.ms/contoso-chat-client",
         "order": [
+            "route",
             "contosoSkillId",
             "contosoSecretKey",
             "allowSuggestedActions"
@@ -18,6 +19,7 @@
         "subtitle": "Connect to fake client",
         "helpLink": "https://aka.ms/who",
         "order": [
+            "route",
             "exampleName",
             "emojiTest",
             "longLongName"

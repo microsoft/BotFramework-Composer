@@ -337,6 +337,12 @@
       "description": "Connect your bot to Contoso Chat Client",
       "type": "object",
       "properties": {
+        "route": {
+          "type": "string",
+          "title": "Route",
+          "description": "Route name to use within the API",
+          "default": "contoso"
+        },
         "contosoSkillId": {
             "type": "string",
             "title": "Contoso Skill Id",
@@ -360,7 +366,8 @@
       },
       "required": [
           "contosoSkillId",
-          "contosoSecretKey"
+          "contosoSecretKey",
+          "route"
       ]
     },
     "Adapters.FakeChat": {
@@ -370,6 +377,12 @@
       "description": "Connect your bot to Contoso Chat Client",
       "type": "object",
       "properties": {
+        "route": {
+          "type": "string",
+          "title": "Route",
+          "description": "Route name to use within the API",
+          "default": "fakechat"
+        },
         "exampleName": {
             "type": "string",
             "title": "Example Name",
@@ -392,6 +405,7 @@
         }
       },
       "required": [
+        "route"
       ]
     },
     "Microsoft.ActivityTemplate": {
