@@ -2,15 +2,15 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useCallback, useState } from 'react';
-import { closeDialog, onBack, savePublishConfig, useConfigBeingEdited } from '@bfc/extension-client';
+import { usePublishApi } from '@bfc/extension-client';
 
 import { backButton, buttonBar, column, label, publishRoot, saveButton, textField, title } from '../styles';
 
 export const Main: React.FC<{ title: string }> = (props) => {
-  const [configBeingEdited] = useConfigBeingEdited();
-  const [val1, setVal1] = useState(configBeingEdited ? configBeingEdited.val1 : '');
-  const [val2, setVal2] = useState(configBeingEdited ? configBeingEdited.val2 : '');
-  const [val3, setVal3] = useState(configBeingEdited ? configBeingEdited.val3 : '');
+  const { closeDialog, onBack, savePublishConfig, publishConfig } = usePublishApi();
+  const [val1, setVal1] = useState(publishConfig ? publishConfig.val1 : '');
+  const [val2, setVal2] = useState(publishConfig ? publishConfig.val2 : '');
+  const [val3, setVal3] = useState(publishConfig ? publishConfig.val3 : '');
   const [configIsValid, setConfigIsValid] = useState(false);
 
   const updateVal1 = useCallback((ev) => {

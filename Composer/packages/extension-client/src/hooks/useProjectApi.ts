@@ -10,34 +10,39 @@ import { validateHookContext } from '../utils/validateHookContext';
 import { useStore } from './useStore';
 
 const PROJECT_KEYS = [
+  // type ProjectContext
   'data.botName',
   'data.projectId',
+  'data.projectCollection',
   'data.dialogs',
   'data.dialogSchemas',
   'data.lgFiles',
   'data.luFiles',
+  'data.luFeatures',
   'data.qnaFiles',
   'data.skills',
   'data.skillsSettings',
   'data.schemas',
+  'data.forceDisabledActions',
   'data.settings',
-  'data.projectCollection',
 
+  // type ProjectContexApi
   'api.getDialog',
   'api.saveDialog',
+  'api.reloadProject',
+  'api.navTo',
   'api.updateQnaContent',
   'api.updateRegExIntent',
   'api.renameRegExIntent',
   'api.updateIntentTrigger',
   'api.createDialog',
   'api.commitChanges',
-  'api.addSkillDialog',
   'api.displayManifestModal',
   'api.updateDialogSchema',
   'api.createTrigger',
-  'api.updateSkillSetting',
-  'api.reloadProject',
-  'api.navTo',
+  'api.createQnATrigger',
+  'api.updateSkill',
+  'api.updateRecognizer',
 ];
 
 export function useProjectApi(): ProjectContext & ProjectContextApi {

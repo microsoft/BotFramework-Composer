@@ -40,7 +40,6 @@ export const ShellApiStub: ShellApi = {
   undo: fn,
   redo: fn,
   updateUserSettings: fn,
-  addSkillDialog: fnPromise,
   announce: fn,
   displayManifestModal: fn,
   constructAction: fnPromise,
@@ -56,7 +55,6 @@ export const ShellApiStub: ShellApi = {
   commitChanges: fnPromise,
   updateDialogSchema: fnPromise,
   createTrigger: fnPromise,
-  updateSkillSetting: fnPromise,
   updateFlowZoomRate: fnPromise,
 };
 
