@@ -29,6 +29,11 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
+    'abs',
+    new FunctionEntity(['num: number'], ReturnType.Number, 'Returns the absolute value of the specified number.'),
+  ],
+  ['sqrt', new FunctionEntity(['num: number'], ReturnType.Number, 'Returns the square root of a specified number.')],
+  [
     'div',
     new FunctionEntity(
       ['dividend: number', 'divisor: number'],
