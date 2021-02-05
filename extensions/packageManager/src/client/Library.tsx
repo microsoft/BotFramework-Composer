@@ -116,10 +116,11 @@ const Library: React.FC = () => {
     return true;
   };
 
-  const installComponentAPI = (projectId: string, packageName: string, version: string, isUpdating: boolean) => {
+  const installComponentAPI = (projectId: string, packageName: string, version: string, isUpdating: boolean, source: string) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/import`, {
       package: packageName,
       version: version,
+      source: source,
       isUpdating,
     });
   };
@@ -331,7 +332,7 @@ const Library: React.FC = () => {
     setAddDialogHidden(true);
   };
 
-  const importFromWeb = async (packageName, version, isUpdating) => {
+  const importFromWeb = async (packageName, version, isUpdating, source) => {
     const existing = installedComponents?.find((l) => l.name === packageName);
     let okToProceed = true;
     if (existing) {
@@ -343,21 +344,21 @@ const Library: React.FC = () => {
     if (okToProceed) {
       closeDialog();
       setWorking(true);
-      await importComponent(packageName, version, isUpdating || false);
+      await importComponent(packageName, version, isUpdating || false, source);
       setWorking(false);
     }
   };
 
-  const importComponent = async (packageName, version, isUpdating) => {
+  const importComponent = async (packageName, version, isUpdating, source) => {
     try {
-      const results = await installComponentAPI(currentProjectId, packageName, version, isUpdating);
+      const results = await installComponentAPI(currentProjectId, packageName, version, isUpdating, source);
 
       // check to see if there was a conflict that requires confirmation
       if (results.data.success === false) {
         const title = strings.conflictConfirmationTitle;
         const msg = strings.conflictConfirmationPrompt;
         if (await confirm(title, msg)) {
-          await installComponentAPI(currentProjectId, packageName, version, true);
+          await installComponentAPI(currentProjectId, packageName, version, true, source);
         }
       } else {
         updateInstalledComponents(results.data.components);
@@ -427,11 +428,11 @@ const Library: React.FC = () => {
   };
 
   const install = async () => {
-    return importFromWeb(selectedItem?.name, selectedVersion, false);
+    return importFromWeb(selectedItem?.name, selectedVersion, false, feeds.find((f) => f.key == feed).url);
   };
 
   const redownload = async () => {
-    return importFromWeb(selectedItem?.name, selectedVersion, true);
+    return importFromWeb(selectedItem?.name, selectedVersion, true, feed);
   };
 
   const removeComponent = async () => {
@@ -582,7 +583,7 @@ const Library: React.FC = () => {
                           placeholder="Search"
                           onClear={() => setSearchTerm('')}
                           onSearch={setSearchTerm}
-                          disabled={!feeds || !feed || items.length===0}
+                          disabled={!feeds || !feed || (!searchTerm && items.length===0)}
                           styles={{
                             root: { width: '200px' },
                           }}

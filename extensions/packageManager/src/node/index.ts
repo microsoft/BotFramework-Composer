@@ -343,6 +343,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // get URL or package name
       const packageName = req.body.package;
       const version = req.body.version;
+      const source = req.body.source;
       const isUpdating = req.body.isUpdating || false;
       const mergeErrors: string[] = [];
 
@@ -359,7 +360,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       if (packageName && runtimePath) {
         try {
           // Call the runtime's component install mechanism.
-          const installOutput = await runtime.installComponent(runtimePath, packageName, version);
+          const installOutput = await runtime.installComponent(runtimePath, packageName, version, source);
 
           const manifestFile = runtime.identifyManifest(runtimePath);
 
