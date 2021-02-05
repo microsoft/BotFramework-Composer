@@ -63,6 +63,11 @@ const AdapterSettings = (props: Props) => {
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
       <div css={sectionHeader}>{formatMessage('External service adapters')}</div>
+      <div css={subtitle}>
+        {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
+          a: ({ children }) => <Link href="plugin/package-manager/package-manager">{children}</Link>,
+        })}
+      </div>
       <div css={tableRow}>
         <div css={tableColumnHeader(columnWidths[0])}>{formatMessage('Name')}</div>
         <div css={tableColumnHeader(columnWidths[1])}>{formatMessage('Configured')}</div>
