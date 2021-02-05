@@ -10,10 +10,11 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const esbuild = require('esbuild');
+const GlobalsPlugin = require('esbuild-plugin-globals');
 
 const FORCE = process.argv.includes('--force') || process.argv.includes('-f');
 
-const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '..');
+const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname);
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
 console.log('Compiling extensions in %s', extensionsDir);
@@ -22,7 +23,7 @@ if (FORCE) {
   console.log('--force is true. Forcing a rebuild of all extensions.');
 }
 
-const ignoredDirs = ['scripts', 'node_modules'];
+const ignoredDirs = ['node_modules'];
 const allExtensions = fs
   .readdirSync(extensionsDir, { withFileTypes: true })
   .filter((ent) => !ignoredDirs.includes(ent.name));
@@ -31,7 +32,7 @@ const checkComposerLibs = () => {
   const libsToCheck = ['types', 'extension', 'extension-client', 'lib/shared'];
 
   for (const libName of libsToCheck) {
-    const libPath = path.resolve(__dirname, '../../Composer/packages/', libName, 'lib/index.js');
+    const libPath = path.resolve(__dirname, '../Composer/packages/', libName, 'lib/index.js');
     if (!fs.existsSync(libPath)) {
       console.error('Composer libraries have not yet been compiled. Run `yarn build:libs` first.');
       process.exit(1);
@@ -93,32 +94,6 @@ const hasChanges = (name, lastModified) => {
   return buildCache[name] ? new Date(buildCache[name]) < lastModified : true;
 };
 
-const ComposerGlobalsPlugin = {
-  name: 'composer-global',
-  setup(build) {
-    const globals = {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-      '@bfc/extension-client': 'ExtensionClient',
-      'office-ui-fabric-react': 'Fabric',
-      '@bfc/code-editor': 'CodeEditors',
-      '@bfc/ui-shared': 'UIShared',
-    };
-
-    Object.keys(globals).forEach((moduleName) => {
-      build.onResolve({ filter: new RegExp(`^${moduleName}$`) }, (args) => ({
-        path: args.path,
-        namespace: 'composer-global',
-      }));
-      build.onLoad({ filter: /.*/, namespace: 'composer-global' }, (args) => {
-        const name = args.path;
-        const contents = `module.exports = ${globals[name]}`;
-        return { contents };
-      });
-    });
-  },
-};
-
 const getBundleConfigs = (extPath, packageJSON) => {
   const buildConfigs = [];
 
@@ -165,7 +140,16 @@ const getBundleConfigs = (extPath, packageJSON) => {
               outdir: path.join(extPath, './dist'),
               entryPoints: [cPath],
               target: ['es2015'],
-              plugins: [ComposerGlobalsPlugin],
+              plugins: [
+                GlobalsPlugin({
+                  react: 'React',
+                  'react-dom': 'ReactDOM',
+                  '@bfc/extension-client': 'ExtensionClient',
+                  'office-ui-fabric-react': 'Fabric',
+                  '@bfc/code-editor': 'CodeEditors',
+                  '@bfc/ui-shared': 'UIShared',
+                }),
+              ],
               loader: {
                 '.svg': 'dataurl',
                 '.png': 'file',
