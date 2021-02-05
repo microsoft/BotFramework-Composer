@@ -12,7 +12,14 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogIdsState, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
+import {
+  dialogIdsState,
+  qnaFilesState,
+  dispatcherState,
+  createQnAOnState,
+  localeState,
+  settingsState,
+} from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -34,9 +41,9 @@ const QnAPage: React.FC<RouteComponentProps<{
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
-  //To do: support other languages
-  const locale = 'en-us';
-  //const locale = useRecoilValue(localeState);
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const settings = useRecoilValue(settingsState(actualProjectId));
+  const { languages } = settings.languages;
   const creatQnAOnInfo = useRecoilValue(createQnAOnState);
 
   const path = props.location?.pathname ?? '';

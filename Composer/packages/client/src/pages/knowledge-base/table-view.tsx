@@ -64,6 +64,8 @@ interface QnASectionItem extends QnASection {
   sectionId: string;
 }
 
+const qnaSuffix = (locale) => `.source.${locale}`;
+
 const createQnASectionItem = (fileId: string): QnASectionItem => {
   return {
     fileId,
@@ -104,7 +106,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     updateQnAQuestion,
   } = useRecoilValue(dispatcherState);
 
-  const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
+  const targetFileId = dialogId.endsWith(qnaSuffix(locale)) ? dialogId : `${dialogId}.${locale}`;
   const qnaFile = qnaFileId
     ? qnaFiles.find(({ id }) => id === qnaFileId)
     : qnaFiles.find(({ id }) => id === targetFileId);
@@ -118,7 +120,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         qnaFiles.find(({ id }) => id === `${dialog.qnaFile}.${locale}`);
       if (dialogQnAFile) {
         dialogQnAFile.imports.forEach(({ id }) => {
-          if (id === `${file.id}.qna`) {
+          if (`${getBaseName(id)}.${locale}` === `${file.id}`) {
             usedInDialog.push({ id: dialog.id, displayName: dialog.displayName });
           }
         });
@@ -150,16 +152,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
     groupKey: '-1',
     sectionIndex: -1,
   });
-  const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
+  const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => `${getBaseName(id)}.${locale}`) || [];
   const currentDialogImportedFiles = qnaFiles.filter(({ id }) => currentDialogImportedFileIds.includes(id));
-  const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) => id.endsWith('.source'));
-  const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
+  const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) =>
+    id.endsWith(qnaSuffix(locale))
+  );
+  const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith(qnaSuffix(locale)));
 
   const initializeQnASections = (qnaFiles: QnAFile[], dialogId: string) => {
     if (isEmpty(qnaFiles)) return [];
 
     const allSections = flatMap(
-      qnaFiles.filter(({ id }) => id.endsWith('.source')),
+      qnaFiles.filter(({ id }) => id.endsWith(qnaSuffix(locale))),
       generateQnASections
     );
     if (dialogId === 'all') {
@@ -176,7 +180,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (isEmpty(qnaFiles)) return;
 
     const allSections = flatMap(
-      qnaFiles.filter(({ id }) => id.endsWith('.source')),
+      qnaFiles.filter(({ id }) => id.endsWith(qnaSuffix(locale))),
       generateQnASections
     );
     if (dialogId === 'all') {
@@ -286,7 +290,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const groupName = props?.group?.name || '';
       const containerId = props?.group?.key || '';
       const containerQnAFile = qnaFiles.find(({ id }) => id === containerId);
-      const isImportedSource = containerId.endsWith('.source');
+      const isImportedSource = containerId.endsWith(qnaSuffix(locale));
       const sourceUrl = isImportedSource && containerQnAFile && getQnAFileUrlOption(containerQnAFile);
       const isAllTab = dialogId === 'all';
       const isCreatingQnA = creatQnAPairSettings.groupKey === containerId && creatQnAPairSettings.sectionIndex > -1;
@@ -451,7 +455,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item: QnASectionItem, index) => {
           const isExpanded = expandedIndex === index;
           const questions = isExpanded ? item.Questions : item.Questions.slice(0, 1);
-          const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
+          const isSourceSectionInDialog =
+            item.fileId.endsWith(qnaSuffix(locale)) && !dialogId.endsWith(qnaSuffix(locale));
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           const isCreatingQnA =
             item.fileId === creatQnAPairSettings.groupKey && index === creatQnAPairSettings.sectionIndex;
@@ -581,7 +586,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isResizable: true,
         data: 'string',
         onRender: (item, index) => {
-          const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
+          const isSourceSectionInDialog =
+            item.fileId.endsWith(qnaSuffix(locale)) && !dialogId.endsWith(qnaSuffix(locale));
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           const isExpanded = expandedIndex === index;
           const isCreatingQnA =
@@ -711,7 +717,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       if (createOnGroupId === id) {
         count += 1;
       }
-      const name = getBaseName(id);
+      const name = id.split(qnaSuffix(locale))[0];
 
       // restore last group collapse state
       const prevGroup = groups?.find(({ key }) => key === id);
