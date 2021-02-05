@@ -5,6 +5,12 @@
             "subtitle": "Connect to Contoso Chat Client"
         }
     },
+    "Adapters.FakeChat": {
+        "form": {
+            "label": "Connect to fake client",
+            "subtitle": "Connect to fake client"
+        }
+    },
     "Microsoft.AdaptiveDialog": {
         "form": {
             "description": "This configures a data driven dialog via a collection of events and actions.",

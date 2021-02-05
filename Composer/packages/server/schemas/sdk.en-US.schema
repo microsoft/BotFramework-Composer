@@ -6,6 +6,10 @@
             "title": "Contoso Chat Client Adapter",
             "description": "Connect your bot to Contoso Chat Client",
             "properties": {
+                "route": {
+                    "title": "Route",
+                    "description": "Route name to use within the API"
+                },
                 "contosoSkillId": {
                     "title": "Contoso Skill Id",
                     "description": "SkillId from Contoso portal"
@@ -17,6 +21,32 @@
                 "allowSuggestedActions": {
                     "title": "Allow Suggested Actions",
                     "description": "Optional condition which if true will allow suggested actions."
+                },
+                "$designer": {
+                    "title": "Contoso parameters",
+                    "description": "Parameter values for the Contoso adapter."
+                }
+            }
+        },
+        "Adapters.FakeChat": {
+            "title": "Fake Chat Client Adapter",
+            "description": "Connect your bot to Contoso Chat Client",
+            "properties": {
+                "route": {
+                    "title": "Route",
+                    "description": "Route name to use within the API"
+                },
+                "exampleName": {
+                    "title": "Example Name",
+                    "description": "fake skill used for testing"
+                },
+                "emojiTest": {
+                    "title": "🥍🦈",
+                    "description": "Number of sharks playing lacrosse."
+                },
+                "longLongName": {
+                    "title": "This field has a really long name - let's see what the dialog does with it",
+                    "description": "Set to true if this field is true."
                 },
                 "$designer": {
                     "title": "Contoso parameters",
