@@ -180,20 +180,15 @@ export const publisherDispatcher = () => {
         const luFiles = await snapshot.getPromise(luFilesState(projectId));
         const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-        const response = await httpClient.post(
-          `/publish/${projectId}/publish/${target.name}`,
-          {
-            metadata: {
-              ...metadata,
-              luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-              qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-            },
-            sensitiveSettings,
+        const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
+          accessToken: token,
+          metadata: {
+            ...metadata,
+            luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+          sensitiveSettings,
+        });
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
