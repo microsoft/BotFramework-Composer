@@ -10,17 +10,25 @@ import { validateHookContext } from '../utils/validateHookContext';
 import { useStore } from './useStore';
 
 const APPLICATION_KEYS = [
+  // type ApplicationContext
   'data.locale',
   'data.hosted',
   'data.userSettings',
+  'data.skills',
+  'data.skillsSettings',
   'data.flowZoomRate',
+  'data.httpClient',
 
+  // type ApplicationContextApi
   'api.navigateTo',
   'api.updateUserSettings',
   'api.announce',
   'api.addCoachMarkRef',
+  'api.isFeatureEnabled',
   'api.setApplicationLevelError',
   'api.confirm',
+  'api.updateFlowZoomRate',
+  'api.telemetryClient',
 ];
 
 export function useApplicationApi(): ApplicationContext & ApplicationContextApi {
