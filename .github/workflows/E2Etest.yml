@@ -1,0 +1,59 @@
+name: Composer E2E test
+
+on:
+  push:
+    branches:
+      - hond/testCI
+# After this branch merged into main, would change the trigger event from 'push' to 'time schedule'
+#  schedule:
+# # Triggered once every day at 00:00
+#    - cron:  '0 0 0 * * ?'
+
+jobs:
+  prepare-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - run: git checkout hond/testCI
+
+    - name: Set up Node.js version
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+
+    - name: Azure Login
+      uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        environment: 'AzureStack'
+
+    - name: Composer install, build, and start
+      run: |
+        yarn
+        yarn build
+        yarn start
+      working-directory: Composer
+
+  start-test:
+    needs: prepare-and-build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - run: git checkout hond/testCI
+
+    - name: Set up Node.js version
+      uses: actions/setup-node@v1
+      with:
+
+        node-version: '14.x'
+
+    - name: Composer test
+      env:
+        PUBLISH_FILE: ${{ secrets.PUBLISH_FILE }}
+        DIRECTLINE_TOKEN: ${{ secrets.DIRECTLINE_TOKEN }}
+      run: |
+        npm install
+        npm test
+      working-directory: Composer/dailyCI

@@ -3,11 +3,11 @@ import { ComposerApi } from './composerApi';
 import { DirectLineTester } from "./directLineTester";
 
 jest.setTimeout(1000 * 60 * 10);
-const directlineToken = '';
+const directlineToken = process.env.DIRECTLINE_TOKEN;
 
 const publishTargets = {
     todoLuisBot: {
-        botName: 'ToDoBotWithLuisSample-0',
+        botName: 'ToDoBotWithLuisSample-37',
         botId: '55586.955975498255'
     },
     qnaBot: {

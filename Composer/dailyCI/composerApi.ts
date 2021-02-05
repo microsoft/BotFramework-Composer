@@ -238,17 +238,23 @@ export class ComposerApi {
     }
 
     private GetPublishProfile() {
-        const luisResource = process.env.luisResource ?? '';
-        const hostname = process.env.hostname ?? '';
-        const qnaEndpoint = process.env.qnaEndpoint ?? '';
-        const qnaSubscriptionKey = process.env.qnaSubscriptionKey ?? '';
-        const microsoftAppId = process.env.MicrosoftAppId ?? '';
-        const microsoftAppPassword = process.env.MicrosoftAppPassword ?? '';
-        const luisAuthoringKey = process.env.luisAuthoringKey ?? '';
-        const luisAuthoringEndpoint = process.env.luisAuthoringEndpoint ?? '';
-        const luisEndpointKey = process.env.luisEndpointKey ?? '';
-        const luisEndpoint = process.env.luisEndpoint ?? '';
-        const luisRegion = process.env.luisRegion ?? '';
+        const publishFile = process.env.PUBLISH_FILE;
+        if (!publishFile) {
+          throw Error('Could not find publish file.');
+        }
+
+        const publishFileJson = JSON.parse(publishFile.trim());
+        const luisResource = publishFileJson.luisResource ?? '';
+        const hostname = publishFileJson.hostname ?? '';
+        const qnaEndpoint = publishFileJson.qnaEndpoint ?? '';
+        const qnaSubscriptionKey = publishFileJson.qnaSubscriptionKey ?? '';
+        const microsoftAppId = publishFileJson.MicrosoftAppId ?? '';
+        const microsoftAppPassword = publishFileJson.MicrosoftAppPassword ?? '';
+        const luisAuthoringKey = publishFileJson.luisAuthoringKey ?? '';
+        const luisAuthoringEndpoint = publishFileJson.luisAuthoringEndpoint ?? '';
+        const luisEndpointKey = publishFileJson.luisEndpointKey ?? '';
+        const luisEndpoint = publishFileJson.luisEndpoint ?? '';
+        const luisRegion = publishFileJson.luisRegion ?? '';
         return {
             accessToken: '',
             runtimeIdentifier: "win-x64",
