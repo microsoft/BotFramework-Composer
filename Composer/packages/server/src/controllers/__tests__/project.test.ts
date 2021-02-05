@@ -173,26 +173,47 @@ describe('should get recent projects', () => {
 });
 
 describe('create a component model conversational core bot project', () => {
-  it('should start to create a new project', async () => {
-    jest.setTimeout(300000);
-    const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
-    const name = 'newConversationalCoreBot';
-    const mockReq = {
-      params: {},
-      query: {},
-      body: {
-        storageId: 'default',
-        location: newBotDir,
-        description: '',
-        name: name,
-        templateId: 'generator-conversational-core',
-        templateVersion: '1.0.9',
-      },
-    } as Request;
-    const createProjPromise = ProjectController.createProjectV2(mockReq, mockRes);
+  const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
+  const name = 'newConversationalCoreBot';
+  const mockReq = {
+    params: {},
+    query: {},
+    body: {
+      storageId: 'default',
+      location: newBotDir,
+      description: '',
+      name: name,
+      templateId: 'generator-conversational-core',
+      templateVersion: '1.0.9',
+    },
+  } as Request;
+
+  jest.mock('yeoman-environment', () => ({
+    installLocalGenerators: jest.fn(() => {
+      console.log('in mock install local generators');
+    }),
+    lookupLocalPackages: jest.fn(() => {
+      console.log('in mock lookupLocalPackages');
+    }),
+    createEnv: jest.fn().mockImplementation(() => {
+      console.log('in mock create env');
+      return {
+        lookupLocalPackages: jest.fn(),
+      };
+    }),
+  }));
+
+  fit('should start to create a new project', async () => {
+    // ProjectController.createProjectAsync = jest.fn(async (req: any, jobId: any) => {
+    //   console.log('called createProjAsync');
+    // });
+
+    ProjectController.createProjectV2(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(202);
-    const projCreatedSuccessfully = await createProjPromise;
-    expect(projCreatedSuccessfully).toBe(true);
+  });
+
+  fit('should create a new project', async () => {
+    await ProjectController.createProjectAsync(mockReq, '123');
   });
 });
 

@@ -29,7 +29,11 @@ export class AssetManager {
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
-    this.yeomanEnv = yeoman.createEnv('', { cwd: templateGeneratorPath }, new TerminalAdapter({ console: console }));
+    this.yeomanEnv = yeoman.createEnv(
+      '',
+      { yeomanRepository: templateGeneratorPath },
+      new TerminalAdapter({ console: console })
+    );
     this.yeomanEnv.lookupLocalPackages();
   }
 
