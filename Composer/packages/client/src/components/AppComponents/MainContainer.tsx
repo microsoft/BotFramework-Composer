@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
+import { Router } from '@reach/router';
 
 import { NotificationContainer } from '../Notifications/NotificationContainer';
 
@@ -17,7 +18,9 @@ const main = css`
 export const MainContainer = () => {
   return (
     <div css={main}>
-      <SideBar />
+      <Router primary={false}>
+        <SideBar path="*" />
+      </Router>
       <RightPanel />
       <Assistant />
       <NotificationContainer />
