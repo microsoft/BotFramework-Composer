@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, LuFile, QnAFile, SDKKinds } from '@bfc/shared';
+import { DialogInfo, LuFile, LUISLocales, QnAFile, SDKKinds } from '@bfc/shared';
 
 import { LuisConfig, QnaConfig } from '../constants';
 
@@ -25,17 +25,19 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[],
 
     if (!filtered.length) return result;
 
-    languages.forEach((language) => {
-      const triggers = filtered.reduce((result, { intent, dialogs }) => {
-        const ids = dialogs
-          .map((dialog) => createConfigId(dialog, language))
-          .filter((id) => luFiles.some((file) => `${file.id}` === id));
-        if (!ids.length && dialogs.length) return result;
-        result[intent] = ids;
-        return result;
-      }, {});
-      result[createConfigId(id, language)] = { rootDialog, triggers };
-    });
+    languages
+      .filter((item) => LUISLocales.includes(item))
+      .forEach((language) => {
+        const triggers = filtered.reduce((result, { intent, dialogs }) => {
+          const ids = dialogs
+            .map((dialog) => createConfigId(dialog, language))
+            .filter((id) => luFiles.some((file) => `${file.id}` === id));
+          if (!ids.length && dialogs.length) return result;
+          result[intent] = ids;
+          return result;
+        }, {});
+        result[createConfigId(id, language)] = { rootDialog, triggers };
+      });
 
     return result;
   }, {});
