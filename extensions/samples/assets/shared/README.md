@@ -1,9 +1,11 @@
-This folder contains a Bot Project created with Bot Framework Composer.
+
+
+<!-- This folder contains a Bot Project created with Bot Framework Composer.
 
 The full documentation for Composer lives here:
 https://github.com/microsoft/botframework-composer
 
-To test this bot locally, open this folder in Composer, then click "Start Bot"
+To test this bot locally, open this folder in Composer, then click "Start Bot" -->
 
 ## Provision Azure Resources to Host Bot
 
@@ -16,7 +18,8 @@ This project includes a script that can be used to provision the resources neces
 * You will see progress indicators as the provision process runs. Note that it will take roughly 10 minutes to fully provision the resources.
 
 It will look like this:
-```
+
+```json
 {
   "accessToken": "<SOME VALUE>",
   "name": "<NAME OF YOUR RESOURCE GROUP>",
@@ -43,12 +46,12 @@ It will look like this:
     "MicrosoftAppId": "<SOME VALUE>",
     "MicrosoftAppPassword": "<SOME VALUE>"
   }
-}```
+}
+```
 
 When completed, you will see a message with a JSON "publishing profile" and instructions for using it in Composer.
 
-
-## Publish bot to Azure
+## Publish a bot to Azure
 
 To publish your bot to a Azure resources provisioned using the process above:
 
