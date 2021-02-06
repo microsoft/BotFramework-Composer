@@ -15,6 +15,7 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
 
+import addTrigger from '../../images/addTrigger.svg';
 import {
   dispatcherState,
   rootBotProjectIdSelector,
@@ -219,7 +220,8 @@ export const ProjectTree: React.FC<Props> = ({
     showLuImports: options.showLuImports ?? false,
   };
   const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelectorFamily(selectorOptions));
-
+  console.log(selectorOptions);
+  console.log(projectCollection);
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
@@ -376,7 +378,8 @@ export const ProjectTree: React.FC<Props> = ({
     },
     dialog: DialogInfo,
     projectId: string,
-    dialogLink: TreeLink
+    dialogLink: TreeLink,
+    depth: number
   ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
@@ -393,12 +396,14 @@ export const ProjectTree: React.FC<Props> = ({
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
+        actionIcon={addTrigger}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
+        marginLeft={depth * INDENT_PER_LEVEL}
         menu={
           options.showDelete
             ? [
@@ -430,7 +435,13 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
+  const renderTriggerList = (
+    triggers: ITrigger[],
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink,
+    depth: number
+  ) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -443,7 +454,8 @@ export const ProjectTree: React.FC<Props> = ({
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
           projectId,
-          dialogLink
+          dialogLink,
+          depth
         );
       });
   };
@@ -499,7 +511,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link)}</div>
+        <div>{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
       </ExpandableNode>
     );
   };
@@ -520,7 +532,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink: TreeLink) => {
     return dialogIsFormDialog(dialog)
       ? renderDialogTriggersByProperty(dialog, projectId, startDepth + 1)
-      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink);
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, 1);
   };
 
   const renderLgImport = (

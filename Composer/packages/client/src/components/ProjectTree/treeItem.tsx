@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState } from 'react';
-import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
@@ -67,51 +66,51 @@ export const menuStyle: Partial<IContextualMenuStyles> = {
 export const moreButton = (isActive: boolean): IButtonStyles => {
   return {
     root: {
-      padding: '4px 4px 0 4px',
       alignSelf: 'stretch',
       visibility: isActive ? 'visible' : 'hidden',
-      height: 'auto',
-      width: '16px',
+      height: 24,
+      width: 24,
       color: '#000',
     },
     menuIcon: {
       fontSize: '12px',
-      color: '#000',
+      color: NeutralColors.gray160,
+    },
+    rootHovered: {
+      color: '#0078d4',
+      selectors: {
+        '.ms-Button-menuIcon': {
+          fontWeight: 600,
+        },
+      },
     },
   };
 };
 
-const navItem = (
-  isActive: boolean,
-  isBroken: boolean,
-  padLeft: number,
-  isAnyMenuOpen: boolean,
-  menuOpenHere: boolean
-) => css`
+const navContainer = (isAnyMenuOpen: boolean, isActive: boolean, menuOpenHere: boolean) => css`
+  ${isAnyMenuOpen
+    ? ''
+    : `&:hover {
+  background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+
+  .dialog-more-btn {
+    visibility: visible;
+  }
+  }`};
+  background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
+`;
+
+const navItem = (isBroken: boolean, padLeft: number, marginLeft: number) => css`
   label: navItem;
   position: relative;
   height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
-  color: ${isActive ? NeutralColors.white : '#545454'};
-  background: ${isActive ? '#0078d4' : menuOpenHere ? '#f2f2f2' : 'transparent'};
+  margin-left: ${marginLeft}px;
   opacity: ${isBroken ? 0.5 : 1};
-  font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
-
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  ${isAnyMenuOpen
-    ? ''
-    : `&:hover {
-    color: #545454;
-    background: #f2f2f2;
-
-    .dialog-more-btn {
-      visibility: visible;
-    }
-  }`}
 
   &:focus {
     outline: none;
@@ -205,6 +204,7 @@ const calloutRootStyle = css`
 
 interface ITreeItemProps {
   link: TreeLink;
+  actionIcon?: string;
   isActive?: boolean;
   isSubItemActive?: boolean;
   onSelect?: (link: TreeLink) => void;
@@ -213,6 +213,7 @@ interface ITreeItemProps {
   textWidth?: number;
   extraSpace?: number;
   padLeft?: number;
+  marginLeft?: number;
   hasChildren?: boolean;
   menu?: TreeMenuItem[];
   menuOpenCallback?: (cb: boolean) => void;
@@ -411,7 +412,9 @@ const onRenderOverflowButton = (
           className="dialog-more-btn"
           data-is-focusable={isActive}
           data-testid="dialogMoreButton"
-          menuIconProps={{ iconName: 'MoreVertical' }}
+          menuIconProps={{
+            iconName: 'More',
+          }}
           menuProps={{
             items: overflowItems,
             styles: menuStyle,
@@ -441,6 +444,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   link,
   isActive = false,
   icon,
+  actionIcon = '',
   dialogName,
   onSelect,
   textWidth = 100,
@@ -448,6 +452,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   menu = [],
   extraSpace = 0,
   padLeft = 0,
+  marginLeft = 0,
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
@@ -462,42 +467,58 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const isBroken = !!link.botError;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
+  const items = [
+    {
+      key: linkString,
+      icon: isBroken ? 'RemoveLink' : icon,
+      ...link,
+    },
+  ];
+  if (actionIcon) {
+    items.push({
+      key: linkString,
+      icon: icon,
+      ...link,
+    });
+  }
   return (
-    <div
-      aria-label={a11yLabel}
-      css={navItem(isActive, isBroken, padLeft, isMenuOpen, thisItemSelected)}
-      data-testid={a11yLabel}
-      role="gridcell"
-      tabIndex={0}
-      onClick={() => {
-        onSelect?.(link);
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
+    <div css={navContainer(isMenuOpen, isActive, thisItemSelected)}>
+      <div
+        aria-label={a11yLabel}
+        css={navItem(isBroken, padLeft, marginLeft)}
+        data-testid={a11yLabel}
+        role="gridcell"
+        tabIndex={0}
+        onClick={() => {
           onSelect?.(link);
-        }
-      }}
-    >
-      <div style={{ minWidth: `${spacerWidth}px` }}></div>
-      <OverflowSet
-        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
-        //remove this at that time
-        doNotContainWithinFocusZone
-        css={overflowSet(isBroken)}
-        data-testid={linkString}
-        items={[
-          {
-            key: linkString,
-            icon: isBroken ? 'RemoveLink' : icon,
-            ...link,
-          },
-        ]}
-        overflowItems={overflowMenu}
-        role="row"
-        styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, showErrors)}
-        onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected)}
-      />
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            onSelect?.(link);
+          }
+        }}
+      >
+        <div style={{ minWidth: `${spacerWidth}px` }}></div>
+        <OverflowSet
+          //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
+          //remove this at that time
+          doNotContainWithinFocusZone
+          css={overflowSet(isBroken)}
+          data-testid={linkString}
+          items={[
+            {
+              key: linkString,
+              icon: isBroken ? 'RemoveLink' : icon,
+              ...link,
+            },
+          ]}
+          overflowItems={overflowMenu}
+          role="row"
+          styles={{ item: { flex: 1 } }}
+          onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, showErrors)}
+          onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected)}
+        />
+      </div>
     </div>
   );
 };

@@ -16,16 +16,16 @@ type Props = {
   defaultState?: boolean;
 };
 
-const summaryStyle = css`
+const summaryStyle = (depth) => css`
   label: summary;
   display: flex;
+  margin-left: ${depth * INDENT_PER_LEVEL}px;
   padding-left: 12px;
   padding-top: 6px;
 `;
 
-const nodeStyle = (depth: number) => css`
+const nodeStyle = css`
   margin-top: 2px;
-  margin-left: ${depth * INDENT_PER_LEVEL}px;
 `;
 
 const TRIANGLE_SCALE = 0.6;
@@ -62,11 +62,11 @@ export const ExpandableNode = ({ children, summary, detailsRef, depth = 0, onTog
   }
 
   return (
-    <div css={nodeStyle(depth)} data-testid="dialog">
+    <div css={nodeStyle} data-testid="dialog">
       <details ref={detailsRef} css={detailsStyle} open={isExpanded}>
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
         <summary
-          css={summaryStyle}
+          css={summaryStyle(depth)}
           data-testid={'summaryTag'}
           role="button"
           tabIndex={0}
