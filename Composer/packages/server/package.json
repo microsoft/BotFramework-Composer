@@ -53,7 +53,8 @@
     "mock-fs": "^4.10.1",
     "nodemon": "^2.0.3",
     "source-map-explorer": "^2.4.2",
-    "ts-node": "^8.4.1"
+    "ts-node": "^8.4.1",
+    "jest-fetch-mock": "^3.0.3"
   },
   "dependencies": {
     "@azure/msal-node": "^1.0.0-beta.1",
