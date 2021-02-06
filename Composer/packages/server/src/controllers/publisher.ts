@@ -53,7 +53,7 @@ export const PublishController = {
   publish: async (req, res) => {
     const target: string = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
-    const { metadata, sensitiveSettings } = req.body;
+    const { accessToken = '', metadata, sensitiveSettings } = req.body;
     const projectId: string = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -68,9 +68,7 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
 
-    // get token from header
-    const accessToken = req.headers.authorization?.substring('Bearer '.length);
-    log('access token get from header: %s', accessToken);
+    log('access token retrieved from body: %s', accessToken || 'no token provided');
     if (profile && extensionImplementsMethod(extensionName, 'publish')) {
       // append config from client(like sensitive settings)
       const configuration = {
