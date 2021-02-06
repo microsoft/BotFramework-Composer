@@ -15,7 +15,7 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
 
-import addDialog from '../../images/addDialog.svg';
+import addDialog from '../../images/emptyQnAIcon.svg';
 import {
   dispatcherState,
   rootBotProjectIdSelector,
