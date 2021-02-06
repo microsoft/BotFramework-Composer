@@ -15,7 +15,7 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
 
-import addTrigger from '../../images/addTrigger.svg';
+import addDialog from '../../images/addDialog.svg';
 import {
   dispatcherState,
   rootBotProjectIdSelector,
@@ -220,8 +220,7 @@ export const ProjectTree: React.FC<Props> = ({
     showLuImports: options.showLuImports ?? false,
   };
   const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelectorFamily(selectorOptions));
-  console.log(selectorOptions);
-  console.log(projectCollection);
+
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
@@ -396,7 +395,7 @@ export const ProjectTree: React.FC<Props> = ({
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
-        actionIcon={addTrigger}
+        actionIcon={addDialog}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
         icon={icons.TRIGGER}

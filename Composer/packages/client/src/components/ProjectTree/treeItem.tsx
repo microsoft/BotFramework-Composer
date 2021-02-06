@@ -87,6 +87,15 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
+const actionIconStyle = (isActive: boolean) => {
+  return {
+    height: 15,
+    width: 15,
+    color: NeutralColors.gray160,
+    visibility: isActive ? ('visible' as 'visible') : ('hidden' as 'hidden'),
+  };
+};
+
 const navContainer = (isAnyMenuOpen: boolean, isActive: boolean, menuOpenHere: boolean) => css`
   ${isAnyMenuOpen
     ? ''
@@ -399,6 +408,7 @@ const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflo
 
 const onRenderOverflowButton = (
   isActive: boolean,
+  actionIcon: string,
   menuOpenCallback: (cb: boolean) => void,
   setThisItemSelected: (sel: boolean) => void
 ) => {
@@ -407,6 +417,9 @@ const onRenderOverflowButton = (
     if (overflowItems == null) return null;
     return (
       <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
+        {actionIcon ? (
+          <img alt={'add'} className={'actionIcon'} src={actionIcon} style={actionIconStyle(isActive)} />
+        ) : null}
         <IconButton
           ariaLabel={moreLabel}
           className="dialog-more-btn"
@@ -467,20 +480,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const isBroken = !!link.botError;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
-  const items = [
-    {
-      key: linkString,
-      icon: isBroken ? 'RemoveLink' : icon,
-      ...link,
-    },
-  ];
-  if (actionIcon) {
-    items.push({
-      key: linkString,
-      icon: icon,
-      ...link,
-    });
-  }
   return (
     <div css={navContainer(isMenuOpen, isActive, thisItemSelected)}>
       <div
@@ -516,7 +515,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           role="row"
           styles={{ item: { flex: 1 } }}
           onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, showErrors)}
-          onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected)}
+          onRenderOverflowButton={onRenderOverflowButton(!!isActive, actionIcon, menuOpenCallback, setThisItemSelected)}
         />
       </div>
     </div>
