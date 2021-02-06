@@ -52,17 +52,25 @@ const AdapterSettings = (props: Props) => {
 
   const header = () => <div css={subtitle}>{formatMessage('Connect your bot to other messaging services.')}</div>;
 
-  const azureServices = () => (
-    <div>
-      <div css={sectionHeader}>{formatMessage('Azure Bot Service adapters')}</div>
+  const renderSectionHeader = (name: string, tooltip?: string) => (
+    <div css={sectionHeader}>
+      {name}
+      {tooltip != null && (
+        <TooltipHost content={tooltip} styles={{ root: { paddingLeft: '4px' } }}>
+          <Icon iconName="Unknown" />
+        </TooltipHost>
+      )}
     </div>
   );
+
+  const azureServices = () =>
+    renderSectionHeader(formatMessage('Azure Bot Service adapters'), '(description of internal channels)');
 
   const columnWidths = ['300px', '150px', '150px'];
 
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
-      <div css={sectionHeader}>{formatMessage('External service adapters')}</div>
+      {renderSectionHeader(formatMessage('External service adapters'), '(description of external adapters)')}
       <div css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
           a: ({ children }) => <Link href="plugin/package-manager/package-manager">{children}</Link>,

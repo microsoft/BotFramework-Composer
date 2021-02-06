@@ -23,7 +23,7 @@ export const subtitle = css`
 export const sectionHeader = css`
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.small};
-  padding-bottom: 12px;
+  padding: 6px 0;
 `;
 
 export const tableRow = css`
