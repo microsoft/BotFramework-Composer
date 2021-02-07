@@ -46,36 +46,55 @@ export default {
   },
   [SDKKinds.OnMessagingExtensionCardButtonClicked]: {
     trigger: {
+      label: 'Messaging extension configuration - card button clicked',
       submenu: 'Teams',
     },
   },
   [SDKKinds.OnMessagingExtensionConfigurationQuerySettingUrl]: {
     trigger: {
+      label: 'Messaging extension configuration - on query setting url',
       submenu: 'Teams',
     },
   },
   [SDKKinds.OnMessagingExtensionConfigurationSetting]: {
     trigger: {
+      label: 'Messaging extension configuration - on setting',
       submenu: 'Teams',
     },
   },
   [SDKKinds.OnMessagingExtensionFetchTask]: {
     trigger: {
+      label: 'Messaging extension - on fetch task',
       submenu: 'Teams',
     },
   },
   [SDKKinds.OnMessagingExtensionQuery]: {
     trigger: {
+      label: 'Messaging extension - on query',
       submenu: 'Teams',
     },
   },
   [SDKKinds.OnMessagingExtensionSelectItem]: {
     trigger: {
+      label: 'Messaging extension - on select item',
       submenu: 'Teams',
     },
   },
   [SDKKinds.OnMessagingExtensionSubmitAction]: {
     trigger: {
+      label: 'Messaging extension - on submit action',
+      submenu: 'Teams',
+    },
+  },
+  [SDKKinds.OnMessagingExtensionBotMessagePreviewEdit]: {
+    trigger: {
+      label: 'Messaging extension - on bot message preview edit',
+      submenu: 'Teams',
+    },
+  },
+  [SDKKinds.OnMessagingExtensionBotMessagePreviewSend]: {
+    trigger: {
+      label: 'Messaging extension - on bot message preview send',
       submenu: 'Teams',
     },
   },
@@ -120,16 +139,6 @@ export default {
     },
   },
   [SDKKinds.OnTeamUnarchived]: {
-    trigger: {
-      submenu: 'Teams',
-    },
-  },
-  [SDKKinds.OnMessagingExtensionBotMessagePreviewEdit]: {
-    trigger: {
-      submenu: 'Teams',
-    },
-  },
-  [SDKKinds.OnMessagingExtensionBotMessagePreviewSend]: {
     trigger: {
       submenu: 'Teams',
     },
