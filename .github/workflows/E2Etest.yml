@@ -32,5 +32,5 @@ jobs:
       run: |
         yarn
         yarn build
-        yarn start && cd dailyCI && npm install && npm test
+        yarn start & cd dailyCI && npm install && npm test
       working-directory: Composer
