@@ -9,8 +9,8 @@ export default {
     trigger: {
       submenu: {
         label: 'Teams',
-        prompt: 'Which event?',
-        placeholder: 'Select an event type',
+        prompt: 'Which Teams event?',
+        placeholder: 'Select a Teams event type',
       },
     },
   },
