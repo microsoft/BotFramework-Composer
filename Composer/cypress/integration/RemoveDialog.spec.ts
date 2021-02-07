@@ -9,7 +9,7 @@ context('RemoveDialog', () => {
 
   it('can remove dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByTestId('$Root_additem').within(() => {
+      cy.findByTestId('$Root_AddItem').within(() => {
         cy.findByTestId('dialogMoreButton').first().invoke('attr', 'style', 'visibility: visible').click();
       });
     });
