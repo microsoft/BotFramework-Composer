@@ -244,38 +244,8 @@ export class ComposerApi {
         }
 
         const publishFileJson = JSON.parse(publishFile.trim());
-        const luisResource = publishFileJson.luisResource ?? '';
-        const hostname = publishFileJson.hostname ?? '';
-        const qnaEndpoint = publishFileJson.qnaEndpoint ?? '';
-        const qnaSubscriptionKey = publishFileJson.qnaSubscriptionKey ?? '';
-        const microsoftAppId = publishFileJson.MicrosoftAppId ?? '';
-        const microsoftAppPassword = publishFileJson.MicrosoftAppPassword ?? '';
-        const luisAuthoringKey = publishFileJson.luisAuthoringKey ?? '';
-        const luisAuthoringEndpoint = publishFileJson.luisAuthoringEndpoint ?? '';
-        const luisEndpointKey = publishFileJson.luisEndpointKey ?? '';
-        const luisEndpoint = publishFileJson.luisEndpoint ?? '';
-        const luisRegion = publishFileJson.luisRegion ?? '';
-        return {
-            accessToken: '',
-            runtimeIdentifier: "win-x64",
-            settings: {
-                luis: {
-                    authoringKey: luisAuthoringKey,
-                    authoringEndpoint: luisAuthoringEndpoint,
-                    endpointKey: luisEndpointKey,
-                    endpoint: luisEndpoint,
-                    region: luisRegion
-                },
-                MicrosoftAppId: microsoftAppId,
-                MicrosoftAppPassword: microsoftAppPassword,
-                qna: {
-                    endpoint: qnaEndpoint,
-                    subscriptionKey: qnaSubscriptionKey
-                }
-            },
-            hostname: hostname,
-            luisResource: luisResource
-        }
+        publishFileJson.accessToken = '';
+        return publishFileJson;
     }
 }
 

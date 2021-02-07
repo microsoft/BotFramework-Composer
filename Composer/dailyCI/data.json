@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "projectLocationMap": {
+    "55586.955975498255": {
+      "eTag": "",
+      "path": "../../dailyCI/ToDoBotWithLuisSample-37"
+    },
+    "97560.9290918719": {
+      "eTag": "",
+      "path": "../../dailyCI/dailyCI/QnASample-0"
+    },
+    "63678.489045529794": {
+      "eTag": "",
+      "path": "../../dailyCI/EchoBot-0"
+    }
+  }
+}
