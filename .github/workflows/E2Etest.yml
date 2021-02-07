@@ -29,6 +29,9 @@ jobs:
         environment: 'AzureStack'
 
     - name: Composer install, build, start and test
+      env:
+          DAILY_CI_PUBLISH_FILE: ${{ secrets.DAILY_CI_PUBLISH_FILE }}
+          DAILY_CI_DIRECTLINE_TOKEN: ${{ secrets.DAILY_CI_DIRECTLINE_TOKEN }}
       run: |
         yarn
         yarn build
