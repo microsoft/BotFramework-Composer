@@ -158,6 +158,11 @@ describe('user dispatcher', () => {
         lineNumbers: false,
         wordWrap: false,
         minimap: false,
+        fontSettings: {
+          fontFamily: 'Courier New',
+          fontSize: '18px',
+          fontWeight: '500',
+        },
       },
       propertyEditorWidth: 400,
       dialogNavWidth: 555,
