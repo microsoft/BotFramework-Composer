@@ -3,7 +3,7 @@ import { ComposerApi } from './composerApi';
 import { DirectLineTester } from "./directLineTester";
 
 jest.setTimeout(1000 * 60 * 10);
-const directlineToken = process.env.DIRECTLINE_TOKEN;
+const directlineToken = process.env.DAILY_CI_DIRECTLINE_TOKEN;
 
 const publishTargets = {
     todoLuisBot: {

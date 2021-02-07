@@ -238,7 +238,7 @@ export class ComposerApi {
     }
 
     private GetPublishProfile() {
-        const publishFile = process.env.PUBLISH_FILE;
+        const publishFile = process.env.DAILY_CI_PUBLISH_FILE;
         if (!publishFile) {
           throw Error('Could not find publish file.');
         }

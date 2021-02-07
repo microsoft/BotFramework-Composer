@@ -25,7 +25,7 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.DAILY_CI_AZURE_CREDENTIALS }}
         environment: 'AzureStack'
 
     - name: Composer install, build, and start
@@ -51,8 +51,8 @@ jobs:
 
     - name: Composer test
       env:
-        PUBLISH_FILE: ${{ secrets.PUBLISH_FILE }}
-        DIRECTLINE_TOKEN: ${{ secrets.DIRECTLINE_TOKEN }}
+        DAILY_CI_PUBLISH_FILE: ${{ secrets.DAILY_CI_PUBLISH_FILE }}
+        DAILY_CI_DIRECTLINE_TOKEN: ${{ secrets.DAILY_CI_DIRECTLINE_TOKEN }}
       run: |
         npm install
         npm test
