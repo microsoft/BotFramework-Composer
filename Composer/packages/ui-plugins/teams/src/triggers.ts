@@ -5,9 +5,8 @@ import { UISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
 export default {
-  [SDKKinds.OnTeamsAppBasedLinkQuery]: {
+  [SDKKinds.OnAppBasedLinkQuery]: {
     trigger: {
-      label: 'On app based link query',
       submenu: {
         label: 'Teams',
         prompt: 'Which event?',
@@ -15,159 +14,133 @@ export default {
       },
     },
   },
-  [SDKKinds.OnTeamsCardAction]: {
+  [SDKKinds.OnCardAction]: {
     trigger: {
-      label: 'Card action',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsChannelCreated]: {
+  [SDKKinds.OnChannelCreated]: {
     trigger: {
-      label: 'Channel created',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsChannelDeleted]: {
+  [SDKKinds.OnChannelDeleted]: {
     trigger: {
-      label: 'Channel deleted',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsChannelRenamed]: {
+  [SDKKinds.OnChannelRenamed]: {
     trigger: {
-      label: 'Channel renamed',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsChannelRestored]: {
+  [SDKKinds.OnChannelRestored]: {
     trigger: {
-      label: 'Channel restored',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsFileConsent]: {
+  [SDKKinds.OnFileConsent]: {
     trigger: {
-      label: 'File consent',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionCardButtonClicked]: {
+  [SDKKinds.OnMessagingExtensionCardButtonClicked]: {
     trigger: {
-      label: 'Messaging extension card button clicked',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionConfigurationQuerySettingUrl]: {
+  [SDKKinds.OnMessagingExtensionConfigurationQuerySettingUrl]: {
     trigger: {
-      label: 'Messaging extension configuration query setting url',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionConfigurationSetting]: {
+  [SDKKinds.OnMessagingExtensionConfigurationSetting]: {
     trigger: {
-      label: 'Messaging extension configuration setting',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionFetchTask]: {
+  [SDKKinds.OnMessagingExtensionFetchTask]: {
     trigger: {
-      label: 'Messaging extension fetch task',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionQuery]: {
+  [SDKKinds.OnMessagingExtensionQuery]: {
     trigger: {
-      label: 'Messaging extension query',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionSelectItem]: {
+  [SDKKinds.OnMessagingExtensionSelectItem]: {
     trigger: {
-      label: 'Messaging extension select item',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionSubmitAction]: {
+  [SDKKinds.OnMessagingExtensionSubmitAction]: {
     trigger: {
-      label: 'Messaging extension submit action',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsO365ConnectorCardAction]: {
+  [SDKKinds.OnO365ConnectorCardAction]: {
     trigger: {
-      label: 'O365 connector card action',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTaskModuleFetch]: {
+  [SDKKinds.OnTaskModuleFetch]: {
     trigger: {
-      label: 'Task module fetch',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTaskModuleSubmit]: {
+  [SDKKinds.OnTaskModuleSubmit]: {
     trigger: {
-      label: 'Task module submit',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTeamArchived]: {
+  [SDKKinds.OnTeamArchived]: {
     trigger: {
-      label: 'Team archived',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTeamDeleted]: {
+  [SDKKinds.OnTeamDeleted]: {
     trigger: {
-      label: 'Team deleted',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTeamHardDeleted]: {
+  [SDKKinds.OnTeamHardDeleted]: {
     trigger: {
-      label: 'Team hard deleted',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTeamRenamed]: {
+  [SDKKinds.OnTeamRenamed]: {
     trigger: {
-      label: 'Team Renamed',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTeamRestored]: {
+  [SDKKinds.OnTeamRestored]: {
     trigger: {
-      label: 'Team restored',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTeamUnarchived]: {
+  [SDKKinds.OnTeamUnarchived]: {
     trigger: {
-      label: 'Team unarchived',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionBotMessagePreviewEdit]: {
+  [SDKKinds.OnMessagingExtensionBotMessagePreviewEdit]: {
     trigger: {
-      label: 'Messaging extension bot message preview edit',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsMessagingExtensionBotMessagePreviewSend]: {
+  [SDKKinds.OnMessagingExtensionBotMessagePreviewSend]: {
     trigger: {
-      label: 'Messaging extension bot message preview send',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTabFetch]: {
+  [SDKKinds.OnTabFetch]: {
     trigger: {
-      label: 'Tab fetch',
       submenu: 'Teams',
     },
   },
-  [SDKKinds.OnTeamsTabSubmit]: {
+  [SDKKinds.OnTabSubmit]: {
     trigger: {
-      label: 'Tab submit',
       submenu: 'Teams',
     },
   },

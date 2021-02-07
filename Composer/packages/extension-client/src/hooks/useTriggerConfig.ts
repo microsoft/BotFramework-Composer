@@ -30,7 +30,7 @@ export function useTriggerConfig() {
       delete implementedTriggerSchema[SDKKinds.OnQnAMatch];
     }
 
-    // Use sdk.schema title as fallback uischema label
+    // Use sdk.schema title as fallback trigger label
     Object.entries(implementedTriggerSchema).forEach(([$kind, triggerOptions]) => {
       if (!triggerOptions) return;
       if (!triggerOptions.label) {
