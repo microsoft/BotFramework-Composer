@@ -4,157 +4,165 @@
 import { UISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
+const Groups = {
+  Teams: 'Teams',
+  GetData: 'Get Teams data',
+  MessagingExtension: 'Messaging Extension',
+  TaskModule: 'Task module',
+  Response: 'Response',
+};
+
 export default {
   [SDKKinds.GetMeetingParticipant]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.GetData],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.GetMember]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.GetData],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.GetPagedMembers]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.GetData],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.GetPagedTeamMembers]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.GetData],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.GetTeamChannels]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.GetData],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.GetTeamDetails]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.GetData],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.GetTeamMember]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.GetData],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendAppBasedLinkQueryResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.Response],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessageToTeamsChannel]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.Response],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessagingExtensionActionResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.MessagingExtension],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessagingExtensionAttachmentsResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.MessagingExtension],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessagingExtensionAuthResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.MessagingExtension],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessagingExtensionBotMessagePreviewResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.MessagingExtension],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessagingExtensionConfigQuerySettingUrlResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.MessagingExtension],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessagingExtensionMessageResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.MessagingExtension],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendMessagingExtensionSelectItemResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.MessagingExtension],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendTaskModuleCardResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.TaskModule],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendTaskModuleMessageResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.TaskModule],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
   [SDKKinds.SendTaskModuleUrlResponse]: {
     menu: {
-      submenu: ['Teams'],
+      submenu: [Groups.Teams, Groups.TaskModule],
     },
     flow: {
-      widget: 'ActionCard',
+      widget: 'ActionHeader',
     },
   },
 } as UISchema;
