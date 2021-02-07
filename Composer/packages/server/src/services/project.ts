@@ -120,6 +120,13 @@ export class BotProjectService {
     return [...defaultProperties, ...userDefined];
   }
 
+  public static staticEntityResolver(projectId: string): string[] {
+    console.log('here is it!', projectId);
+
+    //return flatten(entities);
+    return ['name', 'age', 'gender'];
+  }
+
   public static getCurrentBotProject(): BotProject | undefined {
     throw new Error('getCurrentBotProject is DEPRECATED');
   }

@@ -22,6 +22,7 @@ import { buildInFunctionsMap } from '@bfc/built-in-functions';
 import { LgParser } from './lgParser';
 import {
   getRangeAtPosition,
+  getEntityRangeAtPosition,
   LGDocument,
   convertDiagnostics,
   generateDiagnostic,
@@ -44,12 +45,14 @@ export class LGServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = [];
   private memoryVariables: Record<string, any> = {};
+  private luisEntities: string[] = [];
   private _lgParser = new LgParser();
 
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
-    protected readonly memoryResolver?: MemoryResolver
+    protected readonly memoryResolver?: MemoryResolver,
+    protected readonly entitiesResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => this.validate(change.document));
@@ -71,7 +74,7 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['.', '[', '[', '\n'],
+            triggerCharacters: ['.', '[', '[', '\n', '@'],
           },
           hoverProvider: true,
           foldingRangeProvider: false,
@@ -496,6 +499,28 @@ export class LGServer {
       return Promise.resolve(null);
     }
 
+    const wordRange = getEntityRangeAtPosition(document, params.position);
+    const word = document.getText(wordRange);
+    console.log('current word!', word);
+    const projectId = this.getLGDocument(document)?.projectId;
+    console.log(projectId);
+    if (projectId && this.entitiesResolver) {
+      console.log('Is there?');
+      this.luisEntities = this.entitiesResolver(projectId) || [];
+      console.log(this.luisEntities);
+    }
+
+    const startWithAt = word.startsWith('@');
+
+    const completionEntityList = this.luisEntities.map((entity: string) => {
+      return {
+        label: entity,
+        kind: CompletionItemKind.Keyword,
+        insertText: entity,
+        documentation: `Registerd Luis Entity of ${entity}`,
+      };
+    });
+
     const { allTemplates } = lgFile;
     const completionTemplateList: CompletionItem[] = allTemplates.map((template) => {
       return {
@@ -534,7 +559,7 @@ export class LGServer {
       });
 
       return Promise.resolve({
-        isIncomplete: true,
+        isIncomplete: false,
         items: cardTypesSuggestions,
       });
     }
@@ -587,7 +612,7 @@ export class LGServer {
 
       if (items.length > 0) {
         return Promise.resolve({
-          isIncomplete: true,
+          isIncomplete: false,
           items: items,
         });
       }
@@ -597,13 +622,18 @@ export class LGServer {
     if (matchedState === EXPRESSION) {
       if (endWithDot) {
         return Promise.resolve({
-          isIncomplete: true,
+          isIncomplete: false,
           items: completionPropertyResult,
+        });
+      } else if (startWithAt) {
+        return Promise.resolve({
+          isIncomplete: false,
+          items: completionEntityList,
         });
       } else {
         return Promise.resolve({
-          isIncomplete: true,
-          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult)),
+          isIncomplete: false,
+          items: [...completionTemplateList, ...completionFunctionList, ...completionPropertyResult],
         });
       }
     } else {

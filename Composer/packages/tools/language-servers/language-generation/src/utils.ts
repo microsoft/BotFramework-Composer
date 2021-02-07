@@ -60,6 +60,25 @@ export function getRangeAtPosition(document: TextDocument, position: Position): 
   return undefined;
 }
 
+export function getEntityRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
+  const text = document.getText();
+  const line = position.line;
+  const pos = position.character;
+  const lineText = text.split('\n')[line];
+  let match: RegExpMatchArray | null;
+  const wordDefinition = /[a-zA-Z0-9@]+/g;
+  while ((match = wordDefinition.exec(lineText))) {
+    const matchIndex = match.index || 0;
+    if (matchIndex > pos) {
+      return undefined;
+    } else if (wordDefinition.lastIndex >= pos) {
+      return Range.create(line, matchIndex, line, wordDefinition.lastIndex);
+    }
+  }
+
+  return undefined;
+}
+
 const severityMap = {
   [LGDiagnosticSeverity.Error]: DiagnosticSeverity.Error,
   [LGDiagnosticSeverity.Hint]: DiagnosticSeverity.Hint,
