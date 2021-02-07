@@ -32,28 +32,5 @@ jobs:
       run: |
         yarn
         yarn build
-        yarn start
+        yarn start && cd dailyCI && npm install && npm test
       working-directory: Composer
-
-  start-test:
-    needs: prepare-and-build
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@master
-    - run: git checkout hond/testCI
-
-    - name: Set up Node.js version
-      uses: actions/setup-node@v1
-      with:
-
-        node-version: '14.x'
-
-    - name: Composer test
-      env:
-        DAILY_CI_PUBLISH_FILE: ${{ secrets.DAILY_CI_PUBLISH_FILE }}
-        DAILY_CI_DIRECTLINE_TOKEN: ${{ secrets.DAILY_CI_DIRECTLINE_TOKEN }}
-      run: |
-        npm install
-        npm test
-      working-directory: Composer/dailyCI
