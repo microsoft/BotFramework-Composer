@@ -7,7 +7,6 @@ import { SDKKinds } from '@bfc/shared';
 export default {
   [SDKKinds.GetMeetingParticipant]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -16,7 +15,6 @@ export default {
   },
   [SDKKinds.GetMember]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -25,7 +23,6 @@ export default {
   },
   [SDKKinds.GetPagedMembers]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -34,7 +31,6 @@ export default {
   },
   [SDKKinds.GetPagedTeamMembers]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -43,7 +39,6 @@ export default {
   },
   [SDKKinds.GetTeamChannels]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -52,7 +47,6 @@ export default {
   },
   [SDKKinds.GetTeamDetails]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -61,7 +55,6 @@ export default {
   },
   [SDKKinds.GetTeamMember]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -70,7 +63,6 @@ export default {
   },
   [SDKKinds.SendAppBasedLinkQueryResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -79,7 +71,6 @@ export default {
   },
   [SDKKinds.SendMessageToTeamsChannel]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -88,7 +79,6 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionActionResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -97,7 +87,6 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionAttachmentsResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -106,7 +95,6 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionAuthResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -115,7 +103,6 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionBotMessagePreviewResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -124,7 +111,6 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionConfigQuerySettingUrlResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -133,7 +119,6 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionMessageResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -142,7 +127,6 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionSelectItemResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -151,7 +135,6 @@ export default {
   },
   [SDKKinds.SendTaskModuleCardResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -160,7 +143,6 @@ export default {
   },
   [SDKKinds.SendTaskModuleMessageResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
@@ -169,7 +151,6 @@ export default {
   },
   [SDKKinds.SendTaskModuleUrlResponse]: {
     menu: {
-      label: '',
       submenu: ['Teams'],
     },
     flow: {
