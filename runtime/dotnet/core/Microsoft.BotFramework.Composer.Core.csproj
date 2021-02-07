@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.12.0-daily.*"/>
     <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.12.0-daily.*"/>
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.12.0-daily.*"/>
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive.Teams" Version="4.12.0-daily.*"/>
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Debugging" Version="4.12.0-daily.preview.*"/>
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Declarative" Version="4.12.0-daily.*"/>
     <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.12.0-daily.*"/>

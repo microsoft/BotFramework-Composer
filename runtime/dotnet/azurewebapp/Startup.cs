@@ -18,6 +18,7 @@ using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Teams;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
@@ -150,6 +151,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
+            ComponentRegistration.Add(new TeamsComponentRegistration());
 
             // This is for custom action component registration.
             //ComponentRegistration.Add(new CustomActionComponentRegistration());
