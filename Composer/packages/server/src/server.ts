@@ -116,8 +116,6 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   // always authorize all api routes, it will be a no-op if no auth provider set
   app.use(`${BASEURL}/api`, authorize, apiRouter);
 
-  const preferredPort = toNumber(process.env.PORT) || 5000;
-
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
@@ -141,6 +139,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     });
   });
 
+  const preferredPort = toNumber(process.env.PORT) || 5000;
   let port = preferredPort;
   if (process.env.NODE_ENV === 'production') {
     // Dynamically search for an open PORT starting with PORT or 5000, so that
