@@ -3,27 +3,44 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { useEffect, useRef, useState } from 'react';
+import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { moreButton, overflowSet } from './treeItem';
+const searchBox: ISearchBoxStyles = {
+  root: {
+    borderBottom: '1px solid #edebe9',
+    height: '45px',
+    borderRadius: '0px',
+    width: '100%',
+  },
+};
+
+const buttonStyle = css`
+  height: 100%;
+`;
 
 const headerText = css`
+  border-bottom: 1px solid #edebe9;
+  height: 45px;
+  border-radius: 0px;
   text-align: left;
-  text-transform: uppercase;
   font-size: ${FontSizes.size12};
   position: relative;
   display: flex;
   margin: 0;
-  padding: 0 0 0 12px;
 `;
 
-const headerWrapper = css`
-  background: ${NeutralColors.gray60};
+const overflowSet = css`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  display: flex;
 `;
 
 export interface ProjectTreeHeaderMenuItem {
@@ -34,9 +51,59 @@ export interface ProjectTreeHeaderMenuItem {
 
 export interface ProjectTreeHeaderProps {
   menu: ProjectTreeHeaderMenuItem[];
+  onFilter?: (_e, newValue?: string) => void;
 }
 
-export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) => {
+const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
+  if (item.onRender) {
+    return item.onRender(item);
+  }
+  return (
+    <CommandButton
+      css={buttonStyle}
+      iconProps={{ iconName: item.icon }}
+      menuProps={item.subMenuProps}
+      role="menuitem"
+      text={item.name}
+      onClick={item.onClick}
+    />
+  );
+};
+
+const onRenderOverflowButton = (isActive: boolean) => {
+  const moreLabel = formatMessage('Actions');
+  return (overflowItems: IContextualMenuItem[] | undefined) => {
+    if (overflowItems == null) return null;
+    return (
+      <CommandButton
+        ariaLabel={moreLabel}
+        className="project-tree-header-more-btn"
+        css={buttonStyle}
+        data-is-focusable={isActive}
+        data-testid="projectTreeHeaderMoreButton"
+        iconProps={{ iconName: 'Add' }}
+        menuProps={{ items: overflowItems }}
+        text={formatMessage('Add')}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.stopPropagation();
+          }
+        }}
+      />
+    );
+  };
+};
+
+export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFilter = () => {} }) => {
+  const [showFilter, setShowFilter] = useState(false);
+  const searchBoxRef = useRef<ISearchBox>(null);
+
+  useEffect(() => {
+    if (showFilter && searchBoxRef.current) {
+      searchBoxRef.current.focus();
+    }
+  }, [showFilter]);
+
   const overflowMenu = menu.map((item) => {
     return {
       key: item.label,
@@ -51,54 +118,47 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) =>
     };
   });
 
-  const onRenderOverflowButton = (isActive: boolean) => {
-    const moreLabel = formatMessage('Actions');
-    return (overflowItems: IContextualMenuItem[] | undefined) => {
-      if (overflowItems == null) return null;
-      return (
-        <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
-          <IconButton
-            ariaLabel={moreLabel}
-            className="project-tree-header-more-btn"
-            data-is-focusable={isActive}
-            data-testid="projectTreeHeaderMoreButton"
-            menuIconProps={{ iconName: 'Add', style: { color: NeutralColors.black } }}
-            menuProps={{ items: overflowItems }}
-            role="cell"
-            styles={{ ...moreButton(true), rootHovered: { background: 'none' } }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.stopPropagation();
-              }
-            }}
-          />
-        </TooltipHost>
-      );
-    };
+  const handleSearchBoxBlur = (_e) => {
+    onFilter(_e, '');
+    setShowFilter(false);
   };
 
   return (
-    <div css={headerWrapper}>
-      <div css={headerText}>
+    <div css={headerText}>
+      {showFilter ? (
+        <SearchBox
+          underlined
+          ariaLabel={formatMessage('Type trigger name')}
+          componentRef={searchBoxRef}
+          iconProps={{ iconName: 'Filter' }}
+          placeholder={formatMessage('Filter by trigger name')}
+          styles={searchBox}
+          onBlur={handleSearchBoxBlur}
+          onChange={onFilter}
+        />
+      ) : (
         <OverflowSet
           doNotContainWithinFocusZone
-          css={overflowSet(true)}
+          css={overflowSet}
           data-testid={'ProjectTreeHeaderMoreButton'}
           items={[
             {
-              key: 'your project',
-              displayName: formatMessage('your project'),
+              key: 'newItem',
+              icon: 'Filter',
+              ariaLabel: formatMessage('Filter by trigger name'),
+              onClick: () => {
+                setShowFilter(true);
+              },
             },
           ]}
           overflowItems={overflowMenu}
+          overflowSide={'start'}
           role="row"
-          styles={{ item: { flex: 1 } }}
-          onRenderItem={(item) => {
-            return <div key={item.key}>{item.displayName}</div>;
-          }}
+          styles={{ item: { flex: 1, justifyContent: 'flex-end' } }}
+          onRenderItem={onRenderItem}
           onRenderOverflowButton={onRenderOverflowButton(true)}
         />
-      </div>
+      )}
     </div>
   );
 };

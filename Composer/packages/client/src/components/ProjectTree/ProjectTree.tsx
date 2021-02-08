@@ -4,14 +4,12 @@
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
-import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
 
@@ -36,14 +34,6 @@ import { doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 
 // -------------------- Styles -------------------- //
-
-const searchBox: ISearchBoxStyles = {
-  root: {
-    borderBottom: '1px solid #edebe9',
-    height: '45px',
-    borderRadius: '0px',
-  },
-};
 
 const root = css`
   width: 100%;
@@ -197,6 +187,8 @@ export const ProjectTree: React.FC<Props> = ({
   const setPageElement = (name: string, value) => setPageElementState('dialogs', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
+  const filterRef = useRef(filter);
+  filterRef.current = filter;
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
 
@@ -427,7 +419,7 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const filterMatch = (scope: string): boolean => {
-    return scope.toLowerCase().includes(filter.toLowerCase());
+    return scope.toLowerCase().includes(filterRef.current.toLowerCase());
   };
 
   const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
@@ -749,15 +741,7 @@ export const ProjectTree: React.FC<Props> = ({
       role="region"
     >
       <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-        <SearchBox
-          underlined
-          ariaLabel={formatMessage('Type dialog name')}
-          iconProps={{ iconName: icons.FILTER }}
-          placeholder={formatMessage('Filter Dialog')}
-          styles={searchBox}
-          onChange={onFilter}
-        />
-        <ProjectTreeHeader menu={headerMenu} />
+        <ProjectTreeHeader menu={headerMenu} onFilter={onFilter} />
         <div
           aria-label={formatMessage(
             `{
