@@ -26,7 +26,7 @@ import { dispatcherState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 
-type AddProfileDialogProps = {
+type ProfileFormDialogProps = {
   onDismiss: () => void;
   targets: PublishTarget[];
   types: PublishType[];
@@ -73,7 +73,7 @@ const onRenderLabel = (props) => {
   );
 };
 
-export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
+export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const { onDismiss, targets, types, onNext, updateSettings, projectId, setType, current } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [errorMessage, setErrorMsg] = useState('');

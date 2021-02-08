@@ -5,7 +5,7 @@ import { ComposerGlobalName } from '../common/constants';
 
 import { PublishConfig } from './types';
 
-export function useConfigBeingEdited(): PublishConfig[] | undefined[] {
+export function useConfigBeingEdited(): PublishConfig | undefined {
   return window[ComposerGlobalName].useConfigBeingEdited();
 }
 

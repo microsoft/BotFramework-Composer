@@ -22,7 +22,7 @@ interface AuthAPI {
 }
 
 interface PublishAPI {
-  useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
+  useConfigBeingEdited?: (() => PublishConfig) | (() => void);
   startProvision?: (config: any) => void;
   currentProjectId?: () => string;
   closeDialog?: () => void;
