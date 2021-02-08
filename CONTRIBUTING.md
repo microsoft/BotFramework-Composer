@@ -9,6 +9,7 @@
 - Programatic testing for each change is a requirement. Comprehensive unit tests for every change is not. _"Write tests, not too many, mostly integration"_. We should be using [Jest](https://jestjs.io/) & [@testing-library/react](https://github.com/testing-library/react-testing-library) for this in the client. Code coverage benchmarks will be introduced and need to be met with each change (TBD).
 - Write code with Internationalization & Accessibility in mind. Every rendered string should be wrapped in an i18n API. Scrub through each UI change for keyboard-navigation and focus-indication. This will prevent most accessibility bugs.
 - Use `rebase` when merging changes into to the main branch. This can be done using the _“Squash and Merge”_ technique in the GitHub UI. Local branches will need to be updated using rebase as well. This will keep a clean commit history. Reach out to me if you need help understanding rebase.
+- Features pushed behind a feature flag (regardless if the feature flag is hidden or not) need to follow all traditional PR requirements to the main branch.
 
 ### Forking
 
