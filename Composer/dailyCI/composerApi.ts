@@ -118,6 +118,7 @@ export class ComposerApi {
                     lastPublished: Date.now()
                 },
             ]
+            console.log('default settings:');
             console.log(defaultSettings);
             const response = await axios.default({
                 url: endpoint,

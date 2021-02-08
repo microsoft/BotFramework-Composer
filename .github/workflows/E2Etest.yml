@@ -1,21 +1,19 @@
 name: Composer E2E test
 
 on:
-  push:
-    branches:
-      - hond/testCI
-# After this branch merged into main, would change the trigger event from 'push' to 'time schedule'
-#  schedule:
-# # Triggered once every day at 00:00
-#    - cron:  '0 0 0 * * ?'
+  schedule:
+  # Triggered once every day at 00:00
+    - cron:  '0 0 0 * * ?'
+
 
 jobs:
-  prepare-and-build:
+  Build-And-Test:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
-    - run: git checkout hond/testCI
+    # Remove this while merged to main branch
+    - run: git checkout qika/dailyCI
 
     - name: Set up Node.js version
       uses: actions/setup-node@v1
@@ -40,7 +38,7 @@ jobs:
           DAILY_CI_PUBLISH_FILE: ${{ secrets.DAILY_CI_PUBLISH_FILE }}
           DAILY_CI_DIRECTLINE_TOKEN: ${{ secrets.DAILY_CI_DIRECTLINE_TOKEN }}
       run: |
-        sleep 120
+        sleep 30
         npm install
         npm run build
         npm test
