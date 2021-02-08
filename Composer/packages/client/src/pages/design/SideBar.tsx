@@ -65,9 +65,10 @@ const parseTriggerId = (triggerId: string | undefined): number | undefined => {
   return parseInt(indexString);
 };
 
-type SideBarProps = { dialogId: string; projectId: string };
+type SideBarProps = { projectId: string };
 
-const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
+const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
+  const { dialogId, selected: encodedSelected } = useRecoilValue(designPageLocationState(projectId));
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
@@ -75,7 +76,6 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const { commitChanges } = undoFunction;
-  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
 
   const {
     removeDialog,
@@ -93,7 +93,7 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
   const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === dialogId)?.content,
-    designPageLocation.selected || ''
+    encodedSelected || ''
   );
 
   const setTriggerModalInfo = useSetRecoilState(triggerModalInfoState);
@@ -287,6 +287,6 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
       />
     </React.Fragment>
   );
-};
+});
 
 export default SideBar;
