@@ -63,14 +63,11 @@ const AdapterSettings = (props: Props) => {
     </div>
   );
 
-  const azureServices = () =>
-    renderSectionHeader(formatMessage('Azure Bot Service adapters'), '(description of internal channels)');
-
   const columnWidths = ['300px', '150px', '150px'];
 
-  const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
+  const serviceList = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
-      {renderSectionHeader(formatMessage('External service adapters'), '(description of external adapters)')}
+      {renderSectionHeader(formatMessage('Service adapters'), '(description of adapters)')}
       <div css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
           a: ({ children }) => <Link href="plugin/package-manager/package-manager">{children}</Link>,
@@ -161,8 +158,7 @@ const AdapterSettings = (props: Props) => {
       <div data-testid="adapterSettings">
         <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
           {header()}
-          {azureServices()}
-          {externalServices(adapterSchemas)}
+          {serviceList(adapterSchemas)}
         </CollapsableWrapper>
       </div>
       {currentKey != null && schemaDefinitions[currentKey] != null && (
