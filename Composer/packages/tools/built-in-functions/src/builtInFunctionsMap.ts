@@ -29,6 +29,11 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
+    'abs',
+    new FunctionEntity(['num: number'], ReturnType.Number, 'Returns the absolute value of the specified number.'),
+  ],
+  ['sqrt', new FunctionEntity(['num: number'], ReturnType.Number, 'Returns the square root of a specified number.')],
+  [
     'div',
     new FunctionEntity(
       ['dividend: number', 'divisor: number'],
@@ -73,7 +78,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['...strings: string[]'],
       ReturnType.String + ReturnType.Array,
-      'Combine two or more strings and return the resulting string. E.g. concat(‘hello’, ‘world’, ‘…’)'
+      'Combine two or more strings and return the resulting string. E.g. concat(‘hello’, ‘world’, ‘…’).'
     ),
   ],
   [
@@ -105,7 +110,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['...input: any[]'],
       ReturnType.Boolean,
-      'Comparison equal. Returns true if specified values are equal'
+      'Comparison equal. Returns true if specified values are equal.'
     ),
   ],
   [
@@ -148,19 +153,51 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return a string that has all the items from an array and has each character separated by a delimiter.'
     ),
   ],
-  ['empty', new FunctionEntity(['collection: any'], ReturnType.Boolean, 'Check if the collection is empty')],
-  ['newGuid', new FunctionEntity([], ReturnType.String, 'Return new guid string')],
+  ['empty', new FunctionEntity(['collection: any'], ReturnType.Boolean, 'Check if the collection is empty.')],
+  ['newGuid', new FunctionEntity([], ReturnType.String, 'Return new guid string.')],
   [
     'min',
-    new FunctionEntity(['...numbers: number[]'], ReturnType.Number, 'Returns the smallest value from a collection'),
+    new FunctionEntity(['...numbers: number[]'], ReturnType.Number, 'Returns the smallest value from a collection.'),
   ],
   [
     'max',
-    new FunctionEntity(['...numbers: number[]'], ReturnType.Number, 'Returns the largest value from a collection'),
+    new FunctionEntity(['...numbers: number[]'], ReturnType.Number, 'Returns the largest value from a collection.'),
   ],
   [
     'average',
-    new FunctionEntity(['...numbers: number[]'], ReturnType.Number, 'Returns the average value from a collection'),
+    new FunctionEntity(['...numbers: number[]'], ReturnType.Number, 'Returns the average value from a collection.'),
+  ],
+  [
+    'floor',
+    new FunctionEntity(
+      ['number: number'],
+      ReturnType.Number,
+      'Return the largest integral value less than or equal to the specified number.'
+    ),
+  ],
+  [
+    'ceiling',
+    new FunctionEntity(
+      ['number: number'],
+      ReturnType.Number,
+      'Return the largest integral value less than or equal to the specified number.'
+    ),
+  ],
+  [
+    'round',
+    new FunctionEntity(
+      ['number: number', 'precision?: number'],
+      ReturnType.Number,
+      'Round a value to the nearest integer or to the specified number of fractional digits.'
+    ),
+  ],
+  [
+    'formatNumber',
+    new FunctionEntity(
+      ['number: number', 'precision: number', 'locale?: string'],
+      ReturnType.String,
+      'Format number into required decimal numbers with optional locale.'
+    ),
   ],
   [
     'sum',
@@ -168,15 +205,15 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   ],
   [
     'exists',
-    new FunctionEntity(['expression: expression'], ReturnType.Boolean, 'Returns the smallest value from a collection'),
+    new FunctionEntity(['expression: expression'], ReturnType.Boolean, 'Returns the smallest value from a collection.'),
   ],
-  ['length', new FunctionEntity(['str: string'], ReturnType.Number, 'Returns the length of a string')],
+  ['length', new FunctionEntity(['str: string'], ReturnType.Number, 'Returns the length of a string.')],
   [
     'replace',
     new FunctionEntity(
       ['text: string', 'oldText: string', 'newText: string'],
       ReturnType.String,
-      'Replace a substring with the specified string, and return the updated string. case sensitive'
+      'Replace a substring with the specified string, and return the updated string. case sensitive.'
     ),
   ],
   [
@@ -184,7 +221,23 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'oldText: string', 'newText: string'],
       ReturnType.String,
-      'Replace a substring with the specified string, and return the updated string. Case in-sensitive'
+      'Replace a substring with the specified string, and return the updated string. Case in-sensitive.'
+    ),
+  ],
+  [
+    'titleCase',
+    new FunctionEntity(
+      ['text: string', 'locale?: string'],
+      ReturnType.String,
+      'Capitalize the first letter of each word in a string in an optional locale format.'
+    ),
+  ],
+  [
+    'sentenceCase',
+    new FunctionEntity(
+      ['text: string', 'locale?: string'],
+      ReturnType.String,
+      'Capitalize the first letter of the first word in a string in an optional local format.'
     ),
   ],
   [
@@ -200,21 +253,35 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'startIndex: number', 'length?: number'],
       ReturnType.String,
-      'Returns characters from a string. Substring(sourceString, startPos, endPos). startPos cannot be less than 0. endPos greater than source strings length will be taken as the max length of the string'
+      'Returns characters from a string. Substring(sourceString, startPos, endPos). startPos cannot be less than 0. endPos greater than source strings length will be taken as the max length of the string.'
     ),
   ],
-  ['toLower', new FunctionEntity(['text: string'], ReturnType.String, 'Convert a string to all upper case characters')],
-  ['toUpper', new FunctionEntity(['text: string'], ReturnType.String, 'Convert a string to all lower case characters')],
+  [
+    'toLower',
+    new FunctionEntity(
+      ['text: string', 'locale?: string'],
+      ReturnType.String,
+      'Convert a string to all upper case characters.'
+    ),
+  ],
+  [
+    'toUpper',
+    new FunctionEntity(
+      ['text: string', 'locale?: string'],
+      ReturnType.String,
+      'Convert a string to all lower case characters.'
+    ),
+  ],
   [
     'trim',
-    new FunctionEntity(['text: string'], ReturnType.String, 'Remove leading and trailing white spaces from a string'),
+    new FunctionEntity(['text: string'], ReturnType.String, 'Remove leading and trailing white spaces from a string.'),
   ],
   [
     'count',
     new FunctionEntity(
       ['collection: string|Array'],
       ReturnType.Number,
-      'Returns the number of items in the collection'
+      'Returns the number of items in the collection.'
     ),
   ],
   [
@@ -222,55 +289,55 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['collection: stirng|Array|Map', 'value: stirng|Array|Map'],
       ReturnType.Boolean,
-      'Works to find an item in a string or to find an item in an array or to find a parameter in a complex object. E.g. contains(‘hello world, ‘hello); contains([‘1’, ‘2’], ‘1’); contains({“foo”:”bar”}, “foo”)'
+      'Works to find an item in a string or to find an item in an array or to find a parameter in a complex object. E.g. contains(‘hello world, ‘hello); contains([‘1’, ‘2’], ‘1’); contains({“foo”:”bar”}, “foo”).'
     ),
   ],
   [
     'first',
-    new FunctionEntity(['collection: string|Array'], ReturnType.Object, 'Returns the first item from the collection'),
+    new FunctionEntity(['collection: string|Array'], ReturnType.Object, 'Returns the first item from the collection.'),
   ],
   [
     'last',
-    new FunctionEntity(['collection: string|Array'], ReturnType.Object, 'Returns the last item from the collection'),
+    new FunctionEntity(['collection: string|Array'], ReturnType.Object, 'Returns the last item from the collection.'),
   ],
   [
     'foreach',
     new FunctionEntity(
       ['collection: Array | Object', 'iteratorName: string', 'function: any'],
       ReturnType.Object,
-      'Operate on each element and return the new collection'
+      'Operate on each element and return the new collection.'
     ),
   ],
   [
     'addDays',
     new FunctionEntity(
-      ['timestamp: string', 'days: number', 'format?: string'],
+      ['timestamp: string', 'days: number', 'format?: string', 'locale?: string'],
       ReturnType.String,
-      'Add number of specified days to a given timestamp'
+      'Add number of specified days to a given timestamp.'
     ),
   ],
   [
     'addHours',
     new FunctionEntity(
-      ['timestamp: string', 'hours: number', 'format?: string'],
+      ['timestamp: string', 'hours: number', 'format?: string', 'locale?: string'],
       ReturnType.String,
-      'Add specified number of hours to a given timestamp'
+      'Add specified number of hours to a given timestamp.'
     ),
   ],
   [
     'addMinutes',
     new FunctionEntity(
-      ['timestamp: string', 'minutes: number', 'format?: string'],
+      ['timestamp: string', 'minutes: number', 'format?: string', 'locale?: string'],
       ReturnType.String,
-      'Add specified number of minutes to a given timestamp'
+      'Add specified number of minutes to a given timestamp.'
     ),
   ],
   [
     'addSeconds',
     new FunctionEntity(
-      ['timestamp: string', 'seconds: number', 'format?: string'],
+      ['timestamp: string', 'seconds: number', 'format?: string', 'locale?: string'],
       ReturnType.String,
-      'Add specified number of seconds to a given timestamp'
+      'Add specified number of seconds to a given timestamp.'
     ),
   ],
   [
@@ -289,7 +356,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     'dayOfYear',
     new FunctionEntity(['timestamp: string'], ReturnType.Number, 'Return the day of the year from a timestamp.'),
   ],
-  ['month', new FunctionEntity(['timestamp: string'], ReturnType.Number, 'Returns the month of given timestamp')],
+  ['month', new FunctionEntity(['timestamp: string'], ReturnType.Number, 'Returns the month of given timestamp.')],
   [
     'date',
     new FunctionEntity(
@@ -298,20 +365,43 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return the date of a specified timestamp in "M/dd/yyyy" format.'
     ),
   ],
-  ['year', new FunctionEntity(['timestamp: string'], ReturnType.Number, 'Returns year for the given timestamp')],
-  ['utcNow', new FunctionEntity(['format?: string'], ReturnType.String, 'Returns current timestamp as string')],
+  ['year', new FunctionEntity(['timestamp: string'], ReturnType.Number, 'Returns year for the given timestamp.')],
+  [
+    'utcNow',
+    new FunctionEntity(
+      ['format?: string', 'locale?: string'],
+      ReturnType.String,
+      'Returns current timestamp as string.'
+    ),
+  ],
   [
     'formatDateTime',
     new FunctionEntity(
-      ['timestamp: string', 'format?: string'],
+      ['timestamp: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Return a timestamp in the specified format.'
     ),
   ],
   [
+    'formatTicks',
+    new FunctionEntity(
+      ['ticks: number', 'format?: string', 'locale?: string'],
+      ReturnType.String,
+      'Return a timestamp in an optional locale format from ticks.'
+    ),
+  ],
+  [
+    'formatEpoch',
+    new FunctionEntity(
+      ['epoch: number', 'format?: string', 'locale?: string'],
+      ReturnType.String,
+      'Return a timestamp in an optional locale format from UNIX Epoch time (Unix time, POSIX time).'
+    ),
+  ],
+  [
     'subtractFromTime',
     new FunctionEntity(
-      ['timestamp: string', 'interval: number', 'timeUnit: string', 'format?: string'],
+      ['timestamp: string', 'interval: number', 'timeUnit: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Subtract a number of time units from a timestamp.'
     ),
@@ -321,7 +411,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['currentDate: string', 'targetDate: string'],
       ReturnType.String,
-      'Uses the date-time library to provide a date readback. dateReadBack(currentDate, targetDate). E.g. dateReadBack(‘2016/05/30’,’2016/05/23’)=>"Yesterday"'
+      'Uses the date-time library to provide a date readback. dateReadBack(currentDate, targetDate). E.g. dateReadBack(‘2016/05/30’,’2016/05/23’)=>"Yesterday".'
     ),
   ],
   [
@@ -329,7 +419,63 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['timestamp: string'],
       ReturnType.String,
-      'Returns time of day for a given timestamp (midnight = 12AM, morning = 12:01AM – 11:59PM, noon = 12PM, afternoon = 12:01PM -05:59PM, evening = 06:00PM – 10:00PM, night = 10:01PM – 11:59PM)'
+      'Returns time of day for a given timestamp (midnight = 12AM, morning = 12:01AM – 11:59PM, noon = 12PM, afternoon = 12:01PM -05:59PM, evening = 06:00PM – 10:00PM, night = 10:01PM – 11:59PM).'
+    ),
+  ],
+  [
+    'getNextViableTime',
+    new FunctionEntity(
+      ['timexString: string', 'timezone?: string'],
+      ReturnType.String,
+      'Return the next viable time of a timex expression based on the current time and an optionally specified timezone.'
+    ),
+  ],
+  [
+    'getNextViableDate',
+    new FunctionEntity(
+      ['timexString: string', 'timezone?: string'],
+      ReturnType.String,
+      'Return the next viable date of a timex expression based on the current date and an optionally specified timezone.'
+    ),
+  ],
+  [
+    'getPreviousViableTime',
+    new FunctionEntity(
+      ['timexString: string', 'timezone?: string'],
+      ReturnType.String,
+      'Return the previous viable time of a timex expression based on the current date and an optionally specified timezone.'
+    ),
+  ],
+  [
+    'getPreviousViableDate',
+    new FunctionEntity(
+      ['timexString: string', 'timezone?: string'],
+      ReturnType.String,
+      'Return the previous viable date of a timex expression based on the current date and an optionally specified timezone.'
+    ),
+  ],
+  [
+    'dateTimeDiff',
+    new FunctionEntity(
+      ['timestamp1: string', 'timestamp2: string'],
+      ReturnType.Number,
+      'Return the difference in ticks between two timestamps.'
+    ),
+  ],
+  [
+    'ticksToDays',
+    new FunctionEntity(['ticks: number'], ReturnType.Number, 'Convert a ticks property value to the number of days.'),
+  ],
+  [
+    'ticksToHours',
+    new FunctionEntity(['ticks: number'], ReturnType.Number, 'Convert a ticks property value to the number of hours.'),
+  ],
+  [
+    'ticksToMinutes',
+    new FunctionEntity(
+      ['ticks: number'],
+      ReturnType.Number,
+      'Convert a ticks property value to the number of minutes.'
     ),
   ],
   [
@@ -337,7 +483,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['value: string'],
       ReturnType.Number,
-      'Return floating point representation of the specified string or the string itself if conversion is not possible'
+      'Return floating point representation of the specified string or the string itself if conversion is not possible.'
     ),
   ],
   [
@@ -345,25 +491,37 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['value: string'],
       ReturnType.Number,
-      'Return integer representation of the specified string or the string itself if conversion is not possible'
+      'Return integer representation of the specified string or the string itself if conversion is not possible.'
     ),
   ],
-  ['string', new FunctionEntity(['value: any'], ReturnType.String, 'Return string version of the specified value')],
+  [
+    'string',
+    new FunctionEntity(
+      ['value: any', 'locale?: string'],
+      ReturnType.String,
+      'Return string version of the specified value.'
+    ),
+  ],
+  ['jsonStringfy', new FunctionEntity(['value: any'], ReturnType.String, 'Return the string version of a value.')],
+  ['EOL', new FunctionEntity([], ReturnType.String, 'Return the end of line (EOL) sequence text.')],
   [
     'bool',
     new FunctionEntity(
       ['value: any'],
       ReturnType.Boolean,
-      'Return Boolean representation of the specified string. Bool(‘true’), bool(1)'
+      'Return Boolean representation of the specified string. Bool(‘true’), bool(1).'
     ),
   ],
-  ['createArray', new FunctionEntity(['...objects: any[]'], ReturnType.Object, 'Create an array from multiple inputs')],
+  [
+    'createArray',
+    new FunctionEntity(['...objects: any[]'], ReturnType.Object, 'Create an array from multiple inputs.'),
+  ],
   [
     'if',
     new FunctionEntity(
       ['expression: boolean', 'valueIfTrue: any', 'valueIfFalse: any'],
       ReturnType.Object,
-      'if(exp, valueIfTrue, valueIfFalse)'
+      'if(exp, valueIfTrue, valueIfFalse).'
     ),
   ],
   [
@@ -371,7 +529,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['minValue: number', 'maxValue: number'],
       ReturnType.Number,
-      'Returns a random number between specified min and max value – rand(<minValue>, <maxValue>)'
+      'Returns a random number between specified min and max value – rand(<minValue>, <maxValue>).'
     ),
   ],
   [
@@ -399,6 +557,14 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
+    'merge',
+    new FunctionEntity(
+      ['jsobObject1: any', 'jsobObject2: any'],
+      ReturnType.Object,
+      'Merge two JSON objects into one JSON object.'
+    ),
+  ],
+  [
     'removeProperty',
     new FunctionEntity(
       ['jsobObject: any', 'property: string'],
@@ -419,7 +585,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'value: string'],
       ReturnType.Boolean,
-      'Return if a text is end with another string'
+      'Return if a text is end with another string.'
     ),
   ],
   [
@@ -427,17 +593,17 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'value: string'],
       ReturnType.Boolean,
-      'Return if a text is end with another string'
+      'Return if a text is end with another string.'
     ),
   ],
-  ['countWord', new FunctionEntity(['text: string'], ReturnType.Number, 'Returns the word count')],
-  ['addOrdinal', new FunctionEntity(['num: number'], ReturnType.String, 'e.g. addOrdinal(10) = 10th')],
+  ['countWord', new FunctionEntity(['text: string'], ReturnType.Number, 'Returns the word count.')],
+  ['addOrdinal', new FunctionEntity(['num: number'], ReturnType.String, 'e.g. addOrdinal(10) = 10th.')],
   [
     'indexOf',
     new FunctionEntity(
       ['text: string', 'value: string'],
       ReturnType.Number,
-      'Returns the index of the value from the text'
+      'Returns the index of the value from the text.'
     ),
   ],
   [
@@ -445,7 +611,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'value: string'],
       ReturnType.Number,
-      'Returns the last index of the value from the text'
+      'Returns the last index of the value from the text.'
     ),
   ],
   [
@@ -481,14 +647,22 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
+    'reverse',
+    new FunctionEntity(
+      ['array: Array | String'],
+      ReturnType.Array + ReturnType.String,
+      'Reverses the order of the elements in a String or Array.'
+    ),
+  ],
+  [
     'subArray',
     new FunctionEntity(
       ['array: Array', 'startIndex: number', 'endIndex: number'],
       ReturnType.Object,
-      'Returns the sub array from start index to end index'
+      'Returns the sub array from start index to end index.'
     ),
   ],
-  ['array', new FunctionEntity(['value: any'], ReturnType.Object, 'Create a new array with single value ')],
+  ['array', new FunctionEntity(['value: any'], ReturnType.Object, 'Create a new array with single value.')],
   ['binary', new FunctionEntity(['value: string'], ReturnType.String, 'Return the binary version for an input value.')],
   [
     'dataUri',
@@ -546,8 +720,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return the string version for a uniform resource identifier (URI) encoded string, effectively decoding the URI-encoded string.'
     ),
   ],
-  //TODO. Make sure xml can be used in both browser/node environment
-  //['xml', new FunctionEntity(['xmlStr: string]'], ReturnType.Object, 'Return the XML version for a string.')],
+  ['xml', new FunctionEntity(['xmlStr: string]'], ReturnType.Object, 'Return the XML version for a string.')],
   [
     'range',
     new FunctionEntity(
@@ -559,7 +732,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'getFutureTime',
     new FunctionEntity(
-      ['interval: number', 'timeUnit: string', 'format?: string'],
+      ['interval: number', 'timeUnit: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Return the current timestamp plus the specified time units.'
     ),
@@ -567,7 +740,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'getPastTime',
     new FunctionEntity(
-      ['interval: number', 'timeUnit: string', 'format?: string'],
+      ['interval: number', 'timeUnit: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Return the current timestamp minus the specified time units.'
     ),
@@ -575,15 +748,15 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'addToTime',
     new FunctionEntity(
-      ['timestamp: string', 'interval: number', 'timeUnit: string', 'format?: string'],
+      ['timestamp: string', 'interval: number', 'timeUnit: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
-      'Add a number of time units to a timestamp. See also getFutureTime()'
+      'Add a number of time units to a timestamp. See also getFutureTime().'
     ),
   ],
   [
     'convertFromUtc',
     new FunctionEntity(
-      ['timestamp: string', 'destinationTimeZone: string', 'format?: string'],
+      ['timestamp: string', 'destinationTimeZone: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Convert a timestamp from Universal Time Coordinated(UTC) to target time zone.'
     ),
@@ -591,7 +764,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'convertToUtc',
     new FunctionEntity(
-      ['timestamp: string', 'sourceTimeZone: string', 'format?: string'],
+      ['timestamp: string', 'sourceTimeZone: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Convert a timestamp to Universal Time Coordinated(UTC) from source time zone.'
     ),
@@ -599,7 +772,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'startOfDay',
     new FunctionEntity(
-      ['timestamp: string', 'format?: string'],
+      ['timestamp: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Return the start of the day for a timestamp.'
     ),
@@ -607,7 +780,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'startOfHour',
     new FunctionEntity(
-      ['timestamp: string', 'format?: string'],
+      ['timestamp: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Return the start of the hour for a timestamp.'
     ),
@@ -615,10 +788,14 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'startOfMonth',
     new FunctionEntity(
-      ['timestamp: string', 'format?: string'],
+      ['timestamp: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
       'Return the start of the month for a timestamp.'
     ),
+  ],
+  [
+    'resolve',
+    new FunctionEntity(['timexString: string'], ReturnType.String, 'Resolve the value of a timex expression.'),
   ],
   [
     'ticks',
@@ -684,7 +861,6 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return the first non-null value from one or more parameters. Empty strings, empty arrays, and empty objects are not null.'
     ),
   ],
-  /* TODO. Make sure xpath can be used in both browser/node environment
   [
     'xpath',
     new FunctionEntity(
@@ -693,13 +869,12 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Check XML for nodes or values that match an XPath (XML Path Language) expression, and return the matching nodes or values. An XPath expression, or just "XPath", helps you navigate an XML document structure so that you can select nodes or compute values in the XML content.'
     ),
   ],
-  */
   [
     'select',
     new FunctionEntity(
       ['collection: Array | Object', 'iteratorName: string', 'function: any'],
       ReturnType.Object,
-      'Operate on each element and return the new collection'
+      'Operate on each element and return the new collection.'
     ),
   ],
   [
@@ -707,7 +882,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['collection: Array | Object', 'iteratorName: string', 'confitionFunction: any'],
       ReturnType.Object,
-      'Filter on each element and return the new collection of filtered elements which match specific condition'
+      'Filter on each element and return the new collection of filtered elements which match specific condition.'
     ),
   ],
   [
