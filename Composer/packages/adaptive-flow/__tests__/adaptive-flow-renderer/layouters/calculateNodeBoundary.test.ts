@@ -13,6 +13,7 @@ import {
   BranchIntervalX,
   BranchIntervalY,
   LoopEdgeMarginLeft,
+  BranchingNodeMarginRight,
 } from '../../../src/adaptive-flow-renderer/constants/ElementSizes';
 
 const boundary = new Boundary();
@@ -100,7 +101,7 @@ describe('calculateForeachBoundary', () => {
   });
   it('should return a box whose property be calcalated by foreachBoundary, stepsBoundary, loopBeginBoundary, loopEndBoundary', () => {
     const returnBoundary = {
-      width: 380 + LoopEdgeMarginLeft,
+      width: 380 + LoopEdgeMarginLeft + BranchingNodeMarginRight,
       height: 228 + BranchIntervalY * 3,
       axisX: 190 + LoopEdgeMarginLeft,
       axisY: 0,
