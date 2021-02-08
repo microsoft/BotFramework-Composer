@@ -39,16 +39,19 @@ jobs:
         source: "Composer/dailyCI/data.json"
         target: "Composer/packages/server/data.json"
 
-    - name: Test
-      env:
-          DAILY_CI_PUBLISH_FILE: ${{ secrets.DAILY_CI_PUBLISH_FILE }}
-          DAILY_CI_DIRECTLINE_TOKEN: ${{ secrets.DAILY_CI_DIRECTLINE_TOKEN }}
+    - name: Build and Run Composer
       run: |
         yarn
         yarn build
         yarn start &
+      working-directory: Composer
+
+    - name: E2E test
+      env:
+          DAILY_CI_PUBLISH_FILE: ${{ secrets.DAILY_CI_PUBLISH_FILE }}
+          DAILY_CI_DIRECTLINE_TOKEN: ${{ secrets.DAILY_CI_DIRECTLINE_TOKEN }}
+      run: |
         sleep 120
-        cd dailyCI
         npm install
         npm test
-      working-directory: Composer
+      working-directory: Composer/dailyCI
