@@ -18,6 +18,8 @@ export type AdapterRecord = {
   enabled: boolean;
 };
 
+type ConfigValue = string | number | boolean;
+
 type Props = {
   adapterKey: string;
   isOpen: boolean;
@@ -25,10 +27,10 @@ type Props = {
   projectId: string;
   schema: JSONSchema7;
   uiSchema: JSONSchema7;
-  value?: { [key: string]: string | number | boolean };
+  value?: { [key: string]: ConfigValue };
 };
 
-function hasRequired(testObject: { [key: string]: string | number | boolean }, fields?: string[]) {
+function hasRequired(testObject: { [key: string]: ConfigValue }, fields?: string[]) {
   if (fields == null || fields.length === 0) return true;
   return fields.every((field: string) => field in testObject);
 }
