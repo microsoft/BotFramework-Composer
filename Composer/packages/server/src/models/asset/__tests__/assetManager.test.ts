@@ -14,6 +14,16 @@ jest.mock('azure-storage', () => {
   return {};
 });
 
+jest.mock('yeoman-environment', () => ({
+  createEnv: jest.fn().mockImplementation(() => {
+    return {
+      lookupLocalPackages: jest.fn(),
+      installLocalGenerators: jest.fn().mockReturnValue(true),
+      run: jest.fn(),
+    };
+  }),
+}));
+
 jest.mock('../../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
@@ -129,6 +139,23 @@ describe('assetManager', () => {
           },
         },
       ] as BotTemplateV2[]);
+    });
+  });
+
+  describe('copyRemoteProjectTemplateToV2', () => {
+    it('Should instantiate npm driven template and return new conv ref', async () => {
+      const mockLocRef = { path: '/path/to/npmbot1', storageId: 'default' };
+      const assetManager = new AssetManager();
+      const newBotLocationRef = await assetManager.copyRemoteProjectTemplateToV2(
+        'generator-conversational-core',
+        '1.0.3',
+        'sampleConversationalCore',
+        mockLocRef
+      );
+      expect(newBotLocationRef).toStrictEqual({
+        path: '/path/to/npmbot1/sampleConversationalCore',
+        storageId: 'default',
+      });
     });
   });
 });
