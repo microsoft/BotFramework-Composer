@@ -15,7 +15,6 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
 
-import addDialog from '../../images/emptyQnAIcon.svg';
 import {
   dispatcherState,
   rootBotProjectIdSelector,
@@ -29,6 +28,8 @@ import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
+import AddDialogIcon from './AddDialogIcon';
+import AddTriggerIcon from './AddTriggerIcon';
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 import { INDENT_PER_LEVEL } from './constants';
@@ -395,7 +396,7 @@ export const ProjectTree: React.FC<Props> = ({
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
-        actionIcon={addDialog}
+        ActionIcon={AddTriggerIcon}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
