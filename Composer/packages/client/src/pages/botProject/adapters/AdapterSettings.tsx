@@ -35,7 +35,7 @@ const AdapterSettings = (props: Props) => {
   const { setSettings } = useRecoilValue(dispatcherState);
   const adapters: AdapterRecord[] = currentSettings.adapters ?? [];
 
-  const { definitions: schemaDefinitions } = schemas?.default ?? {};
+  const { definitions: schemaDefinitions } = schemas?.sdk?.content ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
 
   const [currentModalProps, setModalProps] = useState<{ key: string; callback?: () => void } | undefined>();
