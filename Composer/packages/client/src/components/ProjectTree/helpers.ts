@@ -16,7 +16,6 @@ export const doesLinkMatch = (linkInTree?: Partial<TreeLink>, selectedLink?: Par
 
 export const isChildTriggerLinkSelected = (linkInTree?: Partial<TreeLink>, selectedLink?: Partial<TreeLink>) => {
   if (linkInTree == null || selectedLink == null) return false;
-  console.log(linkInTree, selectedLink);
   return linkInTree.skillId === selectedLink.skillId && linkInTree.dialogId === selectedLink.dialogId;
 };
 

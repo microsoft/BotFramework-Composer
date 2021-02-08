@@ -20,6 +20,8 @@ import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
+import { text } from '../Pagination';
+
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH, ACTION_BUTTON_WIDTH } from './constants';
 
@@ -411,7 +413,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
       let warningContent = '';
       let errorContent = '';
-
       if (showErrors) {
         const warnings: Diagnostic[] = diagnostics.filter(
           (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Warning

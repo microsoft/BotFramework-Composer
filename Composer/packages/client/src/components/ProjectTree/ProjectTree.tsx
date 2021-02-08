@@ -232,7 +232,7 @@ export const ProjectTree: React.FC<Props> = ({
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
   const createSubtree = useCallback(() => {
     return projectCollection.map(createBotSubtree);
-  }, [projectCollection, selectedLink]);
+  }, [projectCollection, selectedLink, leftSplitWidth]);
 
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
@@ -257,7 +257,13 @@ export const ProjectTree: React.FC<Props> = ({
     onSelect?.(link);
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
+  const renderDialogHeader = (
+    skillId: string,
+    dialog: DialogInfo,
+    depth: number,
+    isPvaSchema: boolean,
+    shouldShowActionButton: boolean
+  ) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -328,8 +334,8 @@ export const ProjectTree: React.FC<Props> = ({
         >
           <TreeItem
             hasChildren
-            ActionIcon={AddTriggerIcon}
-            actionIconText="Add Trigger"
+            ActionIcon={shouldShowActionButton ? AddTriggerIcon : undefined}
+            actionIconText={shouldShowActionButton ? 'Add Trigger' : ''}
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
@@ -647,7 +653,7 @@ export const ProjectTree: React.FC<Props> = ({
       return [
         ...commonLink,
         ...filteredDialogs.map((dialog: DialogInfo) => {
-          const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
+          const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema, true);
           const key = 'dialog-' + dialog.id;
           let lgImports, luImports;
           if (options.showLgImports) {
@@ -681,7 +687,7 @@ export const ProjectTree: React.FC<Props> = ({
               </ExpandableNode>
             );
           } else {
-            return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
+            return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema, false).summaryElement;
           }
         }),
       ];
@@ -689,7 +695,7 @@ export const ProjectTree: React.FC<Props> = ({
       return [
         ...commonLink,
         ...filteredDialogs.map(
-          (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
+          (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema, false).summaryElement
         ),
       ];
     }
