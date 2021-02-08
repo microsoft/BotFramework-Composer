@@ -25,8 +25,13 @@ type Props = {
   projectId: string;
   schema: JSONSchema7;
   uiSchema: JSONSchema7;
-  value?: { [key: string]: any };
+  value?: { [key: string]: string | number | boolean };
 };
+
+function hasRequired(testObject: { [key: string]: string | number | boolean }, fields?: string[]) {
+  if (fields == null || fields.length === 0) return true;
+  return fields.every((field: string) => field in testObject);
+}
 
 const AdapterModal = (props: Props) => {
   const { isOpen, onClose, schema, uiSchema, projectId, adapterKey } = props;
@@ -34,6 +39,8 @@ const AdapterModal = (props: Props) => {
   const [value, setValue] = useState(props.value);
   const { setSettings } = useRecoilValue(dispatcherState);
   const currentSettings = useRecoilValue(settingsState(projectId));
+
+  const { required } = schema;
 
   return (
     <DialogWrapper
@@ -53,12 +60,13 @@ const AdapterModal = (props: Props) => {
           uiOptions={uiSchema}
           value={value}
           onChange={(update?: { [key: string]: any }) => {
-            if (update != null) setValue({ ...value, ...update });
+            if (update != null) setValue(update);
           }}
         />
         <DialogFooter>
           <DefaultButton onClick={onClose}>{formatMessage('Back')}</DefaultButton>
           <PrimaryButton
+            disabled={value == null || !hasRequired(value, required)}
             onClick={async () => {
               if (value != null) {
                 const currentAdapters: AdapterRecord[] = currentSettings.adapters ?? [];
