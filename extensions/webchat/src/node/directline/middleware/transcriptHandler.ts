@@ -9,7 +9,7 @@ import { Conversation } from '../store/entities/Conversation';
 import { textItem } from '../utils/helpers';
 import { writeFile, mkdirp } from '../utils/fileOperations';
 
-export function saveTranscriptHandler(state: DLServerState) {
+export const saveTranscriptHandler = (state: DLServerState) => {
   return async (req: express.Request, res: express.Response): Promise<void> => {
     const { fileSavePath } = req.body;
     const conversation: Conversation = (req as any).conversation;
@@ -36,9 +36,9 @@ export function saveTranscriptHandler(state: DLServerState) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ex);
     }
   };
-}
+};
 
-export function getTranscriptHandler(state: DLServerState) {
+export const getTranscriptHandler = (state: DLServerState) => {
   return async (req: express.Request, res: express.Response): Promise<any> => {
     const conversation: Conversation = (req as any).conversation;
     if (!conversation) {
@@ -55,4 +55,4 @@ export function getTranscriptHandler(state: DLServerState) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ex);
     }
   };
-}
+};

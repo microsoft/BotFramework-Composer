@@ -8,7 +8,7 @@ import { BotErrorCodes, createAPIException } from '../utils/apiErrorException';
 import { DLServerState } from '../store/DLServerState';
 import { ConversationAPIPathParameters } from '../store/types';
 
-export function createGetConversationHandler(state: DLServerState) {
+export const createGetConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response, next?: express.NextFunction): any => {
     const conversationParameters: ConversationAPIPathParameters = req.params;
     const conversation = state.conversations.conversationById(conversationParameters.conversationId);
@@ -19,4 +19,4 @@ export function createGetConversationHandler(state: DLServerState) {
     (req as any).conversation = conversation;
     next?.();
   };
-}
+};

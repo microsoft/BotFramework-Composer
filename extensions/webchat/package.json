@@ -1,5 +1,5 @@
 {
-  "name": "botframework-webchat-composer",
+  "name": "bf-directline-server",
   "version": "1.0.0",
   "scripts": {
     "build": "yarn clean && tsc",
@@ -29,7 +29,6 @@
     "base64url": "^3.0.1",
     "botframework-schema": "^4.11.1",
     "debug": "^4.3.1",
-    "eslint-plugin-prettier": "^3.3.1",
     "express": "^4.16.4",
     "express-serve-static-core": "^0.1.1",
     "formidable": "^1.2.2",

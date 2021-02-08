@@ -6,7 +6,7 @@ import * as express from 'express';
 import { BotEndpoint } from '../store/entities/BotEndpoint';
 import { DLServerState } from '../store/DLServerState';
 
-export function createCreateBotEndpointHandler(state: DLServerState) {
+export const createCreateBotEndpointHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response, next?: express.NextFunction): void => {
     const request = req as any;
     const { endpoints } = state;
@@ -22,15 +22,14 @@ export function createCreateBotEndpointHandler(state: DLServerState) {
     request.botEndpoint = endpoint;
     next?.();
   };
-}
+};
 
-export function createGetEndpointHandler(state: DLServerState) {
+export const createGetEndpointHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response, next?: express.NextFunction): any => {
     const auth = req.header('Authorization');
     const { endpoints } = state;
-    // TODO: We should not use token as conversation ID
     const tokenMatch = /Bearer\s+(.+)/.exec(auth) || [];
     (req as any).botEndpoint = endpoints.get(tokenMatch[1]) || state.dispatchers.getDefaultEndpoint();
     next?.();
   };
-}
+};

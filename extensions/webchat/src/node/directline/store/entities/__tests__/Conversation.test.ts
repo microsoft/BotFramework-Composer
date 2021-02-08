@@ -186,7 +186,7 @@ describe('Conversation class', () => {
     });
     const result = await conversation.postActivityToBot(serverState.state, mockActivity);
 
-    const postedActivity: Activity | undefined = result.updatedActivity;
+    const postedActivity: Activity | undefined = result.sendActivity;
     expect(postedActivity?.localTimestamp).toBe(formattedDataStr);
     expect(postedActivity?.timestamp).toBe(isoDateStr);
   });

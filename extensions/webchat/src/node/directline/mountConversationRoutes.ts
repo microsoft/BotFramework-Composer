@@ -18,7 +18,7 @@ import {
 import DLServerContext from './store/DLServerState';
 import { getWebSocketPort } from './utils/socketPort';
 
-export function mountConversationsRoutes(dLServerState: DLServerContext): express.Router {
+export const mountConversationsRoutes = (dLServerState: DLServerContext): express.Router => {
   const router = express.Router();
   const { state } = dLServerState;
   const verifyBotFramework = createBotFrameworkAuthenticationMiddleware();
@@ -58,4 +58,4 @@ export function mountConversationsRoutes(dLServerState: DLServerContext): expres
   router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler(state));
 
   return router;
-}
+};

@@ -23,12 +23,19 @@ jest.mock('../../utils/WebSocketServer.ts', () => {
 
 let res;
 const mockEnd = jest.fn();
+
+const createMockEnd = () => ({
+  end: mockEnd,
+});
+
 const mockJsonResponse = jest.fn(() => ({
-  end: mockEnd,
+  ...createMockEnd(),
 }));
+
 const mockSend = jest.fn(() => ({
-  end: mockEnd,
+  ...createMockEnd(),
 }));
+
 const mockStatus = jest.fn(() => ({
   json: mockJsonResponse,
   send: mockSend,
@@ -92,7 +99,7 @@ describe('postActivityToBot handler', () => {
 
     const postActivityHandler = createPostActivityHandler(state);
     postActivityHandler(req, res);
-    expect(mockSend).toHaveBeenCalledWith('conversation not found');
+    expect(mockSend).toHaveBeenCalledWith('Conversation not found.');
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockEnd).toHaveBeenCalled();
   });
@@ -121,19 +128,17 @@ describe('postActivityToBot handler', () => {
       },
     };
     mockPostToBot.mockResolvedValueOnce({
-      updatedActivity: {
+      sendActivity: {
         id: 'test-activity',
       },
       status: 201,
     });
+
     const postActivityHandler = createPostActivityHandler(state);
     await postActivityHandler(req, res);
 
     expect(mockStatus).toHaveBeenCalledWith(201);
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      id: 'test-activity',
-    });
-    expect(mockSendToSubscribers).toHaveBeenLastCalledWith('conversation-1', {
       id: 'test-activity',
     });
   });

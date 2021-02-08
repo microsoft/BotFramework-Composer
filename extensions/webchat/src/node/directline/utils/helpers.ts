@@ -9,11 +9,11 @@ export function getBotDataKey(channelId: string, conversationId: string, userId:
   return `$${channelId || '*'}!${conversationId || '*'}!${userId || '*'}`;
 }
 
-export function generateUniqueId(): string {
+export const generateUniqueId = (): string => {
   return uuid().toString();
-}
+};
 
-export function textItem(level: LoggerLevel, text: string): LogItem {
+export const textItem = (level: LoggerLevel, text: string): LogItem => {
   return {
     type: LogItemType.Text,
     payload: {
@@ -21,16 +21,13 @@ export function textItem(level: LoggerLevel, text: string): LogItem {
       text,
     },
   };
-}
+};
 
-export function statusCodeFamily(statusCode: number | string, expectedFamily: number): boolean {
-  if (typeof statusCode === 'string') {
-    statusCode = +statusCode;
-  }
+export const statusCodeFamily = (statusCode: number, expectedFamily: number): boolean => {
   return Math.floor(statusCode / 100) === Math.floor(expectedFamily / 100);
-}
+};
 
-export function validateRequest(payload): Error | undefined {
+export const validateRequest = (payload): Error | undefined => {
   if (!payload.bot) {
     return new Error('Missing bot object in request.');
   } else if (!payload.botEndpoint) {
@@ -38,4 +35,4 @@ export function validateRequest(payload): Error | undefined {
   } else if (payload.members.length !== 1 || payload.members[0].role !== 'user') {
     return new Error('Missing user inside of members array in request.');
   }
-}
+};

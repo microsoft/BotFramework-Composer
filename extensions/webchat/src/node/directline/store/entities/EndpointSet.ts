@@ -25,7 +25,7 @@ export class EndpointSet {
       const decoded = JSON.parse(base64url.decode(id));
       return this.get(decoded.endpointId);
     } catch (ex) {
-      return undefined;
+      return;
     }
   }
 

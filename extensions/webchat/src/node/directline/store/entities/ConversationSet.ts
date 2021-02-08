@@ -10,7 +10,7 @@ import { Conversation } from './Conversation';
 export class ConversationSet {
   public conversations: Record<string, Conversation> = {};
 
-  // TODO: May be we want to move "bot" back to the constructor
+  // TODO: Refactor to move to constructor
   public newConversation(
     botEndpoint: BotEndpoint,
     user: User,

@@ -23,6 +23,9 @@ export type TranscriptRecord = {
 };
 
 export class Conversation {
+  private transcript: TranscriptRecord[] = [];
+  private activities: ActivityBucket[] = [];
+
   public botEndpoint: BotEndpoint;
   public conversationId: string;
   public members: User[] = [];
@@ -30,8 +33,6 @@ export class Conversation {
   public user: User;
   public nextWatermark = 0;
   public codeVerifier: string | undefined;
-  private transcript: TranscriptRecord[] = [];
-  private activities: ActivityBucket[] = [];
 
   constructor(botEndpoint: BotEndpoint, conversationId: string, user: User, webChatMode: WebChatMode) {
     this.botEndpoint = botEndpoint;
@@ -67,18 +68,20 @@ export class Conversation {
     }
   }
 
-  public async prepActivityToBeSentToBot(state: DLServerState, activity: Activity): Promise<Activity> {
-    // Do not make a shallow copy here before modifying
+  public prepActivityToBeSentToBot(state: DLServerState, incomingActivity: Activity): Activity {
+    let activity = {
+      ...incomingActivity,
+    };
     activity = this.postage(this.botEndpoint.botId, activity);
     activity.from = activity.from || this.user;
-    // TODO:Pass locale from the bot
+
+    // TODO: Pass locale from the bot #5564
     activity.locale = 'en-us';
 
     if (!activity.recipient.name) {
       activity.recipient.name = 'Bot';
     }
 
-    // Fill in role field, if missing
     if (!activity.recipient.role) {
       activity.recipient.role = 'bot';
     }
@@ -86,10 +89,13 @@ export class Conversation {
 
     this.addActivityToQueue(activity);
     this.transcript = [...this.transcript, { type: 'activity add', activity }];
-    return { ...activity };
+    return activity;
   }
 
-  public prepActivityToBeSentToUser(userId: string, activity: Activity): Activity {
+  public prepActivityToBeSentToUser(userId: string, incomingActivity: Activity): Activity {
+    let activity = {
+      ...incomingActivity,
+    };
     activity = this.postage(userId, activity, false);
     if (!activity.from.name) {
       activity.from.name = 'Bot';
@@ -102,17 +108,16 @@ export class Conversation {
     }
 
     if (!activity.locale) {
-      // TODO:Pass locale from the bot
       activity.locale = 'en-us';
     }
 
-    // Fill in role field, if missing
     if (!activity.recipient.role) {
       activity.recipient.role = 'user';
     }
 
     this.addActivityToQueue(activity);
     this.transcript = [...this.transcript, { type: 'activity add', activity }];
+
     return activity;
   }
 
@@ -123,35 +128,34 @@ export class Conversation {
     state: DLServerState,
     activity: Activity
   ): Promise<{
-    updatedActivity: Activity | undefined;
+    sendActivity: Activity | undefined;
     response: any | undefined;
     status: number;
   }> {
-    let updatedActivity = {
+    let sendActivity = {
       ...activity,
     };
 
     if (!this.botEndpoint) {
       return {
         status: StatusCodes.NOT_FOUND,
-        response: undefined,
-        updatedActivity: undefined,
+        response: 'Endpoint not available in request.',
+        sendActivity: undefined,
       };
     }
 
-    updatedActivity = await this.prepActivityToBeSentToBot(state, updatedActivity);
+    sendActivity = await this.prepActivityToBeSentToBot(state, sendActivity);
     const options = {
-      body: updatedActivity,
+      body: sendActivity,
       headers: {
         'Content-Type': 'application/json',
       },
     };
-
     const response = await this.botEndpoint.fetchWithAuth(this.botEndpoint.botUrl, options);
     const status = response.status;
 
     return {
-      updatedActivity,
+      sendActivity,
       response,
       status,
     };
@@ -162,9 +166,9 @@ export class Conversation {
     this.activities.length = 0;
   }
 
-  public async processActivityForDataUrls(activity: Activity): Promise<Activity> {
+  public async processActivityForDataUrls(incomingActivity: Activity): Promise<Activity> {
     const visitor = new DataUrlEncoder();
-    activity = { ...activity };
+    const activity = { ...incomingActivity };
     await visitor.traverseActivity(activity);
     return activity;
   }

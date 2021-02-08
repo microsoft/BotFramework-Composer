@@ -12,29 +12,28 @@ import { Conversation } from '../store/entities/Conversation';
 import { WebSocketServer } from '../utils/WebSocketServer';
 import { textItem } from '../utils/helpers';
 
-export function createReplyToActivityHandler(req: express.Request, res: express.Response): void {
-  let activity = req.body as Activity;
-  const activityToBeSent = {
-    ...activity,
+export const createReplyToActivityHandler = (req: express.Request, res: express.Response): void => {
+  let activityToBeSent: Activity = {
+    ...req.body,
   };
   try {
     activityToBeSent.replyToId = req.params.activityId;
     const { conversation }: { conversation: Conversation } = req as any;
-    activity = conversation.prepActivityToBeSentToUser(conversation.user.id, activityToBeSent);
+    activityToBeSent = conversation.prepActivityToBeSentToUser(conversation.user.id, activityToBeSent);
     WebSocketServer.sendToSubscribers(conversation.conversationId, activityToBeSent);
     res.status(StatusCodes.OK).json({ id: activityToBeSent.id });
   } catch (err) {
     sendErrorResponse(req, res, err);
   }
-}
+};
 
-export function createPostActivityHandler(state: DLServerState): any {
+export const createPostActivityHandler = (state: DLServerState): any => {
   const { logToDocument } = state.dispatchers;
 
   return async (req: express.Request, res: express.Response): Promise<void> => {
     const conversation: Conversation = (req as any).conversation;
     if (!conversation) {
-      res.status(StatusCodes.NOT_FOUND).send('conversation not found').end();
+      res.status(StatusCodes.NOT_FOUND).send('Conversation not found.').end();
       const logItem = textItem('Error', 'Cannot post activity. Conversation not found.');
       logToDocument(req.params.conversationId, logItem);
       return;
@@ -42,17 +41,20 @@ export function createPostActivityHandler(state: DLServerState): any {
 
     const activity = req.body as Activity;
     try {
-      const { updatedActivity, status } = await conversation.postActivityToBot(state, activity);
-      res.status(status).json({ id: updatedActivity?.id });
-      WebSocketServer.sendToSubscribers(conversation.conversationId, activity);
+      const { sendActivity, status } = await conversation.postActivityToBot(state, activity);
+      if (sendActivity) {
+        res.status(status).json({ id: sendActivity.id });
+        WebSocketServer.sendToSubscribers(conversation.conversationId, activity);
+      } else {
+        throw new Error('Error Posting activity to the bot');
+      }
     } catch (err) {
-      const errObj = err.response;
-      sendErrorResponse(req, res, errObj);
+      sendErrorResponse(req, res, err.response);
     }
   };
-}
+};
 
-export function createUpdateConversationHandler(state: DLServerState) {
+export const createUpdateConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response): void => {
     const oldConversationId = req.params.conversationId;
     const { conversationId, userId } = req.body;
@@ -80,7 +82,7 @@ export function createUpdateConversationHandler(state: DLServerState) {
     currentConversation.nextWatermark = 0;
     state.dispatchers.updateConversation(conversationId, currentConversation);
 
-    res.status(StatusCodes.OK).json({
+    res.status(StatusCodes.CREATED).json({
       botEndpoint: currentConversation.botEndpoint,
       conversationId: currentConversation.conversationId,
       user: currentConversation.user,
@@ -89,4 +91,4 @@ export function createUpdateConversationHandler(state: DLServerState) {
       nextWatermark: currentConversation.nextWatermark,
     });
   };
-}
+};

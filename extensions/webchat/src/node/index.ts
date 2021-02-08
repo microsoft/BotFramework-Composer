@@ -19,7 +19,7 @@ const addCORSHeaders = (req: Request, res: Response, next?: NextFunction) => {
   next?.();
 };
 
-function initialize(registration: IExtensionRegistration) {
+const initialize = (registration: IExtensionRegistration) => {
   const preferredPort = toNumber(process.env.PORT) || 5000;
   const DLServerState = DLServerContext.getInstance(preferredPort);
 
@@ -31,7 +31,7 @@ function initialize(registration: IExtensionRegistration) {
 
   registration.addRouter('/', conversationRouter);
   registration.addRouter('/', directlineRouter);
-}
+};
 
 module.exports = {
   initialize,

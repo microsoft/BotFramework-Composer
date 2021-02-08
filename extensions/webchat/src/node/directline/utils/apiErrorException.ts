@@ -41,7 +41,7 @@ const createErrorResponse = (code: string, message: string): ErrorResponse => {
   };
 };
 
-function exceptionToAPIException(exception: any): APIException {
+const exceptionToAPIException = (exception: any): APIException => {
   if (exception?.data && exception?.status) {
     return {
       error: exception.data,
@@ -53,17 +53,17 @@ function exceptionToAPIException(exception: any): APIException {
       status: StatusCodes.BAD_REQUEST,
     };
   }
-}
+};
 
-export function createAPIException(statusCode: number, code: string, message: string): APIException {
+export const createAPIException = (statusCode: number, code: string, message: string): APIException => {
   return {
     status: statusCode,
     error: createErrorResponse(code, message),
   };
-}
+};
 
-export function sendErrorResponse(req: express.Request, res: express.Response, exceptionObj: any): ErrorResponse {
+export const sendErrorResponse = (req: express.Request, res: express.Response, exceptionObj: any): ErrorResponse => {
   const apiException = exceptionToAPIException(exceptionObj);
   res.status(apiException.status).json(apiException.error);
   return apiException.error;
-}
+};

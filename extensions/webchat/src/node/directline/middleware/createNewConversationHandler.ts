@@ -8,7 +8,7 @@ import { DLServerState } from '../store/DLServerState';
 import { validateRequest } from '../utils/helpers';
 import { BotEndpoint } from '../store/entities/BotEndpoint';
 
-export function createNewConversationHandler(state: DLServerState) {
+export const createNewConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response): void => {
     const validationResult = validateRequest({
       ...req.body,
@@ -34,4 +34,4 @@ export function createNewConversationHandler(state: DLServerState) {
       id: conversation.conversationId,
     });
   };
-}
+};

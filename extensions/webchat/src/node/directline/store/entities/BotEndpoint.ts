@@ -21,28 +21,6 @@ export class BotEndpoint {
     public msaPassword?: string
   ) {}
 
-  public async fetchWithAuth(url: string, reqOptions: { body: any; headers: any }, forceRefresh = false): Promise<any> {
-    if (this.msaAppId) {
-      reqOptions.headers = {
-        ...reqOptions.headers,
-        Authorization: `Bearer ${await this.getAccessToken(forceRefresh)}`,
-      };
-    }
-    const response = await axios.post(url, reqOptions.body, {
-      headers: reqOptions.headers,
-    });
-
-    if (
-      (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.FORBIDDEN) &&
-      !forceRefresh &&
-      this.msaAppId
-    ) {
-      return this.fetchWithAuth(url, reqOptions, true);
-    }
-
-    return response;
-  }
-
   private async getAccessToken(forceRefresh = false): Promise<string | undefined> {
     if (
       !forceRefresh &&
@@ -88,5 +66,26 @@ export class BotEndpoint {
         body: resp.data,
       };
     }
+  }
+
+  public async fetchWithAuth(url: string, reqOptions: { body: any; headers: any }, forceRefresh = false): Promise<any> {
+    if (this.msaAppId) {
+      reqOptions.headers = {
+        ...reqOptions.headers,
+        Authorization: `Bearer ${await this.getAccessToken(forceRefresh)}`,
+      };
+    }
+    const response = await axios.post(url, reqOptions.body, {
+      headers: reqOptions.headers,
+    });
+
+    if (
+      (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.FORBIDDEN) &&
+      !forceRefresh &&
+      this.msaAppId
+    ) {
+      return this.fetchWithAuth(url, reqOptions, true);
+    }
+    return response;
   }
 }

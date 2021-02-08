@@ -96,7 +96,7 @@ describe('upload handler', () => {
     upload(req, res);
 
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
-    expect(mockSend).toHaveBeenCalledWith('conversation not found');
+    expect(mockSend).toHaveBeenCalledWith('Conversation not found.');
     expect(mockEnd).toHaveBeenCalled();
     const logItem = textItem('Error', 'Cannot upload file. Conversation not found.');
     expect(mockLogToDoc).toHaveBeenCalledWith('conversation1', logItem);
