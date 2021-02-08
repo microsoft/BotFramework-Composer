@@ -16,7 +16,7 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
-import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
+import { MemoryResolver, AsyncMemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
 
 import { LgParser } from './lgParser';
@@ -52,7 +52,7 @@ export class LGServer {
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
     protected readonly memoryResolver?: MemoryResolver,
-    protected readonly entitiesResolver?: MemoryResolver
+    protected readonly entitiesResolver?: AsyncMemoryResolver
   ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => this.validate(change.document));
@@ -506,7 +506,7 @@ export class LGServer {
     console.log(projectId);
     if (projectId && this.entitiesResolver) {
       console.log('Is there?');
-      this.luisEntities = this.entitiesResolver(projectId) || [];
+      this.luisEntities = (await this.entitiesResolver(projectId)) || [];
       console.log(this.luisEntities);
     }
 
