@@ -4,7 +4,6 @@
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { remove } from 'fs-extra';
-import formatMessage from 'format-message';
 
 import { ExtensionContext } from '../models/extension/extensionContext';
 import log from '../logger';
@@ -14,7 +13,7 @@ import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
-import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
+import { getLocationRef, getNewProjRef } from '../utility/project';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 import { TelemetryService } from '../services/telemetry';
 

@@ -8,7 +8,7 @@ import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
 import { ensureDir, existsSync, remove } from 'fs-extra';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import formatMessage from 'format-message';
 
 import AssetService from '../services/asset';
