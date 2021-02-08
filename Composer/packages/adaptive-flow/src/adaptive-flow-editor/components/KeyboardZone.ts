@@ -12,7 +12,7 @@ const KeyNameByModifierAttr = {
   shiftKey: 'Shift',
 };
 
-const overriddenKeyCodes = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+const overriddenKeyCodes = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
 
 interface KeyboardCommand {
   area: string;
