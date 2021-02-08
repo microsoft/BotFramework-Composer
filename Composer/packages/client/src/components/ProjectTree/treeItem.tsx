@@ -20,10 +20,8 @@ import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
-import { text } from '../Pagination';
-
 import { TreeLink, TreeMenuItem } from './ProjectTree';
-import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH, ACTION_BUTTON_WIDTH } from './constants';
+import { SUMMARY_ARROW_SPACE, OVERFLOW_ICON_WIDTH } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -406,7 +404,8 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
   const isBroken = !!link.botError;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
-  const iconWidth = THREE_DOTS_ICON_WIDTH + ACTION_BUTTON_WIDTH;
+  const overflowIconWidth = overflowMenu.length > 0 ? OVERFLOW_ICON_WIDTH : 0;
+
   const onRenderItem = useCallback(
     (maxTextWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
       const { diagnostics = [], projectId, skillId, onErrorClick } = item;
@@ -558,7 +557,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           overflowItems={overflowMenu}
           role="row"
           styles={{ item: { flex: 1 } }}
-          onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace - iconWidth, showErrors)}
+          onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace - overflowIconWidth, showErrors)}
           onRenderOverflowButton={onRenderOverflowButton(
             !!isActive,
             isChildSelected,

@@ -159,8 +159,8 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
   return (
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`} role="grid">
       <TreeItem
-        ActionIcon={AddDialogIcon}
-        actionIconText="Add Dialog"
+        ActionIcon={!isRemote ? AddDialogIcon : undefined}
+        actionIconText={!isRemote ? 'Add Dialog' : ''}
         hasChildren={!isRemote}
         icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
