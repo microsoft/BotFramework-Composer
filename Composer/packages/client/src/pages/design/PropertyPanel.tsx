@@ -26,7 +26,7 @@ type PropertyViewProps = {
   isSkill: boolean;
 };
 
-const PropertyPanel: React.FC<PropertyViewProps> = ({ projectId = '', isSkill = false }) => {
+const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '', isSkill = false }) => {
   const schemas = useRecoilValue(schemasState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
@@ -58,6 +58,6 @@ const PropertyPanel: React.FC<PropertyViewProps> = ({ projectId = '', isSkill = 
       )}
     </EditorExtension>
   );
-};
+});
 
 export default PropertyPanel;
