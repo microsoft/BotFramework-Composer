@@ -147,20 +147,20 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             // handle error.
             break;
         }
-        throw new Error(`Failed to retrieve status for ${channelId}`, err?.data?.error.message);
+        throw new Error(`Failed to retrieve status for ${channelId} ${err?.data?.error.message}`);
       }
     }
   };
 
   const createChannelService = async (channelId: string) => {
     try {
-      const url = `https://management.azure.com/subscriptions/${currentResource.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
+      const url = `https://management.azure.com/subscriptions/${currentResource?.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
       let data = {};
       switch (channelId) {
         case CHANNELS.TEAMS:
           data = {
             location: 'global',
-            name: `${currentResource.name}/${channelId}`,
+            name: `${currentResource?.resourceName}/${channelId}`,
             properties: {
               channelName: channelId,
               location: 'global',
@@ -176,7 +176,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           break;
         case CHANNELS.WEBCHAT:
           data = {
-            name: `${currentResource.name}/${channelId}`,
+            name: `${currentResource?.resourceName}/${channelId}`,
             type: 'Microsoft.BotService/botServices/channels',
             location: 'global',
             properties: {
@@ -197,7 +197,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           break;
         case CHANNELS.SPEECH:
           data = {
-            name: `${currentResource.name}/${channelId}`,
+            name: `${currentResource?.resourceName}/${channelId}`,
             type: 'Microsoft.BotService/botServices/channels',
             location: 'global',
             properties: {
@@ -246,16 +246,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           // handle error.
           break;
       }
-      throw new Error(`Failed to retrieve status for ${channelId}`, err?.data?.error.message);
+      throw new Error(`Failed to retrieve status for ${channelId} ${err?.data?.error.message}`);
     }
   };
 
   const deleteChannelService = async (channelId: string) => {
     try {
-      const url = `https://management.azure.com/subscriptions/${currentResource.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
-      const data = {
-        parameters: {},
-      };
+      const url = `https://management.azure.com/subscriptions/${currentResource?.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
       const res = await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
 
       console.log('DELETE COMPLETED', res);
@@ -287,52 +284,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           // handle error.
           break;
       }
-      throw new Error(`Failed to retrieve status for ${channelId}`, err?.data?.error.message);
-    }
-  };
-
-  const setEnabledChannelService = async (channelId: string, enabled: boolean) => {
-    try {
-      const url = `https://management.azure.com/subscriptions/${currentResource.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
-
-      let data = {};
-      switch (channelId) {
-        case CHANNELS.TEAMS:
-          data = {
-            ...channelStatus[CHANNELS.TEAMS].data,
-          };
-          console.log('DATA PARAMETER', data);
-          data.properties.properties.isEnabled = enabled;
-          console.log('MUTATED DATA', data);
-          break;
-        case CHANNELS.WEBCHAT:
-          // data = { properties: { isEnabled: enabled }};
-          // isEnabled = res.data.properties.properties.sites[0].isEnabled;
-          break;
-      }
-
-      const res = await httpClient.patch(url, data, { headers: { Authorization: `Bearer ${token}` } });
-      console.log(`status of ${channelId}`, channelId, res.data);
-    } catch (err) {
-      switch (err?.response?.data?.error.code) {
-        case 'AuthenticationFailed':
-          // the auth failed for some reason.
-          break;
-
-        case 'ResourceGroupNotFound':
-          // this resource group is not found - in other words, can't find a channel registration in the expected spot.
-          break;
-
-        case 'SubscriptionNotFound':
-          // the subscription is not found or invalid
-          break;
-
-        default:
-          // handle error.
-          break;
-      }
-      console.error(err);
-      // throw new Error(`Failed to retrieve status for ${channelId}`,err?.data?.error.message || err);
+      throw new Error(`Failed to retrieve status for ${channelId} ${err?.data?.error.message}`);
     }
   };
 
@@ -366,71 +318,39 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const toggleTeams = async (evt, enabled) => {
-    console.log('toggle tams to', enabled, channelStatus[CHANNELS.TEAMS]);
+    console.log('toggle tams to', enabled, channelStatus?.[CHANNELS.TEAMS]);
     if (enabled) {
-      if (channelStatus?.[CHANNELS.TEAMS].configured) {
-        // enable an already existing service
-        console.log('ENABLE EXISTING SERVICE');
-        const res = await setEnabledChannelService(CHANNELS.TEAMS, true);
-      } else {
-        // create the teams service and turn it on
-        console.log('CREATE A NEW SERVICE');
-        const res = await createChannelService(CHANNELS.TEAMS);
-      }
+      // create the teams service and turn it on
+      console.log('CREATE A NEW SERVICE');
+      await createChannelService(CHANNELS.TEAMS);
     } else {
-      if (channelStatus?.[CHANNELS.TEAMS].configured) {
-        // enable an already existing service
-        console.log('DISABLE AN EXISTING SERVICE');
-        const res = await deleteChannelService(CHANNELS.TEAMS);
-      } else {
-        // do nothing, service does not exist.
-      }
+      // enable an already existing service
+      console.log('DISABLE AN EXISTING SERVICE');
+      await deleteChannelService(CHANNELS.TEAMS);
     }
   };
 
   const toggleWebchat = async (evt, enabled) => {
-    console.log('toggle webchat to', enabled, channelStatus[CHANNELS.WEBCHAT]);
+    console.log('toggle webchat to', enabled, channelStatus?.[CHANNELS.WEBCHAT]);
     if (enabled) {
-      if (channelStatus[CHANNELS.WEBCHAT].configured) {
-        // enable an already existing service
-        console.log('ENABLE EXISTING SERVICE');
-        const res = await setEnabledChannelService(CHANNELS.WEBCHAT, true);
-      } else {
-        // create the teams service and turn it on
-        console.log('CREATE A NEW SERVICE');
-        const res = await createChannelService(CHANNELS.WEBCHAT);
-      }
+      // create the teams service and turn it on
+      console.log('CREATE A NEW SERVICE');
+      await createChannelService(CHANNELS.WEBCHAT);
     } else {
-      if (channelStatus[CHANNELS.WEBCHAT].configured) {
-        // enable an already existing service
-        console.log('DISABLE AN EXISTING SERVICE');
-        const res = await deleteChannelService(CHANNELS.WEBCHAT);
-      } else {
-        // do nothing, service does not exist.
-      }
+      console.log('DISABLE AN EXISTING SERVICE');
+      await deleteChannelService(CHANNELS.WEBCHAT);
     }
   };
 
   const toggleSpeech = async (evt, enabled) => {
-    console.log('toggle SPEECH to', enabled, channelStatus[CHANNELS.SPEECH]);
+    console.log('toggle SPEECH to', enabled, channelStatus?.[CHANNELS.SPEECH]);
     if (enabled) {
-      if (channelStatus[CHANNELS.SPEECH].configured) {
-        // enable an already existing service
-        console.log('ENABLE EXISTING SERVICE');
-        const res = await setEnabledChannelService(CHANNELS.SPEECH, true);
-      } else {
-        // create the teams service and turn it on
-        console.log('CREATE A NEW SERVICE');
-        const res = await createChannelService(CHANNELS.SPEECH);
-      }
+      // create the teams service and turn it on
+      console.log('CREATE A NEW SERVICE');
+      await createChannelService(CHANNELS.SPEECH);
     } else {
-      if (channelStatus[CHANNELS.SPEECH].configured) {
-        // enable an already existing service
-        console.log('DISABLE AN EXISTING SERVICE');
-        const res = await deleteChannelService(CHANNELS.SPEECH);
-      } else {
-        // do nothing, service does not exist.
-      }
+      console.log('DISABLE AN EXISTING SERVICE');
+      await deleteChannelService(CHANNELS.SPEECH);
     }
   };
 
@@ -453,9 +373,11 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <div ref={containerRef}>
         <Dropdown
-          options={publishTargets.map((p) => {
-            return { key: p.name, text: p.name };
-          })}
+          options={
+            publishTargets?.map((p) => {
+              return { key: p.name, text: p.name };
+            }) || []
+          }
           placeholder={formatMessage('Choose publishing profile')}
           onChange={onSelectProfile}
         />
