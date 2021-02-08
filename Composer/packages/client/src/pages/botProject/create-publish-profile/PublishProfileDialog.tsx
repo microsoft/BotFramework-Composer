@@ -16,7 +16,7 @@ import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
-import { AddProfileDialog } from './AddProfileDialog';
+import { ProfileFormDialog } from './ProfileFormDialog';
 
 type PublishProfileDialogProps = {
   closeDialog: () => void;
@@ -27,15 +27,14 @@ type PublishProfileDialogProps = {
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
 };
 
-enum Page {
-  AddProfile = 'add',
-  EditProfile = 'edit',
-  ConfigProvision = 'config',
-}
+const Page = {
+  ProfileForm: Symbol('form'),
+  ConfigProvision: Symbol('config'),
+};
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
   const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
-  const [page, setPage] = useState(current ? Page.EditProfile : Page.AddProfile);
+  const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
 
   const [dialogTitle, setTitle] = useState({
@@ -71,7 +70,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   useEffect(() => {
     PluginAPI.publish.closeDialog = closeDialog;
     PluginAPI.publish.onBack = () => {
-      setPage(Page.AddProfile);
+      setPage(Page.ProfileForm);
+      setTitle({
+        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+        subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
+      });
     };
     PluginAPI.publish.getTokenFromCache = () => {
       return {
@@ -89,29 +92,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
   useEffect(() => {
-    PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.item.configuration) : undefined];
+    PluginAPI.publish.useConfigBeingEdited = () => (current ? JSON.parse(current.item.configuration) : undefined);
     PluginAPI.publish.currentProjectId = () => {
       return projectId;
     };
   }, [current, projectId]);
-
-  const updatePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string, editTarget: any) => {
-      if (!editTarget) {
-        return;
-      }
-
-      const newTargets = targets ? [...targets] : [];
-      newTargets[editTarget.index] = {
-        name,
-        type,
-        configuration,
-      };
-
-      await setPublishTargets(newTargets, projectId);
-    },
-    [targets, projectId]
-  );
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
@@ -144,7 +129,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
                 {formatMessage('Learn More.')}
               </Link>
             </div>
-            <AddProfileDialog
+            <ProfileFormDialog
               current={current}
               projectId={projectId}
               setType={setSelectType}

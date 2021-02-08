@@ -7,7 +7,7 @@ import { closeDialog, onBack, savePublishConfig, useConfigBeingEdited } from '@b
 import { backButton, buttonBar, column, label, publishRoot, saveButton, textField, title } from '../styles';
 
 export const Main: React.FC<{ title: string }> = (props) => {
-  const [configBeingEdited] = useConfigBeingEdited();
+  const configBeingEdited = useConfigBeingEdited();
   const [val1, setVal1] = useState(configBeingEdited ? configBeingEdited.val1 : '');
   const [val2, setVal2] = useState(configBeingEdited ? configBeingEdited.val2 : '');
   const [val3, setVal3] = useState(configBeingEdited ? configBeingEdited.val3 : '');
