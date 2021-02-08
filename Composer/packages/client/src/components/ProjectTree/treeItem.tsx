@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
@@ -21,7 +21,7 @@ import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
-import { SUMMARY_ARROW_SPACE } from './constants';
+import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH, ACTION_BUTTON_WIDTH } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -96,11 +96,14 @@ const navContainer = (isAnyMenuOpen: boolean, isActive: boolean, menuOpenHere: b
   .dialog-more-btn {
     visibility: visible;
   }
+  .action-btn {
+    visibility: visible;
+  }
   }`};
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 `;
 
-const navItem = (isBroken: boolean, padLeft: number, marginLeft: number) => css`
+const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
   label: navItem;
   position: relative;
   height: 24px;
@@ -111,6 +114,11 @@ const navItem = (isBroken: boolean, padLeft: number, marginLeft: number) => css`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  :hover {
+    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+  }
+  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 
   &:focus {
     outline: none;
@@ -201,20 +209,38 @@ const itemName = (nameWidth: number) => css`
 const calloutRootStyle = css`
   padding: 11px;
 `;
+
+const overflowButtonContainer = css`
+  display: flex;
+`;
+
 const actionButtonStyle = (isActive: boolean) => css`
+  display: flex;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
   .action-btn {
     visibility: ${isActive ? 'visible' : 'hidden'};
   }
-  :hover .action-btn {
-    visibility: visible;
+  :hover {
+    background: ${NeutralColors.gray20};
+    .action-btn {
+      visibility: visible;
+      path {
+        fill: #0078d4;
+      }
+    }
   }
 `;
+
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
   link: TreeLink;
   ActionIcon?: React.FC<any>;
+  actionIconText?: string;
   isActive?: boolean;
+  isChildSelected?: boolean;
   isSubItemActive?: boolean;
   onSelect?: (link: TreeLink) => void;
   icon?: string;
@@ -351,115 +377,13 @@ const DiagnosticIcons = (props: {
   );
 };
 
-const onRenderItem = (textWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
-  const { diagnostics = [], projectId, skillId, onErrorClick } = item;
-
-  let warningContent = '';
-  let errorContent = '';
-
-  if (showErrors) {
-    const warnings: Diagnostic[] = diagnostics.filter(
-      (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Warning
-    );
-    const errors: Diagnostic[] = diagnostics.filter((diag: Diagnostic) => diag.severity === DiagnosticSeverity.Error);
-
-    warningContent = warnings.map((diag) => diag.message).join(',');
-
-    errorContent = errors.map((diag) => diag.message).join(',');
-  }
-
-  return (
-    <div
-      data-is-focusable
-      aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
-      css={projectTreeItemContainer}
-      role="cell"
-      tabIndex={0}
-      onBlur={item.onBlur}
-      onFocus={item.onFocus}
-    >
-      <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-        {item.icon != null && (
-          <Icon
-            iconName={item.icon}
-            styles={{
-              root: {
-                width: '12px',
-                marginRight: '8px',
-                outline: 'none',
-              },
-            }}
-            tabIndex={-1}
-          />
-        )}
-        <span css={itemName(textWidth)}>{item.displayName}</span>
-        {showErrors && (
-          <DiagnosticIcons
-            diagnostics={diagnostics}
-            projectId={projectId}
-            skillId={skillId}
-            onErrorClick={onErrorClick}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
-const onRenderOverflowButton = (
-  isActive: boolean,
-  menuOpenCallback: (cb: boolean) => void,
-  setThisItemSelected: (sel: boolean) => void,
-  ActionIcon?: React.FC<any>
-) => {
-  const moreLabel = formatMessage('Actions');
-  return (overflowItems: IContextualMenuItem[] | undefined) => {
-    if (overflowItems == null) return null;
-    return (
-      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
-        {ActionIcon ? (
-          <div css={actionButtonStyle(isActive)}>
-            <ActionIcon className="action-btn" />
-          </div>
-        ) : null}
-        <IconButton
-          ariaLabel={moreLabel}
-          className="dialog-more-btn"
-          data-is-focusable={isActive}
-          data-testid="dialogMoreButton"
-          menuIconProps={{
-            iconName: 'More',
-          }}
-          menuProps={{
-            items: overflowItems,
-            styles: menuStyle,
-            onMenuOpened: () => {
-              setThisItemSelected(true);
-              menuOpenCallback(true);
-            },
-            onMenuDismissed: () => {
-              setThisItemSelected(false);
-              menuOpenCallback(false);
-            },
-          }}
-          role="cell"
-          styles={moreButton(isActive)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.stopPropagation();
-            }
-          }}
-        />
-      </TooltipHost>
-    );
-  };
-};
-
 export const TreeItem: React.FC<ITreeItemProps> = ({
   link,
   isActive = false,
+  isChildSelected = false,
   icon,
   ActionIcon,
+  actionIconText = '',
   dialogName,
   onSelect,
   textWidth = 100,
@@ -473,7 +397,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   showErrors = true,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
-
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
@@ -481,12 +404,130 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
   const isBroken = !!link.botError;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
+  const iconWidth = THREE_DOTS_ICON_WIDTH + ACTION_BUTTON_WIDTH;
+  const onRenderItem = useCallback(
+    (maxTextWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
+      const { diagnostics = [], projectId, skillId, onErrorClick } = item;
+
+      let warningContent = '';
+      let errorContent = '';
+
+      if (showErrors) {
+        const warnings: Diagnostic[] = diagnostics.filter(
+          (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Warning
+        );
+        const errors: Diagnostic[] = diagnostics.filter(
+          (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Error
+        );
+
+        warningContent = warnings.map((diag) => diag.message).join(',');
+
+        errorContent = errors.map((diag) => diag.message).join(',');
+      }
+
+      return (
+        <div
+          data-is-focusable
+          aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
+          css={projectTreeItemContainer}
+          role="cell"
+          tabIndex={0}
+          onBlur={item.onBlur}
+          onFocus={item.onFocus}
+        >
+          <div css={projectTreeItem} role="presentation" tabIndex={-1}>
+            {item.icon != null && (
+              <Icon
+                iconName={item.icon}
+                styles={{
+                  root: {
+                    width: '12px',
+                    marginRight: '8px',
+                    outline: 'none',
+                  },
+                }}
+                tabIndex={-1}
+              />
+            )}
+            <span css={itemName(maxTextWidth)}>{item.displayName}</span>
+            {showErrors && (
+              <DiagnosticIcons
+                diagnostics={diagnostics}
+                projectId={projectId}
+                skillId={skillId}
+                onErrorClick={onErrorClick}
+              />
+            )}
+          </div>
+        </div>
+      );
+    },
+    [textWidth, spacerWidth, extraSpace, showErrors]
+  );
+
+  const onRenderOverflowButton = useCallback(
+    (
+      isActive: boolean,
+      isChildSelected: boolean,
+      menuOpenCallback: (cb: boolean) => void,
+      setThisItemSelected: (sel: boolean) => void,
+      ActionIcon?: React.FC<any>,
+      actionIconText?: string
+    ) => {
+      const moreLabel = formatMessage('More options');
+      return (overflowItems: IContextualMenuItem[] | undefined) => {
+        if (overflowItems == null) return null;
+        return (
+          <div css={overflowButtonContainer}>
+            {ActionIcon ? (
+              <div css={actionButtonStyle(isActive)}>
+                <TooltipHost content={actionIconText} directionalHint={DirectionalHint.bottomCenter}>
+                  <ActionIcon className="action-btn" />
+                </TooltipHost>
+              </div>
+            ) : null}
+            <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
+              <IconButton
+                ariaLabel={moreLabel}
+                className="dialog-more-btn"
+                data-is-focusable={isActive}
+                data-testid="dialogMoreButton"
+                menuIconProps={{
+                  iconName: 'More',
+                }}
+                menuProps={{
+                  items: overflowItems,
+                  styles: menuStyle,
+                  onMenuOpened: () => {
+                    setThisItemSelected(true);
+                    menuOpenCallback(true);
+                  },
+                  onMenuDismissed: () => {
+                    setThisItemSelected(false);
+                    menuOpenCallback(false);
+                  },
+                }}
+                role="cell"
+                styles={moreButton(isActive)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.stopPropagation();
+                  }
+                }}
+              />
+            </TooltipHost>
+          </div>
+        );
+      };
+    },
+    [isActive, isChildSelected, menuOpenCallback, setThisItemSelected, ActionIcon, actionIconText]
+  );
 
   return (
     <div css={navContainer(isMenuOpen, isActive, thisItemSelected)}>
       <div
         aria-label={a11yLabel}
-        css={navItem(isBroken, padLeft, marginLeft)}
+        css={navItem(isBroken, padLeft, marginLeft, isActive)}
         data-testid={a11yLabel}
         role="gridcell"
         tabIndex={0}
@@ -516,8 +557,15 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           overflowItems={overflowMenu}
           role="row"
           styles={{ item: { flex: 1 } }}
-          onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace, showErrors)}
-          onRenderOverflowButton={onRenderOverflowButton(!!isActive, menuOpenCallback, setThisItemSelected, ActionIcon)}
+          onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace - iconWidth, showErrors)}
+          onRenderOverflowButton={onRenderOverflowButton(
+            !!isActive,
+            isChildSelected,
+            menuOpenCallback,
+            setThisItemSelected,
+            ActionIcon,
+            actionIconText
+          )}
         />
       </div>
     </div>

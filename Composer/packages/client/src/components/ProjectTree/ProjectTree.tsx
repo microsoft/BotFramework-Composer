@@ -3,6 +3,7 @@
 
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
@@ -28,7 +29,7 @@ import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-import AddDialogIcon from './AddDialogIcon';
+//import AddDialogIcon from './AddDialogIcon';
 import AddTriggerIcon from './AddTriggerIcon';
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -73,10 +74,14 @@ const tree = css`
   label: tree;
 `;
 
-const headerCSS = (label: string) => css`
+const headerCSS = (label: string, isActive?: boolean) => css`
   margin-top: -6px;
   width: 100%;
   label: ${label};
+  :hover {
+    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+  }
+  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 `;
 
 // -------------------- Helper functions -------------------- //
@@ -317,12 +322,14 @@ export const ProjectTree: React.FC<Props> = ({
         <span
           key={dialog.id}
           ref={dialog.isRoot ? addMainDialogRef : null}
-          css={headerCSS('dialog-header')}
+          css={headerCSS('dialog-header', doesLinkMatch(dialogLink, selectedLink))}
           data-testid={`DialogHeader-${dialog.displayName}`}
           role="grid"
         >
           <TreeItem
             hasChildren
+            ActionIcon={AddTriggerIcon}
+            actionIconText="Add Trigger"
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
@@ -396,7 +403,6 @@ export const ProjectTree: React.FC<Props> = ({
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
-        ActionIcon={AddTriggerIcon}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
@@ -662,6 +668,7 @@ export const ProjectTree: React.FC<Props> = ({
                 defaultState={getPageElement(key)}
                 depth={startDepth}
                 detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
+                isActive={doesLinkMatch(dialogLink, selectedLink)}
                 summary={summaryElement}
                 onToggle={(newState) => setPageElement(key, newState)}
               >

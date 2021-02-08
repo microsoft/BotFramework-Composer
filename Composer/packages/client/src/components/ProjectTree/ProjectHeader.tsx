@@ -17,6 +17,7 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { TreeLink, ProjectTreeOptions } from './ProjectTree';
 import { doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
+import { AddDialogIcon } from './AddDialogIcon';
 
 const icons = {
   BOT: 'CubeShape',
@@ -158,6 +159,8 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
   return (
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`} role="grid">
       <TreeItem
+        ActionIcon={AddDialogIcon}
+        actionIconText="Add Dialog"
         hasChildren={!isRemote}
         icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
