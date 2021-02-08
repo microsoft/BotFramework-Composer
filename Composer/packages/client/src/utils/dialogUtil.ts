@@ -3,6 +3,7 @@
 
 import {
   conceptLabels as conceptLabelsFn,
+  getFriendlyName,
   SDKKinds,
   DialogInfo,
   DialogFactory,
@@ -188,19 +189,6 @@ function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
     result[dialog.id] = dialog.content;
     return result;
   }, {});
-}
-
-export function getFriendlyName(data): string {
-  const conceptLabels = conceptLabelsFn();
-  if (data?.$designer?.name) {
-    return data?.$designer?.name;
-  }
-
-  if (data?.intent) {
-    return `${data?.intent}`;
-  }
-
-  return conceptLabels[data.$kind]?.title ?? data.$kind;
 }
 
 const getLabel = (dialog: DialogInfo, dataPath: string) => {
