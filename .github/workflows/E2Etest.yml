@@ -3,7 +3,11 @@ name: Composer E2E test
 on:
   push:
     branches:
-      - hond/testCI
+# would be main in main
+      - qika/dailyCI
+#  schedule:
+# Would be '0 0 0 * *' in main
+#    - cron: "0 0 * * *"
 
 jobs:
   Build-And-Test:
@@ -12,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     # Remove this while merged to main branch
-    - run: git checkout hond/testCI
+    - run: git checkout qika/dailyCI
 
     - name: Set up Node.js version
       uses: actions/setup-node@v1
