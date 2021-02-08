@@ -151,7 +151,7 @@ export const settingsDispatcher = () => {
   );
 
   const setRuntimeField = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (projectId: string, field: string, newValue: boolean) => {
+    ({ set }: CallbackInterface) => async (projectId: string, field: string, newValue: boolean | string) => {
       set(settingsState(projectId), (currentValue) => ({
         ...currentValue,
         runtime: {
