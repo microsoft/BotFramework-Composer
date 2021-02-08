@@ -12,7 +12,7 @@ interface AddTriggerIconProps {
 }
 
 export const AddTriggerIcon: React.FC<AddTriggerIconProps> = (props) => {
-  const { className = '', id } = props;
+  const { className = '' } = props;
 
   return (
     <svg

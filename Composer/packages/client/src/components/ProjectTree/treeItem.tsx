@@ -480,7 +480,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         return (
           <div css={overflowButtonContainer}>
             {ActionIcon ? (
-              <div css={actionButtonStyle(isActive)}>
+              <div css={actionButtonStyle(isActive || isChildSelected)}>
                 <TooltipHost content={actionIconText} directionalHint={DirectionalHint.bottomCenter}>
                   <ActionIcon className="action-btn" />
                 </TooltipHost>
@@ -508,7 +508,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                   },
                 }}
                 role="cell"
-                styles={moreButton(isActive)}
+                styles={moreButton(isActive || isChildSelected)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.stopPropagation();

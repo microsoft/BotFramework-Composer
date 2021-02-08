@@ -35,7 +35,7 @@ import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 import { INDENT_PER_LEVEL } from './constants';
 import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
-import { doesLinkMatch } from './helpers';
+import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 
 // -------------------- Styles -------------------- //
@@ -332,6 +332,7 @@ export const ProjectTree: React.FC<Props> = ({
             actionIconText="Add Trigger"
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
+            isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
             link={dialogLink}
             menu={options.showMenu ? menu : options.showQnAMenu ? [QnAMenuItem] : []}
