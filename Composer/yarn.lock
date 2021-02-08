@@ -4960,45 +4960,28 @@ adaptive-expressions@4.11.1, adaptive-expressions@^4.11.1:
     moment "^2.25.1"
     moment-timezone "^0.5.28"
 
-adaptive-expressions@4.12.0-dev-20201119.9afa93623c3e:
-  version "4.12.0-dev-20201119.9afa93623c3e"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.12.0-dev-20201119.9afa93623c3e.tgz#f06f585f124ba7e202a9520c4baf10cc41006eb5"
-  integrity sha512-8C2MVOS3+ze1WGZTsVZ2kXVnDPjQ1p3LVz9JGvwGshiwqGflzu9vIbdkHN0F1nEXEwWJaF/hbyivxrhTIZVpYQ==
+adaptive-expressions@4.12.0-dev-20210125.e5a4fc60f438:
+  version "4.12.0-dev-20210125.e5a4fc60f438"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.12.0-dev-20210125.e5a4fc60f438.tgz#39afc36fd9b959432e837676badf7d98af472e5c"
+  integrity sha512-ySxUg8iRGfVlr7p3q7EGyln6Cdqf15wBm2WtWnrGmnlGsVepliN0/FvNeNk5r3WMNWJ6nWLu8jFiFWQAo85Nxw==
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
     "@types/atob-lite" "^2.0.0"
     "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.13"
     "@types/xmldom" "^0.1.29"
     antlr4ts "0.5.0-alpha.3"
     atob-lite "^2.0.0"
     big-integer "^1.6.48"
     d3-format "^1.4.4"
+    dayjs "^1.10.3"
     jspath "^0.4.0"
     lodash "^4.17.19"
     lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
-
-adaptive-expressions@^4.11.0-dev.20201013.d5458bf:
-  version "4.11.0"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.0.tgz#741fc7cf71d18fcf28c455ec636b737b580362df"
-  integrity sha512-CrSPRrnevGbjA0tSoNQc2q1P4iBmsFvMi1Nx56Qz6pxImMFTCKYhSYR88jvPwGIl5z+UlAWz2zmidMw9lVt9fg==
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob-lite" "^2.0.0"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.13"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.3"
-    atob-lite "^2.0.0"
-    big-integer "^1.6.48"
-    d3-format "^1.4.4"
-    jspath "^0.4.0"
-    lodash "^4.17.19"
-    lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
+    uuid "^8.3.2"
+    x2js "^3.4.0"
+    xml2js "^0.4.23"
+    xmldom "^0.4.0"
+    xpath "^0.0.32"
 
 address@1.0.3, address@^1.0.1:
   version "1.0.3"
@@ -6124,16 +6107,16 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@4.12.0-dev-20201119.9afa93623c3e:
-  version "4.12.0-dev-20201119.9afa93623c3e"
-  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-dev-20201119.9afa93623c3e.tgz#10e8ab892917a4131926a20c0a213055d7744643"
-  integrity sha512-3hli5yNaiIdfeM0Vtf1X/xudnbyNYapo1db7SLWPClT8gAAMj2FMmeo4thO/CRP1aA7bCBDs/FEq4n783G57GQ==
+botbuilder-lg@4.12.0-dev-20210125.e5a4fc60f438:
+  version "4.12.0-dev-20210125.e5a4fc60f438"
+  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-dev-20210125.e5a4fc60f438.tgz#106eace62e170768b3c32f1ecb60d875f2c94d8d"
+  integrity sha512-Ra9JZkeW/KI05BfA/te9N8SqIBG1JlNl1mcb5ct4LZC6+JTdpbQA4tgwlonIPieRhc5iRqPDYL5JTdLVWBmPCQ==
   dependencies:
-    adaptive-expressions "4.12.0-dev-20201119.9afa93623c3e"
+    adaptive-expressions "4.12.0-dev-20210125.e5a4fc60f438"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
-    uuid "^3.4.0"
+    uuid "^8.3.2"
 
 botbuilder-lg@^4.11.1:
   version "4.11.1"
@@ -8614,6 +8597,11 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
+
+dayjs@^1.10.3:
+  version "1.10.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
+  integrity sha1-jlRKm4aD9heD9XCYCoqA6vVKseI=
 
 debug@2.6.9, debug@^2.1.1, debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
@@ -20522,6 +20510,11 @@ uuid@^8.3.1:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
   integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
 
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha1-gNW1ztJxu5r2xEXyGhoExgbO++I=
+
 v8-compile-cache@^2.0.3:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.1.0.tgz#e14de37b31a6d194f5690d67efc4e7f6fc6ab30e"
@@ -21414,6 +21407,13 @@ x-is-string@^0.1.0:
   resolved "https://registry.yarnpkg.com/x-is-string/-/x-is-string-0.1.0.tgz#474b50865af3a49a9c4657f05acd145458f77d82"
   integrity sha1-R0tQhlrzpJqcRlfwWs0UVFj3fYI=
 
+x2js@^3.4.0:
+  version "3.4.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/x2js/-/x2js-3.4.0.tgz#1414ad99062705086a4838e8dde4ecd06e8bd3a9"
+  integrity sha1-FBStmQYnBQhqSDjo3eTs0G6L06k=
+  dependencies:
+    xmldom "^0.1.19"
+
 xdg-basedir@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-4.0.0.tgz#4bc8d9984403696225ef83a1573cbbcb4e79db13"
@@ -21439,20 +21439,48 @@ xml2js@^0.4.19:
     sax ">=0.6.0"
     xmlbuilder "~9.0.1"
 
+xml2js@^0.4.23:
+  version "0.4.23"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
+  integrity sha1-oMaVFnUkIesqx1juTUzPWIQ+rGY=
+  dependencies:
+    sax ">=0.6.0"
+    xmlbuilder "~11.0.0"
+
 xmlbuilder@^9.0.7, xmlbuilder@~9.0.1:
   version "9.0.7"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
   integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
+
+xmlbuilder@~11.0.0:
+  version "11.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
+  integrity sha1-vpuuHIoEbnazESdyY0fQrXACvrM=
 
 xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
 
+xmldom@^0.1.19:
+  version "0.1.31"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xmldom/-/xmldom-0.1.31.tgz#b76c9a1bd9f0a9737e5a72dc37231cf38375e2ff"
+  integrity sha1-t2yaG9nwqXN+WnLcNyMc84N14v8=
+
+xmldom@^0.4.0:
+  version "0.4.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xmldom/-/xmldom-0.4.0.tgz#8771e482a333af44587e30ce026f0998c23f3830"
+  integrity sha1-h3HkgqMzr0RYfjDOAm8JmMI/ODA=
+
 xmlhttprequest@1:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
   integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
+
+xpath@^0.0.32:
+  version "0.0.32"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xpath/-/xpath-0.0.32.tgz#1b73d3351af736e17ec078d6da4b8175405c48af"
+  integrity sha1-G3PTNRr3NuF+wHjW2kuBdUBcSK8=
 
 xregexp@2.0.0:
   version "2.0.0"
