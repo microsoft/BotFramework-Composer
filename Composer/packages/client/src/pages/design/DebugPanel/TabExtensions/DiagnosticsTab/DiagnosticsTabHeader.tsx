@@ -16,9 +16,7 @@ const Severity = {
   Warning: DiagnosticSeverity[1],
 };
 
-export const DiagnosticsHeaderCollapsed = 'Issues';
-
-export const DiagnosticsHeaderExpanded = 'Issues';
+export const DiagnosticsHeader = 'Issues';
 
 /**
  * Displays how many errors and warnings in current project.

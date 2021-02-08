@@ -12,11 +12,13 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { debugPanelExpansionState } from '../../../recoilModel';
 
 import {
-  debugPaneCollapsedStyle,
-  debugPaneExpandedStyle,
+  debugPaneContainerExpandedStyle,
+  debugPaneBarStyle,
+  leftBarStyle,
+  rightBarStyle,
   debugPaneHeaderStyle,
-  leftHeaderStyle,
-  rightHeaderStyle,
+  statusBarStyle,
+  debugPaneContentStyle,
 } from './styles';
 import debugExtensions from './TabExtensions';
 
@@ -34,91 +36,134 @@ export const DebugPanel = () => {
 
     let element: JSX.Element;
     if (typeof tabHeaderComponent === 'string') {
-      element = (
-        <span
-          key={`tabHeader-${tabKey}`}
-          onClick={() => {
-            setExpansion(true);
-            setActiveTab(tabKey);
-          }}
-        >
-          {tabHeaderComponent}
-        </span>
-      );
+      element = <span key={`tabHeader-${tabKey}`}>{tabHeaderComponent}</span>;
     } else {
-      const CollapsedTabHeader = tabHeaderComponent;
-      // TODO: add toggle control / focus control apis for customized tab extension
-      element = <CollapsedTabHeader key={`tabHeader-${tabKey}`} />;
+      const TabHeader = tabHeaderComponent;
+      element = <TabHeader key={`tabHeader-${tabKey}`} />;
     }
     return { key: tabKey, element };
   }, []);
 
-  const buildTabToolbar = useCallback((tabKey: string, tabToolbarComponent?: React.FC) => {
-    if (!tabToolbarComponent) return { key: tabKey, element: null };
+  const buildTabStatusBar = useCallback((tabKey: string, tabStatusbarComponent?: React.FC) => {
+    if (!tabStatusbarComponent) return { key: tabKey, element: null };
 
-    const Toolbar = tabToolbarComponent;
-    return { key: tabKey, element: <Toolbar /> };
+    const StatusBar = tabStatusbarComponent;
+    return { key: tabKey, element: <StatusBar /> };
   }, []);
 
-  const toolbar = useMemo(() => {
-    const toolbarItems = debugExtensions
-      .map(({ key, toolbar }) => buildTabToolbar(key, toolbar).element)
+  const statusbar = useMemo(() => {
+    const statusbarItems = debugExtensions
+      .map(({ key, statusWidget }) => buildTabStatusBar(key, statusWidget).element)
       .filter(Boolean);
-    return <div data-testid="debug-panel__header__toolbar">{toolbarItems}</div>;
+    return <div data-testid="debug-panel__header__toolbar">{statusbarItems}</div>;
   }, []);
 
-  const header = useMemo(() => {
+  const headerPivot = useMemo(() => {
     const tabTitles = debugExtensions
-      .map(({ key, headerExpanded }) => buildTabTitle(key, headerExpanded))
+      .map(({ key, headerWidget }) => buildTabTitle(key, headerWidget))
       .filter(({ element }) => Boolean(element))
       .map(({ key, element }) => {
         return (
           <PivotItem
             key={`tabHeader-pivot-${key}${expanded ? '--expanded' : ''}`}
             itemKey={key}
-            onRenderItemLink={() => element}
+            onRenderItemLink={() => (
+              <div
+                onClick={() => {
+                  setActiveTab(key);
+                  setExpansion(true);
+                }}
+              >
+                {element}
+              </div>
+            )}
           />
         );
       });
-
+    const height = expanded ? 36 : 24;
     return (
-      <div css={debugPaneHeaderStyle} data-testid="debug-panel__header">
-        <div css={leftHeaderStyle} data-testid="header__left">
-          <Pivot aria-label="Debug Panel Header" selectedKey={activeTab}>
-            {tabTitles}
-          </Pivot>
-        </div>
-        <div css={rightHeaderStyle} data-testid="header__right">
-          {toolbar}
-          <IconButton
-            iconProps={{ iconName: expanded ? 'Cancel' : 'ChevronUp' }}
-            title={expanded ? formatMessage('Collapse debug panel') : formatMessage('Expand debug panel')}
-            onClick={() => {
-              setExpansion(!expanded);
-            }}
-          />
-        </div>
-      </div>
+      <Pivot
+        aria-label="Debug Panel Header"
+        selectedKey={expanded ? activeTab : null}
+        styles={{
+          link: { height },
+          linkIsSelected: { height },
+        }}
+      >
+        {tabTitles}
+      </Pivot>
     );
-  }, [expanded]);
+  }, [expanded, activeTab]);
 
   const activeTabContent = useMemo(() => {
     const configOfActiveTab = debugExtensions.find((ext) => ext.key === activeTab);
-    if (!configOfActiveTab || !configOfActiveTab.content) return null;
+    if (!configOfActiveTab || !configOfActiveTab.contentWidget) return null;
 
-    const TabContent = configOfActiveTab.content;
+    const TabContent = configOfActiveTab.contentWidget;
     return <TabContent key={`tabContent-${configOfActiveTab.key}`} />;
   }, [activeTab]);
 
-  return (
-    <div
-      css={css`
-        ${expanded ? debugPaneExpandedStyle : debugPaneCollapsedStyle}
-      `}
-      data-testid="debug-panel--expanded"
-    >
-      {header}
-      {expanded ? <div data-testid="debug-panel__content">{activeTabContent}</div> : null}
-    </div>
-  );
+  if (expanded) {
+    return (
+      <div
+        css={css`
+          ${debugPaneContainerExpandedStyle}
+        `}
+        data-testid="debug-panel--expanded"
+      >
+        <div
+          css={css`
+            ${debugPaneBarStyle}
+            ${debugPaneHeaderStyle}
+          `}
+          data-testid="debug-panel__header"
+        >
+          <div css={leftBarStyle} data-testid="header__left">
+            {headerPivot}
+          </div>
+          <div css={rightBarStyle} data-testid="header__right">
+            <IconButton
+              iconProps={{ iconName: 'Cancel' }}
+              title={formatMessage('Collapse debug panel')}
+              onClick={() => {
+                setExpansion(!expanded);
+              }}
+            />
+          </div>
+        </div>
+        <div css={debugPaneContentStyle} data-testid="debug-panel__content">
+          {activeTabContent}
+        </div>
+        <div
+          css={css`
+            ${debugPaneBarStyle}
+            ${statusBarStyle}
+          `}
+          data-testid="debug-panel__statusbar"
+        >
+          <div css={leftBarStyle} data-testid="statusbar__left"></div>
+          <div css={rightBarStyle} data-testid="statusbar__right">
+            {statusbar}
+          </div>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div
+        css={css`
+          ${debugPaneBarStyle}
+          ${statusBarStyle}
+        `}
+        data-testid="debug-panel__statusbar"
+      >
+        <div css={leftBarStyle} data-testid="statusbar__left">
+          {headerPivot}
+        </div>
+        <div css={rightBarStyle} data-testid="statusbar__right">
+          {statusbar}
+        </div>
+      </div>
+    );
+  }
 };
