@@ -15,20 +15,20 @@ export function registerLULanguage(monaco: Monaco) {
         [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
-        [/^\s*-/, { token: 'utterrance-indentifier', next: '@utterrance' }],
+        [/^\s*-/, { token: 'utterance-identifier', next: '@utterance' }],
       ],
 
       intent: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
-        [/^\s*-/, { token: 'utterrance-indentifier', next: '@utterrance' }],
+        [/^\s*-/, { token: 'utterance-identifier', next: '@utterance' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
         [/.*$/, 'intent'],
       ],
-      utterrance: [
+      utterance: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
-        [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
+        [/^\s*-/, { token: 'utterance-identifier', next: 'utterance' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
         [/({)(\s*[\w.@:\s]*\s*)(=)(\s*[\w.\s]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
         [/({\s*@)(\s*[\w.]*\s*)(})/, ['lb', 'entity-name', 'rb']],
@@ -39,17 +39,17 @@ export function registerLULanguage(monaco: Monaco) {
       entityMode: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
-        [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
+        [/^\s*-/, { token: 'utterance-identifier', next: 'utterance' }],
         [
           /(@\s*)(prebuilt\s+)(age|datetimeV2|dimension|email|geographyV2|keyPhrase|money|number|ordinal|ordinalV2|percentage|personName|phonenumber|temperature|url|datetime)(\s+[\w_,\s]+)/,
-          ['intent-indentifier', 'entity-type', 'prebult-type', 'entity-name'],
+          ['intent-identifier', 'entity-type', 'prebuilt-type', 'entity-name'],
         ],
         [
           // eslint-disable-next-line security/detect-unsafe-regex
           /(@\s*)(ml|prebuilt|regex|list|composite|Pattern\.Any|phraseList)(\s+[\w_]+)/,
-          ['intent-indentifier', 'entity-type', 'entity-name'],
+          ['intent-identifier', 'entity-type', 'entity-name'],
         ],
-        [/(@\s*)(\s*[\w_]+)/, ['intent-indentifier', 'entity-name']],
+        [/(@\s*)(\s*[\w_]+)/, ['intent-identifier', 'entity-name']],
         [/\s*(hasRoles|useFeature)\s*/, 'keywords'],
         [/.*$/, 'entity-other', '@pop'],
       ],
@@ -82,7 +82,7 @@ export function registerLULanguage(monaco: Monaco) {
       { token: 'comments', foreground: '656565' },
       { token: 'import-desc', foreground: '00A32B' },
       { token: 'entity-type', foreground: 'DF2C2C' },
-      { token: 'prebult-type', foreground: '393939' },
+      { token: 'prebuilt-type', foreground: '393939' },
       { token: 'keywords', foreground: '038387' },
     ],
   });
