@@ -47,7 +47,7 @@ jobs:
         yarn
         yarn build
         yarn start &
-        sleep 30
+        sleep 120
         cd dailyCI
         npm install
         npm test
