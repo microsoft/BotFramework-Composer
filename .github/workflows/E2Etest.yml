@@ -28,7 +28,7 @@ jobs:
         creds: ${{ secrets.DAILY_CI_AZURE_CREDENTIALS }}
         environment: 'AzureStack'
 
-    - name: Remove Original Resource
+    - name: Remove Resource
       uses: JesseTG/rm@v1.0.2
       with:
         path: Composer/packages/server/data.json
