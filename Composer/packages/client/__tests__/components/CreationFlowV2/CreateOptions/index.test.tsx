@@ -40,7 +40,7 @@ describe('<CreateOptionsV2/>', () => {
     );
   };
 
-  it('should save echo bot template id', async () => {
+  it('should save conversational core template id', async () => {
     const component = renderComponent();
     const conversationalCoreBot = await component.findByText('conversational-core');
     fireEvent.click(conversationalCoreBot);
