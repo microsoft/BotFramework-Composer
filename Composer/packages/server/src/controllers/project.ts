@@ -510,89 +510,13 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
 
 function createProjectV2(req: Request, res: Response) {
   const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Creating Bot Project');
-  createProjectAsync(req, jobId);
+  BotProjectService.createProjectAsync(req, jobId);
   res.status(202).json({
     jobId: jobId,
   });
 }
 
-async function createProjectAsync(req: Request, jobId: string) {
-  const {
-    templateId,
-    templateVersion,
-    name,
-    description,
-    storageId,
-    location,
-    preserveRoot,
-    templateDir,
-    eTag,
-    alias,
-    locale,
-    schemaUrl,
-  } = req.body;
-  // get user from request
-  const user = await ExtensionContext.getUserFromRequest(req);
-
-  const createFromPva = !!templateDir;
-
-  // populate template if none was passed
-  if (templateId === '') {
-    // TODO: Replace with default template once one is determined
-    throw Error('empty templateID passed');
-  }
-
-  // location to store the bot project
-  const locationRef = getLocationRef(location, storageId, name);
-  try {
-    await BotProjectService.cleanProject(locationRef);
-
-    // Update status for polling
-    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
-
-    const newProjRef = createFromPva
-      ? await getNewProjRef(templateDir, templateId, locationRef, user, locale)
-      : await AssetService.manager.copyRemoteProjectTemplateToV2(templateId, templateVersion, name, locationRef, user);
-
-    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
-
-    const id = await BotProjectService.openProject(newProjRef, user);
-
-    // in the case of PVA, we need to update the eTag and alias used by the import mechanism
-    createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
-
-    const currentProject = await BotProjectService.getProjectById(id, user);
-
-    // inject shared content into every new project.  this comes from assets/shared
-    !createFromPva && (await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage));
-
-    if (currentProject !== undefined) {
-      !createFromPva && (await ejectAndMerge(currentProject, jobId));
-      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
-      await currentProject.updateBotInfo(name, description, preserveRoot);
-
-      if (schemaUrl && !createFromPva) {
-        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-      }
-
-      await currentProject.init();
-
-      const project = currentProject.getProject();
-      log('Project created successfully.');
-      BackgroundProcessManager.updateProcess(jobId, 200, 'Created Successfully', {
-        id,
-        ...project,
-      });
-    }
-    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
-  } catch (err) {
-    BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
-    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
-  }
-}
-
 export const ProjectController = {
-  createProjectAsync,
   getProjectById,
   openProject,
   removeProject,
