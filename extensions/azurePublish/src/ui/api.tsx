@@ -459,6 +459,6 @@ export const getLuisAuthoringRegions = (): string[] => {
   return LuisAuthoringSupportLocation;
 };
 
-export const getLuisPredictionRegions = ():{ [key:string]: string[]} => {
+export const getLuisPredictionRegions = (): { [key: string]: string[] } => {
   return LuisPublishSupportLocation;
 }
