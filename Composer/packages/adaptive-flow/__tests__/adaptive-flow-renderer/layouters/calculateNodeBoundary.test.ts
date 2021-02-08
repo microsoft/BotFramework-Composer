@@ -78,7 +78,7 @@ describe('calculateSwitchCaseBoundary', () => {
   });
   it('should return a box whose property be calcalated by conditionBoundary, choiceBoundary, branchBoundaries', () => {
     const returnBoundary = {
-      width: 580 + BranchIntervalX,
+      width: 580 + BranchIntervalX + BranchingNodeMarginRight,
       height: 180 + BranchIntervalY * 3,
       axisX: 140,
       axisY: 0,
@@ -101,7 +101,7 @@ describe('calculateForeachBoundary', () => {
   });
   it('should return a box whose property be calcalated by foreachBoundary, stepsBoundary, loopBeginBoundary, loopEndBoundary', () => {
     const returnBoundary = {
-      width: 380 + LoopEdgeMarginLeft + BranchingNodeMarginRight,
+      width: 380 + LoopEdgeMarginLeft,
       height: 228 + BranchIntervalY * 3,
       axisX: 190 + LoopEdgeMarginLeft,
       axisY: 0,
