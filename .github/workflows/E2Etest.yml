@@ -28,17 +28,6 @@ jobs:
         creds: ${{ secrets.DAILY_CI_AZURE_CREDENTIALS }}
         environment: 'AzureStack'
 
-    - name: Remove Resource
-      uses: JesseTG/rm@v1.0.2
-      with:
-        path: Composer/packages/server/data.json
-
-    - name: Copy Resource
-      uses: canastro/copy-file-action@master
-      with:
-        source: "Composer/dailyCI/data.json"
-        target: "Composer/packages/server/data.json"
-
     - name: Build and Run Composer
       run: |
         yarn
@@ -53,5 +42,6 @@ jobs:
       run: |
         sleep 120
         npm install
+        npm run build
         npm test
       working-directory: Composer/dailyCI

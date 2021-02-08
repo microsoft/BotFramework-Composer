@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
+    "build":" cp data.json ../packages/server/",
     "gen": "jest --runInBand --coverage && istanbul report --include coverage/coverage-final.json html > coverage.html",
     "mail": "node mail.js"
   },
