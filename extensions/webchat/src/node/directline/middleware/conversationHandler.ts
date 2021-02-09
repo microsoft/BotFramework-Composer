@@ -44,7 +44,7 @@ export const createPostActivityHandler = (state: DLServerState): any => {
       const { sendActivity, status } = await conversation.postActivityToBot(state, activity);
       if (sendActivity) {
         res.status(status).json({ id: sendActivity.id });
-        WebSocketServer.sendToSubscribers(conversation.conversationId, activity);
+        WebSocketServer.sendToSubscribers(conversation.conversationId, sendActivity);
       } else {
         throw new Error('Error Posting activity to the bot');
       }
