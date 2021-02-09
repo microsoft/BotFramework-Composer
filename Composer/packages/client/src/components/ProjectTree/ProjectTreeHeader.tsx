@@ -40,6 +40,7 @@ const commands = css`
   box-sizing: border-box;
   justify-content: space-between;
   display: flex;
+  flex-direction: row-reverse;
 `;
 
 export interface ProjectTreeHeaderMenuItem {
@@ -98,27 +99,29 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFi
       ) : (
         <div css={commands}>
           <CommandButton
-            data-is-focusable
-            ariaLabel={formatMessage('Actions')}
-            className="project-tree-header-more-btn"
-            css={buttonStyle}
-            data-testid="projectTreeHeaderMoreButton"
-            iconProps={{ iconName: 'Add' }}
-            menuProps={{ items: overflowMenu }}
-            text={formatMessage('Add')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.stopPropagation();
-              }
-            }}
-          />
-          <CommandButton
             css={buttonStyle}
             iconProps={{ iconName: 'Filter' }}
             onClick={() => {
               setShowFilter(true);
             }}
           />
+          {overflowMenu.length ? (
+            <CommandButton
+              data-is-focusable
+              ariaLabel={formatMessage('Actions')}
+              className="project-tree-header-more-btn"
+              css={buttonStyle}
+              data-testid="projectTreeHeaderMoreButton"
+              iconProps={{ iconName: 'Add' }}
+              menuProps={{ items: overflowMenu }}
+              text={formatMessage('Add')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.stopPropagation();
+                }
+              }}
+            />
+          ) : null}
         </div>
       )}
     </div>
