@@ -378,6 +378,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const provisionResults = await azureProvisioner.create(config);
         // GOT PROVISION RESULTS!
         // cast this into the right form for a publish profile
+        const currentSettings = JSON.parse(config.currentProfile.configuration).settings;
         const publishProfile = {
           name: config.hostname,
           environment: 'composer',
@@ -386,19 +387,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           runtimeIdentifier: 'win-x64',
           settings: {
             applicationInsights: {
-              InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
+              InstrumentationKey: currentSettings?.applicationInsights?.InstrumentationKey?.startsWith('<') ? provisionResults.appInsights?.instrumentationKey : currentSettings?.applicationInsights?.InstrumentationKey,
             },
-            cosmosDb: provisionResults.cosmosDB,
-            blobStorage: provisionResults.blobStorage,
+            cosmosDb: currentSettings?.cosmosDb?.authKey?.startsWith('<') ? provisionResults.cosmosDB : currentSettings?.cosmosDb,
+            blobStorage: currentSettings?.blobStorage?.connectionString?.startsWith('<') ? provisionResults.blobStorage : currentSettings?.blobStorage,
             luis: {
-              authoringKey: provisionResults.luisAuthoring?.authoringKey,
-              authoringEndpoint: provisionResults.luisAuthoring?.authoringEndpoint,
-              endpointKey: provisionResults.luisPrediction?.endpointKey,
-              endpoint: provisionResults.luisPrediction?.endpoint,
-              region: provisionResults.resourceGroup.location,
+              authoringKey: currentSettings?.luis?.authoringKey?.startsWith('<') ? provisionResults.luisAuthoring?.authoringKey : currentSettings?.luis?.authoringKey,
+              authoringEndpoint: currentSettings?.luis?.authoringEndpoint?.startsWith('<') ? provisionResults.luisAuthoring?.authoringEndpoint: currentSettings?.luis?.authoringEndpoint,
+              endpointKey: currentSettings?.luis?.endpointKey?.startsWith('<') ? provisionResults.luisPrediction?.endpointKey : currentSettings?.luis?.endpointKey,
+              endpoint: currentSettings?.luis?.endpoint?.startsWith('<') ?  provisionResults.luisPrediction?.endpoint : currentSettings?.luis?.endpoint,
+              region: currentSettings?.luis?.region?.startsWith('<') ? provisionResults.resourceGroup.location : currentSettings?.luis?.region,
             },
-            MicrosoftAppId: provisionResults.appId,
-            MicrosoftAppPassword: provisionResults.appPassword,
+            MicrosoftAppId: currentSettings?.MicrosoftAppId?.startsWith('<') ? provisionResults.appId : currentSettings?.MicrosoftAppId,
+            MicrosoftAppPassword: currentSettings?.MicrosoftAppPassword?.startsWith('<') ? provisionResults.appPassword : currentSettings?.MicrosoftAppPassword,
           },
         };
 
