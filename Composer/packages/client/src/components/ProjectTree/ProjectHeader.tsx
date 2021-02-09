@@ -17,7 +17,7 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { TreeLink, ProjectTreeOptions } from './ProjectTree';
 import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
-import { AddDialogIcon } from './AddDialogIcon';
+import AddDialogIcon from './AddDialogIcon';
 
 const icons = {
   BOT: 'CubeShape',
@@ -156,10 +156,14 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
 
   const menu = generateMenuItems();
 
+  const onRenderActionIcon = (props: { className?: string; style?: React.CSSProperties }) => {
+    const { className, style } = props;
+    return <AddDialogIcon className={className} style={style} />;
+  };
+
   return (
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`} role="grid">
       <TreeItem
-        ActionIcon={!isRemote ? AddDialogIcon : undefined}
         actionIconText={!isRemote ? 'Add Dialog' : ''}
         hasChildren={!isRemote}
         icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
@@ -171,6 +175,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         menuOpenCallback={setMenuOpen}
         showErrors={options.showErrors}
         textWidth={textWidth}
+        onRenderActionIcon={!isRemote ? onRenderActionIcon : undefined}
         onSelect={options.showCommonLinks ? undefined : handleOnSelect}
       />
     </span>

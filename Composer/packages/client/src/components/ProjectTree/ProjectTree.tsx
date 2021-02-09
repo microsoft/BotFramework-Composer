@@ -29,7 +29,6 @@ import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-//import AddDialogIcon from './AddDialogIcon';
 import AddTriggerIcon from './AddTriggerIcon';
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -298,6 +297,11 @@ export const ProjectTree: React.FC<Props> = ({
       },
     };
 
+    const onRenderActionIcon = (props: { className?: string; style?: React.CSSProperties }) => {
+      const { className, style } = props;
+      return <AddTriggerIcon className={className} style={style} />;
+    };
+
     if (!isPvaSchema) {
       menu.splice(1, 0, QnAMenuItem);
     }
@@ -334,7 +338,6 @@ export const ProjectTree: React.FC<Props> = ({
         >
           <TreeItem
             hasChildren
-            ActionIcon={shouldShowActionButton ? AddTriggerIcon : undefined}
             actionIconText={shouldShowActionButton ? 'Add Trigger' : ''}
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
@@ -346,6 +349,7 @@ export const ProjectTree: React.FC<Props> = ({
             padLeft={depth * LEVEL_PADDING}
             showErrors={false}
             textWidth={leftSplitWidth - TREE_PADDING}
+            onRenderActionIcon={shouldShowActionButton ? onRenderActionIcon : undefined}
             onSelect={handleOnSelect}
           />
         </span>

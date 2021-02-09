@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React, { useState, useCallback } from 'react';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { DefaultPalette } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -77,7 +78,7 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
       color: NeutralColors.gray160,
     },
     rootHovered: {
-      color: '#0078d4',
+      color: DefaultPalette.accent,
       selectors: {
         '.ms-Button-menuIcon': {
           fontWeight: 600,
@@ -150,7 +151,6 @@ export const overflowSet = (isBroken: boolean) => css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  line-height: 24px;
   justify-content: space-between;
   display: flex;
   i {
@@ -214,11 +214,7 @@ const overflowButtonContainer = css`
   display: flex;
 `;
 
-const actionButtonStyle = (isActive: boolean) => css`
-  display: flex;
-  justify-content: center;
-  height: 24px;
-  width: 24px;
+const actionButtonContainerStyle = (isActive: boolean) => css`
   .action-btn {
     visibility: ${isActive ? 'visible' : 'hidden'};
   }
@@ -227,17 +223,23 @@ const actionButtonStyle = (isActive: boolean) => css`
     .action-btn {
       visibility: visible;
       path {
-        fill: #0078d4;
+        fill: ${DefaultPalette.accent};
       }
     }
   }
 `;
 
+const actionButtonStyle = {
+  height: 24,
+  width: 24,
+  textAlign: 'center' as 'center',
+};
+
 // -------------------- TreeItem -------------------- //
 
-interface ITreeItemProps {
+type ITreeItemProps = {
   link: TreeLink;
-  ActionIcon?: React.FC<any>;
+  onRenderActionIcon?: (props: { className?: string; style?: React.CSSProperties }) => React.ReactNode;
   actionIconText?: string;
   isActive?: boolean;
   isChildSelected?: boolean;
@@ -254,7 +256,7 @@ interface ITreeItemProps {
   menuOpenCallback?: (cb: boolean) => void;
   isMenuOpen?: boolean;
   showErrors?: boolean;
-}
+};
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   if (item.label === '') {
@@ -382,7 +384,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   isChildSelected = false,
   icon,
-  ActionIcon,
+  onRenderActionIcon,
   actionIconText = '',
   dialogName,
   onSelect,
@@ -471,7 +473,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       isChildSelected: boolean,
       menuOpenCallback: (cb: boolean) => void,
       setThisItemSelected: (sel: boolean) => void,
-      ActionIcon?: React.FC<any>,
+      onRenderActionIcon?: (props: { className?: string; style?: React.CSSProperties }) => React.ReactNode,
       actionIconText?: string
     ) => {
       const moreLabel = formatMessage('More options');
@@ -479,10 +481,10 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         if (overflowItems == null) return null;
         return (
           <div css={overflowButtonContainer}>
-            {ActionIcon ? (
-              <div css={actionButtonStyle(isActive || isChildSelected)}>
+            {onRenderActionIcon ? (
+              <div css={actionButtonContainerStyle(isActive || isChildSelected)}>
                 <TooltipHost content={actionIconText} directionalHint={DirectionalHint.bottomCenter}>
-                  <ActionIcon className="action-btn" />
+                  {onRenderActionIcon({ className: 'action-btn', style: actionButtonStyle })}
                 </TooltipHost>
               </div>
             ) : null}
@@ -520,7 +522,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         );
       };
     },
-    [isActive, isChildSelected, menuOpenCallback, setThisItemSelected, ActionIcon, actionIconText]
+    [isActive, isChildSelected, menuOpenCallback, setThisItemSelected, onRenderActionIcon, actionIconText]
   );
 
   return (
@@ -563,7 +565,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             isChildSelected,
             menuOpenCallback,
             setThisItemSelected,
-            ActionIcon,
+            onRenderActionIcon,
             actionIconText
           )}
         />
