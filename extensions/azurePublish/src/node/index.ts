@@ -378,6 +378,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const provisionResults = await azureProvisioner.create(config);
         // GOT PROVISION RESULTS!
         // cast this into the right form for a publish profile
+        const currentSettings = JSON.parse(config.currentProfile.configuration).settings;
         const publishProfile = {
           name: config.hostname,
           environment: 'composer',
@@ -386,19 +387,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           runtimeIdentifier: 'win-x64',
           settings: {
             applicationInsights: {
-              InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
+              InstrumentationKey: currentSettings.applicationInsights.InstrumentationKey ?? provisionResults.appInsights?.instrumentationKey,
             },
-            cosmosDb: provisionResults.cosmosDB,
-            blobStorage: provisionResults.blobStorage,
+            cosmosDb: currentSettings?.cosmosDb?.authKey?.startsWith('<') ? provisionResults.cosmosDB : currentSettings?.cosmosDb,
+            blobStorage: currentSettings?.blobStorage?.connectionString?.startsWith('<') ? provisionResults.blobStorage : currentSettings?.blobStorage,
             luis: {
-              authoringKey: provisionResults.luisAuthoring?.authoringKey,
-              authoringEndpoint: provisionResults.luisAuthoring?.authoringEndpoint,
-              endpointKey: provisionResults.luisPrediction?.endpointKey,
-              endpoint: provisionResults.luisPrediction?.endpoint,
-              region: provisionResults.resourceGroup.location,
+              authoringKey: currentSettings?.luis?.authoringKey ?? provisionResults.luisAuthoring?.authoringKey,
+              authoringEndpoint: currentSettings?.luis?.authoringEndpoint ?? provisionResults.luisAuthoring?.authoringEndpoint,
+              endpointKey: currentSettings?.luis?.endpointKey ?? provisionResults.luisPrediction?.endpointKey,
+              endpoint: currentSettings?.luis?.endpoint ?? provisionResults.luisPrediction?.endpoint,
+              region: currentSettings?.luis?.region ?? provisionResults.resourceGroup.location,
             },
-            MicrosoftAppId: provisionResults.appId,
-            MicrosoftAppPassword: provisionResults.appPassword,
+            MicrosoftAppId: currentSettings?.settings.MicrosoftAppId ?? provisionResults.appId,
+            MicrosoftAppPassword: currentSettings?.settings.MicrosoftAppPassword ?? provisionResults.appPassword,
           },
         };
 
