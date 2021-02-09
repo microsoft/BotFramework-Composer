@@ -523,10 +523,10 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSubmit = useMemo(
     () => async (options) => {
       // call back to the main Composer API to begin this process...
-      // startProvision(options);
+      startProvision(options);
       console.log(options);
       // TODO: close window
-      // closeDialog();
+      closeDialog();
     },
     []
   );

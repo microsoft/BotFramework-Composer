@@ -522,7 +522,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
      *************************************************************************************************/
     provision = async (config: any, project: IBotProject, user, getAccessToken): Promise<ProcessStatus> => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
-
+      console.log(config);
       this.asyncProvision(jobId, config, project, user);
       return BackgroundProcessManager.getStatus(jobId);
     };
