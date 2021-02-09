@@ -453,25 +453,27 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [currentSubscription]);
 
   // const removePlaceholder = React.useCallback((config:any)=>{
-  //   if(config){
-  //     let str = JSON.stringify(config);
-  //     str = str.replace(/<.*>/g,'');
-  //     console.log(str);
-  //     const newConfig = JSON.parse(str);
-  //     console.log(newConfig);
-  //     return newConfig;
-  //   } else {
-  //     return undefined;
+  //   try{
+  //     if(config){
+  //       let str = JSON.stringify(config);
+  //       str = str.replace(/<.*>/g,null);
+  //       console.log(str);
+  //       const newConfig = JSON.parse(str);
+  //       console.log(newConfig);
+  //       return newConfig;
+  //     } else {
+  //       return undefined;
+  //     }
+  //   }catch(e){
+  //     console.log(e);
   //   }
+
   // },[]);
 
   const getExistResources = ()=>{
     const result = [];
     // let config = removePlaceholder(currentConfig);
     const config = currentConfig;
-    // const str = JSON.stringify(config).replace(/<.*>/g, '');
-    // console.log(JSON.parse(str));
-    console.log(config);
     if(config){
       if(config.hostname){
         result.push(AzureResourceTypes.WEBAPP);

@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { PublishTarget } from '@bfc/shared';
+import { DialogSetting, PublishTarget } from '@bfc/shared';
 
 import { provisionStatusState, settingsState } from '../atoms/botState';
 import { CardProps } from '../../components/Notifications/NotificationCard';
@@ -35,6 +35,21 @@ export const provisionDispatcher = () => {
     };
   };
 
+  const updatePublishTargets = (settings: DialogSetting, profile: PublishTarget) => {
+    const index = settings.publishTargets?.findIndex((item) => item.name === profile.name);
+    if (index && index >= 0) {
+      return settings.publishTargets?.map((item) => {
+        if (item.name === profile.name) {
+          return profile;
+        } else {
+          return item;
+        }
+      });
+    } else {
+      return (settings.publishTargets || []).concat([profile]);
+    }
+  };
+
   const provisionToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       config: any,
@@ -46,7 +61,6 @@ export const provisionDispatcher = () => {
     ) => {
       try {
         TelemetryClient.track('NewPublishingProfileStarted');
-        console.log(currentProfile);
         const result = await httpClient.post(
           `/provision/${projectId}/${type}`,
           { ...config, graphToken: graphToken, currentProfile },
@@ -117,10 +131,10 @@ export const provisionDispatcher = () => {
               name: targetName,
               type: targetType,
             };
-            const targetlist = (settings.publishTargets || []).concat([profile]);
+            const targetList = updatePublishTargets(settings, profile);
             return {
               ...settings,
-              publishTargets: targetlist,
+              publishTargets: targetList,
             };
           });
 
