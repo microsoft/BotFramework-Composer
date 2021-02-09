@@ -163,7 +163,7 @@ export class AssetManager {
 
     log('About to instantiate a template!', dstDir, generatorName, projectName);
     await this.yeomanEnv.run([generatorName, projectName], {}, () => {
-      console.log('DONE');
+      log('Template successfully instantiated', dstDir, generatorName, projectName);
     });
     return true;
   }

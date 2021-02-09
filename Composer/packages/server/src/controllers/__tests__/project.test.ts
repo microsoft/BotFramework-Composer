@@ -209,10 +209,6 @@ describe('create a component model conversational core bot project', () => {
     ProjectController.createProjectV2(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(202);
   });
-
-  it('should create a new project', async () => {
-    // await ProjectController.createProjectAsync(mockReq, '123');
-  });
 });
 
 describe('create a Empty Bot project', () => {
