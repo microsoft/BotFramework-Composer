@@ -24,6 +24,12 @@ jest.mock('yeoman-environment', () => ({
   }),
 }));
 
+jest.mock('fs-extra', () => {
+  return {
+    mkdirSync: jest.fn(),
+  };
+});
+
 jest.mock('../../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
