@@ -250,7 +250,9 @@ export class Builder {
     onProgress: IOrchestratorProgress,
     onFinish: IOrchestratorProgress
   ): Promise<void> {
-    await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
+    if (!(await pathExists(modelPath))) {
+      await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
+    }
   }
 
   /**
