@@ -144,7 +144,7 @@ describe('assetManager', () => {
 
   describe('copyRemoteProjectTemplateToV2', () => {
     it('Should instantiate npm driven template and return new conv ref', async () => {
-      const mockLocRef = { path: '/path/to/npmbot1', storageId: 'default' };
+      const mockLocRef = { path: '/path/to/npmbot', storageId: 'default' };
       const assetManager = new AssetManager();
       const newBotLocationRef = await assetManager.copyRemoteProjectTemplateToV2(
         'generator-conversational-core',
@@ -153,7 +153,7 @@ describe('assetManager', () => {
         mockLocRef
       );
       expect(newBotLocationRef).toStrictEqual({
-        path: '/path/to/npmbot1/sampleConversationalCore',
+        path: '/path/to/npmbot/sampleConversationalCore',
         storageId: 'default',
       });
     });

@@ -165,7 +165,6 @@ export class AssetManager {
     await this.yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });
-    console.log('hello in here');
     return true;
   }
 
