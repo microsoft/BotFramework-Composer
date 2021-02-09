@@ -6,13 +6,12 @@ import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { OpenConfirmModal } from '@bfc/ui-shared';
+import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import { useSetRecoilState } from 'recoil';
 import React from 'react';
 
-import { DialogDeleting } from '../../constants';
+import { DialogDeleting, removeSkillDialog } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
-import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { navigateTo, createBotSettingUrl } from '../../utils/navigation';
 import {
@@ -26,6 +25,7 @@ import {
   showAddSkillDialogModalState,
   rootBotProjectIdSelector,
   currentDialogState,
+  skillUsedInBotsSelector,
 } from '../../recoilModel';
 import { undoFunctionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
@@ -34,7 +34,7 @@ import { useBotOperations } from '../../components/BotRuntimeController/useBotOp
 import { exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-import { deleteDialogContent } from './styles';
+import { deleteDialogContent, removeSkillDialogContentStyle, removeSkillDialogStyle } from './styles';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -65,9 +65,10 @@ const parseTriggerId = (triggerId: string | undefined): number | undefined => {
   return parseInt(indexString);
 };
 
-type SideBarProps = { dialogId: string; projectId: string };
+type SideBarProps = { projectId: string };
 
-const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
+const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
+  const { dialogId, selected: encodedSelected } = useRecoilValue(designPageLocationState(projectId));
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
@@ -75,7 +76,6 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const { commitChanges } = undoFunction;
-  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
 
   const {
     removeDialog,
@@ -90,10 +90,10 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
     updateZoomRate,
     deleteTrigger,
   } = useRecoilValue(dispatcherState);
-
+  const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === dialogId)?.content,
-    designPageLocation.selected || ''
+    encodedSelected || ''
   );
 
   const setTriggerModalInfo = useSetRecoilState(triggerModalInfoState);
@@ -238,6 +238,27 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
     }
   };
 
+  async function handleRemoveSkill(skillId: string) {
+    // check if skill used in current project workspace
+    const usedInBots = skillUsedInBotsMap[skillId];
+    const confirmRemove = usedInBots.length
+      ? await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subText, {
+          onRenderContent: () => {
+            return (
+              <div css={removeSkillDialogStyle}>
+                <div> {removeSkillDialog().subText} </div>
+                <div css={removeSkillDialogContentStyle}> {usedInBots.map(({ name }) => name).join('\n')} </div>
+                <div> {removeSkillDialog().footerText} </div>
+              </div>
+            );
+          },
+        })
+      : await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subTextNoUse);
+
+    if (!confirmRemove) return;
+    removeSkillFromBotProject(skillId);
+  }
+
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
 
   return (
@@ -254,7 +275,7 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
         onBotDeleteDialog={handleDeleteDialog}
         onBotEditManifest={handleDisplayManifestModal}
         onBotExportZip={exportToZip}
-        onBotRemoveSkill={removeSkillFromBotProject}
+        onBotRemoveSkill={handleRemoveSkill}
         onBotStart={startSingleBot}
         onBotStop={stopSingleBot}
         onDialogCreateTrigger={(projectId, dialogId) => {
@@ -266,6 +287,6 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
       />
     </React.Fragment>
   );
-};
+});
 
 export default SideBar;
