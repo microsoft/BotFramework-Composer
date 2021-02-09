@@ -107,7 +107,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
     if (link.botError) {
       setBrokenSkillInfo(link);
     }
-    const { skillId, dialogId, trigger } = link;
+    const { skillId, dialogId, trigger, projectId } = link;
 
     updateZoomRate({ currentRate: 1 });
 
@@ -262,30 +262,28 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
 
   return (
-    <React.Fragment>
-      <ProjectTree
-        headerMenu={projectTreeHeaderMenuItems}
-        selectedLink={{
-          projectId: rootProjectId,
-          skillId: rootProjectId === projectId ? undefined : projectId,
-          dialogId,
-          trigger: parseTriggerId(selectedTrigger?.id),
-        }}
-        onBotCreateDialog={handleCreateDialog}
-        onBotDeleteDialog={handleDeleteDialog}
-        onBotEditManifest={handleDisplayManifestModal}
-        onBotExportZip={exportToZip}
-        onBotRemoveSkill={handleRemoveSkill}
-        onBotStart={startSingleBot}
-        onBotStop={stopSingleBot}
-        onDialogCreateTrigger={(projectId, dialogId) => {
-          setTriggerModalInfo({ projectId, dialogId });
-        }}
-        onDialogDeleteTrigger={handleDeleteTrigger}
-        onErrorClick={handleErrorClick}
-        onSelect={handleSelect}
-      />
-    </React.Fragment>
+    <ProjectTree
+      headerMenu={projectTreeHeaderMenuItems}
+      selectedLink={{
+        projectId: rootProjectId,
+        skillId: rootProjectId === projectId ? undefined : projectId,
+        dialogId,
+        trigger: parseTriggerId(selectedTrigger?.id),
+      }}
+      onBotCreateDialog={handleCreateDialog}
+      onBotDeleteDialog={handleDeleteDialog}
+      onBotEditManifest={handleDisplayManifestModal}
+      onBotExportZip={exportToZip}
+      onBotRemoveSkill={handleRemoveSkill}
+      onBotStart={startSingleBot}
+      onBotStop={stopSingleBot}
+      onDialogCreateTrigger={(projectId, dialogId) => {
+        setTriggerModalInfo({ projectId, dialogId });
+      }}
+      onDialogDeleteTrigger={handleDeleteTrigger}
+      onErrorClick={handleErrorClick}
+      onSelect={handleSelect}
+    />
   );
 });
 
