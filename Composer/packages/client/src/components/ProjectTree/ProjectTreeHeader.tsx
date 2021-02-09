@@ -7,8 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { CommandButton } from 'office-ui-fabric-react/lib/Button';
-import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 
 const searchBox: ISearchBoxStyles = {
@@ -35,7 +34,7 @@ const headerText = css`
   margin: 0;
 `;
 
-const overflowSet = css`
+const commands = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -53,46 +52,6 @@ export interface ProjectTreeHeaderProps {
   menu: ProjectTreeHeaderMenuItem[];
   onFilter?: (newValue?: string) => void;
 }
-
-const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
-  if (item.onRender) {
-    return item.onRender(item);
-  }
-  return (
-    <CommandButton
-      css={buttonStyle}
-      iconProps={{ iconName: item.icon }}
-      menuProps={item.subMenuProps}
-      role="menuitem"
-      text={item.name}
-      onClick={item.onClick}
-    />
-  );
-};
-
-const onRenderOverflowButton = (isActive: boolean) => {
-  const moreLabel = formatMessage('Actions');
-  return (overflowItems: IContextualMenuItem[] | undefined) => {
-    if (!overflowItems) return null;
-    return (
-      <CommandButton
-        ariaLabel={moreLabel}
-        className="project-tree-header-more-btn"
-        css={buttonStyle}
-        data-is-focusable={isActive}
-        data-testid="projectTreeHeaderMoreButton"
-        iconProps={{ iconName: 'Add' }}
-        menuProps={{ items: overflowItems }}
-        text={formatMessage('Add')}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.stopPropagation();
-          }
-        }}
-      />
-    );
-  };
-};
 
 export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFilter = () => {} }) => {
   const [showFilter, setShowFilter] = useState(false);
@@ -116,9 +75,9 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFi
       },
       onClick: item.onClick,
     };
-  });
+  }) as IOverflowSetItemProps[];
 
-  const handleSearchBoxBlur = (_e) => {
+  const handleSearchBoxBlur = () => {
     onFilter('');
     setShowFilter(false);
   };
@@ -137,27 +96,30 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFi
           onChange={(_e, value) => onFilter(value)}
         />
       ) : (
-        <OverflowSet
-          doNotContainWithinFocusZone
-          css={overflowSet}
-          data-testid={'ProjectTreeHeaderMoreButton'}
-          items={[
-            {
-              key: 'newItem',
-              icon: 'Filter',
-              ariaLabel: formatMessage('Filter by trigger name'),
-              onClick: () => {
-                setShowFilter(true);
-              },
-            },
-          ]}
-          overflowItems={overflowMenu}
-          overflowSide={'start'}
-          role="row"
-          styles={{ item: { flex: 1, justifyContent: 'flex-end' } }}
-          onRenderItem={onRenderItem}
-          onRenderOverflowButton={onRenderOverflowButton(true)}
-        />
+        <div css={commands}>
+          <CommandButton
+            data-is-focusable
+            ariaLabel={formatMessage('Actions')}
+            className="project-tree-header-more-btn"
+            css={buttonStyle}
+            data-testid="projectTreeHeaderMoreButton"
+            iconProps={{ iconName: 'Add' }}
+            menuProps={{ items: overflowMenu }}
+            text={formatMessage('Add')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.stopPropagation();
+              }
+            }}
+          />
+          <CommandButton
+            css={buttonStyle}
+            iconProps={{ iconName: 'Filter' }}
+            onClick={() => {
+              setShowFilter(true);
+            }}
+          />
+        </div>
       )}
     </div>
   );
