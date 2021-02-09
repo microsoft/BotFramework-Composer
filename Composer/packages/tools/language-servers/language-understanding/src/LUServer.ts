@@ -31,7 +31,7 @@ import {
   LUDocument,
   generateDiagnostic,
   convertDiagnostics,
-  getCurrLine,
+  getLineByIndex,
 } from './utils';
 
 // define init methods call from client
@@ -121,10 +121,10 @@ export class LUServer {
     const lineCount = document.lineCount;
     let i = 0;
     while (i < lineCount) {
-      const currLine = getCurrLine(document, lineCount, i);
+      const currLine = getLineByIndex(document, i);
       if (currLine?.startsWith('>>')) {
         for (let j = i + 1; j < lineCount; j++) {
-          if (getCurrLine(document, lineCount, j)?.startsWith('>>')) {
+          if (getLineByIndex(document, j)?.startsWith('>>')) {
             items.push(FoldingRange.create(i, j - 1));
             i = j - 1;
             break;
@@ -145,7 +145,7 @@ export class LUServer {
     for (const section in luResource.Sections) {
       const start = sections[section].Range.Start.Line - 1;
       let end = sections[section].Range.End.Line - 1;
-      const sectionLastLine = getCurrLine(document, lineCount, end);
+      const sectionLastLine = getLineByIndex(document, end);
       if (sectionLastLine?.startsWith('>>')) {
         end = end - 1;
       }
@@ -309,6 +309,7 @@ export class LUServer {
         if (entityGroup && entityGroup.length >= 2) {
           entityName = entityGroup[1];
         }
+
         if (mlEntities.includes(entityName)) {
           const newPos = Position.create(pos.line, 0);
           const item: TextEdit = TextEdit.insert(newPos, '\t-@');

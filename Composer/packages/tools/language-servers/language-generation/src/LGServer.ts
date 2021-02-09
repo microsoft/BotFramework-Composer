@@ -35,7 +35,7 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
-  getCurrLine,
+  getLineByIndex,
 } from './utils';
 
 // define init methods call from client
@@ -120,13 +120,14 @@ export class LGServer {
     if (!document) {
       return items;
     }
+
     const lineCount = document.lineCount;
     let i = 0;
     while (i < lineCount) {
-      const currLine = getCurrLine(document, lineCount, i);
+      const currLine = getLineByIndex(document, i);
       if (currLine?.startsWith('>>')) {
         for (let j = i + 1; j < lineCount; j++) {
-          if (getCurrLine(document, lineCount, j)?.startsWith('>>')) {
+          if (getLineByIndex(document, j)?.startsWith('>>')) {
             items.push(FoldingRange.create(i, j - 1));
             i = j - 1;
             break;
@@ -143,23 +144,25 @@ export class LGServer {
     }
 
     for (let i = 0; i < lineCount; i++) {
-      const currLine = getCurrLine(document, lineCount, i);
+      const currLine = getLineByIndex(document, i);
       if (currLine?.startsWith('#')) {
         let j = i + 1;
         for (j = i + 1; j < lineCount; j++) {
-          const secLine = getCurrLine(document, lineCount, j);
+          const secLine = getLineByIndex(document, j);
           if (secLine?.startsWith('>>') || secLine?.startsWith('#')) {
             items.push(FoldingRange.create(i, j - 1));
             i = j - 1;
             break;
           }
         }
+
         if (i !== j - 1) {
           items.push(FoldingRange.create(i, j - 1));
           i == j - 2;
         }
       }
     }
+
     return items;
   }
 
