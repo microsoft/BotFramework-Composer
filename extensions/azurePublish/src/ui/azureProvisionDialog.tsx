@@ -47,6 +47,7 @@ import {
   Selection,
   SelectionMode,
   DetailsRow,
+  setRTL,
 } from 'office-ui-fabric-react';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
@@ -451,21 +452,48 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentSubscription]);
 
+  // const removePlaceholder = React.useCallback((config:any)=>{
+  //   if(config){
+  //     let str = JSON.stringify(config);
+  //     str = str.replace(/<.*>/g,'');
+  //     console.log(str);
+  //     const newConfig = JSON.parse(str);
+  //     console.log(newConfig);
+  //     return newConfig;
+  //   } else {
+  //     return undefined;
+  //   }
+  // },[]);
+
   const getExistResources = ()=>{
     const result = [];
-    if(currentConfig){
-      if(currentConfig.hostname){
+    // let config = removePlaceholder(currentConfig);
+    const config = currentConfig;
+    // const str = JSON.stringify(config).replace(/<.*>/g, '');
+    // console.log(JSON.parse(str));
+    console.log(config);
+    if(config){
+      if(config.hostname){
         result.push(AzureResourceTypes.WEBAPP);
         result.push(AzureResourceTypes.APP_REGISTRATION);
       }
-      if(currentConfig.settings?.MicrosoftAppId){
+      if(config.settings?.MicrosoftAppId){
         result.push(AzureResourceTypes.BOT_REGISTRATION);
       }
-      if(currentConfig.settings?.luis?.authoringKey){
+      if(config.settings?.luis?.authoringKey){
         result.push(AzureResourceTypes.LUIS_AUTHORING);
       }
-      if(currentConfig.settings?.luis?.endpointKey){
+      if(config.settings?.luis?.endpointKey){
         result.push(AzureResourceTypes.LUIS_PREDICTION);
+      }
+      if(config.settings?.applicationInsights?.InstrumentationKey){
+        result.push(AzureResourceTypes.APPINSIGHTS);
+      }
+      if(config.settings?.cosmosDb?.authKey){
+        result.push(AzureResourceTypes.COSMOSDB);
+      }
+      if(config.settings?.blobStorage?.connectionString){
+        result.push(AzureResourceTypes.BLOBSTORAGE);
       }
       return result;
     } else return [];
@@ -733,13 +761,12 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{margin: '0 4px'}}
             />
             <PrimaryButton
-              disabled={isDisAble}
               text={'Next'}
               onClick={()=>{
                 setPage(PageTypes.ReviewResource);
                 setTitle(DialogTitle.REVIEW);
                 let selectedResources = requireResources.concat(enabledResources);
-                selectedResources = selectedResources.map(item=>({...item, region: currentLocation, resourceGroup:currentConfig.resourceGroup || currentHostName}))
+                selectedResources = selectedResources.map(item=>({...item, region: currentLocation, resourceGroup:currentConfig?.resourceGroup || currentHostName}))
                 console.log(selectedResources);
                 setReviewListItems(selectedResources);
               }}
