@@ -11,17 +11,14 @@ export interface WebchatLog {
 }
 
 export const WebchatLogContent = () => {
+  const [webchatLogs, setWebchatLogs] = useState<WebchatLog[]>([]);
+
   useEffect(() => {
-    extensionEventEmitter.on('wechat:log', ({ type, message }) => {
-      console.log('Webchat log', type, message);
+    extensionEventEmitter.on('wechat:log', (log) => {
+      setWebchatLogs([...webchatLogs, log]);
     });
   }, []);
 
-  const [webchatLogs, setWebchatLogs] = useState<WebchatLog[]>([]);
-
-  (window as any).addLog = (msg) => {
-    setWebchatLogs([...webchatLogs, { conversationId: 'test', type: 'error', message: msg }]);
-  };
   return (
     <div>
       Webchat Content
