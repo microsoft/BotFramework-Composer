@@ -18,7 +18,7 @@ export interface ProvisionConfig {
   externalResources: ResourceType[];
   location: { id: string; name: string; displayName: string };
   luisLocation: string;
-  subscription: { subscriptionId: string; tenantId: string; displayName: string };
+  subscription: string;
   logger?: (string) => any;
   name: string; // profile name
   type: string; // webapp or function
@@ -42,7 +42,7 @@ export class BotProjectProvision {
   private tenantId = '';
 
   constructor(config: ProvisionConfig) {
-    this.subscriptionId = config.subscription.subscriptionId;
+    this.subscriptionId = config.subscription;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.graphToken = config.graphToken;

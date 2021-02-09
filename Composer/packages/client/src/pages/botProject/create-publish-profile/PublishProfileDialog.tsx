@@ -100,7 +100,14 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
-      const newTargets = [...(targets || []), { name, type, configuration }];
+      // check exist
+      const newTargets = [...targets] || [];
+      const index = targets.findIndex((item) => item.name === name);
+      if (index >= 0) {
+        newTargets.splice(index, 1, { name, type, configuration });
+      } else {
+        newTargets.push({ name, type, configuration });
+      }
       await setPublishTargets(newTargets, projectId);
       TelemetryClient.track('NewPublishingProfileSaved', { type });
     },
