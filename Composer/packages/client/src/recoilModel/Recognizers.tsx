@@ -56,8 +56,8 @@ export const OrchestratorRecognizerTemplate = (target: string, fileName: string)
 
   return {
     $kind: SDKKinds.OrchestratorRecognizer,
-    modelPath: `=settings.orchestrator.models.${locale.replace(/[-.]/g, '_')}`,
-    snapshotPath: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
+    modelFolder: `=settings.orchestrator.models.${locale.replace(/[-.]/g, '_')}`,
+    snapshotFile: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
   };
 };
 
