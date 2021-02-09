@@ -6,7 +6,6 @@ import find from 'lodash/find';
 import flatten from 'lodash/flatten';
 import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
-import extractAllEntities from '@bfc/indexers/lib/dialogUtils/extractLUEntities';
 import { UserIdentity } from '@bfc/extension';
 import { ensureDir, existsSync, remove } from 'fs-extra';
 
@@ -121,15 +120,9 @@ export class BotProjectService {
     return [...defaultProperties, ...userDefined];
   }
 
-  public static async staticEntityResolver(projectId: string): Promise<any[]> {
-    console.log('here is it!', projectId);
-    const suggestEntities = BotProjectService.getIndexedProjectById(projectId)?.luFiles.map(async (file) => {
-      const entities = await extractAllEntities(file.content);
-      console.log(entities);
-      return entities;
-    });
-
-    return Promise.resolve(flatten(suggestEntities));
+  public static staticEntityResolver(projectId: string): string[] | undefined {
+    const contents = BotProjectService.getIndexedProjectById(projectId)?.luFiles.map((file) => file.content);
+    return flatten(contents);
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

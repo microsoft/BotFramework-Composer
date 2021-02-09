@@ -4,7 +4,10 @@
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
 import { DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
+import { parser } from '@microsoft/bf-lu/lib/parser';
 import { offsetRange } from '@bfc/indexers';
+
+const { parseFile } = parser;
 
 // state should map to tokenizer state
 export enum LGCursorState {
@@ -161,3 +164,47 @@ export const cardPropDict = {
   Attachment: ['contenttype', 'content'],
   Others: ['type', 'name', 'value'],
 };
+
+export async function extractLUISContent(text: string): Promise<any> {
+  let parsedContent: any;
+  const log = false;
+  const locale = 'en-us';
+  try {
+    parsedContent = await parseFile(text, log, locale);
+  } catch (e) {
+    // nothing to do in catch block
+  }
+
+  if (parsedContent !== undefined) {
+    return Promise.resolve(parsedContent.LUISJsonStructure);
+  } else {
+    return undefined;
+  }
+}
+
+export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: string[]): string[] {
+  const suggestionEntityList: string[] = [];
+  if (luisJson !== undefined) {
+    suggestionEntityTypes.forEach((entityType) => {
+      if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
+        luisJson[entityType].forEach((entity) => {
+          if (entity?.name) {
+            suggestionEntityList.push(entity.name);
+          }
+        });
+      }
+    });
+  }
+
+  return suggestionEntityList;
+}
+
+export const suggestionAllEntityTypes = [
+  'entities',
+  'regex_entities',
+  'patternAnyEntities',
+  'preBuiltEntities',
+  'closedLists',
+  'phraseLists',
+  'composites',
+];

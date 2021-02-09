@@ -231,8 +231,6 @@ export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;
 
-export type AsyncMemoryResolver = (id: string) => Promise<string[] | undefined>;
-
 export type SkillManifestFile = {
   content: any;
   id: string;

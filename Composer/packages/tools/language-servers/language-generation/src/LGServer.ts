@@ -16,7 +16,7 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
-import { MemoryResolver, AsyncMemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
+import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
 
 import { LgParser } from './lgParser';
@@ -31,6 +31,9 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
+  getSuggestionEntities,
+  extractLUISContent,
+  suggestionAllEntityTypes,
 } from './utils';
 
 // define init methods call from client
@@ -52,7 +55,7 @@ export class LGServer {
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
     protected readonly memoryResolver?: MemoryResolver,
-    protected readonly entitiesResolver?: AsyncMemoryResolver
+    protected readonly entitiesResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => this.validate(change.document));
@@ -501,13 +504,18 @@ export class LGServer {
 
     const wordRange = getEntityRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
-    console.log('current word!', word);
     const projectId = this.getLGDocument(document)?.projectId;
-    console.log(projectId);
+    let suggestEntities: string[] = [];
     if (projectId && this.entitiesResolver) {
-      console.log('Is there?');
-      this.luisEntities = (await this.entitiesResolver(projectId)) || [];
-      console.log(this.luisEntities);
+      const luConetnts = this.entitiesResolver(projectId);
+      if (luConetnts) {
+        for (const conetnt of luConetnts) {
+          const luisJson = await extractLUISContent(conetnt);
+          suggestEntities = suggestEntities.concat(getSuggestionEntities(luisJson, suggestionAllEntityTypes));
+        }
+      }
+
+      this.luisEntities = suggestEntities;
     }
 
     const startWithAt = word.startsWith('@');
