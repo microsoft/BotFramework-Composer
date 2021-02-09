@@ -302,13 +302,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const newResourceGroup = useMemo(
     () => (e, newName) => {
       setHostName(newName);
-      // validate existed or not
-      const existed = resourceGroups.find((t) => t.name === newName);
-      if (existed) {
-        setErrorHostName('this resource group already exist');
-      } else {
-        checkNameAvailability(newName);
-      }
+      checkNameAvailability(newName);
     },
     [resourceGroups, checkNameAvailability]
   );
