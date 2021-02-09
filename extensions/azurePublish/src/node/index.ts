@@ -369,7 +369,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           this.logger(msg);
           BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
         },
-        tenantId: subscription.tenantId, // does the tenantId ever come back from the subscription API we use? it does not appear in my tests.
       });
 
       // perform the provision using azureProvisioner.create.

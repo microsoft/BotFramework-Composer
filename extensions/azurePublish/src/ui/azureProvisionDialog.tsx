@@ -18,6 +18,7 @@ import {
   getType,
   getTokenFromCache,
   isGetTokenFromUser,
+  useConfigBeingEdited
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -51,6 +52,9 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
 import jwtDecode from 'jwt-decode';
 import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview, getLuisAuthoringRegions, CheckWebAppNameAvailability } from './api';
+import { AzureResourceTypes } from '../types';
+import { Item } from '@azure/cosmos';
+import { hostname } from 'os';
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
@@ -58,6 +62,7 @@ const choiceOptions: IChoiceGroupOption[] = [
 ];
 const PageTypes = {
   ConfigProvision: 'config',
+  AddResources: 'add',
   ReviewResource: 'review',
 };
 const DialogTitle = {
@@ -66,6 +71,10 @@ const DialogTitle = {
     subText: formatMessage(
       'How you would like to provision your Azure resources to publish your bot?'
     ),
+  },
+  ADD_RESOURCES: {
+    title: formatMessage('Add resources'),
+    subText: formatMessage('Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile.')
   },
   REVIEW: {
     title: formatMessage('Review & create'),
@@ -128,6 +137,128 @@ const onRenderLabel = (props) => {
   );
 };
 
+const columns: IColumn[] = [
+  {
+    key: 'Icon',
+    name: 'File Type',
+    isIconOnly: true,
+    fieldName: 'name',
+    minWidth: 16,
+    maxWidth: 16,
+    onRender: (item: ResourcesItem & {name,icon}) => {
+      return <img src={item.icon} />;
+    },
+  },
+  {
+    key: 'Name',
+    name: formatMessage('Name'),
+    className: 'name',
+    fieldName: 'name',
+    minWidth: 300,
+    isRowHeader: true,
+    data: 'string',
+    onRender: (item: ResourcesItem & {name,icon}) => {
+      return <div style={{whiteSpace: 'normal'}}>
+          <div style={{fontSize: '14px', color: NeutralColors.gray190}}>{item.name}</div>
+          <div style={{fontSize: '12px', color: NeutralColors.gray130}}>{item.text} | {item.tier}</div>
+        </div>;
+    },
+    isPadded: true,
+  },
+  {
+    key: 'Description',
+    name: formatMessage('Description'),
+    className: 'description',
+    fieldName: 'description',
+    minWidth: 380,
+    isRowHeader: true,
+    data: 'string',
+    onRender: (item: ResourcesItem & {name,icon}) => {
+      return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.description}</div>;
+    },
+    isPadded: true,
+  }
+];
+
+const reviewCols: IColumn[] = [
+  {
+    key: 'Icon',
+    name: 'File Type',
+    isIconOnly: true,
+    fieldName: 'name',
+    minWidth: 16,
+    maxWidth: 16,
+    onRender: (item: ResourcesItem & {name,icon}) => {
+      return <img src={item.icon} />;
+    },
+  },
+  {
+    key: 'Resource Type',
+    name: formatMessage('Resource Type'),
+    className: 'Resource Type',
+    fieldName: 'Resource Type',
+    minWidth: 150,
+    isRowHeader: true,
+    data: 'string',
+    onRender: (item: ResourcesItem) => {
+      return <div>{item.text}</div>;
+    },
+    isPadded: true,
+  },
+  {
+    key: 'Status',
+    name: formatMessage('Status'),
+    className: 'Status',
+    fieldName: 'Status',
+    minWidth: 100,
+    isRowHeader: true,
+    data: 'string',
+    onRender: (item: ResourcesItem) => {
+    return <div>Ready</div>;
+    },
+    isPadded: true,
+  },
+  {
+    key: 'resourceGroup',
+    name: formatMessage('Resource Group'),
+    className: 'resourceGroup',
+    fieldName: 'resourceGroup',
+    minWidth: 100,
+    isRowHeader: true,
+    data: 'string',
+    onRender: (item: ResourcesItem) => {
+    return <div>{item.resourceGroup}</div>;
+    },
+    isPadded: true,
+  },
+  {
+    key: 'Name',
+    name: formatMessage('Name'),
+    className: 'name',
+    fieldName: 'name',
+    minWidth: 150,
+    isRowHeader: true,
+    data: 'string',
+    onRender: (item: ResourcesItem & {name,icon}) => {
+      return <div>{item.name}</div>;
+    },
+    isPadded: true,
+  },
+  {
+    key: 'Region',
+    name: formatMessage('Region'),
+    className: 'region',
+    fieldName: 'region',
+    minWidth: 100,
+    isRowHeader: true,
+    data: 'string',
+    onRender: (item: ResourcesItem & {name,icon}) => {
+    return <div>{item.region.displayName}</div>;
+    },
+    isPadded: true,
+  },
+];
+
 export const AzureProvisionDialog: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
@@ -138,7 +269,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<any>();
 
   const [choice, setChoice] = useState(choiceOptions[0]);
-  const [currentSubscription, setSubscription] = useState<Subscription>();
+  const [currentSubscription, setSubscription] = useState<string>('');
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
@@ -148,57 +279,16 @@ export const AzureProvisionDialog: React.FC = () => {
   const [requireResources, setRequireResources] = useState<ResourcesItem[]>([]);
 
   const [isEditorError, setEditorError] = useState(false);
-  const [importConfig, setImportConfig] = useState();
+  const [importConfig, setImportConfig] = useState<any>();
 
   const [page, setPage] = useState(PageTypes.ConfigProvision);
   const [group, setGroup] = useState<IGroup[]>();
   const [listItems, setListItem] = useState<(ResourcesItem & {name,icon})[]>();
+  const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
 
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
-
-  const columns: IColumn[] = [
-    {
-      key: 'Icon',
-      name: 'File Type',
-      isIconOnly: true,
-      fieldName: 'name',
-      minWidth: 16,
-      maxWidth: 16,
-      onRender: (item: ResourcesItem & {name,icon}) => {
-        return <img src={item.icon} />;
-      },
-    },
-    {
-      key: 'Name',
-      name: formatMessage('Name'),
-      className: 'name',
-      fieldName: 'name',
-      minWidth: 300,
-      isRowHeader: true,
-      data: 'string',
-      onRender: (item: ResourcesItem & {name,icon}) => {
-        return <div style={{whiteSpace: 'normal'}}>
-            <div style={{fontSize: '14px', color: NeutralColors.gray190}}>{item.name}</div>
-            <div style={{fontSize: '12px', color: NeutralColors.gray130}}>{item.text} | {item.tier}</div>
-          </div>;
-      },
-      isPadded: true,
-    },
-    {
-      key: 'Description',
-      name: formatMessage('Description'),
-      className: 'description',
-      fieldName: 'description',
-      minWidth: 380,
-      isRowHeader: true,
-      data: 'string',
-      onRender: (item: ResourcesItem & {name,icon}) => {
-        return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.description}</div>;
-      },
-      isPadded: true,
-    }
-  ];
+  const currentConfig = useConfigBeingEdited();
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -236,6 +326,17 @@ export const AzureProvisionDialog: React.FC = () => {
 
   }, []);
 
+  useEffect(()=>{
+    if(currentConfig){
+      if(currentConfig?.subscriptionId){
+        setSubscription(currentConfig?.subscriptionId);
+      }
+      if(currentConfig?.hostname){
+        setHostName(currentConfig?.hostname);
+      }
+    }
+  },[currentConfig]);
+
   useEffect(()=> {
     if(token){
       getSubscriptions(token).then(setSubscriptions);
@@ -267,17 +368,17 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const updateCurrentSubscription = useMemo(
     () => (_e, option?: IDropdownOption) => {
-      const sub = subscriptions.find((t) => t.subscriptionId === option?.key);
+      const sub = subscriptionOption.find((t) => t.key === option?.key);
 
       if (sub) {
-        setSubscription(sub);
+        setSubscription(sub.key);
       }
     },
-    [subscriptions]
+    [subscriptionOption]
   );
 
   const checkNameAvailability = useMemo(()=>(newName: string)=>{
-    if(currentSubscription){
+    if(!currentConfig?.subscriptionId && currentSubscription){
       // get preview list
       const names = getPreview(newName);
       let app = '';
@@ -287,7 +388,7 @@ export const AzureProvisionDialog: React.FC = () => {
         app = names.find(item=>item.key === 'webApp').name;
       }
       // check app name whether exist or not
-      CheckWebAppNameAvailability(token, app, currentSubscription.subscriptionId).then(value=>{
+      CheckWebAppNameAvailability(token, app, currentSubscription).then(value=>{
         if(!value.nameAvailable){
           setErrorHostName(value.message);
         } else {
@@ -297,17 +398,19 @@ export const AzureProvisionDialog: React.FC = () => {
     } else {
       setErrorHostName('');
     }
-  }, [publishType, currentSubscription, token]);
+  }, [currentConfig, publishType, currentSubscription, token]);
 
   const newResourceGroup = useMemo(
     () => (e, newName) => {
       setHostName(newName);
-      // validate existed or not
-      const existed = resourceGroups.find((t) => t.name === newName);
-      if (existed) {
-        setErrorHostName('this resource group already exist');
-      } else {
-        checkNameAvailability(newName);
+      if(!currentConfig?.hostname){
+        // validate existed or not
+        const existed = resourceGroups.find((t) => t.name === newName);
+        if (existed) {
+          setErrorHostName('this resource group already exist');
+        } else {
+          checkNameAvailability(newName);
+        }
       }
     },
     [resourceGroups, checkNameAvailability]
@@ -337,28 +440,57 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     if (currentSubscription) {
       // get resource group under subscription
-      getResourceGroups(token, currentSubscription.subscriptionId).then(setResourceGroups);
-      getDeployLocations(token, currentSubscription.subscriptionId).then(setDeployLocations);
+      getResourceGroups(token, currentSubscription).then(setResourceGroups);
+      getDeployLocations(token, currentSubscription).then(setDeployLocations);
       setLuisLocations(getLuisAuthoringRegions());
 
-      if(currentHostName){
-        // check its hostname availability
-        checkNameAvailability(currentHostName);
-      }
+      // if(currentHostName){
+      //   // check its hostname availability
+      //   checkNameAvailability(currentHostName);
+      // }
     }
   }, [currentSubscription]);
 
+  const getExistResources = ()=>{
+    const result = [];
+    if(currentConfig){
+      if(currentConfig.hostname){
+        result.push(AzureResourceTypes.WEBAPP);
+        result.push(AzureResourceTypes.APP_REGISTRATION);
+      }
+      if(currentConfig.settings?.MicrosoftAppId){
+        result.push(AzureResourceTypes.BOT_REGISTRATION);
+      }
+      if(currentConfig.settings?.luis?.authoringKey){
+        result.push(AzureResourceTypes.LUIS_AUTHORING);
+      }
+      if(currentConfig.settings?.luis?.endpointKey){
+        result.push(AzureResourceTypes.LUIS_PREDICTION);
+      }
+      return result;
+    } else return [];
+  }
+
   const onNext = useMemo(
     () => (hostname) => {
+      // get resources already have
+      const alreadyHave = getExistResources();
+      console.log(alreadyHave);
+
       const names = getPreview(hostname);
-      const result = extensionResourceOptions.map((resource) => {
+      const result = [];
+      for(let resource of extensionResourceOptions){
+        if(alreadyHave.find(item => item === resource.key)){
+          continue;
+        }
         const previewObject = names.find((n) => n.key === resource.key);
-        return {
+        result.push({
           ...resource,
           name: previewObject ? previewObject.name : `UNKNOWN NAME FOR ${resource.key}`,
           icon: previewObject ? previewObject.icon : undefined,
-        };
-      });
+        });
+      }
+      console.log(result);
 
       // set review list
       const groups: IGroup[] = [];
@@ -382,8 +514,8 @@ export const AzureProvisionDialog: React.FC = () => {
       setGroup(groups);
       setListItem(items);
 
-      setPage(PageTypes.ReviewResource);
-      setTitle(DialogTitle.REVIEW);
+      setPage(PageTypes.AddResources);
+      setTitle(DialogTitle.ADD_RESOURCES);
     },
     [extensionResourceOptions]
   );
@@ -391,9 +523,10 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSubmit = useMemo(
     () => async (options) => {
       // call back to the main Composer API to begin this process...
-      startProvision(options);
+      // startProvision(options);
+      console.log(options);
       // TODO: close window
-      closeDialog();
+      // closeDialog();
     },
     []
   );
@@ -421,8 +554,8 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const isDisAble = useMemo(() => {
-    return !currentSubscription || !currentHostName || errorHostName !== '';
-  }, [currentSubscription, currentHostName, errorHostName]);
+    return !currentSubscription || !currentHostName || errorHostName !== '' || !currentLocation;
+  }, [currentSubscription, currentHostName, errorHostName, currentLocation]);
 
   const PageFormConfig = (
     <Fragment>
@@ -431,7 +564,8 @@ export const AzureProvisionDialog: React.FC = () => {
         <form style={{ width: '50%', marginTop: '16px' }}>
           <Dropdown
             required
-            defaultSelectedKey={currentSubscription?.subscriptionId}
+            disabled={currentConfig?.subscriptionId}
+            defaultSelectedKey={currentSubscription}
             label={formatMessage('Subscription')}
             ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
             options={subscriptionOption}
@@ -440,11 +574,22 @@ export const AzureProvisionDialog: React.FC = () => {
             styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
           />
+          {currentConfig?.resourceGroup && <TextField
+            required
+            disabled
+            defaultValue={currentConfig?.resourceGroup}
+            label={formatMessage('Resource group name')}
+            ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
+            placeholder={'Name of your new resource group'}
+            styles={{ root: { paddingBottom: '8px' } }}
+            onRenderLabel={onRenderLabel}
+          />}
           <TextField
             required
+            disabled={currentConfig?.hostname}
             defaultValue={currentHostName}
             errorMessage={errorHostName}
-            label={formatMessage('Resource group name')}
+            label={currentConfig?.resourceGroup? formatMessage('Hostname') : formatMessage('Resource group name')}
             ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
             placeholder={'Name of your new resource group'}
             onChange={newResourceGroup}
@@ -482,7 +627,7 @@ export const AzureProvisionDialog: React.FC = () => {
           <JsonEditor
             id={publishType}
             height={300}
-            value={importConfig}
+            value={currentConfig || importConfig}
             onChange={(value) => {
               setEditorError(false);
               setImportConfig(value);
@@ -514,7 +659,7 @@ export const AzureProvisionDialog: React.FC = () => {
     return s;
   }, [listItems]);
 
-  const PageReview = useMemo(() => {
+  const PageAddResources = useMemo(() => {
     return (
       <Fragment>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 64px)'}}>
@@ -534,6 +679,23 @@ export const AzureProvisionDialog: React.FC = () => {
       </Fragment>
     );
   }, [group, listItems, selection]);
+
+
+  const PageReview = (
+    <Fragment>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 64px)'}}>
+        <DetailsList
+          isHeaderVisible
+          selectionMode={SelectionMode.none}
+          columns={reviewCols}
+          getKey={(item) => item.key}
+          items={reviewListItems}
+          layoutMode={DetailsListLayoutMode.justified}
+          setKey="none"
+        />
+      </ScrollablePane>
+    </Fragment>
+  );
 
   const PageFooter = useMemo(() => {
     if (page === PageTypes.ConfigProvision) {
@@ -557,7 +719,7 @@ export const AzureProvisionDialog: React.FC = () => {
           </div>
         </div>
       );
-    } else {
+    } else if(page === PageTypes.AddResources){
       return (
         <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
           {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'Sign out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
@@ -572,7 +734,32 @@ export const AzureProvisionDialog: React.FC = () => {
             />
             <PrimaryButton
               disabled={isDisAble}
-              text={'Done'}
+              text={'Next'}
+              onClick={()=>{
+                setPage(PageTypes.ReviewResource);
+                setTitle(DialogTitle.REVIEW);
+                let selectedResources = requireResources.concat(enabledResources);
+                selectedResources = selectedResources.map(item=>({...item, region: currentLocation, resourceGroup:currentConfig.resourceGroup || currentHostName}))
+                console.log(selectedResources);
+                setReviewListItems(selectedResources);
+              }}
+              style={{margin: '0 4px'}}
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
+          {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'Sign out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
+          <div>
+            <DefaultButton text={'Back'} onClick={()=>{
+              setPage(PageTypes.AddResources);
+              setTitle(DialogTitle.ADD_RESOURCES);
+            }} style={{margin: '0 4px'}} />
+            <PrimaryButton
+              disabled={isDisAble}
+              text="Done"
               onClick={async () => {
                 const selectedResources = requireResources.concat(enabledResources);
                 await onSubmit({
@@ -588,7 +775,7 @@ export const AzureProvisionDialog: React.FC = () => {
             />
           </div>
         </div>
-      );
+      )
     }
   }, [
     onSave,
@@ -609,7 +796,9 @@ export const AzureProvisionDialog: React.FC = () => {
 
   return (
     <div style={{ height: '100vh' }}>
-        {page === PageTypes.ConfigProvision ? PageFormConfig : PageReview}
+        {page === PageTypes.ConfigProvision && PageFormConfig}
+        {page === PageTypes.AddResources && PageAddResources}
+        {page === PageTypes.ReviewResource && PageReview}
       <div
         style={{
           background: '#FFFFFF',
