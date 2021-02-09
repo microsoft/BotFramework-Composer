@@ -398,8 +398,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               endpoint: currentSettings?.luis?.endpoint?.startsWith('<') ?  provisionResults.luisPrediction?.endpoint : currentSettings?.luis?.endpoint,
               region: currentSettings?.luis?.region?.startsWith('<') ? provisionResults.resourceGroup.location : currentSettings?.luis?.region,
             },
-            MicrosoftAppId: currentSettings?.MicrosoftAppId?.startsWith('<') ? provisionResults.appId : currentSettings?.settings.MicrosoftAppId,
-            MicrosoftAppPassword: currentSettings?.MicrosoftAppPassword?.startsWith('<') ? provisionResults.appPassword : currentSettings?.settings.MicrosoftAppPassword,
+            MicrosoftAppId: currentSettings?.MicrosoftAppId?.startsWith('<') ? provisionResults.appId : currentSettings?.MicrosoftAppId,
+            MicrosoftAppPassword: currentSettings?.MicrosoftAppPassword?.startsWith('<') ? provisionResults.appPassword : currentSettings?.MicrosoftAppPassword,
           },
         };
 
