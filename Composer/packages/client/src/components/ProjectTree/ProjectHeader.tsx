@@ -161,10 +161,12 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
     return <AddDialogIcon className={className} style={style} />;
   };
 
+  const shouldRenderAddDialogIcon = !isRemote && !!options.showMenu;
+
   return (
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`} role="grid">
       <TreeItem
-        actionIconText={!isRemote ? 'Add Dialog' : ''}
+        actionIconText={shouldRenderAddDialogIcon ? 'Add Dialog' : ''}
         hasChildren={!isRemote}
         icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
@@ -175,7 +177,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         menuOpenCallback={setMenuOpen}
         showErrors={options.showErrors}
         textWidth={textWidth}
-        onRenderActionIcon={!isRemote ? onRenderActionIcon : undefined}
+        onRenderActionIcon={shouldRenderAddDialogIcon ? onRenderActionIcon : undefined}
         onSelect={options.showCommonLinks ? undefined : handleOnSelect}
       />
     </span>
