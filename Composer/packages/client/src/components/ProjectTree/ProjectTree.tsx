@@ -39,10 +39,15 @@ const root = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden;
   .ms-List-cell {
     min-height: 36px;
   }
+`;
+
+const focusStyle = css`
+  height: 100%;
+  position: relative;
 `;
 
 const icons = {
@@ -57,7 +62,8 @@ const icons = {
 };
 
 const tree = css`
-  height: 100%;
+  height: calc(100% - 45px);
+  overflow-y: auto;
   label: tree;
 `;
 
@@ -412,7 +418,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const onFilter = (_e, newValue?: string): void => {
+  const onFilter = (newValue?: string): void => {
     if (typeof newValue === 'string') {
       delayedSetFilter(newValue);
     }
@@ -740,7 +746,7 @@ export const ProjectTree: React.FC<Props> = ({
       data-testid="ProjectTree"
       role="region"
     >
-      <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
+      <FocusZone isCircularNavigation css={focusStyle} direction={FocusZoneDirection.vertical}>
         <ProjectTreeHeader menu={headerMenu} onFilter={onFilter} />
         <div
           aria-label={formatMessage(

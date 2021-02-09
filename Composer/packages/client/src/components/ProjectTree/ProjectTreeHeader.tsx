@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useEffect, useRef, useState } from 'react';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
@@ -13,7 +13,7 @@ import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/
 
 const searchBox: ISearchBoxStyles = {
   root: {
-    borderBottom: '1px solid #edebe9',
+    borderBottom: `1px solid ${NeutralColors.gray30}`,
     height: '45px',
     borderRadius: '0px',
     width: '100%',
@@ -25,7 +25,7 @@ const buttonStyle = css`
 `;
 
 const headerText = css`
-  border-bottom: 1px solid #edebe9;
+  border-bottom: 1px solid ${NeutralColors.gray30};
   height: 45px;
   border-radius: 0px;
   text-align: left;
@@ -51,7 +51,7 @@ export interface ProjectTreeHeaderMenuItem {
 
 export interface ProjectTreeHeaderProps {
   menu: ProjectTreeHeaderMenuItem[];
-  onFilter?: (_e, newValue?: string) => void;
+  onFilter?: (newValue?: string) => void;
 }
 
 const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
@@ -73,7 +73,7 @@ const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
 const onRenderOverflowButton = (isActive: boolean) => {
   const moreLabel = formatMessage('Actions');
   return (overflowItems: IContextualMenuItem[] | undefined) => {
-    if (overflowItems == null) return null;
+    if (!overflowItems) return null;
     return (
       <CommandButton
         ariaLabel={moreLabel}
@@ -119,7 +119,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFi
   });
 
   const handleSearchBoxBlur = (_e) => {
-    onFilter(_e, '');
+    onFilter('');
     setShowFilter(false);
   };
 
@@ -134,7 +134,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFi
           placeholder={formatMessage('Filter by trigger name')}
           styles={searchBox}
           onBlur={handleSearchBoxBlur}
-          onChange={onFilter}
+          onChange={(_e, value) => onFilter(value)}
         />
       ) : (
         <OverflowSet
