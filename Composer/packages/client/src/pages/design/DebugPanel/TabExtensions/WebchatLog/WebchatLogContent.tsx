@@ -2,7 +2,10 @@
 // Licensed under the MIT License.
 
 import { extensionEventEmitter } from '@bfc/extension-client';
+import { useRecoilValue } from 'recoil';
 import React, { useEffect, useState, useCallback } from 'react';
+
+import { currentProjectIdState } from '../../../../../recoilModel';
 
 export interface WebchatLog {
   skillId: string;
@@ -13,6 +16,8 @@ export interface WebchatLog {
 
 export const WebchatLogContent = () => {
   const [webchatLogs, setWebchatLogs] = useState<WebchatLog[]>([]);
+
+  const currentProjectId = useRecoilValue(currentProjectIdState);
 
   const appendLog = useCallback((log: WebchatLog) => {
     setWebchatLogs([...webchatLogs, log]);
@@ -38,13 +43,15 @@ export const WebchatLogContent = () => {
 
   return (
     <div>
-      Webchat logs
+      Webchat logs of {currentProjectId}
       <div>
-        {webchatLogs.map((log, idx) => (
-          <div key={`webchatLog-${idx}`}>
-            {log.type}: {log.message}
-          </div>
-        ))}
+        {webchatLogs
+          .filter((log) => log.skillId === currentProjectId)
+          .map((log, idx) => (
+            <div key={`webchatLog-${idx}`}>
+              {log.type}: {log.message}
+            </div>
+          ))}
       </div>
     </div>
   );
