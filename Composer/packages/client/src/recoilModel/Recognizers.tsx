@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, LuFile, QnAFile, SDKKinds, RecognizerFile } from '@bfc/shared';
+import { DialogInfo, LuFile, QnAFile, SDKKinds, RecognizerFile, LuProviderType } from '@bfc/shared';
 import React, { useEffect, useRef } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useRecoilValue } from 'recoil';
@@ -16,8 +16,6 @@ import * as buildUtil from './../utils/buildUtil';
 import { crossTrainConfigState, filePersistenceState, luFilesState, qnaFilesState, settingsState } from './atoms';
 import { dialogsSelectorFamily } from './selectors';
 import { recognizersSelectorFamily } from './selectors/recognizers';
-
-type LuProvide = SDKKinds.OrchestratorRecognizer | SDKKinds.LuisRecognizer;
 
 export const LuisRecognizerTemplate = (target: string, fileName: string) => ({
   $kind: SDKKinds.LuisRecognizer,
@@ -122,14 +120,14 @@ export const generateRecognizers = (
   dialog: DialogInfo,
   luFiles: LuFile[],
   qnaFiles: QnAFile[],
-  luProvide?: LuProvide
+  luProvide?: LuProviderType
 ) => {
   const isCrossTrain = isCrossTrainedRecognizerSet(dialog);
   const luisRecognizers =
     luProvide === SDKKinds.OrchestratorRecognizer
       ? getOrchestratorRecognizerDialogs(dialog.id, luFiles)
       : getLuisRecognizerDialogs(dialog.id, luFiles);
-  const luMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu');
+  const luMultiLanguageRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu');
 
   const crossTrainedRecognizer = getCrossTrainedRecognizerDialog(dialog.id, luFiles, qnaFiles);
   const qnaMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, qnaFiles, 'qna');
@@ -138,7 +136,7 @@ export const generateRecognizers = (
   return {
     isCrossTrain,
     luisRecognizers,
-    luMultiLanguagueRecognizer,
+    luMultiLanguageRecognizer,
     crossTrainedRecognizer,
     qnaMultiLanguagueRecognizer,
     qnaMakeRecognizers,
@@ -177,19 +175,19 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
       .filter((dialog) => isCrossTrainedRecognizerSet(dialog) || isLuisRecognizer(dialog))
       .forEach((dialog) => {
         const luProvide = getLuProvider(dialog.id, curRecognizersRef.current);
-        const filtedLus = luFiles.filter((item) => getBaseName(item.id) === dialog.id);
-        const filtedQnas = qnaFiles.filter((item) => getBaseName(item.id) === dialog.id);
+        const filteredLus = luFiles.filter((item) => getBaseName(item.id) === dialog.id);
+        const filteredQnas = qnaFiles.filter((item) => getBaseName(item.id) === dialog.id);
         const {
           isCrossTrain,
           luisRecognizers,
-          luMultiLanguagueRecognizer,
+          luMultiLanguageRecognizer,
           crossTrainedRecognizer,
           qnaMultiLanguagueRecognizer,
           qnaMakeRecognizers,
-        } = generateRecognizers(dialog, filtedLus, filtedQnas, luProvide);
+        } = generateRecognizers(dialog, filteredLus, filteredQnas, luProvide);
 
         if (luisRecognizers.length) {
-          recognizers.push(luMultiLanguagueRecognizer);
+          recognizers.push(luMultiLanguageRecognizer);
           recognizers = [...recognizers, ...preserveRecognizer(luisRecognizers, curRecognizersRef.current)];
         }
         if (isCrossTrain) {
