@@ -37,7 +37,7 @@ export const provisionDispatcher = () => {
 
   const updatePublishTargets = (settings: DialogSetting, profile: PublishTarget) => {
     const index = settings.publishTargets?.findIndex((item) => item.name === profile.name);
-    if (index && index >= 0) {
+    if (typeof index === 'number' && index >= 0) {
       return settings.publishTargets?.map((item) => {
         if (item.name === profile.name) {
           return profile;
@@ -132,6 +132,7 @@ export const provisionDispatcher = () => {
               type: targetType,
             };
             const targetList = updatePublishTargets(settings, profile);
+            console.log(targetList);
             return {
               ...settings,
               publishTargets: targetList,

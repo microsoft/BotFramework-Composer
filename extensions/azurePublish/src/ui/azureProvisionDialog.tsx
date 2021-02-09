@@ -207,19 +207,6 @@ const reviewCols: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'Status',
-    name: formatMessage('Status'),
-    className: 'Status',
-    fieldName: 'Status',
-    minWidth: 100,
-    isRowHeader: true,
-    data: 'string',
-    onRender: (item: ResourcesItem) => {
-    return <div>Ready</div>;
-    },
-    isPadded: true,
-  },
-  {
     key: 'resourceGroup',
     name: formatMessage('Resource Group'),
     className: 'resourceGroup',
@@ -405,13 +392,7 @@ export const AzureProvisionDialog: React.FC = () => {
     () => (e, newName) => {
       setHostName(newName);
       if(!currentConfig?.hostname){
-        // validate existed or not
-        const existed = resourceGroups.find((t) => t.name === newName);
-        if (existed) {
-          setErrorHostName('this resource group already exist');
-        } else {
-          checkNameAvailability(newName);
-        }
+        checkNameAvailability(newName);
       }
     },
     [resourceGroups, checkNameAvailability]
@@ -452,28 +433,26 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentSubscription]);
 
-  // const removePlaceholder = React.useCallback((config:any)=>{
-  //   try{
-  //     if(config){
-  //       let str = JSON.stringify(config);
-  //       str = str.replace(/<.*>/g,null);
-  //       console.log(str);
-  //       const newConfig = JSON.parse(str);
-  //       console.log(newConfig);
-  //       return newConfig;
-  //     } else {
-  //       return undefined;
-  //     }
-  //   }catch(e){
-  //     console.log(e);
-  //   }
+  const removePlaceholder = React.useCallback((config:any)=>{
+    try{
+      if(config){
+        let str = JSON.stringify(config);
+        str = str.replace(/<[.^>]*>/g, null);
+        const newConfig = JSON.parse(str);
+        return newConfig;
+      } else {
+        return undefined;
+      }
+    }catch(e){
+      console.log(e);
+    }
 
-  // },[]);
+  },[]);
 
   const getExistResources = ()=>{
     const result = [];
-    // let config = removePlaceholder(currentConfig);
-    const config = currentConfig;
+    const config = removePlaceholder(currentConfig);
+    console.log(config);
     if(config){
       if(config.hostname){
         result.push(AzureResourceTypes.WEBAPP);
@@ -554,7 +533,6 @@ export const AzureProvisionDialog: React.FC = () => {
     () => async (options) => {
       // call back to the main Composer API to begin this process...
       startProvision(options);
-      console.log(options);
       // TODO: close window
       closeDialog();
     },
