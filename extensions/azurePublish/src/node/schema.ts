@@ -30,6 +30,10 @@ const schema: JSONSchema7 = {
       title:
         'Runtime identifier for hosting bot, default to win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog',
     },
+    subscriptionId: {
+      type: 'string',
+      title: 'id of your subscription'
+    },
     settings: {
       type: 'object',
       title: 'Settings for Azure resources',
