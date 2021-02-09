@@ -22,7 +22,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
+import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, QnABotTemplateId } from '../../../constants';
