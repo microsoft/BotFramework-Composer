@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { PublishTarget } from '@bfc/shared';
 
 import { provisionStatusState, settingsState } from '../atoms/botState';
 import { CardProps } from '../../components/Notifications/NotificationCard';
@@ -40,13 +41,15 @@ export const provisionDispatcher = () => {
       type: string,
       projectId: string,
       armToken = '',
-      graphToken = ''
+      graphToken = '',
+      currentProfile: PublishTarget | undefined = undefined
     ) => {
       try {
         TelemetryClient.track('NewPublishingProfileStarted');
+        console.log(currentProfile);
         const result = await httpClient.post(
           `/provision/${projectId}/${type}`,
-          { ...config, graphToken: graphToken },
+          { ...config, graphToken: graphToken, currentProfile },
           {
             headers: { Authorization: `Bearer ${armToken}` },
           }

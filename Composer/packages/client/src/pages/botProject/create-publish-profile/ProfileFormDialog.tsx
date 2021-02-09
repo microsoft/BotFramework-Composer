@@ -145,7 +145,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph);
+      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
     };
   }, [name, targetType]);
 
