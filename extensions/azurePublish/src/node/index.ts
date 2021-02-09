@@ -387,19 +387,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           runtimeIdentifier: 'win-x64',
           settings: {
             applicationInsights: {
-              InstrumentationKey: currentSettings.applicationInsights.InstrumentationKey ?? provisionResults.appInsights?.instrumentationKey,
+              InstrumentationKey: currentSettings?.applicationInsights?.InstrumentationKey?.startsWith('<') ? provisionResults.appInsights?.instrumentationKey : currentSettings?.applicationInsights?.InstrumentationKey,
             },
             cosmosDb: currentSettings?.cosmosDb?.authKey?.startsWith('<') ? provisionResults.cosmosDB : currentSettings?.cosmosDb,
             blobStorage: currentSettings?.blobStorage?.connectionString?.startsWith('<') ? provisionResults.blobStorage : currentSettings?.blobStorage,
             luis: {
-              authoringKey: currentSettings?.luis?.authoringKey ?? provisionResults.luisAuthoring?.authoringKey,
-              authoringEndpoint: currentSettings?.luis?.authoringEndpoint ?? provisionResults.luisAuthoring?.authoringEndpoint,
-              endpointKey: currentSettings?.luis?.endpointKey ?? provisionResults.luisPrediction?.endpointKey,
-              endpoint: currentSettings?.luis?.endpoint ?? provisionResults.luisPrediction?.endpoint,
-              region: currentSettings?.luis?.region ?? provisionResults.resourceGroup.location,
+              authoringKey: currentSettings?.luis?.authoringKey?.startsWith('<') ? provisionResults.luisAuthoring?.authoringKey : currentSettings?.luis?.authoringKey,
+              authoringEndpoint: currentSettings?.luis?.authoringEndpoint?.startsWith('<') ? provisionResults.luisAuthoring?.authoringEndpoint: currentSettings?.luis?.authoringEndpoint,
+              endpointKey: currentSettings?.luis?.endpointKey?.startsWith('<') ? provisionResults.luisPrediction?.endpointKey : currentSettings?.luis?.endpointKey,
+              endpoint: currentSettings?.luis?.endpoint?.startsWith('<') ?  provisionResults.luisPrediction?.endpoint : currentSettings?.luis?.endpoint,
+              region: currentSettings?.luis?.region?.startsWith('<') ? provisionResults.resourceGroup.location : currentSettings?.luis?.region,
             },
-            MicrosoftAppId: currentSettings?.settings.MicrosoftAppId ?? provisionResults.appId,
-            MicrosoftAppPassword: currentSettings?.settings.MicrosoftAppPassword ?? provisionResults.appPassword,
+            MicrosoftAppId: currentSettings?.settings?.MicrosoftAppId?.startsWith('<') ? provisionResults.appId : currentSettings?.settings.MicrosoftAppId,
+            MicrosoftAppPassword: currentSettings?.settings?.MicrosoftAppPassword?.startsWith('<') ? provisionResults.appPassword : currentSettings?.settings.MicrosoftAppPassword,
           },
         };
 
