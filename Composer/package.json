@@ -16,7 +16,8 @@
     "terser-webpack-plugin": "^2.3.7",
     "axios": "^0.21.1",
     "y18n": "^5.0.5",
-    "immer": "^8.0.1"
+    "immer": "^8.0.1",
+    "adaptive-expressions":"4.12.0-dev-20210125.e5a4fc60f438"
   },
   "engines": {
     "node": ">=12"
