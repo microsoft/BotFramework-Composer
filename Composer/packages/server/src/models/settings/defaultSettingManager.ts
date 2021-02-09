@@ -56,7 +56,6 @@ export class DefaultSettingManager extends FileSettingManager {
       speech: {
         voiceFontName: 'en-US-AriaNeural',
         fallbackToTextForSpeechIfEmpty: true,
-        lang: 'en-US',
       },
       luis: {
         name: '',

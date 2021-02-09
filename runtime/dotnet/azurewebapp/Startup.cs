@@ -75,7 +75,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         {
             if (settings?.Feature?.UseSetSpeakMiddleware == true && settings.Speech != null)
             {
-                adapter.Use(new SetSpeakMiddleware(settings.Speech.VoiceFontName, settings.Speech.Lang, settings.Speech.FallbackToTextForSpeechIfEmpty));
+                adapter.Use(new SetSpeakMiddleware(settings.Speech.VoiceFontName, settings.Speech.FallbackToTextForSpeechIfEmpty));
             }
         }
 

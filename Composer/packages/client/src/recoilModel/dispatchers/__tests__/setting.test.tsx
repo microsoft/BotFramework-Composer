@@ -39,7 +39,6 @@ const settings = {
   speech: {
     voiceFontName: 'en-US-AriaNeural',
     fallbackToTextForSpeechIfEmpty: true,
-    lang: 'en-US',
   },
   defaultLanguage: 'en-us',
   languages: ['en-us'],

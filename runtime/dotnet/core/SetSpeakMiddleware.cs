@@ -12,13 +12,11 @@ namespace Microsoft.BotFramework.Composer.Core
     {
         private readonly string _voiceName;
         private readonly bool _fallbackToTextForSpeak;
-        private readonly string _lang;
 
-        public SetSpeakMiddleware(string voiceName, string lang, bool fallbackToTextForSpeak)
+        public SetSpeakMiddleware(string voiceName, bool fallbackToTextForSpeak)
         {
             _voiceName = voiceName;
             _fallbackToTextForSpeak = fallbackToTextForSpeak;
-            _lang = lang;
         }
 
         public async Task OnTurnAsync(ITurnContext turnContext, NextDelegate next, CancellationToken cancellationToken = default)
@@ -47,7 +45,7 @@ namespace Microsoft.BotFramework.Composer.Core
                                     activity.Speak = $"<voice name='{_voiceName}'>{activity.Speak}</voice>";
                                 }
 
-                                activity.Speak = $"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='{_lang}'>{activity.Speak}</speak>";
+                                activity.Speak = $"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='{activity.Locale ?? "en-US"}'>{activity.Speak}</speak>";
                             }
                         }
                     }

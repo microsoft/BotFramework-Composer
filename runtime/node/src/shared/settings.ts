@@ -34,7 +34,6 @@ export interface BlobStorageConfiguration {
 export interface SpeechConfiguration {
   voiceFontName: string;
   fallbackToTextForSpeechIfEmpty: boolean;
-  lang: string;
 }
 
 export interface CosmosDbConfiguration {

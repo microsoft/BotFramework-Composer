@@ -47,8 +47,6 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
             public string VoiceFontName { get; set; }
 
             public bool FallbackToTextForSpeechIfEmpty { get; set; }
-
-            public string Lang { get; set; }
         }
     }
 }
