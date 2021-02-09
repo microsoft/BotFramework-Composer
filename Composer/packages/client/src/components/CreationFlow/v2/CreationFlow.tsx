@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// TODO: Remove path module
 import Path from 'path';
 
 import React, { useEffect, useRef, Fragment } from 'react';

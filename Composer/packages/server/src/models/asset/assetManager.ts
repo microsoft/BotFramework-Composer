@@ -123,6 +123,8 @@ export class AssetManager {
 
       if (remoteTemplateAvailable) {
         await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+      } else {
+        throw new Error(`error hit when installing remote template`);
       }
 
       ref.path = `${ref.path}/${projectName}`;
@@ -147,8 +149,8 @@ export class AssetManager {
       log('Looking up local packages');
       await this.yeomanEnv.lookupLocalPackages();
       return true;
-    } catch (err) {
-      throw new Error(`error hit when installing remote template: ${err?.message}`);
+    } catch {
+      return false;
     }
   }
 
@@ -163,6 +165,7 @@ export class AssetManager {
     await this.yeomanEnv.run([generatorName, projectName], {}, () => {
       console.log('DONE');
     });
+    console.log('hello in here');
     return true;
   }
 

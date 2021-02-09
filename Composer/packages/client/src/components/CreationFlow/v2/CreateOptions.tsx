@@ -218,7 +218,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           }}
         >
           <PivotItem headerText="C#" itemKey={csharpFeedKey}></PivotItem>
-          <PivotItem headerText="Typescript" itemKey={nodeFeedKey}></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
