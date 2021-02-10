@@ -5,7 +5,7 @@
   "main": "lib/node/index.js",
   "license": "MIT",
   "scripts": {
-    "build:ui": "webpack --config webpack.config.js",
+    "build:ui": "webpack --max_old_space_size=4096 --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
     "clean": "rimraf lib",
     "build": "yarn clean && webpack",
