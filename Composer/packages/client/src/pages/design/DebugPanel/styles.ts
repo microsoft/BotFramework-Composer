@@ -8,7 +8,7 @@ export const DebugPaneHeaderHeight = 36;
 export const DebugPaneFooterHeight = 24;
 
 export const debugPaneContainerExpandedStyle = css`
-  height: 320px;
+  height: 300px;
   display: flex;
   flex-direction: column;
 `;

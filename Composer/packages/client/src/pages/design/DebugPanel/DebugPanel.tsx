@@ -125,16 +125,6 @@ export const DebugPanel = () => {
         <div css={debugPaneContentStyle} data-testid="debug-panel__content">
           {activeTabContent}
         </div>
-        <div
-          css={css`
-            ${debugPaneBarStyle}
-            ${statusBarStyle}
-          `}
-          data-testid="debug-panel__statusbar"
-        >
-          <div css={leftBarStyle} data-testid="statusbar__left"></div>
-          <div css={rightBarStyle} data-testid="statusbar__right"></div>
-        </div>
       </div>
     );
   } else {
