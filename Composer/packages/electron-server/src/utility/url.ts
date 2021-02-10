@@ -27,6 +27,7 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
         if (!source || !payload) {
           throw new Error('bfcomposer://import must include a "source" and "payload" parameter.');
         }
+
         return `projects/import?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
       }
 
