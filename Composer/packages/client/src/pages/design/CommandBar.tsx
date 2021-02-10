@@ -7,30 +7,23 @@ import React, { useMemo, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { getEditorAPI, registerEditorAPI } from '@bfc/shared';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import {
-  visualEditorSelectionState,
-  dispatcherState,
-  rootBotProjectIdSelector,
-  currentDialogState,
-  debugPanelExpansionState,
-} from '../../recoilModel';
+import { visualEditorSelectionState, dispatcherState, currentDialogState } from '../../recoilModel';
 import { undoFunctionState } from '../../recoilModel/undo/history';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
-import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+
+import implementedDebugExtensions from './DebugPanel/TabExtensions';
 
 type CommandBarProps = { dialogId?: string; projectId: string };
 
 const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const { undo, redo, clearUndo } = useRecoilValue(undoFunctionState(projectId));
-  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
-  const setDebugPanelExpansion = useSetRecoilState(debugPanelExpansionState);
 
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
@@ -57,19 +50,24 @@ const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
 
   const EditorAPI = getEditorAPI();
 
+  const debugItems: IToolbarItem[] = useMemo(
+    () =>
+      implementedDebugExtensions
+        .map(({ key, ToolbarWidget }) => {
+          if (!ToolbarWidget) return;
+          return {
+            type: 'element',
+            element: <ToolbarWidget key={`ToolbarWidget-${key}`} />,
+            align: 'right',
+          };
+        })
+        .filter((item) => Boolean(item)) as IToolbarItem[],
+    []
+  );
+
   const toolbarItems: IToolbarItem[] = useMemo(
     () => [
-      {
-        type: 'element',
-        element: (
-          <DiagnosticsHeader
-            onClick={() => {
-              setDebugPanelExpansion(true);
-            }}
-          />
-        ),
-        align: 'right',
-      },
+      ...debugItems,
       {
         type: 'dropdown',
         text: formatMessage('Edit'),
@@ -175,7 +173,7 @@ const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
         },
       },
     ],
-    [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo]
+    [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo, debugItems]
   );
 
   const addNewBtnRef = useCallback((addNew) => {

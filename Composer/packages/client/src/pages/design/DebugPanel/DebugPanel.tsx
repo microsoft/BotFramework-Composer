@@ -36,22 +36,21 @@ export const DebugPanel = () => {
 
   const [activeTab, setActiveTab] = useState<string>(debugExtensions[0].key);
 
-  const buildTabTitle = useCallback((tabKey: string, tabHeaderComponent: React.FC | string) => {
-    if (!tabHeaderComponent) return { key: tabKey, element: null };
+  const buildTabTitle = useCallback((tabKey: string, TabHeaderWidget: React.FC | string) => {
+    if (!TabHeaderWidget) return { key: tabKey, element: null };
 
     let element: JSX.Element;
-    if (typeof tabHeaderComponent === 'string') {
-      element = <span key={`tabHeader-${tabKey}`}>{tabHeaderComponent}</span>;
+    if (typeof TabHeaderWidget === 'string') {
+      element = <span key={`tabHeader-${tabKey}`}>{TabHeaderWidget}</span>;
     } else {
-      const TabHeader = tabHeaderComponent;
-      element = <TabHeader key={`tabHeader-${tabKey}`} />;
+      element = <TabHeaderWidget key={`tabHeader-${tabKey}`} />;
     }
     return { key: tabKey, element };
   }, []);
 
   const headerPivot = useMemo(() => {
     const tabTitles = debugExtensions
-      .map(({ key, headerWidget }) => buildTabTitle(key, headerWidget))
+      .map(({ key, HeaderWidget }) => buildTabTitle(key, HeaderWidget))
       .filter(({ element }) => Boolean(element))
       .map(({ key, element }) => {
         return (
@@ -89,10 +88,10 @@ export const DebugPanel = () => {
 
   const activeTabContent = useMemo(() => {
     const configOfActiveTab = debugExtensions.find((ext) => ext.key === activeTab);
-    if (!configOfActiveTab || !configOfActiveTab.contentWidget) return null;
+    if (!configOfActiveTab || !configOfActiveTab.ContentWidget) return null;
 
-    const TabContent = configOfActiveTab.contentWidget;
-    return <TabContent key={`tabContent-${configOfActiveTab.key}`} />;
+    const { ContentWidget } = configOfActiveTab;
+    return <ContentWidget key={`tabContent-${configOfActiveTab.key}`} />;
   }, [activeTab]);
 
   if (expanded) {

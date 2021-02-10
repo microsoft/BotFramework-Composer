@@ -8,6 +8,6 @@ import { WebchatLogContent } from './WebchatLogContent';
 export const WebchatLogTabConfig: TabExtensionConfig = {
   key: 'WebchatLog',
   description: 'Webchat log.',
-  headerWidget: 'Outputs',
-  contentWidget: WebchatLogContent,
+  HeaderWidget: 'Outputs',
+  ContentWidget: WebchatLogContent,
 };

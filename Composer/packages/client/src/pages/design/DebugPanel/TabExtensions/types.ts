@@ -11,11 +11,11 @@ export interface TabExtensionConfig {
   description?: string;
 
   /** Tab header component. If it's typed with string, shows a plain text as the tab header. */
-  headerWidget: FC | string;
+  HeaderWidget: FC | string;
 
   /** Tab content component used when debug panel is expanded. */
-  contentWidget: FC;
+  ContentWidget: FC;
 
-  /** Extra component displayed on the right side of status bar. */
-  statusWidget?: FC;
+  /** Extra component displayed on the right side of Composer command bar. */
+  ToolbarWidget?: FC;
 }
