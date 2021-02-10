@@ -9,6 +9,7 @@ import {
   MenuUISchema,
   FlowUISchema,
   RecognizerUISchema,
+  TriggerUISchema,
 } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
@@ -17,6 +18,7 @@ import { IntentField, RecognizerField, QnAActionsField } from '@bfc/adaptive-for
 import { DefaultMenuSchema } from './defaultMenuSchema';
 import { DefaultFlowSchema } from './defaultFlowSchema';
 import { DefaultRecognizerSchema } from './defaultRecognizerSchema';
+import { DefaultTriggerSchema } from './defaultTriggerSchema';
 
 const DefaultFormSchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
@@ -173,18 +175,26 @@ const synthesizeUISchema = (
   formSchema: FormUISchema,
   menuSchema: MenuUISchema,
   flowSchema: FlowUISchema,
+  triggerSchema: TriggerUISchema,
   recognizerSchema: RecognizerUISchema
 ): UISchema => {
   let uischema: UISchema = {};
   uischema = mergeWith(uischema, formSchema, (origin, formOption) => ({ ...origin, form: formOption }));
   uischema = mergeWith(uischema, menuSchema, (origin, menuOption) => ({ ...origin, menu: menuOption }));
   uischema = mergeWith(uischema, flowSchema, (origin, flowOption) => ({ ...origin, flow: flowOption }));
+  uischema = mergeWith(uischema, triggerSchema, (origin, triggerOption) => ({ ...origin, trigger: triggerOption }));
   uischema = mergeWith(uischema, recognizerSchema, (origin, opt) => ({ ...origin, recognizer: opt }));
   return uischema;
 };
 
 const config: PluginConfig = {
-  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema, DefaultFlowSchema, DefaultRecognizerSchema),
+  uiSchema: synthesizeUISchema(
+    DefaultFormSchema,
+    DefaultMenuSchema,
+    DefaultFlowSchema,
+    DefaultTriggerSchema,
+    DefaultRecognizerSchema
+  ),
 };
 
 export default config;

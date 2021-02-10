@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selectorFamily, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { act, RenderHookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import noop from 'lodash/noop';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -19,7 +19,7 @@ const projectIds = ['123-a', '234-bc', '567-de'];
 
 const projectDataSelector = selectorFamily({
   key: 'project-data-selector',
-  get: (projectId: string) => noop,
+  get: () => noop,
   set: (projectId: string) => ({ set }, stateUpdater: any) => {
     const { metadata, botError, displayName } = stateUpdater;
     if (metadata) {
@@ -62,7 +62,7 @@ const useRecoilTestHook = () => {
   };
 };
 
-let renderedComponent;
+let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>;
 
 beforeEach(() => {
   const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(

@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
+import { renderHook, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { useLgApi } from '../../src/shell/lgApi';
-import { lgFilesState, localeState, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
+import { lgFilesSelectorFamily, localeState, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
 const state = {
@@ -30,7 +30,8 @@ const state = {
 // const resolvers = { lgFileResolver: jest.fn((id) => state.lgFiles.find((file) => file.id === id)) };
 
 describe('use lgApi hooks', () => {
-  let removeLgTemplatesMock, initRecoilState, copyLgTemplateMock, updateLgTemplateMock, removeLgTemplateMock, result;
+  let removeLgTemplatesMock, initRecoilState, copyLgTemplateMock, updateLgTemplateMock, removeLgTemplateMock;
+  let result: HookResult<any>;
 
   beforeEach(() => {
     updateLgTemplateMock = jest.fn();
@@ -41,7 +42,7 @@ describe('use lgApi hooks', () => {
     initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
       set(localeState(state.projectId), 'en-us');
-      set(lgFilesState(state.projectId), state.lgFiles);
+      set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
         updateLgTemplate: updateLgTemplateMock,

@@ -49,7 +49,7 @@ export const SelectItems: React.FC<SelectItemsProps> = ({ items, selection, tabl
   };
 
   const onRenderRow = (props?: IDetailsRowProps, defaultRender?: IRenderFunction<IDetailsRowProps>): JSX.Element => {
-    return <div data-selection-toggle>{defaultRender && defaultRender(props)}</div>;
+    return <div data-selection-toggle>{defaultRender?.(props)}</div>;
   };
 
   const handleToggleSelectAll = () => {

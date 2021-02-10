@@ -151,7 +151,8 @@ const filterParseResult = (lgFile: LgFile) => {
 const getTargetFile = (projectId: string, lgFile: LgFile) => {
   const cachedFile = cache.get(projectId, lgFile.id);
 
-  return !cachedFile || cachedFile.content !== lgFile.content ? lgFile : cachedFile;
+  // Instead of compare content, just use cachedFile as single truth of fact, because all updates are supposed to be happen in worker, and worker will always update cache.
+  return cachedFile ?? lgFile;
 };
 
 export const handleMessage = (msg: LgMessageEvent) => {

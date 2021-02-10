@@ -128,7 +128,7 @@ const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, 
   Promise.resolve(handler(req, res, next)).catch(next);
 };
 
-router.stack.forEach((layer) => {
+(router as any).stack.forEach((layer) => {
   if (layer.route == null) return;
   const fn: RequestHandler = layer.route.stack[0].handle;
   layer.route.stack[0].handle = errorHandler(fn);

@@ -205,6 +205,7 @@ export class BotProjectProvision {
         cosmosDB: null,
         appInsights: null,
         qna: null,
+        bot: null,
       };
 
       const resourceGroupName = `${config.hostname}`;
@@ -270,7 +271,9 @@ export class BotProjectProvision {
               displayName: config.hostname, // todo: this may be wrong!
               endpoint: `https://${provisionResults.webApp.hostname}/api/messages`,
               appId: provisionResults.appId,
+              webAppHostname: provisionResults.webApp.hostname
             });
+            provisionResults.bot = config.hostname;
             break;
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

@@ -14,7 +14,7 @@ import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { css } from '@emotion/core';
 
-import { botDisplayNameState, projectMetaDataState } from '../../recoilModel';
+import { botDisplayNameState, dialogDiagnosticsSelectorFamily, projectMetaDataState } from '../../recoilModel';
 
 import { PropertyEditorHeader } from './PropertyEditorHeader';
 import { formEditor } from './styles';
@@ -41,6 +41,7 @@ const PropertyEditor: React.FC = () => {
   const { onFocusSteps } = shellApi;
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const projectData = useRecoilValue(projectMetaDataState(projectId));
+  const diagnostics = useRecoilValue(dialogDiagnosticsSelectorFamily({ projectId, dialogId: currentDialog.id }));
 
   const dialogData = useMemo(() => {
     if (currentDialog?.content) {
@@ -81,8 +82,7 @@ const PropertyEditor: React.FC = () => {
   }, [$schema, formUIOptions]);
 
   const errors = useMemo(() => {
-    const diagnostics = currentDialog?.diagnostics;
-    if (diagnostics) {
+    if (diagnostics?.length) {
       const currentPath = focusPath.replace('#', '');
 
       return diagnostics.reduce((errors, d) => {

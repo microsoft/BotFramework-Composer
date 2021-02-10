@@ -25,7 +25,7 @@ function ExtractIntentTriggers(value: any): IIntentTrigger[] {
   const intentTriggers: IIntentTrigger[] = [];
   const triggers = value?.[FieldNames.Events];
 
-  if (triggers && triggers.length) {
+  if (triggers?.length) {
     for (const trigger of triggers) {
       const dialogs = ExtractAllBeginDialogs(trigger);
 

@@ -9,11 +9,13 @@ import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { RouteComponentProps } from '@reach/router';
 
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { PageLink } from '../../utils/pageLinks';
 
 import { useLinks } from './../../utils/hooks';
 
@@ -63,13 +65,13 @@ const divider = (isExpand: boolean) => css`
 
 // -------------------- SideBar -------------------- //
 
-export const SideBar = () => {
+export const SideBar: React.FC<RouteComponentProps> = () => {
   const [sideBarExpand, setSideBarExpand] = useState(false);
   const { topLinks, bottomLinks } = useLinks();
 
   const mapNavItemTo = (relPath: string) => resolveToBasePath(BASEPATH, relPath);
   const globalNavButtonText = sideBarExpand ? formatMessage('Collapse Navigation') : formatMessage('Expand Navigation');
-  const showTooltips = (link) => !sideBarExpand && !link.disabled;
+  const showTooltips = (link: PageLink) => !sideBarExpand && !link.disabled;
   return (
     <nav css={sideBar(sideBarExpand)}>
       <div>

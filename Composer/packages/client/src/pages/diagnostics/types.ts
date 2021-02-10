@@ -145,7 +145,7 @@ export class LgDiagnostic extends DiagnosticInfo {
         get(diagnostic, 'range.start.line') >= get(t, 'range.start.line') &&
         get(diagnostic, 'range.end.line') <= get(t, 'range.end.line')
     );
-    if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
+    if (mappedTemplate?.name?.match(LgNamePattern)) {
       //should navigate to design page
       const lgTemplateName = mappedTemplate.name;
       const dialog = dialogs.find((d) => d.lgFile === this.resourceId);

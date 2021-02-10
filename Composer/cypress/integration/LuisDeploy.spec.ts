@@ -9,6 +9,7 @@ context('Luis Deploy', () => {
     cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything', status: 404 });
     cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
+    cy.visitPage('Design');
   });
 
   it('can deploy luis success', () => {
@@ -17,7 +18,6 @@ context('Luis Deploy', () => {
     cy.findAllByTestId('rootLUISRegion').click();
     cy.findByText('westus').click();
     cy.visitPage('User Input');
-    cy.url().should('contain', 'language-understanding/all');
     cy.visitPage('Design');
     cy.route({
       method: 'POST',
@@ -26,7 +26,6 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/failure',
     });
     cy.findByTitle(/^Start bot/).click();
-    cy.findByTitle('Open start bots panel').click();
     cy.findByText('See Details').click();
 
     cy.route({

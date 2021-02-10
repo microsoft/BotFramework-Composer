@@ -31,7 +31,7 @@ describe('parse', () => {
 @ simple fooName
 
 `;
-    const { intents, diagnostics }: any = parse(content);
+    const { intents, diagnostics }: any = parse(content, '', {});
     expect(diagnostics.length).toEqual(0);
     expect(intents.length).toEqual(4);
     expect(intents[0].Name).toEqual('CheckTodo');
@@ -44,6 +44,19 @@ describe('parse', () => {
     expect(intents[0].Children[0].Entities[0]).toEqual('todoTitle');
   });
 
+  it('should parse LU file with import', () => {
+    const content = `[import](greating.lu)
+  [import](../common/aks.lu)
+  `;
+
+    const result = parse(content, '', {});
+    expect(result.imports.length).toEqual(2);
+    expect(result.imports[0]).toEqual({ id: 'greating.lu', path: 'greating.lu', description: 'import' });
+    expect(result.imports[1]).toEqual({ id: 'aks.lu', path: '../common/aks.lu', description: 'import' });
+    expect(result.empty).toEqual(false);
+    expect(result.intents.length).toEqual(0);
+  });
+
   it('should parse lu file with diagnostic', () => {
     const content = `# Greeting
 hi
@@ -52,7 +65,7 @@ hi
 @ simple friendsName
 
 `;
-    const { intents, diagnostics }: any = parse(content);
+    const { intents, diagnostics }: any = parse(content, '', {});
     expect(intents.length).toEqual(1);
     expect(diagnostics.length).toEqual(1);
     expect(diagnostics[0].range.start.line).toEqual(2);
@@ -80,7 +93,7 @@ describe('index', () => {
   };
 
   it('should index lu file', () => {
-    const { id, intents, diagnostics }: any = index([file])[0];
+    const { id, intents, diagnostics }: any = index([file], {})[0];
     expect(id).toEqual('test');
     expect(diagnostics.length).toEqual(0);
     expect(intents.length).toEqual(1);

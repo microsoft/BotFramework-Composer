@@ -86,10 +86,11 @@ export type ILUFeaturesConfig = {
 };
 
 export type IQnAConfig = {
-  subscriptionKey: string;
+  subscriptionKey: string | undefined;
   endpointKey: string;
-  qnaRegion: string;
-  [key: string]: string;
+  qnaRegion?: string;
+  knowledgebaseid?: string;
+  hostname?: string;
 };
 
 export type IConfig = ILuisConfig & {

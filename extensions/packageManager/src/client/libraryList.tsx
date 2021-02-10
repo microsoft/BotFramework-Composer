@@ -2,11 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
-import formatMessage from "format-message";
+import { jsx } from '@emotion/core';
+import formatMessage from 'format-message';
 import {
   DetailsList,
-  Link,
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
@@ -19,10 +18,10 @@ import {
   Selection,
   OverflowSet,
   IOverflowSetItemProps,
-} from "office-ui-fabric-react";
-import React, { useState, useEffect, useMemo, Fragment } from "react";
+} from 'office-ui-fabric-react';
+import React, { useState, useEffect, useMemo, Fragment } from 'react';
 
-import { listRoot, tableView, detailList } from "./styles";
+import { listRoot, tableView, detailList } from './styles';
 
 export interface LibraryRef {
   name: string;
@@ -38,8 +37,8 @@ export interface LibraryRef {
   type?: string;
   category?: string;
   source?: string;
+  isCompatible?: boolean;
 }
-
 
 export interface ILibraryListProps {
   disabled: boolean;
@@ -58,9 +57,7 @@ function onRenderDetailsHeader(props, defaultRender) {
     <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
       {defaultRender({
         ...props,
-        onRenderColumnHeaderTooltip: (tooltipHostProps) => (
-          <TooltipHost {...tooltipHostProps} />
-        ),
+        onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
       })}
     </Sticky>
   );
@@ -70,14 +67,14 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
   const { items, groups, disabled } = props;
   const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({
-    key: "ItemName",
+    key: 'ItemName',
     descending: true,
   });
 
   const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
     return (
       <IconButton
-        menuIconProps={{ iconName: "MoreVertical" }}
+        menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems! }}
         role="menuitem"
         title="More options"
@@ -91,55 +88,55 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
 
   const columns = [
     {
-      key: "ItemName",
-      name: "Name",
-      fieldName: "name",
+      key: 'ItemName',
+      name: 'Name',
+      fieldName: 'name',
       minWidth: 150,
       maxWidth: 300,
       isRowHeader: true,
       isResizable: true,
-      data: "string",
+      data: 'string',
       onRender: (item: LibraryRef) => {
         return <span>{item.name}</span>;
       },
       isPadded: true,
     },
     {
-      key: "Version",
-      name: "Version",
-      fieldName: "version",
+      key: 'Version',
+      name: 'Version',
+      fieldName: 'version',
       minWidth: 70,
       maxWidth: 90,
       isRowHeader: true,
       isResizable: true,
-      data: "string",
+      data: 'string',
       onRender: (item: LibraryRef) => {
         return <span>{item.version}</span>;
       },
       isPadded: true,
     },
     {
-      key: "Description",
-      name: "Description",
-      fieldName: "description",
+      key: 'Description',
+      name: 'Description',
+      fieldName: 'description',
       minWidth: 150,
       maxWidth: 600,
       isRowHeader: true,
       isResizable: true,
-      data: "string",
+      data: 'string',
       onRender: (item: LibraryRef) => {
         return <span>{item.description}</span>;
       },
       isPadded: true,
     },
     {
-      key: "actions",
-      name: "",
+      key: 'actions',
+      name: '',
       minWidth: 90,
       maxWidth: 60,
       isRowHeader: true,
       isResizable: true,
-      data: "string",
+      data: 'string',
       onRender: (item: LibraryRef) => {
         return (
           <Fragment>
@@ -147,8 +144,8 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
               <OverflowSet
                 overflowItems={[
                   {
-                    key: "remove",
-                    name: "Remove",
+                    key: 'remove',
+                    name: 'Remove',
                     onClick: () => props.removeLibrary(item),
                   },
                 ]}
@@ -158,9 +155,9 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
             )}
             {!props.isInstalled(item) && (
               <DefaultButton
-                text={formatMessage("Install")}
+                text={formatMessage('Install')}
                 onClick={props.install}
-                disabled={disabled}
+                disabled={disabled || !item.isCompatible}
               />
             )}
           </Fragment>
@@ -182,11 +179,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
   }, [items]);
 
   useEffect(() => {
-    if (
-      items &&
-      typeof selectIndex === "number" &&
-      items.length > selectIndex
-    ) {
+    if (items && typeof selectIndex === 'number' && items.length > selectIndex) {
       props.onItemClick(items[selectIndex]);
     } else {
       props.onItemClick(null);

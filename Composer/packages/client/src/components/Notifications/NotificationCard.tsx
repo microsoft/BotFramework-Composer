@@ -6,7 +6,7 @@ import { jsx, css, keyframes } from '@emotion/core';
 import React, { useState } from 'react';
 import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { useRef } from 'react';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -74,6 +74,11 @@ const errorType = css`
 const successType = css`
   margin-top: 4px;
   color: #27ae60;
+`;
+
+const warningType = css`
+  margin-top: 4px;
+  color: ${SharedColors.yellow10};
 `;
 
 const cardTitle = css`
@@ -147,6 +152,7 @@ const defaultCardContentRenderer = (props: CardProps) => {
     <div css={cardContent}>
       {type === 'error' && <Icon css={errorType} iconName="ErrorBadge" />}
       {type === 'success' && <Icon css={successType} iconName="Completed" />}
+      {type === 'warning' && <Icon css={warningType} iconName="Warning" />}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}

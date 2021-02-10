@@ -7,6 +7,7 @@ import has from 'lodash/has';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import unset from 'lodash/unset';
+import omit from 'lodash/omit';
 
 import { Path } from '../../utility/path';
 import log from '../../logger';
@@ -128,16 +129,7 @@ export class DefaultSettingManager extends FileSettingManager {
     return result;
   }
 
-  private filterOutSensitiveValue = (obj: any) => {
-    if (obj && typeof obj === 'object') {
-      SensitiveProperties.map((key) => {
-        set(obj, key, '');
-      });
-      return obj;
-    }
-  };
-
-  public set = async (settings: any): Promise<void> => {
+  public set = async (settings: DialogSetting): Promise<void> => {
     const path = this.getPath();
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
@@ -145,7 +137,7 @@ export class DefaultSettingManager extends FileSettingManager {
       await this.storage.mkDir(dir, { recursive: true });
     }
     // remove sensitive values before saving to disk
-    const settingsWithoutSensitive = this.filterOutSensitiveValue(settings);
+    const settingsWithoutSensitive = omit(settings, SensitiveProperties);
 
     await this.storage.writeFile(path, JSON.stringify(settingsWithoutSensitive, null, 2));
   };

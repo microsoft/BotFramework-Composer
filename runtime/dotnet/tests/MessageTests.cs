@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
@@ -9,22 +13,13 @@ using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Tests
 {
     [TestClass]
-    public class MessageTests
+    public class MessageTests : ConversationTestsBase
     {
-        private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
-
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\extensions\samples\assets\projects");
-
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
-
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)

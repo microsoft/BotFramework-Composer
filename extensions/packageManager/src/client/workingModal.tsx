@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
-import { Dialog, DialogType } from "office-ui-fabric-react";
-import { LoadingSpinner } from "@bfc/ui-shared";
+import { jsx } from '@emotion/core';
+import { Dialog, DialogType } from 'office-ui-fabric-react';
+import { LoadingSpinner } from '@bfc/ui-shared';
 
-import { modalControlGroup } from "./styles";
+import { modalControlGroup } from './styles';
 
 export interface WorkingModalProps {
   hidden: boolean;

@@ -50,7 +50,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
   const storageFileLoadingStatus = useRecoilValue(storageFileLoadingStatusState);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
-  const isWindows = storage && storage.platform === 'win32';
+  const isWindows = storage?.platform === 'win32';
   const onFileChosen = (item: File) => {
     if (item) {
       const { type, path } = item;
@@ -58,7 +58,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
       if (type === FileTypes.FOLDER) {
         onCurrentPathUpdate(path, storageId);
       } else if (type === FileTypes.BOT && creationFlowStatus === CreationFlowStatus.OPEN) {
-        onOpen && onOpen(path, storageId);
+        onOpen?.(path, storageId);
       }
     }
   };

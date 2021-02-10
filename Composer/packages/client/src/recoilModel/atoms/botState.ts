@@ -17,7 +17,6 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
-  Skill,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
@@ -48,6 +47,32 @@ const emptyDialog: DialogInfo = {
   skills: [],
   isFormDialog: false,
 };
+
+const emptyLg: LgFile = {
+  id: '',
+  content: '',
+  diagnostics: [],
+  templates: [],
+  allTemplates: [],
+  imports: [],
+};
+
+type LgStateParams = { projectId: string; lgFileId: string };
+
+export const lgFileState = atomFamily<LgFile, LgStateParams>({
+  key: getFullyQualifiedKey('lg'),
+  default: () => {
+    return emptyLg;
+  },
+});
+
+export const lgFileIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('lgFileIds'),
+  default: () => {
+    return [];
+  },
+});
+
 type dialogStateParams = { projectId: string; dialogId: string };
 export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
   key: getFullyQualifiedKey('dialog'),
@@ -125,13 +150,6 @@ export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
   },
 });
 
-export const lgFilesState = atomFamily<LgFile[], string>({
-  key: getFullyQualifiedKey('lgFiles'),
-  default: (id) => {
-    return [];
-  },
-});
-
 export const luFilesState = atomFamily<LuFile[], string>({
   key: getFullyQualifiedKey('luFiles'),
   default: (id) => {
@@ -172,11 +190,6 @@ export const skillManifestsState = atomFamily<SkillManifestFile[], string>({
   default: (id) => {
     return [];
   },
-});
-
-export const showAddSkillDialogModalState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showAddSkillDialogModal'),
-  default: false,
 });
 
 export const settingsState = atomFamily<DialogSetting, string>({
@@ -346,13 +359,6 @@ export const botNameIdentifierState = atomFamily<string, string>({
 export const currentSkillManifestIndexState = atomFamily<number, string>({
   key: getFullyQualifiedKey('currentSkillManifestIndex'),
   default: 0,
-});
-
-export const skillsState = atomFamily<Skill[], string>({
-  key: getFullyQualifiedKey('skills'),
-  default: (id) => {
-    return [];
-  },
 });
 
 export const canUndoState = atomFamily<boolean, string>({

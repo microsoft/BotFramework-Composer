@@ -5,7 +5,7 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { BaseSchema, deleteActions, ITriggerCondition, LgTemplate, LgTemplateSamples, SDKKinds } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { lgFilesState, luFilesState, schemasState, dialogState, localeState } from '../atoms/botState';
+import { luFilesState, schemasState, dialogState, localeState } from '../atoms/botState';
 import { dispatcherState } from '../DispatcherWrapper';
 import { dialogsSelectorFamily } from '../selectors';
 import {
@@ -15,6 +15,7 @@ import {
   qnaMatcherKey,
   TriggerFormData,
 } from '../../utils/dialogUtil';
+import { lgFilesSelectorFamily } from '../selectors/lg';
 
 import { setError } from './shared';
 
@@ -47,7 +48,7 @@ export const triggerDispatcher = () => {
       try {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
         const luFiles = await snapshot.getPromise(luFilesState(projectId));
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId }));

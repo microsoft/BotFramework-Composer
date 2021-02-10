@@ -9,7 +9,7 @@ import { useTriggerApi } from '../../src/shell/triggerApi';
 import {
   localeState,
   luFilesState,
-  lgFilesState,
+  lgFilesSelectorFamily,
   dialogsSelectorFamily,
   schemasState,
   dispatcherState,
@@ -53,7 +53,7 @@ describe('use triggerApi hooks', () => {
       set(currentProjectIdState, state.projectId);
       set(localeState(state.projectId), 'en-us');
       set(luFilesState(state.projectId), state.luFiles);
-      set(lgFilesState(state.projectId), state.lgFiles);
+      set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
       set(dialogsSelectorFamily(state.projectId), state.dialogs);
       set(schemasState(state.projectId), state.schemas);
       set(dispatcherState, (current: Dispatcher) => ({

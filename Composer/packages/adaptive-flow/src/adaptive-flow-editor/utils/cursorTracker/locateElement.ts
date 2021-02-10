@@ -19,7 +19,7 @@ export function locateNearestElement(
   filterAttrs?: string[]
 ): SelectorElement {
   // Get elements that meet the filter criteria
-  let elementArr = elements.filter((element) => !filterAttrs || filterAttrs.find((key) => !!element[key]));
+  let elementArr = elements.filter((element) => !filterAttrs || filterAttrs?.find((key) => !!element[key]));
 
   elementArr = filterPromptElementsBySchema(currentElement, elementArr, direction);
   elementArr = filterElementsByVector(currentElement, elementArr, direction);

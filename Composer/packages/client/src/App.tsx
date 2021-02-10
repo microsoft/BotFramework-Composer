@@ -15,6 +15,11 @@ import { useInitializeLogger } from './telemetry/useInitializeLogger';
 
 initializeIcons(undefined, { disableWarnings: true });
 
+const Logger = () => {
+  useInitializeLogger();
+  return null;
+};
+
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
   const { fetchExtensions, fetchFeatureFlags } = useRecoilValue(dispatcherState);
@@ -28,10 +33,9 @@ export const App: React.FC = () => {
     fetchFeatureFlags();
   }, []);
 
-  useInitializeLogger();
-
   return (
     <Fragment key={appLocale}>
+      <Logger />
       <Announcement />
       <Header />
       <MainContainer />

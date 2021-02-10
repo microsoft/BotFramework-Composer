@@ -182,7 +182,7 @@ export class OneAuthInstance extends OneAuthBase {
         ''
       );
       const result = await this.oneAuth.signInInteractively('', reqParams, '');
-      if (result && result.credential && result.credential.value) {
+      if (result?.credential?.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
           accessToken: result.credential.value,

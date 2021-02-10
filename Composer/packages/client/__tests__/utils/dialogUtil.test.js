@@ -9,10 +9,6 @@ import {
   updateRegExIntent,
   createSelectedPath,
   deleteTrigger,
-  getTriggerTypes,
-  getEventTypes,
-  getActivityTypes,
-  getFriendlyName,
   getBreadcrumbLabel,
   getSelected,
 } from '../../src/utils/dialogUtil';
@@ -178,59 +174,6 @@ describe('deleteTrigger', () => {
     const length = dialogs[0].content.triggers.length;
     const dialogContent = deleteTrigger(dialogs, 'id1', 2);
     expect(dialogContent.triggers.length).toBe(length - 1);
-  });
-});
-
-describe('getTriggerTypes', () => {
-  it('return trigger types', () => {
-    const triggerTypes = getTriggerTypes();
-    expect(triggerTypes).toEqual([
-      { key: 'Microsoft.OnIntent', text: 'Intent recognized' },
-      { key: 'Microsoft.OnQnAMatch', text: 'QnA Intent recognized' },
-      { key: 'Microsoft.OnUnknownIntent', text: 'Unknown intent' },
-      { key: 'Microsoft.OnDialogEvent', text: 'Dialog events' },
-      { key: 'Microsoft.OnActivity', text: 'Activities' },
-      { key: 'Microsoft.OnChooseIntent', text: 'Duplicated intents recognized' },
-      { key: 'OnCustomEvent', text: 'Custom events' },
-    ]);
-  });
-});
-
-describe('getEventTypes', () => {
-  it('return event types', () => {
-    const eventTypes = getEventTypes();
-    expect(eventTypes).toEqual([
-      { key: 'Microsoft.OnBeginDialog', text: 'Dialog started (Begin dialog event)' },
-      { key: 'Microsoft.OnCancelDialog', text: 'Dialog cancelled (Cancel dialog event)' },
-      { key: 'Microsoft.OnError', text: 'Error occurred (Error event)' },
-      { key: 'Microsoft.OnRepromptDialog', text: 'Re-prompt for input (Reprompt dialog event)' },
-    ]);
-  });
-});
-
-describe('getActivityTypes', () => {
-  it('return activity types', () => {
-    const activityTypes = getActivityTypes();
-    expect(activityTypes).toEqual([
-      { key: 'Microsoft.OnActivity', text: 'Activities (Activity received)' },
-      { key: 'Microsoft.OnConversationUpdateActivity', text: 'Greeting (ConversationUpdate activity)' },
-      { key: 'Microsoft.OnEndOfConversationActivity', text: 'Conversation ended (EndOfConversation activity)' },
-      { key: 'Microsoft.OnEventActivity', text: 'Event received (Event activity)' },
-      { key: 'Microsoft.OnHandoffActivity', text: 'Handover to human (Handoff activity)' },
-      { key: 'Microsoft.OnInvokeActivity', text: 'Conversation invoked (Invoke activity)' },
-      { key: 'Microsoft.OnTypingActivity', text: 'User is typing (Typing activity)' },
-      { key: 'Microsoft.OnMessageActivity', text: 'Message received (Message received activity)' },
-      { key: 'Microsoft.OnMessageDeleteActivity', text: 'Message deleted (Message deleted activity)' },
-      { key: 'Microsoft.OnMessageReactionActivity', text: 'Message reaction (Message reaction activity)' },
-      { key: 'Microsoft.OnMessageUpdateActivity', text: 'Message updated (Message updated activity)' },
-    ]);
-  });
-});
-
-describe('getFriendlyName', () => {
-  it('return friendly name', () => {
-    const name = getFriendlyName(dialogs[0].content);
-    expect(name).toBe('kind1');
   });
 });
 

@@ -124,8 +124,11 @@ export class BotProjectService {
     throw new Error('getCurrentBotProject is DEPRECATED');
   }
 
-  public static getProjectsDateModifiedDict = async (projects: LocationRef[], user?: UserIdentity): Promise<any> => {
-    const dateModifiedDict: any = [];
+  public static getProjectsDateModifiedDict = async (
+    projects: LocationRef[],
+    user?: UserIdentity
+  ): Promise<{ dateModified: string; path: string }[]> => {
+    const dateModifiedDict: { dateModified: string; path: string }[] = [];
     const promises = projects.map(async (project) => {
       let dateModified = '';
       try {
@@ -145,16 +148,16 @@ export class BotProjectService {
       BotProjectService.recentBotProjects,
       user
     );
-    const recentBots = BotProjectService.recentBotProjects.reduce((result: any[], item) => {
-      const name = Path.basename(item.path);
-      //remove .botproj. Someone may open project before new folder structure.
-      if (!name.includes('.botproj')) {
-        result.push({ name, ...item });
-      }
-      return result;
-    }, []);
+    const allRecentBots = BotProjectService.recentBotProjects;
 
-    return recentBots.map((item: any) => {
+    const recentBots = allRecentBots
+      .filter((bot) => !Path.basename(bot.path).includes('.botproj'))
+      .map((bot) => ({
+        ...bot,
+        name: Path.basename(bot.path),
+      }));
+
+    return recentBots.map((item) => {
       return merge(item, find(dateModifiedDict, { path: item.path }));
     });
   };
@@ -251,7 +254,7 @@ export class BotProjectService {
       if (!(await StorageService.checkBlob('default', path, user))) {
         BotProjectService.deleteRecentProject(path);
         BotProjectService.removeProjectIdFromCache(projectId);
-        throw new Error(`file ${path} does not exist`);
+        throw new Error(`${path} doesn't seem to be exist any longer`);
       }
       const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
       await project.init();
@@ -291,7 +294,6 @@ export class BotProjectService {
         break;
       }
     }
-
     if (matchingProjectId) {
       const { eTag, path } = BotProjectService.projectLocationMap[matchingProjectId];
       if (path == null) {
@@ -301,7 +303,7 @@ export class BotProjectService {
         if (!(await StorageService.checkBlob('default', path, user))) {
           BotProjectService.deleteRecentProject(path);
           BotProjectService.removeProjectIdFromCache(matchingProjectId);
-          throw new Error(`file ${path} does not exist`);
+          throw new Error(`${path} doesn't seem to be exist any longer`);
         }
         const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
         await project.init();

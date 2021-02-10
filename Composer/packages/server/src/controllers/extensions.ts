@@ -162,7 +162,7 @@ export async function performExtensionFetch(req: ExtensionFetchRequest, res: Res
     const json = await response.json();
     res.json(json);
   } catch (e) {
-    if (e && e.json) {
+    if (e?.json) {
       const error = await e.json();
       res.status(500).json(error);
     } else {

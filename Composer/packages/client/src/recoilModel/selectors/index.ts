@@ -11,3 +11,4 @@ export * from './projectTemplates';
 export * from './skills';
 export * from './localRuntimeBuilder';
 export * from './diagnosticsPageSelector';
+export * from './lg';

@@ -8,7 +8,7 @@ import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
@@ -23,11 +23,13 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { MessageBar } from 'office-ui-fabric-react/lib/components/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import querystring from 'query-string';
+import axios from 'axios';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
@@ -36,7 +38,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
-const optionIcon = (checked) => css`
+const optionIcon = (checked: boolean) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
@@ -65,7 +67,7 @@ export const bannerClass = mergeStyles({
   marginTop: '5px',
 });
 
-const rowDetails = (disabled) => {
+const rowDetails = (disabled: boolean) => {
   return {
     root: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
@@ -83,7 +85,7 @@ const rowDetails = (disabled) => {
   };
 };
 
-const rowTitle = (disabled) => {
+const rowTitle = (disabled: boolean) => {
   return {
     cellTitle: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
@@ -124,6 +126,7 @@ type CreateOptionsProps = {
 export function CreateOptions(props: CreateOptionsProps) {
   const [option, setOption] = useState(optionKeys.createFromScratch);
   const [disabled, setDisabled] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
@@ -141,17 +144,19 @@ export function CreateOptions(props: CreateOptionsProps) {
     });
   }, []);
 
-  function SelectOption(props) {
+  function SelectOption(props?: { checked?: boolean; text: string; key: string }) {
+    if (props == null) return null;
     const { checked, text, key } = props;
     return (
       <div key={key} css={optionRoot}>
-        <Icon css={optionIcon(checked)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
+        <Icon css={optionIcon(checked ?? false)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
         <span>{text}</span>
       </div>
     );
   }
 
-  const handleChange = (event, option) => {
+  const handleChange = (event, option?: IChoiceGroupOption) => {
+    if (option == null) return;
     setOption(option.key);
     if (option.key === optionKeys.createFromTemplate) {
       setDisabled(false);
@@ -170,8 +175,7 @@ export function CreateOptions(props: CreateOptionsProps) {
     if (option === optionKeys.createFromQnA) {
       routeToTemplate = QnABotTemplateId;
     }
-
-    if (props.location && props.location.search) {
+    if (props.location?.search) {
       routeToTemplate += props.location.search;
     }
 
@@ -244,6 +248,34 @@ export function CreateOptions(props: CreateOptionsProps) {
     }
   }, [templates]);
 
+  useEffect(() => {
+    if (props.location?.search) {
+      const decoded = decodeURIComponent(props.location.search);
+      const { source, payload } = querystring.parse(decoded);
+      if (payload && typeof payload === 'string' && source === 'abs') {
+        const profile = JSON.parse(payload);
+        const alias = `abs-${profile.botName}-${profile.appId}`;
+        // check to see if Composer currently has a bot project corresponding to the alias
+        axios
+          .get<any>(`/api/projects/alias/${alias}`)
+          .then((aliasRes) => {
+            console.log(aliasRes);
+            if (aliasRes.status === 200) {
+              navigate(`/bot/${aliasRes.data.id}`);
+              return;
+            }
+          })
+          .catch((e) => {
+            setIsOpen(true);
+          });
+      } else {
+        setIsOpen(true);
+      }
+    } else {
+      setIsOpen(true);
+    }
+  }, [props.location?.search]);
+
   const choiceOptions = [
     {
       ariaLabel: formatMessage('Create from scratch') + (option === optionKeys.createFromScratch ? ' selected' : ''),
@@ -274,7 +306,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   // TODO: remove banner UI when REMOTE_TEMPLATE_CREATION_EXPERIENCE is removed
   return (
     <Fragment>
-      <DialogWrapper isOpen {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
+      <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <ChoiceGroup label={choiceGroupTitle} options={choiceOptions} selectedKey={option} onChange={handleChange} />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
         {featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled && (

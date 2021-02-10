@@ -72,6 +72,8 @@ interface DefineConversationFormData {
   schemaUrl: string;
   location?: string;
 
+  profile?: any; // abs payload to create bot
+
   templateDir?: string; // location of the imported template
   eTag?: string; // e tag used for content sync between composer and imported bot content
   urlSuffix?: string; // url to deep link to after creation
@@ -232,6 +234,18 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             }),
           });
           addNotification(notification);
+        }
+      }
+
+      if (props.location?.search) {
+        const decoded = decodeURIComponent(props.location.search);
+        const { source, payload } = querystring.parse(decoded);
+        if (payload && typeof payload === 'string' && source) {
+          const profile = JSON.parse(payload);
+          if (source === 'abs') {
+            dataToSubmit.alias = `abs-${profile.botName}-${profile.appId}`;
+            dataToSubmit.profile = profile;
+          }
         }
       }
 

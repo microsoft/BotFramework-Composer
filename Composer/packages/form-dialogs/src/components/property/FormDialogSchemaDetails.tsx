@@ -40,7 +40,7 @@ export const FormDialogSchemaDetails = () => {
       const selection = window.getSelection();
 
       // If click outside is the continuation of text select within the card, don't dismiss the card.
-      if (selection && selection.toString()) return;
+      if (selection?.toString()) return;
 
       const { x, y } = e;
       const elms = Array.prototype.slice.call(

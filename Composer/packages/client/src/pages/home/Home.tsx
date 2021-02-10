@@ -22,7 +22,7 @@ import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
 
-const linksButtom = [
+const linksBottom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
     text: formatMessage('Getting Started'),
@@ -72,7 +72,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
-    if (item && item.path) {
+    if (item?.path) {
       await openProject(item.path, 'default', true, (projectId) => {
         TelemetryClient.track('BotProjectOpened', { method: 'list', projectId });
       });
@@ -228,7 +228,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                     'Bot Framework provides the most comprehensive experience for building conversational applications.'
                   )}
                 </div>
-                {linksButtom.map((link) => {
+                {linksBottom.map((link) => {
                   return (
                     <Link
                       key={'homePageLeftLinks-' + link.text}
