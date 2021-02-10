@@ -41,6 +41,7 @@ const Library: React.FC = () => {
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[] | undefined>(undefined);
   const [installedComponents, updateInstalledComponents] = useState<LibraryRef[]>([]);
+  const [isLoadingInstalled, setIsLoadingInstalled] = useState<boolean>(false);
   const [recentlyUsed, setRecentlyUsed] = useState<LibraryRef[]>([]);
   const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
   const [feeds, updateFeeds] = useState([]);
@@ -294,16 +295,20 @@ const Library: React.FC = () => {
   };
 
   const getInstalledLibraries = async () => {
-    try {
-      updateInstalledComponents([]);
-      const response = await getInstalledComponentsAPI(currentProjectId);
-      updateInstalledComponents(response.data.components);
-    } catch (err) {
-      setApplicationLevelError({
-        status: err.response.status,
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: strings.libraryError,
-      });
+    if (!isLoadingInstalled) {
+      setIsLoadingInstalled(true);
+      try {
+        updateInstalledComponents([]);
+        const response = await getInstalledComponentsAPI(currentProjectId);
+        updateInstalledComponents(response.data.components);
+      } catch (err) {
+        setApplicationLevelError({
+          status: err.response.status,
+          message: err.response && err.response.data.message ? err.response.data.message : err,
+          summary: strings.libraryError,
+        });
+      }
+      setIsLoadingInstalled(false);
     }
   };
 
