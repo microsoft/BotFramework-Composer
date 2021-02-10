@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState, Fragment } from 'react';
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -20,6 +20,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { navigateTo } from '../../utils/navigation';
 import { settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { AuthClient } from '../../utils/authClient';
@@ -116,9 +117,6 @@ type AzureResourcePointer = {
 type AzureChannelStatus = {
   enabled: boolean;
   loading: boolean;
-  data: {
-    [key: string]: any;
-  };
 };
 
 type AzureChannelsStatus = {
@@ -140,6 +138,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const [token, setToken] = useState<string | undefined>();
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
+  const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoadingStatus, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -164,32 +163,36 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const onSelectProfile = async (evt, opt, index) => {
-    let newtoken = '';
-    if (isGetTokenFromUser()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
-      }
-      newtoken = getTokenFromCache('accessToken');
+  const onSelectProfile = async (_, opt) => {
+    if (opt.key === 'manageProfiles') {
+      navigateTo(`/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`);
     } else {
-      newtoken = await AuthClient.getAccessToken(armScopes);
-    }
-    setToken(newtoken);
+      let newtoken = '';
+      if (isGetTokenFromUser()) {
+        if (isShowAuthDialog(false)) {
+          setShowAuthDialog(true);
+        }
+        newtoken = getTokenFromCache('accessToken');
+      } else {
+        newtoken = await AuthClient.getAccessToken(armScopes);
+      }
+      setToken(newtoken);
 
-    // identify the publishing profile in the list
-    const profile = publishTargets?.find((p) => p.name === opt.key);
-    if (profile) {
-      const config = JSON.parse(profile.configuration);
-      setCurrentResource({
-        resourceName: config.name,
-        resourceGroupName: config.name,
-        subscriptionId: config.subscriptionId,
-      });
+      // identify the publishing profile in the list
+      const profile = publishTargets?.find((p) => p.name === opt.key);
+      if (profile) {
+        const config = JSON.parse(profile.configuration);
+        setCurrentResource({
+          resourceName: config.name,
+          resourceGroupName: config.name,
+          subscriptionId: config.subscriptionId,
+        });
+      }
     }
   };
 
   // allow a user to provide a subscription id if one is missing
-  const onChangeSubscription = async (evt, opt, index) => {
+  const onChangeSubscription = async (_, opt) => {
     if (currentResource) {
       setCurrentResource({
         ...currentResource,
@@ -206,22 +209,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
           currentResource?.resourceName
         }/channels/${channelId}?api-version=2020-06-02`;
-        const res = await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
-        console.log(`status of ${channelId}`, channelId, res.data);
+        await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
         return {
           enabled: true,
           loading: false,
-          data: res.data,
         };
       } catch (err) {
         switch (err?.response.data?.error.code) {
           case 'ResourceNotFound':
             // this channel has not yet been created, should display as disabled
-            console.log('RESOURCe NOT FOUND == NOT ENABLED, RETURN FALSE');
             return {
               enabled: false,
               loading: false,
-              data: {},
             };
             break;
           case 'AuthenticationFailed':
@@ -305,7 +304,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               },
             };
         }
-        const res = await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
+        await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
 
         // success!!
         setChannelStatus({
@@ -313,11 +312,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           [channelId]: {
             enabled: true,
             loading: false,
-            data: res.data,
           },
         });
 
-        console.log(`status of ${channelId}`, channelId, res.data);
         return {
           enabled: true,
           loading: false,
@@ -343,44 +340,43 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const deleteChannelService = async (channelId: string) => {
-    try {
-      const url = `https://management.azure.com/subscriptions/${
-        currentResource.subscriptionId || currentResource.alternateSubscriptionId
-      }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
-        currentResource?.resourceName
-      }/channels/${channelId}?api-version=2020-06-02`;
-      const res = await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (currentResource) {
+      try {
+        const url = `https://management.azure.com/subscriptions/${
+          currentResource.subscriptionId || currentResource.alternateSubscriptionId
+        }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+          currentResource?.resourceName
+        }/channels/${channelId}?api-version=2020-06-02`;
+        await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
 
-      console.log('DELETE COMPLETED', res);
+        // success!!
+        setChannelStatus({
+          ...channelStatus,
+          [channelId]: {
+            enabled: false,
+            loading: false,
+          },
+        });
+      } catch (err) {
+        switch (err?.response.data?.error.code) {
+          case 'AuthenticationFailed':
+            // the auth failed for some reason.
+            break;
 
-      // success!!
-      setChannelStatus({
-        ...channelStatus,
-        [channelId]: {
-          enabled: false,
-          loading: false,
-          data: {},
-        },
-      });
-    } catch (err) {
-      switch (err?.response.data?.error.code) {
-        case 'AuthenticationFailed':
-          // the auth failed for some reason.
-          break;
+          case 'ResourceGroupNotFound':
+            // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+            break;
 
-        case 'ResourceGroupNotFound':
-          // this resource group is not found - in other words, can't find a channel registration in the expected spot.
-          break;
+          case 'SubscriptionNotFound':
+            // the subscription is not found or invalid
+            break;
 
-        case 'SubscriptionNotFound':
-          // the subscription is not found or invalid
-          break;
-
-        default:
-          // handle error.
-          break;
+          default:
+            // handle error.
+            break;
+        }
+        throw new Error(err?.response.data?.error.message || 'Failed to delete new channel');
       }
-      throw new Error(err?.response.data?.error.message || 'Failed to delete new channel');
     }
   };
 
@@ -413,7 +409,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const hasAuth = async () => {
-    console.log('rEADY TO GO');
     let newtoken = '';
     if (isGetTokenFromUser()) {
       if (isShowAuthDialog(false)) {
@@ -428,13 +423,11 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const toggleService = (channel) => {
     return async (_, enabled) => {
-      console.log(`toggle ${channel} to ${enabled} from ${channelStatus?.[channel]}`);
       setChannelStatus({
         ...channelStatus,
         [channel]: {
           enabled: enabled,
           loading: true,
-          data: {},
         },
       });
 
@@ -456,6 +449,37 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       </div>
     );
   };
+
+  /* Copied from BotStatusList.tx */
+  const renderDropdownOption = (option?: IDropdownOption): JSX.Element | null => {
+    if (!option) return null;
+    const style = {
+      ...option.data?.style,
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+    };
+    return <div style={style}>{option.text}</div>;
+  };
+
+  useEffect(() => {
+    // reset the ui back to no selection
+    setPublishTargetOptions([]);
+
+    // generate options
+    const options: IDropdownOption[] =
+      publishTargets?.map((p) => {
+        return { key: p.name, text: p.name };
+      }) || [];
+
+    // add a link to jump down to create a profile
+    options.push({
+      key: 'manageProfiles',
+      text: formatMessage('Manage profiles'),
+      data: { style: { color: '#0078D4' } },
+    });
+    setPublishTargetOptions(options);
+  }, [publishTargets, projectId]);
 
   useEffect(() => {
     if (containerRef.current && scrollToSectionId === '#runtimeSettings') {
@@ -510,11 +534,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       <div ref={containerRef}>
         <Dropdown
           label={formatMessage('Publish profile to configure:')}
-          options={
-            publishTargets?.map((p) => {
-              return { key: p.name, text: p.name };
-            }) || []
-          }
+          options={publishTargetOptions}
           placeholder={formatMessage('Choose publishing profile')}
           styles={{
             root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
@@ -523,6 +543,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
           onChange={onSelectProfile}
           onRenderLabel={onRenderLabel}
+          onRenderOption={renderDropdownOption}
         />
 
         {availableSubscriptions?.length ? (
