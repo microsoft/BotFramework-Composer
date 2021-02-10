@@ -7,15 +7,15 @@ import React, { useMemo, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { getEditorAPI, registerEditorAPI } from '@bfc/shared';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { createDiagnosticsPageUrl, navigateTo } from '../../utils/navigation';
 import {
   visualEditorSelectionState,
   dispatcherState,
   rootBotProjectIdSelector,
   currentDialogState,
+  debugPanelExpansionState,
 } from '../../recoilModel';
 import { undoFunctionState } from '../../recoilModel/undo/history';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
@@ -30,6 +30,7 @@ const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
+  const setDebugPanelExpansion = useSetRecoilState(debugPanelExpansionState);
 
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
@@ -60,7 +61,13 @@ const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
     () => [
       {
         type: 'element',
-        element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
+        element: (
+          <DiagnosticsHeader
+            onClick={() => {
+              setDebugPanelExpansion(true);
+            }}
+          />
+        ),
         align: 'right',
       },
       {
