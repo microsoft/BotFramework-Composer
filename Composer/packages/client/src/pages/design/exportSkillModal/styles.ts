@@ -3,11 +3,9 @@
 
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
-import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
-import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 import { css } from '@emotion/core';
 
-export const styles: { dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles>; [key: string]: any } = {
+export const styles = {
   dialog: {
     title: {
       fontWeight: FontWeights.bold,

@@ -81,10 +81,10 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     };
 
     const onMenuClick = () => {
-      handleMenuShow && handleMenuShow(true);
+      handleMenuShow?.(true);
     };
     const onAfterMenuDismiss = () => {
-      handleMenuShow && handleMenuShow(false);
+      handleMenuShow?.(false);
     };
     return (
       <IconButton

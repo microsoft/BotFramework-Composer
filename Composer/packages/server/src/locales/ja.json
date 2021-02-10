@@ -183,7 +183,7 @@
     "message": "> このインテントをトリガーするために、いくつかの語句の例を追加します:\n> - 天気を教えてください\n> - '{'city=Seattle'}' の天気はどうですか\n\n> エンティティ定義:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> 予想されるいくつかのユーザー応答を追加します:\n> - '{'itemTitle=buy milk'} するよう通知してください'\n> - '{'itemTitle'}' について通知してください \n> - To Do リストに '{'itemTitle'}' を追加します\n>\n> エンティティ定義:\n> @ ml itemTitle\n"
+    "message": "> 予想されるいくつかのユーザー応答を追加します:\n> - '{'itemTitle=buy milk'}' するよう通知してください\n> - '{'itemTitle'}' について通知してください \n> - To Do リストに '{'itemTitle'}' を追加します\n>\n> エンティティ定義:\n> @ ml itemTitle\n"
   },
   "add_welcome_message_49d9ded9": {
     "message": "ウェルカム メッセージの追加"

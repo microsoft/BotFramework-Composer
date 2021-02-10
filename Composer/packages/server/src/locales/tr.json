@@ -9,7 +9,7 @@
     "message": "Form düzenleyicisinde bir hata oluştu!"
   },
   "ErrorInfo_part2": {
-    "message": "Bunun nedeni büyük olasılıkla Composer'daki hatalı biçimlendirilmiş veriler veya eksik işlevsellik olabilir."
+    "message": "Bunun nedeni büyük olasılıkla Composer’daki hatalı biçimlendirilmiş veriler veya eksik işlevsellik olabilir."
   },
   "ErrorInfo_part3": {
     "message": "Görsel düzenleyicide başka bir düğüme gitmeyi deneyin."
@@ -33,7 +33,7 @@
     "message": "Bu ada sahip bir profil zaten var."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer'de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
+    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer’de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
   },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
@@ -240,7 +240,7 @@
     "message": "9 Nis 2020"
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
-    "message": "Ekleme Ürünü Turu'ndan çıkmak istediğinizden emin misiniz? Turu ekleme ayarlarında yeniden başlatabilirsiniz."
+    "message": "Ekleme Ürünü Turu’ndan çıkmak istediğinizden emin misiniz? Turu ekleme ayarlarında yeniden başlatabilirsiniz."
   },
   "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
     "message": "\"{ id }\" form iletişim şemasını kaldırmak istediğinizden emin misiniz?"
@@ -378,7 +378,7 @@
     "message": "Bot Framework Composer, Microsoft Bot Framework teknolojisi yığınıyla birlikte botlar ve başka türlerde konuşma uygulamaları oluşturmaya yönelik bir görsel yazma tuvalidir. Composer ile modern ve son teknoloji ürünü bir konuşma deneyimi oluşturmak için ihtiyacınız olan her şeyi bulabilirsiniz."
   },
   "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
-    "message": "Bot Framework Composer, geliştiricilerin ve çok disiplinli ekiplerin bot oluşturmasını sağlayan açık kaynak bir görsel yazma tuvalidir. Composer, LUIS'yi ve Soru-Cevap Oluşturma'yı tümleştirir ve dil oluşturmayı kullanarak bot yanıtlarının kapsamlı birleşimini sağlar."
+    "message": "Bot Framework Composer, geliştiricilerin ve çok disiplinli ekiplerin bot oluşturmasını sağlayan açık kaynak bir görsel yazma tuvalidir. Composer, LUIS’yi ve Soru-Cevap Oluşturma’yı tümleştirir ve dil oluşturmayı kullanarak bot yanıtlarının kapsamlı birleşimini sağlar."
   },
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
     "message": "Bot Framework, konuşma uygulamaları oluşturmak için en kapsamlı deneyimi sağlar."
@@ -549,7 +549,7 @@
     "message": "ConditionalSelector"
   },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
-    "message": "Botunuzu özelleştirebileceğiniz ve denetleyebileceğiniz çalışma zamanı kodunu kullanarak başlatmak için Composer'ı yapılandırın."
+    "message": "Botunuzu özelleştirebileceğiniz ve denetleyebileceğiniz çalışma zamanı kodunu kullanarak başlatmak için Composer’ı yapılandırın."
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Dosya adında bir kültür kodu yoksa kullanılacak varsayılan dil modelini yapılandırır (Varsayılan: tr-TR)"
@@ -579,7 +579,7 @@
     "message": "Yeteneğe bağlan"
   },
   "connect_to_qna_knowledgebase_4b324132": {
-    "message": "Soru-Cevap Bilgi Bankası'na Bağlan"
+    "message": "Soru-Cevap Bilgi Bankası’na Bağlan"
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -675,7 +675,7 @@
     "message": "Bilgi bankasından oluştur (Soru-Cevap Oluşturma)"
   },
   "create_from_qna_7aa9dcbb": {
-    "message": "Soru-Cevap'tan oluştur"
+    "message": "Soru-Cevap’tan oluştur"
   },
   "create_from_scratch_485c3045": {
     "message": "Sıfırdan oluştur"
@@ -900,10 +900,10 @@
     "message": "{ value } adlı iletişim kutusu zaten var."
   },
   "dialogfactory_missing_schema_5c3255c4": {
-    "message": "DialogFactory'de şema eksik."
+    "message": "DialogFactory’de şema eksik."
   },
   "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {Sıfır bot}\n     = 1 {Bir bot}\n  other {# bot}\n} bulundu.\n            { dialogNum, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {Sıfır bot}\n     =1 {Bir bot}\n  other {# bot}\n} bulundu.\n            { dialogNum, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
   },
   "disable_a5c05db3": {
     "message": "Devre Dışı Bırak"
@@ -933,7 +933,7 @@
     "message": "Bitti"
   },
   "download_now_and_install_when_you_close_composer_e241ed74": {
-    "message": "Şimdi indirin ve Composer'ı kapattığınızda yükleyin."
+    "message": "Şimdi indirin ve Composer’ı kapattığınızda yükleyin."
   },
   "downloading_bb6fb34b": {
     "message": "İndiriliyor..."
@@ -1044,7 +1044,7 @@
     "message": "Endpoints"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
-    "message": "Botunuza yeni bir yetenek eklemek için bir bildirim URL'si girin."
+    "message": "Botunuza yeni bir yetenek eklemek için bir bildirim URL’si girin."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "En yüksek değeri girin"
@@ -1173,13 +1173,13 @@
     "message": "External services"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
-    "message": "Çevrimiçi bir SSS'den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx'tir. Bilgi bankası kaynakları hakkında daha fazla bilgi edinin. Oluşturma işleminden sonra soruları ve yanıtları kendiniz eklemek için bu adımı atlayın. Ekleyebileceğiniz kaynak sayısı ve dosya boyutu, seçtiğiniz Soru-Cevap hizmeti SKU'suna bağlıdır. Soru-Cevap Oluşturma SKU'ları hakkında daha fazla bilgi edinin."
+    "message": "Çevrimiçi bir SSS’den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx’tir. Bilgi bankası kaynakları hakkında daha fazla bilgi edinin. Oluşturma işleminden sonra soruları ve yanıtları kendiniz eklemek için bu adımı atlayın. Ekleyebileceğiniz kaynak sayısı ve dosya boyutu, seçtiğiniz Soru-Cevap hizmeti SKU’suna bağlıdır. Soru-Cevap Oluşturma SKU’ları hakkında daha fazla bilgi edinin."
   },
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
-    "message": "Çevrimiçi bir SSS'den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx'tir. "
+    "message": "Çevrimiçi bir SSS’den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx’tir. "
   },
   "extracting_qna_pairs_from_url_b0331bba": {
-    "message": "{ url } URL'sinden Soru-Cevap eşleri ayıklanıyor"
+    "message": "{ url } URL’sinden Soru-Cevap eşleri ayıklanıyor"
   },
   "failed_to_start_1edb0dbe": {
     "message": "Failed to start"
@@ -1386,10 +1386,10 @@
     "message": "Microsoft .NET Core SDK yükle"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
-    "message": "En son özelliklere erişmek ve bunları test etmek için Composer'ın yayın öncesi sürümlerini günlük olarak yükleyin. <a>Daha fazla bilgi edinin</a>."
+    "message": "En son özelliklere erişmek ve bunları test etmek için Composer’ın yayın öncesi sürümlerini günlük olarak yükleyin. <a>Daha fazla bilgi edinin</a>."
   },
   "install_the_update_and_restart_composer_fac30a61": {
-    "message": "Güncelleştirmeyi yükleyin ve Composer'ı yeniden başlatın."
+    "message": "Güncelleştirmeyi yükleyin ve Composer’ı yeniden başlatın."
   },
   "integer_7f378275": {
     "message": "tamsayı"
@@ -1446,7 +1446,7 @@
     "message": "öğe eklendi"
   },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
-    "message": "{ itemCount, plural,\n     = 0 {Sıfır şema}\n     =1 {Bir şema}\n  other {# şema}\n} bulundu.\n            { itemCount, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
+    "message": "{ itemCount, plural,\n     =0 {Sıfır şema}\n     =1 {Bir şema}\n  other {# şema}\n} bulundu.\n            { itemCount, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
   },
   "jan_28_2020_8beb36dc": {
     "message": "28 Oca 2020"
@@ -1590,7 +1590,7 @@
     "message": "Oturum Açın"
   },
   "login_to_composer_eb42b41": {
-    "message": "Composer'da oturum açın"
+    "message": "Composer’da oturum açın"
   },
   "loop_for_each_item_53eb7c5b": {
     "message": "Döngü: her öğe için"
@@ -1668,10 +1668,10 @@
     "message": "manifest editor"
   },
   "manifest_url_30824e88": {
-    "message": "Bildirim URL'si"
+    "message": "Bildirim URL’si"
   },
   "manifest_url_can_not_be_accessed_a7f147b2": {
-    "message": "Bildirim URL'sine erişilemiyor"
+    "message": "Bildirim URL’sine erişilemiyor"
   },
   "manifest_version_1edc004a": {
     "message": "Bildirim Sürümü"
@@ -2010,7 +2010,7 @@
     "message": "Lütfen bir olay adı girin"
   },
   "please_input_a_manifest_url_d726edbf": {
-    "message": "Lütfen bir bildirim URL'si girin"
+    "message": "Lütfen bir bildirim URL’si girin"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Lütfen normal ifade deseni girin"
@@ -2025,7 +2025,7 @@
     "message": "Lütfen bir olay türü seçin"
   },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
-    "message": "Lütfen Soru-Cevap'ı içeri aktarmak için belirli bir Soru-Cevap dosyası seçin"
+    "message": "Lütfen Soru-Cevap’ı içeri aktarmak için belirli bir Soru-Cevap dosyası seçin"
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "Lütfen bir tetikleyici türü seçin"
@@ -2382,7 +2382,7 @@
     "message": "Ara"
   },
   "search_for_extensions_on_npm_c5ca65d9": {
-    "message": "NPM'de uzantıları ara"
+    "message": "NPM’de uzantıları ara"
   },
   "see_details_da74090e": {
     "message": "See Details"
@@ -2475,7 +2475,7 @@
     "message": "Ayarlar"
   },
   "settings_contains_detailed_information_about_your__54aa601d": {
-    "message": "Ayarlar, botunuz ile ilgili ayrıntılı bilgiler içerir. Güvenlik nedenleriyle bu bilgiler varsayılan olarak gizlenir. Botunuzu test etmek veya Azure'da yayımlamak için bu ayarları sağlamanız gerekebilir."
+    "message": "Ayarlar, botunuz ile ilgili ayrıntılı bilgiler içerir. Güvenlik nedenleriyle bu bilgiler varsayılan olarak gizlenir. Botunuzu test etmek veya Azure’da yayımlamak için bu ayarları sağlamanız gerekebilir."
   },
   "settings_editor_b5246933": {
     "message": "Ayarlar düzenleyicisi"
@@ -2538,10 +2538,10 @@
     "message": "Ne yazık ki yayımlama sırasında bir sorun oluştu. Yeniden deneyin veya bu görevden çıkın."
   },
   "sorted_a_to_z_915b2ed3": {
-    "message": "A'dan Z'ye sıralandı"
+    "message": "A’dan Z’ye sıralandı"
   },
   "sorted_z_to_a_722f1567": {
-    "message": "Z'den A'ya sıralandı"
+    "message": "Z’den A’ya sıralandı"
   },
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Boşluk ve özel karakterlere izin verilmez."
@@ -2631,7 +2631,7 @@
     "message": "Kullanım Koşulları"
   },
   "test_in_emulator_b1b3c278": {
-    "message": "Emulator'da Test Et"
+    "message": "Emulator’da Test Et"
   },
   "test_your_bot_3cd1f4bb": {
     "message": "Botunuzu test edin"
@@ -2691,7 +2691,7 @@
     "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
-    "message": "BB'niz oluşturulurken hata oluştu"
+    "message": "BB’niz oluşturulurken hata oluştu"
   },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
     "message": "Bu örnekler, konuşma deneyimlerini oluştururken belirlediğimiz tüm en iyi uygulamaları ve destekleyici bileşenleri bir araya getirir."
@@ -2715,7 +2715,7 @@
     "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
-    "message": "Bu, Composer'ın kullanıcı arabirimi için kullanılan dildir."
+    "message": "Bu, Composer’ın kullanıcı arabirimi için kullanılan dildir."
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "Bu dil, çeviri temeli (ve temel dili) olarak kopyalanır ve kullanılır."
@@ -2823,7 +2823,7 @@
     "message": "Tekrar deneyin"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
-    "message": "Önizlemedeki yeni özellikleri deneyin ve Composer'ı geliştirmemize yardımcı olun. Bu özellikleri istediğiniz zaman etkinleştirebilir veya devre dışı bırakabilirsiniz."
+    "message": "Önizlemedeki yeni özellikleri deneyin ve Composer’ı geliştirmemize yardımcı olun. Bu özellikleri istediğiniz zaman etkinleştirebilir veya devre dışı bırakabilirsiniz."
   },
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "Bu içeriği açıklayan bir ad yazın"
@@ -2967,13 +2967,13 @@
     "message": "İletişim kutusunu görüntüle"
   },
   "view_kb_c382e495": {
-    "message": "BB'yi görüntüle"
+    "message": "BB’yi görüntüle"
   },
   "view_log_6d51af5e": {
     "message": "View log"
   },
   "view_on_npm_2051324d": {
-    "message": "NPM'de görüntüle"
+    "message": "NPM’de görüntüle"
   },
   "vishwac_sena_45910bf0": {
     "message": "Vishwac Sena"
@@ -3096,7 +3096,7 @@
     "message": "You have successfully published { name } to { publishTarget }"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
-    "message": "Composer'daki bot oluşturma yolculuğunuz"
+    "message": "Composer’daki bot oluşturma yolculuğunuz"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Botunuz, doğal dil anlama için LUIS ve Soru-Cevap kullanıyor."

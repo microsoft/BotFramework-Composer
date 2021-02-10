@@ -9,8 +9,8 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import {
   dispatcherState,
   formDialogErrorState,
@@ -19,6 +19,7 @@ import {
   formDialogSchemaIdsState,
 } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 
 import CreateFormDialogSchemaModal from './CreateFormDialogSchemaModal';
 import { FormDialogSchemaList } from './FormDialogSchemaList';
@@ -51,6 +52,8 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
+
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const generationStartedRef = React.useRef(false);
   const generationPendingNotificationIdRef = React.useRef<string | undefined>();
@@ -185,10 +188,21 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     [createFormDialogSchema, setCreateSchemaDialogOpen]
   );
 
+  const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
+    setPageElementState('forms', { leftSplitWidth: sizes.primary });
+  };
+
   return (
     <>
       <Stack horizontal verticalFill>
-        <LeftRightSplit initialLeftGridWidth={320} minLeftPixels={320} minRightPixels={800} pageMode={'forms'}>
+        <Split
+          resetOnDoubleClick
+          initialPrimarySize="320px"
+          minPrimarySize="320px"
+          minSecondarySize="800px"
+          renderSplitter={renderThinSplitter}
+          onMeasuredSizesChanged={onMeasuredSizesChanged}
+        >
           <FormDialogSchemaList
             items={formDialogSchemaIds}
             loading={formDialogGenerationProgressing}
@@ -220,7 +234,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
               </Text>
             </EmptyView>
           )}
-        </LeftRightSplit>
+        </Split>
       </Stack>
       {createSchemaDialogOpen ? (
         <CreateFormDialogSchemaModal

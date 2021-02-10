@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo } from '@bfc/shared';
+import { FileInfo, lgImportResolverGenerator, ResolverResource } from '@bfc/shared';
 
 import { lgIndexer } from '../src/lgIndexer';
-import { getBaseName } from '../src/utils/help';
 
 const { parse, index } = lgIndexer;
 
@@ -54,25 +53,24 @@ describe('index', () => {
     lastModified: '',
   };
 
-  const files = {
-    common: {
+  const files = [
+    {
       id: 'common',
       content: `# Greeting
       -What's up bro`,
     },
-  };
+  ] as ResolverResource[];
 
-  const importResolver = (_source: string, _id: string) => {
-    const id = getBaseName(_id.split('/').pop() || '', '.lg');
-    return files[id];
-  };
+  const importresolver = lgImportResolverGenerator(files, '.lg');
 
   it('should index lg file with [import]', () => {
-    const { id, templates, diagnostics }: any = index([file], importResolver)[0];
+    const { id, templates, diagnostics, imports }: any = index([file], importresolver)[0];
     expect(id).toEqual('test');
     expect(templates.length).toEqual(2);
     expect(diagnostics.length).toEqual(0);
     expect(templates[0].name).toEqual('Exit');
     expect(templates[1].name).toEqual('Hi');
+    expect(imports.length).toEqual(1);
+    expect(imports[0]).toEqual({ id: 'common.lg', path: '../common/common.lg', description: 'import' });
   });
 });

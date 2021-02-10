@@ -4,7 +4,7 @@
 import { useRecoilState } from 'recoil';
 import { LuIntentSection, LuFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { luUtil } from '@bfc/indexers';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -17,7 +17,7 @@ const luFeatures = {};
 
 jest.mock('../../parsers/luWorker', () => {
   return {
-    parse: (id, content, luFeatures) => ({ id, content, luFeatures }),
+    parse: (id: string, content, luFeatures) => ({ id, content, luFeatures }),
     addIntent: require('@bfc/indexers/lib/utils/luUtil').addIntent,
     addIntents: require('@bfc/indexers/lib/utils/luUtil').addIntents,
     updateIntent: require('@bfc/indexers/lib/utils/luUtil').updateIntent,
@@ -40,19 +40,20 @@ const getLuIntent = (Name, Body): LuIntentSection =>
   } as LuIntentSection);
 
 describe('Lu dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const [luFiles, setLuFiles] = useRecoilState(luFilesState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
+  const useRecoilTestHook = () => {
+    const [luFiles, setLuFiles] = useRecoilState(luFilesState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
 
-      return {
-        luFiles,
-        setLuFiles,
-        currentDispatcher,
-      };
+    return {
+      luFiles,
+      setLuFiles,
+      currentDispatcher,
     };
+  };
 
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: luFilesState(projectId), initialValue: luFiles },

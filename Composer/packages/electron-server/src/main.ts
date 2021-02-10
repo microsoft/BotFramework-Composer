@@ -102,6 +102,9 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     appUpdater.on('progress', (progress) => {
       mainWindow.webContents.send('app-update', 'progress', progress);
     });
+    appUpdater.on('update-in-progress', (updateInfo: UpdateInfo) => {
+      mainWindow.webContents.send('app-update', 'update-in-progress', updateInfo);
+    });
     appUpdater.on('update-not-available', (explicitCheck: boolean) => {
       mainWindow.webContents.send('app-update', 'update-not-available', explicitCheck);
     });

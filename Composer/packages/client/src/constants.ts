@@ -50,8 +50,8 @@ export const LUIS_REGIONS: IDropdownOption[] = [
     text: formatMessage('westeurope'),
   },
   {
-    key: 'australia',
-    text: formatMessage('australia'),
+    key: 'australiaeast',
+    text: formatMessage('australiaeast'),
   },
 ];
 
@@ -172,6 +172,9 @@ export const BotStatusesCopy = {
   },
   get stopping() {
     return formatMessage('Stopping');
+  },
+  get pending() {
+    return formatMessage('Status pending');
   },
 };
 
@@ -299,6 +302,19 @@ export const repairSkillDialog = (name: string) => {
   return {
     title: formatMessage('Link to this skill has been broken'),
     subText: formatMessage('{name} cannot be found at the location.', { name }),
+  };
+};
+
+export const removeSkillDialog = () => {
+  return {
+    title: formatMessage('Warning'),
+    subText: formatMessage(
+      'The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action.'
+    ),
+    subTextNoUse: formatMessage(
+      'You are about to remove the skill from this project. Removing this skill won’t delete the files.'
+    ),
+    footerText: formatMessage('Do you wish to continue?'),
   };
 };
 

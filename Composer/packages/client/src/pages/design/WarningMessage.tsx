@@ -5,7 +5,8 @@
 import { jsx } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Button } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import React from 'react';
 
 import { triggerNotSupportedWarning } from '../../constants';
 
@@ -39,18 +40,19 @@ const changeRecognizerButton = {
 };
 
 interface WarningMessageProps {
+  isVisible: boolean;
   okText: string;
   onOk: () => void;
   onCancel: () => void;
 }
 
-export const WarningMessage: React.FC<WarningMessageProps> = (props) => {
-  const { okText, onOk, onCancel } = props;
-  return (
+export const WarningMessage: React.FC<WarningMessageProps> = React.memo((props) => {
+  const { okText, onOk, onCancel, isVisible } = props;
+  return isVisible ? (
     <div css={warningRoot}>
       <Icon iconName={'Warning'} style={warningIcon} />
       <div css={warningFont}>{triggerNotSupportedWarning}</div>
-      <Button
+      <ActionButton
         styles={changeRecognizerButton}
         text={okText}
         onClick={() => {
@@ -59,7 +61,7 @@ export const WarningMessage: React.FC<WarningMessageProps> = (props) => {
       />
       <Icon iconName={'Cancel'} style={warningIcon} onClick={onCancel} />
     </div>
-  );
-};
+  ) : null;
+});
 
 export default WarningMessage;

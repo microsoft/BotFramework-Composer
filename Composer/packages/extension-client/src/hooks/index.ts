@@ -4,6 +4,7 @@ export * from './useDialogApi';
 export * from './useFlowConfig';
 export * from './useFormConfig';
 export * from './useMenuConfig';
+export * from './useTriggerConfig';
 export * from './useRecognizerConfig';
 export * from './useShellApi';
 

@@ -25,7 +25,6 @@ import {
   currentProjectIdState,
   skillManifestsState,
   luFilesState,
-  lgFilesState,
   settingsState,
   botEnvironmentState,
   botDiagnosticsState,
@@ -41,7 +40,7 @@ import {
   botErrorState,
   botProjectSpaceLoadedState,
 } from '../../atoms';
-import { dialogsSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
@@ -67,20 +66,20 @@ jest.mock('../../../utils/httpUtil');
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
-    flush: () => new Promise((resolve) => resolve()),
-    addProject: () => new Promise((resolve) => resolve()),
+    flush: () => new Promise((resolve) => resolve(null)),
+    addProject: () => new Promise((resolve) => resolve(null)),
   };
 });
 
 jest.mock('../../parsers/luWorker', () => {
   return {
-    flush: () => new Promise((resolve) => resolve()),
+    flush: () => new Promise((resolve) => resolve(null)),
   };
 });
 
 jest.mock('../../persistence/FilePersistence', () => {
   return jest.fn().mockImplementation(() => {
-    return { flush: () => new Promise((resolve) => resolve()) };
+    return { flush: () => new Promise((resolve) => resolve(null)) };
   });
 });
 
@@ -115,7 +114,7 @@ describe('Project dispatcher', () => {
     const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
-    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const settings = useRecoilValue(settingsState(projectId));
     const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
     const botEnvironment = useRecoilValue(botEnvironmentState(projectId));
@@ -513,6 +512,7 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
+
     setImmediate(() => {
       expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
       expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');

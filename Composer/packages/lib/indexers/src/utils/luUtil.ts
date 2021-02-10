@@ -20,10 +20,12 @@ import {
   Range,
   DiagnosticSeverity,
   ILUFeaturesConfig,
+  LuParseResource,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { buildNewlineText, splitNewlineText } from './help';
+import { buildNewlineText, getFileName, splitNewlineText } from './help';
+import { SectionTypes } from './qnaUtil';
 
 const { luParser, sectionOperator } = sectionHandler;
 const { parseFile, validateResource } = BFLUParser;
@@ -62,7 +64,11 @@ export function convertLuDiagnostic(d: any, source: string, offset = 0): Diagnos
   return result;
 }
 
-export function convertLuParseResultToLuFile(id: string, resource, luFeatures: ILUFeaturesConfig): LuFile {
+export function convertLuParseResultToLuFile(
+  id: string,
+  resource: LuParseResource,
+  luFeatures: ILUFeaturesConfig
+): LuFile {
   // filter structured-object from LUParser result.
   const { Sections, Errors, Content } = resource;
   const intents: LuIntentSection[] = [];
@@ -104,6 +110,16 @@ export function convertLuParseResultToLuFile(id: string, resource, luFeatures: I
     convertLuDiagnostic(e, id)
   ) as Diagnostic[];
 
+  const imports = Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(
+    ({ Path, Description }) => {
+      return {
+        id: getFileName(Path),
+        description: Description,
+        path: Path,
+      };
+    }
+  );
+
   const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics);
   return {
     id,
@@ -111,6 +127,7 @@ export function convertLuParseResultToLuFile(id: string, resource, luFeatures: I
     empty: !Sections.length,
     intents,
     diagnostics,
+    imports,
     resource: { Sections, Errors, Content },
   };
 }

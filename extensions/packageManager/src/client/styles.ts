@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { css } from "@emotion/core";
-import { FontWeights, FontSizes } from "office-ui-fabric-react";
-import { NeutralColors } from "@uifabric/fluent-theme";
+import { css } from '@emotion/core';
+import { FontWeights, FontSizes } from 'office-ui-fabric-react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;

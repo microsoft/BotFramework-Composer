@@ -132,7 +132,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
           text={formatMessage('Cancel')}
           onClick={() => {
             actions.createQnAFromUrlDialogCancel({ projectId });
-            onDismiss && onDismiss();
+            onDismiss?.();
           }}
         />
         <PrimaryButton

@@ -34,7 +34,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
   };
 
   useEffect(() => {
-    onError && onError(parseError);
+    onError?.(parseError);
   }, [parseError]);
 
   const onInit: OnInit = (monaco) => {

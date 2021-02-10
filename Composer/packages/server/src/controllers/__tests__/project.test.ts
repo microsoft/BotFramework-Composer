@@ -377,7 +377,7 @@ describe('publish luis files', () => {
         luFiles: [],
       },
       setTimeout: (msecs: number, callback: () => any): void => {},
-    } as Request;
+    } as Request & { setTimeout };
     await ProjectController.build(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalled();
   });

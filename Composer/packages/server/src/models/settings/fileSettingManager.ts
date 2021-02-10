@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { UserIdentity } from '@bfc/extension';
+import mapValues from 'lodash/mapValues';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -26,6 +27,7 @@ export class FileSettingManager implements ISettingManager {
     this.storage = StorageService.getStorageClient('default', user);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async get(obfuscate = false): Promise<any> {
     const path = this.getPath();
     const settings = await this._getFromStorage(path);
@@ -45,10 +47,11 @@ export class FileSettingManager implements ISettingManager {
     }
   };
 
-  protected createDefaultSettings = (): any => {
+  protected createDefaultSettings = () => {
     return {};
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public set = async (settings: any): Promise<void> => {
     const path = this.getPath();
 
@@ -62,20 +65,15 @@ export class FileSettingManager implements ISettingManager {
 
   public getFileName = () => fileName;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private obfuscateValues = (obj: any): any => {
     if (obj) {
       const type = typeof obj;
       if (type === 'object') {
         if (Array.isArray(obj)) {
-          const result: any[] = [];
-          obj.forEach((x) => result.push(this.obfuscateValues(x)));
-          return result;
+          return obj.map(this.obfuscateValues);
         } else {
-          const result: any = {};
-          for (const p in obj) {
-            result[p] = this.obfuscateValues(obj[p]);
-          }
-          return result;
+          return mapValues(obj, this.obfuscateValues);
         }
       }
     }

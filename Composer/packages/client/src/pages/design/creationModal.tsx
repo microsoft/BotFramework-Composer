@@ -53,7 +53,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const [templateId, setTemplateId] = useState('');
 
   useEffect(() => {
-    if (storages && storages.length) {
+    if (storages?.length) {
       const storageId = storage.id;
       const path = storage.path;
       const formattedPath = Path.normalize(path);
@@ -99,7 +99,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const handleDismiss = () => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    props.onDismiss && props.onDismiss();
+    props.onDismiss?.();
   };
 
   const handleDefineConversationSubmit = async (formData, templateId: string) => {

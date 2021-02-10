@@ -1,7 +1,7 @@
 version: "3"
 services:
   composer:
-    build: Composer
+    build: .
     ports:
       - "3000:3000"
       - "3979-5000:3979-5000"

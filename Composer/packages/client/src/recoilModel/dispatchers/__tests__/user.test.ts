@@ -2,15 +2,17 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import jwtDecode from 'jwt-decode';
 
 import { userDispatcher } from '../user';
+import { UserSettingsPayload } from '../../types';
 import { DEFAULT_USER_SETTINGS } from '../../utils';
 import { userSettingsState, currentUserState, CurrentUser } from '../../atoms/appState';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { dispatcherState } from '../../DispatcherWrapper';
 import { getUserTokenFromCache, loginPopup } from '../../../utils/auth';
+import { Dispatcher } from '..';
 
 const realDate = Date.now;
 
@@ -36,22 +38,23 @@ const mockLoginPopup = loginPopup as jest.Mock;
 const mockJwtDecode = jwtDecode as jest.Mock;
 
 describe('user dispatcher', () => {
-  let renderedComponent, dispatcher;
+  const useRecoilTestHook = () => {
+    const userSettings = useRecoilValue(userSettingsState);
+    const currentUser = useRecoilValue(currentUserState);
+
+    const currentDispatcher = useRecoilValue(dispatcherState);
+
+    return {
+      userSettings,
+      currentUser,
+      currentDispatcher,
+    };
+  };
+
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
   beforeEach(() => {
     process.env.COMPOSER_REQUIRE_AUTH = 'true'; // needs to be a string
-
-    const useRecoilTestHook = () => {
-      const userSettings = useRecoilValue(userSettingsState);
-      const currentUser = useRecoilValue(currentUserState);
-
-      const currentDispatcher = useRecoilValue(dispatcherState);
-
-      return {
-        userSettings,
-        currentUser,
-        currentDispatcher,
-      };
-    };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
@@ -142,9 +145,9 @@ describe('user dispatcher', () => {
     await act(async () => {
       dispatcher.updateUserSettings({
         appUpdater: { autoDownload: true }, // updates one object deep
-        dialogNavWidth: 555, // to test non-object updating
+        dialogNavWidth: 555, // to test non-object updating\
         nonsense: 'foo', // should not appear in results
-      });
+      } as Partial<UserSettingsPayload>); // cheat the type so we can pass a noncompliant argument without complaint
     });
     expect(renderedComponent.current.userSettings).toEqual({
       appUpdater: {

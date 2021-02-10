@@ -29,7 +29,7 @@ export const ContentEditable = (props: ContentEditableProps) => {
 
   const focusInputRef = () => {
     const { inputRef } = props;
-    if (inputRef && inputRef.current) {
+    if (inputRef?.current) {
       inputRef.current.focus();
     }
   };

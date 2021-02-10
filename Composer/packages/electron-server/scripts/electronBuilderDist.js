@@ -38,7 +38,7 @@ try {
   }
 
   // call electron-builder . --prepackaged --config electron-builder-config.json
-  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --${platform} --x64 --prepackaged "${unpackedAppDir}" --config electron-builder-config.json`;
+  const cmd = `"${electronBuilderBinary}" --projectDir "${electronServerDir}" --${platform} --x64 --prepackaged "${unpackedAppDir}" --config electron-builder-config.json`;
   log.info('Executing command: ', cmd);
 
   execSync(cmd, { stdio: 'inherit' }); // lgtm [js/shell-command-injection-from-environment]

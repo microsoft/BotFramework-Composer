@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@botframework-composer/test-utils/lib/hooks';
+import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { settingsState, currentProjectIdState } from '../../atoms';
@@ -64,6 +64,7 @@ const settings = {
     path: '',
     command: '',
     key: '',
+    name: '',
   },
   downsampling: {
     maxImbalanceRatio: 10,
@@ -73,17 +74,18 @@ const settings = {
 };
 
 describe('setting dispatcher', () => {
-  let renderedComponent, dispatcher: Dispatcher;
-  beforeEach(() => {
-    const useRecoilTestHook = () => {
-      const settings = useRecoilValue(settingsState(projectId));
-      const currentDispatcher = useRecoilValue(dispatcherState);
-      return {
-        settings,
-        currentDispatcher,
-      };
+  const useRecoilTestHook = () => {
+    const settings = useRecoilValue(settingsState(projectId));
+    const currentDispatcher = useRecoilValue(dispatcherState);
+    return {
+      settings,
+      currentDispatcher,
     };
+  };
 
+  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+
+  beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: settingsState(projectId), initialValue: settings },
@@ -129,8 +131,8 @@ describe('setting dispatcher', () => {
       );
     });
 
-    expect(renderedComponent.current.settings.publishTargets.length).toBe(1);
-    expect(renderedComponent.current.settings.publishTargets[0].name).toBe('new');
+    expect(renderedComponent.current.settings.publishTargets?.length).toBe(1);
+    expect(renderedComponent.current.settings.publishTargets?.[0].name).toBe('new');
   });
 
   it('should update RuntimeSettings', async () => {
@@ -142,6 +144,7 @@ describe('setting dispatcher', () => {
     expect(renderedComponent.current.settings.runtime.path).toBe('path');
     expect(renderedComponent.current.settings.runtime.command).toBe('command');
     expect(renderedComponent.current.settings.runtime.key).toBe('key');
+    // @ts-ignore - runtime has 'name' in practice and is of a type that has 'name', but TS isn't seeing it somehow
     expect(renderedComponent.current.settings.runtime.name).toBe('name');
   });
 

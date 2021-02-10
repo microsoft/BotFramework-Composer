@@ -77,7 +77,7 @@ export const botProjectFileDispatcher = () => {
     const rootBotSettings = await snapshot.getPromise(settingsState(rootBotProjectId));
     if (rootBotSettings.skill) {
       const updatedSettings = produce(rootBotSettings, (draftState) => {
-        if (draftState.skill && draftState.skill[botNameIdentifier]) {
+        if (draftState.skill?.[botNameIdentifier]) {
           delete draftState.skill[botNameIdentifier];
         }
       });

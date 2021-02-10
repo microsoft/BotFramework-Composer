@@ -20,7 +20,7 @@ import {
   pluginPagesSelector,
   botOpeningMessage,
 } from './recoilModel';
-import { localBotsDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
+import { localBotsSettingDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -71,6 +71,8 @@ const Routes = (props) => {
             <LGPage path="language-generation/common/*" />
             <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/all/*" />
+            <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <BotProjectSettings path="botProjectsSettings" />
             <Diagnostics path="diagnostics" />
@@ -132,7 +134,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-  const localBots = useRecoilValue(localBotsDataSelector);
+  const localBots = useRecoilValue(localBotsSettingDataSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));

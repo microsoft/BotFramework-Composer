@@ -34,7 +34,7 @@ try {
   }
 
   // call electron-builder . --dir --config electron-builder-config.json
-  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform} --x64 --config electron-builder-config.json`;
+  const cmd = `"${electronBuilderBinary}" --projectDir "${electronServerDir}" --dir --${platform} --x64 --config electron-builder-config.json`;
   log.info('Executing command: ', cmd);
 
   execSync(cmd, { stdio: 'inherit' }); // lgtm [js/shell-command-injection-from-environment]

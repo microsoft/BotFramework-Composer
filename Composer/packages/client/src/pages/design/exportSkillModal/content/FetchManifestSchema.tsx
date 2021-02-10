@@ -10,7 +10,7 @@ export const FetchManifestSchema: React.FC<ContentProps> = ({ completeStep, edit
   useEffect(() => {
     (async function () {
       try {
-        if (value && value?.$schema) {
+        if (value?.$schema) {
           const res = await fetch(value.$schema);
           const schema = await res.json();
           setSchema(schema);

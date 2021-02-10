@@ -29,7 +29,6 @@ import {
   createQnAOnState,
   currentProjectIdState,
   filePersistenceState,
-  locationState,
   projectMetaDataState,
   settingsState,
   showCreateQnAFromUrlDialogState,
@@ -209,19 +208,9 @@ export const projectDispatcher = () => {
       navigate = true,
       callback?: (projectId: string) => void
     ) => {
-      const { set, snapshot } = callbackHelpers;
+      const { set } = callbackHelpers;
       try {
         set(botOpeningState, true);
-        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
-
-        if (rootBotId) {
-          const rootBotLocation = await snapshot.getPromise(locationState(rootBotId));
-          // Reloading the same bot. No need to fetch resources again.
-          if (rootBotLocation === path) {
-            navigateToBot(callbackHelpers, rootBotId);
-            return;
-          }
-        }
 
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
@@ -275,6 +264,9 @@ export const projectDispatcher = () => {
       });
       projectIdCache.set(projectId);
     } catch (ex) {
+      if (projectId === projectIdCache.get()) {
+        projectIdCache.clear();
+      }
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
@@ -284,7 +276,7 @@ export const projectDispatcher = () => {
   });
 
   const createNewBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
@@ -300,6 +292,7 @@ export const projectDispatcher = () => {
         urlSuffix,
         alias,
         preserveRoot,
+        profile,
       } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
@@ -316,6 +309,25 @@ export const projectDispatcher = () => {
       );
       set(botProjectIdsState, [projectId]);
 
+      if (profile) {
+        // ABS Create Flow, update publishProfile after create project
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        const appId = profile.appId;
+        delete profile.appId;
+        const newProfile = {
+          name: `abs-${profile.botName}`,
+          type: 'azurePublish',
+          configuration: JSON.stringify({
+            hostname: profile.tag?.webapp || '',
+            runtimeIdentifier: 'win-x64',
+            settings: {
+              MicrosoftAppId: appId,
+            },
+            ...profile,
+          }),
+        };
+        dispatcher.setPublishTargets([newProfile], projectId);
+      }
       // Post project creation
       set(projectMetaDataState(projectId), {
         isRootBot: true,
@@ -536,6 +548,10 @@ export const projectDispatcher = () => {
     set(currentProjectIdState, projectId);
   });
 
+  const setProjectError = useRecoilCallback((callbackHelpers: CallbackInterface) => (error) => {
+    setError(callbackHelpers, error);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -556,5 +572,6 @@ export const projectDispatcher = () => {
     reloadProject,
     updateCreationMessage,
     setCurrentProjectId,
+    setProjectError,
   };
 };

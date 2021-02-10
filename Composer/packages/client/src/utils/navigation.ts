@@ -108,7 +108,7 @@ export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; Micr
   // and start up the emulator
   const i = document.createElement('iframe');
   i.style.display = 'none';
-  i.onload = () => i.parentNode && i.parentNode.removeChild(i);
+  i.onload = () => i.parentNode?.removeChild(i);
   i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&msaAppId=${
     authSettings.MicrosoftAppId
   }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;

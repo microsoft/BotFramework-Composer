@@ -36,10 +36,8 @@ export const generateSkillManifest = (
   const resolvedDialogs = dialogs.filter(({ id }) => selectedDialogs.find(({ id: dialogId }) => id === dialogId));
 
   const { content } = rootDialog;
-  const triggers = selectedTriggers.reduce((acc: ITrigger[], { id: path }) => {
-    const trigger = get(content, path) as ITrigger;
-    return trigger ? [...acc, trigger] : acc;
-  }, []);
+
+  const triggers = selectedTriggers.map((tr) => get(content, tr.id) as ITrigger).filter(Boolean);
 
   const activities = generateActivities(dialogSchemas, triggers, resolvedDialogs);
   const dispatchModels = generateDispatchModels(schema, dialogs, triggers, luFiles, qnaFiles);

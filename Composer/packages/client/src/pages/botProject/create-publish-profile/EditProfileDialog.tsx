@@ -65,39 +65,48 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = (props) => {
     <DialogWrapper
       isOpen
       dialogType={DialogTypes.Customer}
-      minWidth={700}
+      minWidth={960}
       title={formatMessage('Edit a publish profile')}
       onDismiss={onDismiss}
     >
-      <div style={{ width: '60%' }}>
+      <div style={{ width: '49%' }}>
         <form>
           <TextField
             readOnly
+            required
             defaultValue={current?.item.name || ''}
-            label={formatMessage('Create profile name')}
+            label={formatMessage('Name')}
             placeholder={formatMessage('My Staging Environment')}
+            styles={{ root: { paddingBottom: '11px' } }}
           />
           <Dropdown
+            required
             defaultSelectedKey={targetType}
-            label={formatMessage('Select your publish target')}
+            label={formatMessage('Publish target')}
             options={targetTypes}
             placeholder={formatMessage('Choose One')}
             onChange={updateType}
           />
         </form>
-        {selectedType?.instructions && <p>{selectedType.instructions}</p>}
+        {selectedType?.instructions && <p style={{}}>{selectedType.instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
         <JsonEditor
           key={targetType}
           editorSettings={userSettings.codeEditor}
-          height={200}
+          height={260}
           schema={selectedType?.schema}
           value={config}
           onChange={setConfig}
         />
       </div>
       <Separator css={separator} />
-      <DialogFooter>
+      <DialogFooter
+        styles={{
+          actions: {
+            marginTop: '12px',
+          },
+        }}
+      >
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton disabled={!targetType} text={formatMessage('Save')} onClick={submit} />
       </DialogFooter>

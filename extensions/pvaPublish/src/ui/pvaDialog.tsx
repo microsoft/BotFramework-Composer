@@ -89,7 +89,7 @@ export const PVADialog: FC = () => {
         setFetchingEnvironments(false);
         setEnvs(envs);
         if (envs && envs.length) {
-          setEnv(envs[0]);
+          setEnv(envs[0].id);
         }
       };
       fetchEnvs();

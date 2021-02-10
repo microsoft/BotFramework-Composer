@@ -59,7 +59,7 @@ type IconProps = {
 
 interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
   expanded?: boolean;
-  componentFocusOnmount?: boolean;
+  componentFocusOnMount?: boolean;
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
@@ -88,7 +88,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
   const {
-    componentFocusOnmount = false,
+    componentFocusOnMount = false,
     containerStyles,
     depth,
     required,
@@ -125,7 +125,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
 
   const fieldRef = useRef<ITextField>(null);
   useEffect(() => {
-    if (componentFocusOnmount) {
+    if (componentFocusOnMount) {
       fieldRef.current?.focus();
     }
   }, []);
@@ -155,7 +155,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     fieldRef.current?.focus();
   };
 
-  const handleChange = (_e: any, newValue?: string) => {
+  const handleChange = (_e, newValue?: string) => {
     if (isMultiLineText(newValue)) setMultiline(true);
     updateField('value', newValue);
     setHasBeenEdited(true);
@@ -170,12 +170,12 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     if (!formData.value) {
       updateField('value', value);
     }
-    onBlur && onBlur(id, formData.value);
+    onBlur?.(id, formData.value);
   };
 
   const handleOnFocus = () => {
     setHasFocus(true);
-    onFocus && onFocus();
+    onFocus?.();
   };
 
   const cancel = () => {

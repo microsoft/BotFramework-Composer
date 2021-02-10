@@ -22,7 +22,7 @@ import {
   settingsState,
   luFilesState,
   qnaFilesState,
-  validateDialogsSelectorFamily,
+  dialogsSelectorFamily,
   botDisplayNameState,
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
@@ -171,7 +171,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
   const rootqnaKey = groupQnAKey.root;
 
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
