@@ -8,14 +8,21 @@ import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
 import { ensureDir, existsSync, remove } from 'fs-extra';
+import { Request } from 'express';
+import formatMessage from 'format-message';
 
+import AssetService from '../services/asset';
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
 import log from '../logger';
+import { ExtensionContext } from '../models/extension/extensionContext';
+import { getLocationRef, getNewProjRef, ejectAndMerge } from '../utility/project';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
+import { BackgroundProcessManager } from './backgroundProcessManager';
+import { TelemetryService } from './telemetry';
 
 const MAX_RECENT_BOTS = 7;
 
@@ -398,4 +405,86 @@ export class BotProjectService {
       throw new Error(`Failed to backup project ${project.id}: ${e}`);
     }
   };
+
+  public static async createProjectAsync(req: Request, jobId: string) {
+    const {
+      templateId,
+      templateVersion,
+      name,
+      description,
+      storageId,
+      location,
+      preserveRoot,
+      templateDir,
+      eTag,
+      alias,
+      locale,
+      schemaUrl,
+    } = req.body;
+    // get user from request
+    const user = await ExtensionContext.getUserFromRequest(req);
+
+    const createFromPva = !!templateDir;
+
+    // populate template if none was passed
+    if (templateId === '') {
+      // TODO: Replace with default template once one is determined
+      throw Error('empty templateID passed');
+    }
+
+    // location to store the bot project
+    const locationRef = getLocationRef(location, storageId, name);
+    try {
+      await BotProjectService.cleanProject(locationRef);
+
+      // Update status for polling
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
+
+      const newProjRef = createFromPva
+        ? await getNewProjRef(templateDir, templateId, locationRef, user, locale)
+        : await AssetService.manager.copyRemoteProjectTemplateToV2(
+            templateId,
+            templateVersion,
+            name,
+            locationRef,
+            user
+          );
+
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
+
+      const id = await BotProjectService.openProject(newProjRef, user);
+
+      // in the case of PVA, we need to update the eTag and alias used by the import mechanism
+      createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
+
+      const currentProject = await BotProjectService.getProjectById(id, user);
+
+      // inject shared content into every new project.  this comes from assets/shared
+      !createFromPva &&
+        (await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage));
+
+      if (currentProject !== undefined) {
+        !createFromPva && (await ejectAndMerge(currentProject, jobId));
+        BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
+        await currentProject.updateBotInfo(name, description, preserveRoot);
+
+        if (schemaUrl && !createFromPva) {
+          await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+        }
+
+        await currentProject.init();
+
+        const project = currentProject.getProject();
+        log('Project created successfully.');
+        BackgroundProcessManager.updateProcess(jobId, 200, 'Created Successfully', {
+          id,
+          ...project,
+        });
+      }
+      TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
+    } catch (err) {
+      BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
+      TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+    }
+  }
 }
