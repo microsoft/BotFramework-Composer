@@ -49,20 +49,6 @@ export const DebugPanel = () => {
     return { key: tabKey, element };
   }, []);
 
-  const buildTabStatusBar = useCallback((tabKey: string, tabStatusbarComponent?: React.FC) => {
-    if (!tabStatusbarComponent) return { key: tabKey, element: null };
-
-    const StatusBar = tabStatusbarComponent;
-    return { key: tabKey, element: <StatusBar /> };
-  }, []);
-
-  const statusbar = useMemo(() => {
-    const statusbarItems = debugExtensions
-      .map(({ key, statusWidget }) => buildTabStatusBar(key, statusWidget).element)
-      .filter(Boolean);
-    return <div data-testid="debug-panel__header__toolbar">{statusbarItems}</div>;
-  }, []);
-
   const headerPivot = useMemo(() => {
     const tabTitles = debugExtensions
       .map(({ key, headerWidget }) => buildTabTitle(key, headerWidget))
@@ -147,9 +133,7 @@ export const DebugPanel = () => {
           data-testid="debug-panel__statusbar"
         >
           <div css={leftBarStyle} data-testid="statusbar__left"></div>
-          <div css={rightBarStyle} data-testid="statusbar__right">
-            {statusbar}
-          </div>
+          <div css={rightBarStyle} data-testid="statusbar__right"></div>
         </div>
       </div>
     );
@@ -165,9 +149,7 @@ export const DebugPanel = () => {
         <div css={leftBarStyle} data-testid="statusbar__left">
           {headerPivot}
         </div>
-        <div css={rightBarStyle} data-testid="statusbar__right">
-          {statusbar}
-        </div>
+        <div css={rightBarStyle} data-testid="statusbar__right"></div>
       </div>
     );
   }
