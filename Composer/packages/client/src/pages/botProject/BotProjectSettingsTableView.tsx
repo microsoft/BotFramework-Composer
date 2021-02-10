@@ -8,8 +8,10 @@ import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+import { useFeatureFlag } from '../../utils/hooks';
 
 import { ABSChannels } from './ABSChannels';
+import AdapterSettings from './adapters/AdapterSettings';
 import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
@@ -41,6 +43,8 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
+  const useAdapters = useFeatureFlag('NEW_CREATION_FLOW');
+
   return (
     <div css={container}>
       {isRootBot && <SkillHostEndPoint projectId={projectId} />}
@@ -48,6 +52,7 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
       <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <ABSChannels projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <BotLanguage projectId={projectId} />
+      {isRootBot && useAdapters && <AdapterSettings projectId={projectId} />}
       <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <div css={publishTargetsWrap(!isRootBot)}>
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
