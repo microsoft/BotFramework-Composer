@@ -371,6 +371,9 @@
   "bot_controller_319b408d": {
     "message": "Bot Controller"
   },
+  "bot_files_created_986109df": {
+    "message": "Bot files created"
+  },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code."
   },
@@ -397,6 +400,9 @@
   },
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
+  },
+  "bot_name_cannot_not_start_with_a_number_d70239": {
+    "message": "Bot name cannot not start with a number"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot name is { botName }"
@@ -479,6 +485,9 @@
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
   },
+  "choose_a_template_for_your_bot_47ed06a8": {
+    "message": "Choose a template for your bot"
+  },
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
@@ -520,6 +529,9 @@
   },
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
+  },
+  "component_templates_populated_from_npm_feeds_d89351ef": {
+    "message": "Component templates populated from npm feeds"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
@@ -1129,6 +1141,9 @@
   },
   "error_event_c079b608": {
     "message": "Error event"
+  },
+  "error_fetching_runtime_templates_5e8a4701": {
+    "message": "Error fetching runtime templates"
   },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "Error in UI schema for { title }: { errorMsg }\n{ options }"
@@ -1805,6 +1820,9 @@
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft App Password"
   },
+  "microsoft_s_templates_offer_best_practices_for_dev_87bec01c": {
+    "message": "Microsoft''s templates offer best practices for developing conversational bots"
+  },
   "minimap_beb3be27": {
     "message": "Minimap"
   },
@@ -1900,6 +1918,9 @@
   },
   "new_13daf639": {
     "message": "New"
+  },
+  "new_creation_experience_29591aca": {
+    "message": "New Creation Experience"
   },
   "new_template_49e6f0f2": {
     "message": "New template"
@@ -2152,6 +2173,9 @@
   },
   "previous_folder_e7eeb306": {
     "message": "previous folder"
+  },
+  "primary_language_96276a64": {
+    "message": "Primary Language"
   },
   "privacy_290109ea": {
     "message": "Privacy"
@@ -2453,6 +2477,9 @@
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
   },
+  "runtime_type_f9e2419b": {
+    "message": "Runtime type"
+  },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
   },
@@ -2668,6 +2695,9 @@
   },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__9f354fe3": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, or _."
   },
   "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."

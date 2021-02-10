@@ -51,6 +51,7 @@ type BotProjectEvents = {
   CreateNewBotProject: { method: 'toolbar' | 'newCallToAction' | 'luisCallToAction' };
   CreateNewBotProjectNextButton: { template: string };
   CreateNewBotProjectFromExample: { template: string };
+  CreateNewBotProjectStarted: { template: string };
   CreateNewBotProjectCompleted: { template: string; status: number };
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
