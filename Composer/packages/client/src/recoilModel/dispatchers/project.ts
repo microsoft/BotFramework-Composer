@@ -30,6 +30,7 @@ import {
   currentProjectIdState,
   filePersistenceState,
   projectMetaDataState,
+  selectedTemplateReadMeState,
   settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
@@ -332,6 +333,7 @@ export const projectDispatcher = () => {
       set(botOpeningState, true);
       const {
         templateId,
+        templateVersion,
         name,
         description,
         location,
@@ -347,6 +349,7 @@ export const projectDispatcher = () => {
       const response = await createNewBotFromTemplateV2(
         callbackHelpers,
         templateId,
+        templateVersion,
         name,
         description,
         location,
@@ -528,6 +531,21 @@ export const projectDispatcher = () => {
     set(currentProjectIdState, projectId);
   });
 
+  const fetchReadMe = useRecoilCallback((callbackHelpers: CallbackInterface) => async (moduleName: string) => {
+    try {
+      const response = await httpClient.get(`/assets/templateReadme`, {
+        params: { moduleName: encodeURIComponent(moduleName) },
+      });
+
+      if (response.data) {
+        callbackHelpers.set(selectedTemplateReadMeState, response.data);
+      }
+    } catch (err) {
+      handleProjectFailure(callbackHelpers, err);
+      callbackHelpers.set(selectedTemplateReadMeState, '');
+    }
+  });
+
   const setProjectError = useRecoilCallback((callbackHelpers: CallbackInterface) => (error) => {
     setError(callbackHelpers, error);
   });
@@ -553,5 +571,6 @@ export const projectDispatcher = () => {
     updateCreationMessage,
     setCurrentProjectId,
     setProjectError,
+    fetchReadMe,
   };
 };

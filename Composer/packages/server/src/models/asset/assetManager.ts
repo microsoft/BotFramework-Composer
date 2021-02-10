@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
-import path, { join } from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, BotTemplate, FileExtensions } from '@bfc/extension';
-import { mkdirs, readFile } from 'fs-extra';
-import rimraf from 'rimraf';
+import { UserIdentity, FileExtensions, BotTemplateV2, FeedType } from '@bfc/extension';
+import { mkdirSync, readFile } from 'fs-extra';
+import yeoman from 'yeoman-environment';
+import Environment from 'yeoman-environment';
+import TerminalAdapter from 'yeoman-environment/lib/adapter';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -20,16 +20,21 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
-
-const execAsync = promisify(exec);
-const removeDirAndFiles = promisify(rimraf);
+import { templateGeneratorPath } from '../../settings/env';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
+  public yeomanEnv: Environment;
   private _botProjectFileTemplate;
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
+    this.yeomanEnv = yeoman.createEnv(
+      '',
+      { yeomanRepository: templateGeneratorPath },
+      new TerminalAdapter({ console: console })
+    );
+    this.yeomanEnv.lookupLocalPackages();
   }
 
   public get botProjectFileTemplate() {
@@ -92,22 +97,75 @@ export class AssetManager {
     return ref;
   }
 
-  private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
-    // install package
-    if (template.package) {
-      const { stderr: initErr } = await execAsync(`dotnet new -i ${template.package.packageName}`);
-      if (initErr) {
-        throw new Error(initErr);
+  public async copyRemoteProjectTemplateToV2(
+    templateId: string,
+    templateVersion: string,
+    projectName: string,
+    ref: LocationRef,
+    user?: UserIdentity
+  ): Promise<LocationRef> {
+    try {
+      // user storage maybe diff from template storage
+      const dstStorage = StorageService.getStorageClient(ref.storageId, user);
+      const dstDir = Path.resolve(ref.path);
+      if (await dstStorage.exists(dstDir)) {
+        log('Failed copying template to %s', dstDir);
+        throw new Error('already have this folder, please give another name');
       }
-      const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
-        cwd: destinationPath,
-      });
-      if (initErr2) {
-        throw new Error(initErr2);
+
+      mkdirSync(dstDir, { recursive: true });
+
+      // find selected template
+      const npmPackageName = templateId;
+      const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+
+      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, templateVersion);
+
+      if (remoteTemplateAvailable) {
+        await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+      } else {
+        throw new Error(`error hit when installing remote template`);
       }
-    } else {
-      throw new Error('selected template has no local or external address');
+
+      ref.path = `${ref.path}/${projectName}`;
+
+      return ref;
+    } catch (err) {
+      throw new Error(`error hit when instantiating remote template: ${err?.message}`);
     }
+  }
+
+  private async installRemoteTemplate(
+    generatorName: string,
+    npmPackageName: string,
+    templateVersion: string
+  ): Promise<boolean> {
+    this.yeomanEnv.cwd = templateGeneratorPath;
+    try {
+      log('Installing generator', npmPackageName);
+      templateVersion = templateVersion ? templateVersion : '*';
+      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
+
+      log('Looking up local packages');
+      await this.yeomanEnv.lookupLocalPackages();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private async instantiateRemoteTemplate(
+    generatorName: string,
+    dstDir: string,
+    projectName: string
+  ): Promise<boolean> {
+    this.yeomanEnv.cwd = dstDir;
+
+    log('About to instantiate a template!', dstDir, generatorName, projectName);
+    await this.yeomanEnv.run([generatorName, projectName], {}, () => {
+      log('Template successfully instantiated', dstDir, generatorName, projectName);
+    });
+    return true;
   }
 
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
@@ -116,34 +174,11 @@ export class AssetManager {
       throw new Error(`no such template with id ${templateId}`);
     }
 
-    let templateSrcPath = template.path;
-    const isHostedTemplate = !templateSrcPath;
-    if (isHostedTemplate) {
-      // create empty temp directory on server for holding externally hosted template src
-      const baseDir = process.env.COMPOSER_TEMP_DIR as string;
-      templateSrcPath = join(baseDir, 'feedBasedTemplates');
-      if (fs.existsSync(templateSrcPath)) {
-        await removeDirAndFiles(templateSrcPath);
-      }
-      await mkdirs(templateSrcPath, (err) => {
-        if (err) {
-          throw new Error('Error creating temp directory for external template storage');
-        }
-      });
-      await this.getRemoteTemplate(template, templateSrcPath);
-    }
+    const templateSrcPath = template.path;
 
     if (templateSrcPath) {
       // copy Composer data files
       await copyDir(templateSrcPath, this.templateStorage, dstDir, dstStorage);
-
-      if (isHostedTemplate) {
-        try {
-          await removeDirAndFiles(templateSrcPath);
-        } catch (err) {
-          throw new Error('Issue deleting temp generated file for external template assets');
-        }
-      }
     }
 
     // if we have a locale override, copy those files over too
@@ -233,5 +268,57 @@ export class AssetManager {
         return '';
       }
     }
+  }
+
+  private getFeedType(): FeedType {
+    // TODO: parse through data to detect for npm or nuget package schema and return respecive result
+    return 'npm';
+  }
+
+  private async getFeedContents(feedUrl: string): Promise<BotTemplateV2[] | undefined | null> {
+    try {
+      const res = await fetch(feedUrl);
+      const data = await res.json();
+      const feedType = this.getFeedType();
+      if (feedType === 'npm') {
+        return data.objects.map((result) => {
+          const { name, version, description = '', keywords = [] } = result.package;
+
+          return {
+            id: name,
+            name: name,
+            description: description,
+            keywords: keywords,
+            package: {
+              packageName: name,
+              packageSource: 'npm',
+              packageVersion: version,
+            },
+          } as BotTemplateV2;
+        });
+      } else if (feedType === 'nuget') {
+        // TODO: handle nuget processing
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  public async getCustomFeedTemplates(feedUrls: string[]): Promise<BotTemplateV2[]> {
+    let templates: BotTemplateV2[] = [];
+    const invalidFeedUrls: string[] = [];
+
+    for (const feed of feedUrls) {
+      const feedTemplates = await this.getFeedContents(feed);
+      if (feedTemplates === null) {
+        invalidFeedUrls.push(feed);
+      } else if (feedTemplates && Array.isArray(feedTemplates) && feedTemplates.length > 0) {
+        templates = templates.concat(feedTemplates);
+      }
+    }
+
+    return templates;
   }
 }
