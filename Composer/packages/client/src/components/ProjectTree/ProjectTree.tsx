@@ -29,7 +29,6 @@ import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-import AddTriggerIcon from './AddTriggerIcon';
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 import { INDENT_PER_LEVEL } from './constants';
@@ -256,13 +255,7 @@ export const ProjectTree: React.FC<Props> = ({
     onSelect?.(link);
   };
 
-  const renderDialogHeader = (
-    skillId: string,
-    dialog: DialogInfo,
-    depth: number,
-    isPvaSchema: boolean,
-    shouldShowActionButton: boolean
-  ) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -295,11 +288,6 @@ export const ProjectTree: React.FC<Props> = ({
         createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
         TelemetryClient.track('AddNewKnowledgeBaseStarted');
       },
-    };
-
-    const onRenderActionIcon = (props: { className?: string; style?: React.CSSProperties }) => {
-      const { className, style } = props;
-      return <AddTriggerIcon className={className} style={style} />;
     };
 
     if (!isPvaSchema) {
@@ -338,7 +326,6 @@ export const ProjectTree: React.FC<Props> = ({
         >
           <TreeItem
             hasChildren
-            actionIconText={shouldShowActionButton ? 'Add Trigger' : ''}
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
@@ -349,7 +336,6 @@ export const ProjectTree: React.FC<Props> = ({
             padLeft={depth * LEVEL_PADDING}
             showErrors={false}
             textWidth={leftSplitWidth - TREE_PADDING}
-            onRenderActionIcon={shouldShowActionButton ? onRenderActionIcon : undefined}
             onSelect={handleOnSelect}
           />
         </span>
@@ -657,7 +643,7 @@ export const ProjectTree: React.FC<Props> = ({
       return [
         ...commonLink,
         ...filteredDialogs.map((dialog: DialogInfo) => {
-          const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema, true);
+          const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
           const key = 'dialog-' + dialog.id;
           let lgImports, luImports;
           if (options.showLgImports) {
@@ -691,7 +677,7 @@ export const ProjectTree: React.FC<Props> = ({
               </ExpandableNode>
             );
           } else {
-            return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema, false).summaryElement;
+            return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
           }
         }),
       ];
@@ -699,7 +685,7 @@ export const ProjectTree: React.FC<Props> = ({
       return [
         ...commonLink,
         ...filteredDialogs.map(
-          (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema, false).summaryElement
+          (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
         ),
       ];
     }

@@ -22,7 +22,7 @@ import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
-import { SUMMARY_ARROW_SPACE, ACTION_ICON_WIDTH, THREE_DOTS_ICON_WIDTH } from './constants';
+import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -213,37 +213,10 @@ const calloutRootStyle = css`
   padding: 11px;
 `;
 
-const overflowButtonContainer = css`
-  display: flex;
-`;
-
-const actionButtonContainerStyle = (isActive: boolean) => css`
-  .action-btn {
-    visibility: ${isActive ? 'visible' : 'hidden'};
-  }
-  :hover {
-    background: ${NeutralColors.gray20};
-    .action-btn {
-      visibility: visible;
-      path {
-        fill: ${DefaultPalette.accent};
-      }
-    }
-  }
-`;
-
-const actionButtonStyle = {
-  height: 24,
-  width: 24,
-  textAlign: 'center' as 'center',
-};
-
 // -------------------- TreeItem -------------------- //
 
 type ITreeItemProps = {
   link: TreeLink;
-  onRenderActionIcon?: (props: { className?: string; style?: React.CSSProperties }) => React.ReactNode;
-  actionIconText?: string;
   isActive?: boolean;
   isChildSelected?: boolean;
   isSubItemActive?: boolean;
@@ -387,8 +360,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   isChildSelected = false,
   icon,
-  onRenderActionIcon,
-  actionIconText = '',
   dialogName,
   onSelect,
   textWidth = 100,
@@ -410,14 +381,11 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const isBroken = !!link.botError;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
-  const overflowIconWidthOnHover =
-    (overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0) + (onRenderActionIcon ? ACTION_ICON_WIDTH : 0);
+  const overflowIconWidthOnHover = overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
 
-  let overflowIconWidthActiveOrChildSelected = 0;
-  if (isActive || isChildSelected) {
-    overflowIconWidthActiveOrChildSelected += overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
-    overflowIconWidthActiveOrChildSelected += onRenderActionIcon ? ACTION_ICON_WIDTH : 0;
-  }
+  const overflowIconWidthActiveOrChildSelected =
+    (isActive || isChildSelected) && overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
+
   const onRenderItem = useCallback(
     (maxTextWidth: number, showErrors: boolean) => (item: IOverflowSetItemProps) => {
       const { diagnostics = [], projectId, skillId, onErrorClick } = item;
@@ -484,57 +452,46 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       isActive: boolean,
       isChildSelected: boolean,
       menuOpenCallback: (cb: boolean) => void,
-      setThisItemSelected: (sel: boolean) => void,
-      onRenderActionIcon?: (props: { className?: string; style?: React.CSSProperties }) => React.ReactNode,
-      actionIconText?: string
+      setThisItemSelected: (sel: boolean) => void
     ) => {
       const moreLabel = formatMessage('More options');
       return (overflowItems: IContextualMenuItem[] | undefined) => {
         if (overflowItems == null) return null;
         return (
-          <div css={overflowButtonContainer}>
-            {onRenderActionIcon ? (
-              <div css={actionButtonContainerStyle(isActive || isChildSelected)}>
-                <TooltipHost content={actionIconText} directionalHint={DirectionalHint.bottomCenter}>
-                  {onRenderActionIcon({ className: 'action-btn', style: actionButtonStyle })}
-                </TooltipHost>
-              </div>
-            ) : null}
-            <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
-              <IconButton
-                ariaLabel={moreLabel}
-                className="dialog-more-btn"
-                data-is-focusable={isActive}
-                data-testid="dialogMoreButton"
-                menuIconProps={{
-                  iconName: 'More',
-                }}
-                menuProps={{
-                  items: overflowItems,
-                  styles: menuStyle,
-                  onMenuOpened: () => {
-                    setThisItemSelected(true);
-                    menuOpenCallback(true);
-                  },
-                  onMenuDismissed: () => {
-                    setThisItemSelected(false);
-                    menuOpenCallback(false);
-                  },
-                }}
-                role="cell"
-                styles={moreButton(isActive || isChildSelected)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.stopPropagation();
-                  }
-                }}
-              />
-            </TooltipHost>
-          </div>
+          <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
+            <IconButton
+              ariaLabel={moreLabel}
+              className="dialog-more-btn"
+              data-is-focusable={isActive}
+              data-testid="dialogMoreButton"
+              menuIconProps={{
+                iconName: 'More',
+              }}
+              menuProps={{
+                items: overflowItems,
+                styles: menuStyle,
+                onMenuOpened: () => {
+                  setThisItemSelected(true);
+                  menuOpenCallback(true);
+                },
+                onMenuDismissed: () => {
+                  setThisItemSelected(false);
+                  menuOpenCallback(false);
+                },
+              }}
+              role="cell"
+              styles={moreButton(isActive || isChildSelected)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.stopPropagation();
+                }
+              }}
+            />
+          </TooltipHost>
         );
       };
     },
-    [isActive, isChildSelected, menuOpenCallback, setThisItemSelected, onRenderActionIcon, actionIconText]
+    [isActive, isChildSelected, menuOpenCallback, setThisItemSelected]
   );
 
   return (
@@ -586,9 +543,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             !!isActive,
             isChildSelected,
             menuOpenCallback,
-            setThisItemSelected,
-            onRenderActionIcon,
-            actionIconText
+            setThisItemSelected
           )}
         />
       </div>
