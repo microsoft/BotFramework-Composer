@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// TODO: Remove path module
 import Path from 'path';
 
 import React, { useEffect, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 
-import { CreationFlowStatus, feedDictionary } from '../../constants';
+import { CreationFlowStatus } from '../../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -17,25 +16,22 @@ import {
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
-  filteredTemplatesSelector,
-  featureFlagsState,
-} from '../../recoilModel';
-import Home from '../../pages/home/Home';
-import { useProjectIdCache } from '../../utils/hooks';
-import { ImportModal } from '../ImportModal/ImportModal';
-import TelemetryClient from '../../telemetry/TelemetryClient';
+  templateProjectsState,
+} from '../../../recoilModel';
+import Home from '../../../pages/home/Home';
+import { useProjectIdCache } from '../../../utils/hooks';
+import { ImportModal } from '../../ImportModal/ImportModal';
+import { OpenProject } from '../OpenProject';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
-import { CreateOptions } from './CreateOptions';
-import { OpenProject } from './OpenProject';
-import DefineConversation from './DefineConversation';
+import { CreateOptionsV2 } from './CreateOptions';
+import DefineConversationV2 from './DefineConversation';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
-const CreationFlow: React.FC<CreationFlowProps> = () => {
+const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const {
-    fetchTemplates,
     fetchTemplatesV2,
-    fetchRecentProjects,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -43,15 +39,15 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
+    fetchRecentProjects,
     openProject,
-    createNewBot,
     saveProjectAs,
     fetchProjectById,
     createNewBotV2,
+    fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
-  const templateProjects = useRecoilValue(filteredTemplatesSelector);
-  const featureFlags = useRecoilValue(featureFlagsState);
+  const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
@@ -61,6 +57,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
+
   useEffect(() => {
     if (storages?.length) {
       const storageId = storage.id;
@@ -73,12 +70,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const fetchResources = async () => {
     // fetchProject use `gotoSnapshot` which will wipe out all state value.
     // so here make those methods call in sequence.
+
     if (!projectId && cachedProjectId) {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
+
     fetchRecentProjects();
-    featureFlags.NEW_CREATION_FLOW.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
   };
 
   useEffect(() => {
@@ -107,25 +105,28 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     });
   };
 
-  const handleCreateNew = async (formData, templateId: string) => {
+  const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
+    const templateVersion = templateProjects.find((template: BotTemplate) => {
+      return template.id == templateId;
+    })?.package?.packageVersion;
     const newBotData = {
       templateId: templateId || '',
+      templateVersion: templateVersion || '',
       name: formData.name,
       description: formData.description,
       location: formData.location,
       schemaUrl: formData.schemaUrl,
       appLocale,
-      templateDir: formData.templateDir,
-      eTag: formData.eTag,
-      urlSuffix: formData.urlSuffix,
-      alias: formData.alias,
-      preserveRoot: formData.preserveRoot,
+      qnaKbUrls,
+      templateDir: formData?.pvaData?.templateDir,
+      eTag: formData?.pvaData?.eTag,
+      urlSuffix: formData?.pvaData?.urlSuffix,
+      alias: formData?.pvaData?.alias,
+      preserveRoot: formData?.pvaData?.preserveRoot,
     };
-    if (templateId === 'conversationalcore') {
-      createNewBotV2(newBotData);
-    } else {
-      createNewBot(newBotData);
-    }
+    TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
+
+    createNewBotV2(newBotData);
   };
 
   const handleSaveAs = (formData) => {
@@ -154,7 +155,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     <Fragment>
       <Home />
       <Router>
-        <DefineConversation
+        <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="create/:templateId"
@@ -163,8 +164,15 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
         />
-        <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
-        <DefineConversation
+        <CreateOptionsV2
+          fetchReadMe={fetchReadMe}
+          fetchTemplates={fetchTemplatesV2}
+          path="create"
+          templates={templateProjects}
+          onDismiss={handleDismiss}
+          onNext={handleCreateNext}
+        />
+        <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path=":projectId/:templateId/save"
@@ -186,4 +194,4 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   );
 };
 
-export default CreationFlow;
+export default CreationFlowV2;
