@@ -42,7 +42,7 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
-  const useAdapters = useFeatureFlag('REMOTE_TEMPLATE_CREATION_EXPERIENCE');
+  const useAdapters = useFeatureFlag('NEW_CREATION_FLOW');
 
   return (
     <div css={container}>
