@@ -60,6 +60,7 @@ export const DebugPanel = () => {
             itemKey={key}
             onRenderItemLink={() => (
               <div
+                css={{ height: 'inherit', width: 'inherit' }}
                 onClick={() => {
                   setActiveTab(key);
                   setExpansion(true);
@@ -77,8 +78,8 @@ export const DebugPanel = () => {
         aria-label="Debug Panel Header"
         selectedKey={expanded ? activeTab : null}
         styles={{
-          link: { height },
-          linkIsSelected: { height },
+          link: { height, lineHeight: height },
+          linkIsSelected: { height, lineHeight: height },
         }}
       >
         {tabTitles}

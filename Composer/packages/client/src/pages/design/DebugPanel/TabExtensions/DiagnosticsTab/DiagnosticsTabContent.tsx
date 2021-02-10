@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { currentProjectIdState } from '../../../../../recoilModel';
 import { DiagnosticList } from '../../../../diagnostics/DiagnosticList';
 
-import { useDiagnosticsData } from './useDiagnosticsData';
+import { useDiagnosticsData } from './useDiagnostics';
 
 export const DiagnosticsContent = () => {
   const skillId = useRecoilValue(currentProjectIdState);
