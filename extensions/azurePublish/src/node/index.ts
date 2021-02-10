@@ -402,6 +402,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             MicrosoftAppPassword: currentSettings?.MicrosoftAppPassword?.startsWith('<') ? provisionResults.appPassword : currentSettings?.MicrosoftAppPassword,
           },
         };
+        for (let configUnit in currentSettings) {
+          if (!(configUnit in publishProfile)) {
+            publishProfile[configUnit] = currentSettings[configUnit];
+          }
+        }
 
         this.logger(publishProfile);
 
