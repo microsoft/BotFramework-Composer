@@ -23,8 +23,8 @@ import { IDiagnosticInfo } from '../../../../diagnostics/types';
 // -------------------- Styles -------------------- //
 
 const icons = {
-  Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
-  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
+  Error: { iconName: 'StatusErrorFull', color: '#EB3941' },
+  Warning: { iconName: 'WarningSolid', color: '#F4BD00' },
 };
 
 const diagnostic = mergeStyleSets({
