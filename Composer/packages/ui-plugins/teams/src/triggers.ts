@@ -3,154 +3,155 @@
 
 import { UISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 export default {
   [SDKKinds.OnAppBasedLinkQuery]: {
     trigger: {
       submenu: {
-        label: 'Teams',
-        prompt: 'Which Teams event?',
-        placeholder: 'Select a Teams event type',
+        label: formatMessage('Microsoft Teams'),
+        prompt: formatMessage('Which Teams event?'),
+        placeholder: formatMessage('Select a Teams event type'),
       },
     },
   },
   [SDKKinds.OnCardAction]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnChannelCreated]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnChannelDeleted]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnChannelRenamed]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnChannelRestored]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnFileConsent]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionCardButtonClicked]: {
     trigger: {
-      label: 'Messaging extension configuration - card button clicked',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - card button clicked'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionConfigurationQuerySettingUrl]: {
     trigger: {
-      label: 'Messaging extension configuration - on query setting url',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - on query setting url'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionConfigurationSetting]: {
     trigger: {
-      label: 'Messaging extension configuration - on setting',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - configuration setting'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionFetchTask]: {
     trigger: {
-      label: 'Messaging extension - on fetch task',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - on fetch task'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionQuery]: {
     trigger: {
-      label: 'Messaging extension - on query',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - on query'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionSelectItem]: {
     trigger: {
-      label: 'Messaging extension - on select item',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - on select item'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionSubmitAction]: {
     trigger: {
-      label: 'Messaging extension - on submit action',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - on submit action'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionBotMessagePreviewEdit]: {
     trigger: {
-      label: 'Messaging extension - on bot message preview edit',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - on bot message preview edit'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnMessagingExtensionBotMessagePreviewSend]: {
     trigger: {
-      label: 'Messaging extension - on bot message preview send',
-      submenu: 'Teams',
+      label: formatMessage('Messaging extension - on bot message preview send'),
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnO365ConnectorCardAction]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTaskModuleFetch]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTaskModuleSubmit]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTeamArchived]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTeamDeleted]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTeamHardDeleted]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTeamRenamed]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTeamRestored]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTeamUnarchived]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTabFetch]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
   [SDKKinds.OnTabSubmit]: {
     trigger: {
-      submenu: 'Teams',
+      submenu: formatMessage('Microsoft Teams'),
     },
   },
 } as UISchema;
