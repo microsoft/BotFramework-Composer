@@ -48,11 +48,13 @@
     "@types/morgan": "^1.7.35",
     "@types/node": "^11.9.6",
     "@types/rimraf": "^2.0.2",
+    "@types/yeoman-environment": "^2.10.2",
     "fs-extra": "7.0.1",
     "mock-fs": "^4.10.1",
     "nodemon": "^2.0.3",
     "source-map-explorer": "^2.4.2",
-    "ts-node": "^8.4.1"
+    "ts-node": "^8.4.1",
+    "jest-fetch-mock": "^3.0.3"
   },
   "dependencies": {
     "@azure/msal-node": "^1.0.0-beta.1",
@@ -101,13 +103,16 @@
     "portfinder": "^1.0.28",
     "rimraf": "^3.0.2",
     "tar": "^6.0.5",
+    "through": "^2.3.8",
+    "trumpet": "^1.7.2",
     "ts-md5": "^1.2.7",
     "tslib": "^2.0.0",
     "unzip-stream": "^0.3.0",
     "uuid": "^8.3.0",
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "ws": "^5.0.0"
+    "ws": "^5.0.0",
+    "yeoman-environment": "^2.10.3"
   },
   "resolutions": {
     "bl": "^4.0.3"
