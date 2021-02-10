@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { pathExists, writeFile, copy } from 'fs-extra';
+import { pathExists, writeFile, copy, existsSync, mkdirSync } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
@@ -10,6 +10,7 @@ import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
 import partition from 'lodash/partition';
+import set from 'lodash/set';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -492,13 +493,17 @@ export class Builder {
       keptVersionCount: 10,
       isStaging: false,
       region: config.region,
-      directVersionPublish: true,
+      directVersionPublish: false,
     });
-
-    await this.luBuilder.writeDialogAssets(buildResult, {
-      force: true,
-      out: this.generatedFolderPath,
-    });
+    // delete version property
+    for (let i = 0; i < buildResult.length; i++) {
+      const luisAppsMap = JSON.parse(buildResult[i]?.content).luis;
+      for (const appName of Object.keys(luisAppsMap)) {
+        delete luisAppsMap[appName].version;
+      }
+      set(buildResult[i], 'content', JSON.stringify({ luis: luisAppsMap }));
+    }
+    await this.writeDialogAssets(buildResult, { out: this.generatedFolderPath, force: true });
   }
 
   private async runQnaBuild(files: FileInfo[]) {
@@ -525,6 +530,48 @@ export class Builder {
       out: this.generatedFolderPath,
     });
   }
+
+  private writeDialogAssets = async (contents, option: { force: boolean; out: string }) => {
+    const force = option.force || false;
+    const out = option.out;
+    const settingsContents = contents.filter((c) => c.id.endsWith('.json'));
+    if (settingsContents && settingsContents.length > 0) {
+      const outPath = Path.join(Path.resolve(out), settingsContents[0].id);
+
+      //merge
+      const mergedSettings = { path: '', luis: {} };
+      for (const content of contents) {
+        const luisAppsMap = JSON.parse(content.content).luis;
+        for (const appName of Object.keys(luisAppsMap)) {
+          mergedSettings.luis[appName] = {
+            appId: luisAppsMap[appName].appId,
+          };
+        }
+      }
+
+      const newContent = {
+        content: JSON.stringify({ luis: mergedSettings.luis }, null, 4),
+        path: Path.basename(outPath),
+      };
+
+      //write
+      let writeDone = false;
+      let outFilePath;
+      if (out) {
+        outFilePath = Path.join(Path.resolve(out), Path.basename(newContent.path));
+      } else {
+        outFilePath = newContent.path;
+      }
+      if (force || !existsSync(outFilePath)) {
+        if (!existsSync(Path.dirname(outFilePath))) {
+          mkdirSync(Path.dirname(outFilePath));
+        }
+        await writeFile(outFilePath, newContent.content, 'utf-8');
+        writeDone = true;
+      }
+      return writeDone;
+    }
+  };
 
   //delete files in generated folder
   private async deleteDir(path: string) {
