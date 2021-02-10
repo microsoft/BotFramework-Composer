@@ -495,15 +495,18 @@ export class Builder {
       region: config.region,
       directVersionPublish: false,
     });
+
     // delete version property
     for (let i = 0; i < buildResult.length; i++) {
-      const luisAppsMap = JSON.parse(buildResult[i]?.content).luis;
-      for (const appName of Object.keys(luisAppsMap)) {
-        delete luisAppsMap[appName].version;
+      if (buildResult[i]?.id?.endsWith('.json')) {
+        const luisAppsMap = JSON.parse(buildResult[i]?.content).luis;
+        for (const appName of Object.keys(luisAppsMap)) {
+          delete luisAppsMap[appName].version;
+        }
+        set(buildResult[i], 'content', JSON.stringify({ luis: luisAppsMap }));
       }
-      set(buildResult[i], 'content', JSON.stringify({ luis: luisAppsMap }));
     }
-    await this.writeDialogAssets(buildResult, { out: this.generatedFolderPath, force: true });
+    await this.writeLuisSettings(buildResult, this.generatedFolderPath);
   }
 
   private async runQnaBuild(files: FileInfo[]) {
@@ -531,9 +534,7 @@ export class Builder {
     });
   }
 
-  private writeDialogAssets = async (contents, option: { force: boolean; out: string }) => {
-    const force = option.force || false;
-    const out = option.out;
+  private writeLuisSettings = async (contents, out: string) => {
     const settingsContents = contents.filter((c) => c.id.endsWith('.json'));
     if (settingsContents && settingsContents.length > 0) {
       const outPath = Path.join(Path.resolve(out), settingsContents[0].id);
@@ -555,21 +556,16 @@ export class Builder {
       };
 
       //write
-      let writeDone = false;
       let outFilePath;
       if (out) {
         outFilePath = Path.join(Path.resolve(out), Path.basename(newContent.path));
       } else {
         outFilePath = newContent.path;
       }
-      if (force || !existsSync(outFilePath)) {
-        if (!existsSync(Path.dirname(outFilePath))) {
-          mkdirSync(Path.dirname(outFilePath));
-        }
-        await writeFile(outFilePath, newContent.content, 'utf-8');
-        writeDone = true;
+      if (!existsSync(Path.dirname(outFilePath))) {
+        mkdirSync(Path.dirname(outFilePath));
       }
-      return writeDone;
+      await writeFile(outFilePath, newContent.content, 'utf-8');
     }
   };
 
