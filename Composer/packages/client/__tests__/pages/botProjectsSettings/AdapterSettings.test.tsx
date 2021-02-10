@@ -15,23 +15,25 @@ const PROJECT_ID = 'test';
 const defaultSettings = {};
 
 const mockSchemas = {
-  default: {
-    definitions: {
-      'Adapter.Mock': {
-        $schema: 'https://schemas.botframework.com/schemas/component/v1.0/component.schema',
-        $role: 'implements(Microsoft.IAdapter)',
-        title: 'Mock Adapter',
-        properties: {
-          exampleName: {
-            type: 'string',
-            title: 'Example Name',
-            description: 'fake skill used for testing',
-          },
-          route: {
-            type: 'string',
-            title: 'Route',
-            description: 'Route',
-            default: 'mockRoute',
+  sdk: {
+    content: {
+      definitions: {
+        'Adapter.Mock': {
+          $schema: 'https://schemas.botframework.com/schemas/component/v1.0/component.schema',
+          $role: 'implements(Microsoft.IAdapter)',
+          title: 'Mock Adapter',
+          properties: {
+            exampleName: {
+              type: 'string',
+              title: 'Example Name',
+              description: 'fake skill used for testing',
+            },
+            route: {
+              type: 'string',
+              title: 'Route',
+              description: 'Route',
+              default: 'mockRoute',
+            },
           },
         },
       },
@@ -75,6 +77,7 @@ describe('AdapterSettings', () => {
       <AdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
+
     const container = getByTestId('adapterSettings');
     let modal = queryByTestId('adapterModal');
 
