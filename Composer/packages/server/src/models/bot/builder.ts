@@ -61,10 +61,10 @@ export class Builder {
   private _locale: string;
   private containOrchestrator = false;
 
-  private luBuilder = new luBuild.Builder((message) => {
+  public luBuilder = new luBuild.Builder((message) => {
     log(message);
   });
-  private qnaBuilder = new qnaBuild.Builder((message) => {
+  public qnaBuilder = new qnaBuild.Builder((message) => {
     log(message);
   });
 
@@ -444,6 +444,7 @@ export class Builder {
       keptVersionCount: 10,
       isStaging: false,
       region: config.region,
+      directVersionPublish: true,
     });
 
     await this.luBuilder.writeDialogAssets(buildResult, {

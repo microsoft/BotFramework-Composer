@@ -169,6 +169,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           path: lspServerPath,
         }}
         lgOption={lgOption}
+        lgTemplates={file?.allTemplates}
+        mode="codeEditor"
         value={content}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
@@ -176,21 +178,21 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     );
   }, [lgOption]);
 
-  const defaultLanguageFileEditor = useMemo(() => {
-    return (
-      <LgEditor
-        editorSettings={userSettings.codeEditor}
-        lgOption={{
-          fileId: dialogId,
-        }}
-        options={{
-          readOnly: true,
-        }}
-        value={defaultLangContent}
-        onChange={() => {}}
-      />
-    );
-  }, [dialogId]);
+  const defaultLanguageFileEditor = (
+    <LgEditor
+      editorSettings={userSettings.codeEditor}
+      lgOption={{
+        fileId: dialogId,
+      }}
+      lgTemplates={file?.allTemplates}
+      mode="codeEditor"
+      options={{
+        readOnly: true,
+      }}
+      value={defaultLangContent}
+      onChange={() => {}}
+    />
+  );
 
   return (
     <Fragment>

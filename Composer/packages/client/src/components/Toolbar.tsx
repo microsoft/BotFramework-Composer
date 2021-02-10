@@ -3,17 +3,11 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
-import { EditorExtension, mergePluginConfigs, PluginConfig } from '@bfc/extension-client';
-import { useRecoilValue } from 'recoil';
-
-import plugins from '../plugins';
-import { currentProjectIdState, schemasState } from '../recoilModel';
-import { useShell } from '../shell/useShell';
 
 // -------------------- Styles -------------------- //
 
@@ -103,15 +97,6 @@ type ToolbarProps = {
 // fabric-ui IButtonProps interface}
 export const Toolbar = (props: ToolbarProps) => {
   const { toolbarItems = [], ...rest } = props;
-  const projectId = useRecoilValue(currentProjectIdState);
-  const schemas = useRecoilValue(schemasState(projectId));
-  const shellForPropertyEditor = useShell('DesignPage', projectId);
-
-  const pluginConfig: PluginConfig = useMemo(() => {
-    const sdkUISchema = schemas?.ui?.content ?? {};
-    const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
-  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   const left: IToolbarItem[] = [];
   const right: IToolbarItem[] = [];
@@ -127,11 +112,9 @@ export const Toolbar = (props: ToolbarProps) => {
   }
 
   return (
-    <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
-      <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
-        <div css={leftActions}>{left.map(renderItemList)} </div>
-        <div css={rightActions}>{right.map(renderItemList)}</div>
-      </div>
-    </EditorExtension>
+    <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
+      <div css={leftActions}>{left.map(renderItemList)} </div>
+      <div css={rightActions}>{right.map(renderItemList)}</div>
+    </div>
   );
 };
