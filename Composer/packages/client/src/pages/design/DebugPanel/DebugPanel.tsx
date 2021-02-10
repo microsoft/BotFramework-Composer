@@ -21,12 +21,7 @@ import {
   debugPaneContentStyle,
 } from './styles';
 import debugExtensions from './TabExtensions';
-// TODOs:
-// 1. Unify icon for errors / warnings accross whole Composer (use the filled version)
-// 2. Styles - background color, font size...
-// 3. Diagnostics tab filter (Errors, Warnings) https://www.figma.com/file/deFhMPBnRWxTYiYDYqYxrc/Composer-Vivek?node-id=10908%3A59195
-// 4. Red dot on 'issues'
-// 5. When there is no error, show a green 'ok' icon in status bar and display 'No error'
+
 export interface DebugPanelProps {
   expanded: boolean;
   onToggleExpansion: (expanded: boolean) => void;

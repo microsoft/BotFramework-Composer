@@ -19,7 +19,8 @@ export const debugPaneHeaderStyle = css`
 `;
 
 export const debugPaneContentStyle = css`
-  flex-grow: 1;
+  height: calc(100% - ${DebugPaneHeaderHeight}px);
+  overflow-x: auto;
 `;
 
 export const statusBarStyle = css`
