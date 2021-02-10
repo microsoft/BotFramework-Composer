@@ -46,7 +46,6 @@ const typeIcon = (icon) => css`
   font-size: 16px;
   width: 24px;
   height: 24px;
-  background: ${icon.background};
   line-height: 24px;
   color: ${icon.color};
   cursor: pointer;
