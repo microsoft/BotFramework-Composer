@@ -10,7 +10,7 @@ import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
 import { useFormConfig, useShellApi } from '@bfc/extension-client';
-import cloneDeep from 'lodash/cloneDeep';
+import clone from 'lodash/clone';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { dispatcherState, dialogsSelectorFamily, schemasState, designPageLocationState } from '../../recoilModel';
@@ -77,20 +77,18 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const formConfig = useFormConfig();
   const overridedSDKSchema = useMemo(() => {
     if (!dialogId) return {};
-
-    const sdkSchema = cloneDeep(schemas.sdk?.content ?? {});
-    const sdkDefinitions = sdkSchema.definitions;
-
+    const sdkSchema = schemas.sdk?.content ?? {};
+    const sdkDefinitions = clone(sdkSchema.definitions) ?? {};
     // Override the sdk.schema 'title' field with form ui option 'label' field
     // to make sure the title is consistent with Form Editor.
     Object.entries(formConfig).forEach(([$kind, formOptions]) => {
-      if (formOptions && sdkDefinitions[$kind]) {
-        sdkDefinitions[$kind].title = formOptions?.label;
+      const sdkOptions = sdkDefinitions[$kind];
+      if (formOptions && sdkOptions) {
+        sdkDefinitions[$kind] = { ...sdkOptions, title: formOptions.label };
       }
     });
-    return sdkSchema;
+    return { ...sdkSchema, definitions: sdkDefinitions };
   }, [formConfig, schemas, dialogId]);
-
   useEffect(() => {
     const dialog = dialogs.find((d) => d.id === dialogId);
     const visible = dialog ? get(dialog, 'triggers', []).length === 0 : false;
