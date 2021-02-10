@@ -278,11 +278,24 @@ export class BotProjectDeploy {
   private async BindKeyVault(absSettings: any, hostname: string) {
     const webAppName = hostname;
     const hint = absSettings.appPasswordHint;
+    if (!hint) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'appPasswordHint incomplete, return ...'
+      });
+    }
+
     const hintsList = hint.split('/');
-    const vaultName = hintsList.length > 8 ? hintsList[8] : '';
-    const secretName = hintsList.length > 10 ? hintsList[10] : '';
-    const subscriptionId = hintsList.length > 2 ? hintsList[2] : '';
-    const resourceGroupName = hintsList.length > 4? hintsList[4] : '';
+    if (hintsList.length !== 11) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'appPasswordHint incomplete, return ...'
+      });
+    }
+    const vaultName = hintsList[8] ?? '';
+    const secretName = hintsList[10] ?? '';
+    const subscriptionId = hintsList[2] ?? '';
+    const resourceGroupName = hintsList[4] ?? '';
 
     const email = absSettings.email;
 
@@ -359,7 +372,7 @@ export const isProfileComplete = (profile) => {
   }
 }
 
-export const getAbsSettings = (config)=>{
+export const getAbsSettings = (config) => {
   return {
     appPasswordHint: config.appPasswordHint,
     subscriptionId: config.subscriptionId,
