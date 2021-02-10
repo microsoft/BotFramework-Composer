@@ -22,7 +22,6 @@ Then please refer to the following steps:
     \Scripts\deploy.ps1 -publishProfilePath < path to your publishing profile>
     ```
 
-
 parameters of deploy.ps1:
 
 | Param        |            |

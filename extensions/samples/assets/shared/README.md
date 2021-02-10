@@ -139,13 +139,13 @@ Follow these steps to manually publish a bot to Azure:
 3. Navigate to your runtime's azurewebapp folder, for example `C:\user\test\ToDoBot\runtime\azurewebapp` and execute the following command under `azurewebapp` folder:
 
     ```powershell
-    \Scripts\deploy.ps1 -name <name of resource group> -hostName <hostname of azure webapp> -luisAuthoringKey <luis authoring key> -qnaSubscriptionKey <qna subscription key> -environment <environment>
+    .\Scripts\deploy.ps1 -name <name of resource group> -hostName <hostname of azure webapp> -luisAuthoringKey <luis authoring key> -qnaSubscriptionKey <qna subscription key> -environment <environment>
     ```
 
 4. Alternatively, if you have saved your publishing profile in json format (profile.json), execute the following command:
 
     ```powershell
-    \Scripts\deploy.ps1 -publishProfilePath < path to your publishing profile>
+    .\Scripts\deploy.ps1 -publishProfilePath < path to your publishing profile>
     ```
 
   The following is a table of the deploy.ps1 parameters:
