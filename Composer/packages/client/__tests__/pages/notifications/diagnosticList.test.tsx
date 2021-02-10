@@ -124,7 +124,7 @@ describe('<DiagnosticList/>', () => {
 
   it('should render the DiagnosticList', () => {
     const { container } = renderWithRecoil(
-      <DiagnosticList showType="" skillId={state.projectId} onItemClick={jest.fn} />,
+      <DiagnosticList diagnosticItems={[]} skillId={state.projectId} onItemClick={jest.fn} />,
       initRecoilState
     );
     expect(container).toHaveTextContent('server');
