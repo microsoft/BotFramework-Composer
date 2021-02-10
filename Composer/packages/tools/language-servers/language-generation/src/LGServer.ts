@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import URI from 'vscode-uri';
 import { IConnection, TextDocuments } from 'vscode-languageserver';
+import formatMessage from 'format-message';
 import {
   TextDocument,
   Diagnostic,
@@ -507,10 +508,10 @@ export class LGServer {
     const projectId = this.getLGDocument(document)?.projectId;
     let suggestEntities: string[] = [];
     if (projectId && this.entitiesResolver) {
-      const luConetnts = this.entitiesResolver(projectId);
-      if (luConetnts) {
-        for (const conetnt of luConetnts) {
-          const luisJson = await extractLUISContent(conetnt);
+      const luContents = this.entitiesResolver(projectId);
+      if (luContents) {
+        for (const content of luContents) {
+          const luisJson = await extractLUISContent(content);
           suggestEntities = suggestEntities.concat(getSuggestionEntities(luisJson, suggestionAllEntityTypes));
         }
       }
@@ -523,9 +524,9 @@ export class LGServer {
     const completionEntityList = this.luisEntities.map((entity: string) => {
       return {
         label: entity,
-        kind: CompletionItemKind.Keyword,
+        kind: CompletionItemKind.Property,
         insertText: entity,
-        documentation: `Registerd Luis Entity of ${entity}`,
+        documentation: formatMessage('Entity defined in lu files: { entity }', { entity: entity }),
       };
     });
 
@@ -562,7 +563,7 @@ export class LGServer {
           label: type,
           kind: CompletionItemKind.Keyword,
           insertText: type,
-          documentation: `Suggestion for Card or Activity: ${type}`,
+          documentation: formatMessage('Suggestion for Card or Activity: { type }', { type: type }),
         };
       });
 
@@ -587,7 +588,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
             };
             items.push(item);
           }
@@ -599,7 +600,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
             };
             items.push(item);
           }
@@ -611,7 +612,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
             };
             items.push(item);
           }

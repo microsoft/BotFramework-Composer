@@ -48,7 +48,7 @@ export function getRangeAtPosition(document: TextDocument, position: Position): 
   const text = document.getText();
   const line = position.line;
   const pos = position.character;
-  const lineText = text.split('\n')[line];
+  const lineText = text.split(/\r?\n/g)[line];
   let match: RegExpMatchArray | null;
   const wordDefinition = /[a-zA-Z0-9_/.-]+/g;
   while ((match = wordDefinition.exec(lineText))) {
@@ -67,7 +67,7 @@ export function getEntityRangeAtPosition(document: TextDocument, position: Posit
   const text = document.getText();
   const line = position.line;
   const pos = position.character;
-  const lineText = text.split('\n')[line];
+  const lineText = text.split(/\r?\n/g)[line];
   let match: RegExpMatchArray | null;
   const wordDefinition = /[a-zA-Z0-9@]+/g;
   while ((match = wordDefinition.exec(lineText))) {
