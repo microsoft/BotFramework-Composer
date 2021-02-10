@@ -1,75 +1,175 @@
+# Manually publish a bot to Azure (_Preview_)
 
+This article covers script-based instructions of how to manually provision and publish a bot built using Composer to _Azure Web App (Preview)_ and _Azure Functions (Preview)_. Please note that provisioning and publishing in Composer is still in preview.
 
-<!-- This folder contains a Bot Project created with Bot Framework Composer.
+## Prerequisites
 
-The full documentation for Composer lives here:
-https://github.com/microsoft/botframework-composer
+- A subscription to [Microsoft Azure](https://azure.microsoft.com/free/).
+- [A basic bot built using Composer](https://aka.ms/composer-create-first-bot).
+- Latest version of the [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli).
+- [Node.js](https://nodejs.org/). Use version 12.13.0 or later.
+- PowerShell version 6.0 and later.
 
-To test this bot locally, open this folder in Composer, then click "Start Bot" -->
+## Provision Azure resources
 
-## Provision Azure Resources to Host Bot
+This section covers steps to provision required Azure resources using JavaScript scripts. If you already have your Azure resources provisioned, skip to the [publish a bot to Azure](#publish-a-bot-to-azure) section directly.
 
-This project includes a script that can be used to provision the resources necessary to run your bot in the Azure cloud. Running this script will create all of the necessary resources and return a publishing profile in the form of a JSON object.  This JSON object can be imported into Composer's "Publish" tab and used to deploy the bot.
+Follow these instructions to provision Azure resources:
 
-* From this project folder, navigate to the scripts/ folder
-* Run `npm install`
-* Run `node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev>`
-* You will be asked to login to the Azure portal in your browser.
-* You will see progress indicators as the provision process runs. Note that it will take roughly 10 minutes to fully provision the resources.
+1. Open a new Command Prompt and navigate to the **scripts** folder of your bot's project folder. For example:
 
-It will look like this:
+    ```cmd
+    cd C:\Users\UserName\Documents\Composer\BotName\scripts
+    ```
 
-```json
-{
-  "accessToken": "<SOME VALUE>",
-  "name": "<NAME OF YOUR RESOURCE GROUP>",
-  "environment": "<ENVIRONMENT>",
-  "settings": {
-    "applicationInsights": {
-      "InstrumentationKey": "<SOME VALUE>"
-    },
-    "cosmosDb": {
-      "cosmosDBEndpoint": "<SOME VALUE>",
-      "authKey": "<SOME VALUE>",
-      "databaseId": "botstate-db",
-      "containerId": "botstate-container"
-    },
-    "blobStorage": {
-      "connectionString": "<SOME VALUE>",
-      "container": "transcripts"
-    },
-    "luis": {
-      "endpointKey": "<SOME VALUE>",
-      "authoringKey": "<SOME VALUE>",
-      "region": "westus"
-    },
-    "MicrosoftAppId": "<SOME VALUE>",
-    "MicrosoftAppPassword": "<SOME VALUE>"
-  }
-}
-```
+2. Run the following command:
 
-When completed, you will see a message with a JSON "publishing profile" and instructions for using it in Composer.
+   ```cmd
+   npm install
+   ```
+
+3. Then run the following command to provision new Azure resources.
+
+   - **For _Azure Web App (Preview)_**:
+
+   ```cmd
+   node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev>
+   ```
+
+   - **For _Azure Functions (Preview)_**:
+
+   ```cmd
+   node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --customArmTemplate=DeploymentTemplates/function-template-with-preexisting-rg.json
+   ```
+
+   | Property | Value |
+   |----|----|
+   |Your Azure Subscription ID| Find it in your Azure resource in the **Subscription ID** field. |
+   |Name of your resource group| The name you give to the resource group you are creating. |
+   |App password|At least 16 characters with at least one number, one letter, and one special character. |
+   |Name for environment| The name you give to the publish environment. |
+
+4. You will be asked to login to the Azure portal in your browser.
+
+    > ![publish az login](./media/publish-az-login.png)
+
+5. If you see the error message "InsufficientQuota", add a param '--createLuisAuthoringResource false' and run the script again.
+
+    - **For _Azure Web App_**:
+
+    ```cmd
+    node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP>--appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false
+    ```
+
+    - **For _Azure Functions_**:
+
+    ```cmd
+    node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false --customArmTemplate=DeploymentTemplates/function-template-with-preexisting-rg.json
+    ```
+
+    > [!NOTE]
+    > If you use `--createLuisAuthoringResource false` in this step, you should manually add the LUIS authoring key to the publish configuration in the [deploy bot to new Azure resources](#deploy-bot-to-new-azure-resources) section. The default region is `westus`. To provision to other regions, you should add `--location region`.
+
+6. As the Azure resources are being provisioned, which takes a few minutes, you will see the following:
+
+    > [!div class="mx-imgBorder"]
+    > ![Create Azure resource command line](./media/create-azure-resource-command-line.png)
+
+    Once completed, the generated JSON appears in the command line like the following.
+
+      ```json
+      {
+        "accessToken": "<SOME VALUE>",
+        "name": "<NAME OF YOUR RESOURCE GROUP>",
+        "environment": "<ENVIRONMENT>",
+        "hostname": "<NAME OF THE HOST>",
+        "luisResource": "<NAME OF YOUR LUIS RESOURCE>",
+        "settings": {
+          "applicationInsights": {
+            "InstrumentationKey": "<SOME VALUE>"
+          },
+          "cosmosDb": {
+            "cosmosDBEndpoint": "<SOME VALUE>",
+            "authKey": "<SOME VALUE>",
+            "databaseId": "botstate-db",
+            "collectionId": "botstate-collection",
+            "containerId": "botstate-container"
+          },
+          "blobStorage": {
+            "connectionString": "<SOME VALUE>",
+            "container": "transcripts"
+          },
+          "luis": {
+            "endpointKey": "<SOME VALUE>",
+            "authoringKey": "<SOME VALUE>",
+            "region": "westus"
+          },
+          "qna": {
+            "endpoint": "<SOME VALUE>",
+            "subscriptionKey": "<SOME VALUE>"
+          },
+          "MicrosoftAppId": "<SOME VALUE>",
+          "MicrosoftAppPassword": "<SOME VALUE>"
+        }
+      }
+      ```
 
 ## Publish a bot to Azure
 
-To publish your bot to a Azure resources provisioned using the process above:
+This section covers instructions to publish a bot to Azure using PowerShell scripts. Make sure you already have required Azure resources provisioned before publishing a bot, if not, follow these instructions from the [provision Azure resources](#provision-azure-resources) section.
 
-* Open your bot in Composer
-* Navigate to the "Publish" tab
-* Select "Add new profile" from the toolbar
-* In the resulting dialog box, choose "azurePublish" from the "Publish Destination Type" dropdown
-* Paste in the profile you received from the provisioning script
+Follow these steps to manually publish a bot to Azure:
 
-When you are ready to publish your bot to Azure, select the newly created profile from the sidebar and click "Publish to selected profile" in the toolbar.
+1. Install the required dependencies.
+
+    bf command
+
+   ```cmd
+   npm i -g @microsoft/botframework-cli@next
+   ```
+
+   bf plugins
+
+    ```cmd
+   bf plugins:install @microsoft/bf-sampler-cli@beta
+   ```
+
+2. [Eject your C# runtime](https://aka.ms/composer-customize-action#export-runtime).
+
+3. Navigate to your runtime's azurewebapp folder, for example `C:\user\test\ToDoBot\runtime\azurewebapp` and execute the following command under `azurewebapp` folder:
+
+    ```powershell
+    \Scripts\deploy.ps1 -name <name of resource group> -hostName <hostname of azure webapp> -luisAuthoringKey <luis authoring key> -qnaSubscriptionKey <qna subscription key> -environment <environment>
+    ```
+
+4. Alternatively, if you have saved your publishing profile in json format (profile.json), execute the following command:
+
+    ```powershell
+    \Scripts\deploy.ps1 -publishProfilePath < path to your publishing profile>
+    ```
+
+  The following is a table of the deploy.ps1 parameters:
+
+  | Parameter | Description  |
+  | ----------|--------------|
+  | name      | name of your Bot Channels Registration|
+  | environment | environment, which is the same as Composer |
+  | hostName | Hostname of your azure webapp instance|
+  | luisAuthoringKey | luis authoring key, only needed with luis resources|
+  | luisAuthoringRegion | luis authoring region, this could be optional|
+  | qnaSubscriptionKey | qna subscription key, only needed with qna resources|
+  | language | language of your qna & luis, defaults to 'en-us' |
+  | botPath | path to your bot assets, defaults to `../../` for ejected runtime |
+  | logFile | path to save your log file, defaults to `deploy_log.txt` |
+  | runtimeIdentifier | runtime identifier of your C# publishing targets, defaults to win-x64, read more in [this doc](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog) |
+  | luisResource | the name of your luis prediction (not authoring) resource |
+  | publishProfilePath | the path to your publishing profile (in json format) |
 
 ## Refresh your Azure Token
 
-When publishing, you may encounter an error about your access token being expired. This happens when the access token used to provision your bot expires.
+Follow these steps to get a new token if you encounter an error about your access token being expired:
 
-To get a new token:
-
-* Open a terminal window
-* Run `az account get-access-token`
-* This will result in a JSON object printed to the console, containing a new `accessToken` field.
-* Copy the value of the accessToken from the terminal and into the publish `accessToken` field in the profile in Composer.
+- Open a terminal window.
+- Run `az account get-access-token`.
+- This will result in a JSON object containing the new `accessToken`, printed to the console.
+- Copy the value of the accessToken from the terminal and into the publish `accessToken` field in the profile in Composer.
