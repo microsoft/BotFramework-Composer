@@ -160,7 +160,7 @@ export class Builder {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
     const nlrList = await this.runOrchestratorNlrList();
-    const defaultNLR = nlrList.default;
+    const defaultNLR = nlrList.defaults.en_intent;
     const modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
 
     if (!(await pathExists(modelPath))) {
@@ -250,7 +250,7 @@ export class Builder {
   public async copyModelPathToBot() {
     if (this.containOrchestrator) {
       const nlrList = await this.runOrchestratorNlrList();
-      const defaultNLR = nlrList.default;
+      const defaultNLR = nlrList.defaults.en_intent;
       const folderName = defaultNLR.replace('.onnx', '');
       const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
       const destDir = Path.resolve(Path.join(this.botDir, MODEL), folderName);
