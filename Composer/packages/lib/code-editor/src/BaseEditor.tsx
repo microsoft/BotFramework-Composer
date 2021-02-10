@@ -30,7 +30,7 @@ const defaultOptions = {
   lineDecorationsWidth: 10,
   lineNumbersMinChars: 3,
   glyphMargin: false,
-  folding: true,
+  folding: false,
   renderLineHighlight: 'none',
   formatOnType: true,
   fixedOverflowWidgets: true,
