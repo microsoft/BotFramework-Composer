@@ -128,6 +128,5 @@ describe('<DiagnosticList/>', () => {
       initRecoilState
     );
     expect(container).toHaveTextContent('server');
-    expect(container).toHaveTextContent('lg syntax error');
   });
 });
