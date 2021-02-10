@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
+import * as fs from 'fs';
 import * as semverSort from 'semver-sort';
 import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
@@ -258,7 +259,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       for (const url of packageSources) {
         try {
           let raw;
-          if (url.match(/^[\\\/]/)) {
+          if (fs.existsSync(url)) {
             const rawlocal = await crawlLocalFeed(url);
             // caste this to the form of the http response from nuget
             raw = {data: { data: rawlocal } };
@@ -274,7 +275,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          res.status(500).json({message: 'Could not load feed. Please check the feed URL and format.'})
+          return res.status(500).json({message: 'Could not load feed. Please check the feed URL and format.'})
         }
       }
 
@@ -303,11 +304,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
 
       if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
-        const manifestFile = runtime.identifyManifest(runtimePath);
+        const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
         const dryrun = new SchemaMerger(
-          [manifestFile],
-          '',
+          [manifestFile,'!**/imported/**','!**/generated/**'],
+          path.join(currentProject.dataDir, 'schemas/sdk'),
           path.join(currentProject.dataDir, 'dialogs/imported'),
           true, // copy only? true = dry run
           false, // verbosity: true = verbose
@@ -360,13 +361,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       if (packageName && runtimePath) {
         try {
           // Call the runtime's component install mechanism.
-          const installOutput = await runtime.installComponent(runtimePath, packageName, version, source);
+          const installOutput = await runtime.installComponent(runtimePath, packageName, version, source, currentProject);
 
-          const manifestFile = runtime.identifyManifest(runtimePath);
+          const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
-            [manifestFile],
+            [manifestFile,'!**/imported/**','!**/generated/**'],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             true, // copy only? true = dry run
@@ -394,7 +395,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             });
           } else {
             const realMerge = new SchemaMerger(
-              [manifestFile],
+              [manifestFile,'!**/imported/**','!**/generated/**'],
               path.join(currentProject.dataDir, 'schemas/sdk'),
               path.join(currentProject.dataDir, 'dialogs/imported'),
               false, // copy only? true = dry run
@@ -427,7 +428,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Error in import', { message: err.message });
           try {
-            await runtime.uninstallComponent(runtimePath, packageName);
+            await runtime.uninstallComponent(runtimePath, packageName, currentProject);
           } catch (err) {
             composer.log('Error uninstalling', err);
           }
@@ -435,7 +436,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           if (packageName.match(/.*\/.*/)) {
             const [user, realPackageName] = packageName.split(/\//);
             if (!user.match(/^@/)) {
-              await runtime.uninstallComponent(runtimePath, realPackageName);
+              await runtime.uninstallComponent(runtimePath, realPackageName, currentProject);
             }
           }
           res.status(500).json({ success: false, message: err.message });
@@ -467,13 +468,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const packageName = req.body.package;
       if (packageName && runtimePath) {
         try {
-          const output = await runtime.uninstallComponent(runtimePath, packageName);
+          const output = await runtime.uninstallComponent(runtimePath, packageName, currentProject);
 
-          const manifestFile = runtime.identifyManifest(runtimePath);
+          const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
-            [manifestFile],
+            [manifestFile,'!**/imported/**','!**/generated/**'],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             false, // copy only? true = dry run
