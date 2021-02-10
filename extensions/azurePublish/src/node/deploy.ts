@@ -276,13 +276,14 @@ export class BotProjectDeploy {
    * @param absSettings
    */
   private async BindKeyVault(absSettings: any, hostname: string) {
-    const subscriptionId = absSettings.subscriptionId;
-    const resourceGroupName = absSettings.resourceGroup;
     const webAppName = hostname;
     const hint = absSettings.appPasswordHint;
     const hintsList = hint.split('/');
     const vaultName = hintsList.length > 8 ? hintsList[8] : '';
     const secretName = hintsList.length > 10 ? hintsList[10] : '';
+    const subscriptionId = hintsList.length > 2 ? hintsList[2] : '';
+    const resourceGroupName = hintsList.length > 4? hintsList[4] : '';
+
     const email = absSettings.email;
 
     console.log(`${subscriptionId}, ${resourceGroupName}, ${webAppName}, ${hintsList}, ${vaultName}, ${secretName}, ${email}`);
@@ -310,10 +311,14 @@ export class BotProjectDeploy {
     await keyVaultApi.KeyVaultSetPolicy(resourceGroupName, vaultName, email, principalId, tenantId);
 
     console.log('getting secret ...')
-    const secret = await keyVaultApi.KeyVaultGetSecret(resourceGroupName, vaultName, secretName);
+    // const secret = await keyVaultApi.KeyVaultGetSecret(resourceGroupName, vaultName, secretName);
+
+    const secret = await keyVaultApi.KeyVaultGetSecretValue(resourceGroupName, vaultName, secretName);
 
     console.log(`secret: ${secret}`);
-    await keyVaultApi.UpdateKeyVaultAppSettings(resourceGroupName, webAppName, secret);
+    // await keyVaultApi.UpdateKeyVaultAppSettings(resourceGroupName, webAppName, secret);
+
+    await keyVaultApi.UpdateKeyVaultValueAppSettings(resourceGroupName, webAppName, secret);
   }
 
   private async getTenantId(accessToken: string, subId: string) {

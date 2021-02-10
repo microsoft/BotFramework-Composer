@@ -89,11 +89,45 @@ export class KeyVaultApi {
         return secretResult._response.parsedBody.properties.secretUri;
     }
 
+    public async KeyVaultGetSecretValue(resourceGroupName: string, vaultName: string, secretName: string) {
+        // const vaultUrl = `https://${vaultName}.vault.azure.net/`;
+        // const keyVaultClient = new SecretClient(vaultUrl, this.creds);
+        // const getResult = await keyVaultClient.getSecret(secretName);
+        // return getResult.properties.id;
+        const keyVaultManagementClient = new KeyVaultManagementClient(this.creds, this.subscriptionId);
+        const secretResult = await keyVaultManagementClient.secrets.get(resourceGroupName, vaultName, secretName);
+        if (secretResult._response.status >= 300) {
+            this.logger({
+                status: BotProjectDeployLoggerType.PROVISION_ERROR,
+                message: secretResult._response.bodyAsText,
+            });
+            throw createCustomizeError(ProvisionErrors.KEYVAULT_ERROR, secretResult._response.bodyAsText);
+        }
+        console.log(JSON.stringify(secretResult._response.parsedBody, null, 2));
+        return secretResult._response.parsedBody.properties.value;
+    }
+
     public async UpdateKeyVaultAppSettings(resourceGroupName: string, webAppName: string, secretUri: string) {
         const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
         const updateResult = await webSiteManagementClient.webApps.updateApplicationSettings(resourceGroupName, webAppName, {
             properties: {
                 MicrosoftAppPassword: `@Microsoft.KeyVault(SecretUri=${secretUri})`
+            }
+        });
+        if (updateResult._response.status >= 300) {
+            this.logger({
+                status: BotProjectDeployLoggerType.PROVISION_ERROR,
+                message: updateResult._response.bodyAsText,
+            });
+            throw createCustomizeError(ProvisionErrors.KEYVAULT_ERROR, updateResult._response.bodyAsText);
+        }
+    }
+
+    public async UpdateKeyVaultValueAppSettings(resourceGroupName: string, webAppName: string, secretValue: string) {
+        const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
+        const updateResult = await webSiteManagementClient.webApps.updateApplicationSettings(resourceGroupName, webAppName, {
+            properties: {
+                MicrosoftAppPassword: secretValue
             }
         });
         if (updateResult._response.status >= 300) {
