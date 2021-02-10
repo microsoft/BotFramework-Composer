@@ -16,6 +16,8 @@ import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { settingsState } from '../../recoilModel';
@@ -113,7 +115,7 @@ type AzureResourcePointer = {
 
 type AzureChannelStatus = {
   enabled: boolean;
-  configured: boolean;
+  loading: boolean;
   data: {
     [key: string]: any;
   };
@@ -208,7 +210,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         console.log(`status of ${channelId}`, channelId, res.data);
         return {
           enabled: true,
-          configured: true,
+          loading: false,
           data: res.data,
         };
       } catch (err) {
@@ -218,7 +220,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             console.log('RESOURCe NOT FOUND == NOT ENABLED, RETURN FALSE');
             return {
               enabled: false,
-              configured: false,
+              loading: false,
               data: {},
             };
             break;
@@ -241,102 +243,112 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const createChannelService = async (channelId: string) => {
-    try {
-      const url = `https://management.azure.com/subscriptions/${currentResource?.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
-      let data = {};
-      switch (channelId) {
-        case CHANNELS.TEAMS:
-          data = {
-            location: 'global',
-            name: `${currentResource?.resourceName}/${channelId}`,
-            properties: {
-              channelName: channelId,
+    if (currentResource) {
+      try {
+        const url = `https://management.azure.com/subscriptions/${
+          currentResource.subscriptionId || currentResource.alternateSubscriptionId
+        }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+          currentResource?.resourceName
+        }/channels/${channelId}?api-version=2020-06-02`;
+        let data = {};
+        switch (channelId) {
+          case CHANNELS.TEAMS:
+            data = {
+              location: 'global',
+              name: `${currentResource?.resourceName}/${channelId}`,
+              properties: {
+                channelName: channelId,
+                location: 'global',
+                properties: {
+                  isEnabled: true,
+                },
+              },
+            };
+            break;
+          case CHANNELS.WEBCHAT:
+            data = {
+              name: `${currentResource?.resourceName}/${channelId}`,
+              type: 'Microsoft.BotService/botServices/channels',
               location: 'global',
               properties: {
-                isEnabled: true,
+                properties: {
+                  webChatEmbedCode: null,
+                  sites: [
+                    {
+                      siteName: 'Default Site',
+                      isEnabled: true,
+                      isWebchatPreviewEnabled: true,
+                    },
+                  ],
+                },
+                channelName: 'WebChatChannel',
+                location: 'global',
               },
-            },
-          };
-          break;
-        case CHANNELS.WEBCHAT:
-          data = {
-            name: `${currentResource?.resourceName}/${channelId}`,
-            type: 'Microsoft.BotService/botServices/channels',
-            location: 'global',
-            properties: {
-              properties: {
-                webChatEmbedCode: null,
-                sites: [
-                  {
-                    siteName: 'Default Site',
-                    isEnabled: true,
-                    isWebchatPreviewEnabled: true,
-                  },
-                ],
-              },
-              channelName: 'WebChatChannel',
+            };
+            break;
+          case CHANNELS.SPEECH:
+            data = {
+              name: `${currentResource?.resourceName}/${channelId}`,
+              type: 'Microsoft.BotService/botServices/channels',
               location: 'global',
-            },
-          };
-          break;
-        case CHANNELS.SPEECH:
-          data = {
-            name: `${currentResource?.resourceName}/${channelId}`,
-            type: 'Microsoft.BotService/botServices/channels',
-            location: 'global',
-            properties: {
               properties: {
-                cognitiveServiceRegion: null,
-                cognitiveServiceSubscriptionKey: null,
-                isEnabled: true,
-                customVoiceDeploymentId: '',
-                customSpeechModelId: '',
-                isDefaultBotForCogSvcAccount: false,
+                properties: {
+                  cognitiveServiceRegion: null,
+                  cognitiveServiceSubscriptionKey: null,
+                  isEnabled: true,
+                  customVoiceDeploymentId: '',
+                  customSpeechModelId: '',
+                  isDefaultBotForCogSvcAccount: false,
+                },
+                channelName: 'DirectLineSpeechChannel',
+                location: 'global',
               },
-              channelName: 'DirectLineSpeechChannel',
-              location: 'global',
-            },
-          };
-      }
-      const res = await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
+            };
+        }
+        const res = await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
 
-      // success!!
-      setChannelStatus({
-        ...channelStatus,
-        [channelId]: {
+        // success!!
+        setChannelStatus({
+          ...channelStatus,
+          [channelId]: {
+            enabled: true,
+            loading: false,
+            data: res.data,
+          },
+        });
+
+        console.log(`status of ${channelId}`, channelId, res.data);
+        return {
           enabled: true,
-          configured: true,
-          data: res.data,
-        },
-      });
-
-      console.log(`status of ${channelId}`, channelId, res.data);
-      return {
-        enabled: true,
-        configured: true,
-      };
-    } catch (err) {
-      switch (err?.response.data?.error.code) {
-        case 'AuthenticationFailed':
-          // the auth failed for some reason.
-          break;
-        case 'ResourceGroupNotFound':
-          // this resource group is not found - in other words, can't find a channel registration in the expected spot.
-          break;
-        case 'SubscriptionNotFound':
-          // the subscription is not found or invalid
-          break;
-        default:
-          // handle error.
-          break;
+          loading: false,
+        };
+      } catch (err) {
+        switch (err?.response.data?.error.code) {
+          case 'AuthenticationFailed':
+            // the auth failed for some reason.
+            break;
+          case 'ResourceGroupNotFound':
+            // this resource group is not found - in other words, can't find a channel registration in the expected spot.
+            break;
+          case 'SubscriptionNotFound':
+            // the subscription is not found or invalid
+            break;
+          default:
+            // handle error.
+            break;
+        }
+        throw new Error(err?.response.data?.error.message || 'Failed to create new channel');
       }
-      throw new Error(err?.response.data?.error.message || 'Failed to create new channel');
     }
   };
 
   const deleteChannelService = async (channelId: string) => {
     try {
-      const url = `https://management.azure.com/subscriptions/${currentResource?.subscriptionId}/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${currentResource?.resourceName}/channels/${channelId}?api-version=2020-06-02`;
+      const url = `https://management.azure.com/subscriptions/${
+        currentResource.subscriptionId || currentResource.alternateSubscriptionId
+      }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+        currentResource?.resourceName
+      }/channels/${channelId}?api-version=2020-06-02`;
       const res = await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
 
       console.log('DELETE COMPLETED', res);
@@ -346,7 +358,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         ...channelStatus,
         [channelId]: {
           enabled: false,
-          configured: false,
+          loading: false,
           data: {},
         },
       });
@@ -417,6 +429,15 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const toggleService = (channel) => {
     return async (_, enabled) => {
       console.log(`toggle ${channel} to ${enabled} from ${channelStatus?.[channel]}`);
+      setChannelStatus({
+        ...channelStatus,
+        [channel]: {
+          enabled: enabled,
+          loading: true,
+          data: {},
+        },
+      });
+
       if (enabled) {
         await createChannelService(channel);
       } else {
@@ -550,11 +571,23 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                 </Link>
               </div>
               <div css={tableRowItem(columnWidths[2])}>
-                <Toggle
-                  inlineLabel
-                  checked={channelStatus[CHANNELS.TEAMS].enabled}
-                  onChange={toggleService(CHANNELS.TEAMS)}
-                />
+                <Stack horizontal tokens={{ childrenGap: 10 }}>
+                  <Stack.Item>
+                    <Toggle
+                      inlineLabel
+                      checked={channelStatus[CHANNELS.TEAMS].enabled}
+                      disabled={channelStatus[CHANNELS.TEAMS].loading}
+                      onChange={toggleService(CHANNELS.TEAMS)}
+                    />
+                  </Stack.Item>
+                  {channelStatus[CHANNELS.TEAMS].loading ? (
+                    <Stack.Item>
+                      <Spinner />
+                    </Stack.Item>
+                  ) : (
+                    ''
+                  )}
+                </Stack>
               </div>
             </div>
             <div key={CHANNELS.WEBCHAT} css={tableRow}>
@@ -565,11 +598,23 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                 </Link>
               </div>
               <div css={tableRowItem(columnWidths[2])}>
-                <Toggle
-                  inlineLabel
-                  checked={channelStatus[CHANNELS.WEBCHAT].enabled}
-                  onChange={toggleService(CHANNELS.WEBCHAT)}
-                />
+                <Stack horizontal tokens={{ childrenGap: 10 }}>
+                  <Stack.Item>
+                    <Toggle
+                      inlineLabel
+                      checked={channelStatus[CHANNELS.WEBCHAT].enabled}
+                      disabled={channelStatus[CHANNELS.WEBCHAT].loading}
+                      onChange={toggleService(CHANNELS.WEBCHAT)}
+                    />
+                  </Stack.Item>
+                  {channelStatus[CHANNELS.WEBCHAT].loading ? (
+                    <Stack.Item>
+                      <Spinner />
+                    </Stack.Item>
+                  ) : (
+                    ''
+                  )}
+                </Stack>
               </div>
             </div>
             <div key={CHANNELS.SPEECH} css={tableRow}>
@@ -581,11 +626,23 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                 </Link>
               </div>
               <div css={tableRowItem(columnWidths[2])}>
-                <Toggle
-                  inlineLabel
-                  checked={channelStatus[CHANNELS.SPEECH].enabled}
-                  onChange={toggleService(CHANNELS.SPEECH)}
-                />
+                <Stack horizontal tokens={{ childrenGap: 10 }}>
+                  <Stack.Item>
+                    <Toggle
+                      inlineLabel
+                      checked={channelStatus[CHANNELS.SPEECH].enabled}
+                      disabled={channelStatus[CHANNELS.SPEECH].loading}
+                      onChange={toggleService(CHANNELS.SPEECH)}
+                    />
+                  </Stack.Item>
+                  {channelStatus[CHANNELS.SPEECH].loading ? (
+                    <Stack.Item>
+                      <Spinner />
+                    </Stack.Item>
+                  ) : (
+                    ''
+                  )}
+                </Stack>
               </div>
             </div>
           </Fragment>
