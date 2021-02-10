@@ -10,16 +10,22 @@ import { getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { visualEditorSelectionState, dispatcherState, currentDialogState } from '../../recoilModel';
+import {
+  visualEditorSelectionState,
+  dispatcherState,
+  currentDialogState,
+  designPageLocationState,
+} from '../../recoilModel';
 import { undoFunctionState } from '../../recoilModel/undo/history';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import implementedDebugExtensions from './DebugPanel/TabExtensions';
 
-type CommandBarProps = { dialogId?: string; projectId: string };
+type CommandBarProps = { projectId: string };
 
-const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
+const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
+  const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const { undo, redo, clearUndo } = useRecoilValue(undoFunctionState(projectId));
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -190,6 +196,6 @@ const CommandBar: React.FC<CommandBarProps> = ({ dialogId, projectId }) => {
       <Toolbar toolbarItems={toolbarItems} />
     </div>
   );
-};
+});
 
 export default CommandBar;

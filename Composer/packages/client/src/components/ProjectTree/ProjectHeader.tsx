@@ -137,13 +137,18 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
       },
     ];
 
+    const removeSkillItem = {
+      label: formatMessage('Remove this skill from project'),
+      onClick: () => {
+        onBotRemoveSkill(projectId);
+      },
+    };
+    if (isRemote) {
+      return [removeSkillItem];
+    }
+
     if (!isRootBot) {
-      menuItems.splice(3, 0, {
-        label: formatMessage('Remove this skill from project'),
-        onClick: () => {
-          onBotRemoveSkill(projectId);
-        },
-      });
+      menuItems.splice(3, 0, removeSkillItem);
     }
     return menuItems;
   }, [projectId, isRunning]);
