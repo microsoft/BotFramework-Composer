@@ -18,7 +18,7 @@ import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 
-import { IDiagnosticInfo } from './types';
+import { IDiagnosticInfo } from '../../../../diagnostics/types';
 
 // -------------------- Styles -------------------- //
 

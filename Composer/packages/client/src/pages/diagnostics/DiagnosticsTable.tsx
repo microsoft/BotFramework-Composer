@@ -12,9 +12,9 @@ import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
 import { diagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
+import { DiagnosticList } from '../design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
 
 import { IDiagnosticInfo } from './types';
-import { DiagnosticList } from './DiagnosticList';
 
 // -------------------- Styles -------------------- //
 

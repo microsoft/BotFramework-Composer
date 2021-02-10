@@ -6,8 +6,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { currentProjectIdState, exportSkillModalInfoState } from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
-import { DiagnosticList } from '../../../../diagnostics/DiagnosticList';
 
+import { DiagnosticList } from './DiagnosticList';
 import { useDiagnosticsData } from './useDiagnostics';
 
 export const DiagnosticsContent = () => {
