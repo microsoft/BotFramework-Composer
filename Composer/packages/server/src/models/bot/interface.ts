@@ -45,7 +45,9 @@ export interface ILuisStatusOperation {
 
 export interface IOrchestratorNLRList {
   version: string;
-  default: string;
+  defaults: {
+    [key: string]: string;
+  };
   readonly models: Record<
     string,
     {

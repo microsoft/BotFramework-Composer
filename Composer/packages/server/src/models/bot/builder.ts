@@ -9,6 +9,7 @@ import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/
 import { Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
+import partition from 'lodash/partition';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -148,6 +149,56 @@ export class Builder {
     return baseModelPath;
   };
 
+  public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
+    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
+
+    const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) => f.name.split('.')?.[1] === 'en-us');
+
+    const nlrList = await this.runOrchestratorNlrList();
+
+    let orchestratorSettings = {
+      orchestrator: {
+        models: {},
+        snapshots: {},
+      },
+    };
+
+    if (enLuFiles) {
+      const enModel = nlrList?.defaults?.en_intent;
+      if (!enModel) {
+        throw new Error('English Model default not set in NLRList');
+      }
+      const modelPath = Path.resolve(await this.getModelPathAsync(), enModel.replace('.onnx', ''));
+      await this.runOrchestratorNlrGet(modelPath, enModel);
+      let snapshotData = await this.buildOrchestratorSnapshots(enModel, modelPath, enLuFiles, emptyFiles);
+
+      orchestratorSettings.orchestrator.models['en_us'] = modelPath;
+      for (var snap in snapshotData) {
+        orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
+      }
+    }
+
+    if (multiLangLuFiles) {
+      //const multilangModel = nlrList?.defaults?.multilingual_intent;
+      const multilangModel = 'pretrained.20201210.microsoft.dte.00.12.unicoder_multilingual.onnx';
+
+      if (!multilangModel) {
+        throw new Error('Multilang Model default not set in NLRList');
+      }
+      const modelPath = Path.resolve(await this.getModelPathAsync(), multilangModel.replace('.onnx', ''));
+      await this.runOrchestratorNlrGet(modelPath, multilangModel);
+      let snapshotData = await this.buildOrchestratorSnapshots(multilangModel, modelPath, multiLangLuFiles, emptyFiles);
+
+      orchestratorSettings.orchestrator.models['multilang'] = modelPath;
+      for (var snap in snapshotData) {
+        orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
+      }
+    }
+
+    const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
+    await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
+  };
+
   /**
    * Orchestrator: Perform the full build process
    * 1) Query the Orchestrator service for the latest default NLR model
@@ -156,27 +207,18 @@ export class Builder {
    * 4) Generate settings file for runtime containing model and snapshot paths and place in /generated folder
    * @param luFiles LU Files needed to build snapshot data
    */
-  public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
+  public buildOrchestratorSnapshots = async (
+    nlrModel: string,
+    modelPath: string,
+    luFiles: FileInfo[],
+    emptyFiles: { [key: string]: boolean }
+  ) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
-
-    const nlrList = await this.runOrchestratorNlrList();
-    const defaultNLR = nlrList.default;
-    const modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
-
-    let multilangModelName = 'pretrained.20201210.microsoft.dte.00.12.unicoder_multilingual.onnx';
-    let multilangModelPath = Path.resolve(await this.getModelPathAsync(), multilangModelName.replace('.onnx', ''));
-    let hasMultiLang = luFiles.some((file: FileInfo) => file.name.split('.')?.[1] != 'en-us' || false);
-
-    if (!(await pathExists(modelPath))) {
-      const handler: IOrchestratorProgress = (status) => {
-        log(status);
-      };
-      await this.runOrchestratorNlrGet(modelPath, defaultNLR, handler, handler);
-    }
 
     // build snapshots from LU files
     const returnData = await this.orchestratorBuilder(
-      luFiles.filter((file) => file.name.split('.')?.[1] == 'en-us'),
+      //luFiles.filter((file) => file.name.split('.')?.[1] == 'en-us'),
+      luFiles,
       modelPath
     );
 
@@ -189,42 +231,7 @@ export class Builder {
       await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
     }
 
-    // write settings into /generated/orchestrator.settings.json
-    const orchestratorSettings = {
-      orchestrator: {
-        models: {
-          en_us: modelPath,
-        },
-        snapshots,
-      },
-    };
-
-    //same process for multilang
-    if (hasMultiLang) {
-      // build snapshots from LU files
-      const returnData = await this.orchestratorBuilder(
-        luFiles.filter((file) => file.name.split('.')?.[1] != 'en-us'),
-        multilangModelPath
-      );
-
-      // write snapshot data into /generated folder
-      const snapshots: { [key: string]: string } = {};
-      for (const dialog of returnData.outputs) {
-        const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
-        snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
-
-        await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
-      }
-
-      orchestratorSettings.orchestrator.models['multilang'] = multilangModelPath.replace('.onnx', '');
-
-      for (var snap in snapshots) {
-        orchestratorSettings.orchestrator.snapshots[snap.replace(/[-.]/g, '_')] = snapshots[snap];
-      }
-    }
-
-    const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
-    await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
+    return snapshots;
   };
 
   /**
@@ -235,7 +242,7 @@ export class Builder {
   }
 
   /**
-   * Orchestrator: Download an available NLR model.
+   * Orchestrator: Download an available NLR model given an nlrId
    *
    * @remarks Available NLR models and VersionIds are obtained by running runOrchestratorNlrList first.
    *
@@ -247,8 +254,12 @@ export class Builder {
   public async runOrchestratorNlrGet(
     modelPath: string,
     nlrId: string,
-    onProgress: IOrchestratorProgress,
-    onFinish: IOrchestratorProgress
+    onProgress: IOrchestratorProgress = (status) => {
+      log(status);
+    },
+    onFinish: IOrchestratorProgress = (status) => {
+      log(status);
+    }
   ): Promise<void> {
     if (!(await pathExists(modelPath))) {
       await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
@@ -285,7 +296,7 @@ export class Builder {
   public async copyModelPathToBot() {
     if (this.containOrchestrator) {
       const nlrList = await this.runOrchestratorNlrList();
-      const defaultNLR = nlrList.default;
+      const defaultNLR = nlrList.defaults.en_intent;
       const folderName = defaultNLR.replace('.onnx', '');
       const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
       const destDir = Path.resolve(Path.join(this.botDir, MODEL), folderName);
