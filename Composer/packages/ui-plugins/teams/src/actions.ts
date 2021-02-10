@@ -3,19 +3,12 @@
 
 import { UISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
-
-const Groups = {
-  Teams: 'Teams',
-  GetData: 'Get Teams data',
-  MessagingExtension: 'Messaging Extension',
-  TaskModule: 'Task module',
-  Response: 'Response',
-};
+import formatMessage from 'format-message';
 
 export default {
   [SDKKinds.GetMeetingParticipant]: {
     menu: {
-      submenu: [Groups.Teams, Groups.GetData],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Get Microsoft Teams Data')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -23,7 +16,7 @@ export default {
   },
   [SDKKinds.GetMember]: {
     menu: {
-      submenu: [Groups.Teams, Groups.GetData],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Get Microsoft Teams Data')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -31,7 +24,7 @@ export default {
   },
   [SDKKinds.GetPagedMembers]: {
     menu: {
-      submenu: [Groups.Teams, Groups.GetData],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Get Microsoft Teams Data')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -39,7 +32,7 @@ export default {
   },
   [SDKKinds.GetPagedTeamMembers]: {
     menu: {
-      submenu: [Groups.Teams, Groups.GetData],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Get Microsoft Teams Data')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -47,7 +40,7 @@ export default {
   },
   [SDKKinds.GetTeamChannels]: {
     menu: {
-      submenu: [Groups.Teams, Groups.GetData],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Get Microsoft Teams Data')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -55,7 +48,7 @@ export default {
   },
   [SDKKinds.GetTeamDetails]: {
     menu: {
-      submenu: [Groups.Teams, Groups.GetData],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Get Microsoft Teams Data')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -63,7 +56,7 @@ export default {
   },
   [SDKKinds.GetTeamMember]: {
     menu: {
-      submenu: [Groups.Teams, Groups.GetData],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Get Microsoft Teams Data')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -71,7 +64,7 @@ export default {
   },
   [SDKKinds.SendAppBasedLinkQueryResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.Response],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Response')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -79,7 +72,7 @@ export default {
   },
   [SDKKinds.SendMessageToTeamsChannel]: {
     menu: {
-      submenu: [Groups.Teams, Groups.Response],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Response')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -87,7 +80,7 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionActionResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.MessagingExtension],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Messaging Extension')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -95,7 +88,7 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionAttachmentsResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.MessagingExtension],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Messaging Extension')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -103,7 +96,7 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionAuthResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.MessagingExtension],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Messaging Extension')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -111,7 +104,7 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionBotMessagePreviewResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.MessagingExtension],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Messaging Extension')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -119,7 +112,7 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionConfigQuerySettingUrlResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.MessagingExtension],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Messaging Extension')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -127,7 +120,7 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionMessageResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.MessagingExtension],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Messaging Extension')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -135,7 +128,7 @@ export default {
   },
   [SDKKinds.SendMessagingExtensionSelectItemResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.MessagingExtension],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Messaging Extension')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -143,7 +136,7 @@ export default {
   },
   [SDKKinds.SendTaskModuleCardResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.TaskModule],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Task module')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -151,7 +144,7 @@ export default {
   },
   [SDKKinds.SendTaskModuleMessageResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.TaskModule],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Task module')],
     },
     flow: {
       widget: 'ActionHeader',
@@ -159,7 +152,7 @@ export default {
   },
   [SDKKinds.SendTaskModuleUrlResponse]: {
     menu: {
-      submenu: [Groups.Teams, Groups.TaskModule],
+      submenu: [formatMessage('Microsoft Teams'), formatMessage('Task module')],
     },
     flow: {
       widget: 'ActionHeader',
