@@ -4,8 +4,8 @@
 import { Activity } from 'botframework-schema';
 
 import DLServerContext from '../../DLServerState';
-import { BotEndpoint } from '../botEndpoint';
-import { Conversation } from '../conversation';
+import { BotEndpoint } from '../BotEndpoint';
+import { Conversation } from '../Conversation';
 
 const mockPostResponse = jest.fn();
 
