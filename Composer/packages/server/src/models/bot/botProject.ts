@@ -205,6 +205,7 @@ export class BotProject implements IBotProject {
     // Resolve relative path for custom runtime if the path is relative
     if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
       const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
+
       if (fs.existsSync(absolutePath)) {
         settings.runtime.path = absolutePath;
         await this.updateEnvSettings(settings);
@@ -796,6 +797,8 @@ export class BotProject implements IBotProject {
           pattern,
           '!(generated/**)',
           '!(runtime/**)',
+          '!(bin/**)',
+          '!(obj/**)',
           '!(scripts/**)',
           '!(settings/appsettings.json)',
           '!(**/luconfig.json)',
