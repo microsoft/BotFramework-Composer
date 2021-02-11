@@ -1,4 +1,4 @@
-# Manually publish a bot to Azure (_Preview_)
+# Manually provision and publish a bot to Azure (_Preview_)
 
 This article covers script-based instructions of how to manually provision and publish a bot built using Composer to _Azure Web App (Preview)_ and _Azure Functions (Preview)_. Please note that provisioning and publishing in Composer is still in preview.
 
@@ -12,7 +12,7 @@ This article covers script-based instructions of how to manually provision and p
 
 ## Provision Azure resources
 
-This section covers steps to provision required Azure resources using JavaScript scripts. If you already have your Azure resources provisioned, skip to the [publish a bot to Azure](#publish-a-bot-to-azure) section directly.
+This section covers steps to provision required Azure resources using JavaScript scripts. If you already have your Azure resources provisioned, skip to the [publish a bot to Azure](#publish-a-bot-to-azure) section.
 
 Follow these instructions to provision Azure resources:
 
