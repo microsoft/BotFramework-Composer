@@ -13,7 +13,12 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import {
+  TextDocumentPositionParams,
+  DocumentOnTypeFormattingParams,
+  FoldingRangeParams,
+  FoldingRange,
+} from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
@@ -30,6 +35,7 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
+  getLineByIndex,
 } from './utils';
 
 // define init methods call from client
@@ -74,7 +80,7 @@ export class LGServer {
             triggerCharacters: ['.', '[', '[', '\n'],
           },
           hoverProvider: true,
-          foldingRangeProvider: false,
+          foldingRangeProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -84,6 +90,9 @@ export class LGServer {
     this.connection.onCompletion(async (params) => await this.completion(params));
     this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
+      this.foldingRangeHandler(foldingRangeParams)
+    );
 
     this.connection.onRequest((method, params) => {
       if (initializeDocumentsMethodName === method) {
@@ -103,6 +112,58 @@ export class LGServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
+    const document = this.documents.get(params.textDocument.uri);
+    const items: FoldingRange[] = [];
+    if (!document) {
+      return items;
+    }
+
+    const lineCount = document.lineCount;
+    let i = 0;
+    while (i < lineCount) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('>>')) {
+        for (let j = i + 1; j < lineCount; j++) {
+          if (getLineByIndex(document, j)?.startsWith('>>')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+
+          if (j === lineCount - 1) {
+            items.push(FoldingRange.create(i, j));
+            i = j;
+          }
+        }
+      }
+
+      i = i + 1;
+    }
+
+    for (let i = 0; i < lineCount; i++) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('#')) {
+        let j = i + 1;
+        for (j = i + 1; j < lineCount; j++) {
+          const secLine = getLineByIndex(document, j);
+          if (secLine?.startsWith('>>') || secLine?.startsWith('#')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+        }
+
+        if (i !== j - 1) {
+          items.push(FoldingRange.create(i, j - 1));
+          i == j - 2;
+        }
+      }
+    }
+
+    return items;
   }
 
   protected updateObject(propertyList: string[]): void {
