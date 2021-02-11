@@ -7,7 +7,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
-import DLServerContext from './directline/store/DLServerState';
+import DLServerContext from './directline/store/dLServerState';
 
 const addCORSHeaders = (req: Request, res: Response, next?: NextFunction) => {
   res.header('Access-Control-Allow-Origin', '*');

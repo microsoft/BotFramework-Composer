@@ -4,7 +4,7 @@
 import StatusCodes from 'http-status-codes';
 import * as express from 'express';
 
-import { WebSocketServer } from './WebsocketServer';
+import { WebSocketServer } from './webSocketServer';
 
 export async function getWebSocketPort(req: express.Request, res: express.Response): Promise<void> {
   try {

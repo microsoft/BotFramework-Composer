@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { OpenIdMetadata } from '../OpenIdMetaData';
+import { OpenIdMetadata } from '../openIdMetaData';
 
 const mockGetResponse = jest.fn();
 

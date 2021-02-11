@@ -15,7 +15,7 @@ import {
   saveTranscriptHandler,
   getTranscriptHandler,
 } from './middleware';
-import DLServerContext from './store/DLServerState';
+import DLServerContext from './store/dLServerState';
 import { getWebSocketPort } from './utils/socketPort';
 
 export const mountConversationsRoutes = (dLServerState: DLServerContext): express.Router => {

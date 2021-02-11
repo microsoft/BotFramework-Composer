@@ -6,7 +6,7 @@ import * as express from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { authentication, usGovernmentAuthentication, v31Authentication, v32Authentication } from '../utils/constants';
-import { OpenIdMetadata } from '../utils/OpenIdMetaData';
+import { OpenIdMetadata } from '../utils/openIdMetaData';
 
 export const createBotFrameworkAuthenticationMiddleware = () => {
   const openIdMetadata = new OpenIdMetadata(authentication.openIdMetadata);

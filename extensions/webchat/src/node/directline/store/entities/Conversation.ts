@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import moment from 'moment';
 
 import { generateUniqueId } from '../../utils/helpers';
-import { DLServerState } from '../DLServerState';
+import { DLServerState } from '../dLServerState';
 import { User, WebChatMode } from '../types';
 
 import { BotEndpoint } from './BotEndpoint';

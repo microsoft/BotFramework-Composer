@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
 
 import { BotErrorCodes, createAPIException } from '../utils/apiErrorException';
-import { DLServerState } from '../store/DLServerState';
+import { DLServerState } from '../store/dLServerState';
 import { ConversationAPIPathParameters } from '../store/types';
 
 export const createGetConversationHandler = (state: DLServerState) => {

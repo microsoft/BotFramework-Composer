@@ -6,10 +6,10 @@ import { Activity } from 'botframework-schema';
 import * as express from 'express';
 
 import { sendErrorResponse } from '../utils/apiErrorException';
-import { DLServerState } from '../store/DLServerState';
+import { DLServerState } from '../store/dLServerState';
 import { User } from '../store/types';
 import { Conversation } from '../store/entities/Conversation';
-import { WebSocketServer } from '../utils/WebsocketServer';
+import { WebSocketServer } from '../utils/webSocketServer';
 import { textItem } from '../utils/helpers';
 
 export const createReplyToActivityHandler = (req: express.Request, res: express.Response): void => {

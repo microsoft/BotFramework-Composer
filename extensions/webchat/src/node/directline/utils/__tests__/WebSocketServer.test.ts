@@ -3,7 +3,7 @@
 
 import { Activity } from 'botframework-schema';
 
-import { WebSocketServer } from '../WebsocketServer';
+import { WebSocketServer } from '../webSocketServer';
 
 const mockOnConnection = jest.fn();
 const mockWSServer = {
