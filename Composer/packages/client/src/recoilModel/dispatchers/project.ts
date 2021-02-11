@@ -2,7 +2,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotProjectFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
 import { RootBotManagedProperties } from '@bfc/shared';
@@ -22,7 +21,6 @@ import {
   botNameIdentifierState,
   botOpeningMessage,
   botOpeningState,
-  botProjectFileState,
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
@@ -53,6 +51,7 @@ import {
   navigateToSkillBot,
   openLocalSkill,
   openRemoteSkill,
+  openRootBotAndSkills,
   openRootBotAndSkillsByPath,
   openRootBotAndSkillsByProjectId,
   removeRecentProject,
@@ -484,11 +483,8 @@ export const projectDispatcher = () => {
             if (settingStorage.get(projectId)) {
               settingStorage.remove(projectId);
             }
-            const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-            callbackHelpers.set(botProjectFileState(projectId), currentBotProjectFileIndexed);
 
-            const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
-            callbackHelpers.set(botProjectIdsState, [projectId]);
+            const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
 
             // Post project creation
             callbackHelpers.set(projectMetaDataState(projectId), {
