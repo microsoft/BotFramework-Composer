@@ -10,7 +10,7 @@ import { DLServerState } from '../dlServerState';
 import { User, WebChatMode } from '../types';
 
 import { BotEndpoint } from './botEndpoint';
-import { DataUrlEncoder } from './DataUrlEncoder';
+import { DataUrlEncoder } from './dataUrlEncoder';
 
 type ActivityBucket = {
   activity: Activity;

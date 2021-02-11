@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { mountConversationsRoutes } from '../../mountConversationRoutes';
-import DLServerContext from '../../store/dLServerState';
+import DLServerContext from '../../store/dlServerState';
 
 jest.mock('express', () => ({
   Router: () => ({
