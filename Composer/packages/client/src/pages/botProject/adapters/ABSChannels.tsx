@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import { jsx, css } from '@emotion/core';
+import React, { useEffect, useState, Fragment } from 'react';
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -15,80 +14,31 @@ import { useRecoilValue } from 'recoil';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { navigateTo } from '../../utils/navigation';
-import { settingsState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { armScopes } from '../../constants';
-import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
-import httpClient from '../../utils/httpUtil';
-
-import { tableRow, tableRowItem, tableColumnHeader } from './styles';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { navigateTo } from '../../../utils/navigation';
+import { settingsState } from '../../../recoilModel';
+import { AuthClient } from '../../../utils/authClient';
+import { AuthDialog } from '../../../components/Auth/AuthDialog';
+import { armScopes } from '../../../constants';
+import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../../utils/auth';
+import httpClient from '../../../utils/httpUtil';
+import {
+  tableRow,
+  tableRowItem,
+  tableColumnHeader,
+  labelContainer,
+  customerLabel,
+  unknownIconStyle,
+  errorContainer,
+  errorIcon,
+  errorTextStyle,
+} from '../styles';
 
 // TODO: move these to the styles file once we merge with Ben Y's branch
 // -------------------- Styles -------------------- //
-
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
-
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-  width: 200px;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.medium};
-  margin-right: 5px;
-`;
-
-const errorContainer = css`
-  display: flex;
-  width: 100%;
-  line-height: 24px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  background: #fed9cc;
-  color: ${NeutralColors.black};
-`;
-
-const errorTextStyle = css`
-  margin-bottom: 5px;
-  font-size: ${FontSizes.small};
-`;
-
-const errorIcon = {
-  root: {
-    color: '#A80000',
-    marginRight: 8,
-    paddingLeft: 12,
-    fontSize: FontSizes.mediumPlus,
-  },
-};
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 10,
-        },
-      },
-    },
-  };
-};
 
 // -------------------- RuntimeSettings -------------------- //
 
@@ -104,7 +54,6 @@ const CHANNELS = {
 
 type RuntimeSettingsProps = {
   projectId: string;
-  scrollToSectionId?: string;
 };
 
 type AzureResourcePointer = {
@@ -131,7 +80,7 @@ export enum AzureAPIStatus {
 }
 
 export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
-  const { projectId, scrollToSectionId } = props;
+  const { projectId } = props;
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [currentResource, setCurrentResource] = useState<AzureResourcePointer | undefined>();
   const [channelStatus, setChannelStatus] = useState<AzureChannelsStatus | undefined>();
@@ -141,7 +90,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoadingStatus, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -482,12 +430,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   }, [publishTargets, projectId]);
 
   useEffect(() => {
-    if (containerRef.current && scrollToSectionId === '#runtimeSettings') {
-      containerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [scrollToSectionId]);
-
-  useEffect(() => {
     // reset UI
     setChannelStatus(undefined);
 
@@ -521,7 +463,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const columnWidths = ['300px', '150px', '150px'];
 
   return (
-    <CollapsableWrapper title={formatMessage('Azure Bot Service Connections')} titleStyle={titleStyle}>
+    <React.Fragment>
       {showAuthDialog && (
         <AuthDialog
           needGraph={false}
@@ -531,7 +473,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
         />
       )}
-      <div ref={containerRef}>
+      <div>
         <Dropdown
           label={formatMessage('Publish profile to configure:')}
           options={publishTargetOptions}
@@ -669,6 +611,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           </Fragment>
         )}
       </div>
-    </CollapsableWrapper>
+    </React.Fragment>
   );
 };
+
+export default ABSChannels;

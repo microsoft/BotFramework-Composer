@@ -8,8 +8,8 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ObjectField } from '@bfc/adaptive-form';
 import { useRecoilValue } from 'recoil';
+import { JSONSchema7 } from '@botframework-composer/types';
 
-import { JSONSchema7 } from '../../../../../types';
 import { settingsState, dispatcherState } from '../../../recoilModel';
 
 export type AdapterRecord = {

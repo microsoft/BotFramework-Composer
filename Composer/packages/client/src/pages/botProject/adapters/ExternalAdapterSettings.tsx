@@ -13,13 +13,12 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { JSONSchema7 } from '@botframework-composer/types';
 
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
-import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
-import { title, subtitle, sectionHeader, tableRow, tableRowItem, tableColumnHeader } from '../styles';
-import { JSONSchema7 } from '../../../../../types';
+import { subtitle, sectionHeader, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 
-import AdapterModal, { AdapterRecord } from './AdapterModal';
+import AdapterModal, { AdapterRecord } from './ExternalAdapterModal';
 
 //////////
 
@@ -159,11 +158,9 @@ const AdapterSettings = (props: Props) => {
   return (
     <Fragment>
       <div data-testid="adapterSettings">
-        <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
-          {header()}
-          {azureServices()}
-          {externalServices(adapterSchemas)}
-        </CollapsableWrapper>
+        {header()}
+        {azureServices()}
+        {externalServices(adapterSchemas)}
       </div>
       {currentKey != null && schemaDefinitions[currentKey] != null && (
         <AdapterModal
