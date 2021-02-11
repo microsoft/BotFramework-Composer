@@ -4,8 +4,8 @@
 import { generateUniqueId } from '../../utils/helpers';
 import { User, WebChatMode } from '../types';
 
-import { BotEndpoint } from './BotEndpoint';
-import { Conversation } from './Conversation';
+import { BotEndpoint } from './botEndpoint';
+import { Conversation } from './conversation';
 
 export class ConversationSet {
   public conversations: Record<string, Conversation> = {};

@@ -8,7 +8,7 @@ import * as express from 'express';
 import { sendErrorResponse } from '../utils/apiErrorException';
 import { DLServerState } from '../store/dLServerState';
 import { User } from '../store/types';
-import { Conversation } from '../store/entities/Conversation';
+import { Conversation } from '../store/entities/conversation';
 import { WebSocketServer } from '../utils/webSocketServer';
 import { textItem } from '../utils/helpers';
 

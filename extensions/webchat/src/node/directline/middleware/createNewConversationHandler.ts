@@ -6,7 +6,7 @@ import * as express from 'express';
 
 import { DLServerState } from '../store/dLServerState';
 import { validateRequest } from '../utils/helpers';
-import { BotEndpoint } from '../store/entities/BotEndpoint';
+import { BotEndpoint } from '../store/entities/botEndpoint';
 
 export const createNewConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response): void => {

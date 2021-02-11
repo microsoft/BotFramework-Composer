@@ -3,8 +3,8 @@
 
 import { StatusCodes } from 'http-status-codes';
 
-import { BotEndpoint } from '../../store/entities/BotEndpoint';
-import { Conversation } from '../../store/entities/Conversation';
+import { BotEndpoint } from '../../store/entities/botEndpoint';
+import { Conversation } from '../../store/entities/conversation';
 import {
   createReplyToActivityHandler,
   createPostActivityHandler,

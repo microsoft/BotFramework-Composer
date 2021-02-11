@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotEndpoint } from '../BotEndpoint';
-import { EndpointSet } from '../EndpointSet';
+import { BotEndpoint } from '../botEndpoint';
+import { EndpointSet } from '../endpointSet';
 
 let endpoints: EndpointSet;
 describe('EndpointSet', () => {

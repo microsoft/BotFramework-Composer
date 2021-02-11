@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
 
 import { DLServerState } from '../store/dLServerState';
-import { Conversation } from '../store/entities/Conversation';
+import { Conversation } from '../store/entities/conversation';
 import { textItem } from '../utils/helpers';
 import { writeFile, mkdirp } from '../utils/fileOperations';
 

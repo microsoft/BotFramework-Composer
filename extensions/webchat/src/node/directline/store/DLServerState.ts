@@ -3,12 +3,12 @@
 
 import log from '../utils/logger';
 
-import { BotEndpoint } from './entities/BotEndpoint';
-import { Attachments } from './entities/Attachments';
-import { ConversationSet } from './entities/ConversationSet';
-import { EndpointSet } from './entities/EndpointSet';
+import { BotEndpoint } from './entities/botEndpoint';
+import { Attachments } from './entities/attachments';
+import { ConversationSet } from './entities/conversationSet';
+import { EndpointSet } from './entities/endpointSet';
 import { LoggerLevel, LogItem } from './types';
-import { Conversation } from './entities/Conversation';
+import { Conversation } from './entities/conversation';
 
 export type DLServerState = {
   conversations: ConversationSet;

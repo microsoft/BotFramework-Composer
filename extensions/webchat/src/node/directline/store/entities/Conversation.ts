@@ -9,7 +9,7 @@ import { generateUniqueId } from '../../utils/helpers';
 import { DLServerState } from '../dLServerState';
 import { User, WebChatMode } from '../types';
 
-import { BotEndpoint } from './BotEndpoint';
+import { BotEndpoint } from './botEndpoint';
 import { DataUrlEncoder } from './DataUrlEncoder';
 
 type ActivityBucket = {

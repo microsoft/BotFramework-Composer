@@ -5,7 +5,7 @@ import base64url from 'base64url';
 
 import { generateUniqueId } from '../../utils/helpers';
 
-import { BotEndpoint } from './BotEndpoint';
+import { BotEndpoint } from './botEndpoint';
 
 export class EndpointSet {
   private endpoints: Record<string, BotEndpoint> = {};
