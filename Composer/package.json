@@ -36,7 +36,8 @@
     "packages/tools/built-in-functions",
     "packages/tools/language-servers/*",
     "packages/types",
-    "packages/ui-plugins/*"
+    "packages/ui-plugins/*",
+    "packages/webchat-client"
   ],
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",

@@ -11,6 +11,9 @@ import formatMessage from 'format-message';
 import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { useBoolean } from '@uifabric/react-hooks';
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
+import { WebChatPanel } from '@bfc/webchat-client';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
@@ -19,8 +22,11 @@ import {
   runningBotsSelector,
   allDiagnosticsSelectorFamily,
   rootBotProjectIdSelector,
+  botEndpointsState,
+  currentProjectIdState,
+  botDisplayNameState,
 } from '../../recoilModel';
-import { BotStatus } from '../../constants';
+import { BASEPATH, BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
@@ -32,7 +38,6 @@ const iconSectionContainer = css`
   align-items: flex-end;
   flex-direction: row;
   background: ${CommunicationColors.tint10};
-
   :before {
     content: '';
     position: relative;
@@ -67,12 +72,21 @@ const BotController: React.FC = () => {
   const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
-  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+
   const [botsStartOperationCompleted, setBotsStartOperationCompleted] = useState(false);
   const [areBotsStarting, setBotsStarting] = useState(false);
   const [startPanelButtonText, setStartPanelButtonText] = useState('');
   const { startAllBots, stopAllBots } = useBotOperations();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
+  const [isOpen, { setTrue: openWebChatPanel, setFalse: dismissPanel }] = useBoolean(false);
+  const botEndpoints = useRecoilValue(botEndpointsState);
+
+  const projectId = useRecoilValue(currentProjectIdState);
+  const projectName = useRecoilValue(botDisplayNameState(projectId));
+
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const rootBotDisplayName = useRecoilValue(botDisplayNameState(rootBotId ?? ''));
+  const isRootBotRunning = runningBots.projectIds.find((id) => id === rootBotId);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -186,15 +200,28 @@ const BotController: React.FC = () => {
   };
 
   const items = useMemo<IContextualMenuItem[]>(() => {
-    return projectCollection.map(({ name: displayName, projectId }) => ({
-      key: projectId,
-      displayName,
-      projectId,
-      isRoot: projectId === rootBotId,
-      setGlobalErrorCalloutVisibility,
-      isRootBot: projectId === rootBotId,
-    }));
+    return projectCollection.map(({ name: displayName, projectId }) => {
+      const isRootBot = projectId === rootBotId;
+      return {
+        key: projectId,
+        displayName,
+        projectId,
+        setGlobalErrorCalloutVisibility,
+        isRootBot,
+      };
+    });
   }, [projectCollection, rootBotId]);
+
+  const getBotSecrets = (botId: string) => {
+    const matchedProject = projectCollection.find((project) => project.projectId === botId);
+    if (matchedProject) {
+      return matchedProject.secrets;
+    }
+    return {
+      msAppId: '',
+      msPassword: '',
+    };
+  };
 
   return (
     <React.Fragment>
@@ -281,6 +308,64 @@ const BotController: React.FC = () => {
           />
         </div>
       </div>
+      <IconButton
+        ariaDescription={formatMessage('Open web chat')}
+        disabled={!isRootBotRunning}
+        iconProps={{
+          iconName: 'ChatSolid',
+        }}
+        styles={{
+          root: {
+            color: NeutralColors.white,
+            height: '36px',
+            background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
+            selectors: {
+              ':disabled .ms-Button-icon': {
+                opacity: 0.6,
+                backgroundColor: CommunicationColors.tint10,
+                color: `${NeutralColors.white}`,
+              },
+            },
+          },
+          rootHovered: { background: transparentBackground, color: NeutralColors.white },
+        }}
+        title={formatMessage('Open Web Chat')}
+        onClick={openWebChatPanel}
+      />
+      <Panel
+        isHiddenOnDismiss
+        closeButtonAriaLabel={formatMessage('Close')}
+        customWidth={'395px'}
+        headerText={projectName}
+        isBlocking={false}
+        isOpen={isOpen}
+        styles={{
+          root: {
+            marginTop: '50px',
+          },
+          scrollableContent: {
+            width: '100%',
+            height: '100%',
+          },
+          content: {
+            width: '100%',
+            height: '100%',
+            padding: 0,
+            margin: 0,
+          },
+        }}
+        type={PanelType.custom}
+        onDismiss={dismissPanel}
+      >
+        <WebChatPanel
+          botName={rootBotDisplayName}
+          botUrl={rootBotId ? botEndpoints[rootBotId] : ''}
+          directlineHostUrl={BASEPATH}
+          isPanelActive={isOpen}
+          projectId={rootBotId}
+          secrets={getBotSecrets(rootBotId || '')}
+        />
+      </Panel>
       <BotControllerMenu
         ref={startPanelTarget}
         hidden={isControllerHidden}

@@ -26,6 +26,7 @@
     "@bfc/form-dialogs": "*",
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
+    "@bfc/webchat-client": "*",
     "@bfc/ui-plugin-composer": "*",
     "@bfc/ui-plugin-cross-trained": "*",
     "@bfc/ui-plugin-dialog-schema-editor": "*",

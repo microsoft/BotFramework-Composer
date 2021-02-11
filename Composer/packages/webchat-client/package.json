@@ -1,0 +1,55 @@
+{
+  "name": "@bfc/webchat-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Botframework Webchat Client in Composer",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
+  "files": [
+    "css",
+    "es",
+    "lib",
+    "umd"
+  ],
+  "scripts": {
+    "build": "yarn clean && yarn build:ts",
+    "build:ts": "tsc --build tsconfig.build.json",
+    "clean": "rimraf lib demo/dist",
+    "prepublishOnly": "npm run build",
+    "test": "jest --no-cache",
+    "lint": "eslint --quiet ./src ./__tests__",
+    "lint:fix": "yarn lint --fix",
+    "start": "tsc --watch --preserveWatchOutput"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@bfc/extension-client": "*",
+    "@bfc/shared": "*",
+    "@bfc/ui-shared": "*",
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
+    "axios": "^0.21.1",
+    "botframework-webchat": "^4.11.0",
+    "lodash": "^4.17.19",
+    "prop-types": "^15.7.2"
+  },
+  "peerDependencies": {
+    "format-message": "^6.2.3",
+    "office-ui-fabric-react": "^7.88.1",
+    "react": "16.13.1"
+  },
+  "devDependencies": {
+    "@botframework-composer/test-utils": "*",
+    "@types/lodash": "^4.14.146",
+    "@types/react": "16.9.23",
+    "format-message": "^6.2.3",
+    "json-loader": "^0.5.7",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "7.0.4",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
+  }
+}
