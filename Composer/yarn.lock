@@ -3268,7 +3268,7 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-orchestrator@^4.11.0-beta.20210210.116dcad":
+"@microsoft/bf-orchestrator@4.11.0-beta.20210210.116dcad":
   version "4.11.0-beta.20210210.116dcad"
   resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.11.0-beta.20210210.116dcad.tgz#7e0375a71667378bd9132ae62ec1a1cc1a0aa56e"
   integrity sha512-amsE8Yw9TrY/esrzEo63pjU+OXOi1hZSqjb64z7Hu2McM7jksJc09qrmrDy1GLhJBGIBQHsgM6fIF/iQfzPDpA==
