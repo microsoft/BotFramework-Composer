@@ -4,7 +4,7 @@
 import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
 
-import { DLServerState } from '../store/dLServerState';
+import { DLServerState } from '../store/dlServerState';
 import { Conversation } from '../store/entities/conversation';
 import { textItem } from '../utils/helpers';
 import { writeFile, mkdirp } from '../utils/fileOperations';

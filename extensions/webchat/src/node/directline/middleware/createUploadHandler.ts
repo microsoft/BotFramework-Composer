@@ -7,7 +7,7 @@ import * as express from 'express';
 import * as Formidable from 'formidable';
 
 import { sendErrorResponse } from '../utils/apiErrorException';
-import { DLServerState } from '../store/dLServerState';
+import { DLServerState } from '../store/dlServerState';
 import { Conversation } from '../store/entities/conversation';
 import { textItem, statusCodeFamily } from '../utils/helpers';
 import { readFile } from '../utils/fileOperations';

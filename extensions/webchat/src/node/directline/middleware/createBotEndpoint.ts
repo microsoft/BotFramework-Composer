@@ -4,7 +4,7 @@
 import * as express from 'express';
 
 import { BotEndpoint } from '../store/entities/botEndpoint';
-import { DLServerState } from '../store/dLServerState';
+import { DLServerState } from '../store/dlServerState';
 
 export const createCreateBotEndpointHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response, next?: express.NextFunction): void => {

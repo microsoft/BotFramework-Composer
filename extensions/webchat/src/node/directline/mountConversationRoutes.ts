@@ -15,12 +15,12 @@ import {
   saveTranscriptHandler,
   getTranscriptHandler,
 } from './middleware';
-import DLServerContext from './store/dLServerState';
+import DLServerContext from './store/dlServerState';
 import { getWebSocketPort } from './utils/socketPort';
 
-export const mountConversationsRoutes = (dLServerState: DLServerContext): express.Router => {
+export const mountConversationsRoutes = (dlServerState: DLServerContext): express.Router => {
   const router = express.Router();
-  const { state } = dLServerState;
+  const { state } = dlServerState;
   const verifyBotFramework = createBotFrameworkAuthenticationMiddleware();
   const fetchConversation = createGetConversationHandler(state);
 

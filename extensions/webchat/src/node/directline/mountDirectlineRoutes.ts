@@ -9,7 +9,7 @@ import {
   createPostActivityHandler,
   createUploadHandler,
 } from './middleware';
-import DLServerContext from './store/dLServerState';
+import DLServerContext from './store/dlServerState';
 
 export const mountDirectLineRoutes = (dLServerContext: DLServerContext): express.Router => {
   const router = express.Router();

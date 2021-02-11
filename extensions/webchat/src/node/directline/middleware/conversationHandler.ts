@@ -6,7 +6,7 @@ import { Activity } from 'botframework-schema';
 import * as express from 'express';
 
 import { sendErrorResponse } from '../utils/apiErrorException';
-import { DLServerState } from '../store/dLServerState';
+import { DLServerState } from '../store/dlServerState';
 import { User } from '../store/types';
 import { Conversation } from '../store/entities/conversation';
 import { WebSocketServer } from '../utils/webSocketServer';

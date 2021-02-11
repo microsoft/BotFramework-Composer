@@ -3,7 +3,7 @@
 
 import { Activity } from 'botframework-schema';
 
-import DLServerContext from '../../dLServerState';
+import DLServerContext from '../../dlServerState';
 import { BotEndpoint } from '../botEndpoint';
 import { Conversation } from '../conversation';
 

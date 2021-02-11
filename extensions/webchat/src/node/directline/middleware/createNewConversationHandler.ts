@@ -4,7 +4,7 @@
 import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
 
-import { DLServerState } from '../store/dLServerState';
+import { DLServerState } from '../store/dlServerState';
 import { validateRequest } from '../utils/helpers';
 import { BotEndpoint } from '../store/entities/botEndpoint';
 
