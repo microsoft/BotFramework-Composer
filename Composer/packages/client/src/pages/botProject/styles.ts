@@ -22,7 +22,7 @@ export const subtitle = css`
 
 export const sectionHeader = css`
   font-weight: ${FontWeights.semibold};
-  font-size: ${FontSizes.small};
+  font-size: ${FontSizes.medium};
   padding: 6px 0;
 `;
 
@@ -35,7 +35,7 @@ export const tableRow = css`
 `;
 
 export const tableRowItem = (width?: string) => css`
-  font-size: ${FontSizes.small};
+  font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
   padding-top: 10px;
   padding-left: 10px;
@@ -46,7 +46,7 @@ export const tableRowItem = (width?: string) => css`
 `;
 
 export const tableColumnHeader = (width?: string) => css`
-  font-size: ${FontSizes.small};
+  font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.bold};
   padding-top: 10px;
   padding-left: 10px;
@@ -87,7 +87,7 @@ export const errorIcon = {
     color: '#A80000',
     marginRight: 8,
     paddingLeft: 12,
-    fontSize: FontSizes.mediumPlus,
+    fontSize: FontSizes.medium,
   },
 };
 
@@ -101,6 +101,7 @@ export const unknownIconStyle = (required: boolean) => {
           paddingRight: 10,
         },
       },
+      fontSize: FontSizes.medium,
     },
   };
 };

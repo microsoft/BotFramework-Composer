@@ -88,7 +88,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [token, setToken] = useState<string | undefined>();
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
-  const [isLoadingStatus, setLoadingStatus] = useState<boolean>(false);
+  const [isLoading, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   /* Copied from Azure Publishing extension */
@@ -462,6 +462,36 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const columnWidths = ['300px', '150px', '150px'];
 
+  const absTableToggle = (key: string) => (
+    <Stack horizontal tokens={{ childrenGap: 10 }}>
+      <Stack.Item>
+        <Toggle
+          inlineLabel
+          checked={channelStatus?.[key].enabled}
+          disabled={channelStatus?.[key].loading}
+          onChange={toggleService(key)}
+        />
+      </Stack.Item>
+      {channelStatus?.[key].loading && (
+        <Stack.Item>
+          <Spinner />
+        </Stack.Item>
+      )}
+    </Stack>
+  );
+
+  const absTableRow = (channel: string, name: string, link: string) => (
+    <div key={channel} css={tableRow}>
+      <div css={tableRowItem(columnWidths[0])}>{name}</div>
+      <div css={tableRowItem(columnWidths[1])}>
+        <Link href={link} target="_docs">
+          {formatMessage('Learn more')}
+        </Link>
+      </div>
+      <div css={tableRowItem(columnWidths[2])}>{absTableToggle(channel)}</div>
+    </div>
+  );
+
   return (
     <React.Fragment>
       {showAuthDialog && (
@@ -488,15 +518,15 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           onRenderOption={renderDropdownOption}
         />
 
-        {availableSubscriptions?.length ? (
+        {availableSubscriptions?.length > 0 && (
           <Dropdown
             label={formatMessage('Subscription Id:')}
             options={
               availableSubscriptions
                 ?.filter((p) => p.subscriptionId && p.displayName)
                 .map((p) => {
-                  return { key: p.subscriptionId || '', text: p.displayName || 'Unnamed' };
-                }) || []
+                  return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+                }) ?? []
             }
             placeholder={formatMessage('Choose subscription')}
             styles={{
@@ -507,17 +537,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             onChange={onChangeSubscription}
             onRenderLabel={onRenderLabel}
           />
-        ) : (
-          ''
         )}
-        {isLoadingStatus ? <LoadingSpinner /> : ''}
-        {errorMessage ? (
+        {isLoading && <LoadingSpinner />}
+        {errorMessage != null && (
           <div css={errorContainer}>
             <Icon iconName="ErrorBadge" styles={errorIcon} />
             <div css={errorTextStyle}>{errorMessage}</div>
           </div>
-        ) : (
-          ''
         )}
         {currentResource && channelStatus && (
           <Fragment>
@@ -526,88 +552,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               <div css={tableColumnHeader(columnWidths[1])}>{formatMessage('Documentation')}</div>
               <div css={tableColumnHeader(columnWidths[2])}>{formatMessage('Enabled')}</div>
             </div>
-            <div key={CHANNELS.TEAMS} css={tableRow}>
-              <div css={tableRowItem(columnWidths[0])}>{formatMessage('MS Teams')}</div>
-              <div css={tableRowItem(columnWidths[1])}>
-                <Link href={teamsHelpLink} target="_docs">
-                  {formatMessage('Learn more')}
-                </Link>
-              </div>
-              <div css={tableRowItem(columnWidths[2])}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                  <Stack.Item>
-                    <Toggle
-                      inlineLabel
-                      checked={channelStatus[CHANNELS.TEAMS].enabled}
-                      disabled={channelStatus[CHANNELS.TEAMS].loading}
-                      onChange={toggleService(CHANNELS.TEAMS)}
-                    />
-                  </Stack.Item>
-                  {channelStatus[CHANNELS.TEAMS].loading ? (
-                    <Stack.Item>
-                      <Spinner />
-                    </Stack.Item>
-                  ) : (
-                    ''
-                  )}
-                </Stack>
-              </div>
-            </div>
-            <div key={CHANNELS.WEBCHAT} css={tableRow}>
-              <div css={tableRowItem(columnWidths[0])}>{formatMessage('Webchat')}</div>
-              <div css={tableRowItem(columnWidths[1])}>
-                <Link href={webchatHelpLink} target="_docs">
-                  {formatMessage('Learn more')}
-                </Link>
-              </div>
-              <div css={tableRowItem(columnWidths[2])}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                  <Stack.Item>
-                    <Toggle
-                      inlineLabel
-                      checked={channelStatus[CHANNELS.WEBCHAT].enabled}
-                      disabled={channelStatus[CHANNELS.WEBCHAT].loading}
-                      onChange={toggleService(CHANNELS.WEBCHAT)}
-                    />
-                  </Stack.Item>
-                  {channelStatus[CHANNELS.WEBCHAT].loading ? (
-                    <Stack.Item>
-                      <Spinner />
-                    </Stack.Item>
-                  ) : (
-                    ''
-                  )}
-                </Stack>
-              </div>
-            </div>
-            <div key={CHANNELS.SPEECH} css={tableRow}>
-              <div css={tableRowItem(columnWidths[0])}>{formatMessage('Speech')}</div>
-              <div css={tableRowItem(columnWidths[1])}>
-                {' '}
-                <Link href={speechHelpLink} target="_docs">
-                  {formatMessage('Learn more')}
-                </Link>
-              </div>
-              <div css={tableRowItem(columnWidths[2])}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                  <Stack.Item>
-                    <Toggle
-                      inlineLabel
-                      checked={channelStatus[CHANNELS.SPEECH].enabled}
-                      disabled={channelStatus[CHANNELS.SPEECH].loading}
-                      onChange={toggleService(CHANNELS.SPEECH)}
-                    />
-                  </Stack.Item>
-                  {channelStatus[CHANNELS.SPEECH].loading ? (
-                    <Stack.Item>
-                      <Spinner />
-                    </Stack.Item>
-                  ) : (
-                    ''
-                  )}
-                </Stack>
-              </div>
-            </div>
+            {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
+            {absTableRow(CHANNELS.WEBCHAT, formatMessage('Webchat'), webchatHelpLink)}
+            {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}
       </div>
