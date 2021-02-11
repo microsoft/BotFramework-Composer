@@ -37,9 +37,6 @@ import {
   errorTextStyle,
 } from '../styles';
 
-// TODO: move these to the styles file once we merge with Ben Y's branch
-// -------------------- Styles -------------------- //
-
 // -------------------- RuntimeSettings -------------------- //
 
 const teamsHelpLink = 'https://aka.ms/configureComposerTeamsChannel';
