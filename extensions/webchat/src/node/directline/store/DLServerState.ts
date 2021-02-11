@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import log from '../utils/logger';
+
 import { BotEndpoint } from './entities/BotEndpoint';
 import { Attachments } from './entities/Attachments';
 import { ConversationSet } from './entities/ConversationSet';
@@ -53,7 +55,7 @@ class DLServerContext {
   ) {
     // TODO: Send the log item to the client Webchat instance to log errors.
     // eslint-disable-next-line no-console
-    console.log(conversationId + logItem.payload.text);
+    log(conversationId + logItem.payload.text);
   }
 
   private updateConversation(conversationId: string, updatedConversation: Conversation) {
