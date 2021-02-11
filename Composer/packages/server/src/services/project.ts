@@ -471,35 +471,45 @@ export class BotProjectService {
         });
       }
 
-      for (const botRef of botsToProcess) {
-        log('Open project', botRef);
-        const id = await BotProjectService.openProject(botRef, user);
+      await Promise.all(
+        botsToProcess.map((botRef) => {
+          // eslint-disable-next-line no-async-promise-executor
+          return new Promise(async (resolve, reject) => {
+            try {
+              log('Open project', botRef);
+              const id = await BotProjectService.openProject(botRef, user);
 
-        // in the case of PVA, we need to update the eTag and alias used by the import mechanism
-        createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
+              // in the case of PVA, we need to update the eTag and alias used by the import mechanism
+              createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
 
-        log('Get Project by Id', id);
-        const currentProject = await BotProjectService.getProjectById(id, user);
+              log('Get Project by Id', id);
+              const currentProject = await BotProjectService.getProjectById(id, user);
 
-        // inject shared content into every new project.  this comes from assets/shared
-        !createFromPva &&
-          (await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage));
+              // inject shared content into every new project.  this comes from assets/shared
+              !createFromPva &&
+                (await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage));
 
-        if (currentProject !== undefined) {
-          !createFromPva && (await ejectAndMerge(currentProject, jobId));
-          BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
+              if (currentProject !== undefined) {
+                !createFromPva && (await ejectAndMerge(currentProject, jobId));
+                BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
 
-          log('Updatebot info', id, preserveRoot);
-          await currentProject.updateBotInfo(botRef.name, description, true);
+                log('Updatebot info', id, preserveRoot);
+                await currentProject.updateBotInfo(botRef.name, description, true);
 
-          if (schemaUrl && !createFromPva) {
-            await currentProject.saveSchemaToProject(schemaUrl, botRef.path);
-          }
+                if (schemaUrl && !createFromPva) {
+                  await currentProject.saveSchemaToProject(schemaUrl, botRef.path);
+                }
 
-          log('Init project', id);
-          await currentProject.init();
-        }
-      }
+                log('Init project', id);
+                await currentProject.init();
+              }
+              resolve(id);
+            } catch (err) {
+              return reject(err);
+            }
+          });
+        })
+      );
 
       const rootBot = botsToProcess.find((b) => b.name === name);
       if (rootBot) {
