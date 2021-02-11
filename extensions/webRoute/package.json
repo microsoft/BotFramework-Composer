@@ -2,10 +2,7 @@
   "name": "webroute",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "webpack"
-  },
+  "main": "dist/extension.js",
   "composer": {
     "enabled": false
   },

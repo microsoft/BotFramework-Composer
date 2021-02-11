@@ -2,13 +2,9 @@
   "name": "azurePublish",
   "version": "1.0.0",
   "description": "Publish bot to an Azure Web App (Preview)",
-  "main": "lib/node/index.js",
+  "main": "dist/extension.js",
   "license": "MIT",
   "scripts": {
-    "build:ui": "webpack --config webpack.config.js",
-    "build:node": "tsc --project tsconfig.node.json",
-    "clean": "rimraf lib",
-    "build": "yarn clean && webpack",
     "test": "yarn test:ui && yarn test:node",
     "test:ui": "jest --config jest.config.ui.js",
     "test:node": "jest --config jest.config.node.js"
@@ -21,11 +17,11 @@
     "bundles": [
       {
         "id": "azurePublish",
-        "path": "lib/ui/publish.js"
+        "path": "dist/publish.js"
       },
       {
         "id": "azureFunctionsPublish",
-        "path": "lib/ui/publish.js"
+        "path": "dist/publish.js"
       }
     ],
     "contributes": {
@@ -63,6 +59,7 @@
     "@bfc/shared": "../../Composer/packages/lib/shared",
     "adal-node": "0.2.1",
     "archiver": "^5.0.2",
+    "encoding": "^0.1.13",
     "axios": "^0.21.1",
     "fs-extra": "8.1.0",
     "https-proxy-agent": "^5.0.0",
@@ -84,6 +81,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.9.6",
+    "@bfc/code-editor": "../../Composer/packages/lib/code-editor",
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@types/archiver": "3.1.0",
     "@types/fs-extra": "8.1.0",

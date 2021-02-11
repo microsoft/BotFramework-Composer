@@ -2,10 +2,7 @@
   "name": "authtest",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "webpack"
-  },
+  "main": "dist/node/index.js",
   "composer": {
     "enabled": false
   },
@@ -13,9 +10,5 @@
   "license": "ISC",
   "dependencies": {
     "passport-local": "^1.0.0"
-  },
-  "devDependencies": {
-    "webpack": "^5.4.0",
-    "webpack-cli": "^4.2.0"
   }
 }

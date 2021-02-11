@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ExtensionSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -199,6 +199,11 @@ export const notificationsState = atomFamily<Notification, string>({
 export const extensionsState = atom<Omit<ExtensionMetadata, 'path'>[]>({
   key: getFullyQualifiedKey('extensions'),
   default: [],
+});
+
+export const extensionSettingsState = atom<ExtensionSettings>({
+  key: getFullyQualifiedKey('extensionSettings'),
+  default: {},
 });
 
 export const botProjectIdsState = atom<string[]>({

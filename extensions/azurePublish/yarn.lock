@@ -1153,10 +1153,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bfc/built-in-functions@../../Composer/packages/tools/built-in-functions":
+  version "1.0.0"
+
 "@bfc/code-editor@../../Composer/packages/lib/code-editor":
   version "0.0.0"
   dependencies:
     "@emotion/core" "^10.0.27"
+    "@emotion/styled" "^10.0.27"
+    "@fluentui/react-icons" "^0.3.9"
     "@monaco-editor/react" "^3.1.0"
     "@uifabric/fluent-theme" "^7.1.4"
     json-schema-defaults "^0.4.0"
@@ -1176,7 +1181,7 @@
 "@bfc/indexers@../../Composer/packages/lib/indexers":
   version "0.0.0"
   dependencies:
-    "@microsoft/bf-lu" "^4.12.0-dev.20201209.a2ab9dd"
+    "@microsoft/bf-lu" "^4.12.0-dev.20210129.82760de"
     adaptive-expressions "^4.11.0-dev.20201013.d5458bf"
     botbuilder-lg "4.12.0-dev-20201119.9afa93623c3e"
     lodash "^4.17.19"
@@ -1215,7 +1220,7 @@
   dependencies:
     "@types/express" "^4.16.1"
     "@types/passport" "^1.0.4"
-    axios "^0.21.0"
+    axios "^0.21.1"
     express-serve-static-core "0.1.1"
     json-schema "^0.2.5"
 
@@ -1263,6 +1268,13 @@
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
   integrity sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==
 
+"@emotion/is-prop-valid@0.8.8":
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.8.8.tgz#db28b1c4368a259b60a97311d6a952d4fd01ac1a"
+  integrity sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==
+  dependencies:
+    "@emotion/memoize" "0.7.4"
+
 "@emotion/memoize@0.7.4":
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
@@ -1283,6 +1295,24 @@
   version "0.9.4"
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-0.9.4.tgz#894374bea39ec30f489bbfc3438192b9774d32e5"
   integrity sha512-zM9PFmgVSqBw4zL101Q0HrBVTGmpAxFZH/pYx/cjJT5advXguvcgjHFTCaIO3enL/xr89vK2bh0Mfyj9aa0ANA==
+
+"@emotion/styled-base@^10.0.27":
+  version "10.0.31"
+  resolved "https://registry.yarnpkg.com/@emotion/styled-base/-/styled-base-10.0.31.tgz#940957ee0aa15c6974adc7d494ff19765a2f742a"
+  integrity sha512-wTOE1NcXmqMWlyrtwdkqg87Mu6Rj1MaukEoEmEkHirO5IoHDJ8LgCQL4MjJODgxWxXibGR3opGp1p7YvkNEdXQ==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    "@emotion/is-prop-valid" "0.8.8"
+    "@emotion/serialize" "^0.11.15"
+    "@emotion/utils" "0.11.3"
+
+"@emotion/styled@^10.0.27":
+  version "10.0.27"
+  resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-10.0.27.tgz#12cb67e91f7ad7431e1875b1d83a94b814133eaf"
+  integrity sha512-iK/8Sh7+NLJzyp9a5+vIQIXTYxfT4yB/OJbjzQanB2RZpvmzBQOHZWhpAMZWYEKRNNbsD6WfBw5sVWkb6WzS/Q==
+  dependencies:
+    "@emotion/styled-base" "^10.0.27"
+    babel-plugin-emotion "^10.0.27"
 
 "@emotion/stylis@0.8.5":
   version "0.8.5"
@@ -1360,6 +1390,16 @@
     "@uifabric/merge-styles" "^7.19.1"
     "@uifabric/set-version" "^7.0.23"
     "@uifabric/styling" "^7.16.18"
+    "@uifabric/utilities" "^7.33.2"
+    tslib "^1.10.0"
+
+"@fluentui/react-icons@^0.3.9":
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-0.3.9.tgz#72f282740939c8204a852e38c3b5e98fbf2ff68f"
+  integrity sha512-xGisio0Ds8/TWkbERtg6akoegp68/Vop3n6eD7X+0HqVL0rOl44iW+cmQrnOh1xIWiz7EqLVQU0w70bL2oLCGw==
+  dependencies:
+    "@microsoft/load-themed-styles" "^1.10.26"
+    "@uifabric/set-version" "^7.0.23"
     "@uifabric/utilities" "^7.33.2"
     tslib "^1.10.0"
 
@@ -1592,10 +1632,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@microsoft/bf-lu@^4.12.0-dev.20201209.a2ab9dd":
-  version "4.12.0-dev.20201211.e06f70f"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20201211.e06f70f.tgz#8c2bc57d2a6acef290d46f6a861a5295d5432d91"
-  integrity sha512-2JIvk5CckCKvKsJG07j70440/oittZOv1Aq6GPPbm+OgzvG4T7Oc33VIFaP6zJNVGPamr8aS+FlGC6fv7WvhrQ==
+"@microsoft/bf-lu@^4.12.0-dev.20210129.82760de":
+  version "4.12.0-dev.20210202.c622c6f"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20210202.c622c6f.tgz#a19a9ffd2bd09c783f8f254c58eeda45bbbebcee"
+  integrity sha512-Bi1mLKJuAqrKpp2svqSq/p4fvweHf3ie7EiSyfAaWmcmFdWES9N/z5T6xKSlY0BT41vOEvu0BpYfTFz0lNnZwA==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -1626,8 +1666,8 @@
 
 "@microsoft/recognizers-text-data-types-timex-expression@1.3.0":
   version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/recognizers-text-data-types-timex-expression/-/recognizers-text-data-types-timex-expression-1.3.0.tgz#fc5d586c826e478e8477b7fcb21e9e2830e81c67"
-  integrity sha512-REHUXmMUI1jL3b9v+aSdzKxLxRdejsfg9McYRxY3LW0Gu4UbwD7Q+K6mtSo40cwg8uh6fiV9GY8hDuKXHH6dVA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-data-types-timex-expression/-/@microsoft/recognizers-text-data-types-timex-expression-1.3.0.tgz#fc5d586c826e478e8477b7fcb21e9e2830e81c67"
+  integrity sha1-/F1YbIJuR46Ed7f8sh6eKDDoHGc=
 
 "@monaco-editor/react@^3.1.0":
   version "3.7.4"
@@ -1817,8 +1857,8 @@
 
 "@types/express@*", "@types/express@^4.16.1":
   version "4.17.9"
-  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.9.tgz#f5f2df6add703ff28428add52bdec8a1091b0a78"
-  integrity sha512-SDzEIZInC4sivGIFY4Sz1GG6J9UObPwCInYJjko2jzOf/Imx/dlpume6Xxwj1ORL82tBbmN4cPDIDkLbWHk9hw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/express/-/@types/express-4.17.9.tgz#f5f2df6add703ff28428add52bdec8a1091b0a78"
+  integrity sha1-9fLfat1wP/KEKK3VK97IoQkbCng=
   dependencies:
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
@@ -2732,7 +2772,7 @@ axios@^0.19.0:
   dependencies:
     follow-redirects "1.5.10"
 
-axios@^0.21.0, axios@^0.21.1:
+axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -3943,6 +3983,13 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
+encoding@^0.1.13:
+  version "0.1.13"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/encoding/-/encoding-0.1.13.tgz#56574afdd791f54a8e9b2785c0582a2d26210fa9"
+  integrity sha1-VldK/deR9UqOmyeFwFgqLSYhD6k=
+  dependencies:
+    iconv-lite "^0.6.2"
+
 end-of-stream@^1.0.0, end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/end-of-stream/-/end-of-stream-1.4.4.tgz#5ae64a5f45057baf3626ec14da0ca5e4b2431eb0"
@@ -4836,6 +4883,13 @@ iconv-lite@0.4.24:
   integrity sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
+
+iconv-lite@^0.6.2:
+  version "0.6.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/iconv-lite/-/iconv-lite-0.6.2.tgz#ce13d1875b0c3a674bd6a04b7f76b01b1b6ded01"
+  integrity sha1-zhPRh1sMOmdL1qBLf3awGxtt7QE=
+  dependencies:
+    safer-buffer ">= 2.1.2 < 3.0.0"
 
 ieee754@^1.1.13, ieee754@^1.1.4:
   version "1.2.1"
@@ -6090,12 +6144,24 @@ mime-db@1.44.0:
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.44.0.tgz#fa11c5eb0aca1334b4233cb4d52f10c5a6272f92"
   integrity sha512-/NOTfLrsPBVeH7YtFPgsVWveuL+4SjjYxaQ1xtM1KMFj7HdxlBlxeyNLzhyJVx7r4rZGJAZ/6lkKCitSc/Nmpg==
 
-mime-types@^2.1.12, mime-types@^2.1.27, mime-types@~2.1.19:
+mime-db@1.45.0:
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.45.0.tgz#cceeda21ccd7c3a745eba2decd55d4b73e7879ea"
+  integrity sha512-CkqLUxUk15hofLoLyljJSrukZi8mAtgd+yE5uO4tqRZsdsAJKv0O+rFMhVDRJgozy+yG6md5KwuXhD4ocIoP+w==
+
+mime-types@^2.1.12, mime-types@~2.1.19:
   version "2.1.27"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.27.tgz#47949f98e279ea53119f5722e0f34e529bec009f"
   integrity sha512-JIhqnCasI9yD+SsmkquHBxTSEuZdQX5BuQnS2Vc7puQQQ+8yiP5AY5uWhpdv4YL4VM5c6iliiYWPgJ/nJQLp7w==
   dependencies:
     mime-db "1.44.0"
+
+mime-types@^2.1.27:
+  version "2.1.28"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.28.tgz#1160c4757eab2c5363888e005273ecf79d2a0ecd"
+  integrity sha512-0TO2yJ5YHYr7M2zzT7gDU1tbwHxEUWBCLt0lscSNpcdAfFyJOVEpRYNS7EXVcTLNj/25QO8gulHC5JtTzSE2UQ==
+  dependencies:
+    mime-db "1.45.0"
 
 mimic-fn@^2.1.0:
   version "2.1.0"
@@ -7300,7 +7366,7 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
-"safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
+"safer-buffer@>= 2.1.2 < 3", "safer-buffer@>= 2.1.2 < 3.0.0", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
