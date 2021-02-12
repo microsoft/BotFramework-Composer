@@ -8,17 +8,17 @@ import { AzureProvisionDialog } from './azureProvisionDialog';
 jest.mock('@bfc/extension-client', () => {
   return {
     getType: () => 'azurePublish',
-    getAccessToken: async() => 'accessToken',
+    getAccessToken: async () => 'accessToken',
     setTitle: (title) => null,
     getCurrentUser: () => 'testUser',
     currentProjectId: () => 'testId',
 
-  // logOut,
-  // startProvision,
-  // closeDialog,
-  // onBack,
-  // savePublishConfig,
-  // getSchema,
+    // logOut,
+    // startProvision,
+    // closeDialog,
+    // onBack,
+    // savePublishConfig,
+    // getSchema,
   };
 });
 jest.mock('./api', () => {
@@ -28,8 +28,8 @@ jest.mock('./api', () => {
       return Promise.resolve([]);
     },
     getResourceGroups: (token, subscriptionId) => [],
-  }
-})
+  };
+});
 it('should render', async () => {
   const { getByText } = render(<AzureProvisionDialog />);
   const option1 = await waitFor(() => getByText('Create new Azure resources'));
