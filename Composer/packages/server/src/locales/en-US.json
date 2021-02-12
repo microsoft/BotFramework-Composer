@@ -1235,6 +1235,9 @@
   "extracting_qna_pairs_from_url_b0331bba": {
     "message": "Extracting QNA pairs from { url }"
   },
+  "fail_to_save_bot_578fa8aa": {
+    "message": "Fail to save bot"
+  },
   "failed_to_start_1edb0dbe": {
     "message": "Failed to start"
   },
@@ -1273,6 +1276,15 @@
   },
   "folder_foldername_already_exists_4a2260e9": {
     "message": "folder { folderName } already exists"
+  },
+  "font_family_baa0c6a3": {
+    "message": "Font family"
+  },
+  "font_size_bf4db203": {
+    "message": "Font size"
+  },
+  "font_weight_188bb2b9": {
+    "message": "Font weight"
   },
   "for_each_def04c48": {
     "message": "For Each"
@@ -1655,6 +1667,9 @@
   "local_skill_6ce0d311": {
     "message": "Local Skill."
   },
+  "locale_locale_is_not_supported_by_luis_a3a72047": {
+    "message": "locale \"{ locale }\" is not supported by LUIS"
+  },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Locate the bot file and repair the link"
   },
@@ -1720,6 +1735,9 @@
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
+  },
+  "luis_build_warning_320e4ee2": {
+    "message": "Luis build warning"
   },
   "luis_endpoint_key_c685e219": {
     "message": "LUIS endpoint key"
@@ -2834,6 +2852,9 @@
   "the_root_bot_is_not_a_bot_project_d1495cf6": {
     "message": "The root bot is not a bot project"
   },
+  "the_skill_you_tried_to_remove_from_the_project_is__2c0bd965": {
+    "message": "The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action."
+  },
   "the_target_where_you_publish_your_bot_3132ef47": {
     "message": "The target where you publish your bot"
   },
@@ -3167,6 +3188,9 @@
   "warning_53c98b03": {
     "message": "Warning!"
   },
+  "warning_aacb8c24": {
+    "message": "Warning"
+  },
   "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
     "message": "Warning: the action you are about to take cannot be undone. Going further will delete this bot and any related files in the bot project folder."
   },
@@ -3256,6 +3280,9 @@
   },
   "you_are_about_to_pull_project_files_from_the_selec_15786351": {
     "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+  },
+  "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
+    "message": "You are about to remove the skill from this project. Removing this skill won’t delete the files."
   },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "You can create a new bot from scratch with Composer, or start with a template."
