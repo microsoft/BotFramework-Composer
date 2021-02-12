@@ -48,15 +48,12 @@ export const CrossTrainedRecognizerTemplate = (): {
 });
 
 export const OrchestratorRecognizerTemplate = (target: string, fileName: string) => {
-  let locale: string = fileName.split('.')?.[1] || 'en-us';
-
-  if (locale != 'en-us') {
-    locale = 'multilang';
-  }
+  let locale: string = fileName.split('.')?.[1]?.toLowerCase() ?? 'en';
+  locale = locale.startsWith('en') ? 'en' : 'multilang';
 
   return {
     $kind: SDKKinds.OrchestratorRecognizer,
-    modelFolder: `=settings.orchestrator.models.${locale.replace(/[-.]/g, '_')}`,
+    modelFolder: `=settings.orchestrator.models.${locale}`,
     snapshotFile: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
   };
 };

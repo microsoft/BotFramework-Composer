@@ -149,10 +149,20 @@ export class Builder {
     return baseModelPath;
   };
 
+  /**
+   * Orchestrator: Perform the full build process
+   * 1) Query the Orchestrator service for the latest default NLR model
+   * 2) If the default model has changed or never been downloaded, download it to user's AppData/BotFrameworkComposer folder
+   * 3) Generate the embedding/snapshot data for Orchestrator (.blu files) and place in /generated folder
+   * 4) Generate settings file for runtime containing model and snapshot paths and place in /generated folder
+   * @param luFiles LU Files needed to build snapshot data
+   */
   public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
-    const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) => f.name.split('.')?.[1] === 'en-us');
+    const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
+      f.name.split('.')?.[1]?.toLocaleLowerCase().startsWith('en')
+    );
 
     const nlrList = await this.runOrchestratorNlrList();
 
@@ -163,35 +173,24 @@ export class Builder {
       },
     };
 
-    if (enLuFiles) {
-      const enModel = nlrList?.defaults?.en_intent;
-      if (!enModel) {
-        throw new Error('English Model default not set in NLRList');
-      }
-      const modelPath = Path.resolve(await this.getModelPathAsync(), enModel.replace('.onnx', ''));
-      await this.runOrchestratorNlrGet(modelPath, enModel);
-      let snapshotData = await this.buildOrchestratorSnapshots(enModel, modelPath, enLuFiles, emptyFiles);
+    let modelDatas = [
+      { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
+      { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
+    ];
 
-      orchestratorSettings.orchestrator.models['en_us'] = modelPath;
-      for (var snap in snapshotData) {
-        orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
-      }
-    }
+    for (let modelData of modelDatas) {
+      if (modelData.luFiles) {
+        if (!modelData.model) {
+          throw new Error('Model not set');
+        }
+        const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
+        await this.runOrchestratorNlrGet(modelPath, modelData.model);
+        let snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
-    if (multiLangLuFiles) {
-      //const multilangModel = nlrList?.defaults?.multilingual_intent;
-      const multilangModel = 'pretrained.20201210.microsoft.dte.00.12.unicoder_multilingual.onnx';
-
-      if (!multilangModel) {
-        throw new Error('Multilang Model default not set in NLRList');
-      }
-      const modelPath = Path.resolve(await this.getModelPathAsync(), multilangModel.replace('.onnx', ''));
-      await this.runOrchestratorNlrGet(modelPath, multilangModel);
-      let snapshotData = await this.buildOrchestratorSnapshots(multilangModel, modelPath, multiLangLuFiles, emptyFiles);
-
-      orchestratorSettings.orchestrator.models['multilang'] = modelPath;
-      for (var snap in snapshotData) {
-        orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
+        orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
+        for (var snap in snapshotData) {
+          orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
+        }
       }
     }
 
@@ -200,15 +199,13 @@ export class Builder {
   };
 
   /**
-   * Orchestrator: Perform the full build process
-   * 1) Query the Orchestrator service for the latest default NLR model
-   * 2) If the default model has changed or never been downloaded, download it to user's AppData/BotFrameworkComposer folder
-   * 3) Generate the embedding/snapshot data for Orchestrator (.blu files) and place in /generated folder
-   * 4) Generate settings file for runtime containing model and snapshot paths and place in /generated folder
-   * @param luFiles LU Files needed to build snapshot data
+   * Orchestrator: Write out the embeddings (snapshots) into Binary LU  (.blu) files.
+   *
+   * Part of the Orchestrator training pipeline
+   * @param modelPath Local Path to the model that is used for training
+   * @param luFiles Array of FileInfo[] to the LU files that are used for training
    */
   public buildOrchestratorSnapshots = async (
-    nlrModel: string,
     modelPath: string,
     luFiles: FileInfo[],
     emptyFiles: { [key: string]: boolean }
