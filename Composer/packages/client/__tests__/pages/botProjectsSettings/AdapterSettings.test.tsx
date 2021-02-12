@@ -5,7 +5,7 @@ import React from 'react';
 import { act, fireEvent, within } from '@botframework-composer/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import AdapterSettings from '../../../src/pages/botProject/adapters/AdapterSettings';
+import ExternalAdapterSettings from '../../../src/pages/botProject/adapters/ExternalAdapterSettings';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import { settingsState, currentProjectIdState, schemasState } from '../../../src/recoilModel';
@@ -64,7 +64,7 @@ const makeInitialState = (newSettings: {}) => ({ set }) => {
   set(schemasState(PROJECT_ID), mockSchemas);
 };
 
-describe('AdapterSettings', () => {
+describe('ExternalAdapterSettings', () => {
   let initRecoilState;
 
   beforeEach(() => {
@@ -74,7 +74,7 @@ describe('AdapterSettings', () => {
 
   it('brings up the modal', () => {
     const { getByTestId, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AdapterSettings projectId={PROJECT_ID} />,
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
 
@@ -83,7 +83,7 @@ describe('AdapterSettings', () => {
 
     expect(modal).not.toBeInTheDocument();
 
-    expect(getByText('External service adapters')).toBeInTheDocument();
+    expect(getByText('Mock Adapter')).toBeInTheDocument();
     const configureButton = within(container).queryAllByText('Configure')[0];
     act(() => {
       fireEvent.click(configureButton);
@@ -95,7 +95,7 @@ describe('AdapterSettings', () => {
 
   it('sets settings on an adapter', async () => {
     const { getByTestId, getByLabelText, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AdapterSettings projectId={PROJECT_ID} />,
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
     const container = getByTestId('adapterSettings');
@@ -133,7 +133,7 @@ describe('AdapterSettings', () => {
     };
 
     const { queryByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AdapterSettings projectId={PROJECT_ID} />,
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
       makeInitialState(initStateWithAdapter)
     );
 
@@ -162,7 +162,7 @@ describe('AdapterSettings', () => {
     };
 
     const { queryByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AdapterSettings projectId={PROJECT_ID} />,
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
       makeInitialState(initStateWithAdapter)
     );
 

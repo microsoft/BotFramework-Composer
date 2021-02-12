@@ -8,7 +8,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   NEW_CREATION_FLOW: {
     displayName: formatMessage('New Creation Experience'),
     description: formatMessage('Component templates populated from npm feeds'),
-    isHidden: true,
+    isHidden: false,
     enabled: false,
   },
   FORM_DIALOG: {

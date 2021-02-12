@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import { jsx, css } from '@emotion/core';
+import React, { useEffect, useState, Fragment } from 'react';
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -15,80 +14,28 @@ import { useRecoilValue } from 'recoil';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { navigateTo } from '../../utils/navigation';
-import { settingsState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { armScopes } from '../../constants';
-import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
-import httpClient from '../../utils/httpUtil';
-
-import { tableRow, tableRowItem, tableColumnHeader } from './styles';
-
-// TODO: move these to the styles file once we merge with Ben Y's branch
-// -------------------- Styles -------------------- //
-
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
-
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-  width: 200px;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.medium};
-  margin-right: 5px;
-`;
-
-const errorContainer = css`
-  display: flex;
-  width: 100%;
-  line-height: 24px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  background: #fed9cc;
-  color: ${NeutralColors.black};
-`;
-
-const errorTextStyle = css`
-  margin-bottom: 5px;
-  font-size: ${FontSizes.small};
-`;
-
-const errorIcon = {
-  root: {
-    color: '#A80000',
-    marginRight: 8,
-    paddingLeft: 12,
-    fontSize: FontSizes.mediumPlus,
-  },
-};
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 10,
-        },
-      },
-    },
-  };
-};
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { navigateTo } from '../../../utils/navigation';
+import { settingsState } from '../../../recoilModel';
+import { AuthClient } from '../../../utils/authClient';
+import { AuthDialog } from '../../../components/Auth/AuthDialog';
+import { armScopes } from '../../../constants';
+import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../../utils/auth';
+import httpClient from '../../../utils/httpUtil';
+import {
+  tableRow,
+  tableRowItem,
+  tableColumnHeader,
+  labelContainer,
+  customerLabel,
+  unknownIconStyle,
+  errorContainer,
+  errorIcon,
+  errorTextStyle,
+} from '../styles';
 
 // -------------------- RuntimeSettings -------------------- //
 
@@ -104,7 +51,6 @@ const CHANNELS = {
 
 type RuntimeSettingsProps = {
   projectId: string;
-  scrollToSectionId?: string;
 };
 
 type AzureResourcePointer = {
@@ -131,7 +77,7 @@ export enum AzureAPIStatus {
 }
 
 export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
-  const { projectId, scrollToSectionId } = props;
+  const { projectId } = props;
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [currentResource, setCurrentResource] = useState<AzureResourcePointer | undefined>();
   const [channelStatus, setChannelStatus] = useState<AzureChannelsStatus | undefined>();
@@ -139,9 +85,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [token, setToken] = useState<string | undefined>();
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
-  const [isLoadingStatus, setLoadingStatus] = useState<boolean>(false);
+  const [isLoading, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -482,12 +427,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   }, [publishTargets, projectId]);
 
   useEffect(() => {
-    if (containerRef.current && scrollToSectionId === '#runtimeSettings') {
-      containerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [scrollToSectionId]);
-
-  useEffect(() => {
     // reset UI
     setChannelStatus(undefined);
 
@@ -520,8 +459,38 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const columnWidths = ['300px', '150px', '150px'];
 
+  const absTableToggle = (key: string) => (
+    <Stack horizontal tokens={{ childrenGap: 10 }}>
+      <Stack.Item>
+        <Toggle
+          inlineLabel
+          checked={channelStatus?.[key].enabled}
+          disabled={channelStatus?.[key].loading}
+          onChange={toggleService(key)}
+        />
+      </Stack.Item>
+      {channelStatus?.[key].loading && (
+        <Stack.Item>
+          <Spinner />
+        </Stack.Item>
+      )}
+    </Stack>
+  );
+
+  const absTableRow = (channel: string, name: string, link: string) => (
+    <div key={channel} css={tableRow}>
+      <div css={tableRowItem(columnWidths[0])}>{name}</div>
+      <div css={tableRowItem(columnWidths[1])}>
+        <Link href={link} target="_docs">
+          {formatMessage('Learn more')}
+        </Link>
+      </div>
+      <div css={tableRowItem(columnWidths[2])}>{absTableToggle(channel)}</div>
+    </div>
+  );
+
   return (
-    <CollapsableWrapper title={formatMessage('Azure Bot Service Connections')} titleStyle={titleStyle}>
+    <React.Fragment>
       {showAuthDialog && (
         <AuthDialog
           needGraph={false}
@@ -531,7 +500,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
         />
       )}
-      <div ref={containerRef}>
+      <div>
         <Dropdown
           label={formatMessage('Publish profile to configure:')}
           options={publishTargetOptions}
@@ -546,15 +515,15 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           onRenderOption={renderDropdownOption}
         />
 
-        {availableSubscriptions?.length ? (
+        {availableSubscriptions?.length > 0 && (
           <Dropdown
             label={formatMessage('Subscription Id:')}
             options={
               availableSubscriptions
                 ?.filter((p) => p.subscriptionId && p.displayName)
                 .map((p) => {
-                  return { key: p.subscriptionId || '', text: p.displayName || 'Unnamed' };
-                }) || []
+                  return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+                }) ?? []
             }
             placeholder={formatMessage('Choose subscription')}
             styles={{
@@ -565,17 +534,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             onChange={onChangeSubscription}
             onRenderLabel={onRenderLabel}
           />
-        ) : (
-          ''
         )}
-        {isLoadingStatus ? <LoadingSpinner /> : ''}
-        {errorMessage ? (
+        {isLoading && <LoadingSpinner />}
+        {errorMessage != null && (
           <div css={errorContainer}>
             <Icon iconName="ErrorBadge" styles={errorIcon} />
             <div css={errorTextStyle}>{errorMessage}</div>
           </div>
-        ) : (
-          ''
         )}
         {currentResource && channelStatus && (
           <Fragment>
@@ -584,91 +549,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               <div css={tableColumnHeader(columnWidths[1])}>{formatMessage('Documentation')}</div>
               <div css={tableColumnHeader(columnWidths[2])}>{formatMessage('Enabled')}</div>
             </div>
-            <div key={CHANNELS.TEAMS} css={tableRow}>
-              <div css={tableRowItem(columnWidths[0])}>{formatMessage('MS Teams')}</div>
-              <div css={tableRowItem(columnWidths[1])}>
-                <Link href={teamsHelpLink} target="_docs">
-                  {formatMessage('Learn more')}
-                </Link>
-              </div>
-              <div css={tableRowItem(columnWidths[2])}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                  <Stack.Item>
-                    <Toggle
-                      inlineLabel
-                      checked={channelStatus[CHANNELS.TEAMS].enabled}
-                      disabled={channelStatus[CHANNELS.TEAMS].loading}
-                      onChange={toggleService(CHANNELS.TEAMS)}
-                    />
-                  </Stack.Item>
-                  {channelStatus[CHANNELS.TEAMS].loading ? (
-                    <Stack.Item>
-                      <Spinner />
-                    </Stack.Item>
-                  ) : (
-                    ''
-                  )}
-                </Stack>
-              </div>
-            </div>
-            <div key={CHANNELS.WEBCHAT} css={tableRow}>
-              <div css={tableRowItem(columnWidths[0])}>{formatMessage('Webchat')}</div>
-              <div css={tableRowItem(columnWidths[1])}>
-                <Link href={webchatHelpLink} target="_docs">
-                  {formatMessage('Learn more')}
-                </Link>
-              </div>
-              <div css={tableRowItem(columnWidths[2])}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                  <Stack.Item>
-                    <Toggle
-                      inlineLabel
-                      checked={channelStatus[CHANNELS.WEBCHAT].enabled}
-                      disabled={channelStatus[CHANNELS.WEBCHAT].loading}
-                      onChange={toggleService(CHANNELS.WEBCHAT)}
-                    />
-                  </Stack.Item>
-                  {channelStatus[CHANNELS.WEBCHAT].loading ? (
-                    <Stack.Item>
-                      <Spinner />
-                    </Stack.Item>
-                  ) : (
-                    ''
-                  )}
-                </Stack>
-              </div>
-            </div>
-            <div key={CHANNELS.SPEECH} css={tableRow}>
-              <div css={tableRowItem(columnWidths[0])}>{formatMessage('Speech')}</div>
-              <div css={tableRowItem(columnWidths[1])}>
-                {' '}
-                <Link href={speechHelpLink} target="_docs">
-                  {formatMessage('Learn more')}
-                </Link>
-              </div>
-              <div css={tableRowItem(columnWidths[2])}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                  <Stack.Item>
-                    <Toggle
-                      inlineLabel
-                      checked={channelStatus[CHANNELS.SPEECH].enabled}
-                      disabled={channelStatus[CHANNELS.SPEECH].loading}
-                      onChange={toggleService(CHANNELS.SPEECH)}
-                    />
-                  </Stack.Item>
-                  {channelStatus[CHANNELS.SPEECH].loading ? (
-                    <Stack.Item>
-                      <Spinner />
-                    </Stack.Item>
-                  ) : (
-                    ''
-                  )}
-                </Stack>
-              </div>
-            </div>
+            {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
+            {absTableRow(CHANNELS.WEBCHAT, formatMessage('Webchat'), webchatHelpLink)}
+            {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}
       </div>
-    </CollapsableWrapper>
+    </React.Fragment>
   );
 };
+
+export default ABSChannels;
