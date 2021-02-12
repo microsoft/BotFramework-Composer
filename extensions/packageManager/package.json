@@ -6,6 +6,10 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
+  },
   "composer": {
     "enabled": true,
     "bundles": [

@@ -2,8 +2,12 @@
   "name": "sample-ui-plugin",
   "version": "1.0.0",
   "license": "ISC",
+  "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
+  },
   "composer": {
-    "enabled": false,
+    "enabled": true,
     "bundles": [
       {
         "id": "publish",

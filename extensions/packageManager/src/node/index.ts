@@ -158,7 +158,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
         const dryrun = new SchemaMerger(
-          [manifestFile,'!**/imported/**','!**/generated/**'],
+          [manifestFile, '!**/imported/**', '!**/generated/**'],
           path.join(currentProject.dataDir, 'schemas/sdk'),
           path.join(currentProject.dataDir, 'dialogs/imported'),
           true, // copy only? true = dry run
@@ -217,7 +217,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
-            [manifestFile,'!**/imported/**','!**/generated/**'],
+            [manifestFile, '!**/imported/**', '!**/generated/**'],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             true, // copy only? true = dry run
@@ -245,7 +245,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             });
           } else {
             const realMerge = new SchemaMerger(
-              [manifestFile,'!**/imported/**','!**/generated/**'],
+              [manifestFile, '!**/imported/**', '!**/generated/**'],
               path.join(currentProject.dataDir, 'schemas/sdk'),
               path.join(currentProject.dataDir, 'dialogs/imported'),
               false, // copy only? true = dry run
@@ -324,7 +324,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
-            [manifestFile,'!**/imported/**','!**/generated/**'],
+            [manifestFile, '!**/imported/**', '!**/generated/**'],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             false, // copy only? true = dry run

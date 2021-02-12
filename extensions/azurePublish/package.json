@@ -5,6 +5,8 @@
   "main": "dist/extension.js",
   "license": "MIT",
   "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch",
     "test": "yarn test:ui && yarn test:node",
     "test:ui": "jest --config jest.config.ui.js",
     "test:node": "jest --config jest.config.node.js"
@@ -59,8 +61,8 @@
     "@bfc/shared": "../../Composer/packages/lib/shared",
     "adal-node": "0.2.1",
     "archiver": "^5.0.2",
-    "encoding": "^0.1.13",
     "axios": "^0.21.1",
+    "encoding": "^0.1.13",
     "fs-extra": "8.1.0",
     "https-proxy-agent": "^5.0.0",
     "jwt-decode": "^3.1.2",
@@ -82,6 +84,7 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.9.6",
     "@bfc/code-editor": "../../Composer/packages/lib/code-editor",
+    "@botframework-composer/test-utils": "^0.0.1",
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@types/archiver": "3.1.0",
     "@types/fs-extra": "8.1.0",
@@ -89,7 +92,6 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/request": "2.48.4",
-    "@botframework-composer/test-utils": "^0.0.1",
     "@types/request-promise": "4.1.45",
     "html-webpack-plugin": "^4.3.0",
     "ts-loader": "^8.0.0",
