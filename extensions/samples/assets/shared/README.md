@@ -173,3 +173,8 @@ Follow these steps to get a new token if you encounter an error about your acces
 - Run `az account get-access-token`.
 - This will result in a JSON object containing the new `accessToken`, printed to the console.
 - Copy the value of the accessToken from the terminal and into the publish `accessToken` field in the profile in Composer.
+
+## Known issues
+
+- The provision and publish flow from Composer UI is limited to  Microsoft account only now. A personal Microsoft account (non-work / school) then authentication will not work.
+-
