@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { BotProjectProvision, ProvisionConfig } from './provision';
 
 const mockConfig = {
@@ -9,7 +12,7 @@ const mockConfig = {
   location: {
     id: 'local',
     name: 'local',
-    displayName: 'westus'
+    displayName: 'westus',
   },
   luisLocation: '',
   name: 'profileName',
@@ -17,27 +20,24 @@ const mockConfig = {
   subscription: {
     subscriptionId: 'subscriptionId',
     tenantId: 'tenant',
-    displayName: 'test'
+    displayName: 'test',
   },
 } as ProvisionConfig;
 const azProvision = new BotProjectProvision(mockConfig);
 
 const mockGet = jest.fn();
-jest.mock('request-promise', ()=>{
-  return { get: async(...args) => await mockGet(args),
-    RequestPromiseOptions: {}};
+jest.mock('request-promise', () => {
+  return { get: async (...args) => await mockGet(args), RequestPromiseOptions: {} };
 });
 
-describe('provision', ()=>{
-  it('test private method getTenantId', async ()=>{
-    expect(typeof azProvision['getTenantId']).toBe('function');
+describe('provision', () => {
+  it('test private method getTenantId', async () => {
+    expect(typeof azProvision.getTenantId).toBe('function');
     // mockGet.mockResolvedValueOnce({
     //   tenantId: 'test'
     // });
     // const tenantId = await azProvision['getTenantId']();
     // expect(tenantId).toBe('test');
   });
-  it('test get error message', ()=> {
-
-  })
-})
+  it('test get error message', () => {});
+});

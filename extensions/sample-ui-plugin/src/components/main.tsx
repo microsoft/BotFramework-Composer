@@ -81,7 +81,7 @@ export const Main: React.FC<{ title: string }> = (props) => {
         <button className={backButton} onClick={onBack}>
           Back
         </button>
-        <button className={saveButton} onClick={onSave} disabled={!configIsValid}>
+        <button className={saveButton} disabled={!configIsValid} onClick={onSave}>
           Save
         </button>
       </div>

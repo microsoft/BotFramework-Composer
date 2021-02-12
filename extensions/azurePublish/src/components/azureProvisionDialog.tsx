@@ -9,7 +9,6 @@ import { getAccessToken, logOut, usePublishApi } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
-import { ResourcesItem, authConfig } from '../types';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import {
   ScrollablePane,
@@ -36,6 +35,9 @@ import {
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
 import jwtDecode from 'jwt-decode';
+
+import { ResourcesItem, authConfig } from '../types';
+
 import {
   getResourceList,
   getSubscriptions,
@@ -431,11 +433,11 @@ export const AzureProvisionDialog: React.FC = () => {
     () => (props: IPersonaProps) => {
       return (
         <div
+          style={{ color: 'blue', cursor: 'pointer' }}
           onClick={() => {
             closeDialog();
             logOut();
           }}
-          style={{ color: 'blue', cursor: 'pointer' }}
         >
           {props.secondaryText}
         </div>
@@ -450,31 +452,31 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageFormConfig = (
     <Fragment>
-      <ChoiceGroup style={{}} defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
+      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} style={{}} onChange={updateChoice} />
       {subscriptionOption?.length > 0 && choice.key === 'create' && (
         <form style={{ width: '50%', marginTop: '16px' }}>
           <Dropdown
             required
+            ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
             defaultSelectedKey={currentSubscription?.subscriptionId}
             label={formatMessage('Subscription')}
-            ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
             options={subscriptionOption}
             placeholder={'Select one'}
-            onChange={updateCurrentSubscription}
             styles={{ root: { paddingBottom: '8px' } }}
+            onChange={updateCurrentSubscription}
             onRenderLabel={onRenderLabel}
           />
           <TextField
             required
-            defaultValue={currentHostName}
-            errorMessage={errorHostName}
-            label={formatMessage('Resource group name')}
             ariaLabel={formatMessage(
               'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
             )}
+            defaultValue={currentHostName}
+            errorMessage={errorHostName}
+            label={formatMessage('Resource group name')}
             placeholder={'Name of your new resource group'}
-            onChange={newResourceGroup}
             styles={{ root: { paddingBottom: '8px' } }}
+            onChange={newResourceGroup}
             onRenderLabel={onRenderLabel}
           />
           <Dropdown
@@ -511,14 +513,14 @@ export const AzureProvisionDialog: React.FC = () => {
             {formatMessage('Publish Configuration')}
           </div>
           <JsonEditor
-            id={publishType}
             height={300}
+            id={publishType}
+            schema={getSchema()}
             value={importConfig}
             onChange={(value) => {
               setEditorError(false);
               setImportConfig(value);
             }}
-            schema={getSchema()}
             onError={() => {
               setEditorError(true);
             }}
@@ -552,13 +554,13 @@ export const AzureProvisionDialog: React.FC = () => {
           <DetailsList
             isHeaderVisible
             checkboxVisibility={CheckboxVisibility.onHover}
-            selectionMode={SelectionMode.multiple}
-            selection={selection}
             columns={columns}
             getKey={(item) => item.key}
             groups={group}
             items={listItems}
             layoutMode={DetailsListLayoutMode.justified}
+            selection={selection}
+            selectionMode={SelectionMode.multiple}
             setKey="none"
           />
         </ScrollablePane>
@@ -572,25 +574,25 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
+              secondaryText={'Sign out'}
               size={PersonaSize.size40}
               text={currentUser.name}
-              secondaryText={'Sign out'}
               onRenderSecondaryText={onRenderSecondaryText}
             />
           ) : null}
           <div>
-            <DefaultButton text={'Back'} onClick={onBack} style={{ margin: '0 4px' }} />
+            <DefaultButton style={{ margin: '0 4px' }} text={'Back'} onClick={onBack} />
             {choice.key === 'create' ? (
               <PrimaryButton
                 disabled={isDisAble}
+                style={{ margin: '0 4px' }}
                 text="Next: Review"
                 onClick={() => {
                   onNext(currentHostName);
                 }}
-                style={{ margin: '0 4px' }}
               />
             ) : (
-              <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} style={{ margin: '0 4px' }} />
+              <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
             )}
           </div>
         </div>
@@ -600,23 +602,24 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
+              secondaryText={'Sign out'}
               size={PersonaSize.size40}
               text={currentUser.name}
-              secondaryText={'Sign out'}
               onRenderSecondaryText={onRenderSecondaryText}
             />
           ) : null}
           <div>
             <DefaultButton
+              style={{ margin: '0 4px' }}
               text={'Back'}
               onClick={() => {
                 setPage(PageTypes.ConfigProvision);
                 setTitle(DialogTitle.CONFIG_RESOURCES);
               }}
-              style={{ margin: '0 4px' }}
             />
             <PrimaryButton
               disabled={isDisAble}
+              style={{ margin: '0 4px' }}
               text={'Done'}
               onClick={async () => {
                 const selectedResources = requireResources.concat(enabledResources);
@@ -629,7 +632,6 @@ export const AzureProvisionDialog: React.FC = () => {
                   externalResources: selectedResources,
                 });
               }}
-              style={{ margin: '0 4px' }}
             />
           </div>
         </div>

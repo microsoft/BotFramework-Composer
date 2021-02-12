@@ -126,8 +126,8 @@ const Main: React.FC = () => {
         isHeaderVisible
         checkboxVisibility={CheckboxVisibility.hidden}
         columns={tableColumns}
-        layoutMode={DetailsListLayoutMode.justified}
         items={items}
+        layoutMode={DetailsListLayoutMode.justified}
       />
       Dialog data from project api
       <pre>{JSON.stringify(dialogs[0].content, null, 2)}</pre>
