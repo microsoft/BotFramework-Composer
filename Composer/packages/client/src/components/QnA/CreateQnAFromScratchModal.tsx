@@ -13,6 +13,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dispatcherState, showCreateQnAFromUrlDialogState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { validateName, CreateQnAFromModalProps, CreateQnAFromScratchFormData } from './constants';
 import { subText, styles, dialogWindowMini, textField } from './styles';
@@ -96,6 +97,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
               return;
             }
             onSubmit(formData);
+            TelemetryClient.track('AddNewKnowledgeBaseCompleted');
           }}
         />
       </DialogFooter>
