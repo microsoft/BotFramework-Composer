@@ -44,6 +44,13 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
   formConfig.name.validate = validateName(qnaFiles);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors || !formData.name;
+
+  const handleDismiss = () => {
+    onDismiss?.();
+    actions.createQnAFromScratchDialogCancel({ projectId });
+    TelemetryClient.track('AddNewKnowledgeBaseCanceled');
+  };
+
   return (
     <Dialog
       dialogContentProps={{
@@ -56,7 +63,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
         isBlocking: false,
         styles: styles.modal,
       }}
-      onDismiss={onDismiss}
+      onDismiss={handleDismiss}
     >
       <div css={dialogWindowMini}>
         <Stack>
@@ -84,8 +91,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
         <DefaultButton
           text={formatMessage('Cancel')}
           onClick={() => {
-            actions.createQnAFromScratchDialogCancel({ projectId });
-            onDismiss?.();
+            handleDismiss();
           }}
         />
         <PrimaryButton
@@ -97,7 +103,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
               return;
             }
             onSubmit(formData);
-            TelemetryClient.track('AddNewKnowledgeBaseCompleted');
+            TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
           }}
         />
       </DialogFooter>
