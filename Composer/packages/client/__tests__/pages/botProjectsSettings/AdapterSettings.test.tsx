@@ -83,7 +83,7 @@ describe('ExternalAdapterSettings', () => {
 
     expect(modal).not.toBeInTheDocument();
 
-    expect(getByText('External service adapters')).toBeInTheDocument();
+    expect(getByText('Mock Adapter')).toBeInTheDocument();
     const configureButton = within(container).queryAllByText('Configure')[0];
     act(() => {
       fireEvent.click(configureButton);
