@@ -5,6 +5,10 @@
   "main": "dist/extension.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
+  },
   "dependencies": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "adm-zip": "^0.4.14",

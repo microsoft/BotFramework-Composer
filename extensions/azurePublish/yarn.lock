@@ -1182,8 +1182,8 @@
   version "0.0.0"
   dependencies:
     "@microsoft/bf-lu" "^4.12.0-dev.20210129.82760de"
-    adaptive-expressions "^4.11.0-dev.20201013.d5458bf"
-    botbuilder-lg "4.12.0-dev-20201119.9afa93623c3e"
+    adaptive-expressions "4.12.0-dev-20210125.e5a4fc60f438"
+    botbuilder-lg "4.12.0-dev-20210125.e5a4fc60f438"
     lodash "^4.17.19"
 
 "@bfc/shared@../../Composer/packages/lib/shared":
@@ -1659,11 +1659,6 @@
   resolved "https://registry.yarnpkg.com/@microsoft/load-themed-styles/-/load-themed-styles-1.10.141.tgz#491da5e77f5da1eb9c3dbf8cb43329d2e92e9b17"
   integrity sha512-IWqbTWhxpp10X2nZI14oqbPtzrRLvXtyX7sV/QDfVBtQQivLilZFynr/X69SAZtbSp/wi7WI8gKl2/6TuTNN1A==
 
-"@microsoft/recognizers-text-data-types-timex-expression@1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@microsoft/recognizers-text-data-types-timex-expression/-/recognizers-text-data-types-timex-expression-1.1.4.tgz#623453ae65e8df212d8156f6a314675c30696c1d"
-  integrity sha512-2vICaEJfV9EpaDKs5P1PLAEs+WpNqrtpkl7CLsmc5gKmxgpQtsojG4tk6km5JRKg1mYuLV5ZzJ/65oOEeyTMvQ==
-
 "@microsoft/recognizers-text-data-types-timex-expression@1.3.0":
   version "1.3.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-data-types-timex-expression/-/@microsoft/recognizers-text-data-types-timex-expression-1.3.0.tgz#fc5d586c826e478e8477b7fcb21e9e2830e81c67"
@@ -1938,13 +1933,6 @@
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
-
-"@types/moment-timezone@^0.5.13":
-  version "0.5.30"
-  resolved "https://registry.yarnpkg.com/@types/moment-timezone/-/moment-timezone-0.5.30.tgz#340ed45fe3e715f4a011f5cfceb7cb52aad46fc7"
-  integrity sha512-aDVfCsjYnAQaV/E9Qc24C5Njx1CoDjXsEgkxtp9NyXDpYu4CCbmclb6QhWloS9UTU/8YROUEEdEkWI0D7DxnKg==
-  dependencies:
-    moment-timezone "*"
 
 "@types/node-fetch@^2.3.7", "@types/node-fetch@~2.5.5":
   version "2.5.7"
@@ -2475,45 +2463,28 @@ adal-node@^0.1.28:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.12.0-dev-20201119.9afa93623c3e:
-  version "4.12.0-dev-20201119.9afa93623c3e"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.12.0-dev-20201119.9afa93623c3e.tgz#f06f585f124ba7e202a9520c4baf10cc41006eb5"
-  integrity sha512-8C2MVOS3+ze1WGZTsVZ2kXVnDPjQ1p3LVz9JGvwGshiwqGflzu9vIbdkHN0F1nEXEwWJaF/hbyivxrhTIZVpYQ==
+adaptive-expressions@4.12.0-dev-20210125.e5a4fc60f438:
+  version "4.12.0-dev-20210125.e5a4fc60f438"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.12.0-dev-20210125.e5a4fc60f438.tgz#39afc36fd9b959432e837676badf7d98af472e5c"
+  integrity sha512-ySxUg8iRGfVlr7p3q7EGyln6Cdqf15wBm2WtWnrGmnlGsVepliN0/FvNeNk5r3WMNWJ6nWLu8jFiFWQAo85Nxw==
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
     "@types/atob-lite" "^2.0.0"
     "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.13"
     "@types/xmldom" "^0.1.29"
     antlr4ts "0.5.0-alpha.3"
     atob-lite "^2.0.0"
     big-integer "^1.6.48"
     d3-format "^1.4.4"
+    dayjs "^1.10.3"
     jspath "^0.4.0"
     lodash "^4.17.19"
     lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
-
-adaptive-expressions@^4.11.0-dev.20201013.d5458bf:
-  version "4.11.0"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.0.tgz#741fc7cf71d18fcf28c455ec636b737b580362df"
-  integrity sha512-CrSPRrnevGbjA0tSoNQc2q1P4iBmsFvMi1Nx56Qz6pxImMFTCKYhSYR88jvPwGIl5z+UlAWz2zmidMw9lVt9fg==
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob-lite" "^2.0.0"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.13"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.3"
-    atob-lite "^2.0.0"
-    big-integer "^1.6.48"
-    d3-format "^1.4.4"
-    jspath "^0.4.0"
-    lodash "^4.17.19"
-    lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
+    uuid "^8.3.2"
+    x2js "^3.4.0"
+    xml2js "^0.4.23"
+    xmldom "^0.4.0"
+    xpath "^0.0.32"
 
 agent-base@6:
   version "6.0.2"
@@ -2963,16 +2934,16 @@ boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-botbuilder-lg@4.12.0-dev-20201119.9afa93623c3e:
-  version "4.12.0-dev-20201119.9afa93623c3e"
-  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-dev-20201119.9afa93623c3e.tgz#10e8ab892917a4131926a20c0a213055d7744643"
-  integrity sha512-3hli5yNaiIdfeM0Vtf1X/xudnbyNYapo1db7SLWPClT8gAAMj2FMmeo4thO/CRP1aA7bCBDs/FEq4n783G57GQ==
+botbuilder-lg@4.12.0-dev-20210125.e5a4fc60f438:
+  version "4.12.0-dev-20210125.e5a4fc60f438"
+  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-dev-20210125.e5a4fc60f438.tgz#106eace62e170768b3c32f1ecb60d875f2c94d8d"
+  integrity sha512-Ra9JZkeW/KI05BfA/te9N8SqIBG1JlNl1mcb5ct4LZC6+JTdpbQA4tgwlonIPieRhc5iRqPDYL5JTdLVWBmPCQ==
   dependencies:
-    adaptive-expressions "4.12.0-dev-20201119.9afa93623c3e"
+    adaptive-expressions "4.12.0-dev-20210125.e5a4fc60f438"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
-    uuid "^3.4.0"
+    uuid "^8.3.2"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3710,6 +3681,11 @@ date-utils@*:
   version "1.2.21"
   resolved "https://registry.yarnpkg.com/date-utils/-/date-utils-1.2.21.tgz#61fb16cdc1274b3c9acaaffe9fc69df8720a2b64"
   integrity sha1-YfsWzcEnSzyayq/+n8ad+HIKK2Q=
+
+dayjs@^1.10.3:
+  version "1.10.4"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
+  integrity sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw==
 
 debug@4, debug@^4.1.0, debug@^4.1.1:
   version "4.3.1"
@@ -6226,18 +6202,6 @@ mkdirp@^0.5.1, mkdirp@^0.5.3:
   dependencies:
     minimist "^1.2.5"
 
-moment-timezone@*, moment-timezone@^0.5.28:
-  version "0.5.32"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.32.tgz#db7677cc3cc680fd30303ebd90b0da1ca0dfecc2"
-  integrity sha512-Z8QNyuQHQAmWucp8Knmgei8YNo28aLjJq6Ma+jy1ZSpSk5nyfRT8xgUbSQvD2+2UajISfenndwvFuH3NGS+nvA==
-  dependencies:
-    moment ">= 2.9.0"
-
-"moment@>= 2.9.0", moment@^2.25.1:
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
-
 monaco-editor@^0.19.0:
   version "0.19.3"
   resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.19.3.tgz#1c994b3186c00650dbcd034d5370d46bf56c0663"
@@ -8250,12 +8214,12 @@ uuid@7.0.3:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
   integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
-uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2, uuid@^3.4.0:
+uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.3.0:
+uuid@^8.3.0, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
@@ -8532,12 +8496,19 @@ ws@^7.2.3:
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.1.tgz#a333be02696bd0e54cea0434e21dcc8a9ac294bb"
   integrity sha512-pTsP8UAfhy3sk1lSk/O/s4tjD0CRwvMnzvwr4OKGX7ZvqZtUyx4KIJB5JWbkykPoc55tixMGgTNoh3k4FkNGFQ==
 
+x2js@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.4.0.tgz#1414ad99062705086a4838e8dde4ecd06e8bd3a9"
+  integrity sha512-1tozn7D51ghz2DAiy5U6R55qn9x2F3lHUxusOD0QtYlLSDGxyXjHfn0c508eXG1D7s8qqj54SiU5HsPEfhDIpg==
+  dependencies:
+    xmldom "^0.1.19"
+
 xml-name-validator@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"
   integrity sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==
 
-xml2js@^0.4.19:
+xml2js@^0.4.19, xml2js@^0.4.23:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
   integrity sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==
@@ -8555,15 +8526,25 @@ xmlchars@^2.2.0:
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
 
-"xmldom@>= 0.1.x":
+"xmldom@>= 0.1.x", xmldom@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.4.0.tgz#8771e482a333af44587e30ce026f0998c23f3830"
   integrity sha512-2E93k08T30Ugs+34HBSTQLVtpi6mCddaY8uO+pMNk1pqSjV5vElzn4mmh6KLxN3hki8rNcHSYzILoh3TEWORvA==
+
+xmldom@^0.1.19:
+  version "0.1.31"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.31.tgz#b76c9a1bd9f0a9737e5a72dc37231cf38375e2ff"
+  integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==
 
 xpath.js@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/xpath.js/-/xpath.js-1.1.0.tgz#3816a44ed4bb352091083d002a383dd5104a5ff1"
   integrity sha512-jg+qkfS4K8E7965sqaUl8mRngXiKb3WZGfONgE18pr03FUQiuSV6G+Ej4tS55B+rIQSFEIw3phdVAQ4pPqNWfQ==
+
+xpath@^0.0.32:
+  version "0.0.32"
+  resolved "https://registry.yarnpkg.com/xpath/-/xpath-0.0.32.tgz#1b73d3351af736e17ec078d6da4b8175405c48af"
+  integrity sha512-rxMJhSIoiO8vXcWvSifKqhvV96GjiD5wYb8/QHdoRyQvraTpp4IEv944nhGausZZ3u7dhQXteZuZbaqfpB7uYw==
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
