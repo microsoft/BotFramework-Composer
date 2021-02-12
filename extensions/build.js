@@ -79,6 +79,7 @@ const getBundleConfigs = (extPath, packageJSON, watch = false) => {
               loader: {
                 '.svg': 'dataurl',
                 '.png': 'file',
+                '.ttf': 'file',
               },
               define: {
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) || JSON.stringify('development'),
