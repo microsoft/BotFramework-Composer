@@ -17,7 +17,7 @@ module.exports = {
           clientSecret: GITHUB_CLIENT_SECRET,
           callbackURL: `${BASE_URL}/auth/github/callback`,
         },
-        function (accessToken, refreshToken, profile, cb) {
+        (accessToken, refreshToken, profile, cb) => {
           return cb(null, {
             id: profile.id,
             token: accessToken,
@@ -42,7 +42,7 @@ module.exports = {
       'get',
       '/auth/github/callback',
       composer.passport.authenticate('github', { failureRedirect: '/login' }),
-      function (req, res) {
+      (req, res) => {
         console.log('login complete!');
         // Successful authentication, redirect home.
         res.redirect('/home');

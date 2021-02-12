@@ -41,9 +41,9 @@ const headerCSS = (label: string) => css`
 // -------------------- ProjectList -------------------- //
 
 export type ListLink = {
-  displayName?: string,
-  projectId: string
-}
+  displayName?: string;
+  projectId: string;
+};
 
 type BotInProject = {
   projectId: string;
@@ -54,22 +54,17 @@ type BotInProject = {
 type Props = {
   onSelect?: (link: ListLink) => void;
   defaultSelected?: string;
-  projectCollection: BotInProject[]
+  projectCollection: BotInProject[];
 };
 
-export const ProjectList: React.FC<Props> = ({
-  onSelect,
-  defaultSelected,
-  projectCollection,
-}) => {
+export const ProjectList: React.FC<Props> = ({ onSelect, defaultSelected, projectCollection }) => {
   const listRef = useRef<HTMLDivElement>(null);
 
   const [selectedLink, setSelectedLink] = useState<string | undefined>(defaultSelected);
 
   const createProjectList = () => {
     return projectCollection.filter((p) => !p.isRemote).map(renderBotHeader);
-  }
-
+  };
 
   const handleOnSelect = (link: ListLink) => {
     // Skip state change when link not changed.
@@ -95,7 +90,7 @@ export const ProjectList: React.FC<Props> = ({
         />
       </span>
     );
-  }
+  };
 
   const projectList = createProjectList();
 

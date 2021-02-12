@@ -391,7 +391,7 @@ const Library: React.FC = () => {
           </Link>
         </p>
       </div>
-      <Stack horizontal disableShrink styles={{ root: { borderTop: '1px solid #CCC' } }}>
+      <Stack disableShrink horizontal styles={{ root: { borderTop: '1px solid #CCC' } }}>
         <Stack.Item styles={{ root: { width: '300px', borderRight: '1px solid #CCC' } }}>
           <ProjectList
             defaultSelected={projectId}
@@ -402,13 +402,13 @@ const Library: React.FC = () => {
         <Stack.Item styles={{ root: { flexGrow: 1 } }}>
           {!ejectedRuntime && (
             <MessageBar
-              messageBarType={MessageBarType.warning}
-              isMultiline={false}
               actions={
                 <div>
                   <MessageBarButton onClick={navigateToEject}>{strings.ejectRuntime}</MessageBarButton>
                 </div>
               }
+              isMultiline={false}
+              messageBarType={MessageBarType.warning}
             >
               {strings.requireEject}
             </MessageBar>
@@ -418,13 +418,13 @@ const Library: React.FC = () => {
               <PivotItem headerText={strings.browseHeader}>
                 <section style={{ paddingRight: '20px', display: 'grid', justifyContent: 'end' }}>
                   <Dropdown
+                    options={feeds}
                     placeholder="Format"
                     selectedKey={feed}
-                    options={feeds}
-                    onChange={onChangeFeed}
                     styles={{
                       root: { width: '200px' },
                     }}
+                    onChange={onChangeFeed}
                   ></Dropdown>
                 </section>
                 {loading && <LoadingSpinner />}

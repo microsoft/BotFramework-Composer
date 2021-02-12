@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable no-underscore-dangle */
 import axios from 'axios';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
@@ -13,8 +14,15 @@ import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices'
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 
+import {
+  AzureAPIStatus,
+  AzureResourceProviderType,
+  ResourcesItem,
+  LuisAuthoringSupportLocation,
+  LuisPublishSupportLocation,
+} from '../types';
+
 import * as Images from './images';
-import { AzureAPIStatus, AzureResourceProviderType, ResourcesItem, LuisAuthoringSupportLocation, LuisPublishSupportLocation } from '../types';
 
 const logger = debug('composer:extension:azureProvision');
 
@@ -459,6 +467,6 @@ export const getLuisAuthoringRegions = (): string[] => {
   return LuisAuthoringSupportLocation;
 };
 
-export const getLuisPredictionRegions = ():{ [key:string]: string[]} => {
+export const getLuisPredictionRegions = (): { [key: string]: string[] } => {
   return LuisPublishSupportLocation;
-}
+};

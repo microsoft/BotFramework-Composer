@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { useCallback, useEffect, useMemo, useState, FC } from 'react';
 import * as React from 'react';
 import { getAccessToken, fetch, usePublishApi } from '@bfc/extension-client';
@@ -17,8 +20,7 @@ import formatMessage from 'format-message';
 
 import { buttonBar as buttonBarStyles, root } from './styles';
 import { Bot, BotEnvironment } from './types';
-
-const PVABotIcon = require('./media/pva-bot-icon.svg');
+import PVABotIcon from './media/pva-bot-icon.svg';
 
 const API_VERSION = 'v1';
 const BASE_URL = `https://powerva.microsoft.com/api/botmanagement/${API_VERSION}`; // prod / sdf
@@ -89,7 +91,7 @@ export const PVADialog: FC = () => {
         const envs = await res.json();
         setFetchingEnvironments(false);
         setEnvs(envs);
-        if (envs && envs.length) {
+        if (envs?.length) {
           setEnv(envs[0].id);
         }
       };
@@ -124,7 +126,7 @@ export const PVADialog: FC = () => {
         const bots = await res.json();
         setFetchingBots(false);
         setBots(bots);
-        if (bots && bots.length) {
+        if (bots?.length) {
           setBot(bots[0]);
         } else {
           setBot(undefined);
@@ -161,12 +163,12 @@ export const PVADialog: FC = () => {
           return (
             <>
               <Dropdown
-                label={formatMessage('Environment')}
-                onChange={onSelectEnv}
-                placeholder={formatMessage('Select an environment')}
-                options={envOptions}
-                responsiveMode={ResponsiveMode.large}
                 defaultSelectedKey={envOptions[0].key}
+                label={formatMessage('Environment')}
+                options={envOptions}
+                placeholder={formatMessage('Select an environment')}
+                responsiveMode={ResponsiveMode.large}
+                onChange={onSelectEnv}
               />
             </>
           );
@@ -176,9 +178,9 @@ export const PVADialog: FC = () => {
       } else {
         return (
           <Spinner
-            size={SpinnerSize.medium}
-            labelPosition={'right'}
             label={formatMessage('Fetching environments...')}
+            labelPosition={'right'}
+            size={SpinnerSize.medium}
             style={{ marginTop: 16, marginRight: 'auto' }}
           />
         );
@@ -196,12 +198,12 @@ export const PVADialog: FC = () => {
           return (
             <>
               <Dropdown
-                label={formatMessage('Bot')}
-                onChange={onSelectBot}
-                placeholder={formatMessage('Select a bot')}
-                options={botOptions}
-                responsiveMode={ResponsiveMode.large}
                 defaultSelectedKey={botOptions[0].key}
+                label={formatMessage('Bot')}
+                options={botOptions}
+                placeholder={formatMessage('Select a bot')}
+                responsiveMode={ResponsiveMode.large}
+                onChange={onSelectBot}
               />
             </>
           );
@@ -211,9 +213,9 @@ export const PVADialog: FC = () => {
       } else {
         return (
           <Spinner
-            size={SpinnerSize.medium}
-            labelPosition={'right'}
             label={formatMessage('Fetching bots...')}
+            labelPosition={'right'}
+            size={SpinnerSize.medium}
             style={{ marginTop: 16, marginRight: 'auto' }}
           />
         );
@@ -225,22 +227,22 @@ export const PVADialog: FC = () => {
     if (!loggedIn) {
       const loginButton = loggingIn ? (
         <Spinner
-          size={SpinnerSize.medium}
-          labelPosition={'right'}
           label={formatMessage('Logging in...')}
+          labelPosition={'right'}
+          size={SpinnerSize.medium}
           style={{ marginTop: 16 }}
         />
       ) : (
         <PrimaryButton
-          onClick={login}
           styles={{
             root: { backgroundColor: pvaBranding, marginTop: 20, border: 0, maxWidth: 200 },
             rootHovered: { backgroundColor: pvaBrandingHover, border: 0 },
             rootPressed: { backgroundColor: pvaBrandingClick, border: 0 },
           }}
+          onClick={login}
         >
           {formatMessage('Login to proceed')}{' '}
-          <Icon iconName={'ChevronRight'} color={'#FFF'} styles={{ root: { fontSize: '11px', marginLeft: 10 } }} />
+          <Icon color={'#FFF'} iconName={'ChevronRight'} styles={{ root: { fontSize: '11px', marginLeft: 10 } }} />
         </PrimaryButton>
       );
       return (
@@ -268,7 +270,7 @@ export const PVADialog: FC = () => {
               left: 0,
               width: 30,
               height: 30,
-              backgroundImage: `url("${PVABotIcon.default}")`,
+              backgroundImage: `url("${PVABotIcon}")`,
             }}
           ></i>
           <Stack horizontalAlign={'start'}>
@@ -286,19 +288,19 @@ export const PVADialog: FC = () => {
       return (
         <div style={buttonBarStyles}>
           <DefaultButton
-            text="Back"
-            onClick={onBack}
             styles={{
               root: { marginLeft: 'auto' },
             }}
+            text="Back"
+            onClick={onBack}
           />
           <PrimaryButton
-            text="Save"
-            onClick={onSave}
             disabled={!configIsValid}
             styles={{
               root: { marginLeft: 8 },
             }}
+            text="Save"
+            onClick={onSave}
           />
         </div>
       );

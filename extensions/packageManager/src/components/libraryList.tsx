@@ -155,9 +155,9 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
             )}
             {!props.isInstalled(item) && (
               <DefaultButton
+                disabled={disabled || !item.isCompatible}
                 text={formatMessage('Install')}
                 onClick={props.install}
-                disabled={disabled || !item.isCompatible}
               />
             )}
           </Fragment>
