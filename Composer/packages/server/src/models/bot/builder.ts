@@ -166,29 +166,29 @@ export class Builder {
 
     const nlrList = await this.runOrchestratorNlrList();
 
-    let orchestratorSettings = {
+    const orchestratorSettings = {
       orchestrator: {
         models: {},
         snapshots: {},
       },
     };
 
-    let modelDatas = [
+    const modelDatas = [
       { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
       { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
     ];
 
-    for (let modelData of modelDatas) {
+    for (const modelData of modelDatas) {
       if (modelData.luFiles) {
         if (!modelData.model) {
           throw new Error('Model not set');
         }
         const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
         await this.runOrchestratorNlrGet(modelPath, modelData.model);
-        let snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
+        const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
         orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
-        for (var snap in snapshotData) {
+        for (const snap in snapshotData) {
           orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
         }
       }
