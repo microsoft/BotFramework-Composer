@@ -13,13 +13,12 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { JSONSchema7 } from '@botframework-composer/types';
 
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
-import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
-import { title, subtitle, sectionHeader, tableRow, tableRowItem, tableColumnHeader } from '../styles';
-import { JSONSchema7 } from '../../../../../types';
+import { subtitle, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 
-import AdapterModal, { AdapterRecord } from './AdapterModal';
+import AdapterModal, { AdapterRecord } from './ExternalAdapterModal';
 
 //////////
 
@@ -50,27 +49,10 @@ const AdapterSettings = (props: Props) => {
 
   if (schemaDefinitions == null) return null;
 
-  const header = () => <div css={subtitle}>{formatMessage('Connect your bot to other messaging services.')}</div>;
-
-  const renderSectionHeader = (name: string, tooltip?: string) => (
-    <div css={sectionHeader}>
-      {name}
-      {tooltip != null && (
-        <TooltipHost content={tooltip} styles={{ root: { paddingLeft: '4px' } }}>
-          <Icon iconName="Unknown" />
-        </TooltipHost>
-      )}
-    </div>
-  );
-
-  const azureServices = () =>
-    renderSectionHeader(formatMessage('Azure Bot Service adapters'), '(description of internal channels)');
-
   const columnWidths = ['300px', '150px', '150px'];
 
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
-      {renderSectionHeader(formatMessage('External service adapters'), '(description of external adapters)')}
       <div css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
           a: ({ children }) => <Link href="plugin/package-manager/package-manager">{children}</Link>,
@@ -158,13 +140,7 @@ const AdapterSettings = (props: Props) => {
 
   return (
     <Fragment>
-      <div data-testid="adapterSettings">
-        <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
-          {header()}
-          {azureServices()}
-          {externalServices(adapterSchemas)}
-        </CollapsableWrapper>
-      </div>
+      <div data-testid="adapterSettings">{externalServices(adapterSchemas)}</div>
       {currentKey != null && schemaDefinitions[currentKey] != null && (
         <AdapterModal
           isOpen

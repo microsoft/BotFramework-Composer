@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const title = css`
@@ -22,7 +22,7 @@ export const subtitle = css`
 
 export const sectionHeader = css`
   font-weight: ${FontWeights.semibold};
-  font-size: ${FontSizes.small};
+  font-size: ${FontSizes.medium};
   padding: 6px 0;
 `;
 
@@ -35,7 +35,7 @@ export const tableRow = css`
 `;
 
 export const tableRowItem = (width?: string) => css`
-  font-size: ${FontSizes.small};
+  font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
   padding-top: 10px;
   padding-left: 10px;
@@ -46,7 +46,7 @@ export const tableRowItem = (width?: string) => css`
 `;
 
 export const tableColumnHeader = (width?: string) => css`
-  font-size: ${FontSizes.small};
+  font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.bold};
   padding-top: 10px;
   padding-left: 10px;
@@ -55,3 +55,53 @@ export const tableColumnHeader = (width?: string) => css`
   white-space: nowrap;
   ${width != null ? `width: ${width};` : ''}
 `;
+
+export const labelContainer = css`
+  display: flex;
+  flex-direction: row;
+  width: 200px;
+`;
+
+export const customerLabel = css`
+  font-size: ${FontSizes.medium};
+  margin-right: 5px;
+`;
+
+export const errorContainer = css`
+  display: flex;
+  width: 100%;
+  line-height: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: #fed9cc;
+  color: ${NeutralColors.black};
+`;
+
+export const errorTextStyle = css`
+  margin-bottom: 5px;
+  font-size: ${FontSizes.small};
+`;
+
+export const errorIcon = {
+  root: {
+    color: '#A80000',
+    marginRight: 8,
+    paddingLeft: 12,
+    fontSize: FontSizes.medium,
+  },
+};
+
+export const unknownIconStyle = (required: boolean) => {
+  return {
+    root: {
+      selectors: {
+        '&::before': {
+          content: required ? " '*'" : '',
+          color: SharedColors.red10,
+          paddingRight: 10,
+        },
+      },
+      fontSize: FontSizes.medium,
+    },
+  };
+};
