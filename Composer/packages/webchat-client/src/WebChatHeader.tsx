@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { HighContrastSelector } from 'office-ui-fabric-react/lib';
-import { IconButton, DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
@@ -14,7 +14,7 @@ const customButtonStyles: IButtonStyles = {
   },
   label: {
     fontWeight: '400',
-    color: '#323130',
+    color: `${NeutralColors.black}`,
   },
   icon: {
     color: `${CommunicationColors.primary}`,
@@ -43,16 +43,16 @@ enum RestartOption {
 
 export interface WebChatHeaderProps {
   conversationId: string;
-  onRestartConversation: (conversationId: string) => Promise<any>;
-  onStartNewConversation: (conversationId: string) => Promise<any>;
+  onRestartConversation: (conversationId: string, requireNewUserId: boolean) => Promise<any>;
   onSaveTranscript: (conversationId: string) => Promise<any>;
+  openBotInEmulator: () => void;
 }
 
 export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   conversationId,
   onRestartConversation,
   onSaveTranscript,
-  onStartNewConversation,
+  openBotInEmulator,
 }) => {
   const [lastSelectedRestartOption, setOption] = useState<RestartOption>(RestartOption.SameUserID);
   const menuProps: IContextualMenuProps = {
@@ -63,7 +63,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         iconProps: { iconName: 'Refresh' },
         onClick: () => {
           setOption(RestartOption.SameUserID);
-          onRestartConversation(conversationId);
+          onRestartConversation(conversationId, false);
         },
       },
       {
@@ -72,45 +72,49 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         iconProps: { iconName: 'Refresh' },
         onClick: () => {
           setOption(RestartOption.NewUserID);
-          onStartNewConversation(conversationId);
+          onRestartConversation(conversationId, true);
         },
       },
     ],
   };
 
-  const webChatHeader = useMemo(() => {
-    return (
-      <div data-testid="Webchat-Header" style={{ height: 36 }}>
-        <DefaultButton
-          split
-          aria-roledescription="split button"
-          ariaLabel="restart-conversation"
-          iconProps={{ iconName: 'Refresh' }}
-          menuProps={menuProps}
-          splitButtonAriaLabel="See 2 other restart conversation options"
-          styles={customButtonStyles}
-          text={
-            lastSelectedRestartOption === RestartOption.SameUserID
-              ? formatMessage('Restart Conversation - same user ID')
-              : formatMessage('Restart Conversation - new user ID')
+  return (
+    <div data-testid="Webchat-Header" style={{ height: 36, borderBottom: `1px solid ${NeutralColors.gray60}` }}>
+      <DefaultButton
+        split
+        aria-roledescription="split button"
+        ariaLabel="restart-conversation"
+        iconProps={{ iconName: 'Refresh' }}
+        menuProps={menuProps}
+        splitButtonAriaLabel="See 2 other restart conversation options"
+        styles={customButtonStyles}
+        text={
+          lastSelectedRestartOption === RestartOption.SameUserID
+            ? formatMessage('Restart Conversation - same user ID')
+            : formatMessage('Restart Conversation - new user ID')
+        }
+        title="restart-conversation"
+        onClick={() => {
+          if (lastSelectedRestartOption === RestartOption.SameUserID) {
+            onRestartConversation(conversationId, true);
+          } else {
+            onRestartConversation(conversationId, false);
           }
-          title="restart-conversation"
-          onClick={() => {
-            if (lastSelectedRestartOption === RestartOption.SameUserID) {
-              onRestartConversation(conversationId);
-            } else {
-              onStartNewConversation(conversationId);
-            }
-          }}
-        />
-        <IconButton
-          ariaLabel="save-transcripts"
-          iconProps={{ iconName: 'Save' }}
-          title="Save chat transcripts"
-          onClick={() => onSaveTranscript(conversationId)}
-        />
-      </div>
-    );
-  }, [lastSelectedRestartOption]);
-  return webChatHeader;
+        }}
+      />
+      <ActionButton
+        ariaLabel="save-transcripts"
+        iconProps={{ iconName: 'Save' }}
+        title="Save chat transcripts"
+        onClick={() => onSaveTranscript(conversationId)}
+      />
+      <ActionButton
+        iconProps={{
+          iconName: 'OpenInNewTab',
+        }}
+        styles={{ root: { height: '20px' } }}
+        onClick={openBotInEmulator}
+      ></ActionButton>
+    </div>
+  );
 };

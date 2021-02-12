@@ -5,9 +5,10 @@ import React, { useMemo, useEffect, useState, useRef } from 'react';
 import ReactWebChat, { createStyleSet } from 'botframework-webchat';
 import formatMessage from 'format-message';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
+import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
 import webChatStyleOptions from './utils/webChatTheme';
-import { ChatData, ConversationService, BotSecrets } from './utils/ConversationService';
+import { ChatData, ConversationService, BotSecrets, ActivityTypes } from './utils/ConversationService';
 import { WebChatHeader } from './WebChatHeader';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
@@ -19,7 +20,9 @@ export interface WebChatPanelProps {
   directlineHostUrl?: string;
   botName: string;
   projectId: string;
-  isPanelActive: boolean;
+  isPanelHidden: boolean;
+  activeLocale: string;
+  openBotInEmulator: (projectId: string) => void;
 }
 
 export const WebChatPanel: React.FC<WebChatPanelProps> = ({
@@ -28,7 +31,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   secrets,
   directlineHostUrl = BASEPATH,
   botName,
-  isPanelActive,
+  isPanelHidden,
+  openBotInEmulator,
+  activeLocale,
 }) => {
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
@@ -46,9 +51,14 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }, [botUrl]);
 
   useEffect(() => {
-    if (isConversationStartQueued) {
+    if (!isPanelHidden && isConversationStartQueued) {
       const startConversation = async () => {
-        const chatData: ChatData = await conversationService.startNewConversation(botUrl, secrets, projectId);
+        const chatData: ChatData = await conversationService.startNewConversation(
+          botUrl,
+          secrets,
+          projectId,
+          activeLocale
+        );
         setCurrentConversation(chatData.conversationId);
         // Currently maintaining one conversation. In future we would have mulitple chats at the same time active.
         setChatData({
@@ -58,7 +68,65 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       startConversation();
       queueConversationStart(false);
     }
-  }, [isPanelActive]);
+  }, [isPanelHidden]);
+
+  const cardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
+    const { type, value } = cardAction;
+
+    switch (type) {
+      case 'signin': {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        const popup = window.open();
+        const url = await getSignInUrl();
+        if (popup) {
+          popup.location.href = url;
+        }
+        break;
+      }
+
+      case 'downloadFile':
+      //Fall through
+
+      case 'playAudio':
+      //Fall through
+
+      case 'playVideo':
+      //Fall through
+
+      case 'showImage':
+      //Fall through
+
+      case 'openUrl':
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        window.open(value, '_blank');
+        break;
+
+      default:
+        return next({ cardAction, getSignInUrl });
+    }
+  };
+
+  const createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...renderArgs) => {
+    const card = setupArgs[0];
+
+    switch (card.activity.type) {
+      case ActivityTypes.Trace:
+        return false;
+
+      case ActivityTypes.EndOfConversation:
+        return false;
+
+      default:
+        if (typeof next === 'function') {
+          const middlewareResult = next(...setupArgs);
+          if (middlewareResult) {
+            return middlewareResult(...renderArgs);
+          }
+          return false;
+        }
+        return false;
+    }
+  };
 
   const webchatContent = useMemo(() => {
     if (currentConversation) {
@@ -67,6 +135,22 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
       const webchatStore = createWebChatStore({});
       const styleSet = createStyleSet({ ...webChatStyleOptions });
+      styleSet.fileContent = {
+        ...styleSet.fileContent,
+        background: `${NeutralColors.white}`,
+        '& .webchat__fileContent__fileName': {
+          color: `${CommunicationColors.primary}`,
+        },
+        '& .webchat__fileContent__size': {
+          color: `${NeutralColors.white}`,
+        },
+        '& .webchat__fileContent__downloadIcon': {
+          fill: `${NeutralColors.white}`,
+        },
+        '& .webchat__fileContent__badge': {
+          padding: '4px',
+        },
+      };
 
       return (
         <ReactWebChat
@@ -76,6 +160,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           store={webchatStore}
           styleSet={styleSet}
           userID={chatData.user.id}
+          activityMiddleware={createActivityMiddleware}
+          cardActionMiddleware={cardActionMiddleware}
+          locale={activeLocale}
         />
       );
     }
@@ -83,7 +170,11 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }, [chats]);
 
   const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
-    const chatData = await conversationService.restartConversation(chats[oldConversationId], requireNewUserId);
+    const chatData = await conversationService.restartConversation(
+      chats[oldConversationId],
+      requireNewUserId,
+      activeLocale
+    );
     setCurrentConversation(chatData.conversationId);
     setChatData({
       [chatData.conversationId]: chatData,
@@ -116,9 +207,11 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     <>
       <WebChatHeader
         conversationId={currentConversation}
-        onRestartConversation={() => onRestartConversationClick(currentConversation, false)}
+        onRestartConversation={onRestartConversationClick}
         onSaveTranscript={onSaveTranscriptClick}
-        onStartNewConversation={() => onRestartConversationClick(currentConversation, true)}
+        openBotInEmulator={() => {
+          openBotInEmulator(projectId);
+        }}
       />
       <div data-testid="WebChat-Content" style={{ height: 'calc(100% - 36px)' }}>
         {webchatContent}

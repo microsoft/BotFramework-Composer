@@ -207,7 +207,8 @@ describe('updateConversation handler', () => {
         name: 'user-old',
         id: 'user-old',
       },
-      'livechat'
+      'livechat',
+      'en-us'
     );
 
     const state: any = {

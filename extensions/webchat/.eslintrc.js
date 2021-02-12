@@ -8,6 +8,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier/@typescript-eslint',
+    'plugin:react/recommended',
   ],
   plugins: ['import', 'notice', 'security', 'lodash'],
   env: {

@@ -33,8 +33,15 @@ export class Conversation {
   public user: User;
   public nextWatermark = 0;
   public codeVerifier: string | undefined;
+  public locale: string;
 
-  constructor(botEndpoint: BotEndpoint, conversationId: string, user: User, webChatMode: WebChatMode) {
+  constructor(
+    botEndpoint: BotEndpoint,
+    conversationId: string,
+    user: User,
+    webChatMode: WebChatMode,
+    activeLocale = 'en-us'
+  ) {
     this.botEndpoint = botEndpoint;
     this.conversationId = conversationId;
     this.members.push({
@@ -44,6 +51,7 @@ export class Conversation {
     this.user = user;
     this.members.push({ id: user.id, name: user.name });
     this.chatMode = webChatMode;
+    this.locale = activeLocale;
   }
 
   private postage(recipientId: string, activity: Partial<Activity>, isHistoric = false): Activity {
@@ -75,8 +83,7 @@ export class Conversation {
     activity = this.postage(this.botEndpoint.botId, activity);
     activity.from = activity.from || this.user;
 
-    // TODO: Pass locale from the bot #5564
-    activity.locale = 'en-us';
+    activity.locale = this.locale;
 
     if (!activity.recipient.name) {
       activity.recipient.name = 'Bot';
@@ -108,7 +115,7 @@ export class Conversation {
     }
 
     if (!activity.locale) {
-      activity.locale = 'en-us';
+      activity.locale = this.locale;
     }
 
     if (!activity.recipient.role) {

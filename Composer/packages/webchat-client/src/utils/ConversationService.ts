@@ -25,14 +25,35 @@ type ConversationMember = {
   role?: string;
 };
 
-interface StartConversationPayload {
+type StartConversationPayload = {
   bot?: ConversationMember;
   botUrl: string;
   channelServiceType: ChannelService;
   members: ConversationMember[];
   mode: WebChatMode;
+  locale: string;
   msaAppId?: string;
   msaPassword?: string;
+};
+
+// All activity types. Just parsing for Trace currently.
+export enum ActivityTypes {
+  Message = 'message',
+  ContactRelationUpdate = 'contactRelationUpdate',
+  ConversationUpdate = 'conversationUpdate',
+  Typing = 'typing',
+  EndOfConversation = 'endOfConversation',
+  Event = 'event',
+  Invoke = 'invoke',
+  InvokeResponse = 'invokeResponse',
+  DeleteUserData = 'deleteUserData',
+  MessageUpdate = 'messageUpdate',
+  MessageDelete = 'messageDelete',
+  InstallationUpdate = 'installationUpdate',
+  MessageReaction = 'messageReaction',
+  Suggestion = 'suggestion',
+  Trace = 'trace',
+  Handoff = 'handoff',
 }
 
 export type ChatData = {
@@ -55,7 +76,12 @@ export class ConversationService {
     });
   }
 
-  startNewConversation = async (botUrl: string, secrets: BotSecrets, projectId: string): Promise<ChatData> => {
+  startNewConversation = async (
+    botUrl: string,
+    secrets: BotSecrets,
+    projectId: string,
+    activeLocale: string
+  ): Promise<ChatData> => {
     const chatMode = 'livechat';
     const user = this.getUser();
 
@@ -66,6 +92,7 @@ export class ConversationService {
       mode: chatMode,
       msaAppId: secrets.msAppId,
       msaPassword: secrets.msPassword,
+      locale: activeLocale,
     });
 
     const conversationId: string = resp.data?.conversationId;
@@ -89,7 +116,7 @@ export class ConversationService {
     throw new Error('An error occured starting a new conversation');
   };
 
-  restartConversation = async (oldChatData: ChatData, requireNewUserID: boolean) => {
+  restartConversation = async (oldChatData: ChatData, requireNewUserID: boolean, activeLocale: string) => {
     oldChatData.directline.end();
     let conversationId = oldChatData.conversationId;
     if (requireNewUserID) {
@@ -101,7 +128,7 @@ export class ConversationService {
       user = this.getUser();
     }
 
-    const resp = await this.conversationUpdate(oldChatData.conversationId, conversationId, user.id);
+    const resp = await this.conversationUpdate(oldChatData.conversationId, conversationId, user.id, activeLocale);
     const { endpointId } = resp.data;
     const directline = await this.fetchDirectLineObject(conversationId, {
       mode: oldChatData.chatMode,
@@ -176,13 +203,14 @@ export class ConversationService {
     };
   };
 
-  conversationUpdate = (oldConversationId, newConversationId, userId) => {
+  conversationUpdate = (oldConversationId: string, newConversationId: string, userId: string, activeLocale: string) => {
     const url = `${this.directlineHostUrl}/conversations/${oldConversationId}/updateConversation`;
     return axios.put(
       url,
       {
         conversationId: newConversationId,
         userId,
+        locale: activeLocale,
       },
       {
         headers: {
