@@ -144,6 +144,7 @@ namespace Microsoft.BotFramework.Composer.Functions
                 ConfigureTranscriptLoggerMiddleware(adapter, settings);
                 ConfigureInspectionMiddleWare(adapter, settings, s);
                 ConfigureShowTypingMiddleWare(adapter, settings);
+                ConfigureSetSpeakMiddleWare(adapter, settings);
 
                 adapter.OnTurnError = async (turnContext, exception) =>
                 {
@@ -194,6 +195,14 @@ namespace Microsoft.BotFramework.Composer.Functions
             if (settings?.Feature?.UseInspectionMiddleware == true)
             {
                 adapter.Use(s.GetService<TelemetryInitializerMiddleware>());
+            }
+        }
+
+        public void ConfigureSetSpeakMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings?.Feature?.UseSetSpeakMiddleware == true && settings.Speech != null)
+            {
+                adapter.Use(new SetSpeakMiddleware(settings.Speech.VoiceFontName, settings.Speech.FallbackToTextForSpeechIfEmpty));
             }
         }
 
