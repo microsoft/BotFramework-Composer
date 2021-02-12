@@ -456,7 +456,7 @@ export class BotProjectService {
       // The outcome of our creation might be > 1 bot! We need to determine how many bots we find in this folder.
       // is this a single bot?
       if (await StorageService.checkIsBotFolder(newProjRef.storageId, newProjRef.path, user)) {
-        botsToProcess.push({ ...newProjRef, name: name });
+        botsToProcess.push({ ...newProjRef, name });
       } else {
         // or multiple bots?
         const files = await StorageService.getBlob(newProjRef.storageId, newProjRef.path, user);
