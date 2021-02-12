@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-context('Creating a new bot', () => {
+context.skip('Creating a new bot', () => {
   beforeEach(() => {
     cy.visit('/home');
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();

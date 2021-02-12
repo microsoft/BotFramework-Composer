@@ -311,8 +311,8 @@
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
     "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
-  "azure_bot_service_adapters_ea8540d2": {
-    "message": "Azure Bot Service adapters"
+  "azure_bot_service_channels_5b358c1c": {
+    "message": "Azure Bot Service channels"
   },
   "back_2900f52a": {
     "message": "Back"
@@ -499,6 +499,12 @@
   },
   "choose_one_2c4277df": {
     "message": "Choose One"
+  },
+  "choose_publishing_profile_ee7ecc78": {
+    "message": "Choose publishing profile"
+  },
+  "choose_subscription_3d78d10d": {
+    "message": "Choose subscription"
   },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
@@ -973,6 +979,9 @@
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "Do you wish to continue?"
+  },
+  "documentation_d82f6eec": {
+    "message": "Documentation"
   },
   "does_not_exist_3a34b418": {
     "message": "Does Not Exist"
@@ -1487,6 +1496,9 @@
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
+  "install_more_adapters_in_a_package_settings_a_e8b0df7a": {
+    "message": "Install more adapters in <a>Package Settings</a>."
+  },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
   },
@@ -1676,6 +1688,9 @@
   "local_skill_6ce0d311": {
     "message": "Local Skill."
   },
+  "locale_locale_is_not_supported_by_luis_a3a72047": {
+    "message": "locale \"{ locale }\" is not supported by LUIS"
+  },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Locate the bot file and repair the link"
   },
@@ -1741,6 +1756,9 @@
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
+  },
+  "luis_build_warning_320e4ee2": {
+    "message": "Luis build warning"
   },
   "luis_endpoint_key_c685e219": {
     "message": "LUIS endpoint key"
@@ -1882,6 +1900,9 @@
   },
   "move_up_b1c4d3a5": {
     "message": "Move Up"
+  },
+  "ms_teams_15993b97": {
+    "message": "MS Teams"
   },
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
@@ -2299,6 +2320,9 @@
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
+  },
+  "publish_profile_to_configure_ca758e68": {
+    "message": "Publish profile to configure:"
   },
   "publish_profiles_36fb522d": {
     "message": "Publish profiles"
@@ -2732,6 +2756,9 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "Specify a name, description, and location for your new bot project."
   },
+  "speech_16063aed": {
+    "message": "Speech"
+  },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Start and stop local bot runtimes individually."
   },
@@ -2788,6 +2815,9 @@
   },
   "submit_a3cc6859": {
     "message": "Submit"
+  },
+  "subscription_id_250f5e1f": {
+    "message": "Subscription Id:"
   },
   "switch_to_code_editor_3dcbe16f": {
     "message": "switch to code editor"
@@ -3205,6 +3235,9 @@
   },
   "weather_bot_c38920cd": {
     "message": "Weather Bot"
+  },
+  "webchat_a134b64b": {
+    "message": "Webchat"
   },
   "welcome_73d18b4d": {
     "message": "Welcome!"
