@@ -61,7 +61,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.put('/conversations/:conversationId/cleanup', cleanupConversation());
 
-  router.put('/conversations/cleanupAll', fetchConversation, cleanupAll());
+  router.put('/conversations/cleanupAll', cleanupAll());
 
   return router;
 };

@@ -250,19 +250,11 @@ export class ConversationService {
   };
 
   cleanupConversation = async (conversationId: string) => {
-    try {
-      await this.composerApiClient.put(`/conversations/${conversationId}/cleanup`);
-    } catch (ex) {
-      console.log(ex);
-    }
+    await this.composerApiClient.put(`/conversations/${conversationId}/cleanup`);
   };
 
   cleanupAll = async () => {
-    try {
-      await this.composerApiClient.put(`/conversations/cleanupAll`);
-    } catch (ex) {
-      console.log(ex);
-    }
+    await this.composerApiClient.put(`/conversations/cleanupAll`);
   };
 
   createCardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
