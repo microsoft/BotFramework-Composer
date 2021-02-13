@@ -8,6 +8,7 @@ import { Request, Response, NextFunction } from 'express';
 import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import DLServerContext from './directline/store/dlServerState';
+import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 
 const addCORSHeaders = (req: Request, res: Response, next?: NextFunction) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -25,12 +26,14 @@ const initialize = (registration: IExtensionRegistration) => {
 
   const conversationRouter = mountConversationsRoutes(DLServerState);
   const directlineRouter = mountDirectLineRoutes(DLServerState);
+  const attachmentRouter = mountAttachmentRoutes(DLServerState);
 
   conversationRouter.use((req, res, next) => addCORSHeaders(req, res, next));
   directlineRouter.use((req, res, next) => addCORSHeaders(req, res, next));
 
   registration.addRouter('/', conversationRouter);
   registration.addRouter('/', directlineRouter);
+  registration.addRouter('/', attachmentRouter);
 };
 
 module.exports = {

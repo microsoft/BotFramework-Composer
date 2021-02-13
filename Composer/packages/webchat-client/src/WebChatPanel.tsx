@@ -8,7 +8,7 @@ import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
 import webChatStyleOptions from './utils/webChatTheme';
-import { ChatData, ConversationService, BotSecrets, ActivityTypes } from './utils/ConversationService';
+import { ChatData, ConversationService, BotSecrets } from './utils/ConversationService';
 import { WebChatHeader } from './WebChatHeader';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
@@ -20,8 +20,9 @@ export interface WebChatPanelProps {
   directlineHostUrl?: string;
   botName: string;
   projectId: string;
-  isPanelHidden: boolean;
+  isWebChatPanelVisible: boolean;
   activeLocale: string;
+  appLifecycleHandler: any;
   openBotInEmulator: (projectId: string) => void;
 }
 
@@ -31,9 +32,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   secrets,
   directlineHostUrl = BASEPATH,
   botName,
-  isPanelHidden,
+  isWebChatPanelVisible,
   openBotInEmulator,
   activeLocale,
+  appLifecycleHandler,
 }) => {
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
@@ -41,6 +43,13 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const conversationService = conversationServiceRef.current;
   const downloadLinkRef = useRef<HTMLAnchorElement>(null);
   const [isConversationStartQueued, queueConversationStart] = useState<boolean>(false);
+  const ipcRenderer = useRef<any>(appLifecycleHandler);
+
+  useEffect(() => {
+    ipcRenderer.current?.on('conversation-cleanup', () => {
+      conversationService.cleanupAll();
+    });
+  }, []);
 
   useEffect(() => {
     if (botUrl) {
@@ -51,7 +60,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }, [botUrl]);
 
   useEffect(() => {
-    if (!isPanelHidden && isConversationStartQueued) {
+    if (isWebChatPanelVisible && isConversationStartQueued) {
       const startConversation = async () => {
         const chatData: ChatData = await conversationService.startNewConversation(
           botUrl,
@@ -59,6 +68,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           projectId,
           activeLocale
         );
+
         setCurrentConversation(chatData.conversationId);
         // Currently maintaining one conversation. In future we would have mulitple chats at the same time active.
         setChatData({
@@ -68,65 +78,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       startConversation();
       queueConversationStart(false);
     }
-  }, [isPanelHidden]);
-
-  const cardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
-    const { type, value } = cardAction;
-
-    switch (type) {
-      case 'signin': {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const popup = window.open();
-        const url = await getSignInUrl();
-        if (popup) {
-          popup.location.href = url;
-        }
-        break;
-      }
-
-      case 'downloadFile':
-      //Fall through
-
-      case 'playAudio':
-      //Fall through
-
-      case 'playVideo':
-      //Fall through
-
-      case 'showImage':
-      //Fall through
-
-      case 'openUrl':
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        window.open(value, '_blank');
-        break;
-
-      default:
-        return next({ cardAction, getSignInUrl });
-    }
-  };
-
-  const createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...renderArgs) => {
-    const card = setupArgs[0];
-
-    switch (card.activity.type) {
-      case ActivityTypes.Trace:
-        return false;
-
-      case ActivityTypes.EndOfConversation:
-        return false;
-
-      default:
-        if (typeof next === 'function') {
-          const middlewareResult = next(...setupArgs);
-          if (middlewareResult) {
-            return middlewareResult(...renderArgs);
-          }
-          return false;
-        }
-        return false;
-    }
-  };
+  }, [isWebChatPanelVisible]);
 
   const webchatContent = useMemo(() => {
     if (currentConversation) {
@@ -160,8 +112,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           store={webchatStore}
           styleSet={styleSet}
           userID={chatData.user.id}
-          activityMiddleware={createActivityMiddleware}
-          cardActionMiddleware={cardActionMiddleware}
+          activityMiddleware={conversationService.createActivityMiddleware}
+          cardActionMiddleware={conversationService.createCardActionMiddleware}
           locale={activeLocale}
         />
       );
@@ -175,6 +127,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       requireNewUserId,
       activeLocale
     );
+
     setCurrentConversation(chatData.conversationId);
     setChatData({
       [chatData.conversationId]: chatData,

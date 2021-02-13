@@ -10,7 +10,7 @@ export const headers = {
 };
 
 export type User = {
-  id: string; // use custom id or generate new one
+  id: string;
   name: string;
   role: string;
 };
@@ -118,10 +118,7 @@ export class ConversationService {
 
   restartConversation = async (oldChatData: ChatData, requireNewUserID: boolean, activeLocale: string) => {
     oldChatData.directline.end();
-    let conversationId = oldChatData.conversationId;
-    if (requireNewUserID) {
-      conversationId = `${this.generateUniqueId()}|${oldChatData.chatMode}`;
-    }
+    const conversationId = `${this.generateUniqueId()}|${oldChatData.chatMode}`;
 
     let user = oldChatData.user;
     if (requireNewUserID) {
@@ -249,6 +246,79 @@ export class ConversationService {
       });
     } catch (ex) {
       // TODO: Transcript save failure
+    }
+  };
+
+  cleanupConversation = async (conversationId: string) => {
+    try {
+      await this.composerApiClient.put(`/conversations/${conversationId}/cleanup`);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  cleanupAll = async () => {
+    try {
+      await this.composerApiClient.put(`/conversations/cleanupAll`);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  createCardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
+    const { type, value } = cardAction;
+
+    switch (type) {
+      case 'signin': {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        const popup = window.open();
+        const url = await getSignInUrl();
+        if (popup) {
+          popup.location.href = url;
+        }
+        break;
+      }
+
+      case 'downloadFile':
+      //Fall through
+
+      case 'playAudio':
+      //Fall through
+
+      case 'playVideo':
+      //Fall through
+
+      case 'showImage':
+      //Fall through
+
+      case 'openUrl':
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        window.open(value, '_blank');
+        break;
+
+      default:
+        return next({ cardAction, getSignInUrl });
+    }
+  };
+
+  createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...renderArgs) => {
+    const card = setupArgs[0];
+    switch (card.activity.type) {
+      case ActivityTypes.Trace:
+        return false;
+
+      case ActivityTypes.EndOfConversation:
+        return false;
+
+      default:
+        if (typeof next === 'function') {
+          const middlewareResult = next(...setupArgs);
+          if (middlewareResult) {
+            return middlewareResult(...renderArgs);
+          }
+          return false;
+        }
+        return false;
     }
   };
 }

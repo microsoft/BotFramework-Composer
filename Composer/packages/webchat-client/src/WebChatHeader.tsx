@@ -54,7 +54,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   onSaveTranscript,
   openBotInEmulator,
 }) => {
-  const [lastSelectedRestartOption, setOption] = useState<RestartOption>(RestartOption.SameUserID);
+  const [lastSelectedRestartOption, setOption] = useState<RestartOption>(RestartOption.NewUserID);
   const menuProps: IContextualMenuProps = {
     items: [
       {
@@ -107,13 +107,16 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         iconProps={{ iconName: 'Save' }}
         title="Save chat transcripts"
         onClick={() => onSaveTranscript(conversationId)}
+        ariaDescription="Save conversation as transcript"
       />
       <ActionButton
         iconProps={{
           iconName: 'OpenInNewTab',
         }}
+        title="Open in Emulator"
         styles={{ root: { height: '20px' } }}
         onClick={openBotInEmulator}
+        ariaDescription="Open the bot in Emulator"
       ></ActionButton>
     </div>
   );

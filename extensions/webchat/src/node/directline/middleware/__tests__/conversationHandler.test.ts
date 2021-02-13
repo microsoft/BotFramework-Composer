@@ -246,6 +246,7 @@ describe('updateConversation handler', () => {
         accessToken: undefined,
         accessTokenExpires: undefined,
       },
+      locale: 'en-us',
       conversationId: 'conversation-new',
       members: [
         { id: 'bot-1', name: 'Bot' },

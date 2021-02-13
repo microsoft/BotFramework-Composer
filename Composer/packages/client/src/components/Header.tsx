@@ -162,7 +162,11 @@ export const Header = () => {
 
   useEffect(() => {
     // hide it on the /home page, but make sure not to hide on /bot/stuff/home in case someone names a dialog "home"
-    setStartBotsWidgetVisible(!pathname.endsWith('/home') || pathname.includes('/bot/'));
+    const hideCondition = !pathname.endsWith('/home') || pathname.includes('/bot/');
+    setStartBotsWidgetVisible(hideCondition);
+    if (!hideCondition) {
+      toggleWebChatPanel(false);
+    }
   }, [pathname]);
 
   const onUpdateAvailableClick = useCallback(() => {
@@ -344,10 +348,11 @@ export const Header = () => {
         {webchatEssentials ? (
           <WebChatPanel
             activeLocale={webchatEssentials.activeLocale}
+            appLifecycleHandler={window.ipcRenderer}
             botName={webchatEssentials.displayName}
             botUrl={webchatEssentials.botUrl}
             directlineHostUrl={BASEPATH}
-            isPanelHidden={isWebChatPanelVisible}
+            isWebChatPanelVisible={isWebChatPanelVisible}
             openBotInEmulator={openBotInEmulator}
             projectId={webchatEssentials.botId}
             secrets={webchatEssentials.secrets}
