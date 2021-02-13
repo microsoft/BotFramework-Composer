@@ -52,6 +52,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.19",
+    "monaco-editor": "^0.22.3",
     "office-ui-fabric-react": "^7.121.11",
     "prop-types": "^15.7.2",
     "query-string": "^6.8.2",
