@@ -143,7 +143,7 @@ export const createKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getLoadable(localeState(projectId));
+  const locale = await snapshot.getPromise(localeState(projectId));
   const createdSourceQnAId = `${name}.source.${locale}`;
 
   if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
@@ -164,7 +164,7 @@ export const createKBFileState = async (
     updatedQnAFiles = qnaFiles
       .filter((file) => !file.id.endsWith('.source') && getBaseName(file.id) === getBaseName(updatedQnAId))
       .map((file) => {
-        return qnaUtil.addImport(file, `${createdSourceQnAId}.qna`);
+        return qnaUtil.addImport(file, `${name}.source.qna`);
       });
 
     qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
@@ -174,7 +174,7 @@ export const createKBFileState = async (
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
 
   //need to create other locale qna files
-  await createQnAFileState(callbackHelpers, { id: name, content, projectId });
+  await createQnAFileState(callbackHelpers, { id: `${name}.source`, content, projectId });
 };
 
 export const removeKBFileState = async (
