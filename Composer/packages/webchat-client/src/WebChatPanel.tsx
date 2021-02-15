@@ -8,7 +8,7 @@ import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
 import webChatStyleOptions from './utils/webChatTheme';
-import { ChatData, ConversationService, BotSecrets } from './utils/ConversationService';
+import ConversationService, { ChatData, BotSecrets } from './utils/ConversationService';
 import { WebChatHeader } from './WebChatHeader';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
@@ -70,7 +70,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         );
 
         setCurrentConversation(chatData.conversationId);
-        // Currently maintaining one conversation. In future we would have mulitple chats at the same time active.
         setChatData({
           [chatData.conversationId]: chatData,
         });
@@ -129,6 +128,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     );
 
     setCurrentConversation(chatData.conversationId);
+
     setChatData({
       [chatData.conversationId]: chatData,
     });

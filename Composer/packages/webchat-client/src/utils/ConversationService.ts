@@ -64,7 +64,7 @@ export type ChatData = {
   conversationId: string;
 };
 
-export class ConversationService {
+export default class ConversationService {
   private directlineHostUrl: string;
   private composerApiClient: AxiosInstance;
   private restServerForWSPort = -1;

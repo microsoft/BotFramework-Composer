@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React, { useState } from 'react';
-import { HighContrastSelector } from 'office-ui-fabric-react/lib';
 import { ActionButton, DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import formatMessage from 'format-message';
@@ -28,11 +27,6 @@ const customButtonStyles: IButtonStyles = {
     position: 'absolute',
     top: 4,
     bottom: 4,
-  },
-  splitButtonContainer: {
-    selectors: {
-      [HighContrastSelector]: { border: 'none' },
-    },
   },
 };
 
@@ -94,6 +88,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
             : formatMessage('Restart Conversation - new user ID')
         }
         title="restart-conversation"
+        data-testid="restart-conversation"
         onClick={() => {
           if (lastSelectedRestartOption === RestartOption.SameUserID) {
             onRestartConversation(conversationId, true);
