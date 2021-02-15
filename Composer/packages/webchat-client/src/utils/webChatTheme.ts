@@ -16,7 +16,7 @@ export default {
   bubbleMinHeight: 20,
 
   microphoneButtonColorOnDictate: `${SharedColors.red10}`,
-  sendBoxBackground: `${NeutralColors.gray10}`,
+  sendBoxBackground: `${NeutralColors.white}`,
   sendBoxButtonColor: `${NeutralColors.gray130}`,
   sendBoxButtonColorOnFocus: `${NeutralColors.gray140}`,
   sendBoxButtonColorOnHover: `${NeutralColors.gray150}`,
