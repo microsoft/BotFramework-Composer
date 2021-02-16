@@ -145,17 +145,23 @@ export const computeRequiredEdits = (text: string, editor: any): MonacoEdit[] | 
  * @param properties List of available properties.
  */
 export const computePropertyItemTree = (properties: readonly string[]): PropertyItem => {
+  // Generate random unique ids
+  const generateId = () => {
+    const arr = crypto.getRandomValues(new Uint32Array(1));
+    return `${arr[0]}`;
+  };
+
   const items = properties.slice().sort();
-  const dummyRoot = { id: 'root', children: [] };
+  const dummyRoot = { id: 'root', name: 'root', children: [] };
 
   const helper = (currentNode: PropertyItem, prefix: string, scopedItems: string[], level: number) => {
     const uniques = uniq(scopedItems.map((i) => i.split('.')[level])).filter(Boolean);
-    const children = uniques.map((id) => ({ id: id, children: [] }));
+    const children = uniques.map((name) => ({ id: generateId(), name, children: [] }));
     for (const n of children) {
       helper(
         n,
-        `${prefix}${prefix ? '.' : ''}${n.id}`,
-        items.filter((i) => i.startsWith(`${prefix}${prefix ? '.' : ''}${n.id}`)),
+        `${prefix}${prefix ? '.' : ''}${n.name}`,
+        items.filter((i) => i.startsWith(`${prefix}${prefix ? '.' : ''}${n.name}`)),
         level + 1
       );
     }
@@ -167,12 +173,12 @@ export const computePropertyItemTree = (properties: readonly string[]): Property
   return dummyRoot;
 };
 
-const getPath = <T extends { id: string; children?: T[] }>(item: T, parents: Record<string, T>) => {
+const getPath = <T extends { id: string; name: string; children?: T[] }>(item: T, parents: Record<string, T>) => {
   const path: string[] = [];
   let currentItem = item;
   if (currentItem) {
     while (currentItem) {
-      path.push(currentItem.id);
+      path.push(currentItem.name);
       currentItem = parents[currentItem.id];
       while (currentItem && currentItem.id.indexOf('root') !== -1) {
         currentItem = parents[currentItem.id];
@@ -182,21 +188,23 @@ const getPath = <T extends { id: string; children?: T[] }>(item: T, parents: Rec
   return path.reverse().join('.');
 };
 
-export const getAllNodes = <T extends { id: string; children?: T[] }>(
+/**
+ * Returns a flat list of nodes, their level by id, and the path from root to that node.
+ * @param root Root of the tree.
+ * @param options Options including current state of expanded nodes, and if the root should be skipped.
+ */
+export const getAllNodes = <T extends { id: string; name: string; children?: T[] }>(
   root: T,
   options?: Partial<{ expanded: Record<string, boolean>; skipRoot: boolean }>
 ): {
   nodes: T[];
   levels: Record<string, number>;
-  parents: Record<string, T>;
   paths: Record<string, string>;
-  descendantCount: Record<string, number>;
 } => {
   const nodes: T[] = [];
   const levels: Record<string, number> = {};
   const parents: Record<string, T> = {};
   const paths: Record<string, string> = {};
-  const descendantCount: Record<string, number> = {};
 
   if (options?.skipRoot && options?.expanded) {
     options.expanded[root.id] = true;
@@ -221,20 +229,9 @@ export const getAllNodes = <T extends { id: string; children?: T[] }>(
     }
   };
 
-  const countHelper = (node: T) => {
-    let sum = 0;
-    for (const n of node?.children ?? []) {
-      sum += countHelper(n);
-    }
-
-    descendantCount[node.id] = sum + (node.children?.length ?? 0);
-    return descendantCount[node.id];
-  };
-
   addNode(root, null);
-  countHelper(root);
 
-  return { nodes, levels, parents, paths, descendantCount };
+  return { nodes, levels, paths };
 };
 
 export const getUniqueTemplateName = (templateId: string, templates?: readonly LgTemplate[]): string => {

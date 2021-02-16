@@ -15,6 +15,7 @@ export type TemplateRefPayload = {
 
 export type PropertyItem = {
   id: string;
+  name: string;
   children: PropertyItem[];
 };
 
