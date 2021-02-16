@@ -56,6 +56,9 @@
   "accepted_values_b4224bcd": {
     "message": "Accepted values"
   },
+  "accepting_40ba3b70": {
+    "message": "Accepting"
+  },
   "accepts_multiple_values_73658f63": {
     "message": "Accepts multiple values"
   },
@@ -116,6 +119,9 @@
   "activity_received_2f20fa9d": {
     "message": "Activity received"
   },
+  "adaptive_card_785723e3": {
+    "message": "Adaptive card"
+  },
   "adaptive_dialog_61a05dde": {
     "message": "Adaptive dialog"
   },
@@ -152,8 +158,14 @@
   "add_an_intent_trigger_a9acc149": {
     "message": "Add an intent trigger"
   },
+  "add_custom_a376ce51": {
+    "message": "Add Custom"
+  },
   "add_custom_runtime_6b73dc44": {
     "message": "Add custom runtime"
+  },
+  "add_more_to_this_response_d45bdfda": {
+    "message": "Add more to this response"
   },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Add multiple comma-separated synonyms"
@@ -163,6 +175,9 @@
   },
   "add_new_answer_9de3808e": {
     "message": "Add new answer"
+  },
+  "add_new_attachment_546a68c": {
+    "message": "Add new attachment"
   },
   "add_new_extension_19b82b77": {
     "message": "Add new extension"
@@ -178,6 +193,9 @@
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Add new validation rule here"
+  },
+  "add_new_variation_e49425ea": {
+    "message": "Add new variation"
   },
   "add_property_d381eba3": {
     "message": "Add Property"
@@ -208,6 +226,9 @@
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
+  },
+  "animation_card_1a7d75ff": {
+    "message": "Animation card"
   },
   "answer_4620913f": {
     "message": "Answer"
@@ -289,6 +310,15 @@
   },
   "attachment_input_e0ece49c": {
     "message": "Attachment Input"
+  },
+  "attachment_layout_b42b242": {
+    "message": "Attachment layout"
+  },
+  "attachments_694cf227": {
+    "message": "Attachments"
+  },
+  "audio_card_8587cf83": {
+    "message": "Audio card"
   },
   "australiaeast_f3227a31": {
     "message": "australiaeast"
@@ -469,6 +499,9 @@
   },
   "cancel_dialog_event_cc671dee": {
     "message": "Cancel dialog event"
+  },
+  "carousal_c65edfcd": {
+    "message": "Carousal"
   },
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
@@ -710,6 +743,9 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
+  "create_from_templates_779893ae": {
+    "message": "Create from templates"
+  },
   "create_kb_e78571ba": {
     "message": "Create KB"
   },
@@ -947,6 +983,9 @@
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
   },
+  "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
+    "message": "Display text used by the channel to render visually."
+  },
   "do_you_want_to_proceed_cd35aa38": {
     "message": "Do you want to proceed?"
   },
@@ -1031,8 +1070,8 @@
   "edit_source_45af68b4": {
     "message": "Edit source"
   },
-  "edit_this_template_in_a_bot_response_view_a_53d982f6": {
-    "message": "Edit this template in <a>Bot Response view</a>"
+  "edit_this_template_in_a_bot_response_view_a_7236985f": {
+    "message": "Edit this template in<a>Bot Response view</a>"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Ejecting runtime..."
@@ -1198,6 +1237,9 @@
   },
   "expected_responses_intent_intentname_44b051c": {
     "message": "Expected responses (intent: #{ intentName })"
+  },
+  "expecting_4df12c00": {
+    "message": "Expecting"
   },
   "export_json_2e2981f5": {
     "message": "Export JSON"
@@ -1388,6 +1430,9 @@
   "here_s_what_we_know_4e9c1731": {
     "message": "Here’s what we know…"
   },
+  "hero_card_cef4cd02": {
+    "message": "Hero card"
+  },
   "hide_code_5dcffa94": {
     "message": "Hide code"
   },
@@ -1421,6 +1466,9 @@
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first."
   },
+  "ignoring_dc76ef87": {
+    "message": "Ignoring"
+  },
   "import_as_new_35630827": {
     "message": "Import as new"
   },
@@ -1435,6 +1483,9 @@
   },
   "importing_bot_content_from_targetname_6da78f15": {
     "message": "Importing bot content from { targetName }..."
+  },
+  "in_order_to_use_the_response_editor_please_fix_you_570408e8": {
+    "message": "In order to use the response editor, please fix your template errors first."
   },
   "in_production_5a70b8b4": {
     "message": "In production"
@@ -1454,6 +1505,9 @@
   "input_1d1d9b8e": {
     "message": "Input"
   },
+  "input_hint_37e0c163": {
+    "message": "Input hint: "
+  },
   "insert_a_property_reference_in_memory_95d27746": {
     "message": "Insert a property reference in memory"
   },
@@ -1468,6 +1522,9 @@
   },
   "insert_property_reference_38f0605": {
     "message": "Insert property reference"
+  },
+  "insert_ssml_tag_1fedbe80": {
+    "message": "Insert SSML tag"
   },
   "insert_template_reference_bb33720e": {
     "message": "Insert template reference"
@@ -1574,6 +1631,9 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "Last modified time is { time }"
   },
+  "layout_56d3a203": {
+    "message": "Layout: "
+  },
   "learn_more_14816ec": {
     "message": "Learn More."
   },
@@ -1637,11 +1697,20 @@
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "link to where this LUIS intent is defined"
   },
+  "list_6cc05": {
+    "message": "List"
+  },
   "list_a034633b": {
     "message": "list"
   },
   "list_count_values_33ea7088": {
     "message": "list - { count } values"
+  },
+  "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
+    "message": "List of actions rendered as suggestions to user."
+  },
+  "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
+    "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
   },
   "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
     "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language."
@@ -2003,6 +2072,9 @@
   "node_menu_e2aa8092": {
     "message": "Node menu"
   },
+  "none_3b5e34d2": {
+    "message": "None"
+  },
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
   },
@@ -2069,6 +2141,9 @@
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents Types"
   },
+  "one_of_the_variations_added_below_will_be_selected_bee3c3f1": {
+    "message": "One of the variations added below will be selected at random by the LG library."
+  },
   "open_an_existing_skill_fbd87273": {
     "message": "Open an existing skill"
   },
@@ -2098,6 +2173,9 @@
   },
   "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
     "message": "Optional. Setting a minimum value enables your bot to reject a value that is too small and re-prompt the user for a new value."
+  },
+  "options_3ab0ea65": {
+    "message": "Options"
   },
   "or_4f7d4edb": {
     "message": "Or: "
@@ -2414,6 +2492,18 @@
   "remote_skill_f9074d76": {
     "message": "Remote Skill."
   },
+  "remove_all_attachments_9fbd3821": {
+    "message": "Remove all attachments"
+  },
+  "remove_all_speech_responses_2ac35289": {
+    "message": "Remove all speech responses"
+  },
+  "remove_all_suggested_actions_7c69eca3": {
+    "message": "Remove all suggested actions"
+  },
+  "remove_all_text_responses_77592d1a": {
+    "message": "Remove all text responses"
+  },
   "remove_f47dc62a": {
     "message": "Remove"
   },
@@ -2428,6 +2518,12 @@
   },
   "remove_this_trigger_622d866d": {
     "message": "Remove this trigger"
+  },
+  "remove_variation_43b4f4d6": {
+    "message": "Remove variation"
+  },
+  "removing_a_modality_from_this_action_node_702b52be": {
+    "message": "Removing a modality from this action node"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "Repeat this dialog"
@@ -2455,6 +2551,9 @@
   },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
+  },
+  "response_variations_302594e": {
+    "message": "Response Variations"
   },
   "responses_12d6df1d": {
     "message": "Responses"
@@ -2570,6 +2669,9 @@
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Select an schema to edit or create a new one"
   },
+  "select_input_hint_267a6208": {
+    "message": "Select input hint"
+  },
   "select_language_to_delete_d1662d3d": {
     "message": "Select language to delete"
   },
@@ -2663,6 +2765,9 @@
   "show_skill_manifest_5d0abde1": {
     "message": "Show skill manifest"
   },
+  "sign_in_card_aac56fe0": {
+    "message": "Sign-in card"
+  },
   "sign_out_user_6845d640": {
     "message": "Sign out user"
   },
@@ -2726,6 +2831,18 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "Specify a name, description, and location for your new bot project."
   },
+  "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
+    "message": "Specify an attachment layout when there are more than one."
+  },
+  "speech_16063aed": {
+    "message": "Speech"
+  },
+  "spoken_text_used_by_the_channel_to_render_audibly_d07c7427": {
+    "message": "Spoken text used by the channel to render audibly."
+  },
+  "ssml_tag_981a8aac": {
+    "message": "SSML tag"
+  },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Start and stop local bot runtimes individually."
   },
@@ -2783,6 +2900,9 @@
   "submit_a3cc6859": {
     "message": "Submit"
   },
+  "suggested_actions_94d06bfa": {
+    "message": "Suggested Actions"
+  },
   "switch_to_code_editor_3dcbe16f": {
     "message": "switch to code editor"
   },
@@ -2815,6 +2935,12 @@
   },
   "text_7f4593da": {
     "message": "Text"
+  },
+  "text_if_you_proceed_to_switch_to_response_editor_y_5f975ffb": {
+    "message": "<text>If you proceed to switch to Response editor, you will lose your current template content, and start with a blank response. Do you want to continue?</text>"
+  },
+  "text_to_use_response_editor_the_lg_template_needs__7c0b3936": {
+    "message": "<text>To use Response editor, the LG template needs to be an activity response template. <a>Visit this document</a> to learn more.</text>"
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
@@ -2933,6 +3059,9 @@
   "throw_exception_9d0d1db": {
     "message": "Throw exception"
   },
+  "thumbnail_card_7ebfa436": {
+    "message": "Thumbnail card"
+  },
   "time_2b5aac58": {
     "message": "Time"
   },
@@ -2950,6 +3079,12 @@
   },
   "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
     "message": "To customize the welcome message, select the <i>Send a response</i> action in the Visual Editor. Then in the Form Editor on the right, you can edit the bot''s welcome message in the <b>Language Generation</b> field."
+  },
+  "to_learn_more_a_visit_this_document_a_ce188d8": {
+    "message": "To learn more, <a>visit this document</a>."
+  },
+  "to_learn_more_about_ssml_tags_a_visit_this_documen_533b3e8": {
+    "message": "To learn more about SSML Tags, <a>visit this document</a>."
   },
   "to_learn_more_about_the_lg_file_format_read_the_do_ef6e083d": {
     "message": "> To learn more about the LG file format, read the documentation at\n> { lgHelp }"
@@ -3161,6 +3296,9 @@
   "version_version_a051e218": {
     "message": "Version { version }"
   },
+  "video_card_cda18e03": {
+    "message": "Video card"
+  },
   "video_tutorials_79eb26ca": {
     "message": "Video tutorials:"
   },
@@ -3277,6 +3415,9 @@
   },
   "you_are_about_to_pull_project_files_from_the_selec_15786351": {
     "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+  },
+  "you_are_about_to_remove_modalitytitle_modality_fro_567167b3": {
+    "message": "You are about to remove { modalityTitle } modality from this action node. The content in the tab will be lost. Do you want to continue?"
   },
   "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
     "message": "You are about to remove the skill from this project. Removing this skill won’t delete the files."
