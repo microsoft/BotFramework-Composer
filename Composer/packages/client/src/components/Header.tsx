@@ -40,7 +40,6 @@ export const actionButton = css`
 `;
 
 // -------------------- Styles -------------------- //
-
 const headerContainer = css`
   position: relative;
   background: ${SharedColors.cyanBlue10};
@@ -329,7 +328,7 @@ export const Header = () => {
         isOpen={isWebChatPanelVisible}
         styles={{
           root: {
-            marginTop: '50px',
+            marginTop: '94px',
           },
           scrollableContent: {
             width: '100%',

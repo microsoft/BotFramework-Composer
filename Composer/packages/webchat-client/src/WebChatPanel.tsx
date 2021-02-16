@@ -18,7 +18,6 @@ export interface WebChatPanelProps {
   projectId: string;
   isWebChatPanelVisible: boolean;
   activeLocale: string;
-  appLifecycleHandler: any;
   openBotInEmulator: (projectId: string) => void;
 }
 
@@ -40,9 +39,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
   useEffect(() => {
     queueConversationStart(!!botUrl);
-  }, [botUrl]);
+  }, [botUrl, secrets]);
 
   useEffect(() => {
+    let mounted = true;
     if (isWebChatPanelVisible && isConversationStartQueued) {
       const startConversation = async () => {
         const chatData: ChatData = await conversationService.startNewConversation(
@@ -51,15 +51,20 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           projectId,
           activeLocale
         );
-
-        setCurrentConversation(chatData.conversationId);
-        setChatData({
-          [chatData.conversationId]: chatData,
-        });
+        if (mounted) {
+          setCurrentConversation(chatData.conversationId);
+          setChatData({
+            [chatData.conversationId]: chatData,
+          });
+        }
       };
       startConversation();
       queueConversationStart(false);
     }
+
+    return () => {
+      mounted = false;
+    };
   }, [isWebChatPanelVisible]);
 
   const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
@@ -101,7 +106,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }
 
   return (
-    <div ref={webChatPanelRef}>
+    <div style={{ height: 'calc(100% - 38px)' }} ref={webChatPanelRef}>
       <WebChatHeader
         conversationId={currentConversation}
         onRestartConversation={onRestartConversationClick}
@@ -110,18 +115,16 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           openBotInEmulator(projectId);
         }}
       />
-      <div data-testid="WebChat-Content" style={{ height: 'calc(100% - 36px)' }}>
-        <WebChatContainer
-          botUrl={botUrl}
-          conversationService={conversationService}
-          activeLocale={activeLocale}
-          chatData={chats[currentConversation]}
-          currentConversation={currentConversation}
-          sendInitialActivity={(conversationId: string, currentUser: User) => {
-            conversationService.sendInitialActivity(conversationId, [currentUser]);
-          }}
-        />
-      </div>
+      <WebChatContainer
+        botUrl={botUrl}
+        conversationService={conversationService}
+        activeLocale={activeLocale}
+        chatData={chats[currentConversation]}
+        currentConversation={currentConversation}
+        sendInitialActivity={(conversationId: string, currentUser: User) => {
+          conversationService.sendInitialActivity(conversationId, [currentUser]);
+        }}
+      />
     </div>
   );
 };
