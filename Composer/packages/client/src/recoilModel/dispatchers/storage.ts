@@ -4,7 +4,8 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
-import { FeatureFlagMap, FeatureFlagKey } from '@botframework-composer/types';
+import { FeatureFlagMap, FeatureFlagKey, BotTemplate } from '@botframework-composer/types';
+import { QnABotTemplateId } from '@bfc/shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import httpClient from '../../utils/httpUtil';
@@ -165,6 +166,16 @@ export const storageDispatcher = () => {
       const data = response?.data;
 
       if (data && Array.isArray(data) && data.length > 0) {
+        (data as BotTemplate[]).push({
+          id: QnABotTemplateId,
+          name: 'generator-qna-bot',
+          description: 'Empty bot template that routes to qna configuration',
+          package: {
+            packageName: 'generator-empty-bot',
+            packageSource: 'npm',
+            packageVersion: '0.0.1',
+          },
+        });
         set(templateProjectsState, data);
       }
     } catch (err) {
