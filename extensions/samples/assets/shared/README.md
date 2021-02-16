@@ -1,6 +1,6 @@
 # Manually provision and publish a bot to Azure (_Preview_)
 
-This article covers script-based instructions of how to manually provision and publish a bot built using Composer to _Azure Web App (Preview)_ and _Azure Functions (Preview)_. Please note that provisioning and publishing in Composer is still in preview.
+This article covers script-based instructions to manually provision and publish a bot built using Composer to _Azure Web App (Preview)_ and _Azure Functions (Preview)_.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ This article covers script-based instructions of how to manually provision and p
 
 This section covers steps to provision required Azure resources using JavaScript scripts. If you already have your Azure resources provisioned, skip to the [publish a bot to Azure](#publish-a-bot-to-azure) section.
 
-Follow these instructions to provision Azure resources:
+Follow these instructions to manually provision Azure resources:
 
 1. Open a new Command Prompt and navigate to the **scripts** folder of your bot's project folder. For example:
 
@@ -30,13 +30,13 @@ Follow these instructions to provision Azure resources:
 
 3. Then run the following command to provision new Azure resources.
 
-   - **For _Azure Web App (Preview)_**:
+   - **_Azure Web App (Preview)_**:
 
    ```cmd
    node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev>
    ```
 
-   - **For _Azure Functions (Preview)_**:
+   - **_Azure Functions (Preview)_**:
 
    ```cmd
    node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --customArmTemplate=DeploymentTemplates/function-template-with-preexisting-rg.json
@@ -55,13 +55,13 @@ Follow these instructions to provision Azure resources:
 
 5. If you see the error message "InsufficientQuota", add a param '--createLuisAuthoringResource false' and run the script again.
 
-    - **For _Azure Web App_**:
+    - **_Azure Web App_**:
 
     ```cmd
     node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP>--appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false
     ```
 
-    - **For _Azure Functions_**:
+    - **_Azure Functions_**:
 
     ```cmd
     node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false --customArmTemplate=DeploymentTemplates/function-template-with-preexisting-rg.json
@@ -114,6 +114,20 @@ Follow these instructions to provision Azure resources:
       }
       ```
 
+    Once completed, the provision scripts will create the following resources in Azure portal:
+
+    | Resource | Required/Optional |
+    | -------- | ----------------- |
+    | App Service plan | Required |
+    | App Service | Required |
+    | Application Registration | Required |
+    | Azure Cosmos DB | Optional |
+    | Application Insights | Optional |
+    | Azure Blob Storage | Optional |
+    | LUIS authoring resource (Cognitive Services)| Optional |
+    | LUIS prediction resource (Cognitive Services)| Optional |
+    | QnA Maker resources (Cognitive Services) | Optional |
+
 ## Publish a bot to Azure
 
 This section covers instructions to publish a bot to Azure using PowerShell scripts. Make sure you already have required Azure resources provisioned before publishing a bot, if not, follow these instructions from the [provision Azure resources](#provision-azure-resources) section.
@@ -136,7 +150,7 @@ Follow these steps to manually publish a bot to Azure:
 
 2. [Eject your C# runtime](https://aka.ms/composer-customize-action#export-runtime).
 
-3. Navigate to your runtime's azurewebapp folder, for example `C:\user\test\ToDoBot\runtime\azurewebapp` and execute the following command under `azurewebapp` folder:
+3. Navigate to your runtime's azurewebapp folder, for example `C:\user\test\ToDoBot\runtime\azurewebapp` and execute the following command under the `azurewebapp` folder:
 
     ```powershell
     .\Scripts\deploy.ps1 -name <name of resource group> -hostName <hostname of azure webapp> -luisAuthoringKey <luis authoring key> -qnaSubscriptionKey <qna subscription key> -environment <environment>
