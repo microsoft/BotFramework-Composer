@@ -161,7 +161,7 @@ export class Builder {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
     const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
-      f.name.split('.')?.[1]?.toLocaleLowerCase().startsWith('en')
+      f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
     );
 
     const nlrList = await this.runOrchestratorNlrList();
@@ -213,11 +213,7 @@ export class Builder {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
     // build snapshots from LU files
-    const returnData = await this.orchestratorBuilder(
-      //luFiles.filter((file) => file.name.split('.')?.[1] == 'en-us'),
-      luFiles,
-      modelPath
-    );
+    const returnData = await this.orchestratorBuilder(luFiles, modelPath);
 
     // write snapshot data into /generated folder
     const snapshots: { [key: string]: string } = {};
