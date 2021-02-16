@@ -6,6 +6,8 @@ labels: "Type: Enhancement, Needs-triage"
 assignees: ""
 ---
 
+<!-- Please search for your feature request before creating a new one. >
+
 ## Is your feature request related to a problem? Please describe.
 
 <!-- A clear and concise description of what the problem is. Ex. I'm always frustrated when [...] -->
