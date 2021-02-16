@@ -2,7 +2,7 @@
   "name": "bf-directline-server",
   "version": "1.0.0",
   "scripts": {
-    "build": "yarn clean && tsc",
+    "build": "yarn clean && webpack",
     "clean": "rimraf lib",
     "start:dev": "nodemon",
     "test": "jest",
