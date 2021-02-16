@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { BotTemplateV2 } from '@bfc/shared';
+import { BotTemplateV2, QnABotTemplateId } from '@bfc/shared';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
+import log from '../logger';
 
 async function getProjTemplates(req: Request, res: Response) {
   try {
@@ -53,6 +54,14 @@ export async function getTemplateReadMe(req: any, res: any) {
       res.status(400).json({
         message: 'missing module name on request',
       });
+    } else if (moduleName === QnABotTemplateId) {
+      const qnaReadMe = await AssetService.manager.getRawGithubFileContent(
+        'microsoft',
+        'botframework-components',
+        'main',
+        'docs/qnaTemplateReadMe.md'
+      );
+      res.status(200).json(qnaReadMe);
     } else {
       const moduleURL = `https://registry.npmjs.org/${moduleName}`;
       const response = await fetch(moduleURL);
@@ -60,9 +69,9 @@ export async function getTemplateReadMe(req: any, res: any) {
       res.status(200).json(data?.readme || '');
     }
   } catch (error) {
-    res.status(400).json({
-      message: error instanceof Error ? error.message : error,
-    });
+    log('Failed getting template readMe', error);
+
+    res.status(200).json('## Issue hit getting template readMe');
   }
 }
 
