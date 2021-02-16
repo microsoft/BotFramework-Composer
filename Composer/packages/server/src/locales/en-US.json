@@ -1295,6 +1295,15 @@
   "folder_foldername_already_exists_4a2260e9": {
     "message": "folder { folderName } already exists"
   },
+  "font_family_baa0c6a3": {
+    "message": "Font family"
+  },
+  "font_size_bf4db203": {
+    "message": "Font size"
+  },
+  "font_weight_188bb2b9": {
+    "message": "Font weight"
+  },
   "for_each_def04c48": {
     "message": "For Each"
   },
@@ -1676,6 +1685,9 @@
   "local_skill_6ce0d311": {
     "message": "Local Skill."
   },
+  "locale_locale_is_not_supported_by_luis_a3a72047": {
+    "message": "locale \"{ locale }\" is not supported by LUIS"
+  },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Locate the bot file and repair the link"
   },
@@ -1741,6 +1753,9 @@
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
+  },
+  "luis_build_warning_320e4ee2": {
+    "message": "Luis build warning"
   },
   "luis_endpoint_key_c685e219": {
     "message": "LUIS endpoint key"
