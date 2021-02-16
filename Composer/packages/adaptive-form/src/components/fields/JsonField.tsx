@@ -20,6 +20,7 @@ type JsonFieldProps = FieldProps;
 const JsonField: React.FC<JsonFieldProps> = (props) => {
   const { onChange, value, id, label, description, uiOptions, required, schema, onBlur, onFocus, style } = props;
   const { userSettings } = useShellApi();
+  console.log('uS:', userSettings);
 
   const height = style?.height || 200;
 

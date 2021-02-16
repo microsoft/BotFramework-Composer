@@ -117,7 +117,7 @@ const AdapterSettings = (props: Props) => {
                   ],
                 }}
                 role="cell"
-                styles={{ root: { paddingTop: '10px' } }}
+                styles={{ root: { paddingTop: '10px', paddingBottom: '10px' } }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.stopPropagation();
