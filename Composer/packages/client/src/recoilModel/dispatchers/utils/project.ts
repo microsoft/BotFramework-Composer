@@ -599,7 +599,7 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   return projectId;
 };
 
-const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
+export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
   const { set, snapshot } = callbackHelpers;
   const dispatcher = await snapshot.getPromise(dispatcherState);
