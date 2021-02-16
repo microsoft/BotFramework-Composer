@@ -32,8 +32,7 @@
     "@emotion/styled": "^10.0.27",
     "axios": "^0.21.1",
     "botframework-webchat": "^4.11.0",
-    "lodash": "^4.17.19",
-    "prop-types": "^15.7.2"
+    "lodash": "^4.17.19"
   },
   "peerDependencies": {
     "format-message": "^6.2.3",

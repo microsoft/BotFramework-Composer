@@ -348,7 +348,6 @@ export const Header = () => {
         {webchatEssentials ? (
           <WebChatPanel
             activeLocale={webchatEssentials.activeLocale}
-            appLifecycleHandler={window.ipcRenderer}
             botName={webchatEssentials.displayName}
             botUrl={webchatEssentials.botUrl}
             directlineHostUrl={BASEPATH}

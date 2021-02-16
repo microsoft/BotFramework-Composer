@@ -12,7 +12,7 @@ type AttachmentParams = {
   viewId: string;
 };
 
-export function createGetAttachmentInfoHandler(state: DLServerState) {
+export function createAttachmentInfoHandler(state: DLServerState) {
   return (req: express.Request, res: express.Response): void => {
     try {
       const parms: AttachmentParams = req.params;
