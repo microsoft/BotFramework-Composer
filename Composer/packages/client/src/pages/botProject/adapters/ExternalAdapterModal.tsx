@@ -54,8 +54,6 @@ const AdapterModal = (props: Props) => {
 
   const { required } = schema;
 
-  console.log(currentSettings);
-
   return (
     <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
       <DialogWrapper
