@@ -43,7 +43,7 @@ export const createBotFrameworkAuthenticationMiddleware = () => {
       }
 
       try {
-        (req as any).jwt = jwt.verify(token, key, {
+        (req as any).jwt = jwt.verify(token, key ?? '', {
           audience: usGovernmentAuthentication.botTokenAudience,
           clockTolerance: 300,
           issuer,
