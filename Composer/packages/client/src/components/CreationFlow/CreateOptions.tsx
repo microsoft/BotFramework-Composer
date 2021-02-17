@@ -25,13 +25,10 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { MessageBar } from 'office-ui-fabric-react/lib/components/MessageBar';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
-import { featureFlagsState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
@@ -129,7 +126,6 @@ export function CreateOptions(props: CreateOptionsProps) {
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const creationFlowType = useRecoilValue(creationFlowTypeState);
 
-  const featureFlags = useRecoilValue(featureFlagsState);
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
