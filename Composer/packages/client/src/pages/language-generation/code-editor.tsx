@@ -88,7 +88,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     setLgEditor(lgEditor);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const abortController = new AbortController();
     (async () => {
       try {

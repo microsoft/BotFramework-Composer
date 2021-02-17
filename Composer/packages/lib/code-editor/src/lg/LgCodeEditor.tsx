@@ -193,11 +193,11 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
         theme="lgtheme"
         onInit={onInit}
       />
-      {onNavigateToLgPage && (
+      {onNavigateToLgPage && lgOption && (
         <Stack horizontal verticalAlign="center">
           <Text styles={grayTextStyle}>{formatMessage('Template name: ')}</Text>
           <LgTemplateLink as="button" styles={linkStyles} onClick={navigateToLgPage}>
-            #{lgOption?.templateId}()
+            #{lgOption.templateId}()
           </LgTemplateLink>
         </Stack>
       )}

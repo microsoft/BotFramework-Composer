@@ -16,10 +16,29 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 
 import { LGOption } from '../../utils';
-import { cardTemplates, jsLgToolbarMenuClassName } from '../constants';
+import { lgCardAttachmentTemplates, LgCardTemplateType, cardTemplates, jsLgToolbarMenuClassName } from '../constants';
 import { getUniqueTemplateName } from '../../utils/lgUtils';
 
 import { StringArrayItem } from './StringArrayItem';
+
+const getLgCardTemplateDisplayName = (attachmentType: LgCardTemplateType) => {
+  switch (attachmentType) {
+    case 'hero':
+      return formatMessage('Hero card');
+    case 'thumbnail':
+      return formatMessage('Thumbnail card');
+    case 'signin':
+      return formatMessage('Sign-in card');
+    case 'animation':
+      return formatMessage('Animation card');
+    case 'video':
+      return formatMessage('Video card');
+    case 'audio':
+      return formatMessage('Audio card');
+    case 'adaptive':
+      return formatMessage('Adaptive card');
+  }
+};
 
 const styles: { button: IButtonStyles } = {
   button: {
@@ -121,71 +140,15 @@ export const AttachmentArrayEditor = React.memo(
           text: formatMessage('Create from templates'),
           itemProps: addButtonMenuItemProps,
           subMenuProps: {
-            items: [
-              {
-                key: 'hero',
-                text: formatMessage('Hero card'),
-                onClick: onAddTemplateClick,
-                itemProps: addButtonMenuItemProps,
-                data: {
-                  template: cardTemplates.hero,
-                },
+            items: lgCardAttachmentTemplates.map((templateType) => ({
+              key: templateType,
+              text: getLgCardTemplateDisplayName(templateType),
+              onClick: onAddTemplateClick,
+              itemProps: addButtonMenuItemProps,
+              data: {
+                template: cardTemplates[templateType],
               },
-              {
-                key: 'thumbnail',
-                text: formatMessage('Thumbnail card'),
-                itemProps: addButtonMenuItemProps,
-                onClick: onAddTemplateClick,
-                data: {
-                  template: cardTemplates.thumbnail,
-                },
-              },
-              {
-                key: 'signin',
-                text: formatMessage('Sign-in card'),
-                itemProps: addButtonMenuItemProps,
-                onClick: onAddTemplateClick,
-                data: {
-                  template: cardTemplates.signin,
-                },
-              },
-              {
-                key: 'animation',
-                text: formatMessage('Animation card'),
-                itemProps: addButtonMenuItemProps,
-                onClick: onAddTemplateClick,
-                data: {
-                  template: cardTemplates.animation,
-                },
-              },
-              {
-                key: 'video',
-                text: formatMessage('Video card'),
-                itemProps: addButtonMenuItemProps,
-                onClick: onAddTemplateClick,
-                data: {
-                  template: cardTemplates.video,
-                },
-              },
-              {
-                key: 'audio',
-                text: formatMessage('Audio card'),
-                itemProps: addButtonMenuItemProps,
-                onClick: onAddTemplateClick,
-                data: {
-                  template: cardTemplates.audio,
-                },
-              },
-              {
-                key: 'adaptive',
-                text: formatMessage('Adaptive card'),
-                itemProps: addButtonMenuItemProps,
-                onClick: onAddTemplateClick,
-                data: {
-                  template: cardTemplates.adaptive,
-                },
-              },
-            ],
+            })),
           },
         },
       ],
