@@ -273,20 +273,11 @@ export function CreateOptions(props: CreateOptionsProps) {
   const choiceGroupTitle = creationFlowType === 'Skill' ? '' : formatMessage('Choose how to create your bot');
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
-  // TODO: remove banner UI when REMOTE_TEMPLATE_CREATION_EXPERIENCE is removed
   return (
     <Fragment>
       <DialogWrapper isOpen {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <ChoiceGroup label={choiceGroupTitle} options={choiceOptions} selectedKey={option} onChange={handleChange} />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
-        {featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled && (
-          <MessageBar className={bannerClass}>
-            {formatMessage('Conversational Core preview template is available since you have that feature turned on.')}
-            <Link href="https://aka.ms/AAabzf9" target="_blank">
-              {formatMessage('Learn More.')}
-            </Link>
-          </MessageBar>
-        )}
         <div css={detailListContainer} data-is-scrollable="true">
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList
