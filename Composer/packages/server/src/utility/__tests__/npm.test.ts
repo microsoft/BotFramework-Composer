@@ -11,6 +11,7 @@ import { search, downloadPackage } from '../npm';
 
 class MockBody extends Readable {
   _read() {
+    this.on('end', jest.fn());
     setTimeout(() => {
       this.emit('end');
     }, 1);
