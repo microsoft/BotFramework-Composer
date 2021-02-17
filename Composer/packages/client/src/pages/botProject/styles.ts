@@ -38,7 +38,6 @@ export const tableRow = css`
 export const tableRowItem = (width?: string) => css`
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
-  padding-top: 10px;
   padding-left: 10px;
   text-overflow: ellipsis;
   overflow: hidden;

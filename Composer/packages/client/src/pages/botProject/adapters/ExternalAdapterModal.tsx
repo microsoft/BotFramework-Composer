@@ -48,9 +48,10 @@ const AdapterModal = (props: Props) => {
   const shell = useShell('DesignPage', projectId);
 
   const pluginConfig: PluginConfig = useMemo(() => {
-    const sdkUISchema = uiSchema;
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins);
+    return mergePluginConfigs({ uiSchema }, plugins);
   }, [uiSchema]);
+
+  console.log(pluginConfig);
 
   const { required } = schema;
 
