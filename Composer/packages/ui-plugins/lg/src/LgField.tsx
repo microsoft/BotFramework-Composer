@@ -102,17 +102,17 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   useEffect(() => {
     const abortController = new AbortController();
-    (async (currentProjectId: string) => {
+    (async () => {
       try {
-        const variables = await shellApi.getMemoryVariables(currentProjectId, { signal: abortController.signal });
+        const variables = await shellApi.getMemoryVariables(projectId, { signal: abortController.signal });
         setMemoryVariables(variables);
       } catch (e) {
         // error can be due to abort
       }
-    })(projectId);
+    })();
 
     // clean up pending async request
-    () => {
+    return () => {
       abortController.abort();
     };
   }, [projectId]);

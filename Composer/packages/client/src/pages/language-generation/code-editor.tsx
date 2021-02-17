@@ -100,7 +100,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     })();
 
     // clean up pending async request
-    () => {
+    return () => {
       abortController.abort();
     };
   }, [projectId]);
