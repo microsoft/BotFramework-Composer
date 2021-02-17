@@ -27,6 +27,6 @@ export const HelpIconTooltip = React.memo(
     tooltipProps?: WithTooltipProps;
   }) => {
     const TooltipIcon = withTooltip({ ...tooltipProps, content: helpMessage, id: tooltipId }, Icon);
-    return <TooltipIcon iconName={'Unknown'} styles={iconStyles} />;
+    return <TooltipIcon data-testid="helpIcon" iconName={'Unknown'} styles={iconStyles} />;
   }
 );
