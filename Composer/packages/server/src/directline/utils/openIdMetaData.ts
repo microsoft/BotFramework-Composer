@@ -34,7 +34,7 @@ export class OpenIdMetadata {
       try {
         await this.refreshCache();
       } catch {
-        // Do nothing
+        this.keys = [];
       }
     }
     return this.findKey(keyId);

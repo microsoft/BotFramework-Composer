@@ -183,10 +183,7 @@ export class Conversation {
   public async getTranscript(): Promise<Activity[]> {
     const activities = this.transcript
       .filter((record) => record.type === 'activity add')
-      .map((record) => {
-        const { activity } = record;
-        return activity;
-      });
+      .map((record) => record.activity);
 
     for (let i = 0; i < activities.length; i++) {
       await this.processActivityForDataUrls(activities[i]);

@@ -51,8 +51,7 @@ export class BotEndpoint {
     });
 
     if (statusCodeFamily(resp.status, 200)) {
-      // Subtract 5 minutes from expires_in so they'll we'll get a
-      // new token before it expires.
+      // Subtract 5 minutes from expires_in so they'll we'll get a new token before it expires.
       const oauthResponse = await resp.data;
 
       this.accessToken = oauthResponse.access_token;
