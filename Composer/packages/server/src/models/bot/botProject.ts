@@ -709,6 +709,7 @@ export class BotProject implements IBotProject {
   // update file in this project this function will guarantee the memory cache
   // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
+    log('Update file', relativePath, content);
     const file = this.files.get(Path.basename(relativePath));
     if (!file) {
       throw new Error(`no such file at ${relativePath}`);

@@ -113,6 +113,7 @@ export class AssetManager {
         throw new Error('already have this folder, please give another name');
       }
 
+      log('About to create folder', dstDir);
       mkdirSync(dstDir, { recursive: true });
 
       // find selected template
@@ -159,9 +160,10 @@ export class AssetManager {
     dstDir: string,
     projectName: string
   ): Promise<boolean> {
-    this.yeomanEnv.cwd = dstDir;
-
     log('About to instantiate a template!', dstDir, generatorName, projectName);
+    this.yeomanEnv.cwd = dstDir;
+    process.chdir(dstDir);
+
     await this.yeomanEnv.run([generatorName, projectName], {}, () => {
       log('Template successfully instantiated', dstDir, generatorName, projectName);
     });

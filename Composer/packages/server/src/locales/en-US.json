@@ -1274,6 +1274,15 @@
   "folder_foldername_already_exists_4a2260e9": {
     "message": "folder { folderName } already exists"
   },
+  "font_family_baa0c6a3": {
+    "message": "Font family"
+  },
+  "font_size_bf4db203": {
+    "message": "Font size"
+  },
+  "font_weight_188bb2b9": {
+    "message": "Font weight"
+  },
   "for_each_def04c48": {
     "message": "For Each"
   },
