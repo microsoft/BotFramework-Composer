@@ -261,7 +261,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
             )}
           </p>
-          <ExampleList examples={botTemplates} onClick={onClickTemplate} />
+          {!featureFlags.NEW_CREATION_FLOW.enabled && <ExampleList examples={botTemplates} onClick={onClickTemplate} />}
         </div>
       </div>
     </div>
