@@ -13,8 +13,8 @@ export const Severity = {
 };
 
 export const useDiagnosticsData = (): IDiagnosticInfo[] => {
-  const skillId = useRecoilValue(currentProjectIdState);
-  const diagnosticData = useRecoilValue(diagnosticsSelectorFamily(skillId));
+  const projectId = useRecoilValue(currentProjectIdState);
+  const diagnosticData = useRecoilValue(diagnosticsSelectorFamily(projectId));
 
   return diagnosticData ?? [];
 };
