@@ -118,8 +118,14 @@ export default class ConversationService {
       ...directLineOptions,
     };
 
+    const { port, newRestServerSetup } = resp.data;
+
     const secret = btoa(JSON.stringify(options));
-    this.restServerForWSPort = resp.data;
+    this.restServerForWSPort = port;
+
+    if (newRestServerSetup) {
+      this.connectToErrorsChannel();
+    }
 
     const directLine = createDirectLine({
       token: 'emulatorToken',
@@ -221,11 +227,11 @@ export default class ConversationService {
   }
 
   public connectToErrorsChannel() {
-    // TODO
-    // const ws = new WebSocket(`ws://localhost:${this.restServerForWSPort}/ws/createErrorChannel`);
-    // ws.onmessage = (event) => {
-    //   console.log('WebSocket message received:', event);
-    // };
+    debugger;
+    const ws = new WebSocket(`ws://localhost:${this.restServerForWSPort}/ws/createErrorChannel`);
+    ws.onmessage = (event) => {
+      console.log('WebSocket message received:', event);
+    };
   }
 
   public sendInitialActivity(conversationId: string, members: [User]) {
