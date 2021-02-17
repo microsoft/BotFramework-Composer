@@ -68,7 +68,6 @@ const content = css`
 
 // -------------------- Diagnosticist -------------------- //
 export interface IDiagnosticListProps {
-  skillId: string;
   diagnosticItems: IDiagnosticInfo[];
   onItemClick: (item: IDiagnosticInfo) => void;
 }

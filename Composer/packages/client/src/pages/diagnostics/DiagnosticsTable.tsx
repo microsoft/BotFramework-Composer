@@ -34,7 +34,7 @@ const tableView = css`
 
 // -------------------- Diagnosticist -------------------- //
 export interface IDiagnosticListProps extends RouteComponentProps {
-  skillId?: string;
+  projectId: string;
   showType: string;
   onItemClick: (item: IDiagnosticInfo) => void;
 }
@@ -42,8 +42,8 @@ export interface IDiagnosticListProps extends RouteComponentProps {
 const itemCount = 10;
 
 export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
-  const { onItemClick, skillId = '', showType } = props;
-  const diagnostics = useRecoilValue(diagnosticsSelectorFamily(skillId));
+  const { onItemClick, projectId, showType } = props;
+  const diagnostics = useRecoilValue(diagnosticsSelectorFamily(projectId));
   const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
 
@@ -57,7 +57,7 @@ export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
     <div css={listRoot} data-testid="diagnostics-table-view" role="main">
       <div aria-label={formatMessage('Diagnostic list')} css={tableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DiagnosticList diagnosticItems={showItems} skillId={skillId} onItemClick={onItemClick} />
+          <DiagnosticList diagnosticItems={showItems} onItemClick={onItemClick} />
         </ScrollablePane>
       </div>
       <Pagination pageCount={pageCount} onChange={setPageIndex} />

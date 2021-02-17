@@ -19,7 +19,6 @@ export const DiagnosticsContent = () => {
   return (
     <DiagnosticList
       diagnosticItems={diagnostics}
-      skillId={skillId}
       onItemClick={(item) => {
         navigateTo(item.getUrl());
         if (item.location === 'manifest.json') {

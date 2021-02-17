@@ -24,7 +24,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
 
-  const { projectId = '', skillId } = props;
+  const { projectId = '' } = props;
   const toolbarItems: IToolbarItem[] = implementedDebugExtensions
     .map(({ key, ToolbarWidget }) => {
       if (!ToolbarWidget) return;
@@ -58,7 +58,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
     >
-      <DiagnosticsTable showType={showType} skillId={skillId ?? projectId} onItemClick={handleItemClick} />
+      <DiagnosticsTable projectId={projectId} showType={showType} onItemClick={handleItemClick} />
     </Page>
   );
 };
