@@ -8,6 +8,7 @@ labels: "Needs-triage, Type: Bug"
 assignees: ""
 ---
 
+<!-- Please search for your feature request before creating a new one. >
 <!-- Complete the necessary portions of this template and delete the rest. -->
 
 ## Describe the bug
