@@ -51,8 +51,6 @@ const AdapterModal = (props: Props) => {
     return mergePluginConfigs({ uiSchema } as PluginConfig, plugins);
   }, [uiSchema]);
 
-  console.log(pluginConfig);
-
   const { required } = schema;
 
   return (
