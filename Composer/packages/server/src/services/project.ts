@@ -431,7 +431,6 @@ export class BotProjectService {
       // TODO: Replace with default template once one is determined
       throw Error('empty templateID passed');
     }
-
     // location to store the bot project
     const locationRef = getLocationRef(location, storageId, name);
     try {
@@ -452,36 +451,81 @@ export class BotProjectService {
 
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
 
-      const id = await BotProjectService.openProject(newProjRef, user);
+      const botsToProcess: { storageId: string; path: string; name: string }[] = [];
 
-      // in the case of PVA, we need to update the eTag and alias used by the import mechanism
-      createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
+      // The outcome of our creation might be > 1 bot! We need to determine how many bots we find in this folder.
+      // is this a single bot?
+      if (await StorageService.checkIsBotFolder(newProjRef.storageId, newProjRef.path, user)) {
+        botsToProcess.push({ ...newProjRef, name });
+      } else {
+        // or multiple bots?
+        const files = await StorageService.getBlob(newProjRef.storageId, newProjRef.path, user);
+        const childbots = files.children.filter((f) => f.type === 'bot');
 
-      const currentProject = await BotProjectService.getProjectById(id, user);
+        childbots.forEach((b) => {
+          botsToProcess.push({
+            storageId: newProjRef.storageId,
+            path: b.path,
+            name: b.name,
+          });
+        });
+      }
 
-      // inject shared content into every new project.  this comes from assets/shared
-      !createFromPva &&
-        (await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage));
+      await Promise.all(
+        botsToProcess.map((botRef) => {
+          // eslint-disable-next-line no-async-promise-executor
+          return new Promise(async (resolve, reject) => {
+            try {
+              log('Open project', botRef);
+              const id = await BotProjectService.openProject(botRef, user);
 
-      if (currentProject !== undefined) {
-        !createFromPva && (await ejectAndMerge(currentProject, jobId));
-        BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
-        await currentProject.updateBotInfo(name, description, preserveRoot);
+              // in the case of PVA, we need to update the eTag and alias used by the import mechanism
+              createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
 
-        if (schemaUrl && !createFromPva) {
-          await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-        }
+              log('Get Project by Id', id);
+              const currentProject = await BotProjectService.getProjectById(id, user);
 
-        await currentProject.init();
+              // inject shared content into every new project.  this comes from assets/shared
+              !createFromPva &&
+                (await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage));
 
+              if (currentProject !== undefined) {
+                !createFromPva && (await ejectAndMerge(currentProject, jobId));
+                BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
+
+                log('Updatebot info', id, preserveRoot);
+                await currentProject.updateBotInfo(botRef.name, description, true);
+
+                if (schemaUrl && !createFromPva) {
+                  await currentProject.saveSchemaToProject(schemaUrl, botRef.path);
+                }
+
+                log('Init project', id);
+                await currentProject.init();
+              }
+              resolve(id);
+            } catch (err) {
+              return reject(err);
+            }
+          });
+        })
+      );
+
+      const rootBot = botsToProcess.find((b) => b.name === name);
+      if (rootBot) {
+        const id = await BotProjectService.openProject({ storageId: rootBot?.storageId, path: rootBot.path }, user);
+        const currentProject = await BotProjectService.getProjectById(id, user);
         const project = currentProject.getProject();
         log('Project created successfully.');
         BackgroundProcessManager.updateProcess(jobId, 200, 'Created Successfully', {
           id,
           ...project,
         });
+
+        TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
+      } else {
+        throw new Error('Could not find root bot');
       }
-      TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
     } catch (err) {
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
       TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
