@@ -19,6 +19,7 @@ const settings = {
     UseShowTypingMiddleware: false,
     UseInspectionMiddleware: false,
     RemoveRecipientMention: false,
+    UseSetSpeakMiddleware: false,
   },
   MicrosoftAppPassword: '',
   MicrosoftAppId: '',
@@ -34,6 +35,10 @@ const settings = {
   blobStorage: {
     connectionString: '',
     container: 'transcripts',
+  },
+  speech: {
+    voiceFontName: 'en-US-AriaNeural',
+    fallbackToTextForSpeechIfEmpty: true,
   },
   defaultLanguage: 'en-us',
   languages: ['en-us'],

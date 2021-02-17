@@ -12,8 +12,7 @@ import { AzurePublishErrors } from './utils/errorHandler';
 import {BotProjectDeployLoggerType} from './types';
 
 const readdir: any = promisify(fs.readdir);
-
-const botPath = (projPath: string) => path.join(projPath, 'ComposerDialogs')
+const botPath = (projPath: string) => path.join(projPath) // there should not be a need to specify the sub directory
 
 type QnaConfigType = {
   subscriptionKey: string;

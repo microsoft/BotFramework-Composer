@@ -54,7 +54,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     onChange(intentName);
   };
 
-  const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
+  const handleSettingsChange = (settings: CodeEditorSettings) => {
     shellApi.updateUserSettings({ codeEditor: settings });
   };
 
