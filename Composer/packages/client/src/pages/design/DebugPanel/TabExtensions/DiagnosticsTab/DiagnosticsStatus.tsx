@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useSetRecoilState } from 'recoil';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 import { debugPanelExpansionState } from '../../../../../recoilModel';
 
@@ -33,8 +34,8 @@ export const DiagnosticsStatus = () => {
             border: 'none',
             marginRight: '8px',
           },
-          label: { fontSize: '18px', fontFamily: 'Segoe UI', lineHeight: '20px' },
-          icon: { color: '#EB3941', fontSize: '18px', lineHeight: '18px' },
+          label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
+          icon: { color: '#EB3941', fontSize: FontSizes.size18, lineHeight: '18px' },
         }}
         onClick={() => {
           setExpansion(true);
@@ -46,8 +47,8 @@ export const DiagnosticsStatus = () => {
         iconProps={{ iconName: 'WarningSolid' }}
         styles={{
           root: { height: '36px', padding: 0, paddingRight: '3px', border: 'none', minWidth: '20px' },
-          label: { fontSize: '18px', fontFamily: 'Segoe UI', lineHeight: '20px' },
-          icon: { color: '#F4BD00', fontSize: '18px', lineHeight: '18px' },
+          label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
+          icon: { color: '#F4BD00', fontSize: FontSizes.size18, lineHeight: '18px' },
         }}
         onClick={() => {
           setExpansion(true);
