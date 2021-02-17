@@ -78,6 +78,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         split
         aria-roledescription="split button"
         ariaLabel="restart-conversation"
+        data-testid="restart-conversation"
         iconProps={{ iconName: 'Refresh' }}
         menuProps={menuProps}
         splitButtonAriaLabel="See 2 other restart conversation options"
@@ -88,7 +89,6 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
             : formatMessage('Restart Conversation - new user ID')
         }
         title="restart-conversation"
-        data-testid="restart-conversation"
         onClick={() => {
           if (lastSelectedRestartOption === RestartOption.SameUserID) {
             onRestartConversation(conversationId, true);
@@ -98,20 +98,20 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         }}
       />
       <ActionButton
+        ariaDescription="Save conversation as transcript"
         ariaLabel="save-transcripts"
         iconProps={{ iconName: 'Save' }}
         title="Save chat transcripts"
         onClick={() => onSaveTranscript(conversationId)}
-        ariaDescription="Save conversation as transcript"
       />
       <ActionButton
+        ariaDescription="Open the bot in Emulator"
         iconProps={{
           iconName: 'OpenInNewTab',
         }}
-        title="Open in Emulator"
         styles={{ root: { height: '20px' } }}
+        title="Open in Emulator"
         onClick={openBotInEmulator}
-        ariaDescription="Open the bot in Emulator"
       ></ActionButton>
     </div>
   );

@@ -104,14 +104,14 @@ export const WebChatContainer = React.memo((props: WebChatContainerProps) => {
     return (
       <ReactWebChat
         key={chatData.conversationId}
+        activityMiddleware={createActivityMiddleware}
+        cardActionMiddleware={createCardActionMiddleware}
         directLine={chatData.directline}
         disabled={!botUrl}
+        locale={activeLocale}
         store={webchatStore}
         styleSet={styleSet}
         userID={chatData.user.id}
-        activityMiddleware={createActivityMiddleware}
-        cardActionMiddleware={createCardActionMiddleware}
-        locale={activeLocale}
       />
     );
   }

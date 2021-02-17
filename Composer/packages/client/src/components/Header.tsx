@@ -14,7 +14,6 @@ import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@ui
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { WebChatPanel } from '@bfc/webchat-client';
 
 import { BASEPATH } from '../constants';
 import { schemasState } from '../recoilModel/atoms';
@@ -31,6 +30,7 @@ import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import { useLocation } from '../utils/hooks';
 
+import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';

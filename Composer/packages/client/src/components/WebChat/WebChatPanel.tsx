@@ -106,20 +106,20 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }
 
   return (
-    <div style={{ height: 'calc(100% - 38px)' }} ref={webChatPanelRef}>
+    <div ref={webChatPanelRef} style={{ height: 'calc(100% - 38px)' }}>
       <WebChatHeader
         conversationId={currentConversation}
-        onRestartConversation={onRestartConversationClick}
-        onSaveTranscript={onSaveTranscriptClick}
         openBotInEmulator={() => {
           openBotInEmulator(projectId);
         }}
+        onRestartConversation={onRestartConversationClick}
+        onSaveTranscript={onSaveTranscriptClick}
       />
       <WebChatContainer
-        botUrl={botUrl}
-        conversationService={conversationService}
         activeLocale={activeLocale}
+        botUrl={botUrl}
         chatData={chats[currentConversation]}
+        conversationService={conversationService}
         currentConversation={currentConversation}
         sendInitialActivity={(conversationId: string, currentUser: User) => {
           conversationService.sendInitialActivity(conversationId, [currentUser]);
