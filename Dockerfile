@@ -21,7 +21,7 @@ COPY ./Composer .
 COPY ./extensions ../extensions
 # run yarn install as a distinct layer
 RUN yarn install --frozen-lock-file $YARN_ARGS
-ENV NODE_OPTIONS "--max-old-space-size=4096"
+ENV NODE_OPTIONS "--max-old-space-size=10240"
 ENV NODE_ENV "production"
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
 RUN yarn build:prod $YARN_ARGS
