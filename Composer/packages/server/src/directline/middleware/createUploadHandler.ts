@@ -81,19 +81,15 @@ export const createUploadHandler = (state: DLServerState) => {
           activity.attachments.push(attachment);
         }
 
-        try {
-          const { sendActivity, status, response } = await conversation.postActivityToBot(state, activity);
+        const { sendActivity, status, response } = await conversation.postActivityToBot(state, activity);
 
-          if (!statusCodeFamily(status, 200)) {
-            res
-              .status(status || StatusCodes.INTERNAL_SERVER_ERROR)
-              .json(response.data)
-              .end();
-          } else {
-            res.status(status).json({ id: sendActivity?.id }).end();
-          }
-        } catch (err) {
-          sendErrorResponse(req, res, err);
+        if (!statusCodeFamily(status, 200)) {
+          res
+            .status(status || StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(response.data)
+            .end();
+        } else {
+          res.status(status).json({ id: sendActivity?.id }).end();
         }
       } catch (err) {
         sendErrorResponse(req, res, err);
