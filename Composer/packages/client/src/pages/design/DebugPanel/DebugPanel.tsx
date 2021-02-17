@@ -29,7 +29,7 @@ export interface DebugPanelProps {
 export const DebugPanel = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
 
-  const [activeTab, setActiveTab] = useState<string>(debugExtensions[0].key);
+  const [activeTab, setActiveTab] = useState<string>(debugExtensions[0]?.key);
 
   const buildTabTitle = useCallback((tabKey: string, TabHeaderWidget: React.FC | string) => {
     if (!TabHeaderWidget) return { key: tabKey, element: null };
@@ -69,7 +69,7 @@ export const DebugPanel = () => {
     const height = expanded ? 36 : 24;
     return (
       <Pivot
-        aria-label="Debug Panel Header"
+        aria-label={formatMessage('Debug Panel Header')}
         selectedKey={expanded ? activeTab : null}
         styles={{
           link: { height, lineHeight: height },

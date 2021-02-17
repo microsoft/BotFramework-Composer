@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import { debugPanelExpansionState } from '../../../../../recoilModel';
 
@@ -14,7 +14,7 @@ import { useDiagnosticsStatistics } from './useDiagnostics';
  * Displays how many errors and warnings in current project.
  */
 export const DiagnosticsStatus = () => {
-  const [, setExpansion] = useRecoilState(debugPanelExpansionState);
+  const setExpansion = useSetRecoilState(debugPanelExpansionState);
   const { errorsCount, warningsCount } = useDiagnosticsStatistics();
 
   return (

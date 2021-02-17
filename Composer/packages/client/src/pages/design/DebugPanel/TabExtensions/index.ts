@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { TabExtensionConfig } from './types';
-import { DiagnoticsTabConfig } from './DiagnosticsTab';
+import { DiagnosticsTabConfig } from './DiagnosticsTab';
 
-const implementedDebugExtensions: TabExtensionConfig[] = [DiagnoticsTabConfig];
+const implementedDebugExtensions: TabExtensionConfig[] = [DiagnosticsTabConfig];
 
 export default implementedDebugExtensions;

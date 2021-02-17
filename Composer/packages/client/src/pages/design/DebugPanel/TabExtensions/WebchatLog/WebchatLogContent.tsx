@@ -8,7 +8,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { currentProjectIdState } from '../../../../../recoilModel';
 
 export interface WebchatLog {
-  skillId: string;
+  projectId: string;
   conversationId: string;
   type: 'error' | 'warning' | 'info';
   message: string;
@@ -28,7 +28,7 @@ export const WebchatLogContent = () => {
   }, []);
 
   useEffect(() => {
-    extensionEventEmitter.on('wechat:log', (log: WebchatLog) => {
+    extensionEventEmitter.on('webchat:log', (log: WebchatLog) => {
       appendLog(log);
     });
 
@@ -46,7 +46,7 @@ export const WebchatLogContent = () => {
       Webchat logs of {currentProjectId}
       <div>
         {webchatLogs
-          .filter((log) => log.skillId === currentProjectId)
+          .filter((log) => log.projectId === currentProjectId)
           .map((log, idx) => (
             <div key={`webchatLog-${idx}`}>
               {log.type}: {log.message}
