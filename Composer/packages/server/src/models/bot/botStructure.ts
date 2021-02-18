@@ -76,6 +76,14 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   templateInterpolate(BotStructureTemplate.recognizer, { RECOGNIZERNAME: '*.dialog' }),
   templateInterpolate(BotStructureTemplate.crossTrainConfig, { CROSSTRAINCONFIGNAME: 'cross-train.config.json' }),
+  'sdk.override.schema',
+  'sdk.override.uischema',
+  'sdk.schema',
+  'sdk.uischema',
+  'app.override.schema',
+  'app.override.uischema',
+  'app.schema',
+  'app.uischema',
 ];
 
 // parse file name: [fileId].[locale].[fileType]
