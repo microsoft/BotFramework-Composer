@@ -9,6 +9,11 @@ import { WebChatContainer } from './WebChatContainer';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 
+export enum RestartOption {
+  SameUserID,
+  NewUserID,
+}
+
 export interface WebChatPanelProps {
   botUrl: string;
   secrets: BotSecrets;
@@ -36,6 +41,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [isConversationStartQueued, queueConversationStart] = useState<boolean>(false);
+  const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
 
   useEffect(() => {
     queueConversationStart(!!botUrl);
@@ -109,11 +115,13 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     <div ref={webChatPanelRef} style={{ height: 'calc(100% - 38px)' }}>
       <WebChatHeader
         conversationId={currentConversation}
+        currentRestartOption={currentRestartOption}
         openBotInEmulator={() => {
           openBotInEmulator(projectId);
         }}
         onRestartConversation={onRestartConversationClick}
         onSaveTranscript={onSaveTranscriptClick}
+        onSetRestartOption={onSetRestartOption}
       />
       <WebChatContainer
         activeLocale={activeLocale}

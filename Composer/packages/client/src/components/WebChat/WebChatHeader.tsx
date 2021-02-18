@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ActionButton, DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
+
+import { RestartOption } from './WebChatPanel';
 
 const customButtonStyles: IButtonStyles = {
   root: {
@@ -30,12 +32,9 @@ const customButtonStyles: IButtonStyles = {
   },
 };
 
-enum RestartOption {
-  SameUserID,
-  NewUserID,
-}
-
 export interface WebChatHeaderProps {
+  currentRestartOption: RestartOption;
+  onSetRestartOption: (restartOption: RestartOption) => void;
   conversationId: string;
   onRestartConversation: (conversationId: string, requireNewUserId: boolean) => Promise<any>;
   onSaveTranscript: (conversationId: string) => Promise<any>;
@@ -44,11 +43,12 @@ export interface WebChatHeaderProps {
 
 export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   conversationId,
+  currentRestartOption,
   onRestartConversation,
   onSaveTranscript,
   openBotInEmulator,
+  onSetRestartOption,
 }) => {
-  const [lastSelectedRestartOption, setOption] = useState<RestartOption>(RestartOption.NewUserID);
   const menuProps: IContextualMenuProps = {
     items: [
       {
@@ -56,7 +56,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         text: formatMessage('Restart Conversation - same user ID'),
         iconProps: { iconName: 'Refresh' },
         onClick: () => {
-          setOption(RestartOption.SameUserID);
+          onSetRestartOption(RestartOption.SameUserID);
           onRestartConversation(conversationId, false);
         },
       },
@@ -65,7 +65,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         text: formatMessage('Restart Conversation - new user ID'),
         iconProps: { iconName: 'Refresh' },
         onClick: () => {
-          setOption(RestartOption.NewUserID);
+          onSetRestartOption(RestartOption.NewUserID);
           onRestartConversation(conversationId, true);
         },
       },
@@ -84,13 +84,13 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         splitButtonAriaLabel="See 2 other restart conversation options"
         styles={customButtonStyles}
         text={
-          lastSelectedRestartOption === RestartOption.SameUserID
+          currentRestartOption === RestartOption.SameUserID
             ? formatMessage('Restart Conversation - same user ID')
             : formatMessage('Restart Conversation - new user ID')
         }
         title="restart-conversation"
         onClick={() => {
-          if (lastSelectedRestartOption === RestartOption.SameUserID) {
+          if (currentRestartOption === RestartOption.SameUserID) {
             onRestartConversation(conversationId, true);
           } else {
             onRestartConversation(conversationId, false);
