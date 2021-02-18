@@ -3,11 +3,9 @@
 
 import React from 'react';
 import { render } from '@botframework-composer/test-utils';
-import { LgTemplate, TelemetryClient } from '@bfc/shared';
 
 import { TextModalityEditor } from '../modalityEditors/TextModalityEditor';
-import { ModalityType, PartialStructuredResponse, TextStructuredResponseItem } from '../types';
-import { LGOption } from '../../utils';
+import { CommonModalityEditorProps, TextStructuredResponseItem } from '../types';
 
 const noop = () => {};
 
@@ -20,20 +18,7 @@ const renderTextModalityEditor = ({
   onRemoveModality = jest.fn(),
   onRemoveTemplate = jest.fn(),
   onUpdateResponseTemplate = jest.fn(),
-}: Partial<{
-  response?: TextStructuredResponseItem;
-  removeModalityDisabled: boolean;
-  lgOption?: LGOption;
-  lgTemplates?: readonly LgTemplate[];
-  memoryVariables?: readonly string[];
-  telemetryClient: TelemetryClient;
-  onAttachmentLayoutChange?: (layout: string) => void;
-  onInputHintChange?: (inputHint: string) => void;
-  onTemplateChange: (templateId: string, body?: string) => void;
-  onRemoveModality: (modality: ModalityType) => void;
-  onRemoveTemplate: (templateId: string) => void;
-  onUpdateResponseTemplate: (response: PartialStructuredResponse) => void;
-}>) => {
+}: Partial<CommonModalityEditorProps & { response: TextStructuredResponseItem }>) => {
   return render(
     <TextModalityEditor
       lgOption={lgOption}
