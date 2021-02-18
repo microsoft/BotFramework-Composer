@@ -168,7 +168,7 @@ export const structuredResponseToString = (structuredResponse: PartialStructured
     return text;
   }, '');
 
-  return `[${activityTemplateType}\n${body}]\n`.replace(/\t/gm, defaultIndent);
+  return body ? `[${activityTemplateType}\n${body}]\n`.replace(/\t/gm, defaultIndent) : '';
 };
 
 export const getTemplateId = <T extends ArrayBasedStructuredResponseItem>(response: T): string | undefined => {
