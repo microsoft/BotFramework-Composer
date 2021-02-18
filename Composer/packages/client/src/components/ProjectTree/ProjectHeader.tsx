@@ -15,7 +15,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 
 import { TreeLink, ProjectTreeOptions } from './ProjectTree';
-import { doesLinkMatch } from './helpers';
+import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
 
 const icons = {
@@ -137,13 +137,18 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
       },
     ];
 
+    const removeSkillItem = {
+      label: formatMessage('Remove this skill from project'),
+      onClick: () => {
+        onBotRemoveSkill(projectId);
+      },
+    };
+    if (isRemote) {
+      return [removeSkillItem];
+    }
+
     if (!isRootBot) {
-      menuItems.splice(3, 0, {
-        label: formatMessage('Remove this skill from project'),
-        onClick: () => {
-          onBotRemoveSkill(projectId);
-        },
-      });
+      menuItems.splice(3, 0, removeSkillItem);
     }
     return menuItems;
   }, [projectId, isRunning]);
@@ -156,6 +161,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         hasChildren={!isRemote}
         icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
+        isChildSelected={isChildDialogLinkSelected(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
         menu={options.showMenu ? menu : []}

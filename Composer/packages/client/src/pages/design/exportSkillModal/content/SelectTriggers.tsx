@@ -4,13 +4,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
-import { DialogInfo, ITrigger, SDKKinds } from '@bfc/shared';
+import { DialogInfo, ITrigger, SDKKinds, getFriendlyName } from '@bfc/shared';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { getFriendlyName } from '../../../../utils/dialogUtil';
 import { isSupportedTrigger } from '../generateSkillManifest';
 import { dialogsSelectorFamily, schemasState } from '../../../../recoilModel';
 

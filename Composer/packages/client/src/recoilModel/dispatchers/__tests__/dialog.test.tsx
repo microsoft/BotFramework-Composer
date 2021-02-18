@@ -74,23 +74,12 @@ jest.mock('@bfc/indexers', () => {
 jest.mock('../../parsers/luWorker', () => {
   return {
     parse: (id: string, content) => ({ id, content }),
-    addIntent: require('@bfc/indexers/lib/utils/luUtil').addIntent,
-    addIntents: require('@bfc/indexers/lib/utils/luUtil').addIntents,
-    updateIntent: require('@bfc/indexers/lib/utils/luUtil').updateIntent,
-    removeIntent: require('@bfc/indexers/lib/utils/luUtil').removeIntent,
-    removeIntents: require('@bfc/indexers/lib/utils/luUtil').removeIntents,
   };
 });
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
     parse: (id: string, content) => ({ id, content }),
-    addTemplate: require('../../../utils/lgUtil').addTemplate,
-    addTemplates: require('../../../utils/lgUtil').addTemplates,
-    updateTemplate: require('../../../utils/lgUtil').updateTemplate,
-    removeTemplate: require('../../../utils/lgUtil').removeTemplate,
-    removeAllTemplates: require('../../../utils/lgUtil').removeTemplates,
-    copyTemplate: require('../../../utils/lgUtil').copyTemplate,
   };
 });
 

@@ -192,11 +192,6 @@ export const skillManifestsState = atomFamily<SkillManifestFile[], string>({
   },
 });
 
-export const showAddSkillDialogModalState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showAddSkillDialogModal'),
-  default: false,
-});
-
 export const settingsState = atomFamily<DialogSetting, string>({
   key: getFullyQualifiedKey('settings'),
   default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {}, qna: {} } as DialogSetting,

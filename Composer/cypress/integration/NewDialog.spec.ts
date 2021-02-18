@@ -12,7 +12,7 @@ context('Creating a new Dialog', () => {
     cy.findByTestId('BotHeader-__TestTodoSample').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a dialog').click();
+    cy.findAllByText('Add a dialog').click({ force: true });
     cy.findByTestId('NewDialogName').type('{selectall}TestNewDialog2{enter}');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('TestNewDialog2').should('exist');
