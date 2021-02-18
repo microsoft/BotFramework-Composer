@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import {
   Link,
   PrimaryButton,
+  DefaultButton,
   Pivot,
   PivotItem,
   Dialog,
@@ -736,6 +737,8 @@ const Library: React.FC = () => {
                   </Link>
                 </p>
               )}
+
+              {isInstalled(selectedItem) && <DefaultButton onClick={removeComponent}>Uninstall</DefaultButton>}
             </Fragment>
           ) : (
             <Fragment>

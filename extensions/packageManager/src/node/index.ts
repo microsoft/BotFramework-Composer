@@ -427,6 +427,22 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               if (currentProject.settings.runtime.key === 'node-azurewebapp') {
                 runtimeLanguage = 'js';
               }
+
+              // update the settings.plugins array
+              const newlyInstalledPlugin = installedComponents.find(c=>c.includesSchema && c.name==packageName);
+              if (newlyInstalledPlugin && !currentProject.settings.runtimeSettings?.plugins?.find((p)=>p.name===newlyInstalledPlugin.name)) {
+                const newSettings = currentProject.settings;
+                if (!newSettings.runtimeSettings) {
+                  newSettings.runtimeSettings = {
+                    plugins: []
+                  };
+                }
+                newSettings.runtimeSettings.plugins.push({
+                  name: newlyInstalledPlugin.name,
+                  settingsPrefix: newlyInstalledPlugin.name,
+                });
+                currentProject.updateEnvSettings(newSettings);
+              }
               updateRecentlyUsed(installedComponents, runtimeLanguage);
             } else {
               res.json({
@@ -504,6 +520,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             success: true,
             components: mergeResults.components.filter((c) => c.includesSchema || c.includesExports),
           });
+
+          // update the settings.plugins array
+          if (currentProject.settings.runtimeSettings?.plugins?.find((p)=>p.name===packageName)) {
+            const newSettings = currentProject.settings;
+            newSettings.runtimeSettings.plugins = newSettings.runtimeSettings.plugins.filter((p)=>p.name!==packageName);
+            currentProject.updateEnvSettings(newSettings);
+          }
+
         } catch (err) {
           res.json({
             success: false,
