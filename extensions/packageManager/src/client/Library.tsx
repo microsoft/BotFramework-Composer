@@ -412,6 +412,7 @@ const Library: React.FC = () => {
         message: err.response && err.response.data.message ? err.response.data.message : err,
         summary: strings.libraryError,
       });
+      setLoading(false);
     }
   };
 
