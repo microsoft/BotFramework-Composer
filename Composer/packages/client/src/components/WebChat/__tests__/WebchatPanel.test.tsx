@@ -11,7 +11,7 @@ const mockSendActivity = jest.fn();
 
 URL.createObjectURL = jest.fn();
 
-jest.mock('../utils/ConversationService', () => {
+jest.mock('../utils/conversationService', () => {
   return jest.fn().mockImplementation(() => {
     return { startNewConversation: mockstartNewConversation, sendInitialActivity: mockSendActivity };
   });
