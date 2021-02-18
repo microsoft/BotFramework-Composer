@@ -51,7 +51,7 @@ interface ILetterIconProps {
 }
 
 export const LetterIcon: React.FC<ILetterIconProps> = (props) => {
-  return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', color: '#FFF', backgroundColor: 'rgb(0, 120, 212)', fontSize: '25px'}}>
+  return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', color: '#FFF', backgroundColor: '#333', fontSize: '25px', borderRadius: '2px'}}>
     <span>{ props.letter }</span>
   </div>
 }
@@ -70,13 +70,8 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       isResizable: false,
       data: 'string',
       onRender: (item: LibraryRef) => {
-        return <Fragment>
-          {item.icon ? (
-            <img src={item.icon} width="32" height="32" alt="icon" />
-          ): (
-            <LetterIcon letter={item.name[0]} />
-          )}
-        </Fragment>;
+        if (item.icon) return <img src={item.icon} width="32" height="32" alt="icon" />;
+        return <LetterIcon letter={item.name[0]} />;
       },
     },
     {
@@ -89,7 +84,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       data: 'string',
       onRender: (item: LibraryRef) => {
         return <Fragment>
-          <span style={{display: 'block', fontWeight: 'bold'}}>{item.name}</span>
+          <span style={{display: 'block', fontWeight: 'bold', lineHeight: '150%'}}>{item.name}</span>
           <span>{item.description}</span>
           </Fragment>;
       },

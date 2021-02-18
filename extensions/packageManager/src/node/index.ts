@@ -8,121 +8,120 @@ import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 import { readdirSync, readFileSync } from 'fs';
-import {parseStringPromise} from 'xml2js'
-
+import { parseStringPromise } from 'xml2js';
 
 const API_ROOT = '/api';
 
-const normalizeFeed = async (feed) => {
-  if (feed.objects) {
-    // this is an NPM feed
-    return feed.objects.map((i) => {
-      return {
-        name: i.package.name,
-        version: i.package.version,
-        authors: i.package?.author?.name,
-        keywords: i.package.keywords,
-        repository: i.package?.links.repository,
-        description: i.package.description,
-        language: 'js',
-        source: 'npm',
-      };
-    });
-  } else if (feed.data) {
-    // this is a nuget feed
-    return feed.data.map((i) => {
-      return {
-        name: i.id,
-        version: i.version,
-        versions: i.versions ? semverSort.desc(i.versions.map(v => v.version)) : [i.version],
-        authors: i.authors[0],
-        keywords: i.tags,
-        repository: i.projectUrl,
-        description: i.description,
-        language: 'c#',
-        source: 'nuget',
-      };
-    });
-  } else if (feed.resources) {
-    // this is actually a myget feed that points to the feed we want...
-    const queryEndpoint = feed.resources.find((resource) => resource['@type'] === 'SearchQueryService');
-    if (queryEndpoint) {
-      const raw = await axios.get(queryEndpoint['@id']);
-      return normalizeFeed(raw.data);
-    } else {
-      return [];
-    }
-  } else {
-    console.error('Unknown feed format!', feed);
-    return null;
-  }
-};
-
-
-const getPackageInfo = async (name, url) => {
-
-  // available versions should be folders underneath this folder
-  let versions;
-  try {
-    versions = readdirSync(url, {withFileTypes: true}).filter(f=>f.isDirectory()).map(f=>f.name);
-    if (versions.length === 0) {
-      throw new Error('version list is empty');
-    }
-    versions = semverSort.desc(versions);
-  } catch(err) {
-    throw new Error(`Could not find versions of local package ${ name } at ${ url }. For more info about setting up a local feed, see here: https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds`)
-  }
-
-  // can read from the nuspec file in the latest to get other info
-  let metadata = {};
-  try {
-    const pathToNuspec = path.join(url, versions[0], `${ name }.nuspec`);
-
-    const xml = readFileSync(pathToNuspec,'utf8');
-
-    const parsed = await parseStringPromise(xml);
-    metadata = {
-      id: parsed.package.metadata[0].id[0],
-      version: parsed.package.metadata[0].version[0],
-      authors: parsed.package.metadata[0].authors,
-      projectUrl: parsed.package.metadata[0].projectUrl[0],
-      description: parsed.package.metadata[0].description[0],
-      tags: parsed.package.metadata[0].tags[0].split(/\s/),
-      versions: versions.map(v=> {return {version: v}}),
-      source: 'local',
-      language: 'c#',
-    }
-  } catch(err) {
-    console.error(err);
-    throw new Error(`Could not parse nuspec for local package ${ name } at ${ url }`);
-  }
-
-  return metadata;
-
-}
-
-const crawlLocalFeed = async(url) => {
-
-  // get a list of all the files at the feed URL
-
- // the local feed is expected to be in folders using the structure defined here:
- // https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds
- // the line below will:
- // * get a list of all the files at the specified url
- // * extract only folders from that list
- // * pass each one through the getPackageInfo function, which extracts metadata from the package
- // * return a feed in the form that is used by nuget search API
- const packages = readdirSync(url, { withFileTypes: true}).filter(f=>f.isDirectory());
- const feed = [];
- for (const p of packages) {
-  feed.push(await getPackageInfo(p.name, path.join(url, p.name)));
- }
- return feed;
-
-}
-
-
 export default async (composer: IExtensionRegistration): Promise<void> => {
+  const normalizeFeed = async (feed) => {
+    if (feed.objects) {
+      // this is an NPM feed
+      return feed.objects.map((i) => {
+        return {
+          name: i.package.name,
+          version: i.package.version,
+          authors: i.package?.author?.name,
+          keywords: i.package.keywords,
+          repository: i.package?.links.repository,
+          description: i.package.description,
+          language: 'js',
+          source: 'npm',
+        };
+      });
+    } else if (feed.data) {
+      // this is a nuget feed
+      return feed.data.map((i) => {
+        return {
+          name: i.id,
+          version: i.version,
+          versions: i.versions ? semverSort.desc(i.versions.map((v) => v.version)) : [i.version],
+          authors: i.authors[0],
+          keywords: i.tags,
+          repository: i.projectUrl,
+          description: i.description,
+          language: 'c#',
+          source: 'nuget',
+        };
+      });
+    } else if (feed.resources) {
+      // this is actually a myget feed that points to the feed we want...
+      const queryEndpoint = feed.resources.find((resource) => resource['@type'] === 'SearchQueryService');
+      if (queryEndpoint) {
+        const raw = await axios.get(queryEndpoint['@id']);
+        return normalizeFeed(raw.data);
+      } else {
+        return [];
+      }
+    } else {
+      composer.log('Unknown feed format!', feed);
+      return null;
+    }
+  };
+
+  const getPackageInfo = async (name, url) => {
+    // available versions should be folders underneath this folder
+    let versions;
+    try {
+      versions = readdirSync(url, { withFileTypes: true })
+        .filter((f) => f.isDirectory())
+        .map((f) => f.name);
+      if (versions.length === 0) {
+        throw new Error('version list is empty');
+      }
+      versions = semverSort.desc(versions);
+    } catch (err) {
+      throw new Error(
+        `Could not find versions of local package ${name} at ${url}. For more info about setting up a local feed, see here: https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds`
+      );
+    }
+
+    // can read from the nuspec file in the latest to get other info
+    let metadata = {};
+    try {
+      const pathToNuspec = path.join(url, versions[0], `${name}.nuspec`);
+
+      const xml = readFileSync(pathToNuspec, 'utf8');
+
+      const parsed = await parseStringPromise(xml);
+      metadata = {
+        id: parsed.package.metadata[0].id?.[0],
+        version: parsed.package.metadata[0].version?.[0],
+        authors: parsed.package.metadata[0].authors,
+        projectUrl: parsed.package.metadata[0].projectUrl?.[0],
+        description: parsed.package.metadata[0].description?.[0],
+        tags: parsed.package.metadata[0].tags?.[0]?.split(/\s/),
+        versions: versions.map((v) => {
+          return { version: v };
+        }),
+        source: 'local',
+        language: 'c#',
+      };
+    } catch (err) {
+      composer.log(err);
+      throw new Error(`Could not parse nuspec for local package ${name} at ${url}`);
+    }
+
+    return metadata;
+  };
+
+  const crawlLocalFeed = async (url) => {
+    // get a list of all the files at the feed URL
+
+    // the local feed is expected to be in folders using the structure defined here:
+    // https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds
+    // the line below will:
+    // * get a list of all the files at the specified url
+    // * extract only folders from that list
+    // * pass each one through the getPackageInfo function, which extracts metadata from the package
+    // * return a feed in the form that is used by nuget search API
+    const packages = readdirSync(url, { withFileTypes: true }).filter((f) => f.isDirectory());
+    const feed = [];
+    for (const p of packages) {
+      feed.push(await getPackageInfo(p.name, path.join(url, p.name)));
+    }
+    return feed;
+  };
+
   const updateRecentlyUsed = (componentList, runtimeLanguage) => {
     const recentlyUsed = (composer.store.read('recentlyUsed') as any[]) || [];
     componentList.forEach((component) => {
@@ -237,7 +236,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          res.status(err.response?.status || 500).json({message: 'Could not load feed. Please check the feed URL and format.'})
+          res
+            .status(err.response?.status || 500)
+            .json({ message: 'Could not load feed. Please check the feed URL and format.' });
           return;
         }
       }
@@ -261,7 +262,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           if (fs.existsSync(url)) {
             const rawlocal = await crawlLocalFeed(url);
             // cast this to the form of the http response from nuget
-            raw = {data: { data: rawlocal } };
+            raw = { data: { data: rawlocal } };
           } else {
             raw = await axios.get(url);
           }
@@ -274,7 +275,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          return res.status(err.response?.status || 500).json({message: `Could not load feed. Please check the feed URL and format. Error message: ${ err.message }`})
+          return res
+            .status(err.response?.status || 500)
+            .json({
+              message: `Could not load feed. Please check the feed URL and format. Error message: ${err.message}`,
+            });
         }
       }
 
@@ -306,7 +311,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
         const dryrun = new SchemaMerger(
-          [manifestFile,'!**/imported/**','!**/generated/**'],
+          [manifestFile, '!**/imported/**', '!**/generated/**'],
           path.join(currentProject.dataDir, 'schemas/sdk'),
           path.join(currentProject.dataDir, 'dialogs/imported'),
           true, // copy only? true = dry run
@@ -360,13 +365,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       if (packageName && runtimePath) {
         try {
           // Call the runtime's component install mechanism.
-          const installOutput = await runtime.installComponent(runtimePath, packageName, version, source, currentProject);
+          const installOutput = await runtime.installComponent(
+            runtimePath,
+            packageName,
+            version,
+            source,
+            currentProject
+          );
 
           const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
-            [manifestFile,'!**/imported/**','!**/generated/**'],
+            [manifestFile, '!**/imported/**', '!**/generated/**'],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             true, // copy only? true = dry run
@@ -394,7 +405,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             });
           } else {
             const realMerge = new SchemaMerger(
-              [manifestFile,'!**/imported/**','!**/generated/**'],
+              [manifestFile, '!**/imported/**', '!**/generated/**'],
               path.join(currentProject.dataDir, 'schemas/sdk'),
               path.join(currentProject.dataDir, 'dialogs/imported'),
               false, // copy only? true = dry run
@@ -473,7 +484,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
-            [manifestFile,'!**/imported/**','!**/generated/**'],
+            [manifestFile, '!**/imported/**', '!**/generated/**'],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             false, // copy only? true = dry run
@@ -513,5 +524,4 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
   composer.addWebRoute('post', `${API_ROOT}/feeds`, LibraryController.updateFeeds);
   composer.addWebRoute('get', `${API_ROOT}/feed`, LibraryController.getFeed);
   composer.addWebRoute('get', `${API_ROOT}/readme/:packageName`, LibraryController.getReadme);
-
 };
