@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -9,8 +9,11 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ObjectField } from '@bfc/adaptive-form';
 import { useRecoilValue } from 'recoil';
 import { JSONSchema7 } from '@botframework-composer/types';
+import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 
 import { settingsState, dispatcherState } from '../../../recoilModel';
+import { useShell } from '../../../shell';
+import plugins, { mergePluginConfigs } from '../../../plugins';
 
 export type AdapterRecord = {
   name: string;
@@ -42,51 +45,62 @@ const AdapterModal = (props: Props) => {
   const { setSettings } = useRecoilValue(dispatcherState);
   const currentSettings = useRecoilValue(settingsState(projectId));
 
+  const shell = useShell('DesignPage', projectId);
+
+  const pluginConfig: PluginConfig = useMemo(() => {
+    return mergePluginConfigs({ uiSchema } as PluginConfig, plugins);
+  }, [uiSchema]);
+
   const { required } = schema;
 
   return (
-    <DialogWrapper
-      data-testid={'adapterModal'}
-      dialogType={DialogTypes.Customer}
-      isOpen={isOpen}
-      title={formatMessage('Configure adapter')}
-      onDismiss={onClose}
-    >
-      <div data-testid="adapterModal">
-        <ObjectField
-          definitions={{}}
-          depth={0}
-          id={''}
-          name={''}
-          schema={schema}
-          uiOptions={uiSchema}
-          value={value}
-          onChange={(update?: { [key: string]: any }) => {
-            if (update != null) setValue(update);
-          }}
-        />
-        <DialogFooter>
-          <DefaultButton onClick={onClose}>{formatMessage('Back')}</DefaultButton>
-          <PrimaryButton
-            disabled={value == null || !hasRequired(value, required)}
-            onClick={async () => {
-              if (value != null) {
-                const currentAdapters: AdapterRecord[] = currentSettings.adapters ?? [];
-
-                await setSettings(projectId, {
-                  ...currentSettings,
-                  adapters: [...currentAdapters, { name: adapterKey, enabled: true, route: value.route }],
-                  [adapterKey]: value,
-                });
-              }
-              onClose();
+    <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
+      <DialogWrapper
+        data-testid={'adapterModal'}
+        dialogType={DialogTypes.Customer}
+        isOpen={isOpen}
+        title={formatMessage('Configure adapter')}
+        onDismiss={onClose}
+      >
+        <div data-testid="adapterModal">
+          <ObjectField
+            definitions={{}}
+            depth={0}
+            id={''}
+            name={''}
+            schema={schema}
+            uiOptions={uiSchema}
+            value={value}
+            onChange={(update?: { [key: string]: any }) => {
+              if (update != null) setValue(update);
             }}
-          >
-            {formatMessage('Create')}
-          </PrimaryButton>
-        </DialogFooter>
-      </div>
-    </DialogWrapper>
+          />
+          <DialogFooter>
+            <DefaultButton onClick={onClose}>{formatMessage('Back')}</DefaultButton>
+            <PrimaryButton
+              disabled={value == null || !hasRequired(value, required)}
+              onClick={async () => {
+                if (value != null) {
+                  const currentAdapters: AdapterRecord[] = currentSettings.adapters ?? [];
+
+                  await setSettings(projectId, {
+                    ...currentSettings,
+                    adapters: [
+                      ...currentAdapters.filter((a) => a.name != adapterKey),
+                      { name: adapterKey, enabled: true, route: value.route },
+                    ],
+                    [adapterKey]: value,
+                  });
+                }
+                onClose();
+              }}
+            >
+              {formatMessage('Create')}
+            </PrimaryButton>
+          </DialogFooter>
+        </div>
+      </DialogWrapper>
+    </EditorExtension>
   );
 };
 

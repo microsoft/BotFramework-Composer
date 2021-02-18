@@ -466,6 +466,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           inlineLabel
           checked={channelStatus?.[key].enabled}
           disabled={channelStatus?.[key].loading}
+          styles={{ root: { paddingTop: '8px' } }}
           onChange={toggleService(key)}
         />
       </Stack.Item>
