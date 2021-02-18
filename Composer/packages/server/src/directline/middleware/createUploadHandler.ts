@@ -47,7 +47,8 @@ export const createUploadHandler = (state: DLServerState) => {
     // TODO: Override form.onPart handler so it doesn't write temp files to disk.
     form.parse(req as any, async (err, fields, files: any) => {
       try {
-        const activity = JSON.parse((files.activity.path, 'utf8'));
+        const fileContents = await readFile(files.activity.path, 'utf8');
+        const activity = JSON.parse(fileContents);
         let uploads = files.file;
 
         if (!Array.isArray(uploads)) {
