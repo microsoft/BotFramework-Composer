@@ -3,11 +3,34 @@
 
 import * as React from 'react';
 
-type Props = {};
+import { LgResponseEditorProps } from '../types';
+import { getStructuredResponseFromTemplate } from '../utils/structuredResponse';
 
-// This part is being implemented and tracked by task item:
-// https://github.com/microsoft/BotFramework-Composer/issues/5571
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const LgResponseEditor = (_: Props) => {
-  return <div>Under construction</div>;
-};
+import { ModalityPivot } from './ModalityPivot';
+
+export const LgResponseEditor = React.memo(
+  ({
+    lgOption,
+    lgTemplates,
+    memoryVariables,
+    telemetryClient,
+    editorSettings,
+    onTemplateChange,
+    onRemoveTemplate = () => {},
+  }: LgResponseEditorProps) => {
+    const structuredResponse = getStructuredResponseFromTemplate(lgOption?.template);
+
+    return (
+      <ModalityPivot
+        editorSettings={editorSettings}
+        lgOption={lgOption}
+        lgTemplates={lgTemplates}
+        memoryVariables={memoryVariables}
+        structuredResponse={structuredResponse}
+        telemetryClient={telemetryClient}
+        onRemoveTemplate={onRemoveTemplate}
+        onTemplateChange={onTemplateChange}
+      />
+    );
+  }
+);
