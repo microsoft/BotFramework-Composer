@@ -8635,7 +8635,8 @@
     "feature": {
       "UseShowTypingMiddleware": false,
       "UseInspectionMiddleware": false,
-      "RemoveRecipientMention": false
+      "RemoveRecipientMention": false,
+      "UseSetSpeakMiddleware": true
     },
     "MicrosoftAppPassword": "",
     "MicrosoftAppId": "",
@@ -8651,6 +8652,10 @@
     "blobStorage": {
       "connectionString": "",
       "container": "transcripts"
+    },
+    "speech": {
+      "voiceFontName": "en-US-AriaNeural",
+      "fallbackToTextForSpeechIfEmpty": "true"
     },
     "defaultLanguage": "en-us",
     "languages": ["en-us"],

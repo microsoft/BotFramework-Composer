@@ -134,8 +134,12 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
   if (!useLUIS) return [];
 
   const unsupportedLocales = difference(languages, LUISLocales);
+
+  const severity =
+    unsupportedLocales.length === languages.length ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning;
+
   return unsupportedLocales.map((locale) => {
-    return new Diagnostic(`locale ${locale} is not supported by LUIS`, 'appsettings.json', DiagnosticSeverity.Warning);
+    return new Diagnostic(`locale ${locale} is not supported by LUIS`, 'appsettings.json', severity);
   });
 };
 
