@@ -70,7 +70,7 @@ const getPackageInfo = async (name, url) => {
     }
     versions = semverSort.desc(versions);
   } catch(err) {
-    throw new Error(`Could not find versions of local package ${ name } at ${ url }`)
+    throw new Error(`Could not find versions of local package ${ name } at ${ url }. For more info about setting up a local feed, see here: https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds`)
   }
 
   // can read from the nuspec file in the latest to get other info
@@ -147,7 +147,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           res.status(200).json(raw.data);
         }
       } catch (error) {
-        res.status(400).json({
+        res.status(error.response?.status || 400).json({
           message: error instanceof Error ? error.message : error,
         });
       }
@@ -198,7 +198,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }[];
 
       if (!updatedItem) {
-        // remove this
         // update component state
         feeds = feeds.filter((f) => f.key !== key);
       } else if (feeds.filter((f) => f.key === key).length) {
@@ -238,7 +237,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          res.status(500).json({message: 'Could not load feed. Please check the feed URL and format.'})
+          res.status(err.response?.status || 500).json({message: 'Could not load feed. Please check the feed URL and format.'})
           return;
         }
       }
@@ -261,7 +260,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           let raw;
           if (fs.existsSync(url)) {
             const rawlocal = await crawlLocalFeed(url);
-            // caste this to the form of the http response from nuget
+            // cast this to the form of the http response from nuget
             raw = {data: { data: rawlocal } };
           } else {
             raw = await axios.get(url);
@@ -275,7 +274,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          return res.status(500).json({message: 'Could not load feed. Please check the feed URL and format.'})
+          return res.status(err.response?.status || 500).json({message: `Could not load feed. Please check the feed URL and format. Error message: ${ err.message }`})
         }
       }
 

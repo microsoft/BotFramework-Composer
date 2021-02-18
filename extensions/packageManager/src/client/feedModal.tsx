@@ -49,9 +49,6 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
           setSelectedItem(undefined);
         }
       },
-      // canSelectItem: (item: PackageSourceFeed) => {
-      //   return !item.readonly;
-      // },
     })
   );
 
