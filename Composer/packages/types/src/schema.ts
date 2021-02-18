@@ -155,27 +155,6 @@ export enum SDKKinds {
   OnMessagingExtensionBotMessagePreviewSend = 'Teams.OnMessagingExtensionBotMessagePreviewSend',
   OnTabFetch = 'Teams.OnTabFetch',
   OnTabSubmit = 'Teams.OnTabSubmit',
-
-  /** Teams Actions */
-  GetMeetingParticipant = 'Teams.GetMeetingParticipant',
-  GetMember = 'Teams.GetMember',
-  GetPagedMembers = 'Teams.GetPagedMembers',
-  GetPagedTeamMembers = 'Teams.GetPagedTeamMembers',
-  GetTeamChannels = 'Teams.GetTeamChannels',
-  GetTeamDetails = 'Teams.GetTeamDetails',
-  GetTeamMember = 'Teams.GetTeamMember',
-  SendAppBasedLinkQueryResponse = 'Teams.SendAppBasedLinkQueryResponse',
-  SendMessageToTeamsChannel = 'Teams.SendMessageToTeamsChannel',
-  SendMessagingExtensionActionResponse = 'Teams.SendMessagingExtensionActionResponse',
-  SendMessagingExtensionAttachmentsResponse = 'Teams.SendMessagingExtensionAttachmentsResponse',
-  SendMessagingExtensionAuthResponse = 'Teams.SendMessagingExtensionAuthResponse',
-  SendMessagingExtensionBotMessagePreviewResponse = 'Teams.SendMessagingExtensionBotMessagePreviewResponse',
-  SendMessagingExtensionConfigQuerySettingUrlResponse = 'Teams.SendMessagingExtensionConfigQuerySettingUrlResponse',
-  SendMessagingExtensionMessageResponse = 'Teams.SendMessagingExtensionMessageResponse',
-  SendMessagingExtensionSelectItemResponse = 'Teams.SendMessagingExtensionSelectItemResponse',
-  SendTaskModuleCardResponse = 'Teams.SendTaskModuleCardResponse',
-  SendTaskModuleMessageResponse = 'Teams.SendTaskModuleMessageResponse',
-  SendTaskModuleUrlResponse = 'Teams.SendTaskModuleUrlResponse',
 }
 
 export enum SDKRoles {

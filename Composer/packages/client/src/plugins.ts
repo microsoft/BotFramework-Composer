@@ -15,7 +15,6 @@ import orchestrator from '@bfc/ui-plugin-orchestrator';
 import lg from '@bfc/ui-plugin-lg';
 import lu from '@bfc/ui-plugin-luis';
 import crossTrained from '@bfc/ui-plugin-cross-trained';
-import teams from '@bfc/ui-plugin-teams';
 
 const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
   if (isArray(objValue)) {
@@ -47,6 +46,5 @@ export default mergePluginConfigs(
   lu,
   orchestrator,
   crossTrained,
-  schemaEditor,
-  teams
+  schemaEditor
 );
