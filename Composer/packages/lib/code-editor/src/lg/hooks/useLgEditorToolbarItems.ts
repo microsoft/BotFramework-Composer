@@ -5,32 +5,31 @@ import { builtInFunctionsGrouping } from '@bfc/built-in-functions';
 import { LgTemplate } from '@bfc/shared';
 import * as React from 'react';
 
-import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload } from './types';
+import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload, ToolbarButtonPayload } from '../types';
 
 export const useLgEditorToolbarItems = (
   lgTemplates: readonly LgTemplate[],
   properties: readonly string[],
-  selectToolbarMenuItem: (text: string) => void
+  selectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void
 ) => {
   const templateRefPayload = React.useMemo(
     () =>
       ({
-        kind: 'templateRef',
+        kind: 'template',
         data: { templates: lgTemplates, onSelectTemplate: selectToolbarMenuItem },
       } as TemplateRefPayload),
     [lgTemplates, selectToolbarMenuItem]
   );
 
   const propertyRefPayload = React.useMemo(
-    () =>
-      ({ kind: 'propertyRef', data: { properties, onSelectProperty: selectToolbarMenuItem } } as PropertyRefPayload),
-    [properties]
+    () => ({ kind: 'property', data: { properties, onSelectProperty: selectToolbarMenuItem } } as PropertyRefPayload),
+    [properties, selectToolbarMenuItem]
   );
 
   const functionRefPayload = React.useMemo(
     () =>
       ({
-        kind: 'functionRef',
+        kind: 'function',
         data: { functions: builtInFunctionsGrouping, onSelectFunction: selectToolbarMenuItem },
       } as FunctionRefPayload),
     [builtInFunctionsGrouping, selectToolbarMenuItem]

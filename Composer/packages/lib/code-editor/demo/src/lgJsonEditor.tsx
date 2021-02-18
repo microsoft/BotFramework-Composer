@@ -3,8 +3,10 @@
 
 import React, { useState, Fragment } from 'react';
 
-import { LgEditor } from '../../src';
+import { LgCodeEditor } from '../../src';
 import { JsonEditor } from '../../src';
+
+import { mockTelemetryClient } from './mockTelemetryClient';
 
 const jsonContent = {
   'ComposerDialogs/AddToDo/AddToDo.lu': {
@@ -117,7 +119,7 @@ export default function App() {
   };
   return (
     <Fragment>
-      <LgEditor {...props1} />
+      <LgCodeEditor {...props1} telemetryClient={mockTelemetryClient} />
       <JsonEditor {...props2} />
     </Fragment>
   );
