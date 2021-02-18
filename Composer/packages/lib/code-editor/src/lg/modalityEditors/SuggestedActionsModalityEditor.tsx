@@ -11,7 +11,7 @@ import { StringArrayEditor } from './StringArrayEditor';
 
 type Props = CommonModalityEditorProps & { response: SuggestedActionsStructuredResponseItem };
 
-export const SuggestedActionsModalityEditor = React.memo(
+const SuggestedActionsModalityEditor = React.memo(
   ({
     response,
     lgOption,
@@ -54,3 +54,5 @@ export const SuggestedActionsModalityEditor = React.memo(
     );
   }
 );
+
+export { SuggestedActionsModalityEditor };

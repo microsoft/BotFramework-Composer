@@ -22,7 +22,7 @@ type Props = CommonModalityEditorProps & {
   editorSettings?: Partial<CodeEditorSettings>;
 };
 
-export const AttachmentModalityEditor = React.memo(
+const AttachmentModalityEditor = React.memo(
   ({
     response,
     lgOption,
@@ -105,3 +105,5 @@ export const AttachmentModalityEditor = React.memo(
     );
   }
 );
+
+export { AttachmentModalityEditor };

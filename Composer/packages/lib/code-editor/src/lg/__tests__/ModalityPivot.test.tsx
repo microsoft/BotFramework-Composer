@@ -26,9 +26,9 @@ jest.mock('../modalityEditors/AttachmentModalityEditor', () => {
   };
 });
 
-jest.mock('../modalityEditors/AttachmentModalityEditor', () => {
+jest.mock('../modalityEditors/SuggestedActionsModalityEditor', () => {
   return {
-    AttachmentModalityEditor: () => <div>Attachments Modality Editor</div>,
+    SuggestedActionsModalityEditor: () => <div>Suggested Actions Modality Editor</div>,
   };
 });
 

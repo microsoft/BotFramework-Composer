@@ -16,7 +16,7 @@ type Props = CommonModalityEditorProps & {
   inputHint?: InputHintStructuredResponseItem['value'] | 'none';
 };
 
-export const SpeechModalityEditor = React.memo(
+const SpeechModalityEditor = React.memo(
   ({
     response,
     removeModalityDisabled: disableRemoveModality,
@@ -103,3 +103,5 @@ export const SpeechModalityEditor = React.memo(
     );
   }
 );
+
+export { SpeechModalityEditor };

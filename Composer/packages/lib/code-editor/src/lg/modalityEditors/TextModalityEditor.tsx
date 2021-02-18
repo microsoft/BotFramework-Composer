@@ -12,7 +12,7 @@ import { StringArrayEditor } from './StringArrayEditor';
 
 type Props = CommonModalityEditorProps & { response: TextStructuredResponseItem };
 
-export const TextModalityEditor = React.memo(
+const TextModalityEditor = React.memo(
   ({
     response,
     removeModalityDisabled: disableRemoveModality,
@@ -60,3 +60,5 @@ export const TextModalityEditor = React.memo(
     );
   }
 );
+
+export { TextModalityEditor };
