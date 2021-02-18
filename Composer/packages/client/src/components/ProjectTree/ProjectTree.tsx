@@ -3,6 +3,7 @@
 
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
@@ -32,7 +33,7 @@ import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 import { INDENT_PER_LEVEL } from './constants';
 import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
-import { doesLinkMatch } from './helpers';
+import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 
 // -------------------- Styles -------------------- //
@@ -71,10 +72,14 @@ const tree = css`
   label: tree;
 `;
 
-const headerCSS = (label: string) => css`
+const headerCSS = (label: string, isActive?: boolean) => css`
   margin-top: -6px;
   width: 100%;
   label: ${label};
+  :hover {
+    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+  }
+  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 `;
 
 // -------------------- Helper functions -------------------- //
@@ -225,7 +230,7 @@ export const ProjectTree: React.FC<Props> = ({
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
   const createSubtree = useCallback(() => {
     return projectCollection.map(createBotSubtree);
-  }, [projectCollection, selectedLink]);
+  }, [projectCollection, selectedLink, leftSplitWidth]);
 
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
@@ -315,7 +320,7 @@ export const ProjectTree: React.FC<Props> = ({
         <span
           key={dialog.id}
           ref={dialog.isRoot ? addMainDialogRef : null}
-          css={headerCSS('dialog-header')}
+          css={headerCSS('dialog-header', doesLinkMatch(dialogLink, selectedLink))}
           data-testid={`DialogHeader-${dialog.displayName}`}
           role="grid"
         >
@@ -323,6 +328,7 @@ export const ProjectTree: React.FC<Props> = ({
             hasChildren
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
+            isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
             link={dialogLink}
             menu={options.showMenu ? menu : options.showQnAMenu ? [QnAMenuItem] : []}
@@ -376,7 +382,8 @@ export const ProjectTree: React.FC<Props> = ({
     },
     dialog: DialogInfo,
     projectId: string,
-    dialogLink: TreeLink
+    dialogLink: TreeLink,
+    depth: number
   ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
@@ -399,6 +406,7 @@ export const ProjectTree: React.FC<Props> = ({
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
+        marginLeft={depth * INDENT_PER_LEVEL}
         menu={
           options.showDelete
             ? [
@@ -430,7 +438,13 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
+  const renderTriggerList = (
+    triggers: ITrigger[],
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink,
+    depth: number
+  ) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -443,7 +457,8 @@ export const ProjectTree: React.FC<Props> = ({
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
           projectId,
-          dialogLink
+          dialogLink,
+          depth
         );
       });
   };
@@ -499,7 +514,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link)}</div>
+        <div>{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
       </ExpandableNode>
     );
   };
@@ -520,7 +535,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink: TreeLink) => {
     return dialogIsFormDialog(dialog)
       ? renderDialogTriggersByProperty(dialog, projectId, startDepth + 1)
-      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink);
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, 1);
   };
 
   const renderLgImport = (
@@ -650,6 +665,7 @@ export const ProjectTree: React.FC<Props> = ({
                 defaultState={getPageElement(key)}
                 depth={startDepth}
                 detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
+                isActive={doesLinkMatch(dialogLink, selectedLink)}
                 summary={summaryElement}
                 onToggle={(newState) => setPageElement(key, newState)}
               >
