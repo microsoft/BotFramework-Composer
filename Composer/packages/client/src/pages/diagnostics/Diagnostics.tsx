@@ -13,9 +13,9 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { exportSkillModalInfoState } from '../../recoilModel';
-import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
+import implementedDebugExtensions from '../design/DebugPanel/TabExtensions';
 
-import { DiagnosticList } from './DiagnosticList';
+import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
 
@@ -24,14 +24,17 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
 
-  const { projectId = '', skillId } = props;
-  const toolbarItems: IToolbarItem[] = [
-    {
-      type: 'element',
-      element: <DiagnosticsHeader />,
-      align: 'right',
-    },
-  ];
+  const { projectId = '' } = props;
+  const toolbarItems: IToolbarItem[] = implementedDebugExtensions
+    .map(({ key, ToolbarWidget }) => {
+      if (!ToolbarWidget) return;
+      return {
+        type: 'element',
+        element: <ToolbarWidget key={`ToolbarWidget-${key}`} />,
+        align: 'right',
+      };
+    })
+    .filter((item) => Boolean(item)) as IToolbarItem[];
 
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigateTo(item.getUrl());
@@ -55,7 +58,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
     >
-      <DiagnosticList showType={showType} skillId={skillId ?? projectId} onItemClick={handleItemClick} />
+      <DiagnosticsTable projectId={projectId} showType={showType} onItemClick={handleItemClick} />
     </Page>
   );
 };
