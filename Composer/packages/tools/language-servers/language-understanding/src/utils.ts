@@ -70,3 +70,10 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
   });
   return diagnostics;
 }
+
+export function getLineByIndex(document: TextDocument, line: number) {
+  const lineCount = document.lineCount;
+  if (line >= lineCount || line < 0) return null;
+
+  return document.getText().split(/\r?\n/g)[line];
+}
