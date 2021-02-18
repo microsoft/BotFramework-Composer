@@ -20,9 +20,10 @@ import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
 import { navigateTo } from '../../utils/navigation';
+import { DebugPanel } from '../design/DebugPanel/DebugPanel';
 
 import { PublishDialog } from './PublishDialog';
-import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
+import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, contentWrapper } from './styles';
 import { BotStatusList } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
@@ -291,7 +292,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   return (
-    <Fragment>
+    <div css={contentWrapper} role="main">
       {showAuthDialog && (
         <AuthDialog
           needGraph={false}
@@ -355,7 +356,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           />
         </div>
       </div>
-    </Fragment>
+      <DebugPanel />
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@ import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
 import { navigateTo, buildURL } from '../utils/navigation';
 import { dispatcherState, PageMode } from '../recoilModel';
+import { DebugPanel } from '../pages/design/DebugPanel/DebugPanel';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
@@ -61,8 +62,9 @@ export const headerContent = css`
 
 export const main = css`
   margin-left: 2px;
-  height: calc(100vh - 165px);
+  height: 0;
   display: flex;
+  flex-grow: 1;
   border-top: 1px solid #dddddd;
   position: relative;
   nav {
@@ -187,6 +189,7 @@ const Page: React.FC<IPageProps> = (props) => {
             </div>
           </Split>
         </div>
+        <DebugPanel />
       </div>
     </div>
   );
