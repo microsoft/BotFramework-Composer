@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
+import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
 import {
   recentProjectsState,
   templateIdState,
@@ -75,7 +75,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   } = useRecoilValue(dispatcherState);
 
   const featureFlags = useRecoilValue(featureFlagsState);
-  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
+  const botTemplates = useRecoilValue(templateProjectsState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -254,15 +254,17 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
-          <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
-          <p css={home.examplesDescription}>
-            {formatMessage(
-              "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
-            )}
-          </p>
-          <ExampleList examples={filteredTemplates} onClick={onClickTemplate} />
-        </div>
+        {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
+          <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
+            <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
+            <p css={home.examplesDescription}>
+              {formatMessage(
+                "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
+              )}
+            </p>
+            <ExampleList examples={botTemplates} onClick={onClickTemplate} />
+          </div>
+        )}
       </div>
     </div>
   );
