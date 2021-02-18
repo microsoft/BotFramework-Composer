@@ -195,6 +195,7 @@ export class BotProjectProvision {
 
       // this object collects all of the various configuration output
       const provisionResults = {
+        subscriptionId: null,
         appId: null,
         appPassword: null,
         resourceGroup: null,
@@ -215,6 +216,8 @@ export class BotProjectProvision {
         creds: tokenCredentials,
         logger: this.logger,
       } as AzureResourceManangerConfig;
+
+      provisionResults.subscriptionId = this.subscriptionId;
 
       // This object is used to actually make the calls to Azure...
       this.azureResourceManagementClient = new AzureResourceMananger(armConfig);

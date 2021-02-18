@@ -454,12 +454,13 @@ export const AzureProvisionDialog: React.FC = () => {
     const config = removePlaceholder(currentConfig);
     console.log(config);
     if(config){
-      if(config.hostname){
+      // If name or hostname is configured, it means the webapp is already created.
+      if(config.hostname || config.name){
         result.push(AzureResourceTypes.WEBAPP);
-        result.push(AzureResourceTypes.APP_REGISTRATION);
       }
       if(config.settings?.MicrosoftAppId){
         result.push(AzureResourceTypes.BOT_REGISTRATION);
+        result.push(AzureResourceTypes.APP_REGISTRATION);
       }
       if(config.settings?.luis?.authoringKey){
         result.push(AzureResourceTypes.LUIS_AUTHORING);
