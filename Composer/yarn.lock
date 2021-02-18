@@ -5082,10 +5082,10 @@ adaptive-expressions@4.11.1, adaptive-expressions@^4.11.1:
     moment "^2.25.1"
     moment-timezone "^0.5.28"
 
-adaptive-expressions@4.12.0-dev-20210125.e5a4fc60f438:
-  version "4.12.0-dev-20210125.e5a4fc60f438"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.12.0-dev-20210125.e5a4fc60f438.tgz#39afc36fd9b959432e837676badf7d98af472e5c"
-  integrity sha512-ySxUg8iRGfVlr7p3q7EGyln6Cdqf15wBm2WtWnrGmnlGsVepliN0/FvNeNk5r3WMNWJ6nWLu8jFiFWQAo85Nxw==
+adaptive-expressions@4.12.0-rc1:
+  version "4.12.0-rc1"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.12.0-rc1.tgz#d7f90d78b2b4242495471047074d0f5111f1cc46"
+  integrity sha512-PA5FVt1zpCZFzA708FzdOc3qE+6ltFsvqSVirHjZFRnNBMmLJnS5UJqJ3Y4P+B0+w2/f6B9ZY/gBIRGOPekNwQ==
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
     "@types/atob-lite" "^2.0.0"
@@ -6244,12 +6244,12 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@4.12.0-dev-20210125.e5a4fc60f438:
-  version "4.12.0-dev-20210125.e5a4fc60f438"
-  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-dev-20210125.e5a4fc60f438.tgz#106eace62e170768b3c32f1ecb60d875f2c94d8d"
-  integrity sha512-Ra9JZkeW/KI05BfA/te9N8SqIBG1JlNl1mcb5ct4LZC6+JTdpbQA4tgwlonIPieRhc5iRqPDYL5JTdLVWBmPCQ==
+botbuilder-lg@4.12.0-rc1:
+  version "4.12.0-rc1"
+  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-rc1.tgz#32e5f6dd8bdbf176d059a2d4f6faad8c1effc140"
+  integrity sha512-Sg4Kahj1EW5dkfoKosfzsQu2x0QTKaEeci/nOQI/RaXvvG2pzAr1d/qOLdcPCq04KMRBSuyDC5SqRpXYGpPIpA==
   dependencies:
-    adaptive-expressions "4.12.0-dev-20210125.e5a4fc60f438"
+    adaptive-expressions "4.12.0-rc1"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
@@ -15184,9 +15184,9 @@ mock-fs@^4.10.1:
   integrity sha512-w22rOL5ZYu6HbUehB5deurghGM0hS/xBVyHMGKOuQctkk93J9z9VEOhDsiWrXOprVNQpP9uzGKdl8v9mFspKuw==
 
 moment-timezone@*, moment-timezone@^0.5.28:
-  version "0.5.32"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.32.tgz#db7677cc3cc680fd30303ebd90b0da1ca0dfecc2"
-  integrity sha512-Z8QNyuQHQAmWucp8Knmgei8YNo28aLjJq6Ma+jy1ZSpSk5nyfRT8xgUbSQvD2+2UajISfenndwvFuH3NGS+nvA==
+  version "0.5.33"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.33.tgz#b252fd6bb57f341c9b59a5ab61a8e51a73bbd22c"
+  integrity sha512-PTc2vcT8K9J5/9rDEPe5czSIKgLoGsH8UNpA4qZTVw0Vd/Uz19geE9abbIOQKaAQFcnQ3v5YEXrbSc5BpshH+w==
   dependencies:
     moment ">= 2.9.0"
 
