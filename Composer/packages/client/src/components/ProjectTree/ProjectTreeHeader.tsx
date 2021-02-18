@@ -51,10 +51,17 @@ export interface ProjectTreeHeaderMenuItem {
 
 export interface ProjectTreeHeaderProps {
   menu: ProjectTreeHeaderMenuItem[];
+  placeholder?: string;
+  ariaLabel?: string;
   onFilter?: (newValue?: string) => void;
 }
 
-export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFilter = () => {} }) => {
+export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
+  menu,
+  onFilter = () => {},
+  placeholder = '',
+  ariaLabel = '',
+}) => {
   const [showFilter, setShowFilter] = useState(false);
   const searchBoxRef = useRef<ISearchBox>(null);
 
@@ -88,10 +95,10 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu, onFi
       {showFilter ? (
         <SearchBox
           underlined
-          ariaLabel={formatMessage('Type trigger name')}
+          ariaLabel={ariaLabel}
           componentRef={searchBoxRef}
           iconProps={{ iconName: 'Filter' }}
-          placeholder={formatMessage('Filter by trigger name')}
+          placeholder={placeholder}
           styles={searchBox}
           onBlur={handleSearchBoxBlur}
           onChange={(_e, value) => onFilter(value)}

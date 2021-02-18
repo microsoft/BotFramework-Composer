@@ -152,6 +152,8 @@ type Props = {
   onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
   selectedLink?: Partial<TreeLink>;
   options?: ProjectTreeOptions;
+  headerAriaLabel?: string;
+  headerPlaceholder?: string;
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
@@ -183,6 +185,8 @@ export const ProjectTree: React.FC<Props> = ({
     showRemote: true,
     showTriggers: true,
   },
+  headerAriaLabel = '',
+  headerPlaceholder = '',
 }) => {
   const {
     onboardingAddCoachMarkRef,
@@ -198,8 +202,7 @@ export const ProjectTree: React.FC<Props> = ({
   const setPageElement = (name: string, value) => setPageElementState('dialogs', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
-  const filterRef = useRef(filter);
-  filterRef.current = filter;
+
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
 
@@ -228,7 +231,7 @@ export const ProjectTree: React.FC<Props> = ({
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
   const createSubtree = useCallback(() => {
     return projectCollection.map(createBotSubtree);
-  }, [projectCollection, selectedLink, leftSplitWidth]);
+  }, [projectCollection, selectedLink, leftSplitWidth, filter]);
 
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
@@ -433,7 +436,7 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const filterMatch = (scope: string): boolean => {
-    return scope.toLowerCase().includes(filterRef.current.toLowerCase());
+    return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
   const renderTriggerList = (
@@ -763,7 +766,12 @@ export const ProjectTree: React.FC<Props> = ({
       role="region"
     >
       <FocusZone isCircularNavigation css={focusStyle} direction={FocusZoneDirection.vertical}>
-        <ProjectTreeHeader menu={headerMenu} onFilter={onFilter} />
+        <ProjectTreeHeader
+          ariaLabel={headerAriaLabel}
+          menu={headerMenu}
+          placeholder={headerPlaceholder}
+          onFilter={onFilter}
+        />
         <div
           aria-label={formatMessage(
             `{
