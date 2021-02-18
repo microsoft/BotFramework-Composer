@@ -58,6 +58,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
   const [selection, setSelection] = useState<Selection>(
     new Selection({
       onSelectionChanged: () => {
+        setEditRow(false);
         if (selection.getSelectedCount() > 0) {
           setSelectedItem(selection.getSelection()[0] as PackageSourceFeed);
         } else {
@@ -70,14 +71,6 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
   useEffect(() => {
     setItems(props.feeds);
   }, [props.feeds]);
-
-  useEffect(() => {
-    if (selectedItem && selectedItem.text === 'New Feed') {
-      setEditRow(true);
-    } else {
-      setEditRow(false);
-    }
-  }, [selectedItem?.key]);
 
   const columns = [
     {
@@ -172,7 +165,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
   const addItem = () => {
     const newItem = {
       key: uuid(),
-      text: 'New Feed',
+      text: formatMessage('New Feed'),
       url: 'http://',
     } as PackageSourceFeed;
 
@@ -188,6 +181,10 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     selection.setItems(newItems, true);
     selection.setKeySelected(newItem.key, true, false);
     setSelection(selection);
+
+    setEditRow(true);
+
+
   };
 
   const removeSelected = async () => {
