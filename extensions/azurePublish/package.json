@@ -56,6 +56,8 @@
     "@azure/ms-rest-browserauth": "0.1.4",
     "@azure/ms-rest-js": "^2.0.7",
     "@azure/ms-rest-nodeauth": "3.0.3",
+    "@bfc/built-in-functions": "../../Composer/packages/tools/built-in-functions",
+    "@bfc/ui-shared": "../../Composer/packages/lib/ui-shared",
     "@bfc/code-editor": "../../Composer/packages/lib/code-editor",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/indexers": "../../Composer/packages/lib/indexers",

@@ -23,9 +23,9 @@ import { FeatureFlagKey } from './featureFlags';
 import { TelemetryClient } from './telemetry';
 
 /** Recursively marks all properties as optional. */
-type AllPartial<T> = {
-  [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
-};
+// type AllPartial<T> = {
+//   [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
+// };
 
 export type HttpClient = AxiosInstance;
 
@@ -66,7 +66,7 @@ export type DisabledMenuActions = {
 
 export type ApplicationContextApi = {
   navigateTo: (to: string, opts?: { state?: any; replace?: boolean }) => void;
-  updateUserSettings: (settings: AllPartial<UserSettings>) => void;
+  updateUserSettings: (settings: Partial<UserSettings>) => void;
   announce: (message: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
@@ -111,6 +111,7 @@ export type LgContextApi = {
 };
 
 export type ProjectContextApi = {
+  getMemoryVariables: (projectId: string, options?: { signal: AbortSignal }) => Promise<string[]>;
   getDialog: (dialogId: string) => any;
   saveDialog: (dialogId: string, newDialogData: any) => any;
   reloadProject: () => void;

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, useContext, useCallback } from 'react';
+import { FC, useContext, useCallback, useEffect } from 'react';
 import { generateActionTitle, PromptTab } from '@bfc/shared';
 import { useShellApi } from '@bfc/extension-client';
 
@@ -38,6 +38,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
   const nodeFocused = focusedId === id || focusedEvent === id;
   const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);
+  const nodeId = `action-${selectableId}`;
 
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
@@ -58,6 +59,13 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
     addCoachMarkRef({ action });
   }, []);
 
+  useEffect(() => {
+    if (nodeSelected || nodeDoubleSelected) {
+      const actionNode = document.getElementById(nodeId);
+      actionNode?.focus();
+    }
+  }, [nodeSelected, tab, nodeDoubleSelected]);
+
   // Set 'use-select' to none to disable browser's default
   // text selection effect when pressing Shift + Click.
   return (
@@ -73,8 +81,13 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
         &:hover {
           ${!nodeFocused && nodeBorderHoveredStyle}
         }
+        &:focus {
+          outline: 0;
+        }
       `}
       data-testid="ActionNodeWrapper"
+      id={nodeId}
+      tabIndex={0}
       {...declareElementAttributes(selectableId, id)}
       aria-label={generateActionTitle(data, '', '', tab)}
       onClick={(e) => {

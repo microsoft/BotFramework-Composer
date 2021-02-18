@@ -176,37 +176,48 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       try {
         // point to the declarative assets (possibly in remote storage)
         const botFiles = project.getProject().files;
-        const botFolder = this.getBotFolder(resourcekey, this.mode);
-        const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
-        // clean up from any previous deploys
-        await this.cleanup(resourcekey);
+        if (runtime.key === 'csharp-azurewebapp-v2') {
+          const buildFolder = this.getProjectFolder(resourcekey, this.mode)
 
-        // create the temporary folder to contain this project
-        mkdirSync(runtimeFolder, { recursive: true });
+          // clean up from any previous deploys
+          await this.cleanup(resourcekey);
 
-        // create the ComposerDialogs/ folder
-        mkdirSync(botFolder, { recursive: true });
+          // copy bot and runtime into projFolder
+          await copy(srcTemplate, buildFolder);
+        } else {
+          const botFolder = this.getBotFolder(resourcekey, this.mode);
+          const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
-        let manifestPath;
-        for (const file of botFiles) {
-          const pattern = /manifests\/[0-9A-z-]*.json/;
-          if (file.relativePath.match(pattern)) {
-            manifestPath = path.dirname(file.path);
+          // clean up from any previous deploys
+          await this.cleanup(resourcekey);
+
+          // create the temporary folder to contain this project
+          mkdirSync(runtimeFolder, { recursive: true });
+
+          // create the ComposerDialogs/ folder
+          mkdirSync(botFolder, { recursive: true });
+
+          let manifestPath;
+          for (const file of botFiles) {
+            const pattern = /manifests\/[0-9A-z-]*.json/;
+            if (file.relativePath.match(pattern)) {
+              manifestPath = path.dirname(file.path);
+            }
+            // save bot files
+            const filePath = path.resolve(botFolder, file.relativePath);
+            if (!(await pathExists(path.dirname(filePath)))) {
+              mkdirSync(path.dirname(filePath), { recursive: true });
+            }
+            writeFileSync(filePath, file.content);
           }
-          // save bot files
-          const filePath = path.resolve(botFolder, file.relativePath);
-          if (!(await pathExists(path.dirname(filePath)))) {
-            mkdirSync(path.dirname(filePath), { recursive: true });
-          }
-          writeFileSync(filePath, file.content);
+
+          // save manifest
+          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
+
+          // copy bot and runtime into projFolder
+          await copy(srcTemplate, runtimeFolder);
         }
-
-        // save manifest
-        runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
-
-        // copy bot and runtime into projFolder
-        await copy(srcTemplate, runtimeFolder);
 
       } catch (error) {
         throw createCustomizeError(AzurePublishErrors.INITIALIZE_ERROR, `Error during init publish folder, ${error.message}`);
@@ -401,6 +412,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             MicrosoftAppId: provisionResults.appId,
             MicrosoftAppPassword: provisionResults.appPassword,
           },
+          subscriptionId: config.subscription.subscriptionId
         };
 
         this.logger(publishProfile);
@@ -523,7 +535,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
      *************************************************************************************************/
     provision = async (config: any, project: IBotProject, user, getAccessToken): Promise<ProcessStatus> => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
-
       this.asyncProvision(jobId, config, project, user);
       return BackgroundProcessManager.getStatus(jobId);
     };

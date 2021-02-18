@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import formatMessage from 'format-message';
 
-const dialogStyle = {
+export const dialogStyle = {
   normal: 'NORMAL',
   console: 'CONSOLE',
 };

@@ -13,6 +13,11 @@ export type CodeEditorSettings = {
   lineNumbers: boolean;
   wordWrap: boolean;
   minimap: boolean;
+  fontSettings: {
+    fontFamily: string;
+    fontSize: string;
+    fontWeight: string;
+  };
 };
 
 export type TelemetrySettings = {

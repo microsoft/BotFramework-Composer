@@ -39,7 +39,7 @@ if (instrumentationKey) {
   // do not collect the user's machine name
   AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope, context): boolean => {
-    const { sessionId, telemetry, composerVersion } = getTelemetryContext();
+    const { sessionId, telemetry, composerVersion, userId } = getTelemetryContext();
 
     if (!telemetry?.allowDataCollection) {
       return false;
@@ -48,6 +48,9 @@ if (instrumentationKey) {
 
     // Add session id
     envelope.tags[AppInsights.defaultClient.context.keys.sessionId] = sessionId;
+
+    // Add truncated user id
+    envelope.tags[AppInsights.defaultClient.context.keys.userId] = userId?.slice(0, Math.floor(userId.length * 0.8));
 
     // Remove PII from url
     if (envelope.data.baseType === 'RequestData' && data.baseData.url.match(/\/\d+.\d+/i)) {

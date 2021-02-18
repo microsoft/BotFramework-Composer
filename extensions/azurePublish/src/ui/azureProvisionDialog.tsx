@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import formatMessage from 'format-message';
 import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import {
   currentProjectId,
   getAccessToken,
@@ -24,7 +22,8 @@ import {
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
-import { ResourcesItem, authConfig, LuisAuthoringSupportLocation, LuisPublishSupportLocation } from '../types';
+import { ResourcesItem, authConfig} from '../types';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -38,13 +37,17 @@ import {
   Sticky,
   StickyPositionType,
   TooltipHost,
+  Icon,
+  TextField,
   Spinner,
   Persona,
   IPersonaProps,
   PersonaSize,
   Selection,
   SelectionMode,
+  DetailsRow,
 } from 'office-ui-fabric-react';
+import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
 import jwtDecode from 'jwt-decode';
 import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview, getLuisAuthoringRegions, CheckWebAppNameAvailability } from './api';
@@ -61,13 +64,13 @@ const DialogTitle = {
   CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage(
-      'Composer will create your bot resources in this Azure destination. If you already have assets created then select import'
+      'How you would like to provision your Azure resources to publish your bot?'
     ),
   },
   REVIEW: {
-    title: formatMessage('Review + Create'),
+    title: formatMessage('Review & create'),
     subText: formatMessage(
-      'Please review the resources that will be created for your bot. Once these resources are provisioned, your resources will be available in your Azure profile'
+      'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
     ),
   },
 };
@@ -91,6 +94,39 @@ function decodeToken(token: string) {
     return null;
   }
 }
+
+const iconStyle = (required) => {
+  return {
+    root: {
+      selectors: {
+        '&::before': {
+          content: required ? " '*'" : '',
+          color: SharedColors.red10,
+          paddingRight: 3,
+        },
+      },
+    },
+  };
+};
+
+const onRenderLabel = (props) => {
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      marginBottom: '5px'
+    }}>
+      <div style={{
+        marginRight: '5px',
+        fontWeight: 600,
+        fontSize: '14px'
+      }}> {props.label} </div>
+      <TooltipHost content={props.ariaLabel}>
+        <Icon iconName="Info" styles={iconStyle(props.required)} />
+      </TooltipHost>
+    </div>
+  );
+};
 
 export const AzureProvisionDialog: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -123,9 +159,8 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const columns: IColumn[] = [
     {
-      key: 'icon',
+      key: 'Icon',
       name: 'File Type',
-      iconName: 'Page',
       isIconOnly: true,
       fieldName: 'name',
       minWidth: 16,
@@ -140,14 +175,12 @@ export const AzureProvisionDialog: React.FC = () => {
       className: 'name',
       fieldName: 'name',
       minWidth: 300,
-      maxWidth: 350,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: ResourcesItem & {name,icon}) => {
-        return <div>
-            {item.name}
-            <div>{item.text} | {item.tier}</div>
+        return <div style={{whiteSpace: 'normal'}}>
+            <div style={{fontSize: '14px', color: NeutralColors.gray190}}>{item.name}</div>
+            <div style={{fontSize: '12px', color: NeutralColors.gray130}}>{item.text} | {item.tier}</div>
           </div>;
       },
       isPadded: true,
@@ -157,13 +190,11 @@ export const AzureProvisionDialog: React.FC = () => {
       name: formatMessage('Description'),
       className: 'description',
       fieldName: 'description',
-      minWidth: 300,
-      maxWidth: 350,
+      minWidth: 380,
       isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: ResourcesItem & {name,icon}) => {
-        return <span>{item.description}</span>;
+        return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.description}</div>;
       },
       isPadded: true,
     }
@@ -271,13 +302,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const newResourceGroup = useMemo(
     () => (e, newName) => {
       setHostName(newName);
-      // validate existed or not
-      const existed = resourceGroups.find((t) => t.name === newName);
-      if (existed) {
-        setErrorHostName('this resource group already exist');
-      } else {
-        checkNameAvailability(newName);
-      }
+      checkNameAvailability(newName);
     },
     [resourceGroups, checkNameAvailability]
   );
@@ -395,50 +420,62 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageFormConfig = (
     <Fragment>
-      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
+      <ChoiceGroup style={{}} defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       {subscriptionOption?.length > 0 && choice.key === 'create' && (
-        <form style={{ width: '60%', height:'100%' }}>
+        <form style={{ width: '50%', marginTop: '16px' }}>
           <Dropdown
             required
             defaultSelectedKey={currentSubscription?.subscriptionId}
-            label={'Subscription'}
+            label={formatMessage('Subscription')}
+            ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
             options={subscriptionOption}
-            placeholder={'Select your subscription'}
+            placeholder={'Select one'}
             onChange={updateCurrentSubscription}
+            styles={{ root: { paddingBottom: '8px' } }}
+            onRenderLabel={onRenderLabel}
           />
           <TextField
             required
             defaultValue={currentHostName}
             errorMessage={errorHostName}
-            label={'HostName'}
+            label={formatMessage('Resource group name')}
+            ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
             placeholder={'Name of your new resource group'}
             onChange={newResourceGroup}
+            styles={{ root: { paddingBottom: '8px' } }}
+            onRenderLabel={onRenderLabel}
           />
           <Dropdown
             required
             defaultSelectedKey={currentLocation?.id}
-            label={'Locations'}
+            label={'Region'}
             options={deployLocationsOption}
-            placeholder={'Select your location'}
+            placeholder={'Select one'}
+            styles={{ root: { paddingBottom: '8px' } }}
             onChange={updateCurrentLocation}
           />
           {currentLocation && luisLocations.length>0 && !luisLocations.includes(currentLocation.name) ?
           <Dropdown
             required
-            label={'Location for Luis'}
+            label={'Region for Luis'}
             options={luisLocationsOption}
-            placeholder={'Select your location'}
+            placeholder={'Select one'}
             onChange={updateLuisLocation}
           />: null}
         </form>
       )}
       {choice.key === 'create' && subscriptionOption.length < 1 && <Spinner label="Loading" />}
       {choice.key === 'import' && (
-        <div style={{ width: '60%', marginTop: '10px', height: '100%' }}>
-          <div>Publish Configuration</div>
+        <div style={{ width: '50%', marginTop: '10px', height: '100%' }}>
+          <div style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#323130',
+            padding: '5px 0px'
+          }}>{formatMessage('Publish Configuration')}</div>
           <JsonEditor
             id={publishType}
-            height={200}
+            height={300}
             value={importConfig}
             onChange={(value) => {
               setEditorError(false);
@@ -474,20 +511,19 @@ export const AzureProvisionDialog: React.FC = () => {
   const PageReview = useMemo(() => {
     return (
       <Fragment>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 50px)'}}>
-        <DetailsList
-          isHeaderVisible
-          checkboxVisibility={CheckboxVisibility.onHover}
-          selectionMode={SelectionMode.multiple}
-          selection={selection}
-          columns={columns}
-          getKey={(item) => item.key}
-          groups={group}
-          items={listItems}
-          layoutMode={DetailsListLayoutMode.justified}
-          setKey="none"
-          onRenderDetailsHeader={onRenderDetailsHeader}
-        />
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 64px)'}}>
+          <DetailsList
+            isHeaderVisible
+            checkboxVisibility={CheckboxVisibility.onHover}
+            selectionMode={SelectionMode.multiple}
+            selection={selection}
+            columns={columns}
+            getKey={(item) => item.key}
+            groups={group}
+            items={listItems}
+            layoutMode={DetailsListLayoutMode.justified}
+            setKey="none"
+          />
         </ScrollablePane>
       </Fragment>
     );
@@ -497,13 +533,13 @@ export const AzureProvisionDialog: React.FC = () => {
     if (page === PageTypes.ConfigProvision) {
       return (
         <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
-          {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'log out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
+          {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'Sign out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
           <div>
             <DefaultButton text={'Back'} onClick={onBack} style={{margin: '0 4px'}} />
             {choice.key === 'create' ? (
               <PrimaryButton
                 disabled={isDisAble}
-                text="Next"
+                text="Next: Review"
                 onClick={() => {
                   onNext(currentHostName);
                 }}
@@ -518,7 +554,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else {
       return (
         <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
-          {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'log out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
+          {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'Sign out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
           <div>
             <DefaultButton
               text={'Back'}
@@ -571,13 +607,13 @@ export const AzureProvisionDialog: React.FC = () => {
       <div
         style={{
           background: '#FFFFFF',
-          borderTop: '1px solid #000',
+          borderTop: '1px solid #EDEBE9',
           position: 'fixed',
           width: '100%',
           bottom: '0',
           textAlign: 'right',
           height:'fit-content',
-          padding: '16px 0px 0px',
+          padding: '24px 0px 0px',
         }}
       >
         {PageFooter}

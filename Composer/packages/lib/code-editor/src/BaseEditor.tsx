@@ -19,8 +19,9 @@ const defaultOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
   wordWrapColumn: 120,
-  fontFamily: 'Segoe UI',
-  fontSize: 14,
+  fontFamily: 'Courier',
+  fontSize: '18px',
+  fontWeight: 600,
   lineNumbers: 'off',
   quickSuggestions: false,
   minimap: {
@@ -96,6 +97,9 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
       enabled: overrides.minimap,
       maxColumn: overrides.minimap ? 120 : 0,
     },
+    fontFamily: overrides?.fontSettings?.fontFamily,
+    fontSize: overrides?.fontSettings?.fontSize,
+    fontWeight: Number(overrides?.fontSettings?.fontWeight),
   };
 };
 
@@ -113,7 +117,7 @@ export interface BaseEditorProps extends EditorProps {
   warningMessage?: string; // warning text show below editor
   errorMessage?: string; // error text show below editor
   editorSettings?: Partial<CodeEditorSettings>;
-  onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
+  onChangeSettings?: (settings: CodeEditorSettings) => void;
   onBlur?: (id: string) => void;
   onFocus?: (id: string) => void;
 }
@@ -146,6 +150,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.
+  // if editor is readOnly, we can take external value updates.
   const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
@@ -242,7 +247,13 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} key={id} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
+        <Editor
+          {...rest}
+          key={id}
+          editorDidMount={onEditorMount}
+          options={editorOptions}
+          value={(editorOptions?.readOnly ? value : initialValue) || ''}
+        />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
