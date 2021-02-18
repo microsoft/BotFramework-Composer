@@ -90,7 +90,11 @@ export const buildConfigurationSelector = selector({
         if (rootBotId) {
           sensitiveSettings = getSensitiveProperties(settings);
         }
-        return { ...result, name, dialogs, sensitiveSettings };
+        const secrets = {
+          msAppId: settings.MicrosoftAppId || '',
+          msPassword: settings.MicrosoftAppPassword || '',
+        };
+        return { ...result, name, dialogs, sensitiveSettings, secrets };
       });
   },
 });
