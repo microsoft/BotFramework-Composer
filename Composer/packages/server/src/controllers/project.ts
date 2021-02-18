@@ -4,11 +4,7 @@
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { remove } from 'fs-extra';
-<<<<<<< HEAD
-=======
-import formatMessage from 'format-message';
 import set from 'lodash/set';
->>>>>>> update luis name while saving as a project
 
 import { ExtensionContext } from '../models/extension/extensionContext';
 import log from '../logger';
