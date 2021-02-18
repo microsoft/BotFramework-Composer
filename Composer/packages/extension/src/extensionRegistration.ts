@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { RequestHandler } from 'express-serve-static-core';
+import { RequestHandler, Router } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 import {
   PublishPlugin,
@@ -172,6 +172,14 @@ export class ExtensionRegistration implements IExtensionRegistration {
       } else {
         throw new Error(`Unhandled web route type ${type}`);
       }
+    }
+  }
+
+  public addRouter(routerPath: string, router: Router) {
+    if (!this.context.webserver) {
+      throw new Error('Plugin loaded in context without webserver. Cannot add express Router.');
+    } else {
+      this.context.webserver.use(routerPath || '/', router);
     }
   }
 

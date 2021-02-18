@@ -30,7 +30,7 @@ export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
 
 const getAuthCredentials = (baseUrl: string) => {
   const url = new URL(baseUrl);
-  if (url.hostname.includes('int') || url.hostname.includes('ppe')) {
+  if (url.hostname.includes('.int.') || url.hostname.includes('.ppe.')) {
     log('Using INT / PPE auth credentials.');
     return {
       clientId: COMPOSER_1P_APP_ID,
