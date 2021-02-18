@@ -12,14 +12,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import {
-  dialogIdsState,
-  qnaFilesState,
-  dispatcherState,
-  createQnAOnState,
-  localeState,
-  settingsState,
-} from '../../recoilModel';
+import { dialogIdsState, qnaFilesState, dispatcherState, createQnAOnState, localeState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 

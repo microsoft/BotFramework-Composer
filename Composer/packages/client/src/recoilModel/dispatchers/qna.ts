@@ -13,6 +13,7 @@ import {
   showCreateQnAFromUrlDialogState,
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
+  localeState,
 } from '../atoms/botState';
 import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
@@ -73,9 +74,9 @@ export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
-  const { set } = callbackHelpers;
-  //To do: support other languages on qna
-  id = id.endsWith('.source') ? id : `${getBaseName(id)}.en-us`;
+  const { set, snapshot } = callbackHelpers;
+  const locale = await snapshot.getPromise(localeState(projectId));
+  id = id.endsWith('.source') ? id : `${getBaseName(id)}.${locale}`;
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
 
   set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedQnAFile] }));
@@ -87,9 +88,7 @@ export const createQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  //const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages on qna
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
   const { languages } = await snapshot.getPromise(settingsState(projectId));
   const createdQnaId = `${id}.${locale}`;
   const createdQnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
@@ -98,7 +97,7 @@ export const createQnAFileState = async (
   }
   const changes: QnAFile[] = [];
 
-  // copy to other locales
+  // create same qna file on all locales
   languages.forEach((lang) => {
     const fileId = `${id}.${lang}`;
     qnaFileStatusStorage.updateFileStatus(projectId, fileId);
@@ -122,9 +121,7 @@ export const removeQnAFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  //const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages on qna
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -146,13 +143,14 @@ export const createKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const createdSourceQnAId = `${name}.source`;
+  const locale = await snapshot.getPromise(localeState(projectId));
+  const createdSourceQnAId = `${name}.source.${locale}`;
 
   if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
     throw new Error(`source qna file ${createdSourceQnAId}.qna already exist`);
   }
 
-  const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
+  //const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
 
   let updatedQnAFiles: QnAFile[] = [];
 
@@ -166,14 +164,17 @@ export const createKBFileState = async (
     updatedQnAFiles = qnaFiles
       .filter((file) => !file.id.endsWith('.source') && getBaseName(file.id) === getBaseName(updatedQnAId))
       .map((file) => {
-        return qnaUtil.addImport(file, `${createdSourceQnAId}.qna`);
+        return qnaUtil.addImport(file, `${name}.source.qna`);
       });
 
     qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
+    set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles }));
   }
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
-  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles, adds: [createdQnAFile] }));
+
+  //need to create other locale qna files
+  await createQnAFileState(callbackHelpers, { id: `${name}.source`, content, projectId });
 };
 
 export const removeKBFileState = async (
@@ -182,9 +183,7 @@ export const removeKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  // const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages on qna
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -206,9 +205,7 @@ export const renameKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  //const locale = await snapshot.getPromise(localeState(projectId));
-  //To do: support other languages
-  const locale = 'en-us';
+  const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetQnAFile =
     qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
@@ -373,8 +370,9 @@ export const qnaDispatcher = () => {
       multiTurn: boolean;
       projectId: string;
     }) => {
-      //To do: support other languages on qna
-      id = `${getBaseName(id)}.en-us`;
+      const { snapshot } = callbackHelpers;
+      const locale = await snapshot.getPromise(localeState(projectId));
+      id = `${getBaseName(id)}.${locale}`;
       await dismissCreateQnAModal({ projectId });
       const notification = createNotification(getQnaPendingNotification(url));
       addNotificationInternal(callbackHelpers, notification);
@@ -438,8 +436,9 @@ ${response.data}
       content?: string;
       projectId: string;
     }) => {
-      //To do: support other languages on qna
-      id = `${getBaseName(id)}.en-us`;
+      const { snapshot } = callbackHelpers;
+      const locale = await snapshot.getPromise(localeState(projectId));
+      id = `${getBaseName(id)}.${locale}`;
       await dismissCreateQnAModal({ projectId });
 
       await createKBFileState(callbackHelpers, {
