@@ -16,7 +16,7 @@ export function useMenuConfig(): { menuSchema: MenuUISchema; forceDisabledAction
   const sdkDefinitions = sdkSchema?.content?.definitions || {};
   const forceDisabledActions = shellData.forceDisabledActions;
 
-  const getFallbackLabel = ($kind): string => get(sdkSchema, `content.definitions["${$kind}"].title`);
+  const getFallbackLabel = ($kind): string => get(sdkSchema, `content.definitions["${$kind}"].title`, $kind);
 
   return useMemo(() => {
     const menuSchema = mapValues(uiSchema, 'menu') as MenuUISchema;
