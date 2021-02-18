@@ -10,6 +10,8 @@ export { EditorDidMount } from '@monaco-editor/react';
 export * from './BaseEditor';
 export * from './JsonEditor';
 export * from './LgEditor';
+export * from './lg/LgCodeEditor';
 export * from './LuEditor';
 export * from './QnAEditor';
 export * from './constants';
+export * from './utils/lgValidate';

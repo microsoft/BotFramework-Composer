@@ -29,6 +29,7 @@
     "@bfc/indexers": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/shared": "*",
+    "@bfc/ui-shared": "*",
     "@bfc/built-in-functions": "*"
   },
   "devDependencies": {
