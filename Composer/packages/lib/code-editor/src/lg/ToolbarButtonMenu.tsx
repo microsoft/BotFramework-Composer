@@ -467,6 +467,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
   return (
     <IconButton
       className={jsLgToolbarMenuClassName}
+      data-testid="menuButton"
       disabled={disabled}
       menuProps={menuProps}
       styles={buttonStyles}
