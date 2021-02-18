@@ -78,6 +78,7 @@ export class LGServer {
         this.workspaceRoot = URI.parse(params.rootUri);
       }
       this.connection.console.log('The server is initialized.');
+
       return {
         capabilities: {
           textDocumentSync: this.documents.syncKind,
@@ -567,17 +568,26 @@ export class LGServer {
     const wordRange = getEntityRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
     const projectId = this.getLGDocument(document)?.projectId;
-    let suggestEntities: string[] = [];
-    if (projectId && this.entitiesResolver) {
-      const luContents = this.entitiesResolver(projectId);
-      if (luContents) {
-        for (const content of luContents) {
-          const luisJson = await extractLUISContent(content);
-          suggestEntities = suggestEntities.concat(getSuggestionEntities(luisJson, suggestionAllEntityTypes));
+
+    const getEntities = async () => {
+      let suggestEntities: string[] = [];
+      if (projectId && this.entitiesResolver) {
+        const luContents = this.entitiesResolver(projectId);
+        if (luContents) {
+          for (const content of luContents) {
+            const luisJson = await extractLUISContent(content);
+            suggestEntities = suggestEntities.concat(getSuggestionEntities(luisJson, suggestionAllEntityTypes));
+          }
         }
       }
 
       this.luisEntities = suggestEntities;
+    };
+
+    setTimeout(getEntities, 1000);
+
+    if (this.luisEntities.length === 0) {
+      await getEntities();
     }
 
     const startWithAt = word.startsWith('@');
