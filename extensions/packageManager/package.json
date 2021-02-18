@@ -41,7 +41,7 @@
     "@emotion/core": "^10.0.35",
     "@uifabric/fluent-theme": "^7.1.4",
     "date-fns": "^2.16.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "format-message": "^6.2.3",
     "office-ui-fabric-react": "7.71.0",
     "react": "^16.13.0",
