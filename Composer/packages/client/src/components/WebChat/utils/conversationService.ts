@@ -53,7 +53,7 @@ export enum ActivityType {
 }
 
 export type ChatData = {
-  webChatMode: 'livechat' | 'transcript';
+  webChatMode: WebChatMode;
   directline: {
     end: () => void;
   };
