@@ -46,7 +46,7 @@ export type LgLanguageContext =
 export type PartialStructuredResponse = Partial<Record<StructuredResponseItem['kind'], StructuredResponseItem | null>>;
 
 export type CommonModalityEditorProps = {
-  response?: PartialStructuredResponse;
+  response?: StructuredResponseItem;
   removeModalityDisabled: boolean;
   lgOption?: LGOption;
   lgTemplates?: readonly LgTemplate[];
