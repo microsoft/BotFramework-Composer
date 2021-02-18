@@ -28,7 +28,7 @@ export const createMissingLgTemplatesForDialogs = async (
   for (const lgFile of lgFiles) {
     const dialogId = getBaseName(lgFile.id);
     const templatesShouldExist = templateNamesInDialog[dialogId];
-    const templatesInLgFile = lgFile.templates.map(({ name }) => name);
+    const templatesInLgFile = lgFile.allTemplates.map(({ name }) => name);
     const templatesNotExist = difference(templatesShouldExist, templatesInLgFile);
     if (templatesNotExist?.length) {
       const templatesToAdd = templatesNotExist.map((name) => {
