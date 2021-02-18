@@ -161,6 +161,7 @@ export type LgTemplate = {
   body: string;
   parameters: string[];
   range?: IRange;
+  properties?: Record<string, unknown>;
 };
 
 export type LgParsed = {

@@ -1,13 +1,25 @@
 ---
 name: Feature Request
-about: "Deprecated: Use 'Feature Request' discussion."
+about: Suggest an idea for the Bot Framework Composer
 title: ""
 labels: "Type: Enhancement, Needs-triage"
 assignees: ""
 ---
 
-> This issue template is deprecated.
+<!-- Please search for your feature request before creating a new one. >
 
-Please search Feature Request discussions for your feature request and create a new one if not found.
+## Is your feature request related to a problem? Please describe.
 
-You can create a new discussion [here](https://github.com/microsoft/BotFramework-Composer/discussions/new).
+<!-- A clear and concise description of what the problem is. Ex. I'm always frustrated when [...] -->
+
+## Describe the solution you'd like
+
+<!-- A clear and concise description of what you want to happen. -->
+
+## Describe alternatives you've considered
+
+<!-- A clear and concise description of any alternative solutions or features you've considered. -->
+
+## Additional context
+
+<!-- Add any other context or screenshots about the feature request here. -->

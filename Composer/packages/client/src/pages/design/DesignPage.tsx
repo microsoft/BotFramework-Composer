@@ -18,6 +18,7 @@ import PropertyPanel from './PropertyPanel';
 import useEmptyPropsHandler from './useEmptyPropsHandler';
 import { contentWrapper, editorContainer, editorWrapper, pageRoot } from './styles';
 import Modals from './Modals';
+import { DebugPanel } from './DebugPanel/DebugPanel';
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
@@ -61,6 +62,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               </Split>
             </div>
           </Conversation>
+          <DebugPanel />
         </div>
       </Split>
       <Modals projectId={activeBot} />
