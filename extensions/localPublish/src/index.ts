@@ -343,11 +343,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
-    let customerRuntimePath = settings.runtime.path;
-    if (customerRuntimePath && !path.isAbsolute(customerRuntimePath)) {
-      customerRuntimePath = path.resolve(project.dir, customerRuntimePath);
+    let customRuntimePath = settings.runtime.path;
+    if (customRuntimePath && !path.isAbsolute(customRuntimePath)) {
+      customRuntimePath = path.resolve(project.dir, customRuntimePath);
     }
-    const botDir = settings.runtime?.customRuntime === true ? customerRuntimePath : this.getBotRuntimeDir(botId);
+    const botDir = settings.runtime?.customRuntime === true ? customRuntimePath : this.getBotRuntimeDir(botId);
 
     const commandAndArgs =
       settings.runtime?.customRuntime === true

@@ -172,6 +172,45 @@ describe('should get recent projects', () => {
   });
 });
 
+describe('create a component model conversational core bot project', () => {
+  const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
+  const name = 'newConversationalCoreBot';
+  const mockReq = {
+    params: {},
+    query: {},
+    body: {
+      storageId: 'default',
+      location: newBotDir,
+      description: '',
+      name: name,
+      templateId: 'generator-conversational-core',
+      templateVersion: '1.0.9',
+    },
+  } as Request;
+
+  jest.mock('yeoman-environment', () => ({
+    installLocalGenerators: jest.fn(() => {
+      console.log('in mock install local generators');
+    }),
+    lookupLocalPackages: jest.fn(() => {
+      console.log('in mock lookupLocalPackages');
+    }),
+    createEnv: jest.fn().mockImplementation(() => {
+      console.log('in mock create env');
+      return {
+        lookupLocalPackages: jest.fn(),
+      };
+    }),
+  }));
+
+  it('should start to create a new project', async () => {
+    BotProjectService.createProjectAsync = jest.fn();
+
+    ProjectController.createProjectV2(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(202);
+  });
+});
+
 describe('create a Empty Bot project', () => {
   it('should create a new project', async () => {
     const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');

@@ -547,6 +547,7 @@ export const createNewBotFromTemplate = async (
 export const createNewBotFromTemplateV2 = async (
   callbackHelpers,
   templateId: string,
+  templateVersion: string,
   name: string,
   description: string,
   location: string,
@@ -560,6 +561,7 @@ export const createNewBotFromTemplateV2 = async (
   const jobId = await httpClient.post(`/v2/projects`, {
     storageId: 'default',
     templateId,
+    templateVersion,
     name,
     description,
     location,
@@ -597,7 +599,7 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   return projectId;
 };
 
-const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
+export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
   const { set, snapshot } = callbackHelpers;
   const dispatcher = await snapshot.getPromise(dispatcherState);
