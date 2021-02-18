@@ -4,10 +4,11 @@
 import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
 import formatMessage from 'format-message';
+import { DirectLineError } from '@botframework-composer/types';
 
 import { BotErrorCodes } from '../utils/apiErrorException';
 import { DLServerState } from '../store/dlServerState';
-import { ConversationAPIPathParameters, DirectLineError } from '../store/types';
+import { ConversationAPIPathParameters } from '../store/types';
 
 export const createGetConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response, next?: express.NextFunction): any => {

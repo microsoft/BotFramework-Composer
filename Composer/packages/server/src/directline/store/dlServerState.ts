@@ -3,6 +3,7 @@
 
 import moment from 'moment';
 import { StatusCodes } from 'http-status-codes';
+import { DirectLineLogType } from '@bfc/shared';
 
 import log from '../utils/logger';
 import { WebSocketServer } from '../utils/webSocketServer';
@@ -11,7 +12,7 @@ import { BotEndpoint } from './entities/botEndpoint';
 import { Attachments } from './entities/attachments';
 import { ConversationSet } from './entities/conversationSet';
 import { EndpointSet } from './entities/endpointSet';
-import { LoggerLevel, LogItem } from './types';
+import { LogItem } from './types';
 import { Conversation } from './entities/conversation';
 
 export type DLServerState = {
@@ -23,7 +24,7 @@ export type DLServerState = {
     logToDocument: (
       conversationId: string,
       logMessage: LogItem<{
-        level: LoggerLevel;
+        level: DirectLineLogType;
         text: string;
       }>
     ) => void;
@@ -53,7 +54,7 @@ class DLServerContext {
   private logToDocument(
     conversationId: string,
     logItem: LogItem<{
-      level: LoggerLevel;
+      level: DirectLineLogType;
       text: string;
     }>
   ) {

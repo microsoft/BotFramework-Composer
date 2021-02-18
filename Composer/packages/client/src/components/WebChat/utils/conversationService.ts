@@ -193,8 +193,6 @@ export default class ConversationService {
         conversationId,
       };
     }
-    // TODO handle error here
-    throw new Error('An error occured starting a new conversation');
   }
 
   public async restartConversation(oldChatData: ChatData, requireNewUserID: boolean, activeLocale: string) {

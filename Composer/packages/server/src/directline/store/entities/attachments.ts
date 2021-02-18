@@ -4,10 +4,10 @@
 import { AttachmentData } from 'botframework-schema';
 import formatMessage from 'format-message';
 import { StatusCodes } from 'http-status-codes';
+import { DirectLineError } from '@botframework-composer/types';
 
 import { BotErrorCodes } from '../../utils/apiErrorException';
 import { generateUniqueId } from '../../utils/helpers';
-import { DirectLineError } from '../types';
 
 export interface AttachmentWithId extends AttachmentData {
   id: string;

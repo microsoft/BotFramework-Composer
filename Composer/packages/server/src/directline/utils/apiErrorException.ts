@@ -3,8 +3,7 @@
 import * as express from 'express';
 import { StatusCodes } from 'http-status-codes';
 import moment from 'moment';
-
-import { DirectLineError, DirectLineLog } from '../store/types';
+import { DirectLineError, DirectLineLog } from '@botframework-composer/types';
 
 import { WebSocketServer } from './webSocketServer';
 

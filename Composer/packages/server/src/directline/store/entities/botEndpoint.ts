@@ -3,9 +3,9 @@
 
 import axios, { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
+import { DirectLineError } from '@botframework-composer/types';
 
 import { authentication } from '../../utils/constants';
-import { DirectLineError } from '../types';
 
 const TIME_TO_REFRESH = 5 * 60 * 1000;
 
@@ -62,7 +62,7 @@ export class BotEndpoint {
       const response: AxiosResponse = ex.response;
       const err: DirectLineError = {
         status: response.status,
-        errorDetails: response.data.error_description,
+        details: response.data.error_description,
         message: formatMessage('An error occured validating the Microsoft App Id and Microsoft App Password.'),
       };
       throw err;
@@ -85,7 +85,7 @@ export class BotEndpoint {
       const response: AxiosResponse = ex.response;
       const err: DirectLineError = {
         status: response.status,
-        errorDetails: response.data?.error_description,
+        details: response.data?.error_description,
         message: formatMessage('An error occured validating the Microsoft App Id and Microsoft App Password'),
       };
       throw err;

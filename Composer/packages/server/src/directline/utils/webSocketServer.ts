@@ -7,8 +7,7 @@ import portfinder from 'portfinder';
 import express, { Response } from 'express';
 import { Activity } from 'botframework-schema';
 import { Server as WSServer } from 'ws';
-
-import { DirectLineLog } from '../store/types';
+import { DirectLineLog } from '@botframework-composer/types';
 
 import log from './logger';
 
