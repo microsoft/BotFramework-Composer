@@ -584,11 +584,7 @@ export class LGServer {
       this.luisEntities = suggestEntities;
     };
 
-    setTimeout(getEntities, 5000);
-
-    if (this.luisEntities.length === 0) {
-      await getEntities();
-    }
+    setTimeout(getEntities);
 
     const startWithAt = word.startsWith('@');
 
