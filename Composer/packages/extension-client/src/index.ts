@@ -10,5 +10,6 @@ export * from './EditorExtensionContext';
 export * from './hooks';
 export * from './types';
 export * from './utils';
+export { extensionEventEmitter } from './extensionEventEmitter';
 
 export { syncStore } from './store';
