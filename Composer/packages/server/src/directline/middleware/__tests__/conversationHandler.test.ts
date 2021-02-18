@@ -207,7 +207,8 @@ describe('updateConversation handler', () => {
         name: 'user-old',
         id: 'user-old',
       },
-      'livechat'
+      'livechat',
+      'en-us'
     );
 
     const state: any = {
@@ -245,6 +246,7 @@ describe('updateConversation handler', () => {
         accessToken: undefined,
         accessTokenExpires: undefined,
       },
+      locale: 'en-us',
       conversationId: 'conversation-new',
       members: [
         { id: 'bot-1', name: 'Bot' },

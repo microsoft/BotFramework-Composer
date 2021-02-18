@@ -65,7 +65,7 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
   const isExpandable = !!item.children?.length && onToggleExpand;
 
   return (
-    <Root horizontal style={{ paddingLeft }} title={item.id} verticalAlign="center">
+    <Root horizontal style={{ paddingLeft }} title={item.name} verticalAlign="center">
       {isExpandable ? (
         <Icon
           iconName={expanded ? 'CaretDownSolid8' : 'CaretRightSolid8'}
