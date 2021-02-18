@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Range, Position } from '@bfc/shared';
 
 import { renderWithRecoil } from '../../testUtils';
-import { DiagnosticList } from '../../../src/pages/diagnostics/DiagnosticList';
+import { DiagnosticList } from '../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
 import {
   botDiagnosticsState,
   botProjectIdsState,
@@ -46,8 +46,8 @@ const state = {
       diagnostics: [
         {
           message: 'lu syntax error',
-          severity: 0,
-          source: 'test.en-us',
+          severity: 'Error',
+          location: 'test.en-us',
           range: {
             end: { character: 2, line: 7 },
             start: { character: 0, line: 7 },
@@ -70,8 +70,8 @@ const state = {
       diagnostics: [
         {
           message: 'lg syntax error',
-          severity: 1,
-          source: 'test.en-us',
+          severity: 'Error',
+          location: 'test.en-us',
           range: {
             end: { character: 2, line: 13 },
             start: { character: 0, line: 13 },
@@ -89,8 +89,8 @@ const state = {
   diagnostics: [
     {
       message: 'server error',
-      severity: 0,
-      source: 'server',
+      severity: 'Error',
+      location: 'server',
     },
   ],
   settings: {
@@ -124,10 +124,9 @@ describe('<DiagnosticList/>', () => {
 
   it('should render the DiagnosticList', () => {
     const { container } = renderWithRecoil(
-      <DiagnosticList showType="" skillId={state.projectId} onItemClick={jest.fn} />,
+      <DiagnosticList diagnosticItems={state.diagnostics as any} onItemClick={jest.fn} />,
       initRecoilState
     );
     expect(container).toHaveTextContent('server');
-    expect(container).toHaveTextContent('test.en-us.lg');
   });
 });
