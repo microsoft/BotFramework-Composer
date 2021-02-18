@@ -33,7 +33,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
-import { BotStatus } from '../../../constants';
+import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
 import httpClient from '../../../utils/httpUtil';
@@ -763,4 +763,10 @@ export const checkIfBotExistsInBotProjectFile = async (
     }
   }
   return false;
+};
+
+export const getMemoryVariables = async (projectId: string, options?: { signal: AbortSignal }) => {
+  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, { signal: options?.signal });
+  const json = (await res.json()) as { variables: string[] };
+  return json.variables ?? [];
 };
