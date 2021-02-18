@@ -62,7 +62,7 @@ export const headerContent = css`
 
 export const main = css`
   margin-left: 2px;
-  height: 0;
+  height: calc(100vh - 165px);
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
@@ -78,12 +78,20 @@ export const main = css`
 
 export const content = (shouldShowEditorError: boolean) => css`
   flex: 4;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
   position: relative;
   overflow: auto;
-  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : 'calc(100% - 10px)'};
+  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : '100%'};
   label: PageContent;
   box-sizing: border-box;
+`;
+
+const contentStyle = css`
+  padding: 20px;
+  flex-grow: 1;
+  height: 0;
+  position: relative;
 `;
 
 // -------------------- Page -------------------- //
@@ -118,7 +126,7 @@ const Page: React.FC<IPageProps> = (props) => {
     navRegionName,
     mainRegionName,
     headerStyle = header,
-    shouldShowEditorError = true,
+    shouldShowEditorError = false,
     useNewTree,
     pageMode,
     showCommonLinks = false,
@@ -185,11 +193,11 @@ const Page: React.FC<IPageProps> = (props) => {
               data-testid="PageContent"
               role="region"
             >
-              {children}
+              <div css={contentStyle}>{children}</div>
+              <DebugPanel />
             </div>
           </Split>
         </div>
-        <DebugPanel />
       </div>
     </div>
   );
