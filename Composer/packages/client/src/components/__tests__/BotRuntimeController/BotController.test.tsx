@@ -62,7 +62,7 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[2]), BotStatus.failed);
     };
     const { findByText } = renderWithRecoil(
-      <BotController hideController={jest.fn()} isControllerHidden={false} />,
+      <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
     await findByText('Restart all bots (2/3 running)');
@@ -77,7 +77,7 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[2]), BotStatus.inactive);
     };
     const { findByText } = renderWithRecoil(
-      <BotController hideController={jest.fn()} isControllerHidden={false} />,
+      <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
     await findByText('Start all bots');
@@ -92,7 +92,7 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[2]), BotStatus.connected);
     };
     const { findByTestId } = renderWithRecoil(
-      <BotController hideController={jest.fn()} isControllerHidden={false} />,
+      <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
     const button = await findByTestId('button');
@@ -112,7 +112,7 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[2]), BotStatus.inactive);
     };
     const { findByTestId } = renderWithRecoil(
-      <BotController hideController={jest.fn()} isControllerHidden={false} />,
+      <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
     const button = await findByTestId('button');
@@ -134,7 +134,7 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[3]), BotStatus.queued);
     };
     const { findByText } = renderWithRecoil(
-      <BotController hideController={jest.fn()} isControllerHidden={false} />,
+      <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
     await findByText('Starting bots.. (1/4 running)');

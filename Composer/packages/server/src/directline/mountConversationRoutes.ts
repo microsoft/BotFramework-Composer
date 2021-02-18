@@ -46,6 +46,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.get('/conversations/ws/port', getWebSocketPort);
 
+  // The initial greeting from the bot
   router.put(
     '/conversations/:conversationId/updateConversation',
     verifyBotFramework,

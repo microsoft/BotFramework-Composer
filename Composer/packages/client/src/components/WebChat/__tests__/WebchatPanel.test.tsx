@@ -11,7 +11,7 @@ const mockSendActivity = jest.fn();
 
 URL.createObjectURL = jest.fn();
 
-jest.mock('../utils/ConversationService', () => {
+jest.mock('../utils/conversationService', () => {
   return jest.fn().mockImplementation(() => {
     return { startNewConversation: mockstartNewConversation, sendInitialActivity: mockSendActivity };
   });
@@ -51,7 +51,7 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(<WebChatPanel {...props} isWebChatPanelVisible={true} />);
+      rerender(<WebChatPanel {...props} isWebChatPanelVisible />);
       await findAllByTestId('restart-conversation');
     });
   });

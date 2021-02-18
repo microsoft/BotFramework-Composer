@@ -176,7 +176,7 @@ export const Header = () => {
     if (!hideBotController && isWebChatPanelVisible) {
       toggleWebChatPanel(false);
     }
-  }, [hideBotController]);
+  }, [hideBotController, isWebChatPanelVisible]);
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
@@ -240,7 +240,7 @@ export const Header = () => {
 
       <div css={rightSection}>
         {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && (
-          <BotController hideController={hideBotStartController} isControllerHidden={hideBotController} />
+          <BotController isControllerHidden={hideBotController} onHideController={hideBotStartController} />
         )}
         {showUpdateAvailableIcon && (
           <IconButton
