@@ -72,6 +72,14 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             }
         }
 
+        public void ConfigureSetSpeakMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings?.Feature?.UseSetSpeakMiddleware == true && settings.Speech != null)
+            {
+                adapter.Use(new SetSpeakMiddleware(settings.Speech.VoiceFontName, settings.Speech.FallbackToTextForSpeechIfEmpty));
+            }
+        }
+
         public IStorage ConfigureStorage(BotSettings settings)
         {
             if (string.IsNullOrEmpty(settings?.CosmosDb?.ContainerId))
@@ -116,6 +124,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
             ConfigureInspectionMiddleWare(adapter, settings, storage);
             ConfigureShowTypingMiddleWare(adapter, settings);
+            ConfigureSetSpeakMiddleWare(adapter, settings);
 
             adapter.OnTurnError = async (turnContext, exception) =>
             {

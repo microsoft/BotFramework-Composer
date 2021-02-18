@@ -133,6 +133,13 @@ export const cardPropPossibleValueType = {
   contenttype: 'adaptivecard',
   content: '${json(fromFile("../../card.json"))}',
   name: 'An Example Name',
+
+  Text: 'Text | ${Expression}',
+  Speak: 'Text | ${Expression}',
+  Attachments: 'List of attachments',
+  InputHint: 'accepting | ignoring | expecting',
+  AttachmentLayout: 'list | carousel',
+  SuggestedActions: 'Text | ${Expression}',
 };
 
 export const cardPropDict = {
@@ -140,6 +147,7 @@ export const cardPropDict = {
   Suggestions: ['SuggestionActions'],
   Cards: ['title', 'subtitle', 'text', 'image', 'buttons'],
   Attachment: ['contenttype', 'content'],
+  Activity: ['Text', 'Speak', 'Attachments', 'SuggestedActions', 'InputHint', 'AttachmentLayout'],
   Others: ['type', 'name', 'value'],
 };
 
