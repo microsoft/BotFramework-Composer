@@ -24,7 +24,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     displayName: formatMessage('Conversational Core Template'),
     description: formatMessage('Enable the new conversational core template built on the component model'),
     documentationLink: 'https://aka.ms/AAabzf9',
-    isHidden: true,
+    isHidden: false,
     enabled: false,
   },
   ORCHESTRATOR: {

@@ -26,7 +26,7 @@ type Props = {
   projectId: string;
 };
 
-const AdapterSettings = (props: Props) => {
+const ExternalAdapterSettings = (props: Props) => {
   const { projectId } = props;
 
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
@@ -53,9 +53,13 @@ const AdapterSettings = (props: Props) => {
 
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
-      <div css={subtitle}>
+      <div key={'subtitle'} css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
-          a: ({ children }) => <Link href="plugin/package-manager/package-manager">{children}</Link>,
+          a: ({ children }) => (
+            <Link key="link" href="plugin/package-manager/package-manager">
+              {children}
+            </Link>
+          ),
         })}
       </div>
       <div css={tableRow}>
@@ -77,7 +81,9 @@ const AdapterSettings = (props: Props) => {
               {key in currentSettings ? (
                 <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
               ) : (
-                <Link onClick={() => openModal(key)}>{formatMessage('Configure')}</Link>
+                <Link key={key} onClick={() => openModal(key)}>
+                  {formatMessage('Configure')}
+                </Link>
               )}
             </div>
             <div css={tableRowItem(columnWidths[2])}>
@@ -85,6 +91,7 @@ const AdapterSettings = (props: Props) => {
                 checked={keyEnabled}
                 data-testid={`toggle_${key}`}
                 disabled={!keyConfigured}
+                styles={{ root: { paddingTop: '8px' } }}
                 onChange={(ev, val?: boolean) => {
                   if (val != null) {
                     const oldAdapters = currentSettings.adapters ?? [];
@@ -117,7 +124,7 @@ const AdapterSettings = (props: Props) => {
                   ],
                 }}
                 role="cell"
-                styles={{ root: { paddingTop: '10px' } }}
+                styles={{ root: { paddingTop: '10px', paddingBottom: '10px' } }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.stopPropagation();
@@ -158,4 +165,4 @@ const AdapterSettings = (props: Props) => {
   );
 };
 
-export default AdapterSettings;
+export default ExternalAdapterSettings;

@@ -29,6 +29,7 @@ export const sectionHeader = css`
 export const tableRow = css`
   display: flex;
   flex-direction: row;
+  align-items: center;
   height: 42px;
   width: 750px;
   border-bottom: 1px solid ${NeutralColors.gray30};
@@ -37,7 +38,6 @@ export const tableRow = css`
 export const tableRowItem = (width?: string) => css`
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
-  padding-top: 10px;
   padding-left: 10px;
   text-overflow: ellipsis;
   overflow: hidden;
