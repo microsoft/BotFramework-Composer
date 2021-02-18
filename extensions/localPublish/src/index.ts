@@ -4,7 +4,6 @@
 import { ChildProcess, spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
-import { mkdir, readFile, readdir, stat, copyFile, unlink } from 'fs/promises';
 import { promisify } from 'util';
 
 import max from 'lodash/max';
@@ -20,7 +19,12 @@ import map from 'lodash/map';
 import * as tcpPortUsed from 'tcp-port-used';
 
 const removeDirAndFiles = promisify(rimraf);
-
+const mkdir = promisify(fs.mkdir);
+const readFile = promisify(fs.readFile);
+const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
+const copyFile = promisify(fs.copyFile);
+const unlink = promisify(fs.unlink);
 interface RunningBot {
   process?: ChildProcess;
   port?: number;
