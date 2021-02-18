@@ -24,7 +24,7 @@ jest.mock('fs-extra', () => ({
 const mockGetAccessToken = jest.fn().mockResolvedValue('accessToken');
 jest.mock('../../services/auth/auth', () => ({
   authService: {
-    getAccessToken: async (...args) => await mockGetAccessToken(...args), //jest.fn().mockResolvedValue('accessToken'),
+    getAccessToken: async (...args) => await mockGetAccessToken(...args),
   },
 }));
 
