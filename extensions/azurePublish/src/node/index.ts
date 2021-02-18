@@ -17,6 +17,7 @@ import schema from './schema';
 import { stringifyError, AzurePublishErrors, createCustomizeError } from './utils/errorHandler';
 import { ProcessStatus } from './types';
 import { authConfig, ResourcesItem } from '../types';
+import { ResourceGroup } from '@azure/arm-resources/esm/models/mappers';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
 // set to TRUE for history to be saved to disk
@@ -378,31 +379,44 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const provisionResults = await azureProvisioner.create(config);
         // GOT PROVISION RESULTS!
         // cast this into the right form for a publish profile
-        const currentSettings = JSON.parse(config.currentProfile.configuration).settings;
+
+        var currentProfile = null;
+        if (config.currentProfile)
+        {
+          currentProfile = JSON.parse(config.currentProfile.configuration);
+        }
+        const currentSettings = currentProfile?.settings;
+
         const publishProfile = {
           name: config.hostname,
           environment: 'composer',
+          subscriptionId: provisionResults.subscriptionId,
+          resourceGroup: provisionResults.resourceGroup.name,
           hostname: config.hostname,
           luisResource: `${config.hostname}-luis`,
           runtimeIdentifier: 'win-x64',
           settings: {
             applicationInsights: {
-              InstrumentationKey: currentSettings?.applicationInsights?.InstrumentationKey?.startsWith('<') ? provisionResults.appInsights?.instrumentationKey : currentSettings?.applicationInsights?.InstrumentationKey,
+              InstrumentationKey: provisionResults.appInsights?.instrumentationKey ?? currentSettings?.applicationInsights?.InstrumentationKey,
             },
-            cosmosDb: currentSettings?.cosmosDb?.authKey?.startsWith('<') ? provisionResults.cosmosDB : currentSettings?.cosmosDb,
-            blobStorage: currentSettings?.blobStorage?.connectionString?.startsWith('<') ? provisionResults.blobStorage : currentSettings?.blobStorage,
+            cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
+            blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
             luis: {
-              authoringKey: currentSettings?.luis?.authoringKey?.startsWith('<') ? provisionResults.luisAuthoring?.authoringKey : currentSettings?.luis?.authoringKey,
-              authoringEndpoint: currentSettings?.luis?.authoringEndpoint?.startsWith('<') ? provisionResults.luisAuthoring?.authoringEndpoint: currentSettings?.luis?.authoringEndpoint,
-              endpointKey: currentSettings?.luis?.endpointKey?.startsWith('<') ? provisionResults.luisPrediction?.endpointKey : currentSettings?.luis?.endpointKey,
-              endpoint: currentSettings?.luis?.endpoint?.startsWith('<') ?  provisionResults.luisPrediction?.endpoint : currentSettings?.luis?.endpoint,
-              region: currentSettings?.luis?.region?.startsWith('<') ? provisionResults.resourceGroup.location : currentSettings?.luis?.region,
+              authoringKey: provisionResults.luisAuthoring?.authoringKey ?? currentSettings?.luis?.authoringKey,
+              authoringEndpoint: provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
+              endpointKey: provisionResults.luisPrediction?.endpointKey ?? currentSettings?.luis?.endpointKey,
+              endpoint: provisionResults.luisPrediction?.endpoint ?? currentSettings?.luis?.endpoint,
+              region: provisionResults.luisPrediction?.location ?? currentSettings?.luis?.region,
             },
-            MicrosoftAppId: currentSettings?.MicrosoftAppId?.startsWith('<') ? provisionResults.appId : currentSettings?.MicrosoftAppId,
-            MicrosoftAppPassword: currentSettings?.MicrosoftAppPassword?.startsWith('<') ? provisionResults.appPassword : currentSettings?.MicrosoftAppPassword,
-          },
+            qna: {
+              subscriptionKey: provisionResults.qna?.subscriptionKey ?? currentSettings?.qna?.subscriptionKey,
+              qnaRegion: provisionResults.qna?.region ?? currentSettings?.qna?.qnaRegion,
+            },
+            MicrosoftAppId: provisionResults.appId ?? currentSettings?.MicrosoftAppId,
+            MicrosoftAppPassword: provisionResults.appPassword ?? currentSettings?.MicrosoftAppPassword,
+          }
         };
-        for (let configUnit in currentSettings) {
+        for (let configUnit in currentProfile) {
           if (!(configUnit in publishProfile)) {
             publishProfile[configUnit] = currentSettings[configUnit];
           }
