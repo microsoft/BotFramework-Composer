@@ -10,7 +10,7 @@ import { FormUISchema } from '../types';
 
 export function useFormConfig() {
   const { plugins, shellData } = useContext(EditorExtensionContext);
-  const sdkSchema = shellData.schemas.sdk.content;
+  const sdkSchema = get(shellData, 'schemas.sdk.content', {});
 
   const isTrigger = ($kind): boolean => {
     const schemaRole = get(sdkSchema, ['definitions', $kind, '$role']);
