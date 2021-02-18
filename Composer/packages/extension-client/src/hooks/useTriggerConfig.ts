@@ -14,7 +14,7 @@ export function useTriggerConfig() {
 
   const isPvaEnv = Boolean(get(schemas, 'sdk.content.definitions["Microsoft.VirtualAgents.Recognizer"]'));
 
-  const getSDKDefaultTitle = ($kind): string => get(schemas, `sdk.content.definitions["${$kind}"].title`);
+  const getSDKDefaultTitle = ($kind): string => get(schemas, `sdk.content.definitions["${$kind}"].title`, $kind);
 
   const triggerConfig: TriggerUISchema = useMemo(() => {
     const implementedTriggerSchema: TriggerUISchema = {};
