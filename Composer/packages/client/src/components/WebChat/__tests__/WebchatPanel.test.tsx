@@ -51,7 +51,7 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(<WebChatPanel {...props} isWebChatPanelVisible={true} />);
+      rerender(<WebChatPanel {...props} isWebChatPanelVisible />);
       await findAllByTestId('restart-conversation');
     });
   });
