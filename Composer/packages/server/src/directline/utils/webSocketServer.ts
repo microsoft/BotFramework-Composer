@@ -108,8 +108,8 @@ export class WebSocketServer {
   }
 
   public static cleanUpConversation(conversationId: string): void {
-    if (this.getSocketByConversationId(conversationId)) {
-      this.getSocketByConversationId(conversationId)?.close();
+    if (this.sockets[conversationId]) {
+      this.sockets[conversationId]?.close();
     }
 
     if (this.servers[conversationId]) {

@@ -14,8 +14,6 @@ import {
   createUpdateConversationHandler,
   saveTranscriptHandler,
   getTranscriptHandler,
-  cleanupConversation,
-  cleanupAll,
 } from './middleware';
 import DLServerContext from './store/dlServerState';
 import { getWebSocketPort } from './utils/socketPort';
@@ -48,6 +46,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.get('/conversations/ws/port', getWebSocketPort);
 
+  // The initial greeting from the bot
   router.put(
     '/conversations/:conversationId/updateConversation',
     verifyBotFramework,
@@ -58,10 +57,6 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
   router.post('/conversations/:conversationId/saveTranscript', fetchConversation, saveTranscriptHandler(state));
 
   router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler(state));
-
-  router.put('/conversations/:conversationId/cleanup', cleanupConversation());
-
-  router.put('/conversations/cleanupAll', cleanupAll());
 
   return router;
 };

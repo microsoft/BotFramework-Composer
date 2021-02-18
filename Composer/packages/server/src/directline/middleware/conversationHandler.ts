@@ -95,22 +95,3 @@ export const createUpdateConversationHandler = (state: DLServerState) => {
     });
   };
 };
-
-export const cleanupConversation = () => {
-  return (req: express.Request, res: express.Response): void => {
-    const { conversationId } = req.params;
-    if (!conversationId) {
-      res.status(StatusCodes.BAD_REQUEST).send('Cannot find the conversation id to cleanup.').end();
-      return;
-    }
-    WebSocketServer.cleanUpConversation(conversationId);
-    res.status(StatusCodes.OK).send('Conversation has been cleaned up.');
-  };
-};
-
-export const cleanupAll = () => {
-  return (req: express.Request, res: express.Response): void => {
-    WebSocketServer.cleanUpAll();
-    res.status(StatusCodes.OK).send('Conversation sockets have been cleaned up.');
-  };
-};

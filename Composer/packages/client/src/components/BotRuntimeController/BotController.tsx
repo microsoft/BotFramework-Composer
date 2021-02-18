@@ -56,11 +56,11 @@ const startPanelsContainer = css`
 const transparentBackground = 'rgba(255, 255, 255, 0.5)';
 
 type BotControllerProps = {
-  hideController: (isHidden: boolean) => void;
+  onHideController: (isHidden: boolean) => void;
   isControllerHidden: boolean;
 };
 
-const BotController: React.FC<BotControllerProps> = ({ hideController, isControllerHidden }: BotControllerProps) => {
+const BotController: React.FC<BotControllerProps> = ({ onHideController, isControllerHidden }: BotControllerProps) => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
   const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
@@ -133,7 +133,7 @@ const BotController: React.FC<BotControllerProps> = ({ hideController, isControl
 
     if (botOperationsCompleted) {
       if (statusIconClass !== 'Refresh') {
-        hideController(false);
+        onHideController(false);
       }
       setStatusIconClass('Refresh');
 
@@ -166,7 +166,7 @@ const BotController: React.FC<BotControllerProps> = ({ hideController, isControl
   useClickOutsideOutsideTarget(
     isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
     (event: React.MouseEvent<HTMLElement>) => {
-      hideController(true);
+      onHideController(true);
       event.stopPropagation();
     }
   );
@@ -186,7 +186,7 @@ const BotController: React.FC<BotControllerProps> = ({ hideController, isControl
   };
 
   const onSplitButtonClick = () => {
-    hideController(!isControllerHidden);
+    onHideController(!isControllerHidden);
   };
 
   const items = useMemo<IContextualMenuItem[]>(() => {

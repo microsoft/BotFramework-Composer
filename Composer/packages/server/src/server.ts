@@ -135,7 +135,6 @@ export async function start(electronContext?: ElectronContext): Promise<number |
 
   // Setup directline and conversation routes for v3 bots
   const DLServerState = DLServerContext.getInstance(port);
-
   const conversationRouter = mountConversationsRoutes(DLServerState);
   app.use(`${BASEURL}`, conversationRouter);
 

@@ -298,6 +298,11 @@ export const showAddSkillDialogModalState = atom<boolean>({
   default: false,
 });
 
+export const debugPanelExpansionState = atom<boolean>({
+  key: getFullyQualifiedKey('debugPanelExpansion'),
+  default: false,
+});
+
 export const selectedTemplateReadMeState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateReadMeState'),
   default: '',
