@@ -51,7 +51,7 @@ interface ILetterIconProps {
 }
 
 export const LetterIcon: React.FC<ILetterIconProps> = (props) => {
-  return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: '#FFF', backgroundColor: 'rgb(0, 120, 212)', fontSize: '30px'}}>
+  return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', color: '#FFF', backgroundColor: 'rgb(0, 120, 212)', fontSize: '25px'}}>
     <span>{ props.letter }</span>
   </div>
 }
@@ -65,27 +65,26 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       key: 'icon',
       name: 'Icon',
       fieldName: 'icon',
-      minWidth: 50,
-      maxWidth: 50,
+      minWidth: 32,
+      maxWidth: 32,
       isResizable: false,
       data: 'string',
       onRender: (item: LibraryRef) => {
         return <Fragment>
           {item.icon ? (
-            <img src={item.icon} width="50" height="50" alt="icon" />
+            <img src={item.icon} width="32" height="32" alt="icon" />
           ): (
             <LetterIcon letter={item.name[0]} />
           )}
         </Fragment>;
       },
-      isPadded: true,
     },
     {
       key: 'ItemName',
       name: formatMessage('Name'),
       fieldName: 'name',
       minWidth: 300,
-      maxWidth: 800,
+      maxWidth: 1000,
       isResizable: true,
       data: 'string',
       onRender: (item: LibraryRef) => {
@@ -94,24 +93,23 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
           <span>{item.description}</span>
           </Fragment>;
       },
-      isPadded: true,
     },
     {
       key: 'actions',
       name: '',
-      minWidth: 90,
-      maxWidth: 60,
+      minWidth: 100,
+      maxWidth: 100,
       isResizable: false,
       data: 'string',
       onRender: (item: LibraryRef) => {
         return (
-          <Fragment>
+          <div style={{textAlign: "right"}}>
             {props.isInstalled(item) && (
               <span  style={{color: '#219653'}}>
                 <FontIcon iconName={'CheckMark'} style={{color: '#219653', fontSize: '1rem', position: 'relative', top: '3px'}}/> { formatMessage('Installed') }
               </span>
             )}
-          </Fragment>
+          </div>
         );
       },
       isPadded: true,
@@ -145,6 +143,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={columns}
           css={detailList}
+          cellStyleProps={{cellLeftPadding: 20, cellRightPadding: 0, cellExtraRightPadding: 20}}
           getKey={(item) => item.id}
           items={items}
           layoutMode={DetailsListLayoutMode.justified}

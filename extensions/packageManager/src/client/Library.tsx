@@ -564,7 +564,7 @@ const Library: React.FC = () => {
   *  This is the top nav that includes the tabs and search bar
   ****************************************************************************/}
 
-          <Stack horizontal styles={{root:{paddingLeft: '12px', paddingRight: '12px'}}}>
+          <Stack horizontal styles={{root:{paddingLeft: '12px', paddingRight: '20px'}}}>
               <Stack.Item align="stretch">
                 <Pivot aria-label="Library Views" onLinkClick={(item:PivotItem)=>setCurrentTab(item.props.itemKey)}>
                   <PivotItem headerText={strings.browseHeader} itemKey={TABS.BROWSE}  />
@@ -668,22 +668,22 @@ const Library: React.FC = () => {
   *  This is the details pane
   ****************************************************************************/}
 
-        <Stack.Item grow={0} shrink={0} disableShrink styles={{ root: { width: '400px', padding: '20px', borderLeft: '1px solid #CCC' } }}>
+        <Stack.Item grow={0} shrink={0} disableShrink styles={{ root: { width: '400px', padding: '10px 20px', borderLeft: '1px solid #CCC' } }}>
           {selectedItem ? (
             <Fragment>
               <Stack horizontal tokens={{childrenGap:10}} >
-                <Stack.Item  grow={0} align="center" styles={{root:{width:50}}}>
+                <Stack.Item  grow={0} align="center" styles={{root:{width:32}}}>
                   {selectedItem.icon ? (
-                    <img src={selectedItem.icon} width="50" height="50" alt="icon" />
+                    <img src={selectedItem.icon} width="32" height="32" alt="icon" />
                   ): (
                     <LetterIcon letter={selectedItem.name[0]} />
                   )}
                 </Stack.Item>
-                <Stack.Item align="center" grow={1}>
+                <Stack.Item align="center" grow={1} styles={{root: {width: 140}}}>
                   { selectedItem.authors }
                 </Stack.Item>
                 <Stack.Item align="center" grow={1} styles={{root:{textAlign:"right"}}}>
-                    <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible} split={versionOptions!=undefined} menuProps={versionOptions}>
+                    <PrimaryButton onClick={install} disabled={!ejectedRuntime || !selectedItem.isCompatible} split={versionOptions!=undefined} menuProps={versionOptions} styles={{root: {maxWidth: 180, textOverflow: "ellipsis"}}}>
                     {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
                     {(isInstalled(selectedItem) && selectedVersion===installedVersion(selectedItem)) ? (
                       <span>{selectedVersion} {strings.installed}</span>
