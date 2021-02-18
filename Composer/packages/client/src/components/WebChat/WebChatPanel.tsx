@@ -35,6 +35,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   isWebChatPanelVisible,
   openBotInEmulator,
   activeLocale,
+  onAddEntryToInspector,
 }) => {
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');

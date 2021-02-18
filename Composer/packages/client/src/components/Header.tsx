@@ -354,6 +354,10 @@ export const Header = () => {
             openBotInEmulator={openBotInEmulator}
             projectId={webchatEssentials.botId}
             secrets={webchatEssentials.secrets}
+            onAddEntryToInspector={(item) => {
+              // eslint-disable-next-line no-console
+              console.log(item);
+            }}
           />
         ) : null}
       </Panel>

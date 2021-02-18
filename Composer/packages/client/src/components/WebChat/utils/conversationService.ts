@@ -176,23 +176,21 @@ export default class ConversationService {
       locale: activeLocale,
     });
 
-    const conversationId: string = resp.data?.conversationId;
-    const endpointId: string = resp.data?.endpointId;
+    const conversationId: string = resp.data.conversationId;
+    const endpointId: string = resp.data.endpointId;
 
-    if (conversationId && endpointId) {
-      const directline = await this.fetchDirectLineObject(conversationId, {
-        mode: webChatMode,
-        endpointId: endpointId,
-        userId: user.id,
-      });
-      return {
-        directline,
-        webChatMode: webChatMode,
-        projectId,
-        user,
-        conversationId,
-      };
-    }
+    const directline = await this.fetchDirectLineObject(conversationId, {
+      mode: webChatMode,
+      endpointId: endpointId,
+      userId: user.id,
+    });
+    return {
+      directline,
+      webChatMode: webChatMode,
+      projectId,
+      user,
+      conversationId,
+    };
   }
 
   public async restartConversation(oldChatData: ChatData, requireNewUserID: boolean, activeLocale: string) {
