@@ -13,7 +13,7 @@ import {
 
 const mockSendToSubscribers = jest.fn();
 
-jest.mock('../../utils/WebSocketServer.ts', () => {
+jest.mock('../../utils/webSocketServer.ts', () => {
   return {
     WebSocketServer: {
       sendToSubscribers: (...args) => mockSendToSubscribers(...args),

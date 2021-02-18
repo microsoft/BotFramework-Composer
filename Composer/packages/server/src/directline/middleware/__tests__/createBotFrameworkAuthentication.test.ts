@@ -10,7 +10,7 @@ import {
 import { createBotFrameworkAuthenticationMiddleware } from '../createBotFrameworkAuthentication';
 
 const mockGetKey = jest.fn().mockResolvedValue(`openIdMetadataKey`);
-jest.mock('../../utils/openIdMetadata', () => ({
+jest.mock('../../utils/openIdMetaData', () => ({
   OpenIdMetadata: jest.fn().mockImplementation(() => ({
     getKey: mockGetKey,
   })),
