@@ -24,7 +24,7 @@ jobs:
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
-          node-version: 12.13.0
+          node-version: 14.15.5
       #- name: Restore yarn cache
       #  uses: actions/cache@v2.1.2
       #  with:
@@ -80,7 +80,7 @@ jobs:
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
-          node-version: 12.13.0
+          node-version: 14.15.5
       - name: npm install
         run: npm install
         working-directory: runtime/node
