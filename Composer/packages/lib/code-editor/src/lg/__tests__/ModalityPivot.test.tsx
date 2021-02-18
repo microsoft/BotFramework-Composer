@@ -33,10 +33,10 @@ jest.mock('../modalityEditors/AttachmentModalityEditor', () => {
 });
 
 jest.mock('office-ui-fabric-react/lib/Button', () => {
-  const Buttons = jest.requireActual('office-ui-fabric-react/lib/Button');
+  const MockButtons = jest.requireActual('office-ui-fabric-react/lib/Button');
 
   return {
-    ...Buttons,
+    ...MockButtons,
     IconButton: ({ menuProps: { onItemClick } }) => (
       <button onClick={(e) => onItemClick(e, { key: 'Text' })}>Add</button>
     ),
