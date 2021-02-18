@@ -227,7 +227,6 @@ export default class ConversationService {
   }
 
   public connectToErrorsChannel() {
-    debugger;
     const ws = new WebSocket(`ws://localhost:${this.restServerForWSPort}/ws/createErrorChannel`);
     ws.onmessage = (event) => {
       console.log('WebSocket message received:', event);

@@ -3,11 +3,12 @@
 
 import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
+import formatMessage from 'format-message';
 
 import { DLServerState } from '../store/dlServerState';
 import { validateRequest } from '../utils/helpers';
 import { BotEndpoint } from '../store/entities/botEndpoint';
-import { sendErrorResponse } from '../utils/apiErrorException';
+import logger from '../utils/logger';
 
 export const createNewConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response): void => {
@@ -36,7 +37,8 @@ export const createNewConversationHandler = (state: DLServerState) => {
         id: conversation.conversationId,
       });
     } catch (err) {
-      sendErrorResponse(req, res, err);
+      logger(err);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(formatMessage('An error occured starting a new conversation'));
     }
   };
 };

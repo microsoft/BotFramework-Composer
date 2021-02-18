@@ -8,7 +8,7 @@ import express, { Response } from 'express';
 import { Activity } from 'botframework-schema';
 import { Server as WSServer } from 'ws';
 
-import { LoggerLevel, LogItem } from '../store/types';
+import { DirectLineLog } from '../store/types';
 
 import log from './logger';
 
@@ -58,17 +58,6 @@ export class WebSocketServer {
     } else {
       this.queueActivities(conversationId, activity);
     }
-  }
-
-  public static sendErrorToSubscibers(
-    conversationId: string,
-    logItem: LogItem<{
-      level: LoggerLevel;
-      text: string;
-    }>
-  ): void {
-    const socket = this.sockets[socketErrorChannelKey];
-    socket?.send(JSON.stringify({ conversationId, logItem }));
   }
 
   public static async init(): Promise<number | void> {
@@ -152,8 +141,8 @@ export class WebSocketServer {
     }
   }
 
-  public static sendDLErrorsToSubscribers(): void {
-    this.sockets[socketErrorChannelKey].send('Hello');
+  public static sendDLErrorsToSubscribers(logItem: DirectLineLog): void {
+    this.sockets[socketErrorChannelKey].send(JSON.stringify(logItem));
   }
 
   public static cleanUpConversation(conversationId: string): void {

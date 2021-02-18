@@ -3,10 +3,11 @@
 
 import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
+import formatMessage from 'format-message';
 
-import { BotErrorCodes, createAPIException } from '../utils/apiErrorException';
+import { BotErrorCodes } from '../utils/apiErrorException';
 import { DLServerState } from '../store/dlServerState';
-import { ConversationAPIPathParameters } from '../store/types';
+import { ConversationAPIPathParameters, DirectLineError } from '../store/types';
 
 export const createGetConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response, next?: express.NextFunction): any => {
@@ -14,7 +15,11 @@ export const createGetConversationHandler = (state: DLServerState) => {
     const conversation = state.conversations.conversationById(conversationParameters.conversationId);
 
     if (!conversation) {
-      throw createAPIException(StatusCodes.NOT_FOUND, BotErrorCodes.BadArgument, 'conversation not found');
+      const err: DirectLineError = {
+        status: StatusCodes.NOT_FOUND,
+        message: formatMessage(`Conversation not found. ${BotErrorCodes.BadArgument}`),
+      };
+      throw err;
     }
     (req as any).conversation = conversation;
     next?.();

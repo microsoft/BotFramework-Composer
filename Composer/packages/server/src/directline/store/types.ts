@@ -15,6 +15,18 @@ export type WebChatMode = 'livechat' | 'transcript';
 
 export type LoggerLevel = 'Debug' | 'Info' | 'Warn' | 'Error';
 
+export interface DirectLineError {
+  status: number;
+  message: string;
+  errorDetails?: string;
+}
+
+export interface DirectLineLog extends DirectLineError {
+  timestamp: string;
+  route?: string;
+  logType: LoggerLevel;
+}
+
 export enum LogItemType {
   Text = 'text',
 }

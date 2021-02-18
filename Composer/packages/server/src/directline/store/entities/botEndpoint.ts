@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { StatusCodes } from 'http-status-codes';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import formatMessage from 'format-message';
 
-import { statusCodeFamily } from '../../utils/helpers';
 import { authentication } from '../../utils/constants';
+import { DirectLineError } from '../types';
 
 const TIME_TO_REFRESH = 5 * 60 * 1000;
 
@@ -22,35 +22,35 @@ export class BotEndpoint {
   ) {}
 
   private async getAccessToken(forceRefresh = false): Promise<string | undefined> {
-    if (
-      !forceRefresh &&
-      this.accessToken &&
-      this.accessTokenExpires &&
-      Date.now() < this.accessTokenExpires - TIME_TO_REFRESH
-    ) {
-      return this.accessToken;
-    }
+    try {
+      if (
+        !forceRefresh &&
+        this.accessToken &&
+        this.accessTokenExpires &&
+        Date.now() < this.accessTokenExpires - TIME_TO_REFRESH
+      ) {
+        return this.accessToken;
+      }
 
-    // Refresh access token
-    const tokenEndpoint: string = authentication.tokenEndpoint;
+      // Refresh access token
+      const tokenEndpoint: string = authentication.tokenEndpoint;
 
-    const postData = {
-      grant_type: 'client_credentials',
-      client_id: this.msaAppId ?? '',
-      client_secret: this.msaPassword ?? '',
-      scope: `${this.msaAppId}/.default`,
-    };
+      const postData = {
+        grant_type: 'client_credentials',
+        client_id: this.msaAppId ?? '',
+        client_secret: this.msaPassword ?? '',
+        scope: `${this.msaAppId}/.default`,
+      };
 
-    const resp = await axios({
-      method: 'post',
-      url: tokenEndpoint,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      data: new URLSearchParams(postData).toString(),
-    });
+      const resp = await axios({
+        method: 'post',
+        url: tokenEndpoint,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        data: new URLSearchParams(postData).toString(),
+      });
 
-    if (statusCodeFamily(resp.status, 200)) {
       // Subtract 5 minutes from expires_in so they'll we'll get a new token before it expires.
       const oauthResponse = await resp.data;
 
@@ -58,6 +58,14 @@ export class BotEndpoint {
       this.accessTokenExpires = Date.now() + oauthResponse.expires_in * 1000;
 
       return this.accessToken;
+    } catch (ex) {
+      const response: AxiosResponse = ex.response;
+      const err: DirectLineError = {
+        status: response.status,
+        errorDetails: response.data.error_description,
+        message: formatMessage('An error occured validating the Microsoft App Id and Microsoft App Password.'),
+      };
+      throw err;
     }
   }
 
@@ -68,17 +76,19 @@ export class BotEndpoint {
         Authorization: `Bearer ${await this.getAccessToken(forceRefresh)}`,
       };
     }
-    const response = await axios.post(url, reqOptions.body, {
-      headers: reqOptions.headers,
-    });
-
-    if (
-      (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.FORBIDDEN) &&
-      !forceRefresh &&
-      this.msaAppId
-    ) {
-      return this.fetchWithAuth(url, reqOptions, true);
+    try {
+      const response = await axios.post(url, reqOptions.body, {
+        headers: reqOptions.headers,
+      });
+      return response;
+    } catch (ex) {
+      const response: AxiosResponse = ex.response;
+      const err: DirectLineError = {
+        status: response.status,
+        errorDetails: response.data?.error_description,
+        message: formatMessage('An error occured validating the Microsoft App Id and Microsoft App Password'),
+      };
+      throw err;
     }
-    return response;
   }
 }

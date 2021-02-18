@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import moment from 'moment';
+import { StatusCodes } from 'http-status-codes';
+
 import log from '../utils/logger';
+import { WebSocketServer } from '../utils/webSocketServer';
 
 import { BotEndpoint } from './entities/botEndpoint';
 import { Attachments } from './entities/attachments';
@@ -53,9 +57,14 @@ class DLServerContext {
       text: string;
     }>
   ) {
-    // TODO: Send the log item to the client Webchat instance to log errors.
-    // eslint-disable-next-line no-console
-    log(conversationId + logItem.payload.text);
+    const logMessage = `${conversationId}: ${logItem.payload.text}`;
+    log(logMessage);
+    WebSocketServer.sendDLErrorsToSubscribers({
+      message: logMessage,
+      logType: logItem.payload.level,
+      timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
+      status: logItem.payload.level === 'Error' ? StatusCodes.BAD_REQUEST : StatusCodes.OK,
+    });
   }
 
   private updateConversation(conversationId: string, updatedConversation: Conversation) {
