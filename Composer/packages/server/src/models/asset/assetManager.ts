@@ -277,6 +277,17 @@ export class AssetManager {
     return 'npm';
   }
 
+  private getPackageDisplayName(packageName: string): string {
+    if (packageName) {
+      return packageName
+        .replace('generator-', '')
+        .split('-')
+        .reduce((a, b) => a.charAt(0).toUpperCase() + a.slice(1) + ' ' + b.charAt(0).toUpperCase() + b.slice(1));
+    } else {
+      return '';
+    }
+  }
+
   private async getFeedContents(feedUrl: string): Promise<BotTemplateV2[] | undefined | null> {
     try {
       const res = await fetch(feedUrl);
@@ -285,10 +296,10 @@ export class AssetManager {
       if (feedType === 'npm') {
         return data.objects.map((result) => {
           const { name, version, description = '', keywords = [] } = result.package;
-
+          const displayName = this.getPackageDisplayName(name);
           return {
             id: name,
-            name: name,
+            name: displayName,
             description: description,
             keywords: keywords,
             package: {

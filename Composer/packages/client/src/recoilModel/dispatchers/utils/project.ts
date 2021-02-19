@@ -32,7 +32,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
-import { BotStatus, QnABotTemplateId } from '../../../constants';
+import { BASEURL, BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
 import httpClient from '../../../utils/httpUtil';
@@ -71,6 +71,7 @@ import {
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
   createQnAOnState,
+  botEndpointsState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
@@ -107,6 +108,7 @@ export const resetBotStates = async ({ reset }: CallbackInterface, projectId: st
     const currentRecoilAtom: any = botstates[state];
     reset(currentRecoilAtom(projectId));
   });
+  reset(botEndpointsState);
 };
 
 export const setErrorOnBotProject = async (
@@ -762,4 +764,10 @@ export const checkIfBotExistsInBotProjectFile = async (
     }
   }
   return false;
+};
+
+export const getMemoryVariables = async (projectId: string, options?: { signal: AbortSignal }) => {
+  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, { signal: options?.signal });
+  const json = (await res.json()) as { variables: string[] };
+  return json.variables ?? [];
 };
