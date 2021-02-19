@@ -495,10 +495,9 @@ export class Builder {
       region: config.region,
       directVersionPublish: false,
     });
-
     // delete version property
     for (let i = 0; i < buildResult.length; i++) {
-      if (buildResult[i]?.id?.endsWith('.json')) {
+      if (buildResult[i].id && buildResult[i].id.endsWith('.json')) {
         const luisAppsMap = JSON.parse(buildResult[i]?.content).luis;
         for (const appName of Object.keys(luisAppsMap)) {
           delete luisAppsMap[appName].version;
@@ -535,7 +534,7 @@ export class Builder {
   }
 
   private writeLuisSettings = async (contents, out: string) => {
-    const settingsContents = contents.filter((c) => c.id.endsWith('.json'));
+    const settingsContents = contents.filter((c) => c.id && c.id.endsWith('.json'));
     if (settingsContents && settingsContents.length > 0) {
       const outPath = Path.join(Path.resolve(out), settingsContents[0].id);
 
