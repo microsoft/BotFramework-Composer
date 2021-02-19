@@ -171,19 +171,16 @@ export async function publishLuisToPrediction(
           }
           else {
             // handle the token invalid
+            // handle the token invalid
             if(typeof err.error === 'string'){
               const error = JSON.parse(err.error);
               if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
                 throw new Error(
                   `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
                 );
-              }else if(error?.error?.code === 'BadArgument'){
-                throw Error('Failed to bind luis prediciton resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.');
               }
-            } else if(typeof err.error === 'object'){
-              throw err.error;
             }
-            throw err;
+            throw Error('Failed to bind luis prediciton resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.');
           }
         }
       }
