@@ -203,14 +203,14 @@ export class BotProject implements IBotProject {
     const settings = await this.settingManager.get(obfuscate);
 
     // Resolve relative path for custom runtime if the path is relative
-    if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
-      const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
+    // if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
+    //   const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
 
-      if (fs.existsSync(absolutePath)) {
-        settings.runtime.path = absolutePath;
-        await this.updateEnvSettings(settings);
-      }
-    }
+    //   if (fs.existsSync(absolutePath)) {
+    //     settings.runtime.path = absolutePath;
+    //     await this.updateEnvSettings(settings);
+    //   }
+    // }
 
     // fix old bot have no language settings
     if (!settings?.defaultLanguage) {
