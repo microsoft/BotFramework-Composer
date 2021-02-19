@@ -20,7 +20,7 @@ interface WebSocket {
 export class WebSocketServer {
   private static restServer: http.Server;
   private static servers: Record<string, WSServer> = {};
-  private static dLErrorsServer: WSServer;
+  private static dLErrorsServer: WSServer | null = null;
   private static sockets: Record<string, WebSocket> = {};
 
   private static queuedMessages: { [conversationId: string]: Activity[] } = {};
@@ -92,7 +92,7 @@ export class WebSocketServer {
             this.sockets[socketErrorChannelKey] = socket;
 
             socket.on('close', () => {
-              this.dLErrorsServer = {} as WSServer;
+              this.dLErrorsServer = null;
               delete this.sockets[socketErrorChannelKey];
             });
           });

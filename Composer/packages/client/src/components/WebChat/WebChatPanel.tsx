@@ -2,8 +2,12 @@
 // Licensed under the MIT License.
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
+import { DirectLineLog } from '@botframework-composer/types';
+import { AxiosResponse } from 'axios';
+import moment from 'moment';
+import formatMessage from 'format-message';
 
-import ConversationService, { ChatData, BotSecrets, User } from './utils/conversationService';
+import ConversationService, { ChatData, BotSecrets } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
 
@@ -23,7 +27,7 @@ export interface WebChatPanelProps {
   projectId: string;
   isWebChatPanelVisible: boolean;
   activeLocale: string;
-  onAddEntryToInspector: () => void;
+  onAddEntryToInspector: (projectId: string, log: DirectLineLog) => void;
   openBotInEmulator: (projectId: string) => void;
 }
 
@@ -44,14 +48,37 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [isConversationStartQueued, queueConversationStart] = useState<boolean>(false);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
+  const directLineErrorChannel = useRef<WebSocket>();
 
   useEffect(() => {
     const bootstrapChat = async () => {
       const conversationServerPort = await conversationService.setUpConversationServer();
-      const errorSocket = new WebSocket(`ws://localhost:${conversationServerPort}/ws/createErrorChannel`);
-      errorSocket.on('message');
+      try {
+        directLineErrorChannel.current = new WebSocket(
+          `ws://localhost:${conversationServerPort}/ws/createErrorChannel`
+        );
+        if (directLineErrorChannel.current) {
+          directLineErrorChannel.current.onmessage = (event) => {
+            const data: DirectLineLog = event.data;
+            onAddEntryToInspector(projectId, data);
+          };
+        }
+      } catch (ex) {
+        const response: AxiosResponse = ex.response;
+        const err: DirectLineLog = {
+          timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
+          route: 'conversations/ws/port',
+          status: response.status,
+          logType: 'Error',
+          message: formatMessage('An error occured connecting initializing the DirectLine server'),
+        };
+        onAddEntryToInspector(projectId, err);
+      }
     };
     bootstrapChat();
+    return () => {
+      directLineErrorChannel.current?.close();
+    };
   }, []);
 
   useEffect(() => {
@@ -69,10 +96,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           activeLocale
         );
         if (mounted) {
-          setCurrentConversation(chatData.conversationId);
-          setChatData({
-            [chatData.conversationId]: chatData,
-          });
+          sendInitialActivities(chatData);
         }
       };
       startConversation();
@@ -84,12 +108,25 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     };
   }, [isWebChatPanelVisible]);
 
+  const sendInitialActivities = async (chatData: ChatData) => {
+    try {
+      await conversationService.sendInitialActivity(chatData.conversationId, [chatData.user]);
+      setCurrentConversation(chatData.conversationId);
+      setChatData({
+        [chatData.conversationId]: chatData,
+      });
+    } catch (err) {
+      onAddEntryToInspector(projectId, err);
+    }
+  };
+
   const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
     const chatData = await conversationService.restartConversation(
       chats[oldConversationId],
       requireNewUserId,
       activeLocale
     );
+    sendInitialActivities(chatData);
     setCurrentConversation(chatData.conversationId);
     setChatData({
       [chatData.conversationId]: chatData,
@@ -114,7 +151,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
       webChatPanelRef.current?.removeChild(downloadLink);
     } catch (ex) {
-      //TODO: Handle failed transcript download
+      onAddEntryToInspector(projectId, ex);
     }
   };
 
@@ -140,9 +177,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         chatData={chats[currentConversation]}
         conversationService={conversationService}
         currentConversation={currentConversation}
-        sendInitialActivity={(conversationId: string, currentUser: User) => {
-          conversationService.sendInitialActivity(conversationId, [currentUser]);
-        }}
       />
     </div>
   );

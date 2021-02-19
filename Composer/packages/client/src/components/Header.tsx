@@ -354,7 +354,7 @@ export const Header = () => {
             openBotInEmulator={openBotInEmulator}
             projectId={webchatEssentials.botId}
             secrets={webchatEssentials.secrets}
-            onAddEntryToInspector={(item) => {
+            onAddEntryToInspector={(projectId, item) => {
               // eslint-disable-next-line no-console
               console.log(item);
             }}

@@ -15,7 +15,6 @@ type WebChatContainerProps = {
   conversationService: ConversationService;
   botUrl: string;
   chatData: ChatData;
-  sendInitialActivity: (conversationId: string, user: User) => void;
 };
 
 const createCardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
@@ -79,10 +78,8 @@ const areEqual = (prevProps: WebChatContainerProps, nextProps: WebChatContainerP
   prevProps.currentConversation === nextProps.currentConversation;
 
 export const WebChatContainer = React.memo((props: WebChatContainerProps) => {
-  const { currentConversation, botUrl, activeLocale, chatData, sendInitialActivity } = props;
+  const { currentConversation, botUrl, activeLocale, chatData } = props;
   if (currentConversation) {
-    sendInitialActivity(currentConversation, chatData.user);
-
     const webchatStore = createWebChatStore({});
     const styleSet = createStyleSet({ ...webChatStyleOptions });
     styleSet.fileContent = {

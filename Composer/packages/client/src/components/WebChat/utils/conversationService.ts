@@ -2,8 +2,11 @@
 // Licensed under the MIT License.
 
 import { v4 as uuidv4 } from 'uuid';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { createDirectLine } from 'botframework-webchat';
+import moment from 'moment';
+import { DirectLineLog } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 export type User = {
   id: string;
@@ -228,7 +231,15 @@ export default class ConversationService {
         },
       });
     } catch (ex) {
-      console.log(ex);
+      const response: AxiosResponse = ex.response;
+      const err: DirectLineLog = {
+        timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
+        route: 'conversations/ws/port',
+        status: response.status,
+        logType: 'Error',
+        message: formatMessage('An error occured sending conversation update activity to the bot'),
+      };
+      throw err;
     }
   }
 
@@ -242,14 +253,21 @@ export default class ConversationService {
         fileSavePath,
       });
     } catch (ex) {
-      // TODO: Transcript save failure
+      const response: AxiosResponse = ex.response;
+      const err: DirectLineLog = {
+        timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
+        route: response.request?.path,
+        status: response.status,
+        logType: 'Error',
+        message: formatMessage('An error occured trying to save the transcript to disk'),
+      };
+      return err;
     }
   }
 
   public async setUpConversationServer() {
     const resp = await this.composerApiClient.get(`conversations/ws/port`);
     const { port } = resp.data;
-
     this.restServerForWSPort = port;
     return port;
   }
