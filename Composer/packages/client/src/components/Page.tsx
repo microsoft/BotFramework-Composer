@@ -8,6 +8,7 @@ import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
+import formatMessage from 'format-message';
 
 import { navigateTo, buildURL } from '../utils/navigation';
 import { dispatcherState, PageMode } from '../recoilModel';
@@ -151,6 +152,8 @@ const Page: React.FC<IPageProps> = (props) => {
           >
             {useNewTree ? (
               <ProjectTree
+                headerAriaLabel={formatMessage('Filter by file name')}
+                headerPlaceholder={formatMessage('Filter by file name')}
                 options={{
                   showDelete: false,
                   showTriggers: false,
