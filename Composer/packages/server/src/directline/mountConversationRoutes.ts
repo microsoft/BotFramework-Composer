@@ -55,6 +55,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
   );
 
   router.post('/conversations/:conversationId/saveTranscript', fetchConversation, saveTranscriptHandler(state));
+
   router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler(state));
 
   return router;

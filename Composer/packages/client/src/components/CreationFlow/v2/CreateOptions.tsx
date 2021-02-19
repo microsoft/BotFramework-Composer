@@ -34,7 +34,8 @@ import { TemplateDetailView } from './TemplateDetailView';
 // -------------------- Styles -------------------- //
 
 const detailListContainer = css`
-  width: 50%;
+  width: 48%;
+  padding-right: 2%;
   height: 400px;
   overflow: hidden;
   float: left;
@@ -42,7 +43,8 @@ const detailListContainer = css`
 `;
 
 const templateDetailContainer = css`
-  width: 50%;
+  width: 48%;
+  padding-right: 2%;
   height: 400px;
   overflow: auto;
   flex-grow: 1;

@@ -72,6 +72,7 @@ import {
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
   createQnAOnState,
+  botEndpointsState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
@@ -108,6 +109,7 @@ export const resetBotStates = async ({ reset }: CallbackInterface, projectId: st
     const currentRecoilAtom: any = botstates[state];
     reset(currentRecoilAtom(projectId));
   });
+  reset(botEndpointsState);
 };
 
 export const setErrorOnBotProject = async (
