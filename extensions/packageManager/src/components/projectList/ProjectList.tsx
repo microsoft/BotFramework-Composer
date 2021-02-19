@@ -2,14 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
+import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import isEqual from 'lodash/isEqual';
 
-import { ListItem } from './listItem';
-
+import { ListItem } from './ListItem';
 // -------------------- Styles -------------------- //
 
 const root = css`

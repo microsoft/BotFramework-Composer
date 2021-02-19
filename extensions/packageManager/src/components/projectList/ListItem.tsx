@@ -4,8 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React from 'react';
-import { FontWeights } from '@uifabric/styling';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Icon } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { ListLink } from './ProjectList';
