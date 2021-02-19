@@ -8,22 +8,24 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { webchatLogsState } from '../atoms/webchatState';
 
 export const webchatLogDispatcher = () => {
-  const clearWebchatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => () => {
+  const clearWebchatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
     const { set } = callbackHelpers;
-    set(webchatLogsState, []);
+    set(webchatLogsState(projectId), []);
   });
 
-  const appendWebchatLog = useRecoilCallback((callbackHelpers: CallbackInterface) => async (log: WebchatLog) => {
-    const { snapshot, set } = callbackHelpers;
-    const currentlogs = await snapshot.getPromise(webchatLogsState);
-    set(webchatLogsState, [...currentlogs, log]);
-  });
+  const appendWebchatLog = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, log: WebchatLog) => {
+      const { set } = callbackHelpers;
+      set(webchatLogsState(projectId), (currentLogs) => [...currentLogs, log]);
+    }
+  );
 
-  const appendWebchatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => async (logs: WebchatLog[]) => {
-    const { snapshot, set } = callbackHelpers;
-    const currentlogs = await snapshot.getPromise(webchatLogsState);
-    set(webchatLogsState, [...currentlogs, ...logs]);
-  });
+  const appendWebchatLogs = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, logs: WebchatLog[]) => {
+      const { set } = callbackHelpers;
+      set(webchatLogsState(projectId), (currentLogs) => [...currentLogs, ...logs]);
+    }
+  );
 
   return {
     clearWebchatLogs,
