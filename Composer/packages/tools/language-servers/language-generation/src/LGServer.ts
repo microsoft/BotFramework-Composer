@@ -37,9 +37,6 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
-  getSuggestionEntities,
-  extractLUISContent,
-  suggestionAllEntityTypes,
   getLineByIndex,
 } from './utils';
 
@@ -56,13 +53,14 @@ export class LGServer {
   private memoryVariables: Record<string, any> = {};
   private luisEntities: string[] = [];
   private _lgParser = new LgParser();
-
+  private _lastUpdateEntityTime: number;
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
     protected readonly memoryResolver?: MemoryResolver,
     protected readonly entitiesResolver?: MemoryResolver
   ) {
+    this._lastUpdateEntityTime = Date.now();
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => this.validate(change.document));
     this.documents.onDidClose((event) => {
@@ -564,23 +562,17 @@ export class LGServer {
     const wordRange = getEntityRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
     const projectId = this.getLGDocument(document)?.projectId;
+    let luContents: string[] = [];
+    if (projectId && this.entitiesResolver) {
+      luContents = this.entitiesResolver(projectId) || [];
+    }
 
-    const getEntities = async () => {
-      let suggestEntities: string[] = [];
-      if (projectId && this.entitiesResolver) {
-        const luContents = this.entitiesResolver(projectId);
-        if (luContents) {
-          for (const content of luContents) {
-            const luisJson = await extractLUISContent(content);
-            suggestEntities = suggestEntities.concat(getSuggestionEntities(luisJson, suggestionAllEntityTypes));
-          }
-        }
-      }
-
-      this.luisEntities = suggestEntities;
-    };
-
-    setTimeout(getEntities);
+    // update luis entities only when the interval is great than 5 seconds or the first time a completion request recieved
+    const curTimeStamp = Date.now();
+    if (curTimeStamp - this._lastUpdateEntityTime >= 5000 || this.luisEntities.length === 0) {
+      this._lastUpdateEntityTime = Date.now();
+      this._lgParser.extractLuisEntity(luContents).then((res) => (this.luisEntities = res.suggestEntities));
+    }
 
     const startWithAt = word.startsWith('@');
 
