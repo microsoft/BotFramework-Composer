@@ -64,6 +64,13 @@ export const topLinks = (
       match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
     },
     {
+      to: `/bot/${rootProjectId || projectId}/diagnostics`,
+      iconName: 'Warning',
+      labelName: formatMessage('Diagnostics'),
+      disabled: !botLoaded,
+      match: /diagnostics/,
+    },
+    {
       to: `/bot/${rootProjectId || projectId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
