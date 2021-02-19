@@ -81,6 +81,9 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
         &:hover {
           ${!nodeFocused && nodeBorderHoveredStyle}
         }
+        &:focus {
+          outline: 0;
+        }
       `}
       data-testid="ActionNodeWrapper"
       id={nodeId}

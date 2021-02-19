@@ -41,6 +41,8 @@ import {
   updateText,
 } from './style';
 
+type RuntimeType = 'path' | 'command';
+
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
   const botName = useRecoilValue(botDisplayNameState(projectId));
@@ -63,10 +65,16 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [ejecting, setEjecting] = useState(false);
   const [needsUpdate, setNeedsUpdate] = useState(false);
   const [templateKey, setTemplateKey] = useState('');
+  const [runtimePath, setRuntimePath] = useState(settings.runtime?.path ?? '');
+  const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime?.command ?? '');
+  const [usingCustomRuntime, setUsingCustomRuntime] = useState(settings.runtime?.customRuntime ?? false);
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
     if (projectId) getBoilerplateVersion(projectId);
+    setRuntimePath(settings.runtime?.path ?? '');
+    setRuntimeCommand(settings.runtime?.command ?? '');
+    setUsingCustomRuntime(settings.runtime?.customRuntime ?? false);
   }, [projectId]);
 
   useEffect(() => {
@@ -82,10 +90,11 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const toggleCustomRuntime = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
+    setUsingCustomRuntime(isOn);
     TelemetryClient.track('CustomRuntimeToggleChanged', { enabled: isOn });
   };
 
-  const updateSetting = (field) => (e, newValue) => {
+  const handleRuntimeSettingOnChange = (field: RuntimeType) => (e, newValue) => {
     let valid = true;
     let error = formatMessage('There was an error');
     if (newValue === '') {
@@ -93,12 +102,24 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
       error = formatMessage('This is a required field.');
     }
 
-    setRuntimeField(projectId, field, newValue);
+    if (field === 'path') {
+      setRuntimePath(newValue);
+    } else {
+      setRuntimeCommand(newValue);
+    }
 
     if (valid) {
       setFormDataErrors({ ...formDataErrors, [field]: '' });
     } else {
       setFormDataErrors({ ...formDataErrors, [field]: error });
+    }
+  };
+
+  const handleRuntimeSettingOnBlur = (field: RuntimeType) => {
+    if (field === 'path') {
+      setRuntimeField(projectId, field, runtimePath);
+    } else {
+      setRuntimeField(projectId, field, runtimeCommand);
     }
   };
 
@@ -112,7 +133,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     <div css={runtimeToggle}>
       <Toggle
         inlineLabel
-        checked={settings.runtime?.customRuntime}
+        checked={usingCustomRuntime}
         label={formatMessage('Use custom runtime')}
         onChange={toggleCustomRuntime}
       />
@@ -191,8 +212,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           errorMessage={formDataErrors.path}
           label={formatMessage('Runtime code location')}
           styles={name}
-          value={settings.runtime ? settings.runtime.path : ''}
-          onChange={updateSetting('path')}
+          value={runtimePath}
+          onBlur={() => handleRuntimeSettingOnBlur('path')}
+          onChange={handleRuntimeSettingOnChange('path')}
           onRenderLabel={onRenderLabel}
         />
         <span css={textOr}>{formatMessage('Or: ')}</span>
@@ -211,8 +233,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           errorMessage={formDataErrors.command}
           label={formatMessage('Start command')}
           styles={name}
-          value={settings.runtime ? settings.runtime.command : ''}
-          onChange={updateSetting('command')}
+          value={runtimeCommand}
+          onBlur={() => handleRuntimeSettingOnBlur('command')}
+          onChange={handleRuntimeSettingOnChange('command')}
           onRenderLabel={onRenderLabel}
         />
       </div>

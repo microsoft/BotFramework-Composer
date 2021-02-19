@@ -21,9 +21,9 @@ jobs:
 
     steps:
       - task: NodeTool@0
-        displayName: "Use Node 12.13.0"
+        displayName: "Use Node 14.15.5"
         inputs:
-          versionSpec: 12.13.0
+          versionSpec: 14.15.5
       # - task: Cache@2
       #   inputs:
       #     key: yarn | $(Agent.OS) | Composer/yarn.lock

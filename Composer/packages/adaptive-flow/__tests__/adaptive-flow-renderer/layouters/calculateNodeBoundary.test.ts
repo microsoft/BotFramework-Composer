@@ -13,6 +13,7 @@ import {
   BranchIntervalX,
   BranchIntervalY,
   LoopEdgeMarginLeft,
+  BranchingNodeMarginRight,
 } from '../../../src/adaptive-flow-renderer/constants/ElementSizes';
 
 const boundary = new Boundary();
@@ -77,7 +78,7 @@ describe('calculateSwitchCaseBoundary', () => {
   });
   it('should return a box whose property be calcalated by conditionBoundary, choiceBoundary, branchBoundaries', () => {
     const returnBoundary = {
-      width: 580 + BranchIntervalX,
+      width: 580 + BranchIntervalX + BranchingNodeMarginRight,
       height: 180 + BranchIntervalY * 3,
       axisX: 140,
       axisY: 0,
