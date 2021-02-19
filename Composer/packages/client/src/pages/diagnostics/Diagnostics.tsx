@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { IToolbarItem } from '@bfc/ui-shared';
 
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
@@ -15,7 +14,6 @@ import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnost
 import { exportSkillModalInfoState } from '../../recoilModel';
 import implementedDebugExtensions from '../design/DebugPanel/TabExtensions';
 
-import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
 
