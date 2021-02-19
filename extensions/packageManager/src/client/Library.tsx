@@ -29,7 +29,7 @@ import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
 import { ImportDialog } from './ImportDialog';
-import { LibraryRef, LibraryList, LetterIcon } from './libraryList';
+import { LibraryRef, LibraryList, LetterIcon } from './LibraryList';
 import { WorkingModal } from './WorkingModal';
 import { FeedModal } from './FeedModal';
 import { ProjectList } from './projectList/ProjectList';
