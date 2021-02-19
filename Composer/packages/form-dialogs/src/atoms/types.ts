@@ -3,7 +3,8 @@
 
 export type PropertyRequiredKind = 'required' | 'optional';
 
-export type FormDialogPropertyKind = 'ref' | 'number' | 'integer' | 'string' | 'array';
+export type FormDialogPropertyKind = 'ref';
+// chrimc | 'number' | 'integer' | 'string' | 'array';
 
 export type RefPropertyPayload = TypedPropertyPayload & {
   ref: string;
@@ -14,12 +15,13 @@ export type TypedPropertyPayload = {
   entities?: string[];
 };
 
-const builtInFormats = ['date-time', 'date', 'time', 'email', 'uri', 'iri'] as const;
+// chrimc const builtInFormats = ['date-time', 'date', 'time', 'email', 'uri', 'iri'] as const;
 
-export type BuiltInStringFormat = typeof builtInFormats[number];
+// chrimc export type BuiltInStringFormat = typeof builtInFormats[number];
 
-export type StringFormatItem = { displayName: string; value: BuiltInStringFormat };
+// chrimc export type StringFormatItem = { displayName: string; value: BuiltInStringFormat };
 
+/* chrimc
 export const builtInStringFormats: readonly StringFormatItem[] = [
   { displayName: 'date-time', value: 'date-time' },
   { displayName: 'date', value: 'date' },
@@ -28,7 +30,9 @@ export const builtInStringFormats: readonly StringFormatItem[] = [
   { displayName: 'uri', value: 'uri' },
   { displayName: 'iri', value: 'iri' },
 ];
+*/
 
+/*
 export type StringPropertyPayload = TypedPropertyPayload & {
   kind: 'string';
   enums?: string[];
@@ -47,21 +51,24 @@ export type IntegerPropertyPayload = TypedPropertyPayload & {
   minimum: number;
   maximum: number;
 };
+*/
 
 export type ArrayPropertyPayload = Pick<TypedPropertyPayload, 'kind'> & {
   kind: 'array';
-  items:
-    | (IntegerPropertyPayload & { maxItems?: number })
+  items: /* chrimc | (IntegerPropertyPayload & { maxItems?: number })
     | (NumberPropertyPayload & { maxItems?: number })
     | (StringPropertyPayload & { maxItems?: number })
-    | RefPropertyPayload;
+    | */
+  RefPropertyPayload;
 };
 
 export type FormDialogPropertyPayload =
   | RefPropertyPayload
+  /* chrimc
   | StringPropertyPayload
   | NumberPropertyPayload
   | IntegerPropertyPayload
+  */
   | ArrayPropertyPayload;
 
 export type FormDialogProperty = {

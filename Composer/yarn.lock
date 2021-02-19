@@ -3206,15 +3206,15 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20210129.207826":
-  version "4.10.0-daily.20210129.207826"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20210129.207826.tgz#335eda4de63abfeb9c6e5b4d1a9b1968be6cc5f9"
-  integrity sha1-M17aTeY6v+ucbltNGpsZaL5sxfk=
+"@microsoft/bf-generate-library@^4.10.0-daily.20210218.214915":
+  version "4.10.0-daily.20210218.214915"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20210218.214915.tgz#993ea3728f4412b6d5ab9601971b41a1e1c76695"
+  integrity sha1-mT6jco9EErbVq5YBlxtBoeHHZpU=
   dependencies:
     "@microsoft/bf-lu" rc
-    adaptive-expressions "^4.11.1"
+    adaptive-expressions "4.11.1"
     ajv "^6.9.1"
-    botbuilder-lg "^4.11.1"
+    botbuilder-lg "4.11.1"
     clone "^2.1.2"
     fs-extra "^8.1.0"
     globby "^11.0.1"
@@ -5062,7 +5062,7 @@ acorn@^7.4.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
-adaptive-expressions@4.11.1, adaptive-expressions@^4.11.1:
+adaptive-expressions@4.11.1:
   version "4.11.1"
   resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.1.tgz#ccd0249f754e891d15354be2f8b77f3fb10ae05f"
   integrity sha512-lj9yfCs/RYws70BrjxIzqkRgmVu9Xrc9XR67Kc8fv6KmuaoddVrrq3CE1cdz20mtkTWrRLSYEk/N+zvmYlRiww==
@@ -6244,6 +6244,17 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
+botbuilder-lg@4.11.1:
+  version "4.11.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.11.1.tgz#4bae2f22f0c35abf0809c5768f2f64256c88a58f"
+  integrity sha1-S64vIvDDWr8ICcV2jy9kJWyIpY8=
+  dependencies:
+    adaptive-expressions "4.11.1"
+    antlr4ts "0.5.0-alpha.3"
+    lodash "^4.17.19"
+    path "^0.12.7"
+    uuid "^3.4.0"
+
 botbuilder-lg@4.12.0-dev-20210125.e5a4fc60f438:
   version "4.12.0-dev-20210125.e5a4fc60f438"
   resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-dev-20210125.e5a4fc60f438.tgz#106eace62e170768b3c32f1ecb60d875f2c94d8d"
@@ -6254,17 +6265,6 @@ botbuilder-lg@4.12.0-dev-20210125.e5a4fc60f438:
     lodash "^4.17.19"
     path "^0.12.7"
     uuid "^8.3.2"
-
-botbuilder-lg@^4.11.1:
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.11.1.tgz#4bae2f22f0c35abf0809c5768f2f64256c88a58f"
-  integrity sha512-M9TUIwddMIDV8A9ttgVyrczjr9k01stnUytI/wHfV6OzHXDOv3yywyYx1i+ZctbpklpRb8hPHwgmhV38CvlP/g==
-  dependencies:
-    adaptive-expressions "4.11.1"
-    antlr4ts "0.5.0-alpha.3"
-    lodash "^4.17.19"
-    path "^0.12.7"
-    uuid "^3.4.0"
 
 botframework-schema@^4.11.1:
   version "4.11.1"

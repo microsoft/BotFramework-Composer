@@ -112,6 +112,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
   const dynamicOptions = React.useMemo(
     () =>
       [
+        /* chrimc
         { key: 'number', text: formatMessage('number'), selected: kind === 'number', data: 'number' },
         { key: 'integer', text: formatMessage('integer'), selected: kind === 'integer', data: 'integer' },
         {
@@ -120,7 +121,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
           selected: kind === 'string' && !(payload as StringPropertyPayload).format,
           data: 'string',
         },
-        ...stringOptions,
+        ...stringOptions, */
         ...templateOptions,
       ].sort((a, b) => a.text.localeCompare(b.text)) as IDropdownOption[],
     [kind, stringOptions, templateOptions]

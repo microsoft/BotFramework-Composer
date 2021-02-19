@@ -3,9 +3,9 @@
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
-import formatMessage from 'format-message';
+// chrimc: import formatMessage from 'format-message';
 import {
-  builtInStringFormats,
+  // chrimc: builtInStringFormats,
   FormDialogProperty,
   FormDialogPropertyKind,
   FormDialogPropertyPayload,
@@ -22,12 +22,14 @@ export const getDefaultPayload = (kind: FormDialogPropertyKind) => {
   switch (kind) {
     case 'ref':
       return <RefPropertyPayload>{ kind: 'ref' };
+    /* chrimc
     case 'string':
       return <StringPropertyPayload>{ kind: 'string', entities: [] };
     case 'number':
       return <NumberPropertyPayload>{ kind: 'number', entities: [] };
     case 'integer':
       return <IntegerPropertyPayload>{ kind: 'integer', entities: [] };
+      */
     default:
       throw new Error(`Property type: "${kind}" is not supported!`);
   }
@@ -46,6 +48,7 @@ const retrievePayload = (kind: FormDialogPropertyKind, payloadData: any, array =
   switch (kind) {
     case 'ref':
       return <RefPropertyPayload>{ ref: $refToRef(payloadData.$ref) };
+    /* chrimc
     case 'string':
       return <StringPropertyPayload>{ kind: 'string', entities: payloadData.$entities, enums: payloadData.enum };
     case 'number':
@@ -60,6 +63,7 @@ const retrievePayload = (kind: FormDialogPropertyKind, payloadData: any, array =
         minimum: payloadData.minimum,
         maximum: payloadData.maximum,
       };
+      */
     default:
       throw new Error(`Property of type: ${kind} is not currently supported!`);
   }
@@ -267,15 +271,18 @@ export const validateSchemaPropertyStore = (property: FormDialogProperty) => {
 
 export const getPropertyTypeDisplayName = (property: FormDialogProperty) => {
   switch (property.kind) {
+    /* chrimc
     case 'number':
       return formatMessage('number');
     case 'integer':
       return formatMessage('integer');
+      */
     case 'ref': {
       const refPayload = property.payload as RefPropertyPayload;
       return refPayload.ref.split('.')[0];
     }
     default:
+    /* chrimc
     case 'string': {
       const stringPayload = property.payload as StringPropertyPayload;
       if (stringPayload.enums) {
@@ -286,5 +293,6 @@ export const getPropertyTypeDisplayName = (property: FormDialogProperty) => {
         ? builtInStringFormats.find((f) => f.value === stringPayload.format).displayName
         : formatMessage('any string');
     }
+    */
   }
 };
