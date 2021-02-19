@@ -151,7 +151,7 @@ export const Header = () => {
   const { showing, status } = appUpdate;
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
-  const { openBotInEmulator, appendLogToWebChat } = useRecoilValue(dispatcherState);
+  const { openBotInEmulator, appendLogToWebChatInspector } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
   const [isWebChatPanelVisible, toggleWebChatPanel] = useState(false);
 
@@ -347,7 +347,7 @@ export const Header = () => {
         {webchatEssentials ? (
           <WebChatPanel
             activeLocale={webchatEssentials.activeLocale}
-            appendLogToWebChat={appendLogToWebChat}
+            appendLogToWebChatInspector={appendLogToWebChatInspector}
             botName={webchatEssentials.displayName}
             botUrl={webchatEssentials.botUrl}
             directlineHostUrl={BASEPATH}

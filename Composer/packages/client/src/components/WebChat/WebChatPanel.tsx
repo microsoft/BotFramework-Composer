@@ -26,7 +26,7 @@ export interface WebChatPanelProps {
   projectId: string;
   isWebChatPanelVisible: boolean;
   activeLocale: string;
-  appendLogToWebChat: (projectId: string, log: DirectLineLog) => void;
+  appendLogToWebChatInspector: (projectId: string, log: DirectLineLog) => void;
   openBotInEmulator: (projectId: string) => void;
 }
 
@@ -39,7 +39,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   isWebChatPanelVisible,
   openBotInEmulator,
   activeLocale,
-  appendLogToWebChat,
+  appendLogToWebChatInspector,
 }) => {
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
@@ -59,7 +59,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         if (directLineErrorChannel.current) {
           directLineErrorChannel.current.onmessage = (event) => {
             const data: DirectLineLog = event.data;
-            appendLogToWebChat(projectId, data);
+            appendLogToWebChatInspector(projectId, data);
           };
         }
       } catch (ex) {
@@ -71,7 +71,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           logType: 'Error',
           message: formatMessage('An error occured connecting initializing the DirectLine server'),
         };
-        appendLogToWebChat(projectId, err);
+        appendLogToWebChatInspector(projectId, err);
       }
     };
 
@@ -117,7 +117,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         [chatData.conversationId]: chatData,
       });
     } catch (err) {
-      appendLogToWebChat(projectId, err);
+      appendLogToWebChatInspector(projectId, err);
     }
   };
 
@@ -152,7 +152,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
       webChatPanelRef.current?.removeChild(downloadLink);
     } catch (ex) {
-      appendLogToWebChat(projectId, ex);
+      appendLogToWebChatInspector(projectId, ex);
     }
   };
 

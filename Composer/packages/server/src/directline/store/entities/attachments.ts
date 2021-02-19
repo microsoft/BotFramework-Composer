@@ -24,7 +24,7 @@ export class Attachments {
     if (!attachmentData.type) {
       const err: DirectLineError = {
         status: StatusCodes.BAD_REQUEST,
-        message: formatMessage(`'You must specify type property for the attachment'. ${BotErrorCodes.MissingProperty}`),
+        message: formatMessage(`You must specify type property for the attachment'. ${BotErrorCodes.MissingProperty}`),
       };
       throw err;
     }
@@ -33,7 +33,7 @@ export class Attachments {
       const err: DirectLineError = {
         status: StatusCodes.BAD_REQUEST,
         message: formatMessage(
-          `'You must specify originalBase64 byte[] for the attachment'. ${BotErrorCodes.MissingProperty}`
+          `You must specify originalBase64 byte[] for the attachment'. ${BotErrorCodes.MissingProperty}`
         ),
       };
       throw err;

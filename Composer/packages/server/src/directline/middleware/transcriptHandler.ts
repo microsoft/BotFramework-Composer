@@ -33,7 +33,7 @@ export const saveTranscriptHandler = (state: DLServerState) => {
       writeFile(fileSavePath, contentsToWrite);
       res.status(StatusCodes.CREATED).json({
         path: req.query.fileSavePath,
-        message: 'Transcript has been saved to disk succesfully',
+        message: 'Transcript has been saved to disk successfully',
       });
     } catch (ex) {
       logger(ex);

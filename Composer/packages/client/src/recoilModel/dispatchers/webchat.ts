@@ -13,7 +13,7 @@ export const webChatLogDispatcher = () => {
     set(webChatLogsState(projectId), []);
   });
 
-  const appendLogToWebChat = useRecoilCallback(
+  const appendLogToWebChatInspector = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (projectId: string, log: DirectLineLog) => {
       const { set } = callbackHelpers;
       set(webChatLogsState(projectId), (currentLogs) => [...currentLogs, log]);
@@ -22,6 +22,6 @@ export const webChatLogDispatcher = () => {
 
   return {
     clearWebChatLogs,
-    appendLogToWebChat,
+    appendLogToWebChatInspector,
   };
 };
