@@ -20,13 +20,6 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     isHidden: false,
     enabled: false,
   },
-  REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
-    displayName: formatMessage('Conversational Core Template'),
-    description: formatMessage('Enable the new conversational core template built on the component model'),
-    documentationLink: 'https://aka.ms/AAabzf9',
-    isHidden: true,
-    enabled: false,
-  },
   ORCHESTRATOR: {
     displayName: formatMessage('Orchestrator'),
     description: formatMessage('Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB'),

@@ -17,7 +17,7 @@ const bot1 = {
   lgFiles: [
     {
       id: 'EmptyBot-Test.en-us',
-      templates: [{ name: 'SendActivity_Welcome' }, { name: 'SendActivity_jKvFxl' }],
+      allTemplates: [{ name: 'SendActivity_Welcome' }, { name: 'SendActivity_jKvFxl' }],
       content: `# SendActivity_Welcome
         - welcome
         # SendActivity_jKvFxl()
@@ -25,7 +25,7 @@ const bot1 = {
     } as LgFile,
     {
       id: 'EmptyBot-Test.zh-cn',
-      templates: [{ name: 'SendActivity_Welcome' }, { name: 'SendActivity_8Oc1NU' }],
+      allTemplates: [{ name: 'SendActivity_Welcome' }, { name: 'SendActivity_8Oc1NU' }],
       content: `# SendActivity_Welcome
         - welcome
         # SendActivity_8Oc1NU()
