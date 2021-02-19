@@ -3971,10 +3971,32 @@
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
 
-"@microsoft/bf-lu@^4.12.0-dev.20210129.82760de", "@microsoft/bf-lu@next":
-  version "4.12.0-dev.20210129.82760de"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20210129.82760de.tgz#f3b4c932b1fb6b3e69e6d0cba3356fc3ba61ade8"
-  integrity sha512-nlzKjMAvr/bgjqVNXh/v4ns7aP4L5d6UT51keXa7k6+XGtHcQQkwXxwgWvo8CQXjZE5Aju8DTbxbIBY0bXcq6A==
+"@microsoft/bf-lu@4.12.0-rc0":
+  version "4.12.0-rc0"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-rc0.tgz#9c1aa4cb7d22a0a49d4c16eb1bce5d5e222c40b1"
+  integrity sha512-bz5BPQsIh+BwXZ+YAMG15wTndF/Ug3EviSjOs0GtryRSkgJkmAqAhdpU0SRjVAVuy7XzTRpltxbMmSoiYVnHtA==
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "~4.8.0"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
+"@microsoft/bf-lu@next":
+  version "4.13.0-dev.20210218.d9e7d3a"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.13.0-dev.20210218.d9e7d3a.tgz#351004819bf9a130d324e687e774df621914e2a0"
+  integrity sha512-Z/cBw1nu6WzvPR4r8dVuGfp3Cw6hSws9TNntrIsSYr2hCcGw9fROf2GJP1JMIs+QZYAt6+AvnuKnH8L1BiZOTg==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
