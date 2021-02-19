@@ -25,7 +25,6 @@ export enum BotErrorCodes {
 }
 
 const generateGenericError = (code: BotErrorCodes, exception: any, status?: number): DirectLineError => {
-  console.log('Ex', exception);
   const apiException = {
     message: JSON.stringify({
       code,
@@ -33,7 +32,6 @@ const generateGenericError = (code: BotErrorCodes, exception: any, status?: numb
     }),
     status: status ?? StatusCodes.BAD_REQUEST,
   };
-  console.log(apiException);
   return apiException;
 };
 
