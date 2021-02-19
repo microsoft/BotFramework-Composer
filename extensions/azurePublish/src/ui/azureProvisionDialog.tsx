@@ -468,6 +468,9 @@ export const AzureProvisionDialog: React.FC = () => {
       if(config.settings?.luis?.endpointKey){
         result.push(AzureResourceTypes.LUIS_PREDICTION);
       }
+      if(config.settings?.qna?.subscriptionKey){
+        result.push(AzureResourceTypes.QNA);
+      }
       if(config.settings?.applicationInsights?.InstrumentationKey){
         result.push(AzureResourceTypes.APPINSIGHTS);
       }
