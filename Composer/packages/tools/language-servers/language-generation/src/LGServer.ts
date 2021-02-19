@@ -13,7 +13,12 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import {
+  TextDocumentPositionParams,
+  DocumentOnTypeFormattingParams,
+  FoldingRangeParams,
+  FoldingRange,
+} from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
@@ -30,10 +35,10 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
+  getLineByIndex,
 } from './utils';
 
 // define init methods call from client
-const fetchPropertiesMethodName = 'fetchProperties';
 const initializeDocumentsMethodName = 'initializeDocuments';
 
 const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
@@ -74,7 +79,7 @@ export class LGServer {
             triggerCharacters: ['.', '[', '[', '\n'],
           },
           hoverProvider: true,
-          foldingRangeProvider: false,
+          foldingRangeProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -84,6 +89,9 @@ export class LGServer {
     this.connection.onCompletion(async (params) => await this.completion(params));
     this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
+      this.foldingRangeHandler(foldingRangeParams)
+    );
 
     this.connection.onRequest((method, params) => {
       if (initializeDocumentsMethodName === method) {
@@ -94,15 +102,64 @@ export class LGServer {
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
         }
-      } else if (fetchPropertiesMethodName === method) {
-        const { projectId }: { projectId: string } = params;
-        this.connection.sendNotification('properties', { result: this.memoryResolver?.(projectId) });
       }
     });
   }
 
   start() {
     this.connection.listen();
+  }
+
+  protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
+    const document = this.documents.get(params.textDocument.uri);
+    const items: FoldingRange[] = [];
+    if (!document) {
+      return items;
+    }
+
+    const lineCount = document.lineCount;
+    let i = 0;
+    while (i < lineCount) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('>>')) {
+        for (let j = i + 1; j < lineCount; j++) {
+          if (getLineByIndex(document, j)?.startsWith('>>')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+
+          if (j === lineCount - 1) {
+            items.push(FoldingRange.create(i, j));
+            i = j;
+          }
+        }
+      }
+
+      i = i + 1;
+    }
+
+    for (let i = 0; i < lineCount; i++) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('#')) {
+        let j = i + 1;
+        for (j = i + 1; j < lineCount; j++) {
+          const secLine = getLineByIndex(document, j);
+          if (secLine?.startsWith('>>') || secLine?.startsWith('#')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+        }
+
+        if (i !== j - 1) {
+          items.push(FoldingRange.create(i, j - 1));
+          i == j - 2;
+        }
+      }
+    }
+
+    return items;
   }
 
   protected updateObject(propertyList: string[]): void {
@@ -544,7 +601,7 @@ export class LGServer {
     const cardNameRegex = /^\s*\[[\w]+/;
     const lastLine = lines[lines.length - 2];
     const paddingIndent = cardNameRegex.test(lastLine) ? '\t' : '';
-    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment'];
+    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment', 'Activity'];
     if (cardType && cardTypes.includes(cardType)) {
       const items: CompletionItem[] = [];
       if (normalCardTypes.includes(cardType)) {

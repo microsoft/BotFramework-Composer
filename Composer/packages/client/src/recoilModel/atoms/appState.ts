@@ -167,7 +167,7 @@ export const runtimeSettingsState = atom<{
   },
 });
 
-export const botEndpointsState = atom<any>({
+export const botEndpointsState = atom<Record<string, string>>({
   key: getFullyQualifiedKey('botEndpoints'),
   default: {},
 });
@@ -296,4 +296,14 @@ export const dialogModalInfoState = atom<undefined | string>({
 export const showAddSkillDialogModalState = atom<boolean>({
   key: getFullyQualifiedKey('showAddSkillDialogModal'),
   default: false,
+});
+
+export const debugPanelExpansionState = atom<boolean>({
+  key: getFullyQualifiedKey('debugPanelExpansion'),
+  default: false,
+});
+
+export const selectedTemplateReadMeState = atom<string>({
+  key: getFullyQualifiedKey('selectedTemplateReadMeState'),
+  default: '',
 });

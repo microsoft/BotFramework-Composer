@@ -1,27 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { generateDesignerId, LgTemplate } from '@bfc/shared';
 import uniq from 'lodash/uniq';
 
-import { LgLanguageContext, PropertyItem } from './types';
+import { LgLanguageContext, PropertyItem } from '../lg/types';
 
-const templateStart = '- ';
-const templateStartRegex = /\s*-\s*.*$/;
+type MonacoPosition = {
+  lineNumber: number;
+  column: number;
+};
 
-/**
- * This function returns the context of the current cursor position in an LG document.
- * @param editor LG editor instance.
- */
-const getCursorContext = (editor: any) => {
+type MonacoRange = {
+  startLineNumber: number;
+  startColumn: number;
+  endLineNumber: number;
+  endColumn: number;
+};
+
+type MonacoEdit = {
+  range: MonacoRange;
+  text: string;
+  forceMoveMarkers: boolean;
+};
+
+export const getCursorContextWithinLine = (lineContent: string) => {
   const state: LgLanguageContext[] = [];
-  const position = editor.getPosition() ?? { lineNumber: 1, column: 1 };
-  const range = {
-    startLineNumber: position.lineNumber,
-    startColumn: 1,
-    endLineNumber: position.lineNumber,
-    endColumn: position.column,
-  };
-  let lineContent = editor.getModel()?.getValueInRange(range) ?? '';
 
   if (!lineContent.startsWith('-')) {
     lineContent = `- ${lineContent}`;
@@ -79,69 +83,52 @@ const getCursorContext = (editor: any) => {
 };
 
 /**
+ * This function returns the context of the current cursor position in an LG document.
+ * @param editor LG editor instance.
+ */
+const getCursorContext = (editor: any) => {
+  const position: MonacoPosition = editor.getPosition() ?? { lineNumber: 1, column: 1 };
+  const range: MonacoRange = {
+    startLineNumber: position.lineNumber,
+    startColumn: 1,
+    endLineNumber: position.lineNumber,
+    endColumn: position.column,
+  };
+  const lineContent = editor.getModel()?.getValueInRange(range) ?? '';
+
+  return getCursorContextWithinLine(lineContent);
+};
+
+/**
  * This function computes what edits should be applied to the document
  * based on the selected text in the editor and selected text from LG editor menu.
  * @param text LG toolbar selected item text.
  * @param editor LG editor instance.
  */
-export const computeRequiredEdits = (
-  text: string,
-  editor: any
-): { range: any; text: string; forceMoveMarkers: boolean }[] | undefined => {
+export const computeRequiredEdits = (text: string, editor: any): MonacoEdit[] | undefined => {
   if (editor) {
-    const position = editor.getPosition() ?? { lineNumber: 1, column: 1 };
-    let value = editor.getModel()?.getLineContent(position.lineNumber) ?? '';
-    const selection = editor.getSelection();
+    const position: MonacoPosition = editor.getPosition() ?? { lineNumber: 1, column: 1 };
+    const selection: MonacoRange = editor.getSelection();
     const textSelected = selection?.startColumn !== editor.getSelection()?.endColumn;
-    let selectedValue = '';
-
-    if (selection && textSelected) {
-      value = editor.getModel()?.getValueInRange({ ...selection, startColumn: 1 }) ?? '';
-      selectedValue = editor.getModel()?.getValueInRange(selection) ?? '';
-      value = value.replace(selectedValue, '');
-    }
-
-    const hasDash = templateStartRegex.test(value);
 
     const context = getCursorContext(editor);
 
     const insertText = context === 'expression' ? text : `\${${text}}`;
 
-    const edits: { range: any; text: string; forceMoveMarkers: boolean }[] = [];
-
-    if (!hasDash) {
-      edits.push({
-        range:
-          textSelected && selection
-            ? {
-                startLineNumber: selection.startLineNumber,
-                startColumn: 1,
-                endLineNumber: selection.startLineNumber,
-                endColumn: templateStart.length,
-              }
-            : {
-                startLineNumber: position.lineNumber,
-                startColumn: 1,
-                endLineNumber: position.lineNumber,
-                endColumn: templateStart.length,
-              },
-        text: templateStart,
-        forceMoveMarkers: textSelected,
-      });
-    }
+    const edits: MonacoEdit[] = [];
 
     edits.push({
       range:
         textSelected && selection
           ? {
               startLineNumber: selection.startLineNumber,
-              startColumn: selection.startColumn + (hasDash ? 0 : templateStart.length),
+              startColumn: selection.startColumn,
               endLineNumber: selection.endLineNumber,
               endColumn: selection.endColumn,
             }
           : {
               startLineNumber: position.lineNumber,
-              startColumn: position.column + (hasDash ? 0 : templateStart.length),
+              startColumn: position.column,
               endLineNumber: position.lineNumber,
               endColumn: position.column,
             },
@@ -158,17 +145,23 @@ export const computeRequiredEdits = (
  * @param properties List of available properties.
  */
 export const computePropertyItemTree = (properties: readonly string[]): PropertyItem => {
+  // Generate random unique ids
+  const generateId = () => {
+    const arr = crypto.getRandomValues(new Uint32Array(1));
+    return `${arr[0]}`;
+  };
+
   const items = properties.slice().sort();
-  const dummyRoot = { id: 'root', children: [] };
+  const dummyRoot = { id: 'root', name: 'root', children: [] };
 
   const helper = (currentNode: PropertyItem, prefix: string, scopedItems: string[], level: number) => {
     const uniques = uniq(scopedItems.map((i) => i.split('.')[level])).filter(Boolean);
-    const children = uniques.map((id) => ({ id: id, children: [] }));
+    const children = uniques.map((name) => ({ id: generateId(), name, children: [] }));
     for (const n of children) {
       helper(
         n,
-        `${prefix}${prefix ? '.' : ''}${n.id}`,
-        items.filter((i) => i.startsWith(`${prefix}${prefix ? '.' : ''}${n.id}`)),
+        `${prefix}${prefix ? '.' : ''}${n.name}`,
+        items.filter((i) => i.startsWith(`${prefix}${prefix ? '.' : ''}${n.name}`)),
         level + 1
       );
     }
@@ -180,12 +173,12 @@ export const computePropertyItemTree = (properties: readonly string[]): Property
   return dummyRoot;
 };
 
-const getPath = <T extends { id: string; children?: T[] }>(item: T, parents: Record<string, T>) => {
+const getPath = <T extends { id: string; name: string; children?: T[] }>(item: T, parents: Record<string, T>) => {
   const path: string[] = [];
   let currentItem = item;
   if (currentItem) {
     while (currentItem) {
-      path.push(currentItem.id);
+      path.push(currentItem.name);
       currentItem = parents[currentItem.id];
       while (currentItem && currentItem.id.indexOf('root') !== -1) {
         currentItem = parents[currentItem.id];
@@ -195,21 +188,23 @@ const getPath = <T extends { id: string; children?: T[] }>(item: T, parents: Rec
   return path.reverse().join('.');
 };
 
-export const getAllNodes = <T extends { id: string; children?: T[] }>(
+/**
+ * Returns a flat list of nodes, their level by id, and the path from root to that node.
+ * @param root Root of the tree.
+ * @param options Options including current state of expanded nodes, and if the root should be skipped.
+ */
+export const getAllNodes = <T extends { id: string; name: string; children?: T[] }>(
   root: T,
   options?: Partial<{ expanded: Record<string, boolean>; skipRoot: boolean }>
 ): {
   nodes: T[];
   levels: Record<string, number>;
-  parents: Record<string, T>;
   paths: Record<string, string>;
-  descendantCount: Record<string, number>;
 } => {
   const nodes: T[] = [];
   const levels: Record<string, number> = {};
   const parents: Record<string, T> = {};
   const paths: Record<string, string> = {};
-  const descendantCount: Record<string, number> = {};
 
   if (options?.skipRoot && options?.expanded) {
     options.expanded[root.id] = true;
@@ -234,18 +229,14 @@ export const getAllNodes = <T extends { id: string; children?: T[] }>(
     }
   };
 
-  const countHelper = (node: T) => {
-    let sum = 0;
-    for (const n of node?.children ?? []) {
-      sum += countHelper(n);
-    }
-
-    descendantCount[node.id] = sum + (node.children?.length ?? 0);
-    return descendantCount[node.id];
-  };
-
   addNode(root, null);
-  countHelper(root);
 
-  return { nodes, levels, parents, paths, descendantCount };
+  return { nodes, levels, paths };
+};
+
+export const getUniqueTemplateName = (templateId: string, templates?: readonly LgTemplate[]): string => {
+  const id = `${templateId}_${generateDesignerId()}`;
+  return !templates || templates.find(({ name }) => name === id)
+    ? (getUniqueTemplateName(templateId, templates) as string)
+    : id;
 };

@@ -800,6 +800,7 @@ msRestNodeAuth
         luisResource: `${name}-${environment}-luis`,
         settings: createResult,
         runtimeIdentifier: 'win-x64',
+        subscriptionId: subId
       };
 
       console.log(chalk.white(JSON.stringify(profile, null, 2)));

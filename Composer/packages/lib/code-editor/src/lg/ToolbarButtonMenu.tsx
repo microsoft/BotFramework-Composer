@@ -3,11 +3,10 @@
 
 import { buildInFunctionsMap, getBuiltInFunctionInsertText } from '@bfc/built-in-functions';
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { DefaultPalette } from '@uifabric/styling';
-import formatMessage from 'format-message';
-import { IconButton, IButton } from 'office-ui-fabric-react/lib/Button';
 import { createSvgIcon } from '@fluentui/react-icons';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import {
   ContextualMenuItem,
   IContextualMenuItem,
@@ -18,22 +17,28 @@ import {
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { Stack, IStackStyles } from 'office-ui-fabric-react/lib/Stack';
+import { IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
 
+import { computePropertyItemTree, getAllNodes } from '../utils/lgUtils';
+import { withTooltip } from '../utils/withTooltip';
+
+import { jsLgToolbarMenuClassName } from './constants';
+import { useDebounce } from './hooks/useDebounce';
 import { PropertyTreeItem } from './PropertyTreeItem';
 import {
-  ToolbarButtonPayload,
-  TemplateRefPayload,
   FunctionRefPayload,
-  PropertyRefPayload,
   PropertyItem,
+  PropertyRefPayload,
+  TemplateRefPayload,
+  ToolbarButtonPayload,
 } from './types';
-import { useDebounce } from './useDebounce';
-import { computePropertyItemTree, getAllNodes } from './utils';
+
+// no op operation
+const noop = () => {};
 
 const propertiesSvgIcon = (
   <svg height="16" viewBox="0 0 2048 2048" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -49,33 +54,47 @@ const templateSvgIcon = (
   </svg>
 );
 
-const DEFAULT_TREE_ITEM_HEIGHT = 36;
+const defaultTreeItemHeight = 36;
 
+const buttonStyles = { menuIcon: { fontSize: 8, color: NeutralColors.black } };
 const labelContainerStyle: IStackStyles = {
-  root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: DEFAULT_TREE_ITEM_HEIGHT },
+  root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: defaultTreeItemHeight },
 };
 
 const headerContainerStyles = {
   root: { height: 32 },
 };
 
+const fontSizeStyle = {
+  fontSize: FluentTheme.fonts.small.fontSize,
+};
+
 const Header = styled(Label)({
   padding: '0 8px',
-  color: DefaultPalette.accent,
-  fontSize: 12,
+  color: FluentTheme.palette.accent,
+  ...fontSizeStyle,
 });
 
 const OneLiner = styled.div({
+  ...fontSizeStyle,
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   padding: '0 8px',
 });
 
+const searchEmptyMessageStyles = { root: { height: 32 } };
+const searchEmptyMessageTokens = { childrenGap: 8 };
+
 const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
 const iconStyles = { root: { color: NeutralColors.black, margin: '0 4px', width: 16, height: 16 } };
-const searchFieldStyles = { root: { borderRadius: 0 }, iconContainer: { display: 'none' } };
-const calloutProps = { styles: { calloutMain: { overflowY: 'hidden' } } };
+const searchFieldStyles = { root: { borderRadius: 0, ...fontSizeStyle }, iconContainer: { display: 'none' } };
+const calloutProps = {
+  styles: {
+    calloutMain: { overflowY: 'hidden' },
+  },
+  layerProps: { className: jsLgToolbarMenuClassName },
+};
 const itemsContainerStyles = { root: { overflowY: 'auto', maxHeight: 216, width: 200, overflowX: 'hidden' } };
 
 type ToolbarButtonMenuProps = {
@@ -85,13 +104,13 @@ type ToolbarButtonMenuProps = {
 
 const getIcon = (kind: ToolbarButtonPayload['kind']): JSX.Element => {
   switch (kind) {
-    case 'functionRef':
+    case 'function':
       return <Icon iconName="Variable" styles={iconStyles} />;
-    case 'propertyRef': {
+    case 'property': {
       const PropertyIcon = createSvgIcon({ svg: () => propertiesSvgIcon, displayName: 'PropertyIcon' });
       return <PropertyIcon style={svgIconStyle} />;
     }
-    case 'templateRef': {
+    case 'template': {
       const TemplateIcon = createSvgIcon({ svg: () => templateSvgIcon, displayName: 'TemplateIcon' });
       return <TemplateIcon style={svgIconStyle} />;
     }
@@ -100,19 +119,19 @@ const getIcon = (kind: ToolbarButtonPayload['kind']): JSX.Element => {
 
 const getStrings = (kind: ToolbarButtonPayload['kind']) => {
   switch (kind) {
-    case 'functionRef':
+    case 'function':
       return {
         emptyMessage: formatMessage('No functions found'),
         searchPlaceholder: formatMessage('Search functions'),
         header: formatMessage('Insert prebuilt functions'),
       };
-    case 'propertyRef':
+    case 'property':
       return {
         emptyMessage: formatMessage('No properties found'),
         searchPlaceholder: formatMessage('Search properties'),
         header: formatMessage('Insert property reference'),
       };
-    case 'templateRef':
+    case 'template':
       return {
         emptyMessage: formatMessage('No templates found'),
         searchPlaceholder: formatMessage('Search templates'),
@@ -121,11 +140,10 @@ const getStrings = (kind: ToolbarButtonPayload['kind']) => {
   }
 };
 
-const TooltipItem = React.memo(({ text, tooltip }: { text?: string; tooltip?: string }) => (
-  <TooltipHost content={tooltip} directionalHint={DirectionalHint.topRightEdge}>
-    <OneLiner>{text}</OneLiner>
-  </TooltipHost>
-));
+const TooltipItem = React.memo(({ text, tooltip }: { text?: string; tooltip?: string }) => {
+  const OneLinerTooltip = withTooltip({ content: tooltip, directionalHint: DirectionalHint.topRightEdge }, OneLiner);
+  return <OneLinerTooltip>{text}</OneLinerTooltip>;
+});
 
 export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
   const { payload, disabled = false } = props;
@@ -133,29 +151,40 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
   const [query, setQuery] = React.useState<string | undefined>();
   const debouncedQuery = useDebounce<string | undefined>(query, 300);
-  const buttonRef = React.useRef<IButton>(null);
   const uiStrings = React.useMemo(() => getStrings(payload.kind), [payload.kind]);
+
+  const propertyTreeConfig = React.useMemo(() => {
+    if (payload.kind === 'property') {
+      const { properties, onSelectProperty } = (payload as PropertyRefPayload).data;
+      return { root: computePropertyItemTree(properties), onSelectProperty };
+    }
+
+    return { root: { id: 'root', name: 'root', children: [] }, onSelectProperty: noop };
+  }, [payload]);
 
   const getContextualMenuItems = (): IContextualMenuItem[] => {
     switch (payload.kind) {
-      case 'templateRef': {
+      case 'template': {
         const { templates, onSelectTemplate } = (payload as TemplateRefPayload).data;
         return templates.map((t, i) => ({
           text: t.name,
           key: `${i}-${t.name}`,
           secondaryText: t.body,
-          onClick: () => onSelectTemplate(`${t.name}(${t.parameters.join(', ')})`),
+          onClick: () => onSelectTemplate(`${t.name}(${t.parameters.join(', ')})`, 'template'),
         })) as IContextualMenuItem[];
       }
-      case 'functionRef': {
+      case 'function': {
         const { functions, onSelectFunction } = (payload as FunctionRefPayload).data;
         return functions.map((grouping: { key: string; name: string; children: string[] }) => {
           return {
             key: grouping.key,
             text: grouping.name,
-            target: '_blank',
+            style: fontSizeStyle,
             subMenuProps: {
-              calloutProps: { calloutMaxHeight: 432 },
+              calloutProps: {
+                calloutMaxHeight: 432,
+                layerProps: { className: jsLgToolbarMenuClassName },
+              },
               contextualMenuItemAs: (itemProps: IContextualMenuItemProps) => {
                 return (
                   <TooltipItem
@@ -168,16 +197,15 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
                 return {
                   key: key,
                   text: key,
-                  onClick: () => onSelectFunction(getBuiltInFunctionInsertText(key)),
+                  onClick: () => onSelectFunction(getBuiltInFunctionInsertText(key), 'function'),
                 };
               }),
             },
           };
         });
       }
-      case 'propertyRef': {
-        const { properties, onSelectProperty } = (payload as PropertyRefPayload).data;
-        const root = computePropertyItemTree(properties);
+      case 'property': {
+        const { root, onSelectProperty } = propertyTreeConfig;
         const { nodes, levels, paths } = getAllNodes<PropertyItem>(root, {
           expanded: propertyTreeExpanded,
           skipRoot: true,
@@ -189,7 +217,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
 
         return nodes.map((node) => ({
           key: node.id,
-          text: node.id,
+          text: node.name,
           secondaryText: paths[node.id],
           onClick: (ev) => {
             if (node.children.length) {
@@ -197,7 +225,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
               onToggleExpand(node.id, !propertyTreeExpanded[node.id]);
             } else {
               const path = paths[node.id];
-              onSelectProperty(path);
+              onSelectProperty(path, 'property');
             }
           },
           data: {
@@ -212,7 +240,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
   };
 
   const flatFunctionListItems = React.useMemo(() => {
-    if (payload.kind === 'functionRef') {
+    if (payload.kind === 'function') {
       const { functions, onSelectFunction } = (payload as FunctionRefPayload).data;
       return functions
         .reduce((acc, f) => {
@@ -225,7 +253,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         .map((key) => ({
           text: key,
           key,
-          onClick: () => onSelectFunction(getBuiltInFunctionInsertText(key)),
+          onClick: () => onSelectFunction(getBuiltInFunctionInsertText(key), 'function'),
         })) as IContextualMenuItem[];
     }
 
@@ -233,10 +261,8 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
   }, [payload]);
 
   const flatPropertyListItems = React.useMemo(() => {
-    if (payload.kind === 'propertyRef') {
-      const { properties, onSelectProperty } = (payload as PropertyRefPayload).data;
-
-      const root = computePropertyItemTree(properties);
+    if (payload.kind === 'property') {
+      const { root, onSelectProperty } = propertyTreeConfig;
       const { nodes, paths } = getAllNodes<PropertyItem>(root, { skipRoot: true });
 
       return nodes.map((node) => ({
@@ -245,7 +271,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         secondaryText: paths[node.id],
         onClick: () => {
           const path = paths[node.id];
-          onSelectProperty(path);
+          onSelectProperty(path, 'property');
         },
         data: {
           node,
@@ -256,7 +282,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     }
 
     return [] as IContextualMenuItem[];
-  }, [payload]);
+  }, [payload, propertyTreeConfig]);
 
   const menuItems = React.useMemo(getContextualMenuItems, [payload, propertyTreeExpanded]);
 
@@ -274,10 +300,10 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
 
   const getFilterPredictable = React.useCallback((kind: ToolbarButtonPayload['kind'], q: string) => {
     switch (kind) {
-      case 'functionRef':
-      case 'templateRef':
+      case 'function':
+      case 'template':
         return (item: IContextualMenuItem) => item.text && item.text.toLowerCase().indexOf(q.toLowerCase()) !== -1;
-      case 'propertyRef':
+      case 'property':
         return (item: IContextualMenuItem) =>
           item.data.node.children.length === 0 && item.secondaryText?.toLowerCase().indexOf(q.toLowerCase()) !== -1;
     }
@@ -286,9 +312,9 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
   React.useEffect(() => {
     if (debouncedQuery) {
       const searchableItems =
-        payload.kind === 'functionRef'
+        payload.kind === 'function'
           ? flatFunctionListItems
-          : payload.kind === 'propertyRef'
+          : payload.kind === 'property'
           ? flatPropertyListItems
           : menuItems;
 
@@ -304,12 +330,12 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
               key="no_results"
               horizontal
               horizontalAlign="center"
-              styles={{ root: { height: 32 } }}
-              tokens={{ childrenGap: 8 }}
+              styles={searchEmptyMessageStyles}
+              tokens={searchEmptyMessageTokens}
               verticalAlign="center"
             >
               <Icon iconName="SearchIssue" title={uiStrings.emptyMessage} />
-              <span>{uiStrings.emptyMessage}</span>
+              <Text variant="small">{uiStrings.emptyMessage}</Text>
             </Stack>
           ),
         });
@@ -349,7 +375,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
 
   const menuProps: IContextualMenuProps = React.useMemo(() => {
     switch (payload.kind) {
-      case 'templateRef': {
+      case 'template': {
         return {
           onDismiss,
           items,
@@ -360,7 +386,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
           },
         } as IContextualMenuProps;
       }
-      case 'functionRef': {
+      case 'function': {
         return {
           onDismiss,
           items,
@@ -378,7 +404,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
           },
         } as IContextualMenuProps;
       }
-      case 'propertyRef': {
+      case 'property': {
         return {
           onDismiss,
           items,
@@ -398,14 +424,17 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
               const pathNodes = (path ?? '').split('.');
               return (
                 <Stack horizontal styles={labelContainerStyle} verticalAlign="center">
-                  {pathNodes.map((pn, idx) => (
+                  {pathNodes.map((pathNode, idx) => (
                     <Text
                       key={`segment-${idx}`}
                       styles={{
-                        root: { color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray70 },
+                        root: {
+                          color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray70,
+                        },
                       }}
+                      variant="small"
                     >
-                      {`${pn}${idx === pathNodes.length - 1 && node.children.length === 0 ? '' : '.'}`}
+                      {`${pathNode}${idx === pathNodes.length - 1 && node.children.length === 0 ? '' : '.'}`}
                     </Text>
                   ))}
                 </Stack>
@@ -414,7 +443,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
 
             const renderSearchResultLabel = () => (
               <Stack styles={labelContainerStyle} verticalAlign="center">
-                <Text>{path}</Text>
+                <Text variant="small">{path}</Text>
               </Stack>
             );
 
@@ -437,11 +466,12 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
 
   return (
     <IconButton
-      componentRef={buttonRef}
+      className={jsLgToolbarMenuClassName}
+      data-testid="menuButton"
       disabled={disabled}
       menuProps={menuProps}
+      styles={buttonStyles}
       onRenderIcon={renderIcon}
-      onRenderMenuIcon={() => null}
     />
   );
 });
