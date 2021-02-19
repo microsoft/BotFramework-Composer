@@ -785,15 +785,7 @@ export class AzureResourceMananger {
             {
               name: 'WEBSITE_NODE_DEFAULT_VERSION',
               value: '10.14.1',
-            },
-            {
-              name: 'MicrosoftAppId',
-              value: config.appId,
-            },
-            {
-              name: 'MicrosoftAppPassword',
-              value: config.appPwd,
-            },
+            }
           ],
           cors: {
             allowedOrigins: ['https://botservice.hosting.portal.azure.net', 'https://hosting.onecloud.azure-test.net/'],
@@ -839,14 +831,6 @@ export class AzureResourceMananger {
         httpsOnly: true,
         siteConfig: {
           appSettings: [
-            {
-              name: 'MicrosoftAppId',
-              value: config.appId,
-            },
-            {
-              name: 'MicrosoftAppPassword',
-              value: config.appPwd,
-            },
             {
               name: 'FUNCTIONS_EXTENSION_VERSION',
               value: '~3'

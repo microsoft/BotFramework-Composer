@@ -254,9 +254,7 @@ export class BotProjectProvision {
             const hostname = await this.azureResourceManagementClient.deployWebAppResource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
-              name: config.hostname,
-              appId: provisionResults.appId,
-              appPwd: provisionResults.appPassword,
+              name: config.hostname
             });
             provisionResults.webApp = {
               hostname: hostname,
@@ -271,7 +269,7 @@ export class BotProjectProvision {
               location: provisionResults.resourceGroup.location,
               name: config.hostname, // come back to this!
               displayName: config.hostname, // todo: this may be wrong!
-              endpoint: `https://${provisionResults.webApp.hostname}/api/messages`,
+              endpoint: `https://${provisionResults.webApp?.hostname ?? (config.hostname + ".azurewebsites.net")}/api/messages`,
               appId: provisionResults.appId,
             });
             break;
@@ -282,9 +280,7 @@ export class BotProjectProvision {
             const functionsHostName = await this.azureResourceManagementClient.deployAzureFunctions({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
-              name: config.hostname,
-              appId: provisionResults.appId,
-              appPwd: provisionResults.appPassword,
+              name: config.hostname
             });
             provisionResults.webApp = {
               hostname: functionsHostName,

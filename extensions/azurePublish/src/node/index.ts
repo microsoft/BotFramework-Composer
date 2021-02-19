@@ -18,6 +18,7 @@ import { stringifyError, AzurePublishErrors, createCustomizeError } from './util
 import { ProcessStatus } from './types';
 import { authConfig, ResourcesItem } from '../types';
 import { ResourceGroup } from '@azure/arm-resources/esm/models/mappers';
+import { LuisApp } from '@azure/cognitiveservices-luis-authoring/esm/models/mappers';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
 // set to TRUE for history to be saved to disk
@@ -399,13 +400,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const currentSettings = currentProfile?.settings;
 
         const publishProfile = {
-          name: config.hostname,
-          environment: 'composer',
-          subscriptionId: provisionResults.subscriptionId,
-          resourceGroup: provisionResults.resourceGroup.name,
-          hostname: config.hostname,
-          luisResource: `${config.hostname}-luis`,
-          runtimeIdentifier: 'win-x64',
+          name: currentProfile?.name ?? config.hostname,
+          environment: currentProfile?.environment ?? 'composer',
+          subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
+          resourceGroup: provisionResults.resourceGroup?.name ?? currentProfile?.resourceGroup,
+          hostname: config.hostname ?? currentProfile?.hostname,
+          luisResource: provisionResults.luisPrediction? `${config.hostname}-luis` : currentProfile?.luisResource,
+          runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
           settings: {
             applicationInsights: {
               InstrumentationKey: provisionResults.appInsights?.instrumentationKey ?? currentSettings?.applicationInsights?.InstrumentationKey,
