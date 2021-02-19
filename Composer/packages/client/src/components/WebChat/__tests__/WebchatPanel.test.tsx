@@ -32,11 +32,8 @@ describe('<WebchatPanel />', () => {
       isWebChatPanelVisible: false,
       openBotInEmulator: mockOpenInEmulator,
       activeLocale: 'en-us',
-      appLifecycleHandler: {
-        on: () => {},
-      },
     };
-    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} />);
+    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} onAddEntryToInspector={jest.fn()} />);
     mockstartNewConversation.mockResolvedValue({
       directline: {
         activity$: jest.fn(),
@@ -51,7 +48,44 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(<WebChatPanel {...props} isWebChatPanelVisible />);
+      rerender(<WebChatPanel {...props} isWebChatPanelVisible onAddEntryToInspector={jest.fn()} />);
+      await findAllByTestId('restart-conversation');
+    });
+  });
+
+  it('should destroy the error socket when component is destroyed', async () => {
+    const mockOpenInEmulator = jest.fn();
+    const props = {
+      projectId: '123-12',
+      botUrl: 'http://localhost:3989/api/messages',
+      secrets: {
+        msAppId: '',
+        msPassword: '',
+      },
+      directlineHostUrl: 'http://localhost:3000/v3/directline',
+      botName: 'test-bot',
+      isWebChatPanelVisible: false,
+      openBotInEmulator: mockOpenInEmulator,
+      activeLocale: 'en-us',
+    };
+    const { rerender, findAllByTestId, unmount } = render(
+      <WebChatPanel {...props} onAddEntryToInspector={jest.fn()} />
+    );
+    mockstartNewConversation.mockResolvedValue({
+      directline: {
+        activity$: jest.fn(),
+        subscribe: jest.fn(),
+      },
+      chatMode: 'conversation',
+      projectId: '123-12',
+      user: {
+        id: 'dsf',
+      },
+      conversationId: '123sdf=234',
+    });
+
+    await act(async () => {
+      rerender(<WebChatPanel {...props} isWebChatPanelVisible onAddEntryToInspector={jest.fn()} />);
       await findAllByTestId('restart-conversation');
     });
   });

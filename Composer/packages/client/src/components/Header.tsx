@@ -347,6 +347,10 @@ export const Header = () => {
         {webchatEssentials ? (
           <WebChatPanel
             activeLocale={webchatEssentials.activeLocale}
+            addEntryToInspector={(projectId, item) => {
+              // eslint-disable-next-line no-console
+              console.log(item);
+            }}
             botName={webchatEssentials.displayName}
             botUrl={webchatEssentials.botUrl}
             directlineHostUrl={BASEPATH}
@@ -354,10 +358,6 @@ export const Header = () => {
             openBotInEmulator={openBotInEmulator}
             projectId={webchatEssentials.botId}
             secrets={webchatEssentials.secrets}
-            onAddEntryToInspector={(projectId, item) => {
-              // eslint-disable-next-line no-console
-              console.log(item);
-            }}
           />
         ) : null}
       </Panel>

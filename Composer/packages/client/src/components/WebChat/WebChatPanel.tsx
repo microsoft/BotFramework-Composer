@@ -4,10 +4,9 @@
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { DirectLineLog } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
-import moment from 'moment';
 import formatMessage from 'format-message';
 
-import ConversationService, { ChatData, BotSecrets } from './utils/conversationService';
+import ConversationService, { ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
 
@@ -66,7 +65,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       } catch (ex) {
         const response: AxiosResponse = ex.response;
         const err: DirectLineLog = {
-          timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
+          timestamp: getDateTimeFormatted(),
           route: 'conversations/ws/port',
           status: response.status,
           logType: 'Error',
@@ -75,7 +74,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         onAddEntryToInspector(projectId, err);
       }
     };
+
     bootstrapChat();
+
     return () => {
       directLineErrorChannel.current?.close();
     };

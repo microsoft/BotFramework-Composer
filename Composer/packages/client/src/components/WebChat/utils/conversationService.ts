@@ -65,6 +65,10 @@ export type ChatData = {
   conversationId: string;
 };
 
+export const getDateTimeFormatted = (): string => {
+  return moment().local().format('YYYY-MM-DD HH:mm:ss');
+};
+
 export default class ConversationService {
   private directlineHostUrl: string;
   private composerApiClient: AxiosInstance;
@@ -232,7 +236,7 @@ export default class ConversationService {
     } catch (ex) {
       const response: AxiosResponse = ex.response;
       const err: DirectLineLog = {
-        timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
+        timestamp: getDateTimeFormatted(),
         route: 'conversations/ws/port',
         status: response.status,
         logType: 'Error',
@@ -254,8 +258,8 @@ export default class ConversationService {
     } catch (ex) {
       const response: AxiosResponse = ex.response;
       const err: DirectLineLog = {
-        timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
-        route: response.request?.path,
+        timestamp: getDateTimeFormatted(),
+        route: response.request?.path ?? '',
         status: response.status,
         logType: 'Error',
         message: formatMessage('An error occured trying to save the transcript to disk'),
@@ -269,9 +273,5 @@ export default class ConversationService {
     const { port } = resp.data;
     this.restServerForWSPort = port;
     return port;
-  }
-
-  public async cleanupAll() {
-    await this.composerApiClient.put(`/conversations/cleanupAll`);
   }
 }
