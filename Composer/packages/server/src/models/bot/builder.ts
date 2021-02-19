@@ -6,7 +6,7 @@ import { pathExists, writeFile, copy } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
-import { Orchestrator } from '@microsoft/bf-orchestrator';
+import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
 import partition from 'lodash/partition';
@@ -61,6 +61,7 @@ export class Builder {
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
   private containOrchestrator = false;
+  private orchestratorLabelResolvers = new Map<string, LabelResolver>();
 
   public luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -283,7 +284,15 @@ export class Builder {
         content: fi.content,
       }));
 
-    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, '', null, fullEmbedding);
+    return await Orchestrator.buildAsync(
+      modelPath,
+      luObjects,
+      this.orchestratorLabelResolvers,
+      isDialog,
+      '',
+      null,
+      fullEmbedding
+    );
   }
 
   public async copyModelPathToBot() {
