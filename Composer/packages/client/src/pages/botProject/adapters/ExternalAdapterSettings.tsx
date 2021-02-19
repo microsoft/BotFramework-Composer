@@ -18,7 +18,7 @@ import { JSONSchema7 } from '@botframework-composer/types';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 
-import AdapterModal, { AdapterRecord } from './ExternalAdapterModal';
+import AdapterModal, { AdapterRecord, hasRequired } from './ExternalAdapterModal';
 
 //////////
 
@@ -32,24 +32,26 @@ const ExternalAdapterSettings = (props: Props) => {
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
   const currentSettings = useRecoilValue(settingsState(projectId));
   const { setSettings } = useRecoilValue(dispatcherState);
-  const adapters: AdapterRecord[] = currentSettings.adapters ?? [];
+  const adapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];
 
   const { definitions: schemaDefinitions } = schemas?.sdk?.content ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
 
-  const [currentModalProps, setModalProps] = useState<{ key: string; callback?: () => void } | undefined>();
+  const [currentModalProps, setModalProps] = useState<{ key: string; packageName: string } | undefined>();
 
-  const openModal = (key: string | undefined, callback?: () => void) => {
-    if (key == null) {
+  const openModal = (key?: string, packageName?: string) => {
+    if (key == null || packageName == null) {
       setModalProps(undefined);
     } else {
-      setModalProps({ key, callback });
+      setModalProps({ key, packageName });
     }
   };
 
   if (schemaDefinitions == null) return null;
 
   const columnWidths = ['300px', '150px', '150px'];
+
+  console.log(adapters);
 
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
@@ -69,19 +71,20 @@ const ExternalAdapterSettings = (props: Props) => {
       </div>
 
       {schemas.map((schema) => {
-        const { key, title } = schema;
+        const { key, packageName, title } = schema;
 
-        const keyConfigured = adapters.some((ad) => ad.name === key);
+        const keyConfigured =
+          packageName in currentSettings && hasRequired(currentSettings[packageName], schemaDefinitions[key].required);
         const keyEnabled = adapters.some((ad) => ad.name === key && ad.enabled);
 
         return (
           <div key={key} css={tableRow}>
             <div css={tableRowItem(columnWidths[0])}>{title}</div>
             <div css={tableRowItem(columnWidths[1])}>
-              {key in currentSettings ? (
+              {keyConfigured ? (
                 <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
               ) : (
-                <Link key={key} onClick={() => openModal(key)}>
+                <Link key={key} onClick={() => openModal(key, packageName)}>
                   {formatMessage('Configure')}
                 </Link>
               )}
@@ -94,14 +97,18 @@ const ExternalAdapterSettings = (props: Props) => {
                 styles={{ root: { paddingTop: '8px' } }}
                 onChange={(ev, val?: boolean) => {
                   if (val != null) {
-                    const oldAdapters = currentSettings.adapters ?? [];
+                    console.log(key, val);
+                    const oldAdapters = currentSettings.runtimeSettings?.adapters ?? [];
                     setSettings(projectId, {
                       ...currentSettings,
-                      adapters: oldAdapters.map((ad: AdapterRecord) => {
-                        if (ad.name == key) {
-                          return { ...ad, enabled: val };
-                        } else return ad;
-                      }),
+                      runtimeSettings: {
+                        ...(currentSettings?.runtimeSettings ?? {}),
+                        adapters: oldAdapters.map((ad: AdapterRecord) => {
+                          if (ad.name == key) {
+                            return { ...ad, enabled: val };
+                          } else return ad;
+                        }),
+                      },
                     });
                   }
                 }}
@@ -119,7 +126,7 @@ const ExternalAdapterSettings = (props: Props) => {
                       key: 'edit',
                       text: formatMessage('Edit'),
                       iconProps: { iconName: 'Edit' },
-                      onClick: () => openModal(key),
+                      onClick: () => openModal(key, packageName),
                     },
                   ],
                 }}
@@ -138,26 +145,26 @@ const ExternalAdapterSettings = (props: Props) => {
     </div>
   );
 
-  console.log(schemaDefinitions);
   const adapterSchemas = Object.entries(schemaDefinitions as { [key: string]: JSONSchema7 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(([key, value]) => value?.$role != null && /IAdapter/.test(value.$role))
-    .map(([key, value]) => ({ ...value, key }));
+    .map(([key, value]) => ({ ...value, key, packageName: value.$package?.name }));
 
   const currentKey = currentModalProps?.key;
+  const currentPackageName = currentModalProps?.packageName;
 
   return (
     <Fragment>
       <div data-testid="adapterSettings">{externalServices(adapterSchemas)}</div>
-      {currentKey != null && schemaDefinitions[currentKey] != null && (
+      {currentKey != null && currentPackageName != null && schemaDefinitions[currentKey] != null && (
         <AdapterModal
           isOpen
           adapterKey={currentKey}
-          packageName={currentKey}
+          packageName={currentPackageName}
           projectId={projectId}
           schema={schemaDefinitions[currentKey]}
           uiSchema={uiSchemas?.[currentKey]?.form}
-          value={currentSettings[currentKey]}
+          value={currentSettings[currentPackageName]}
           onClose={() => {
             openModal(undefined);
           }}

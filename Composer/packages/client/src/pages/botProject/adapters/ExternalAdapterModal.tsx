@@ -34,7 +34,7 @@ type Props = {
   value?: { [key: string]: ConfigValue };
 };
 
-function hasRequired(testObject: { [key: string]: ConfigValue }, fields?: string[]) {
+export function hasRequired(testObject: { [key: string]: ConfigValue }, fields?: string[]) {
   if (fields == null || fields.length === 0) return true;
   return fields.every((field: string) => field in testObject);
 }
@@ -53,6 +53,8 @@ const AdapterModal = (props: Props) => {
   }, [uiSchema]);
 
   const { required } = schema;
+
+  if (value != null) console.log(value, required, hasRequired(value, required));
 
   return (
     <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
@@ -73,7 +75,8 @@ const AdapterModal = (props: Props) => {
             uiOptions={uiSchema}
             value={value}
             onChange={(update?: { [key: string]: any }) => {
-              if (update != null) setValue(update);
+              console.log(update);
+              if (update != null) setValue({ ...update, $kind: adapterKey });
             }}
           />
           <DialogFooter>
@@ -86,13 +89,13 @@ const AdapterModal = (props: Props) => {
 
                   await setSettings(projectId, {
                     ...currentSettings,
+                    [packageName]: { ...(currentSettings[packageName] ?? {}), ...value },
                     runtimeSettings: {
                       ...currentSettings.runtimeSettings,
                       adapters: [
                         ...currentAdapters.filter((a) => a.name != adapterKey),
                         { name: adapterKey, enabled: true, route: value.route },
                       ],
-                      [packageName]: value,
                     },
                   });
                 }
