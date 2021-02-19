@@ -267,7 +267,9 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
 
   return (
     <ProjectTree
+      headerAriaLabel={formatMessage('Filter by dialog or trigger name')}
       headerMenu={projectTreeHeaderMenuItems}
+      headerPlaceholder={formatMessage('Filter by dialog or trigger name')}
       selectedLink={{
         projectId: rootProjectId,
         skillId: rootProjectId === projectId ? undefined : projectId,
