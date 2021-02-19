@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -20,10 +20,9 @@ import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
 import { navigateTo } from '../../utils/navigation';
-import { DebugPanel } from '../design/DebugPanel/DebugPanel';
 
 import { PublishDialog } from './PublishDialog';
-import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, contentWrapper } from './styles';
+import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { BotStatusList } from './BotStatusList';
 import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
 import { PullDialog } from './pullDialog';
@@ -292,7 +291,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   return (
-    <div css={contentWrapper} role="main">
+    <Fragment>
       {showAuthDialog && (
         <AuthDialog
           needGraph={false}
@@ -356,8 +355,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           />
         </div>
       </div>
-      <DebugPanel />
-    </div>
+    </Fragment>
   );
 };
 

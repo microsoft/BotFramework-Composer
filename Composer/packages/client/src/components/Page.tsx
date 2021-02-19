@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css, SerializedStyles } from '@emotion/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
@@ -13,6 +13,7 @@ import formatMessage from 'format-message';
 import { navigateTo, buildURL } from '../utils/navigation';
 import { dispatcherState, PageMode } from '../recoilModel';
 import { DebugPanel } from '../pages/design/DebugPanel/DebugPanel';
+import implementedDebugExtensions from '../pages/design/DebugPanel/TabExtensions';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
@@ -143,10 +144,26 @@ const Page: React.FC<IPageProps> = (props) => {
     setPageElementState(pageMode, { leftSplitWidth: sizes.primary });
   };
 
+  const debugItems: IToolbarItem[] = useMemo(
+    () =>
+      implementedDebugExtensions
+        .map(({ key, ToolbarWidget }) => {
+          if (!ToolbarWidget) return;
+          return {
+            type: 'element',
+            element: <ToolbarWidget key={`ToolbarWidget-${key}`} />,
+            align: 'right',
+          };
+        })
+        .filter((item) => Boolean(item)) as IToolbarItem[],
+    []
+  );
+  const displayedToolbarItems = toolbarItems.concat(debugItems);
+
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
-        <Toolbar toolbarItems={toolbarItems} />
+        <Toolbar toolbarItems={displayedToolbarItems} />
         <div css={headerStyle}>
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
@@ -198,7 +215,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              <DebugPanel />
+              {title !== 'Diagnostics' && <DebugPanel />}
             </div>
           </Split>
         </div>

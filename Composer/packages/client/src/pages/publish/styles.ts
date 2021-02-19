@@ -20,13 +20,6 @@ export const settingsDescription = css`
   margin-top: 8px;
 `;
 
-export const contentWrapper = css`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  label: PublishPageContent;
-`;
-
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
   height: 60px;
@@ -44,9 +37,9 @@ export const HeaderText = css`
 export const ContentStyle = css`
   margin-left: 2px;
   display: flex;
-  height: 0;
+  height: 100%;
   border-top: 1px solid #dddddd;
-  flex-grow: 1;
+  flex: 1;
   position: relative;
   nav {
     ul {
