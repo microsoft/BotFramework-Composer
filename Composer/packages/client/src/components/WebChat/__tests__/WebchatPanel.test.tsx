@@ -18,7 +18,7 @@ jest.mock('../utils/conversationService', () => {
 });
 
 describe('<WebchatPanel />', () => {
-  it('should render webchat panel correctly', async () => {
+  fit('should render webchat panel correctly', async () => {
     const mockOpenInEmulator = jest.fn();
     const props = {
       projectId: '123-12',
@@ -33,7 +33,7 @@ describe('<WebchatPanel />', () => {
       openBotInEmulator: mockOpenInEmulator,
       activeLocale: 'en-us',
     };
-    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} appendLogToWebChat={jest.fn()} />);
+    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} appendLogToWebChatInspector={jest.fn()} />);
     mockstartNewConversation.mockResolvedValue({
       directline: {
         activity$: jest.fn(),
@@ -48,7 +48,7 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(<WebChatPanel {...props} isWebChatPanelVisible appendLogToWebChat={jest.fn()} />);
+      rerender(<WebChatPanel {...props} isWebChatPanelVisible appendLogToWebChatInspector={jest.fn()} />);
       await findAllByTestId('restart-conversation');
     });
   });
@@ -68,7 +68,7 @@ describe('<WebchatPanel />', () => {
       openBotInEmulator: mockOpenInEmulator,
       activeLocale: 'en-us',
     };
-    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} appendLogToWebChat={jest.fn()} />);
+    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} appendLogToWebChatInspector={jest.fn()} />);
     mockstartNewConversation.mockResolvedValue({
       directline: {
         activity$: jest.fn(),
@@ -83,7 +83,7 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(<WebChatPanel {...props} isWebChatPanelVisible appendLogToWebChat={jest.fn()} />);
+      rerender(<WebChatPanel {...props} isWebChatPanelVisible appendLogToWebChatInspector={jest.fn()} />);
       await findAllByTestId('restart-conversation');
     });
   });

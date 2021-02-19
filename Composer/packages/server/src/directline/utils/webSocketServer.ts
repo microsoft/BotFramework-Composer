@@ -76,34 +76,6 @@ export class WebSocketServer {
       this.port = port;
       this.restServer.listen(port);
 
-      app.use('/ws/createErrorChannel', (req: express.Request, res: express.Response) => {
-        if (!(req as any).claimUpgrade) {
-          return res.status(426).send('Connection must upgrade for web sockets.');
-        }
-
-        if (!this.dLErrorsServer) {
-          const { head, socket } = (req as any).claimUpgrade();
-
-          const wsServer = new WSServer({
-            noServer: true,
-          });
-
-          wsServer.on('connection', (socket, req) => {
-            this.sockets[socketErrorChannelKey] = socket;
-
-            socket.on('close', () => {
-              this.dLErrorsServer = null;
-              delete this.sockets[socketErrorChannelKey];
-            });
-          });
-
-          wsServer.handleUpgrade(req as any, socket, head, (socket) => {
-            wsServer.emit('connection', socket, req);
-          });
-          this.dLErrorsServer = wsServer;
-        }
-      });
-
       app.use('/ws/:conversationId', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {
           return res.status(426).send('Connection must upgrade for web sockets.');
@@ -135,6 +107,35 @@ export class WebSocketServer {
           this.servers[conversationId] = wsServer;
         }
       });
+
+      app.use('/ws/createErrorChannel', (req: express.Request, res: express.Response) => {
+        if (!(req as any).claimUpgrade) {
+          return res.status(426).send('Connection must upgrade for web sockets.');
+        }
+
+        if (!this.dLErrorsServer) {
+          const { head, socket } = (req as any).claimUpgrade();
+
+          const wsServer = new WSServer({
+            noServer: true,
+          });
+
+          wsServer.on('connection', (socket, req) => {
+            this.sockets[socketErrorChannelKey] = socket;
+
+            socket.on('close', () => {
+              this.dLErrorsServer = null;
+              delete this.sockets[socketErrorChannelKey];
+            });
+          });
+
+          wsServer.handleUpgrade(req as any, socket, head, (socket) => {
+            wsServer.emit('connection', socket, req);
+          });
+          this.dLErrorsServer = wsServer;
+        }
+      });
+
       log(`Web Socket host server listening on ${this.port}...`);
       return this.port;
     }

@@ -12,11 +12,17 @@ import {
 } from '../conversationHandler';
 
 const mockSendToSubscribers = jest.fn();
+const mockSendErrorToSubscribers = jest.fn();
+
+jest.mock('moment', () => {
+  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000Z');
+});
 
 jest.mock('../../utils/webSocketServer.ts', () => {
   return {
     WebSocketServer: {
       sendToSubscribers: (...args) => mockSendToSubscribers(...args),
+      sendDLErrorsToSubscribers: (...args) => mockSendErrorToSubscribers(...args),
     },
   };
 });
@@ -180,8 +186,12 @@ describe('postActivityToBot handler', () => {
 
     expect(mockStatus).toHaveBeenCalledWith(400);
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      error: 'The bot cannot accept messages at this time',
-      errorCode: ['123Z-4', '989-Az'],
+      logType: 'Error',
+      message:
+        '{"code":"ServiceError","exception":{"response":{"status":400,"data":{"error":"The bot cannot accept messages at this time","errorCode":["123Z-4","989-Az"]}}}}',
+      route: undefined,
+      status: 400,
+      timestamp: '2021-02-18 16:00:00',
     });
   });
 });
