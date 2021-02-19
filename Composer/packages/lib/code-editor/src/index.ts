@@ -4,8 +4,7 @@
 import { monaco } from '@monaco-editor/react';
 
 // initialize moanco api as early as possible
-monaco.init().then(instance => {
-  console.log('setting monaco on window', instance);
+monaco.init().then((instance) => {
   // @ts-ignore
   window.monaco = instance;
 });

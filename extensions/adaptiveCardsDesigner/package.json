@@ -15,7 +15,7 @@
     "bundles": [
       {
         "id": "adaptive-cards-designer",
-        "path": "./dist/Library.js"
+        "path": "./dist/CardsDesigner.js"
       }
     ],
     "contributes": {
@@ -47,6 +47,7 @@
     "monaco-editor": "^0.22.3",
     "monaco-editor-webpack-plugin": "^3.0.0",
     "office-ui-fabric-react": "7.71.0",
+    "query-string": "^6.14.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "uuid": "^8.3.2"

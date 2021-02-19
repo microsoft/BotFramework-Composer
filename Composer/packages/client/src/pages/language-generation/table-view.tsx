@@ -155,6 +155,21 @@ const TableView: React.FC<TableViewProps> = (props) => {
     [defaultLangFile, actualProjectId]
   );
 
+  const isACCard = (item) => {
+    const capturedJSON = /-\s*```\s*([\s\S]*)```/.exec(item.body);
+    let payload;
+    if (capturedJSON) {
+      try {
+        payload = JSON.parse(capturedJSON[1]);
+        if (payload.type === 'AdaptiveCard') {
+          return true;
+        }
+      } catch {
+        return false;
+      }
+    }
+  };
+
   const getTemplatesMoreButtons = useCallback(
     (item) => {
       const buttons = [
@@ -182,7 +197,24 @@ const TableView: React.FC<TableViewProps> = (props) => {
           },
         },
       ];
-
+      if (isACCard(item)) {
+        buttons.push({
+          key: 'edit_adaptive_card',
+          name: formatMessage('Edit in Adaptive Cards Designer'),
+          onClick: () => {
+            let payload = '';
+            const capturedJSON = /-\s*```\s*([\s\S]*)```/.exec(item.body);
+            if (capturedJSON) {
+              payload = JSON.parse(capturedJSON[1]);
+            }
+            navigateTo(
+              `/bot/${actualProjectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${
+                item.name
+              }&templateBody=${JSON.stringify(payload)}`
+            );
+          },
+        });
+      }
       return buttons;
     },
     [activeDialog, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]

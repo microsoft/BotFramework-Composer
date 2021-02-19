@@ -1016,6 +1016,9 @@
   "edit_displayname_dialog_description_986a7d60": {
     "message": "Edit { displayName } dialog description"
   },
+  "edit_in_adaptive_cards_designer_945703bc": {
+    "message": "Edit in Adaptive Cards Designer"
+  },
   "edit_in_json_75d0d754": {
     "message": "Edit in JSON"
   },
@@ -1216,9 +1219,6 @@
   },
   "extension_settings_899ccb55": {
     "message": "Extension Settings"
-  },
-  "extensions_7250a0bb": {
-    "message": "Extensions"
   },
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "External resources will not be changed."

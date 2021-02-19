@@ -1,6 +1,9 @@
-const fs = require('fs-extra');
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 const path = require('path');
 
+const fs = require('fs-extra');
 const esbuild = require('esbuild');
 const GlobalsPlugin = require('esbuild-plugin-globals');
 
@@ -82,7 +85,12 @@ const getBundleConfigs = (extPath, packageJSON, watch = false) => {
                 '.ttf': 'file',
               },
               define: {
-                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) || JSON.stringify('development'),
+                process: JSON.stringify({
+                  env: {
+                    NODE_ENV: JSON.stringify(process.env.NODE_ENV) || JSON.stringify('development'),
+                    PIC_TO_CARD_PREDICTION_API: '',
+                  },
+                }),
               },
             }
           )
