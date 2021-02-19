@@ -303,6 +303,11 @@ export const debugPanelExpansionState = atom<boolean>({
   default: false,
 });
 
+export const debugPanelActiveTabState = atom<string>({
+  key: getFullyQualifiedKey('degbugPanelActiveTab'),
+  default: '',
+});
+
 export const selectedTemplateReadMeState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateReadMeState'),
   default: '',
