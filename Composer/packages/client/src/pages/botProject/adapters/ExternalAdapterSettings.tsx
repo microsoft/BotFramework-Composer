@@ -51,8 +51,6 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const columnWidths = ['300px', '150px', '150px'];
 
-  console.log(adapters);
-
   const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
     <div>
       <div key={'subtitle'} css={subtitle}>
@@ -97,7 +95,6 @@ const ExternalAdapterSettings = (props: Props) => {
                 styles={{ root: { paddingTop: '8px' } }}
                 onChange={(ev, val?: boolean) => {
                   if (val != null) {
-                    console.log(key, val);
                     const oldAdapters = currentSettings.runtimeSettings?.adapters ?? [];
                     setSettings(projectId, {
                       ...currentSettings,

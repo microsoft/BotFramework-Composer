@@ -54,8 +54,6 @@ const AdapterModal = (props: Props) => {
 
   const { required } = schema;
 
-  if (value != null) console.log(value, required, hasRequired(value, required));
-
   return (
     <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
       <DialogWrapper
@@ -75,7 +73,6 @@ const AdapterModal = (props: Props) => {
             uiOptions={uiSchema}
             value={value}
             onChange={(update?: { [key: string]: any }) => {
-              console.log(update);
               if (update != null) setValue({ ...update, $kind: adapterKey });
             }}
           />
