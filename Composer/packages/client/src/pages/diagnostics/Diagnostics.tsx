@@ -12,8 +12,8 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { exportSkillModalInfoState } from '../../recoilModel';
-import implementedDebugExtensions from '../design/DebugPanel/TabExtensions';
 
+import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
 
