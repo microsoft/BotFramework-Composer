@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { indexer } from '@bfc/indexers';
+import { BotIndexer, indexer } from '@bfc/indexers';
 import {
   BotProjectFile,
   BotProjectSpace,
@@ -237,19 +237,40 @@ export const navigateToSkillBot = (rootProjectId: string, skillId: string, mainD
   }
 };
 
-export const loadProjectData = (data) => {
+export const loadProjectData = async (data) => {
   const { files, botName, settings, id: projectId } = data;
   const mergedSettings = getMergedSettings(projectId, settings, botName);
-  const storedLocale = languageStorage.get(botName)?.locale;
-  const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
-  const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
+  const indexedFiles = indexer.index(files, botName);
 
+  const { lgResources, luResources, qnaResources } = indexedFiles;
+
+  //parse all resources with worker
+  await lgWorker.addProject(projectId);
+  const result = await Promise.all([
+    await lgWorker.parseAll(projectId, lgResources),
+    await luWorker.parseAll(luResources, mergedSettings.luFeatures),
+    await qnaWorker.parseAll(qnaResources),
+  ]);
+
+  const lgFiles = result[0] as LgFile[];
+  const luFiles = result[1] as LuFile[];
+  const qnaFiles = result[2] as QnAFile[];
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
-  const updateQnAFiles = reformQnAToContainerKB(projectId, indexedFiles.qnaFiles);
+  const updateQnAFiles = reformQnAToContainerKB(projectId, qnaFiles);
+
+  const assets = { ...indexedFiles, lgFiles, luFiles, qnaFiles: updateQnAFiles };
+  //Validate all files
+  const diagnostics = BotIndexer.validate({
+    ...assets,
+    setting: settings,
+    botProjectFile: assets.botProjectSpaceFiles[0],
+  });
+
+  const botFiles = { ...assets, mergedSettings, diagnostics };
 
   return {
-    botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
+    botFiles,
     projectData: data,
     error: undefined,
   };
@@ -261,7 +282,7 @@ export const fetchProjectDataByPath = async (
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.put(`/projects/open`, { path, storageId });
-    const projectData = loadProjectData(response.data);
+    const projectData = await loadProjectData(response.data);
     return projectData;
   } catch (ex) {
     return {
@@ -275,7 +296,7 @@ export const fetchProjectDataByPath = async (
 export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const projectData = loadProjectData(response.data);
+    const projectData = await loadProjectData(response.data);
     return projectData;
   } catch (ex) {
     return {
@@ -386,8 +407,6 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(dialogIdsState(projectId), dialogIds);
   set(recognizersSelectorFamily(projectId), recognizers);
   set(crossTrainConfigState(projectId), crossTrainConfig);
-
-  await lgWorker.addProject(projectId, lgFiles);
 
   // Form dialogs
   set(
@@ -528,7 +547,7 @@ export const createNewBotFromTemplate = async (
     alias,
     preserveRoot,
   });
-  const { botFiles, projectData } = loadProjectData(response.data);
+  const { botFiles, projectData } = await loadProjectData(response.data);
   const projectId = response.data.id;
   if (settingStorage.get(projectId)) {
     settingStorage.remove(projectId);
@@ -710,7 +729,7 @@ export const saveProject = async (callbackHelpers, oldProjectData) => {
     description,
     location,
   });
-  const data = loadProjectData(response.data);
+  const data = await loadProjectData(response.data);
   if (data.error) {
     throw data.error;
   }
