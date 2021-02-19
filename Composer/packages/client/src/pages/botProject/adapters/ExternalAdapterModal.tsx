@@ -25,6 +25,7 @@ type ConfigValue = string | number | boolean;
 
 type Props = {
   adapterKey: string;
+  packageName: string;
   isOpen: boolean;
   onClose: () => void;
   projectId: string;
@@ -39,7 +40,7 @@ function hasRequired(testObject: { [key: string]: ConfigValue }, fields?: string
 }
 
 const AdapterModal = (props: Props) => {
-  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey } = props;
+  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName } = props;
 
   const [value, setValue] = useState(props.value);
   const { setSettings } = useRecoilValue(dispatcherState);
@@ -81,15 +82,18 @@ const AdapterModal = (props: Props) => {
               disabled={value == null || !hasRequired(value, required)}
               onClick={async () => {
                 if (value != null) {
-                  const currentAdapters: AdapterRecord[] = currentSettings.adapters ?? [];
+                  const currentAdapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];
 
                   await setSettings(projectId, {
                     ...currentSettings,
-                    adapters: [
-                      ...currentAdapters.filter((a) => a.name != adapterKey),
-                      { name: adapterKey, enabled: true, route: value.route },
-                    ],
-                    [adapterKey]: value,
+                    runtimeSettings: {
+                      ...currentSettings.runtimeSettings,
+                      adapters: [
+                        ...currentAdapters.filter((a) => a.name != adapterKey),
+                        { name: adapterKey, enabled: true, route: value.route },
+                      ],
+                      [packageName]: value,
+                    },
                   });
                 }
                 onClose();

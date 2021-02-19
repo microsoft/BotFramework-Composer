@@ -138,6 +138,7 @@ const ExternalAdapterSettings = (props: Props) => {
     </div>
   );
 
+  console.log(schemaDefinitions);
   const adapterSchemas = Object.entries(schemaDefinitions as { [key: string]: JSONSchema7 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(([key, value]) => value?.$role != null && /IAdapter/.test(value.$role))
@@ -152,6 +153,7 @@ const ExternalAdapterSettings = (props: Props) => {
         <AdapterModal
           isOpen
           adapterKey={currentKey}
+          packageName={currentKey}
           projectId={projectId}
           schema={schemaDefinitions[currentKey]}
           uiSchema={uiSchemas?.[currentKey]?.form}
