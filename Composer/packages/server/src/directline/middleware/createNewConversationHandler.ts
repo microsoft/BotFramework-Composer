@@ -20,11 +20,11 @@ export const createNewConversationHandler = (state: DLServerState) => {
       return;
     }
 
-    const { members, mode } = req.body;
+    const { members, mode, locale } = req.body;
     const { botEndpoint }: { botEndpoint: BotEndpoint } = req as any;
     const { conversations } = state;
 
-    const conversation = conversations.newConversation(botEndpoint, members[0], mode);
+    const conversation = conversations.newConversation(botEndpoint, members[0], mode, locale);
 
     state.endpoints.set(conversation.botEndpoint.id, conversation.botEndpoint);
     res.status(StatusCodes.CREATED).json({

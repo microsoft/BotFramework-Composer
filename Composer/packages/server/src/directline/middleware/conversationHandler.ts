@@ -57,17 +57,20 @@ export const createPostActivityHandler = (state: DLServerState): any => {
 export const createUpdateConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response): void => {
     const oldConversationId = req.params.conversationId;
-    const { conversationId, userId } = req.body;
+    const { conversationId, userId, locale } = req.body;
     const currentConversation = state.conversations.conversationById(oldConversationId);
     if (!oldConversationId || !currentConversation) {
       res.status(StatusCodes.NOT_FOUND).send('Conversation ID cannot be updated.');
     }
-
     // update the conversation object and reset as much as we can to resemble a new conversation
     state.conversations.deleteConversation(oldConversationId);
 
     currentConversation.conversationId = conversationId;
     currentConversation.user.id = userId;
+    if (locale && currentConversation.locale !== locale) {
+      currentConversation.locale = locale;
+    }
+
     const user: User | undefined = currentConversation.members.find((member) => member.name === 'User');
     if (!user) {
       const err = new Error(`Conversation ${oldConversationId} is missing the user in the members array.`);

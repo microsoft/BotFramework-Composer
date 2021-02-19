@@ -44,7 +44,6 @@ import {
 } from './utils';
 
 // define init methods call from client
-const fetchPropertiesMethodName = 'fetchProperties';
 const initializeDocumentsMethodName = 'initializeDocuments';
 
 const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
@@ -111,9 +110,6 @@ export class LGServer {
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
         }
-      } else if (fetchPropertiesMethodName === method) {
-        const { projectId }: { projectId: string } = params;
-        this.connection.sendNotification('properties', { result: this.memoryResolver?.(projectId) });
       }
     });
   }
@@ -645,7 +641,7 @@ export class LGServer {
     const cardNameRegex = /^\s*\[[\w]+/;
     const lastLine = lines[lines.length - 2];
     const paddingIndent = cardNameRegex.test(lastLine) ? '\t' : '';
-    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment'];
+    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment', 'Activity'];
     if (cardType && cardTypes.includes(cardType)) {
       const items: CompletionItem[] = [];
       if (normalCardTypes.includes(cardType)) {
