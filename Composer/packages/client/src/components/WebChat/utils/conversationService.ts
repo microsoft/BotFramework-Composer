@@ -66,12 +66,14 @@ export default class ConversationService {
   private directlineHostUrl: string;
   private composerApiClient: AxiosInstance;
   private restServerForWSPort = -1;
+  private errorsSocket: WebSocket | null = null;
 
   constructor(directlineHostUrl: string) {
     this.directlineHostUrl = directlineHostUrl.endsWith('/') ? directlineHostUrl.slice(0, -1) : directlineHostUrl;
     this.composerApiClient = axios.create({
       baseURL: directlineHostUrl,
     });
+    this.setUpConversationServer();
   }
 
   private generateUniqueId = () => {
@@ -112,21 +114,11 @@ export default class ConversationService {
     conversationId: string,
     directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
   ) {
-    const resp = await this.composerApiClient.get(`conversations/ws/port`);
     const options = {
       conversationId,
       ...directLineOptions,
     };
-
-    const { port, newRestServerSetup } = resp.data;
-
     const secret = btoa(JSON.stringify(options));
-    this.restServerForWSPort = port;
-
-    if (newRestServerSetup) {
-      this.connectToErrorsChannel();
-    }
-
     const directLine = createDirectLine({
       token: 'emulatorToken',
       conversationId,
@@ -222,25 +214,22 @@ export default class ConversationService {
     };
   }
 
-  public connectToErrorsChannel() {
-    const ws = new WebSocket(`ws://localhost:${this.restServerForWSPort}/ws/createErrorChannel`);
-    ws.onmessage = (event) => {
-      console.log('WebSocket message received:', event);
-    };
-  }
-
   public sendInitialActivity(conversationId: string, members: [User]) {
-    const url = `${this.directlineHostUrl}/v3/directline/conversations/${conversationId}/activities`;
-    const activity = {
-      type: 'conversationUpdate',
-      membersAdded: members,
-      membersRemoved: [],
-    };
-    return axios.post(url, activity, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const url = `${this.directlineHostUrl}/v3/directline/conversations/${conversationId}/activities`;
+      const activity = {
+        type: 'conversationUpdate',
+        membersAdded: members,
+        membersRemoved: [],
+      };
+      return axios.post(url, activity, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
   }
 
   public async getTranscriptsData(conversationId: string) {
@@ -255,6 +244,14 @@ export default class ConversationService {
     } catch (ex) {
       // TODO: Transcript save failure
     }
+  }
+
+  public async setUpConversationServer() {
+    const resp = await this.composerApiClient.get(`conversations/ws/port`);
+    const { port } = resp.data;
+
+    this.restServerForWSPort = port;
+    return port;
   }
 
   public async cleanupAll() {

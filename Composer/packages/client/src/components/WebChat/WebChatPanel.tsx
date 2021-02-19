@@ -23,6 +23,7 @@ export interface WebChatPanelProps {
   projectId: string;
   isWebChatPanelVisible: boolean;
   activeLocale: string;
+  onAddEntryToInspector: () => void;
   openBotInEmulator: (projectId: string) => void;
 }
 
@@ -43,6 +44,15 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [isConversationStartQueued, queueConversationStart] = useState<boolean>(false);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
+
+  useEffect(() => {
+    const bootstrapChat = async () => {
+      const conversationServerPort = await conversationService.setUpConversationServer();
+      const errorSocket = new WebSocket(`ws://localhost:${conversationServerPort}/ws/createErrorChannel`);
+      errorSocket.on('message');
+    };
+    bootstrapChat();
+  }, []);
 
   useEffect(() => {
     queueConversationStart(!!botUrl);
