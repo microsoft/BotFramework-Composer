@@ -1,58 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { extensionEventEmitter } from '@bfc/extension-client';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useEffect, useState, useCallback } from 'react';
 
 import { currentProjectIdState } from '../../../../../recoilModel';
+import { webchatLogsState } from '../../../../../recoilModel/atoms/webchatState';
 
-export interface WebchatLog {
-  projectId: string;
-  conversationId: string;
-  type: 'error' | 'warning' | 'info';
-  message: string;
-}
+import { WebchatLogItem } from './WebchatLogItem';
 
 export const WebchatLogContent = () => {
-  const [webchatLogs, setWebchatLogs] = useState<WebchatLog[]>([]);
-
   const currentProjectId = useRecoilValue(currentProjectIdState);
-
-  const appendLog = useCallback((log: WebchatLog) => {
-    setWebchatLogs([...webchatLogs, log]);
-  }, []);
-
-  const clearLogs = useCallback(() => {
-    setWebchatLogs([]);
-  }, []);
-
-  useEffect(() => {
-    extensionEventEmitter.on('webchat:log', (log: WebchatLog) => {
-      appendLog(log);
-    });
-
-    extensionEventEmitter.on('webchat:start', () => {
-      clearLogs();
-    });
-
-    extensionEventEmitter.on('webchat:restart', () => {
-      clearLogs();
-    });
-  }, []);
+  const displayedLogs = useRecoilValue(webchatLogsState(currentProjectId));
 
   return (
-    <div>
-      Webchat logs of {currentProjectId}
-      <div>
-        {webchatLogs
-          .filter((log) => log.projectId === currentProjectId)
-          .map((log, idx) => (
-            <div key={`webchatLog-${idx}`}>
-              {log.type}: {log.message}
-            </div>
-          ))}
-      </div>
+    <div data-testid="Webchat-Logs-Container">
+      {displayedLogs.map((log, idx) => (
+        <WebchatLogItem key={`webchatLog-${idx}`} item={log} />
+      ))}
     </div>
   );
 };
