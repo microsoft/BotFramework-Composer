@@ -165,20 +165,25 @@ export async function publishLuisToPrediction(
           if (retryCount < 1) {
             logger({
               status: AzurePublishErrors.LUIS_PUBLISH_ERROR,
-              message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+              message: JSON.stringify(err, Object.getOwnPropertyNames(err), 2),
             });
             retryCount++;
           }
           else {
             // handle the token invalid
-            const error = JSON.parse(err.error);
-            if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
-              throw new Error(
-                `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
-              );
-            } else {
-              throw err;
+            if(typeof err.error === 'string'){
+              const error = JSON.parse(err.error);
+              if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+                throw new Error(
+                  `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+                );
+              }else if(error?.error?.code === 'BadArgument'){
+                throw Error('Failed to bind luis prediciton resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.');
+              }
+            } else if(typeof err.error === 'object'){
+              throw err.error;
             }
+            throw err;
           }
         }
       }
