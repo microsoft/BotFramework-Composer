@@ -61,8 +61,6 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.lu, { BOTNAME: '*', LOCALE: '*' }),
   templateInterpolate(BotStructureTemplate.qna, { BOTNAME: '*', LOCALE: '*' }),
   templateInterpolate(BotStructureTemplate.sourceQnA, { FILENAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.schema, { FILENAME: '*.schema' }),
   templateInterpolate(BotStructureTemplate.settings, { FILENAME: 'appsettings.json' }),
   templateInterpolate(BotStructureTemplate.dialogs.entry, { DIALOGNAME: '*' }),
   templateInterpolate(BotStructureTemplate.dialogs.lg, { DIALOGNAME: '*', LOCALE: '*' }),
@@ -76,14 +74,8 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   templateInterpolate(BotStructureTemplate.recognizer, { RECOGNIZERNAME: '*.dialog' }),
   templateInterpolate(BotStructureTemplate.crossTrainConfig, { CROSSTRAINCONFIGNAME: 'cross-train.config.json' }),
-  'sdk.override.schema',
-  'sdk.override.uischema',
-  'sdk.schema',
-  'sdk.uischema',
-  'app.override.schema',
-  'app.override.uischema',
-  'app.schema',
-  'app.uischema',
+  '*.schema',
+  '*.uischema',
 ];
 
 // parse file name: [fileId].[locale].[fileType]
