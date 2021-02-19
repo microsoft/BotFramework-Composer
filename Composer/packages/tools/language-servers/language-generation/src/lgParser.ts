@@ -41,7 +41,6 @@ class LgParserWithoutWorker {
       }
     }
 
-    console.log(suggestEntities);
     return { suggestEntities: suggestEntities };
   }
 }
