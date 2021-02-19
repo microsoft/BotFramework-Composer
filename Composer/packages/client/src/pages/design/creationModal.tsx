@@ -15,7 +15,7 @@ import {
   focusedStorageFolderState,
   creationFlowTypeState,
   userSettingsState,
-  filteredTemplatesSelector,
+  templateProjectsState,
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -41,7 +41,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     addExistingSkillToBotProject,
   } = useRecoilValue(dispatcherState);
 
-  const templateProjects = useRecoilValue(filteredTemplatesSelector);
+  const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);

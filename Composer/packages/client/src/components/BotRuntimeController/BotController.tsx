@@ -32,7 +32,6 @@ const iconSectionContainer = css`
   align-items: flex-end;
   flex-direction: row;
   background: ${CommunicationColors.tint10};
-
   :before {
     content: '';
     position: relative;
@@ -56,23 +55,28 @@ const startPanelsContainer = css`
 
 const transparentBackground = 'rgba(255, 255, 255, 0.5)';
 
-const BotController: React.FC = () => {
+type BotControllerProps = {
+  onHideController: (isHidden: boolean) => void;
+  isControllerHidden: boolean;
+};
+
+const BotController: React.FC<BotControllerProps> = ({ onHideController, isControllerHidden }: BotControllerProps) => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
   const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
-  const [isControllerHidden, hideController] = useState(true);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
   const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
-  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+
   const [botsStartOperationCompleted, setBotsStartOperationCompleted] = useState(false);
   const [areBotsStarting, setBotsStarting] = useState(false);
   const [startPanelButtonText, setStartPanelButtonText] = useState('');
   const { startAllBots, stopAllBots } = useBotOperations();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -129,7 +133,7 @@ const BotController: React.FC = () => {
 
     if (botOperationsCompleted) {
       if (statusIconClass !== 'Refresh') {
-        hideController(false);
+        onHideController(false);
       }
       setStatusIconClass('Refresh');
 
@@ -162,7 +166,7 @@ const BotController: React.FC = () => {
   useClickOutsideOutsideTarget(
     isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
     (event: React.MouseEvent<HTMLElement>) => {
-      hideController(true);
+      onHideController(true);
       event.stopPropagation();
     }
   );
@@ -182,18 +186,20 @@ const BotController: React.FC = () => {
   };
 
   const onSplitButtonClick = () => {
-    hideController(!isControllerHidden);
+    onHideController(!isControllerHidden);
   };
 
   const items = useMemo<IContextualMenuItem[]>(() => {
-    return projectCollection.map(({ name: displayName, projectId }) => ({
-      key: projectId,
-      displayName,
-      projectId,
-      isRoot: projectId === rootBotId,
-      setGlobalErrorCalloutVisibility,
-      isRootBot: projectId === rootBotId,
-    }));
+    return projectCollection.map(({ name: displayName, projectId }) => {
+      const isRootBot = projectId === rootBotId;
+      return {
+        key: projectId,
+        displayName,
+        projectId,
+        setGlobalErrorCalloutVisibility,
+        isRootBot,
+      };
+    });
   }, [projectCollection, rootBotId]);
 
   return (
@@ -259,7 +265,7 @@ const BotController: React.FC = () => {
             ariaDescription={formatMessage('Open start bots panel')}
             disabled={disableStartBots}
             iconProps={{
-              iconName: 'ProductList',
+              iconName: 'List',
             }}
             styles={{
               root: {
