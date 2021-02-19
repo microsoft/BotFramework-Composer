@@ -49,28 +49,45 @@ Follow these instructions to manually provision Azure resources:
    |App password|At least 16 characters with at least one number, one letter, and one special character. |
    |Name for environment| The name you give to the publish environment. |
 
-4. You will be asked to login to the Azure portal in your browser.
+    Once completed, the provision scripts will create the following resources in Azure portal:
 
-    > ![publish az login](./media/publish-az-login.png)
+    | Resource | Required/Optional |
+    | -------- | ----------------- |
+    | App Service plan | Required |
+    | App Service | Required |
+    | Application Registration | Required |
+    | Azure Cosmos DB | Optional |
+    | Application Insights | Optional |
+    | Azure Blob Storage | Optional |
+    | LUIS authoring resource (Cognitive Services)| Optional |
+    | LUIS prediction resource (Cognitive Services)| Optional |
+    | QnA Maker resources (Cognitive Services) | Optional |
 
-5. If you see the error message "InsufficientQuota", add a param '--createLuisAuthoringResource false' and run the script again.
+    > [!TIP]
+    > You may not want to create a complete list of the Azure resources. Read the [customize the scripts](#customize-the-provision-scripts) section to customize the provision scripts and create the Azure resources you want.
 
-    - **_Azure Web App_**:
+   1. You will be asked to login to the Azure portal in your browser.
 
-    ```cmd
-    node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP>--appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false
-    ```
+      > ![publish az login](./media/publish-az-login.png)
 
-    - **_Azure Functions_**:
+   2. If you see the error message "InsufficientQuota", add a param '--createLuisAuthoringResource false' and run the script again.
 
-    ```cmd
-    node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false --customArmTemplate=DeploymentTemplates/function-template-with-preexisting-rg.json
-    ```
+      - **_Azure Web App_**:
 
-    > [!NOTE]
-    > If you use `--createLuisAuthoringResource false` in this step, you should manually add the LUIS authoring key to the publish configuration in the [deploy bot to new Azure resources](#deploy-bot-to-new-azure-resources) section. The default region is `westus`. To provision to other regions, you should add `--location region`.
+      ```cmd
+      node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP>--appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false
+      ```
 
-6. As the Azure resources are being provisioned, which takes a few minutes, you will see the following:
+       - **_Azure Functions_**:
+
+      ```cmd
+      node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --createLuisAuthoringResource false --customArmTemplate=DeploymentTemplates/function-template-with-preexisting-rg.json
+      ```
+
+      > [!NOTE]
+      > If you use `--createLuisAuthoringResource false` in this step, you should manually add the LUIS authoring key to the publish configuration in the [deploy bot to new Azure resources](#deploy-bot-to-new-azure-resources) section. The default region is `westus`. To provision to other regions, you should add `--location region`.
+
+4. As the Azure resources are being provisioned, which takes a few minutes, you will see the following:
 
     > [!div class="mx-imgBorder"]
     > ![Create Azure resource command line](./media/create-azure-resource-command-line.png)
@@ -114,20 +131,6 @@ Follow these instructions to manually provision Azure resources:
       }
       ```
 
-    Once completed, the provision scripts will create the following resources in Azure portal:
-
-    | Resource | Required/Optional |
-    | -------- | ----------------- |
-    | App Service plan | Required |
-    | App Service | Required |
-    | Application Registration | Required |
-    | Azure Cosmos DB | Optional |
-    | Application Insights | Optional |
-    | Azure Blob Storage | Optional |
-    | LUIS authoring resource (Cognitive Services)| Optional |
-    | LUIS prediction resource (Cognitive Services)| Optional |
-    | QnA Maker resources (Cognitive Services) | Optional |
-
 ## Publish a bot to Azure
 
 This section covers instructions to publish a bot to Azure using PowerShell scripts. Make sure you already have required Azure resources provisioned before publishing a bot, if not, follow these instructions from the [provision Azure resources](#provision-azure-resources) section.
@@ -150,34 +153,37 @@ Follow these steps to manually publish a bot to Azure:
 
 2. [Eject your C# runtime](https://aka.ms/composer-customize-action#export-runtime).
 
-3. Navigate to your runtime's azurewebapp folder, for example `C:\user\test\ToDoBot\runtime\azurewebapp` and execute the following command under the `azurewebapp` folder:
+3. Save your publishing profile in `json` format (profile.json) and execute the following command:
+
+    ```powershell
+    .\Scripts\deploy.ps1 -publishProfilePath <path to your publishing profile>
+    ```
+
+4. Alternatively, navigate to your bot runtime's `azurewebapp` folder, for example `C:\user\test\ToDoBot\runtime\azurewebapp` and execute the following command under the `azurewebapp` folder:
 
     ```powershell
     .\Scripts\deploy.ps1 -name <name of resource group> -hostName <hostname of azure webapp> -luisAuthoringKey <luis authoring key> -qnaSubscriptionKey <qna subscription key> -environment <environment>
     ```
 
-4. Alternatively, if you have saved your publishing profile in json format (profile.json), execute the following command:
+> [!NOTE]
+> Make sure you [set the correct subscription](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az_account_set) when running the scripts to publish your bot. The publishing process will take a couple of minutes to finish.
 
-    ```powershell
-    .\Scripts\deploy.ps1 -publishProfilePath < path to your publishing profile>
-    ```
+  The following table lists the parameters of the `deploy.ps1` scripts:
 
-  The following is a table of the deploy.ps1 parameters:
-
-  | Parameter | Description  |
-  | ----------|--------------|
-  | name      | name of your Bot Channels Registration|
-  | environment | environment, which is the same as Composer |
-  | hostName | Hostname of your azure webapp instance|
-  | luisAuthoringKey | luis authoring key, only needed with luis resources|
-  | luisAuthoringRegion | luis authoring region, this could be optional|
-  | qnaSubscriptionKey | qna subscription key, only needed with qna resources|
-  | language | language of your qna & luis, defaults to 'en-us' |
-  | botPath | path to your bot assets, defaults to `../../` for ejected runtime |
-  | logFile | path to save your log file, defaults to `deploy_log.txt` |
-  | runtimeIdentifier | runtime identifier of your C# publishing targets, defaults to win-x64, read more in [this doc](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog) |
-  | luisResource | the name of your luis prediction (not authoring) resource |
-  | publishProfilePath | the path to your publishing profile (in json format) |
+  | Parameter | Required/Optional | Description |
+  | ----------|--------------|--------------|
+  | name      | Required | The name of your Bot Channels Registration |
+  | environment | Required | Environment, e.g. Composer |
+  | hostName | Required | The name of your Azure Web App instance |
+  | luisAuthoringKey | Optional | The LUIS authoring key value |
+  | luisAuthoringRegion | Optional | The LUIS authoring region, this is optional|
+  | luisResource | The name of your LUIS prediction resource |
+  | qnaSubscriptionKey | Optional | The QnA subscription key |
+  | language | Optional | The language of qna & luis, defaults to 'en-us' |
+  | botPath |  | The path to your bot assets, defaults to `../../` for ejected runtime |
+  | logFile |  | The path to save your log file, defaults to `deploy_log.txt` |
+  | runtimeIdentifier |  | runtime identifier of your C# publishing targets, defaults to win-x64, read more in [this doc](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog) |
+  | publishProfilePath | Required | The path to the publishing profile (in json format) |
 
 ## Refresh your Azure Token
 
@@ -188,7 +194,29 @@ Follow these steps to get a new token if you encounter an error about your acces
 - This will result in a JSON object containing the new `accessToken`, printed to the console.
 - Copy the value of the accessToken from the terminal and into the publish `accessToken` field in the profile in Composer.
 
-## Known issues
+## Additional information
 
-- The provision and publish flow from Composer UI is limited to  Microsoft account only now. A personal Microsoft account (non-work / school) then authentication will not work.
+### Customize the provision scripts
+
+You don't need to create a complete list of the Azure resources as covered in **step 3** of the [provision Azure resources](#provision-azure-resources) section. Below is a table with detailed descriptions of the parameters to set in the provision scripts.
+
+| Parameter | Required/Optional | Default value | Description |
+| ----------| ------------------| --------------| ------------|
+| subscriptionId | Required | N/A | Your Azure subscription ID. |
+| name |Required | N/A | The name of your resource group |
+| appPassword | Required | N/A |  The password to create the resource. It must be at least 16 characters long, contain at least 1 upper or lower case alphabetical character, and contain at least 1 special character|
+| environment | Optional | dev | N/A |
+| location | Optional | `westus` | Your Azure resource group region |
+| tenantId | Optional | default tenantId | ID of your tenant if required. |
+|customArmTemplate | Optional | `/DeploymentTemplates/template-with-preexisting-rg.json` | For Azure Functions or your own template for a custom deployment.|
+| createLuisResource | Optional | `true` | The LUIS prediction resource to create. Region is default to `westus` and cannot be changed. |
+| createLuisAuthoringResource | Optional | true | The LUIS authoring resource to create. Region is default to `westus` and cannot be changed. |
+| createQnAResource | Optional | `true` | The QnA resource to create.|
+| createCosmosDB | Optional | `true` | The CosmosDB resource to create. |
+| createStorage | Optional | `true` | The BlobStorage resource to create. |
+| createAppInsights | Optional | `true` | The AppInsights resource to create. |
+
+### Known issues
+
+- For now, the provision and publish flow from Composer UI are limited to Microsoft organization accounts only. A personal Microsoft account will not make authentication work.
 -
