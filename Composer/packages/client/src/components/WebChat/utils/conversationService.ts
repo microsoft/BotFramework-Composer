@@ -69,7 +69,6 @@ export default class ConversationService {
   private directlineHostUrl: string;
   private composerApiClient: AxiosInstance;
   private restServerForWSPort = -1;
-  private errorsSocket: WebSocket | null = null;
 
   constructor(directlineHostUrl: string) {
     this.directlineHostUrl = directlineHostUrl.endsWith('/') ? directlineHostUrl.slice(0, -1) : directlineHostUrl;

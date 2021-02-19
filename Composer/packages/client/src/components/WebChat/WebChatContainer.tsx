@@ -5,9 +5,8 @@ import ReactWebChat, { createStyleSet } from 'botframework-webchat';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import ConversationService, { ActivityType, ChatData, User } from './utils/conversationService';
+import ConversationService, { ActivityType, ChatData } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
-import { WebChatErrorBoundary } from './WebChatErrorBoundary';
 
 type WebChatContainerProps = {
   currentConversation: string;
@@ -100,19 +99,17 @@ export const WebChatContainer = React.memo((props: WebChatContainerProps) => {
     };
 
     return (
-      <WebChatErrorBoundary>
-        <ReactWebChat
-          key={chatData.conversationId}
-          activityMiddleware={createActivityMiddleware}
-          cardActionMiddleware={createCardActionMiddleware}
-          directLine={chatData.directline}
-          disabled={!botUrl}
-          locale={activeLocale}
-          store={webchatStore}
-          styleSet={styleSet}
-          userID={chatData.user.id}
-        />
-      </WebChatErrorBoundary>
+      <ReactWebChat
+        key={chatData.conversationId}
+        activityMiddleware={createActivityMiddleware}
+        cardActionMiddleware={createCardActionMiddleware}
+        directLine={chatData.directline}
+        disabled={!botUrl}
+        locale={activeLocale}
+        store={webchatStore}
+        styleSet={styleSet}
+        userID={chatData.user.id}
+      />
     );
   }
   return null;
