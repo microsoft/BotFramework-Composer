@@ -137,7 +137,7 @@ describe('assetManager', () => {
       expect(templates).toStrictEqual([
         {
           id: 'generator-conversational-core',
-          name: 'generator-conversational-core',
+          name: 'Conversational Core',
           description: 'Preview conversational core package for TESTING ONLY',
           keywords: ['conversationalcore', 'yeoman-generator'],
           package: {
