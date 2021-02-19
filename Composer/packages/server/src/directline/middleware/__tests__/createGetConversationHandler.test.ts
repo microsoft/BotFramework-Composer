@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as HttpStatus from 'http-status-codes';
+// import * as HttpStatus from 'http-status-codes';
 
-import { BotErrorCodes, createAPIException } from '../../utils/apiErrorException';
+// import { BotErrorCodes } from '../../utils/apiErrorException';
+import { StatusCodes } from 'http-status-codes';
+
 import { createGetConversationHandler } from '../createGetConversationHandler';
 
 describe('getConversation handler', () => {
@@ -46,7 +48,10 @@ describe('getConversation handler', () => {
       getConversation(req, res, next);
       expect(true).toBe(false); // ensure that catch is hit
     } catch (e) {
-      expect(e).toEqual(createAPIException(HttpStatus.NOT_FOUND, BotErrorCodes.BadArgument, 'conversation not found'));
+      expect(e).toEqual({
+        message: 'Conversation not found. BadArgument',
+        status: StatusCodes.NOT_FOUND,
+      });
     }
   });
 });

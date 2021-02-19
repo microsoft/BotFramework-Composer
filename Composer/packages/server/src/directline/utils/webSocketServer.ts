@@ -141,7 +141,7 @@ export class WebSocketServer {
   }
 
   public static sendDLErrorsToSubscribers(logItem: DirectLineLog): void {
-    this.sockets[socketErrorChannelKey].send(JSON.stringify(logItem));
+    this.sockets[socketErrorChannelKey]?.send(JSON.stringify(logItem));
   }
 
   public static cleanUpConversation(conversationId: string): void {

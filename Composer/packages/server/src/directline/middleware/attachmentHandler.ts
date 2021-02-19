@@ -81,7 +81,7 @@ export function createGetAttachmentHandler(state: DLServerState) {
           } else {
             handleDirectLineErrors(req, res, {
               status: StatusCodes.NOT_FOUND,
-              message: formatMessage(`Unable to fetch attachment data .${BotErrorCodes.BadArgument}`),
+              message: formatMessage(`Unable to fetch attachment data. ${BotErrorCodes.BadArgument}`),
               errorDetails:
                 params.viewId === 'original'
                   ? formatMessage('There is no original view')

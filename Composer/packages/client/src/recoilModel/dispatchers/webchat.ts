@@ -2,34 +2,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WebchatLog } from '@botframework-composer/types/src';
+import { DirectLineLog } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import { webchatLogsState } from '../atoms/webchatState';
+import { webChatLogsState } from '../atoms';
 
-export const webchatLogDispatcher = () => {
-  const clearWebchatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
+export const webChatLogDispatcher = () => {
+  const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
     const { set } = callbackHelpers;
-    set(webchatLogsState(projectId), []);
+    set(webChatLogsState(projectId), []);
   });
 
-  const appendWebchatLog = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, log: WebchatLog) => {
+  const appendLogToWebChat = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (projectId: string, log: DirectLineLog) => {
       const { set } = callbackHelpers;
-      set(webchatLogsState(projectId), (currentLogs) => [...currentLogs, log]);
-    }
-  );
-
-  const appendWebchatLogs = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, logs: WebchatLog[]) => {
-      const { set } = callbackHelpers;
-      set(webchatLogsState(projectId), (currentLogs) => [...currentLogs, ...logs]);
+      set(webChatLogsState(projectId), (currentLogs) => [...currentLogs, log]);
     }
   );
 
   return {
-    clearWebchatLogs,
-    appendWebchatLog,
-    appendWebchatLogs,
+    clearWebChatLogs,
+    appendLogToWebChat,
   };
 };
