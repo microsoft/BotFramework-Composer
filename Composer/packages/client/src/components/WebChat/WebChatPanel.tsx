@@ -122,7 +122,15 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       setChatData({
         [chatData.conversationId]: chatData,
       });
-    } catch (err) {
+    } catch (ex) {
+      const err: DirectLineLog = {
+        timestamp: getDateTimeFormatted(),
+        route: 'conversations/activities',
+        status: 400,
+        logType: 'Error',
+        message: formatMessage('An error occured connecting initializing the DirectLine server'),
+        details: ex.message,
+      };
       appendLogToWebChatInspector(projectId, err);
     }
   };
@@ -159,7 +167,15 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
       webChatPanelRef.current?.removeChild(downloadLink);
     } catch (ex) {
-      appendLogToWebChatInspector(projectId, ex);
+      const err: DirectLineLog = {
+        timestamp: getDateTimeFormatted(),
+        route: 'saveTranscripts/',
+        status: 400,
+        logType: 'Error',
+        message: formatMessage('An error occured saving transcripts'),
+        details: ex.message,
+      };
+      appendLogToWebChatInspector(projectId, err);
     }
   };
 
