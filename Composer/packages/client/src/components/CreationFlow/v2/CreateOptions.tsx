@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useState, Fragment, useEffect, useMemo } from 'react';
+import { useState, Fragment, useEffect, useMemo, SetStateAction, Dispatch } from 'react';
 import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -109,8 +109,10 @@ const optionKeys = {
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
+  selectedTemplateId: string;
+  setSelectedTemplateId: Dispatch<SetStateAction<string>>;
   onDismiss: () => void;
-  onNext: (data: string) => void;
+  onNext: () => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
@@ -118,8 +120,7 @@ type CreateOptionsProps = {
 export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
-  const { templates, onDismiss, onNext } = props;
-  const [currentTemplate, setCurrentTemplate] = useState('');
+  const { templates, selectedTemplateId, onDismiss, onNext, setSelectedTemplateId } = props;
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
   const readMe = useRecoilValue(selectedTemplateReadMeState);
@@ -129,29 +130,16 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       onSelectionChanged: () => {
         const t = selectedTemplate.getSelection()[0] as BotTemplate;
         if (t) {
-          setCurrentTemplate(t.id);
+          setSelectedTemplateId(t.id);
         }
       },
     });
   }, []);
 
   const handleJumpToNext = () => {
-    let routeToTemplate = emptyBotKey;
-    if (option === optionKeys.createFromTemplate) {
-      routeToTemplate = currentTemplate;
-    }
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: selectedTemplateId });
 
-    if (option === optionKeys.createFromQnA) {
-      routeToTemplate = QnABotTemplateId;
-    }
-
-    if (props.location && props.location.search) {
-      routeToTemplate += props.location.search;
-    }
-
-    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
-
-    onNext(routeToTemplate);
+    onNext();
   };
 
   const tableColumns = [
@@ -185,7 +173,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     if (templates.length > 1) {
       const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
       if (emptyBotTemplate) {
-        setCurrentTemplate(emptyBotTemplate.id);
+        setSelectedTemplateId(emptyBotTemplate.id);
         setEmptyBotKey(emptyBotTemplate.id);
       }
     }
@@ -198,10 +186,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [selectedFeed]);
 
   useEffect(() => {
-    if (currentTemplate) {
-      props.fetchReadMe(currentTemplate);
+    if (selectedTemplateId) {
+      props.fetchReadMe(selectedTemplateId);
     }
-  }, [currentTemplate]);
+  }, [selectedTemplateId]);
 
   return (
     <Fragment>
@@ -242,14 +230,16 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
+            <TemplateDetailView readMe={readMe} templateId={selectedTemplateId} />
           </div>
         </div>
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
+            disabled={
+              option === optionKeys.createFromTemplate && (templates.length <= 0 || selectedTemplateId === null)
+            }
             text={formatMessage('Next')}
             onClick={handleJumpToNext}
           />
