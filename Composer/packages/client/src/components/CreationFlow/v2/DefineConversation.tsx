@@ -337,6 +337,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 options={mockLanguageOptions}
                 selectedKey={formData.primaryLanguage}
                 onChange={(_e, option) => updateField('primaryLanguage', option?.key.toString())}
+                disabled
               />
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
