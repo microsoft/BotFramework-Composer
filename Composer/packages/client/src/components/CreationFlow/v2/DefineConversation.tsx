@@ -25,7 +25,6 @@ import {
   mockLanguageOptions,
   runtimeOptions,
   defaultPrimaryLanguage,
-  defaultRuntime,
 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
@@ -33,6 +32,7 @@ import { createNotification } from '../../../recoilModel/dispatchers/notificatio
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
 import { dispatcherState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
+import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 
 // -------------------- Styles -------------------- //
 
@@ -79,7 +79,7 @@ type DefineConversationFormData = {
   description: string;
   schemaUrl: string;
   primaryLanguage: string;
-  runtimeChoice: string;
+  runtimeChoice: RuntimeType;
   location?: string;
   templateVersion?: string;
 
@@ -202,7 +202,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       primaryLanguage: defaultPrimaryLanguage,
-      runtimeChoice: defaultRuntime,
+      runtimeChoice: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
       location:

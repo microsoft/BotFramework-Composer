@@ -21,6 +21,7 @@ import {
   RootBotManagedProperties,
   defaultPublishConfig,
   LgFile,
+  RuntimeType,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -553,7 +554,7 @@ export const createNewBotFromTemplateV2 = async (
   name: string,
   description: string,
   location: string,
-  runtimeChoice: string,
+  runtimeChoice: RuntimeType,
   schemaUrl?: string,
   locale?: string,
   templateDir?: string,

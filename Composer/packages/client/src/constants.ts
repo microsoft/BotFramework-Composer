@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FeedName } from '@botframework-composer/types/src';
+import { FeedName, webAppRuntimeKey, functionsRuntimeKey } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -405,9 +405,7 @@ export const mockLanguageOptions: IDropdownOption[] = [
   { key: 'spanish', text: 'Spanish' },
 ];
 
-export const defaultRuntime = 'azureWebApp';
-
 export const runtimeOptions: IDropdownOption[] = [
-  { key: defaultRuntime, text: 'Azure Web App' },
-  { key: 'azureFunctions', text: 'Azure Functions' },
+  { key: webAppRuntimeKey, text: 'Azure Web App' },
+  { key: functionsRuntimeKey, text: 'Azure Functions' },
 ];
