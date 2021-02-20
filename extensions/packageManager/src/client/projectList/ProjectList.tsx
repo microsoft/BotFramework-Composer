@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
+import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import isEqual from 'lodash/isEqual';
 
-import { ListItem } from './listItem';
+import { ListItem } from './ListItem';
 
 // -------------------- Styles -------------------- //
 
@@ -41,9 +40,9 @@ const headerCSS = (label: string) => css`
 // -------------------- ProjectList -------------------- //
 
 export type ListLink = {
-  displayName?: string,
-  projectId: string
-}
+  displayName?: string;
+  projectId: string;
+};
 
 type BotInProject = {
   projectId: string;
@@ -54,22 +53,17 @@ type BotInProject = {
 type Props = {
   onSelect?: (link: ListLink) => void;
   defaultSelected?: string;
-  projectCollection: BotInProject[]
+  projectCollection: BotInProject[];
 };
 
-export const ProjectList: React.FC<Props> = ({
-  onSelect,
-  defaultSelected,
-  projectCollection,
-}) => {
+export const ProjectList: React.FC<Props> = ({ onSelect, defaultSelected, projectCollection }) => {
   const listRef = useRef<HTMLDivElement>(null);
 
   const [selectedLink, setSelectedLink] = useState<string | undefined>(defaultSelected);
 
   const createProjectList = () => {
     return projectCollection.filter((p) => !p.isRemote).map(renderBotHeader);
-  }
-
+  };
 
   const handleOnSelect = (link: ListLink) => {
     // Skip state change when link not changed.
@@ -95,7 +89,7 @@ export const ProjectList: React.FC<Props> = ({
         />
       </span>
     );
-  }
+  };
 
   const projectList = createProjectList();
 
