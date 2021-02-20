@@ -8,7 +8,7 @@ import { createGetAttachmentHandler } from '../attachmentHandler';
 let res;
 
 jest.mock('moment', () => {
-  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000Z');
+  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000');
 });
 
 const mockEnd = jest.fn();
@@ -105,7 +105,7 @@ describe('getAttachment handler', () => {
       message: 'Unable to fetch attachment data. BadArgument',
       route: undefined,
       status: 404,
-      timestamp: '2021-02-18 16:00:00',
+      timestamp: '2021-02-19 00:00:00',
     });
   });
 
@@ -126,7 +126,7 @@ describe('getAttachment handler', () => {
       message: 'Unable to fetch attachment data. BadArgument',
       route: undefined,
       status: 404,
-      timestamp: '2021-02-18 16:00:00',
+      timestamp: '2021-02-19 00:00:00',
     });
   });
 
@@ -146,7 +146,7 @@ describe('getAttachment handler', () => {
       message: 'attachment[attach1] not found .BadArgument',
       status: 404,
       route: undefined,
-      timestamp: '2021-02-18 16:00:00',
+      timestamp: '2021-02-19 00:00:00',
     });
   });
 
@@ -167,7 +167,7 @@ describe('getAttachment handler', () => {
       message: 'attachment[undefined] not found .BadArgument',
       status: 404,
       route: 'v3/attachments',
-      timestamp: '2021-02-18 16:00:00',
+      timestamp: '2021-02-19 00:00:00',
     });
   });
 });
