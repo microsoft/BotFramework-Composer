@@ -903,7 +903,7 @@ export class AzureResourceMananger {
         });
         throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, botResult._response?.bodyAsText);
       }
-
+      return config.name;
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
