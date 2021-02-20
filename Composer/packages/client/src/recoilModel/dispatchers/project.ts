@@ -343,6 +343,7 @@ export const projectDispatcher = () => {
         urlSuffix,
         alias,
         preserveRoot,
+        runtimeChoice,
       } = newProjectData;
       // starts the creation process and stores the jobID in state for tracking
       const response = await createNewBotFromTemplateV2(
@@ -352,6 +353,7 @@ export const projectDispatcher = () => {
         name,
         description,
         location,
+        runtimeChoice,
         schemaUrl,
         locale,
         templateDir,

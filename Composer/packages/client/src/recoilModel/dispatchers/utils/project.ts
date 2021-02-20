@@ -553,6 +553,7 @@ export const createNewBotFromTemplateV2 = async (
   name: string,
   description: string,
   location: string,
+  runtimeChoice: string,
   schemaUrl?: string,
   locale?: string,
   templateDir?: string,
@@ -573,6 +574,7 @@ export const createNewBotFromTemplateV2 = async (
     eTag,
     alias,
     preserveRoot,
+    runtimeChoice,
   });
   return jobId;
 };

@@ -420,6 +420,7 @@ export class BotProjectService {
       alias,
       locale,
       schemaUrl,
+      runtimeChoice,
     } = req.body;
     // get user from request
     const user = await ExtensionContext.getUserFromRequest(req);
@@ -446,6 +447,7 @@ export class BotProjectService {
             templateVersion,
             name,
             locationRef,
+            runtimeChoice,
             user
           );
 
