@@ -19,6 +19,7 @@ export interface ProvisionConfig {
   location: { id: string; name: string; displayName: string };
   luisLocation: string;
   subscription: string;
+  resourceGroup?: string;
   logger?: (string) => any;
   name: string; // profile name
   type: string; // webapp or function
@@ -208,7 +209,7 @@ export class BotProjectProvision {
         qna: null,
       };
 
-      const resourceGroupName = `${config.hostname}`;
+      const resourceGroupName = config.resourceGroup ?? config.hostname;
 
       // azure resource manager class config
       const armConfig = {

@@ -262,6 +262,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [choice, setChoice] = useState(choiceOptions[0]);
   const [currentSubscription, setSubscription] = useState<string>('');
+  const [currentResourceGroup, setResourceGroup] = useState<string>('');
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
@@ -322,6 +323,9 @@ export const AzureProvisionDialog: React.FC = () => {
     if(currentConfig){
       if(currentConfig?.subscriptionId){
         setSubscription(currentConfig?.subscriptionId);
+      }
+      if(currentConfig?.resourceGroup){
+        setResourceGroup(currentConfig?.resourceGroup);
       }
       if(currentConfig?.hostname){
         setHostName(currentConfig?.hostname);
@@ -394,6 +398,13 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const newResourceGroup = useMemo(
     () => (e, newName) => {
+      setResourceGroup(newName);
+    },
+    [resourceGroups, checkNameAvailability]
+  );
+
+  const newHostName = useMemo(
+    () => (e, newName) => {
       setHostName(newName);
       if(!currentConfig?.hostname){
         checkNameAvailability(newName);
@@ -447,7 +458,7 @@ export const AzureProvisionDialog: React.FC = () => {
     try{
       if(config){
         let str = JSON.stringify(config);
-        str = str.replace(/<[.^>]*>/g, '');
+        str = str.replace(/<.*>/g, '');
         console.log(str);
         const newConfig = JSON.parse(str);
         return newConfig;
@@ -548,8 +559,8 @@ export const AzureProvisionDialog: React.FC = () => {
     () => async (options) => {
       // call back to the main Composer API to begin this process...
       console.log(options);
-      // startProvision(options);
-      // closeDialog();
+      startProvision(options);
+      closeDialog();
     },
     []
   );
@@ -604,6 +615,7 @@ export const AzureProvisionDialog: React.FC = () => {
             label={formatMessage('Resource group name')}
             ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
             placeholder={'Name of your new resource group'}
+            onChange={newResourceGroup}
             styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
           />}
@@ -613,9 +625,9 @@ export const AzureProvisionDialog: React.FC = () => {
             defaultValue={currentHostName}
             errorMessage={errorHostName}
             label={currentConfig?.resourceGroup? formatMessage('Hostname') : formatMessage('Resource group name')}
-            ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
-            placeholder={'Name of your new resource group'}
-            onChange={newResourceGroup}
+            ariaLabel={formatMessage('A hostname which is used to make up the provisoned services names')}
+            placeholder={'Name of your services'}
+            onChange={newHostName}
             styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
           />
@@ -791,9 +803,10 @@ export const AzureProvisionDialog: React.FC = () => {
                 const selectedResources = requireResources.concat(enabledResources);
                 await onSubmit({
                   subscription: currentSubscription,
+                  resourceGroup: currentResourceGroup,
                   hostname: currentHostName,
                   location: currentLocation,
-                  luisLocation: currentLuisLocation.name || currentLocation.name,
+                  luisLocation: currentLuisLocation?.name || currentLocation.name,
                   type: publishType,
                   externalResources: selectedResources,
                 });
@@ -811,6 +824,7 @@ export const AzureProvisionDialog: React.FC = () => {
     isEditorError,
     isDisAble,
     currentSubscription,
+    currentResourceGroup,
     currentHostName,
     currentLocation,
     publishType,
