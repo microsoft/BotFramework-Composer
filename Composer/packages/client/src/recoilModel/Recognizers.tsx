@@ -47,17 +47,22 @@ export const CrossTrainedRecognizerTemplate = (): {
   recognizers: [],
 });
 
-export const OrchestratorRecognizerTemplate = (target: string, fileName: string) => ({
-  $kind: SDKKinds.OrchestratorRecognizer,
-  modelPath: '=settings.orchestrator.modelPath',
-  snapshotPath: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
-});
+export const OrchestratorRecognizerTemplate = (target: string, fileName: string) => {
+  let locale: string = fileName.split('.')?.[1]?.toLowerCase() ?? 'en';
+  locale = locale.startsWith('en') ? 'en' : 'multilang';
+
+  return {
+    $kind: SDKKinds.OrchestratorRecognizer,
+    modelFolder: `=settings.orchestrator.models.${locale}`,
+    snapshotFile: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
+  };
+};
 
 export const getMultiLanguagueRecognizerDialog = (
   target: string,
   files: { empty: boolean; id: string }[],
   fileType: 'lu' | 'qna',
-  defalutLanguage = 'en-us'
+  defaultLanguage = 'en-us'
 ) => {
   const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target, fileType);
 
@@ -66,7 +71,7 @@ export const getMultiLanguagueRecognizerDialog = (
     const locale = getExtension(item.id);
     const fileName = `${item.id}.${fileType}`;
     multiLanguageRecognizer.recognizers[locale] = fileName;
-    if (locale === defalutLanguage) {
+    if (locale === defaultLanguage) {
       multiLanguageRecognizer.recognizers[''] = fileName;
     }
   });
