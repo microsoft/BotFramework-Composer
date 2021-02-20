@@ -3,13 +3,20 @@
 
 import { useEffect } from 'react';
 import { globalHistory, WindowLocation } from '@reach/router';
-import { PromptTab } from '@bfc/shared';
-import { useRecoilValue } from 'recoil';
+import { LgFile, PromptTab } from '@bfc/shared';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getDialogData } from '../../utils/dialogUtil';
 import { getFocusPath } from '../../utils/navigation';
-import { dispatcherState, currentDialogState } from '../../recoilModel';
+import {
+  dispatcherState,
+  currentDialogState,
+  localeState,
+  lgFileState,
+  lgFilesSelectorFamily,
+} from '../../recoilModel';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
+import lgDiagnosticWorker from '../../recoilModel/parsers/lgDiagnosticWorker';
 
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
@@ -26,7 +33,11 @@ export const useEmptyPropsHandler = (
   const activeBot = skillId ?? projectId;
 
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId: activeBot }));
-
+  const locale = useRecoilValue(localeState(activeBot));
+  const [currentLg, setCurrentLg] = useRecoilState(
+    lgFileState({ projectId: activeBot, lgFileId: dialogId + '.' + locale })
+  );
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const { updateDialog, setDesignPageLocation, navTo } = useRecoilValue(dispatcherState);
 
   // migration: add id to dialog when dialog doesn't have id
@@ -40,6 +51,16 @@ export const useEmptyPropsHandler = (
       updateDialog({ id, content: dialogContent, projectId });
     }
   }, [currentDialog]);
+
+  useEffect(() => {
+    if (!currentDialog) return;
+    if (currentLg.rawData) {
+      //for current dialog, check the lg file to make sure the file is parsed.
+      lgDiagnosticWorker.parse(activeBot, currentLg.id, currentLg.content, lgFiles).then((result) => {
+        setCurrentLg(result as LgFile);
+      });
+    }
+  }, [currentDialog, currentLg, lgFiles]);
 
   useEffect(() => {
     if (!location || !currentDialog || !activeBot) return;

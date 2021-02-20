@@ -69,7 +69,17 @@ export function convertTemplatesToLgFile(id = '', content: string, parseResult: 
     };
   });
 
-  return { id, content, templates, allTemplates, diagnostics, imports, options: parseResult.options, parseResult };
+  return {
+    id,
+    content,
+    templates,
+    allTemplates,
+    diagnostics,
+    imports,
+    options: parseResult.options,
+    parseResult,
+    rawData: false,
+  };
 }
 
 export function increaseNameUtilNotExist(templates: LgTemplate[], name: string): string {

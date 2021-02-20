@@ -87,7 +87,7 @@ import { setRootBotSettingState } from '../setting';
 import { lgFilesSelectorFamily } from '../../selectors/lg';
 import { createMissingLgTemplatesForDialogs } from '../../../utils/lgUtil';
 
-import { crossTrainConfigState } from './../../atoms/botState';
+import { crossTrainConfigState, lgFileState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
 
 const repairBotProject = async (
@@ -237,6 +237,18 @@ export const navigateToSkillBot = (rootProjectId: string, skillId: string, mainD
   }
 };
 
+const emptyLgFile = (id: string, content: string): LgFile => {
+  return {
+    id,
+    content,
+    diagnostics: [],
+    templates: [],
+    allTemplates: [],
+    imports: [],
+    rawData: true,
+  };
+};
+
 export const loadProjectData = async (data) => {
   const { files, botName, settings, id: projectId } = data;
   const mergedSettings = getMergedSettings(projectId, settings, botName);
@@ -247,14 +259,13 @@ export const loadProjectData = async (data) => {
   //parse all resources with worker
   await lgWorker.addProject(projectId);
   const result = await Promise.all([
-    await lgWorker.parseAll(projectId, lgResources),
     await luWorker.parseAll(luResources, mergedSettings.luFeatures),
     await qnaWorker.parseAll(qnaResources),
   ]);
 
-  const lgFiles = result[0] as LgFile[];
-  const luFiles = result[1] as LuFile[];
-  const qnaFiles = result[2] as QnAFile[];
+  const lgFiles = lgResources.map(({ id, content }) => emptyLgFile(id, content));
+  const luFiles = result[0] as LuFile[];
+  const qnaFiles = result[1] as QnAFile[];
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
   const updateQnAFiles = reformQnAToContainerKB(projectId, qnaFiles);
@@ -437,8 +448,19 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
 
-  // async repair bot assets, add missing lg templates
-  repairBotProject(callbackHelpers, { projectId, botFiles });
+  lgWorker.parseAll(projectId, lgFiles).then((result) => {
+    /*
+    If we set state for ervery single file, the UI may have many times re-render.
+    We may add a dialog during the loading stage. If we set lgFilesSelectorFamily directly,
+    this may overwrite the Ids state.
+    */
+    (result as LgFile[]).forEach((item) => {
+      set(lgFileState({ projectId, lgFileId: item.id }), (old) => (old.rawData ? item : old));
+    });
+    // async repair bot assets, add missing lg templates
+    botFiles.lgFiles = result;
+    repairBotProject(callbackHelpers, { projectId, botFiles });
+  });
 
   return mainDialog;
 };
