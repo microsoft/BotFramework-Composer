@@ -37,7 +37,7 @@ export function useFormConfig() {
       });
 
     // Add default options for those $kind without uischema.
-    const allSDKKinds = Object.keys(sdkSchema.definitions);
+    const allSDKKinds = Object.keys(get(sdkSchema, 'definitions', {}));
     const kindsWithoutFormOptions = allSDKKinds.filter(($kind) => !result[$kind]);
     const triggersWithoutFormOptions = kindsWithoutFormOptions.filter(($kind) => isTrigger($kind));
     triggersWithoutFormOptions.forEach(($kind) => {
