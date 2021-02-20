@@ -3,7 +3,7 @@
 
 import Path from 'path';
 
-import React, { useEffect, useRef, Fragment } from 'react';
+import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
@@ -54,6 +54,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
   const cachedProjectId = useProjectIdCache();
+  const [selectedTemplateId, setSelectedTemplateId] = useState('');
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
@@ -147,9 +148,9 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (data: string) => {
+  const handleCreateNext = async () => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-    navigate(`./create/${data}`);
+    navigate(`./create/template`);
   };
 
   return (
@@ -159,11 +160,12 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
         <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
-          path="create/:templateId"
+          path="create/template"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
+          selectedTemplateId={selectedTemplateId}
         />
         <CreateOptionsV2
           fetchReadMe={fetchReadMe}
@@ -172,15 +174,18 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           templates={templateProjects}
           onDismiss={handleDismiss}
           onNext={handleCreateNext}
+          selectedTemplateId={selectedTemplateId}
+          setSelectedTemplateId={setSelectedTemplateId}
         />
         <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
-          path=":projectId/:templateId/save"
+          path=":projectId/template/save"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
+          selectedTemplateId={selectedTemplateId}
         />
         <OpenProject
           focusedStorageFolder={focusedStorageFolder}

@@ -100,8 +100,8 @@ type DefineConversationProps = {
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
   focusedStorageFolder: StorageFolder;
+  selectedTemplateId: string;
 } & RouteComponentProps<{
-  templateId: string;
   location: string;
 }>;
 
@@ -110,7 +110,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     onSubmit,
     onDismiss,
     onCurrentPathUpdate,
-    templateId,
+    selectedTemplateId,
     focusedStorageFolder,
     createFolder,
     updateFolder,
@@ -127,7 +127,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
 
   const getDefaultName = () => {
     let i = -1;
-    const bot = normalizeTemplateId(templateId);
+    const bot = normalizeTemplateId(selectedTemplateId);
     let defaultName = '';
     do {
       i++;
@@ -228,7 +228,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
       }
     }
     updateForm(formData);
-  }, [templateId]);
+  }, [selectedTemplateId]);
 
   useEffect(() => {
     validateForm();
@@ -269,7 +269,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
         }
       }
 
-      onSubmit({ ...dataToSubmit }, templateId || '');
+      onSubmit({ ...dataToSubmit }, selectedTemplateId || '');
     },
     [hasErrors, formData]
   );
@@ -356,7 +356,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={hasErrors || !writable}
-              text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('OK')}
+              text={selectedTemplateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('OK')}
               onClick={handleSubmit}
             />
           </DialogFooter>
