@@ -56,10 +56,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       const conversationServerPort = await conversationService.setUpConversationServer();
       try {
         directLineErrorChannel.current = new WebSocket(
-          `ws://localhost:${conversationServerPort}/ws/createErrorChannel`
+          `ws://localhost:${conversationServerPort}/ws/errors/createErrorChannel`
         );
         if (directLineErrorChannel.current) {
-          console.log('Inside');
           directLineErrorChannel.current.onmessage = (event) => {
             const data: DirectLineLog = event.data;
             appendLogToWebChatInspector(projectId, data);
@@ -120,15 +119,15 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         [chatData.conversationId]: chatData,
       });
     } catch (ex) {
-      const err: DirectLineLog = {
-        timestamp: getDateTimeFormatted(),
-        route: 'conversations/activities',
-        status: 400,
-        logType: 'Error',
-        message: formatMessage('An error occured connecting initializing the DirectLine server'),
-        details: ex.message,
-      };
-      appendLogToWebChatInspector(projectId, err);
+      // const err: DirectLineLog = {
+      //   timestamp: getDateTimeFormatted(),
+      //   route: 'conversations/activities',
+      //   status: 400,
+      //   logType: 'Error',
+      //   message: formatMessage('An error occured connecting initializing the DirectLine server'),
+      //   details: ex.message,
+      // };
+      // appendLogToWebChatInspector(projectId, err);
     }
   };
 

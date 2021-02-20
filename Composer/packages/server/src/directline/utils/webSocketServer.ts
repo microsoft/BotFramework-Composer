@@ -76,7 +76,7 @@ export class WebSocketServer {
       this.port = port;
       this.restServer.listen(port);
 
-      app.use('/ws/:conversationId', (req: express.Request, res: express.Response) => {
+      app.use('/ws/conversation/:conversationId', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {
           return res.status(426).send('Connection must upgrade for web sockets.');
         }
@@ -108,7 +108,7 @@ export class WebSocketServer {
         }
       });
 
-      app.use('/ws/createErrorChannel', (req: express.Request, res: express.Response) => {
+      app.use('/ws/errors/createErrorChannel', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {
           return res.status(426).send('Connection must upgrade for web sockets.');
         }
