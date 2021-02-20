@@ -207,6 +207,7 @@ export class BotProjectProvision {
         cosmosDB: null,
         appInsights: null,
         qna: null,
+        botName: null,
       };
 
       const resourceGroupName = config.resourceGroup ?? config.hostname;
@@ -265,7 +266,7 @@ export class BotProjectProvision {
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
           case AzureResourceTypes.BOT_REGISTRATION:
-            await this.azureResourceManagementClient.deployBotResource({
+            const botName = await this.azureResourceManagementClient.deployBotResource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
               name: config.hostname, // come back to this!
@@ -273,6 +274,7 @@ export class BotProjectProvision {
               endpoint: `https://${provisionResults.webApp?.hostname ?? (config.hostname + ".azurewebsites.net")}/api/messages`,
               appId: provisionResults.appId,
             });
+            provisionResults.botName = botName;
             break;
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
