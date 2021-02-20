@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, FileExtensions, BotTemplateV2, FeedType } from '@bfc/extension';
+import { UserIdentity, FileExtensions, BotTemplateV2, FeedType, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
 import yeoman from 'yeoman-environment';
 import Environment from 'yeoman-environment';
@@ -102,7 +102,7 @@ export class AssetManager {
     templateVersion: string,
     projectName: string,
     ref: LocationRef,
-    runtimeChoice: string,
+    runtimeChoice: RuntimeType,
     user?: UserIdentity
   ): Promise<LocationRef> {
     try {
@@ -160,7 +160,7 @@ export class AssetManager {
     generatorName: string,
     dstDir: string,
     projectName: string,
-    runtimeChoice: string
+    runtimeChoice: RuntimeType
   ): Promise<boolean> {
     log('About to instantiate a template!', dstDir, generatorName, projectName);
     this.yeomanEnv.cwd = dstDir;
