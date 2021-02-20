@@ -1,9 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import * as HttpStatus from 'http-status-codes';
-
-// import { BotErrorCodes } from '../../utils/apiErrorException';
 import { StatusCodes } from 'http-status-codes';
 
 import { createGetConversationHandler } from '../createGetConversationHandler';
