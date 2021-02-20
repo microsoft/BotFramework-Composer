@@ -15,7 +15,7 @@ const mockSendToSubscribers = jest.fn();
 const mockSendErrorToSubscribers = jest.fn();
 
 jest.mock('moment', () => {
-  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000Z');
+  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000');
 });
 
 jest.mock('../../utils/webSocketServer.ts', () => {
@@ -191,7 +191,7 @@ describe('postActivityToBot handler', () => {
         '{"code":"ServiceError","exception":{"response":{"status":400,"data":{"error":"The bot cannot accept messages at this time","errorCode":["123Z-4","989-Az"]}}}}',
       route: undefined,
       status: 400,
-      timestamp: '2021-02-18 16:00:00',
+      timestamp: '2021-02-19 00:00:00',
     });
   });
 });

@@ -12,7 +12,7 @@ let res;
 const mockEnd = jest.fn();
 
 jest.mock('moment', () => {
-  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000Z');
+  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000');
 });
 
 const mockJsonResponse = jest.fn(() => ({
@@ -76,7 +76,7 @@ describe('uploadAttachment handler', () => {
       message: "'You must specify type property for the attachment'. MissingProperty",
       route: 'v3/uploads',
       status: StatusCodes.BAD_REQUEST,
-      timestamp: '2021-02-18 16:00:00',
+      timestamp: '2021-02-19 00:00:00',
     });
   });
 });
