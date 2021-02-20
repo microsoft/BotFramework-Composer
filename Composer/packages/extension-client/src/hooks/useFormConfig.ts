@@ -45,6 +45,6 @@ export function useFormConfig() {
     });
 
     return result;
-  }, [plugins.uiSchema, shellData.schemas.sdk]);
+  }, [plugins.uiSchema, sdkSchema]);
   return formConfig;
 }
