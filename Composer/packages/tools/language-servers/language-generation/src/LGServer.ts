@@ -21,6 +21,7 @@ import {
   FoldingRange,
 } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
@@ -53,6 +54,7 @@ export class LGServer {
   private memoryVariables: Record<string, any> = {};
   private _lgParser = new LgParser();
   private _luisEntities: string[] = [];
+  private _lastLuContent: string[] = [];
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
@@ -112,7 +114,9 @@ export class LGServer {
         let luContents: string[] = [];
         if (projectId && this.entitiesResolver) {
           luContents = this.entitiesResolver(projectId) || [];
-          this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
+          if (!isEqual(luContents, this._lastLuContent)) {
+            this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
+          }
         }
       }
     });
