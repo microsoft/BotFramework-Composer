@@ -4,18 +4,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React from 'react';
-import { FontWeights } from '@uifabric/styling';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Icon } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
-import {ListLink} from './ProjectList';
+import { ListLink } from './ProjectList';
 
 // -------------------- Styles -------------------- //
 
-const navItem = (
-  isActive: boolean,
-  padLeft: number,
-) => css`
+const navItem = (isActive: boolean, padLeft: number) => css`
   label: navItem;
   position: relative;
   height: 24px;
@@ -53,7 +49,7 @@ export const overflowSet = css`
   box-sizing: border-box;
   line-height: 24px;
   justify-content: space-between;
-  display: flex
+  display: flex;
 `;
 
 const itemName = (nameWidth: number) => css`
@@ -82,8 +78,6 @@ export const ListItem: React.FC<Props> = ({
   textWidth = 100,
   padLeft = 16,
 }) => {
-
-
   const linkString = `${link.projectId}_ListItem`;
 
   return (

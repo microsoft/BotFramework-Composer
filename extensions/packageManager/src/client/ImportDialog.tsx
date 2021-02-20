@@ -9,7 +9,7 @@ import { TextField, DialogFooter, PrimaryButton, DefaultButton } from 'office-ui
 
 interface ImportDialogProps {
   closeDialog: () => void;
-  doImport: (packageName: string, version: string | undefined, isUpdating: boolean) => void;
+  doImport: (packageName: string, version: string | undefined, isUpdating: boolean, source?: string) => void;
   name?: string;
   version?: string;
 }
