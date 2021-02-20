@@ -282,8 +282,11 @@ export class AssetManager {
     if (packageName) {
       return packageName
         .replace('generator-', '')
+        .replace('@microsoft/', '')
+        .replace('microsoft', '')
         .split('-')
-        .reduce((a, b) => a.charAt(0).toUpperCase() + a.slice(1) + ' ' + b.charAt(0).toUpperCase() + b.slice(1));
+        .reduce((a, b) => a.charAt(0).toUpperCase() + a.slice(1) + ' ' + b.charAt(0).toUpperCase() + b.slice(1))
+        .trim();
     } else {
       return '';
     }
