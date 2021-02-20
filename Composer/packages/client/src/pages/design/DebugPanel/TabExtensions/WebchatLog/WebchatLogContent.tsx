@@ -15,7 +15,7 @@ export const WebchatLogContent = () => {
   const displayedLogs = useRecoilValue(webChatLogsState(currentProjectId));
 
   return (
-    <div data-testid="Webchat-Logs-Container">
+    <div css={{ padding: '16px 24px' }} data-testid="Webchat-Logs-Container">
       {displayedLogs.map((log, idx) => (
         <WebchatLogItem key={`webchatLog-${idx}`} item={log} />
       ))}
