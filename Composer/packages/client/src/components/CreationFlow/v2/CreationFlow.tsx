@@ -161,31 +161,31 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="create/template"
+          selectedTemplateId={selectedTemplateId}
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
-          selectedTemplateId={selectedTemplateId}
         />
         <CreateOptionsV2
           fetchReadMe={fetchReadMe}
           fetchTemplates={fetchTemplatesV2}
           path="create"
+          selectedTemplateId={selectedTemplateId}
+          setSelectedTemplateId={setSelectedTemplateId}
           templates={templateProjects}
           onDismiss={handleDismiss}
           onNext={handleCreateNext}
-          selectedTemplateId={selectedTemplateId}
-          setSelectedTemplateId={setSelectedTemplateId}
         />
         <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path=":projectId/template/save"
+          selectedTemplateId={selectedTemplateId}
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
-          selectedTemplateId={selectedTemplateId}
         />
         <OpenProject
           focusedStorageFolder={focusedStorageFolder}

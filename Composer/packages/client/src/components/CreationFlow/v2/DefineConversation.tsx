@@ -332,12 +332,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
             <StackItem grow={0} styles={halfstack}>
               <Dropdown
+                disabled
                 data-testid="NewDialogPrimaryLanguage"
                 label={formatMessage('Primary Language')}
                 options={mockLanguageOptions}
                 selectedKey={formData.primaryLanguage}
                 onChange={(_e, option) => updateField('primaryLanguage', option?.key.toString())}
-                disabled
               />
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
