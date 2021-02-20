@@ -111,9 +111,8 @@ export class LGServer {
 
         // update luis entities once user open LG editor
         const projectId = lgOption?.projectId;
-        let luContents: string[] = [];
         if (projectId && this.entitiesResolver) {
-          luContents = this.entitiesResolver(projectId) || [];
+          const luContents = this.entitiesResolver(projectId) || [];
           if (!isEqual(luContents, this._lastLuContent)) {
             this._lastLuContent = luContents;
             this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
