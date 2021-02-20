@@ -55,6 +55,7 @@ const emptyLg: LgFile = {
   templates: [],
   allTemplates: [],
   imports: [],
+  rawData: true,
 };
 
 type LgStateParams = { projectId: string; lgFileId: string };

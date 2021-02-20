@@ -195,6 +195,7 @@ export type LgFile = {
   imports: { id: string; path: string; description: string }[];
   options?: string[];
   parseResult?: any;
+  rawData: boolean;
 };
 
 export type Manifest = {

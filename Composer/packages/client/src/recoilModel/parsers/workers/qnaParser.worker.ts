@@ -31,7 +31,6 @@ export const handleMessage = (msg: QnaMessageEvent) => {
     case QnAActionType.ParseAll: {
       const { qnaResources } = msg.payload;
       result = qnaResources.map(({ id, content }) => qnaUtil.parse(id, content));
-      console.log(result);
       break;
     }
   }
