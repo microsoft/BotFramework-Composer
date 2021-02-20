@@ -403,7 +403,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           name: currentProfile?.name ?? config.hostname,
           environment: currentProfile?.environment ?? 'composer',
           subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
-          resourceGroup: provisionResults.resourceGroup?.name ?? currentProfile?.resourceGroup,
+          resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
           hostname: config.hostname ?? currentProfile?.hostname,
           luisResource: provisionResults.luisPrediction? `${config.hostname}-luis` : currentProfile?.luisResource,
           runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
