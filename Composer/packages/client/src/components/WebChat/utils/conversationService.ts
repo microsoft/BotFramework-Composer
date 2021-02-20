@@ -69,7 +69,7 @@ export const getDateTimeFormatted = (): string => {
   return moment().local().format('YYYY-MM-DD HH:mm:ss');
 };
 
-export default class ConversationService {
+export class ConversationService {
   private directlineHostUrl: string;
   private composerApiClient: AxiosInstance;
   private restServerForWSPort = -1;

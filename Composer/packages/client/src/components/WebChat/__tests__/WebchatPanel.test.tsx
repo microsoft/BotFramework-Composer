@@ -8,18 +8,28 @@ import { WebChatPanel } from '../WebChatPanel';
 
 const mockstartNewConversation = jest.fn();
 const mockSendActivity = jest.fn();
+const mockServerPort = jest.fn();
 
 URL.createObjectURL = jest.fn();
 
 jest.mock('../utils/conversationService', () => {
-  return jest.fn().mockImplementation(() => {
-    return { startNewConversation: mockstartNewConversation, sendInitialActivity: mockSendActivity };
-  });
+  return {
+    ConversationService: jest.fn().mockImplementation(() => {
+      return {
+        startNewConversation: mockstartNewConversation,
+        sendInitialActivity: mockSendActivity,
+        setUpConversationServer: mockServerPort,
+        getDateTimeFormatted: jest.fn(),
+      };
+    }),
+    getDateTimeFormatted: jest.fn(),
+  };
 });
 
 describe('<WebchatPanel />', () => {
-  fit('should render webchat panel correctly', async () => {
+  it('should render webchat panel correctly', async () => {
     const mockOpenInEmulator = jest.fn();
+
     const props = {
       projectId: '123-12',
       botUrl: 'http://localhost:3989/api/messages',
@@ -33,42 +43,11 @@ describe('<WebchatPanel />', () => {
       openBotInEmulator: mockOpenInEmulator,
       activeLocale: 'en-us',
     };
-    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} appendLogToWebChatInspector={jest.fn()} />);
-    mockstartNewConversation.mockResolvedValue({
-      directline: {
-        activity$: jest.fn(),
-        subscribe: jest.fn(),
-      },
-      chatMode: 'conversation',
-      projectId: '123-12',
-      user: {
-        id: 'dsf',
-      },
-      conversationId: '123sdf=234',
-    });
 
-    await act(async () => {
-      rerender(<WebChatPanel {...props} isWebChatPanelVisible appendLogToWebChatInspector={jest.fn()} />);
-      await findAllByTestId('restart-conversation');
-    });
-  });
+    mockServerPort.mockResolvedValue(4000);
 
-  it('should destroy the error socket when component is destroyed', async () => {
-    const mockOpenInEmulator = jest.fn();
-    const props = {
-      projectId: '123-12',
-      botUrl: 'http://localhost:3989/api/messages',
-      secrets: {
-        msAppId: '',
-        msPassword: '',
-      },
-      directlineHostUrl: 'http://localhost:3000/v3/directline',
-      botName: 'test-bot',
-      isWebChatPanelVisible: false,
-      openBotInEmulator: mockOpenInEmulator,
-      activeLocale: 'en-us',
-    };
     const { rerender, findAllByTestId } = render(<WebChatPanel {...props} appendLogToWebChatInspector={jest.fn()} />);
+
     mockstartNewConversation.mockResolvedValue({
       directline: {
         activity$: jest.fn(),

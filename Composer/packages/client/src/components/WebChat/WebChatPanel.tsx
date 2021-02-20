@@ -6,7 +6,7 @@ import { DirectLineLog } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 
-import ConversationService, { ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
+import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
 
@@ -57,6 +57,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           `ws://localhost:${conversationServerPort}/ws/createErrorChannel`
         );
         if (directLineErrorChannel.current) {
+          console.log('Inside');
           directLineErrorChannel.current.onmessage = (event) => {
             const data: DirectLineLog = event.data;
             appendLogToWebChatInspector(projectId, data);
