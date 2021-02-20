@@ -18,13 +18,14 @@ export const WebchatLogItem: React.FC<WebchatLogItemProps> = ({ item }) => {
         <span css={{ marginLeft: 10, color: `${CommunicationColors.primary}` }}>{item.status}</span>
         <span css={{ marginLeft: 10 }}>{item.route}</span>
       </div>
-      <div
-        css={{ color: `${SharedColors.red20}`, whiteSpace: 'pre-wrap', fontWeight: 600 }}
-        data-testid="LogItem__Summary"
-      >
+      <div css={{ color: `${SharedColors.red20}`, fontWeight: 600 }} data-testid="LogItem__Summary">
         {item.message}
       </div>
-      {item.details ? <div data-testid="LogItem__Details">{item.details}</div> : null}
+      {item.details ? (
+        <div css={{ whiteSpace: 'pre-wrap' }} data-testid="LogItem__Details">
+          {item.details + '\n' + item.details}
+        </div>
+      ) : null}
     </div>
   );
 };
