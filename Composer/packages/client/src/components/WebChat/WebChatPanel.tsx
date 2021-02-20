@@ -5,6 +5,9 @@ import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { DirectLineLog } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
+
+import { dispatcherState } from '../../recoilModel';
 
 import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
@@ -41,6 +44,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   activeLocale,
   appendLogToWebChatInspector,
 }) => {
+  const { clearWebChatLogs } = useRecoilValue(dispatcherState);
+
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
   const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
@@ -133,6 +138,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     setChatData({
       [chatData.conversationId]: chatData,
     });
+    clearWebChatLogs(projectId);
   };
 
   const onSaveTranscriptClick = async (conversationId: string) => {
