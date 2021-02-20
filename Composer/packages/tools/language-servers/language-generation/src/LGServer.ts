@@ -115,6 +115,7 @@ export class LGServer {
         if (projectId && this.entitiesResolver) {
           luContents = this.entitiesResolver(projectId) || [];
           if (!isEqual(luContents, this._lastLuContent)) {
+            this._lastLuContent = luContents;
             this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
           }
         }
