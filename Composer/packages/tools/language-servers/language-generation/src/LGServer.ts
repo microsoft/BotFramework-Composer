@@ -21,7 +21,6 @@ import {
   FoldingRange,
 } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
@@ -53,17 +52,13 @@ export class LGServer {
   protected LGDocuments: LGDocument[] = [];
   private memoryVariables: Record<string, any> = {};
   private _lgParser = new LgParser();
-  private _lastUpdateEntityTime: number;
   private _luisEntities: string[] = [];
-  private _lastLUContents: string[];
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
     protected readonly memoryResolver?: MemoryResolver,
     protected readonly entitiesResolver?: MemoryResolver
   ) {
-    this._lastUpdateEntityTime = Date.now();
-    this._lastLUContents = [];
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => this.validate(change.document));
     this.documents.onDidClose((event) => {
@@ -110,6 +105,14 @@ export class LGServer {
           this.addLGDocument(textDocument, lgOption);
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
+        }
+
+        // update luis entities once user open LG editor
+        const projectId = lgOption?.projectId;
+        let luContents: string[] = [];
+        if (projectId && this.entitiesResolver) {
+          luContents = this.entitiesResolver(projectId) || [];
+          this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
         }
       }
     });
@@ -564,22 +567,6 @@ export class LGServer {
 
     const wordRange = getEntityRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
-
-    // update luis entities only when the interval is great than 5 seconds or the first time a completion request recieved
-    const curTimeStamp = Date.now();
-    if (curTimeStamp - this._lastUpdateEntityTime >= 5000 || this._luisEntities.length === 0) {
-      const projectId = this.getLGDocument(document)?.projectId;
-      let luContents: string[] = [];
-      if (projectId && this.entitiesResolver) {
-        luContents = this.entitiesResolver(projectId) || [];
-      }
-
-      if (!isEqual(this._lastLUContents, luContents)) {
-        this._lastLUContents = luContents;
-        this._lastUpdateEntityTime = Date.now();
-        this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
-      }
-    }
 
     const startWithAt = word.startsWith('@');
 
