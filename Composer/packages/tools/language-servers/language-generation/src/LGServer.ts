@@ -52,9 +52,9 @@ export class LGServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = [];
   private memoryVariables: Record<string, any> = {};
-  private luisEntities: string[] = [];
   private _lgParser = new LgParser();
   private _lastUpdateEntityTime: number;
+  private _luisEntities: string[] = [];
   private _lastLUContents: string[];
   constructor(
     protected readonly connection: IConnection,
@@ -567,7 +567,7 @@ export class LGServer {
 
     // update luis entities only when the interval is great than 5 seconds or the first time a completion request recieved
     const curTimeStamp = Date.now();
-    if (curTimeStamp - this._lastUpdateEntityTime >= 5000 || this.luisEntities.length === 0) {
+    if (curTimeStamp - this._lastUpdateEntityTime >= 5000 || this._luisEntities.length === 0) {
       const projectId = this.getLGDocument(document)?.projectId;
       let luContents: string[] = [];
       if (projectId && this.entitiesResolver) {
@@ -577,13 +577,13 @@ export class LGServer {
       if (!isEqual(this._lastLUContents, luContents)) {
         this._lastLUContents = luContents;
         this._lastUpdateEntityTime = Date.now();
-        this._lgParser.extractLuisEntity(luContents).then((res) => (this.luisEntities = res.suggestEntities));
+        this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
       }
     }
 
     const startWithAt = word.startsWith('@');
 
-    const completionEntityList = this.luisEntities.map((entity: string) => {
+    const completionEntityList = this._luisEntities.map((entity: string) => {
       return {
         label: entity,
         kind: CompletionItemKind.Property,
