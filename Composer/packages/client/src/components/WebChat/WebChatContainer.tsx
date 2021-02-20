@@ -5,7 +5,7 @@ import ReactWebChat, { createStyleSet } from 'botframework-webchat';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import ConversationService, { ActivityType, ChatData } from './utils/conversationService';
+import { ConversationService, ActivityType, ChatData } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 
 type WebChatContainerProps = {
