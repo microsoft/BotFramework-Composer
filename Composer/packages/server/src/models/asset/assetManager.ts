@@ -337,7 +337,7 @@ export class AssetManager {
   }
 
   public async getRawGithubFileContent(owner: string, repo: string, branch: string, path: string) {
-    const githubUrl = new URL(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`);
+    const githubUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
     const res = await fetch(githubUrl.toString());
 
     return await res.text();

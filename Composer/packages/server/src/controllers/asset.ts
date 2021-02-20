@@ -3,6 +3,7 @@
 
 import { Request, Response } from 'express';
 import { BotTemplateV2, QnABotTemplateId } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
@@ -30,6 +31,16 @@ export async function getProjTemplatesV2(req: any, res: any) {
     if (feedUrls) {
       const feedTemplates = await AssetService.manager.getCustomFeedTemplates(feedUrls);
       templates = templates.concat(feedTemplates);
+      templates.push({
+        id: QnABotTemplateId,
+        name: 'generator-qna-bot',
+        description: formatMessage('Empty bot template that routes to qna configuration'),
+        package: {
+          packageName: 'generator-empty-bot',
+          packageSource: 'npm',
+          packageVersion: '0.0.1',
+        },
+      });
     }
 
     if (getFirstPartyNpm) {
