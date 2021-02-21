@@ -92,7 +92,7 @@ export function createGetAttachmentHandler(state: DLServerState) {
       } else {
         handleDirectLineErrors(req, res, {
           status: StatusCodes.NOT_FOUND,
-          message: formatMessage(`attachment[${params.attachmentId}] not found .${BotErrorCodes.BadArgument}`),
+          message: formatMessage(`attachment[${params.attachmentId}] not found. ${BotErrorCodes.BadArgument}`),
         });
       }
     } catch (err) {
