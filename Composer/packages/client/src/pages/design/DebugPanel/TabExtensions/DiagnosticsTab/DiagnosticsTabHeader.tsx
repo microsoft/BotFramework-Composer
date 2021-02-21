@@ -26,7 +26,7 @@ export const DiagnosticsHeader = () => {
           margin-right: ${hasError || hasWarning ? 4 : 0}px;
         `}
       >
-        {formatMessage('Issues')}
+        {formatMessage('Problems')}
       </div>
       <DebugPanelErrorIndicator hasError={hasError} hasWarning={hasWarning} />
     </div>

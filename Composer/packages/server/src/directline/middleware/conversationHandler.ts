@@ -31,13 +31,13 @@ export const createReplyToActivityHandler = (req: express.Request, res: express.
     ) {
       const oAuthException: DirectLineError = {
         message: formatMessage(
-          'OAuth activity attachments are not available for testing yet in Composer. Please continue using Bot Framework Emulator for OAuth action support in bots.'
+          'OAuth activities are not available for testing in Composer yet. Please continue using Bot Framework Emulator for testing OAuth actions.'
         ),
         status: StatusCodes.NOT_IMPLEMENTED,
       };
+      WebSocketServer.sendToSubscribers(conversation.conversationId, activityToBeSent);
       throw oAuthException;
     }
-
     WebSocketServer.sendToSubscribers(conversation.conversationId, activityToBeSent);
     res.status(StatusCodes.OK).json({ id: activityToBeSent.id });
   } catch (err) {
