@@ -14,6 +14,7 @@ type WebChatContainerProps = {
   conversationService: ConversationService;
   botUrl: string;
   chatData: ChatData;
+  isDisabled: boolean;
 };
 
 const createCardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
@@ -77,40 +78,38 @@ const areEqual = (prevProps: WebChatContainerProps, nextProps: WebChatContainerP
   prevProps.currentConversation === nextProps.currentConversation;
 
 export const WebChatContainer = React.memo((props: WebChatContainerProps) => {
-  const { currentConversation, botUrl, activeLocale, chatData } = props;
-  if (currentConversation) {
-    const webchatStore = createWebChatStore({});
-    const styleSet = createStyleSet({ ...webChatStyleOptions });
-    styleSet.fileContent = {
-      ...styleSet.fileContent,
-      background: `${NeutralColors.white}`,
-      '& .webchat__fileContent__fileName': {
-        color: `${CommunicationColors.primary}`,
-      },
-      '& .webchat__fileContent__size': {
-        color: `${NeutralColors.white}`,
-      },
-      '& .webchat__fileContent__downloadIcon': {
-        fill: `${NeutralColors.white}`,
-      },
-      '& .webchat__fileContent__badge': {
-        padding: '4px',
-      },
-    };
+  const { activeLocale, chatData, isDisabled } = props;
 
-    return (
-      <ReactWebChat
-        key={chatData.conversationId}
-        activityMiddleware={createActivityMiddleware}
-        cardActionMiddleware={createCardActionMiddleware}
-        directLine={chatData.directline}
-        disabled={!botUrl}
-        locale={activeLocale}
-        store={webchatStore}
-        styleSet={styleSet}
-        userID={chatData.user.id}
-      />
-    );
-  }
-  return null;
+  const webchatStore = createWebChatStore({});
+  const styleSet = createStyleSet({ ...webChatStyleOptions });
+  styleSet.fileContent = {
+    ...styleSet.fileContent,
+    background: `${NeutralColors.white}`,
+    '& .webchat__fileContent__fileName': {
+      color: `${CommunicationColors.primary}`,
+    },
+    '& .webchat__fileContent__size': {
+      color: `${NeutralColors.white}`,
+    },
+    '& .webchat__fileContent__downloadIcon': {
+      fill: `${NeutralColors.white}`,
+    },
+    '& .webchat__fileContent__badge': {
+      padding: '4px',
+    },
+  };
+
+  return (
+    <ReactWebChat
+      key={chatData?.conversationId}
+      activityMiddleware={createActivityMiddleware}
+      cardActionMiddleware={createCardActionMiddleware}
+      directLine={chatData?.directline}
+      disabled={isDisabled}
+      locale={activeLocale}
+      store={webchatStore}
+      styleSet={styleSet}
+      userID={chatData?.user.id}
+    />
+  );
 }, areEqual);

@@ -38,7 +38,7 @@ const generateGenericError = (code: BotErrorCodes, exception: any, status?: numb
 export const createDirectLineErrorLog = (req: express.Request, errorObject: DirectLineError): DirectLineLog => {
   return {
     timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
-    route: req.path,
+    route: `${req.method} ${req.path}`,
     logType: 'Error',
     ...errorObject,
   };

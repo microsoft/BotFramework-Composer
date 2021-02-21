@@ -60,7 +60,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         );
         if (directLineErrorChannel.current) {
           directLineErrorChannel.current.onmessage = (event) => {
-            const data: DirectLineLog = event.data;
+            const data: DirectLineLog = JSON.parse(event.data);
             appendLogToWebChatInspector(projectId, data);
           };
         }
@@ -88,6 +88,21 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     queueConversationStart(!!botUrl);
   }, [botUrl, secrets]);
 
+  const sendInitialActivities = async (chatData: ChatData) => {
+    try {
+      await conversationService.sendInitialActivity(chatData.conversationId, [chatData.user]);
+    } catch (ex) {
+      // DL errors are handled through socket above.
+    }
+  };
+
+  const setConversationData = async (chatData: ChatData) => {
+    setChatData({
+      [chatData.conversationId]: chatData,
+    });
+    setCurrentConversation(chatData.conversationId);
+  };
+
   useEffect(() => {
     let mounted = true;
     if (isWebChatPanelVisible && isConversationStartQueued) {
@@ -99,6 +114,11 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           activeLocale
         );
         if (mounted) {
+          setChatData({
+            [chatData.conversationId]: chatData,
+          });
+          setCurrentConversation(chatData.conversationId);
+          setConversationData(chatData);
           sendInitialActivities(chatData);
         }
       };
@@ -111,38 +131,19 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     };
   }, [isWebChatPanelVisible]);
 
-  const sendInitialActivities = async (chatData: ChatData) => {
-    try {
-      await conversationService.sendInitialActivity(chatData.conversationId, [chatData.user]);
-      setCurrentConversation(chatData.conversationId);
-      setChatData({
-        [chatData.conversationId]: chatData,
-      });
-    } catch (ex) {
-      // const err: DirectLineLog = {
-      //   timestamp: getDateTimeFormatted(),
-      //   route: 'conversations/activities',
-      //   status: 400,
-      //   logType: 'Error',
-      //   message: formatMessage('An error occured connecting initializing the DirectLine server'),
-      //   details: ex.message,
-      // };
-      // appendLogToWebChatInspector(projectId, err);
-    }
-  };
-
   const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
-    const chatData = await conversationService.restartConversation(
-      chats[oldConversationId],
-      requireNewUserId,
-      activeLocale
-    );
-    sendInitialActivities(chatData);
-    setCurrentConversation(chatData.conversationId);
-    setChatData({
-      [chatData.conversationId]: chatData,
-    });
-    clearWebchatInspectorLogs(projectId);
+    try {
+      const chatData = await conversationService.restartConversation(
+        chats[oldConversationId],
+        requireNewUserId,
+        activeLocale
+      );
+      setConversationData(chatData);
+      sendInitialActivities(chatData);
+      clearWebchatInspectorLogs(projectId);
+    } catch (ex) {
+      // DL errors are handled through socket above.
+    }
   };
 
   const onSaveTranscriptClick = async (conversationId: string) => {
@@ -175,10 +176,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     }
   };
 
-  if (!chats[currentConversation]?.directline) {
-    return null;
-  }
-
   return (
     <div ref={webChatPanelRef} style={{ height: 'calc(100% - 38px)' }}>
       <WebChatHeader
@@ -197,6 +194,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         chatData={chats[currentConversation]}
         conversationService={conversationService}
         currentConversation={currentConversation}
+        isDisabled={!chats[currentConversation]}
       />
     </div>
   );
