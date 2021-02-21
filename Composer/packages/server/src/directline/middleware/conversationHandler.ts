@@ -5,6 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Activity } from 'botframework-schema';
 import * as express from 'express';
 import formatMessage from 'format-message';
+import { DirectLineError } from '@bfc/shared';
 
 import { handleDirectLineErrors } from '../utils/apiErrorException';
 import { DLServerState } from '../store/dlServerState';
@@ -13,6 +14,7 @@ import { Conversation } from '../store/entities/conversation';
 import { WebSocketServer } from '../utils/webSocketServer';
 import { textItem } from '../utils/helpers';
 import logger from '../utils/logger';
+import { AttachmentContentTypes } from '../utils/constants';
 
 export const createReplyToActivityHandler = (req: express.Request, res: express.Response): void => {
   let activityToBeSent: Activity = {
@@ -22,10 +24,31 @@ export const createReplyToActivityHandler = (req: express.Request, res: express.
     activityToBeSent.replyToId = req.params.activityId;
     const { conversation }: { conversation: Conversation } = req as any;
     activityToBeSent = conversation.prepActivityToBeSentToUser(conversation.user.id, activityToBeSent);
+
+    if (
+      activityToBeSent.attachments?.length === 1 &&
+      activityToBeSent?.attachments?.[0].contentType === AttachmentContentTypes.oAuthCard
+    ) {
+      const oAuthException: DirectLineError = {
+        message: formatMessage(
+          'OAuth activity attachments are not available for testing yet in Composer. Please continue using Bot Framework Emulator for OAuth action support in bots.'
+        ),
+        status: StatusCodes.NOT_IMPLEMENTED,
+      };
+      throw oAuthException;
+    }
+
     WebSocketServer.sendToSubscribers(conversation.conversationId, activityToBeSent);
     res.status(StatusCodes.OK).json({ id: activityToBeSent.id });
   } catch (err) {
-    handleDirectLineErrors(req, res, err);
+    let exception = err;
+    if (!exception.message) {
+      exception = {
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: formatMessage(`An error occured receiving an activity from the bot.`),
+      };
+    }
+    handleDirectLineErrors(req, res, exception);
   }
 };
 

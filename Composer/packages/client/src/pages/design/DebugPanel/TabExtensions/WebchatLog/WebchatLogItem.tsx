@@ -13,7 +13,7 @@ export interface WebchatLogItemProps {
 export const WebchatLogItem: React.FC<WebchatLogItemProps> = ({ item }) => {
   return (
     <div
-      css={{ padding: '8px 0px', fontSize: FontSizes.size16, fontFamily: 'Consolas', color: `${NeutralColors.black}` }}
+      css={{ padding: '8px 0px', fontSize: FontSizes.size14, fontFamily: 'Consolas', color: `${NeutralColors.black}` }}
       data-testid="Webchat-LogItem"
     >
       <div data-testid="LogItem__Header">
@@ -26,7 +26,7 @@ export const WebchatLogItem: React.FC<WebchatLogItemProps> = ({ item }) => {
       </div>
       {item.details ? (
         <div css={{ whiteSpace: 'pre-wrap', marginLeft: 15 }} data-testid="LogItem__Details">
-          {item.details + '\n' + item.details}
+          {item.details}
         </div>
       ) : null}
     </div>
