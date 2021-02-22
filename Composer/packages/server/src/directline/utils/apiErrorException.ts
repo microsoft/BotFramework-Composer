@@ -2,6 +2,10 @@
 // Licensed under the MIT License.
 import * as express from 'express';
 import { StatusCodes } from 'http-status-codes';
+import moment from 'moment';
+import { DirectLineError, DirectLineLog } from '@botframework-composer/types';
+
+import { WebSocketServer } from './webSocketServer';
 
 export enum BotErrorCodes {
   /// unknown service error
@@ -20,50 +24,34 @@ export enum BotErrorCodes {
   MessageSizeTooBig = 'MessageSizeTooBig',
 }
 
-type ErrorResponse = {
-  error: {
-    code?: string;
-    message?: string;
-  };
-};
-
-type APIException = {
-  error: ErrorResponse;
-  status: number;
-};
-
-const createErrorResponse = (code: string, message: string): ErrorResponse => {
-  return {
-    error: {
+const generateGenericError = (code: BotErrorCodes, exception: any, status?: number): DirectLineError => {
+  const apiException = {
+    message: JSON.stringify({
       code,
-      message,
-    },
+      exception,
+    }),
+    status: status ?? StatusCodes.BAD_REQUEST,
   };
+  return apiException;
 };
 
-const exceptionToAPIException = (exception: any): APIException => {
-  if (exception?.data && exception?.status) {
-    return {
-      error: exception.data,
-      status: exception?.status,
-    };
-  } else {
-    return {
-      error: createErrorResponse(BotErrorCodes.ServiceError, exception.message),
-      status: StatusCodes.BAD_REQUEST,
-    };
-  }
-};
-
-export const createAPIException = (statusCode: number, code: string, message: string): APIException => {
+export const createDirectLineErrorLog = (req: express.Request, errorObject: DirectLineError): DirectLineLog => {
   return {
-    status: statusCode,
-    error: createErrorResponse(code, message),
+    timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
+    route: `${req.method} ${req.path}`,
+    logType: 'Error',
+    ...errorObject,
   };
 };
 
-export const sendErrorResponse = (req: express.Request, res: express.Response, exceptionObj: any): ErrorResponse => {
-  const apiException = exceptionToAPIException(exceptionObj);
-  res.status(apiException.status).json(apiException.error);
-  return apiException.error;
+export const handleDirectLineErrors = (req: express.Request, res: express.Response, err) => {
+  let item: DirectLineLog;
+  if (err.status && err.message) {
+    item = createDirectLineErrorLog(req, err);
+  } else {
+    const error = generateGenericError(err.code ?? BotErrorCodes.ServiceError, err);
+    item = createDirectLineErrorLog(req, error);
+  }
+  WebSocketServer.sendDLErrorsToSubscribers(item);
+  res.status(item.status).json(item).end();
 };
