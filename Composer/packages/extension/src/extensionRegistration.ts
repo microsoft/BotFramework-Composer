@@ -13,6 +13,8 @@ import {
   UserIdentity,
   IBotProject,
   IExtensionRegistration,
+  ExtensionMetadata,
+  ExtensionSettings,
 } from '@botframework-composer/types';
 import { PassportStatic } from 'passport';
 
@@ -26,10 +28,15 @@ export class ExtensionRegistration implements IExtensionRegistration {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _store: Store<any> | null = null;
 
-  constructor(public context: IExtensionContext, name: string, description: string, private dataDir: string) {
-    this._name = name;
-    this._description = description;
-    this._log = log.extend(name);
+  constructor(
+    public context: IExtensionContext,
+    metadata: ExtensionMetadata,
+    private _getSettings: () => ExtensionSettings,
+    private _dataDir: string
+  ) {
+    this._name = metadata.id;
+    this._description = metadata.description;
+    this._log = log.extend(metadata.id);
   }
 
   public get passport(): PassportStatic {
@@ -54,11 +61,15 @@ export class ExtensionRegistration implements IExtensionRegistration {
 
   public get store() {
     if (this._store === null) {
-      const storePath = path.join(this.dataDir, `${this.name}.json`);
+      const storePath = path.join(this._dataDir, `${this.name}.json`);
       this._store = new Store(storePath, {}, this.log);
     }
 
     return this._store;
+  }
+
+  public get settings() {
+    return this._getSettings();
   }
 
   /**************************************************************************************
