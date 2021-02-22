@@ -106,6 +106,18 @@ type BotSettingsEvents = {
   GetNewRuntime: { runtimeType: string };
 };
 
+type LgEditorEvents = {
+  LGEditorSwitchToCodeEditor: undefined;
+  LGEditorSwitchToResponseEditor: undefined;
+  LGEditorModalityAdded: { modality: string };
+  LGEditorModalityDeleted: { modality: string };
+  LGQuickInsertItem: {
+    itemType: string;
+    item?: string;
+    location: 'LGCodeEditor' | 'LGResponseEditor';
+  };
+};
+
 type OtherEvents = {};
 
 type PageView = {
@@ -133,7 +145,8 @@ export type TelemetryEvents = ApplicationEvents &
   PublishingEvents &
   QnaEvents &
   AppSettingsEvents &
-  PageView;
+  PageView &
+  LgEditorEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

@@ -8,9 +8,8 @@ import jwtDecode from 'jwt-decode';
 import { userDispatcher } from '../user';
 import { UserSettingsPayload } from '../../types';
 import { DEFAULT_USER_SETTINGS } from '../../utils';
-import { userSettingsState, currentUserState, CurrentUser } from '../../atoms/appState';
+import { userSettingsState, currentUserState, CurrentUser, dispatcherState } from '../../atoms/appState';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { dispatcherState } from '../../DispatcherWrapper';
 import { getUserTokenFromCache, loginPopup } from '../../../utils/auth';
 import { Dispatcher } from '..';
 

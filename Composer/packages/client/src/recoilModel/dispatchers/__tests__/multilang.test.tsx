@@ -13,9 +13,9 @@ import {
   onAddLanguageDialogCompleteState,
   onDelLanguageDialogCompleteState,
   currentProjectIdState,
+  dispatcherState,
 } from '../../atoms';
 import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';
 

@@ -10,11 +10,25 @@ import formatMessage from 'format-message';
 import { useResolvers } from '../hooks/useResolver';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
-import { focusPathState } from './../recoilModel';
-import { dispatcherState } from './../recoilModel/DispatcherWrapper';
+import { dispatcherState, focusPathState } from './../recoilModel';
 
 const fileNotFound = (id: string) => formatMessage('LG file {id} not found', { id });
 const TEMPLATE_ERROR = formatMessage('templateName is missing or empty');
+
+const memoizedDebounce = (func, wait, options = {}) => {
+  const memory = {};
+
+  return (...args) => {
+    const [, searchType] = args;
+
+    if (typeof memory[searchType] === 'function') {
+      return memory[searchType](...args);
+    }
+
+    memory[searchType] = debounce(func, wait, { ...options, leading: true }); // leading required for return promise
+    return memory[searchType](...args);
+  };
+};
 
 function createLgApi(
   state: { focusPath: string; projectId: string },
@@ -99,7 +113,7 @@ function createLgApi(
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
     updateLgTemplate,
-    debouncedUpdateLgTemplate: debounce(updateLgTemplate, 250),
+    debouncedUpdateLgTemplate: memoizedDebounce(updateLgTemplate, 250),
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
