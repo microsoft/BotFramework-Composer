@@ -6,8 +6,7 @@ import { QnAFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { useResolvers } from '../hooks/useResolver';
-
-import { dispatcherState } from './../recoilModel/DispatcherWrapper';
+import { dispatcherState } from '../recoilModel/atoms';
 
 function createQnaApi(state: { projectId }, dispatchers: any, qnaFileResolver: (id: string) => QnAFile | undefined) {
   const updateQnaContentHandler = async (id, content) => {

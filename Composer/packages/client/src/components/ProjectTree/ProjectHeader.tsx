@@ -14,9 +14,9 @@ import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSe
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 
-import { TreeLink, ProjectTreeOptions } from './ProjectTree';
 import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
+import { ProjectTreeOptions, TreeLink } from './types';
 
 const icons = {
   BOT: 'CubeShape',

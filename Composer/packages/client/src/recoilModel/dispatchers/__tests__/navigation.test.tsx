@@ -9,11 +9,16 @@ import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { focusPathState, designPageLocationState } from '../../atoms/botState';
 import { dialogsSelectorFamily } from '../../selectors';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../../recoilModel/dispatchers';
 import { convertPathToUrl, navigateTo, checkUrl, getUrlSearch } from '../../../utils/navigation';
 import { createSelectedPath, getSelected } from '../../../utils/dialogUtil';
-import { currentProjectIdState, botProjectIdsState, botProjectFileState, projectMetaDataState } from '../../atoms';
+import {
+  currentProjectIdState,
+  botProjectIdsState,
+  botProjectFileState,
+  projectMetaDataState,
+  dispatcherState,
+} from '../../atoms';
 
 jest.mock('../../../utils/navigation');
 jest.mock('../../../utils/dialogUtil');

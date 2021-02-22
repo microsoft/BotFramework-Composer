@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TreeLink } from './ProjectTree';
+import { TreeLink } from './types';
 
 export const doesLinkMatch = (linkInTree?: Partial<TreeLink>, selectedLink?: Partial<TreeLink>) => {
   if (linkInTree == null || selectedLink == null) return false;
