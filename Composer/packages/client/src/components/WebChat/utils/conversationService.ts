@@ -2,8 +2,11 @@
 // Licensed under the MIT License.
 
 import { v4 as uuidv4 } from 'uuid';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { createDirectLine } from 'botframework-webchat';
+import moment from 'moment';
+import { DirectLineLog } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 export type User = {
   id: string;
@@ -62,7 +65,11 @@ export type ChatData = {
   conversationId: string;
 };
 
-export default class ConversationService {
+export const getDateTimeFormatted = (): string => {
+  return moment().local().format('YYYY-MM-DD HH:mm:ss');
+};
+
+export class ConversationService {
   private directlineHostUrl: string;
   private composerApiClient: AxiosInstance;
   private restServerForWSPort = -1;
@@ -72,6 +79,7 @@ export default class ConversationService {
     this.composerApiClient = axios.create({
       baseURL: directlineHostUrl,
     });
+    this.setUpConversationServer();
   }
 
   private generateUniqueId = () => {
@@ -112,22 +120,18 @@ export default class ConversationService {
     conversationId: string,
     directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
   ) {
-    const resp = await this.composerApiClient.get(`conversations/ws/port`);
     const options = {
       conversationId,
       ...directLineOptions,
     };
-
     const secret = btoa(JSON.stringify(options));
-    this.restServerForWSPort = resp.data;
-
     const directLine = createDirectLine({
       token: 'emulatorToken',
       conversationId,
       secret,
       domain: `${this.directlineHostUrl}/v3/directline`,
       webSocket: true,
-      streamUrl: `ws://localhost:${this.restServerForWSPort}/ws/${conversationId}`,
+      streamUrl: `ws://localhost:${this.restServerForWSPort}/ws/conversation/${conversationId}`,
     });
     return directLine;
   }
@@ -170,25 +174,21 @@ export default class ConversationService {
       locale: activeLocale,
     });
 
-    const conversationId: string = resp.data?.conversationId;
-    const endpointId: string = resp.data?.endpointId;
+    const conversationId: string = resp.data.conversationId;
+    const endpointId: string = resp.data.endpointId;
 
-    if (conversationId && endpointId) {
-      const directline = await this.fetchDirectLineObject(conversationId, {
-        mode: webChatMode,
-        endpointId: endpointId,
-        userId: user.id,
-      });
-      return {
-        directline,
-        webChatMode: webChatMode,
-        projectId,
-        user,
-        conversationId,
-      };
-    }
-    // TODO handle error here
-    throw new Error('An error occured starting a new conversation');
+    const directline = await this.fetchDirectLineObject(conversationId, {
+      mode: webChatMode,
+      endpointId: endpointId,
+      userId: user.id,
+    });
+    return {
+      directline,
+      webChatMode: webChatMode,
+      projectId,
+      user,
+      conversationId,
+    };
   }
 
   public async restartConversation(oldChatData: ChatData, requireNewUserID: boolean, activeLocale: string) {
@@ -220,26 +220,30 @@ export default class ConversationService {
     };
   }
 
-  public connectToErrorsChannel() {
-    // TODO
-    // const ws = new WebSocket(`ws://localhost:${this.restServerForWSPort}/ws/createErrorChannel`);
-    // ws.onmessage = (event) => {
-    //   console.log('WebSocket message received:', event);
-    // };
-  }
-
   public sendInitialActivity(conversationId: string, members: [User]) {
-    const url = `${this.directlineHostUrl}/v3/directline/conversations/${conversationId}/activities`;
-    const activity = {
-      type: 'conversationUpdate',
-      membersAdded: members,
-      membersRemoved: [],
-    };
-    return axios.post(url, activity, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const url = `${this.directlineHostUrl}/v3/directline/conversations/${conversationId}/activities`;
+      const activity = {
+        type: 'conversationUpdate',
+        membersAdded: members,
+        membersRemoved: [],
+      };
+      return axios.post(url, activity, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (ex) {
+      const response: AxiosResponse = ex.response;
+      const err: DirectLineLog = {
+        timestamp: getDateTimeFormatted(),
+        route: 'conversations/ws/port',
+        status: response.status,
+        logType: 'Error',
+        message: formatMessage('An error occured sending conversation update activity to the bot'),
+      };
+      throw err;
+    }
   }
 
   public async getTranscriptsData(conversationId: string) {
@@ -252,11 +256,22 @@ export default class ConversationService {
         fileSavePath,
       });
     } catch (ex) {
-      // TODO: Transcript save failure
+      const response: AxiosResponse = ex.response;
+      const err: DirectLineLog = {
+        timestamp: getDateTimeFormatted(),
+        route: response.request?.path ?? '',
+        status: response.status,
+        logType: 'Error',
+        message: formatMessage('An error occured trying to save the transcript to disk'),
+      };
+      return err;
     }
   }
 
-  public async cleanupAll() {
-    await this.composerApiClient.put(`/conversations/cleanupAll`);
+  public async setUpConversationServer() {
+    const resp = await this.composerApiClient.get(`conversations/ws/port`);
+    const { port } = resp.data;
+    this.restServerForWSPort = port;
+    return port;
   }
 }
