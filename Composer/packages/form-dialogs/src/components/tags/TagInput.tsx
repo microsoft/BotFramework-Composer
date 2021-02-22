@@ -5,8 +5,8 @@ import styled from '@emotion/styled';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import * as React from 'react';
-import { Tag } from 'src/components/tags/Tag';
 
+import { Tag } from './Tag';
 import { csvToArray } from './utils';
 
 const Root = styled.div({

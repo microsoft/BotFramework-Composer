@@ -1,19 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-      "noImplicitAny": true,
-      "declarationMap": true,
-      "declaration": true,
-      "outDir": "./lib/",
-      "declarationDir": "./lib/",
-      "module": "esnext",
-      "target": "es6",
-      "importHelpers": true,
-      "strictNullChecks": false,
-      "baseUrl": ".",
-      "paths": {
-          "src/*": ["src/*"]
-      }
+    "target": "es6",
+    "module": "commonjs",
+    "downlevelIteration": true,
+    "outDir": "./lib/",
+    "strictNullChecks": false,
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
 }
