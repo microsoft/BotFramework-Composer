@@ -60,7 +60,7 @@ describe('WebSocketServer', () => {
 
   it('should throw an error if no upgrade can be claimed', async () => {
     mockUse.mockImplementationOnce((path, callFn) => {
-      expect(path).toBe('/ws/:conversationId');
+      expect(path).toBe('/ws/conversation/:conversationId');
       const req = {
         params: {
           conversationId: '123213-123',
@@ -93,7 +93,7 @@ describe('WebSocketServer', () => {
       '123213-123': {},
     };
     mockUse.mockImplementationOnce((path, callFn) => {
-      expect(path).toBe('/ws/:conversationId');
+      expect(path).toBe('/ws/conversation/:conversationId');
       const req = {
         params: {
           conversationId: '123213-123',
@@ -135,7 +135,7 @@ describe('WebSocketServer', () => {
     });
 
     mockUse.mockImplementationOnce((path, callFn) => {
-      expect(path).toBe('/ws/:conversationId');
+      expect(path).toBe('/ws/conversation/:conversationId');
       const req = {
         params: {
           conversationId,
