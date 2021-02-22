@@ -35,8 +35,6 @@ import {
   IColumn,
   IGroup,
   CheckboxVisibility,
-  Sticky,
-  StickyPositionType,
   TooltipHost,
   Icon,
   TextField,
@@ -46,16 +44,12 @@ import {
   PersonaSize,
   Selection,
   SelectionMode,
-  DetailsRow,
-  setRTL,
 } from 'office-ui-fabric-react';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
 import jwtDecode from 'jwt-decode';
 import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview, getLuisAuthoringRegions, CheckWebAppNameAvailability } from './api';
 import { AzureResourceTypes } from '../types';
-import { Item } from '@azure/cosmos';
-import { hostname } from 'os';
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
@@ -325,6 +319,8 @@ export const AzureProvisionDialog: React.FC = () => {
       }
       if(currentConfig?.hostname){
         setHostName(currentConfig?.hostname);
+      } else if(currentConfig?.name){
+        setHostName(currentConfig?.environment? `${currentConfig?.name}-${currentConfig?.environment}`: currentConfig?.name);
       }
     }
   },[currentConfig]);
@@ -392,21 +388,16 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentConfig, publishType, currentSubscription, token]);
 
-  const newResourceGroup = useMemo(
-    () => (e, newName) => {
-      setResourceGroup(newName);
-    },
-    [resourceGroups, checkNameAvailability]
-  );
+  const updateCurrentResourceGroup = useMemo(()=>(e,newGroup)=>{
+    setResourceGroup(newGroup);
+  },[]);
 
   const newHostName = useMemo(
     () => (e, newName) => {
       setHostName(newName);
-      if(!currentConfig?.hostname){
-        checkNameAvailability(newName);
-      }
+      checkNameAvailability(newName);
     },
-    [resourceGroups, checkNameAvailability]
+    [checkNameAvailability]
   );
 
   const updateCurrentLocation = useMemo(
@@ -604,23 +595,25 @@ export const AzureProvisionDialog: React.FC = () => {
             styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
           />
-          {currentConfig?.resourceGroup && <TextField
+          {/* {currentConfig?.resourceGroup &&  */}
+          <TextField
             required
-            disabled
+            disabled={currentConfig?.resourceGroup}
             defaultValue={currentConfig?.resourceGroup}
             label={formatMessage('Resource group name')}
             ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
             placeholder={'Name of your new resource group'}
-            onChange={newResourceGroup}
+            onChange={updateCurrentResourceGroup}
             styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
-          />}
+          />
           <TextField
             required
-            disabled={currentConfig?.hostname}
+            disabled={currentConfig?.hostname || currentConfig?.name}
             defaultValue={currentHostName}
             errorMessage={errorHostName}
-            label={currentConfig?.resourceGroup? formatMessage('Hostname') : formatMessage('Resource group name')}
+            // label={currentConfig?.resourceGroup? formatMessage('Hostname') : formatMessage('Resource group name')}
+            label={formatMessage('Hostname')}
             ariaLabel={formatMessage('A hostname which is used to make up the provisoned services names')}
             placeholder={'Name of your services'}
             onChange={newHostName}
