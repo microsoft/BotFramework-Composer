@@ -72,13 +72,45 @@ interface DefineConversationFormData {
   schemaUrl: string;
   location?: string;
 
-  profile?: any; // abs payload to create bot
+  profile?: PublishProfile; // abs payload to create bot
 
   templateDir?: string; // location of the imported template
   eTag?: string; // e tag used for content sync between composer and imported bot content
   urlSuffix?: string; // url to deep link to after creation
   alias?: string; // identifier that is used to track bots between imports
   preserveRoot?: boolean; // identifier that is used to determine ay project file renames upon creation
+}
+
+interface PublishProfile {
+  name?: string;
+  environment?: string;
+  hostname?: string;
+  runtimeIdentifier: string;
+  settings: {
+    applicationInsights?: {
+      InstrumentationKey?: string;
+    };
+    cosmosDb?: {
+      cosmosDBEndpoint: string;
+      authKey: string;
+      databaseId: string;
+      containerId: string;
+    };
+    blobStorage?: {
+      connectionString: string;
+      container: string;
+    };
+    luis?: {
+      authoringKey: string;
+      authoringEndpoint: string;
+      endpointKey: string;
+      endpoint: string;
+      region: string;
+    };
+    MicrosoftAppId: string;
+    MicrosoftAppPassword: string;
+  };
+  [key: string]: any;
 }
 
 interface DefineConversationProps
