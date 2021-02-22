@@ -548,6 +548,9 @@
   "collapse_34080b4d": {
     "message": "Collapse"
   },
+  "collapse_debug_panel_6f1c5869": {
+    "message": "Collapse debug panel"
+  },
   "collapse_navigation_17228b95": {
     "message": "Collapse Navigation"
   },
@@ -655,12 +658,6 @@
   },
   "conversation_invoked_invoke_activity_71efde42": {
     "message": "Conversation invoked (Invoke activity)"
-  },
-  "conversational_core_preview_template_is_available__ba9b43b8": {
-    "message": "Conversational Core preview template is available since you have that feature turned on."
-  },
-  "conversational_core_template_899e3082": {
-    "message": "Conversational Core Template"
   },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate activity"
@@ -826,6 +823,9 @@
   },
   "debug_break_870a75df": {
     "message": "Debug break"
+  },
+  "debug_panel_header_2ee4d70c": {
+    "message": "Debug Panel Header"
   },
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
@@ -1100,9 +1100,6 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
   },
-  "enable_the_new_conversational_core_template_built__df338773": {
-    "message": "Enable the new conversational core template built on the component model"
-  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -1307,8 +1304,11 @@
   "file_type_fd1ba7ee": {
     "message": "File Type"
   },
-  "filter_dialog_de3ce43f": {
-    "message": "Filter Dialog"
+  "filter_by_dialog_or_trigger_name_784ee5b0": {
+    "message": "Filter by dialog or trigger name"
+  },
+  "filter_by_file_name_fa3d33b5": {
+    "message": "Filter by file name"
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1579,6 +1579,9 @@
   },
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
+  },
+  "issues_4680a499": {
+    "message": "Issues"
   },
   "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
     "message": "it''s not a built-in function or a custom function."
@@ -2159,6 +2162,12 @@
   "open_start_bots_panel_f7f87200": {
     "message": "Open start bots panel"
   },
+  "open_web_chat_23601990": {
+    "message": "Open Web Chat"
+  },
+  "open_web_chat_7a24d4f8": {
+    "message": "Open web chat"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -2557,6 +2566,12 @@
   },
   "responses_12d6df1d": {
     "message": "Responses"
+  },
+  "restart_conversation_new_user_id_9c024543": {
+    "message": "Restart Conversation - new user ID"
+  },
+  "restart_conversation_same_user_id_a0188cca": {
+    "message": "Restart Conversation - same user ID"
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -3170,9 +3185,6 @@
   "type_could_not_be_loaded_65ebaf86": {
     "message": "{ type } could not be loaded"
   },
-  "type_dialog_name_14a50769": {
-    "message": "Type dialog name"
-  },
   "type_form_dialog_schema_name_b767985c": {
     "message": "Type form dialog schema name"
   },
@@ -3454,8 +3466,5 @@
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
-  },
-  "your_project_2a42631c": {
-    "message": "your project"
   }
 }
