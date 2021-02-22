@@ -6,19 +6,28 @@ import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
+import { exportSkillModalInfoState } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
 
 import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
+import { IDiagnosticInfo } from './types';
 
 const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
+  const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
 
-  const { projectId = '' } = props;
+  const handleItemClick = (item: IDiagnosticInfo) => {
+    navigateTo(item.getUrl());
+    if (item.location === 'manifest.json') {
+      setExportSkillModalInfo(item.projectId);
+    }
+  };
 
   const onRenderHeaderContent = () => {
     return <DiagnosticFilter onChange={setShowType} />;
@@ -35,7 +44,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
-      <DiagnosticsTable projectId={projectId} showType={showType} />
+      <DiagnosticsTable showType={showType} onItemClick={handleItemClick} />
     </Page>
   );
 };

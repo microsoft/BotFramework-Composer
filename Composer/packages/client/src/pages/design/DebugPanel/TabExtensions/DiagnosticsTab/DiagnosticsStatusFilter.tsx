@@ -24,7 +24,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
         flexDirection: 'column',
         backgroundColor: '#F7F7F7',
       }}
-      data-testid="diagnostics-tab-header--collapsed"
+      data-testid="diagnostics-sidebar"
     >
       <DefaultButton
         iconProps={{ iconName: 'StatusErrorFull' }}

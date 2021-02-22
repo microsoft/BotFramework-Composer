@@ -20,7 +20,7 @@ export const DiagnosticsContent = () => {
   return (
     <Split
       resetOnDoubleClick
-      initialPrimarySize="20%"
+      initialPrimarySize="160px"
       minPrimarySize="160px"
       minSecondarySize="800px"
       renderSplitter={renderThinSplitter}

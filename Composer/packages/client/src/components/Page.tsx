@@ -206,7 +206,13 @@ const Page: React.FC<IPageProps> = (props) => {
                 }}
               />
             ) : (
-              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+              <NavTree
+                navLinks={navLinks as INavTreeItem[]}
+                regionName={navRegionName}
+                onLinkClick={(item: INavTreeItem) => {
+                  setCurrentProjectId(item.id);
+                }}
+              />
             )}
             <div
               aria-label={mainRegionName}
