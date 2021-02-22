@@ -1,6 +1,6 @@
 {
   "name": "@bfc/form-dialogs",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "license": "MIT",
   "author": "Microsoft",
   "description": "Form Dialog components for Bot Framework Composer",
