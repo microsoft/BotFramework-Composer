@@ -10,12 +10,12 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import httpClient from '../../utils/httpUtil';
 import {
+  dispatcherState,
   formDialogErrorState,
   formDialogGenerationProgressingState,
   formDialogLibraryTemplatesState,
 } from '../atoms/appState';
 import { dialogState, formDialogSchemaIdsState, formDialogSchemaState } from '../atoms/botState';
-import { dispatcherState } from '../DispatcherWrapper';
 
 export const formDialogsDispatcher = () => {
   const createFormDialogSchema = useRecoilCallback(({ set }: CallbackInterface) => ({ id, projectId }) => {

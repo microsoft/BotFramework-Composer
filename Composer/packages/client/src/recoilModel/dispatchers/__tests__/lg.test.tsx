@@ -8,8 +8,7 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { currentProjectIdState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '..';
 import { lgFilesSelectorFamily } from '../../selectors';
 

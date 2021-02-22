@@ -10,7 +10,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
 import { repairSkillDialog } from '../constants';
 
-import { TreeLink } from './ProjectTree/ProjectTree';
+import { TreeLink } from './ProjectTree/types';
 
 export type RepairSkillModalFormData = 'repairSkill' | 'removeSkill';
 
