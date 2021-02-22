@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import { AttachmentData } from 'botframework-schema';
+import formatMessage from 'format-message';
 import { StatusCodes } from 'http-status-codes';
+import { DirectLineError } from '@botframework-composer/types';
 
-import { BotErrorCodes, createAPIException } from '../../utils/apiErrorException';
+import { BotErrorCodes } from '../../utils/apiErrorException';
 import { generateUniqueId } from '../../utils/helpers';
 
 export interface AttachmentWithId extends AttachmentData {
@@ -20,19 +22,21 @@ export class Attachments {
 
   public uploadAttachment(attachmentData: AttachmentData): string {
     if (!attachmentData.type) {
-      throw createAPIException(
-        StatusCodes.BAD_REQUEST,
-        BotErrorCodes.MissingProperty,
-        'You must specify type property for the attachment'
-      );
+      const err: DirectLineError = {
+        status: StatusCodes.BAD_REQUEST,
+        message: formatMessage(`You must specify type property for the attachment'. ${BotErrorCodes.MissingProperty}`),
+      };
+      throw err;
     }
 
     if (!attachmentData.originalBase64) {
-      throw createAPIException(
-        StatusCodes.BAD_REQUEST,
-        BotErrorCodes.MissingProperty,
-        'You must specify originalBase64 byte[] for the attachment'
-      );
+      const err: DirectLineError = {
+        status: StatusCodes.BAD_REQUEST,
+        message: formatMessage(
+          `You must specify originalBase64 byte[] for the attachment'. ${BotErrorCodes.MissingProperty}`
+        ),
+      };
+      throw err;
     }
 
     const attachment: AttachmentWithId = { ...attachmentData, id: generateUniqueId() };

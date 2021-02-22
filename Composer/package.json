@@ -19,7 +19,7 @@
     "immer": "^8.0.1"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "workspaces": [
     "packages/adaptive-flow",

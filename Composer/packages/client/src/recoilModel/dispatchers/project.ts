@@ -4,11 +4,11 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { RootBotManagedProperties } from '@bfc/shared';
+import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, QnABotTemplateId } from '../../constants';
+import { BotStatus } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -26,13 +26,13 @@ import {
   botStatusState,
   createQnAOnState,
   currentProjectIdState,
+  dispatcherState,
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
   settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
-import { dispatcherState } from '../DispatcherWrapper';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';

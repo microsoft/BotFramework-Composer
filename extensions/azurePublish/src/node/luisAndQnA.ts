@@ -43,11 +43,13 @@ function getAccount(accounts: any, filter: string) {
  */
 async function getFiles(dir: string): Promise<string[]> {
   const files = [];
+
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   const dirents = await fs.readdir(dir, { withFileTypes: true });
 
   for (const dirent of dirents) {
     const res = path.resolve(dir, dirent.name);
+
     if (dirent.isDirectory()) {
       files.push(...(await getFiles(res)));
     } else {
@@ -140,7 +142,7 @@ export async function publishLuisToPrediction(
     }
   }
 
-  // Extract the accoutn object that matches the expected resource name.
+  // Extract the account object that matches the expected resource name.
   // This is the name that would appear in the azure portal associated with the luis endpoint key.
   const account = getAccount(accountList, luisResource ? luisResource : `${name}-${environment}-luis`);
 
@@ -170,19 +172,23 @@ export async function publishLuisToPrediction(
         if (retryCount < 1) {
           logger({
             status: AzurePublishErrors.LUIS_PUBLISH_ERROR,
-            message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+            message: JSON.stringify(err, Object.getOwnPropertyNames(err), 2),
           });
           retryCount++;
         } else {
           // handle the token invalid
-          const error = JSON.parse(err.error);
-          if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
-            throw new Error(
-              `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
-            );
-          } else {
-            throw err;
+          // handle the token invalid
+          if (typeof err.error === 'string') {
+            const error = JSON.parse(err.error);
+            if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+              throw new Error(
+                `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+              );
+            }
           }
+          throw Error(
+            'Failed to bind luis prediction resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.'
+          );
         }
       }
     }
