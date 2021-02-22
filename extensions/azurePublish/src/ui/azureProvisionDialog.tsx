@@ -433,14 +433,13 @@ export const AzureProvisionDialog: React.FC = () => {
       if(config){
         let str = JSON.stringify(config);
         str = str.replace(/<.*>/g, '');
-        console.log(str);
         const newConfig = JSON.parse(str);
         return newConfig;
       } else {
         return undefined;
       }
     }catch(e){
-      console.log(e);
+      console.error(e);
     }
 
   },[]);
@@ -448,7 +447,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const getExistResources = ()=>{
     const result = [];
     const config = removePlaceholder(currentConfig);
-    console.log(config);
     if(config){
       // If name or hostname is configured, it means the webapp is already created.
       if(config.hostname || config.name){
@@ -484,7 +482,6 @@ export const AzureProvisionDialog: React.FC = () => {
     () => (hostname) => {
       // get resources already have
       const alreadyHave = getExistResources();
-      console.log(alreadyHave);
 
       const names = getPreview(hostname);
       const result = [];
@@ -499,7 +496,6 @@ export const AzureProvisionDialog: React.FC = () => {
           icon: previewObject ? previewObject.icon : undefined,
         });
       }
-      console.log(result);
 
       // set review list
       const groups: IGroup[] = [];
@@ -532,7 +528,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSubmit = useMemo(
     () => async (options) => {
       // call back to the main Composer API to begin this process...
-      console.log(options);
       startProvision(options);
       closeDialog();
     },
@@ -753,7 +748,6 @@ export const AzureProvisionDialog: React.FC = () => {
                   if(item.key.includes('luis')){
                     region = currentLuisLocation;
                   }
-                  console.log(region);
                   return {...item, region: region, resourceGroup: currentConfig?.resourceGroup || currentResourceGroup};
                 });
                 setReviewListItems(selectedResources);
