@@ -111,6 +111,7 @@ export type LgContextApi = {
 };
 
 export type ProjectContextApi = {
+  getMemoryVariables: (projectId: string, options?: { signal: AbortSignal }) => Promise<string[]>;
   getDialog: (dialogId: string) => any;
   saveDialog: (dialogId: string, newDialogData: any) => any;
   reloadProject: () => void;

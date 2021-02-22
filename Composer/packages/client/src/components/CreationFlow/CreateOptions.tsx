@@ -20,18 +20,15 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { MessageBar } from 'office-ui-fabric-react/lib/components/MessageBar';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
-import { featureFlagsState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
@@ -129,7 +126,6 @@ export function CreateOptions(props: CreateOptionsProps) {
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const creationFlowType = useRecoilValue(creationFlowTypeState);
 
-  const featureFlags = useRecoilValue(featureFlagsState);
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
@@ -273,20 +269,11 @@ export function CreateOptions(props: CreateOptionsProps) {
   const choiceGroupTitle = creationFlowType === 'Skill' ? '' : formatMessage('Choose how to create your bot');
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
-  // TODO: remove banner UI when REMOTE_TEMPLATE_CREATION_EXPERIENCE is removed
   return (
     <Fragment>
       <DialogWrapper isOpen {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <ChoiceGroup label={choiceGroupTitle} options={choiceOptions} selectedKey={option} onChange={handleChange} />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
-        {featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled && (
-          <MessageBar className={bannerClass}>
-            {formatMessage('Conversational Core preview template is available since you have that feature turned on.')}
-            <Link href="https://aka.ms/AAabzf9" target="_blank">
-              {formatMessage('Learn More.')}
-            </Link>
-          </MessageBar>
-        )}
         <div css={detailListContainer} data-is-scrollable="true">
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList

@@ -8,8 +8,8 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "node --max_old_space_size=4096 --max-http-header-size=16000 scripts/start.js",
-    "build": "node --max_old_space_size=4096 scripts/build.js",
+    "start": "node --max_old_space_size=6114 --max-http-header-size=16000 scripts/start.js",
+    "build": "node --max_old_space_size=6114 scripts/build.js",
     "clean": "rimraf build",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
@@ -67,7 +67,9 @@
     "recoil": "^0.0.13",
     "styled-components": "^4.1.3",
     "uuid": "^8.3.0",
-    "webpack-bundle-analyzer": "^3.8.0"
+    "webpack-bundle-analyzer": "^3.8.0",
+    "botframework-webchat": "4.11.0",
+    "botframework-webchat-core": "4.11.0"
   },
   "browserslist": [
     ">0.2%",
