@@ -56,6 +56,7 @@ const detailList = css`
 `;
 
 const tableCell = css`
+  margin-top: 4px;
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
@@ -86,26 +87,24 @@ const columns: IColumn[] = [
       return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
     },
   },
-
   {
-    key: 'DiagnosticType',
-    name: formatMessage('Type'),
+    key: 'DiagnosticResourceId',
+    name: formatMessage('Bot'),
     className: diagnostic.columnCell,
-    fieldName: 'type',
+    fieldName: 'resourceId',
     minWidth: 70,
     maxWidth: 90,
-    isRowHeader: true,
     isResizable: true,
     data: 'string',
     onRender: (item: IDiagnosticInfo) => {
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`This is a {severity} diagnostic`, { severity: item.severity })}
+            aria-label={formatMessage(`Bot is {resourceId}`, { resourceId: item.resourceId })}
             css={content}
             tabIndex={-1}
           >
-            {item.severity}
+            {item.resourceId}
           </div>
         </div>
       );
@@ -138,7 +137,7 @@ const columns: IColumn[] = [
   },
   {
     key: 'DiagnosticDetail',
-    name: formatMessage('Message'),
+    name: formatMessage('Description'),
     className: diagnostic.columnCell,
     fieldName: 'message',
     minWidth: 70,
@@ -151,7 +150,7 @@ const columns: IColumn[] = [
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`Diagnostic Message {msg}`, { msg: item.message })}
+            aria-label={formatMessage(`Diagnostic Description {msg}`, { msg: item.message })}
             css={content}
             tabIndex={-1}
           >
