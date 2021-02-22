@@ -12,29 +12,28 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onUpdateKey: (key: string) => Promise<void>;
+  onUpdateKey: (key: string, region: string, isDefault: boolean) => Promise<void>;
 };
 
 const ABSChannelSpeechModal = (props: Props) => {
   const { isOpen, onClose, onUpdateKey } = props;
 
   const [value, setValue] = useState<string | undefined>();
+  const [region, setRegion] = useState<string | undefined>();
 
   return (
     <DialogWrapper
       data-testid={'absChannelsSpeechModal'}
       dialogType={DialogTypes.Customer}
       isOpen={isOpen}
-      title={formatMessage('Connect to Direct Line Speech')}
+      title={formatMessage('Connect to Speech Service')}
       onDismiss={onClose}
     >
       <div data-testid="absChannelsSpeechModal">
         <p>
-          {formatMessage(
-            'In order to connect your bot to the Direct Line Speech service, you must provide a Cognitive Services key. '
-          )}
+          {formatMessage('Provide a key in order to connect your bot to the Azure Speech service. ')}
           <Link
-            href="https://docs.microsoft.com/en-us/azure/bot-service/bot-service-channel-connect-directlinespeech?view=azure-bot-service-4.0#prerequisites"
+            href="https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account?tabs=multiservice%2Cwindows"
             target="_new"
           >
             {formatMessage('Learn more')}
@@ -49,19 +48,32 @@ const ABSChannelSpeechModal = (props: Props) => {
           value={value}
           onChange={(e, newvalue) => setValue(newvalue)}
         />
+        <TextField
+          aria-label={formatMessage('Cognitive Service Region')}
+          data-testid={'absChannelsSpeechModalRegion'}
+          id={'speechRegion'}
+          label={formatMessage('Cognitive Service Region')}
+          placeholder={formatMessage('Enter cognitive service region')}
+          value={region}
+          onChange={(e, newregion) => setRegion(newregion)}
+        />
+        <Link href="https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesAllInOne" target="_new">
+          {formatMessage('Get a key')}
+        </Link>
+
         <DialogFooter>
-          <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
           <PrimaryButton
-            disabled={!value}
+            disabled={!value || !region}
             onClick={async () => {
-              if (value) {
-                onUpdateKey(value);
+              if (value && region) {
+                onUpdateKey(value, region, true);
                 onClose();
               }
             }}
           >
             {formatMessage('Enable Speech')}
           </PrimaryButton>
+          <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
         </DialogFooter>
       </div>
     </DialogWrapper>
