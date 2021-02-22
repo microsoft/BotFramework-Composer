@@ -3,31 +3,39 @@
 
 import { StatusCodes } from 'http-status-codes';
 
-import { BotErrorCodes, createAPIException } from '../../utils/apiErrorException';
 import { createGetAttachmentHandler } from '../attachmentHandler';
 
-const mockSendErrorResponse = jest.fn();
+let res;
 
-jest.mock('../../utils/apiErrorException', () => {
-  return {
-    sendErrorResponse: (...args) => mockSendErrorResponse(...args),
-    BotErrorCodes: {
-      ServiceError: 'ServiceError',
-      BadArgument: 'BadArgument',
-      BadSyntax: 'BadSyntax',
-      MissingProperty: 'MissingProperty',
-      MessageSizeTooBig: 'MessageSizeTooBig',
-    },
-    createAPIException: jest.fn(),
-  };
+jest.mock('moment', () => {
+  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000');
 });
 
+const mockEnd = jest.fn();
+const mockJsonResponse = jest.fn(() => ({
+  end: mockEnd,
+}));
+
+const mockSend = jest.fn(() => ({
+  end: mockEnd,
+}));
+
+const mockStatus = jest.fn(() => ({
+  json: mockJsonResponse,
+  send: mockSend,
+}));
+
 describe('getAttachment handler', () => {
-  let state;
+  const state: any = {};
 
   beforeEach(() => {
-    state = {};
-    mockSendErrorResponse.mockClear();
+    mockEnd.mockClear();
+    mockJsonResponse.mockClear();
+    mockStatus.mockClear();
+    res = {
+      send: mockSend,
+      status: mockStatus,
+    };
   });
 
   it('should return the attachment content uploaded via Web Chat', () => {
@@ -46,6 +54,7 @@ describe('getAttachment handler', () => {
       end: jest.fn(),
       send: jest.fn(),
       type: jest.fn(),
+      json: mockJsonResponse,
     };
 
     getAttachmentHandler(req, res);
@@ -61,14 +70,17 @@ describe('getAttachment handler', () => {
         type: 'text/plain',
       })),
     };
+
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
       params: { viewId: 'original' },
     };
+
     const res: any = {
       end: jest.fn(),
       type: jest.fn(),
       send: jest.fn(),
+      status: jest.fn(),
     };
 
     getAttachmentHandler(req, res);
@@ -82,21 +94,21 @@ describe('getAttachment handler', () => {
     };
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
       params: { viewId: 'original' },
-    };
-    const res: any = {
-      end: jest.fn(),
-      send: jest.fn(),
-      type: jest.fn(),
     };
 
     getAttachmentHandler(req, res);
 
-    expect(mockSendErrorResponse).toHaveBeenCalledWith(
-      req,
-      res,
-      createAPIException(StatusCodes.NOT_FOUND, BotErrorCodes.BadArgument, 'There is no original view')
-    );
+    expect(mockJsonResponse).toHaveBeenCalledWith({
+      errorDetails: 'There is no original view',
+      logType: 'Error',
+      message: 'Unable to fetch attachment data. BadArgument',
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
+      status: 404,
+      timestamp: '2021-02-19 00:00:00',
+    });
   });
 
   it('should send an error message if the thumbnail view is requested, but missing', () => {
@@ -106,18 +118,20 @@ describe('getAttachment handler', () => {
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
       params: { viewId: 'thumbnail' },
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
     };
-    const res: any = {
-      end: jest.fn(),
-      send: jest.fn(),
-    };
+
     getAttachmentHandler(req, res);
 
-    expect(mockSendErrorResponse).toHaveBeenCalledWith(
-      req,
-      res,
-      createAPIException(StatusCodes.NOT_FOUND, BotErrorCodes.BadArgument, 'There is no thumbnail view')
-    );
+    expect(mockJsonResponse).toHaveBeenCalledWith({
+      errorDetails: 'There is no thumbnail view',
+      logType: 'Error',
+      message: 'Unable to fetch attachment data. BadArgument',
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
+      status: 404,
+      timestamp: '2021-02-19 00:00:00',
+    });
   });
 
   it('should send an error message the attachment can not be found', () => {
@@ -127,45 +141,40 @@ describe('getAttachment handler', () => {
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
       params: { attachmentId: 'attach1' },
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
     };
-    const res: any = {
-      end: jest.fn(),
-      send: jest.fn(),
-    };
+
     getAttachmentHandler(req, res);
 
-    expect(mockSendErrorResponse).toHaveBeenCalledWith(
-      req,
-      res,
-      createAPIException(
-        StatusCodes.NOT_FOUND,
-        BotErrorCodes.BadArgument,
-        `attachment[${req.params.attachmentId}] not found`
-      )
-    );
+    expect(mockJsonResponse).toHaveBeenCalledWith({
+      logType: 'Error',
+      message: 'attachment[attach1] not found. BadArgument',
+      status: 404,
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
+      timestamp: '2021-02-19 00:00:00',
+    });
   });
 
   it('should send an error message if an error is thrown', () => {
     state.attachments = {
-      getAttachmentData: jest.fn(() => {
-        throw new Error('Something went wrong.');
-      }),
+      getAttachmentData: jest.fn(() => undefined),
     };
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
       params: {},
-    };
-    const res: any = {
-      end: jest.fn(),
-      send: jest.fn(),
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
     };
 
     getAttachmentHandler(req, res);
 
-    expect(mockSendErrorResponse).toHaveBeenCalledWith(
-      req,
-      res,
-      createAPIException(StatusCodes.INTERNAL_SERVER_ERROR, BotErrorCodes.ServiceError, 'Something went wrong.')
-    );
+    expect(mockJsonResponse).toHaveBeenCalledWith({
+      logType: 'Error',
+      message: 'attachment[undefined] not found. BadArgument',
+      status: 404,
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
+      timestamp: '2021-02-19 00:00:00',
+    });
   });
 });
