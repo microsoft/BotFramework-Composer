@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Position } from 'vscode-languageserver';
+import { Position, Range } from 'vscode-languageserver';
 import { TextDocument } from 'vscode-languageserver-textdocument';
+import { DiagnosticSeverity } from 'vscode-languageserver-types';
+import { Diagnostic as lgDiagnostic, DiagnosticSeverity as lgDiagnosticSeverity } from 'botbuilder-lg';
 
 import {
   getRangeAtPosition,
@@ -11,6 +13,9 @@ import {
   getSuggestionEntities,
   suggestionAllEntityTypes,
   getLineByIndex,
+  generateDiagnostic,
+  convertDiagnostics,
+  convertSeverity,
 } from '../../lib/utils';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -58,6 +63,11 @@ const luisObj = {
 
 const luisText = '@ ml name\r\n @ prebuilt number age\r\n @regex zipcode';
 
+const lgDiagnostics = [
+  new lgDiagnostic(Range.create(0, 0, 0, 10), 'No template name', DiagnosticSeverity.Error),
+  new lgDiagnostic(Range.create(1, 0, 1, 10), 'No template body', DiagnosticSeverity.Warning),
+];
+
 describe('LG LSP Server Function Unit Tests', () => {
   it('Test getRangeAtPosition function', () => {
     const result = getRangeAtPosition(textDoc, Position.create(0, 3));
@@ -84,5 +94,22 @@ describe('LG LSP Server Function Unit Tests', () => {
   it('Test getLineByIndex function', () => {
     const result = getLineByIndex(textDoc2, 2);
     assert.deepStrictEqual(result, 'line2');
+  });
+
+  it('Test generateDiagnostic function', () => {
+    const result = generateDiagnostic('No Template Found', DiagnosticSeverity.Error, textDoc2);
+    assert.deepStrictEqual(result.message, 'No Template Found');
+    assert.deepStrictEqual(result.severity, DiagnosticSeverity.Error);
+  });
+
+  it('Test convertDiagnostics function', () => {
+    const result = convertDiagnostics(lgDiagnostics, textDoc2);
+    assert.deepStrictEqual(result.length, 2);
+    assert.deepStrictEqual(result[1].message, 'No template body');
+  });
+
+  it('Test convertSeverity function', () => {
+    const result = convertSeverity(lgDiagnosticSeverity.Error);
+    assert.deepStrictEqual(result, DiagnosticSeverity.Error);
   });
 });
