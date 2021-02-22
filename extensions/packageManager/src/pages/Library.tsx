@@ -28,12 +28,12 @@ import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/ex
 import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
-import { ContentHeaderStyle, HeaderText } from './styles';
-import { ImportDialog } from './ImportDialog';
-import { LibraryRef, LibraryList, LetterIcon } from './LibraryList';
-import { WorkingModal } from './WorkingModal';
-import { FeedModal } from './FeedModal';
-import { ProjectList } from './projectList/ProjectList';
+import { ContentHeaderStyle, HeaderText } from '../components/styles';
+import { ImportDialog } from '../components/ImportDialog';
+import { LibraryRef, LibraryList, LetterIcon } from '../components/LibraryList';
+import { WorkingModal } from '../components/WorkingModal';
+import { FeedModal } from '../components/FeedModal';
+import { ProjectList } from '../components/projectList/ProjectList';
 
 const docsUrl = `https://aka.ms/composer-package-manager-readme`;
 
