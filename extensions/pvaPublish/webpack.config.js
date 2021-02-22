@@ -38,6 +38,9 @@ function getWebpackConfigs() {
         extensions: ['.js', '.ts', '.tsx'],
       },
       plugins: [],
+      node: {
+        fs: 'empty',
+      },
     },
     {
       entry: './src/node/index.ts',
