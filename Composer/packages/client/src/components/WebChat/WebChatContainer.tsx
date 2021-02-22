@@ -5,7 +5,7 @@ import ReactWebChat, { createStyleSet } from 'botframework-webchat';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import ConversationService, { ActivityType, ChatData, User } from './utils/conversationService';
+import { ConversationService, ActivityType, ChatData } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 
 type WebChatContainerProps = {
@@ -14,7 +14,7 @@ type WebChatContainerProps = {
   conversationService: ConversationService;
   botUrl: string;
   chatData: ChatData;
-  sendInitialActivity: (conversationId: string, user: User) => void;
+  isDisabled: boolean;
 };
 
 const createCardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
@@ -78,42 +78,38 @@ const areEqual = (prevProps: WebChatContainerProps, nextProps: WebChatContainerP
   prevProps.currentConversation === nextProps.currentConversation;
 
 export const WebChatContainer = React.memo((props: WebChatContainerProps) => {
-  const { currentConversation, botUrl, activeLocale, chatData, sendInitialActivity } = props;
-  if (currentConversation) {
-    sendInitialActivity(currentConversation, chatData.user);
+  const { activeLocale, chatData, isDisabled } = props;
 
-    const webchatStore = createWebChatStore({});
-    const styleSet = createStyleSet({ ...webChatStyleOptions });
-    styleSet.fileContent = {
-      ...styleSet.fileContent,
-      background: `${NeutralColors.white}`,
-      '& .webchat__fileContent__fileName': {
-        color: `${CommunicationColors.primary}`,
-      },
-      '& .webchat__fileContent__size': {
-        color: `${NeutralColors.white}`,
-      },
-      '& .webchat__fileContent__downloadIcon': {
-        fill: `${NeutralColors.white}`,
-      },
-      '& .webchat__fileContent__badge': {
-        padding: '4px',
-      },
-    };
+  const webchatStore = createWebChatStore({});
+  const styleSet = createStyleSet({ ...webChatStyleOptions });
+  styleSet.fileContent = {
+    ...styleSet.fileContent,
+    background: `${NeutralColors.white}`,
+    '& .webchat__fileContent__fileName': {
+      color: `${CommunicationColors.primary}`,
+    },
+    '& .webchat__fileContent__size': {
+      color: `${NeutralColors.white}`,
+    },
+    '& .webchat__fileContent__downloadIcon': {
+      fill: `${NeutralColors.white}`,
+    },
+    '& .webchat__fileContent__badge': {
+      padding: '4px',
+    },
+  };
 
-    return (
-      <ReactWebChat
-        key={chatData.conversationId}
-        activityMiddleware={createActivityMiddleware}
-        cardActionMiddleware={createCardActionMiddleware}
-        directLine={chatData.directline}
-        disabled={!botUrl}
-        locale={activeLocale}
-        store={webchatStore}
-        styleSet={styleSet}
-        userID={chatData.user.id}
-      />
-    );
-  }
-  return null;
+  return (
+    <ReactWebChat
+      key={chatData?.conversationId}
+      activityMiddleware={createActivityMiddleware}
+      cardActionMiddleware={createCardActionMiddleware}
+      directLine={chatData?.directline}
+      disabled={isDisabled}
+      locale={activeLocale}
+      store={webchatStore}
+      styleSet={styleSet}
+      userID={chatData?.user.id}
+    />
+  );
 }, areEqual);

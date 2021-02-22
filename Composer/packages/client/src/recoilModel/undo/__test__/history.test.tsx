@@ -16,12 +16,12 @@ import {
   designPageLocationState,
   canUndoState,
   canRedoState,
+  dispatcherState,
 } from '../../atoms';
 import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
 import { undoStatusSelectorFamily } from '../../selectors/undo';
-import { dispatcherState } from '../../DispatcherWrapper';
 
 import { mockDialog } from './mockDialog';
 
