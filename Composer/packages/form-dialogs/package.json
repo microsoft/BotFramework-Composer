@@ -20,7 +20,8 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "react-beautiful-dnd": "^13.0.0"
+    "react-beautiful-dnd": "^13.0.0",
+    "@bfc/ui-shared": "*"
   },
   "peerDependencies": {
     "recoil": "^0.0.13",
@@ -32,8 +33,7 @@
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@uifabric/fluent-theme": "^7.1.107",
-    "@uifabric/react-hooks": "^7.4.12",
-    "@bfc/ui-shared": "*"
+    "@uifabric/react-hooks": "^7.4.12"
   },
   "devDependencies": {
     "@types/react": "^16.8.18",
