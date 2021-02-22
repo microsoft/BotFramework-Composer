@@ -127,6 +127,11 @@ export class BotProjectService {
     return [...defaultProperties, ...userDefined];
   }
 
+  public static staticEntityResolver(projectId: string): string[] | undefined {
+    const contents = BotProjectService.getIndexedProjectById(projectId)?.luFiles.map((file) => file.content);
+    return flatten(contents);
+  }
+
   public static getCurrentBotProject(): BotProject | undefined {
     throw new Error('getCurrentBotProject is DEPRECATED');
   }

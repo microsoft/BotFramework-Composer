@@ -1,10 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import { Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
+import { parser } from '@microsoft/bf-lu/lib/parser';
 import { offsetRange } from '@bfc/indexers';
+
+const { parseFile } = parser;
 
 // state should map to tokenizer state
 export enum LGCursorState {
@@ -45,9 +49,28 @@ export function getRangeAtPosition(document: TextDocument, position: Position): 
   const text = document.getText();
   const line = position.line;
   const pos = position.character;
-  const lineText = text.split('\n')[line];
+  const lineText = text.split(/\r?\n/g)[line];
   let match: RegExpMatchArray | null;
   const wordDefinition = /[a-zA-Z0-9_/.-]+/g;
+  while ((match = wordDefinition.exec(lineText))) {
+    const matchIndex = match.index || 0;
+    if (matchIndex > pos) {
+      return undefined;
+    } else if (wordDefinition.lastIndex >= pos) {
+      return Range.create(line, matchIndex, line, wordDefinition.lastIndex);
+    }
+  }
+
+  return undefined;
+}
+
+export function getEntityRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
+  const text = document.getText();
+  const line = position.line;
+  const pos = position.character;
+  const lineText = text.split(/\r?\n/g)[line];
+  let match: RegExpMatchArray | null;
+  const wordDefinition = /[a-zA-Z0-9@]+/g;
   while ((match = wordDefinition.exec(lineText))) {
     const matchIndex = match.index || 0;
     if (matchIndex > pos) {
@@ -150,6 +173,50 @@ export const cardPropDict = {
   Activity: ['Text', 'Speak', 'Attachments', 'SuggestedActions', 'InputHint', 'AttachmentLayout'],
   Others: ['type', 'name', 'value'],
 };
+
+export async function extractLUISContent(text: string): Promise<any> {
+  let parsedContent: any;
+  const log = false;
+  const locale = 'en-us';
+  try {
+    parsedContent = await parseFile(text, log, locale);
+  } catch (e) {
+    // nothing to do in catch block
+  }
+
+  if (parsedContent !== undefined) {
+    return Promise.resolve(parsedContent.LUISJsonStructure);
+  } else {
+    return undefined;
+  }
+}
+
+export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: string[]): string[] {
+  const suggestionEntityList: string[] = [];
+  if (luisJson !== undefined) {
+    suggestionEntityTypes.forEach((entityType) => {
+      if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
+        luisJson[entityType].forEach((entity) => {
+          if (entity?.name) {
+            suggestionEntityList.push(entity.name);
+          }
+        });
+      }
+    });
+  }
+
+  return suggestionEntityList;
+}
+
+export const suggestionAllEntityTypes = [
+  'entities',
+  'regex_entities',
+  'patternAnyEntities',
+  'preBuiltEntities',
+  'closedLists',
+  'phraseLists',
+  'composites',
+];
 
 export function getLineByIndex(document: TextDocument, line: number) {
   const lineCount = document.lineCount;

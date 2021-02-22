@@ -16,10 +16,10 @@ import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { QnABotTemplateId } from '@bfc/shared';
 
 import {
   DialogCreationCopy,
-  QnABotTemplateId,
   nameRegexV2,
   invalidNameCharRegex,
   mockLanguageOptions,

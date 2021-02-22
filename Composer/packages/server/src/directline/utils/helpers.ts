@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { v4 as uuid } from 'uuid';
+import { DirectLineLogType } from '@bfc/shared';
 
-import { LogItem, LogItemType, LoggerLevel } from '../store/types';
+import { LogItem, LogItemType } from '../store/types';
 
 export function getBotDataKey(channelId: string, conversationId: string, userId: string): string {
   return `$${channelId || '*'}!${conversationId || '*'}!${userId || '*'}`;
@@ -13,7 +14,7 @@ export const generateUniqueId = (): string => {
   return uuid().toString();
 };
 
-export const textItem = (level: LoggerLevel, text: string): LogItem => {
+export const textItem = (level: DirectLineLogType, text: string): LogItem => {
   return {
     type: LogItemType.Text,
     payload: {
