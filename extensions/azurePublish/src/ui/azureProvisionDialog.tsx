@@ -241,11 +241,7 @@ const reviewCols: IColumn[] = [
     isRowHeader: true,
     data: 'string',
     onRender: (item: ResourcesItem & {name,icon}) => {
-      // if(item.key.includes('luis')){
-      //   return <div>{item.}</div>
-      // }else{
-        return <div>{item.region.displayName}</div>;
-      // }
+      return <div>{item.region?.displayName}</div>;
     },
     isPadded: true,
   },
@@ -444,8 +440,8 @@ export const AzureProvisionDialog: React.FC = () => {
         const region = data.filter(item=> luRegions.includes(item.name));
         console.log(region);
         setLuisLocations(region);
+        setCurrentLuisLocation(region[0]);
       });
-
 
       // if(currentHostName){
       //   // check its hostname availability
@@ -778,6 +774,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   if(item.key.includes('luis')){
                     region = currentLuisLocation;
                   }
+                  console.log(region);
                   return {...item, region: region, resourceGroup:currentConfig?.resourceGroup || currentHostName};
                 });
                 setReviewListItems(selectedResources);
