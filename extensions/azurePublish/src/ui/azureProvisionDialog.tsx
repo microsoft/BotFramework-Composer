@@ -79,17 +79,6 @@ const DialogTitle = {
   },
 };
 
-// function onRenderDetailsHeader(props, defaultRender) {
-//   return (
-//     <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
-//       {defaultRender({
-//         ...props,
-//         onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
-//       })}
-//     </Sticky>
-//   );
-// }
-
 function decodeToken(token: string) {
   try {
     return jwtDecode<any>(token);
@@ -243,7 +232,6 @@ const reviewCols: IColumn[] = [
 
 export const AzureProvisionDialog: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
 
@@ -406,9 +394,15 @@ export const AzureProvisionDialog: React.FC = () => {
 
       if (location) {
         setLocation(location);
+        const region = luisLocations.find(item=> item.name === location.name)
+        if(region){
+          setCurrentLuisLocation(region);
+        } else {
+          setCurrentLuisLocation(luisLocations[0]);
+        }
       }
     },
-    [deployLocations]
+    [deployLocations, luisLocations]
   );
 
   const updateLuisLocation = useMemo(
@@ -424,20 +418,13 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     if (currentSubscription) {
       // get resource group under subscription
-      getResourceGroups(token, currentSubscription).then(setResourceGroups);
+      // getResourceGroups(token, currentSubscription).then(setResourceGroups);
       getDeployLocations(token, currentSubscription).then((data:DeployLocation[])=> {
         setDeployLocations(data);
         const luRegions = getLuisAuthoringRegions();
         const region = data.filter(item=> luRegions.includes(item.name));
-        console.log(region);
         setLuisLocations(region);
-        setCurrentLuisLocation(region[0]);
       });
-
-      // if(currentHostName){
-      //   // check its hostname availability
-      //   checkNameAvailability(currentHostName);
-      // }
     }
   }, [currentSubscription]);
 
@@ -595,11 +582,10 @@ export const AzureProvisionDialog: React.FC = () => {
             styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
           />
-          {/* {currentConfig?.resourceGroup &&  */}
           <TextField
             required
             disabled={currentConfig?.resourceGroup}
-            defaultValue={currentConfig?.resourceGroup}
+            defaultValue={currentResourceGroup}
             label={formatMessage('Resource group name')}
             ariaLabel={formatMessage('A resource group is a collection of resources that share the same lifecycle, permissions, and policies')}
             placeholder={'Name of your new resource group'}
@@ -612,7 +598,6 @@ export const AzureProvisionDialog: React.FC = () => {
             disabled={currentConfig?.hostname || currentConfig?.name}
             defaultValue={currentHostName}
             errorMessage={errorHostName}
-            // label={currentConfig?.resourceGroup? formatMessage('Hostname') : formatMessage('Resource group name')}
             label={formatMessage('Hostname')}
             ariaLabel={formatMessage('A hostname which is used to make up the provisoned services names')}
             placeholder={'Name of your services'}
@@ -629,14 +614,15 @@ export const AzureProvisionDialog: React.FC = () => {
             styles={{ root: { paddingBottom: '8px' } }}
             onChange={updateCurrentLocation}
           />
-          {currentLocation && luisLocations.length>0 && !luisLocations.find(item=> item.name === currentLocation.name) ?
+          {currentLocation && currentLuisLocation && currentLocation.name !== currentLuisLocation.name && //luisLocations.length>0 && !luisLocations.find(item=> item.name === currentLocation.name) ?
           <Dropdown
             required
             label={'Region for Luis'}
+            defaultSelectedKey={currentLuisLocation.id}
             options={luisLocationsOption}
             placeholder={'Select one'}
             onChange={updateLuisLocation}
-          />: null}
+          />}
         </form>
       )}
       {choice.key === 'create' && subscriptionOption.length < 1 && <Spinner label="Loading" />}
@@ -768,7 +754,7 @@ export const AzureProvisionDialog: React.FC = () => {
                     region = currentLuisLocation;
                   }
                   console.log(region);
-                  return {...item, region: region, resourceGroup:currentConfig?.resourceGroup || currentHostName};
+                  return {...item, region: region, resourceGroup: currentConfig?.resourceGroup || currentResourceGroup};
                 });
                 setReviewListItems(selectedResources);
               }}
