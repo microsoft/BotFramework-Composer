@@ -21,8 +21,8 @@ import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
-import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH } from './constants';
+import { TreeLink, TreeMenuItem } from './types';
 
 // -------------------- Styles -------------------- //
 

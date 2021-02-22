@@ -26,13 +26,13 @@ import {
   botStatusState,
   createQnAOnState,
   currentProjectIdState,
+  dispatcherState,
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
   settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
-import { dispatcherState } from '../DispatcherWrapper';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
