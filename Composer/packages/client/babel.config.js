@@ -1,5 +1,14 @@
 module.exports = {
-  presets: ['react-app', '@emotion/babel-preset-css-prop'],
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        exclude: ['@babel/plugin-proposal-unicode-property-regex', '@babel/plugin-transform-unicode-regex'],
+      },
+    ],
+    'react-app',
+    '@emotion/babel-preset-css-prop',
+  ],
   env: {
     development: {
       presets: [
