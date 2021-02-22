@@ -154,8 +154,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       try {
         const url = `https://management.azure.com/subscriptions/${
           currentResource.subscriptionId || currentResource.alternateSubscriptionId
-        }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
-          currentResource?.resourceName
+        }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+          currentResource.resourceName
         }/channels/${channelId}?api-version=2020-06-02`;
         await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
         return {
@@ -179,15 +179,15 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     if (currentResource) {
       const url = `https://management.azure.com/subscriptions/${
         currentResource.subscriptionId || currentResource.alternateSubscriptionId
-      }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
-        currentResource?.resourceName
+      }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+        currentResource.resourceName
       }/channels/${channelId}?api-version=2020-06-02`;
       let data = {};
       switch (channelId) {
         case CHANNELS.TEAMS:
           data = {
             location: 'global',
-            name: `${currentResource?.resourceName}/${channelId}`,
+            name: `${currentResource.resourceName}/${channelId}`,
             properties: {
               channelName: channelId,
               location: 'global',
@@ -199,7 +199,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           break;
         case CHANNELS.WEBCHAT:
           data = {
-            name: `${currentResource?.resourceName}/${channelId}`,
+            name: `${currentResource.resourceName}/${channelId}`,
             type: 'Microsoft.BotService/botServices/channels',
             location: 'global',
             properties: {
@@ -220,7 +220,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           break;
         case CHANNELS.SPEECH:
           data = {
-            name: `${currentResource?.resourceName}/${channelId}`,
+            name: `${currentResource.resourceName}/${channelId}`,
             type: 'Microsoft.BotService/botServices/channels',
             location: 'global',
             properties: {
@@ -259,8 +259,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     if (currentResource) {
       const url = `https://management.azure.com/subscriptions/${
         currentResource.subscriptionId || currentResource.alternateSubscriptionId
-      }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
-        currentResource?.resourceName
+      }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+        currentResource.resourceName
       }/channels/${channelId}?api-version=2020-06-02`;
       await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
 
@@ -336,7 +336,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             await deleteChannelService(channel);
           }
         } catch (err) {
-          console.error('An error occured while using the ARM apis', err);
           setApplicationLevelError(err);
           setChannelStatus({
             ...channelStatus,
@@ -366,7 +365,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         isDefaultBotForCogSvcAccount: isDefault,
       });
     } catch (err) {
-      console.error('An error occured while using the ARM apis', err);
       setChannelStatus({
         ...channelStatus,
         [CHANNELS.SPEECH]: {

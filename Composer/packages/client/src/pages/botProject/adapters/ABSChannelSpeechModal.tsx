@@ -21,6 +21,10 @@ const ABSChannelSpeechModal = (props: Props) => {
   const [value, setValue] = useState<string | undefined>();
   const [region, setRegion] = useState<string | undefined>();
 
+  const linkToCreateKey = 'https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesAllInOne';
+  const linkToHelp =
+    'https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account?tabs=multiservice%2Cwindows';
+
   return (
     <DialogWrapper
       data-testid={'absChannelsSpeechModal'}
@@ -32,10 +36,7 @@ const ABSChannelSpeechModal = (props: Props) => {
       <div data-testid="absChannelsSpeechModal">
         <p>
           {formatMessage('Provide a key in order to connect your bot to the Azure Speech service. ')}
-          <Link
-            href="https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account?tabs=multiservice%2Cwindows"
-            target="_new"
-          >
+          <Link href={linkToHelp} target="_blank">
             {formatMessage('Learn more')}
           </Link>
         </p>
@@ -57,14 +58,14 @@ const ABSChannelSpeechModal = (props: Props) => {
           value={region}
           onChange={(e, newregion) => setRegion(newregion)}
         />
-        <Link href="https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesAllInOne" target="_new">
+        <Link href={linkToCreateKey} target="_blank">
           {formatMessage('Get a key')}
         </Link>
 
         <DialogFooter>
           <PrimaryButton
             disabled={!value || !region}
-            onClick={async () => {
+            onClick={() => {
               if (value && region) {
                 onUpdateKey(value, region, true);
                 onClose();
