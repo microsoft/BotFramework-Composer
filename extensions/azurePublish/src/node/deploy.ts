@@ -51,7 +51,7 @@ export class BotProjectDeploy {
     absSettings?: any
   ) {
     try {
-      console.log(absSettings);
+      this.logger(absSettings);
 
       await this.linkBotWithWebapp(settings, absSettings, hostname);
 
@@ -307,7 +307,7 @@ export class BotProjectDeploy {
 
     const email = absSettings.email;
 
-    console.log(`${subscriptionId}, ${resourceGroupName}, ${webAppName}, ${hintsList}, ${vaultName}, ${secretName}, ${email}`);
+    this.logger(`${subscriptionId}, ${resourceGroupName}, ${webAppName}, ${hintsList}, ${vaultName}, ${secretName}, ${email}`);
 
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
@@ -326,17 +326,17 @@ export class BotProjectDeploy {
     await keyVaultApi.WebAppAssignIdentity(resourceGroupName, webAppName);
 
     const principalId = await keyVaultApi.WebAppIdentityShow(resourceGroupName, webAppName);
-    console.log(`principal id : ${principalId}`);
+    this.logger(`principal id : ${principalId}`);
 
     const tenantId = await this.getTenantId(this.accessToken, subscriptionId);
     await keyVaultApi.KeyVaultSetPolicy(resourceGroupName, vaultName, email, principalId, tenantId);
 
-    console.log('getting secret ...')
+    this.logger('getting secret ...')
     // const secret = await keyVaultApi.KeyVaultGetSecret(resourceGroupName, vaultName, secretName);
 
     const secret = await keyVaultApi.KeyVaultGetSecretValue(resourceGroupName, vaultName, secretName);
 
-    console.log(`secret: ${secret}`);
+    this.logger(`secret: ${secret}`);
     // await keyVaultApi.UpdateKeyVaultAppSettings(resourceGroupName, webAppName, secret);
 
     await keyVaultApi.UpdateKeyVaultValueAppSettings(resourceGroupName, webAppName, secret);
