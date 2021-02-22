@@ -52,9 +52,8 @@ export class BotProjectDeploy {
   ) {
     try {
       console.log(absSettings);
-      if (absSettings) {
-        await this.linkBotWithWebapp(absSettings, hostname);
-      }
+
+      await this.linkBotWithWebapp(settings, absSettings, hostname);
 
       if (absSettings) {
         await this.BindKeyVault(absSettings, hostname);
@@ -214,8 +213,11 @@ export class BotProjectDeploy {
    * @param absSettings the abs settings
    * @param hostname the hostname of webapp which bot service would be linked to
    */
-  private async linkBotWithWebapp(absSettings: any, hostname: string) {
-    let subscriptionId = '', resourceGroupName = '', botName = '';
+  private async linkBotWithWebapp(settings: any, absSettings: any, hostname: string) {
+    let subscriptionId = settings.subscriptionId;
+    let resourceGroupName = settings.resourceGroup;
+    let botName = settings.botName;
+
     if (!absSettings.resourceId || !hostname) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
@@ -224,9 +226,15 @@ export class BotProjectDeploy {
       return;
     }
     try {
-      subscriptionId = absSettings.resourceId.match(/subscriptions\/([\w-]*)\//)[1];
-      resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^\/]*)/)[1];
-      botName = absSettings.resourceId.match(/botServices\/([^\/]*)/)[1];
+      if (!subscriptionId) {
+        subscriptionId = absSettings.resourceId.match(/subscriptions\/([\w-]*)\//)[1];
+      }
+      if (!resourceGroupName) {
+        resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^\/]*)/)[1];
+      }
+      if (!botName) {
+        botName = absSettings.resourceId.match(/botServices\/([^\/]*)/)[1];
+      }
     } catch (error) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
