@@ -4,7 +4,6 @@ import URI from 'vscode-uri';
 import { IConnection, TextDocuments } from 'vscode-languageserver';
 import formatMessage from 'format-message';
 import {
-  TextDocument,
   Diagnostic,
   CompletionList,
   Hover,
@@ -14,6 +13,7 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
   TextDocumentPositionParams,
   DocumentOnTypeFormattingParams,

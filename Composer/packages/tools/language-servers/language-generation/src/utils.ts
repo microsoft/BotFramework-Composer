@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import { Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
 import { parser } from '@microsoft/bf-lu/lib/parser';

@@ -152,16 +152,6 @@ describe('LG LSP server test', () => {
     ]);
   });
 
-  it('completion, typing a @ in an expression block should suggest existed luis entities', async () => {
-    const payload = `{"jsonrpc":"2.0","id":3,"method":"textDocument/completion","params":{"textDocument":{"uri":"inmemory://model/1"},"position":{"line":8,"character":4},"context":{"triggerKind": 2,"triggerCharacter": "@"}}}`;
-    await send(payload, [
-      (response) => {
-        expect(response.id).toEqual(3);
-        expect(response.result.items.length).toEqual(0);
-      },
-    ]);
-  });
-
   it('close documents should clean all diagnostics', async () => {
     const payload = `{"jsonrpc":"2.0","method":"textDocument/didClose","params":{"textDocument":{"uri":"inmemory://model/1"}}}`;
     await send(payload, [

@@ -1,0 +1,88 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { Position } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
+
+import {
+  getRangeAtPosition,
+  getEntityRangeAtPosition,
+  extractLUISContent,
+  getSuggestionEntities,
+  suggestionAllEntityTypes,
+  getLineByIndex,
+} from '../../lib/utils';
+
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/camelcase */
+const assert = require('assert');
+
+const textDoc: TextDocument = {
+  getText: () => '-this is an entity: ${@name}',
+  uri: 'inmemory://model/1',
+  languageId: 'botbuilderlg',
+  version: 2,
+  positionAt: (offset: number) => Position.create(offset, offset),
+  offsetAt: (pos: Position) => pos.character,
+  lineCount: 2,
+};
+
+const textDoc2: TextDocument = {
+  getText: () => 'line0\r\nline1\r\nline2\r\nline3',
+  uri: 'inmemory://model/1',
+  languageId: 'botbuilderlg',
+  version: 2,
+  positionAt: (offset: number) => Position.create(offset, offset),
+  offsetAt: (pos: Position) => pos.character,
+  lineCount: 4,
+};
+
+const luisObj = {
+  closedLists: [],
+  composites: [],
+  culture: 'en-us',
+  desc: '',
+  entities: [{ explicitlyAdded: true, name: 'name', roles: [] }],
+  intents: [],
+  luis_schema_version: '3.2.0',
+  model_features: [],
+  name: '',
+  patternAnyEntities: [],
+  patterns: [],
+  prebuiltEntities: [{ name: 'number', roles: ['age'] }],
+  regex_entities: [{ name: 'zipcode', regexPattern: '', roles: [] }],
+  regex_features: [],
+  utterances: [],
+  versionId: '0.1',
+};
+
+const luisText = '@ ml name\r\n @ prebuilt number age\r\n @regex zipcode';
+
+describe('LG LSP Server Function Unit Tests', () => {
+  it('Test getRangeAtPosition function', () => {
+    const result = getRangeAtPosition(textDoc, Position.create(0, 3));
+    assert.deepStrictEqual(result, { end: { character: 5, line: 0 }, start: { character: 0, line: 0 } });
+  });
+
+  it('Test getEntityRangeAtPosition function', () => {
+    const result = getEntityRangeAtPosition(textDoc, Position.create(0, 23));
+    assert.deepStrictEqual(result, { end: { character: 27, line: 0 }, start: { character: 22, line: 0 } });
+  });
+
+  it('Test extract luisJson function', async () => {
+    const result = await extractLUISContent(luisText);
+    assert.deepStrictEqual(result.entities[0].name, 'name');
+    assert.deepStrictEqual(result.prebuiltEntities[0].name, 'number');
+    assert.deepStrictEqual(result.regex_entities[0].name, 'zipcode');
+  });
+
+  it('Test getSuggestionEntities function', () => {
+    const result = getSuggestionEntities(luisObj, suggestionAllEntityTypes);
+    assert.deepStrictEqual(result, ['name', 'zipcode']);
+  });
+
+  it('Test getLineByIndex function', () => {
+    const result = getLineByIndex(textDoc2, 2);
+    assert.deepStrictEqual(result, 'line2');
+  });
+});
