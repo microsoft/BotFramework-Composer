@@ -4,13 +4,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
+import { rootBotProjectIdSelector, webChatLogsState } from '../../../../../recoilModel';
 import { DebugPanelErrorIndicator } from '../DebugPanelErrorIndicator';
 
-import { useDiagnosticsStatistics } from './useDiagnostics';
-
-export const DiagnosticsHeader = () => {
-  const { hasError, hasWarning } = useDiagnosticsStatistics();
+export const WebchatLogItemHeader = () => {
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const logItems = useRecoilValue(webChatLogsState(rootBotId ?? ''));
 
   return (
     <div
@@ -23,12 +24,12 @@ export const DiagnosticsHeader = () => {
     >
       <div
         css={css`
-          margin-right: ${hasError || hasWarning ? 4 : 0}px;
+          margin-right: 4px;
         `}
       >
-        {formatMessage('Problems')}
+        {formatMessage('Webchat Inspector')}
       </div>
-      <DebugPanelErrorIndicator hasError={hasError} hasWarning={hasWarning} />
+      <DebugPanelErrorIndicator hasError={logItems.length > 0} />
     </div>
   );
 };
