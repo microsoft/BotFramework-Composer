@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 import path from 'path';
 
-import { ElectronAuthParameters } from '@botframework-composer/types';
+import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
+import fetch from 'node-fetch';
 
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac } from '../utility/platform';
@@ -26,11 +27,18 @@ const GRAPH_RESOURCE = 'https://graph.microsoft.com';
 const DEFAULT_LOCALE = 'en'; // TODO: get this from settings?
 const DEFAULT_AUTH_SCHEME = 2; // bearer token
 const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // work and school accounts
+const ARM_AUTHORITY = 'https://login.microsoftonline.com/organizations';
+const ARM_RESOURCE = 'https://management.core.windows.net';
+
+type GetTenantsResult = {
+  value: AzureTenant[];
+};
 
 export class OneAuthInstance extends OneAuthBase {
   private initialized: boolean;
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
+  private signedInARMAccount: OneAuth.Account | undefined;
 
   constructor() {
     super();
@@ -57,13 +65,22 @@ export class OneAuthInstance extends OneAuthBase {
         'Please login',
         window.getNativeWindowHandle()
       );
+      const msaConfig = new this.oneAuth.MsaConfiguration(
+        COMPOSER_CLIENT_ID,
+        COMPOSER_REDIRECT_URI,
+        GRAPH_RESOURCE + '/Application.ReadWrite.All',
+        undefined
+      );
       const aadConfig = new this.oneAuth.AadConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
         GRAPH_RESOURCE,
         false // prefer broker
       );
-      this.oneAuth.initialize(appConfig, undefined, aadConfig, undefined);
+      this.oneAuth.setFlights([
+        2, // UseMsalforMsa
+      ]);
+      this.oneAuth.initialize(appConfig, msaConfig, aadConfig, undefined);
       this.initialized = true;
       log('Service initialized.');
     } else {
@@ -133,6 +150,97 @@ export class OneAuthInstance extends OneAuthBase {
       throw 'Could not acquire an access token.';
     } catch (e) {
       log('Error while trying to get an access token: %O', e);
+      throw e;
+    }
+  }
+
+  public async getTenants(): Promise<AzureTenant[]> {
+    try {
+      if (!this.initialized) {
+        this.initialize();
+      }
+      log('Signing in...');
+      // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
+      const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+      this.signedInARMAccount = result.account;
+      const token = result.credential.value;
+
+      // call the tenants API
+      const tenantsResult = await fetch('https://management.azure.com/tenants?api-version=2020-01-01', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const tenants = (await tenantsResult.json()) as GetTenantsResult;
+      return tenants.value;
+    } catch (e) {
+      log('There was an error trying to sign in: %O', e);
+      throw e;
+    }
+  }
+
+  public async getARMTokenForTenant(tenantId: string): Promise<string> {
+    if (this.signedInARMAccount) {
+      const tokenParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        `https://login.microsoftonline.com/${tenantId}`,
+        ARM_RESOURCE,
+        '',
+        ''
+      );
+      const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
+      return result.credential.value;
+    }
+    return '';
+  }
+
+  public async armAuth() {
+    try {
+      if (!this.initialized) {
+        this.initialize();
+      }
+      log('Signing in...');
+      // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
+      const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+      this.signedInAccount = result.account;
+      const initialMSAToken = result.credential.value;
+
+      // call the tenants API
+      let tenantsList = await fetch('https://management.azure.com/tenants?api-version=2020-01-01', {
+        headers: { Authorization: `Bearer ${initialMSAToken}` },
+      });
+      tenantsList = await tenantsList.json();
+
+      // choose the first tenant (for debugging purposes)
+      console.log(tenantsList);
+      const tenant = (tenantsList as any).value[0];
+      const tenantId = tenant.tenantId;
+
+      // log the user into the chosen tenant
+      /*
+      signInParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        `https://login.microsoftonline.com/${tenantId}`,
+        ARM_RESOURCE,
+        '',
+        ''
+      );
+      const secondLogin: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+      const armToken = secondLogin.credential.value;
+      console.log(armToken);*/
+
+      // try to silently get a token from ARM
+      const tokenParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        `https://login.microsoftonline.com/${tenantId}`,
+        ARM_RESOURCE,
+        '', //tenantId,
+        ''
+      );
+      const secondToken = await this.oneAuth.acquireCredentialSilently(this.signedInAccount.id, tokenParams, '');
+      console.log(secondToken.credential.value);
+    } catch (e) {
+      log('There was an error trying to sign in: %O', e);
       throw e;
     }
   }
