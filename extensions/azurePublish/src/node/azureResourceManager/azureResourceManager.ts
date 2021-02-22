@@ -27,7 +27,7 @@ import {
   AzureFuntionsConfig,
 } from './azureResourceManagerConfig';
 import { createCustomizeError, ProvisionErrors, stringifyError } from '../utils/errorHandler';
-import { LuisAuthoringSupportLocation, LuisPublishSupportLocation } from '../../types';
+import { LuisAuthoringSupportLocation } from '../../types';
 
 export class AzureResourceMananger {
   // Logger
