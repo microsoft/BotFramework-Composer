@@ -12,8 +12,7 @@ import { AzurePublishErrors } from './utils/errorHandler';
 import {BotProjectDeployLoggerType} from './types';
 
 const readdir: any = promisify(fs.readdir);
-
-const botPath = (projPath: string) => path.join(projPath, 'ComposerDialogs')
+const botPath = (projPath: string) => path.join(projPath) // there should not be a need to specify the sub directory
 
 type QnaConfigType = {
   subscriptionKey: string;
@@ -64,13 +63,13 @@ export async function publishLuisToPrediction(
   path: string,
   logger
   ) {
-    let { authoringKey: luisAuthoringKey, endpoint: luisEndpoint, authoringRegion: luisAuthoringRegion } = luisSettings;
+    let { authoringKey: luisAuthoringKey, authoringEndpoint: authoringEndpoint, authoringRegion: luisAuthoringRegion } = luisSettings;
 
     if(!luisAuthoringRegion){
       luisAuthoringRegion = luisSettings.region || 'westus';
     }
-    if (!luisEndpoint) {
-      luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+    if (!authoringEndpoint) {
+      authoringEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
     }
 
     // Find any files that contain the name 'luis.settings' in them
@@ -104,7 +103,7 @@ export async function publishLuisToPrediction(
         // Make a call to the azureaccounts api
         // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be313cec181ae720aa2b26c
         // This returns a list of azure account information objects with AzureSubscriptionID, ResourceGroup, AccountName for each.
-        const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
+        const getAccountUri = `${authoringEndpoint}/luis/api/v2.0/azureaccounts`;
         const options = {
           headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
         } as rp.RequestPromiseOptions;
@@ -152,7 +151,7 @@ export async function publishLuisToPrediction(
       let retryCount = 0;
       while (retryCount < 2) {
         try {
-          const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
+          const luisAssignEndpoint = `${authoringEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
           const options = {
             body: account,
             json: true,

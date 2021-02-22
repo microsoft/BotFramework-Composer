@@ -5,15 +5,17 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
+import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
 import { checkForPVASchema } from '@bfc/shared';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 
+import { BASEPATH } from '../constants';
 import { schemasState } from '../recoilModel/atoms';
 import {
   dispatcherState,
@@ -22,11 +24,13 @@ import {
   localeState,
   currentProjectIdState,
   settingsState,
+  webChatEssentialsSelector,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import { useLocation } from '../utils/hooks';
 
+import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
@@ -36,7 +40,6 @@ export const actionButton = css`
 `;
 
 // -------------------- Styles -------------------- //
-
 const headerContainer = css`
   position: relative;
   background: ${SharedColors.cyanBlue10};
@@ -82,7 +85,15 @@ const rightSection = css`
   align-items: center;
   justify-content: flex-end;
   width: 50%;
-  margin: 15px 10px;
+  margin: 0 10px;
+
+  & > div:first-of-type {
+    margin-right: 7px;
+  }
+
+  & > button:first-of-type {
+    margin-right: 20px;
+  }
 `;
 
 const buttonStyles: IButtonStyles = {
@@ -93,7 +104,6 @@ const buttonStyles: IButtonStyles = {
   root: {
     height: '20px',
     width: '20px',
-    marginLeft: '16px',
     marginTop: '4px',
   },
   rootHovered: {
@@ -104,28 +114,26 @@ const buttonStyles: IButtonStyles = {
   },
 };
 
-const teachingBubbleStyle = {
+const calloutStyle = {
   root: {
-    selectors: {
-      '.ms-Callout-beak': {
-        background: NeutralColors.white,
-      },
-    },
+    padding: 24,
   },
-  bodyContent: {
-    background: NeutralColors.white,
-    selectors: {
-      '.ms-TeachingBubble-headline': {
-        color: NeutralColors.black,
-        fontSize: FontSizes.size20,
-      },
-      '.ms-TeachingBubble-subText': {
-        color: NeutralColors.black,
-        fontSize: FontSizes.size12,
-      },
-    },
+  calloutMain: {
+    width: 330,
+    height: 120,
   },
 };
+
+const calloutHeader = css`
+  color: ${NeutralColors.black};
+  font-size: ${FontSizes.size20};
+`;
+
+const calloutDescription = css`
+  padding-top: 12px;
+  color: ${NeutralColors.black};
+  font-size: ${FontSizes.size12};
+`;
 
 // -------------------- Header -------------------- //
 
@@ -142,6 +150,10 @@ export const Header = () => {
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
+  const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
+  const { openBotInEmulator, appendLogToWebChatInspector, clearWebChatLogs } = useRecoilValue(dispatcherState);
+  const [hideBotController, hideBotStartController] = useState(true);
+  const [isWebChatPanelVisible, toggleWebChatPanel] = useState(false);
 
   const {
     location: { pathname },
@@ -149,12 +161,22 @@ export const Header = () => {
 
   useEffect(() => {
     // hide it on the /home page, but make sure not to hide on /bot/stuff/home in case someone names a dialog "home"
-    setStartBotsWidgetVisible(!pathname.endsWith('/home') || pathname.includes('/bot/'));
+    const hideCondition = !pathname.endsWith('/home') || pathname.includes('/bot/');
+    setStartBotsWidgetVisible(hideCondition);
+    if (!hideCondition) {
+      toggleWebChatPanel(false);
+    }
   }, [pathname]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
   }, []);
+
+  useEffect(() => {
+    if (!hideBotController && isWebChatPanelVisible) {
+      toggleWebChatPanel(false);
+    }
+  }, [hideBotController, isWebChatPanelVisible]);
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
@@ -217,7 +239,9 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && <BotController />}
+        {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && (
+          <BotController isControllerHidden={hideBotController} onHideController={hideBotStartController} />
+        )}
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
@@ -226,32 +250,115 @@ export const Header = () => {
             onClick={onUpdateAvailableClick}
           />
         )}
+        {showStartBotsWidget && (
+          <IconButton
+            ariaDescription={formatMessage('Open web chat')}
+            css={css`
+              &::after {
+                content: '';
+                position: absolute;
+                top: 6px;
+                bottom: 0;
+                right: -5px;
+                background: ${NeutralColors.gray40};
+                height: 23px;
+                margin: 0px auto;
+                width: 1px;
+              }
+            `}
+            disabled={!webchatEssentials?.botUrl}
+            iconProps={{
+              iconName: 'OfficeChat',
+            }}
+            styles={{
+              root: {
+                color: NeutralColors.white,
+                height: '36px',
+                selectors: {
+                  ':disabled .ms-Button-icon': {
+                    opacity: 0.4,
+                    color: `${NeutralColors.white}`,
+                  },
+                },
+              },
+              rootDisabled: {
+                backgroundColor: `${CommunicationColors.primary}`,
+              },
+              rootHovered: {
+                backgroundColor: 'rgba(255, 255, 255, 0.6)',
+              },
+            }}
+            title={formatMessage('Open Web Chat')}
+            onClick={() => toggleWebChatPanel(!isWebChatPanelVisible)}
+          />
+        )}
         <NotificationButton buttonStyles={buttonStyles} />
       </div>
       {teachingBubbleVisibility && (
-        <div onBlur={handleActiveLanguageButtonOnDismiss}>
-          <TeachingBubble
-            isWide
-            calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
-            headline={formatMessage('Active language')}
-            styles={teachingBubbleStyle}
-            target="#targetButton"
-            onDismiss={handleActiveLanguageButtonOnDismiss}
-          >
+        <Callout
+          directionalHint={DirectionalHint.bottomLeftEdge}
+          styles={calloutStyle}
+          target="#targetButton"
+          onDismiss={handleActiveLanguageButtonOnDismiss}
+        >
+          <div css={calloutHeader}> {formatMessage('Active language')}</div>
+          <div css={calloutDescription}>
             {formatMessage(
               'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
             )}
+          </div>
+          <FocusTrapZone isClickableOutsideFocusTrap>
             <Dropdown
-              disabled={languageListOptions.length === 1}
               options={languageListOptions}
               placeholder="Select an option"
               selectedKey={locale}
               styles={{ root: { marginTop: 12 } }}
               onChange={onLanguageChange}
             />
-          </TeachingBubble>
-        </div>
+          </FocusTrapZone>
+        </Callout>
       )}
+
+      <Panel
+        isHiddenOnDismiss
+        closeButtonAriaLabel={formatMessage('Close')}
+        customWidth={'395px'}
+        headerText={projectName}
+        isBlocking={false}
+        isOpen={isWebChatPanelVisible}
+        styles={{
+          root: {
+            marginTop: '94px',
+          },
+          scrollableContent: {
+            width: '100%',
+            height: '100%',
+          },
+          content: {
+            width: '100%',
+            height: '100%',
+            padding: 0,
+            margin: 0,
+          },
+        }}
+        type={PanelType.custom}
+        onDismiss={() => toggleWebChatPanel(false)}
+      >
+        {webchatEssentials ? (
+          <WebChatPanel
+            activeLocale={webchatEssentials.activeLocale}
+            appendLogToWebChatInspector={appendLogToWebChatInspector}
+            botName={webchatEssentials.displayName}
+            botUrl={webchatEssentials.botUrl}
+            clearWebchatInspectorLogs={clearWebChatLogs}
+            directlineHostUrl={BASEPATH}
+            isWebChatPanelVisible={isWebChatPanelVisible}
+            openBotInEmulator={openBotInEmulator}
+            projectId={webchatEssentials.botId}
+            secrets={webchatEssentials.secrets}
+          />
+        ) : null}
+      </Panel>
     </div>
   );
 };

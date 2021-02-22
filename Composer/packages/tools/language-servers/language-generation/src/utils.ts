@@ -71,7 +71,7 @@ export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSever
   return severityMap[severity];
 }
 
-export function generageDiagnostic(message: string, severity: DiagnosticSeverity, document: TextDocument): Diagnostic {
+export function generateDiagnostic(message: string, severity: DiagnosticSeverity, document: TextDocument): Diagnostic {
   return {
     severity,
     range: Range.create(Position.create(0, 0), Position.create(0, 0)),
@@ -133,6 +133,13 @@ export const cardPropPossibleValueType = {
   contenttype: 'adaptivecard',
   content: '${json(fromFile("../../card.json"))}',
   name: 'An Example Name',
+
+  Text: 'Text | ${Expression}',
+  Speak: 'Text | ${Expression}',
+  Attachments: 'List of attachments',
+  InputHint: 'accepting | ignoring | expecting',
+  AttachmentLayout: 'list | carousel',
+  SuggestedActions: 'Text | ${Expression}',
 };
 
 export const cardPropDict = {
@@ -140,5 +147,13 @@ export const cardPropDict = {
   Suggestions: ['SuggestionActions'],
   Cards: ['title', 'subtitle', 'text', 'image', 'buttons'],
   Attachment: ['contenttype', 'content'],
+  Activity: ['Text', 'Speak', 'Attachments', 'SuggestedActions', 'InputHint', 'AttachmentLayout'],
   Others: ['type', 'name', 'value'],
 };
+
+export function getLineByIndex(document: TextDocument, line: number) {
+  const lineCount = document.lineCount;
+  if (line >= lineCount || line < 0) return null;
+
+  return document.getText().split(/\r?\n/g)[line];
+}

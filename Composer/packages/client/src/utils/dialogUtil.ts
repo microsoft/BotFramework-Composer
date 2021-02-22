@@ -3,9 +3,8 @@
 
 import {
   conceptLabels as conceptLabelsFn,
-  DialogGroup,
+  getFriendlyName,
   SDKKinds,
-  dialogGroups,
   DialogInfo,
   DialogFactory,
   ITriggerCondition,
@@ -14,13 +13,14 @@ import {
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import formatMessage from 'format-message';
 
 import { LuProviderType } from './../../../types/src/indexers';
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
+
+export const qnaMatcherKey = SDKKinds.OnQnAMatch;
+export const onChooseIntentKey = SDKKinds.OnChooseIntent;
+export const intentTypeKey = SDKKinds.OnIntent;
 
 interface DialogsMap {
   [dialogId: string]: any;
@@ -41,22 +41,12 @@ export interface TriggerFormDataErrors {
   event?: string;
   triggerPhrases?: string;
   regEx?: string;
-  activity?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   const dialog = dialogs.find((item) => item.id === dialogId);
   return cloneDeep(dialog);
 }
-
-export const eventTypeKey: string = SDKKinds.OnDialogEvent;
-export const intentTypeKey: string = SDKKinds.OnIntent;
-export const qnaTypeKey: string = SDKKinds.OnQnAMatch;
-export const activityTypeKey: string = SDKKinds.OnActivity;
-export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
-export const customEventKey = 'OnCustomEvent';
-export const qnaMatcherKey: string = SDKKinds.OnQnAMatch;
-export const onChooseIntentKey: string = SDKKinds.OnChooseIntent;
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -181,7 +171,7 @@ export function deleteTrigger(
 ) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
+  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === SDKKinds.RegexRecognizer;
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
@@ -194,87 +184,11 @@ export function deleteTrigger(
   return dialogCopy.content;
 }
 
-export function getTriggerTypes(): IDropdownOption[] {
-  const conceptLabels = conceptLabelsFn();
-  const triggerTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.EVENTS].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = conceptLabels[t];
-
-      if (labelOverrides?.title) {
-        name = labelOverrides.title;
-      }
-
-      return { key: t, text: name || t };
-    }),
-    {
-      key: customEventKey,
-      text: formatMessage('Custom events'),
-    },
-  ];
-  return triggerTypes;
-}
-
-export function getEventTypes(): IComboBoxOption[] {
-  const conceptLabels = conceptLabelsFn();
-  const eventTypes: IComboBoxOption[] = [
-    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = conceptLabels[t];
-
-      if (labelOverrides?.title) {
-        if (labelOverrides.subtitle) {
-          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
-        } else {
-          name = labelOverrides.title;
-        }
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return eventTypes;
-}
-
-export function getActivityTypes(): IDropdownOption[] {
-  const conceptLabels = conceptLabelsFn();
-  const activityTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = conceptLabels[t];
-
-      if (labelOverrides?.title) {
-        if (labelOverrides.subtitle) {
-          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
-        } else {
-          name = labelOverrides.title;
-        }
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return activityTypes;
-}
-
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   return dialogs.reduce((result: { [key: string]: {} }, dialog: DialogInfo) => {
     result[dialog.id] = dialog.content;
     return result;
   }, {});
-}
-
-export function getFriendlyName(data): string {
-  const conceptLabels = conceptLabelsFn();
-  if (data?.$designer?.name) {
-    return data?.$designer?.name;
-  }
-
-  if (data?.intent) {
-    return `${data?.intent}`;
-  }
-
-  return conceptLabels[data.$kind]?.title ?? data.$kind;
 }
 
 const getLabel = (dialog: DialogInfo, dataPath: string) => {

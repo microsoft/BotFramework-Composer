@@ -13,7 +13,12 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import {
+  TextDocumentPositionParams,
+  DocumentOnTypeFormattingParams,
+  FoldingRangeParams,
+  FoldingRange,
+} from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
@@ -24,16 +29,17 @@ import {
   getRangeAtPosition,
   LGDocument,
   convertDiagnostics,
-  generageDiagnostic,
+  generateDiagnostic,
   LGOption,
   LGCursorState,
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
+  getLineByIndex,
 } from './utils';
 
 // define init methods call from client
-const InitializeDocumentsMethodName = 'initializeDocuments';
+const initializeDocumentsMethodName = 'initializeDocuments';
 
 const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
 
@@ -73,7 +79,7 @@ export class LGServer {
             triggerCharacters: ['.', '[', '[', '\n'],
           },
           hoverProvider: true,
-          foldingRangeProvider: false,
+          foldingRangeProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -83,9 +89,12 @@ export class LGServer {
     this.connection.onCompletion(async (params) => await this.completion(params));
     this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
+      this.foldingRangeHandler(foldingRangeParams)
+    );
 
     this.connection.onRequest((method, params) => {
-      if (InitializeDocumentsMethodName === method) {
+      if (initializeDocumentsMethodName === method) {
         const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
         const textDocument = this.documents.get(uri);
         if (textDocument) {
@@ -99,6 +108,58 @@ export class LGServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
+    const document = this.documents.get(params.textDocument.uri);
+    const items: FoldingRange[] = [];
+    if (!document) {
+      return items;
+    }
+
+    const lineCount = document.lineCount;
+    let i = 0;
+    while (i < lineCount) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('>>')) {
+        for (let j = i + 1; j < lineCount; j++) {
+          if (getLineByIndex(document, j)?.startsWith('>>')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+
+          if (j === lineCount - 1) {
+            items.push(FoldingRange.create(i, j));
+            i = j;
+          }
+        }
+      }
+
+      i = i + 1;
+    }
+
+    for (let i = 0; i < lineCount; i++) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('#')) {
+        let j = i + 1;
+        for (j = i + 1; j < lineCount; j++) {
+          const secLine = getLineByIndex(document, j);
+          if (secLine?.startsWith('>>') || secLine?.startsWith('#')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+        }
+
+        if (i !== j - 1) {
+          items.push(FoldingRange.create(i, j - 1));
+          i == j - 2;
+        }
+      }
+    }
+
+    return items;
   }
 
   protected updateObject(propertyList: string[]): void {
@@ -151,7 +212,7 @@ export class LGServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map((errorMsg) => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
     );
   }
 
@@ -249,9 +310,9 @@ export class LGServer {
 
   private removeParamFormat(params: string): string {
     const resultArr = params.split(',').map((element) => {
-      return element.trim().split(':')[0];
+      return element.trim().split(/\??:/)[0];
     });
-    return resultArr.join(' ,');
+    return resultArr.join(', ');
   }
 
   private matchLineState(
@@ -540,7 +601,7 @@ export class LGServer {
     const cardNameRegex = /^\s*\[[\w]+/;
     const lastLine = lines[lines.length - 2];
     const paddingIndent = cardNameRegex.test(lastLine) ? '\t' : '';
-    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment'];
+    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment', 'Activity'];
     if (cardType && cardTypes.includes(cardType)) {
       const items: CompletionItem[] = [];
       if (normalCardTypes.includes(cardType)) {
@@ -748,7 +809,7 @@ export class LGServer {
       const payload = await this._lgParser.parse(fileId || uri, text, projectId ? this.getLgResources(projectId) : []);
       lgDiagnostics = payload.diagnostics;
     } catch (error) {
-      lgDiagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));
+      lgDiagnostics.push(generateDiagnostic(error.message, DiagnosticSeverity.Error, document));
     }
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);

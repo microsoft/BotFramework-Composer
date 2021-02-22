@@ -56,6 +56,7 @@ function templateToLgTemplate(templates: Template[]): LgTemplate[] {
       body: t.body,
       parameters: t.parameters || [],
       range: convertLGRange(t.sourceRange),
+      properties: t.properties,
       templateType: templateDetails.templateType,
       structuredType: templateDetails.structuredType,
       speakEnabled: templateDetails.speakEnabled,

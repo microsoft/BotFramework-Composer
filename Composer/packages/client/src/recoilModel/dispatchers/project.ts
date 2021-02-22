@@ -2,14 +2,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotProjectFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { RootBotManagedProperties } from '@bfc/shared';
+import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, QnABotTemplateId } from '../../constants';
+import { BotStatus } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -22,7 +21,6 @@ import {
   botNameIdentifierState,
   botOpeningMessage,
   botOpeningState,
-  botProjectFileState,
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
@@ -30,6 +28,7 @@ import {
   currentProjectIdState,
   filePersistenceState,
   projectMetaDataState,
+  selectedTemplateReadMeState,
   settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
@@ -52,6 +51,7 @@ import {
   navigateToSkillBot,
   openLocalSkill,
   openRemoteSkill,
+  openRootBotAndSkills,
   openRootBotAndSkillsByPath,
   openRootBotAndSkillsByProjectId,
   removeRecentProject,
@@ -264,6 +264,9 @@ export const projectDispatcher = () => {
       });
       projectIdCache.set(projectId);
     } catch (ex) {
+      if (projectId === projectIdCache.get()) {
+        projectIdCache.clear();
+      }
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
@@ -329,6 +332,7 @@ export const projectDispatcher = () => {
       set(botOpeningState, true);
       const {
         templateId,
+        templateVersion,
         name,
         description,
         location,
@@ -344,6 +348,7 @@ export const projectDispatcher = () => {
       const response = await createNewBotFromTemplateV2(
         callbackHelpers,
         templateId,
+        templateVersion,
         name,
         description,
         location,
@@ -478,11 +483,8 @@ export const projectDispatcher = () => {
             if (settingStorage.get(projectId)) {
               settingStorage.remove(projectId);
             }
-            const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-            callbackHelpers.set(botProjectFileState(projectId), currentBotProjectFileIndexed);
 
-            const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
-            callbackHelpers.set(botProjectIdsState, [projectId]);
+            const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
 
             // Post project creation
             callbackHelpers.set(projectMetaDataState(projectId), {
@@ -525,6 +527,25 @@ export const projectDispatcher = () => {
     set(currentProjectIdState, projectId);
   });
 
+  const fetchReadMe = useRecoilCallback((callbackHelpers: CallbackInterface) => async (moduleName: string) => {
+    try {
+      const response = await httpClient.get(`/assets/templateReadme`, {
+        params: { moduleName: encodeURIComponent(moduleName) },
+      });
+
+      if (response.data) {
+        callbackHelpers.set(selectedTemplateReadMeState, response.data);
+      }
+    } catch (err) {
+      handleProjectFailure(callbackHelpers, err);
+      callbackHelpers.set(selectedTemplateReadMeState, '');
+    }
+  });
+
+  const setProjectError = useRecoilCallback((callbackHelpers: CallbackInterface) => (error) => {
+    setError(callbackHelpers, error);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -545,5 +566,7 @@ export const projectDispatcher = () => {
     reloadProject,
     updateCreationMessage,
     setCurrentProjectId,
+    setProjectError,
+    fetchReadMe,
   };
 };

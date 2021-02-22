@@ -52,7 +52,7 @@ const publishTargetsItem = css`
 `;
 
 const publishTargetsItemText = css`
-  width: 200px;
+  width: 300px;
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
   border-bottom: 1px solid ${NeutralColors.gray30};
@@ -124,11 +124,11 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={titleStyle}>
+      <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={titleStyle}>
         <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
           <div css={publishTargetsHeader}>
             <div css={publishTargetsHeaderText}>{formatMessage('Name')} </div>
-            <div css={publishTargetsHeaderText}>{formatMessage('Type')} </div>
+            <div css={publishTargetsHeaderText}>{formatMessage('Target')} </div>
             <div css={publishTargetsHeaderText}> </div>
           </div>
           {publishTargets?.map((p, index) => {
@@ -159,7 +159,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
             styles={addPublishProfile}
             onClick={() => setDialogHidden(false)}
           >
-            {formatMessage('Add new publish profile')}
+            {formatMessage('Add new')}
           </ActionButton>
         </div>
       </CollapsableWrapper>

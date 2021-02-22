@@ -16,6 +16,7 @@ import {
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
 import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
+import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 
 export type BotProject = {
   readonly id: string;
@@ -166,7 +167,7 @@ export const runtimeSettingsState = atom<{
   },
 });
 
-export const botEndpointsState = atom<any>({
+export const botEndpointsState = atom<Record<string, string>>({
   key: getFullyQualifiedKey('botEndpoints'),
   default: {},
 });
@@ -270,4 +271,44 @@ export const exportSkillModalInfoState = atom<undefined | string>({
 export const displaySkillManifestState = atom<undefined | string>({
   key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
+});
+
+export const triggerModalInfoState = atom<undefined | { projectId: string; dialogId: string }>({
+  key: getFullyQualifiedKey('triggerModalInfo'),
+  default: undefined,
+});
+
+export const brokenSkillInfoState = atom<undefined | TreeLink>({
+  key: getFullyQualifiedKey('brokenSkillInfo'),
+  default: undefined,
+});
+
+export const brokenSkillRepairCallbackState = atom<undefined | (() => void)>({
+  key: getFullyQualifiedKey('brokenSkillRepairCallback'),
+  default: undefined,
+});
+
+export const dialogModalInfoState = atom<undefined | string>({
+  key: getFullyQualifiedKey('dialogModalInfo'),
+  default: undefined,
+});
+
+export const showAddSkillDialogModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showAddSkillDialogModal'),
+  default: false,
+});
+
+export const debugPanelExpansionState = atom<boolean>({
+  key: getFullyQualifiedKey('debugPanelExpansion'),
+  default: false,
+});
+
+export const debugPanelActiveTabState = atom<string>({
+  key: getFullyQualifiedKey('degbugPanelActiveTab'),
+  default: '',
+});
+
+export const selectedTemplateReadMeState = atom<string>({
+  key: getFullyQualifiedKey('selectedTemplateReadMeState'),
+  default: '',
 });

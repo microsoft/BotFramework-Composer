@@ -3,15 +3,14 @@
 
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { jsx, css } from '@emotion/core';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport } from '@bfc/shared';
+import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
-import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
 
@@ -23,7 +22,6 @@ import {
   pageElementState,
   projectTreeSelectorFamily,
 } from '../../recoilModel';
-import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
@@ -33,27 +31,24 @@ import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 import { INDENT_PER_LEVEL } from './constants';
 import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
-import { doesLinkMatch } from './helpers';
+import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 
 // -------------------- Styles -------------------- //
-
-const searchBox: ISearchBoxStyles = {
-  root: {
-    borderBottom: '1px solid #edebe9',
-    height: '45px',
-    borderRadius: '0px',
-  },
-};
 
 const root = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden;
   .ms-List-cell {
     min-height: 36px;
   }
+`;
+
+const focusStyle = css`
+  height: 100%;
+  position: relative;
 `;
 
 const icons = {
@@ -68,14 +63,19 @@ const icons = {
 };
 
 const tree = css`
-  height: 100%;
+  height: calc(100% - 45px);
+  overflow-y: auto;
   label: tree;
 `;
 
-const headerCSS = (label: string) => css`
+const headerCSS = (label: string, isActive?: boolean) => css`
   margin-top: -6px;
   width: 100%;
   label: ${label};
+  :hover {
+    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+  }
+  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 `;
 
 // -------------------- Helper functions -------------------- //
@@ -152,6 +152,8 @@ type Props = {
   onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
   selectedLink?: Partial<TreeLink>;
   options?: ProjectTreeOptions;
+  headerAriaLabel?: string;
+  headerPlaceholder?: string;
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
@@ -183,6 +185,8 @@ export const ProjectTree: React.FC<Props> = ({
     showRemote: true,
     showTriggers: true,
   },
+  headerAriaLabel = '',
+  headerPlaceholder = '',
 }) => {
   const {
     onboardingAddCoachMarkRef,
@@ -198,6 +202,7 @@ export const ProjectTree: React.FC<Props> = ({
   const setPageElement = (name: string, value) => setPageElementState('dialogs', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
+
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
 
@@ -226,7 +231,7 @@ export const ProjectTree: React.FC<Props> = ({
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
   const createSubtree = useCallback(() => {
     return projectCollection.map(createBotSubtree);
-  }, [projectCollection, selectedLink]);
+  }, [projectCollection, selectedLink, leftSplitWidth, filter]);
 
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
@@ -316,7 +321,7 @@ export const ProjectTree: React.FC<Props> = ({
         <span
           key={dialog.id}
           ref={dialog.isRoot ? addMainDialogRef : null}
-          css={headerCSS('dialog-header')}
+          css={headerCSS('dialog-header', doesLinkMatch(dialogLink, selectedLink))}
           data-testid={`DialogHeader-${dialog.displayName}`}
           role="grid"
         >
@@ -324,6 +329,7 @@ export const ProjectTree: React.FC<Props> = ({
             hasChildren
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
+            isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
             link={dialogLink}
             menu={options.showMenu ? menu : options.showQnAMenu ? [QnAMenuItem] : []}
@@ -377,7 +383,8 @@ export const ProjectTree: React.FC<Props> = ({
     },
     dialog: DialogInfo,
     projectId: string,
-    dialogLink: TreeLink
+    dialogLink: TreeLink,
+    depth: number
   ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
@@ -400,6 +407,7 @@ export const ProjectTree: React.FC<Props> = ({
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
+        marginLeft={depth * INDENT_PER_LEVEL}
         menu={
           options.showDelete
             ? [
@@ -421,7 +429,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const onFilter = (_e, newValue?: string): void => {
+  const onFilter = (newValue?: string): void => {
     if (typeof newValue === 'string') {
       delayedSetFilter(newValue);
     }
@@ -431,7 +439,13 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
+  const renderTriggerList = (
+    triggers: ITrigger[],
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink,
+    depth: number
+  ) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -444,7 +458,8 @@ export const ProjectTree: React.FC<Props> = ({
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
           projectId,
-          dialogLink
+          dialogLink,
+          depth
         );
       });
   };
@@ -500,7 +515,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link)}</div>
+        <div>{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
       </ExpandableNode>
     );
   };
@@ -521,7 +536,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink: TreeLink) => {
     return dialogIsFormDialog(dialog)
       ? renderDialogTriggersByProperty(dialog, projectId, startDepth + 1)
-      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink);
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, 1);
   };
 
   const renderLgImport = (
@@ -651,6 +666,7 @@ export const ProjectTree: React.FC<Props> = ({
                 defaultState={getPageElement(key)}
                 depth={startDepth}
                 detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
+                isActive={doesLinkMatch(dialogLink, selectedLink)}
                 summary={summaryElement}
                 onToggle={(newState) => setPageElement(key, newState)}
               >
@@ -698,6 +714,7 @@ export const ProjectTree: React.FC<Props> = ({
     const key = 'bot-' + bot.projectId;
     const projectHeader = (
       <ProjectHeader
+        key={`${key}-header`}
         botError={bot.botError}
         handleOnSelect={handleOnSelect}
         isMenuOpen={isMenuOpen}
@@ -748,16 +765,13 @@ export const ProjectTree: React.FC<Props> = ({
       data-testid="ProjectTree"
       role="region"
     >
-      <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-        <SearchBox
-          underlined
-          ariaLabel={formatMessage('Type dialog name')}
-          iconProps={{ iconName: icons.FILTER }}
-          placeholder={formatMessage('Filter Dialog')}
-          styles={searchBox}
-          onChange={onFilter}
+      <FocusZone isCircularNavigation css={focusStyle} direction={FocusZoneDirection.vertical}>
+        <ProjectTreeHeader
+          ariaLabel={headerAriaLabel}
+          menu={headerMenu}
+          placeholder={headerPlaceholder}
+          onFilter={onFilter}
         />
-        <ProjectTreeHeader menu={headerMenu} />
         <div
           aria-label={formatMessage(
             `{

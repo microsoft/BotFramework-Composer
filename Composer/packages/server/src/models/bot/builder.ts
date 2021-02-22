@@ -6,9 +6,10 @@ import { pathExists, writeFile, copy } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
-import { Orchestrator } from '@microsoft/bf-orchestrator';
+import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
+import partition from 'lodash/partition';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -60,11 +61,12 @@ export class Builder {
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
   private containOrchestrator = false;
+  private orchestratorLabelResolvers = new Map<string, LabelResolver>();
 
-  private luBuilder = new luBuild.Builder((message) => {
+  public luBuilder = new luBuild.Builder((message) => {
     log(message);
   });
-  private qnaBuilder = new qnaBuild.Builder((message) => {
+  public qnaBuilder = new qnaBuild.Builder((message) => {
     log(message);
   });
 
@@ -159,16 +161,57 @@ export class Builder {
   public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
-    const nlrList = await this.runOrchestratorNlrList();
-    const defaultNLR = nlrList.default;
-    const modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
+    const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
+      f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
+    );
 
-    if (!(await pathExists(modelPath))) {
-      const handler: IOrchestratorProgress = (status) => {
-        log(status);
-      };
-      await this.runOrchestratorNlrGet(modelPath, defaultNLR, handler, handler);
+    const nlrList = await this.runOrchestratorNlrList();
+
+    const orchestratorSettings = {
+      orchestrator: {
+        models: {},
+        snapshots: {},
+      },
+    };
+
+    const modelDatas = [
+      { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
+      { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
+    ];
+
+    for (const modelData of modelDatas) {
+      if (modelData.luFiles) {
+        if (!modelData.model) {
+          throw new Error('Model not set');
+        }
+        const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
+        await this.runOrchestratorNlrGet(modelPath, modelData.model);
+        const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
+
+        orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
+        for (const snap in snapshotData) {
+          orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
+        }
+      }
     }
+
+    const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
+    await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
+  };
+
+  /**
+   * Orchestrator: Write out the embeddings (snapshots) into Binary LU  (.blu) files.
+   *
+   * Part of the Orchestrator training pipeline
+   * @param modelPath Local Path to the model that is used for training
+   * @param luFiles Array of FileInfo[] to the LU files that are used for training
+   */
+  public buildOrchestratorSnapshots = async (
+    modelPath: string,
+    luFiles: FileInfo[],
+    emptyFiles: { [key: string]: boolean }
+  ) => {
+    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
     // build snapshots from LU files
     const returnData = await this.orchestratorBuilder(luFiles, modelPath);
@@ -182,16 +225,7 @@ export class Builder {
       await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
     }
 
-    // write settings into /generated/orchestrator.settings.json
-    const orchestratorSettings = {
-      orchestrator: {
-        ModelPath: modelPath,
-        snapshots,
-      },
-    };
-
-    const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
-    await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
+    return snapshots;
   };
 
   /**
@@ -202,7 +236,7 @@ export class Builder {
   }
 
   /**
-   * Orchestrator: Download an available NLR model.
+   * Orchestrator: Download an available NLR model given an nlrId
    *
    * @remarks Available NLR models and VersionIds are obtained by running runOrchestratorNlrList first.
    *
@@ -214,10 +248,16 @@ export class Builder {
   public async runOrchestratorNlrGet(
     modelPath: string,
     nlrId: string,
-    onProgress: IOrchestratorProgress,
-    onFinish: IOrchestratorProgress
+    onProgress: IOrchestratorProgress = (status) => {
+      log(status);
+    },
+    onFinish: IOrchestratorProgress = (status) => {
+      log(status);
+    }
   ): Promise<void> {
-    await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
+    if (!(await pathExists(modelPath))) {
+      await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
+    }
   }
 
   /**
@@ -244,13 +284,21 @@ export class Builder {
         content: fi.content,
       }));
 
-    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, '', null, fullEmbedding);
+    return await Orchestrator.buildAsync(
+      modelPath,
+      luObjects,
+      this.orchestratorLabelResolvers,
+      isDialog,
+      '',
+      null,
+      fullEmbedding
+    );
   }
 
   public async copyModelPathToBot() {
     if (this.containOrchestrator) {
       const nlrList = await this.runOrchestratorNlrList();
-      const defaultNLR = nlrList.default;
+      const defaultNLR = nlrList.defaults.en_intent;
       const folderName = defaultNLR.replace('.onnx', '');
       const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
       const destDir = Path.resolve(Path.join(this.botDir, MODEL), folderName);
@@ -444,6 +492,7 @@ export class Builder {
       keptVersionCount: 10,
       isStaging: false,
       region: config.region,
+      directVersionPublish: true,
     });
 
     await this.luBuilder.writeDialogAssets(buildResult, {

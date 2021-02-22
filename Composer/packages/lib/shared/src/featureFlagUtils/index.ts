@@ -5,19 +5,18 @@ import formatMessage from 'format-message';
 import { FeatureFlagMap } from '@botframework-composer/types';
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
+  NEW_CREATION_FLOW: {
+    displayName: formatMessage('New Creation Experience'),
+    description: formatMessage('Component templates populated from npm feeds'),
+    isHidden: true,
+    enabled: false,
+  },
   FORM_DIALOG: {
     displayName: formatMessage('Form dialogs'),
     description: formatMessage(
       'Automatically generate dialogs that collect information from a user to manage conversations.'
     ),
     documentationLink: 'https://aka.ms/AAailpe',
-    isHidden: false,
-    enabled: false,
-  },
-  REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
-    displayName: formatMessage('Conversational Core Template'),
-    description: formatMessage('Enable the new conversational core template built on the component model'),
-    documentationLink: 'https://aka.ms/AAabzf9',
     isHidden: false,
     enabled: false,
   },

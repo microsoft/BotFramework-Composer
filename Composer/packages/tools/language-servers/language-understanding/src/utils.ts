@@ -46,7 +46,7 @@ export function convertSeverity(severity: BFDiagnosticSeverity): DiagnosticSever
   return severityMap[severity];
 }
 
-export function generageDiagnostic(message: string, severity: DiagnosticSeverity, document: TextDocument): Diagnostic {
+export function generateDiagnostic(message: string, severity: DiagnosticSeverity, document: TextDocument): Diagnostic {
   return {
     severity,
     range: Range.create(Position.create(0, 0), Position.create(0, 0)),
@@ -69,4 +69,11 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
     diagnostics.push(diagnostic);
   });
   return diagnostics;
+}
+
+export function getLineByIndex(document: TextDocument, line: number) {
+  const lineCount = document.lineCount;
+  if (line >= lineCount || line < 0) return null;
+
+  return document.getText().split(/\r?\n/g)[line];
 }

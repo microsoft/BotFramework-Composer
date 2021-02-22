@@ -30,6 +30,10 @@ import log from './logger';
 import { setEnvDefault } from './utility/setEnvDefault';
 import { ElectronContext, setElectronContext } from './utility/electronContext';
 import { authService } from './services/auth/auth';
+import DLServerContext from './directline/store/dlServerState';
+import { mountConversationsRoutes } from './directline/mountConversationRoutes';
+import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
+import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -116,6 +120,34 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   // always authorize all api routes, it will be a no-op if no auth provider set
   app.use(`${BASEURL}/api`, authorize, apiRouter);
 
+  const addCORSHeaders = (req: Request, res: Response, next?: NextFunction) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-ms-bot-agent'
+    );
+    next?.();
+  };
+
+  const preferredPort = toNumber(process.env.PORT) || 5000;
+  let port = preferredPort;
+
+  // Setup directline and conversation routes for v3 bots
+  const DLServerState = DLServerContext.getInstance(port);
+  const conversationRouter = mountConversationsRoutes(DLServerState);
+  app.use(`${BASEURL}`, conversationRouter);
+
+  const directlineRouter = mountDirectLineRoutes(DLServerState);
+  app.use(`${BASEURL}`, directlineRouter);
+
+  const attachmentsRouter = mountAttachmentRoutes(DLServerState);
+  app.use(`${BASEURL}`, attachmentsRouter);
+
+  conversationRouter.use((req, res, next) => addCORSHeaders(req, res, next));
+  directlineRouter.use((req, res, next) => addCORSHeaders(req, res, next));
+  attachmentsRouter.use((req, res, next) => addCORSHeaders(req, res, next));
+
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
@@ -139,8 +171,6 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     });
   });
 
-  const preferredPort = toNumber(process.env.PORT) || 5000;
-  let port = preferredPort;
   if (process.env.NODE_ENV === 'production') {
     // Dynamically search for an open PORT starting with PORT or 5000, so that
     // the app doesn't crash if the port is already being used.

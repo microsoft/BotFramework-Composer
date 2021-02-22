@@ -15,10 +15,11 @@
     "set-value": "^3.0.2",
     "terser-webpack-plugin": "^2.3.7",
     "axios": "^0.21.1",
-    "y18n": "^5.0.5"
+    "y18n": "^5.0.5",
+    "immer": "^8.0.1"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "workspaces": [
     "packages/adaptive-flow",
