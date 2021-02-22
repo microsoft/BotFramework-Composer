@@ -16,7 +16,7 @@ const memoryResolver = () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const luisMemoryResolver = (projectId) => {
+const luisMemoryResolver = (projectId: string) => {
   return ['@ ml name', '@ regex zipcode'];
 };
 
