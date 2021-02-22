@@ -193,58 +193,6 @@ export class OneAuthInstance extends OneAuthBase {
     return '';
   }
 
-  public async armAuth() {
-    try {
-      if (!this.initialized) {
-        this.initialize();
-      }
-      log('Signing in...');
-      // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
-      const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
-      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
-      this.signedInAccount = result.account;
-      const initialMSAToken = result.credential.value;
-
-      // call the tenants API
-      let tenantsList = await fetch('https://management.azure.com/tenants?api-version=2020-01-01', {
-        headers: { Authorization: `Bearer ${initialMSAToken}` },
-      });
-      tenantsList = await tenantsList.json();
-
-      // choose the first tenant (for debugging purposes)
-      console.log(tenantsList);
-      const tenant = (tenantsList as any).value[0];
-      const tenantId = tenant.tenantId;
-
-      // log the user into the chosen tenant
-      /*
-      signInParams = new this.oneAuth.AuthParameters(
-        DEFAULT_AUTH_SCHEME,
-        `https://login.microsoftonline.com/${tenantId}`,
-        ARM_RESOURCE,
-        '',
-        ''
-      );
-      const secondLogin: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
-      const armToken = secondLogin.credential.value;
-      console.log(armToken);*/
-
-      // try to silently get a token from ARM
-      const tokenParams = new this.oneAuth.AuthParameters(
-        DEFAULT_AUTH_SCHEME,
-        `https://login.microsoftonline.com/${tenantId}`,
-        ARM_RESOURCE,
-        '', //tenantId,
-        ''
-      );
-      const secondToken = await this.oneAuth.acquireCredentialSilently(this.signedInAccount.id, tokenParams, '');
-      console.log(secondToken.credential.value);
-    } catch (e) {
-      log('There was an error trying to sign in: %O', e);
-      throw e;
-    }
-  }
-
   public shutdown() {
     log('Shutting down...');
     this.oneAuth.shutdown();
