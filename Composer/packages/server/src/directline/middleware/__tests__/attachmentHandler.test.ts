@@ -94,6 +94,8 @@ describe('getAttachment handler', () => {
     };
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
       params: { viewId: 'original' },
     };
 
@@ -103,7 +105,7 @@ describe('getAttachment handler', () => {
       errorDetails: 'There is no original view',
       logType: 'Error',
       message: 'Unable to fetch attachment data. BadArgument',
-      route: undefined,
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
       status: 404,
       timestamp: '2021-02-19 00:00:00',
     });
@@ -116,6 +118,8 @@ describe('getAttachment handler', () => {
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
       params: { viewId: 'thumbnail' },
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
     };
 
     getAttachmentHandler(req, res);
@@ -124,7 +128,7 @@ describe('getAttachment handler', () => {
       errorDetails: 'There is no thumbnail view',
       logType: 'Error',
       message: 'Unable to fetch attachment data. BadArgument',
-      route: undefined,
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
       status: 404,
       timestamp: '2021-02-19 00:00:00',
     });
@@ -137,15 +141,17 @@ describe('getAttachment handler', () => {
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
       params: { attachmentId: 'attach1' },
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
     };
 
     getAttachmentHandler(req, res);
 
     expect(mockJsonResponse).toHaveBeenCalledWith({
       logType: 'Error',
-      message: 'attachment[attach1] not found .BadArgument',
+      message: 'attachment[attach1] not found. BadArgument',
       status: 404,
-      route: undefined,
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
       timestamp: '2021-02-19 00:00:00',
     });
   });
@@ -157,16 +163,17 @@ describe('getAttachment handler', () => {
     const getAttachmentHandler = createGetAttachmentHandler(state);
     const req: any = {
       params: {},
-      path: 'v3/attachments',
+      method: 'GET',
+      path: '/v3/attachments/:attachmentId/views/:viewId',
     };
 
     getAttachmentHandler(req, res);
 
     expect(mockJsonResponse).toHaveBeenCalledWith({
       logType: 'Error',
-      message: 'attachment[undefined] not found .BadArgument',
+      message: 'attachment[undefined] not found. BadArgument',
       status: 404,
-      route: 'v3/attachments',
+      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
       timestamp: '2021-02-19 00:00:00',
     });
   });

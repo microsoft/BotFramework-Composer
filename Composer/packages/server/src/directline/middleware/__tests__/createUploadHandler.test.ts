@@ -68,13 +68,13 @@ describe('uploadAttachment handler', () => {
         }),
       },
     };
-    const req: any = { path: 'v3/uploads' };
+    const req: any = { path: 'v3/uploads', method: 'POST' };
     const uploadAttachment = createUploadAttachmentHandler(state);
     uploadAttachment(req, res);
     expect(mockJsonResponse).toHaveBeenCalledWith({
       logType: 'Error',
       message: "'You must specify type property for the attachment'. MissingProperty",
-      route: 'v3/uploads',
+      route: 'POST v3/uploads',
       status: StatusCodes.BAD_REQUEST,
       timestamp: '2021-02-19 00:00:00',
     });

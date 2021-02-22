@@ -158,6 +158,8 @@ describe('postActivityToBot handler', () => {
     const mockPostToBot = jest.fn();
 
     const req: any = {
+      method: 'POST',
+      path: 'v3/directine/conv-123',
       params: {
         activityId: 'id-1',
       },
@@ -189,7 +191,7 @@ describe('postActivityToBot handler', () => {
       logType: 'Error',
       message:
         '{"code":"ServiceError","exception":{"response":{"status":400,"data":{"error":"The bot cannot accept messages at this time","errorCode":["123Z-4","989-Az"]}}}}',
-      route: undefined,
+      route: 'POST v3/directine/conv-123',
       status: 400,
       timestamp: '2021-02-19 00:00:00',
     });
