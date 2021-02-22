@@ -26,6 +26,7 @@ import { formDialogsDispatcher } from './formDialogs';
 import { botProjectFileDispatcher } from './botProjectFile';
 import { zoomDispatcher } from './zoom';
 import { recognizerDispatcher } from './recognizers';
+import { webChatLogDispatcher } from './webchat';
 
 const createDispatchers = () => {
   return {
@@ -54,6 +55,7 @@ const createDispatchers = () => {
     ...botProjectFileDispatcher(),
     ...zoomDispatcher(),
     ...recognizerDispatcher(),
+    ...webChatLogDispatcher(),
   };
 };
 

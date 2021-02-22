@@ -5,10 +5,10 @@ import { selector } from 'recoil';
 import formatMessage from 'format-message';
 import lodashGet from 'lodash/get';
 
-import { dispatcherState } from '../DispatcherWrapper';
 import httpClient from '../../utils/httpUtil';
 import { Dispatcher } from '../dispatchers';
 import { StateError } from '../../recoilModel/types';
+import { dispatcherState } from '../atoms';
 
 // Actions
 const ejectRuntimeAction = (dispatcher: Dispatcher) => {
