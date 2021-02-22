@@ -7,7 +7,7 @@ import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
 import formatMessage from 'format-message';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import { RestartOption } from './WebChatPanel';
+import { RestartOption } from './type';
 
 const customButtonStyles: IButtonStyles = {
   root: {
