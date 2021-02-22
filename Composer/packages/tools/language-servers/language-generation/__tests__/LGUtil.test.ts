@@ -19,10 +19,6 @@ import {
 } from '../lib/utils';
 import { LgParser } from '../lib/lgParser';
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/camelcase */
-const assert = require('assert');
-
 const textDoc: TextDocument = {
   getText: () => '-this is an entity: ${@name}',
   uri: 'inmemory://model/1',
@@ -73,57 +69,57 @@ const lgDiagnostics = [
 describe('LG LSP Server Function Unit Tests', () => {
   it('Test getRangeAtPosition function', () => {
     const result = getRangeAtPosition(textDoc, Position.create(0, 3));
-    assert.deepStrictEqual(result, { end: { character: 5, line: 0 }, start: { character: 0, line: 0 } });
+    expect(result).toEqual({ end: { character: 5, line: 0 }, start: { character: 0, line: 0 } });
   });
 
   it('Test getEntityRangeAtPosition function', () => {
     const result = getEntityRangeAtPosition(textDoc, Position.create(0, 23));
-    assert.deepStrictEqual(result, { end: { character: 27, line: 0 }, start: { character: 22, line: 0 } });
+    expect(result).toEqual({ end: { character: 27, line: 0 }, start: { character: 22, line: 0 } });
   });
 
   it('Test extract luisJson function', async () => {
     const result = await extractLUISContent(luisText);
-    assert.deepStrictEqual(result.entities[0].name, 'name');
-    assert.deepStrictEqual(result.prebuiltEntities[0].name, 'number');
-    assert.deepStrictEqual(result.regex_entities[0].name, 'zipcode');
+    expect(result.entities[0].name).toEqual('name');
+    expect(result.prebuiltEntities[0].name).toEqual('number');
+    expect(result.regex_entities[0].name).toEqual('zipcode');
   });
 
   it('Test getSuggestionEntities function', () => {
     const result = getSuggestionEntities(luisObj, suggestionAllEntityTypes);
-    assert.deepStrictEqual(result, ['name', 'zipcode']);
+    expect(result).toEqual(['name', 'zipcode']);
   });
 
   it('Test getLineByIndex function', () => {
     const result = getLineByIndex(textDoc2, 2);
-    assert.deepStrictEqual(result, 'line2');
+    expect(result).toEqual('line2');
   });
 
   it('Test generateDiagnostic function', () => {
     const result = generateDiagnostic('No Template Found', DiagnosticSeverity.Error, textDoc2);
-    assert.deepStrictEqual(result.message, 'No Template Found');
-    assert.deepStrictEqual(result.severity, DiagnosticSeverity.Error);
+    expect(result.message).toEqual('No Template Found');
+    expect(result.severity).toEqual(DiagnosticSeverity.Error);
   });
 
   it('Test convertDiagnostics function', () => {
     const result = convertDiagnostics(lgDiagnostics, textDoc2);
-    assert.deepStrictEqual(result.length, 2);
-    assert.deepStrictEqual(result[1].message, 'No template body');
+    expect(result.length).toEqual(2);
+    expect(result[1].message).toEqual('No template body');
   });
 
   it('Test convertSeverity function', () => {
     const result = convertSeverity(lgDiagnosticSeverity.Error);
-    assert.deepStrictEqual(result, DiagnosticSeverity.Error);
+    expect(result).toEqual(DiagnosticSeverity.Error);
   });
 
   it('Test LGParser function', async () => {
     const lgParser = new LgParser();
     const result = await lgParser.extractLuisEntity([luisText]);
-    assert.deepStrictEqual(result, { suggestEntities: ['name', 'zipcode'] });
+    expect(result).toEqual({ suggestEntities: ['name', 'zipcode'] });
 
     const result2 = await lgParser.parse('id', lgText, []);
-    assert.deepStrictEqual(result2.allTemplates.length, 2);
+    expect(result2.allTemplates.length).toEqual(2);
 
     const result3 = await lgParser.updateTemplate(result2, 'Temp2', { body: 'new body' }, []);
-    assert.deepStrictEqual(result3.allTemplates[1].body, 'new body');
+    expect(result3.allTemplates[1].body).toEqual('new body');
   });
 });

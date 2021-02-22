@@ -110,8 +110,8 @@ export class LGServer {
         }
 
         // update luis entities once user open LG editor
-        const projectId = lgOption?.projectId;
-        if (projectId && this.entitiesResolver) {
+        const projectId = lgOption?.projectId || '';
+        if (this.entitiesResolver) {
           const luContents = this.entitiesResolver(projectId) || [];
           if (!isEqual(luContents, this._lastLuContent)) {
             this._lastLuContent = luContents;
