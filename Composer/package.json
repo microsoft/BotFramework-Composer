@@ -4,7 +4,6 @@
   "private": true,
   "resolutions": {
     "@babel/parser": "^7.11.3",
-    "@babel/preset-env": "7.9.6",
     "@types/react": "16.9.23",
     "bl": "^4.0.3",
     "elliptic": "^6.5.3",
