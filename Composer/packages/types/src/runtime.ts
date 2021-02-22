@@ -63,6 +63,7 @@ export type RuntimeTemplate = {
     runtimePath: string,
     componentName: string,
     version: string,
+    source: string,
     project: IBotProject
   ) => Promise<string>;
 

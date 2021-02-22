@@ -39,10 +39,12 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('FINISHED BUILDING!');
     },
-    installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
+    installComponent: async (runtimePath: string, packageName: string, version: string, source: string,  _project: any): Promise<string> => {
       // run dotnet install on the project
+      const command = `dotnet add package ${packageName}${version ? ' --version=' + version : ''}${source ? ' --source=' + source : ''}`;
+      composer.log('EXEC:', command);
       const { stderr: installError, stdout: installOutput } = await execAsync(
-        `dotnet add package ${packageName}${version ? ' --version=' + version : ''}`,
+        command,
         {
           cwd: path.join(runtimePath, 'azurewebapp'),
         }
@@ -62,7 +64,7 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    identifyManifest: (runtimePath: string): string => {
+    identifyManifest: (runtimePath: string, projName?: string): string => {
       return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
     },
     run: async (project: any, localDisk: IFileStorage) => {
@@ -212,7 +214,7 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('BUILD COMPLETE');
     },
-    installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
+    installComponent: async (runtimePath: string, packageName: string, version: string, source: string, _project: any): Promise<string> => {
       // run dotnet install on the project
       const { stderr: installError, stdout: installOutput } = await execAsync(
         `npm install --loglevel=error --save ${packageName}${version ? '@' + version : ''}`,
@@ -238,7 +240,7 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    identifyManifest: (runtimePath: string): string => {
+    identifyManifest: (runtimePath: string, projName?: string): string => {
       return path.join(runtimePath, 'package.json');
     },
     run: async (project: any, localDisk: IFileStorage) => {
@@ -333,7 +335,7 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('FINISHED BUILDING!');
     },
-    installComponent: async (runtimePath: string, packageName: string, version: string, _project: any): Promise<string> => {
+    installComponent: async (runtimePath: string, packageName: string, version: string, source: string, _project: any): Promise<string> => {
       // run dotnet install on the project
       composer.log(`EXECUTE: dotnet add ${_project.name}.csproj package ${packageName}${version ? ' --version=' + version : ''} `);
       const { stderr: installError, stdout: installOutput } = await execAsync(
