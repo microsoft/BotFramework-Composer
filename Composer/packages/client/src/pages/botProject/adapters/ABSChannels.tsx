@@ -37,11 +37,11 @@ import {
   errorTextStyle,
 } from '../styles';
 
-// -------------------- RuntimeSettings -------------------- //
+import ABSChannelSpeechModal from './ABSChannelSpeechModal';
 
-const teamsHelpLink = 'https://aka.ms/configureComposerTeamsChannel';
-const webchatHelpLink = 'https://aka.ms/configureComposerWebchatChannel';
-const speechHelpLink = 'https://aka.ms/configureComposerSpeechChannel';
+const teamsHelpLink = 'https://aka.ms/composer-channel-teams';
+const webchatHelpLink = 'https://aka.ms/composer-channel-webchat';
+const speechHelpLink = 'https://aka.ms/composer-channel-speech';
 
 const CHANNELS = {
   TEAMS: 'MsTeamsChannel',
@@ -87,7 +87,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoading, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-
+  const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
@@ -186,7 +186,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const createChannelService = async (channelId: string) => {
+  const createChannelService = async (channelId: string, opts?: any) => {
     if (currentResource) {
       try {
         const url = `https://management.azure.com/subscriptions/${
@@ -237,8 +237,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               location: 'global',
               properties: {
                 properties: {
-                  cognitiveServiceRegion: null,
-                  cognitiveServiceSubscriptionKey: null,
+                  cognitiveServiceRegion: 'eastus',
+                  cognitiveServiceSubscriptionKey: opts?.cognitiveServiceSubscriptionKey,
                   isEnabled: true,
                   customVoiceDeploymentId: '',
                   customSpeechModelId: '',
@@ -250,6 +250,10 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             };
         }
         await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
+
+        if (channelId === CHANNELS.SPEECH) {
+          await httpClient.patch(url, data, { headers: { Authorization: `Bearer ${token}` } });
+        }
 
         // success!!
         setChannelStatus({
@@ -368,20 +372,36 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const toggleService = (channel) => {
     return async (_, enabled) => {
-      setChannelStatus({
-        ...channelStatus,
-        [channel]: {
-          enabled: enabled,
-          loading: true,
-        },
-      });
-
-      if (enabled) {
-        await createChannelService(channel);
+      if (enabled && channel === CHANNELS.SPEECH) {
+        setShowSpeechModal(true);
       } else {
-        await deleteChannelService(channel);
+        setChannelStatus({
+          ...channelStatus,
+          [channel]: {
+            enabled: enabled,
+            loading: true,
+          },
+        });
+
+        if (enabled) {
+          await createChannelService(channel);
+        } else {
+          await deleteChannelService(channel);
+        }
       }
     };
+  };
+
+  const toggleSpeechOn = async (key: string) => {
+    setChannelStatus({
+      ...channelStatus,
+      [CHANNELS.SPEECH]: {
+        enabled: true,
+        loading: true,
+      },
+    });
+
+    await createChannelService(CHANNELS.SPEECH, { cognitiveServiceSubscriptionKey: key });
   };
 
   const onRenderLabel = (props) => {
@@ -501,6 +521,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
         />
       )}
+      <ABSChannelSpeechModal
+        isOpen={showSpeechModal}
+        onClose={() => {
+          setShowSpeechModal(false);
+        }}
+        onUpdateKey={toggleSpeechOn}
+      />
       <div>
         <Dropdown
           label={formatMessage('Publish profile to configure:')}
