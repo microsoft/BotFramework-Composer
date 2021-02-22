@@ -17,6 +17,7 @@ import {
   convertDiagnostics,
   convertSeverity,
 } from '../../lib/utils';
+import { LgParser } from '../../lib/lgParser';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/camelcase */
@@ -62,6 +63,7 @@ const luisObj = {
 };
 
 const luisText = '@ ml name\r\n @ prebuilt number age\r\n @regex zipcode';
+const lgText = '#Temp1\r\n -welcome\r\n #Temp2\r\n-greeting';
 
 const lgDiagnostics = [
   new lgDiagnostic(Range.create(0, 0, 0, 10), 'No template name', DiagnosticSeverity.Error),
@@ -111,5 +113,17 @@ describe('LG LSP Server Function Unit Tests', () => {
   it('Test convertSeverity function', () => {
     const result = convertSeverity(lgDiagnosticSeverity.Error);
     assert.deepStrictEqual(result, DiagnosticSeverity.Error);
+  });
+
+  it('Test LGParser function', async () => {
+    const lgParser = new LgParser();
+    const result = await lgParser.extractLuisEntity([luisText]);
+    assert.deepStrictEqual(result, { suggestEntities: ['name', 'zipcode'] });
+
+    const result2 = await lgParser.parse('id', lgText, []);
+    assert.deepStrictEqual(result2.allTemplates.length, 2);
+
+    const result3 = await lgParser.updateTemplate(result2, 'Temp2', { body: 'new body' }, []);
+    assert.deepStrictEqual(result3.allTemplates[1].body, 'new body');
   });
 });
