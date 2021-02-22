@@ -16,6 +16,7 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { navigateTo } from '../../../utils/navigation';
@@ -25,6 +26,7 @@ import { AuthDialog } from '../../../components/Auth/AuthDialog';
 import { armScopes } from '../../../constants';
 import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
+import { dispatcherState } from '../../../recoilModel';
 import {
   tableRow,
   tableRowItem,
@@ -37,11 +39,11 @@ import {
   errorTextStyle,
 } from '../styles';
 
-// -------------------- RuntimeSettings -------------------- //
+import ABSChannelSpeechModal from './ABSChannelSpeechModal';
 
-const teamsHelpLink = 'https://aka.ms/configureComposerTeamsChannel';
-const webchatHelpLink = 'https://aka.ms/configureComposerWebchatChannel';
-const speechHelpLink = 'https://aka.ms/configureComposerSpeechChannel';
+const teamsHelpLink = 'https://aka.ms/composer-channel-teams';
+const webchatHelpLink = 'https://aka.ms/composer-channel-webchat';
+const speechHelpLink = 'https://aka.ms/composer-channel-speech';
 
 const CHANNELS = {
   TEAMS: 'MsTeamsChannel',
@@ -87,7 +89,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoading, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-
+  const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
+  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
@@ -151,8 +154,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       try {
         const url = `https://management.azure.com/subscriptions/${
           currentResource.subscriptionId || currentResource.alternateSubscriptionId
-        }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
-          currentResource?.resourceName
+        }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+          currentResource.resourceName
         }/channels/${channelId}?api-version=2020-06-02`;
         await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
         return {
@@ -160,168 +163,115 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           loading: false,
         };
       } catch (err) {
-        switch (err?.response.data?.error.code) {
-          case 'ResourceNotFound':
-            // this channel has not yet been created, should display as disabled
-            return {
-              enabled: false,
-              loading: false,
-            };
-            break;
-          case 'AuthenticationFailed':
-            // the auth failed for some reason.
-            break;
-          case 'ResourceGroupNotFound':
-            // this resource group is not found - in other words, can't find a channel registration in the expected spot.
-            break;
-          case 'SubscriptionNotFound':
-            // the subscription is not found or invalid
-            break;
-          default:
-            // handle error.
-            break;
+        if (err?.response.data?.error.code === 'ResourceNotFound') {
+          // this channel has not yet been created, should display as disabled
+          return {
+            enabled: false,
+            loading: false,
+          };
         }
         throw new Error(err?.response.data?.error.message || 'Failed to fetch channel status');
       }
     }
   };
 
-  const createChannelService = async (channelId: string) => {
+  const createChannelService = async (channelId: string, opts?: any) => {
     if (currentResource) {
-      try {
-        const url = `https://management.azure.com/subscriptions/${
-          currentResource.subscriptionId || currentResource.alternateSubscriptionId
-        }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
-          currentResource?.resourceName
-        }/channels/${channelId}?api-version=2020-06-02`;
-        let data = {};
-        switch (channelId) {
-          case CHANNELS.TEAMS:
-            data = {
-              location: 'global',
-              name: `${currentResource?.resourceName}/${channelId}`,
-              properties: {
-                channelName: channelId,
-                location: 'global',
-                properties: {
-                  isEnabled: true,
-                },
-              },
-            };
-            break;
-          case CHANNELS.WEBCHAT:
-            data = {
-              name: `${currentResource?.resourceName}/${channelId}`,
-              type: 'Microsoft.BotService/botServices/channels',
+      const url = `https://management.azure.com/subscriptions/${
+        currentResource.subscriptionId || currentResource.alternateSubscriptionId
+      }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+        currentResource.resourceName
+      }/channels/${channelId}?api-version=2020-06-02`;
+      let data = {};
+      switch (channelId) {
+        case CHANNELS.TEAMS:
+          data = {
+            location: 'global',
+            name: `${currentResource.resourceName}/${channelId}`,
+            properties: {
+              channelName: channelId,
               location: 'global',
               properties: {
-                properties: {
-                  webChatEmbedCode: null,
-                  sites: [
-                    {
-                      siteName: 'Default Site',
-                      isEnabled: true,
-                      isWebchatPreviewEnabled: true,
-                    },
-                  ],
-                },
-                channelName: 'WebChatChannel',
-                location: 'global',
+                isEnabled: true,
               },
-            };
-            break;
-          case CHANNELS.SPEECH:
-            data = {
-              name: `${currentResource?.resourceName}/${channelId}`,
-              type: 'Microsoft.BotService/botServices/channels',
-              location: 'global',
+            },
+          };
+          break;
+        case CHANNELS.WEBCHAT:
+          data = {
+            name: `${currentResource.resourceName}/${channelId}`,
+            type: 'Microsoft.BotService/botServices/channels',
+            location: 'global',
+            properties: {
               properties: {
-                properties: {
-                  cognitiveServiceRegion: null,
-                  cognitiveServiceSubscriptionKey: null,
-                  isEnabled: true,
-                  customVoiceDeploymentId: '',
-                  customSpeechModelId: '',
-                  isDefaultBotForCogSvcAccount: false,
-                },
-                channelName: 'DirectLineSpeechChannel',
-                location: 'global',
+                webChatEmbedCode: null,
+                sites: [
+                  {
+                    siteName: 'Default Site',
+                    isEnabled: true,
+                    isWebchatPreviewEnabled: true,
+                  },
+                ],
               },
-            };
-        }
-        await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
+              channelName: 'WebChatChannel',
+              location: 'global',
+            },
+          };
+          break;
+        case CHANNELS.SPEECH:
+          data = {
+            name: `${currentResource.resourceName}/${channelId}`,
+            type: 'Microsoft.BotService/botServices/channels',
+            location: 'global',
+            properties: {
+              properties: {
+                cognitiveServiceRegion: opts?.cognitiveServiceRegion,
+                cognitiveServiceSubscriptionKey: opts?.cognitiveServiceSubscriptionKey,
+                isEnabled: true,
+                customVoiceDeploymentId: '',
+                customSpeechModelId: '',
+                isDefaultBotForCogSvcAccount: opts?.isDefaultBotForCogSvcAccount,
+              },
+              channelName: 'DirectLineSpeechChannel',
+              location: 'global',
+            },
+          };
+      }
+      await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
 
-        // success!!
-        setChannelStatus({
-          ...channelStatus,
-          [channelId]: {
-            enabled: true,
-            loading: false,
-          },
-        });
-
-        return {
+      // success!!
+      setChannelStatus({
+        ...channelStatus,
+        [channelId]: {
           enabled: true,
           loading: false,
-        };
-      } catch (err) {
-        switch (err?.response.data?.error.code) {
-          case 'AuthenticationFailed':
-            // the auth failed for some reason.
-            break;
-          case 'ResourceGroupNotFound':
-            // this resource group is not found - in other words, can't find a channel registration in the expected spot.
-            break;
-          case 'SubscriptionNotFound':
-            // the subscription is not found or invalid
-            break;
-          default:
-            // handle error.
-            break;
-        }
-        throw new Error(err?.response.data?.error.message || 'Failed to create new channel');
-      }
+        },
+      });
+
+      return {
+        enabled: true,
+        loading: false,
+      };
     }
   };
 
   const deleteChannelService = async (channelId: string) => {
     if (currentResource) {
-      try {
-        const url = `https://management.azure.com/subscriptions/${
-          currentResource.subscriptionId || currentResource.alternateSubscriptionId
-        }/resourceGroups/${currentResource?.resourceGroupName}/providers/Microsoft.BotService/botServices/${
-          currentResource?.resourceName
-        }/channels/${channelId}?api-version=2020-06-02`;
-        await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
+      const url = `https://management.azure.com/subscriptions/${
+        currentResource.subscriptionId || currentResource.alternateSubscriptionId
+      }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
+        currentResource.resourceName
+      }/channels/${channelId}?api-version=2020-06-02`;
+      await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
 
-        // success!!
-        setChannelStatus({
-          ...channelStatus,
-          [channelId]: {
-            enabled: false,
-            loading: false,
-          },
-        });
-      } catch (err) {
-        switch (err?.response.data?.error.code) {
-          case 'AuthenticationFailed':
-            // the auth failed for some reason.
-            break;
-
-          case 'ResourceGroupNotFound':
-            // this resource group is not found - in other words, can't find a channel registration in the expected spot.
-            break;
-
-          case 'SubscriptionNotFound':
-            // the subscription is not found or invalid
-            break;
-
-          default:
-            // handle error.
-            break;
-        }
-        throw new Error(err?.response.data?.error.message || 'Failed to delete new channel');
-      }
+      // success!!
+      setChannelStatus({
+        ...channelStatus,
+        [channelId]: {
+          enabled: false,
+          loading: false,
+        },
+      });
     }
   };
 
@@ -368,20 +318,75 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const toggleService = (channel) => {
     return async (_, enabled) => {
+      if (enabled && channel === CHANNELS.SPEECH) {
+        setShowSpeechModal(true);
+      } else {
+        setChannelStatus({
+          ...channelStatus,
+          [channel]: {
+            enabled: enabled,
+            loading: true,
+          },
+        });
+
+        try {
+          if (enabled) {
+            await createChannelService(channel);
+          } else {
+            await deleteChannelService(channel);
+          }
+        } catch (err) {
+          setApplicationLevelError(err);
+          setChannelStatus({
+            ...channelStatus,
+            [channel]: {
+              enabled: !enabled,
+              loading: false,
+            },
+          });
+        }
+      }
+    };
+  };
+
+  const toggleSpeechOn = async (key: string, region: string, isDefault: boolean) => {
+    setChannelStatus({
+      ...channelStatus,
+      [CHANNELS.SPEECH]: {
+        enabled: true,
+        loading: true,
+      },
+    });
+
+    try {
+      await createChannelService(CHANNELS.SPEECH, {
+        cognitiveServiceSubscriptionKey: key,
+        cognitiveServiceRegion: region,
+        isDefaultBotForCogSvcAccount: isDefault,
+      });
+    } catch (err) {
       setChannelStatus({
         ...channelStatus,
-        [channel]: {
-          enabled: enabled,
-          loading: true,
+        [CHANNELS.SPEECH]: {
+          enabled: false,
+          loading: false,
         },
       });
 
-      if (enabled) {
-        await createChannelService(channel);
+      if (err?.response?.data?.error.code === 'InvalidChannelData') {
+        const result = await OpenConfirmModal(
+          formatMessage('Enable speech'),
+          formatMessage(
+            'This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?'
+          )
+        );
+        if (result) {
+          toggleSpeechOn(key, region, false);
+        }
       } else {
-        await deleteChannelService(channel);
+        setApplicationLevelError(err);
       }
-    };
+    }
   };
 
   const onRenderLabel = (props) => {
@@ -501,6 +506,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
         />
       )}
+      <ABSChannelSpeechModal
+        isOpen={showSpeechModal}
+        onClose={() => {
+          setShowSpeechModal(false);
+        }}
+        onUpdateKey={toggleSpeechOn}
+      />
       <div>
         <Dropdown
           label={formatMessage('Publish profile to configure:')}
