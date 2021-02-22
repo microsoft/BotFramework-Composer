@@ -3,17 +3,22 @@
 
 import { StatusCodes } from 'http-status-codes';
 
+import { BotErrorCodes } from '../../utils/apiErrorException';
 import { textItem } from '../../utils/helpers';
 import { createUploadAttachmentHandler, createUploadHandler } from '../createUploadHandler';
 
-const mockSendErrorResponse = jest.fn();
-jest.mock('../../utils/apiErrorException.ts', () => ({
-  sendErrorResponse: (...args) => mockSendErrorResponse(...args),
+let res;
+
+const mockEnd = jest.fn();
+
+jest.mock('moment', () => {
+  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000');
+});
+
+const mockJsonResponse = jest.fn(() => ({
+  end: mockEnd,
 }));
 
-let res;
-const mockEnd = jest.fn();
-const mockJsonResponse = jest.fn();
 const mockSend = jest.fn(() => ({
   end: mockEnd,
 }));
@@ -56,14 +61,23 @@ describe('uploadAttachment handler', () => {
     const state: any = {
       attachments: {
         uploadAttachment: jest.fn(() => {
-          throw new Error('Something went wrong.');
+          throw {
+            status: StatusCodes.BAD_REQUEST,
+            message: `'You must specify type property for the attachment'. ${BotErrorCodes.MissingProperty}`,
+          };
         }),
       },
     };
-    const req: any = { body: {} };
+    const req: any = { path: 'v3/uploads', method: 'POST' };
     const uploadAttachment = createUploadAttachmentHandler(state);
     uploadAttachment(req, res);
-    expect(mockSendErrorResponse).toHaveBeenCalledWith(req, res, new Error('Something went wrong.'));
+    expect(mockJsonResponse).toHaveBeenCalledWith({
+      logType: 'Error',
+      message: "'You must specify type property for the attachment'. MissingProperty",
+      route: 'POST v3/uploads',
+      status: StatusCodes.BAD_REQUEST,
+      timestamp: '2021-02-19 00:00:00',
+    });
   });
 });
 
@@ -96,7 +110,7 @@ describe('upload handler', () => {
     upload(req, res);
 
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
-    expect(mockSend).toHaveBeenCalledWith('Conversation not found.');
+    expect(mockSend).toHaveBeenCalledWith('Cannot upload file. Conversation not found.');
     expect(mockEnd).toHaveBeenCalled();
     const logItem = textItem('Error', 'Cannot upload file. Conversation not found.');
     expect(mockLogToDoc).toHaveBeenCalledWith('conversation1', logItem);
@@ -119,7 +133,7 @@ describe('upload handler', () => {
     const upload = createUploadHandler(serverContext.state);
     upload(req, res);
 
-    expect(mockStatus).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockSend).toHaveBeenCalledWith('Cannot parse attachment.');
     expect(mockEnd).toHaveBeenCalled();
 
@@ -137,7 +151,7 @@ describe('upload handler', () => {
 
     upload(requestWithNoContent, res);
 
-    expect(mockStatus).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockSend).toHaveBeenCalledWith('Cannot parse attachment.');
     expect(mockEnd).toHaveBeenCalled();
   });

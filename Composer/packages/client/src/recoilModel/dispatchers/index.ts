@@ -27,6 +27,7 @@ import { botProjectFileDispatcher } from './botProjectFile';
 import { zoomDispatcher } from './zoom';
 import { recognizerDispatcher } from './recognizers';
 import { orchestratorDispatcher } from './orchestrator';
+import { webChatLogDispatcher } from './webchat';
 
 const createDispatchers = () => {
   return {
@@ -56,6 +57,7 @@ const createDispatchers = () => {
     ...zoomDispatcher(),
     ...recognizerDispatcher(),
     ...orchestratorDispatcher(),
+    ...webChatLogDispatcher(),
   };
 };
 

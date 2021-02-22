@@ -7,13 +7,11 @@ import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { IToolbarItem } from '@bfc/ui-shared';
 
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { exportSkillModalInfoState } from '../../recoilModel';
-import implementedDebugExtensions from '../design/DebugPanel/TabExtensions';
 
 import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
@@ -25,16 +23,6 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
 
   const { projectId = '' } = props;
-  const toolbarItems: IToolbarItem[] = implementedDebugExtensions
-    .map(({ key, ToolbarWidget }) => {
-      if (!ToolbarWidget) return;
-      return {
-        type: 'element',
-        element: <ToolbarWidget key={`ToolbarWidget-${key}`} />,
-        align: 'right',
-      };
-    })
-    .filter((item) => Boolean(item)) as IToolbarItem[];
 
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigateTo(item.getUrl());
@@ -55,7 +43,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       navRegionName={formatMessage('Diagnostics Pane')}
       pageMode={'diagnostics'}
       title={formatMessage('Diagnostics')}
-      toolbarItems={toolbarItems}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <DiagnosticsTable projectId={projectId} showType={showType} onItemClick={handleItemClick} />
