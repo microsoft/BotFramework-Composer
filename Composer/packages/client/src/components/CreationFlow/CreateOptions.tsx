@@ -255,7 +255,6 @@ export function CreateOptions(props: CreateOptionsProps) {
         axios
           .get<any>(`/api/projects/alias/${alias}`)
           .then((aliasRes) => {
-            console.log(aliasRes);
             if (aliasRes.status === 200) {
               navigate(`/bot/${aliasRes.data.id}`);
               return;
@@ -264,12 +263,10 @@ export function CreateOptions(props: CreateOptionsProps) {
           .catch((e) => {
             setIsOpen(true);
           });
-      } else {
-        setIsOpen(true);
+        return;
       }
-    } else {
-      setIsOpen(true);
     }
+    setIsOpen(true);
   }, [props.location?.search]);
 
   const choiceOptions = [
