@@ -37,3 +37,17 @@ export type ISettingManager = {
   set(settings: any): Promise<void>;
   getFileName: () => string;
 };
+
+export type DirectLineLogType = 'Error' | 'Warn' | 'Info';
+
+export interface DirectLineError {
+  status: number;
+  message: string;
+  details?: string;
+}
+
+export interface DirectLineLog extends DirectLineError {
+  timestamp: string;
+  route?: string;
+  logType: DirectLineLogType;
+}

@@ -7,15 +7,17 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useSetRecoilState } from 'recoil';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-import { debugPanelExpansionState } from '../../../../../recoilModel';
+import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
 
 import { useDiagnosticsStatistics } from './useDiagnostics';
+import { DiagnosticsTabKey } from './constants';
 
 /**
  * Displays how many errors and warnings in current project.
  */
 export const DiagnosticsStatus = () => {
   const setExpansion = useSetRecoilState(debugPanelExpansionState);
+  const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
   const { errorsCount, warningsCount } = useDiagnosticsStatistics();
 
   return (
@@ -39,6 +41,7 @@ export const DiagnosticsStatus = () => {
         }}
         onClick={() => {
           setExpansion(true);
+          setActiveTab(DiagnosticsTabKey);
         }}
       >
         {errorsCount}
