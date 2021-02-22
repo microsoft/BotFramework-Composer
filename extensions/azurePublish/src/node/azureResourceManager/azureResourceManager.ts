@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable no-underscore-dangle */
 
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { StorageManagementClient } from '@azure/arm-storage';
@@ -11,6 +12,8 @@ import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
 import { SearchManagementClient } from '@azure/arm-search';
 
 import { BotProjectDeployLoggerType } from '../types';
+import { createCustomizeError, ProvisionErrors, stringifyError } from '../utils/errorHandler';
+import { LuisAuthoringSupportLocation } from '../../types';
 
 import {
   AzureResourceManangerConfig,
@@ -24,10 +27,8 @@ import {
   ResourceGroupConfig,
   DeploymentsConfig,
   QnAResourceConfig,
-  AzureFuntionsConfig,
+  AzureFunctionsConfig,
 } from './azureResourceManagerConfig';
-import { createCustomizeError, ProvisionErrors, stringifyError } from '../utils/errorHandler';
-import { LuisAuthoringSupportLocation, LuisPublishSupportLocation } from '../../types';
 
 export class AzureResourceMananger {
   // Logger
@@ -51,11 +52,17 @@ export class AzureResourceMananger {
    */
   public async createResourceGroup(config: ResourceGroupConfig): Promise<ResourceGroupConfig> {
     if (!config.name) {
-      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,'You should provide a valid resource group name.');
+      throw createCustomizeError(
+        ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
+        'You should provide a valid resource group name.'
+      );
     }
     // Create a new resource group
     if (!config.location) {
-      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,'You should provide a valid resource group name.');
+      throw createCustomizeError(
+        ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
+        'You should provide a valid resource group name.'
+      );
     }
 
     try {
@@ -78,7 +85,10 @@ export class AzureResourceMananger {
             status: BotProjectDeployLoggerType.PROVISION_ERROR,
             message: resourceGroupGetResult._response.bodyAsText,
           });
-          throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, resourceGroupGetResult._response.bodyAsText);
+          throw createCustomizeError(
+            ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
+            resourceGroupGetResult._response.bodyAsText
+          );
         }
 
         this.logger({
@@ -102,7 +112,10 @@ export class AzureResourceMananger {
         });
 
         if (resourceGroupResult._response.status >= 300) {
-          throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, resourceGroupResult._response.bodyAsText);
+          throw createCustomizeError(
+            ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
+            resourceGroupResult._response.bodyAsText
+          );
         }
 
         return config;
@@ -129,7 +142,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       // check location is validated
       let authoringLocation = config.location;
-      if(!LuisAuthoringSupportLocation.includes(config.location)){
+      if (!LuisAuthoringSupportLocation.includes(config.location)) {
         authoringLocation = 'westus'; // default as westus
       }
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
@@ -148,14 +161,14 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        throw createCustomizeError(ProvisionErrors.CREATE_LUIS_AUTHORING_RESOURCE_ERROR, deployResult._response.bodyAsText);
+        throw createCustomizeError(
+          ProvisionErrors.CREATE_LUIS_AUTHORING_RESOURCE_ERROR,
+          deployResult._response.bodyAsText
+        );
       }
 
       const authoringEndpoint = deployResult.properties?.endpoint ?? '';
-      const keys = await cognitiveServicesManagementClient.accounts.listKeys(
-        config.resourceGroupName,
-        config.name
-      );
+      const keys = await cognitiveServicesManagementClient.accounts.listKeys(config.resourceGroupName, config.name);
       const authoringKey = keys?.key1 ?? '';
       return { authoringKey, authoringEndpoint };
     } catch (err) {
@@ -180,7 +193,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       // check luis publish location is validated
       let authoringLocation = config.location;
-      if(!LuisAuthoringSupportLocation.includes(config.location)){
+      if (!LuisAuthoringSupportLocation.includes(config.location)) {
         authoringLocation = 'westus'; // default as westus
       }
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
@@ -203,10 +216,7 @@ export class AzureResourceMananger {
       }
 
       const endpoint = deployResult.properties?.endpoint ?? '';
-      const keys = await cognitiveServicesManagementClient.accounts.listKeys(
-        config.resourceGroupName,
-        config.name
-      );
+      const keys = await cognitiveServicesManagementClient.accounts.listKeys(config.resourceGroupName, config.name);
       const endpointKey = keys?.key1 ?? '';
       return { endpoint, endpointKey };
     } catch (err) {
@@ -235,21 +245,25 @@ export class AzureResourceMananger {
       const qnaMakerServiceName = `${config.name}-qna`;
 
       // only support westus in qna
-      if(config.location !== 'westus'){
+      if (config.location !== 'westus') {
         config.location = 'westus';
       }
 
       // deploy search service
       const searchManagementClient = new SearchManagementClient(this.creds, this.subscriptionId);
-      const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(config.resourceGroupName, qnaMakerSearchName, {
-        location: config.location,
-        sku: {
-          name: 'standard'
-        },
-        replicaCount: 1,
-        partitionCount: 1,
-        hostingMode: 'default'
-      });
+      const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(
+        config.resourceGroupName,
+        qnaMakerSearchName,
+        {
+          location: config.location,
+          sku: {
+            name: 'standard',
+          },
+          replicaCount: 1,
+          partitionCount: 1,
+          hostingMode: 'default',
+        }
+      );
 
       if (searchServiceDeployResult._response.status >= 300) {
         this.logger({
@@ -287,7 +301,10 @@ export class AzureResourceMananger {
       }
 
       // deploy or update exisiting app insights component
-      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(this.creds, this.subscriptionId);
+      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
+        this.creds,
+        this.subscriptionId
+      );
       const appinsightsName = config.resourceGroupName;
       const appinsightsDeployResult = await applicationInsightsManagementClient.components.createOrUpdate(
         config.resourceGroupName,
@@ -307,17 +324,21 @@ export class AzureResourceMananger {
       }
 
       // deploy qna host webapp
-      const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(config.resourceGroupName, qnaMakerWebAppName, {
-        name: qnaMakerWebAppName,
-        serverFarmId: servicePlanResult.name,
-        location: config.location,
-        siteConfig: {
-          cors: {
-            allowedOrigins: ['*'],
+      const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
+        config.resourceGroupName,
+        qnaMakerWebAppName,
+        {
+          name: qnaMakerWebAppName,
+          serverFarmId: servicePlanResult.name,
+          location: config.location,
+          siteConfig: {
+            cors: {
+              allowedOrigins: ['*'],
+            },
           },
-        },
-        enabled: true,
-      });
+          enabled: true,
+        }
+      );
 
       if (webAppResult._response.status >= 300) {
         this.logger({
@@ -328,8 +349,13 @@ export class AzureResourceMananger {
       }
 
       // add web config for websites
-      const azureSearchAdminKey = (await searchManagementClient.adminKeys.get(config.resourceGroupName, qnaMakerSearchName)).primaryKey;
-      const appInsightsComponent = await applicationInsightsManagementClient.components.get(config.resourceGroupName, appinsightsName);
+      const azureSearchAdminKey = (
+        await searchManagementClient.adminKeys.get(config.resourceGroupName, qnaMakerSearchName)
+      ).primaryKey;
+      const appInsightsComponent = await applicationInsightsManagementClient.components.get(
+        config.resourceGroupName,
+        appinsightsName
+      );
       const userAppInsightsKey = appInsightsComponent.instrumentationKey;
       const userAppInsightsName = appinsightsName;
       const userAppInsightsAppId = appInsightsComponent.appId;
@@ -338,46 +364,50 @@ export class AzureResourceMananger {
       const defaultAnswer = 'No good match found in KB.';
       const QNAMAKER_EXTENSION_VERSION = 'latest';
 
-      const webAppConfigUpdateResult = await webSiteManagementClient.webApps.createOrUpdateConfiguration(config.resourceGroupName, qnaMakerWebAppName, {
-        appSettings: [
-          {
-            name: 'AzureSearchName',
-            value: qnaMakerSearchName
-          },
-          {
-            name: 'AzureSearchAdminKey',
-            value: azureSearchAdminKey,
-          },
-          {
-            name: 'UserAppInsightsKey',
-            value: userAppInsightsKey,
-          },
-          {
-            name: 'UserAppInsightsName',
-            value: userAppInsightsName,
-          },
-          {
-            name: 'UserAppInsightsAppId',
-            value: userAppInsightsAppId,
-          },
-          {
-            name: 'PrimaryEndpointKey',
-            value: primaryEndpointKey,
-          },
-          {
-            name: 'SecondaryEndpointKey',
-            value: secondaryEndpointKey,
-          },
-          {
-            name: 'DefaultAnswer',
-            value: defaultAnswer,
-          },
-          {
-            name: 'QNAMAKER_EXTENSION_VERSION',
-            value: QNAMAKER_EXTENSION_VERSION
-          }
-        ]
-      });
+      const webAppConfigUpdateResult = await webSiteManagementClient.webApps.createOrUpdateConfiguration(
+        config.resourceGroupName,
+        qnaMakerWebAppName,
+        {
+          appSettings: [
+            {
+              name: 'AzureSearchName',
+              value: qnaMakerSearchName,
+            },
+            {
+              name: 'AzureSearchAdminKey',
+              value: azureSearchAdminKey,
+            },
+            {
+              name: 'UserAppInsightsKey',
+              value: userAppInsightsKey,
+            },
+            {
+              name: 'UserAppInsightsName',
+              value: userAppInsightsName,
+            },
+            {
+              name: 'UserAppInsightsAppId',
+              value: userAppInsightsAppId,
+            },
+            {
+              name: 'PrimaryEndpointKey',
+              value: primaryEndpointKey,
+            },
+            {
+              name: 'SecondaryEndpointKey',
+              value: secondaryEndpointKey,
+            },
+            {
+              name: 'DefaultAnswer',
+              value: defaultAnswer,
+            },
+            {
+              name: 'QNAMAKER_EXTENSION_VERSION',
+              value: QNAMAKER_EXTENSION_VERSION,
+            },
+          ],
+        }
+      );
       if (webAppConfigUpdateResult._response.status >= 300) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -399,10 +429,10 @@ export class AzureResourceMananger {
           location: config.location,
           properties: {
             apiProperties: {
-              'qnaRuntimeEndpoint': `https://${webAppResult.hostNames?.[0]}`
-            }
-          }
-        },
+              qnaRuntimeEndpoint: `https://${webAppResult.hostNames?.[0]}`,
+            },
+          },
+        }
       );
       if (deployResult._response.status >= 300) {
         this.logger({
@@ -420,9 +450,8 @@ export class AzureResourceMananger {
       const subscriptionKey = keys?.key1 ?? '';
       return {
         endpoint: endpoint,
-        subscriptionKey: subscriptionKey
+        subscriptionKey: subscriptionKey,
       };
-
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -524,8 +553,7 @@ export class AzureResourceMananger {
 
       if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
         const botServiceClient = new AzureBotService(this.creds, this.subscriptionId);
-        let botCreated;
-        botCreated = await botServiceClient.bots.get(config.resourceGroupName, config.name);
+        const botCreated = await botServiceClient.bots.get(config.resourceGroupName, config.name);
         if (botCreated.properties) {
           botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
           botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
@@ -824,7 +852,7 @@ export class AzureResourceMananger {
    * Deploy Azure Functions instance
    * @param config
    */
-  public async deployAzureFunctions(config: AzureFuntionsConfig) {
+  public async deployAzureFunctions(config: AzureFunctionsConfig) {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -832,43 +860,50 @@ export class AzureResourceMananger {
       });
       const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
       const azureFunctionsName = config.name;
-      const azureFunctionsResult = await webSiteManagementClient.webApps.createOrUpdate(config.resourceGroupName, config.name, {
-        name: azureFunctionsName,
-        location: config.location,
-        kind: 'functionapp',
-        httpsOnly: true,
-        siteConfig: {
-          appSettings: [
-            {
-              name: 'MicrosoftAppId',
-              value: config.appId,
-            },
-            {
-              name: 'MicrosoftAppPassword',
-              value: config.appPwd,
-            },
-            {
-              name: 'FUNCTIONS_EXTENSION_VERSION',
-              value: '~3'
-            },
-            {
-              name: 'FUNCTIONS_WORKER_RUNTIME',
-              value: 'dotnet'
-            },
-            {
-              name: 'APPINSIGHTS_INSTRUMENTATIONKEY',
-              value: config.instrumentationKey ?? ''
-            }
-          ]
-        },
-      });
+      const azureFunctionsResult = await webSiteManagementClient.webApps.createOrUpdate(
+        config.resourceGroupName,
+        config.name,
+        {
+          name: azureFunctionsName,
+          location: config.location,
+          kind: 'functionapp',
+          httpsOnly: true,
+          siteConfig: {
+            appSettings: [
+              {
+                name: 'MicrosoftAppId',
+                value: config.appId,
+              },
+              {
+                name: 'MicrosoftAppPassword',
+                value: config.appPwd,
+              },
+              {
+                name: 'FUNCTIONS_EXTENSION_VERSION',
+                value: '~3',
+              },
+              {
+                name: 'FUNCTIONS_WORKER_RUNTIME',
+                value: 'dotnet',
+              },
+              {
+                name: 'APPINSIGHTS_INSTRUMENTATIONKEY',
+                value: config.instrumentationKey ?? '',
+              },
+            ],
+          },
+        }
+      );
 
       if (azureFunctionsResult._response.status >= 300) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: azureFunctionsResult._response.bodyAsText,
         });
-        throw createCustomizeError(ProvisionErrors.CREATE_FUNCTIONS_RESOURCE_ERROR, azureFunctionsResult._response.bodyAsText);
+        throw createCustomizeError(
+          ProvisionErrors.CREATE_FUNCTIONS_RESOURCE_ERROR,
+          azureFunctionsResult._response.bodyAsText
+        );
       }
 
       const siteHost = azureFunctionsResult?.hostNames?.[0];
@@ -919,7 +954,6 @@ export class AzureResourceMananger {
         });
         throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, botResult._response?.bodyAsText);
       }
-
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -960,7 +994,6 @@ export class AzureResourceMananger {
         });
         throw createCustomizeError(ProvisionErrors.CREATE_COUNTER_ERROR, counterResult._response.bodyAsText);
       }
-
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
