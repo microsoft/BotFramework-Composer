@@ -17,7 +17,7 @@ import {
   CheckboxVisibility,
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
@@ -25,7 +25,7 @@ import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pi
 import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 
-import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, QnABotTemplateId } from '../../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
 import { selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
