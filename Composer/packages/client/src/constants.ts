@@ -356,8 +356,6 @@ export enum AppUpdaterStatus {
 
 export const EmptyBotTemplateId = 'EmptyBot';
 
-export const QnABotTemplateId = 'QnASample';
-
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;

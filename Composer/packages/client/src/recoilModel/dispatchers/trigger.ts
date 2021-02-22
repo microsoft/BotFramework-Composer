@@ -6,7 +6,6 @@ import { BaseSchema, deleteActions, ITriggerCondition, LgTemplate, LgTemplateSam
 import get from 'lodash/get';
 
 import { luFilesState, schemasState, dialogState, localeState } from '../atoms/botState';
-import { dispatcherState } from '../DispatcherWrapper';
 import { dialogsSelectorFamily } from '../selectors';
 import {
   onChooseIntentKey,
@@ -16,6 +15,7 @@ import {
   TriggerFormData,
 } from '../../utils/dialogUtil';
 import { lgFilesSelectorFamily } from '../selectors/lg';
+import { dispatcherState } from '../atoms';
 
 import { setError } from './shared';
 
