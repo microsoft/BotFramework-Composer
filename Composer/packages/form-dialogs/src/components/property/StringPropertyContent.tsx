@@ -4,9 +4,10 @@
 import { useId } from '@uifabric/react-hooks';
 import formatMessage from 'format-message';
 import * as React from 'react';
-import { StringPropertyPayload } from 'src/atoms/types';
-import { FieldLabel } from 'src/components/common/FieldLabel';
-import { ValuePicker } from 'src/components/common/ValuePicker';
+
+import { StringPropertyPayload } from '../../atoms/types';
+import { FieldLabel } from '../common/FieldLabel';
+import { ValuePicker } from '../common/ValuePicker';
 
 type Props = {
   payload: StringPropertyPayload;
