@@ -14,8 +14,6 @@ import { Pagination } from '../../components/Pagination';
 import { diagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { DiagnosticList } from '../design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
 
-import { IDiagnosticInfo } from './types';
-
 // -------------------- Styles -------------------- //
 
 const listRoot = css`
@@ -36,13 +34,12 @@ const tableView = css`
 export interface IDiagnosticListProps extends RouteComponentProps {
   projectId: string;
   showType: string;
-  onItemClick: (item: IDiagnosticInfo) => void;
 }
 
 const itemCount = 10;
 
 export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
-  const { onItemClick, projectId, showType } = props;
+  const { projectId, showType } = props;
   const diagnostics = useRecoilValue(diagnosticsSelectorFamily(projectId));
   const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
@@ -57,7 +54,7 @@ export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
     <div css={listRoot} data-testid="diagnostics-table-view" role="main">
       <div aria-label={formatMessage('Diagnostic list')} css={tableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DiagnosticList diagnosticItems={showItems} onItemClick={onItemClick} />
+          <DiagnosticList diagnosticItems={showItems} />
         </ScrollablePane>
       </div>
       <Pagination pageCount={pageCount} onChange={setPageIndex} />

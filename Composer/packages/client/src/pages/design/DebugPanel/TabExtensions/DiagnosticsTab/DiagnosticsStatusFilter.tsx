@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
 import { Severity, useDiagnosticsStatistics } from './useDiagnostics';
 
@@ -36,14 +37,15 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             border: 'none',
             backgroundColor: filterType === Severity.Error ? '#edebe9' : '#F7F7F7',
           },
-          label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px' },
+          flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
+          label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },
           icon: { color: '#EB3941', fontSize: FontSizes.size14, lineHeight: '18px' },
         }}
         onClick={() => {
           onChangeFilterType(Severity.Error);
         }}
       >
-        {errorsCount}
+        {formatMessage(`{errorsCount} errors`, { errorsCount })}
       </DefaultButton>
       <DefaultButton
         iconProps={{ iconName: 'WarningSolid' }}
@@ -56,14 +58,15 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             width: '100%',
             backgroundColor: filterType === Severity.Warning ? '#edebe9' : '#F7F7F7',
           },
-          label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px' },
+          flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
+          label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },
           icon: { color: '#F4BD00', fontSize: FontSizes.size14, lineHeight: '18px' },
         }}
         onClick={() => {
           onChangeFilterType(Severity.Warning);
         }}
       >
-        {warningsCount}
+        {formatMessage(`{warningsCount} warnings`, { warningsCount })}
       </DefaultButton>
     </div>
   );

@@ -17,8 +17,12 @@ import formatMessage from 'format-message';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
+import { botDisplayNameState, currentProjectIdState, exportSkillModalInfoState } from '../../../../../recoilModel';
+import { navigateTo } from '../../../../../utils/navigation';
 
 // -------------------- Styles -------------------- //
 
@@ -70,98 +74,7 @@ const content = css`
 // -------------------- Diagnosticist -------------------- //
 export interface IDiagnosticListProps {
   diagnosticItems: IDiagnosticInfo[];
-  onItemClick: (item: IDiagnosticInfo) => void;
 }
-
-const columns: IColumn[] = [
-  {
-    key: 'Icon',
-    name: '',
-    className: diagnostic.typeIconCell,
-    iconClassName: diagnostic.typeIconHeaderIcon,
-    fieldName: 'icon',
-    minWidth: 30,
-    maxWidth: 30,
-    onRender: (item: IDiagnosticInfo) => {
-      const icon = icons[item.severity];
-      return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
-    },
-  },
-  {
-    key: 'DiagnosticResourceId',
-    name: formatMessage('Bot'),
-    className: diagnostic.columnCell,
-    fieldName: 'resourceId',
-    minWidth: 70,
-    maxWidth: 90,
-    isResizable: true,
-    data: 'string',
-    onRender: (item: IDiagnosticInfo) => {
-      return (
-        <div data-is-focusable css={tableCell}>
-          <div
-            aria-label={formatMessage(`Bot is {resourceId}`, { resourceId: item.resourceId })}
-            css={content}
-            tabIndex={-1}
-          >
-            {item.resourceId}
-          </div>
-        </div>
-      );
-    },
-    isPadded: true,
-  },
-  {
-    key: 'DiagnosticLocation',
-    name: formatMessage('Location'),
-    className: diagnostic.columnCell,
-    fieldName: 'location',
-    minWidth: 70,
-    maxWidth: 90,
-    isResizable: true,
-    data: 'string',
-    onRender: (item: IDiagnosticInfo) => {
-      return (
-        <div data-is-focusable css={tableCell}>
-          <div
-            aria-label={formatMessage(`location is {location}`, { location: item.location })}
-            css={content}
-            tabIndex={-1}
-          >
-            {item.location}
-          </div>
-        </div>
-      );
-    },
-    isPadded: true,
-  },
-  {
-    key: 'DiagnosticDetail',
-    name: formatMessage('Description'),
-    className: diagnostic.columnCell,
-    fieldName: 'message',
-    minWidth: 70,
-    maxWidth: 90,
-    isResizable: true,
-    isCollapsible: true,
-    isMultiline: true,
-    data: 'string',
-    onRender: (item: IDiagnosticInfo) => {
-      return (
-        <div data-is-focusable css={tableCell}>
-          <div
-            aria-label={formatMessage(`Diagnostic Description {msg}`, { msg: item.message })}
-            css={content}
-            tabIndex={-1}
-          >
-            {item.message}
-          </div>
-        </div>
-      );
-    },
-    isPadded: true,
-  },
-];
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
@@ -174,7 +87,100 @@ function onRenderDetailsHeader(props, defaultRender) {
   );
 }
 
-export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems, onItemClick }) => {
+export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems }) => {
+  const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
+  const projectId = useRecoilValue(currentProjectIdState);
+  const botName = useRecoilValue(botDisplayNameState(projectId));
+  const columns: IColumn[] = [
+    {
+      key: 'Icon',
+      name: '',
+      className: diagnostic.typeIconCell,
+      iconClassName: diagnostic.typeIconHeaderIcon,
+      fieldName: 'icon',
+      minWidth: 30,
+      maxWidth: 30,
+      onRender: (item: IDiagnosticInfo) => {
+        const icon = icons[item.severity];
+        return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
+      },
+    },
+    {
+      key: 'DiagnosticResourceId',
+      name: formatMessage('Bot'),
+      className: diagnostic.columnCell,
+      fieldName: 'resourceId',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      data: 'string',
+      onRender: () => {
+        return (
+          <div data-is-focusable css={tableCell}>
+            <div aria-label={formatMessage(`Bot is {botName}`, { botName })} css={content} tabIndex={-1}>
+              {botName}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'DiagnosticLocation',
+      name: formatMessage('Location'),
+      className: diagnostic.columnCell,
+      fieldName: 'location',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: IDiagnosticInfo) => {
+        return (
+          <div data-is-focusable css={tableCell}>
+            <Link
+              underline
+              css={content}
+              onClick={() => {
+                navigateTo(item.getUrl());
+                if (item.location === 'manifest.json') {
+                  setExportSkillModalInfo(item.projectId);
+                }
+              }}
+            >
+              {item.location}
+            </Link>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'DiagnosticDetail',
+      name: formatMessage('Description'),
+      className: diagnostic.columnCell,
+      fieldName: 'message',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      isCollapsible: true,
+      isMultiline: true,
+      data: 'string',
+      onRender: (item: IDiagnosticInfo) => {
+        return (
+          <div data-is-focusable css={tableCell}>
+            <div
+              aria-label={formatMessage(`Diagnostic Description {msg}`, { msg: item.message })}
+              css={content}
+              tabIndex={-1}
+            >
+              {item.message}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+  ];
   return (
     <DetailsList
       isHeaderVisible
@@ -185,7 +191,6 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       layoutMode={DetailsListLayoutMode.justified}
       selectionMode={SelectionMode.single}
       setKey="none"
-      onItemInvoked={onItemClick}
       onRenderDetailsHeader={onRenderDetailsHeader}
     />
   );

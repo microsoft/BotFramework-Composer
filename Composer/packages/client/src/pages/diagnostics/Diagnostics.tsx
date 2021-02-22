@@ -6,22 +6,18 @@ import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { IToolbarItem } from '@bfc/ui-shared';
 
-import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { exportSkillModalInfoState } from '../../recoilModel';
 import implementedDebugExtensions from '../design/DebugPanel/TabExtensions';
 
 import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
-import { IDiagnosticInfo } from './types';
 
 const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
-  const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
 
   const { projectId = '' } = props;
@@ -35,13 +31,6 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       };
     })
     .filter((item) => Boolean(item)) as IToolbarItem[];
-
-  const handleItemClick = (item: IDiagnosticInfo) => {
-    navigateTo(item.getUrl());
-    if (item.location === 'manifest.json') {
-      setExportSkillModalInfo(item.projectId);
-    }
-  };
 
   const onRenderHeaderContent = () => {
     return <DiagnosticFilter onChange={setShowType} />;
@@ -58,7 +47,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
     >
-      <DiagnosticsTable projectId={projectId} showType={showType} onItemClick={handleItemClick} />
+      <DiagnosticsTable projectId={projectId} showType={showType} />
     </Page>
   );
 };
