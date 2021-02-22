@@ -16,8 +16,8 @@ import {
   generateDiagnostic,
   convertDiagnostics,
   convertSeverity,
-} from '../../lib/utils';
-import { LgParser } from '../../lib/lgParser';
+} from '../lib/utils';
+import { LgParser } from '../lib/lgParser';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/camelcase */
