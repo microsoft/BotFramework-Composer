@@ -234,7 +234,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     onFocusSteps: focusSteps,
     onSelect: setVisualEditorSelection,
     onCopy: (clipboardActions) => setVisualEditorClipboard(clipboardActions, projectId),
-    createDialog: (actionsSeed) => {
+    createDialog: (actionsSeed = []) => {
       return new Promise((resolve) => {
         createDialogBegin(
           actionsSeed,
