@@ -6,7 +6,7 @@ Composer provides 2 main localization points:
 
 - [formatMessage](https://www.npmjs.com/package/format-message) is used throughout the Composer code to indicate the UI strings that should be localized.
   - The UI strings in the code are extracted to en-US.json files as part of the `l10n` build step.
-  - After the OneLocBuild localization build process is completed, the `Composer\packages\server\src\locales\` and `C:\code\BotFramework-Composer\Composer\packages\electron-server\locales\en-US.json` folders will contain the localized files.
+  - After the OneLocBuild localization build process is completed, the `Composer\packages\server\src\locales\` and `Composer\packages\electron-server\locales\en-US.json` folders will contain the localized files.
 - SDK schemas and UI schemas in the `Composer\packages\server\schemas` folder are also localized.
 
 ## Localization via OneLocBuild
