@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { BotSchemas } from '@bfc/shared';
+import { BotSchemas, DialogSetting } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -30,7 +30,7 @@ const ExternalAdapterSettings = (props: Props) => {
   const { projectId } = props;
 
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
-  const currentSettings = useRecoilValue(settingsState(projectId));
+  const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
   const { setSettings } = useRecoilValue(dispatcherState);
   const adapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];
 
@@ -51,7 +51,7 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const columnWidths = ['300px', '150px', '150px'];
 
-  const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
+  const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string })[]) => (
     <div>
       <div key={'subtitle'} css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
@@ -69,7 +69,9 @@ const ExternalAdapterSettings = (props: Props) => {
       </div>
 
       {schemas.map((schema) => {
-        const { key, packageName, title } = schema;
+        const { key, title } = schema;
+        let { packageName } = schema;
+        if (packageName == null) packageName = key;
 
         const keyConfigured =
           packageName in currentSettings && hasRequired(currentSettings[packageName], schemaDefinitions[key].required);
@@ -144,7 +146,7 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const adapterSchemas = Object.entries(schemaDefinitions as { [key: string]: JSONSchema7 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([key, value]) => value?.$role != null && /IAdapter/.test(value.$role))
+    .filter(([_, value]) => value?.$role != null && /IAdapter/.test(value.$role))
     .map(([key, value]) => ({ ...value, key, packageName: value.$package?.name }));
 
   const currentKey = currentModalProps?.key;

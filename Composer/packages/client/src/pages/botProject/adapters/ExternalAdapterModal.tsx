@@ -8,6 +8,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ObjectField } from '@bfc/adaptive-form';
 import { useRecoilValue } from 'recoil';
+import { DialogSetting } from '@bfc/shared';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 
@@ -44,7 +45,7 @@ const AdapterModal = (props: Props) => {
 
   const [value, setValue] = useState(props.value);
   const { setSettings } = useRecoilValue(dispatcherState);
-  const currentSettings = useRecoilValue(settingsState(projectId));
+  const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
 
   const shell = useShell('DesignPage', projectId);
 
