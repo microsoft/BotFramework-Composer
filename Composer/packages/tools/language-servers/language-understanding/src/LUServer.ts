@@ -4,7 +4,6 @@
 import URI from 'vscode-uri';
 import { FoldingRangeParams, IConnection, TextDocuments } from 'vscode-languageserver';
 import {
-  TextDocument,
   Diagnostic,
   CompletionList,
   Position,
@@ -14,6 +13,7 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
   TextDocumentPositionParams,
   DocumentOnTypeFormattingParams,

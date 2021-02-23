@@ -46,7 +46,7 @@
     "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @botframework-composer/* -p @bfc/* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
-    "build:extensions": "node scripts/compileExtensions.js",
+    "build:extensions": "cd ../extensions && yarn && yarn build:all",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
@@ -82,7 +82,7 @@
     }
   },
   "lint-staged": {
-    "packages/**/*.{ts,tsx,js,jsx}": [
+    "**/*.{ts,tsx,js,jsx}": [
       "prettier --write",
       "git add"
     ]
