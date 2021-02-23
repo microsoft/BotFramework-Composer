@@ -8,7 +8,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   NEW_CREATION_FLOW: {
     displayName: formatMessage('New Creation Experience'),
     description: formatMessage('Component templates populated from npm feeds'),
-    isHidden: true,
+    isHidden: false,
     enabled: false,
   },
   FORM_DIALOG: {
@@ -17,13 +17,6 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
       'Automatically generate dialogs that collect information from a user to manage conversations.'
     ),
     documentationLink: 'https://aka.ms/AAailpe',
-    isHidden: false,
-    enabled: false,
-  },
-  ORCHESTRATOR: {
-    displayName: formatMessage('Orchestrator'),
-    description: formatMessage('Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB'),
-    documentationLink: 'https://aka.ms/bf-orchestrator',
     isHidden: false,
     enabled: false,
   },

@@ -14,7 +14,9 @@ const config: PluginConfig = {
           if (luProvider === SDKKinds.OrchestratorRecognizer) {
             return false;
           }
-          return !shellAPI.isFeatureEnabled('ORCHESTRATOR');
+          //let installedPackages = shellData.settings.importedLibraries[0].name;
+
+          return !shellAPI.isFeatureEnabled('NEW_CREATION_FLOW');
         },
         displayName: () => formatMessage('Orchestrator recognizer'),
         isSelected: (_, dialog: DialogInfo) => {
