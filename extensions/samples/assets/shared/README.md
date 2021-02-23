@@ -1,6 +1,6 @@
-# Manually provision and publish a bot to Azure (_Preview_)
+# Manually provision resources and publish a bot to Azure (_Preview_)
 
-This article covers script-based instructions to manually provision and publish a bot built using Composer to _Azure Web App (Preview)_ and _Azure Functions (Preview)_.
+This article covers script-based instructions to manually provision resources and publish a bot built using Composer to _Azure Web App (Preview)_ and _Azure Functions (Preview)_.
 
 ## Prerequisites
 
@@ -22,13 +22,13 @@ Follow these instructions to manually provision Azure resources:
     cd C:\Users\UserName\Documents\Composer\BotName\scripts
     ```
 
-2. Run the following command:
+2. Run the following command to install the dependencies:
 
    ```cmd
    npm install
    ```
 
-3. Then run the following command to provision new Azure resources.
+3. Run the following command to provision new Azure resources.
 
    - **_Azure Web App (Preview)_**:
 
@@ -42,14 +42,14 @@ Follow these instructions to manually provision Azure resources:
    node provisionComposer.js --subscriptionId=<YOUR AZURE SUBSCRIPTION ID> --name=<NAME OF YOUR RESOURCE GROUP> --appPassword=<APP PASSWORD> --environment=<NAME FOR ENVIRONMENT DEFAULT to dev> --customArmTemplate=DeploymentTemplates/function-template-with-preexisting-rg.json
    ```
 
-   | Property | Value |
+   | Property | Description |
    |----|----|
    |Your Azure Subscription ID| Find it in your Azure resource in the **Subscription ID** field. |
    |Name of your resource group| The name you give to the resource group you are creating. |
    |App password|At least 16 characters with at least one number, one letter, and one special character. |
    |Name for environment| The name you give to the publish environment. |
 
-    Once completed, the provision scripts will create the following resources in Azure portal:
+    Once completed, the provision scripts will create the following resources in the Azure portal:
 
     | Resource | Required/Optional |
     | -------- | ----------------- |
@@ -64,7 +64,7 @@ Follow these instructions to manually provision Azure resources:
     | QnA Maker resources (Cognitive Services) | Optional |
 
     > [!TIP]
-    > You may not want to create a complete list of the Azure resources. Read the [customize the scripts](#customize-the-provision-scripts) section to customize the provision scripts and create the Azure resources you want.
+    > Read the [parameters list](#provision-scripts-parameters-list) to customize the provision scripts and create the Azure resources you want.
 
    1. You will be asked to login to the Azure portal in your browser.
 
@@ -89,10 +89,9 @@ Follow these instructions to manually provision Azure resources:
 
 4. As the Azure resources are being provisioned, which takes a few minutes, you will see the following:
 
-    > [!div class="mx-imgBorder"]
     > ![Create Azure resource command line](./media/create-azure-resource-command-line.png)
 
-    Once completed, the generated JSON appears in the command line like the following.
+    Once completed, you will see the generated JSON appears in the command line like the following. The JSON output is the publishing profile, which will be used in step **3** of the [Publish a bot to Azure](#publish-a-bot-to-azure) section.
 
       ```json
       {
@@ -151,9 +150,9 @@ Follow these steps to manually publish a bot to Azure:
    bf plugins:install @microsoft/bf-sampler-cli@beta
    ```
 
-2. [Eject your C# runtime](https://aka.ms/composer-customize-action#export-runtime).
+2. [Eject your bot's C# runtime](https://aka.ms/composer-customize-action#export-runtime).
 
-3. Save your publishing profile in `json` format (profile.json) and execute the following command:
+3. Save your publishing profile in `json` format (the JSON output from step **4** of the [provision Azure resources](#provision-azure-resources) section and execute the following command:
 
     ```powershell
     .\Scripts\deploy.ps1 -publishProfilePath <path to your publishing profile>
@@ -166,7 +165,7 @@ Follow these steps to manually publish a bot to Azure:
     ```
 
 > [!NOTE]
-> Make sure you [set the correct subscription](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az_account_set) when running the scripts to publish your bot. The publishing process will take a couple of minutes to finish.
+> Make sure you [set the correct subscription](https://docs.microsoft.com/cli/azure/account?view=azure-cli-latest#az_account_set) when running the scripts to publish your bot. Use the Azure CLI command `az account set --subscription` to set subscription if needed. The publishing process will take a couple of minutes to finish.
 
   The following table lists the parameters of the `deploy.ps1` scripts:
 
@@ -179,7 +178,7 @@ Follow these steps to manually publish a bot to Azure:
   | luisAuthoringRegion | Optional | The LUIS authoring region, this is optional|
   | luisResource | The name of your LUIS prediction resource |
   | qnaSubscriptionKey | Optional | The QnA subscription key |
-  | language | Optional | The language of qna & luis, defaults to 'en-us' |
+  | language | Optional | The language of qna & luis, defaults to `en-us` |
   | botPath |  | The path to your bot assets, defaults to `../../` for ejected runtime |
   | logFile |  | The path to save your log file, defaults to `deploy_log.txt` |
   | runtimeIdentifier |  | runtime identifier of your C# publishing targets, defaults to win-x64, read more in [this doc](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog) |
@@ -196,9 +195,9 @@ Follow these steps to get a new token if you encounter an error about your acces
 
 ## Additional information
 
-### Customize the provision scripts
+### Provision scripts parameters list
 
-You don't need to create a complete list of the Azure resources as covered in **step 3** of the [provision Azure resources](#provision-azure-resources) section. Below is a table with detailed descriptions of the parameters to set in the provision scripts.
+You don't need to create a complete list of the Azure resources as covered in **step 3** of the [provision Azure resources](#provision-azure-resources) section. The following is a table of the parameters you can use to customize the provision scripts so that you only provision the resources needed.
 
 | Parameter | Required/Optional | Default value | Description |
 | ----------| ------------------| --------------| ------------|
@@ -215,8 +214,3 @@ You don't need to create a complete list of the Azure resources as covered in **
 | createCosmosDB | Optional | `true` | The CosmosDB resource to create. |
 | createStorage | Optional | `true` | The BlobStorage resource to create. |
 | createAppInsights | Optional | `true` | The AppInsights resource to create. |
-
-### Known issues
-
-- For now, the provision and publish flow from Composer UI are limited to Microsoft organization accounts only. A personal Microsoft account will not make authentication work.
--
