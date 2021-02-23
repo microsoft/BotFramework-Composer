@@ -107,8 +107,8 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 // authentication from client
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 router.get('/auth/logOut', AuthController.logOut);
-router.get('/auth/getTenants', AuthController.getTenants);
-router.get('/auth/getARMTokenForTenant', AuthController.getARMTokenForTenant);
+router.get('/auth/getTenants', csrfProtection, AuthController.getTenants);
+router.get('/auth/getARMTokenForTenant', csrfProtection, AuthController.getARMTokenForTenant);
 
 // FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
