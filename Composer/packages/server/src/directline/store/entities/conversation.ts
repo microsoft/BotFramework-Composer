@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Activity, ConversationAccount } from 'botframework-schema';
+import formatMessage from 'format-message';
 import { StatusCodes } from 'http-status-codes';
 import moment from 'moment';
 
@@ -135,7 +136,7 @@ export class Conversation {
     state: DLServerState,
     activity: Activity
   ): Promise<{
-    sendActivity: Activity | undefined;
+    sendActivity: Activity;
     response: any | undefined;
     status: number;
   }> {
@@ -144,14 +145,13 @@ export class Conversation {
     };
 
     if (!this.botEndpoint) {
-      return {
-        status: StatusCodes.NOT_FOUND,
-        response: 'Endpoint not available in request.',
-        sendActivity: undefined,
+      throw {
+        status: StatusCodes.BAD_REQUEST,
+        message: formatMessage('Bot endpoint not available in the request'),
       };
     }
 
-    sendActivity = await this.prepActivityToBeSentToBot(state, sendActivity);
+    sendActivity = this.prepActivityToBeSentToBot(state, sendActivity);
     const options = {
       body: sendActivity,
       headers: {

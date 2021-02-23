@@ -6,8 +6,7 @@ import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { dialogSchemaDispatcher } from '../dialogSchema';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { dialogSchemasState, currentProjectIdState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { dialogSchemasState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '..';
 
 const projectId = '42345.23432';

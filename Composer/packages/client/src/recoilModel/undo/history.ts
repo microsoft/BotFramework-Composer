@@ -11,10 +11,8 @@ import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoi
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 
-import { dispatcherState } from '../DispatcherWrapper';
-
 import { rootBotProjectIdSelector } from './../selectors/project';
-import { canRedoState, canUndoState, designPageLocationState } from './../atoms';
+import { canRedoState, canUndoState, designPageLocationState, dispatcherState } from './../atoms';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 import UndoHistory from './undoHistory';
 

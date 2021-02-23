@@ -6,8 +6,7 @@ import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { editorDispatcher } from '../editor';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { visualEditorSelectionState, clipboardActionsState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { visualEditorSelectionState, clipboardActionsState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '..';
 
 describe('Editor dispatcher', () => {

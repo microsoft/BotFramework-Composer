@@ -17,8 +17,8 @@ import {
   locationState,
   projectMetaDataState,
   botDisplayNameState,
+  dispatcherState,
 } from '../../atoms';
-import { dispatcherState } from '../../DispatcherWrapper';
 import { botEndpointsState, botProjectIdsState, currentProjectIdState, displaySkillManifestState } from '../../atoms';
 import { Dispatcher } from '..';
 import { skillsStateSelector } from '../../selectors';
