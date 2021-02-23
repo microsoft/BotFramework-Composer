@@ -1,6 +1,9 @@
-import { URL } from 'url';
-import { logger } from './logger';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
+import { URL } from 'url';
+
+import { logger } from './logger';
 import { AUTH_CREDENTIALS, BASE_URLS } from './constants';
 
 export const getBaseUrl = () => {
@@ -37,7 +40,7 @@ export const getBaseUrl = () => {
  * Looks at the base URL for a request and returns the necessary authentication parameters
  * to get an access token for the resource.
  */
-export const getAuthCredentials = (baseUrl: string = '') => {
+export const getAuthCredentials = (baseUrl = '') => {
   if (baseUrl) {
     const host = new URL(baseUrl).host;
 

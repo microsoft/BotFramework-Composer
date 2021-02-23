@@ -148,7 +148,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
 
   const handleCreateNext = async (data: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-    navigate(`./create/${data}`);
+    navigate(`./create/${encodeURIComponent(data)}`);
   };
 
   return (

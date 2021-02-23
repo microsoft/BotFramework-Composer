@@ -15,9 +15,9 @@ import {
   onCreateDialogCompleteState,
   showCreateDialogModalState,
   qnaFilesState,
+  dispatcherState,
 } from '../../atoms';
 import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
 const projectId = '42345.23432';

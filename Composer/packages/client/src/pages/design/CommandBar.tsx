@@ -10,18 +10,17 @@ import { getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { createDiagnosticsPageUrl, navigateTo } from '../../utils/navigation';
 import {
   visualEditorSelectionState,
   dispatcherState,
-  rootBotProjectIdSelector,
   currentDialogState,
   designPageLocationState,
 } from '../../recoilModel';
 import { undoFunctionState } from '../../recoilModel/undo/history';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
-import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+
+import implementedDebugExtensions from './DebugPanel/TabExtensions';
 
 type CommandBarProps = { projectId: string };
 
@@ -29,7 +28,6 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const { undo, redo, clearUndo } = useRecoilValue(undoFunctionState(projectId));
-  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
 
@@ -58,13 +56,24 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
 
   const EditorAPI = getEditorAPI();
 
+  const debugItems: IToolbarItem[] = useMemo(
+    () =>
+      implementedDebugExtensions
+        .map(({ key, ToolbarWidget }) => {
+          if (!ToolbarWidget) return;
+          return {
+            type: 'element',
+            element: <ToolbarWidget key={`ToolbarWidget-${key}`} />,
+            align: 'right',
+          };
+        })
+        .filter((item) => Boolean(item)) as IToolbarItem[],
+    []
+  );
+
   const toolbarItems: IToolbarItem[] = useMemo(
     () => [
-      {
-        type: 'element',
-        element: <DiagnosticsHeader onClick={() => navigateTo(createDiagnosticsPageUrl(rootProjectId))} />,
-        align: 'right',
-      },
+      ...debugItems,
       {
         type: 'dropdown',
         text: formatMessage('Edit'),
@@ -170,7 +179,7 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
         },
       },
     ],
-    [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo]
+    [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo, debugItems]
   );
 
   const addNewBtnRef = useCallback((addNew) => {
