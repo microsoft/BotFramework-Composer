@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, FileExtensions, BotTemplateV2, FeedType } from '@bfc/extension';
+import { UserIdentity, FileExtensions, BotTemplateV2, FeedType, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
 import yeoman from 'yeoman-environment';
 import Environment from 'yeoman-environment';
@@ -103,6 +103,7 @@ export class AssetManager {
     templateVersion: string,
     projectName: string,
     ref: LocationRef,
+    runtimeChoice: RuntimeType,
     user?: UserIdentity
   ): Promise<LocationRef> {
     try {
@@ -124,7 +125,7 @@ export class AssetManager {
       const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, templateVersion);
 
       if (remoteTemplateAvailable) {
-        await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+        await this.instantiateRemoteTemplate(generatorName, dstDir, projectName, runtimeChoice);
       } else {
         throw new Error(`error hit when installing remote template`);
       }
@@ -159,13 +160,14 @@ export class AssetManager {
   private async instantiateRemoteTemplate(
     generatorName: string,
     dstDir: string,
-    projectName: string
+    projectName: string,
+    runtimeChoice: RuntimeType
   ): Promise<boolean> {
     log('About to instantiate a template!', dstDir, generatorName, projectName);
     this.yeomanEnv.cwd = dstDir;
     process.chdir(dstDir);
 
-    await this.yeomanEnv.run([generatorName, projectName], {}, () => {
+    await this.yeomanEnv.run([generatorName, projectName, runtimeChoice], {}, () => {
       log('Template successfully instantiated', dstDir, generatorName, projectName);
     });
     return true;

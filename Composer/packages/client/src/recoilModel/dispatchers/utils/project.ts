@@ -21,6 +21,7 @@ import {
   RootBotManagedProperties,
   defaultPublishConfig,
   LgFile,
+  RuntimeType,
   QnABotTemplateId,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
@@ -554,6 +555,7 @@ export const createNewBotFromTemplateV2 = async (
   name: string,
   description: string,
   location: string,
+  runtimeChoice: RuntimeType,
   schemaUrl?: string,
   locale?: string,
   templateDir?: string,
@@ -574,6 +576,7 @@ export const createNewBotFromTemplateV2 = async (
     eTag,
     alias,
     preserveRoot,
+    runtimeChoice,
   });
   return jobId;
 };
