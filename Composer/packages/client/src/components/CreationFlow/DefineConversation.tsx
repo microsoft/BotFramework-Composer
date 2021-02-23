@@ -15,7 +15,7 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { QnABotTemplateId } from '@bfc/shared';
+import { QnABotTemplateId, PublishProfile } from '@bfc/shared';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -26,6 +26,7 @@ import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNo
 import { dispatcherState } from '../../recoilModel';
 
 import { LocationSelectContent } from './LocationSelectContent';
+import { getAliasFromPayload } from '../../utils/electronUtil';
 
 // -------------------- Styles -------------------- //
 
@@ -74,44 +75,13 @@ interface DefineConversationFormData {
   location?: string;
 
   profile?: PublishProfile; // abs payload to create bot
+  source?: string; // where the payload come from
 
   templateDir?: string; // location of the imported template
   eTag?: string; // e tag used for content sync between composer and imported bot content
   urlSuffix?: string; // url to deep link to after creation
   alias?: string; // identifier that is used to track bots between imports
   preserveRoot?: boolean; // identifier that is used to determine ay project file renames upon creation
-}
-
-interface PublishProfile {
-  name?: string;
-  environment?: string;
-  hostname?: string;
-  runtimeIdentifier: string;
-  settings: {
-    applicationInsights?: {
-      InstrumentationKey?: string;
-    };
-    cosmosDb?: {
-      cosmosDBEndpoint: string;
-      authKey: string;
-      databaseId: string;
-      containerId: string;
-    };
-    blobStorage?: {
-      connectionString: string;
-      container: string;
-    };
-    luis?: {
-      authoringKey: string;
-      authoringEndpoint: string;
-      endpointKey: string;
-      endpoint: string;
-      region: string;
-    };
-    MicrosoftAppId: string;
-    MicrosoftAppPassword: string;
-  };
-  [key: string]: any;
 }
 
 interface DefineConversationProps
@@ -273,12 +243,10 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       if (props.location?.search) {
         const decoded = decodeURIComponent(props.location.search);
         const { source, payload } = querystring.parse(decoded);
-        if (payload && typeof payload === 'string' && source) {
-          const profile = JSON.parse(payload);
-          if (source === 'abs') {
-            dataToSubmit.alias = `abs-${profile.botName}-${profile.appId}`;
-            dataToSubmit.profile = profile;
-          }
+        if (payload && typeof payload === 'string' && typeof source === 'string') {
+          dataToSubmit.profile = JSON.parse(payload);
+          dataToSubmit.source = source;
+          dataToSubmit.alias = getAliasFromPayload(source, payload);
         }
       }
 
