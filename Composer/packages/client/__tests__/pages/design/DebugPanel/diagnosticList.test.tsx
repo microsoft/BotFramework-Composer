@@ -4,7 +4,8 @@
 import * as React from 'react';
 import { Range, Position } from '@bfc/shared';
 
-import { renderWithRecoil } from '../../testUtils';
+import { renderWithRecoil } from '../../../testUtils';
+import { DiagnosticList } from '../../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
 import {
   botDiagnosticsState,
   botProjectIdsState,
@@ -16,9 +17,8 @@ import {
   luFilesState,
   schemasState,
   settingsState,
-} from '../../../src/recoilModel';
-import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
-import { DiagnosticList } from '../../../src/pages/diagnostics/DiagnosticList';
+} from '../../../../src/recoilModel';
+import mockProjectResponse from '../../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
 const state = {
   projectId: 'test',
@@ -124,7 +124,7 @@ describe('<DiagnosticList/>', () => {
 
   it('should render the DiagnosticList', () => {
     const { container } = renderWithRecoil(
-      <DiagnosticList diagnosticItems={state.diagnostics as any} onItemClick={jest.fn} />,
+      <DiagnosticList diagnosticItems={state.diagnostics as any} />,
       initRecoilState
     );
     expect(container).toHaveTextContent('server');
