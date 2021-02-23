@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IExtensionRegistration } from '@botframework-composer/types';
 
 import { getStatus, history, publish, pull } from './publish';

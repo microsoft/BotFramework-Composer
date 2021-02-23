@@ -18,6 +18,7 @@ import {
   SkillManifestFile,
   RecognizerFile,
 } from '@bfc/shared';
+import { DirectLineLog } from '@botframework-composer/types/src';
 import { atomFamily } from 'recoil';
 
 import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
@@ -369,4 +370,9 @@ export const canUndoState = atomFamily<boolean, string>({
 export const canRedoState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('canRedoState'),
   default: false,
+});
+
+export const webChatLogsState = atomFamily<DirectLineLog[], string>({
+  key: getFullyQualifiedKey('webChatLogs'),
+  default: [],
 });

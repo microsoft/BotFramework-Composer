@@ -6,7 +6,6 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SkillManifestFile } from '@bfc/shared';
 import produce from 'immer';
 
-import { dispatcherState } from '../DispatcherWrapper';
 import { rootBotProjectIdSelector, skillsStateSelector } from '../selectors';
 import {
   skillManifestsState,
@@ -14,6 +13,7 @@ import {
   botProjectFileState,
   settingsState,
   botEndpointsState,
+  dispatcherState,
 } from '../atoms';
 
 import { setRootBotSettingState } from './setting';

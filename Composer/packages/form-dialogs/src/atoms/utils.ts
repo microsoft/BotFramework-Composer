@@ -4,6 +4,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
 import formatMessage from 'format-message';
+
+import { generateId } from '../utils/base';
+import { nameRegex } from '../utils/constants';
+
 import {
   builtInStringFormats,
   FormDialogProperty,
@@ -14,9 +18,7 @@ import {
   RefPropertyPayload,
   StringPropertyPayload,
   TypedPropertyPayload,
-} from 'src/atoms/types';
-import { generateId } from 'src/utils/base';
-import { nameRegex } from 'src/utils/constants';
+} from './types';
 
 export const getDefaultPayload = (kind: FormDialogPropertyKind) => {
   switch (kind) {
