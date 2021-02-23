@@ -8,7 +8,7 @@ import { lgImportResolverGenerator, LgFile, ResolverResource } from '@bfc/shared
 import uniqueId from 'lodash/uniqueId';
 import { lgUtil } from '@bfc/indexers';
 
-import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes } from './utils';
+import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes, uniq } from './utils';
 
 const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
@@ -33,7 +33,7 @@ class LgParserWithoutWorker {
   }
 
   public async extractLuisEntity(luContents: string[]): Promise<{ suggestEntities: string[] }> {
-    let suggestEntities: string[] = [];
+    let suggestEntities: string[] = ['answer', 'itemList'];
     if (luContents) {
       for (const content of luContents) {
         const luisJson = await extractLUISContent(content);
@@ -41,7 +41,7 @@ class LgParserWithoutWorker {
       }
     }
 
-    return { suggestEntities: suggestEntities };
+    return { suggestEntities: uniq(suggestEntities) };
   }
 }
 

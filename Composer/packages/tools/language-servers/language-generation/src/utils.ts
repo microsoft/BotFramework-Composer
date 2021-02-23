@@ -224,3 +224,10 @@ export function getLineByIndex(document: TextDocument, line: number) {
 
   return document.getText().split(/\r?\n/g)[line];
 }
+
+export function uniq(arr: string[]) {
+  const seen = new Set();
+  return arr.filter((item) => {
+    return seen.has(item) ? false : seen.add(item);
+  });
+}
