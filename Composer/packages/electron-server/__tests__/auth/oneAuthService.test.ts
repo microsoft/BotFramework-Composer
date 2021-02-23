@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { OneAuthInstance } from '../../src/auth/oneAuthService';
 
 jest.mock('../../src/electronWindow', () => ({
@@ -37,9 +40,11 @@ describe('OneAuth Serivce', () => {
     Status: {
       InteractionRequired: INTERACTION_REQUIRED,
     },
+    MsaConfiguration: class MSA {},
+    setFlights: jest.fn(),
   };
   let oneAuthService = new OneAuthInstance(); // bypass the shim logic
-  let processEnvBackup = { ...process.env };
+  const processEnvBackup = { ...process.env };
 
   afterEach(() => {
     process.env = processEnvBackup;
