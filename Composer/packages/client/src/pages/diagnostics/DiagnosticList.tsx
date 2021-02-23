@@ -15,7 +15,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 
 import { IDiagnosticInfo } from './types';
@@ -23,8 +23,8 @@ import { IDiagnosticInfo } from './types';
 // -------------------- Styles -------------------- //
 
 const icons = {
-  Error: { iconName: 'StatusErrorFull', color: '#EB3941' },
-  Warning: { iconName: 'WarningSolid', color: '#F4BD00' },
+  Error: { iconName: 'StatusErrorFull', color: SharedColors.red10 },
+  Warning: { iconName: 'WarningSolid', color: SharedColors.yellow10 },
 };
 
 const diagnostic = mergeStyleSets({

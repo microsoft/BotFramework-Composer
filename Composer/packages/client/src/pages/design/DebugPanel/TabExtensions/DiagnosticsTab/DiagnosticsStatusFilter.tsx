@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { Severity, useDiagnosticsStatistics } from './useDiagnostics';
@@ -37,7 +37,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             paddingRight: '3px',
             width: '100%',
             border: 'none',
-            backgroundColor: filterType === Severity.Error ? '#edebe9' : '#F7F7F7',
+            backgroundColor: filterType === Severity.Error ? SharedColors.gray40 : SharedColors.gray20,
           },
           flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
           label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },
@@ -58,7 +58,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             paddingRight: '3px',
             border: 'none',
             width: '100%',
-            backgroundColor: filterType === Severity.Warning ? '#edebe9' : '#F7F7F7',
+            backgroundColor: filterType === Severity.Warning ? SharedColors.gray40 : SharedColors.gray20,
           },
           flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
           label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },

@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useSetRecoilState } from 'recoil';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
@@ -44,14 +44,14 @@ export const DiagnosticsStatus = () => {
       >
         <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
           <FontIcon
-            css={{ color: '#EB3941', fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+            css={{ color: SharedColors.red10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
             iconName="StatusErrorFull"
           />
           {errorsCount}
         </span>
         <span css={{ display: 'flex', alignItems: 'center' }}>
           <FontIcon
-            css={{ color: '#F4BD00', fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+            css={{ color: SharedColors.yellow10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
             iconName="WarningSolid"
           />
           {warningsCount}
