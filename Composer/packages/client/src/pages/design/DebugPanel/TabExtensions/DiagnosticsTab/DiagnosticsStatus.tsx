@@ -5,12 +5,12 @@
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useSetRecoilState } from 'recoil';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { SharedColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
+import { DiagnosticsTabKey } from '../../constants';
 
 import { useDiagnosticsStatistics } from './useDiagnostics';
-import { DiagnosticsTabKey } from './constants';
 
 /**
  * Displays how many errors and warnings in current project.
@@ -37,7 +37,7 @@ export const DiagnosticsStatus = () => {
             marginRight: '8px',
           },
           label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
-          icon: { color: '#EB3941', fontSize: FontSizes.size18, lineHeight: '18px' },
+          icon: { color: `${SharedColors.red10}`, fontSize: FontSizes.size18, lineHeight: '18px' },
         }}
         onClick={() => {
           setExpansion(true);
@@ -51,7 +51,7 @@ export const DiagnosticsStatus = () => {
         styles={{
           root: { height: '36px', padding: 0, paddingRight: '3px', border: 'none', minWidth: '20px' },
           label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
-          icon: { color: '#F4BD00', fontSize: FontSizes.size18, lineHeight: '18px' },
+          icon: { color: `${SharedColors.yellow10}`, fontSize: FontSizes.size18, lineHeight: '18px' },
         }}
         onClick={() => {
           setExpansion(true);

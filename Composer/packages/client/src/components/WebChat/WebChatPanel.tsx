@@ -6,6 +6,8 @@ import { DirectLineLog } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
+
 import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
@@ -129,6 +131,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
   const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
     try {
+      TelemetryClient.track('WebChatConversationRestarted', {
+        restartType: requireNewUserId ? 'NewUserId' : 'SameUserId',
+      });
       const chatData = await conversationService.restartConversation(
         chats[oldConversationId],
         requireNewUserId,
@@ -179,6 +184,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         currentRestartOption={currentRestartOption}
         openBotInEmulator={() => {
           openBotInEmulator(projectId);
+          TelemetryClient.track('EmulatorButtonClicked', { isRoot: true, projectId, location: 'WebChatPane' });
         }}
         onRestartConversation={onRestartConversationClick}
         onSaveTranscript={onSaveTranscriptClick}

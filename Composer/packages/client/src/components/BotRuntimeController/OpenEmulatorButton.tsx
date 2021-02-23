@@ -26,7 +26,7 @@ export const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectI
 
   const handleClick = () => {
     openBotInEmulator(projectId);
-    TelemetryClient.track('EmulatorButtonClicked', { isRoot, projectId });
+    TelemetryClient.track('EmulatorButtonClicked', { isRoot, projectId, location: 'BotController' });
   };
 
   return currentBotStatus === BotStatus.connected ? (

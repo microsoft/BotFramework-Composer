@@ -3,9 +3,17 @@
 
 import { FC } from 'react';
 
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+export const DiagnosticsTabKey = 'Diagnostics';
+export const WebChatInspectorTabKey = 'WebChatInspector';
+
+export type DebugDrawerKeys = typeof DiagnosticsTabKey | typeof WebChatInspectorTabKey;
+
 export interface TabExtensionConfig {
   /** Unique name of this extension. */
-  key: string;
+  key: DebugDrawerKeys;
 
   /** Description of this extension. */
   description?: string;

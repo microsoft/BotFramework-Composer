@@ -68,7 +68,7 @@ type DesignerEvents = {
   EditModeToggled: { jsonView: boolean };
   HelpLinkClicked: { url: string };
   ToolbarButtonClicked: { name: string };
-  EmulatorButtonClicked: { isRoot: boolean; projectId: string };
+  EmulatorButtonClicked: { isRoot: boolean; projectId: string; location: 'WebChatPane' | 'BotController' };
   LeftMenuModeToggled: { expanded: boolean };
   ProjectTreeFilterUsed: undefined;
   TooltipOpened: { location?: string; title: string; duration: number };
@@ -117,6 +117,15 @@ type LgEditorEvents = {
   };
 };
 
+type WebChatEvents = {
+  WebChatPaneOpened: undefined;
+  WebChatPaneClosed: undefined;
+  WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
+  DrawerPaneOpened: undefined;
+  DrawerPaneClosed: undefined;
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' };
+};
+
 type OtherEvents = {};
 
 type PageView = {
@@ -145,7 +154,8 @@ export type TelemetryEvents = ApplicationEvents &
   QnaEvents &
   AppSettingsEvents &
   PageView &
-  LgEditorEvents;
+  LgEditorEvents &
+  WebChatEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

@@ -29,6 +29,7 @@ import {
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import { useLocation } from '../utils/hooks';
+import TelemetryClient from '../telemetry/TelemetryClient';
 
 import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates } from './MultiLanguage';
@@ -289,7 +290,15 @@ export const Header = () => {
               },
             }}
             title={formatMessage('Open Web Chat')}
-            onClick={() => toggleWebChatPanel(!isWebChatPanelVisible)}
+            onClick={() => {
+              const webChatVisible = !isWebChatPanelVisible;
+              toggleWebChatPanel(webChatVisible);
+              if (webChatVisible) {
+                TelemetryClient.track('WebChatPaneOpened');
+              } else {
+                TelemetryClient.track('WebChatPaneClosed');
+              }
+            }}
           />
         )}
         <NotificationButton buttonStyles={buttonStyles} />
@@ -342,7 +351,10 @@ export const Header = () => {
           },
         }}
         type={PanelType.custom}
-        onDismiss={() => toggleWebChatPanel(false)}
+        onDismiss={() => {
+          toggleWebChatPanel(false);
+          TelemetryClient.track('WebChatPaneClosed');
+        }}
       >
         {webchatEssentials ? (
           <WebChatPanel

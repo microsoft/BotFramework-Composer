@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { TabExtensionConfig } from '../types';
+import { DiagnosticsTabKey } from '../../constants';
 
 import { DiagnosticsContent } from './DiagnosticsTabContent';
 import { DiagnosticsHeader } from './DiagnosticsTabHeader';
 import { DiagnosticsStatus } from './DiagnosticsStatus';
-import { DiagnosticsTabKey } from './constants';
 
 export const DiagnosticsTabConfig: TabExtensionConfig = {
   key: DiagnosticsTabKey,
