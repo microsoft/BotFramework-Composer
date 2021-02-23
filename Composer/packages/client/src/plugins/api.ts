@@ -24,7 +24,7 @@ interface AuthAPI {
 }
 
 interface PublishAPI {
-  useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
+  getPublishConfig?: () => PublishConfig | void;
   startProvision?: (config: any) => void;
   currentProjectId?: () => string;
   closeDialog?: () => void;
@@ -49,7 +49,7 @@ class API implements IAPI {
       logOut: () => AuthClient.logOut(),
     };
     this.publish = {
-      useConfigBeingEdited: undefined,
+      getPublishConfig: undefined,
       startProvision: undefined,
       currentProjectId: undefined,
       closeDialog: undefined,

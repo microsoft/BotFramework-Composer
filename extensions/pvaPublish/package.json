@@ -1,10 +1,10 @@
 {
   "name": "pva-publish-composer",
   "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
-    "build": "yarn clean && cross-env NODE_ENV=production webpack",
-    "build:dev": "yarn clean && cross-env NODE_ENV=development webpack",
-    "clean": "rimraf lib",
+    "build": "node ../build.js",
+    "watch": "yarn build --watch",
     "test": "yarn test:node && yarn test:ui",
     "test:node": "jest --config jest.config.node.js",
     "test:ui": "jest --config jest.config.ui.js"
@@ -14,7 +14,7 @@
     "bundles": [
       {
         "id": "publish",
-        "path": "lib/ui/publish-bundle.js"
+        "path": "dist/ui/publish-bundle.js"
       }
     ],
     "contributes": {
@@ -27,13 +27,14 @@
       }
     }
   },
-  "main": "lib/node/index.js",
+  "main": "dist/extension.js",
   "dependencies": {
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@uifabric/icons": "7.3.59",
     "@uifabric/react-hooks": "7.4.12",
     "debug": "^4.2.0",
+    "encoding": "^0.1.13",
     "format-message": "6.2.3",
     "fs-extra": "^9.0.1",
     "node-fetch": "2.6.1",
@@ -50,13 +51,7 @@
     "@types/node-fetch": "^2.5.7",
     "cross-env": "^7.0.2",
     "jest": "^26.6.0",
-    "mini-svg-data-uri": "^1.2.3",
-    "rimraf": "^3.0.2",
-    "ts-loader": "^8.0.0",
-    "typescript": "^3.9.6",
-    "url-loader": "^4.1.1",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "rimraf": "^3.0.2"
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types"

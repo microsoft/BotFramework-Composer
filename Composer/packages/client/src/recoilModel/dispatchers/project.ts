@@ -2,14 +2,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotProjectFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { RootBotManagedProperties } from '@bfc/shared';
+import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, QnABotTemplateId } from '../../constants';
+import { BotStatus } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -22,19 +21,18 @@ import {
   botNameIdentifierState,
   botOpeningMessage,
   botOpeningState,
-  botProjectFileState,
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
   createQnAOnState,
   currentProjectIdState,
+  dispatcherState,
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
   settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
-import { dispatcherState } from '../DispatcherWrapper';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
@@ -53,6 +51,7 @@ import {
   navigateToSkillBot,
   openLocalSkill,
   openRemoteSkill,
+  openRootBotAndSkills,
   openRootBotAndSkillsByPath,
   openRootBotAndSkillsByProjectId,
   removeRecentProject,
@@ -484,11 +483,8 @@ export const projectDispatcher = () => {
             if (settingStorage.get(projectId)) {
               settingStorage.remove(projectId);
             }
-            const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-            callbackHelpers.set(botProjectFileState(projectId), currentBotProjectFileIndexed);
 
-            const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
-            callbackHelpers.set(botProjectIdsState, [projectId]);
+            const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
 
             // Post project creation
             callbackHelpers.set(projectMetaDataState(projectId), {

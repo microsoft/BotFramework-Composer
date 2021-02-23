@@ -4,6 +4,7 @@
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { remove } from 'fs-extra';
+import set from 'lodash/set';
 
 import { ExtensionContext } from '../models/extension/extensionContext';
 import log from '../logger';
@@ -215,6 +216,9 @@ async function saveProjectAs(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      const settings = await currentProject.settingManager.get(false);
+      set(settings, 'luis.name', name);
+      await currentProject.updateFile('appsettings.json', JSON.stringify(settings));
       await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
@@ -515,6 +519,26 @@ function createProjectV2(req: Request, res: Response) {
   });
 }
 
+async function getVariablesByProjectId(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  const project = await BotProjectService.getProjectById(projectId, user);
+
+  if (project !== undefined) {
+    try {
+      const variables = await BotProjectService.staticMemoryResolver(projectId);
+      res.status(200).json({ variables });
+    } catch (e) {
+      log('Failed to fetch memory variables for project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -537,4 +561,5 @@ export const ProjectController = {
   getProjectByAlias,
   backupProject,
   copyTemplateToExistingProject,
+  getVariablesByProjectId,
 };

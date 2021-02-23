@@ -5,14 +5,12 @@
 import React, { useCallback, useState, useRef } from 'react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { jsx, css } from '@emotion/core';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
-import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
 
@@ -35,25 +33,23 @@ import { INDENT_PER_LEVEL } from './constants';
 import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
 import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
+import { ProjectTreeOptions, TreeLink, TreeMenuItem } from './types';
 
 // -------------------- Styles -------------------- //
-
-const searchBox: ISearchBoxStyles = {
-  root: {
-    borderBottom: '1px solid #edebe9',
-    height: '45px',
-    borderRadius: '0px',
-  },
-};
 
 const root = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden;
   .ms-List-cell {
     min-height: 36px;
   }
+`;
+
+const focusStyle = css`
+  height: 100%;
+  position: relative;
 `;
 
 const icons = {
@@ -68,7 +64,8 @@ const icons = {
 };
 
 const tree = css`
-  height: 100%;
+  height: calc(100% - 45px);
+  overflow-y: auto;
   label: tree;
 `;
 
@@ -100,45 +97,9 @@ const sortTriggerGroups = (x: string, y: string): number => {
 };
 
 // -------------------- ProjectTree -------------------- //
-
-export type TreeLink = {
-  displayName: string;
-  isRoot: boolean;
-  isRemote: boolean;
-  diagnostics: Diagnostic[];
-  projectId: string;
-  skillId?: string;
-  dialogId?: string;
-  trigger?: number;
-  lgFileId?: string;
-  luFileId?: string;
-  parentLink?: TreeLink;
-  onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
-  botError?: any;
-};
-
-export type TreeMenuItem = {
-  icon?: string;
-  label: string; // leave this blank to place a separator
-  onClick?: (link: TreeLink) => void;
-};
-
 function getTriggerName(trigger: ITrigger): string {
   return trigger.displayName || getFriendlyName({ $kind: trigger.type });
 }
-
-export type ProjectTreeOptions = {
-  showDelete?: boolean;
-  showDialogs?: boolean;
-  showLgImports?: boolean;
-  showLuImports?: boolean;
-  showMenu?: boolean;
-  showQnAMenu?: boolean;
-  showErrors?: boolean;
-  showCommonLinks?: boolean;
-  showRemote?: boolean;
-  showTriggers?: boolean;
-};
 
 type Props = {
   navLinks?: TreeLink[];
@@ -156,6 +117,8 @@ type Props = {
   onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
   selectedLink?: Partial<TreeLink>;
   options?: ProjectTreeOptions;
+  headerAriaLabel?: string;
+  headerPlaceholder?: string;
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
@@ -187,6 +150,8 @@ export const ProjectTree: React.FC<Props> = ({
     showRemote: true,
     showTriggers: true,
   },
+  headerAriaLabel = '',
+  headerPlaceholder = '',
 }) => {
   const {
     onboardingAddCoachMarkRef,
@@ -202,6 +167,7 @@ export const ProjectTree: React.FC<Props> = ({
   const setPageElement = (name: string, value) => setPageElementState('dialogs', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
+
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
 
@@ -230,7 +196,7 @@ export const ProjectTree: React.FC<Props> = ({
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
   const createSubtree = useCallback(() => {
     return projectCollection.map(createBotSubtree);
-  }, [projectCollection, selectedLink, leftSplitWidth]);
+  }, [projectCollection, selectedLink, leftSplitWidth, filter]);
 
   if (rootProjectId == null) {
     // this should only happen before a project is loaded in, so it won't last very long
@@ -428,7 +394,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const onFilter = (_e, newValue?: string): void => {
+  const onFilter = (newValue?: string): void => {
     if (typeof newValue === 'string') {
       delayedSetFilter(newValue);
     }
@@ -764,16 +730,13 @@ export const ProjectTree: React.FC<Props> = ({
       data-testid="ProjectTree"
       role="region"
     >
-      <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-        <SearchBox
-          underlined
-          ariaLabel={formatMessage('Type dialog name')}
-          iconProps={{ iconName: icons.FILTER }}
-          placeholder={formatMessage('Filter Dialog')}
-          styles={searchBox}
-          onChange={onFilter}
+      <FocusZone isCircularNavigation css={focusStyle} direction={FocusZoneDirection.vertical}>
+        <ProjectTreeHeader
+          ariaLabel={headerAriaLabel}
+          menu={headerMenu}
+          placeholder={headerPlaceholder}
+          onFilter={onFilter}
         />
-        <ProjectTreeHeader menu={headerMenu} />
         <div
           aria-label={formatMessage(
             `{

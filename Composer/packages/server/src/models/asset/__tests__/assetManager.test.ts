@@ -10,6 +10,8 @@ import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
 import StorageService from '../../../services/storage';
 
+const mockchdir = jest.spyOn(process, 'chdir').mockImplementation(() => {});
+
 jest.mock('azure-storage', () => {
   return {};
 });
@@ -135,7 +137,7 @@ describe('assetManager', () => {
       expect(templates).toStrictEqual([
         {
           id: 'generator-conversational-core',
-          name: 'generator-conversational-core',
+          name: 'Conversational Core',
           description: 'Preview conversational core package for TESTING ONLY',
           keywords: ['conversationalcore', 'yeoman-generator'],
           package: {
@@ -162,6 +164,7 @@ describe('assetManager', () => {
         path: '/path/to/npmbot/sampleConversationalCore',
         storageId: 'default',
       });
+      expect(mockchdir).toBeCalledWith('/path/to/npmbot');
     });
   });
 });
