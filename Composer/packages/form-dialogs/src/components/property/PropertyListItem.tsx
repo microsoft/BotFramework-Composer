@@ -13,12 +13,14 @@ import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip
 import * as React from 'react';
 import { Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
-import { activePropertyIdAtom, formDialogPropertyAtom, formDialogPropertyValidSelector } from 'src/atoms/appState';
-import { useHandlers } from 'src/atoms/handlers';
-import { FormDialogProperty, FormDialogPropertyKind, FormDialogPropertyPayload } from 'src/atoms/types';
-import { getPropertyTypeDisplayName } from 'src/atoms/utils';
-import { FormDialogPropertyCard } from 'src/components/property/FormDialogPropertyCard';
-import { RequiredPriorityIndicator } from 'src/components/property/RequiredPriorityIndicator';
+
+import { useHandlers } from '../../atoms/handlers';
+import { activePropertyIdAtom, formDialogPropertyAtom, formDialogPropertyValidSelector } from '../../atoms/appState';
+import { FormDialogProperty, FormDialogPropertyKind, FormDialogPropertyPayload } from '../../atoms/types';
+import { getPropertyTypeDisplayName } from '../../atoms/utils';
+
+import { FormDialogPropertyCard } from './FormDialogPropertyCard';
+import { RequiredPriorityIndicator } from './RequiredPriorityIndicator';
 
 const ItemRoot = styled.div(({ isDragging }: { isDragging: boolean }) => ({
   boxShadow: isDragging ? '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)' : null,
