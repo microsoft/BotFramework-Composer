@@ -7,7 +7,8 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
-import { formDialogSchemaAtom } from 'src/atoms/appState';
+
+import { formDialogSchemaAtom } from '../../atoms/appState';
 
 const Root = styled(Stack)({
   width: 140,

@@ -9,13 +9,9 @@ import formatMessage from 'format-message';
 import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
+import { RestartOption } from './type';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
-
-export enum RestartOption {
-  SameUserID,
-  NewUserID,
-}
 
 export interface WebChatPanelProps {
   botUrl: string;
