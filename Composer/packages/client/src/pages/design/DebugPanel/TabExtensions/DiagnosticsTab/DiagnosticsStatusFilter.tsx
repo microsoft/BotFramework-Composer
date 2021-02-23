@@ -14,6 +14,8 @@ import { Severity, useDiagnosticsStatistics } from './useDiagnostics';
  */
 export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
   const { errorsCount, warningsCount } = useDiagnosticsStatistics();
+  const errorsMsg = `${errorsCount} ${errorsCount === 1 ? 'error' : 'errors'}`;
+  const warningsMsg = `${warningsCount} ${warningsCount === 1 ? 'warning' : 'warnings'}`;
 
   return (
     <div
@@ -45,7 +47,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
           onChangeFilterType(Severity.Error);
         }}
       >
-        {formatMessage(`{errorsCount} errors`, { errorsCount })}
+        {formatMessage(`{errorsMsg}`, { errorsMsg })}
       </DefaultButton>
       <DefaultButton
         iconProps={{ iconName: 'WarningSolid' }}
@@ -66,7 +68,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
           onChangeFilterType(Severity.Warning);
         }}
       >
-        {formatMessage(`{warningsCount} warnings`, { warningsCount })}
+        {formatMessage(`{warningsMsg}`, { warningsMsg })}
       </DefaultButton>
     </div>
   );
