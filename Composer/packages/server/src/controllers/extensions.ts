@@ -47,6 +47,12 @@ interface ExtensionFetchRequest extends Request {
   };
 }
 
+interface ExtensionSettingsRequest extends Request {
+  query: {
+    _all?: boolean;
+  };
+}
+
 const presentExtension = (e?: ExtensionMetadata) => (e ? { ...e, bundles: undefined, path: undefined } : undefined);
 
 export async function listExtensions(req: Request, res: Response) {
@@ -170,4 +176,19 @@ export async function performExtensionFetch(req: ExtensionFetchRequest, res: Res
       throw e;
     }
   }
+}
+
+export async function getSettingsSchema(req: Request, res: Response) {
+  res.json(ExtensionManager.settingsSchema);
+}
+
+export async function getSettings(req: ExtensionSettingsRequest, res: Response) {
+  const includeDefaults = '_all' in req.query;
+
+  res.json(ExtensionManager.getSettings(includeDefaults));
+}
+
+export async function updateSettings(req: Request, res: Response) {
+  ExtensionManager.updateSettings(req.body ?? {});
+  res.json(ExtensionManager.getSettings(true));
 }

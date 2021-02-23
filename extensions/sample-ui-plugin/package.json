@@ -3,23 +3,23 @@
   "version": "1.0.0",
   "license": "ISC",
   "scripts": {
-    "build": "yarn clean && webpack",
-    "clean": "rimraf lib"
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
   },
   "composer": {
     "enabled": false,
     "bundles": [
       {
         "id": "publish",
-        "path": "lib/client/publish1.js"
+        "path": "dist/publish1.js"
       },
       {
         "id": "publish2",
-        "path": "lib/client/publish2.js"
+        "path": "dist/publish2.js"
       },
       {
         "id": "page",
-        "path": "lib/client/page.js"
+        "path": "dist/page.js"
       }
     ],
     "contributes": {
@@ -40,9 +40,19 @@
           }
         ]
       }
+    },
+    "configuration": {
+      "filter": {
+        "description": "Array of file types to show in the page contribution.",
+        "type": "array",
+        "default": ["dialog", "lg", "lu", "qna"],
+        "items": {
+          "type": "string"
+        }
+      }
     }
   },
-  "main": "lib/node/index.js",
+  "main": "dist/extension.js",
   "dependencies": {
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@botframework-composer/types": "file:../../Composer/packages/types",

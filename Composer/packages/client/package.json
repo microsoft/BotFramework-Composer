@@ -102,6 +102,7 @@
     "css-loader": "3.2.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
+    "esbuild-loader": "^2.8.0",
     "eslint-config-react-app": "5.2.1",
     "eslint-loader": "4.0.0",
     "file-loader": "4.2.0",
