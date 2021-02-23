@@ -5,10 +5,10 @@ import * as path from 'path';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
+import archiver from 'archiver';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
-import archiver = require('archiver');
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
 
 export class BotProjectDeploy {
@@ -61,7 +61,7 @@ export class BotProjectDeploy {
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: "Building the bot app...",
+        message: 'Building the bot app...',
       });
       await build(project, this.projPath, settings);
 
@@ -134,6 +134,7 @@ export class BotProjectDeploy {
   private async zipDirectory(source: string, out: string) {
     try {
       const archive = archiver('zip', { zlib: { level: 9 } });
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       const stream = fs.createWriteStream(out);
       return new Promise((resolve, reject) => {
         archive
@@ -164,6 +165,7 @@ export class BotProjectDeploy {
     const publishEndpoint = `https://${
       hostname ? hostname : name + (env ? '-' + env : '')
     }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
       this.logger('%O', err);
