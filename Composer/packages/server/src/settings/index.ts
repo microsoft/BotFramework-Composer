@@ -17,8 +17,9 @@ import {
   diskNames,
   extensionDataDir,
   extensionManifestPath,
-  extensionsbuiltinDir,
+  extensionsBuiltinDir,
   extensionsRemoteDir,
+  extensionSettingsPath,
 } from './env';
 
 interface Settings {
@@ -34,6 +35,7 @@ interface Settings {
     dataDir: string;
     builtinDir: string;
     remoteDir: string;
+    settingsPath: string;
   };
 }
 
@@ -49,8 +51,9 @@ const envSettings: { [env: string]: Settings } = {
     extensions: {
       manifestPath: extensionManifestPath,
       dataDir: extensionDataDir,
-      builtinDir: extensionsbuiltinDir,
+      builtinDir: extensionsBuiltinDir,
       remoteDir: extensionsRemoteDir,
+      settingsPath: extensionSettingsPath,
     },
   },
 };

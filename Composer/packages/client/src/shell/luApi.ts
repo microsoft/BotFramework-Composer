@@ -8,10 +8,8 @@ import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 
 import { useResolvers } from '../hooks/useResolver';
-import { focusPathState } from '../recoilModel';
+import { dispatcherState, focusPathState } from '../recoilModel';
 import { Dispatcher } from '../recoilModel/dispatchers';
-
-import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
 const fileNotFound = (id: string) => formatMessage(`LU file {id} not found`, { id });
 const INTENT_ERROR = formatMessage('intentName is missing or empty');
