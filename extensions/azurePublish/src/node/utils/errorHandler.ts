@@ -1,18 +1,21 @@
-function CustomizeError (name, message, stack = undefined) {
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+function CustomizeError(name, message, stack = undefined) {
   this.name = name;
   this.message = message;
-  this.stack = stack || (new Error()).stack;
+  this.stack = stack || new Error().stack;
 }
 CustomizeError.prototype = Object.create(Error.prototype);
 CustomizeError.prototype.constructor = CustomizeError;
 
-export const isCustomizeError = (err)=> {
+export const isCustomizeError = (err) => {
   return err instanceof CustomizeError;
-}
+};
 
-export const createCustomizeError = (name, message, stack=undefined)=> {
-  return new CustomizeError(name,message, stack);
-}
+export const createCustomizeError = (name, message, stack = undefined) => {
+  return new CustomizeError(name, message, stack);
+};
 
 export const stringifyError = (error: any): string => {
   if (error instanceof Error) {
@@ -22,7 +25,7 @@ export const stringifyError = (error: any): string => {
   } else {
     return error;
   }
-}
+};
 export enum ProvisionErrors {
   CREATE_RESOURCEGROUP_ERROR = 'CREATE_RESOURCES_ERROR',
   PROVISION_ERROR = 'PROVISION_ERROR',

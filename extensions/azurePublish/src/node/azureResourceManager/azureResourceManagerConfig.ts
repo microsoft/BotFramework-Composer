@@ -105,7 +105,7 @@ export interface WebAppConfig {
   appPwd?: string;
 }
 
-export interface AzureFuntionsConfig {
+export interface AzureFunctionsConfig {
   resourceGroupName: string;
   name: string;
   location: string;
