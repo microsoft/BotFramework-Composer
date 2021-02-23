@@ -12,7 +12,7 @@ import React from 'react';
 
 import { DialogDeleting, removeSkillDialog } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
-import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
+import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { navigateTo, createBotSettingUrl } from '../../utils/navigation';
 import {
   dispatcherState,
@@ -33,6 +33,7 @@ import { CreationFlowStatus } from '../../constants';
 import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { TreeLink } from '../../components/ProjectTree/types';
 
 import { deleteDialogContent, removeSkillDialogContentStyle, removeSkillDialogStyle } from './styles';
 

@@ -10,13 +10,13 @@ import { isAbsHosted } from '../../utils/envUtil';
 import {
   botDisplayNameState,
   botStatusState,
+  dispatcherState,
   luFilesState,
   qnaFilesState,
   schemasState,
   settingsState,
 } from '../atoms';
 import { Dispatcher } from '../dispatchers';
-import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 import { getSensitiveProperties } from '../dispatchers/utils/project';
 

@@ -90,7 +90,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
   useEffect(() => {
-    PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.item.configuration) : undefined];
+    PluginAPI.publish.getPublishConfig = () => (current ? JSON.parse(current.item.configuration) : undefined);
     PluginAPI.publish.currentProjectId = () => {
       return projectId;
     };

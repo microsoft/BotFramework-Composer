@@ -36,6 +36,7 @@ const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
 const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
 const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
+const ExtensionsPage = React.lazy(() => import('./pages/extensions/ExtensionsPage'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
@@ -104,6 +105,7 @@ const Routes = (props) => {
             ))}
           </ProjectRouter>
           <SettingPage path="settings/*" />
+          <ExtensionsPage path="extensions/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouterV2 path="v2/projects/*" />
           <BotCreationFlowRouter path="home" />

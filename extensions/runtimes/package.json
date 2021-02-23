@@ -2,12 +2,13 @@
   "name": "plugin-runtimes",
   "version": "1.0.0",
   "description": "provide info about available runtimes",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "webpack"
-  },
+  "main": "dist/extension.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
+  },
   "dependencies": {
     "fs-extra": "^9.0.1",
     "path": "^0.12.7",
