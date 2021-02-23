@@ -26,7 +26,7 @@ export const pluginPagesSelector = selector({
       if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
         // TODO: This code is present to enable the package manager to be behind a feature flag.
         // When this is no longer necessary, we should remove this conditional!
-        if (p.id !== 'package-manager' || featureFlags?.PACKAGE_MANAGER?.enabled === true) {
+        if (p.id !== 'package-manager' || featureFlags?.NEW_CREATION_FLOW?.enabled === true) {
           pages.push(...pagesConfig.map((page) => ({ ...page, id: p.id })));
         }
       }
