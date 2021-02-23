@@ -291,9 +291,9 @@ export const Header = () => {
             }}
             title={formatMessage('Open Web Chat')}
             onClick={() => {
-              const webChatVisible = !isWebChatPanelVisible;
-              toggleWebChatPanel(webChatVisible);
-              if (webChatVisible) {
+              const currentWebChatVisibility = !isWebChatPanelVisible;
+              toggleWebChatPanel(currentWebChatVisibility);
+              if (currentWebChatVisibility) {
                 TelemetryClient.track('WebChatPaneOpened');
               } else {
                 TelemetryClient.track('WebChatPaneClosed');
