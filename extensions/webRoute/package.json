@@ -2,9 +2,10 @@
   "name": "webroute",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/index.js",
+  "main": "dist/extension.js",
   "scripts": {
-    "build": "webpack"
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
   },
   "composer": {
     "enabled": false
