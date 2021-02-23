@@ -428,7 +428,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             MicrosoftAppId: provisionResults.appId,
             MicrosoftAppPassword: provisionResults.appPassword,
           },
-          bot: provisionResults.bot,
+          botName: provisionResults.botName,
           subscriptionId: config.subscription.subscriptionId
         };
 
