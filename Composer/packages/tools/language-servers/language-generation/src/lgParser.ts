@@ -7,6 +7,7 @@ import path from 'path';
 import { lgImportResolverGenerator, LgFile, ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 import { lgUtil } from '@bfc/indexers';
+import uniq from 'lodash/uniq';
 
 import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes } from './utils';
 
@@ -33,7 +34,7 @@ class LgParserWithoutWorker {
   }
 
   public async extractLuisEntity(luContents: string[]): Promise<{ suggestEntities: string[] }> {
-    let suggestEntities: string[] = [];
+    let suggestEntities: string[] = ['answer', 'itemList'];
     if (luContents) {
       for (const content of luContents) {
         const luisJson = await extractLUISContent(content);
@@ -41,7 +42,7 @@ class LgParserWithoutWorker {
       }
     }
 
-    return { suggestEntities: suggestEntities };
+    return { suggestEntities: uniq(suggestEntities) };
   }
 }
 
