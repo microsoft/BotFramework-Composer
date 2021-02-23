@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { Severity, useDiagnosticsStatistics } from './useDiagnostics';
@@ -24,7 +24,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: '#F7F7F7',
+        backgroundColor: NeutralColors.gray10,
       }}
       data-testid="diagnostics-sidebar"
     >
@@ -37,11 +37,11 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             paddingRight: '3px',
             width: '100%',
             border: 'none',
-            backgroundColor: filterType === Severity.Error ? SharedColors.gray40 : SharedColors.gray20,
+            backgroundColor: filterType === Severity.Error ? NeutralColors.gray40 : NeutralColors.gray10,
           },
           flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
           label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },
-          icon: { color: '#EB3941', fontSize: FontSizes.size14, lineHeight: '18px' },
+          icon: { color: SharedColors.red10, fontSize: FontSizes.size14, lineHeight: '18px' },
         }}
         onClick={() => {
           onChangeFilterType(Severity.Error);
@@ -58,11 +58,11 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             paddingRight: '3px',
             border: 'none',
             width: '100%',
-            backgroundColor: filterType === Severity.Warning ? SharedColors.gray40 : SharedColors.gray20,
+            backgroundColor: filterType === Severity.Warning ? NeutralColors.gray40 : NeutralColors.gray10,
           },
           flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
           label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },
-          icon: { color: '#F4BD00', fontSize: FontSizes.size14, lineHeight: '18px' },
+          icon: { color: SharedColors.yellow10, fontSize: FontSizes.size14, lineHeight: '18px' },
         }}
         onClick={() => {
           onChangeFilterType(Severity.Warning);
