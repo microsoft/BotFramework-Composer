@@ -2,20 +2,20 @@
   "name": "package-manager",
   "version": "1.0.0",
   "description": "Discover and use components that can be installed into your bot.",
-  "main": "lib/node/index.js",
-  "scripts": {
-    "build": "yarn clean && webpack --config webpack.config.js",
-    "clean": "rimraf dist"
-  },
+  "main": "dist/extension.js",
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
+  },
   "composer": {
     "enabled": true,
     "bundles": [
       {
         "id": "package-manager",
-        "path": "./lib/pages/package-manager.js"
+        "path": "./dist/Library.js"
       }
     ],
     "contributes": {
@@ -26,6 +26,18 @@
             "label": "Package manager",
             "icon": "Library"
           }
+        ]
+      }
+    },
+    "configuration": {
+      "sources": {
+        "description": "Array of library sources.",
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "default": [
+          "https://raw.githubusercontent.com/microsoft/botframework-components/main/experimental/feeds/components.json"
         ]
       }
     }
