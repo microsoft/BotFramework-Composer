@@ -60,6 +60,7 @@ const LGPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      shouldShowEditorError
       showCommonLinks
       useNewTree
       data-testid="LGPage"

@@ -215,7 +215,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {title !== 'Diagnostics' && <DebugPanel />}
+              {shouldShowEditorError && <DebugPanel />}
             </div>
           </Split>
         </div>
