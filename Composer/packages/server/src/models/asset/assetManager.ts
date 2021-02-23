@@ -10,6 +10,7 @@ import { mkdirSync, readFile } from 'fs-extra';
 import yeoman from 'yeoman-environment';
 import Environment from 'yeoman-environment';
 import TerminalAdapter from 'yeoman-environment/lib/adapter';
+import { QnABotTemplateId } from '@bfc/shared';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -117,7 +118,7 @@ export class AssetManager {
       mkdirSync(dstDir, { recursive: true });
 
       // find selected template
-      const npmPackageName = templateId;
+      const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
       const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
       const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, templateVersion);
@@ -280,7 +281,8 @@ export class AssetManager {
   private getPackageDisplayName(packageName: string): string {
     if (packageName) {
       return packageName
-        .replace('generator-', '')
+        .replace(/^@microsoft\/generator-microsoft-bot/, '') // clean up our complex package names
+        .replace(/^generator-/, '') // clean up other package names too
         .split('-')
         .reduce((a, b) => a.charAt(0).toUpperCase() + a.slice(1) + ' ' + b.charAt(0).toUpperCase() + b.slice(1));
     } else {
@@ -333,5 +335,12 @@ export class AssetManager {
     }
 
     return templates;
+  }
+
+  public async getRawGithubFileContent(owner: string, repo: string, branch: string, path: string) {
+    const githubUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    const res = await fetch(githubUrl.toString());
+
+    return await res.text();
   }
 }

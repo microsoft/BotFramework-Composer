@@ -12,11 +12,11 @@ import { PluginConfig } from '@bfc/extension-client';
 import { DialogInfo, getFriendlyName } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { designPageLocationState, dialogsSelectorFamily, dispatcherState } from '../../recoilModel';
 import { getDialogData } from '../../utils/dialogUtil';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { getFocusPath } from '../../utils/navigation';
+import { TreeLink } from '../../components/ProjectTree/types';
 
 import { breadcrumbClass } from './styles';
 

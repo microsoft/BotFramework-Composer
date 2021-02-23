@@ -20,14 +20,14 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 

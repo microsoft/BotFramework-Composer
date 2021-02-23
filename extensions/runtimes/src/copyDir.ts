@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable security/detect-non-literal-fs-filename */
 
 import Path from 'path';
 
@@ -24,7 +25,7 @@ export async function copyDir(
 
   for (const path of paths) {
     const srcPath = Path.join(srcDir, path);
-    if (pathsToExclude && pathsToExclude.has(srcPath)) {
+    if (pathsToExclude?.has(srcPath)) {
       continue;
     }
     const dstPath = Path.join(dstDir, path);

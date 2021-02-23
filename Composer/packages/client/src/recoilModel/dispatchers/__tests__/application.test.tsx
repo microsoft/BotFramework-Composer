@@ -14,8 +14,8 @@ import {
   applicationErrorState,
   creationFlowStatusState,
   onboardingState,
+  dispatcherState,
 } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../../constants';
 import { StateError } from '../../types';

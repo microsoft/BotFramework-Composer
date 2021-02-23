@@ -6,7 +6,8 @@
 /* eslint-disable react/no-danger */
 
 import * as React from 'react';
-import { safeHtmlString } from 'src/components/tags/utils';
+
+import { safeHtmlString } from './utils';
 
 type ContentEditableProps = {
   value: string;
