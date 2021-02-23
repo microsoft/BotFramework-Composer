@@ -8,9 +8,11 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import { PropertyRequiredKind } from 'src/atoms/types';
-import { PropertyListItem } from 'src/components/property/PropertyListItem';
-import { jsPropertyListClassName } from 'src/utils/constants';
+
+import { PropertyRequiredKind } from '../../atoms/types';
+import { jsPropertyListClassName } from '../../utils/constants';
+
+import { PropertyListItem } from './PropertyListItem';
 
 const Root = styled(Stack)({
   position: 'relative',

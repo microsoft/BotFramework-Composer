@@ -1,16 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions
 export const LuisAuthoringSupportLocation = ['westus', 'australiaeast', 'westeurope'];
 export const LuisPublishSupportLocation = {
-  'australiaeast': [
-    'australiaeast'
-  ],
-  'westeurope': [
-    'francecentral',
-    'northeurope',
-    'westeurope',
-    'uksouth',
-  ],
-  'westus':[
+  australiaeast: ['australiaeast'],
+  westeurope: ['francecentral', 'northeurope', 'westeurope', 'uksouth'],
+  westus: [
     'southafricanorth',
     'centralindia',
     'eastasia',
@@ -27,8 +23,8 @@ export const LuisPublishSupportLocation = {
     'westcentralus',
     'westus',
     'westus2',
-    'brazilsouth'
-  ]
+    'brazilsouth',
+  ],
 };
 
 export enum AzureAPIStatus {
@@ -48,25 +44,25 @@ export enum AzureResourceProviderType {
 }
 
 export type ResourcesItem = {
-  description: string,
-  text: string,
-  tier: string,
-  group: string,
-  key: string,
-  required: boolean,
-  [key:string]: any,
-}
+  description: string;
+  text: string;
+  tier: string;
+  group: string;
+  key: string;
+  required: boolean;
+  [key: string]: any;
+};
 export const authConfig = {
   arm: {
     // for web login
     scopes: ['https://management.core.windows.net/user_impersonation'],
     // for electron
-    targetResource: 'https://management.core.windows.net/'
+    targetResource: 'https://management.core.windows.net/',
   },
   graph: {
     // for web login
     scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
     // for electron
-    targetResource: 'https://graph.microsoft.com/'
-  }
-}
+    targetResource: 'https://graph.microsoft.com/',
+  },
+};
