@@ -184,6 +184,7 @@
         "name": "[variables('webAppName')]",
         "serverFarmId": "[variables('servicePlanName')]",
         "siteConfig": {
+          "webSocketsEnabled": true,
           "appSettings": [
             {
               "name": "WEBSITE_NODE_DEFAULT_VERSION",
