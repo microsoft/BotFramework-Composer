@@ -158,7 +158,8 @@ describe('assetManager', () => {
         'generator-conversational-core',
         '1.0.3',
         'sampleConversationalCore',
-        mockLocRef
+        mockLocRef,
+        'azureWebApp'
       );
       expect(newBotLocationRef).toStrictEqual({
         path: '/path/to/npmbot/sampleConversationalCore',
