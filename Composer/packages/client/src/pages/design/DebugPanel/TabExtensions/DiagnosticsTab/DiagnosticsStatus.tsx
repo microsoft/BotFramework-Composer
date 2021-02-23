@@ -8,7 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { SharedColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
-import { DiagnosticsTabKey } from '../../constants';
+import { DiagnosticsTabKey } from '../types';
 
 import { useDiagnosticsStatistics } from './useDiagnostics';
 

@@ -55,14 +55,16 @@ export const DebugPanel = () => {
             itemKey={key}
             onRenderItemLink={() => (
               <button
-                css={{ height: 'inherit', width: 'inherit' }}
+                css={{ height: 'inherit', width: 'inherit', outline: 'none', border: 'none' }}
                 onClick={() => {
                   setActiveTab(key);
                   setExpansion(true);
-                  TelemetryClient.track('DrawerPaneOpened');
+
                   TelemetryClient.track('DrawerPaneTabOpened', {
                     tabType: key,
                   });
+
+                  TelemetryClient.track('DrawerPaneOpened');
                 }}
               >
                 {element}

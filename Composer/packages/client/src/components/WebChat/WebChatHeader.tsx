@@ -106,6 +106,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
       />
       <ActionButton
         ariaDescription="Open the bot in Emulator"
+        data-testid="open-emulator"
         iconProps={{
           iconName: 'OpenInNewTab',
         }}

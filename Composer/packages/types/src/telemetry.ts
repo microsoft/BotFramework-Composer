@@ -124,6 +124,7 @@ type WebChatEvents = {
   DrawerPaneOpened: undefined;
   DrawerPaneClosed: undefined;
   DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' };
+  SaveTranscriptClicked: undefined;
 };
 
 type OtherEvents = {};

@@ -162,7 +162,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       downloadLink.download = `${botName}.transcript`;
       downloadLink.href = url;
       downloadLink.click();
-
+      TelemetryClient.track('SaveTranscriptClicked');
       webChatPanelRef.current?.removeChild(downloadLink);
     } catch (ex) {
       const err: DirectLineLog = {
