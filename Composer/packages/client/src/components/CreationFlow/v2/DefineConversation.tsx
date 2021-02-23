@@ -17,6 +17,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { QnABotTemplateId } from '@bfc/shared';
+import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 
 import {
   DialogCreationCopy,
@@ -79,7 +80,7 @@ type DefineConversationFormData = {
   description: string;
   schemaUrl: string;
   primaryLanguage: string;
-  runtimeChoice: string;
+  runtimeChoice: RuntimeType;
   location?: string;
   templateVersion?: string;
 
@@ -202,7 +203,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       primaryLanguage: defaultPrimaryLanguage,
-      runtimeChoice: defaultRuntime,
+      runtimeChoice: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
       location:
