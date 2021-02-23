@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable security/detect-non-literal-fs-filename */
 import path from 'path';
 import { promisify } from 'util';
 import { exec } from 'child_process';
@@ -39,16 +40,21 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('FINISHED BUILDING!');
     },
-    installComponent: async (runtimePath: string, packageName: string, version: string, source: string,  _project: any): Promise<string> => {
+    installComponent: async (
+      runtimePath: string,
+      packageName: string,
+      version: string,
+      source: string,
+      _project: any
+    ): Promise<string> => {
       // run dotnet install on the project
-      const command = `dotnet add package ${packageName}${version ? ' --version=' + version : ''}${source ? ' --source=' + source : ''}`;
+      const command = `dotnet add package ${packageName}${version ? ' --version=' + version : ''}${
+        source ? ' --source=' + source : ''
+      }`;
       composer.log('EXEC:', command);
-      const { stderr: installError, stdout: installOutput } = await execAsync(
-        command,
-        {
-          cwd: path.join(runtimePath, 'azurewebapp'),
-        }
-      );
+      const { stderr: installError, stdout: installOutput } = await execAsync(command, {
+        cwd: path.join(runtimePath, 'azurewebapp'),
+      });
       if (installError) {
         throw new Error(installError);
       }
@@ -100,17 +106,15 @@ export default async (composer: any): Promise<void> => {
         // Don't set self-contained and runtimeIdentifier for AzureFunctions.
         let buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`;
 
-        if (profile.type === 'azurePublish')
-        {
+        if (profile.type === 'azurePublish') {
           // if runtime identifier set, make dotnet runtime to self contained, default runtime identifier is win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-          buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${runtimeIdentifier ?? 'win-x64'}`;
+          buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${
+            runtimeIdentifier ?? 'win-x64'
+          }`;
         }
-        const { stdout, stderr } = await execAsync(
-          buildCommand,
-          {
-            cwd: runtimePath,
-          }
-        );
+        const { stdout, stderr } = await execAsync(buildCommand, {
+          cwd: runtimePath,
+        });
         composer.log('OUTPUT FROM BUILD', stdout);
         if (stderr) {
           composer.log('ERR FROM BUILD: ', stderr);
@@ -214,7 +218,13 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('BUILD COMPLETE');
     },
-    installComponent: async (runtimePath: string, packageName: string, version: string, source: string, _project: any): Promise<string> => {
+    installComponent: async (
+      runtimePath: string,
+      packageName: string,
+      version: string,
+      source: string,
+      _project: any
+    ): Promise<string> => {
       // run dotnet install on the project
       const { stderr: installError, stdout: installOutput } = await execAsync(
         `npm install --loglevel=error --save ${packageName}${version ? '@' + version : ''}`,
@@ -335,9 +345,17 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('FINISHED BUILDING!');
     },
-    installComponent: async (runtimePath: string, packageName: string, version: string, source: string, _project: any): Promise<string> => {
+    installComponent: async (
+      runtimePath: string,
+      packageName: string,
+      version: string,
+      source: string,
+      _project: any
+    ): Promise<string> => {
       // run dotnet install on the project
-      composer.log(`EXECUTE: dotnet add ${_project.name}.csproj package ${packageName}${version ? ' --version=' + version : ''} `);
+      composer.log(
+        `EXECUTE: dotnet add ${_project.name}.csproj package ${packageName}${version ? ' --version=' + version : ''} `
+      );
       const { stderr: installError, stdout: installOutput } = await execAsync(
         `dotnet add ${_project.name}.csproj package ${packageName}${version ? ' --version=' + version : ''}`,
         {
@@ -352,9 +370,12 @@ export default async (composer: any): Promise<void> => {
     uninstallComponent: async (runtimePath: string, packageName: string, _project: any): Promise<string> => {
       // run dotnet install on the project
       composer.log(`EXECUTE: dotnet remove ${_project.name}.csproj package ${packageName}`);
-      const { stderr: installError, stdout: installOutput } = await execAsync(`dotnet remove  ${_project.name}.csproj package ${packageName}`, {
-        cwd: path.join(runtimePath),
-      });
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `dotnet remove  ${_project.name}.csproj package ${packageName}`,
+        {
+          cwd: path.join(runtimePath),
+        }
+      );
       if (installError) {
         throw new Error(installError);
       }
@@ -376,7 +397,7 @@ export default async (composer: any): Promise<void> => {
       // } else if (profile.type === 'azureFunctionsPublish') {
       //   csproj = 'Microsoft.BotFramework.Composer.Functions.csproj';
       // }
-      const csproj = `${ project.name }.csproj`;
+      const csproj = `${project.name}.csproj`;
       const publishFolder = path.join(runtimePath, 'bin', 'release', 'publishTarget');
       const deployFilePath = path.join(runtimePath, '.deployment');
       const dotnetProjectPath = path.join(runtimePath, csproj);
@@ -399,14 +420,13 @@ export default async (composer: any): Promise<void> => {
         // if (profile.type === 'azurePublish')
         // {
         // if runtime identifier set, make dotnet runtime to self contained, default runtime identifier is win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-        let buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${runtimeIdentifier ?? 'win-x64'}`;
+        const buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${
+          runtimeIdentifier ?? 'win-x64'
+        }`;
         //  }
-        const { stdout, stderr } = await execAsync(
-          buildCommand,
-          {
-            cwd: runtimePath,
-          }
-        );
+        const { stdout, stderr } = await execAsync(buildCommand, {
+          cwd: runtimePath,
+        });
         composer.log('OUTPUT FROM BUILD', stdout);
         if (stderr) {
           composer.log('ERR FROM BUILD: ', stderr);
@@ -420,8 +440,8 @@ export default async (composer: any): Promise<void> => {
       // const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
       // const localBotPath = path.join(runtimePath, 'ComposerDialogs');
       // await fs.copy(localBotPath, remoteBotPath, {
-        // overwrite: true,
-        // recursive: true,
+      // overwrite: true,
+      // recursive: true,
       // });
 
       // write settings to disk in the appropriate location
