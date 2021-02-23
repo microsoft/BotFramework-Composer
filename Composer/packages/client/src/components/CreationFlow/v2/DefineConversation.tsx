@@ -26,7 +26,6 @@ import {
   mockLanguageOptions,
   runtimeOptions,
   defaultPrimaryLanguage,
-  defaultRuntime,
 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';

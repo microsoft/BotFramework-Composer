@@ -94,6 +94,7 @@ describe('<CreationFlowV2/>', () => {
       eTag: undefined,
       preserveRoot: undefined,
       qnqKbUrls: undefined,
+      runtimeChoice: 'azureWebApp',
       templateDir: undefined,
       urlSuffix: undefined,
     });
