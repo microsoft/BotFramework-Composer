@@ -233,7 +233,7 @@ const reviewCols: IColumn[] = [
 export const AzureProvisionDialog: React.FC = () => {
   const {
     currentProjectId,
-    getPublishConfig,
+    publishConfig,
     startProvision,
     closeDialog,
     onBack,
@@ -272,7 +272,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
-  const currentConfig = getPublishConfig();
+  const currentConfig = publishConfig;
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
