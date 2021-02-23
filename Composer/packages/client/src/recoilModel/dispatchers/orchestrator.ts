@@ -7,7 +7,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { orchestratorDownloadNotificationProps } from '../../components/Orchestrator/DownloadNotification';
 import httpClient from '../../utils/httpUtil';
-import { dispatcherState } from '../DispatcherWrapper';
+import { dispatcherState } from '../../../src/recoilModel';
 import { recognizersSelectorFamily } from '../selectors/recognizers';
 
 import { createNotification } from './notification';
