@@ -10,6 +10,9 @@ export const DebugPaneFooterHeight = 24;
 export const debugPaneContainerExpandedStyle = css`
   height: 300px;
   display: flex;
+  max-height: 600px;
+  min-height: 200px;
+  cursor: n-resize;
   flex-direction: column;
 `;
 
