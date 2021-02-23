@@ -27,9 +27,20 @@ export class JsonStore<T = any> {
   private data: T;
   private filePath: string;
 
+  constructor(jsonFilePath: string, initialValue: T) {
+    this.filePath = path.resolve(jsonFilePath);
+    this.data = initialValue;
+    this.ensureStore();
+  }
+
   public read(): T {
     this.readStore();
     return this.data;
+  }
+
+  public write(newData: T) {
+    this.data = newData;
+    this.flush();
   }
 
   public get<K extends keyof T>(key: K): T[K] | undefined;
@@ -54,14 +65,8 @@ export class JsonStore<T = any> {
     this.flush();
   }
 
-  flush = () => {
+  public flush() {
     fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2) + '\n');
-  };
-
-  constructor(jsonFilePath: string, initialValue: T) {
-    this.filePath = path.resolve(jsonFilePath);
-    this.data = initialValue;
-    this.ensureStore();
   }
 
   private ensureStore() {
