@@ -416,9 +416,8 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   useEffect(() => {
-    if (currentSubscription) {
+    if (currentSubscription && token) {
       // get resource group under subscription
-      // getResourceGroups(token, currentSubscription).then(setResourceGroups);
       getDeployLocations(token, currentSubscription).then((data:DeployLocation[])=> {
         setDeployLocations(data);
         const luRegions = getLuisAuthoringRegions();
@@ -426,13 +425,13 @@ export const AzureProvisionDialog: React.FC = () => {
         setLuisLocations(region);
       });
     }
-  }, [currentSubscription]);
+  }, [currentSubscription, token]);
 
   const removePlaceholder = React.useCallback((config:any)=>{
     try{
       if(config){
         let str = JSON.stringify(config);
-        str = str.replace(/<.*>/g, '');
+        str = str.replace(/<[^>]*>/g, '');
         const newConfig = JSON.parse(str);
         return newConfig;
       } else {
@@ -474,6 +473,7 @@ export const AzureProvisionDialog: React.FC = () => {
       if(config.settings?.blobStorage?.connectionString){
         result.push(AzureResourceTypes.BLOBSTORAGE);
       }
+      console.log(result);
       return result;
     } else return [];
   }
