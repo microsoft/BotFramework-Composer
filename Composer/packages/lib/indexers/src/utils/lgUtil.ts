@@ -14,9 +14,9 @@ import {
   ImportResolverDelegate,
   StructuredBodyContext,
   NormalBodyContext,
-  NormalTemplateStringContext,
   IfElseBodyContext,
   SwitchCaseBodyContext,
+  TemplateStringContext,
 } from 'botbuilder-lg';
 import { LgTemplate, lgImportResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
 import formatMessage from 'format-message';
@@ -28,6 +28,10 @@ import { lgIndexer } from '../lgIndexer';
 import { getFileName } from './help';
 import { LgTemplateType } from './lgTemplateType';
 import { LgStructuredType } from './lgStructuredType';
+
+import { buildInFunctionsMap } from './../../../../tools/built-in-functions';
+
+const buildInFuncNameRegex = /[a-zA-Z0-9_]+s*\(/g;
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -77,35 +81,8 @@ function getLgTemplateDetails(template: Template) {
       .structuredTemplateBody()
       .structuredBodyNameLine()
       .STRUCTURE_NAME()?.text;
-    switch (structureName?.toLowerCase()) {
-      case LgStructuredType.ACTIVITY.toString().toLowerCase():
-        structuredType = LgStructuredType.ACTIVITY;
-        break;
-      case LgStructuredType.ATTACHMENT.toString().toLowerCase():
-        structuredType = LgStructuredType.ATTACHMENT;
-        break;
-      case LgStructuredType.CARDACTION.toString().toLowerCase():
-        structuredType = LgStructuredType.CARDACTION;
-        break;
-      case LgStructuredType.HEROCARD.toString().toLowerCase():
-        structuredType = LgStructuredType.HEROCARD;
-        break;
-      case LgStructuredType.THUMBNAILCARD.toString().toLowerCase():
-        structuredType = LgStructuredType.THUMBNAILCARD;
-        break;
-      case LgStructuredType.SIGNINCARD.toString().toLowerCase():
-        structuredType = LgStructuredType.SIGNINCARD;
-        break;
-      case LgStructuredType.ANIMATIONCARD.toString().toLowerCase():
-        structuredType = LgStructuredType.ANIMATIONCARD;
-        break;
-      case LgStructuredType.VIDEOCARD.toString().toLowerCase():
-        structuredType = LgStructuredType.VIDEOCARD;
-        break;
-      case LgStructuredType.AUDIOCARD.toString().toLowerCase():
-        structuredType = LgStructuredType.AUDIOCARD;
-        break;
-    }
+
+    structuredType = convertStructureNameToStructureType(structureName);
 
     const structuredContentLines = template.templateBodyParseTree.structuredTemplateBody().structuredBodyContentLine();
     (structuredContentLines || []).forEach((contentLine) => {
@@ -119,7 +96,7 @@ function getLgTemplateDetails(template: Template) {
           const expressionsInStructure = structureValue.expressionInStructure();
           (expressionsInStructure || []).forEach((expressionInStructure) => {
             const expressionText = expressionInStructure.EXPRESSION_IN_STRUCTURE_BODY().text;
-            expressionsUsed.push(expressionText);
+            expressionsUsed.push(...extractFunctionNames(expressionText));
           });
         });
       }
@@ -127,18 +104,18 @@ function getLgTemplateDetails(template: Template) {
       if (contentLine.expressionInStructure()) {
         const expressionText = contentLine.expressionInStructure()?.EXPRESSION_IN_STRUCTURE_BODY().text;
         if (expressionText) {
-          expressionsUsed.push(expressionText);
+          expressionsUsed.push(...extractFunctionNames(expressionText));
         }
       }
     });
   } else if (template.templateBodyParseTree instanceof NormalBodyContext) {
-    const normalTemplateStrings = template.templateBodyParseTree.normalTemplateBody().templateString();
-    (normalTemplateStrings || []).forEach((normalTemplateString) => {
-      if (normalTemplateString instanceof NormalTemplateStringContext) {
-        const expressionsContext = normalTemplateString.expression();
+    const templateStrings = template.templateBodyParseTree.normalTemplateBody().templateString();
+    (templateStrings || []).forEach((templateString) => {
+      if (templateString instanceof TemplateStringContext) {
+        const expressionsContext = templateString.normalTemplateString()?.expression();
         (expressionsContext || []).forEach((expressionContext) => {
           const expressionText = expressionContext.EXPRESSION().text;
-          expressionsUsed.push(expressionText);
+          expressionsUsed.push(...extractFunctionNames(expressionText));
         });
       }
     });
@@ -148,7 +125,7 @@ function getLgTemplateDetails(template: Template) {
       const expressionsContext = ifConditionRule.ifCondition().expression();
       (expressionsContext || []).forEach((expressionContext) => {
         const expressionText = expressionContext.EXPRESSION().text;
-        expressionsUsed.push(expressionText);
+        expressionsUsed.push(...extractFunctionNames(expressionText));
       });
 
       const normalTemplateStrings = ifConditionRule.normalTemplateBody()?.templateString();
@@ -157,7 +134,7 @@ function getLgTemplateDetails(template: Template) {
           const expressionsContext = normalTemplateString.normalTemplateString()?.expression();
           (expressionsContext || []).forEach((expressionContext) => {
             const expressionText = expressionContext.EXPRESSION().text;
-            expressionsUsed.push(expressionText);
+            expressionsUsed.push(...extractFunctionNames(expressionText));
           });
         }
       });
@@ -168,7 +145,7 @@ function getLgTemplateDetails(template: Template) {
       const expressionsContext = switchCaseRule.switchCaseStat().expression();
       (expressionsContext || []).forEach((expressionContext) => {
         const expressionText = expressionContext.EXPRESSION().text;
-        expressionsUsed.push(expressionText);
+        expressionsUsed.push(...extractFunctionNames(expressionText));
       });
 
       const normalTemplateStrings = switchCaseRule.normalTemplateBody()?.templateString();
@@ -177,7 +154,7 @@ function getLgTemplateDetails(template: Template) {
           const expressionsContext = normalTemplateString.normalTemplateString()?.expression();
           (expressionsContext || []).forEach((expressionContext) => {
             const expressionText = expressionContext.EXPRESSION().text;
-            expressionsUsed.push(expressionText);
+            expressionsUsed.push(...extractFunctionNames(expressionText));
           });
         }
       });
@@ -185,6 +162,30 @@ function getLgTemplateDetails(template: Template) {
   }
 
   return { templateType, structuredType, speakEnabled, expressionsUsed };
+}
+
+function convertStructureNameToStructureType(structureName?: string): LgStructuredType {
+  let result = LgStructuredType.NONE;
+  for (const structureType of Object.values(LgStructuredType)) {
+    if (structureName?.toLowerCase() === structureType?.toLowerCase()) {
+      result = structureType;
+      break;
+    }
+  }
+
+  return result;
+}
+
+function extractFunctionNames(expressionText: string) {
+  const functionNameArray = expressionText.match(buildInFuncNameRegex) || [];
+  const validFunctionNameArray = functionNameArray.filter((functionName) =>
+    buildInFunctionsMap.has(functionName.slice(0, functionName.length - 1))
+  );
+  const validFunctionNames = validFunctionNameArray.map((functionName) =>
+    functionName.slice(0, functionName.length - 1)
+  );
+
+  return validFunctionNames;
 }
 
 // get parsed resource from lgFile, if not exist do reparse

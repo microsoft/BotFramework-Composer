@@ -291,34 +291,39 @@ describe('extract lg template details', () => {
   it('should extract structured template details of expressions', () => {
     const content = `# Exit
 [Activity
-  Text = \${exit}
+  Text = \${add(1+1)}
   Speak = please exit
   SuggestedActions = a | b
 ]
 
 # Greeting
-- IF: \${who.length > 0}
-  -What's up \${who}
+- IF: \${length(join(foreach(who), ',')) > 0}
+  -What's up \${length(who)}
 - ELSE:
   -What's up friend
 
 # greetInAWeek
--SWITCH: \${day}
-  -CASE: \${'Saturday'}
+-SWITCH: \${length(day)}
+  -CASE: \${concat('Satur', 'day')}
       -Happy Saturday!
-  -CASE: \${'Sunday'}
+  -CASE: \${Sunday}
       -Happy Sunday!
   -DEFAULT:
-      -Work Hard!`;
+      -\${json('Work', 'Hard')}!
+
+# cancel
+- cancel \${add(1, 2)} tasks`;
 
     const templates = parse('a.lg', content, []).templates;
     const templateDetails0: any = templates[0];
     const templateDetails1: any = templates[1];
     const templateDetails2: any = templates[2];
+    const templateDetails3: any = templates[3];
 
-    expect(templates.length).toEqual(3);
-    expect(templateDetails0.expressionsUsed).toEqual(['${exit}']);
-    expect(templateDetails1.expressionsUsed).toEqual(['${who.length > 0}', '${who}']);
-    expect(templateDetails2.expressionsUsed).toEqual(['${day}', "${'Saturday'}", "${'Sunday'}"]);
+    expect(templates.length).toEqual(4);
+    expect(templateDetails0.expressionsUsed).toEqual(['add']);
+    expect(templateDetails1.expressionsUsed).toEqual(['length', 'join', 'foreach', 'length']);
+    expect(templateDetails2.expressionsUsed).toEqual(['length', 'concat', 'json']);
+    expect(templateDetails3.expressionsUsed).toEqual(['add']);
   });
 });
