@@ -2,12 +2,13 @@
   "name": "samples",
   "version": "1.0.0",
   "description": "providing samples to Composer core",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "webpack"
-  },
+  "main": "dist/extension.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
+  },
   "dependencies": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "path": "^0.12.7",
