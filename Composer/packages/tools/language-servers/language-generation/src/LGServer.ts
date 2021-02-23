@@ -53,7 +53,7 @@ export class LGServer {
   protected LGDocuments: LGDocument[] = [];
   private memoryVariables: Record<string, any> = {};
   private _lgParser = new LgParser();
-  private _luisEntities: string[] = [];
+  private _luisEntities: string[] = ['answer', 'itemList'];
   private _lastLuContent: string[] = [];
   constructor(
     protected readonly connection: IConnection,

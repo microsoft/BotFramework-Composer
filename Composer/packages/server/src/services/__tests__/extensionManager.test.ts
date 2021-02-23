@@ -247,11 +247,11 @@ describe('#remove', () => {
     expect(manager.remove('does-not-exist')).rejects.toThrow(/Unable to remove extension/);
   });
 
-  it('is a no-op if the extension is builtin', async () => {
+  it('disables if the extension is builtin', async () => {
     await manager.remove('extension1');
 
     expect(remove).not.toHaveBeenCalled();
-    expect(updateManifestSpy).not.toHaveBeenCalled();
+    expect(updateManifestSpy).toHaveBeenCalledWith('extension1', { enabled: false });
   });
 
   it('removes the extension from the manifest and cleans up', async () => {
