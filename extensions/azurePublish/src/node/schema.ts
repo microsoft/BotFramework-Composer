@@ -32,7 +32,28 @@ const schema: JSONSchema7 = {
     },
     subscriptionId: {
       type: 'string',
-      title: 'id of your subscription'
+      title: 'Id of your subscription'
+    },
+    resourceGroup: {
+      type: 'string',
+      title: 'Name of your resource group'
+    },
+    botName: {
+      type: 'string',
+      title: 'Name of your bot channel registration service'
+    },
+    abs: {
+      type: 'object',
+      properties: {
+        appPasswordHint: {
+          type: 'string',
+          title: 'The password hint of your abs instance'
+        },
+        resourceId: {
+          type: 'string',
+          title: 'The resource id of your abs instance'
+        }
+      }
     },
     settings: {
       type: 'object',
@@ -112,6 +133,8 @@ const schema: JSONSchema7 = {
     name: '<unique name in your subscription>',
     environment: 'dev',
     runtimeIdentifier: 'win-x64',
+    resourceGroup: '<name of your resource group>',
+    botName: '<name of your bot channel registration>',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
