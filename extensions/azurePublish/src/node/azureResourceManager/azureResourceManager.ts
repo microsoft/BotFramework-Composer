@@ -809,6 +809,7 @@ export class AzureResourceMananger {
         location: config.location,
         kind: 'app',
         siteConfig: {
+          webSocketsEnabled: true,
           appSettings: [
             {
               name: 'WEBSITE_NODE_DEFAULT_VERSION',
@@ -869,6 +870,7 @@ export class AzureResourceMananger {
           kind: 'functionapp',
           httpsOnly: true,
           siteConfig: {
+            webSocketsEnabled: true,
             appSettings: [
               {
                 name: 'MicrosoftAppId',
