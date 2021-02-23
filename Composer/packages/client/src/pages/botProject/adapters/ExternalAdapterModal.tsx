@@ -8,6 +8,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ObjectField } from '@bfc/adaptive-form';
 import { useRecoilValue } from 'recoil';
+import { DialogSetting } from '@bfc/shared';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 
@@ -25,6 +26,7 @@ type ConfigValue = string | number | boolean;
 
 type Props = {
   adapterKey: string;
+  packageName: string;
   isOpen: boolean;
   onClose: () => void;
   projectId: string;
@@ -33,17 +35,17 @@ type Props = {
   value?: { [key: string]: ConfigValue };
 };
 
-function hasRequired(testObject: { [key: string]: ConfigValue }, fields?: string[]) {
+export function hasRequired(testObject: { [key: string]: ConfigValue }, fields?: string[]) {
   if (fields == null || fields.length === 0) return true;
   return fields.every((field: string) => field in testObject);
 }
 
 const AdapterModal = (props: Props) => {
-  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey } = props;
+  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName } = props;
 
   const [value, setValue] = useState(props.value);
   const { setSettings } = useRecoilValue(dispatcherState);
-  const currentSettings = useRecoilValue(settingsState(projectId));
+  const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
 
   const shell = useShell('DesignPage', projectId);
 
@@ -72,7 +74,7 @@ const AdapterModal = (props: Props) => {
             uiOptions={uiSchema}
             value={value}
             onChange={(update?: { [key: string]: any }) => {
-              if (update != null) setValue(update);
+              if (update != null) setValue({ ...update, $kind: adapterKey });
             }}
           />
           <DialogFooter>
@@ -81,15 +83,18 @@ const AdapterModal = (props: Props) => {
               disabled={value == null || !hasRequired(value, required)}
               onClick={async () => {
                 if (value != null) {
-                  const currentAdapters: AdapterRecord[] = currentSettings.adapters ?? [];
+                  const currentAdapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];
 
                   await setSettings(projectId, {
                     ...currentSettings,
-                    adapters: [
-                      ...currentAdapters.filter((a) => a.name != adapterKey),
-                      { name: adapterKey, enabled: true, route: value.route },
-                    ],
-                    [adapterKey]: value,
+                    [packageName]: { ...(currentSettings[packageName] ?? {}), ...value },
+                    runtimeSettings: {
+                      ...currentSettings.runtimeSettings,
+                      adapters: [
+                        ...currentAdapters.filter((a) => a.name != adapterKey),
+                        { name: adapterKey, enabled: true, route: value.route },
+                      ],
+                    },
                   });
                 }
                 onClose();
