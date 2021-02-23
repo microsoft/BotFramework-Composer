@@ -8,8 +8,7 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { luUtil } from '@bfc/indexers';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { luFilesState, currentProjectIdState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { luFilesState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '..';
 import { luDispatcher } from '../lu';
 

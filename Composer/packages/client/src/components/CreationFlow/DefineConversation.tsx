@@ -15,8 +15,9 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
+import { QnABotTemplateId } from '@bfc/shared';
 
-import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
+import { DialogCreationCopy, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
 import { creationFlowTypeState } from '../../recoilModel';

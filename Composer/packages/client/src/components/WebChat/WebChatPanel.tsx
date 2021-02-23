@@ -2,17 +2,16 @@
 // Licensed under the MIT License.
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
+import { DirectLineLog } from '@botframework-composer/types';
+import { AxiosResponse } from 'axios';
+import formatMessage from 'format-message';
 
-import ConversationService, { ChatData, BotSecrets, User } from './utils/conversationService';
+import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
+import { RestartOption } from './type';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
-
-export enum RestartOption {
-  SameUserID,
-  NewUserID,
-}
 
 export interface WebChatPanelProps {
   botUrl: string;
@@ -23,6 +22,8 @@ export interface WebChatPanelProps {
   projectId: string;
   isWebChatPanelVisible: boolean;
   activeLocale: string;
+  appendLogToWebChatInspector: (projectId: string, log: DirectLineLog) => void;
+  clearWebchatInspectorLogs: (projectId: string) => void;
   openBotInEmulator: (projectId: string) => void;
 }
 
@@ -35,6 +36,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   isWebChatPanelVisible,
   openBotInEmulator,
   activeLocale,
+  appendLogToWebChatInspector,
+  clearWebchatInspectorLogs,
 }) => {
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
@@ -42,10 +45,59 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [isConversationStartQueued, queueConversationStart] = useState<boolean>(false);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
+  const directLineErrorChannel = useRef<WebSocket>();
+
+  useEffect(() => {
+    const bootstrapChat = async () => {
+      const conversationServerPort = await conversationService.setUpConversationServer();
+      try {
+        directLineErrorChannel.current = new WebSocket(
+          `ws://localhost:${conversationServerPort}/ws/errors/createErrorChannel`
+        );
+        if (directLineErrorChannel.current) {
+          directLineErrorChannel.current.onmessage = (event) => {
+            const data: DirectLineLog = JSON.parse(event.data);
+            appendLogToWebChatInspector(projectId, data);
+          };
+        }
+      } catch (ex) {
+        const response: AxiosResponse = ex.response;
+        const err: DirectLineLog = {
+          timestamp: getDateTimeFormatted(),
+          route: 'conversations/ws/port',
+          status: response.status,
+          logType: 'Error',
+          message: formatMessage('An error occured connecting initializing the DirectLine server'),
+        };
+        appendLogToWebChatInspector(projectId, err);
+      }
+    };
+
+    bootstrapChat();
+
+    return () => {
+      directLineErrorChannel.current?.close();
+    };
+  }, []);
 
   useEffect(() => {
     queueConversationStart(!!botUrl);
   }, [botUrl, secrets]);
+
+  const sendInitialActivities = async (chatData: ChatData) => {
+    try {
+      await conversationService.sendInitialActivity(chatData.conversationId, [chatData.user]);
+    } catch (ex) {
+      // DL errors are handled through socket above.
+    }
+  };
+
+  const setConversationData = async (chatData: ChatData) => {
+    setChatData({
+      [chatData.conversationId]: chatData,
+    });
+    setCurrentConversation(chatData.conversationId);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -58,10 +110,12 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           activeLocale
         );
         if (mounted) {
-          setCurrentConversation(chatData.conversationId);
           setChatData({
             [chatData.conversationId]: chatData,
           });
+          setCurrentConversation(chatData.conversationId);
+          setConversationData(chatData);
+          sendInitialActivities(chatData);
         }
       };
       startConversation();
@@ -74,15 +128,18 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }, [isWebChatPanelVisible]);
 
   const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
-    const chatData = await conversationService.restartConversation(
-      chats[oldConversationId],
-      requireNewUserId,
-      activeLocale
-    );
-    setCurrentConversation(chatData.conversationId);
-    setChatData({
-      [chatData.conversationId]: chatData,
-    });
+    try {
+      const chatData = await conversationService.restartConversation(
+        chats[oldConversationId],
+        requireNewUserId,
+        activeLocale
+      );
+      setConversationData(chatData);
+      sendInitialActivities(chatData);
+      clearWebchatInspectorLogs(projectId);
+    } catch (ex) {
+      // DL errors are handled through socket above.
+    }
   };
 
   const onSaveTranscriptClick = async (conversationId: string) => {
@@ -103,13 +160,17 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
       webChatPanelRef.current?.removeChild(downloadLink);
     } catch (ex) {
-      //TODO: Handle failed transcript download
+      const err: DirectLineLog = {
+        timestamp: getDateTimeFormatted(),
+        route: 'saveTranscripts/',
+        status: 400,
+        logType: 'Error',
+        message: formatMessage('An error occured saving transcripts'),
+        details: ex.message,
+      };
+      appendLogToWebChatInspector(projectId, err);
     }
   };
-
-  if (!chats[currentConversation]?.directline) {
-    return null;
-  }
 
   return (
     <div ref={webChatPanelRef} style={{ height: 'calc(100% - 38px)' }}>
@@ -129,9 +190,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         chatData={chats[currentConversation]}
         conversationService={conversationService}
         currentConversation={currentConversation}
-        sendInitialActivity={(conversationId: string, currentUser: User) => {
-          conversationService.sendInitialActivity(conversationId, [currentUser]);
-        }}
+        isDisabled={!chats[currentConversation]}
       />
     </div>
   );

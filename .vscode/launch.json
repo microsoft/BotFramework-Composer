@@ -44,12 +44,16 @@
       "type": "node",
       "request": "launch",
       "name": "Server: Launch",
-      "program": "${workspaceFolder}/Composer/packages/server/src/init.ts",
+      "program": "${workspaceFolder}/Composer/packages/server/build/init.js",
       "env": {
         "DEBUG": "composer*"
       },
       "restart": true,
-      "outFiles": ["${workspaceFolder}/Composer/packages/server/build/**/*.js"],
+      "outFiles": [
+        "${workspaceRoot}/Composer/packages/server/build/**/*.js",
+        "${workspaceRoot}/extensions/**/*.js"
+      ],
+      "sourceMaps": true,
       "preLaunchTask": "server: build",
       "outputCapture": "std",
       "cwd": "${workspaceFolder}/Composer/packages/server"
@@ -66,13 +70,6 @@
       "cwd": "${workspaceRoot}/Composer/packages/server",
       "sourceMaps": true,
       "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Server: Attach",
-      "port": 9228,
-      "sourceMaps": true
     },
     {
       "type": "node",

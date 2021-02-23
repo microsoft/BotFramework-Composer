@@ -3,7 +3,7 @@
 
 import { useRef, useState, Fragment, useLayoutEffect, MutableRefObject } from 'react';
 // eslint-disable-next-line @typescript-eslint/camelcase
-import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
+import { useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
 import React from 'react';
 import { BotAssets } from '@bfc/shared';
@@ -24,6 +24,7 @@ import {
   botProjectFileState,
   jsonSchemaFilesState,
   crossTrainConfigState,
+  dispatcherState,
 } from './atoms';
 import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from './selectors';
 import { Recognizer } from './Recognizers';
@@ -60,11 +61,6 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     crossTrainConfig,
   };
 };
-
-export const dispatcherState = atom<Dispatcher>({
-  key: 'dispatcherState',
-  default: {} as Dispatcher,
-});
 
 const wrapDispatcher = (dispatchers, forceUpdate) => {
   return Object.keys(dispatchers).reduce((boundDispatchers, dispatcherName) => {

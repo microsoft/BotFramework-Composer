@@ -211,16 +211,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       res.json(feeds);
     },
     getLibrary: async function (req, res) {
-      // read the list of sources from the config file.
-      let packageSources = composer.store.read('sources') as string[];
-
-      // if no sources are in the config file, set the default list to our 1st party feed.
-      if (!packageSources) {
-        packageSources = [
-          `https://raw.githubusercontent.com/microsoft/botframework-components/main/experimental/feeds/components.json`,
-        ];
-        composer.store.write('sources', packageSources);
-      }
+      const packageSources = (composer.settings.sources as string[]) || [
+        `https://raw.githubusercontent.com/microsoft/botframework-components/main/experimental/feeds/components.json`,
+      ];
 
       let combined = [];
       for (let s = 0; s < packageSources.length; s++) {

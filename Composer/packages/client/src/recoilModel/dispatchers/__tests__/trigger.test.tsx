@@ -10,9 +10,15 @@ import { lgDispatcher } from '../lg';
 import { luDispatcher } from '../lu';
 import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { luFilesState, schemasState, dialogSchemasState, actionsSeedState, qnaFilesState } from '../../atoms';
+import {
+  luFilesState,
+  schemasState,
+  dialogSchemasState,
+  actionsSeedState,
+  qnaFilesState,
+  dispatcherState,
+} from '../../atoms';
 import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { DialogInfo } from '../../../../../types';
 
