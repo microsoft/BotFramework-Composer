@@ -57,6 +57,7 @@ const LUPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      shouldShowEditorError
       useNewTree
       data-testid="LUPage"
       dialogId={dialogId}

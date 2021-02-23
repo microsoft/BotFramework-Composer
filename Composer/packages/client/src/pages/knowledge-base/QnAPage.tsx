@@ -74,6 +74,7 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      shouldShowEditorError
       useNewTree
       data-testid="QnAPage"
       dialogId={dialogId}
