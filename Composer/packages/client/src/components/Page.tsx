@@ -78,13 +78,13 @@ export const main = css`
   label: PageMain;
 `;
 
-export const content = (shouldShowEditorError: boolean) => css`
+export const content = css`
   flex: 4;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: auto;
-  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : '100%'};
+  height: 100%;
   label: PageContent;
   box-sizing: border-box;
 `;
@@ -92,7 +92,6 @@ export const content = (shouldShowEditorError: boolean) => css`
 const contentStyle = css`
   padding: 20px;
   flex-grow: 1;
-  height: 0;
   position: relative;
 `;
 
@@ -208,12 +207,7 @@ const Page: React.FC<IPageProps> = (props) => {
             ) : (
               <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
             )}
-            <div
-              aria-label={mainRegionName}
-              css={content(shouldShowEditorError)}
-              data-testid="PageContent"
-              role="region"
-            >
+            <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
               <div css={contentStyle}>{children}</div>
               {shouldShowEditorError && <DebugPanel />}
             </div>
