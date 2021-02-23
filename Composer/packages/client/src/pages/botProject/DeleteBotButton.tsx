@@ -7,7 +7,7 @@ import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Button } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -17,10 +17,6 @@ import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
-
-const marginBottom = css`
-  margin-bottom: 140px;
-`;
 
 const deleteBotText = css`
   font-weight: ${FontWeights.semibold};
@@ -118,11 +114,11 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
   };
 
   return (
-    <div css={marginBottom}>
-      <div css={deleteBotText}> {formatMessage('Delete this bot')}</div>
-      <Button styles={deleteBotButton} onClick={openDeleteBotModal}>
+    <React.Fragment>
+      <div css={deleteBotText}>{formatMessage('Delete this bot')}</div>
+      <PrimaryButton styles={deleteBotButton} onClick={openDeleteBotModal}>
         {formatMessage('Delete')}
-      </Button>
-    </div>
+      </PrimaryButton>
+    </React.Fragment>
   );
 };
