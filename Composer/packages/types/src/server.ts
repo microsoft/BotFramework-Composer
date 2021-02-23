@@ -3,13 +3,13 @@
 
 import { ILuisConfig, IQnAConfig } from './settings';
 
-export type Resource = { id: string; isEmpty: boolean };
+export type BuildResource = { id: string; isEmpty: boolean };
 
 export interface IBuildConfig {
   luisConfig: ILuisConfig;
   qnaConfig: IQnAConfig;
-  luResource: Resource[];
-  qnaResource: Resource[];
+  luResource: BuildResource[];
+  qnaResource: BuildResource[];
 }
 export interface LocationRef {
   storageId: string;

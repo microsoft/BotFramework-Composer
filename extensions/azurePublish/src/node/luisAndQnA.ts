@@ -5,7 +5,7 @@ import * as path from 'path';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
-import { ILuisConfig, FileInfo, IBotProject } from '@botframework-composer/types';
+import { ILuisConfig, FileInfo, IBotProject, BuildResource } from '@botframework-composer/types';
 
 import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
@@ -17,11 +17,9 @@ type QnaConfigType = {
   qnaRegion: string | 'westus';
 };
 
-type Resource = { id: string; isEmpty: boolean };
-
 type Resources = {
-  luResources: Resource[];
-  qnaResources: Resource[];
+  luResources: BuildResource[];
+  qnaResources: BuildResource[];
 };
 
 type BuildSettingType = {

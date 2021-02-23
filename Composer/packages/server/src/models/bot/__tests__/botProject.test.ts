@@ -6,7 +6,7 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import endsWith from 'lodash/endsWith';
-import { LocationRef, Resource } from '@botframework-composer/types';
+import { LocationRef, BuildResource } from '@botframework-composer/types';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
@@ -288,12 +288,12 @@ describe('buildFiles', () => {
       qnaRegion: 'westus',
       subscriptionKey: 'test',
     };
-    const luResource: Resource[] = [
+    const luResource: BuildResource[] = [
       { id: 'a.en-us', isEmpty: false },
       { id: 'b.en-us', isEmpty: false },
       { id: 'bot1.en-us', isEmpty: false },
     ];
-    const qnaResource: Resource[] = [
+    const qnaResource: BuildResource[] = [
       { id: 'a.en-us', isEmpty: false },
       { id: 'b.en-us', isEmpty: false },
       { id: 'bot1.en-us', isEmpty: false },
