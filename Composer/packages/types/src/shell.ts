@@ -72,6 +72,7 @@ export type ApplicationContextApi = {
   isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
+  updateFlowZoomRate: (currentRate: number) => void;
   telemetryClient: TelemetryClient;
 };
 
@@ -121,13 +122,12 @@ export type ProjectContextApi = {
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   renameRegExIntent: (id: string, intentName: string, newIntentName: string) => void;
   updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
-  createDialog: (actions: any) => Promise<string | null>;
+  createDialog: (actions?: any[]) => Promise<string | null>;
   commitChanges: () => void;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   createQnATrigger: (id: string) => void;
-  updateFlowZoomRate: (currentRate: number) => void;
   updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };

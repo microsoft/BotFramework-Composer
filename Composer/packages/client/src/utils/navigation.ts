@@ -5,8 +5,8 @@ import { navigate, NavigateOptions } from '@reach/router';
 
 import { DesignPageLocation } from '../recoilModel/types';
 import { BASEPATH } from '../constants';
-import { TreeLink } from '../components/ProjectTree/ProjectTree';
 import { PageMode } from '../recoilModel';
+import { TreeLink } from '../components/ProjectTree/types';
 
 import { parsePathToFocused } from './convertUtils/parsePathToFocused';
 import { parsePathToSelected } from './convertUtils/parsePathToSelected';
