@@ -8,7 +8,6 @@ export * from './common';
 export * from './components';
 export * from './EditorExtensionContext';
 export * from './hooks';
-export * from './publish';
 export * from './types';
 export * from './utils';
 export { extensionEventEmitter } from './extensionEventEmitter';
