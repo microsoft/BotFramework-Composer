@@ -115,7 +115,7 @@ describe('LG LSP Server Function Unit Tests', () => {
   it('Test LGParser function', async () => {
     const lgParser = new LgParser();
     const result = await lgParser.extractLuisEntity([luisText]);
-    expect(result).toEqual({ suggestEntities: ['name', 'zipcode'] });
+    expect(result).toEqual({ suggestEntities: ['answer', 'itemList', 'name', 'zipcode'] });
 
     const result2 = await lgParser.parse('id', lgText, []);
     expect(result2.allTemplates.length).toEqual(2);
