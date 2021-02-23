@@ -10,17 +10,19 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { exportSkillModalInfoState } from '../../recoilModel';
+import { dispatcherState, exportSkillModalInfoState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 
 import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
+import { INavTreeItem } from '../../components/NavTree';
 
 const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
+  const { setCurrentProjectId } = useRecoilValue(dispatcherState);
 
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigateTo(item.getUrl());
@@ -39,6 +41,9 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       mainRegionName={formatMessage('Diagnostic List')}
       navLinks={navLinks}
       navRegionName={formatMessage('Diagnostics Pane')}
+      navLinkClick={(item: INavTreeItem) => {
+        setCurrentProjectId(item.id);
+      }}
       pageMode={'diagnostics'}
       title={formatMessage('Diagnostics')}
       toolbarItems={[]}
