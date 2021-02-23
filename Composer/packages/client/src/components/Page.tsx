@@ -96,6 +96,8 @@ const contentStyle = css`
   position: relative;
 `;
 
+const ShowDebugPanelPageTitle = ['User Input', 'QnA', 'Bot Responses'];
+
 // -------------------- Page -------------------- //
 
 type IPageProps = {
@@ -110,6 +112,7 @@ type IPageProps = {
   'data-testid'?: string;
   useNewTree?: boolean;
   navLinks?: INavTreeItem[];
+  navLinkClick?: (item: INavTreeItem) => void;
   pageMode: PageMode;
   showCommonLinks?: boolean;
   projectId?: string;
@@ -122,6 +125,7 @@ const Page: React.FC<IPageProps> = (props) => {
   const {
     title,
     navLinks,
+    navLinkClick,
     toolbarItems,
     onRenderHeaderContent,
     children,
@@ -206,7 +210,7 @@ const Page: React.FC<IPageProps> = (props) => {
                 }}
               />
             ) : (
-              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} onLinkClick={navLinkClick} />
             )}
             <div
               aria-label={mainRegionName}
@@ -215,7 +219,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {title !== 'Diagnostics' && <DebugPanel />}
+              {ShowDebugPanelPageTitle.indexOf(title) > -1 && <DebugPanel />}
             </div>
           </Split>
         </div>

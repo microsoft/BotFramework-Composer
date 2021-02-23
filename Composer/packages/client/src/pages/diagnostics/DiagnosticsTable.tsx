@@ -7,13 +7,12 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
-import { useRecoilValue } from 'recoil';
 import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
-import { diagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { DiagnosticList } from '../design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
+import { useDiagnosticsData } from '../design/DebugPanel/TabExtensions/DiagnosticsTab/useDiagnostics';
 
+import { DiagnosticList } from './DiagnosticList';
 import { IDiagnosticInfo } from './types';
 
 // -------------------- Styles -------------------- //
@@ -34,7 +33,6 @@ const tableView = css`
 
 // -------------------- Diagnosticist -------------------- //
 export interface IDiagnosticListProps extends RouteComponentProps {
-  projectId: string;
   showType: string;
   onItemClick: (item: IDiagnosticInfo) => void;
 }
@@ -42,8 +40,8 @@ export interface IDiagnosticListProps extends RouteComponentProps {
 const itemCount = 10;
 
 export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
-  const { onItemClick, projectId, showType } = props;
-  const diagnostics = useRecoilValue(diagnosticsSelectorFamily(projectId));
+  const { onItemClick, showType } = props;
+  const diagnostics = useDiagnosticsData();
   const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
 
