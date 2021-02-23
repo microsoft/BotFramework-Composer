@@ -31,13 +31,5 @@ jest.mock('request-promise', () => {
 });
 
 describe('provision', () => {
-  it('test private method getTenantId', async () => {
-    expect(typeof azProvision.getTenantId).toBe('function');
-    // mockGet.mockResolvedValueOnce({
-    //   tenantId: 'test'
-    // });
-    // const tenantId = await azProvision['getTenantId']();
-    // expect(tenantId).toBe('test');
-  });
-  it('test get error message', () => {});
+
 });
