@@ -67,7 +67,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
-    extensions: formatMessage('Extensions'),
     about: formatMessage('About'),
   };
 
