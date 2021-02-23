@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
-import { debugPanelExpansionState } from '../../../recoilModel';
+import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../recoilModel';
 
 import {
   debugPaneContainerExpandedStyle,
@@ -28,8 +28,7 @@ export interface DebugPanelProps {
 }
 export const DebugPanel = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
-
-  const [activeTab, setActiveTab] = useState<string>(debugExtensions[0]?.key);
+  const [activeTab, setActiveTab] = useRecoilState(debugPanelActiveTabState);
 
   const buildTabTitle = useCallback((tabKey: string, TabHeaderWidget: React.FC | string) => {
     if (!TabHeaderWidget) return { key: tabKey, element: null };

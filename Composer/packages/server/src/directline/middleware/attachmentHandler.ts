@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 import { AttachmentData, AttachmentInfo } from 'botframework-schema';
 import * as express from 'express';
+import formatMessage from 'format-message';
 import { StatusCodes } from 'http-status-codes';
 
 import { DLServerState } from '../store/dlServerState';
-import { BotErrorCodes, createAPIException, sendErrorResponse } from '../utils/apiErrorException';
+import { BotErrorCodes, handleDirectLineErrors } from '../utils/apiErrorException';
 
 type AttachmentParams = {
   attachmentId: string;
@@ -40,25 +41,16 @@ export function createAttachmentInfoHandler(state: DLServerState) {
           });
         }
 
-        res.send(StatusCodes.OK, attachmentInfo);
-        res.end();
+        res.send(StatusCodes.OK, attachmentInfo).end();
       } else {
-        sendErrorResponse(
-          req,
-          res,
-          createAPIException(
-            StatusCodes.NOT_FOUND,
-            BotErrorCodes.BadArgument,
-            `attachment[${parms.attachmentId}] not found`
-          )
-        );
+        handleDirectLineErrors(req, res, {
+          status: StatusCodes.NOT_FOUND,
+          message: formatMessage(`Unable to parse attachment data .${BotErrorCodes.BadArgument}`),
+          errorDetails: formatMessage(`attachment[${parms.attachmentId}] not found`),
+        });
       }
     } catch (err) {
-      sendErrorResponse(
-        req,
-        res,
-        createAPIException(StatusCodes.INTERNAL_SERVER_ERROR, BotErrorCodes.ServiceError, err.message)
-      );
+      handleDirectLineErrors(req, res, err);
     }
   };
 }
@@ -87,34 +79,24 @@ export function createGetAttachmentHandler(state: DLServerState) {
             res.type(attachment.type);
             res.send(StatusCodes.OK, buffer);
           } else {
-            sendErrorResponse(
-              req,
-              res,
-              createAPIException(
-                StatusCodes.NOT_FOUND,
-                BotErrorCodes.BadArgument,
-                params.viewId === 'original' ? 'There is no original view' : 'There is no thumbnail view'
-              )
-            );
+            handleDirectLineErrors(req, res, {
+              status: StatusCodes.NOT_FOUND,
+              message: formatMessage(`Unable to fetch attachment data. ${BotErrorCodes.BadArgument}`),
+              errorDetails:
+                params.viewId === 'original'
+                  ? formatMessage('There is no original view')
+                  : formatMessage('There is no thumbnail view'),
+            });
           }
         }
       } else {
-        sendErrorResponse(
-          req,
-          res,
-          createAPIException(
-            StatusCodes.NOT_FOUND,
-            BotErrorCodes.BadArgument,
-            `attachment[${params.attachmentId}] not found`
-          )
-        );
+        handleDirectLineErrors(req, res, {
+          status: StatusCodes.NOT_FOUND,
+          message: formatMessage(`attachment[${params.attachmentId}] not found. ${BotErrorCodes.BadArgument}`),
+        });
       }
     } catch (err) {
-      sendErrorResponse(
-        req,
-        res,
-        createAPIException(StatusCodes.INTERNAL_SERVER_ERROR, BotErrorCodes.ServiceError, err.message)
-      );
+      handleDirectLineErrors(req, res, err);
     }
   };
 }
