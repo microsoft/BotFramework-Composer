@@ -3,9 +3,6 @@
 
 import { FC } from 'react';
 
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
 export const DiagnosticsTabKey = 'Diagnostics';
 export const WebChatInspectorTabKey = 'WebChatInspector';
 
