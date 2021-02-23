@@ -10,7 +10,6 @@ import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { About } from '../about/About';
 
 import { AppSettings } from './app-settings/AppSettings';
-import { Extensions } from './extensions/Extensions';
 
 export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => {
   const applicationError = useRecoilValue(applicationErrorState);
@@ -25,7 +24,6 @@ export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) 
       <Router>
         <AppSettings default path="application" />
         <About path="about" />
-        <Extensions path="extensions" />
       </Router>
     </ErrorBoundary>
   );

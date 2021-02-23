@@ -107,7 +107,7 @@ export class BotProjectProvision {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: `App create failed: ${JSON.stringify(err, null, 4)}`,
       });
-      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION ,'App create failed!');
+      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'App create failed!');
     }
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -137,7 +137,7 @@ export class BotProjectProvision {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: `Add application password failed: ${JSON.stringify(err, null, 4)}`,
       });
-      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION ,'Add application password failed!');
+      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'Add application password failed!');
     }
 
     const appPassword = passwordSet.secretText;
@@ -157,12 +157,16 @@ export class BotProjectProvision {
    */
   private async getTenantId() {
     if (!this.accessToken) {
-      throw createCustomizeError(ProvisionErrors.GET_TENANTID ,
+      throw createCustomizeError(
+        ProvisionErrors.GET_TENANTID,
         'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
       );
     }
     if (!this.subscriptionId) {
-      throw createCustomizeError(ProvisionErrors.GET_TENANTID ,`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
+      throw createCustomizeError(
+        ProvisionErrors.GET_TENANTID,
+        `Error: Missing subscription Id. Please provide a valid Azure subscription id.`
+      );
     }
     try {
       const tenantUrl = `https://management.azure.com/subscriptions/${this.subscriptionId}?api-version=2020-01-01`;
@@ -172,11 +176,14 @@ export class BotProjectProvision {
       const response = await rp.get(tenantUrl, options);
       const jsonRes = JSON.parse(response);
       if (jsonRes.tenantId === undefined) {
-        throw createCustomizeError(ProvisionErrors.GET_TENANTID ,`No tenants found in the account.`);
+        throw createCustomizeError(ProvisionErrors.GET_TENANTID, `No tenants found in the account.`);
       }
       return jsonRes.tenantId;
     } catch (err) {
-      throw createCustomizeError(ProvisionErrors.GET_TENANTID ,`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
+      throw createCustomizeError(
+        ProvisionErrors.GET_TENANTID,
+        `Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`
+      );
     }
   }
 
@@ -275,7 +282,7 @@ export class BotProjectProvision {
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
-          case AzureResourceTypes.AZUREFUNCTIONS:
+          case AzureResourceTypes.AZUREFUNCTIONS: {
             const functionsHostName = await this.azureResourceManagementClient.deployAzureFunctions({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
@@ -287,6 +294,7 @@ export class BotProjectProvision {
               hostname: functionsHostName,
             };
             break;
+          }
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Cosmo DB for state
