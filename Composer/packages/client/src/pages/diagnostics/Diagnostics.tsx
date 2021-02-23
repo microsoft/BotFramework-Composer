@@ -12,11 +12,11 @@ import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { dispatcherState, exportSkillModalInfoState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
+import { INavTreeItem } from '../../components/NavTree';
 
 import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
-import { INavTreeItem } from '../../components/NavTree';
 
 const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
@@ -39,11 +39,11 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
     <Page
       data-testid="LUPage"
       mainRegionName={formatMessage('Diagnostic List')}
-      navLinks={navLinks}
-      navRegionName={formatMessage('Diagnostics Pane')}
       navLinkClick={(item: INavTreeItem) => {
         setCurrentProjectId(item.id);
       }}
+      navLinks={navLinks}
+      navRegionName={formatMessage('Diagnostics Pane')}
       pageMode={'diagnostics'}
       title={formatMessage('Diagnostics')}
       toolbarItems={[]}
