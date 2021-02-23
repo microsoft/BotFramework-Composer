@@ -212,7 +212,7 @@ export class BotProjectProvision {
         cosmosDB: null,
         appInsights: null,
         qna: null,
-        bot: null,
+        botName: null,
       };
 
       const resourceGroupName = `${config.hostname}`;
@@ -280,7 +280,7 @@ export class BotProjectProvision {
               appId: provisionResults.appId,
               webAppHostname: provisionResults.webApp.hostname
             });
-            provisionResults.bot = config.hostname;
+            provisionResults.botName = config.hostname;
             break;
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
