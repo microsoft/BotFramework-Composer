@@ -1,31 +1,30 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable security/detect-non-literal-fs-filename */
 import { ChildProcess, spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
+
 import max from 'lodash/max';
 import portfinder from 'portfinder';
-
 import glob from 'globby';
 import rimraf from 'rimraf';
 import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframework-composer/types';
-
 import killPort from 'kill-port';
 import map from 'lodash/map';
 import * as tcpPortUsed from 'tcp-port-used';
 
-const stat = promisify(fs.stat);
-const readDir = promisify(fs.readdir);
-const removeFile = promisify(fs.unlink);
-const mkDir = promisify(fs.mkdir);
 const removeDirAndFiles = promisify(rimraf);
-const copyFile = promisify(fs.copyFile);
+const mkdir = promisify(fs.mkdir);
 const readFile = promisify(fs.readFile);
-
+const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
+const copyFile = promisify(fs.copyFile);
+const unlink = promisify(fs.unlink);
 interface RunningBot {
   process?: ChildProcess;
   port?: number;
@@ -42,6 +41,7 @@ interface PublishConfig {
 
 const isWin = process.platform === 'win32';
 
+// eslint-disable-next-line security/detect-unsafe-regex
 const localhostRegex = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
 
 const isLocalhostUrl = (matchUrl: string) => {
@@ -58,7 +58,7 @@ const stringifyError = (error: any): string => {
   } else {
     return error.toString();
   }
-}
+};
 
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   public name = 'localpublish';
@@ -254,12 +254,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         const botDir = this.getBotDir(botId);
         const runtimeDir = this.getBotRuntimeDir(botId);
         // create bot dir
-        await mkDir(botDir, { recursive: true });
-        await mkDir(runtimeDir, { recursive: true });
+        await mkdir(botDir, { recursive: true });
+        await mkdir(runtimeDir, { recursive: true });
 
         // create ComposerDialogs and history folder
-        mkDir(this.getBotAssetsDir(botId), { recursive: true });
-        mkDir(this.getHistoryDir(botId), { recursive: true });
+        await mkdir(this.getBotAssetsDir(botId), { recursive: true });
+        await mkdir(this.getHistoryDir(botId), { recursive: true });
 
         // copy runtime template in folder
         this.composer.log('COPY FROM ', runtime.path, ' to ', runtimeDir);
@@ -276,7 +276,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           })
         );
         // TODO: Understand why this is required as it would never hit this function if runtime is ejected
-        if (settings.runtime?.key && (settings.runtime?.key !== project.settings.runtime?.key)) {
+        if (settings.runtime?.key && settings.runtime?.key !== project.settings.runtime?.key) {
           // in order to change runtime type
           await removeDirAndFiles(this.getBotRuntimeDir(botId));
           // copy runtime template in folder
@@ -498,7 +498,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   private zipBot = async (dstPath: string, srcDir: string) => {
     // delete previous and create new
     if (fs.existsSync(dstPath)) {
-      await removeFile(dstPath);
+      await unlink(dstPath);
     }
     const files = await glob('**/*', {
       cwd: srcDir,
@@ -560,9 +560,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       throw new Error(`no such dir ${srcDir}`);
     }
     if (!(await this.dirExist(dstDir))) {
-      await mkDir(dstDir, { recursive: true });
+      await mkdir(dstDir, { recursive: true });
     }
-    const paths = await readDir(srcDir);
+    const paths = await readdir(srcDir);
     for (const subPath of paths) {
       const srcPath = path.resolve(srcDir, subPath);
       const dstPath = path.resolve(dstDir, subPath);

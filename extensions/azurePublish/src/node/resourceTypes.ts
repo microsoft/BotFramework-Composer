@@ -18,7 +18,6 @@ export const AzureResourceTypes = {
 const hostingGroupName = 'Azure Hosting';
 const cognitiveServicesGroupName = 'Cognitive Services';
 
-
 export const AzureResourceDefinitions = {
   [AzureResourceTypes.APP_REGISTRATION]: {
     description: 'Required registration allowing your bot to communicate with Azure services.',
