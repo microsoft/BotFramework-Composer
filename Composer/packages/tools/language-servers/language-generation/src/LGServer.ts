@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 import URI from 'vscode-uri';
 import { IConnection, TextDocuments } from 'vscode-languageserver';
+import formatMessage from 'format-message';
 import {
-  TextDocument,
   Diagnostic,
   CompletionList,
   Hover,
@@ -13,6 +13,7 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
   TextDocumentPositionParams,
   DocumentOnTypeFormattingParams,
@@ -20,6 +21,7 @@ import {
   FoldingRange,
 } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
@@ -27,6 +29,7 @@ import { buildInFunctionsMap } from '@bfc/built-in-functions';
 import { LgParser } from './lgParser';
 import {
   getRangeAtPosition,
+  getEntityRangeAtPosition,
   LGDocument,
   convertDiagnostics,
   generateDiagnostic,
@@ -50,11 +53,13 @@ export class LGServer {
   protected LGDocuments: LGDocument[] = [];
   private memoryVariables: Record<string, any> = {};
   private _lgParser = new LgParser();
-
+  private _luisEntities: string[] = [];
+  private _lastLuContent: string[] = [];
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
-    protected readonly memoryResolver?: MemoryResolver
+    protected readonly memoryResolver?: MemoryResolver,
+    protected readonly entitiesResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => this.validate(change.document));
@@ -70,13 +75,14 @@ export class LGServer {
         this.workspaceRoot = URI.parse(params.rootUri);
       }
       this.connection.console.log('The server is initialized.');
+
       return {
         capabilities: {
           textDocumentSync: this.documents.syncKind,
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['.', '[', '[', '\n'],
+            triggerCharacters: ['.', '[', '[', '\n', '@'],
           },
           hoverProvider: true,
           foldingRangeProvider: true,
@@ -101,6 +107,16 @@ export class LGServer {
           this.addLGDocument(textDocument, lgOption);
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
+        }
+
+        // update luis entities once user open LG editor
+        const projectId = lgOption?.projectId || '';
+        if (this.entitiesResolver) {
+          const luContents = this.entitiesResolver(projectId) || [];
+          if (!isEqual(luContents, this._lastLuContent)) {
+            this._lastLuContent = luContents;
+            this._lgParser.extractLuisEntity(luContents).then((res) => (this._luisEntities = res.suggestEntities));
+          }
         }
       }
     });
@@ -553,6 +569,20 @@ export class LGServer {
       return Promise.resolve(null);
     }
 
+    const wordRange = getEntityRangeAtPosition(document, params.position);
+    const word = document.getText(wordRange);
+
+    const startWithAt = word.startsWith('@');
+
+    const completionEntityList = this._luisEntities.map((entity: string) => {
+      return {
+        label: entity,
+        kind: CompletionItemKind.Property,
+        insertText: entity,
+        documentation: formatMessage('Entity defined in lu files: { entity }', { entity: entity }),
+      };
+    });
+
     const { allTemplates } = lgFile;
     const completionTemplateList: CompletionItem[] = allTemplates.map((template) => {
       return {
@@ -586,12 +616,12 @@ export class LGServer {
           label: type,
           kind: CompletionItemKind.Keyword,
           insertText: type,
-          documentation: `Suggestion for Card or Activity: ${type}`,
+          documentation: formatMessage('Suggestion for Card or Activity: { type }', { type: type }),
         };
       });
 
       return Promise.resolve({
-        isIncomplete: true,
+        isIncomplete: false,
         items: cardTypesSuggestions,
       });
     }
@@ -611,7 +641,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
             };
             items.push(item);
           }
@@ -623,7 +653,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
             };
             items.push(item);
           }
@@ -635,7 +665,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
             };
             items.push(item);
           }
@@ -644,7 +674,7 @@ export class LGServer {
 
       if (items.length > 0) {
         return Promise.resolve({
-          isIncomplete: true,
+          isIncomplete: false,
           items: items,
         });
       }
@@ -654,13 +684,18 @@ export class LGServer {
     if (matchedState === EXPRESSION) {
       if (endWithDot) {
         return Promise.resolve({
-          isIncomplete: true,
+          isIncomplete: false,
           items: completionPropertyResult,
+        });
+      } else if (startWithAt) {
+        return Promise.resolve({
+          isIncomplete: false,
+          items: completionEntityList,
         });
       } else {
         return Promise.resolve({
-          isIncomplete: true,
-          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult)),
+          isIncomplete: false,
+          items: [...completionTemplateList, ...completionFunctionList, ...completionPropertyResult],
         });
       }
     } else {

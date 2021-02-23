@@ -2,13 +2,13 @@
   "name": "localpublish",
   "version": "1.0.0",
   "description": "start and update the local test bot runtime",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
-  },
+  "main": "dist/extension.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "build": "node ../build.js",
+    "watch": "yarn build --watch"
+  },
   "dependencies": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "adm-zip": "^0.4.14",
@@ -29,10 +29,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.162",
     "@types/node": "^14.11.8",
-    "@types/tcp-port-used": "1.0.0",
-    "ts-loader": "^8.0.9",
-    "typescript": "^4.0.5",
-    "webpack": "^5.4.0",
-    "webpack-cli": "^4.2.0"
+    "@types/rimraf": "^3.0.0",
+    "@types/tcp-port-used": "1.0.0"
   }
 }
