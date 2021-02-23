@@ -112,23 +112,26 @@ describe('ExternalAdapterSettings', () => {
     const modal = queryByTestId('adapterModal');
     expect(modal).not.toBeInTheDocument();
     expect(setSettingsMock).toHaveBeenCalledWith(PROJECT_ID, {
-      adapters: [
-        {
-          name: 'Adapter.Mock',
-          route: 'mockRoute',
-          enabled: true,
-        },
-      ],
-      'Adapter.Mock': { exampleName: 'test text 12345', route: 'mockRoute' },
+      runtimeSettings: {
+        adapters: [
+          {
+            name: 'Adapter.Mock',
+            route: 'mockRoute',
+            enabled: true,
+          },
+        ],
+      },
+      'Adapter.Mock': { exampleName: 'test text 12345', route: 'mockRoute', $kind: 'Adapter.Mock' },
     });
   });
 
   it('disables an adapter', async () => {
     const initStateWithAdapter = {
-      adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }],
+      runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }] },
       'Adapter.Mock': {
         exampleName: 'example',
         route: 'mock',
+        $kind: 'Adapter.Mock',
       },
     };
 
@@ -147,14 +150,14 @@ describe('ExternalAdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }],
+        runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }] },
       })
     );
   });
 
   it('enables an adapter', async () => {
     const initStateWithAdapter = {
-      adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }],
+      runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }] },
       'Adapter.Mock': {
         exampleName: 'example',
         route: 'mock',
@@ -176,7 +179,7 @@ describe('ExternalAdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }],
+        runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }] },
       })
     );
   });

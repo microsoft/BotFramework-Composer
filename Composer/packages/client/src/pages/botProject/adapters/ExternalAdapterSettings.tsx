@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { BotSchemas } from '@bfc/shared';
+import { BotSchemas, DialogSetting } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -18,7 +18,7 @@ import { JSONSchema7 } from '@botframework-composer/types';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 
-import AdapterModal, { AdapterRecord } from './ExternalAdapterModal';
+import AdapterModal, { AdapterRecord, hasRequired } from './ExternalAdapterModal';
 
 //////////
 
@@ -30,20 +30,20 @@ const ExternalAdapterSettings = (props: Props) => {
   const { projectId } = props;
 
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
-  const currentSettings = useRecoilValue(settingsState(projectId));
+  const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
   const { setSettings } = useRecoilValue(dispatcherState);
-  const adapters: AdapterRecord[] = currentSettings.adapters ?? [];
+  const adapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];
 
   const { definitions: schemaDefinitions } = schemas?.sdk?.content ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
 
-  const [currentModalProps, setModalProps] = useState<{ key: string; callback?: () => void } | undefined>();
+  const [currentModalProps, setModalProps] = useState<{ key: string; packageName: string } | undefined>();
 
-  const openModal = (key: string | undefined, callback?: () => void) => {
-    if (key == null) {
+  const openModal = (key?: string, packageName?: string) => {
+    if (key == null || packageName == null) {
       setModalProps(undefined);
     } else {
-      setModalProps({ key, callback });
+      setModalProps({ key, packageName });
     }
   };
 
@@ -51,7 +51,7 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const columnWidths = ['300px', '150px', '150px'];
 
-  const externalServices = (schemas: (JSONSchema7 & { key: string })[]) => (
+  const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string })[]) => (
     <div>
       <div key={'subtitle'} css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
@@ -70,18 +70,21 @@ const ExternalAdapterSettings = (props: Props) => {
 
       {schemas.map((schema) => {
         const { key, title } = schema;
+        let { packageName } = schema;
+        if (packageName == null) packageName = key;
 
-        const keyConfigured = adapters.some((ad) => ad.name === key);
+        const keyConfigured =
+          packageName in currentSettings && hasRequired(currentSettings[packageName], schemaDefinitions[key].required);
         const keyEnabled = adapters.some((ad) => ad.name === key && ad.enabled);
 
         return (
           <div key={key} css={tableRow}>
             <div css={tableRowItem(columnWidths[0])}>{title}</div>
             <div css={tableRowItem(columnWidths[1])}>
-              {key in currentSettings ? (
+              {keyConfigured ? (
                 <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
               ) : (
-                <Link key={key} onClick={() => openModal(key)}>
+                <Link key={key} onClick={() => openModal(key, packageName)}>
                   {formatMessage('Configure')}
                 </Link>
               )}
@@ -94,14 +97,17 @@ const ExternalAdapterSettings = (props: Props) => {
                 styles={{ root: { paddingTop: '8px' } }}
                 onChange={(ev, val?: boolean) => {
                   if (val != null) {
-                    const oldAdapters = currentSettings.adapters ?? [];
+                    const oldAdapters = currentSettings.runtimeSettings?.adapters ?? [];
                     setSettings(projectId, {
                       ...currentSettings,
-                      adapters: oldAdapters.map((ad: AdapterRecord) => {
-                        if (ad.name == key) {
-                          return { ...ad, enabled: val };
-                        } else return ad;
-                      }),
+                      runtimeSettings: {
+                        ...(currentSettings?.runtimeSettings ?? {}),
+                        adapters: oldAdapters.map((ad: AdapterRecord) => {
+                          if (ad.name == key) {
+                            return { ...ad, enabled: val };
+                          } else return ad;
+                        }),
+                      },
                     });
                   }
                 }}
@@ -119,7 +125,7 @@ const ExternalAdapterSettings = (props: Props) => {
                       key: 'edit',
                       text: formatMessage('Edit'),
                       iconProps: { iconName: 'Edit' },
-                      onClick: () => openModal(key),
+                      onClick: () => openModal(key, packageName),
                     },
                   ],
                 }}
@@ -140,22 +146,24 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const adapterSchemas = Object.entries(schemaDefinitions as { [key: string]: JSONSchema7 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([key, value]) => value?.$role != null && /IAdapter/.test(value.$role))
-    .map(([key, value]) => ({ ...value, key }));
+    .filter(([_, value]) => value?.$role != null && /IAdapter/.test(value.$role))
+    .map(([key, value]) => ({ ...value, key, packageName: value.$package?.name }));
 
   const currentKey = currentModalProps?.key;
+  const currentPackageName = currentModalProps?.packageName;
 
   return (
     <Fragment>
       <div data-testid="adapterSettings">{externalServices(adapterSchemas)}</div>
-      {currentKey != null && schemaDefinitions[currentKey] != null && (
+      {currentKey != null && currentPackageName != null && schemaDefinitions[currentKey] != null && (
         <AdapterModal
           isOpen
           adapterKey={currentKey}
+          packageName={currentPackageName}
           projectId={projectId}
           schema={schemaDefinitions[currentKey]}
           uiSchema={uiSchemas?.[currentKey]?.form}
-          value={currentSettings[currentKey]}
+          value={currentSettings[currentPackageName]}
           onClose={() => {
             openModal(undefined);
           }}
