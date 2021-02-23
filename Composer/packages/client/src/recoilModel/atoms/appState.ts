@@ -16,7 +16,8 @@ import {
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
 import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
-import { TreeLink } from '../../components/ProjectTree/ProjectTree';
+import { TreeLink } from '../../components/ProjectTree/types';
+import { Dispatcher } from '../dispatchers';
 
 export type BotProject = {
   readonly id: string;
@@ -49,6 +50,11 @@ export type PageMode =
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
 };
+
+export const dispatcherState = atom<Dispatcher>({
+  key: 'dispatcherState',
+  default: {} as Dispatcher,
+});
 
 // TODO: Add type for recent projects
 export const recentProjectsState = atom<any[]>({
@@ -301,6 +307,11 @@ export const showAddSkillDialogModalState = atom<boolean>({
 export const debugPanelExpansionState = atom<boolean>({
   key: getFullyQualifiedKey('debugPanelExpansion'),
   default: false,
+});
+
+export const debugPanelActiveTabState = atom<string>({
+  key: getFullyQualifiedKey('degbugPanelActiveTab'),
+  default: '',
 });
 
 export const selectedTemplateReadMeState = atom<string>({
