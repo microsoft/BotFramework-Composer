@@ -6,13 +6,13 @@ export const activityTemplateType = 'Activity';
 export const jsLgToolbarMenuClassName = 'js-lg-toolbar-menu';
 
 export const lgCardAttachmentTemplates = [
-  'hero',
-  'thumbnail',
-  'signin',
-  'animation',
-  'video',
-  'audio',
   'adaptive',
+  'hero',
+  'signin',
+  'thumbnail',
+  'audio',
+  'video',
+  'animation',
 ] as const;
 
 export type LgCardTemplateType = typeof lgCardAttachmentTemplates[number];
@@ -20,19 +20,19 @@ export type LgCardTemplateType = typeof lgCardAttachmentTemplates[number];
 export const cardTemplates: Record<LgCardTemplateType, string> = {
   adaptive: `> To learn more Adaptive Cards format, read the documentation at
 > https://docs.microsoft.com/en-us/adaptive-cards/getting-started/bots
-- \`\`\`{
+- \`\`\`\${json({
   "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
   "version": "1.2",
   "type": "AdaptiveCard",
   "body": [
     {
       "type": "TextBlock",
-      "text": "Passengers",
+      "text": "default text",
       "weight": "bolder",
       "isSubtle": false
-    },
+    }
   ]
-}\`\`\``,
+})}\`\`\``,
   hero: `[HeroCard
   title =
   subtitle =
