@@ -247,7 +247,7 @@ const reviewCols: IColumn[] = [
     isRowHeader: true,
     data: 'string',
     onRender: (item: ResourcesItem) => {
-    return <div>{item.resourceGroup}</div>;
+    return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.resourceGroup}</div>;
     },
     isPadded: true,
   },
@@ -260,7 +260,7 @@ const reviewCols: IColumn[] = [
     isRowHeader: true,
     data: 'string',
     onRender: (item: ResourcesItem & {name,icon}) => {
-      return <div>{item.name}</div>;
+      return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.name}</div>;
     },
     isPadded: true,
   },
@@ -273,7 +273,7 @@ const reviewCols: IColumn[] = [
     isRowHeader: true,
     data: 'string',
     onRender: (item: ResourcesItem & {name,icon}) => {
-      return <div>{item.region?.displayName}</div>;
+      return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.region?.displayName}</div>;
     },
     isPadded: true,
   },
