@@ -192,8 +192,8 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: ResourcesItem & {name,icon}) => {
       return <div style={{whiteSpace: 'normal'}}>
-          <div style={{fontSize: '14px', color: NeutralColors.gray190}}>{item.name}</div>
-          <div style={{fontSize: '12px', color: NeutralColors.gray130}}>{item.text} | {item.tier}</div>
+          <div style={{fontSize: '14px', color: NeutralColors.gray190}}>{item.text}</div>
+          <div style={{fontSize: '12px', color: NeutralColors.gray130}}>{item.tier}</div>
         </div>;
     },
     isPadded: true,
