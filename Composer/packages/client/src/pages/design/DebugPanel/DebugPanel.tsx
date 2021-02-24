@@ -152,6 +152,14 @@ export const DebugPanel = () => {
         <div css={leftBarStyle} data-testid="statusbar__left">
           {headerPivot}
         </div>
+        <div
+          css={{ flexGrow: 1 }}
+          data-testid="statusbar__blank"
+          onClick={() => {
+            setExpansion(true);
+            setActiveTab(DiagnosticsTabKey);
+          }}
+        ></div>
         <div css={rightBarStyle} data-testid="statusbar__right">
           <IconButton
             iconProps={{ iconName: 'ChevronUp' }}
