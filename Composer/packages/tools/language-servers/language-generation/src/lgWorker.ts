@@ -12,7 +12,7 @@ process.on('message', async (msg: WorkerMsg) => {
   try {
     switch (msg.type) {
       case 'extractLuisEntity': {
-        let suggestEntities: string[] = ['answer', 'itemList'];
+        let suggestEntities: string[] = [];
         const { luContents } = msg.payload;
         if (luContents) {
           for (const content of luContents) {
