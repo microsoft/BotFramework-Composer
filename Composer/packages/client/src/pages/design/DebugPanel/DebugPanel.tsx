@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo, useCallback, useRef, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
