@@ -10,8 +10,7 @@ import formatMessage from 'format-message';
 import { useResolvers } from '../hooks/useResolver';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
-import { focusPathState } from './../recoilModel';
-import { dispatcherState } from './../recoilModel/DispatcherWrapper';
+import { dispatcherState, focusPathState } from './../recoilModel';
 
 const fileNotFound = (id: string) => formatMessage('LG file {id} not found', { id });
 const TEMPLATE_ERROR = formatMessage('templateName is missing or empty');

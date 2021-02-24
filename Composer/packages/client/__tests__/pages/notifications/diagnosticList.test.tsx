@@ -5,7 +5,6 @@ import * as React from 'react';
 import { Range, Position } from '@bfc/shared';
 
 import { renderWithRecoil } from '../../testUtils';
-import { DiagnosticList } from '../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
 import {
   botDiagnosticsState,
   botProjectIdsState,
@@ -19,6 +18,7 @@ import {
   settingsState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
+import { DiagnosticList } from '../../../src/pages/diagnostics/DiagnosticList';
 
 const state = {
   projectId: 'test',

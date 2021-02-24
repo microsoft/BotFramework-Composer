@@ -16,11 +16,11 @@ import {
   botProjectFileState,
   botProjectIdsState,
   currentProjectIdState,
+  dispatcherState,
   locationState,
   projectMetaDataState,
   settingsState,
 } from '../../atoms';
-import { dispatcherState } from '../../DispatcherWrapper';
 import { Dispatcher } from '..';
 
 jest.mock('../../../utils/httpUtil');

@@ -8,18 +8,28 @@ import { WebChatPanel } from '../WebChatPanel';
 
 const mockstartNewConversation = jest.fn();
 const mockSendActivity = jest.fn();
+const mockServerPort = jest.fn();
 
 URL.createObjectURL = jest.fn();
 
 jest.mock('../utils/conversationService', () => {
-  return jest.fn().mockImplementation(() => {
-    return { startNewConversation: mockstartNewConversation, sendInitialActivity: mockSendActivity };
-  });
+  return {
+    ConversationService: jest.fn().mockImplementation(() => {
+      return {
+        startNewConversation: mockstartNewConversation,
+        sendInitialActivity: mockSendActivity,
+        setUpConversationServer: mockServerPort,
+        getDateTimeFormatted: jest.fn(),
+      };
+    }),
+    getDateTimeFormatted: jest.fn(),
+  };
 });
 
 describe('<WebchatPanel />', () => {
   it('should render webchat panel correctly', async () => {
     const mockOpenInEmulator = jest.fn();
+
     const props = {
       projectId: '123-12',
       botUrl: 'http://localhost:3989/api/messages',
@@ -32,11 +42,14 @@ describe('<WebchatPanel />', () => {
       isWebChatPanelVisible: false,
       openBotInEmulator: mockOpenInEmulator,
       activeLocale: 'en-us',
-      appLifecycleHandler: {
-        on: () => {},
-      },
     };
-    const { rerender, findAllByTestId } = render(<WebChatPanel {...props} />);
+
+    mockServerPort.mockResolvedValue(4000);
+
+    const { rerender, findAllByTestId } = render(
+      <WebChatPanel clearWebchatInspectorLogs={jest.fn()} {...props} appendLogToWebChatInspector={jest.fn()} />
+    );
+
     mockstartNewConversation.mockResolvedValue({
       directline: {
         activity$: jest.fn(),
@@ -51,7 +64,14 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(<WebChatPanel {...props} isWebChatPanelVisible />);
+      rerender(
+        <WebChatPanel
+          {...props}
+          isWebChatPanelVisible
+          appendLogToWebChatInspector={jest.fn()}
+          clearWebchatInspectorLogs={jest.fn()}
+        />
+      );
       await findAllByTestId('restart-conversation');
     });
   });

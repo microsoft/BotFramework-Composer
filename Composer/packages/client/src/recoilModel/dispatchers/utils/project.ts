@@ -73,9 +73,9 @@ import {
   showCreateQnAFromUrlDialogState,
   createQnAOnState,
   botEndpointsState,
+  dispatcherState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
-import { dispatcherState } from '../../DispatcherWrapper';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
