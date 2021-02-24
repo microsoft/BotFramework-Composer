@@ -12,7 +12,7 @@ import { recognizersSelectorFamily } from '../selectors/recognizers';
 
 import { createNotification } from './notification';
 
-const downloadModel = (addr: string, model: 'en' | 'multilang') => {
+export const downloadModel = (addr: string, model: 'en' | 'multilang') => {
   return new Promise<boolean>((resolve, reject) => {
     httpClient.post(addr, { language: model }).then((resp) => {
       if (resp.status !== 200) {
@@ -43,19 +43,19 @@ export const orchestratorDispatcher = () => {
       );
 
       if (isUsingOrchestrator) {
-        // pull out languages
-        const languages = recognizers
+        // pull out languages that Orchestrator has to support
+        const botLanguages = recognizers
           .filter(({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer)
           .map(({ id, content }) => id.split('.')?.[1]);
 
-        const langs: ('en' | 'multilang')[] = [];
-        if (languages.some((l) => l?.startsWith('en'))) {
-          langs.push('en');
+        const languageModels: ('en' | 'multilang')[] = [];
+        if (botLanguages.some((l) => l?.startsWith('en'))) {
+          languageModels.push('en');
         }
 
         // TODO: We need to get a table of Orchestrator supported languages
-        if (languages.length > 1) {
-          langs.push('multilang');
+        if (botLanguages.length > 1) {
+          languageModels.push('multilang');
         }
 
         // Add Notification of downloading
@@ -64,8 +64,8 @@ export const orchestratorDispatcher = () => {
         addNotification(notification);
 
         try {
-          for (const l of langs) {
-            await downloadModel('/orchestrator/download', l);
+          for (const languageModel of languageModels) {
+            await downloadModel('/orchestrator/download', languageModel);
           }
         } finally {
           deleteNotification(notification.id);
@@ -75,6 +75,6 @@ export const orchestratorDispatcher = () => {
   );
 
   return {
-    downloadModel: downloadLanguageModels,
+    downloadLanguageModels,
   };
 };
