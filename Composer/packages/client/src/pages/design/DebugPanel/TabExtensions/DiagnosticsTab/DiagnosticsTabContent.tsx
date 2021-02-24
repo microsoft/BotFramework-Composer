@@ -27,7 +27,9 @@ export const DiagnosticsContent = () => {
       splitterSize="5px"
     >
       <DiagnosticsStatusFilter filterType={filterType} onChangeFilterType={changeFilterType} />
-      <DiagnosticList diagnosticItems={diagnostics.filter((d) => d.severity === filterType)} />
+      <div data-testid="DiagnosticList-Container" style={{ height: '100%', overflow: 'auto' }}>
+        <DiagnosticList diagnosticItems={diagnostics.filter((d) => d.severity === filterType)} />
+      </div>
     </Split>
   );
 };
