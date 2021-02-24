@@ -11,8 +11,9 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 
-import * as styles from './styles';
 import { DEFAULT_FONT_SETTINGS } from '../../../recoilModel/utils';
+
+import * as styles from './styles';
 
 interface IFontSettingsProps {
   id?: string;
