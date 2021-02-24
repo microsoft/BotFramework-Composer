@@ -174,24 +174,29 @@ export class OneAuthInstance extends OneAuthBase {
       log('Got Azure tenants for user: %O', tenants.value);
       return tenants.value;
     } catch (e) {
-      log('There was an error trying to sign in: %O', e);
+      log('There was an error trying to log the user into ARM: %O', e);
       throw e;
     }
   }
 
   public async getARMTokenForTenant(tenantId: string): Promise<string> {
     if (this.signedInARMAccount) {
-      log('Getting an ARM token for tenant %s', tenantId);
-      const tokenParams = new this.oneAuth.AuthParameters(
-        DEFAULT_AUTH_SCHEME,
-        `https://login.microsoftonline.com/${tenantId}`,
-        ARM_RESOURCE,
-        '',
-        ''
-      );
-      const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
-      log('Acquired ARM token for tenant: %s', result.credential.value);
-      return result.credential.value;
+      try {
+        log('Getting an ARM token for tenant %s', tenantId);
+        const tokenParams = new this.oneAuth.AuthParameters(
+          DEFAULT_AUTH_SCHEME,
+          `https://login.microsoftonline.com/${tenantId}`,
+          ARM_RESOURCE,
+          '',
+          ''
+        );
+        const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
+        log('Acquired ARM token for tenant: %s', result.credential.value);
+        return result.credential.value;
+      } catch (e) {
+        log('There was an error trying to get an ARM token for tenant %s: %O', tenantId, e);
+        throw e;
+      }
     }
     return '';
   }
