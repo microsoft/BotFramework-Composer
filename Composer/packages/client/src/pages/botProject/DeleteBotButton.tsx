@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -45,10 +45,11 @@ const deleteBotButton = {
 
 type DeleteBotButtonProps = {
   projectId: string;
+  scrollToSectionId: string;
 };
 
 export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const { deleteBot } = useRecoilValue(dispatcherState);
   const openDeleteBotModal = async () => {
     const boldWarningText = formatMessage(
@@ -117,8 +118,16 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
     }
   };
 
+  const deleteRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (deleteRef.current && scrollToSectionId === '#deleteBot') {
+      deleteRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scrollToSectionId]);
+
   return (
-    <div css={marginBottom}>
+    <div ref={deleteRef} css={marginBottom} id="deleteBot">
       <div css={deleteBotText}> {formatMessage('Delete this bot')}</div>
       <Button styles={deleteBotButton} onClick={openDeleteBotModal}>
         {formatMessage('Delete')}

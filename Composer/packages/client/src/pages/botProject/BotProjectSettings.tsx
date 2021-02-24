@@ -21,6 +21,7 @@ import { settingsState, userSettingsState, schemasState } from '../../recoilMode
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { useFeatureFlag } from '../../utils/hooks';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
@@ -64,6 +65,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const currentProjectId = skillId ?? projectId;
   const schemas = useRecoilValue(schemasState(currentProjectId));
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
+  const newCreationFlowFlag = useFeatureFlag('NEW_CREATION_FLOW');
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
@@ -119,6 +121,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   return (
     <Page
       data-testid="BotProjectsSettings"
+      getStarted={newCreationFlowFlag}
       headerStyle={header}
       mainRegionName={formatMessage('Bot projects settings list View')}
       navLinks={navLinks}

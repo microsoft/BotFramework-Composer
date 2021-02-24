@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
+import { IButtonStyles } from 'office-ui-fabric-react';
 
 // -------------------- Styles -------------------- //
 
@@ -48,6 +49,7 @@ export type IToolbarItem = {
   buttonProps?: {
     iconProps?: IIconProps;
     onClick?: () => void;
+    styles?: IButtonStyles;
   };
   menuProps?: IContextualMenuProps;
   align?: string;
@@ -64,7 +66,7 @@ const renderItemList = (item: IToolbarItem, index: number) => {
     return (
       <ActionButton
         key={index}
-        css={actionButton}
+        css={!item.buttonProps?.styles ? actionButton : null}
         {...item.buttonProps}
         data-testid={item.dataTestid}
         disabled={item.disabled}

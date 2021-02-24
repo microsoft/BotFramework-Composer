@@ -15,6 +15,7 @@ import { dispatcherState, PageMode } from '../recoilModel';
 import { DebugPanel } from '../pages/design/DebugPanel/DebugPanel';
 import implementedDebugExtensions from '../pages/design/DebugPanel/TabExtensions';
 
+import { GetStarted } from './GetStarted/GetStarted';
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
 import { renderThinSplitter } from './Split/ThinSplitter';
@@ -78,6 +79,22 @@ export const main = css`
   label: PageMain;
 `;
 
+export const mainWithGetStarted = css`
+  margin-left: 2px;
+  height: calc(100vh - 385px);
+  display: flex;
+  flex-grow: 1;
+  border-top: 1px solid #dddddd;
+  position: relative;
+  nav {
+    ul {
+      margin-top: 0px;
+    }
+  }
+
+  label: PageMain;
+`;
+
 export const content = (shouldShowEditorError: boolean) => css`
   flex: 4;
   display: flex;
@@ -119,6 +136,7 @@ type IPageProps = {
   skillId?: string;
   dialogId?: string;
   fileId?: string;
+  getStarted?: boolean;
 };
 
 const Page: React.FC<IPageProps> = (props) => {
@@ -167,12 +185,16 @@ const Page: React.FC<IPageProps> = (props) => {
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
-        <Toolbar toolbarItems={displayedToolbarItems} />
+        {props.getStarted ? (
+          <GetStarted toolbarItems={displayedToolbarItems} />
+        ) : (
+          <Toolbar toolbarItems={displayedToolbarItems} />
+        )}
         <div css={headerStyle}>
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
-        <div css={main} role="main">
+        <div css={props.getStarted ? mainWithGetStarted : main} role="main">
           <Split
             resetOnDoubleClick
             initialPrimarySize="20%"
