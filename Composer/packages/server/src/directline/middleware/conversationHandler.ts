@@ -45,7 +45,7 @@ export const createReplyToActivityHandler = (req: express.Request, res: express.
     if (!exception.message) {
       exception = {
         status: StatusCodes.INTERNAL_SERVER_ERROR,
-        message: formatMessage(`An error occured receiving an activity from the bot.`),
+        message: formatMessage(`An error occurred receiving an activity from the bot.`),
       };
     }
     handleDirectLineErrors(req, res, exception);
@@ -120,7 +120,7 @@ export const createUpdateConversationHandler = (state: DLServerState) => {
       logger(err);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(formatMessage(`An error occured updating the conversation id ${oldConversationId}`));
+        .send(formatMessage(`An error occurred updating the conversation id ${oldConversationId}`));
     }
   };
 };

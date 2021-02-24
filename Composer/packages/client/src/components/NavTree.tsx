@@ -84,10 +84,11 @@ export interface INavTreeItem {
 interface INavTreeProps {
   navLinks: INavTreeItem[];
   regionName: string;
+  onLinkClick?: (item: INavTreeItem) => void;
 }
 
 const NavTree: React.FC<INavTreeProps> = (props) => {
-  const { navLinks, regionName } = props;
+  const { navLinks, regionName, onLinkClick } = props;
 
   const onRenderOverflowButton = (isSelected: boolean, item) => (
     menuItems: IOverflowSetItemProps[] | undefined
@@ -132,6 +133,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
               text={item.name}
               onClick={(e) => {
                 e.preventDefault();
+                onLinkClick?.(item);
                 navigateTo(item.url);
               }}
             />
