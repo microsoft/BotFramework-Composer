@@ -78,7 +78,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
     await fetchStorages();
     fetchRecentProjects();
-    featureFlags.NEW_CREATION_FLOW.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
+    featureFlags.NEW_CREATION_FLOW?.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
   };
 
   useEffect(() => {
@@ -121,6 +121,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       alias: formData.alias,
       preserveRoot: formData.preserveRoot,
       profile: formData.profile,
+      source: formData.source,
     };
     if (templateId === 'conversationalcore') {
       createNewBotV2(newBotData);

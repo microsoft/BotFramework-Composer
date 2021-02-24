@@ -33,6 +33,7 @@ import { INDENT_PER_LEVEL } from './constants';
 import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
 import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
+import { ProjectTreeOptions, TreeLink, TreeMenuItem } from './types';
 
 // -------------------- Styles -------------------- //
 
@@ -96,45 +97,9 @@ const sortTriggerGroups = (x: string, y: string): number => {
 };
 
 // -------------------- ProjectTree -------------------- //
-
-export type TreeLink = {
-  displayName: string;
-  isRoot: boolean;
-  isRemote: boolean;
-  diagnostics: Diagnostic[];
-  projectId: string;
-  skillId?: string;
-  dialogId?: string;
-  trigger?: number;
-  lgFileId?: string;
-  luFileId?: string;
-  parentLink?: TreeLink;
-  onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
-  botError?: any;
-};
-
-export type TreeMenuItem = {
-  icon?: string;
-  label: string; // leave this blank to place a separator
-  onClick?: (link: TreeLink) => void;
-};
-
 function getTriggerName(trigger: ITrigger): string {
   return trigger.displayName || getFriendlyName({ $kind: trigger.type });
 }
-
-export type ProjectTreeOptions = {
-  showDelete?: boolean;
-  showDialogs?: boolean;
-  showLgImports?: boolean;
-  showLuImports?: boolean;
-  showMenu?: boolean;
-  showQnAMenu?: boolean;
-  showErrors?: boolean;
-  showCommonLinks?: boolean;
-  showRemote?: boolean;
-  showTriggers?: boolean;
-};
 
 type Props = {
   navLinks?: TreeLink[];

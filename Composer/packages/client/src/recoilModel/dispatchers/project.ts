@@ -4,16 +4,17 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { RootBotManagedProperties } from '@bfc/shared';
+import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, QnABotTemplateId } from '../../constants';
+import { BotStatus } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { navigateTo } from '../../utils/navigation';
+import { getPublishProfileFromPayload } from '../../utils/electronUtil';
 import { projectIdCache } from '../../utils/projectCache';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import {
@@ -26,13 +27,13 @@ import {
   botStatusState,
   createQnAOnState,
   currentProjectIdState,
+  dispatcherState,
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
   settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
-import { dispatcherState } from '../DispatcherWrapper';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
@@ -293,6 +294,7 @@ export const projectDispatcher = () => {
         alias,
         preserveRoot,
         profile,
+        source,
       } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
@@ -312,21 +314,9 @@ export const projectDispatcher = () => {
       if (profile) {
         // ABS Create Flow, update publishProfile after create project
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const appId = profile.appId;
-        delete profile.appId;
-        const newProfile = {
-          name: `abs-${profile.botName}`,
-          type: 'azurePublish',
-          configuration: JSON.stringify({
-            hostname: profile.tag?.webapp || '',
-            runtimeIdentifier: 'win-x64',
-            settings: {
-              MicrosoftAppId: appId,
-            },
-            ...profile,
-          }),
-        };
-        dispatcher.setPublishTargets([newProfile], projectId);
+        const newProfile = getPublishProfileFromPayload(profile, source);
+
+        newProfile && dispatcher.setPublishTargets([newProfile], projectId);
       }
       // Post project creation
       set(projectMetaDataState(projectId), {

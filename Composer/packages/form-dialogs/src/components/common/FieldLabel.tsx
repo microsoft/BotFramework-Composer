@@ -5,7 +5,8 @@ import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
-import { HelpTooltip } from 'src/components/common/HelpTooltip';
+
+import { HelpTooltip } from './HelpTooltip';
 
 type Props = {
   tooltipId: string;
