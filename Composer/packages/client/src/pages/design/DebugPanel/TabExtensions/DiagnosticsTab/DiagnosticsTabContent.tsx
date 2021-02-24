@@ -1,28 +1,33 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
-import { useSetRecoilState } from 'recoil';
+import { Split } from '@geoffcox/react-splitter';
+import React, { useState } from 'react';
 
-import { exportSkillModalInfoState } from '../../../../../recoilModel';
-import { navigateTo } from '../../../../../utils/navigation';
+import { renderThinSplitter } from '../../../../../components/Split/ThinSplitter';
 
 import { DiagnosticList } from './DiagnosticList';
-import { useDiagnosticsData } from './useDiagnostics';
+import { DiagnosticsStatusFilter } from './DiagnosticsStatusFilter';
+import { Severity, useDiagnosticsData } from './useDiagnostics';
 
 export const DiagnosticsContent = () => {
-  const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
+  const [filterType, setFilterType] = useState(Severity.Error);
   const diagnostics = useDiagnosticsData();
 
+  const changeFilterType = (type) => {
+    setFilterType(type);
+  };
   return (
-    <DiagnosticList
-      diagnosticItems={diagnostics}
-      onItemClick={(item) => {
-        navigateTo(item.getUrl());
-        if (item.location === 'manifest.json') {
-          setExportSkillModalInfo(item.projectId);
-        }
-      }}
-    />
+    <Split
+      resetOnDoubleClick
+      initialPrimarySize="160px"
+      minPrimarySize="160px"
+      minSecondarySize="800px"
+      renderSplitter={renderThinSplitter}
+      splitterSize="5px"
+    >
+      <DiagnosticsStatusFilter filterType={filterType} onChangeFilterType={changeFilterType} />
+      <DiagnosticList diagnosticItems={diagnostics.filter((d) => d.severity === filterType)} />
+    </Split>
   );
 };
