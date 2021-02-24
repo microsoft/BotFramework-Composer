@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../recoilModel';
 
@@ -71,8 +72,8 @@ export const DebugPanel = () => {
         aria-label={formatMessage('Debug Panel Header')}
         selectedKey={expanded ? activeTab : null}
         styles={{
-          link: { height, lineHeight: height },
-          linkIsSelected: { height, lineHeight: height },
+          link: { height, lineHeight: height, fontSize: FontSizes.size12 },
+          linkIsSelected: { height, lineHeight: height, fontSize: FontSizes.size12 },
         }}
       >
         {tabTitles}
