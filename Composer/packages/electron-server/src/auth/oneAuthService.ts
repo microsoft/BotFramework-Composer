@@ -161,6 +161,7 @@ export class OneAuthInstance extends OneAuthBase {
       }
       // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
       log('Logging user into ARM...');
+      this.signedInARMAccount = undefined;
       const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
       const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
       this.signedInARMAccount = result.account;
