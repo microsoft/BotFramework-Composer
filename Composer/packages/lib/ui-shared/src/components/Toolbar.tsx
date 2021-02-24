@@ -6,9 +6,8 @@ import { jsx, css } from '@emotion/core';
 import { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, CommandButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
-import { IButtonStyles } from 'office-ui-fabric-react';
 
 // -------------------- Styles -------------------- //
 
