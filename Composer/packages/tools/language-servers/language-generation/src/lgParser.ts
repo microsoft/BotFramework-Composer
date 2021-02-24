@@ -34,7 +34,7 @@ class LgParserWithoutWorker {
   }
 
   public async extractLuisEntity(luContents: string[]): Promise<{ suggestEntities: string[] }> {
-    let suggestEntities: string[] = ['answer', 'itemList'];
+    let suggestEntities: string[] = [];
     if (luContents) {
       for (const content of luContents) {
         const luisJson = await extractLUISContent(content);
