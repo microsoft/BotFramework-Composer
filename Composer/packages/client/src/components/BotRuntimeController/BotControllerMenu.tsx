@@ -84,7 +84,7 @@ const tableColumns: IColumn[] = [
     maxWidth: 130,
     isRowHeader: true,
     onRender: ({ projectId, isRootBot }) => {
-      return <OpenWebChatButton isRoot={isRootBot} projectId={projectId} />;
+      return <OpenWebChatButton isRootBot={isRootBot} projectId={projectId} />;
     },
   },
   {
@@ -94,7 +94,7 @@ const tableColumns: IColumn[] = [
     maxWidth: 150,
     isRowHeader: true,
     onRender: ({ projectId, isRootBot }) => {
-      return <OpenEmulatorButton isRoot={isRootBot} projectId={projectId} />;
+      return <OpenEmulatorButton isRootBot={isRootBot} projectId={projectId} />;
     },
   },
 ];

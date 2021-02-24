@@ -7,7 +7,7 @@ import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 import { ConversationService, ActivityType, ChatData } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 
-type WebChatContainerProps = {
+export type WebChatContainerProps = {
   currentConversation: string;
   activeLocale: string;
   conversationService: ConversationService;

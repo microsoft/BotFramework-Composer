@@ -64,7 +64,7 @@ export type ChatData = {
   projectId: string;
   user: User;
   conversationId: string;
-  webChatStore: any;
+  webChatStore: unknown;
 };
 
 export const getDateTimeFormatted = (): string => {
@@ -184,7 +184,7 @@ export class ConversationService {
       endpointId: endpointId,
       userId: user.id,
     });
-    const webChatStore = createWebChatStore({});
+    const webChatStore: unknown = createWebChatStore({});
     return {
       directline,
       webChatMode: webChatMode,

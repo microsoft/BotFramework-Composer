@@ -13,6 +13,12 @@ const mockServerPort = jest.fn();
 
 URL.createObjectURL = jest.fn();
 
+jest.mock('../WebChatContainer', () => ({
+  WebChatContainer: () => {
+    return <></>;
+  },
+}));
+
 jest.mock('../utils/conversationService', () => {
   return {
     ConversationService: jest.fn().mockImplementation(() => {
@@ -50,7 +56,7 @@ describe('<WebchatPanel />', () => {
 
     mockServerPort.mockResolvedValue(4000);
 
-    const { rerender, findAllByTestId } = render(
+    const { rerender, findByText } = render(
       <WebChatPanel clearWebchatInspectorLogs={jest.fn()} {...props} appendLogToWebChatInspector={jest.fn()} />
     );
 
@@ -76,7 +82,7 @@ describe('<WebchatPanel />', () => {
           clearWebchatInspectorLogs={jest.fn()}
         />
       );
-      await findAllByTestId('restart-conversation');
+      await findByText('Restart Conversation - new user ID');
     });
   });
 });

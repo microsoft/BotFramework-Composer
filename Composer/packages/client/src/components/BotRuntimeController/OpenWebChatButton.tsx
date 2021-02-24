@@ -13,14 +13,14 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 
 type OpenWebChatButtonProps = {
   projectId: string;
-  isRoot: boolean;
+  isRootBot: boolean;
 };
 
-export const OpenWebChatButton: React.FC<OpenWebChatButtonProps> = ({ projectId, isRoot }) => {
+export const OpenWebChatButton: React.FC<OpenWebChatButtonProps> = ({ projectId, isRootBot }) => {
   const { setWebChatPanelVisibility: toggleWebChatPanel } = useRecoilValue(dispatcherState);
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
 
-  if (!isRoot) {
+  if (!isRootBot) {
     return null;
   }
 

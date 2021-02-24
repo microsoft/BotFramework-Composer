@@ -22,7 +22,7 @@ describe('<DebugPanel />', () => {
       await findByText('Problems');
     });
 
-    fit('should render Debug Panel in expanded state', async () => {
+    it('should render Debug Panel in expanded state', async () => {
       const initRecoilState = ({ set }) => {
         set(debugPanelActiveTabState, 'WebChatInspector');
         set(debugPanelExpansionState, true);
