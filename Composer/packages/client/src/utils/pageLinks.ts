@@ -121,4 +121,10 @@ export const bottomLinks: PageLink[] = [
     labelName: formatMessage('Composer Settings'),
     disabled: false,
   },
+  // {
+  //   to: `/extensions`,
+  //   iconName: 'OEM',
+  //   labelName: formatMessage('Extensions'),
+  //   disabled: false,
+  // },
 ];
