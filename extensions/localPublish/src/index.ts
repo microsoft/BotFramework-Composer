@@ -104,7 +104,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
         const runtimePath = path.isAbsolute(project.settings.runtime.path)
           ? project.settings.runtime.path
-          : path.resolve(project.dataDir, project.settings.runtime.path);
+          : path.resolve(project.dataDir, 'settings', project.settings.runtime.path);
         await runtime.build(runtimePath, project);
         await runtime.setSkillManifest(
           project.settings.runtime.path,
@@ -345,7 +345,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
     let customRuntimePath = settings.runtime.path;
     if (customRuntimePath && !path.isAbsolute(customRuntimePath)) {
-      customRuntimePath = path.resolve(project.dir, customRuntimePath);
+      customRuntimePath = path.resolve(project.dir, 'settings', customRuntimePath);
     }
     const botDir = settings.runtime?.customRuntime === true ? customRuntimePath : this.getBotRuntimeDir(botId);
 

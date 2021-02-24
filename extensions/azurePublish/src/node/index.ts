@@ -339,7 +339,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         ) {
           runtimeCodePath = path.isAbsolute(project.settings.runtime.path)
             ? project.settings.runtime.path
-            : path.resolve(project.dir, project.settings.runtime.path);
+            : path.resolve(project.dir, 'settings', project.settings.runtime.path);
         }
 
         // Prepare the temporary project

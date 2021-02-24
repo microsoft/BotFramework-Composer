@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as fs from 'fs';
+import * as path from 'path';
 
 import { remove } from 'fs-extra';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
@@ -62,7 +63,10 @@ export async function getNewProjRef(
 export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
   if (currentProject.settings?.runtime?.customRuntime === true) {
     const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-    const runtimePath = currentProject.settings.runtime.path;
+    let runtimePath = currentProject.settings?.runtime?.path;
+    if (runtimePath && !path.isAbsolute(runtimePath)) {
+      runtimePath = path.resolve(currentProject.dir, 'settings', runtimePath);
+    }
 
     if (!fs.existsSync(runtimePath)) {
       await runtime.eject(currentProject, currentProject.fileStorage);
