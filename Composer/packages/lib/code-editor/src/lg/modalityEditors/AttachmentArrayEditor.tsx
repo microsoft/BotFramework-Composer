@@ -127,17 +127,8 @@ export const AttachmentArrayEditor = React.memo(
     const newButtonMenuItems = React.useMemo<IContextualMenuItem[]>(
       () => [
         {
-          key: 'addCustom',
-          text: formatMessage('Add Custom'),
-          itemProps: addButtonMenuItemProps,
-          onClick: onAddTemplateClick,
-          data: {
-            template: '',
-          },
-        },
-        {
           key: 'template',
-          text: formatMessage('Create from templates'),
+          text: formatMessage('Create from template'),
           itemProps: addButtonMenuItemProps,
           subMenuProps: {
             items: lgCardAttachmentTemplates.map((templateType) => ({
@@ -149,6 +140,15 @@ export const AttachmentArrayEditor = React.memo(
                 template: cardTemplates[templateType],
               },
             })),
+          },
+        },
+        {
+          key: 'addCustom',
+          text: formatMessage('Add Custom'),
+          itemProps: addButtonMenuItemProps,
+          onClick: onAddTemplateClick,
+          data: {
+            template: '',
           },
         },
       ],

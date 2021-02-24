@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TabExtensionConfig } from '../types';
+import formatMessage from 'format-message';
+
+import { TabExtensionConfig, WebChatInspectorTabKey } from '../types';
 
 import { WebchatLogContent } from './WebchatLogContent';
 import { WebchatLogItemHeader } from './WebchatLogItemHeader';
 
 export const WebchatLogTabConfig: TabExtensionConfig = {
-  key: 'WebchatLog',
-  description: 'Webchat log.',
+  key: WebChatInspectorTabKey,
+  description: formatMessage('Webchat log.'),
   HeaderWidget: WebchatLogItemHeader,
   ContentWidget: WebchatLogContent,
 };
