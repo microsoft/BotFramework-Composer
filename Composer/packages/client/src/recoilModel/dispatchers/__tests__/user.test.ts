@@ -7,7 +7,7 @@ import jwtDecode from 'jwt-decode';
 
 import { userDispatcher } from '../user';
 import { UserSettingsPayload } from '../../types';
-import { DEFAULT_USER_SETTINGS } from '../../utils';
+import { DEFAULT_FONT_SETTINGS, DEFAULT_USER_SETTINGS } from '../../utils';
 import { userSettingsState, currentUserState, CurrentUser, dispatcherState } from '../../atoms/appState';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { getUserTokenFromCache, loginPopup } from '../../../utils/auth';
@@ -157,11 +157,7 @@ describe('user dispatcher', () => {
         lineNumbers: false,
         wordWrap: false,
         minimap: false,
-        fontSettings: {
-          fontFamily: 'Courier New',
-          fontSize: '18px',
-          fontWeight: '500',
-        },
+        fontSettings: DEFAULT_FONT_SETTINGS,
       },
       propertyEditorWidth: 400,
       dialogNavWidth: 555,
