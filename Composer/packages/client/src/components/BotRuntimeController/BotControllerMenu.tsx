@@ -15,6 +15,7 @@ import formatMessage from 'format-message';
 import { BotRuntimeOperations } from './BotRuntimeOperations';
 import { BotStatusIndicator } from './BotStatusIndicator';
 import { OpenEmulatorButton } from './OpenEmulatorButton';
+import { OpenWebChatButton } from './OpenWebChatButton';
 
 const styles = {
   container: css`
@@ -42,8 +43,8 @@ const tableColumns: IColumn[] = [
     maxWidth: 20,
     fieldName: 'control',
     isRowHeader: false,
-    onRender: ({ projectId, isRoot }) => {
-      return <BotRuntimeOperations isRoot={isRoot} projectId={projectId} />;
+    onRender: ({ projectId, isRootBot }) => {
+      return <BotRuntimeOperations isRoot={isRootBot} projectId={projectId} />;
     },
   },
   {
@@ -60,8 +61,8 @@ const tableColumns: IColumn[] = [
   {
     key: 'status',
     name: formatMessage('Status'),
-    minWidth: 150,
-    maxWidth: 150,
+    minWidth: 75,
+    maxWidth: 75,
     isRowHeader: true,
     onRender: (item: {
       displayName: string;
@@ -77,13 +78,23 @@ const tableColumns: IColumn[] = [
     },
   },
   {
+    key: 'webchat-viewer',
+    name: '',
+    minWidth: 130,
+    maxWidth: 130,
+    isRowHeader: true,
+    onRender: ({ projectId, isRootBot }) => {
+      return <OpenWebChatButton isRootBot={isRootBot} projectId={projectId} />;
+    },
+  },
+  {
     key: 'emulator',
     name: '',
     minWidth: 150,
     maxWidth: 150,
     isRowHeader: true,
-    onRender: ({ projectId, isRoot }) => {
-      return <OpenEmulatorButton isRoot={isRoot} projectId={projectId} />;
+    onRender: ({ projectId, isRootBot }) => {
+      return <OpenEmulatorButton isRootBot={isRootBot} projectId={projectId} />;
     },
   },
 ];
