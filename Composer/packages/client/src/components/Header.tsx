@@ -140,9 +140,7 @@ const calloutDescription = css`
 // -------------------- Header -------------------- //
 
 export const Header = () => {
-  const { setAppUpdateShowing, setLocale, setWebChatPanelVisibility: toggleWebChatPanel } = useRecoilValue(
-    dispatcherState
-  );
+  const { setAppUpdateShowing, setLocale } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
   const projectName = useRecoilValue(botDisplayNameState(projectId));
   const locale = useRecoilValue(localeState(projectId));
@@ -173,7 +171,7 @@ export const Header = () => {
     const hideCondition = !pathname.endsWith('/home') || pathname.includes('/bot/');
     setStartBotsWidgetVisible(hideCondition);
     if (!hideCondition) {
-      toggleWebChatPanel(false);
+      setWebChatPanelVisibility(false);
     }
   }, [pathname]);
 
@@ -308,7 +306,7 @@ export const Header = () => {
             title={formatMessage('Open Web Chat')}
             onClick={() => {
               const currentWebChatVisibility = !isWebChatPanelVisible;
-              toggleWebChatPanel(currentWebChatVisibility);
+              setWebChatPanelVisibility(currentWebChatVisibility);
               if (currentWebChatVisibility) {
                 TelemetryClient.track('WebChatPaneOpened');
               } else {
@@ -368,7 +366,7 @@ export const Header = () => {
         }}
         type={PanelType.custom}
         onDismiss={() => {
-          toggleWebChatPanel(false);
+          setWebChatPanelVisibility(false);
           TelemetryClient.track('WebChatPaneClosed');
         }}
       >
