@@ -81,6 +81,55 @@ function decodeToken(token: string) {
   }
 }
 
+function removePlaceholder(config:any){
+  try{
+    if(config){
+      let str = JSON.stringify(config);
+      str = str.replace(/<[^>]*>/g, '');
+      const newConfig = JSON.parse(str);
+      return newConfig;
+    } else {
+      return undefined;
+    }
+  }catch(e){
+    console.error(e);
+  }
+};
+
+function getExistResources (config){
+  const result = [];
+  if(config){
+    // If name or hostname is configured, it means the webapp is already created.
+    if(config.hostname || config.name){
+      result.push(AzureResourceTypes.WEBAPP);
+    }
+    if(config.settings?.MicrosoftAppId){
+      result.push(AzureResourceTypes.BOT_REGISTRATION);
+      result.push(AzureResourceTypes.APP_REGISTRATION);
+    }
+    if(config.settings?.luis?.authoringKey){
+      result.push(AzureResourceTypes.LUIS_AUTHORING);
+    }
+    if(config.settings?.luis?.endpointKey){
+      result.push(AzureResourceTypes.LUIS_PREDICTION);
+    }
+    if(config.settings?.qna?.subscriptionKey){
+      result.push(AzureResourceTypes.QNA);
+    }
+    if(config.settings?.applicationInsights?.InstrumentationKey){
+      result.push(AzureResourceTypes.APPINSIGHTS);
+    }
+    if(config.settings?.cosmosDb?.authKey){
+      result.push(AzureResourceTypes.COSMOSDB);
+    }
+    if(config.settings?.blobStorage?.connectionString){
+      result.push(AzureResourceTypes.BLOBSTORAGE);
+    }
+    console.log(result);
+    return result;
+  } else return [];
+}
+
 const iconStyle = (required) => {
   return {
     root: {
@@ -272,7 +321,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
-  const currentConfig = publishConfig;
+  const currentConfig = removePlaceholder(publishConfig);
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -366,27 +415,17 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const checkNameAvailability = useMemo(()=>(newName: string)=>{
-    if(!currentConfig?.subscriptionId && currentSubscription){
-      // get preview list
-      const names = getPreview(newName);
-      let app = '';
-      if(publishType.includes('Function')) {
-        app = names.find(item=>item.key.includes('Function')).name;
-      } else {
-        app = names.find(item=>item.key === 'webApp').name;
-      }
+    setErrorHostName('');
+    console.log(publishType);
+    if(currentSubscription && publishType === 'azurePublish'){
       // check app name whether exist or not
-      CheckWebAppNameAvailability(token, app, currentSubscription).then(value=>{
+      CheckWebAppNameAvailability(token, newName, currentSubscription).then(value=>{
         if(!value.nameAvailable){
           setErrorHostName(value.message);
-        } else {
-          app = names.find((item) => item.key === 'webApp').name;
         }
       });
-    } else {
-      setErrorHostName('');
     }
-  }, [currentConfig, publishType, currentSubscription, token]);
+  }, [publishType, currentSubscription, token]);
 
   const updateCurrentResourceGroup = useMemo(()=>(e,newGroup)=>{
     setResourceGroup(newGroup);
@@ -439,61 +478,10 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentSubscription, token]);
 
-  const removePlaceholder = React.useCallback((config:any)=>{
-    try{
-      if(config){
-        let str = JSON.stringify(config);
-        str = str.replace(/<[^>]*>/g, '');
-        const newConfig = JSON.parse(str);
-        return newConfig;
-      } else {
-        return undefined;
-      }
-    }catch(e){
-      console.error(e);
-    }
-
-  },[]);
-
-  const getExistResources = ()=>{
-    const result = [];
-    const config = removePlaceholder(currentConfig);
-    if(config){
-      // If name or hostname is configured, it means the webapp is already created.
-      if(config.hostname || config.name){
-        result.push(AzureResourceTypes.WEBAPP);
-      }
-      if(config.settings?.MicrosoftAppId){
-        result.push(AzureResourceTypes.BOT_REGISTRATION);
-        result.push(AzureResourceTypes.APP_REGISTRATION);
-      }
-      if(config.settings?.luis?.authoringKey){
-        result.push(AzureResourceTypes.LUIS_AUTHORING);
-      }
-      if(config.settings?.luis?.endpointKey){
-        result.push(AzureResourceTypes.LUIS_PREDICTION);
-      }
-      if(config.settings?.qna?.subscriptionKey){
-        result.push(AzureResourceTypes.QNA);
-      }
-      if(config.settings?.applicationInsights?.InstrumentationKey){
-        result.push(AzureResourceTypes.APPINSIGHTS);
-      }
-      if(config.settings?.cosmosDb?.authKey){
-        result.push(AzureResourceTypes.COSMOSDB);
-      }
-      if(config.settings?.blobStorage?.connectionString){
-        result.push(AzureResourceTypes.BLOBSTORAGE);
-      }
-      console.log(result);
-      return result;
-    } else return [];
-  }
-
   const onNext = useMemo(
     () => (hostname) => {
       // get resources already have
-      const alreadyHave = getExistResources();
+      const alreadyHave = getExistResources(currentConfig);
 
       const names = getPreview(hostname);
       const result = [];
