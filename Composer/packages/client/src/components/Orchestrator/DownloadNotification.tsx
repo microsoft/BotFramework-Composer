@@ -3,6 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import { SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -23,7 +24,7 @@ const cardDetail = css`
 
 const infoType = css`
   margin-top: 4px;
-  color: #0078d4;
+  color: ${SharedColors.cyanBlue10};
 `;
 
 export const orchestratorDownloadNotificationProps = (): CardProps => {
