@@ -21,6 +21,8 @@ export const DiagnosticsStatus = () => {
   const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
   const { errorsCount, warningsCount } = useDiagnosticsStatistics();
 
+  if (!errorsCount && !warningsCount) return null;
+
   return (
     <div
       css={{ height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '8px' }}
