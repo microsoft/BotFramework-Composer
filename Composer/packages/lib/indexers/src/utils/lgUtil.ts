@@ -108,7 +108,7 @@ export function updateTemplate(
   const templateToUpdate = {
     name: name || originTemplate?.name || templateName,
     parameters: parameters || originTemplate?.parameters || [],
-    body: body || originTemplate?.body || '',
+    body: typeof body === 'string' ? body : originTemplate?.body || '',
   };
 
   let templates;

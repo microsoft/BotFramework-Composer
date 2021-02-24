@@ -5,14 +5,15 @@ import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
+
 import {
   ArrayPropertyPayload,
   FormDialogPropertyPayload,
   FormDialogProperty,
   TypedPropertyPayload,
-} from 'src/atoms/types';
-import { Collapsible } from 'src/components/common/Collapsible';
-import { ValuePicker } from 'src/components/common/ValuePicker';
+} from '../../atoms/types';
+import { ValuePicker } from '../common/ValuePicker';
+import { Collapsible } from '../common/Collapsible';
 
 const getDefaultCollapsed = (property: FormDialogProperty) => {
   const payload =
