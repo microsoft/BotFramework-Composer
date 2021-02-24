@@ -6,6 +6,9 @@ import { DirectLineLog } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
+import { BotStatus } from '../../constants';
+
 import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
@@ -14,36 +17,35 @@ import { RestartOption } from './type';
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 
 export interface WebChatPanelProps {
-  botUrl: string;
-  secrets: BotSecrets;
+  botData: {
+    projectId: string;
+    botUrl: string;
+    secrets: BotSecrets;
+    botName: string;
+    activeLocale: string;
+    botStatus: BotStatus;
+  };
   /** Directline host url. By default, set to Composer host url. */
   directlineHostUrl?: string;
-  botName: string;
-  projectId: string;
   isWebChatPanelVisible: boolean;
-  activeLocale: string;
   appendLogToWebChatInspector: (projectId: string, log: DirectLineLog) => void;
   clearWebchatInspectorLogs: (projectId: string) => void;
   openBotInEmulator: (projectId: string) => void;
 }
 
 export const WebChatPanel: React.FC<WebChatPanelProps> = ({
-  projectId,
-  botUrl,
-  secrets,
   directlineHostUrl = BASEPATH,
-  botName,
+  botData,
   isWebChatPanelVisible,
   openBotInEmulator,
-  activeLocale,
   appendLogToWebChatInspector,
   clearWebchatInspectorLogs,
 }) => {
+  const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
   const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
   const webChatPanelRef = useRef<HTMLDivElement>(null);
-  const [isConversationStartQueued, queueConversationStart] = useState<boolean>(false);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
   const directLineErrorChannel = useRef<WebSocket>();
 
@@ -67,7 +69,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           route: 'conversations/ws/port',
           status: response.status,
           logType: 'Error',
-          message: formatMessage('An error occured connecting initializing the DirectLine server'),
+          message: formatMessage('An error occurred connecting initializing the DirectLine server'),
         };
         appendLogToWebChatInspector(projectId, err);
       }
@@ -79,10 +81,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       directLineErrorChannel.current?.close();
     };
   }, []);
-
-  useEffect(() => {
-    queueConversationStart(!!botUrl);
-  }, [botUrl, secrets]);
 
   const sendInitialActivities = async (chatData: ChatData) => {
     try {
@@ -101,7 +99,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
   useEffect(() => {
     let mounted = true;
-    if (isWebChatPanelVisible && isConversationStartQueued) {
+    if (isWebChatPanelVisible && !currentConversation) {
       const startConversation = async () => {
         const chatData: ChatData = await conversationService.startNewConversation(
           botUrl,
@@ -119,7 +117,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         }
       };
       startConversation();
-      queueConversationStart(false);
     }
 
     return () => {
@@ -129,6 +126,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
   const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
     try {
+      TelemetryClient.track('WebChatConversationRestarted', {
+        restartType: requireNewUserId ? 'NewUserId' : 'SameUserId',
+      });
       const chatData = await conversationService.restartConversation(
         chats[oldConversationId],
         requireNewUserId,
@@ -157,7 +157,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       downloadLink.download = `${botName}.transcript`;
       downloadLink.href = url;
       downloadLink.click();
-
+      TelemetryClient.track('SaveTranscriptClicked');
       webChatPanelRef.current?.removeChild(downloadLink);
     } catch (ex) {
       const err: DirectLineLog = {
@@ -165,7 +165,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         route: 'saveTranscripts/',
         status: 400,
         logType: 'Error',
-        message: formatMessage('An error occured saving transcripts'),
+        message: formatMessage('An error occurred saving transcripts'),
         details: ex.message,
       };
       appendLogToWebChatInspector(projectId, err);
@@ -179,6 +179,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         currentRestartOption={currentRestartOption}
         openBotInEmulator={() => {
           openBotInEmulator(projectId);
+          TelemetryClient.track('EmulatorButtonClicked', { isRoot: true, projectId, location: 'WebChatPane' });
         }}
         onRestartConversation={onRestartConversationClick}
         onSaveTranscript={onSaveTranscriptClick}
@@ -190,7 +191,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         chatData={chats[currentConversation]}
         conversationService={conversationService}
         currentConversation={currentConversation}
-        isDisabled={!chats[currentConversation]}
+        isDisabled={botStatus !== BotStatus.connected}
       />
     </div>
   );

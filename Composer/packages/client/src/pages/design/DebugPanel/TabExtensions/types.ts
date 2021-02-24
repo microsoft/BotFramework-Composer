@@ -3,9 +3,14 @@
 
 import { FC } from 'react';
 
+export const DiagnosticsTabKey = 'Diagnostics';
+export const WebChatInspectorTabKey = 'WebChatInspector';
+
+export type DebugDrawerKeys = typeof DiagnosticsTabKey | typeof WebChatInspectorTabKey;
+
 export interface TabExtensionConfig {
   /** Unique name of this extension. */
-  key: string;
+  key: DebugDrawerKeys;
 
   /** Description of this extension. */
   description?: string;
