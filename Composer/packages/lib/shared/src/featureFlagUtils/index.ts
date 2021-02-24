@@ -7,7 +7,7 @@ import { FeatureFlagMap } from '@botframework-composer/types';
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   NEW_CREATION_FLOW: {
     displayName: formatMessage('New Creation Experience'),
-    description: formatMessage('Component templates populated from npm feeds'),
+    description: formatMessage('Preview the new adaptive runtime and component system'),
     isHidden: false,
     enabled: false,
   },
@@ -19,12 +19,5 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     documentationLink: 'https://aka.ms/AAailpe',
     isHidden: false,
     enabled: false,
-  },
-  PACKAGE_MANAGER: {
-    displayName: formatMessage('Package manager'),
-    description: formatMessage('Discover and use components that can be installed into your bot'),
-    isHidden: false,
-    enabled: false,
-    documentationLink: 'https://aka.ms/composer-package-manager-readme',
   },
 });
