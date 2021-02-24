@@ -9,6 +9,7 @@ import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { Resizable } from 're-resizable';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../recoilModel';
 
@@ -22,7 +23,7 @@ import {
   debugPaneContentStyle,
 } from './styles';
 import debugExtensions from './TabExtensions';
-import { Resizable } from 're-resizable';
+import { DiagnosticsTabKey } from './TabExtensions/DiagnosticsTab/constants';
 
 export interface DebugPanelProps {
   expanded: boolean;
@@ -101,8 +102,6 @@ export const DebugPanel = () => {
           width: '100%',
           height: 300,
         }}
-        minHeight="200"
-        maxHeight="600"
         enable={{
           top: true,
           right: false,
@@ -113,6 +112,8 @@ export const DebugPanel = () => {
           bottomLeft: false,
           topLeft: false,
         }}
+        maxHeight="600"
+        minHeight="200"
       >
         <div
           css={css`
@@ -157,6 +158,7 @@ export const DebugPanel = () => {
             title={formatMessage('Expand debug panel')}
             onClick={() => {
               setExpansion(true);
+              !activeTab && setActiveTab(DiagnosticsTabKey);
             }}
           />
         </div>

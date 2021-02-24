@@ -87,10 +87,19 @@ function onRenderDetailsHeader(props, defaultRender) {
   );
 }
 
+const BotNameRender: React.FC<{ item: IDiagnosticInfo }> = ({ item }) => {
+  const botName = useRecoilValue(botDisplayNameState(item.projectId));
+  return (
+    <div data-is-focusable css={tableCell}>
+      <div aria-label={formatMessage(`Bot is {botName}`, { botName })} css={content} tabIndex={-1}>
+        {botName}
+      </div>
+    </div>
+  );
+};
+
 export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems }) => {
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
-  const projectId = useRecoilValue(currentProjectIdState);
-  const botName = useRecoilValue(botDisplayNameState(projectId));
   const columns: IColumn[] = [
     {
       key: 'Icon',
@@ -114,15 +123,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       maxWidth: 90,
       isResizable: true,
       data: 'string',
-      onRender: () => {
-        return (
-          <div data-is-focusable css={tableCell}>
-            <div aria-label={formatMessage(`Bot is {botName}`, { botName })} css={content} tabIndex={-1}>
-              {botName}
-            </div>
-          </div>
-        );
-      },
+      onRender: (item: IDiagnosticInfo) => <BotNameRender item={item} />,
       isPadded: true,
     },
     {

@@ -62,9 +62,9 @@ export const headerContent = css`
   label: PageHeaderContent;
 `;
 
-export const main = css`
+export const main = (hasRenderHeaderContent) => css`
   margin-left: 2px;
-  height: calc(100vh - 165px);
+  height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
@@ -171,7 +171,7 @@ const Page: React.FC<IPageProps> = (props) => {
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
-        <div css={main} role="main">
+        <div css={main(!!onRenderHeaderContent)} role="main">
           <Split
             resetOnDoubleClick
             initialPrimarySize="20%"
@@ -218,7 +218,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {title !== 'Publish' && <DebugPanel />}
+              {title !== 'Diagnostics' && <DebugPanel />}
             </div>
           </Split>
         </div>
