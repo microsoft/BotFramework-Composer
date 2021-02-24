@@ -3,6 +3,7 @@
 
 import { lgImportResolverGenerator } from '@bfc/shared';
 import { lgUtil } from '@bfc/indexers';
+import uniq from 'lodash/uniq';
 
 import { WorkerMsg } from './lgParser';
 import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes } from './utils';
@@ -20,7 +21,7 @@ process.on('message', async (msg: WorkerMsg) => {
           }
         }
 
-        process.send?.({ id: msg.id, payload: { suggestEntities } });
+        process.send?.({ id: msg.id, payload: { suggestEntities: uniq(suggestEntities) } });
         break;
       }
 
