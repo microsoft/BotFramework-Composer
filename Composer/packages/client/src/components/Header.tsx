@@ -181,6 +181,12 @@ export const Header = () => {
     setAppUpdateShowing(true);
   }, []);
 
+  useEffect(() => {
+    if (isWebChatPanelVisible) {
+      hideBotStartController(true);
+    }
+  }, [isWebChatPanelVisible]);
+
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   const languageListOptions = useMemo(() => {

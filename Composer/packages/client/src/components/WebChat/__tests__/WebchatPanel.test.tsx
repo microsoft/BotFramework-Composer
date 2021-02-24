@@ -5,6 +5,7 @@ import React from 'react';
 import { render, act } from '@botframework-composer/test-utils';
 
 import { WebChatPanel } from '../WebChatPanel';
+import { BotStatus } from '../../../constants';
 
 const mockstartNewConversation = jest.fn();
 const mockSendActivity = jest.fn();
@@ -31,17 +32,20 @@ describe('<WebchatPanel />', () => {
     const mockOpenInEmulator = jest.fn();
 
     const props = {
-      projectId: '123-12',
-      botUrl: 'http://localhost:3989/api/messages',
-      secrets: {
-        msAppId: '',
-        msPassword: '',
-      },
       directlineHostUrl: 'http://localhost:3000/v3/directline',
-      botName: 'test-bot',
       isWebChatPanelVisible: false,
+      botData: {
+        projectId: '123-12',
+        botUrl: 'http://localhost:3989/api/messages',
+        secrets: {
+          msAppId: '',
+          msPassword: '',
+        },
+        botStatus: BotStatus.connected,
+        botName: 'test-bot',
+        activeLocale: 'en-us',
+      },
       openBotInEmulator: mockOpenInEmulator,
-      activeLocale: 'en-us',
     };
 
     mockServerPort.mockResolvedValue(4000);

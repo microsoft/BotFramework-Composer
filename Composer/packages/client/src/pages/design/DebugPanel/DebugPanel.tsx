@@ -3,11 +3,12 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useMemo, useCallback, useRef, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../recoilModel';
@@ -28,7 +29,8 @@ export interface DebugPanelProps {
   expanded: boolean;
   onToggleExpansion: (expanded: boolean) => void;
 }
-export const DebugPanel = () => {
+
+export const DebugPanel: React.FC = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
   const [activeTab, setActiveTab] = useRecoilState(debugPanelActiveTabState);
 
@@ -54,13 +56,14 @@ export const DebugPanel = () => {
             key={`tabHeader-pivot-${key}${expanded ? '--expanded' : ''}`}
             itemKey={key}
             onRenderItemLink={() => (
-              <button
+              <Label
                 css={{
                   height: 'inherit',
                   width: 'inherit',
                   outline: 'none',
                   border: 'none',
                   background: 'transparent',
+                  padding: 0,
                 }}
                 onClick={() => {
                   setActiveTab(key);
@@ -74,7 +77,7 @@ export const DebugPanel = () => {
                 }}
               >
                 {element}
-              </button>
+              </Label>
             )}
           />
         );
@@ -156,13 +159,9 @@ export const DebugPanel = () => {
               iconProps={{ iconName: 'Cancel' }}
               title={formatMessage('Collapse debug panel')}
               onClick={() => {
-                const curentExpandedState = !expanded;
-                setExpansion(!expanded);
-                if (curentExpandedState) {
-                  TelemetryClient.track('DrawerPaneOpened');
-                } else {
-                  TelemetryClient.track('DrawerPaneClosed');
-                }
+                setExpansion(false);
+
+                TelemetryClient.track('DrawerPaneClosed');
               }}
             />
           </div>

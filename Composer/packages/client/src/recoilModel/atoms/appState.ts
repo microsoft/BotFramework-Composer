@@ -18,6 +18,7 @@ import onboardingStorage from '../../utils/onboardingStorage';
 import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
+import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
 
 export type BotProject = {
   readonly id: string;
@@ -314,9 +315,9 @@ export const debugPanelExpansionState = atom<boolean>({
   default: false,
 });
 
-export const debugPanelActiveTabState = atom<string>({
+export const debugPanelActiveTabState = atom<DebugDrawerKeys>({
   key: getFullyQualifiedKey('degbugPanelActiveTab'),
-  default: '',
+  default: 'Diagnostics',
 });
 
 export const selectedTemplateReadMeState = atom<string>({
