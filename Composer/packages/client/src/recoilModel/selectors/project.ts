@@ -29,6 +29,7 @@ import {
   schemasState,
   botEndpointsState,
   localeState,
+  botStatusState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
@@ -328,26 +329,28 @@ export const projectTreeSelectorFamily = selectorFamily<
 export const webChatEssentialsSelector = selector({
   key: 'webChatEssentialsSelector',
   get: ({ get }) => {
-    const botId = get(rootBotProjectIdSelector);
-    if (!botId) {
+    const projectId = get(rootBotProjectIdSelector);
+    if (!projectId) {
       return undefined;
     }
-    const settings = get(settingsState(botId));
+    const settings = get(settingsState(projectId));
     const secrets = {
       msAppId: settings.MicrosoftAppId || '',
       msPassword: settings.MicrosoftAppPassword || '',
     };
     const botEndpoints = get(botEndpointsState);
-    const botUrl = botEndpoints[botId];
-    const displayName = get(botDisplayNameState(botId));
-    const activeLocale = get(localeState(botId));
+    const botUrl = botEndpoints[projectId];
+    const botName = get(botDisplayNameState(projectId));
+    const activeLocale = get(localeState(projectId));
+    const botStatus = get(botStatusState(projectId));
 
     return {
-      botId,
-      displayName,
+      projectId,
+      botName,
       secrets,
       botUrl,
       activeLocale,
+      botStatus,
     };
   },
 });

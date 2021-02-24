@@ -43,6 +43,7 @@ const SuggestedActionsModalityEditor = React.memo(
         onRemoveModality={onRemoveModality}
       >
         <StringArrayEditor
+          addButtonText={formatMessage('Add suggested action')}
           items={items}
           lgOption={lgOption}
           lgTemplates={lgTemplates}

@@ -209,6 +209,9 @@
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
     "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
   },
+  "add_suggested_action_baf855ca": {
+    "message": "Add suggested action"
+  },
   "add_welcome_message_49d9ded9": {
     "message": "Add welcome message"
   },
@@ -226,6 +229,33 @@
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
+  },
+  "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
+    "message": "An error occurred connecting initializing the DirectLine server"
+  },
+  "an_error_occurred_parsing_the_transcript_for_a_con_a47395c3": {
+    "message": "An error occurred parsing the transcript for a conversation"
+  },
+  "an_error_occurred_receiving_an_activity_from_the_b_d734a7d": {
+    "message": "An error occurred receiving an activity from the bot."
+  },
+  "an_error_occurred_saving_the_transcript_to_disk_f5cb0f7c": {
+    "message": "An error occurred saving the transcript to disk."
+  },
+  "an_error_occurred_saving_transcripts_be37b977": {
+    "message": "An error occurred saving transcripts"
+  },
+  "an_error_occurred_sending_conversation_update_acti_85be9b0f": {
+    "message": "An error occurred sending conversation update activity to the bot"
+  },
+  "an_error_occurred_starting_a_new_conversation_7586fd9f": {
+    "message": "An error occurred starting a new conversation"
+  },
+  "an_error_occurred_trying_to_save_the_transcript_to_a6efda6f": {
+    "message": "An error occurred trying to save the transcript to disk"
+  },
+  "an_error_occurred_validating_the_microsoft_app_id__c2b9dc19": {
+    "message": "An error occurred validating the Microsoft App Id and Microsoft App Password."
   },
   "animation_card_1a7d75ff": {
     "message": "Animation card"
@@ -401,6 +431,9 @@
   "bot_controller_319b408d": {
     "message": "Bot Controller"
   },
+  "bot_endpoint_not_available_in_the_request_43c381f8": {
+    "message": "Bot endpoint not available in the request"
+  },
   "bot_files_created_986109df": {
     "message": "Bot files created"
   },
@@ -421,6 +454,9 @@
   },
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
     "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
+  },
+  "bot_is_botname_c5af0c89": {
+    "message": "Bot is { botName }"
   },
   "bot_language_6cf30c2": {
     "message": "Bot language"
@@ -500,6 +536,18 @@
   "cancel_dialog_event_cc671dee": {
     "message": "Cancel dialog event"
   },
+  "cannot_find_a_matching_conversation_d6344e4a": {
+    "message": "Cannot find a matching conversation."
+  },
+  "cannot_parse_attachment_c3e552a5": {
+    "message": "Cannot parse attachment."
+  },
+  "cannot_post_activity_conversation_not_found_c1e26d2d": {
+    "message": "Cannot post activity. Conversation not found."
+  },
+  "cannot_upload_file_conversation_not_found_8a983504": {
+    "message": "Cannot upload file. Conversation not found."
+  },
   "carousal_c65edfcd": {
     "message": "Carousal"
   },
@@ -548,6 +596,9 @@
   "collapse_34080b4d": {
     "message": "Collapse"
   },
+  "collapse_debug_panel_6f1c5869": {
+    "message": "Collapse debug panel"
+  },
   "collapse_navigation_17228b95": {
     "message": "Collapse Navigation"
   },
@@ -562,9 +613,6 @@
   },
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
-  },
-  "component_templates_populated_from_npm_feeds_d89351ef": {
-    "message": "Component templates populated from npm feeds"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
@@ -650,17 +698,14 @@
   "conversation_ended_endofconversation_activity_41d0c83f": {
     "message": "Conversation ended (EndOfConversation activity)"
   },
+  "conversation_id_cannot_be_updated_2a973f13": {
+    "message": "Conversation ID cannot be updated."
+  },
   "conversation_invoked_e960884e": {
     "message": "Conversation invoked"
   },
   "conversation_invoked_invoke_activity_71efde42": {
     "message": "Conversation invoked (Invoke activity)"
-  },
-  "conversational_core_preview_template_is_available__ba9b43b8": {
-    "message": "Conversational Core preview template is available since you have that feature turned on."
-  },
-  "conversational_core_template_899e3082": {
-    "message": "Conversational Core Template"
   },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate activity"
@@ -743,9 +788,6 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
-  "create_from_templates_779893ae": {
-    "message": "Create from templates"
-  },
   "create_kb_e78571ba": {
     "message": "Create KB"
   },
@@ -827,6 +869,9 @@
   "debug_break_870a75df": {
     "message": "Debug break"
   },
+  "debug_panel_header_2ee4d70c": {
+    "message": "Debug Panel Header"
+  },
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
   },
@@ -899,6 +944,9 @@
   "design_51b2812a": {
     "message": "Design"
   },
+  "diagnostic_description_msg_9ddd1be": {
+    "message": "Diagnostic Description { msg }"
+  },
   "diagnostic_links_228dc6fe": {
     "message": "diagnostic links"
   },
@@ -919,6 +967,9 @@
   },
   "diagnostics_pane_2d77c390": {
     "message": "Diagnostics Pane"
+  },
+  "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
+    "message": "Diagnostics tab which shows errors and warnings."
   },
   "dialog_68ba69ba": {
     "message": "(Dialog)"
@@ -976,9 +1027,6 @@
   },
   "disable_a5c05db3": {
     "message": "Disable"
-  },
-  "discover_and_use_components_that_can_be_installed__b15032de": {
-    "message": "Discover and use components that can be installed into your bot"
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
@@ -1088,6 +1136,9 @@
   "emit_event_32aa6583": {
     "message": "Emit Event"
   },
+  "empty_bot_template_that_routes_to_qna_configuratio_21531414": {
+    "message": "Empty bot template that routes to qna configuration"
+  },
   "empty_qna_icon_34c180c6": {
     "message": "Empty QnA Icon"
   },
@@ -1099,9 +1150,6 @@
   },
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
-  },
-  "enable_the_new_conversational_core_template_built__df338773": {
-    "message": "Enable the new conversational core template built on the component model"
   },
   "enabled_ba7cab66": {
     "message": "Enabled"
@@ -1166,6 +1214,9 @@
   "entities_ef09392c": {
     "message": "Entities"
   },
+  "entity_defined_in_lu_files_entity_1812c172": {
+    "message": "Entity defined in lu files: { entity }"
+  },
   "environment_68aed6d3": {
     "message": "Environment"
   },
@@ -1187,11 +1238,11 @@
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "Error in UI schema for { title }: { errorMsg }\n{ options }"
   },
-  "error_occured_ejecting_runtime_76bb48e7": {
-    "message": "Error occured ejecting runtime!"
-  },
   "error_occurred_5549a6b4": {
     "message": "Error occurred"
+  },
+  "error_occurred_ejecting_runtime_8512129e": {
+    "message": "Error occurred ejecting runtime!"
   },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
@@ -1201,6 +1252,9 @@
   },
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
+  },
+  "errorsmsg_8f5d3d85": {
+    "message": "{ errorsMsg }"
   },
   "event_activity_2067a94b": {
     "message": "Event activity"
@@ -1259,9 +1313,6 @@
   "extension_settings_899ccb55": {
     "message": "Extension Settings"
   },
-  "extensions_7250a0bb": {
-    "message": "Extensions"
-  },
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "External resources will not be changed."
   },
@@ -1310,8 +1361,11 @@
   "file_type_fd1ba7ee": {
     "message": "File Type"
   },
-  "filter_dialog_de3ce43f": {
-    "message": "Filter Dialog"
+  "filter_by_dialog_or_trigger_name_784ee5b0": {
+    "message": "Filter by dialog or trigger name"
+  },
+  "filter_by_file_name_fa3d33b5": {
+    "message": "Filter by file name"
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1576,6 +1630,9 @@
   },
   "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
     "message": "Introduction of key concepts and user experience elements for Composer."
+  },
+  "invalid_file_path_to_save_the_transcript_54c92a51": {
+    "message": "Invalid file path to save the transcript."
   },
   "invoke_activity_87df4903": {
     "message": "Invoke activity"
@@ -2045,6 +2102,9 @@
   "no_functions_found_e0db426b": {
     "message": "No functions found"
   },
+  "no_i_want_to_keep_the_content_just_de_reference_fr_fac5f2ce": {
+    "message": "No, I want to keep the content, just de-reference from this response."
+  },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NO LU FILE WITH NAME { id }"
   },
@@ -2068,6 +2128,9 @@
   },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
+  },
+  "no_uploads_were_attached_as_a_part_of_the_request_63e92f54": {
+    "message": "No uploads were attached as a part of the request."
   },
   "no_wildcard_ff439e76": {
     "message": "no wildcard"
@@ -2107,6 +2170,9 @@
   },
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
+  },
+  "oauth_activities_are_not_available_for_testing_in__2207dcef": {
+    "message": "OAuth activities are not available for testing in Composer yet. Please continue using Bot Framework Emulator for testing OAuth actions."
   },
   "oauth_login_b6aa9534": {
     "message": "OAuth login"
@@ -2162,6 +2228,12 @@
   "open_start_bots_panel_f7f87200": {
     "message": "Open start bots panel"
   },
+  "open_web_chat_23601990": {
+    "message": "Open Web Chat"
+  },
+  "open_web_chat_7a24d4f8": {
+    "message": "Open web chat"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -2203,9 +2275,6 @@
   },
   "output_5023cf84": {
     "message": "Output"
-  },
-  "package_manager_6c42db30": {
-    "message": "Package manager"
   },
   "page_number_cdee4179": {
     "message": "Page number"
@@ -2264,6 +2333,9 @@
   "preview_features_e279bac5": {
     "message": "Preview features"
   },
+  "preview_the_new_adaptive_runtime_and_component_sys_1106041c": {
+    "message": "Preview the new adaptive runtime and component system"
+  },
   "previous_bd2ac015": {
     "message": "Previous"
   },
@@ -2284,6 +2356,9 @@
   },
   "privacy_statement_da69ebc6": {
     "message": "Privacy statement"
+  },
+  "problems_31833f8c": {
+    "message": "Problems"
   },
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
@@ -2560,6 +2635,12 @@
   },
   "responses_12d6df1d": {
     "message": "Responses"
+  },
+  "restart_conversation_new_user_id_9c024543": {
+    "message": "Restart Conversation - new user ID"
+  },
+  "restart_conversation_same_user_id_a0188cca": {
+    "message": "Restart Conversation - same user ID"
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -2906,6 +2987,12 @@
   "suggested_actions_94d06bfa": {
     "message": "Suggested Actions"
   },
+  "suggested_propertiy_u_in_cardtype_ca80f69": {
+    "message": "Suggested propertiy { u } in { cardType }"
+  },
+  "suggestion_for_card_or_activity_type_b257066a": {
+    "message": "Suggestion for Card or Activity: { type }"
+  },
   "switch_to_code_editor_3dcbe16f": {
     "message": "switch to code editor"
   },
@@ -2995,6 +3082,12 @@
   },
   "there_are_no_preview_features_at_this_time_a5c40953": {
     "message": "There are no preview features at this time."
+  },
+  "there_is_no_original_view_63a2eaed": {
+    "message": "There is no original view"
+  },
+  "there_is_no_thumbnail_view_908fe5cc": {
+    "message": "There is no thumbnail view"
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
@@ -3173,9 +3266,6 @@
   "type_could_not_be_loaded_65ebaf86": {
     "message": "{ type } could not be loaded"
   },
-  "type_dialog_name_14a50769": {
-    "message": "Type dialog name"
-  },
   "type_form_dialog_schema_name_b767985c": {
     "message": "Type form dialog schema name"
   },
@@ -3332,6 +3422,9 @@
   "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
     "message": "Warning: the action you are about to take cannot be undone. Going further will delete this bot and any related files in the bot project folder."
   },
+  "warningsmsg_e2c04bfe": {
+    "message": "{ warningsMsg }"
+  },
   "we_have_created_a_sample_bot_to_help_you_get_start_95a58922": {
     "message": "We have created a sample bot to help you get started with Composer. Click here to open the bot."
   },
@@ -3340,6 +3433,12 @@
   },
   "weather_bot_c38920cd": {
     "message": "Weather Bot"
+  },
+  "webchat_inspector_4d0dfeb7": {
+    "message": "Webchat Inspector"
+  },
+  "webchat_log_b7213a9e": {
+    "message": "Webchat log."
   },
   "welcome_73d18b4d": {
     "message": "Welcome!"
@@ -3410,6 +3509,9 @@
   "yes_dde87d5": {
     "message": "Yes"
   },
+  "yes_i_d_like_to_remove_the_the_content_of_this_tab_e870a0a": {
+    "message": "Yes, I’d like to remove the the content of this tab completely from the LG file."
+  },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "You already have a KB with that name. Choose another name and try again."
   },
@@ -3457,8 +3559,5 @@
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
-  },
-  "your_project_2a42631c": {
-    "message": "your project"
   }
 }
