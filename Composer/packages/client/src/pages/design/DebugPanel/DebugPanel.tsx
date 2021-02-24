@@ -22,6 +22,7 @@ import {
   debugPaneContentStyle,
 } from './styles';
 import debugExtensions from './TabExtensions';
+import { Resizable } from 're-resizable';
 
 export interface DebugPanelProps {
   expanded: boolean;
@@ -89,44 +90,29 @@ export const DebugPanel = () => {
     return <ContentWidget key={`tabContent-${configOfActiveTab.key}`} />;
   }, [activeTab]);
 
-  const panelRef = useRef<HTMLDivElement>(null);
-  let currentPosition = 0;
-
-  const startMove = (e) => {
-    currentPosition = e.y;
-    document.addEventListener('mousemove', resize, false);
-  };
-  const stopMove = (e) => {
-    document.removeEventListener('mousemove', resize);
-  };
-  const resize = (e) => {
-    if (panelRef?.current) {
-      const dy = currentPosition - e.y;
-      currentPosition = e.y;
-      panelRef.current.style.height = parseInt(getComputedStyle(panelRef.current, '').height) + dy + 'px';
-    }
-  };
-  useEffect(() => {
-    if (panelRef?.current) {
-      panelRef.current.addEventListener('mousedown', startMove, false);
-      document.addEventListener('mouseup', stopMove, false);
-    }
-    return () => {
-      if (panelRef?.current) {
-        panelRef.current.removeEventListener('mousedown', startMove);
-        document.removeEventListener('mouseup', stopMove);
-      }
-    };
-  });
-
   if (expanded) {
     return (
-      <div
-        ref={panelRef}
+      <Resizable
         css={css`
           ${debugPaneContainerExpandedStyle}
         `}
         data-testid="debug-panel--expanded"
+        defaultSize={{
+          width: '100%',
+          height: 300,
+        }}
+        minHeight="200"
+        maxHeight="600"
+        enable={{
+          top: true,
+          right: false,
+          bottom: false,
+          left: false,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false,
+        }}
       >
         <div
           css={css`
@@ -151,7 +137,7 @@ export const DebugPanel = () => {
         <div css={debugPaneContentStyle} data-testid="debug-panel__content">
           {activeTabContent}
         </div>
-      </div>
+      </Resizable>
     );
   } else {
     return (
