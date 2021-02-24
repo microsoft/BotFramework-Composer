@@ -25,6 +25,7 @@ import {
   currentProjectIdState,
   settingsState,
   webChatEssentialsSelector,
+  isWebChatPanelVisibleState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
@@ -139,7 +140,9 @@ const calloutDescription = css`
 // -------------------- Header -------------------- //
 
 export const Header = () => {
-  const { setAppUpdateShowing, setLocale } = useRecoilValue(dispatcherState);
+  const { setAppUpdateShowing, setLocale, setWebChatPanelVisibility: toggleWebChatPanel } = useRecoilValue(
+    dispatcherState
+  );
   const projectId = useRecoilValue(currentProjectIdState);
   const projectName = useRecoilValue(botDisplayNameState(projectId));
   const locale = useRecoilValue(localeState(projectId));
@@ -147,14 +150,19 @@ export const Header = () => {
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
   const settings = useRecoilValue(settingsState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
+  const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
-  const { openBotInEmulator, appendLogToWebChatInspector, clearWebChatLogs } = useRecoilValue(dispatcherState);
+  const {
+    openBotInEmulator,
+    appendLogToWebChatInspector,
+    clearWebChatLogs,
+    setWebChatPanelVisibility,
+  } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
-  const [isWebChatPanelVisible, toggleWebChatPanel] = useState(false);
 
   const {
     location: { pathname },
@@ -172,12 +180,6 @@ export const Header = () => {
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
   }, []);
-
-  useEffect(() => {
-    if (!hideBotController && isWebChatPanelVisible) {
-      toggleWebChatPanel(false);
-    }
-  }, [hideBotController, isWebChatPanelVisible]);
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
@@ -241,7 +243,15 @@ export const Header = () => {
 
       <div css={rightSection}>
         {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && (
-          <BotController isControllerHidden={hideBotController} onHideController={hideBotStartController} />
+          <BotController
+            isControllerHidden={hideBotController}
+            onHideController={(isHidden: boolean) => {
+              hideBotStartController(isHidden);
+              if (!isHidden) {
+                setWebChatPanelVisibility(false);
+              }
+            }}
+          />
         )}
         {showUpdateAvailableIcon && (
           <IconButton
@@ -337,7 +347,7 @@ export const Header = () => {
         isOpen={isWebChatPanelVisible}
         styles={{
           root: {
-            marginTop: '94px',
+            marginTop: '50px',
           },
           scrollableContent: {
             width: '100%',
@@ -358,16 +368,12 @@ export const Header = () => {
       >
         {webchatEssentials ? (
           <WebChatPanel
-            activeLocale={webchatEssentials.activeLocale}
             appendLogToWebChatInspector={appendLogToWebChatInspector}
-            botName={webchatEssentials.displayName}
-            botUrl={webchatEssentials.botUrl}
+            botData={{ ...webchatEssentials }}
             clearWebchatInspectorLogs={clearWebChatLogs}
             directlineHostUrl={BASEPATH}
             isWebChatPanelVisible={isWebChatPanelVisible}
             openBotInEmulator={openBotInEmulator}
-            projectId={webchatEssentials.botId}
-            secrets={webchatEssentials.secrets}
           />
         ) : null}
       </Panel>

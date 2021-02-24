@@ -55,7 +55,13 @@ export const DebugPanel = () => {
             itemKey={key}
             onRenderItemLink={() => (
               <button
-                css={{ height: 'inherit', width: 'inherit', outline: 'none', border: 'none' }}
+                css={{
+                  height: 'inherit',
+                  width: 'inherit',
+                  outline: 'none',
+                  border: 'none',
+                  background: 'transparent',
+                }}
                 onClick={() => {
                   setActiveTab(key);
                   setExpansion(true);

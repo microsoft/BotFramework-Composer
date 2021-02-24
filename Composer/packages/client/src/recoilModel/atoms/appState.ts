@@ -318,3 +318,8 @@ export const selectedTemplateReadMeState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateReadMeState'),
   default: '',
 });
+
+export const isWebChatPanelVisibleState = atom<boolean>({
+  key: getFullyQualifiedKey('isWebChatPanelVisible'),
+  default: false,
+});
