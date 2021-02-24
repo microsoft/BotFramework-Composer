@@ -19,9 +19,10 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { useEffect, useState } from 'react';
 
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
-import { botDisplayNameState, currentProjectIdState, exportSkillModalInfoState } from '../../../../../recoilModel';
+import { botDisplayNameState, exportSkillModalInfoState, skillsStateSelector } from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
 
 // -------------------- Styles -------------------- //
@@ -100,7 +101,12 @@ const BotNameRender: React.FC<{ item: IDiagnosticInfo }> = ({ item }) => {
 
 export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems }) => {
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
-  const columns: IColumn[] = [
+  const skillStates = useRecoilValue(skillsStateSelector);
+
+  const getSkillName = (projectId: string) =>
+    Object.keys(skillStates).find((skillName) => skillStates[skillName].id === projectId) ?? projectId;
+
+  const staticColumns = [
     {
       key: 'Icon',
       name: '',
@@ -125,6 +131,14 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       data: 'string',
       onRender: (item: IDiagnosticInfo) => <BotNameRender item={item} />,
       isPadded: true,
+      isSorted: true,
+      isSortedDescending: false,
+      onColumnClick: () => {
+        const newColumns = columns.slice();
+        newColumns[1].isSorted = true;
+        newColumns[1].isSortedDescending = !columns[1].isSortedDescending;
+        setColumns(newColumns);
+      },
     },
     {
       key: 'DiagnosticLocation',
@@ -182,13 +196,32 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isPadded: true,
     },
   ];
+  const [columns, setColumns] = useState<IColumn[]>(staticColumns);
+
+  useEffect(() => {
+    setColumns(staticColumns);
+  }, [diagnosticItems]);
+
+  const sortFactor = columns[1].isSortedDescending ? 1 : -1;
+  const displayedDiagnosticItems = diagnosticItems.sort((a, b) => {
+    const aName = getSkillName(a.projectId);
+    const bName = getSkillName(b.projectId);
+    if (aName < bName) {
+      return sortFactor;
+    } else if (aName > bName) {
+      return -sortFactor;
+    } else {
+      return a.location < b.location ? sortFactor : -sortFactor;
+    }
+  });
+
   return (
     <DetailsList
       isHeaderVisible
       checkboxVisibility={CheckboxVisibility.hidden}
       columns={columns}
       css={detailList}
-      items={diagnosticItems}
+      items={displayedDiagnosticItems}
       layoutMode={DetailsListLayoutMode.justified}
       selectionMode={SelectionMode.single}
       setKey="none"
