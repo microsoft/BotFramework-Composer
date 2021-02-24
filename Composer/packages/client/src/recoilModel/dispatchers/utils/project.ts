@@ -41,7 +41,7 @@ import luFileStatusStorage from '../../../utils/luFileStatusStorage';
 import { getReferredLuFiles } from '../../../utils/luUtil';
 import { navigateTo } from '../../../utils/navigation';
 import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
-import { getReferredQnaFiles, reformQnAToContainerKB } from '../../../utils/qnaUtil';
+import { getReferredQnaFiles, reformQnAToContainerKB, copySourceQnAFilesOnOtherLocales } from '../../../utils/qnaUtil';
 import {
   botDiagnosticsState,
   botDisplayNameState,
@@ -241,13 +241,15 @@ export const loadProjectData = (data) => {
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
-
+  const locales = settings.languages;
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
-  const updateQnAFiles = reformQnAToContainerKB(projectId, indexedFiles.qnaFiles);
+  const updateQnAFiles1 = reformQnAToContainerKB(projectId, indexedFiles.qnaFiles, locales);
+  // copy source qna file on other locales including  *-manual.source.qna
+  const updateQnAFiles2 = copySourceQnAFilesOnOtherLocales(projectId, updateQnAFiles1, locales);
 
   return {
-    botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
+    botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles2, mergedSettings },
     projectData: data,
     error: undefined,
   };

@@ -9,7 +9,7 @@
 import { QnAFile, DialogInfo } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 
-import { createFile, updateFile } from '../recoilModel/persistence/http';
+import { createFile, updateFile, deleteFile } from '../recoilModel/persistence/http';
 
 import { getBaseName, getExtension } from './fileUtil';
 
@@ -32,9 +32,10 @@ export const substringTextByLine = (text: string, start?: number, end?: number):
  * Migrate qna pair in <dialog>.qna to container KB <dialog>-munual.source.qna file.
  * @param qnaFiles
  */
-export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): QnAFile[] => {
+export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[], locales: string[]): QnAFile[] => {
+  const sourceQnAFileId = locales.map((l) => `.source.${l}`);
   const qnaFilesNeedMigrate = qnaFiles.filter((file) => {
-    return !file.id.endsWith('.source') && file.qnaSections.length;
+    return !file.id.endsWith('.source') && !sourceQnAFileId.includes(file.id) && file.qnaSections.length;
   });
   if (!qnaFilesNeedMigrate.length) return qnaFiles;
   const updatedFiles: QnAFile[] = [];
@@ -76,6 +77,31 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): 
   });
   newQnAfiles.push(...createdFiles);
   return newQnAfiles;
+};
+
+export const copySourceQnAFilesOnOtherLocales = (
+  projectId: string,
+  qnaFiles: QnAFile[],
+  locales: string[]
+): QnAFile[] => {
+  const originalSourceQnAFiles = qnaFiles.filter((f) => f.id.endsWith('.source'));
+  if (originalSourceQnAFiles.length === 0) return qnaFiles;
+  const createdFiles: QnAFile[] = [];
+  for (let i = 0; i < originalSourceQnAFiles.length; i++) {
+    //source.{locale}.qna
+    const newSourceQnAFileIds = locales.map((l) => `${originalSourceQnAFiles[i].id}.${l}`);
+    for (let j = 0; j < newSourceQnAFileIds.length; j++) {
+      const createdFile = qnaUtil.parse(newSourceQnAFileIds[j], originalSourceQnAFiles[i].content);
+      if (!qnaFiles.find((f) => f.id === createdFile.id)) {
+        createFile(projectId, `${createdFile.id}.qna`, createdFile.content);
+        createdFiles.push(createdFile);
+      }
+    }
+    deleteFile(projectId, `${originalSourceQnAFiles[i].id}.qna`);
+  }
+  qnaFiles.push(...createdFiles);
+  const newQnAFiles = qnaFiles.filter((f) => !f.id.endsWith('.source'));
+  return newQnAFiles;
 };
 
 export const getQnAFileUrlOption = (file: QnAFile): string | undefined => {
