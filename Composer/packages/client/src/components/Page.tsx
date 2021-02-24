@@ -110,6 +110,7 @@ type IPageProps = {
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
   useNewTree?: boolean;
+  useDebugPane?: boolean;
   navLinks?: INavTreeItem[];
   navLinkClick?: (item: INavTreeItem) => void;
   pageMode: PageMode;
@@ -133,6 +134,7 @@ const Page: React.FC<IPageProps> = (props) => {
     headerStyle = header,
     shouldShowEditorError = false,
     useNewTree,
+    useDebugPane,
     pageMode,
     showCommonLinks = false,
     projectId,
@@ -218,7 +220,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {title !== 'Diagnostics' && <DebugPanel />}
+              {useDebugPane ? <DebugPanel /> : null}
             </div>
           </Split>
         </div>

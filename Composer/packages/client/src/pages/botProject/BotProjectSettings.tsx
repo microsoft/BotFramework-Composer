@@ -117,6 +117,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   return (
     <Page
+      useDebugPane
       data-testid="BotProjectsSettings"
       headerStyle={header}
       mainRegionName={formatMessage('Bot projects settings list View')}
