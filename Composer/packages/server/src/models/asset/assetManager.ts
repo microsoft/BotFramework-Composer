@@ -281,7 +281,8 @@ export class AssetManager {
   private getPackageDisplayName(packageName: string): string {
     if (packageName) {
       return packageName
-        .replace('generator-', '')
+        .replace(/^@microsoft\/generator-microsoft-bot/, '') // clean up our complex package names
+        .replace(/^generator-/, '') // clean up other package names too
         .split('-')
         .reduce((a, b) => a.charAt(0).toUpperCase() + a.slice(1) + ' ' + b.charAt(0).toUpperCase() + b.slice(1));
     } else {
