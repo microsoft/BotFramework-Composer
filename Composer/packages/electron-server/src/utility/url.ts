@@ -10,10 +10,17 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
   try {
     const convertedUrl = new URL(deeplinkUrl);
     const action = lowerCase(convertedUrl.hostname);
+    console.log(action);
     switch (action) {
       case 'open': {
         const encodedUrl: string = convertedUrl.searchParams.get('url') || '';
-        return decodeURIComponent(encodedUrl);
+        const source = convertedUrl.searchParams.get('source');
+        const payload = convertedUrl.searchParams.get('payload');
+        if (encodedUrl) {
+          return decodeURIComponent(encodedUrl);
+        } else if (source && payload) {
+          return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+        }
       }
 
       case 'create': {

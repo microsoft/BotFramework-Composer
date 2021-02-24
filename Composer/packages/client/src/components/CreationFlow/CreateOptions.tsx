@@ -20,18 +20,19 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import querystring from 'query-string';
-import axios from 'axios';
 
-import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { getAliasFromPayload } from '../../utils/electronUtil';
+import axios from 'axios';
 
 // -------------------- Styles -------------------- //
 
@@ -245,12 +246,12 @@ export function CreateOptions(props: CreateOptionsProps) {
   }, [templates]);
 
   useEffect(() => {
+    // open bot directly if alias exist.
     if (props.location?.search) {
       const decoded = decodeURIComponent(props.location.search);
       const { source, payload } = querystring.parse(decoded);
-      if (payload && typeof payload === 'string' && source === 'abs') {
-        const profile = JSON.parse(payload);
-        const alias = `abs-${profile.botName}-${profile.appId}`;
+      if (typeof source === 'string' && typeof payload === 'string') {
+        const alias = getAliasFromPayload(source, payload);
         // check to see if Composer currently has a bot project corresponding to the alias
         axios
           .get<any>(`/api/projects/alias/${alias}`)
