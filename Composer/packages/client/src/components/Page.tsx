@@ -83,7 +83,6 @@ export const content = (shouldShowEditorError: boolean) => css`
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: auto;
   height: ${shouldShowEditorError ? 'calc(100% - 40px)' : '100%'};
   label: PageContent;
   box-sizing: border-box;
@@ -94,9 +93,9 @@ const contentStyle = css`
   flex-grow: 1;
   height: 0;
   position: relative;
+  overflow: auto;
+  box-sizing: border-box;
 `;
-
-const ShowDebugPanelPageTitle = ['User Input', 'QnA', 'Bot Responses'];
 
 // -------------------- Page -------------------- //
 
@@ -219,7 +218,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {ShowDebugPanelPageTitle.indexOf(title) > -1 && <DebugPanel />}
+              {title !== 'Publish' && <DebugPanel />}
             </div>
           </Split>
         </div>

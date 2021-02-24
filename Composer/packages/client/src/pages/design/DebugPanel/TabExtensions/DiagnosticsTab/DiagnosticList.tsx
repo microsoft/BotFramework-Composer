@@ -130,8 +130,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       name: formatMessage('Location'),
       className: diagnostic.columnCell,
       fieldName: 'location',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 150,
+      maxWidth: 180,
       isResizable: true,
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
