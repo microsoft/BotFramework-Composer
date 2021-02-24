@@ -140,7 +140,7 @@ export const DebugPanel = () => {
           </div>
           <div css={rightBarStyle} data-testid="header__right">
             <IconButton
-              iconProps={{ iconName: 'Cancel' }}
+              iconProps={{ iconName: 'ChevronDown' }}
               title={formatMessage('Collapse debug panel')}
               onClick={() => {
                 setExpansion(!expanded);
@@ -165,7 +165,15 @@ export const DebugPanel = () => {
         <div css={leftBarStyle} data-testid="statusbar__left">
           {headerPivot}
         </div>
-        <div css={rightBarStyle} data-testid="statusbar__right"></div>
+        <div css={rightBarStyle} data-testid="statusbar__right">
+          <IconButton
+            iconProps={{ iconName: 'ChevronUp' }}
+            title={formatMessage('Expand debug panel')}
+            onClick={() => {
+              setExpansion(true);
+            }}
+          />
+        </div>
       </div>
     );
   }
