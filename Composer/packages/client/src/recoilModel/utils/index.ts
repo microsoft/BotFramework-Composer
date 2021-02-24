@@ -7,6 +7,12 @@ import merge from 'lodash/merge';
 import storage from '../../utils/storage';
 import { isElectron } from '../../utils/electronUtil';
 
+export const DEFAULT_FONT_SETTINGS = {
+  fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+  fontSize: '14px',
+  fontWeight: '500',
+};
+
 export const DEFAULT_USER_SETTINGS = {
   appUpdater: {
     autoDownload: false,
@@ -16,11 +22,7 @@ export const DEFAULT_USER_SETTINGS = {
     lineNumbers: false,
     wordWrap: false,
     minimap: false,
-    fontSettings: {
-      fontFamily: 'Courier New',
-      fontSize: '18px',
-      fontWeight: '500',
-    },
+    fontSettings: DEFAULT_FONT_SETTINGS,
   },
   propertyEditorWidth: 400,
   dialogNavWidth: 180,

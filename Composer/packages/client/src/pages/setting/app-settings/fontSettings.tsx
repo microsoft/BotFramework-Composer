@@ -12,6 +12,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 
 import * as styles from './styles';
+import { DEFAULT_FONT_SETTINGS } from '../../../recoilModel/utils';
 
 interface IFontSettingsProps {
   id?: string;
@@ -45,7 +46,7 @@ const FontSettings: React.FC<IFontSettingsProps> = (props) => {
           label={formatMessage('Font family')}
           value={fontFamily}
           onChange={(_e, val) => {
-            onChange({ fontFamily: String(val || ''), fontSize, fontWeight });
+            onChange({ fontFamily: String(val || DEFAULT_FONT_SETTINGS.fontFamily), fontSize, fontWeight });
           }}
         />
         <TextField
@@ -53,7 +54,7 @@ const FontSettings: React.FC<IFontSettingsProps> = (props) => {
           label={formatMessage('Font size')}
           value={fontSize}
           onChange={(_e, val) => {
-            onChange({ fontSize: String(val || ''), fontFamily, fontWeight });
+            onChange({ fontSize: String(val || DEFAULT_FONT_SETTINGS.fontSize), fontFamily, fontWeight });
           }}
         />
         <TextField
@@ -61,7 +62,7 @@ const FontSettings: React.FC<IFontSettingsProps> = (props) => {
           label={formatMessage('Font weight')}
           value={fontWeight}
           onChange={(_e, val) => {
-            onChange({ fontWeight: Number(val || ''), fontSize, fontFamily });
+            onChange({ fontWeight: Number(val || DEFAULT_FONT_SETTINGS.fontWeight), fontSize, fontFamily });
           }}
         />
       </Stack>
