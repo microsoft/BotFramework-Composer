@@ -6,6 +6,7 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { BotProjectDeployLoggerType } from "../types";
 import { createCustomizeError, ProvisionErrors } from "../utils/errorHandler";
 import { KeyVaultManagementClient } from "@azure/arm-keyvault-profile-2020-09-01-hybrid";
+import { SecretClient } from "@azure/keyvault-secrets";
 
 export class KeyVaultApi {
     private creds: any;
@@ -93,7 +94,11 @@ export class KeyVaultApi {
         // const vaultUrl = `https://${vaultName}.vault.azure.net/`;
         // const keyVaultClient = new SecretClient(vaultUrl, this.creds);
         // const getResult = await keyVaultClient.getSecret(secretName);
-        // return getResult.properties.id;
+        // this.logger({
+        //     status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        //     message: JSON.stringify(getResult)
+        // })
+        // return getResult.value;
         const keyVaultManagementClient = new KeyVaultManagementClient(this.creds, this.subscriptionId);
         const secretResult = await keyVaultManagementClient.secrets.get(resourceGroupName, vaultName, secretName);
         if (secretResult._response.status >= 300) {

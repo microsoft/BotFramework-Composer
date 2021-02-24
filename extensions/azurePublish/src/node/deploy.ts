@@ -214,31 +214,39 @@ export class BotProjectDeploy {
    * @param hostname the hostname of webapp which bot service would be linked to
    */
   private async linkBotWithWebapp(settings: any, absSettings: any, hostname: string) {
-    let subscriptionId = settings.subscriptionId;
-    let resourceGroupName = settings.resourceGroup;
-    let botName = settings.botName;
+    let subscriptionId = '';
+    let resourceGroupName = '';
+    let botName = '';
 
-    if (!absSettings.resourceId || !hostname) {
+    if (absSettings.resourceId) {
+      try {
+        if (!subscriptionId) {
+          subscriptionId = absSettings.resourceId.match(/subscriptions\/([\w-]*)\//)[1];
+        }
+        if (!resourceGroupName) {
+          resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^\/]*)/)[1];
+        }
+        if (!botName) {
+          botName = absSettings.resourceId.match(/botServices\/([^\/]*)/)[1];
+        }
+      } catch (error) {
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: 'Abs settings resourceId is incomplete, skip linking bot with webapp ...'
+        });
+        return;
+      }
+    }
+    else {
+      subscriptionId = settings.subscriptionId;
+      resourceGroupName = settings.resourceGroup;
+      botName = settings.botName;
+    }
+
+    if (!subscriptionId || !hostname || !resourceGroupName || !botName) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Abs settings incomplete, skip linking bot with webapp ...'
-      });
-      return;
-    }
-    try {
-      if (!subscriptionId) {
-        subscriptionId = absSettings.resourceId.match(/subscriptions\/([\w-]*)\//)[1];
-      }
-      if (!resourceGroupName) {
-        resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^\/]*)/)[1];
-      }
-      if (!botName) {
-        botName = absSettings.resourceId.match(/botServices\/([^\/]*)/)[1];
-      }
-    } catch (error) {
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Abs settings resourceId is incomplete, skip linking bot with webapp ...'
       });
       return;
     }
@@ -284,6 +292,14 @@ export class BotProjectDeploy {
    * @param absSettings
    */
   private async BindKeyVault(absSettings: any, hostname: string) {
+    if (!hostname) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'hostname incomplete, return ...'
+      });
+      return
+    }
+
     const webAppName = hostname;
     const hint = absSettings.appPasswordHint;
     if (!hint) {
@@ -291,23 +307,16 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'appPasswordHint incomplete, return ...'
       });
+      return
     }
-
-    const hintsList = hint.split('/');
-    if (hintsList.length !== 11) {
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'appPasswordHint incomplete, return ...'
-      });
-    }
-    const vaultName = hintsList[8] ?? '';
-    const secretName = hintsList[10] ?? '';
-    const subscriptionId = hintsList[2] ?? '';
-    const resourceGroupName = hintsList[4] ?? '';
+    const vaultName = hint.match(/vaults\/([^\/]*)/)[1];
+    const secretName = hint.match(/secrets\/([^\/]*)/)[1];
+    const subscriptionId = hint.match(/subscriptions\/([\w-]*)\//)[1];
+    const resourceGroupName = hint.match(/resourceGroups\/([^\/]*)/)[1];
 
     const email = absSettings.email;
 
-    this.logger(`${subscriptionId}, ${resourceGroupName}, ${webAppName}, ${hintsList}, ${vaultName}, ${secretName}, ${email}`);
+    this.logger(`${subscriptionId}, ${resourceGroupName}, ${webAppName}, ${vaultName}, ${secretName}, ${email}`);
 
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
@@ -332,14 +341,14 @@ export class BotProjectDeploy {
     await keyVaultApi.KeyVaultSetPolicy(resourceGroupName, vaultName, email, principalId, tenantId);
 
     this.logger('getting secret ...')
-    // const secret = await keyVaultApi.KeyVaultGetSecret(resourceGroupName, vaultName, secretName);
+    const secret = await keyVaultApi.KeyVaultGetSecret(resourceGroupName, vaultName, secretName);
 
-    const secret = await keyVaultApi.KeyVaultGetSecretValue(resourceGroupName, vaultName, secretName);
+    // const secret = await keyVaultApi.KeyVaultGetSecretValue(resourceGroupName, vaultName, secretName);
 
     this.logger(`secret: ${secret}`);
-    // await keyVaultApi.UpdateKeyVaultAppSettings(resourceGroupName, webAppName, secret);
+    await keyVaultApi.UpdateKeyVaultAppSettings(resourceGroupName, webAppName, secret);
 
-    await keyVaultApi.UpdateKeyVaultValueAppSettings(resourceGroupName, webAppName, secret);
+    // await keyVaultApi.UpdateKeyVaultValueAppSettings(resourceGroupName, webAppName, secret);
   }
 
   private async getTenantId(accessToken: string, subId: string) {
