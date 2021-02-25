@@ -39,7 +39,7 @@ export const saveTranscriptHandler = (state: DLServerState) => {
       logger(ex);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(formatMessage('An error occured saving the transcript to disk.'));
+        .send(formatMessage('An error occurred saving the transcript to disk.'));
     }
   };
 };

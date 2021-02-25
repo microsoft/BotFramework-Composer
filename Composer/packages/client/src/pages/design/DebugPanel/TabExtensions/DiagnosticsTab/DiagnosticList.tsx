@@ -138,8 +138,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
         return (
           <div data-is-focusable css={tableCell}>
             <Link
-              underline
               css={content}
+              underline="true"
               onClick={() => {
                 navigateTo(item.getUrl());
                 if (item.location === 'manifest.json') {

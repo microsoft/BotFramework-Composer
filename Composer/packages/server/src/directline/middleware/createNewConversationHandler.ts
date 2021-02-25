@@ -38,7 +38,9 @@ export const createNewConversationHandler = (state: DLServerState) => {
       });
     } catch (err) {
       logger(err);
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(formatMessage('An error occured starting a new conversation'));
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send(formatMessage('An error occurred starting a new conversation'));
     }
   };
 };
