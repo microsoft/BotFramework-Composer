@@ -19,8 +19,9 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
           return decodeURIComponent(encodedUrl);
         } else if (source && payload) {
           return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+        } else {
+          return '';
         }
-        break;
       }
 
       case 'create': {
