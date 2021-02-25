@@ -64,7 +64,7 @@ const Library: React.FC = () => {
   const [selectedItemVersions, setSelectedItemVersions] = useState<string[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<string>('');
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
-  const [working, setWorking] = useState(false);
+  const [working, setWorking] = useState<string>('');
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [readmeContent, setReadmeContent] = useState<string>('');
@@ -88,6 +88,7 @@ const Library: React.FC = () => {
     installed: formatMessage('installed'),
     importDialogTitle: formatMessage('Install a Package'),
     installProgress: formatMessage('Installing package...'),
+    uninstallProgress: formatMessage('Removing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
     installedCategory: formatMessage('Installed'),
     updateConfirmationPrompt: formatMessage(
@@ -358,9 +359,9 @@ const Library: React.FC = () => {
 
     if (okToProceed) {
       closeDialog();
-      setWorking(true);
+      setWorking(strings.installProgress);
       await importComponent(packageName, version, isUpdating || false, source);
-      setWorking(false);
+      setWorking('');
     }
   };
 
@@ -376,7 +377,7 @@ const Library: React.FC = () => {
           await installComponentAPI(currentProjectId, packageName, version, true, source);
         }
       } else {
-        setWorking(false);
+        setWorking('');
 
         updateInstalledComponents(results.data.components);
 
@@ -466,7 +467,7 @@ const Library: React.FC = () => {
       const okToProceed = await confirm(title, msg);
       if (okToProceed) {
         closeDialog();
-        setWorking(true);
+        setWorking(strings.uninstallProgress);
         try {
           const results = await uninstallComponentAPI(currentProjectId, selectedItem.name);
 
@@ -485,7 +486,7 @@ const Library: React.FC = () => {
             summary: strings.importError,
           });
         }
-        setWorking(false);
+        setWorking('');
       }
     }
   };
@@ -535,12 +536,11 @@ const Library: React.FC = () => {
       >
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
       </Dialog>
-      <WorkingModal hidden={!working} title={strings.installProgress} />
+      <WorkingModal hidden={working === ''} title={working} />
       <FeedModal
         closeDialog={() => setModalVisible(false)}
         feeds={feeds}
         hidden={!isModalVisible}
-        title={strings.installProgress}
         onUpdateFeed={updateFeed}
       />
       <Toolbar toolbarItems={toolbarItems} />

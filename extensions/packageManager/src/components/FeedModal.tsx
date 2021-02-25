@@ -38,7 +38,6 @@ const DisplayField: React.FC<DisplayFieldProps> = (props) => {
 
 export interface WorkingModalProps {
   hidden: boolean;
-  title: string;
   feeds: PackageSourceFeed[];
   closeDialog: any;
   onUpdateFeed: any;
