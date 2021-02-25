@@ -55,8 +55,8 @@ const Input = styled(TextField)({
   },
 });
 
-const StyledLgCodeEditor = styled(LgCodeEditor)({
-  padding: '8px 0 8px 4px',
+const LgCodeEditorContainer = styled.div({
+  margin: '8px 0 8px 4px',
 });
 
 const textViewContainerStyles = {
@@ -238,17 +238,19 @@ export const StringArrayItem = (props: Props) => {
         editorMode === 'single' ? (
           <TextFieldItem value={value} onChange={onChange} onShowCallout={onShowCallout} />
         ) : (
-          <StyledLgCodeEditor
-            editorDidMount={onEditorDidMount}
-            editorSettings={codeEditorSettings}
-            height={150}
-            lgOption={lgOption}
-            lgTemplates={lgTemplates}
-            memoryVariables={memoryVariables}
-            telemetryClient={telemetryClient}
-            value={value}
-            onChange={onLgChange}
-          />
+          <LgCodeEditorContainer>
+            <LgCodeEditor
+              editorDidMount={onEditorDidMount}
+              editorSettings={codeEditorSettings}
+              height={150}
+              lgOption={lgOption}
+              lgTemplates={lgTemplates}
+              memoryVariables={memoryVariables}
+              telemetryClient={telemetryClient}
+              value={value}
+              onChange={onLgChange}
+            />
+          </LgCodeEditorContainer>
         )
       ) : (
         <TextViewItem value={value} onFocus={onFocus} onRemove={onRemove} onRenderDisplayText={onRenderDisplayText} />
