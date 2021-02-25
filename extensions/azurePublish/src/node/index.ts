@@ -444,7 +444,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         };
         for (let configUnit in currentProfile) {
           if (!(configUnit in publishProfile)) {
-            publishProfile[configUnit] = currentSettings[configUnit];
+            publishProfile[configUnit] = currentProfile[configUnit];
           }
         }
 
