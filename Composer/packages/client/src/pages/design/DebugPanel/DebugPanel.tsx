@@ -3,12 +3,14 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useMemo, useCallback, useRef, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../recoilModel';
 
 import {
@@ -21,16 +23,18 @@ import {
   debugPaneContentStyle,
 } from './styles';
 import debugExtensions from './TabExtensions';
+import { DebugDrawerKeys } from './TabExtensions/types';
 
 export interface DebugPanelProps {
   expanded: boolean;
   onToggleExpansion: (expanded: boolean) => void;
 }
-export const DebugPanel = () => {
+
+export const DebugPanel: React.FC = () => {
   const [expanded, setExpansion] = useRecoilState(debugPanelExpansionState);
   const [activeTab, setActiveTab] = useRecoilState(debugPanelActiveTabState);
 
-  const buildTabTitle = useCallback((tabKey: string, TabHeaderWidget: React.FC | string) => {
+  const buildTabTitle = useCallback((tabKey: DebugDrawerKeys, TabHeaderWidget: React.FC | string) => {
     if (!TabHeaderWidget) return { key: tabKey, element: null };
 
     let element: JSX.Element;
@@ -52,15 +56,28 @@ export const DebugPanel = () => {
             key={`tabHeader-pivot-${key}${expanded ? '--expanded' : ''}`}
             itemKey={key}
             onRenderItemLink={() => (
-              <div
-                css={{ height: 'inherit', width: 'inherit' }}
+              <Label
+                css={{
+                  height: 'inherit',
+                  width: 'inherit',
+                  outline: 'none',
+                  border: 'none',
+                  background: 'transparent',
+                  padding: 0,
+                }}
                 onClick={() => {
                   setActiveTab(key);
                   setExpansion(true);
+
+                  TelemetryClient.track('DrawerPaneTabOpened', {
+                    tabType: key,
+                  });
+
+                  TelemetryClient.track('DrawerPaneOpened');
                 }}
               >
                 {element}
-              </div>
+              </Label>
             )}
           />
         );
@@ -142,7 +159,9 @@ export const DebugPanel = () => {
               iconProps={{ iconName: 'Cancel' }}
               title={formatMessage('Collapse debug panel')}
               onClick={() => {
-                setExpansion(!expanded);
+                setExpansion(false);
+
+                TelemetryClient.track('DrawerPaneClosed');
               }}
             />
           </div>
