@@ -37,7 +37,6 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
 
   return (
     <Page
-      useDebugPane
       data-testid="LUPage"
       mainRegionName={formatMessage('Diagnostic List')}
       navLinkClick={(item: INavTreeItem) => {
