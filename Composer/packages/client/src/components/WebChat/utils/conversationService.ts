@@ -92,7 +92,8 @@ export class ConversationService {
     oldConversationId: string,
     newConversationId: string,
     userId: string,
-    activeLocale: string
+    activeLocale: string,
+    secrets: BotSecrets
   ) {
     const url = `${this.directlineHostUrl}/conversations/${oldConversationId}/updateConversation`;
     return axios.put(
@@ -101,6 +102,8 @@ export class ConversationService {
         conversationId: newConversationId,
         userId,
         locale: activeLocale,
+        msaAppId: secrets.msAppId,
+        msaPassword: secrets.msPassword,
       },
       {
         headers: {
@@ -195,7 +198,12 @@ export class ConversationService {
     };
   }
 
-  public async restartConversation(oldChatData: ChatData, requireNewUserID: boolean, activeLocale: string) {
+  public async restartConversation(
+    oldChatData: ChatData,
+    requireNewUserID: boolean,
+    activeLocale: string,
+    secrets: BotSecrets
+  ) {
     if (oldChatData.directline) {
       oldChatData.directline.end();
     }
@@ -207,7 +215,13 @@ export class ConversationService {
       user = this.getUser();
     }
 
-    const resp = await this.conversationUpdate(oldChatData.conversationId, conversationId, user.id, activeLocale);
+    const resp = await this.conversationUpdate(
+      oldChatData.conversationId,
+      conversationId,
+      user.id,
+      activeLocale,
+      secrets
+    );
     const { endpointId } = resp.data;
     const directline = await this.fetchDirectLineObject(conversationId, {
       mode: oldChatData.webChatMode,
