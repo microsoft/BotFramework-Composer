@@ -91,7 +91,6 @@ export const createUpdateConversationHandler = (state: DLServerState) => {
       currentConversation.updateConversationId(conversationId);
       currentConversation.updateSecrets(msaAppId, msaPassword);
       currentConversation.updateUser(userId);
-      console.log('LOC', locale);
       currentConversation.updateLocale(locale);
 
       const user: User | undefined = currentConversation.members.find((member) => member.name === 'User');
