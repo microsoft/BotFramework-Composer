@@ -65,7 +65,7 @@ export class BotEndpoint {
       const err: DirectLineError = {
         status: response.status,
         details: response.data.error_description,
-        message: formatMessage('An error occured validating the Microsoft App Id and Microsoft App Password.'),
+        message: formatMessage('An error occurred validating the Microsoft App Id and Microsoft App Password.'),
       };
       throw err;
     }
@@ -89,12 +89,12 @@ export class BotEndpoint {
       if (response) {
         err = {
           status: response.status,
-          message: formatMessage(`An error occured posting activity to the bot. ${response.statusText}`),
+          message: formatMessage(`An error occurred posting activity to the bot. ${response.statusText}`),
         };
       } else {
         err = {
           status: StatusCodes.NOT_FOUND,
-          message: formatMessage(`An error occured posting activity to the bot. ${ex.message}`),
+          message: formatMessage(`An error occurred posting activity to the bot. ${ex.message}`),
         };
       }
 
