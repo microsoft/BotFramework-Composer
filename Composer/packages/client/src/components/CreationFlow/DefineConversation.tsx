@@ -24,9 +24,9 @@ import { creationFlowTypeState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNotification';
 import { dispatcherState } from '../../recoilModel';
+import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 
 import { LocationSelectContent } from './LocationSelectContent';
-import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 
 // -------------------- Styles -------------------- //
 

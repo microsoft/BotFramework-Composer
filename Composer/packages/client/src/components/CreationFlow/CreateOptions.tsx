@@ -27,12 +27,12 @@ import { RouteComponentProps, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import querystring from 'query-string';
+import axios from 'axios';
 
 import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { getAliasFromPayload } from '../../utils/electronUtil';
-import axios from 'axios';
 
 // -------------------- Styles -------------------- //
 
