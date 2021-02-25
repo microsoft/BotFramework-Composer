@@ -149,7 +149,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               key={'settingsjson'}
               editorSettings={userSettings.codeEditor}
               id={currentProjectId}
-              schema={schemas.sdk.content}
               value={mergedSettings}
               onChange={handleChange}
             />
