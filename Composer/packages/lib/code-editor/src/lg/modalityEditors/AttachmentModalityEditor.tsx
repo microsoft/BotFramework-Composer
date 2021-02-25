@@ -95,6 +95,7 @@ const AttachmentModalityEditor = React.memo(
         modalityTitle={formatMessage('Attachments')}
         modalityType="Attachments"
         removeModalityOptionText={formatMessage('Remove all attachments')}
+        showRemoveModalityPrompt={!!response?.value.length}
         onDropdownChange={attachmentLayoutChange}
         onRemoveModality={onRemoveModality}
       >

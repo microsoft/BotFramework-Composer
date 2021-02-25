@@ -102,6 +102,7 @@ const SpeechModalityEditor = React.memo(
         modalityTitle={formatMessage('Suggested Actions')}
         modalityType="Speak"
         removeModalityOptionText={formatMessage('Remove all speech responses')}
+        showRemoveModalityPrompt={!!response?.value.length}
         onDropdownChange={inputHintChange}
         onRemoveModality={onRemoveModality}
       >

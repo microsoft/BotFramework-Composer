@@ -74,6 +74,7 @@ type Props = {
   menuItems?: IContextualMenuItem[];
   modalityTitle: string;
   modalityType: ModalityType;
+  showRemoveModalityPrompt: boolean;
   removeModalityOptionText: string;
   onRemoveModality: (modality: ModalityType, removeReferencedTemplates: boolean) => void;
   onDropdownChange?: (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => void;
@@ -87,6 +88,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
   dropdownOptions,
   dropdownPrefix = '',
   menuItems = [],
+  showRemoveModalityPrompt,
   removeModalityOptionText,
   modalityTitle,
   contentTitle,
@@ -104,6 +106,11 @@ export const ModalityEditorContainer: React.FC<Props> = ({
         itemProps: removeMenuButtonItemProps,
         onClick: () => {
           (async () => {
+            if (!showRemoveModalityPrompt) {
+              onRemoveModality(modalityType, false);
+              return;
+            }
+
             const confirm = await OpenConfirmModalWithChoices(
               formatMessage('Removing a modality from this action node'),
               formatMessage(
