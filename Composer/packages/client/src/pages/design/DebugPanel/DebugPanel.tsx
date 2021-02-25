@@ -66,6 +66,7 @@ export const DebugPanel: React.FC = () => {
                   border: 'none',
                   background: 'transparent',
                   padding: 0,
+                  fontSize: FontSizes.size12,
                 }}
                 onClick={() => {
                   setActiveTab(key);
