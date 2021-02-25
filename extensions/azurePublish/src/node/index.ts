@@ -321,7 +321,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         accessToken,
         luResources,
         qnaResources,
-        abs
+        abs,
       } = config;
       try {
         // get the appropriate runtime template which contains methods to build and configure the runtime
@@ -359,7 +359,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           environment,
           hostname,
           luisResource,
-          abs
+          abs,
         };
         await this.performDeploymentAction(
           project,
@@ -396,7 +396,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           this.logger(msg);
           BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
         },
-        tenantId: subscription.tenantId, // does the tenantId ever come back from the subscription API we use? it does not appear in my tests.
       });
 
       // perform the provision using azureProvisioner.create.
@@ -406,31 +405,51 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const provisionResults = await azureProvisioner.create(config);
         // GOT PROVISION RESULTS!
         // cast this into the right form for a publish profile
+
+        let currentProfile = null;
+        if (config.currentProfile) {
+          currentProfile = JSON.parse(config.currentProfile.configuration);
+        }
+        const currentSettings = currentProfile?.settings;
+
         const publishProfile = {
-          name: config.hostname,
-          environment: 'composer',
-          hostname: config.hostname,
-          luisResource: `${config.hostname}-luis`,
-          runtimeIdentifier: 'win-x64',
+          name: currentProfile?.name ?? config.hostname,
+          environment: currentProfile?.environment ?? 'composer',
+          subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
+          resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
+          botName: currentProfile?.botName ?? provisionResults.botName,
+          hostname: config.hostname ?? currentProfile?.hostname,
+          luisResource: provisionResults.luisPrediction ? `${config.hostname}-luis` : currentProfile?.luisResource,
+          runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
           settings: {
             applicationInsights: {
-              InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
+              InstrumentationKey:
+                provisionResults.appInsights?.instrumentationKey ??
+                currentSettings?.applicationInsights?.InstrumentationKey,
             },
-            cosmosDb: provisionResults.cosmosDB,
-            blobStorage: provisionResults.blobStorage,
+            cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
+            blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
             luis: {
-              authoringKey: provisionResults.luisAuthoring?.authoringKey,
-              authoringEndpoint: provisionResults.luisAuthoring?.authoringEndpoint,
-              endpointKey: provisionResults.luisPrediction?.endpointKey,
-              endpoint: provisionResults.luisPrediction?.endpoint,
-              region: provisionResults.resourceGroup.location,
+              authoringKey: provisionResults.luisAuthoring?.authoringKey ?? currentSettings?.luis?.authoringKey,
+              authoringEndpoint:
+                provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
+              endpointKey: provisionResults.luisPrediction?.endpointKey ?? currentSettings?.luis?.endpointKey,
+              endpoint: provisionResults.luisPrediction?.endpoint ?? currentSettings?.luis?.endpoint,
+              region: provisionResults.luisPrediction?.location ?? currentSettings?.luis?.region,
+            },
+            qna: {
+              subscriptionKey: provisionResults.qna?.subscriptionKey ?? currentSettings?.qna?.subscriptionKey,
+              qnaRegion: provisionResults.qna?.region ?? currentSettings?.qna?.qnaRegion,
             },
             MicrosoftAppId: provisionResults.appId,
             MicrosoftAppPassword: provisionResults.appPassword,
           },
-          botName: provisionResults.botName,
-          subscriptionId: config.subscription.subscriptionId
         };
+        for (const configUnit in currentProfile) {
+          if (!(configUnit in publishProfile)) {
+            publishProfile[configUnit] = currentProfile[configUnit];
+          }
+        }
 
         this.logger(publishProfile);
 
@@ -451,7 +470,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       BackgroundProcessManager.removeProcess(jobId);
     };
 
-
     /**************************************************************************************************
      * plugin methods for publish
      *************************************************************************************************/
@@ -467,7 +485,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       } = config;
 
       const abs = getAbsSettings(config);
-      const {luResources, qnaResources} = metadata;
+      const { luResources, qnaResources } = metadata;
 
       // get the bot id from the project
       const botId = project.id;
@@ -498,7 +516,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // verify publish profile
         isProfileComplete(config);
 
-        this.asyncPublish({...config, accessToken, luResources, qnaResources, abs}, project, resourcekey, jobId);
+        this.asyncPublish({ ...config, accessToken, luResources, qnaResources, abs }, project, resourcekey, jobId);
 
         return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
       } catch (err) {

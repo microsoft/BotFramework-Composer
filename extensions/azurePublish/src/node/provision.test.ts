@@ -17,11 +17,7 @@ const mockConfig = {
   luisLocation: '',
   name: 'profileName',
   type: 'azurepublish',
-  subscription: {
-    subscriptionId: 'subscriptionId',
-    tenantId: 'tenant',
-    displayName: 'test',
-  },
+  subscription: 'test',
 } as ProvisionConfig;
 const azProvision = new BotProjectProvision(mockConfig);
 

@@ -16,8 +16,7 @@ import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
-import { EditProfileDialog } from './EditProfileDialog';
-import { AddProfileDialog } from './AddProfileDialog';
+import { ProfileFormDialog } from './ProfileFormDialog';
 
 type PublishProfileDialogProps = {
   closeDialog: () => void;
@@ -28,19 +27,18 @@ type PublishProfileDialogProps = {
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
 };
 
-enum Page {
-  AddProfile = 'add',
-  EditProfile = 'edit',
-  ConfigProvision = 'config',
-}
+const Page = {
+  ProfileForm: Symbol('form'),
+  ConfigProvision: Symbol('config'),
+};
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
   const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
-  const [page, setPage] = useState(current ? Page.EditProfile : Page.AddProfile);
+  const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
 
   const [dialogTitle, setTitle] = useState({
-    title: formatMessage('Add a publishing profile'),
+    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
     subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
   });
 
@@ -72,7 +70,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   useEffect(() => {
     PluginAPI.publish.closeDialog = closeDialog;
     PluginAPI.publish.onBack = () => {
-      setPage(Page.AddProfile);
+      setPage(Page.ProfileForm);
+      setTitle({
+        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+        subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
+      });
     };
     PluginAPI.publish.getTokenFromCache = () => {
       return {
@@ -96,27 +98,16 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     };
   }, [current, projectId]);
 
-  const updatePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string, editTarget: any) => {
-      if (!editTarget) {
-        return;
-      }
-
-      const newTargets = targets ? [...targets] : [];
-      newTargets[editTarget.index] = {
-        name,
-        type,
-        configuration,
-      };
-
-      await setPublishTargets(newTargets, projectId);
-    },
-    [targets, projectId]
-  );
-
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
-      const newTargets = [...(targets || []), { name, type, configuration }];
+      // check exist
+      const newTargets = [...targets] || [];
+      const index = targets.findIndex((item) => item.name === name);
+      if (index >= 0) {
+        newTargets.splice(index, 1, { name, type, configuration });
+      } else {
+        newTargets.push({ name, type, configuration });
+      }
       await setPublishTargets(newTargets, projectId);
       TelemetryClient.track('NewPublishingProfileSaved', { type });
     },
@@ -125,55 +116,46 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   return (
     <Fragment>
-      {page === Page.EditProfile && (
-        <EditProfileDialog
-          current={props.current}
-          types={types}
-          updateSettings={updatePublishTarget}
-          onDismiss={closeDialog}
-        />
-      )}
-      {page != Page.EditProfile && (
-        <Dialog
-          dialogContentProps={{
-            title: dialogTitle.title,
-            subText: page !== Page.AddProfile ? dialogTitle.subText : '',
-          }}
-          hidden={false}
-          minWidth={960}
-          modalProps={{
-            isBlocking: true,
-          }}
-          onDismiss={closeDialog}
-        >
-          {page === Page.AddProfile && (
-            <div>
-              <div style={{ marginBottom: '16px' }}>
-                {dialogTitle.subText}
-                <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                  {formatMessage('Learn More.')}
-                </Link>
-              </div>
-              <AddProfileDialog
-                projectId={projectId}
-                setType={setSelectType}
-                targets={targets}
-                types={types}
-                updateSettings={savePublishTarget}
-                onDismiss={closeDialog}
-                onNext={() => {
-                  setPage(Page.ConfigProvision);
-                }}
-              />
+      <Dialog
+        dialogContentProps={{
+          title: dialogTitle.title,
+          subText: '',
+        }}
+        hidden={false}
+        minWidth={960}
+        modalProps={{
+          isBlocking: true,
+        }}
+        onDismiss={closeDialog}
+      >
+        {page !== Page.ConfigProvision && (
+          <div>
+            <div style={{ marginBottom: '16px' }}>
+              {dialogTitle.subText}
+              <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
+                {formatMessage('Learn More.')}
+              </Link>
             </div>
-          )}
-          {page === Page.ConfigProvision && selectedType?.bundleId && (
-            <div css={publishSurfaceStyles}>
-              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
-            </div>
-          )}
-        </Dialog>
-      )}
+            <ProfileFormDialog
+              current={current}
+              projectId={projectId}
+              setType={setSelectType}
+              targets={targets}
+              types={types}
+              updateSettings={savePublishTarget}
+              onDismiss={closeDialog}
+              onNext={() => {
+                setPage(Page.ConfigProvision);
+              }}
+            />
+          </div>
+        )}
+        {page === Page.ConfigProvision && selectedType?.bundleId && (
+          <div css={publishSurfaceStyles}>
+            <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+          </div>
+        )}
+      </Dialog>
     </Fragment>
   );
 };

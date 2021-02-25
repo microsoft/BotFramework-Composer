@@ -233,32 +233,32 @@
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
   },
-  "an_error_occured_connecting_initializing_the_direc_980f809": {
-    "message": "An error occured connecting initializing the DirectLine server"
-  },
-  "an_error_occured_receiving_an_activity_from_the_bo_addcc879": {
-    "message": "An error occured receiving an activity from the bot."
-  },
-  "an_error_occured_saving_the_transcript_to_disk_a36615df": {
-    "message": "An error occured saving the transcript to disk."
-  },
-  "an_error_occured_saving_transcripts_25581129": {
-    "message": "An error occured saving transcripts"
-  },
-  "an_error_occured_sending_conversation_update_activ_55c000": {
-    "message": "An error occured sending conversation update activity to the bot"
-  },
-  "an_error_occured_starting_a_new_conversation_da8779c": {
-    "message": "An error occured starting a new conversation"
-  },
-  "an_error_occured_trying_to_save_the_transcript_to__dfb5d862": {
-    "message": "An error occured trying to save the transcript to disk"
-  },
-  "an_error_occured_validating_the_microsoft_app_id_a_e8698163": {
-    "message": "An error occured validating the Microsoft App Id and Microsoft App Password."
+  "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
+    "message": "An error occurred connecting initializing the DirectLine server"
   },
   "an_error_occurred_parsing_the_transcript_for_a_con_a47395c3": {
     "message": "An error occurred parsing the transcript for a conversation"
+  },
+  "an_error_occurred_receiving_an_activity_from_the_b_d734a7d": {
+    "message": "An error occurred receiving an activity from the bot."
+  },
+  "an_error_occurred_saving_the_transcript_to_disk_f5cb0f7c": {
+    "message": "An error occurred saving the transcript to disk."
+  },
+  "an_error_occurred_saving_transcripts_be37b977": {
+    "message": "An error occurred saving transcripts"
+  },
+  "an_error_occurred_sending_conversation_update_acti_85be9b0f": {
+    "message": "An error occurred sending conversation update activity to the bot"
+  },
+  "an_error_occurred_starting_a_new_conversation_7586fd9f": {
+    "message": "An error occurred starting a new conversation"
+  },
+  "an_error_occurred_trying_to_save_the_transcript_to_a6efda6f": {
+    "message": "An error occurred trying to save the transcript to disk"
+  },
+  "an_error_occurred_validating_the_microsoft_app_id__c2b9dc19": {
+    "message": "An error occurred validating the Microsoft App Id and Microsoft App Password."
   },
   "animation_card_1a7d75ff": {
     "message": "Animation card"
@@ -578,9 +578,6 @@
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
-  "choose_one_2c4277df": {
-    "message": "Choose One"
-  },
   "choose_publishing_profile_ee7ecc78": {
     "message": "Choose publishing profile"
   },
@@ -604,6 +601,12 @@
   },
   "close_d634289d": {
     "message": "Close"
+  },
+  "cognitive_service_region_87c668be": {
+    "message": "Cognitive Service Region"
+  },
+  "cognitive_services_key_fcfd093f": {
+    "message": "Cognitive services key"
   },
   "collapse_34080b4d": {
     "message": "Collapse"
@@ -700,6 +703,9 @@
   },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
+  },
+  "connect_to_speech_service_9d877e37": {
+    "message": "Connect to Speech Service"
   },
   "connect_your_bot_to_other_messaging_services_c7f6aed6": {
     "message": "Connect your bot to other messaging services."
@@ -1109,8 +1115,8 @@
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
-  "edit_a_publish_profile_30ebab3e": {
-    "message": "Edit a publish profile"
+  "edit_a_publishing_profile_705e87e3": {
+    "message": "Edit a publishing profile"
   },
   "edit_a_skill_5665d9ac": {
     "message": "Edit a skill"
@@ -1178,6 +1184,12 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
   },
+  "enable_speech_e30d6a2a": {
+    "message": "Enable Speech"
+  },
+  "enable_speech_e4a16f1c": {
+    "message": "Enable speech"
+  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -1213,6 +1225,12 @@
   },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
+  },
+  "enter_cognitive_service_region_a0f684a4": {
+    "message": "Enter cognitive service region"
+  },
+  "enter_cognitive_services_key_b78e4b55": {
+    "message": "Enter cognitive services key"
   },
   "enter_luis_application_name_df312e75": {
     "message": "Enter LUIS application name"
@@ -1406,6 +1424,12 @@
   "font_family_baa0c6a3": {
     "message": "Font family"
   },
+  "font_settings_afc8127c": {
+    "message": "Font settings"
+  },
+  "font_settings_used_in_the_text_editors_a7ed1383": {
+    "message": "Font settings used in the text editors."
+  },
   "font_size_bf4db203": {
     "message": "Font size"
   },
@@ -1465,6 +1489,9 @@
   },
   "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
     "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
+  },
+  "get_a_key_bb364e3": {
+    "message": "Get a key"
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1672,9 +1699,6 @@
   },
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
-  },
-  "issues_4680a499": {
-    "message": "Issues"
   },
   "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
     "message": "it''s not a built-in function or a custom function."
@@ -2063,9 +2087,6 @@
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"
   },
-  "my_staging_environment_2b92d0aa": {
-    "message": "My Staging Environment"
-  },
   "name_1aed4a1b": {
     "message": "Name"
   },
@@ -2294,9 +2315,6 @@
   "or_4f7d4edb": {
     "message": "Or: "
   },
-  "orchestrator_36e58231": {
-    "message": "Orchestrator"
-  },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator recognizer"
   },
@@ -2459,6 +2477,9 @@
   "property_type_e38cf7e4": {
     "message": "Property Type"
   },
+  "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
+    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
+  },
   "provide_access_tokens_8ead7563": {
     "message": "Provide access tokens"
   },
@@ -2482,9 +2503,6 @@
   },
   "publish_5211dca3": {
     "message": "Publish"
-  },
-  "publish_configuration_d759a4e3": {
-    "message": "Publish Configuration"
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
@@ -2575,9 +2593,6 @@
   },
   "recent_bots_53585911": {
     "message": "Recent Bots"
-  },
-  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
-    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
   },
   "recognizer_type_dc591e16": {
     "message": "Recognizer Type"
@@ -3152,6 +3167,9 @@
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
   },
+  "this_cognitive_service_account_is_already_set_as_t_841165f7": {
+    "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
+  },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "This configures a data driven dialog via a collection of events and actions."
   },
@@ -3478,6 +3496,9 @@
   },
   "weather_bot_c38920cd": {
     "message": "Weather Bot"
+  },
+  "webchat_a134b64b": {
+    "message": "Webchat"
   },
   "webchat_inspector_4d0dfeb7": {
     "message": "Webchat Inspector"
