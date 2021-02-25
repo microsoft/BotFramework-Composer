@@ -62,7 +62,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
   const currentProjectId = skillId ?? projectId;
-  const schemas = useRecoilValue(schemasState(currentProjectId));
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
 
   const isRootBot = !!botProject?.isRootBot;
