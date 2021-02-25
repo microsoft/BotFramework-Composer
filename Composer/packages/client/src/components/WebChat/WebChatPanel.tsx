@@ -132,7 +132,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       const chatData = await conversationService.restartConversation(
         chats[oldConversationId],
         requireNewUserId,
-        activeLocale
+        activeLocale,
+        secrets
       );
       setConversationData(chatData);
       sendInitialActivities(chatData);
