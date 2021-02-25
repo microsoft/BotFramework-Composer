@@ -241,6 +241,7 @@ describe('updateConversation handler', () => {
       body: {
         conversationId: 'conversation-new',
         userId: 'user-new',
+        locale: 'en-us',
       },
     };
 
