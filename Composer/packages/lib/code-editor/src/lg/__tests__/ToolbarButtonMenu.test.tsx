@@ -105,13 +105,13 @@ describe('<ToolbarButtonMenu />', () => {
     render(<ToolbarButtonMenu payload={propertiesPayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
-    fireEvent.change(screen.getByPlaceholderText('Search properties'), { target: { value: 'test1' } });
+    fireEvent.change(screen.getByPlaceholderText('Search properties'), { target: { value: 'this' } });
 
     act(() => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/test1/)).length).toBe(2);
+    expect((await screen.findAllByText(/this/)).length).toBe(2);
   });
 
   it('property: Should expand property in the menu on click if not leaf', async () => {

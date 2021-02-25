@@ -66,10 +66,10 @@ export type CommonModalityEditorProps = {
 export const acceptedInputHintValues = ['expecting', 'ignoring', 'accepting'] as const;
 export const acceptedAttachmentLayout = ['carousel', 'list'] as const;
 
-export const modalityType = ['Text', 'Speak', 'Attachments', 'SuggestedActions'] as const;
-export const structuredResponseKeys = [...modalityType, 'AttachmentLayout', 'InputHint'] as const;
+export const modalityTypes = ['Text', 'Speak', 'Attachments', 'SuggestedActions'] as const;
+export const structuredResponseKeys = [...modalityTypes, 'AttachmentLayout', 'InputHint'] as const;
 
-export type ModalityType = typeof modalityType[number];
+export type ModalityType = typeof modalityTypes[number];
 
 export type TextStructuredResponseItem = { kind: 'Text'; value: string[]; valueType: 'template' | 'direct' };
 export type SpeechStructuredResponseItem = { kind: 'Speak'; value: string[]; valueType: 'template' | 'direct' };
