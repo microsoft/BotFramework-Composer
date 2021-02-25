@@ -201,9 +201,7 @@ export class Conversation {
   }
 
   public updateLocale(activeLocal: string) {
-    if (this.locale !== activeLocal) {
-      this.locale = activeLocal;
-    }
+    this.locale = activeLocal;
   }
 
   public updateUser(userId: string) {
