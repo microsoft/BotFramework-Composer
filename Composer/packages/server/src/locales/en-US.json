@@ -209,6 +209,9 @@
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
     "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
   },
+  "add_suggested_action_baf855ca": {
+    "message": "Add suggested action"
+  },
   "add_welcome_message_49d9ded9": {
     "message": "Add welcome message"
   },
@@ -452,6 +455,9 @@
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
     "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
   },
+  "bot_is_botname_c5af0c89": {
+    "message": "Bot is { botName }"
+  },
   "bot_language_6cf30c2": {
     "message": "Bot language"
   },
@@ -607,9 +613,6 @@
   },
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
-  },
-  "component_templates_populated_from_npm_feeds_d89351ef": {
-    "message": "Component templates populated from npm feeds"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
@@ -785,9 +788,6 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
-  "create_from_templates_779893ae": {
-    "message": "Create from templates"
-  },
   "create_kb_e78571ba": {
     "message": "Create KB"
   },
@@ -944,6 +944,9 @@
   "design_51b2812a": {
     "message": "Design"
   },
+  "diagnostic_description_msg_9ddd1be": {
+    "message": "Diagnostic Description { msg }"
+  },
   "diagnostic_links_228dc6fe": {
     "message": "diagnostic links"
   },
@@ -964,6 +967,9 @@
   },
   "diagnostics_pane_2d77c390": {
     "message": "Diagnostics Pane"
+  },
+  "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
+    "message": "Diagnostics tab which shows errors and warnings."
   },
   "dialog_68ba69ba": {
     "message": "(Dialog)"
@@ -1021,9 +1027,6 @@
   },
   "disable_a5c05db3": {
     "message": "Disable"
-  },
-  "discover_and_use_components_that_can_be_installed__b15032de": {
-    "message": "Discover and use components that can be installed into your bot"
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
@@ -1235,11 +1238,11 @@
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "Error in UI schema for { title }: { errorMsg }\n{ options }"
   },
-  "error_occured_ejecting_runtime_76bb48e7": {
-    "message": "Error occured ejecting runtime!"
-  },
   "error_occurred_5549a6b4": {
     "message": "Error occurred"
+  },
+  "error_occurred_ejecting_runtime_8512129e": {
+    "message": "Error occurred ejecting runtime!"
   },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
@@ -1249,6 +1252,9 @@
   },
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
+  },
+  "errorsmsg_8f5d3d85": {
+    "message": "{ errorsMsg }"
   },
   "event_activity_2067a94b": {
     "message": "Event activity"
@@ -2096,6 +2102,9 @@
   "no_functions_found_e0db426b": {
     "message": "No functions found"
   },
+  "no_i_want_to_keep_the_content_just_de_reference_fr_fac5f2ce": {
+    "message": "No, I want to keep the content, just de-reference from this response."
+  },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NO LU FILE WITH NAME { id }"
   },
@@ -2267,9 +2276,6 @@
   "output_5023cf84": {
     "message": "Output"
   },
-  "package_manager_6c42db30": {
-    "message": "Package manager"
-  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2326,6 +2332,9 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
+  },
+  "preview_the_new_adaptive_runtime_and_component_sys_1106041c": {
+    "message": "Preview the new adaptive runtime and component system"
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -3413,6 +3422,9 @@
   "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
     "message": "Warning: the action you are about to take cannot be undone. Going further will delete this bot and any related files in the bot project folder."
   },
+  "warningsmsg_e2c04bfe": {
+    "message": "{ warningsMsg }"
+  },
   "we_have_created_a_sample_bot_to_help_you_get_start_95a58922": {
     "message": "We have created a sample bot to help you get started with Composer. Click here to open the bot."
   },
@@ -3424,6 +3436,9 @@
   },
   "webchat_inspector_4d0dfeb7": {
     "message": "Webchat Inspector"
+  },
+  "webchat_log_b7213a9e": {
+    "message": "Webchat log."
   },
   "welcome_73d18b4d": {
     "message": "Welcome!"
@@ -3493,6 +3508,9 @@
   },
   "yes_dde87d5": {
     "message": "Yes"
+  },
+  "yes_i_d_like_to_remove_the_the_content_of_this_tab_e870a0a": {
+    "message": "Yes, I’d like to remove the the content of this tab completely from the LG file."
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "You already have a KB with that name. Choose another name and try again."

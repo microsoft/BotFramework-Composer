@@ -5,7 +5,7 @@
 import { DirectLineLog } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import { webChatLogsState } from '../atoms';
+import { webChatLogsState, isWebChatPanelVisibleState } from '../atoms';
 
 export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
@@ -20,8 +20,14 @@ export const webChatLogDispatcher = () => {
     }
   );
 
+  const setWebChatPanelVisibility = useRecoilCallback((callbackHelpers: CallbackInterface) => (value: boolean) => {
+    const { set } = callbackHelpers;
+    set(isWebChatPanelVisibleState, value);
+  });
+
   return {
     clearWebChatLogs,
     appendLogToWebChatInspector,
+    setWebChatPanelVisibility,
   };
 };

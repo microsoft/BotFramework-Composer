@@ -70,6 +70,12 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = hasErrors || !formData.url || !formData.name;
 
+  const handleDismiss = () => {
+    onDismiss?.();
+    actions.createQnAFromUrlDialogCancel({ projectId });
+    TelemetryClient.track('AddNewKnowledgeBaseCanceled');
+  };
+
   return (
     <Dialog
       dialogContentProps={{
@@ -82,7 +88,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
         isBlocking: false,
         styles: styles.modal,
       }}
-      onDismiss={onDismiss}
+      onDismiss={handleDismiss}
     >
       <div css={dialogWindow}>
         <Stack>
@@ -131,8 +137,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
         <DefaultButton
           text={formatMessage('Cancel')}
           onClick={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId });
-            onDismiss?.();
+            handleDismiss();
           }}
         />
         <PrimaryButton
@@ -144,7 +149,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
               return;
             }
             onSubmit(formData);
-            TelemetryClient.track('AddNewKnowledgeBaseCompleted');
+            TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: false });
           }}
         />
       </DialogFooter>
