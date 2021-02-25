@@ -158,7 +158,7 @@ export const OpenConfirmModal = (title, subTitle, setting = {}): Promise<boolean
   });
 };
 
-export const OpenConfirmModalWithChoices = (title, subTitle, setting = {}): Promise<{ choice: string } | null> => {
+export const OpenConfirmModalWithChoices = (title, subTitle, setting = {}): Promise<{ choice?: string } | null> => {
   return new Promise((resolve) => {
     const node = document.createElement('div');
     document.body.appendChild(node);
@@ -169,7 +169,7 @@ export const OpenConfirmModalWithChoices = (title, subTitle, setting = {}): Prom
 
     const onConfirm = (choice?: string) => {
       removeNode();
-      resolve(choice ? { choice } : null);
+      resolve({ choice });
     };
     const onCancel = () => {
       removeNode();
