@@ -190,4 +190,21 @@ export class Conversation {
     }
     return activities;
   }
+
+  public updateConversationId(conversationId: string) {
+    this.conversationId = conversationId;
+  }
+
+  public updateSecrets(msaAppId: string, msaPassword: string) {
+    this.botEndpoint.msaAppId = msaAppId;
+    this.botEndpoint.msaPassword = msaPassword;
+  }
+
+  public updateLocale(activeLocal: string) {
+    this.locale = activeLocal;
+  }
+
+  public updateUser(userId: string) {
+    this.user.id = userId;
+  }
 }

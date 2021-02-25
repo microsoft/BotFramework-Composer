@@ -72,7 +72,7 @@ export class BotEndpoint {
   }
 
   public async fetchWithAuth(url: string, reqOptions: { body: any; headers: any }, forceRefresh = false): Promise<any> {
-    if (this.msaAppId) {
+    if (this.msaAppId || this.msaPassword) {
       reqOptions.headers = {
         ...reqOptions.headers,
         Authorization: `Bearer ${await this.getAccessToken(forceRefresh)}`,
