@@ -22,7 +22,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useEffect, useState } from 'react';
 
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
-import { botDisplayNameState, exportSkillModalInfoState, skillsStateSelector } from '../../../../../recoilModel';
+import { botDisplayNameState, botProjectSpaceSelector, exportSkillModalInfoState } from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
 
 // -------------------- Styles -------------------- //
@@ -101,10 +101,10 @@ const BotNameRender: React.FC<{ item: IDiagnosticInfo }> = ({ item }) => {
 
 export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems }) => {
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
-  const skillStates = useRecoilValue(skillsStateSelector);
+  const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
 
   const getSkillName = (projectId: string) =>
-    Object.keys(skillStates).find((skillName) => skillStates[skillName].id === projectId) ?? projectId;
+    botProjectSpace.find((bot) => bot.projectId === projectId)?.name ?? projectId;
 
   const staticColumns = [
     {
