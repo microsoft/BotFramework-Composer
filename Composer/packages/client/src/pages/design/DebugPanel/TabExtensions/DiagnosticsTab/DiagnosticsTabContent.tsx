@@ -21,8 +21,8 @@ export const DiagnosticsContent = () => {
     <Split
       resetOnDoubleClick
       initialPrimarySize="160px"
-      minPrimarySize="160px"
-      minSecondarySize="800px"
+      minPrimarySize="140px"
+      minSecondarySize="600px"
       renderSplitter={renderThinSplitter}
       splitterSize="5px"
     >
