@@ -79,7 +79,7 @@ export const createUpdateConversationHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response): void => {
     const oldConversationId = req.params.conversationId;
     try {
-      const { conversationId, userId, locale } = req.body;
+      const { conversationId, userId, locale, msaPassword, msaAppId } = req.body;
       const currentConversation = state.conversations.conversationById(oldConversationId);
       if (!oldConversationId || !currentConversation) {
         res.status(StatusCodes.NOT_FOUND).send(formatMessage('Conversation ID cannot be updated.'));
@@ -87,11 +87,11 @@ export const createUpdateConversationHandler = (state: DLServerState) => {
       // update the conversation object and reset as much as we can to resemble a new conversation
       state.conversations.deleteConversation(oldConversationId);
 
-      currentConversation.conversationId = conversationId;
-      currentConversation.user.id = userId;
-      if (locale && currentConversation.locale !== locale) {
-        currentConversation.locale = locale;
-      }
+      // Update conversation object with new data supplied from Composer
+      currentConversation.updateConversationId(conversationId);
+      currentConversation.updateSecrets(msaAppId, msaPassword);
+      currentConversation.updateUser(userId);
+      currentConversation.updateLocale(locale);
 
       const user: User | undefined = currentConversation.members.find((member) => member.name === 'User');
       if (!user) {
@@ -106,6 +106,7 @@ export const createUpdateConversationHandler = (state: DLServerState) => {
 
       currentConversation.clearConversation();
       currentConversation.nextWatermark = 0;
+
       state.dispatchers.updateConversation(conversationId, currentConversation);
 
       res.status(StatusCodes.CREATED).json({
