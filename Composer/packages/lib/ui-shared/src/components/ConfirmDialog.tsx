@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import * as React from 'react';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
@@ -61,13 +62,14 @@ const confirmationContainer = css`
 
 type ConfirmDialogProps = {
   onCancel: () => void;
-  onConfirm: () => void;
-  setting: any;
+  onConfirm: (choice?: string) => void;
+  setting: Record<string, any> & { choiceGroup?: { options: IChoiceGroupOption[]; selectedKey: string } };
 };
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   const { setting, onCancel, onConfirm } = props;
   const {
+    choiceGroup,
     title,
     subTitle = '',
     onRenderContent = defaultContentRender,
@@ -78,10 +80,15 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     styles = { content: {}, main: {}, modal: {} },
   } = setting;
 
+  const [selectedChoice, setSelectedChoice] = React.useState(choiceGroup?.selectedKey);
   const [disabled, setDisabled] = React.useState(setting.disabled);
 
   const handleCheckbox = (event, checked) => {
     setDisabled(!checked);
+  };
+
+  const confirm = () => {
+    onConfirm(selectedChoice);
   };
 
   if (!title) {
@@ -109,9 +116,19 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
       <div css={[confirmationContainer, styles.content]}>
         {onRenderContent(subTitle, builtInStyles[style])}
         {checkboxLabel && <Checkbox checked={!disabled} label={checkboxLabel} onChange={handleCheckbox} />}
+        {choiceGroup && (
+          <ChoiceGroup
+            required
+            options={choiceGroup.options}
+            selectedKey={selectedChoice}
+            onChange={(ev, opt) => {
+              setSelectedChoice(opt?.key);
+            }}
+          />
+        )}
       </div>
       <DialogFooter>
-        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmText} onClick={onConfirm} />
+        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmText} onClick={confirm} />
         <DefaultButton data-testid="cancelPrompt" text={cancelText} onClick={onCancel} />
       </DialogFooter>
     </Dialog>
@@ -134,6 +151,29 @@ export const OpenConfirmModal = (title, subTitle, setting = {}): Promise<boolean
     const onCancel = () => {
       removeNode();
       resolve(false);
+    };
+
+    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;
+    ReactDOM.render(modal, node);
+  });
+};
+
+export const OpenConfirmModalWithChoices = (title, subTitle, setting = {}): Promise<{ choice: string } | null> => {
+  return new Promise((resolve) => {
+    const node = document.createElement('div');
+    document.body.appendChild(node);
+    const removeNode = () => {
+      ReactDOM.unmountComponentAtNode(node);
+      node.remove();
+    };
+
+    const onConfirm = (choice?: string) => {
+      removeNode();
+      resolve(choice ? { choice } : null);
+    };
+    const onCancel = () => {
+      removeNode();
+      resolve(null);
     };
 
     const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;

@@ -9,9 +9,9 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
+import { DiagnosticsTabKey } from '../types';
 
 import { useDiagnosticsStatistics } from './useDiagnostics';
-import { DiagnosticsTabKey } from './constants';
 
 /**
  * Displays how many errors and warnings in current project.
