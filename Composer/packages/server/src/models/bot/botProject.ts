@@ -195,6 +195,17 @@ export class BotProject implements IBotProject {
     };
   };
 
+  /**
+   * return the absolute path to the runtime project for use when starting or building the app
+   */
+  public getRuntimePath = (): string | undefined => {
+    let runtimePath = this.settings?.runtime?.path;
+    if (runtimePath && !Path.isAbsolute(runtimePath)) {
+      runtimePath = Path.resolve(this.dir, 'settings', runtimePath);
+    }
+    return runtimePath;
+  };
+
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
     return await this.settingManager.get(obfuscate);
   };

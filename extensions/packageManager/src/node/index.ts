@@ -294,10 +294,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      let runtimePath = currentProject.settings?.runtime?.path;
-      if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, 'settings', runtimePath);
-      }
+      const runtimePath = currentProject.getRuntimePath();
 
       if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
         const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
@@ -349,10 +346,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      let runtimePath = currentProject.settings?.runtime?.path;
-      if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, 'settings', runtimePath);
-      }
+      const runtimePath = currentProject.getRuntimePath();
 
       if (packageName && runtimePath) {
         try {
@@ -480,10 +474,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      let runtimePath = currentProject.settings?.runtime?.path;
-      if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, 'settings', runtimePath);
-      }
+      const runtimePath = currentProject.getRuntimePath();
 
       // get URL or package name
       const packageName = req.body.package;
