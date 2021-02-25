@@ -15,7 +15,7 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { QnABotTemplateId, PublishProfile } from '@bfc/shared';
+import { QnABotTemplateId } from '@bfc/shared';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -26,7 +26,7 @@ import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNo
 import { dispatcherState } from '../../recoilModel';
 
 import { LocationSelectContent } from './LocationSelectContent';
-import { getAliasFromPayload } from '../../utils/electronUtil';
+import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 
 // -------------------- Styles -------------------- //
 
@@ -74,7 +74,7 @@ interface DefineConversationFormData {
   schemaUrl: string;
   location?: string;
 
-  profile?: PublishProfile; // abs payload to create bot
+  profile?: Profile; // abs payload to create bot
   source?: string; // where the payload come from
 
   templateDir?: string; // location of the imported template
