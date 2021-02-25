@@ -1,9 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const checkForPVASchema = (schema) => {
+const checkSchemaFor = (schema, definition) => {
   if (schema?.content?.definitions) {
-    return schema.content.definitions['Microsoft.VirtualAgents.Recognizer'] !== undefined;
+    return schema.content.definitions[definition] !== undefined;
   }
   return false;
 };
+
+export const checkForPVASchema = (schema) => checkSchemaFor(schema, 'Microsoft.VirtualAgents.Recognizer');
+
+export const checkForOrchestratorSchema = (schema) => checkSchemaFor(schema, 'Microsoft.OrchestratorRecognizer');

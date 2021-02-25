@@ -3,6 +3,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { createDirectLine } from 'botframework-webchat';
 import moment from 'moment';
 import { DirectLineLog } from '@bfc/shared';
@@ -63,6 +64,7 @@ export type ChatData = {
   projectId: string;
   user: User;
   conversationId: string;
+  webChatStore: unknown;
 };
 
 export const getDateTimeFormatted = (): string => {
@@ -90,7 +92,8 @@ export class ConversationService {
     oldConversationId: string,
     newConversationId: string,
     userId: string,
-    activeLocale: string
+    activeLocale: string,
+    secrets: BotSecrets
   ) {
     const url = `${this.directlineHostUrl}/conversations/${oldConversationId}/updateConversation`;
     return axios.put(
@@ -99,6 +102,8 @@ export class ConversationService {
         conversationId: newConversationId,
         userId,
         locale: activeLocale,
+        msaAppId: secrets.msAppId,
+        msaPassword: secrets.msPassword,
       },
       {
         headers: {
@@ -182,16 +187,23 @@ export class ConversationService {
       endpointId: endpointId,
       userId: user.id,
     });
+    const webChatStore: unknown = createWebChatStore({});
     return {
       directline,
       webChatMode: webChatMode,
       projectId,
       user,
       conversationId,
+      webChatStore,
     };
   }
 
-  public async restartConversation(oldChatData: ChatData, requireNewUserID: boolean, activeLocale: string) {
+  public async restartConversation(
+    oldChatData: ChatData,
+    requireNewUserID: boolean,
+    activeLocale: string,
+    secrets: BotSecrets
+  ) {
     if (oldChatData.directline) {
       oldChatData.directline.end();
     }
@@ -203,13 +215,20 @@ export class ConversationService {
       user = this.getUser();
     }
 
-    const resp = await this.conversationUpdate(oldChatData.conversationId, conversationId, user.id, activeLocale);
+    const resp = await this.conversationUpdate(
+      oldChatData.conversationId,
+      conversationId,
+      user.id,
+      activeLocale,
+      secrets
+    );
     const { endpointId } = resp.data;
     const directline = await this.fetchDirectLineObject(conversationId, {
       mode: oldChatData.webChatMode,
       endpointId: endpointId,
       userId: user.id,
     });
+    const webChatStore = createWebChatStore({});
 
     return {
       directline,
@@ -217,6 +236,7 @@ export class ConversationService {
       projectId: oldChatData.projectId,
       user,
       conversationId,
+      webChatStore,
     };
   }
 
@@ -240,7 +260,7 @@ export class ConversationService {
         route: 'conversations/ws/port',
         status: response.status,
         logType: 'Error',
-        message: formatMessage('An error occured sending conversation update activity to the bot'),
+        message: formatMessage('An error occurred sending conversation update activity to the bot'),
       };
       throw err;
     }
@@ -262,7 +282,7 @@ export class ConversationService {
         route: response.request?.path ?? '',
         status: response.status,
         logType: 'Error',
-        message: formatMessage('An error occured trying to save the transcript to disk'),
+        message: formatMessage('An error occurred trying to save the transcript to disk'),
       };
       return err;
     }
