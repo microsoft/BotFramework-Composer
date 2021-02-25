@@ -1,15 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import {
-  LuIntentSection,
-  LgFile,
-  LuFile,
-  QnASection,
-  FileInfo,
-  LgTemplate,
-  ILUFeaturesConfig,
-  TextFile,
-} from '@bfc/shared';
+import { LuIntentSection, LgFile, LuFile, FileInfo, LgTemplate, ILUFeaturesConfig, TextFile } from '@bfc/shared';
 
 import { FileAsset } from '../persistence/types';
 

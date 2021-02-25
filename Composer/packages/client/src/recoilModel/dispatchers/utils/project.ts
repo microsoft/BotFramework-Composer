@@ -258,8 +258,8 @@ export const loadProjectData = async (data) => {
   const { lgResources, luResources, qnaResources } = indexedFiles;
 
   //parse all resources with worker
-  await lgWorker.addProject(projectId);
-  console.log(projectId);
+  lgWorker.addProject(projectId);
+
   const result = await Promise.all([
     await luWorker.parseAll(luResources, mergedSettings.luFeatures),
     await qnaWorker.parseAll(qnaResources),

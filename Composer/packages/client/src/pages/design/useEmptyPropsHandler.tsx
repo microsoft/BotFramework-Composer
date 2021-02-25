@@ -35,7 +35,7 @@ export const useEmptyPropsHandler = (
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId: activeBot }));
   const locale = useRecoilValue(localeState(activeBot));
   const [currentLg, setCurrentLg] = useRecoilState(
-    lgFileState({ projectId: activeBot, lgFileId: dialogId + '.' + locale })
+    lgFileState({ projectId: activeBot, lgFileId: `${dialogId}.${locale}` })
   );
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const { updateDialog, setDesignPageLocation, navTo } = useRecoilValue(dispatcherState);
