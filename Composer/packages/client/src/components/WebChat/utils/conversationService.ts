@@ -3,6 +3,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { createDirectLine } from 'botframework-webchat';
 import moment from 'moment';
 import { DirectLineLog } from '@bfc/shared';
@@ -63,6 +64,7 @@ export type ChatData = {
   projectId: string;
   user: User;
   conversationId: string;
+  webChatStore: unknown;
 };
 
 export const getDateTimeFormatted = (): string => {
@@ -182,12 +184,14 @@ export class ConversationService {
       endpointId: endpointId,
       userId: user.id,
     });
+    const webChatStore: unknown = createWebChatStore({});
     return {
       directline,
       webChatMode: webChatMode,
       projectId,
       user,
       conversationId,
+      webChatStore,
     };
   }
 
@@ -210,6 +214,7 @@ export class ConversationService {
       endpointId: endpointId,
       userId: user.id,
     });
+    const webChatStore = createWebChatStore({});
 
     return {
       directline,
@@ -217,6 +222,7 @@ export class ConversationService {
       projectId: oldChatData.projectId,
       user,
       conversationId,
+      webChatStore,
     };
   }
 
@@ -240,7 +246,7 @@ export class ConversationService {
         route: 'conversations/ws/port',
         status: response.status,
         logType: 'Error',
-        message: formatMessage('An error occured sending conversation update activity to the bot'),
+        message: formatMessage('An error occurred sending conversation update activity to the bot'),
       };
       throw err;
     }
@@ -262,7 +268,7 @@ export class ConversationService {
         route: response.request?.path ?? '',
         status: response.status,
         logType: 'Error',
-        message: formatMessage('An error occured trying to save the transcript to disk'),
+        message: formatMessage('An error occurred trying to save the transcript to disk'),
       };
       return err;
     }
