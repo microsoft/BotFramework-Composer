@@ -11,10 +11,11 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 
-import { DEFAULT_FONT_SETTINGS } from '../../../recoilModel/utils';
+import { getDefaultFontSettings } from '../../../recoilModel/utils/fontUtil';
 
 import * as styles from './styles';
 
+const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 interface IFontSettingsProps {
   id?: string;
   description: React.ReactChild;

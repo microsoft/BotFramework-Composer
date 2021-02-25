@@ -6,13 +6,14 @@ import { DirectLineLog } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import { DEFAULT_FONT_SETTINGS } from '../../../../../recoilModel/utils';
+import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 
 export interface WebchatLogItemProps {
   item: DirectLineLog;
 }
 
 export const WebchatLogItem: React.FC<WebchatLogItemProps> = ({ item }) => {
+  const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
   return (
     <div
       css={{
