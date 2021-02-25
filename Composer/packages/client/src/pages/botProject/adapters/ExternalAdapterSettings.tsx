@@ -15,6 +15,7 @@ import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JSONSchema7 } from '@botframework-composer/types';
 
+import { useRouterCache } from '../../../utils/hooks';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableRow, tableRowItem, tableColumnHeader } from '../styles';
 
@@ -32,6 +33,8 @@ const ExternalAdapterSettings = (props: Props) => {
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
   const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
   const { setSettings } = useRecoilValue(dispatcherState);
+  const packageManagerLink = useRouterCache('plugin/package-manager/package-manager');
+
   const adapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];
 
   const { definitions: schemaDefinitions } = schemas?.sdk?.content ?? {};
@@ -58,7 +61,7 @@ const ExternalAdapterSettings = (props: Props) => {
       <div key={'subtitle'} css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
           a: ({ children }) => (
-            <Link key="link" href="plugin/package-manager/package-manager">
+            <Link key="link" href={packageManagerLink}>
               {children}
             </Link>
           ),
