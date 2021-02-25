@@ -119,6 +119,9 @@
   "activity_received_2f20fa9d": {
     "message": "Activity received"
   },
+  "adapters_fd4173b1": {
+    "message": "Adapters"
+  },
   "adaptive_card_785723e3": {
     "message": "Adaptive card"
   },
@@ -368,6 +371,9 @@
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
     "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
+  "azure_bot_service_channels_5b358c1c": {
+    "message": "Azure Bot Service channels"
+  },
   "back_2900f52a": {
     "message": "Back"
   },
@@ -575,6 +581,12 @@
   "choose_one_2c4277df": {
     "message": "Choose One"
   },
+  "choose_publishing_profile_ee7ecc78": {
+    "message": "Choose publishing profile"
+  },
+  "choose_subscription_3d78d10d": {
+    "message": "Choose subscription"
+  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -647,8 +659,17 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
+  "configure_adapter_2f621249": {
+    "message": "Configure adapter"
+  },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Configure Composer to start your bot using runtime code you can customize and control."
+  },
+  "configure_ecb97e30": {
+    "message": "Configure"
+  },
+  "configured_8d0f4dc8": {
+    "message": "Configured"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
@@ -679,6 +700,9 @@
   },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
+  },
+  "connect_your_bot_to_other_messaging_services_c7f6aed6": {
+    "message": "Connect your bot to other messaging services."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -1043,6 +1067,9 @@
   "do_you_wish_to_continue_96469eaf": {
     "message": "Do you wish to continue?"
   },
+  "documentation_d82f6eec": {
+    "message": "Documentation"
+  },
   "does_not_exist_3a34b418": {
     "message": "Does Not Exist"
   },
@@ -1315,6 +1342,9 @@
   },
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "External resources will not be changed."
+  },
+  "external_service_adapters_5218e6a3": {
+    "message": "External service adapters"
   },
   "external_services_da7820ce": {
     "message": "External services"
@@ -1589,6 +1619,9 @@
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
+  "install_more_adapters_in_a_package_settings_a_e8b0df7a": {
+    "message": "Install more adapters in <a>Package Settings</a>."
+  },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
   },
@@ -1639,6 +1672,9 @@
   },
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
+  },
+  "issues_4680a499": {
+    "message": "Issues"
   },
   "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
     "message": "it''s not a built-in function or a custom function."
@@ -2005,6 +2041,9 @@
   },
   "move_up_b1c4d3a5": {
     "message": "Move Up"
+  },
+  "ms_teams_15993b97": {
+    "message": "MS Teams"
   },
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
@@ -2449,6 +2488,9 @@
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
+  },
+  "publish_profile_to_configure_ca758e68": {
+    "message": "Publish profile to configure:"
   },
   "publish_profiles_36fb522d": {
     "message": "Publish profiles"
@@ -2983,6 +3025,9 @@
   },
   "submit_a3cc6859": {
     "message": "Submit"
+  },
+  "subscription_id_250f5e1f": {
+    "message": "Subscription Id:"
   },
   "suggested_actions_94d06bfa": {
     "message": "Suggested Actions"
