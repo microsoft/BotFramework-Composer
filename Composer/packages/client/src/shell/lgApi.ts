@@ -84,7 +84,7 @@ function createLgApi(
    */
   const getGeneratedLgTemplateNames = (file: LgFile, toBeRemovedLgTemplateNames: string[]) => {
     const generatedLgTemplateNames: string[] = [];
-    const lgTemplates = file.allTemplates.filter((t) => toBeRemovedLgTemplateNames.includes(t.name) && !!t.properties);
+    const lgTemplates = file.templates.filter((t) => toBeRemovedLgTemplateNames.includes(t.name) && !!t.properties);
     for (const lgTemplate of lgTemplates) {
       // Auto-generated templates in structured responses have the following pattern
       // [name of the parent template]_text OR [name of the parent template]_speak OR [name of the parent template]_attachment_[random string]
