@@ -53,7 +53,7 @@ export const useEmptyPropsHandler = (
   }, [currentDialog]);
 
   useEffect(() => {
-    if (!currentDialog) return;
+    if (!currentDialog || !currentLg.id) return;
     if (currentLg.rawData) {
       //for current dialog, check the lg file to make sure the file is parsed.
       lgDiagnosticWorker.parse(activeBot, currentLg.id, currentLg.content, lgFiles).then((result) => {
