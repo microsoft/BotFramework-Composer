@@ -20,6 +20,7 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
         } else if (source && payload) {
           return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
         }
+        break;
       }
 
       case 'create': {

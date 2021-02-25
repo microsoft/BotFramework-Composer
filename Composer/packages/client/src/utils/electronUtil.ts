@@ -30,8 +30,8 @@ export function getPublishProfileFromPayload(profile: Profile, source: string): 
       // parse subscriptionId ... from profile
       const temp = { ...profile };
       const subs = profile.resourceId.match(/subscriptions\/([\w-]*)\//);
-      const groups = profile.resourceId.match(/resourceGroups\/([^\/]*)/);
-      const names = profile.resourceId.match(/botServices\/([^\/]*)/);
+      const groups = profile.resourceId.match(/resourceGroups\/([^/]*)/);
+      const names = profile.resourceId.match(/botServices\/([^/]*)/);
       temp.subscriptionId = (subs && subs.length > 0 && subs[1]) || '';
       temp.resourceGroup = (groups && groups.length > 0 && groups[1]) || '';
       temp.botName = (names && names.length > 0 && names[1]) || '';
