@@ -188,7 +188,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onBlurListener.dispose();
       };
     }
-  }, [editorRef.current]);
+  }, [editorRef.current, onBlur, onFocus]);
 
   useEffect(() => {
     if (editorRef.current) {

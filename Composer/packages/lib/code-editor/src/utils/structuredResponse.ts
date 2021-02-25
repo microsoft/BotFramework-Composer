@@ -14,6 +14,7 @@ import {
   PartialStructuredResponse,
   SpeechStructuredResponseItem,
   StructuredResponseItem,
+  structuredResponseKeys,
   SuggestedActionsStructuredResponseItem,
   TextStructuredResponseItem,
 } from '../lg/types';
@@ -56,11 +57,8 @@ const getStructuredResponseByKind = (
     case 'Attachments':
       return getStructuredResponseHelper(value, 'Attachments') as AttachmentsStructuredResponseItem;
     case 'SuggestedActions': {
-      if (Array.isArray(value)) {
-        const responseValue = (value as string[]).map((v) => v.trim());
-        return { kind: 'SuggestedActions', value: responseValue } as SuggestedActionsStructuredResponseItem;
-      }
-      break;
+      const responseValue = Array.isArray(value) ? (value as string[]).map((v) => v.trim()) : [value];
+      return { kind: 'SuggestedActions', value: responseValue } as SuggestedActionsStructuredResponseItem;
     }
     case 'AttachmentLayout':
       if (acceptedAttachmentLayout.includes(value as typeof acceptedAttachmentLayout[number])) {
@@ -159,14 +157,16 @@ export const structuredResponseToString = (structuredResponse: PartialStructured
     }
   };
 
-  const body = keys.reduce((text, kind) => {
-    const value = getValue(kind as StructuredResponseItem['kind']);
+  const body = structuredResponseKeys
+    .filter((k) => keys.includes(k))
+    .reduce((text, kind) => {
+      const value = getValue(kind as StructuredResponseItem['kind']);
 
-    if (value) {
-      text += `\t${kind} = ${value}\n`;
-    }
-    return text;
-  }, '');
+      if (value) {
+        text += `\t${kind} = ${value}\n`;
+      }
+      return text;
+    }, '');
 
   return body ? `[${activityTemplateType}\n${body}]\n`.replace(/\t/gm, defaultIndent) : '';
 };

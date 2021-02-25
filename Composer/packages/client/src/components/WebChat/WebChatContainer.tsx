@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 import React from 'react';
 import ReactWebChat, { createStyleSet } from 'botframework-webchat';
-import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
 import { ConversationService, ActivityType, ChatData } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 
-type WebChatContainerProps = {
+export type WebChatContainerProps = {
   currentConversation: string;
   activeLocale: string;
   conversationService: ConversationService;
@@ -75,12 +74,15 @@ const createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...
 };
 
 const areEqual = (prevProps: WebChatContainerProps, nextProps: WebChatContainerProps) =>
-  prevProps.currentConversation === nextProps.currentConversation;
+  prevProps.currentConversation === nextProps.currentConversation && prevProps.isDisabled === nextProps.isDisabled;
 
 export const WebChatContainer = React.memo((props: WebChatContainerProps) => {
-  const { activeLocale, chatData, isDisabled } = props;
+  const { activeLocale, chatData, isDisabled, currentConversation } = props;
 
-  const webchatStore = createWebChatStore({});
+  if (!currentConversation || !chatData) {
+    return null;
+  }
+
   const styleSet = createStyleSet({ ...webChatStyleOptions });
   styleSet.fileContent = {
     ...styleSet.fileContent,
@@ -101,13 +103,13 @@ export const WebChatContainer = React.memo((props: WebChatContainerProps) => {
 
   return (
     <ReactWebChat
-      key={chatData?.conversationId}
+      key={chatData.conversationId}
       activityMiddleware={createActivityMiddleware}
       cardActionMiddleware={createCardActionMiddleware}
-      directLine={chatData?.directline}
+      directLine={chatData.directline}
       disabled={isDisabled}
       locale={activeLocale}
-      store={webchatStore}
+      store={chatData.webChatStore}
       styleSet={styleSet}
       userID={chatData?.user.id}
     />
