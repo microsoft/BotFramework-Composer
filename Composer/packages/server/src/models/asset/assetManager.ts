@@ -141,7 +141,7 @@ export class AssetManager {
     } catch (err) {
       if (err?.message.match(/npm/)) {
         throw new Error(
-          `Error executing npm package manager. Please ensure that node and npm are installed and available on your system. Full error message: ${err?.message}`
+          `Error calling npm to fetch template. Please ensure that node and npm are installed and available on your system. Full error message: ${err?.message}`
         );
       } else {
         throw new Error(`Error hit when instantiating remote template: ${err?.message}`);
