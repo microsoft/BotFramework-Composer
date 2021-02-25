@@ -4,7 +4,9 @@
 import React, { useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ObjectField } from '@bfc/adaptive-form';
 import { useRecoilValue } from 'recoil';
@@ -28,10 +30,11 @@ type Props = {
   adapterKey: string;
   packageName: string;
   isOpen: boolean;
+  isFirstTime: boolean; // true if the user clicked Configure to get here, false if it's from the Edit menu
   onClose: () => void;
   projectId: string;
   schema: JSONSchema7;
-  uiSchema: JSONSchema7;
+  uiSchema: JSONSchema7 & { helpLink?: string };
   value?: { [key: string]: ConfigValue };
 };
 
@@ -41,7 +44,7 @@ export function hasRequired(testObject: { [key: string]: ConfigValue }, fields?:
 }
 
 const AdapterModal = (props: Props) => {
-  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName } = props;
+  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName, isFirstTime } = props;
 
   const [value, setValue] = useState(props.value);
   const { setSettings } = useRecoilValue(dispatcherState);
@@ -77,6 +80,12 @@ const AdapterModal = (props: Props) => {
               if (update != null) setValue({ ...update, $kind: adapterKey });
             }}
           />
+          <Text>
+            {formatMessage.rich('To learn more about the { title }, <a>visit its documentation page</a>.', {
+              title: schema.title,
+              a: ({ children }) => <Link href={uiSchema.helpLink}>{children}</Link>,
+            })}
+          </Text>
           <DialogFooter>
             <DefaultButton onClick={onClose}>{formatMessage('Back')}</DefaultButton>
             <PrimaryButton
@@ -100,7 +109,7 @@ const AdapterModal = (props: Props) => {
                 onClose();
               }}
             >
-              {formatMessage('Create')}
+              {isFirstTime ? formatMessage('Create') : formatMessage('Confirm')}
             </PrimaryButton>
           </DialogFooter>
         </div>

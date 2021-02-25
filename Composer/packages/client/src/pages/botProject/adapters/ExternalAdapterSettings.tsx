@@ -37,13 +37,15 @@ const ExternalAdapterSettings = (props: Props) => {
   const { definitions: schemaDefinitions } = schemas?.sdk?.content ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
 
-  const [currentModalProps, setModalProps] = useState<{ key: string; packageName: string } | undefined>();
+  const [currentModalProps, setModalProps] = useState<
+    { key: string; packageName: string; firstTime: boolean } | undefined
+  >();
 
-  const openModal = (key?: string, packageName?: string) => {
-    if (key == null || packageName == null) {
+  const openModal = (key?: string, firstTime?: boolean, packageName?: string) => {
+    if (key == null || packageName == null || firstTime == null) {
       setModalProps(undefined);
     } else {
-      setModalProps({ key, packageName });
+      setModalProps({ key, packageName, firstTime });
     }
   };
 
@@ -51,7 +53,7 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const columnWidths = ['300px', '150px', '150px'];
 
-  const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string })[]) => (
+  const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string; firstTime?: boolean })[]) => (
     <div>
       <div key={'subtitle'} css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
@@ -84,7 +86,7 @@ const ExternalAdapterSettings = (props: Props) => {
               {keyConfigured ? (
                 <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
               ) : (
-                <Link key={key} onClick={() => openModal(key, packageName)}>
+                <Link key={key} onClick={() => openModal(key, true, packageName)}>
                   {formatMessage('Configure')}
                 </Link>
               )}
@@ -125,7 +127,7 @@ const ExternalAdapterSettings = (props: Props) => {
                       key: 'edit',
                       text: formatMessage('Edit'),
                       iconProps: { iconName: 'Edit' },
-                      onClick: () => openModal(key, packageName),
+                      onClick: () => openModal(key, false, packageName),
                     },
                   ],
                 }}
@@ -159,6 +161,7 @@ const ExternalAdapterSettings = (props: Props) => {
         <AdapterModal
           isOpen
           adapterKey={currentKey}
+          isFirstTime={currentModalProps?.firstTime ?? false}
           packageName={currentPackageName}
           projectId={projectId}
           schema={schemaDefinitions[currentKey]}
