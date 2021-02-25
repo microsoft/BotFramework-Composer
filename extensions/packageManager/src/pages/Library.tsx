@@ -176,6 +176,10 @@ const Library: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    getInstalledLibraries();
+  }, [currentProjectId]);
+
+  useEffect(() => {
     if (!feed && feeds.length) {
       if (runtimeLanguage === 'js') {
         setFeed('npm');
@@ -195,7 +199,6 @@ const Library: React.FC = () => {
     const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
     if (settings?.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
-      getInstalledLibraries();
       // detect programming language.
       // should one day be a dynamic property of the runtime or at least stored in the settings?
       if (settings.runtime.key === 'node-azurewebapp') {
@@ -373,6 +376,8 @@ const Library: React.FC = () => {
           await installComponentAPI(currentProjectId, packageName, version, true, source);
         }
       } else {
+        setWorking(false);
+
         updateInstalledComponents(results.data.components);
 
         // reload modified content
