@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { Dropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
-import { formDialogTemplatesAtom } from 'src/atoms/appState';
+
 import {
   ArrayPropertyPayload,
   BuiltInStringFormat,
@@ -17,8 +17,9 @@ import {
   RefPropertyPayload,
   FormDialogPropertyKind,
   StringPropertyPayload,
-} from 'src/atoms/types';
-import { FieldLabel } from 'src/components/common/FieldLabel';
+} from '../../atoms/types';
+import { FieldLabel } from '../common/FieldLabel';
+import { formDialogTemplatesAtom } from '../../atoms/appState';
 
 const processSelection = (
   isArray: boolean,

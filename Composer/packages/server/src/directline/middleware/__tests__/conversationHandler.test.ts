@@ -12,11 +12,17 @@ import {
 } from '../conversationHandler';
 
 const mockSendToSubscribers = jest.fn();
+const mockSendErrorToSubscribers = jest.fn();
+
+jest.mock('moment', () => {
+  return () => jest.requireActual('moment')('2021-02-19T00:00:00.000');
+});
 
 jest.mock('../../utils/webSocketServer.ts', () => {
   return {
     WebSocketServer: {
       sendToSubscribers: (...args) => mockSendToSubscribers(...args),
+      sendDLErrorsToSubscribers: (...args) => mockSendErrorToSubscribers(...args),
     },
   };
 });
@@ -152,6 +158,8 @@ describe('postActivityToBot handler', () => {
     const mockPostToBot = jest.fn();
 
     const req: any = {
+      method: 'POST',
+      path: 'v3/directine/conv-123',
       params: {
         activityId: 'id-1',
       },
@@ -180,8 +188,12 @@ describe('postActivityToBot handler', () => {
 
     expect(mockStatus).toHaveBeenCalledWith(400);
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      error: 'The bot cannot accept messages at this time',
-      errorCode: ['123Z-4', '989-Az'],
+      logType: 'Error',
+      message:
+        '{"code":"ServiceError","exception":{"response":{"status":400,"data":{"error":"The bot cannot accept messages at this time","errorCode":["123Z-4","989-Az"]}}}}',
+      route: 'POST v3/directine/conv-123',
+      status: 400,
+      timestamp: '2021-02-19 00:00:00',
     });
   });
 });
@@ -207,7 +219,8 @@ describe('updateConversation handler', () => {
         name: 'user-old',
         id: 'user-old',
       },
-      'livechat'
+      'livechat',
+      'en-us'
     );
 
     const state: any = {
@@ -228,6 +241,7 @@ describe('updateConversation handler', () => {
       body: {
         conversationId: 'conversation-new',
         userId: 'user-new',
+        locale: 'en-us',
       },
     };
 
@@ -245,6 +259,7 @@ describe('updateConversation handler', () => {
         accessToken: undefined,
         accessTokenExpires: undefined,
       },
+      locale: 'en-us',
       conversationId: 'conversation-new',
       members: [
         { id: 'bot-1', name: 'Bot' },

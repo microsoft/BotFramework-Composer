@@ -6,8 +6,9 @@ import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as React from 'react';
-import { IntegerPropertyPayload, NumberPropertyPayload } from 'src/atoms/types';
-import { FieldLabel } from 'src/components/common/FieldLabel';
+
+import { IntegerPropertyPayload, NumberPropertyPayload } from '../../atoms/types';
+import { FieldLabel } from '../common/FieldLabel';
 
 type Props = {
   payload: NumberPropertyPayload | IntegerPropertyPayload;

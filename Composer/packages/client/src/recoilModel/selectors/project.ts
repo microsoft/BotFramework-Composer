@@ -27,6 +27,9 @@ import {
   dialogIdsState,
   dialogState,
   schemasState,
+  botEndpointsState,
+  localeState,
+  botStatusState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
@@ -320,5 +323,34 @@ export const projectTreeSelectorFamily = selectorFamily<
         botError,
       };
     });
+  },
+});
+
+export const webChatEssentialsSelector = selector({
+  key: 'webChatEssentialsSelector',
+  get: ({ get }) => {
+    const projectId = get(rootBotProjectIdSelector);
+    if (!projectId) {
+      return undefined;
+    }
+    const settings = get(settingsState(projectId));
+    const secrets = {
+      msAppId: settings.MicrosoftAppId || '',
+      msPassword: settings.MicrosoftAppPassword || '',
+    };
+    const botEndpoints = get(botEndpointsState);
+    const botUrl = botEndpoints[projectId];
+    const botName = get(botDisplayNameState(projectId));
+    const activeLocale = get(localeState(projectId));
+    const botStatus = get(botStatusState(projectId));
+
+    return {
+      projectId,
+      botName,
+      secrets,
+      botUrl,
+      activeLocale,
+      botStatus,
+    };
   },
 });

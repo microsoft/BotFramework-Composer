@@ -21,6 +21,7 @@ import {
   RootBotManagedProperties,
   defaultPublishConfig,
   LgFile,
+  QnABotTemplateId,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -32,7 +33,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
-import { BASEURL, BotStatus, QnABotTemplateId } from '../../../constants';
+import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
 import httpClient from '../../../utils/httpUtil';
@@ -71,9 +72,10 @@ import {
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
   createQnAOnState,
+  botEndpointsState,
+  dispatcherState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
-import { dispatcherState } from '../../DispatcherWrapper';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
@@ -107,6 +109,7 @@ export const resetBotStates = async ({ reset }: CallbackInterface, projectId: st
     const currentRecoilAtom: any = botstates[state];
     reset(currentRecoilAtom(projectId));
   });
+  reset(botEndpointsState);
 };
 
 export const setErrorOnBotProject = async (

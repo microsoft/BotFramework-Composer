@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export const QnABotTemplateId = 'QnASample';
+
 export const SensitiveProperties = [
   'MicrosoftAppPassword',
   'luis.endpointKey',

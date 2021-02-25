@@ -23,7 +23,7 @@ const Root = styled(Stack)({
 
 const TextViewItemRoot = styled(Stack)({
   transition: 'background 0.1s ease',
-  '& .ms-Button i': {
+  '& .ms-Button:not(:focus) i': {
     visibility: 'hidden',
   },
   '&:hover .ms-Button i': {
@@ -100,6 +100,7 @@ type Props = {
   telemetryClient: TelemetryClient;
   onRenderDisplayText?: () => React.ReactNode;
   onBlur?: () => void;
+  onJumpTo?: (direction: 'next' | 'previous') => void;
   onRemove: () => void;
   onFocus: () => void;
   onChange?: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => void;
@@ -139,12 +140,12 @@ const TextViewItem = React.memo(({ value, onRemove, onFocus, onRenderDisplayText
 
   return (
     <TextViewItemRoot horizontal tokens={textViewRootTokens} verticalAlign="center">
-      <Stack grow styles={textViewContainerStyles} verticalAlign="center" onClick={click} onFocus={focus}>
+      <Stack grow styles={textViewContainerStyles} tabIndex={0} verticalAlign="center" onClick={click} onFocus={focus}>
         <Text styles={displayTextStyles} variant="small">
           {onRenderDisplayText?.() ?? value}
         </Text>
       </Stack>
-      <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} onClick={remove} />
+      <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
     </TextViewItemRoot>
   );
 });

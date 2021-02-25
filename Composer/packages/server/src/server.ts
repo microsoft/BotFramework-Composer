@@ -33,6 +33,7 @@ import { authService } from './services/auth/auth';
 import DLServerContext from './directline/store/dlServerState';
 import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
+import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -139,8 +140,13 @@ export async function start(electronContext?: ElectronContext): Promise<number |
 
   const directlineRouter = mountDirectLineRoutes(DLServerState);
   app.use(`${BASEURL}`, directlineRouter);
+
+  const attachmentsRouter = mountAttachmentRoutes(DLServerState);
+  app.use(`${BASEURL}`, attachmentsRouter);
+
   conversationRouter.use((req, res, next) => addCORSHeaders(req, res, next));
   directlineRouter.use((req, res, next) => addCORSHeaders(req, res, next));
+  attachmentsRouter.use((req, res, next) => addCORSHeaders(req, res, next));
 
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -188,13 +194,13 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     perMessageDeflate: false,
   });
 
-  const { getLgResources, luImportResolver, staticMemoryResolver } = BotProjectService;
+  const { getLgResources, luImportResolver, staticMemoryResolver, staticEntityResolver } = BotProjectService;
 
   function launchLanguageServer(socket: rpc.IWebSocket) {
     const reader = new rpc.WebSocketMessageReader(socket);
     const writer = new rpc.WebSocketMessageWriter(socket);
     const connection: IConnection = createConnection(reader, writer);
-    const server = new LGServer(connection, getLgResources, staticMemoryResolver);
+    const server = new LGServer(connection, getLgResources, staticMemoryResolver, staticEntityResolver);
     server.start();
   }
 
