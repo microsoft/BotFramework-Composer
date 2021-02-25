@@ -10,7 +10,6 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
   try {
     const convertedUrl = new URL(deeplinkUrl);
     const action = lowerCase(convertedUrl.hostname);
-    console.log(action);
     switch (action) {
       case 'open': {
         const encodedUrl: string = convertedUrl.searchParams.get('url') || '';
