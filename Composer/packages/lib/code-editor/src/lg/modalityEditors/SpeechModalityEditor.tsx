@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IDropdownOption, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 import React from 'react';
 
 import { useStringArray } from '../hooks/useStringArray';
@@ -10,6 +11,9 @@ import { CommonModalityEditorProps, InputHintStructuredResponseItem, SpeechStruc
 
 import { ModalityEditorContainer } from './ModalityEditorContainer';
 import { StringArrayEditor } from './StringArrayEditor';
+
+const inputHintDocumentUrl =
+  'https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-connector-add-input-hints?view=azure-bot-service-4.0';
 
 type Props = CommonModalityEditorProps & {
   response: SpeechStructuredResponseItem;
@@ -44,6 +48,22 @@ const SpeechModalityEditor = React.memo(
 
     const inputHintOptions = React.useMemo<IDropdownOption[]>(
       () => [
+        {
+          key: 'header',
+          text: formatMessage('Input hint'),
+          itemType: DropdownMenuItemType.Header,
+          data: {
+            tooltipId: 'input-hint-dropdown-header',
+            tooltipText: formatMessage.rich('To learn more, <a>visit this document</a>.', {
+              a: ({ children }) => (
+                <Link key="input-hint-dropdown-header-link" href={inputHintDocumentUrl} target="_blank">
+                  {children}
+                </Link>
+              ),
+            }),
+          },
+        },
+
         {
           key: 'acceptingInput',
           text: formatMessage('Accepting'),

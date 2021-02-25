@@ -53,7 +53,15 @@ const AttachmentModalityEditor = React.memo(
 
     const attachmentLayoutOptions = React.useMemo<IDropdownOption[]>(
       () => [
-        { key: 'header', text: formatMessage('Attachment layout'), itemType: DropdownMenuItemType.Header },
+        {
+          key: 'header',
+          text: formatMessage('Attachment layout'),
+          itemType: DropdownMenuItemType.Header,
+          data: {
+            tooltipId: 'attachment-layout-dropdown-header',
+            tooltipText: formatMessage('Specify an attachment layout when there are more than one.'),
+          },
+        },
         {
           key: 'list',
           text: formatMessage('List'),
