@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import URI from 'vscode-uri';
-import { IConnection, TextDocuments } from 'vscode-languageserver';
+import { IConnection, LocationLink, TextDocuments } from 'vscode-languageserver';
 import formatMessage from 'format-message';
 import {
   Diagnostic,
@@ -86,6 +86,7 @@ export class LGServer {
           },
           hoverProvider: true,
           foldingRangeProvider: true,
+          definitionProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -93,6 +94,7 @@ export class LGServer {
       };
     });
     this.connection.onCompletion(async (params) => await this.completion(params));
+    this.connection.onDefinition((params: TextDocumentPositionParams) => this.definitionHandler(params));
     this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
     this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
@@ -124,6 +126,12 @@ export class LGServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected definitionHandler(params: TextDocumentPositionParams): LocationLink[] {
+    const uri = this.LGDocuments[0].uri;
+    const loc = LocationLink.create(uri, Range.create(0, 0, 0, 2), Range.create(0, 0, 0, 2));
+    return [loc];
   }
 
   protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
