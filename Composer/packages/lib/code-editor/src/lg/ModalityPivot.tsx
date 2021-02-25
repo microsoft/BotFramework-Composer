@@ -20,7 +20,11 @@ import mergeWith from 'lodash/mergeWith';
 
 import { LGOption } from '../utils';
 import { ItemWithTooltip } from '../components/ItemWithTooltip';
-import { getTemplateId, structuredResponseToString } from '../utils/structuredResponse';
+import {
+  extractTemplateNameFromExpression,
+  getTemplateId,
+  structuredResponseToString,
+} from '../utils/structuredResponse';
 
 import { AttachmentModalityEditor } from './modalityEditors/AttachmentModalityEditor';
 import { SpeechModalityEditor } from './modalityEditors/SpeechModalityEditor';
@@ -35,7 +39,7 @@ import {
   PartialStructuredResponse,
   AttachmentLayoutStructuredResponseItem,
   InputHintStructuredResponseItem,
-  modalityType,
+  modalityTypes,
   ArrayBasedStructuredResponseItem,
 } from './types';
 
@@ -154,7 +158,7 @@ const renderModalityEditor = ({
 
 const getInitialModalities = (structuredResponse?: PartialStructuredResponse): ModalityType[] => {
   const modalities = Object.keys(structuredResponse || {}).filter((m) =>
-    modalityType.includes(m as ModalityType)
+    modalityTypes.includes(m as ModalityType)
   ) as ModalityType[];
   return modalities.length ? modalities : ['Text'];
 };
@@ -250,7 +254,10 @@ export const ModalityPivot = React.memo((props: Props) => {
 
   const pivotItems = useMemo(
     () =>
-      modalities.map((modality) => items.find(({ key }) => key === modality)).filter(Boolean) as IContextualMenuItem[],
+      modalityTypes
+        .filter((m) => modalities.includes(m))
+        .map((modality) => items.find(({ key }) => key === modality))
+        .filter(Boolean) as IContextualMenuItem[],
     [items, modalities]
   );
   const menuItems = useMemo(() => items.filter(({ key }) => !modalities.includes(key as ModalityType)), [
@@ -259,7 +266,7 @@ export const ModalityPivot = React.memo((props: Props) => {
   ]);
 
   const onRemoveModality = useCallback(
-    (modality: ModalityType) => {
+    (modality: ModalityType, removeReferencedTemplates = false) => {
       if (modalities.length > 1) {
         const updatedModalities = modalities.filter((item) => item !== modality);
         setModalities(updatedModalities);
@@ -280,6 +287,17 @@ export const ModalityPivot = React.memo((props: Props) => {
 
             if (templateId) {
               onRemoveTemplate(templateId);
+            }
+          }
+
+          // Remove attachments created by the LG Response Editor
+          if (modality === 'Attachments' && removeReferencedTemplates) {
+            const attachments = (structuredResponse?.[modality] as AttachmentsStructuredResponseItem)?.value;
+            for (const attachment of attachments) {
+              const templateId = extractTemplateNameFromExpression(attachment);
+              if (templateId?.startsWith(`${lgOption.templateId}_attachment_`)) {
+                onRemoveTemplate(templateId);
+              }
             }
           }
         }

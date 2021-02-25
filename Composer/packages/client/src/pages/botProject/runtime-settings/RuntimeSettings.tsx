@@ -75,7 +75,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     setRuntimePath(settings.runtime?.path ?? '');
     setRuntimeCommand(settings.runtime?.command ?? '');
     setUsingCustomRuntime(settings.runtime?.customRuntime ?? false);
-  }, [projectId]);
+  }, [settings, projectId]);
 
   useEffect(() => {
     setNeedsUpdate(!!boilerplateVersion.updateRequired);
