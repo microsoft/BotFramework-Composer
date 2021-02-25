@@ -176,6 +176,8 @@ export const DebugPanel: React.FC = () => {
           onClick={() => {
             setExpansion(true);
             setActiveTab('Diagnostics');
+
+            TelemetryClient.track('DrawerPaneOpened');
           }}
         ></div>
         <div css={rightBarStyle} data-testid="statusbar__right">
@@ -185,6 +187,8 @@ export const DebugPanel: React.FC = () => {
             onClick={() => {
               setExpansion(true);
               !activeTab && setActiveTab('Diagnostics');
+
+              TelemetryClient.track('DrawerPaneOpened');
             }}
           />
         </div>
