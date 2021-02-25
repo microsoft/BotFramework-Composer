@@ -145,6 +145,7 @@ export const DebugPanel: React.FC = () => {
           <div css={rightBarStyle} data-testid="header__right">
             <IconButton
               iconProps={{ iconName: 'ChevronDown' }}
+              styles={{ root: { height: '100%' } }}
               title={formatMessage('Collapse debug panel')}
               onClick={() => {
                 setExpansion(false);
@@ -184,6 +185,7 @@ export const DebugPanel: React.FC = () => {
         <div css={rightBarStyle} data-testid="statusbar__right">
           <IconButton
             iconProps={{ iconName: 'ChevronUp' }}
+            styles={{ root: { height: '100%' } }}
             title={formatMessage('Expand debug panel')}
             onClick={() => {
               setExpansion(true);
