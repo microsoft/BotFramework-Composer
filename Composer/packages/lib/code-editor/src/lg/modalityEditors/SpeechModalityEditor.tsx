@@ -23,7 +23,7 @@ const SpeechModalityEditor = React.memo(
     lgOption,
     lgTemplates,
     memoryVariables,
-    inputHint = 'none',
+    inputHint = 'acceptingInput',
     onInputHintChange,
     onTemplateChange,
     onRemoveModality,
@@ -45,24 +45,19 @@ const SpeechModalityEditor = React.memo(
     const inputHintOptions = React.useMemo<IDropdownOption[]>(
       () => [
         {
-          key: 'none',
-          text: formatMessage('None'),
-          selected: inputHint === 'none',
-        },
-        {
-          key: 'accepting',
+          key: 'acceptingInput',
           text: formatMessage('Accepting'),
-          selected: inputHint === 'accepting',
+          selected: inputHint === 'acceptingInput',
         },
         {
-          key: 'ignoring',
+          key: 'ignoringInput',
           text: formatMessage('Ignoring'),
-          selected: inputHint === 'ignoring',
+          selected: inputHint === 'ignoringInput',
         },
         {
-          key: 'expecting',
+          key: 'expectingInput',
           text: formatMessage('Expecting'),
-          selected: inputHint === 'expecting',
+          selected: inputHint === 'expectingInput',
         },
       ],
       [inputHint]
