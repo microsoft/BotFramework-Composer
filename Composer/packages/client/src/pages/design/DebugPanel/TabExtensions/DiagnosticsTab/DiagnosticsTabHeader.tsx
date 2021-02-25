@@ -28,7 +28,6 @@ export const DiagnosticsHeader = () => {
       >
         {formatMessage('Problems')}
       </div>
-      <DebugPanelErrorIndicator hasError={hasError} hasWarning={hasWarning} />
     </div>
   );
 };

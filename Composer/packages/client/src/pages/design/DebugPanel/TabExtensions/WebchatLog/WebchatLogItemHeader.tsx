@@ -19,11 +19,11 @@ export const WebChatLogItemHeader = (props: { isActive: boolean }) => {
   const [currentLogItems, setCurrentLocalItems] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log('CurrentItems', currentLogItems);
-    console.log('isactive', isActive);
-    if (isActive) {
+    if (isActive || !logItems.length) {
       showUnreadMessageIndicator(false);
+      return;
     }
+
     const newItems = logItems.map((item) => item.timestamp);
     if (!isEqual(newItems, currentLogItems)) {
       setCurrentLocalItems(newItems);
@@ -31,10 +31,6 @@ export const WebChatLogItemHeader = (props: { isActive: boolean }) => {
         showUnreadMessageIndicator(true);
       }
     }
-
-    return () => {
-      console.log('Destroyed');
-    };
   }, [logItems, isActive]);
 
   return (
