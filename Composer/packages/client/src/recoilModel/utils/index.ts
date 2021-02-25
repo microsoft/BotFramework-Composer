@@ -49,7 +49,7 @@ export const DEFAULT_FONT_SETTINGS = {
     ? DEFAULT_LINUX_FONT_FAMILY
     : DEFAULT_WINDOWS_FONT_FAMILY,
   fontWeight: 'normal',
-  fontSize: PLATFORM.isMacintosh ? 12 : 14,
+  fontSize: PLATFORM.isMacintosh ? '12px' : '14px',
   lineHeight: 0,
   letterSpacing: 0,
 };
