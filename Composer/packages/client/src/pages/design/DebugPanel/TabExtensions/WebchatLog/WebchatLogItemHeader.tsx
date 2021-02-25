@@ -4,14 +4,38 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import isEqual from 'lodash/isEqual';
 
 import { rootBotProjectIdSelector, webChatLogsState } from '../../../../../recoilModel';
 import { DebugPanelErrorIndicator } from '../DebugPanelErrorIndicator';
 
-export const WebchatLogItemHeader = () => {
+export const WebChatLogItemHeader = (props: { isActive: boolean }) => {
+  const { isActive } = props;
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const logItems = useRecoilValue(webChatLogsState(rootBotId ?? ''));
+  const [unreadMessageIndicatorVisible, showUnreadMessageIndicator] = useState(false);
+  const [currentLogItems, setCurrentLocalItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log('CurrentItems', currentLogItems);
+    console.log('isactive', isActive);
+    if (isActive) {
+      showUnreadMessageIndicator(false);
+    }
+    const newItems = logItems.map((item) => item.timestamp);
+    if (!isEqual(newItems, currentLogItems)) {
+      setCurrentLocalItems(newItems);
+      if (!isActive) {
+        showUnreadMessageIndicator(true);
+      }
+    }
+
+    return () => {
+      console.log('Destroyed');
+    };
+  }, [logItems, isActive]);
 
   return (
     <div
@@ -29,7 +53,7 @@ export const WebchatLogItemHeader = () => {
       >
         {formatMessage('Webchat Inspector')}
       </div>
-      <DebugPanelErrorIndicator hasError={logItems.length > 0} />
+      <DebugPanelErrorIndicator hasError={unreadMessageIndicatorVisible} />
     </div>
   );
 };
