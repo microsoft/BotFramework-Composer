@@ -48,8 +48,8 @@ export default async (composer: any): Promise<void> => {
       _project: any
     ): Promise<string> => {
       // run dotnet install on the project
-      const command = `dotnet add package ${packageName}${version ? ' --version=' + version : ''}${
-        source ? ' --source=' + source : ''
+      const command = `dotnet add package "${packageName}"${version ? ' --version="' + version + '"' : ''}${
+        source ? ' --source="' + source + '"' : ''
       }`;
       composer.log('EXEC:', command);
       const { stderr: installError, stdout: installOutput } = await execAsync(command, {
@@ -353,15 +353,13 @@ export default async (composer: any): Promise<void> => {
       _project: any
     ): Promise<string> => {
       // run dotnet install on the project
-      composer.log(
-        `EXECUTE: dotnet add ${_project.name}.csproj package ${packageName}${version ? ' --version=' + version : ''} `
-      );
-      const { stderr: installError, stdout: installOutput } = await execAsync(
-        `dotnet add ${_project.name}.csproj package ${packageName}${version ? ' --version=' + version : ''}`,
-        {
-          cwd: path.join(runtimePath),
-        }
-      );
+      const command = `dotnet add ${_project.name}.csproj package "${packageName}"${
+        version ? ' --version="' + version + '"' : ''
+      }${source ? ' --source="' + source + '"' : ''}`;
+      composer.log('EXEC:', command);
+      const { stderr: installError, stdout: installOutput } = await execAsync(command, {
+        cwd: path.join(runtimePath),
+      });
       if (installError) {
         throw new Error(installError);
       }

@@ -9,9 +9,9 @@ import { Indicator } from './Indicator';
 
 export const DebugPanelErrorIndicator = (props: { hasError: boolean; hasWarning?: boolean }) => {
   const indicator = props.hasError ? (
-    <Indicator color={`${SharedColors.red10}`} size={5} />
+    <Indicator color={`${SharedColors.red10}`} size={8} />
   ) : props.hasWarning ? (
-    <Indicator color={`${SharedColors.yellow10}`} size={5} />
+    <Indicator color={`${SharedColors.yellow10}`} size={8} />
   ) : null;
   return indicator;
 };
