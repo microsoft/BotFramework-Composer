@@ -165,7 +165,7 @@ export default async (composer: any): Promise<void> => {
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
         const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/Schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
-        return path.relative(project.dir, destPath);
+        return path.relative(path.join(project.dir, 'settings'), destPath);
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
@@ -308,7 +308,7 @@ export default async (composer: any): Promise<void> => {
         const schemaFolderInRuntime = path.join(destPath, 'schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
 
-        return path.relative(project.dir, destPath);
+        return path.relative(path.join(project.dir, 'settings'), destPath);
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
@@ -451,33 +451,6 @@ export default async (composer: any): Promise<void> => {
 
       // return the location of the build artifiacts
       return publishFolder;
-    },
-    eject: async (project, localDisk: IFileStorage, isReplace: boolean) => {
-      const sourcePath = dotnetTemplatePath;
-      const destPath = path.join(project.dir, 'runtime');
-      if ((await project.fileStorage.exists(destPath)) && isReplace) {
-        // remove runtime folder
-        await removeDirAndFiles(destPath);
-      }
-      if (!(await project.fileStorage.exists(destPath))) {
-        // used to read bot project template from source (bundled in plugin)
-        await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
-        const schemaDstPath = path.join(project.dir, 'schemas');
-        const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
-        const customSchemaExists = fs.existsSync(schemaDstPath);
-        const pathsToExclude: Set<string> = new Set();
-        if (customSchemaExists) {
-          const sdkExcludePath = await localDisk.glob('sdk.schema', schemaSrcPath);
-          if (sdkExcludePath.length > 0) {
-            pathsToExclude.add(path.join(schemaSrcPath, sdkExcludePath[0]));
-          }
-        }
-        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
-        const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/Schemas');
-        await removeDirAndFiles(schemaFolderInRuntime);
-        return path.relative(project.dir, destPath);
-      }
-      throw new Error(`Runtime already exists at ${destPath}`);
     },
     setSkillManifest: async (
       dstRuntimePath: string,
