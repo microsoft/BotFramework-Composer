@@ -450,7 +450,7 @@ export const getPreview = (hostname: string) => {
     },
     {
       name: qnaAccountName,
-      icon: Images.CognitiveServices,
+      icon: Images.QNAMaker,
       key: 'qna',
     },
     {

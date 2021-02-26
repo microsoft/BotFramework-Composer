@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 import * as React from 'react';
-import { useState, useMemo, useEffect, Fragment } from 'react';
+import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { getAccessToken, logOut, usePublishApi } from '@bfc/extension-client';
@@ -278,7 +278,6 @@ const reviewCols: IColumn[] = [
     isPadded: true,
   },
 ];
-
 export const AzureProvisionDialog: React.FC = () => {
   const {
     currentProjectId,
@@ -305,6 +304,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [currentResourceGroup, setResourceGroup] = useState<string>('');
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
+  const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
   const [currentLuisLocation, setCurrentLuisLocation] = useState<DeployLocation>();
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
@@ -319,6 +319,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [listItems, setListItem] = useState<(ResourcesItem & {name,icon})[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
 
+  const timerRef = useRef<any>();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
   const currentConfig = removePlaceholder(publishConfig);
@@ -414,27 +415,45 @@ export const AzureProvisionDialog: React.FC = () => {
     [subscriptionOption]
   );
 
-  const checkNameAvailability = useMemo(()=>(newName: string)=>{
-    setErrorHostName('');
-    console.log(publishType);
-    if(currentSubscription && publishType === 'azurePublish'){
-      // check app name whether exist or not
-      CheckWebAppNameAvailability(token, newName, currentSubscription).then(value=>{
-        if(!value.nameAvailable){
-          setErrorHostName(value.message);
-        }
-      });
+
+  const checkNameAvailability = useCallback((newName: string)=>{
+    if(timerRef.current){
+      clearTimeout(timerRef.current);
     }
+    timerRef.current = setTimeout(()=>{
+      if(currentSubscription && publishType === 'azurePublish'){
+        // check app name whether exist or not
+        CheckWebAppNameAvailability(token, newName, currentSubscription).then(value=>{
+          if(!value.nameAvailable){
+            setErrorHostName(value.message);
+          } else {
+            setErrorHostName('');
+          }
+        });
+      }
+    }, 500);
   }, [publishType, currentSubscription, token]);
+
+
+  const checkResourceGroupName = useCallback((group: string) => {
+    if(group.match(/^[-\w\._\(\)]+$/)){
+      setErrorResourceGroupName('');
+    } else {
+      setErrorResourceGroupName('Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis and cannot end in a period.');
+    }
+  },[]);
 
   const updateCurrentResourceGroup = useMemo(()=>(e,newGroup)=>{
     setResourceGroup(newGroup);
-  },[]);
+    // check resource group name
+    checkResourceGroupName(newGroup);
+  },[checkResourceGroupName]);
 
-  const newHostName = useMemo(
-    () => (e, newName) => {
+  const newHostName = useCallback(
+    (e, newName) => {
       setHostName(newName);
-      checkNameAvailability(newName);
+      // debounce name check
+      checkNameAvailability(newName)
     },
     [checkNameAvailability]
   );
@@ -567,8 +586,8 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const isDisAble = useMemo(() => {
-    return !currentSubscription || !currentHostName || errorHostName !== '' || !currentLocation;
-  }, [currentSubscription, currentHostName, errorHostName, currentLocation]);
+    return !currentSubscription || !currentHostName || errorHostName!== '' || errorResourceGroupName !== '' || !currentLocation;
+  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName]);
 
   const PageFormConfig = (
     <Fragment>
@@ -591,6 +610,7 @@ export const AzureProvisionDialog: React.FC = () => {
             required
             disabled={currentConfig?.resourceGroup}
             defaultValue={currentResourceGroup}
+            errorMessage={errorResourceGroupName}
             label={formatMessage('Resource group name')}
             placeholder={'Name of your new resource group'}
             onChange={updateCurrentResourceGroup}
