@@ -25,17 +25,10 @@ import { templateGeneratorPath } from '../../settings/env';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
-  public yeomanEnv: Environment;
   private _botProjectFileTemplate;
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
-    this.yeomanEnv = yeoman.createEnv(
-      '',
-      { yeomanRepository: templateGeneratorPath },
-      new TerminalAdapter({ console: console })
-    );
-    this.yeomanEnv.lookupLocalPackages();
   }
 
   public get botProjectFileTemplate() {
@@ -121,10 +114,23 @@ export class AssetManager {
       const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
       const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, templateVersion);
+      // create yeoman environment
+      const yeomanEnv = yeoman.createEnv(
+        '',
+        { yeomanRepository: templateGeneratorPath },
+        new TerminalAdapter({ console: console })
+      );
+      yeomanEnv.lookupLocalPackages();
+
+      const remoteTemplateAvailable = await this.installRemoteTemplate(
+        yeomanEnv,
+        generatorName,
+        npmPackageName,
+        templateVersion
+      );
 
       if (remoteTemplateAvailable) {
-        await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+        await this.instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName);
       } else {
         throw new Error(`error hit when installing remote template`);
       }
@@ -133,23 +139,30 @@ export class AssetManager {
 
       return ref;
     } catch (err) {
-      throw new Error(`error hit when instantiating remote template: ${err?.message}`);
+      if (err?.message.match(/npm/)) {
+        throw new Error(
+          `Error calling npm to fetch template. Please ensure that node and npm are installed and available on your system. Full error message: ${err?.message}`
+        );
+      } else {
+        throw new Error(`Error hit when instantiating remote template: ${err?.message}`);
+      }
     }
   }
 
   private async installRemoteTemplate(
+    yeomanEnv: Environment,
     generatorName: string,
     npmPackageName: string,
     templateVersion: string
   ): Promise<boolean> {
-    this.yeomanEnv.cwd = templateGeneratorPath;
+    yeomanEnv.cwd = templateGeneratorPath;
     try {
       log('Installing generator', npmPackageName);
       templateVersion = templateVersion ? templateVersion : '*';
-      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
+      await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
 
       log('Looking up local packages');
-      await this.yeomanEnv.lookupLocalPackages();
+      await yeomanEnv.lookupLocalPackages();
       return true;
     } catch {
       return false;
@@ -157,15 +170,16 @@ export class AssetManager {
   }
 
   private async instantiateRemoteTemplate(
+    yeomanEnv: Environment,
     generatorName: string,
     dstDir: string,
     projectName: string
   ): Promise<boolean> {
     log('About to instantiate a template!', dstDir, generatorName, projectName);
-    this.yeomanEnv.cwd = dstDir;
+    yeomanEnv.cwd = dstDir;
     process.chdir(dstDir);
 
-    await this.yeomanEnv.run([generatorName, projectName], {}, () => {
+    await yeomanEnv.run([generatorName, projectName], {}, () => {
       log('Template successfully instantiated', dstDir, generatorName, projectName);
     });
     return true;
