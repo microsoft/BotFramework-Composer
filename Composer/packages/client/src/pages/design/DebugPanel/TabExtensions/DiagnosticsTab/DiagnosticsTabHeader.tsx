@@ -5,8 +5,6 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 
-import { DebugPanelErrorIndicator } from '../DebugPanelErrorIndicator';
-
 import { useDiagnosticsStatistics } from './useDiagnostics';
 
 export const DiagnosticsHeader = () => {
@@ -28,7 +26,6 @@ export const DiagnosticsHeader = () => {
       >
         {formatMessage('Problems')}
       </div>
-      <DebugPanelErrorIndicator hasError={hasError} hasWarning={hasWarning} />
     </div>
   );
 };
