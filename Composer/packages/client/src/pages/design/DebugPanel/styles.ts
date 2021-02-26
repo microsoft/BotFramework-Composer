@@ -7,7 +7,7 @@ export const DebugPaneHeaderHeight = 36;
 
 export const DebugPaneFooterHeight = 24;
 
-export const debugPaneContainerExpandedStyle = css`
+export const debugPaneContainerStyle = css`
   display: flex;
   flex-direction: column;
 `;
@@ -22,7 +22,7 @@ export const debugPaneContentStyle = css`
   overflow-x: auto;
 `;
 
-export const statusBarStyle = css`
+export const debugPaneFooterStyle = css`
   height: ${DebugPaneFooterHeight}px;
   border-top: 1px solid #dfdfdf;
 `;

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useMemo, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -16,40 +16,49 @@ import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../recoilModel';
 
 import {
-  debugPaneContainerExpandedStyle,
+  debugPaneContainerStyle,
   debugPaneBarStyle,
   leftBarStyle,
   rightBarStyle,
   debugPaneHeaderStyle,
   debugPaneContentStyle,
+  debugPaneFooterStyle,
 } from './styles';
 import debugExtensions from './TabExtensions';
 import { DebugDrawerKeys, DebugPanelTabHeaderProps } from './TabExtensions/types';
-
-const defaultDebugPanelHeaderHeight = 36;
 
 export const DebugPanel: React.FC = () => {
   const [isPanelExpanded, setPanelExpansion] = useRecoilState(debugPanelExpansionState);
   const [activeTab, setActiveTab] = useRecoilState(debugPanelActiveTabState);
 
-  const buildTabTitle = useCallback(
-    (tabKey: DebugDrawerKeys, TabHeaderWidget: React.FC<DebugPanelTabHeaderProps> | string) => {
-      if (!TabHeaderWidget) return { key: tabKey, element: null };
+  const onExpandPanel = useCallback((activeTabKey: DebugDrawerKeys) => {
+    setPanelExpansion(true);
+    setActiveTab(activeTabKey);
+    TelemetryClient.track('DrawerPaneTabOpened', {
+      tabType: activeTabKey,
+    });
+    TelemetryClient.track('DrawerPaneOpened');
+  }, []);
 
-      let element: JSX.Element;
-      if (typeof TabHeaderWidget === 'string') {
-        element = (
-          <span key={`tabHeader-${tabKey}`}>
-            <TabHeaderWidget />
-          </span>
-        );
-      } else {
-        element = <TabHeaderWidget key={`tabHeader-${tabKey}`} isActive={activeTab === tabKey} />;
-      }
-      return { key: tabKey, element };
-    },
-    [activeTab]
-  );
+  const onCollapsePanel = useCallback(() => {
+    setPanelExpansion(false);
+    setActiveTab(undefined);
+    TelemetryClient.track('DrawerPaneClosed');
+  }, []);
+
+  const buildTabTitle = (tabKey: DebugDrawerKeys, TabHeaderWidget: React.FC<DebugPanelTabHeaderProps> | string) => {
+    if (!TabHeaderWidget) return { key: tabKey, element: null };
+
+    let element: JSX.Element;
+    if (typeof TabHeaderWidget === 'string') {
+      element = <span key={`tabHeader-${tabKey}`}>{TabHeaderWidget}</span>;
+    } else {
+      element = <TabHeaderWidget key={`tabHeader-${tabKey}`} isActive={activeTab === tabKey} />;
+    }
+    return { key: tabKey, element };
+  };
+
+  const computedPivotHeight = isPanelExpanded ? 36 : 24;
 
   const headerPivot = useMemo(() => {
     const tabTitles = debugExtensions
@@ -58,7 +67,7 @@ export const DebugPanel: React.FC = () => {
       .map(({ key, element }) => {
         return (
           <PivotItem
-            key={`tabHeader-pivot-${key}${isPanelExpanded ? '--expanded' : ''}`}
+            key={`tabHeader-pivot-${key}`}
             itemKey={key}
             onRenderItemLink={() => (
               <Label
@@ -72,12 +81,7 @@ export const DebugPanel: React.FC = () => {
                   fontSize: FontSizes.size12,
                 }}
                 onClick={() => {
-                  setActiveTab(key);
-                  setPanelExpansion(true);
-                  TelemetryClient.track('DrawerPaneTabOpened', {
-                    tabType: key,
-                  });
-                  TelemetryClient.track('DrawerPaneOpened');
+                  onExpandPanel(key);
                 }}
               >
                 {element}
@@ -93,13 +97,13 @@ export const DebugPanel: React.FC = () => {
         selectedKey={isPanelExpanded ? activeTab : null}
         styles={{
           link: {
-            height: defaultDebugPanelHeaderHeight,
-            lineHeight: defaultDebugPanelHeaderHeight,
+            height: computedPivotHeight,
+            lineHeight: computedPivotHeight,
             fontSize: FontSizes.size14,
           },
           linkIsSelected: {
-            height: defaultDebugPanelHeaderHeight,
-            lineHeight: defaultDebugPanelHeaderHeight,
+            height: computedPivotHeight,
+            lineHeight: computedPivotHeight,
             fontSize: FontSizes.size14,
           },
         }}
@@ -120,12 +124,12 @@ export const DebugPanel: React.FC = () => {
   return (
     <Resizable
       css={css`
-        ${debugPaneContainerExpandedStyle}
+        ${debugPaneContainerStyle}
       `}
-      data-testid="debug-panel--expanded"
+      data-testid="debug-panel"
       defaultSize={{
         width: '100%',
-        height: isPanelExpanded ? 300 : defaultDebugPanelHeaderHeight,
+        height: isPanelExpanded ? 300 : computedPivotHeight,
       }}
       enable={{
         top: isPanelExpanded,
@@ -137,19 +141,28 @@ export const DebugPanel: React.FC = () => {
         bottomLeft: false,
         topLeft: false,
       }}
-      maxHeight={isPanelExpanded ? 600 : defaultDebugPanelHeaderHeight}
-      minHeight={isPanelExpanded ? 300 : defaultDebugPanelHeaderHeight}
+      maxHeight={isPanelExpanded ? 600 : computedPivotHeight}
+      minHeight={isPanelExpanded ? 200 : computedPivotHeight}
     >
       <div
         css={css`
           ${debugPaneBarStyle}
-          ${debugPaneHeaderStyle}
+          ${isPanelExpanded ? debugPaneHeaderStyle : debugPaneFooterStyle}
         `}
-        data-testid="debug-panel__header"
+        data-testid={isPanelExpanded ? 'debug-panel__header' : 'debug-panel__footer'}
       >
         <div css={leftBarStyle} data-testid="header__left">
           {headerPivot}
         </div>
+        <div
+          css={{ flexGrow: 1 }}
+          data-testid="header__blank"
+          onClick={() => {
+            if (!isPanelExpanded) {
+              onExpandPanel('Diagnostics');
+            }
+          }}
+        ></div>
         <div css={rightBarStyle} data-testid="header__right">
           <IconButton
             iconProps={{ iconName: isPanelExpanded ? 'ChevronDown' : 'ChevronUp' }}
@@ -157,17 +170,9 @@ export const DebugPanel: React.FC = () => {
             title={formatMessage('Collapse debug panel')}
             onClick={() => {
               if (isPanelExpanded) {
-                setPanelExpansion(false);
-                setActiveTab(undefined);
-                TelemetryClient.track('DrawerPaneClosed');
+                onCollapsePanel();
               } else {
-                // By default open into the Problems tab
-                setPanelExpansion(true);
-                setActiveTab('Diagnostics');
-                TelemetryClient.track('DrawerPaneTabOpened', {
-                  tabType: 'Diagnostics',
-                });
-                TelemetryClient.track('DrawerPaneOpened');
+                onExpandPanel('Diagnostics');
               }
             }}
           />

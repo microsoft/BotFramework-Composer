@@ -25,7 +25,7 @@ export interface TabExtensionConfig {
   description?: string;
 
   /** Tab header component. If it's typed with string, shows a plain text as the tab header. */
-  HeaderWidget: FC<DebugPanelTabHeaderProps>;
+  HeaderWidget: FC<DebugPanelTabHeaderProps> | string;
 
   /** Tab content component used when debug panel is expanded. */
   ContentWidget: FC;
