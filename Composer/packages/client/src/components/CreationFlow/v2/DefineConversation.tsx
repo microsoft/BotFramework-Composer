@@ -21,7 +21,6 @@ import { QnABotTemplateId } from '@bfc/shared';
 import {
   DialogCreationCopy,
   nameRegexV2,
-  invalidNameCharRegex,
   mockLanguageOptions,
   runtimeOptions,
   defaultPrimaryLanguage,
