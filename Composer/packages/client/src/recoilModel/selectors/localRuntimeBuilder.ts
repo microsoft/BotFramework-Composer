@@ -119,6 +119,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
     buildWithDefaultRecognizer: async (projectId: string, buildDependencies) => {
       const { config } = buildDependencies;
       if (config) {
+        await dispatcher.downloadLanguageModels(projectId);
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
         await dispatcher.build(projectId, config.luis, config.qna);
       }
