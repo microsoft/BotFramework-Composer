@@ -112,7 +112,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
 
   return (
     <div style={wrapperStyle}>
-      <Toolbar toolbarItems={items.concat(props.toolbarItems)} />
+      <Toolbar toolbarItems={props.toolbarItems ? items.concat(props.toolbarItems) : items} />
       <Stack horizontal>
         <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 20 } }}>
           <h2 style={h2Style}>{botProject?.name}</h2>
