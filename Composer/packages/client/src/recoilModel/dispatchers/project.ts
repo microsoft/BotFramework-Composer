@@ -30,10 +30,10 @@ import {
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
-  settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -464,8 +464,9 @@ export const projectDispatcher = () => {
     callbackHelpers.reset(filePersistenceState(projectId));
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
 
+    const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
     // Reload needs to pull the settings from the local storage persisted in the current settingsState of the project
-    botFiles.mergedSettings = await snapshot.getPromise(settingsState(projectId));
+    botFiles.mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, botFiles.mergedSettings);
     await initBotState(callbackHelpers, projectData, botFiles);
   });
 
