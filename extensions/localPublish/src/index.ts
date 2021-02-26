@@ -102,9 +102,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           'azurewebapp'
         );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
-        const runtimePath = path.isAbsolute(project.settings.runtime.path)
-          ? project.settings.runtime.path
-          : path.resolve(project.dataDir, project.settings.runtime.path);
+        const runtimePath = project.getRuntimePath();
         await runtime.build(runtimePath, project);
         await runtime.setSkillManifest(
           project.settings.runtime.path,
@@ -343,10 +341,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
-    let customRuntimePath = settings.runtime.path;
-    if (customRuntimePath && !path.isAbsolute(customRuntimePath)) {
-      customRuntimePath = path.resolve(project.dir, customRuntimePath);
-    }
+    const customRuntimePath = project.getRuntimePath();
     const botDir = settings.runtime?.customRuntime === true ? customRuntimePath : this.getBotRuntimeDir(botId);
 
     const commandAndArgs =

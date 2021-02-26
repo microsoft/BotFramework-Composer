@@ -315,9 +315,9 @@ export const debugPanelExpansionState = atom<boolean>({
   default: false,
 });
 
-export const debugPanelActiveTabState = atom<DebugDrawerKeys>({
+export const debugPanelActiveTabState = atom<DebugDrawerKeys | undefined>({
   key: getFullyQualifiedKey('degbugPanelActiveTab'),
-  default: 'Diagnostics',
+  default: undefined,
 });
 
 export const selectedTemplateReadMeState = atom<string>({
