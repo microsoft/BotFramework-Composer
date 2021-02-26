@@ -287,9 +287,6 @@
       "$ref": "#/definitions/Microsoft.SendActivity"
     },
     {
-      "$ref": "#/definitions/Microsoft.SendHandoffActivity"
-    },
-    {
       "$ref": "#/definitions/Microsoft.SetProperties"
     },
     {
@@ -345,8 +342,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -381,8 +378,8 @@
       "description": "Flexible, data driven dialog that can adapt to the conversation.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -478,8 +475,8 @@
       "description": "Recognizer which recognizes age.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -514,12 +511,14 @@
       "title": "Send activity to ask a question",
       "description": "This is an action which sends an activity to the user when a response is expected",
       "type": "object",
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -594,12 +593,14 @@
       ],
       "title": "Attachment input dialog",
       "description": "Collect information - Ask for a file or image.",
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "type": "object",
       "required": [
@@ -790,8 +791,8 @@
       "description": "Begin another dialog.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -884,8 +885,8 @@
       "description": "Begin a remote skill.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -1002,12 +1003,14 @@
       "required": [
         "$kind"
       ],
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -1049,12 +1052,14 @@
       "title": "Cancel all dialogs",
       "description": "Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.",
       "type": "object",
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -1116,12 +1121,14 @@
       "title": "Cancel all dialogs",
       "description": "Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.",
       "type": "object",
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -1186,8 +1193,8 @@
       "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -1222,12 +1229,14 @@
       "title": "Choice input dialog",
       "description": "Collect information - Pick from a list of choices",
       "type": "object",
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -1582,8 +1591,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -1628,12 +1637,14 @@
       "title": "Confirm input dialog",
       "description": "Collect information - Ask for confirmation (yes or no).",
       "type": "object",
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -1931,8 +1942,8 @@
       "description": "Recognizer which recognizes confirmation choices (yes/no).",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -1969,8 +1980,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2036,15 +2047,16 @@
     "Microsoft.ContinueConversationLater": {
       "$role": "implements(Microsoft.IDialog)",
       "title": "Continue conversation later (Queue)",
-      "description": "Continue conversation at later time (via StorageQueue implementation).",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
       "type": "object",
       "required": [
         "date",
+        "connectionString",
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2102,12 +2114,14 @@
       "required": [
         "$kind"
       ],
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2154,8 +2168,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2202,8 +2216,8 @@
       "description": "Recognizer which recognizes currency.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -2239,8 +2253,8 @@
       "description": "Recognizer which recognizes dates and time fragments.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -2281,12 +2295,14 @@
         "description": "Default locale.",
         "default": "en-us"
       },
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -2452,8 +2468,8 @@
       "description": "If debugger is attached, stop the execution at this point in the conversation.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -2503,8 +2519,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2559,8 +2575,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2617,8 +2633,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2669,8 +2685,8 @@
       "description": "Recognizer which recognizes dimension.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -2708,8 +2724,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2786,8 +2802,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -2874,8 +2890,8 @@
       "description": "Recognizer which recognizes email.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -2912,8 +2928,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -3000,12 +3016,14 @@
       "title": "End dialog",
       "description": "End this dialog.",
       "type": "object",
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3060,8 +3078,8 @@
       "description": "End the current turn without ending the dialog.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3107,8 +3125,8 @@
       "description": "Selector for first true rule",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3145,8 +3163,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -3222,8 +3240,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -3301,8 +3319,8 @@
       "description": "Get the members who are participating in an activity. (BotFrameworkAdapter only)",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3364,8 +3382,8 @@
       "description": "Get the members who are participating in an conversation. (BotFrameworkAdapter only)",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3419,8 +3437,8 @@
       "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3477,12 +3495,14 @@
         "actionId",
         "$kind"
       ],
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -3533,8 +3553,8 @@
       "description": "Recognizer which recognizes guids.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3570,8 +3590,8 @@
       "description": "Recognizer which recognizes Hashtags.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -3609,8 +3629,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -3747,8 +3767,8 @@
         }
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Declarative",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-declarative",
+        "version": "4.12.0-rc3-preview"
       }
     },
     "Microsoft.IDialog": {
@@ -3871,9 +3891,6 @@
           "$ref": "#/definitions/Microsoft.SendActivity"
         },
         {
-          "$ref": "#/definitions/Microsoft.SendHandoffActivity"
-        },
-        {
           "$ref": "#/definitions/Microsoft.SetProperties"
         },
         {
@@ -3905,8 +3922,8 @@
         }
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Declarative",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-declarative",
+        "version": "4.12.0-rc3-preview"
       }
     },
     "Microsoft.IEntityRecognizer": {
@@ -3915,8 +3932,8 @@
       "description": "Components which derive from EntityRecognizer.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "oneOf": [
         {
@@ -3996,8 +4013,8 @@
         }
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       }
     },
     "Microsoft.IRecognizer": {
@@ -4085,8 +4102,8 @@
         }
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Declarative",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-declarative",
+        "version": "4.12.0-rc3-preview"
       }
     },
     "Microsoft.ITextTemplate": {
@@ -4102,8 +4119,8 @@
         }
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Declarative",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-declarative",
+        "version": "4.12.0-rc3-preview"
       }
     },
     "Microsoft.ITrigger": {
@@ -4111,8 +4128,8 @@
       "title": "Microsoft Triggers",
       "description": "Components which derive from OnCondition class.",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "oneOf": [
         {
@@ -4208,8 +4225,8 @@
       "title": "Selectors",
       "description": "Components which derive from TriggerSelector class.",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "oneOf": [
         {
@@ -4244,8 +4261,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -4312,8 +4329,8 @@
     "Microsoft.InputDialog": {
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -4456,8 +4473,8 @@
       "description": "Recognizer which recognizes internet IP patterns (like 192.1.1.1).",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -4489,8 +4506,8 @@
       "description": "This represents a policy map for locales lookups to use for language",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -4536,8 +4553,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -4603,8 +4620,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.AI.Luis",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-ai",
+        "version": "4.12.0-rc3"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -4744,8 +4761,8 @@
       "description": "Recognizer which recognizes @Mentions",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -4778,8 +4795,8 @@
       "description": "Select most specific true events with optional additional selector",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -4820,8 +4837,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -4875,8 +4892,8 @@
       "description": "Recognizer which recognizes numbers.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -4911,12 +4928,14 @@
       "title": "Number input dialog",
       "description": "Collect information - Ask for a number.",
       "type": "object",
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -5092,8 +5111,8 @@
       "description": "Recognizer which recognizes ranges of numbers (Example:2 to 5).",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -5129,12 +5148,14 @@
         "connectionName",
         "$kind"
       ],
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -5273,8 +5294,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -5340,11 +5361,11 @@
         "extends(Microsoft.OnCondition)"
       ],
       "title": "On entity assignment",
-      "description": "Actions to apply an operation on a property and value.",
+      "description": "Actions to take when an entity should be assigned to a property.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -5357,20 +5378,20 @@
         }
       },
       "properties": {
-        "operation": {
-          "type": "string",
-          "title": "Operation",
-          "description": "Operation filter on event."
-        },
         "property": {
           "type": "string",
           "title": "Property",
-          "description": "Property filter on event."
+          "description": "Property that will be set after entity is selected."
         },
-        "value": {
+        "entity": {
           "type": "string",
-          "title": "Value",
-          "description": "Value filter on event."
+          "title": "Entity",
+          "description": "Entity being put into property"
+        },
+        "operation": {
+          "type": "string",
+          "title": "Operation",
+          "description": "Operation for assigning entity."
         },
         "condition": {
           "$ref": "#/definitions/condition",
@@ -5426,8 +5447,8 @@
       "description": "Actions to perform when this dialog begins.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -5494,8 +5515,8 @@
       "description": "Actions to perform on cancel dialog event.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -5559,11 +5580,11 @@
         "extends(Microsoft.OnCondition)"
       ],
       "title": "On choose entity",
-      "description": "Actions to be performed when value is ambiguous for operator and property.",
+      "description": "Actions to be performed when an entity value needs to be resolved.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -5576,20 +5597,15 @@
         }
       },
       "properties": {
-        "operation": {
-          "type": "string",
-          "title": "Operation",
-          "description": "Operation filter on event."
-        },
         "property": {
           "type": "string",
-          "title": "Property",
-          "description": "Property filter on event."
+          "title": "Property to be set",
+          "description": "Property that will be set after entity is selected."
         },
-        "value": {
+        "entity": {
           "type": "string",
-          "title": "Ambiguous value",
-          "description": "Ambiguous value filter on event."
+          "title": "Ambiguous entity",
+          "description": "Ambiguous entity"
         },
         "condition": {
           "$ref": "#/definitions/condition",
@@ -5648,8 +5664,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -5720,12 +5736,12 @@
         "extends(Microsoft.OnCondition)"
       ],
       "title": "On choose property",
-      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
-      "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
-      },
+      "description": "Actions to take when there are multiple possible mappings of entities to properties.",
       "type": "object",
+      "$package": {
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
+      },
       "required": [
         "$kind"
       ],
@@ -5737,6 +5753,31 @@
         }
       },
       "properties": {
+        "entity": {
+          "type": "string",
+          "title": "Entity being assigned",
+          "description": "Entity being assigned to property choice"
+        },
+        "properties": {
+          "type": "array",
+          "title": "Possible properties",
+          "description": "Properties to be chosen between.",
+          "items": {
+            "type": "string",
+            "title": "Property name",
+            "description": "Possible property to choose."
+          }
+        },
+        "entities": {
+          "type": "array",
+          "title": "Entities",
+          "description": "Ambiguous entity names.",
+          "items": {
+            "type": "string",
+            "title": "Entity name",
+            "description": "Entity name being chosen between."
+          }
+        },
         "condition": {
           "$ref": "#/definitions/condition",
           "title": "Condition",
@@ -5791,8 +5832,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -5859,8 +5900,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -5927,8 +5968,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -5996,8 +6037,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6065,8 +6106,8 @@
       "title": "On end of actions",
       "description": "Actions to take when there are no more actions in the current dialog.",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "type": "object",
       "required": [
@@ -6136,12 +6177,14 @@
       "required": [
         "$kind"
       ],
-      "$policies": {
-        "nonInteractive": true
-      },
+      "policies": [
+        {
+          "type": "triggerNotInteractive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6205,8 +6248,8 @@
       "description": "Action to perform when an 'Error' dialog event occurs.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -6276,8 +6319,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6344,8 +6387,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6412,8 +6455,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6480,8 +6523,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6563,8 +6606,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6631,8 +6674,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6699,8 +6742,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6767,8 +6810,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6835,8 +6878,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6903,8 +6946,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -6968,8 +7011,8 @@
       "description": "Actions to perform when 'RepromptDialog' event occurs.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7039,8 +7082,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -7107,8 +7150,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -7172,8 +7215,8 @@
       "description": "Recognizer which recognizes ordinals (example: first, second, 3rd).",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7209,8 +7252,8 @@
       "description": "Recognizer which recognizes percentages.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7246,8 +7289,8 @@
       "description": "Recognizer which recognizes phone numbers.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7286,8 +7329,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.AI.QnA",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-ai",
+        "version": "4.12.0-rc3"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -7451,8 +7494,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.AI.QnA",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-ai",
+        "version": "4.12.0-rc3"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -7634,8 +7677,8 @@
       "description": "Select most specific true rule.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7677,8 +7720,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -7730,8 +7773,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -7771,8 +7814,8 @@
       "description": "Use regular expressions to recognize intents and entities from user input.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7840,12 +7883,14 @@
       "type": "object",
       "title": "Repeat dialog",
       "description": "Repeat current dialog.",
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7914,12 +7959,14 @@
       "type": "object",
       "title": "Replace dialog",
       "description": "Replace current dialog with another dialog.",
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -7999,8 +8046,8 @@
       "description": "MultiLanguage Generator which is bound to resource by resource Id.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -8049,8 +8096,8 @@
       "description": "Respond with an activity.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -8093,50 +8140,6 @@
         }
       }
     },
-    "Microsoft.SendHandoffActivity": {
-      "$role": "implements(Microsoft.IDialog)",
-      "title": "Send a handoff activity",
-      "description": "Sends a handoff activity to trigger a handoff request.",
-      "type": "object",
-      "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
-      },
-      "required": [
-        "$kind"
-      ],
-      "additionalProperties": false,
-      "patternProperties": {
-        "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
-        }
-      },
-      "properties": {
-        "context": {
-          "$ref": "#/definitions/objectExpression",
-          "title": "Context",
-          "description": "Context to send with the handoff request"
-        },
-        "transcript": {
-          "$ref": "#/definitions/objectExpression",
-          "title": "transcript",
-          "description": "Transcript to send with the handoff request"
-        },
-        "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-          "type": "string",
-          "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-          "const": "Microsoft.SendHandoffActivity"
-        },
-        "$designer": {
-          "title": "Designer information",
-          "type": "object",
-          "description": "Extra information for the Bot Framework Composer."
-        }
-      }
-    },
     "Microsoft.SetProperties": {
       "$role": "implements(Microsoft.IDialog)",
       "title": "Set property",
@@ -8147,8 +8150,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -8227,8 +8230,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -8290,8 +8293,8 @@
       "description": "Sign a user out that was logged in previously using OAuthInput.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -8353,8 +8356,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -8396,8 +8399,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -8502,8 +8505,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -8566,8 +8569,8 @@
       "description": "Recognizer which recognizes temperatures.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -8600,8 +8603,8 @@
       "description": "Template Generator which allows only inline evaluation of templates.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -8641,12 +8644,14 @@
       "type": "object",
       "title": "Text input dialog",
       "description": "Collection information - Ask for a word or sentence.",
-      "$policies": {
-        "interactive": true
-      },
+      "policies": [
+        {
+          "type": "interactive"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -8819,8 +8824,8 @@
         "$kind"
       ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -8858,12 +8863,14 @@
         "errorValue",
         "$kind"
       ],
-      "$policies": {
-        "lastAction": true
-      },
+      "policies": [
+        {
+          "type": "lastAction"
+        }
+      ],
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "additionalProperties": false,
       "patternProperties": {
@@ -8911,8 +8918,8 @@
       "description": "Send a trace activity to the transcript logger and/ or Bot Framework Emulator.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -8979,8 +8986,8 @@
       "description": "Selector for all true events",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -9013,8 +9020,8 @@
       "description": "Respond with an activity.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
@@ -9078,8 +9085,8 @@
       "description": "Recognizer which recognizes urls.",
       "type": "object",
       "$package": {
-        "name": "Microsoft.Bot.Builder.Dialogs.Adaptive",
-        "version": "4.12.0-rc1"
+        "name": "botbuilder-dialogs-adaptive",
+        "version": "4.12.0-rc3-preview"
       },
       "required": [
         "$kind"
