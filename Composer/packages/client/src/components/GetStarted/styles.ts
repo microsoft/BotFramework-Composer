@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { FontSizes } from '@uifabric/fluent-theme';
-import { FontWeights } from '@uifabric/styling';
 export const linkStyle = {
   root: { color: '#56CCF2', selectors: { ':hover': { color: '#56CCF2' } } },
 };
@@ -14,12 +13,10 @@ export const wrapperStyle = {
 
 export const h2Style = {
   fontSize: FontSizes.size20,
-  fontWeight: FontWeights.regular,
   marginTop: 0,
 };
 export const h3Style = {
   fontSize: FontSizes.size16,
-  fontWeight: FontWeights.regular,
   marginTop: 0,
 };
 
