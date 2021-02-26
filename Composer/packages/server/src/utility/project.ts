@@ -65,9 +65,12 @@ export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
     const runtimePath = currentProject.getRuntimePath();
     if (runtimePath) {
       if (!fs.existsSync(runtimePath)) {
-        await runtime.eject(currentProject, currentProject.fileStorage);
+        if (runtime.eject) {
+          await runtime.eject(currentProject, currentProject.fileStorage);
+        } else {
+          log('Eject skipped for project with invalid runtime setting');
+        }
       }
-
       // install all dependencies and build the app
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
       await runtime.build(runtimePath, currentProject);
