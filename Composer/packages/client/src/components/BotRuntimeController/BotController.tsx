@@ -131,7 +131,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
       return;
     }
 
-    if (botOperationsCompleted) {
+    if (botOperationsCompleted && runningBots.projectIds.length) {
       if (statusIconClass !== 'Refresh') {
         onHideController(false);
       }

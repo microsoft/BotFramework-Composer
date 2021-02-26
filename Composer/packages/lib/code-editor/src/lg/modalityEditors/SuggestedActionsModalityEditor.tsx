@@ -40,6 +40,7 @@ const SuggestedActionsModalityEditor = React.memo(
         modalityTitle={formatMessage('Suggested Actions')}
         modalityType="SuggestedActions"
         removeModalityOptionText={formatMessage('Remove all suggested actions')}
+        showRemoveModalityPrompt={!!response?.value.length}
         onRemoveModality={onRemoveModality}
       >
         <StringArrayEditor
