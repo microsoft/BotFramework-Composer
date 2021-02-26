@@ -180,7 +180,7 @@ export class Builder {
     ];
 
     for (const modelData of modelDatas) {
-      if (modelData.luFiles) {
+      if (modelData.luFiles.length) {
         if (!modelData.model) {
           throw new Error('Model not set');
         }
