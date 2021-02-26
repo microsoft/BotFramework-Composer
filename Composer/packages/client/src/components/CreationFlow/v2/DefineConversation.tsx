@@ -120,7 +120,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = (templateId?: string) => {
     if (templateId) {
-      console.log('NORMALIZE ', templateId);
       // use almost the same patterns as in assetManager.ts
       return templateId
         .replace(/^@microsoft\/generator-microsoft-bot-/, '') // clean up our complex package names
