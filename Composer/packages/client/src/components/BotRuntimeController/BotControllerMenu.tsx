@@ -12,8 +12,6 @@ import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme/lib/fluent';
 import formatMessage from 'format-message';
 
-import { BotStatus } from '../../constants';
-
 import { BotRuntimeOperations } from './BotRuntimeOperations';
 import { BotStatusIndicator } from './BotStatusIndicator';
 import { OpenEmulatorButton } from './OpenEmulatorButton';
