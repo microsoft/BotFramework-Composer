@@ -21,13 +21,15 @@ export const DiagnosticsContent = () => {
     <Split
       resetOnDoubleClick
       initialPrimarySize="160px"
-      minPrimarySize="160px"
-      minSecondarySize="800px"
+      minPrimarySize="140px"
+      minSecondarySize="600px"
       renderSplitter={renderThinSplitter}
       splitterSize="5px"
     >
       <DiagnosticsStatusFilter filterType={filterType} onChangeFilterType={changeFilterType} />
-      <DiagnosticList diagnosticItems={diagnostics.filter((d) => d.severity === filterType)} />
+      <div data-testid="DiagnosticList-Container" style={{ height: '100%', overflow: 'auto' }}>
+        <DiagnosticList diagnosticItems={diagnostics.filter((d) => d.severity === filterType)} />
+      </div>
     </Split>
   );
 };

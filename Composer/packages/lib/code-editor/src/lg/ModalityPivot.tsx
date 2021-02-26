@@ -355,7 +355,7 @@ export const ModalityPivot = React.memo((props: Props) => {
       onUpdateResponseTemplate({
         InputHint: {
           kind: 'InputHint',
-          value: inputHint !== 'none' ? inputHint : '',
+          value: inputHint,
         } as InputHintStructuredResponseItem,
       });
     },

@@ -4,16 +4,24 @@
 /** @jsx jsx */
 import { DirectLineLog } from '@bfc/shared';
 import { jsx } from '@emotion/core';
-import { SharedColors, FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
+
+import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 
 export interface WebchatLogItemProps {
   item: DirectLineLog;
 }
 
 export const WebchatLogItem: React.FC<WebchatLogItemProps> = ({ item }) => {
+  const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
   return (
     <div
-      css={{ padding: '8px 0px', fontSize: FontSizes.size14, fontFamily: 'Consolas', color: `${NeutralColors.black}` }}
+      css={{
+        padding: '8px 0px',
+        fontSize: DEFAULT_FONT_SETTINGS.fontSize,
+        fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
+        color: `${NeutralColors.black}`,
+      }}
       data-testid="Webchat-LogItem"
     >
       <div data-testid="LogItem__Header">
