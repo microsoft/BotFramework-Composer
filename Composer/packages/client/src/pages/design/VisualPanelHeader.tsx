@@ -29,7 +29,6 @@ type BreadcrumbItem = {
 
 type VisualPanelHeaderProps = {
   projectId: string;
-  visible: boolean;
   showCode: boolean;
   onShowCodeClick: () => void;
   pluginConfig?: PluginConfig;
@@ -158,7 +157,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
 };
 
 const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) => {
-  const { visible, showCode, projectId, onShowCodeClick, pluginConfig } = props;
+  const { showCode, projectId, onShowCodeClick, pluginConfig } = props;
   const breadcrumbs = useBreadcrumbs(projectId, pluginConfig);
 
   const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
@@ -171,7 +170,7 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
 
   const items = breadcrumbs.map(createBreadcrumbItem);
 
-  return visible ? (
+  return (
     <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
       <Breadcrumb
         ariaLabel={formatMessage('Navigation Path')}
@@ -187,7 +186,7 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
         </ActionButton>
       </div>
     </div>
-  ) : null;
+  );
 });
 
 export default VisualPanelHeader;
