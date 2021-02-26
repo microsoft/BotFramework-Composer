@@ -46,6 +46,7 @@ const TextModalityEditor = React.memo(
         modalityTitle={formatMessage('Text')}
         modalityType="Text"
         removeModalityOptionText={formatMessage('Remove all text responses')}
+        showRemoveModalityPrompt={!!response?.value.length}
         onRemoveModality={onRemoveModality}
       >
         <StringArrayEditor
