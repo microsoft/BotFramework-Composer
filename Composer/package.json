@@ -49,6 +49,7 @@
     "build:client": "yarn workspace @bfc/client build",
     "build:extensions": "cd ../extensions && yarn && yarn build:all",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
+    "start:debug": "cross-env NODE_ENV=production PORT=3000 DEBUG=* yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:dev:electron": "concurrently  \"npm:start:client\" \"npm:start:electron\"",
