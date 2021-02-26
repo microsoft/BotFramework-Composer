@@ -63,7 +63,7 @@ export type CommonModalityEditorProps = {
 /**
  * Structured response types.
  */
-export const acceptedInputHintValues = ['expecting', 'ignoring', 'accepting'] as const;
+export const acceptedInputHintValues = ['expectingInput', 'ignoringInput', 'acceptingInput'] as const;
 export const acceptedAttachmentLayout = ['carousel', 'list'] as const;
 
 export const modalityTypes = ['Text', 'Speak', 'Attachments', 'SuggestedActions'] as const;
