@@ -21,6 +21,8 @@ export const DiagnosticsStatus = () => {
   const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
   const { errorsCount, warningsCount } = useDiagnosticsStatistics();
 
+  if (!errorsCount && !warningsCount) return null;
+
   return (
     <div
       css={{ height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '8px' }}
@@ -42,20 +44,24 @@ export const DiagnosticsStatus = () => {
           setActiveTab(DiagnosticsTabKey);
         }}
       >
-        <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-          <FontIcon
-            css={{ color: SharedColors.red10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
-            iconName="StatusErrorFull"
-          />
-          {errorsCount}
-        </span>
-        <span css={{ display: 'flex', alignItems: 'center' }}>
-          <FontIcon
-            css={{ color: SharedColors.yellow10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
-            iconName="WarningSolid"
-          />
-          {warningsCount}
-        </span>
+        {errorsCount > 0 && (
+          <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+            <FontIcon
+              css={{ color: SharedColors.red10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+              iconName="StatusErrorFull"
+            />
+            {errorsCount}
+          </span>
+        )}
+        {warningsCount > 0 && (
+          <span css={{ display: 'flex', alignItems: 'center' }}>
+            <FontIcon
+              css={{ color: SharedColors.yellow10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+              iconName="WarningSolid"
+            />
+            {warningsCount}
+          </span>
+        )}
       </DefaultButton>
     </div>
   );
