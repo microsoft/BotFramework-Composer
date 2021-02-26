@@ -17,7 +17,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';
-import { settingsState, userSettingsState, schemasState } from '../../recoilModel/atoms';
+import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
