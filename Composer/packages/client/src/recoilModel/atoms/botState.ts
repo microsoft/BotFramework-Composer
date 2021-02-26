@@ -59,7 +59,22 @@ const emptyLg: LgFile = {
   rawData: true,
 };
 
+const emptyLu: LuFile = {
+  id: '',
+  content: '',
+  diagnostics: [],
+  intents: [],
+  empty: true,
+  resource: {
+    Sections: [],
+    Errors: [],
+    Content: '',
+  },
+  imports: [],
+};
+
 type LgStateParams = { projectId: string; lgFileId: string };
+type LuStateParams = { projectId: string; luFileId: string };
 
 export const lgFileState = atomFamily<LgFile, LgStateParams>({
   key: getFullyQualifiedKey('lg'),
@@ -70,6 +85,20 @@ export const lgFileState = atomFamily<LgFile, LgStateParams>({
 
 export const lgFileIdsState = atomFamily<string[], string>({
   key: getFullyQualifiedKey('lgFileIds'),
+  default: () => {
+    return [];
+  },
+});
+
+export const luFileState = atomFamily<LuFile, LuStateParams>({
+  key: getFullyQualifiedKey('lu'),
+  default: () => {
+    return emptyLu;
+  },
+});
+
+export const luFileIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('luFileIds'),
   default: () => {
     return [];
   },
