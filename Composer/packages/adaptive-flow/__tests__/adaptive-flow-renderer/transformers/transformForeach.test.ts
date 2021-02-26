@@ -60,7 +60,7 @@ test('should return correct schema when input a ForeachPage schema', () => {
 
   expect(foreachDetail).toBeDefined();
   expect(foreachDetail.id).toEqual('actions[0]');
-  expect(foreachDetail.json.$kind).toEqual(AdaptiveKinds.ForeachPageDetail);
+  expect(foreachDetail.json.$kind).toEqual(AdaptiveKinds.ConditionNode);
   expect(foreachDetail.json.listProperty).toEqual(json.listProperty);
 
   expect(stepGroup).toBeDefined();

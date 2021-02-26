@@ -16,7 +16,7 @@ export function transformSwitchCondition(
   input,
   jsonpath: string
 ): { condition: IndexedNode; choice: IndexedNode; branches: IndexedNode[] } | null {
-  if (!input || input.$kind !== AdaptiveKinds.SwitchCondition) return null;
+  if (!input) return null;
 
   const condition = input[ConditionKey] || '';
   const defaultSteps = input[DefaultBranchKey] || [];
