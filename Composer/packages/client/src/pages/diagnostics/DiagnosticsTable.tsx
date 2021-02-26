@@ -34,6 +34,7 @@ const tableView = css`
 
 // -------------------- Diagnosticist -------------------- //
 export interface IDiagnosticListProps extends RouteComponentProps {
+  projectId: string;
   showType: string;
   onItemClick: (item: IDiagnosticInfo) => void;
 }
@@ -41,8 +42,7 @@ export interface IDiagnosticListProps extends RouteComponentProps {
 const itemCount = 10;
 
 export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
-  const { onItemClick, showType } = props;
-  const projectId = useRecoilValue(currentProjectIdState);
+  const { onItemClick, projectId, showType } = props;
   const diagnostics = useRecoilValue(diagnosticsSelectorFamily(projectId));
   const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
