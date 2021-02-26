@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { OpenConfirmModal } from '@bfc/ui-shared';
+import { OpenConfirmModalWithChoices } from '@bfc/ui-shared';
 import styled from '@emotion/styled';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
@@ -32,11 +32,19 @@ const headerContentStyles = { root: { height: 32 } };
 
 const styles = {
   dropdown: {
+    root: {
+      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown': {
+        color: FluentTheme.palette.themeDarker,
+      },
+      ':focus-within .ms-Dropdown-title, :focus-within .ms-Dropdown-caretDown': {
+        color: FluentTheme.palette.accent,
+      },
+    },
     caretDown: { fontSize: FluentTheme.fonts.xSmall.fontSize, color: FluentTheme.palette.accent },
-    dropdownOptionText: { ...FluentTheme.fonts.small },
+    dropdownOptionText: { fontSize: FluentTheme.fonts.small.fontSize },
     title: {
       border: 'none',
-      ...FluentTheme.fonts.small,
+      fontSize: FluentTheme.fonts.small.fontSize,
       color: FluentTheme.palette.accent,
     },
   },
@@ -66,8 +74,9 @@ type Props = {
   menuItems?: IContextualMenuItem[];
   modalityTitle: string;
   modalityType: ModalityType;
+  showRemoveModalityPrompt: boolean;
   removeModalityOptionText: string;
-  onRemoveModality: (modality: ModalityType) => void;
+  onRemoveModality: (modality: ModalityType, removeReferencedTemplates: boolean) => void;
   onDropdownChange?: (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => void;
 };
 
@@ -79,6 +88,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
   dropdownOptions,
   dropdownPrefix = '',
   menuItems = [],
+  showRemoveModalityPrompt,
   removeModalityOptionText,
   modalityTitle,
   contentTitle,
@@ -96,7 +106,12 @@ export const ModalityEditorContainer: React.FC<Props> = ({
         itemProps: removeMenuButtonItemProps,
         onClick: () => {
           (async () => {
-            const confirm = await OpenConfirmModal(
+            if (!showRemoveModalityPrompt) {
+              onRemoveModality(modalityType, false);
+              return;
+            }
+
+            const confirm = await OpenConfirmModalWithChoices(
               formatMessage('Removing a modality from this action node'),
               formatMessage(
                 'You are about to remove {modalityTitle} modality from this action node. The content in the tab will be lost. Do you want to continue?',
@@ -105,10 +120,30 @@ export const ModalityEditorContainer: React.FC<Props> = ({
               {
                 confirmText: formatMessage('Confirm'),
                 onRenderContent: renderConfirmDialogContent,
+                choiceGroup:
+                  modalityType === 'Attachments'
+                    ? {
+                        selectedKey: 'remove',
+                        options: [
+                          {
+                            key: 'remove',
+                            text: formatMessage(
+                              'Yes, I’d like to remove the the content of this tab completely from the LG file.'
+                            ),
+                          },
+                          {
+                            key: 'keep',
+                            text: formatMessage(
+                              'No, I want to keep the content, just de-reference from this response.'
+                            ),
+                          },
+                        ],
+                      }
+                    : undefined,
               }
             );
             if (confirm) {
-              onRemoveModality(modalityType);
+              onRemoveModality(modalityType, confirm.choice === 'remove');
             }
           })();
         },
@@ -135,8 +170,8 @@ export const ModalityEditorContainer: React.FC<Props> = ({
       itemProps?.itemType === DropdownMenuItemType.Header ? (
         <ItemWithTooltip
           itemText={defaultRender?.(itemProps)}
-          tooltipId="attachment-layout-dropdown-header"
-          tooltipText={formatMessage.rich('Specify an attachment layout when there are more than one.')}
+          tooltipId={itemProps?.data?.tooltipId}
+          tooltipText={itemProps?.data?.tooltipText}
         />
       ) : (
         defaultRender?.(itemProps) ?? null

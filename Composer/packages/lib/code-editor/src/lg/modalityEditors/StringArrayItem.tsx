@@ -23,7 +23,7 @@ const Root = styled(Stack)({
 
 const TextViewItemRoot = styled(Stack)({
   transition: 'background 0.1s ease',
-  '& .ms-Button i': {
+  '& .ms-Button:not(:focus) i': {
     visibility: 'hidden',
   },
   '&:hover .ms-Button i': {
@@ -55,7 +55,7 @@ const Input = styled(TextField)({
   },
 });
 
-const StyledLgCodeEditor = styled(LgCodeEditor)({
+const LgCodeEditorContainer = styled.div({
   padding: '8px 0 8px 4px',
 });
 
@@ -100,6 +100,7 @@ type Props = {
   telemetryClient: TelemetryClient;
   onRenderDisplayText?: () => React.ReactNode;
   onBlur?: () => void;
+  onJumpTo?: (direction: 'next' | 'previous') => void;
   onRemove: () => void;
   onFocus: () => void;
   onChange?: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => void;
@@ -139,12 +140,12 @@ const TextViewItem = React.memo(({ value, onRemove, onFocus, onRenderDisplayText
 
   return (
     <TextViewItemRoot horizontal tokens={textViewRootTokens} verticalAlign="center">
-      <Stack grow styles={textViewContainerStyles} verticalAlign="center" onClick={click} onFocus={focus}>
+      <Stack grow styles={textViewContainerStyles} tabIndex={0} verticalAlign="center" onClick={click} onFocus={focus}>
         <Text styles={displayTextStyles} variant="small">
           {onRenderDisplayText?.() ?? value}
         </Text>
       </Stack>
-      <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} onClick={remove} />
+      <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
     </TextViewItemRoot>
   );
 });
@@ -237,17 +238,19 @@ export const StringArrayItem = (props: Props) => {
         editorMode === 'single' ? (
           <TextFieldItem value={value} onChange={onChange} onShowCallout={onShowCallout} />
         ) : (
-          <StyledLgCodeEditor
-            editorDidMount={onEditorDidMount}
-            editorSettings={codeEditorSettings}
-            height={150}
-            lgOption={lgOption}
-            lgTemplates={lgTemplates}
-            memoryVariables={memoryVariables}
-            telemetryClient={telemetryClient}
-            value={value}
-            onChange={onLgChange}
-          />
+          <LgCodeEditorContainer>
+            <LgCodeEditor
+              editorDidMount={onEditorDidMount}
+              editorSettings={codeEditorSettings}
+              height={150}
+              lgOption={lgOption}
+              lgTemplates={lgTemplates}
+              memoryVariables={memoryVariables}
+              telemetryClient={telemetryClient}
+              value={value}
+              onChange={onLgChange}
+            />
+          </LgCodeEditorContainer>
         )
       ) : (
         <TextViewItem value={value} onFocus={onFocus} onRemove={onRemove} onRenderDisplayText={onRenderDisplayText} />
