@@ -10,25 +10,26 @@ import isEqual from 'lodash/isEqual';
 
 import { rootBotProjectIdSelector, webChatLogsState } from '../../../../../recoilModel';
 import { DebugPanelErrorIndicator } from '../DebugPanelErrorIndicator';
+import { DebugPanelTabHeaderProps } from '../types';
 
-export const WebChatLogItemHeader = (props: { isActive: boolean }) => {
-  const { isActive } = props;
+export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const logItems = useRecoilValue(webChatLogsState(rootBotId ?? ''));
-  const [unreadMessageIndicatorVisible, showUnreadMessageIndicator] = useState(false);
-  const [currentLogItems, setCurrentLocalItems] = useState<string[]>([]);
+
+  const [hasUnreadLog, setHasUnreadLog] = useState(false);
+  const [lastReadLogIds, setLastReadLogIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (isActive || !logItems.length) {
-      showUnreadMessageIndicator(false);
+      setHasUnreadLog(false);
       return;
     }
 
-    const newItems = logItems.map((item) => item.timestamp);
-    if (!isEqual(newItems, currentLogItems)) {
-      setCurrentLocalItems(newItems);
+    const newLogIds = logItems.map((item) => item.timestamp);
+    if (!isEqual(newLogIds, lastReadLogIds)) {
+      setLastReadLogIds(newLogIds);
       if (!isActive) {
-        showUnreadMessageIndicator(true);
+        setHasUnreadLog(true);
       }
     }
   }, [logItems, isActive]);
@@ -49,7 +50,7 @@ export const WebChatLogItemHeader = (props: { isActive: boolean }) => {
       >
         {formatMessage('Webchat Inspector')}
       </div>
-      <DebugPanelErrorIndicator hasError={unreadMessageIndicatorVisible} />
+      <DebugPanelErrorIndicator hasError={hasUnreadLog} />
     </div>
   );
 };
