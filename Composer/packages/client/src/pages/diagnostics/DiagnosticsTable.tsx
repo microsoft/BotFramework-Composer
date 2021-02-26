@@ -8,9 +8,10 @@ import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { css } from '@emotion/core';
+import { useRecoilValue } from 'recoil';
 
 import { Pagination } from '../../components/Pagination';
-import { useDiagnosticsData } from '../design/DebugPanel/TabExtensions/DiagnosticsTab/useDiagnostics';
+import { currentProjectIdState, diagnosticsSelectorFamily } from '../../recoilModel';
 
 import { DiagnosticList } from './DiagnosticList';
 import { IDiagnosticInfo } from './types';
@@ -41,7 +42,8 @@ const itemCount = 10;
 
 export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
   const { onItemClick, showType } = props;
-  const diagnostics = useDiagnosticsData();
+  const projectId = useRecoilValue(currentProjectIdState);
+  const diagnostics = useRecoilValue(diagnosticsSelectorFamily(projectId));
   const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
 
