@@ -29,4 +29,6 @@ const builtinActionWidgets: FlowEditorWidgetMap = {
   ListOverview,
 };
 
+export const buitinNowrapWidgetNames = ['ForeachWidget', 'SwitchConditionWidget', 'IfConditionWidget'];
+
 export default builtinActionWidgets;
