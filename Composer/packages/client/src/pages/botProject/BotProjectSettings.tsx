@@ -39,7 +39,6 @@ const container = css`
   display: flex;
   flex-direction: column;
   max-width: 1000px;
-  height: 100%;
 `;
 
 const botNameStyle = css`
@@ -118,6 +117,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   return (
     <Page
+      useDebugPane
       data-testid="BotProjectsSettings"
       headerStyle={header}
       mainRegionName={formatMessage('Bot projects settings list View')}

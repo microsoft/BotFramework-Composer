@@ -61,6 +61,7 @@ const LGPage: React.FC<RouteComponentProps<{
   return (
     <Page
       showCommonLinks
+      useDebugPane
       useNewTree
       data-testid="LGPage"
       dialogId={dialogId}
