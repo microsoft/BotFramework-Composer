@@ -13,7 +13,7 @@ export function transformForeach(
   input: any,
   jsonpath: string
 ): { foreachDetail: IndexedNode; stepGroup: IndexedNode; loopBegin: IndexedNode; loopEnd: IndexedNode } | null {
-  if (!input) return null;
+  if (!input || typeof input !== 'object') return null;
 
   const foreachDetailNode = new IndexedNode(jsonpath, {
     ...input,
