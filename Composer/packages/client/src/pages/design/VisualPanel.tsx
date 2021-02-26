@@ -67,13 +67,15 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
 
   return (
     <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-      <VisualPanelHeader
-        pluginConfig={pluginConfig}
-        projectId={projectId}
-        showCode={dialogJsonVisible}
-        visible={!isRemoteSkill}
-        onShowCodeClick={handleShowCodeClick}
-      />
+      {!isRemoteSkill && (
+        <VisualPanelHeader
+          pluginConfig={pluginConfig}
+          projectId={projectId}
+          showCode={dialogJsonVisible}
+          onShowCodeClick={handleShowCodeClick}
+        />
+      )}
+
       {dialogJsonVisible && currentDialog ? (
         <JsonEditor
           key={'dialogjson'}
