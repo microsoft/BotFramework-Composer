@@ -55,6 +55,7 @@ const getSSMLProps = (tag: 'prosody' | 'audio' | 'break'): string => {
 };
 
 type StringArrayEditorProps = {
+  addButtonText?: string;
   items: string[];
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
@@ -65,7 +66,15 @@ type StringArrayEditorProps = {
 };
 
 export const StringArrayEditor = React.memo(
-  ({ items, lgTemplates, memoryVariables, isSpeech = false, telemetryClient, onChange }: StringArrayEditorProps) => {
+  ({
+    addButtonText,
+    items,
+    lgTemplates,
+    memoryVariables,
+    isSpeech = false,
+    telemetryClient,
+    onChange,
+  }: StringArrayEditorProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
@@ -281,7 +290,7 @@ export const StringArrayEditor = React.memo(
         ))}
         {currentIndex === null && (
           <Link as="button" styles={styles.link} onClick={onClickAddVariation}>
-            {formatMessage('Add new variation')}
+            {addButtonText ?? formatMessage('Add new variation')}
           </Link>
         )}
         {calloutTargetElement && (

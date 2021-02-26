@@ -84,7 +84,7 @@ describe('<Editor />', () => {
 
   it('should set app updater error', () => {
     const error = {
-      message: 'An error occured with updating composer',
+      message: 'An error occurred with updating composer',
     };
     act(() => {
       dispatcher.setAppUpdateError(error);

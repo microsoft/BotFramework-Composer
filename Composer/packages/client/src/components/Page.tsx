@@ -62,9 +62,9 @@ export const headerContent = css`
   label: PageHeaderContent;
 `;
 
-export const main = css`
+export const main = (hasRenderHeaderContent) => css`
   margin-left: 2px;
-  height: calc(100vh - 165px);
+  height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
@@ -83,7 +83,6 @@ export const content = (shouldShowEditorError: boolean) => css`
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: auto;
   height: ${shouldShowEditorError ? 'calc(100% - 40px)' : '100%'};
   label: PageContent;
   box-sizing: border-box;
@@ -94,6 +93,8 @@ const contentStyle = css`
   flex-grow: 1;
   height: 0;
   position: relative;
+  overflow: auto;
+  box-sizing: border-box;
 `;
 
 // -------------------- Page -------------------- //
@@ -109,7 +110,9 @@ type IPageProps = {
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
   useNewTree?: boolean;
+  useDebugPane?: boolean;
   navLinks?: INavTreeItem[];
+  navLinkClick?: (item: INavTreeItem) => void;
   pageMode: PageMode;
   showCommonLinks?: boolean;
   projectId?: string;
@@ -122,6 +125,7 @@ const Page: React.FC<IPageProps> = (props) => {
   const {
     title,
     navLinks,
+    navLinkClick,
     toolbarItems,
     onRenderHeaderContent,
     children,
@@ -130,6 +134,7 @@ const Page: React.FC<IPageProps> = (props) => {
     headerStyle = header,
     shouldShowEditorError = false,
     useNewTree,
+    useDebugPane,
     pageMode,
     showCommonLinks = false,
     projectId,
@@ -168,7 +173,7 @@ const Page: React.FC<IPageProps> = (props) => {
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
-        <div css={main} role="main">
+        <div css={main(!!onRenderHeaderContent)} role="main">
           <Split
             resetOnDoubleClick
             initialPrimarySize="20%"
@@ -206,7 +211,7 @@ const Page: React.FC<IPageProps> = (props) => {
                 }}
               />
             ) : (
-              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} onLinkClick={navLinkClick} />
             )}
             <div
               aria-label={mainRegionName}
@@ -215,7 +220,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {title !== 'Diagnostics' && <DebugPanel />}
+              {useDebugPane ? <DebugPanel /> : null}
             </div>
           </Split>
         </div>
