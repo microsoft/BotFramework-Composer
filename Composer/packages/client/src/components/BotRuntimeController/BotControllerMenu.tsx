@@ -50,9 +50,8 @@ const tableColumns: IColumn[] = [
   {
     key: 'displayName',
     name: formatMessage('Bot'),
-    minWidth: 150,
-    maxWidth: 150,
     isResizable: true,
+    minWidth: 120,
     onRender: ({ displayName, isRootBot }) => {
       return `${displayName} ${!isRootBot ? `(${formatMessage('Skill')})` : ''}`;
     },
@@ -61,8 +60,8 @@ const tableColumns: IColumn[] = [
   {
     key: 'status',
     name: formatMessage('Status'),
-    minWidth: 75,
-    maxWidth: 75,
+    minWidth: 150,
+    isResizable: true,
     isRowHeader: true,
     onRender: (item: {
       displayName: string;
@@ -81,8 +80,6 @@ const tableColumns: IColumn[] = [
     key: 'webchat-viewer',
     name: '',
     minWidth: 130,
-    maxWidth: 130,
-    isRowHeader: true,
     onRender: ({ projectId, isRootBot }) => {
       return <OpenWebChatButton isRootBot={isRootBot} projectId={projectId} />;
     },
@@ -90,8 +87,7 @@ const tableColumns: IColumn[] = [
   {
     key: 'emulator',
     name: '',
-    minWidth: 150,
-    maxWidth: 150,
+    minWidth: 135,
     isRowHeader: true,
     onRender: ({ projectId, isRootBot }) => {
       return <OpenEmulatorButton isRootBot={isRootBot} projectId={projectId} />;
@@ -105,9 +101,19 @@ const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>
     <Callout
       hideOverflow
       setInitialFocus
-      directionalHint={DirectionalHint.bottomRightEdge}
+      directionalHint={DirectionalHint.topRightEdge}
       hidden={hidden}
       role="dialog"
+      styles={{
+        root: {
+          selectors: {
+            // Move the beak of the callout to right.
+            '.ms-Callout-beak': {
+              right: '5px !important',
+            },
+          },
+        },
+      }}
       target={target}
       onDismiss={onDismiss}
     >
@@ -119,7 +125,6 @@ const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>
         <div css={styles.container}>
           <DetailsList
             columns={tableColumns}
-            compact={false}
             getKey={(item) => item.id}
             items={items}
             layoutMode={DetailsListLayoutMode.justified}
