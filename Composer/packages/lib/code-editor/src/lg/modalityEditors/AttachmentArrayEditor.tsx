@@ -45,6 +45,9 @@ const styles: { button: IButtonStyles } = {
     root: {
       color: FluentTheme.palette.themePrimary,
       fontSize: FluentTheme.fonts.small.fontSize,
+      ':hover .ms-Button-label, :active .ms-Button-label, :focus .ms-Button-label': {
+        color: FluentTheme.palette.themeDarker,
+      },
     },
   },
 };
