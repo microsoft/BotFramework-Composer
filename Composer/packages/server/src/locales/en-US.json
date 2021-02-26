@@ -1376,6 +1376,12 @@
   "font_family_baa0c6a3": {
     "message": "Font family"
   },
+  "font_settings_afc8127c": {
+    "message": "Font settings"
+  },
+  "font_settings_used_in_the_text_editors_a7ed1383": {
+    "message": "Font settings used in the text editors."
+  },
   "font_size_bf4db203": {
     "message": "Font size"
   },
@@ -1564,6 +1570,9 @@
   },
   "input_hint_37e0c163": {
     "message": "Input hint: "
+  },
+  "input_hint_ab89f368": {
+    "message": "Input hint"
   },
   "insert_a_property_reference_in_memory_95d27746": {
     "message": "Insert a property reference in memory"
@@ -2138,9 +2147,6 @@
   "node_menu_e2aa8092": {
     "message": "Node menu"
   },
-  "none_3b5e34d2": {
-    "message": "None"
-  },
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
   },
@@ -2254,9 +2260,6 @@
   },
   "or_4f7d4edb": {
     "message": "Or: "
-  },
-  "orchestrator_36e58231": {
-    "message": "Orchestrator"
   },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator recognizer"
@@ -2533,9 +2536,6 @@
   },
   "recent_bots_53585911": {
     "message": "Recent Bots"
-  },
-  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
-    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
   },
   "recognizer_type_dc591e16": {
     "message": "Recognizer Type"
