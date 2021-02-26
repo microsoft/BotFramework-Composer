@@ -17,7 +17,7 @@ import { JSONSchema7 } from '@botframework-composer/types';
 
 import { useRouterCache } from '../../../utils/hooks';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
-import { subtitle, tableRow, tableRowItem, tableColumnHeader } from '../styles';
+import { subtitle, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
 
 import AdapterModal, { AdapterRecord, hasRequired } from './ExternalAdapterModal';
 
@@ -54,8 +54,6 @@ const ExternalAdapterSettings = (props: Props) => {
 
   if (schemaDefinitions == null) return null;
 
-  const columnWidths = ['300px', '150px', '150px'];
-
   const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string; firstTime?: boolean })[]) => (
     <div>
       <div key={'subtitle'} css={subtitle}>
@@ -68,9 +66,9 @@ const ExternalAdapterSettings = (props: Props) => {
         })}
       </div>
       <div css={tableRow}>
-        <div css={tableColumnHeader(columnWidths[0])}>{formatMessage('Name')}</div>
-        <div css={tableColumnHeader(columnWidths[1])}>{formatMessage('Configured')}</div>
-        <div css={tableColumnHeader(columnWidths[2])}>{formatMessage('Enabled')}</div>
+        <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
+        <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Configured')}</div>
+        <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
       </div>
 
       {schemas.map((schema) => {
@@ -84,8 +82,8 @@ const ExternalAdapterSettings = (props: Props) => {
 
         return (
           <div key={key} css={tableRow}>
-            <div css={tableRowItem(columnWidths[0])}>{title}</div>
-            <div css={tableRowItem(columnWidths[1])}>
+            <div css={tableRowItem(columnSizes[0])}>{title}</div>
+            <div css={tableRowItem(columnSizes[1])}>
               {keyConfigured ? (
                 <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
               ) : (
@@ -94,7 +92,7 @@ const ExternalAdapterSettings = (props: Props) => {
                 </Link>
               )}
             </div>
-            <div css={tableRowItem(columnWidths[2])}>
+            <div css={tableRowItem(columnSizes[2])}>
               <Toggle
                 checked={keyEnabled}
                 data-testid={`toggle_${key}`}

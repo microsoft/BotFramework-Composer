@@ -324,9 +324,6 @@
     },
     {
       "$ref": "#/definitions/Microsoft.UrlEntityRecognizer"
-    },
-    {
-      "$ref": "#/definitions/Adapters.Contoso"
     }
   ],
   "definitions": {

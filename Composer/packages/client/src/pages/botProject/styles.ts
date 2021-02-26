@@ -105,3 +105,5 @@ export const unknownIconStyle = (required: boolean) => {
     },
   };
 };
+
+export const columnSizes = ['200px', '350px', '50px'];
