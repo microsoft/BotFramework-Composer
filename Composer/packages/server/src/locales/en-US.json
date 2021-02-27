@@ -1652,8 +1652,8 @@
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
   },
-  "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
-    "message": "it''s not a built-in function or a custom function."
+  "it_s_not_a_built_in_function_or_a_custom_function_211f17dc": {
+    "message": "it’s not a built-in function or a custom function."
   },
   "item_actions_22d0242": {
     "message": "Item Actions"
@@ -1979,8 +1979,8 @@
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft App Password"
   },
-  "microsoft_s_templates_offer_best_practices_for_dev_87bec01c": {
-    "message": "Microsoft''s templates offer best practices for developing conversational bots"
+  "microsoft_s_templates_offer_best_practices_for_dev_faa1a869": {
+    "message": "Microsoft’s templates offer best practices for developing conversational bots"
   },
   "minimap_beb3be27": {
     "message": "Minimap"
@@ -3056,8 +3056,8 @@
   "the_name_of_your_publishing_file_cefbe3a1": {
     "message": "The name of your publishing file"
   },
-  "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
-    "message": "The page you are looking for can''t be found."
+  "the_page_you_are_looking_for_can_t_be_found_acfd3adc": {
+    "message": "The page you are looking for can’t be found."
   },
   "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
     "message": "The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string."

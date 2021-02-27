@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 
 const EMPTY = formatMessage(`is missing or empty`);
 const RETURNTYPE_NOT_MATCH = formatMessage('the return type does not match');
-const BUILT_IN_FUNCTION_ERROR = formatMessage("it's not a built-in function or a custom function.");
+const BUILT_IN_FUNCTION_ERROR = formatMessage('it’s not a built-in function or a custom function.');
 
 const expressionErrorMessage = (error: string) => formatMessage('must be an expression: {error}', { error });
 const builtInFunctionErrorMessage = (error: string) =>
