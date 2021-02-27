@@ -16,14 +16,12 @@ export default {
   bubbleMinHeight: 20,
 
   microphoneButtonColorOnDictate: `${SharedColors.red10}`,
-  sendBoxBackground: `${NeutralColors.white}`,
   sendBoxButtonColor: `${NeutralColors.gray130}`,
   sendBoxButtonColorOnFocus: `${NeutralColors.gray140}`,
   sendBoxButtonColorOnHover: `${NeutralColors.gray150}`,
-  sendBoxTextColor: 'initial',
-
+  sendBoxTextColor: `${NeutralColors.gray150}`,
+  sendBoxPlaceholderColor: `${NeutralColors.gray150}`,
   timestampColor: `${NeutralColors.gray130}`,
-
   suggestedActionBackground: `${NeutralColors.gray10}`,
   suggestedActionBorderColor: 'transparent',
   suggestedActionBorderStyle: 'solid',
