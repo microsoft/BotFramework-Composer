@@ -125,7 +125,6 @@ const Page: React.FC<IPageProps> = (props) => {
   const {
     title,
     navLinks,
-    navLinkClick,
     toolbarItems,
     onRenderHeaderContent,
     children,
@@ -143,7 +142,7 @@ const Page: React.FC<IPageProps> = (props) => {
     fileId,
   } = props;
 
-  const { setPageElementState, setCurrentProjectId } = useRecoilValue(dispatcherState);
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState(pageMode, { leftSplitWidth: sizes.primary });

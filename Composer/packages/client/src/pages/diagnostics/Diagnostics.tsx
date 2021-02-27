@@ -21,7 +21,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const [showType, setShowType] = useState('');
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
-  const projectId = props.skillId ?? props.projectId;
+  const projectId = (props.skillId ?? props.projectId) as string;
 
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigateTo(item.getUrl());

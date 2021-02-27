@@ -11,7 +11,7 @@ import { css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 
 import { Pagination } from '../../components/Pagination';
-import { currentProjectIdState, diagnosticsSelectorFamily } from '../../recoilModel';
+import { diagnosticsSelectorFamily } from '../../recoilModel';
 
 import { DiagnosticList } from './DiagnosticList';
 import { IDiagnosticInfo } from './types';
