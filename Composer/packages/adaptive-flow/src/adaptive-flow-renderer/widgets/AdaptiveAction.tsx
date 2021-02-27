@@ -11,7 +11,7 @@ import { renderUIWidget } from '../utils/visual/widgetRenderer';
 import { SchemaContext } from '../contexts/SchemaContext';
 import { RendererContext } from '../contexts/RendererContext';
 import { ElementMeasurer } from '../components/ElementMeasurer';
-import { buitinNowrapWidgetNames } from '../configs/builtinWidgets';
+import { buitinNowrapWidgetNames } from '../configs/buitinNowrapWidgetNames';
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const { widgets, schemaProvider, sdkschema } = useContext(SchemaContext);
