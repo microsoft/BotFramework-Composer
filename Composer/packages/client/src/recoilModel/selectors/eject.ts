@@ -34,7 +34,7 @@ const ejectRuntimeAction = (dispatcher: Dispatcher) => {
         } else {
           const errorToShow: StateError = {
             message: ex.response?.data?.message || ex.response?.data || ex.message,
-            summary: formatMessage('Error occured ejecting runtime!'),
+            summary: formatMessage('Error occurred ejecting runtime!'),
             status: ex.response?.data?.status || ex.status,
           };
           dispatcher.setApplicationLevelError(errorToShow);
