@@ -2,19 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
-import { jsx, css } from '@emotion/core';
-import { useRecoilValue } from 'recoil';
-import formatMessage from 'format-message';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { css, jsx } from '@emotion/core';
+import formatMessage from 'format-message';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { Text } from 'office-ui-fabric-react/lib/Text';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
 
 // -------------------- Styles -------------------- //
 
