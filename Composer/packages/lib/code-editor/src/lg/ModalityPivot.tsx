@@ -266,7 +266,7 @@ export const ModalityPivot = React.memo((props: Props) => {
   ]);
 
   const onRemoveModality = useCallback(
-    (modality: ModalityType, removeReferencedTemplates = false) => {
+    (modality: ModalityType, keepReferencedTemplates = false) => {
       if (modalities.length > 1) {
         const updatedModalities = modalities.filter((item) => item !== modality);
         setModalities(updatedModalities);
@@ -291,7 +291,7 @@ export const ModalityPivot = React.memo((props: Props) => {
           }
 
           // Remove attachments created by the LG Response Editor
-          if (modality === 'Attachments' && removeReferencedTemplates) {
+          if (modality === 'Attachments' && !keepReferencedTemplates) {
             const attachments = (structuredResponse?.[modality] as AttachmentsStructuredResponseItem)?.value;
             for (const attachment of attachments) {
               const templateId = extractTemplateNameFromExpression(attachment);
