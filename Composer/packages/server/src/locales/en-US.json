@@ -1511,6 +1511,9 @@
   "i_want_to_delete_this_bot_f81a4735": {
     "message": "I want to delete this bot"
   },
+  "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
+    "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
+  },
   "icon_name_is_file_c80dacae": {
     "message": "{ icon } name is { file }"
   },
@@ -2114,9 +2117,6 @@
   "no_functions_found_e0db426b": {
     "message": "No functions found"
   },
-  "no_i_want_to_keep_the_content_just_de_reference_fr_fac5f2ce": {
-    "message": "No, I want to keep the content, just de-reference from this response."
-  },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NO LU FILE WITH NAME { id }"
   },
@@ -2603,8 +2603,8 @@
   "remove_variation_43b4f4d6": {
     "message": "Remove variation"
   },
-  "removing_a_modality_from_this_action_node_702b52be": {
-    "message": "Removing a modality from this action node"
+  "removing_content_from_action_node_bb6a825e": {
+    "message": "Removing content from action node"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "Repeat this dialog"
@@ -3512,9 +3512,6 @@
   "yes_dde87d5": {
     "message": "Yes"
   },
-  "yes_i_d_like_to_remove_the_the_content_of_this_tab_e870a0a": {
-    "message": "Yes, I’d like to remove the the content of this tab completely from the LG file."
-  },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "You already have a KB with that name. Choose another name and try again."
   },
@@ -3524,8 +3521,8 @@
   "you_are_about_to_pull_project_files_from_the_selec_15786351": {
     "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
   },
-  "you_are_about_to_remove_modalitytitle_modality_fro_567167b3": {
-    "message": "You are about to remove { modalityTitle } modality from this action node. The content in the tab will be lost. Do you want to continue?"
+  "you_are_about_to_remove_modalitytitle_content_from_c51efe05": {
+    "message": "You are about to remove { modalityTitle } content from this action node. Are you sure you want to proceed?"
   },
   "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
     "message": "You are about to remove the skill from this project. Removing this skill won’t delete the files."
