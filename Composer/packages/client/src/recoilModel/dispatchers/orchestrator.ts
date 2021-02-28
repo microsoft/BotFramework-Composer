@@ -4,15 +4,15 @@
 
 import { RecognizerFile, SDKKinds } from '@bfc/shared';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import partition from 'lodash/partition';
 
 import { orchestratorDownloadNotificationProps } from '../../components/Orchestrator/DownloadNotification';
 import httpClient from '../../utils/httpUtil';
 import { dispatcherState } from '../../../src/recoilModel';
 import { recognizersSelectorFamily } from '../selectors/recognizers';
+import { Locales } from '../../locales';
 
 import { createNotification } from './notification';
-import { partition } from 'lodash';
-import { Locales } from '../../locales';
 
 export const downloadModel = (addr: string, model: 'en' | 'multilang') => {
   return new Promise<boolean>((resolve, reject) => {
