@@ -9,9 +9,20 @@ import { NuGetFeed } from './nuget/nugetFeed';
 import axios from 'axios';
 import * as fs from 'fs';
 
+/**
+ * Builds the correct feed abstraction based on the provided package source information.
+ */
 export class FeedFactory {
+  /**
+   * Builds a feed factory.
+   * @param composer The composer registration for logging.
+   */
   constructor(private composer: IExtensionRegistration) {}
 
+  /**
+   * Builds the corresponding feed abstraction, based on the provided package source information.
+   * @param packageSource Package source information based on which the factory will select the feed to be built.
+   */
   async build(packageSource: IPackageSource): Promise<IFeed> {
     this.composer.log(`Feed factory processing url ${packageSource.url}`);
 
