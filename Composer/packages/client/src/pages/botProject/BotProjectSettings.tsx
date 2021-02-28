@@ -39,6 +39,7 @@ const container = css`
   display: flex;
   flex-direction: column;
   max-width: 1000px;
+  height: 100%;
 `;
 
 const botNameStyle = css`
