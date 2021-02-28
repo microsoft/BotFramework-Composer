@@ -48,7 +48,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // this is actually a myget feed that points to the feed we want...
       const queryEndpoint = feed.resources.find((resource) => resource['@type'] === 'SearchQueryService');
       if (queryEndpoint) {
-        const raw = await axios.get(queryEndpoint['@id']);
+        const raw = await axios.get(`queryEndpoint['@id']?q=tags:bf-component&prerelease=true&semVerLevel:2.0.0`);
         return normalizeFeed(raw.data);
       } else {
         return [];
