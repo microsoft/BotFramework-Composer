@@ -36,7 +36,7 @@ export const downloadModel = (addr: string, model: 'en' | 'multilang') => {
 };
 
 export const availableLanguageModels = (recognizerFiles: RecognizerFile[]) => {
-  const dialogsUsingOrchestrator = recognizerFiles?.filter(
+  const dialogsUsingOrchestrator = recognizerFiles.filter(
     ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
   );
   const languageModels: ('en' | 'multilang')[] = [];
@@ -53,7 +53,8 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[]) => {
     if (
       multiLangLuFiles
         .map((r) => r.id.split('.')?.[1])
-        ?.some((lang) => Locales.map((l) => l.locale).includes(lang?.toLowerCase()))
+        .filter((id) => id !== undefined)
+        .some((lang) => Locales.map((l) => l.locale).includes(lang?.toLowerCase()))
     ) {
       languageModels.push('multilang');
     }
@@ -65,7 +66,7 @@ export const orchestratorDispatcher = () => {
   const downloadLanguageModels = useRecoilCallback(({ snapshot }: CallbackInterface) => async (projectId: string) => {
     const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
 
-    const isUsingOrchestrator = recognizers?.some(
+    const isUsingOrchestrator = recognizers.some(
       ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
     );
 

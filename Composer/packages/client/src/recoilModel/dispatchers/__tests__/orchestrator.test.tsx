@@ -12,6 +12,8 @@ describe('Orchestrator model picking logic', () => {
       { id: 'test.zh-cn.dialog', content: { $kind: SDKKinds.LuisRecognizer } },
       { id: 'nonsense-file', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: '..', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: '.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: '', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: 'nonsense-file.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: 'en-us', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: 'test.nonsense-locale.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
