@@ -84,7 +84,10 @@ describe('Orchestrator model picking logic', () => {
   it('return all models when multiple languages are detected', () => {
     const recognizerFiles: RecognizerFile[] = [
       { id: 'test.en-us.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: 'test.en.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: 'test.fr-be.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: 'test.ja-jp.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: 'test.zh.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
     ];
     expect(availableLanguageModels(recognizerFiles)).toHaveLength(2);
     expect(availableLanguageModels(recognizerFiles)).toEqual(['en', 'multilang']);
