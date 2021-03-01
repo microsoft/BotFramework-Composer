@@ -3,6 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import formatMessage from 'format-message';
 import React from 'react';
 
 export interface IndicatorProps {
@@ -12,6 +13,7 @@ export interface IndicatorProps {
 export const Indicator: React.FC<IndicatorProps> = ({ color }) => {
   return (
     <div
+      aria-label={formatMessage('Unread Errors Indicator')}
       css={css`
         background: ${color};
         width: 10px;
