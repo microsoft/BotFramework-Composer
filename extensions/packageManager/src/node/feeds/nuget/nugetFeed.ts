@@ -62,7 +62,7 @@ export class NuGetFeed implements IFeed {
       this.composer.log(`Retrieving NuGet packages with computed search url ${nuGetSearchUrl}`);
       const httpResponse = await axios.get(nuGetSearchUrl);
 
-      if (!httpResponse || !httpResponse.data) {
+      if (httpResponse?.data == null) {
         this.composer.log(`Failed to get search service from url ${nuGetSearchUrl}`);
         return [];
       }
