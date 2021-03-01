@@ -8,4 +8,4 @@ Pre-requisites: Before you can connect a bot to MS Teams, be sure you've complet
 * You've created a publishing profile and published your bot to Azure
 * You've enabled the web chat connection in your bot's settings
 
-To finalize the connection to the web chat control, follow the instructions here](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-channel-connect-webchat?view=azure-bot-service-4.0#embed-the-web-chat-control-in-a-web-page).
+To finalize the connection to the web chat control, [follow the instructions here](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-channel-connect-webchat?view=azure-bot-service-4.0#embed-the-web-chat-control-in-a-web-page).
