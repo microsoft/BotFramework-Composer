@@ -52,17 +52,11 @@ export class AzureResourceMananger {
    */
   public async createResourceGroup(config: ResourceGroupConfig): Promise<ResourceGroupConfig> {
     if (!config.name) {
-      throw createCustomizeError(
-        ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
-        'You should provide a valid resource group name.'
-      );
+      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, 'You should provide a valid resource group name.');
     }
     // Create a new resource group
     if (!config.location) {
-      throw createCustomizeError(
-        ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
-        'You should provide a valid resource group name.'
-      );
+      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, 'You should provide a valid resource group name.');
     }
 
     try {
@@ -947,6 +941,9 @@ export class AzureResourceMananger {
         name: config.name,
         location: 'global',
         kind: 'bot',
+        tags: {
+          webapp: config.webAppHostname
+        }
       });
 
       if (botResult?._response?.status >= 300) {
