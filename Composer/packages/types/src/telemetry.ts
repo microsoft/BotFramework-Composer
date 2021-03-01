@@ -41,6 +41,10 @@ type ApplicationEvents = {
   NotificationPanelOpened: undefined;
 };
 
+type GettingStartedEvents = {
+  GettingStartedLinkClicked: { method: 'link' | 'button'; url: string };
+};
+
 type SessionEvents = {
   SessionStarted: { os: string };
   SessionEnded: undefined;
@@ -147,6 +151,7 @@ type PageView = {
 };
 
 export type TelemetryEvents = ApplicationEvents &
+  GettingStartedEvents &
   BotProjectEvents &
   DesignerEvents &
   SessionEvents &

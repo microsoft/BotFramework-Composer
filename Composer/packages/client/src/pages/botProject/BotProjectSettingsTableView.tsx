@@ -50,7 +50,7 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
       <div css={publishTargetsWrap(!isRootBot)}>
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
       </div>
-      {isRootBot && <DeleteBotButton projectId={projectId} />}
+      {isRootBot && <DeleteBotButton projectId={projectId} scrollToSectionId={scrollToSectionId} />}
     </div>
   );
 };
