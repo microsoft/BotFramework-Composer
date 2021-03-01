@@ -8,6 +8,7 @@ import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { useRecoilValue } from 'recoil';
 
 import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
@@ -15,6 +16,9 @@ import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
+import { AuthClient } from '../../../utils/authClient';
+import { armScopes, graphScopes } from '../../../constants';
+import { dispatcherState } from '../../../recoilModel';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
 
@@ -36,6 +40,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
+  const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const [dialogTitle, setTitle] = useState({
     title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
@@ -96,6 +101,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.currentProjectId = () => {
       return projectId;
     };
+    if (current?.item.type) {
+      setPage(Page.ConfigProvision);
+    } else {
+      setPage(Page.ProfileForm);
+    }
   }, [current, projectId]);
 
   const savePublishTarget = useCallback(
@@ -113,6 +123,34 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     },
     [targets, projectId]
   );
+
+  useEffect(() => {
+    if (current?.item?.type) {
+      PluginAPI.publish.getType = () => {
+        return current?.item?.type;
+      };
+      PluginAPI.publish.getSchema = () => {
+        return types.find((t) => t.name === current?.item?.type)?.schema;
+      };
+      PluginAPI.publish.savePublishConfig = (config) => {
+        savePublishTarget(name, current?.item?.type, JSON.stringify(config) || '{}');
+      };
+      PluginAPI.publish.startProvision = async (config) => {
+        const fullConfig = { ...config, name: current.item.name, type: current.item.type };
+        let arm, graph;
+        if (!isGetTokenFromUser()) {
+          // login or get token implicit
+          arm = await AuthClient.getAccessToken(armScopes);
+          graph = await AuthClient.getAccessToken(graphScopes);
+        } else {
+          // get token from cache
+          arm = getTokenFromCache('accessToken');
+          graph = getTokenFromCache('graphToken');
+        }
+        provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      };
+    }
+  }, [current, types, savePublishTarget]);
 
   return (
     <Fragment>

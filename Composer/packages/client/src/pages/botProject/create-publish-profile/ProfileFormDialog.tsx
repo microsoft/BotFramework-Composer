@@ -19,8 +19,6 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { separator } from '../../publish/styles';
 import { armScopes, graphScopes } from '../../../constants';
 import { PublishType } from '../../../recoilModel/types';
-import { isShowAuthDialog } from '../../../utils/auth';
-import { AuthDialog } from '../../../components/Auth/AuthDialog';
 import { PluginAPI } from '../../../plugins/api';
 import { dispatcherState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
@@ -78,7 +76,6 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const [name, setName] = useState(current?.item.name || '');
   const [errorMessage, setErrorMsg] = useState('');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const updateName = (e, newName) => {
@@ -151,17 +148,6 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            onNext();
-          }}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       <Fragment>
         <div style={{ width: '49%', minHeight: '430px' }}>
           <form>
@@ -195,12 +181,8 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
           <PrimaryButton
             disabled={saveDisabled}
             text={formatMessage('Next: Configure resources')}
-            onClick={async () => {
-              if (isShowAuthDialog(true)) {
-                setShowAuthDialog(true);
-              } else {
-                onNext();
-              }
+            onClick={() => {
+              onNext();
             }}
           />
         </DialogFooter>
