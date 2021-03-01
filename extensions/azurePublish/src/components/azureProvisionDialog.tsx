@@ -273,7 +273,9 @@ const reviewCols: IColumn[] = [
     isRowHeader: true,
     data: 'string',
     onRender: (item: ResourcesItem & {name,icon}) => {
-      return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>{item.region?.displayName}</div>;
+      return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>
+        {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global': item.region?.displayName}
+      </div>;
     },
     isPadded: true,
   },
@@ -546,6 +548,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSubmit = useMemo(
     () => async (options) => {
       // call back to the main Composer API to begin this process...
+      console.log(options);
       startProvision(options);
       closeDialog();
     },
@@ -585,8 +588,12 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const isDisAble = useMemo(() => {
-    return !currentSubscription || !currentHostName || errorHostName!== '' || errorResourceGroupName !== '' || !currentLocation;
-  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName]);
+    return !currentSubscription || !currentHostName || errorHostName!== '' || errorResourceGroupName !== '' || (!currentConfig?.region && !currentLocation);
+  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName, currentConfig]);
+
+  const isSelectAddResources = useMemo(()=>{
+    return enabledResources.length>0;
+  },[enabledResources]);
 
   const PageFormConfig = (
     <Fragment>
@@ -631,15 +638,23 @@ export const AzureProvisionDialog: React.FC = () => {
             styles={{ root: { paddingBottom: '8px' } }}
             onRenderLabel={onRenderLabel}
           />
-          <Dropdown
-            required
-            defaultSelectedKey={currentConfig?.region || currentLocation?.name}
-            label={'Region'}
-            options={deployLocationsOption}
-            placeholder={'Select one'}
-            styles={{ root: { paddingBottom: '8px' } }}
-            onChange={updateCurrentLocation}
-          />
+          {currentConfig?.region ?
+            <TextField
+              required
+              disabled={currentConfig?.region}
+              defaultValue={currentConfig?.region}
+              label={formatMessage('Region')}
+              styles={{ root: { paddingBottom: '8px' } }}
+            /> :
+            <Dropdown
+              required
+              defaultSelectedKey={currentConfig?.region || currentLocation?.name}
+              label={'Region'}
+              options={deployLocationsOption}
+              placeholder={'Select one'}
+              styles={{ root: { paddingBottom: '8px' } }}
+              onChange={updateCurrentLocation}
+            />}
           {currentLocation && currentLuisLocation && currentLocation.name !== currentLuisLocation.name &&
           <Dropdown
             required
@@ -788,6 +803,7 @@ export const AzureProvisionDialog: React.FC = () => {
             />
             <PrimaryButton
               text={'Next'}
+              disabled={!isSelectAddResources}
               onClick={()=>{
                 setPage(PageTypes.ReviewResource);
                 setTitle(DialogTitle.REVIEW);
@@ -825,7 +841,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   subscription: currentSubscription,
                   resourceGroup: currentResourceGroup,
                   hostname: currentHostName,
-                  location: currentLocation,
+                  location: currentConfig?.region || currentLocation,
                   luisLocation: currentLuisLocation?.name || currentLocation.name,
                   type: publishType,
                   externalResources: selectedResources,
