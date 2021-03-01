@@ -105,7 +105,7 @@ export const publisherDispatcher = () => {
 
     // remove job id in publish storage if published
     if (status === PUBLISH_SUCCESS || status === PUBLISH_FAILED) {
-      const publishJobIds = publishStorage.get('jobIds');
+      const publishJobIds = publishStorage.get('jobIds') || {};
       publishJobIds[`${projectId}-${target.name}`] = '';
       publishStorage.set('jobIds', publishJobIds);
     }
@@ -199,9 +199,12 @@ export const publisherDispatcher = () => {
           },
           sensitiveSettings,
         });
+
+        // add job id to storage
         const publishJobIds = publishStorage.get('jobIds') || {};
         publishJobIds[`${projectId}-${target.name}`] = response.data.id;
         publishStorage.set('jobIds', publishJobIds);
+
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
@@ -242,10 +245,9 @@ export const publisherDispatcher = () => {
         const currentJobId =
           jobId ??
           (publishStorage.get('jobIds') ? publishStorage.get('jobIds')[`${projectId}-${target.name}`] : undefined);
-        if (!currentJobId) {
-          return;
-        }
-        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}/${currentJobId}`);
+        const response = await httpClient.get(
+          `/publish/${projectId}/status/${target.name}/${currentJobId ? '/' + currentJobId : ''}`
+        );
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
