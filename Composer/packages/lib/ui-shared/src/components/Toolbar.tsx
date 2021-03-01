@@ -32,11 +32,9 @@ export const rightActions = css`
   margin-right: 20px;
 `;
 
-export const actionButton = css`
-  font-size: 16px;
-  margin-top: 2px;
-  margin-left: 15px;
-`;
+export const defaultToolbarButtonStyles: IButtonStyles = {
+  root: { fontSize: '16px', marginTop: '2px', marginLeft: '15px' },
+};
 
 // -------------------- IToolbarItem -------------------- //
 
@@ -63,13 +61,7 @@ const renderItemList = (item: IToolbarItem, index: number) => {
     return <Fragment key={index}>{item.element}</Fragment>;
   } else if (item.type === 'action') {
     return (
-      <ActionButton
-        key={index}
-        css={!item.buttonProps?.styles ? actionButton : null}
-        {...item.buttonProps}
-        data-testid={item.dataTestid}
-        disabled={item.disabled}
-      >
+      <ActionButton key={index} {...item.buttonProps} data-testid={item.dataTestid} disabled={item.disabled}>
         {item.text}
       </ActionButton>
     );
@@ -77,11 +69,11 @@ const renderItemList = (item: IToolbarItem, index: number) => {
     return (
       <CommandButton
         key={index}
-        css={actionButton}
         data-testid={item.dataTestid}
         disabled={item.disabled}
         iconProps={item.buttonProps?.iconProps}
         menuProps={item.menuProps}
+        styles={defaultToolbarButtonStyles}
         text={item.text}
       />
     );

@@ -12,7 +12,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
-// import TelemetryClient from '../../telemetry/TelemetryClient';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import { navigateTo } from '../../utils/navigation';
 
 import { wrapperStyle, buttonStyles, h2Style, h3Style, ulStyle, linkStyle, liStyle } from './styles';
@@ -100,11 +100,11 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   ];
 
   const linkClick = (event) => {
-    // TODO: track telemetry!
+    TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: event.target.href });
   };
 
   const buttonClick = (link) => {
-    // TODO: track telemetry
+    TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
     navigateTo(link);
   };
 
