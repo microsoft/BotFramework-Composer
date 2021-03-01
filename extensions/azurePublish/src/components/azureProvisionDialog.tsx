@@ -644,6 +644,7 @@ export const AzureProvisionDialog: React.FC = () => {
               defaultValue={currentConfig?.region}
               label={formatMessage('Region')}
               styles={{ root: { paddingBottom: '8px' } }}
+              onRenderLabel={onRenderLabel}
             /> :
             <Dropdown
               required
@@ -840,8 +841,8 @@ export const AzureProvisionDialog: React.FC = () => {
                   subscription: currentSubscription,
                   resourceGroup: currentResourceGroup,
                   hostname: currentHostName,
-                  location: {name: currentConfig?.region} || currentLocation,
-                  luisLocation: currentLuisLocation?.name || currentLocation.name,
+                  location: currentConfig?.region || currentLocation.name,
+                  luisLocation: currentLuisLocation?.name || currentConfig?.region || currentLocation.name,
                   type: publishType,
                   externalResources: selectedResources,
                 });

@@ -16,7 +16,7 @@ export interface ProvisionConfig {
   tenantId?: string;
   hostname: string; // for previous bot, it's ${name}-${environment}
   externalResources: ResourceType[];
-  location: { id: string; name: string; displayName: string };
+  location: string;
   luisLocation: string;
   subscription: string;
   resourceGroup?: string;
@@ -234,7 +234,7 @@ export class BotProjectProvision {
       // Ensure the resource group is ready
       provisionResults.resourceGroup = await this.azureResourceManagementClient.createResourceGroup({
         name: resourceGroupName,
-        location: config.location.name,
+        location: config.location,
       });
 
       // SOME OF THESE MUST HAPPEN IN THE RIGHT ORDER!

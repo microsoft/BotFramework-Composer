@@ -132,7 +132,6 @@ export const provisionDispatcher = () => {
               type: targetType,
             };
             const targetList = updatePublishTargets(settings, profile);
-            console.log(targetList);
             return {
               ...settings,
               publishTargets: targetList,

@@ -418,7 +418,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           hostname: config.hostname ?? currentProfile?.hostname,
           luisResource: provisionResults.luisPrediction? `${config.hostname}-luis` : currentProfile?.luisResource,
           runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
-          region: config.location.name,
+          region: config.location,
           settings: {
             applicationInsights: {
               InstrumentationKey: provisionResults.appInsights?.instrumentationKey ?? currentSettings?.applicationInsights?.InstrumentationKey,
