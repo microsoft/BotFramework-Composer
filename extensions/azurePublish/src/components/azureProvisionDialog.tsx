@@ -125,7 +125,6 @@ function getExistResources (config){
     if(config.settings?.blobStorage?.connectionString){
       result.push(AzureResourceTypes.BLOBSTORAGE);
     }
-    console.log(result);
     return result;
   } else return [];
 }
@@ -274,7 +273,7 @@ const reviewCols: IColumn[] = [
     data: 'string',
     onRender: (item: ResourcesItem & {name,icon}) => {
       return <div style={{whiteSpace: 'normal', fontSize:'12px', color: NeutralColors.gray130}}>
-        {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global': item.region?.displayName}
+        {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global': (item.region?.displayName || item)}
       </div>;
     },
     isPadded: true,
@@ -548,7 +547,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSubmit = useMemo(
     () => async (options) => {
       // call back to the main Composer API to begin this process...
-      console.log(options);
       startProvision(options);
       closeDialog();
     },
@@ -557,6 +555,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSave = useMemo(
     () => () => {
+
       savePublishConfig(importConfig);
       closeDialog();
     },
@@ -809,7 +808,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 setTitle(DialogTitle.REVIEW);
                 let selectedResources = requireResources.concat(enabledResources);
                 selectedResources = selectedResources.map(item=>{
-                  let region = currentLocation;
+                  let region = currentConfig?.region ? {displayName: currentConfig?.region} : currentLocation;
                   if(item.key.includes('luis')){
                     region = currentLuisLocation;
                   }
@@ -841,7 +840,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   subscription: currentSubscription,
                   resourceGroup: currentResourceGroup,
                   hostname: currentHostName,
-                  location: currentConfig?.region || currentLocation,
+                  location: {name: currentConfig?.region} || currentLocation,
                   luisLocation: currentLuisLocation?.name || currentLocation.name,
                   type: publishType,
                   externalResources: selectedResources,
