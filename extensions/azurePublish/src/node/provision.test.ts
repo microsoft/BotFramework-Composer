@@ -17,11 +17,7 @@ const mockConfig = {
   luisLocation: '',
   name: 'profileName',
   type: 'azurepublish',
-  subscription: {
-    subscriptionId: 'subscriptionId',
-    tenantId: 'tenant',
-    displayName: 'test',
-  },
+  subscription: 'test',
 } as ProvisionConfig;
 const azProvision = new BotProjectProvision(mockConfig);
 
@@ -31,13 +27,5 @@ jest.mock('request-promise', () => {
 });
 
 describe('provision', () => {
-  it('test private method getTenantId', async () => {
-    expect(typeof azProvision.getTenantId).toBe('function');
-    // mockGet.mockResolvedValueOnce({
-    //   tenantId: 'test'
-    // });
-    // const tenantId = await azProvision['getTenantId']();
-    // expect(tenantId).toBe('test');
-  });
-  it('test get error message', () => {});
+
 });
