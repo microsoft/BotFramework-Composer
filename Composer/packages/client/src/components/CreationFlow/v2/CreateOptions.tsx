@@ -22,6 +22,8 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 
@@ -246,6 +248,14 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           </div>
         </div>
         <DialogFooter>
+          <Link
+            styles={{ root: { fontSize: '12px', float: 'left' } }}
+            href="https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title="
+            underline
+          >
+            <FontIcon style={{ marginRight: '5px' }} iconName="ChatInviteFriend" />
+            Need another template? Send us a request
+          </Link>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
