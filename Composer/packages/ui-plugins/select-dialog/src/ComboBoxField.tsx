@@ -36,7 +36,9 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
       <div>
         <Icon
           aria-hidden="true"
-          iconName={option.key === ADD_DIALOG ? 'Add' : 'OpenSource'}
+          iconName={
+            option.key === ADD_DIALOG ? 'Add' : option.key === 'expression' ? 'CalculatorEqualTo' : 'OpenSource'
+          }
           style={{ marginRight: '8px' }}
         />
         <span>{option.text}</span>
