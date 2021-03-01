@@ -306,7 +306,6 @@ export class BotProjectService {
         break;
       }
     }
-
     if (matchingProjectId) {
       const { eTag, path } = BotProjectService.projectLocationMap[matchingProjectId];
       if (path == null) {

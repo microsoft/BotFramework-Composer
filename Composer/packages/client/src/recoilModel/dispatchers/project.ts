@@ -14,6 +14,7 @@ import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { navigateTo } from '../../utils/navigation';
+import { getPublishProfileFromPayload } from '../../utils/electronUtil';
 import { projectIdCache } from '../../utils/projectCache';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import {
@@ -276,7 +277,7 @@ export const projectDispatcher = () => {
   });
 
   const createNewBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
@@ -292,6 +293,8 @@ export const projectDispatcher = () => {
         urlSuffix,
         alias,
         preserveRoot,
+        profile,
+        source,
       } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
@@ -308,6 +311,13 @@ export const projectDispatcher = () => {
       );
       set(botProjectIdsState, [projectId]);
 
+      if (profile) {
+        // ABS Create Flow, update publishProfile after create project
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        const newProfile = getPublishProfileFromPayload(profile, source);
+
+        newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+      }
       // Post project creation
       set(projectMetaDataState(projectId), {
         isRootBot: true,
