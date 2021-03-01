@@ -409,7 +409,7 @@ export const getPreview = (hostname: string) => {
       key: 'webApp',
     },
     {
-      name: 'Microsoft Application Registration',
+      name: azureWebAppName,
       icon: Images.AppRegistration,
       key: 'appRegistration',
     },
