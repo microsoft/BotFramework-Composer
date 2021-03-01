@@ -5,12 +5,13 @@ import { StatusCodes } from 'http-status-codes';
 import { AttachmentData, Attachment } from 'botframework-schema';
 import * as express from 'express';
 import * as Formidable from 'formidable';
+import formatMessage from 'format-message';
 
-import { sendErrorResponse } from '../utils/apiErrorException';
 import { DLServerState } from '../store/dlServerState';
 import { Conversation } from '../store/entities/conversation';
-import { textItem, statusCodeFamily } from '../utils/helpers';
+import { textItem } from '../utils/helpers';
 import { readFile } from '../utils/fileOperations';
+import { handleDirectLineErrors } from '../utils/apiErrorException';
 
 export const createUploadAttachmentHandler = (state: DLServerState) => {
   return (req: express.Request, res: express.Response): void => {
@@ -21,7 +22,7 @@ export const createUploadAttachmentHandler = (state: DLServerState) => {
       const resourceResponse = { id: resourceId };
       res.status(StatusCodes.OK).json(resourceResponse);
     } catch (err) {
-      sendErrorResponse(req, res, err);
+      handleDirectLineErrors(req, res, err);
     }
   };
 };
@@ -30,14 +31,16 @@ export const createUploadHandler = (state: DLServerState) => {
   return async (req: express.Request, res: express.Response): Promise<void> => {
     const conversation: Conversation = (req as any).conversation;
     if (!conversation) {
-      res.status(StatusCodes.NOT_FOUND).send('Conversation not found.').end();
-      const logItem = textItem('Error', 'Cannot upload file. Conversation not found.');
-      state.dispatchers.logToDocument(req.params.conversationId, logItem);
+      const message = formatMessage('Cannot upload file. Conversation not found.');
+      res.status(StatusCodes.NOT_FOUND).send(message).end();
+      state.dispatchers.logToDocument(req.params.conversationId, textItem('Error', message));
       return;
     }
 
     if (!req.is('multipart/form-data') || Number(req.headers['content-length']) === 0) {
-      res.status(StatusCodes.BAD_REQUEST).send('Cannot parse attachment.').end();
+      const message = formatMessage('Cannot parse attachment.');
+      res.status(StatusCodes.NOT_FOUND).send(message).end();
+      state.dispatchers.logToDocument(req.params.conversationId, textItem('Error', message));
       return;
     }
 
@@ -47,7 +50,8 @@ export const createUploadHandler = (state: DLServerState) => {
     // TODO: Override form.onPart handler so it doesn't write temp files to disk.
     form.parse(req as any, async (err, fields, files: any) => {
       try {
-        const activity = JSON.parse((files.activity.path, 'utf8'));
+        const fileContents = await readFile(files.activity.path, 'utf8');
+        const activity = JSON.parse(fileContents);
         let uploads = files.file;
 
         if (!Array.isArray(uploads)) {
@@ -55,7 +59,10 @@ export const createUploadHandler = (state: DLServerState) => {
         }
 
         if (!uploads?.length) {
-          sendErrorResponse(req, res, err);
+          const message = formatMessage('No uploads were attached as a part of the request.');
+          res.status(StatusCodes.BAD_REQUEST).send(message).end();
+          state.dispatchers.logToDocument(req.params.conversationId, textItem('Error', message));
+          return;
         }
 
         activity.attachments = [];
@@ -79,23 +86,10 @@ export const createUploadHandler = (state: DLServerState) => {
           };
           activity.attachments.push(attachment);
         }
-
-        try {
-          const { sendActivity, status, response } = await conversation.postActivityToBot(state, activity);
-
-          if (!statusCodeFamily(status, 200)) {
-            res
-              .status(status || StatusCodes.INTERNAL_SERVER_ERROR)
-              .json(response.data)
-              .end();
-          } else {
-            res.status(status).json({ id: sendActivity?.id }).end();
-          }
-        } catch (err) {
-          sendErrorResponse(req, res, err);
-        }
+        const { sendActivity, status } = await conversation.postActivityToBot(state, activity);
+        res.status(status).json({ id: sendActivity?.id }).end();
       } catch (err) {
-        sendErrorResponse(req, res, err);
+        handleDirectLineErrors(req, res, err);
       }
     });
   };

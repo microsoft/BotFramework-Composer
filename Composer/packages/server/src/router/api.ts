@@ -20,6 +20,7 @@ import { ImportController } from '../controllers/import';
 import { StatusController } from '../controllers/status';
 import { SettingsController } from '../controllers/settings';
 import { TelemetryController } from '../controllers/telemetry';
+import { OrchestratorController } from '../controllers/orchestrator';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -45,6 +46,7 @@ router.get('/projects/:projectId/export', ProjectController.exportProject);
 router.get('/projects/alias/:alias', ProjectController.getProjectByAlias);
 router.post('/projects/:projectId/backup', ProjectController.backupProject);
 router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
+router.get('/projects/:projectId/variables', ProjectController.getVariablesByProjectId);
 
 // form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
@@ -100,6 +102,9 @@ router.post('/extensions', ExtensionsController.addExtension);
 router.delete('/extensions', ExtensionsController.removeExtension);
 router.patch('/extensions/toggle', ExtensionsController.toggleExtension);
 router.get('/extensions/search', ExtensionsController.searchExtensions);
+router.get('/extensions/settings/schema.json', ExtensionsController.getSettingsSchema);
+router.get('/extensions/settings', ExtensionsController.getSettings);
+router.patch('/extensions/settings', ExtensionsController.updateSettings);
 router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 // proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
 router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
@@ -125,6 +130,10 @@ router.post('/settings', SettingsController.updateUserSettings);
 
 // Telemetry
 router.post('/telemetry/events', TelemetryController.track);
+
+// Orchestrator Specific API
+router.post('/orchestrator/download', OrchestratorController.downloadDefaultModel);
+router.get('/orchestrator/status', OrchestratorController.status);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

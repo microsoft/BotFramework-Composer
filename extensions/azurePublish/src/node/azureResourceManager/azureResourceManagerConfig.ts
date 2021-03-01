@@ -94,6 +94,7 @@ export interface BotConfig {
   appInsightsId?: string;
   appInsightsApiKey?: string;
   appInsightsInsKey?: string;
+  webAppHostname?: string;
 }
 
 export interface WebAppConfig {
@@ -105,7 +106,7 @@ export interface WebAppConfig {
   appPwd?: string;
 }
 
-export interface AzureFuntionsConfig {
+export interface AzureFunctionsConfig {
   resourceGroupName: string;
   name: string;
   location: string;

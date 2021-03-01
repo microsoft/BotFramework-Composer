@@ -7,15 +7,13 @@ import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { IToolbarItem } from '@bfc/ui-shared';
 
-import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { exportSkillModalInfoState } from '../../recoilModel';
-import { DiagnosticsHeader } from '../../components/DiagnosticsHeader';
+import { navigateTo } from '../../utils/navigation';
 
-import { DiagnosticList } from './DiagnosticList';
+import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo } from './types';
 
@@ -23,15 +21,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const [showType, setShowType] = useState('');
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
-
-  const { projectId = '', skillId } = props;
-  const toolbarItems: IToolbarItem[] = [
-    {
-      type: 'element',
-      element: <DiagnosticsHeader />,
-      align: 'right',
-    },
-  ];
+  const projectId = (props.skillId ?? props.projectId) as string;
 
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigateTo(item.getUrl());
@@ -52,10 +42,10 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       navRegionName={formatMessage('Diagnostics Pane')}
       pageMode={'diagnostics'}
       title={formatMessage('Diagnostics')}
-      toolbarItems={toolbarItems}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
-      <DiagnosticList showType={showType} skillId={skillId ?? projectId} onItemClick={handleItemClick} />
+      <DiagnosticsTable projectId={projectId} showType={showType} onItemClick={handleItemClick} />
     </Page>
   );
 };

@@ -9,8 +9,7 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { qnaDispatcher } from '../qna';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { qnaFilesState, currentProjectIdState, localeState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { qnaFilesState, currentProjectIdState, localeState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '..';
 
 jest.mock('../../parsers/qnaWorker', () => {

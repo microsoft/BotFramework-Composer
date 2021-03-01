@@ -3,27 +3,44 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
+import { useEffect, useRef, useState } from 'react';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
+import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { moreButton, overflowSet } from './treeItem';
+const searchBox: ISearchBoxStyles = {
+  root: {
+    borderBottom: `1px solid ${NeutralColors.gray30}`,
+    height: '45px',
+    borderRadius: '0px',
+    width: '100%',
+  },
+};
+
+const buttonStyle = css`
+  height: 100%;
+`;
 
 const headerText = css`
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  height: 45px;
+  border-radius: 0px;
   text-align: left;
-  text-transform: uppercase;
   font-size: ${FontSizes.size12};
   position: relative;
   display: flex;
   margin: 0;
-  padding: 0 0 0 12px;
 `;
 
-const headerWrapper = css`
-  background: ${NeutralColors.gray60};
+const commands = css`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row-reverse;
 `;
 
 export interface ProjectTreeHeaderMenuItem {
@@ -34,9 +51,26 @@ export interface ProjectTreeHeaderMenuItem {
 
 export interface ProjectTreeHeaderProps {
   menu: ProjectTreeHeaderMenuItem[];
+  placeholder?: string;
+  ariaLabel?: string;
+  onFilter?: (newValue?: string) => void;
 }
 
-export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) => {
+export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
+  menu,
+  onFilter = () => {},
+  placeholder = '',
+  ariaLabel = '',
+}) => {
+  const [showFilter, setShowFilter] = useState(false);
+  const searchBoxRef = useRef<ISearchBox>(null);
+
+  useEffect(() => {
+    if (showFilter && searchBoxRef.current) {
+      searchBoxRef.current.focus();
+    }
+  }, [showFilter]);
+
   const overflowMenu = menu.map((item) => {
     return {
       key: item.label,
@@ -49,56 +83,54 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) =>
       },
       onClick: item.onClick,
     };
-  });
+  }) as IOverflowSetItemProps[];
 
-  const onRenderOverflowButton = (isActive: boolean) => {
-    const moreLabel = formatMessage('Actions');
-    return (overflowItems: IContextualMenuItem[] | undefined) => {
-      if (overflowItems == null) return null;
-      return (
-        <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
-          <IconButton
-            ariaLabel={moreLabel}
-            className="project-tree-header-more-btn"
-            data-is-focusable={isActive}
-            data-testid="projectTreeHeaderMoreButton"
-            menuIconProps={{ iconName: 'Add', style: { color: NeutralColors.black } }}
-            menuProps={{ items: overflowItems }}
-            role="cell"
-            styles={{ ...moreButton(true), rootHovered: { background: 'none' } }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.stopPropagation();
-              }
-            }}
-          />
-        </TooltipHost>
-      );
-    };
+  const handleSearchBoxBlur = () => {
+    onFilter('');
+    setShowFilter(false);
   };
 
   return (
-    <div css={headerWrapper}>
-      <div css={headerText}>
-        <OverflowSet
-          doNotContainWithinFocusZone
-          css={overflowSet(true)}
-          data-testid={'ProjectTreeHeaderMoreButton'}
-          items={[
-            {
-              key: 'your project',
-              displayName: formatMessage('your project'),
-            },
-          ]}
-          overflowItems={overflowMenu}
-          role="row"
-          styles={{ item: { flex: 1 } }}
-          onRenderItem={(item) => {
-            return <div key={item.key}>{item.displayName}</div>;
-          }}
-          onRenderOverflowButton={onRenderOverflowButton(true)}
+    <div css={headerText}>
+      {showFilter ? (
+        <SearchBox
+          underlined
+          ariaLabel={ariaLabel}
+          componentRef={searchBoxRef}
+          iconProps={{ iconName: 'Filter' }}
+          placeholder={placeholder}
+          styles={searchBox}
+          onBlur={handleSearchBoxBlur}
+          onChange={(_e, value) => onFilter(value)}
         />
-      </div>
+      ) : (
+        <div css={commands}>
+          <CommandButton
+            css={buttonStyle}
+            iconProps={{ iconName: 'Filter' }}
+            onClick={() => {
+              setShowFilter(true);
+            }}
+          />
+          {overflowMenu.length ? (
+            <CommandButton
+              data-is-focusable
+              ariaLabel={formatMessage('Actions')}
+              className="project-tree-header-more-btn"
+              css={buttonStyle}
+              data-testid="projectTreeHeaderMoreButton"
+              iconProps={{ iconName: 'Add' }}
+              menuProps={{ items: overflowMenu }}
+              text={formatMessage('Add')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.stopPropagation();
+                }
+              }}
+            />
+          ) : null}
+        </div>
+      )}
     </div>
   );
 };

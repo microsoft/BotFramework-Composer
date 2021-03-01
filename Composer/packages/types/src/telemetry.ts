@@ -68,7 +68,7 @@ type DesignerEvents = {
   EditModeToggled: { jsonView: boolean };
   HelpLinkClicked: { url: string };
   ToolbarButtonClicked: { name: string };
-  EmulatorButtonClicked: { isRoot: boolean; projectId: string };
+  EmulatorButtonClicked: { isRoot: boolean; projectId: string; location: 'WebChatPane' | 'BotController' };
   LeftMenuModeToggled: { expanded: boolean };
   ProjectTreeFilterUsed: undefined;
   TooltipOpened: { location?: string; title: string; duration: number };
@@ -84,7 +84,8 @@ type DesignerEvents = {
 
 type QnaEvents = {
   AddNewKnowledgeBaseStarted: undefined;
-  AddNewKnowledgeBaseCompleted: undefined;
+  AddNewKnowledgeBaseCompleted: { scratch: boolean };
+  AddNewKnowledgeBaseCanceled: undefined;
   NewQnAPair: undefined;
   AlternateQnAPhraseAdded: undefined;
 };
@@ -103,6 +104,28 @@ type AppSettingsEvents = {
 type BotSettingsEvents = {
   CustomRuntimeToggleChanged: { enabled: boolean };
   GetNewRuntime: { runtimeType: string };
+};
+
+type LgEditorEvents = {
+  LGEditorSwitchToCodeEditor: undefined;
+  LGEditorSwitchToResponseEditor: undefined;
+  LGEditorModalityAdded: { modality: string };
+  LGEditorModalityDeleted: { modality: string };
+  LGQuickInsertItem: {
+    itemType: string;
+    item?: string;
+    location: 'LGCodeEditor' | 'LGResponseEditor';
+  };
+};
+
+type WebChatEvents = {
+  WebChatPaneOpened: undefined;
+  WebChatPaneClosed: undefined;
+  WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
+  DrawerPaneOpened: undefined;
+  DrawerPaneClosed: undefined;
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' };
+  SaveTranscriptClicked: undefined;
 };
 
 type OtherEvents = {};
@@ -132,7 +155,9 @@ export type TelemetryEvents = ApplicationEvents &
   PublishingEvents &
   QnaEvents &
   AppSettingsEvents &
-  PageView;
+  PageView &
+  LgEditorEvents &
+  WebChatEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

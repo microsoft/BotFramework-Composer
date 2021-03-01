@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { PublishResult } from '@botframework-composer/types';
 
 export type PVAPublishJob = {

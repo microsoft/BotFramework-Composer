@@ -30,14 +30,13 @@ const state = {
 // const resolvers = { lgFileResolver: jest.fn((id) => state.lgFiles.find((file) => file.id === id)) };
 
 describe('use lgApi hooks', () => {
-  let removeLgTemplatesMock, initRecoilState, copyLgTemplateMock, updateLgTemplateMock, removeLgTemplateMock;
+  let removeLgTemplatesMock, initRecoilState, copyLgTemplateMock, updateLgTemplateMock;
   let result: HookResult<any>;
 
   beforeEach(() => {
     updateLgTemplateMock = jest.fn();
     copyLgTemplateMock = jest.fn();
     removeLgTemplatesMock = jest.fn();
-    removeLgTemplateMock = jest.fn();
 
     initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
@@ -48,7 +47,6 @@ describe('use lgApi hooks', () => {
         updateLgTemplate: updateLgTemplateMock,
         copyLgTemplate: copyLgTemplateMock,
         removeLgTemplates: removeLgTemplatesMock,
-        removeLgTemplate: removeLgTemplateMock,
       }));
     };
 
@@ -104,14 +102,14 @@ describe('use lgApi hooks', () => {
   it('should call remove lg template action', () => {
     result.current.removeLgTemplate('test.en-us', 'bar');
 
-    expect(removeLgTemplateMock).toBeCalledTimes(1);
+    expect(removeLgTemplatesMock).toBeCalledTimes(1);
 
     const arg = {
       id: 'test.en-us',
-      templateName: 'bar',
+      templateNames: ['bar'],
       projectId: state.projectId,
     };
-    expect(removeLgTemplateMock).toBeCalledWith(arg);
+    expect(removeLgTemplatesMock).toBeCalledWith(arg);
   });
 
   it('should call remove lg templates action', () => {

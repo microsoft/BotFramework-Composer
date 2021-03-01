@@ -10,6 +10,7 @@ import { mkdirSync, readFile } from 'fs-extra';
 import yeoman from 'yeoman-environment';
 import Environment from 'yeoman-environment';
 import TerminalAdapter from 'yeoman-environment/lib/adapter';
+import { QnABotTemplateId } from '@bfc/shared';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -24,17 +25,10 @@ import { templateGeneratorPath } from '../../settings/env';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
-  public yeomanEnv: Environment;
   private _botProjectFileTemplate;
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
-    this.yeomanEnv = yeoman.createEnv(
-      '',
-      { yeomanRepository: templateGeneratorPath },
-      new TerminalAdapter({ console: console })
-    );
-    this.yeomanEnv.lookupLocalPackages();
   }
 
   public get botProjectFileTemplate() {
@@ -117,13 +111,26 @@ export class AssetManager {
       mkdirSync(dstDir, { recursive: true });
 
       // find selected template
-      const npmPackageName = templateId;
+      const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
       const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-      const remoteTemplateAvailable = await this.installRemoteTemplate(generatorName, npmPackageName, templateVersion);
+      // create yeoman environment
+      const yeomanEnv = yeoman.createEnv(
+        '',
+        { yeomanRepository: templateGeneratorPath },
+        new TerminalAdapter({ console: console })
+      );
+      yeomanEnv.lookupLocalPackages();
+
+      const remoteTemplateAvailable = await this.installRemoteTemplate(
+        yeomanEnv,
+        generatorName,
+        npmPackageName,
+        templateVersion
+      );
 
       if (remoteTemplateAvailable) {
-        await this.instantiateRemoteTemplate(generatorName, dstDir, projectName);
+        await this.instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName);
       } else {
         throw new Error(`error hit when installing remote template`);
       }
@@ -132,23 +139,30 @@ export class AssetManager {
 
       return ref;
     } catch (err) {
-      throw new Error(`error hit when instantiating remote template: ${err?.message}`);
+      if (err?.message.match(/npm/)) {
+        throw new Error(
+          `Error calling npm to fetch template. Please ensure that node and npm are installed and available on your system. Full error message: ${err?.message}`
+        );
+      } else {
+        throw new Error(`Error hit when instantiating remote template: ${err?.message}`);
+      }
     }
   }
 
   private async installRemoteTemplate(
+    yeomanEnv: Environment,
     generatorName: string,
     npmPackageName: string,
     templateVersion: string
   ): Promise<boolean> {
-    this.yeomanEnv.cwd = templateGeneratorPath;
+    yeomanEnv.cwd = templateGeneratorPath;
     try {
       log('Installing generator', npmPackageName);
       templateVersion = templateVersion ? templateVersion : '*';
-      await this.yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
+      await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
 
       log('Looking up local packages');
-      await this.yeomanEnv.lookupLocalPackages();
+      await yeomanEnv.lookupLocalPackages();
       return true;
     } catch {
       return false;
@@ -156,15 +170,16 @@ export class AssetManager {
   }
 
   private async instantiateRemoteTemplate(
+    yeomanEnv: Environment,
     generatorName: string,
     dstDir: string,
     projectName: string
   ): Promise<boolean> {
     log('About to instantiate a template!', dstDir, generatorName, projectName);
-    this.yeomanEnv.cwd = dstDir;
+    yeomanEnv.cwd = dstDir;
     process.chdir(dstDir);
 
-    await this.yeomanEnv.run([generatorName, projectName], {}, () => {
+    await yeomanEnv.run([generatorName, projectName], {}, () => {
       log('Template successfully instantiated', dstDir, generatorName, projectName);
     });
     return true;
@@ -277,6 +292,18 @@ export class AssetManager {
     return 'npm';
   }
 
+  private getPackageDisplayName(packageName: string): string {
+    if (packageName) {
+      return packageName
+        .replace(/^@microsoft\/generator-microsoft-bot/, '') // clean up our complex package names
+        .replace(/^generator-/, '') // clean up other package names too
+        .split('-')
+        .reduce((a, b) => a.charAt(0).toUpperCase() + a.slice(1) + ' ' + b.charAt(0).toUpperCase() + b.slice(1));
+    } else {
+      return '';
+    }
+  }
+
   private async getFeedContents(feedUrl: string): Promise<BotTemplateV2[] | undefined | null> {
     try {
       const res = await fetch(feedUrl);
@@ -285,10 +312,10 @@ export class AssetManager {
       if (feedType === 'npm') {
         return data.objects.map((result) => {
           const { name, version, description = '', keywords = [] } = result.package;
-
+          const displayName = this.getPackageDisplayName(name);
           return {
             id: name,
-            name: name,
+            name: displayName,
             description: description,
             keywords: keywords,
             package: {
@@ -322,5 +349,12 @@ export class AssetManager {
     }
 
     return templates;
+  }
+
+  public async getRawGithubFileContent(owner: string, repo: string, branch: string, path: string) {
+    const githubUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    const res = await fetch(githubUrl.toString());
+
+    return await res.text();
   }
 }
