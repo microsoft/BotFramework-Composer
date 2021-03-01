@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import React, { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
@@ -9,8 +11,6 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import React from 'react';
-import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
@@ -38,10 +38,11 @@ const deleteBotButton = {
 
 type DeleteBotButtonProps = {
   projectId: string;
+  scrollToSectionId: string;
 };
 
 export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const { deleteBot } = useRecoilValue(dispatcherState);
   const openDeleteBotModal = async () => {
     const boldWarningText = formatMessage(
@@ -110,8 +111,16 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
     }
   };
 
+  const deleteRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (deleteRef.current && scrollToSectionId === '#deleteBot') {
+      deleteRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scrollToSectionId]);
+
   return (
-    <div css={marginBottom}>
+    <div ref={deleteRef} css={marginBottom} id="deleteBot">
       <div css={deleteBotText}> {formatMessage('Delete this bot')}</div>
       <PrimaryButton styles={deleteBotButton} onClick={openDeleteBotModal}>
         {formatMessage('Delete')}
