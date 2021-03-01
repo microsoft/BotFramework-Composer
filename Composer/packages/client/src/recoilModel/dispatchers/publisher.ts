@@ -21,12 +21,12 @@ import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
 import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
+import { ClientStorage } from '../../utils/storage';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
 import { setRootBotSettingState } from './setting';
-import { ClientStorage } from '../../utils/storage';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;

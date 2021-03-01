@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { publishStorage } from '../recoilModel/dispatchers/publisher';
+
 import httpClient from './httpUtil';
 
 enum PollingStateEnum {
