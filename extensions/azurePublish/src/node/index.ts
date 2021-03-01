@@ -330,17 +330,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         let runtimeCodePath = runtime.path;
 
         // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
-        // TODO: this templatePath should come from the runtime instead of this magic parameter
         if (
           project.settings &&
           project.settings.runtime &&
           project.settings.runtime.customRuntime === true &&
           project.settings.runtime.path
-        ) {
-          runtimeCodePath = path.isAbsolute(project.settings.runtime.path)
-            ? project.settings.runtime.path
-            : path.resolve(project.dir, project.settings.runtime.path);
-        }
+        )
+          runtimeCodePath = project.getRuntimePath(); // get computed absolute path
 
         // Prepare the temporary project
         // this writes all the settings to the root settings/appsettings.json file
