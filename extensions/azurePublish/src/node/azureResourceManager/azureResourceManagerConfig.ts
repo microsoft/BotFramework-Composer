@@ -94,6 +94,7 @@ export interface BotConfig {
   appInsightsId?: string;
   appInsightsApiKey?: string;
   appInsightsInsKey?: string;
+  webAppHostname?: string;
 }
 
 export interface WebAppConfig {

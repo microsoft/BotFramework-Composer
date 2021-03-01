@@ -21,6 +21,7 @@ import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { useFeatureFlag } from '../../utils/hooks';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
@@ -63,6 +64,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const userSettings = useRecoilValue(userSettingsState);
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
+  const newCreationFlowFlag = useFeatureFlag('NEW_CREATION_FLOW');
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
@@ -127,6 +129,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       shouldShowEditorError={false}
       title={formatMessage('Bot management and configurations')}
       toolbarItems={[]}
+      useGettingStarted={newCreationFlowFlag} // when this feature flag is deprecated, this should always be set to true
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
