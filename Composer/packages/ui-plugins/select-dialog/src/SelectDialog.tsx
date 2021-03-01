@@ -64,6 +64,7 @@ export const SelectDialog: React.FC<FieldProps> = (props) => {
       } else {
         if (option.key === 'expression') {
           setShowIntellisenseField(true);
+          onChange('');
         } else {
           onChange(option.key);
         }
