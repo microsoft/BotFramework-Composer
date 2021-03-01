@@ -3,18 +3,17 @@
 
 /** @jsx jsx */
 import React, { useEffect } from 'react';
-import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import formatMessage from 'format-message';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Button } from 'office-ui-fabric-react/lib/Button';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { css, jsx } from '@emotion/core';
+import formatMessage from 'format-message';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
-import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
 
 // -------------------- Styles -------------------- //
 
@@ -32,12 +31,6 @@ const deleteBotButton = {
   root: {
     height: 32,
     width: 82,
-    background: SharedColors.cyanBlue10,
-    color: NeutralColors.white,
-  },
-  rootHovered: {
-    background: SharedColors.cyanBlue10,
-    color: NeutralColors.white,
   },
 };
 
@@ -108,7 +101,7 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
         );
       },
       disabled: true,
-      checkboxLabel,
+      checkboxProps: { kind: 'doubleConfirm' as const, checkboxLabel },
       confirmBtnText: formatMessage('Delete'),
     };
     const res = await OpenConfirmModal(title, null, settings);
@@ -129,9 +122,9 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
   return (
     <div ref={deleteRef} css={marginBottom} id="deleteBot">
       <div css={deleteBotText}> {formatMessage('Delete this bot')}</div>
-      <Button styles={deleteBotButton} onClick={openDeleteBotModal}>
+      <PrimaryButton styles={deleteBotButton} onClick={openDeleteBotModal}>
         {formatMessage('Delete')}
-      </Button>
+      </PrimaryButton>
     </div>
   );
 };

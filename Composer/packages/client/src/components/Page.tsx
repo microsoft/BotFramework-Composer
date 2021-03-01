@@ -143,7 +143,6 @@ const Page: React.FC<IPageProps> = (props) => {
   const {
     title,
     navLinks,
-    navLinkClick,
     toolbarItems,
     onRenderHeaderContent,
     children,
@@ -161,7 +160,7 @@ const Page: React.FC<IPageProps> = (props) => {
     fileId,
   } = props;
 
-  const { setPageElementState, setCurrentProjectId } = useRecoilValue(dispatcherState);
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState(pageMode, { leftSplitWidth: sizes.primary });
@@ -228,12 +227,11 @@ const Page: React.FC<IPageProps> = (props) => {
                   luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
                 }}
                 onSelect={(link) => {
-                  setCurrentProjectId(link.skillId ? link.skillId : link.projectId);
                   navigateTo(buildURL(pageMode, link));
                 }}
               />
             ) : (
-              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} onLinkClick={navLinkClick} />
+              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
             )}
             <div
               aria-label={mainRegionName}

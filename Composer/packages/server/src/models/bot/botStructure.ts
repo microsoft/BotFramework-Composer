@@ -66,24 +66,12 @@ const parseSourceFileName = (name: string, locale: string) => {
 
 export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.lg, { BOTNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.lu, { BOTNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.qna, { BOTNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.sourceQnA, { FILENAME: '*', LOCALE: '*' }),
   templateInterpolate(BotStructureTemplate.settings, { FILENAME: 'appsettings.json' }),
   templateInterpolate(BotStructureTemplate.dialogs.entry, { DIALOGNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.dialogs.lg, { DIALOGNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.dialogs.lu, { DIALOGNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.dialogs.qna, { DIALOGNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.dialogs.sourceQnA, { DIALOGNAME: '*', FILENAME: '*', LOCALE: '*' }),
   templateInterpolate(BotStructureTemplate.dialogs.dialogSchema, { DIALOGNAME: '*' }),
   templateInterpolate(BotStructureTemplate.dialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
 
   templateInterpolate(BotStructureTemplate.importedDialogs.entry, { DIALOGNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.lg, { DIALOGNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.lu, { DIALOGNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.qna, { DIALOGNAME: '*', LOCALE: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.sourceQnA, { DIALOGNAME: '*', FILENAME: '*', LOCALE: '*' }),
   templateInterpolate(BotStructureTemplate.importedDialogs.dialogSchema, { DIALOGNAME: '*' }),
   templateInterpolate(BotStructureTemplate.importedDialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
 
@@ -94,6 +82,15 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.crossTrainConfig, { CROSSTRAINCONFIGNAME: 'cross-train.config.json' }),
   '*.schema',
   '*.uischema',
+  'language-generation/**/*.lg',
+  'language-understanding/**/*.lu',
+  'knowledge-base/**/*.qna',
+  'dialogs/*/language-generation/**/*.lg',
+  'dialogs/*/language-understanding/**/*.lu',
+  'dialogs/*/knowledge-base/**/*.qna',
+  'dialogs/imported/*/language-generation/**/*.lg',
+  'dialogs/imported/*/language-understanding/**/*.lu',
+  'dialogs/imported/*/knowledge-base/**/*.qna',
 ];
 
 // parse file name: [fileId].[locale].[fileType]
