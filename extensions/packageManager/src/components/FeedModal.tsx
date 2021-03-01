@@ -18,12 +18,11 @@ import {
 } from 'office-ui-fabric-react';
 import { useState, useEffect, Fragment } from 'react';
 import { useApplicationApi } from '@bfc/extension-client';
-
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { v4 as uuid } from 'uuid';
 
-import { PackageSourceFeed } from './Library';
+import { PackageSourceFeed } from '../pages/Library';
 
 interface DisplayFieldProps {
   text: string;
@@ -39,7 +38,6 @@ const DisplayField: React.FC<DisplayFieldProps> = (props) => {
 
 export interface WorkingModalProps {
   hidden: boolean;
-  title: string;
   feeds: PackageSourceFeed[];
   closeDialog: any;
   onUpdateFeed: any;
@@ -83,14 +81,14 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       isResizable: false,
       onRender: (item: PackageSourceFeed) => {
         if (!selectedItem || item.key !== selectedItem.key || !editRow)
-          return <DisplayField text={item.text} readonly={item.readonly} />;
+          return <DisplayField readonly={item.readonly} text={item.text} />;
         return (
           <TextField
-            placeholder={formatMessage('Feed Name')}
-            value={selectedItem?.text}
             disabled={!selectedItem || selectedItem.readonly}
-            onChange={updateSelected('text')}
+            placeholder={formatMessage('Feed Name')}
             styles={{ field: { fontSize: 12 } }}
+            value={selectedItem?.text}
+            onChange={updateSelected('text')}
           />
         );
       },
@@ -106,11 +104,11 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
         if (!selectedItem || item.key !== selectedItem.key || !editRow) return <DisplayField text={item.url} />;
         return (
           <TextField
-            placeholder={formatMessage('URL')}
-            value={selectedItem ? selectedItem.url : ''}
             disabled={!selectedItem || selectedItem.readonly}
-            onChange={updateSelected('url')}
+            placeholder={formatMessage('URL')}
             styles={{ field: { fontSize: 12 } }}
+            value={selectedItem ? selectedItem.url : ''}
+            onChange={updateSelected('url')}
           />
         );
       },
@@ -125,14 +123,14 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
           return (
             <Fragment>
               <IconButton
+                disabled={!selectedItem || selectedItem.readonly}
                 iconProps={{ iconName: 'Edit' }}
                 onClick={() => setEditRow(true)}
-                disabled={!selectedItem || selectedItem.readonly}
               />
               <IconButton
+                disabled={!selectedItem || selectedItem.readonly}
                 iconProps={{ iconName: 'Delete' }}
                 onClick={removeSelected}
-                disabled={!selectedItem || selectedItem.readonly}
               />
             </Fragment>
           );
@@ -140,12 +138,12 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
         if (selectedItem && item.key === selectedItem.key && editRow)
           return (
             <IconButton
+              disabled={!selectedItem || !selectedItem.text || !selectedItem.url || selectedItem.readonly}
               iconProps={{ iconName: 'Checkmark' }}
               onClick={() => {
                 setEditRow(false);
                 props.onUpdateFeed(selectedItem.key, selectedItem);
               }}
-              disabled={!selectedItem || !selectedItem.text || !selectedItem.url || selectedItem.readonly}
             />
           );
       },
@@ -183,8 +181,6 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     setSelection(selection);
 
     setEditRow(true);
-
-
   };
 
   const removeSelected = async () => {
@@ -199,35 +195,50 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     }
   };
 
+  const closeDialog = () => {
+    if (editRow) {
+      confirm(
+        formatMessage('Discard changes?'),
+        formatMessage('You have unsaved changes. Are you sure you want to close this window?')
+      ).then((confirmed) => {
+        if (confirmed) {
+          props.closeDialog();
+        }
+      });
+    } else {
+      props.closeDialog();
+    }
+  };
+
   return (
     <DialogWrapper
-      isOpen={!props.hidden}
       dialogType={DialogTypes.Customer}
+      isOpen={!props.hidden}
       minWidth={900}
-      title={uitext.title}
       subText={uitext.subTitle}
+      title={uitext.title}
       onDismiss={props.closeDialog}
     >
-      <div style={{ minHeight: '300px', maxHeight: '400px', overflow: 'auto' }} data-is-scrollable="true">
+      <div data-is-scrollable="true" style={{ minHeight: '300px', maxHeight: '400px', overflow: 'auto' }}>
         <DetailsList
-          items={items}
-          columns={columns}
-          setKey="set"
-          selectionMode={SelectionMode.single}
-          layoutMode={DetailsListLayoutMode.justified}
-          checkboxVisibility={CheckboxVisibility.hidden}
-          selection={selection}
-          selectionPreservedOnEmptyClick={true}
-          ariaLabelForSelectionColumn={formatMessage('Toggle selection')}
+          selectionPreservedOnEmptyClick
           ariaLabelForSelectAllCheckbox={formatMessage('Toggle selection for all items')}
+          ariaLabelForSelectionColumn={formatMessage('Toggle selection')}
+          checkboxVisibility={CheckboxVisibility.hidden}
           checkButtonAriaLabel={formatMessage('Row checkbox')}
+          columns={columns}
+          items={items}
+          layoutMode={DetailsListLayoutMode.justified}
+          selection={selection}
+          selectionMode={SelectionMode.single}
+          setKey="set"
         />
       </div>
       <ActionButton iconProps={{ iconName: 'Add' }} onClick={addItem}>
         {formatMessage('Add a new feed')}
       </ActionButton>
       <DialogFooter>
-        <PrimaryButton onClick={props.closeDialog}>{formatMessage('Done')}</PrimaryButton>
+        <PrimaryButton onClick={closeDialog}>{formatMessage('Done')}</PrimaryButton>
       </DialogFooter>
     </DialogWrapper>
   );

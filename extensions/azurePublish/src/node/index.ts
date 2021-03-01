@@ -19,7 +19,7 @@ import { authConfig, ResourcesItem } from '../types';
 
 import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
-import { BotProjectDeploy } from './deploy';
+import { BotProjectDeploy, getAbsSettings, isProfileComplete } from './deploy';
 import { BotProjectProvision } from './provision';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
@@ -41,6 +41,7 @@ interface DeployResources {
   hostname?: string;
   luisResource?: string;
   subscriptionID: string;
+  abs?: any;
 }
 
 interface PublishConfig {
@@ -269,8 +270,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       resourcekey: string,
       customizeConfiguration: DeployResources
     ) => {
-      const { subscriptionID, accessToken, name, environment, hostname, luisResource } = customizeConfiguration;
-
+      const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -285,7 +285,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       // Perform the deploy
-      await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource);
+      await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource, abs);
 
       // If we've made it this far, the deploy succeeded!
       BackgroundProcessManager.updateProcess(jobId, 200, 'Success');
@@ -317,11 +317,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         environment,
         hostname,
         luisResource,
-        defaultLanguage,
         settings,
         accessToken,
         luResources,
         qnaResources,
+        abs
       } = config;
       try {
         // get the appropriate runtime template which contains methods to build and configure the runtime
@@ -330,17 +330,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         let runtimeCodePath = runtime.path;
 
         // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
-        // TODO: this templatePath should come from the runtime instead of this magic parameter
         if (
           project.settings &&
           project.settings.runtime &&
           project.settings.runtime.customRuntime === true &&
           project.settings.runtime.path
-        ) {
-          runtimeCodePath = path.isAbsolute(project.settings.runtime.path)
-            ? project.settings.runtime.path
-            : path.resolve(project.dir, project.settings.runtime.path);
-        }
+        )
+          runtimeCodePath = project.getRuntimePath(); // get computed absolute path
 
         // Prepare the temporary project
         // this writes all the settings to the root settings/appsettings.json file
@@ -359,6 +355,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           environment,
           hostname,
           luisResource,
+          abs
         };
         await this.performDeploymentAction(
           project,
@@ -467,6 +464,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       BackgroundProcessManager.removeProcess(jobId);
     };
 
+
     /**************************************************************************************************
      * plugin methods for publish
      *************************************************************************************************/
@@ -481,7 +479,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         settings,
       } = config;
 
-      const { luResources, qnaResources } = metadata;
+      const abs = getAbsSettings(config);
+      const {luResources, qnaResources} = metadata;
 
       // get the bot id from the project
       const botId = project.id;
@@ -509,8 +508,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (!settings) {
           throw new Error('Required field `settings` is missing from publishing profile.');
         }
+        // verify publish profile
+        isProfileComplete(config);
 
-        this.asyncPublish({ ...config, accessToken, luResources, qnaResources }, project, resourcekey, jobId);
+        this.asyncPublish({...config, accessToken, luResources, qnaResources, abs}, project, resourcekey, jobId);
 
         return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
       } catch (err) {
