@@ -262,7 +262,7 @@ export class BotProjectProvision {
             // eslint-disable-next-line no-case-declarations
             const hostname = await this.azureResourceManagementClient.deployWebAppResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname
             });
             provisionResults.webApp = {
@@ -275,7 +275,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.BOT_REGISTRATION:
             const botName = await this.azureResourceManagementClient.deployBotResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname, // come back to this!
               displayName: config.hostname, // todo: this may be wrong!
               endpoint: `https://${provisionResults.webApp?.hostname ?? (config.hostname + ".azurewebsites.net")}/api/messages`,
@@ -290,7 +290,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.AZUREFUNCTIONS: {
             const functionsHostName = await this.azureResourceManagementClient.deployAzureFunctions({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname
             });
             provisionResults.webApp = {
@@ -304,7 +304,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.COSMOSDB:
             provisionResults.cosmosDB = await this.azureResourceManagementClient.deployCosmosDBResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname.replace(/_/g, '').substr(0, 31).toLowerCase(),
               databaseName: `botstate-db`,
               containerName: `botstate-container`,
@@ -316,7 +316,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.APPINSIGHTS:
             provisionResults.appInsights = await this.azureResourceManagementClient.deployAppInsightsResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname,
             });
 
@@ -358,7 +358,7 @@ export class BotProjectProvision {
             // eslint-disable-next-line no-case-declarations
             provisionResults.blobStorage = await this.azureResourceManagementClient.deployBlobStorageResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, ''),
               containerName: 'transcripts',
             });
@@ -369,7 +369,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.QNA:
             provisionResults.qna = await this.azureResourceManagementClient.deployQnAReource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: `${config.hostname}-qna`,
             });
             break;
