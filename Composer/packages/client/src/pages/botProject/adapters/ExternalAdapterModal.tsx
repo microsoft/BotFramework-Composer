@@ -14,7 +14,7 @@ import { DialogSetting } from '@bfc/shared';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import mapValues from 'lodash/mapValues';
-import { JSONSchema4Type } from 'json-schema';
+import { JSONSchema7Type } from 'json-schema';
 
 import { settingsState, dispatcherState } from '../../../recoilModel';
 import { useShell } from '../../../shell';
@@ -35,10 +35,10 @@ type Props = {
   projectId: string;
   schema: JSONSchema7;
   uiSchema: JSONSchema7 & { helpLink?: string };
-  value?: { [key: string]: JSONSchema4Type };
+  value?: { [key: string]: JSONSchema7Type | undefined };
 };
 
-export function hasRequired(testObject: { [key: string]: JSONSchema4Type | undefined }, fields?: string[]) {
+export function hasRequired(testObject: { [key: string]: JSONSchema7Type | undefined }, fields?: string[]) {
   if (fields == null || fields.length === 0) return true;
   return fields.every((field: string) => field in testObject);
 }
@@ -52,7 +52,7 @@ function makeDefault(schema: JSONSchema7) {
 const AdapterModal = (props: Props) => {
   const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName, isFirstTime } = props;
 
-  const [value, setValue] = useState(props.value == null ? makeDefault(schema) : props.value);
+  const [value, setValue] = useState(props.value ?? makeDefault(schema));
   const { setSettings } = useRecoilValue(dispatcherState);
   const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
 
