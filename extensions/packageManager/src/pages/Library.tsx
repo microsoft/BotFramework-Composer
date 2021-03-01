@@ -778,11 +778,11 @@ const Library: React.FC = () => {
               <h3 css={{ marginBottom: 0 }}>{selectedItem.name}</h3>
 
               {isInstalled(selectedItem) ? (
-                <p>
+                <p css={{ marginTop: 0 }}>
                   {formatMessage('Installed:')} {installedVersion(selectedItem)}
                 </p>
               ) : (
-                <p>
+                <p css={{ marginTop: 0 }}>
                   {formatMessage('Latest:')} {selectedItem.version}
                 </p>
               )}
