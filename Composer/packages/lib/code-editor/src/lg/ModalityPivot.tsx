@@ -292,7 +292,7 @@ export const ModalityPivot = React.memo((props: Props) => {
 
           // Remove attachments created by the LG Response Editor
           if (modality === 'Attachments' && !keepReferencedTemplates) {
-            const attachments = (structuredResponse?.[modality] as AttachmentsStructuredResponseItem)?.value;
+            const attachments = (structuredResponse?.[modality] as AttachmentsStructuredResponseItem)?.value || [];
             for (const attachment of attachments) {
               const templateId = extractTemplateNameFromExpression(attachment);
               if (templateId?.startsWith(`${lgOption.templateId}_attachment_`)) {
