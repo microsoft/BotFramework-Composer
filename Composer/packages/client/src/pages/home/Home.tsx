@@ -10,7 +10,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
@@ -114,6 +114,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           onClickNewBot();
           TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
         },
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-New',
@@ -131,6 +132,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/open`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'openBot' });
         },
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-Open',
@@ -148,6 +150,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/${projectId}/${templateId}/save`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
         },
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
       disabled: botName ? false : true,

@@ -62,7 +62,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             defaultQuery: {
               prerelease: true,
               semVerLevel: '2.0.0',
-              query: 'tags:bf-component',
+              query: 'microsoft.bot.components+tags:bf-component',
             },
             type: PackageSourceType.NuGet,
           },

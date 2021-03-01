@@ -37,6 +37,7 @@ import {
   errorContainer,
   errorIcon,
   errorTextStyle,
+  columnSizes,
 } from '../styles';
 
 import ABSChannelSpeechModal from './ABSChannelSpeechModal';
@@ -462,8 +463,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   }, [token, currentResource]);
 
-  const columnWidths = ['300px', '150px', '150px'];
-
   const absTableToggle = (key: string) => (
     <Stack horizontal tokens={{ childrenGap: 10 }}>
       <Stack.Item>
@@ -485,13 +484,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const absTableRow = (channel: string, name: string, link: string) => (
     <div key={channel} css={tableRow}>
-      <div css={tableRowItem(columnWidths[0])}>{name}</div>
-      <div css={tableRowItem(columnWidths[1])}>
+      <div css={tableRowItem(columnSizes[0])}>{name}</div>
+      <div css={tableRowItem(columnSizes[1])}>
         <Link href={link} target="_docs">
           {formatMessage('Learn more')}
         </Link>
       </div>
-      <div css={tableRowItem(columnWidths[2])}>{absTableToggle(channel)}</div>
+      <div css={tableRowItem(columnSizes[2])}>{absTableToggle(channel)}</div>
     </div>
   );
 
@@ -558,9 +557,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         {currentResource && channelStatus && (
           <Fragment>
             <div css={tableRow}>
-              <div css={tableColumnHeader(columnWidths[0])}>{formatMessage('Name')}</div>
-              <div css={tableColumnHeader(columnWidths[1])}>{formatMessage('Documentation')}</div>
-              <div css={tableColumnHeader(columnWidths[2])}>{formatMessage('Enabled')}</div>
+              <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
+              <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Documentation')}</div>
+              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
             {absTableRow(CHANNELS.WEBCHAT, formatMessage('Webchat'), webchatHelpLink)}

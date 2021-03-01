@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 export * from './auth';
+export * from './azure';
 export * from './diagnostic';
 export * from './dialogUtils';
 export * from './extension';
