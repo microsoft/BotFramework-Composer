@@ -361,16 +361,16 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(()=>{
     if(currentConfig){
-      if(currentConfig?.subscriptionId){
-        setSubscription(currentConfig?.subscriptionId);
+      if(currentConfig.subscriptionId){
+        setSubscription(currentConfig.subscriptionId);
       }
-      if(currentConfig?.resourceGroup){
-        setResourceGroup(currentConfig?.resourceGroup);
+      if(currentConfig.resourceGroup){
+        setResourceGroup(currentConfig.resourceGroup);
       }
-      if(currentConfig?.hostname){
-        setHostName(currentConfig?.hostname);
-      } else if(currentConfig?.name){
-        setHostName(currentConfig?.environment? `${currentConfig?.name}-${currentConfig?.environment}`: currentConfig?.name);
+      if(currentConfig.hostname){
+        setHostName(currentConfig.hostname);
+      } else if(currentConfig.name){
+        setHostName(currentConfig.environment? `${currentConfig.name}-${currentConfig.environment}`: currentConfig.name);
       }
     }
   },[currentConfig]);
@@ -397,7 +397,7 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [subscriptions]);
 
   const deployLocationsOption = useMemo((): IDropdownOption[] => {
-    return deployLocations.map((t) => ({ key: t.id, text: t.displayName }));
+    return deployLocations.map((t) => ({ key: t.name, text: t.displayName }));
   }, [deployLocations]);
 
   const luisLocationsOption = useMemo((): IDropdownOption[] => {
@@ -460,8 +460,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const updateCurrentLocation = useMemo(
     () => (_e, option?: IDropdownOption) => {
-      const location = deployLocations.find((t) => t.id === option?.key);
-
+      const location = deployLocations.find((t) => t.name === option?.key);
       if (location) {
         setLocation(location);
         const region = luisLocations.find(item=> item.name === location.name)
@@ -625,8 +624,8 @@ export const AzureProvisionDialog: React.FC = () => {
             disabled={currentConfig?.hostname || currentConfig?.name}
             defaultValue={currentHostName}
             errorMessage={errorHostName}
-            label={formatMessage('Hostname')}
-            ariaLabel={formatMessage('A hostname which is used to make up the provisoned services names')}
+            label={formatMessage('Resource name')}
+            ariaLabel={formatMessage('This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction')}
             placeholder={'Name of your services'}
             onChange={newHostName}
             styles={{ root: { paddingBottom: '8px' } }}
@@ -634,7 +633,7 @@ export const AzureProvisionDialog: React.FC = () => {
           />
           <Dropdown
             required
-            defaultSelectedKey={currentLocation?.id}
+            defaultSelectedKey={currentConfig?.region || currentLocation?.name}
             label={'Region'}
             options={deployLocationsOption}
             placeholder={'Select one'}
