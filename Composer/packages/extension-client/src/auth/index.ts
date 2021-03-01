@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AuthParameters } from '@botframework-composer/types';
+import { AuthParameters, AzureTenant } from '@botframework-composer/types';
 
 import { ComposerGlobalName } from '../common/constants';
 
@@ -18,4 +18,19 @@ export function logOut(): Promise<void> {
  */
 export function getAccessToken(params: AuthParameters): Promise<string> {
   return window[ComposerGlobalName].getAccessToken(params);
+}
+
+/**
+ * Logs the user in and returns a list of available Azure tenants.
+ */
+export function getTenants(): Promise<AzureTenant[]> {
+  return window[ComposerGlobalName].getTenants();
+}
+
+/**
+ * Returns an ARM token for the specified tenant. Should be called AFTER getTenants().
+ * @param tenantId Tenant to retrieve an ARM token for
+ */
+export function getARMTokenForTenant(tenantId: string): Promise<string> {
+  return window[ComposerGlobalName].getARMTokenForTenant(tenantId);
 }
