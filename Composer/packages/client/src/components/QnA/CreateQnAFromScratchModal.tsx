@@ -13,6 +13,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dispatcherState, showCreateQnAFromUrlDialogState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { validateName, CreateQnAFromModalProps, CreateQnAFromScratchFormData } from './constants';
 import { subText, styles, dialogWindowMini, textField } from './styles';
@@ -43,6 +44,13 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
   formConfig.name.validate = validateName(qnaFiles);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors || !formData.name;
+
+  const handleDismiss = () => {
+    onDismiss?.();
+    actions.createQnAFromScratchDialogCancel({ projectId });
+    TelemetryClient.track('AddNewKnowledgeBaseCanceled');
+  };
+
   return (
     <Dialog
       dialogContentProps={{
@@ -55,7 +63,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
         isBlocking: false,
         styles: styles.modal,
       }}
-      onDismiss={onDismiss}
+      onDismiss={handleDismiss}
     >
       <div css={dialogWindowMini}>
         <Stack>
@@ -83,8 +91,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
         <DefaultButton
           text={formatMessage('Cancel')}
           onClick={() => {
-            actions.createQnAFromScratchDialogCancel({ projectId });
-            onDismiss?.();
+            handleDismiss();
           }}
         />
         <PrimaryButton
@@ -96,6 +103,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
               return;
             }
             onSubmit(formData);
+            TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
           }}
         />
       </DialogFooter>

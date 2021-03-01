@@ -42,6 +42,7 @@ function templateToLgTemplate(templates: Template[]): LgTemplate[] {
       body: t.body,
       parameters: t.parameters || [],
       range: convertLGRange(t.sourceRange),
+      properties: t.properties,
     };
   });
 }
@@ -97,7 +98,7 @@ export function updateTemplate(
   const templateToUpdate = {
     name: name || originTemplate?.name || templateName,
     parameters: parameters || originTemplate?.parameters || [],
-    body: body || originTemplate?.body || '',
+    body: typeof body === 'string' ? body : originTemplate?.body || '',
   };
 
   let templates;

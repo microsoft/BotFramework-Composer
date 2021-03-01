@@ -72,6 +72,7 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      useDebugPane
       useNewTree
       data-testid="QnAPage"
       dialogId={dialogId}

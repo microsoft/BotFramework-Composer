@@ -3,7 +3,9 @@
 
 import React, { useState } from 'react';
 
-import { LgEditor } from '../../src';
+import { LgCodeEditor } from '../../src';
+
+import { mockTelemetryClient } from './mockTelemetryClient';
 
 const content = `# Hello
 -@{Welcome(time)} @{name}
@@ -85,5 +87,5 @@ export default function App() {
     onChange,
     languageServer: 'localhost:5000/lg-language-server',
   };
-  return <LgEditor {...props} />;
+  return <LgCodeEditor {...props} telemetryClient={mockTelemetryClient} />;
 }

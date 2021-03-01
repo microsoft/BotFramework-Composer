@@ -4,16 +4,17 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { RootBotManagedProperties } from '@bfc/shared';
+import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, QnABotTemplateId } from '../../constants';
+import { BotStatus } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { navigateTo } from '../../utils/navigation';
+import { getPublishProfileFromPayload } from '../../utils/electronUtil';
 import { projectIdCache } from '../../utils/projectCache';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import {
@@ -26,14 +27,14 @@ import {
   botStatusState,
   createQnAOnState,
   currentProjectIdState,
+  dispatcherState,
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
-  settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
-import { dispatcherState } from '../DispatcherWrapper';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -276,7 +277,7 @@ export const projectDispatcher = () => {
   });
 
   const createNewBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
@@ -292,6 +293,8 @@ export const projectDispatcher = () => {
         urlSuffix,
         alias,
         preserveRoot,
+        profile,
+        source,
       } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
@@ -308,6 +311,13 @@ export const projectDispatcher = () => {
       );
       set(botProjectIdsState, [projectId]);
 
+      if (profile) {
+        // ABS Create Flow, update publishProfile after create project
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        const newProfile = getPublishProfileFromPayload(profile, source);
+
+        newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+      }
       // Post project creation
       set(projectMetaDataState(projectId), {
         isRootBot: true,
@@ -464,8 +474,9 @@ export const projectDispatcher = () => {
     callbackHelpers.reset(filePersistenceState(projectId));
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
 
+    const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
     // Reload needs to pull the settings from the local storage persisted in the current settingsState of the project
-    botFiles.mergedSettings = await snapshot.getPromise(settingsState(projectId));
+    botFiles.mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, botFiles.mergedSettings);
     await initBotState(callbackHelpers, projectData, botFiles);
   });
 

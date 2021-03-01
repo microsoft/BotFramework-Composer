@@ -17,8 +17,8 @@ import {
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
-  filteredTemplatesSelector,
   featureFlagsState,
+  templateProjectsState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
@@ -50,7 +50,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createNewBotV2,
   } = useRecoilValue(dispatcherState);
 
-  const templateProjects = useRecoilValue(filteredTemplatesSelector);
+  const templateProjects = useRecoilValue(templateProjectsState);
   const featureFlags = useRecoilValue(featureFlagsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
@@ -78,7 +78,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
     await fetchStorages();
     fetchRecentProjects();
-    featureFlags.NEW_CREATION_FLOW.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
+    featureFlags.NEW_CREATION_FLOW?.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
   };
 
   useEffect(() => {
@@ -120,6 +120,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       urlSuffix: formData.urlSuffix,
       alias: formData.alias,
       preserveRoot: formData.preserveRoot,
+      profile: formData.profile,
+      source: formData.source,
     };
     if (templateId === 'conversationalcore') {
       createNewBotV2(newBotData);

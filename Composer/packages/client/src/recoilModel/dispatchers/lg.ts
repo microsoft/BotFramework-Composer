@@ -7,8 +7,8 @@ import differenceBy from 'lodash/differenceBy';
 import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
-import { dispatcherState } from '../DispatcherWrapper';
 import { lgFilesSelectorFamily } from '../selectors/lg';
+import { dispatcherState } from '../atoms';
 
 import { setError } from './shared';
 import LgWorker from './../parsers/lgWorker';

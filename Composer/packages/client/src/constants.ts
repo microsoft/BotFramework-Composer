@@ -189,7 +189,7 @@ export const DialogCreationCopy = {
   get CREATE_NEW_BOT_V2() {
     return {
       title: formatMessage('Choose a template for your bot'),
-      subText: formatMessage("Microsoft's templates offer best practices for developing conversational bots"),
+      subText: formatMessage('Microsoft’s templates offer best practices for developing conversational bots'),
     };
   },
   get CREATE_NEW_SKILLBOT() {
@@ -356,8 +356,6 @@ export enum AppUpdaterStatus {
 
 export const EmptyBotTemplateId = 'EmptyBot';
 
-export const QnABotTemplateId = 'QnASample';
-
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
@@ -393,7 +391,7 @@ export const triggerNotSupportedWarning = () =>
 
 export const feedDictionary: { [key in FeedName]: string } = {
   firstPartyCsharp:
-    'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+    'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
   firstPartyNode: '',
 };
 
