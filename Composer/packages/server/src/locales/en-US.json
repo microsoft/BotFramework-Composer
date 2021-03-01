@@ -572,9 +572,6 @@
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
-  "choose_one_2c4277df": {
-    "message": "Choose One"
-  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -1085,8 +1082,8 @@
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
-  "edit_a_publish_profile_30ebab3e": {
-    "message": "Edit a publish profile"
+  "edit_a_publishing_profile_705e87e3": {
+    "message": "Edit a publishing profile"
   },
   "edit_a_skill_5665d9ac": {
     "message": "Edit a skill"
@@ -2039,9 +2036,6 @@
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"
   },
-  "my_staging_environment_2b92d0aa": {
-    "message": "My Staging Environment"
-  },
   "name_1aed4a1b": {
     "message": "Name"
   },
@@ -2449,9 +2443,6 @@
   },
   "publish_5211dca3": {
     "message": "Publish"
-  },
-  "publish_configuration_d759a4e3": {
-    "message": "Publish Configuration"
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
