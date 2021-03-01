@@ -54,6 +54,7 @@ const PageTypes = {
   ConfigProvision: 'config',
   AddResources: 'add',
   ReviewResource: 'review',
+  EditJson: 'edit',
 };
 const DialogTitle = {
   CONFIG_RESOURCES: {
@@ -70,6 +71,10 @@ const DialogTitle = {
       'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
     ),
   },
+  EDIT:{
+    title: formatMessage('Configure resources'),
+    subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
+  }
 };
 
 function decodeToken(token: string) {
@@ -697,6 +702,14 @@ export const AzureProvisionDialog: React.FC = () => {
     </Fragment>
   );
 
+  useEffect(()=>{
+    console.log(listItems);
+    if(listItems?.length === 0) {
+      setTitle(DialogTitle.EDIT);
+      setPage(PageTypes.EditJson);
+    }
+  },[listItems]);
+
   const selection = useMemo(() => {
     const s = new Selection({
       onSelectionChanged: () => {
@@ -822,7 +835,7 @@ export const AzureProvisionDialog: React.FC = () => {
           </div>
         </div>
       );
-    } else {
+    } else if(page === PageTypes.ReviewResource){
       return (
         <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
           {currentUser? <Persona size={PersonaSize.size40} text={currentUser.name} secondaryText={'Sign out'} onRenderSecondaryText={onRenderSecondaryText} />: null}
@@ -851,6 +864,18 @@ export const AzureProvisionDialog: React.FC = () => {
           </div>
         </div>
       )
+    } else {
+      return (
+        <>
+        <DefaultButton
+          style={{ margin: '0 4px' }}
+          text={'Cancel'}
+          onClick={() => {
+            closeDialog();
+          }}
+        />
+        <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
+      </>);
     }
   }, [
     onSave,
@@ -875,6 +900,21 @@ export const AzureProvisionDialog: React.FC = () => {
         {page === PageTypes.ConfigProvision && PageFormConfig}
         {page === PageTypes.AddResources && PageAddResources}
         {page === PageTypes.ReviewResource && PageReview}
+        {page === PageTypes.EditJson && (
+          <JsonEditor
+            height={500}
+            value={currentConfig || importConfig}
+            id={publishType}
+            schema={getSchema()}
+            onChange={(value) => {
+              setEditorError(false);
+              setImportConfig(value);
+            }}
+            onError={() => {
+              setEditorError(true);
+            }}
+          />
+        )}
       <div
         style={{
           background: '#FFFFFF',
