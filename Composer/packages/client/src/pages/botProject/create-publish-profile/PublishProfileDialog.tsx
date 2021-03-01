@@ -133,7 +133,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         return types.find((t) => t.name === current?.item?.type)?.schema;
       };
       PluginAPI.publish.savePublishConfig = (config) => {
-        savePublishTarget(name, current?.item?.type, JSON.stringify(config) || '{}');
+        savePublishTarget(current?.item.name, current?.item?.type, JSON.stringify(config) || '{}');
       };
       PluginAPI.publish.startProvision = async (config) => {
         const fullConfig = { ...config, name: current.item.name, type: current.item.type };
