@@ -121,7 +121,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     <Page
       useDebugPane
       data-testid="BotProjectsSettings"
-      getStarted={newCreationFlowFlag}
       headerStyle={header}
       mainRegionName={formatMessage('Bot projects settings list View')}
       navLinks={navLinks}
@@ -130,6 +129,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       shouldShowEditorError={false}
       title={formatMessage('Bot management and configurations')}
       toolbarItems={[]}
+      useGettingStarted={newCreationFlowFlag} // when this feature flag is deprecated, this should always be set to true
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>

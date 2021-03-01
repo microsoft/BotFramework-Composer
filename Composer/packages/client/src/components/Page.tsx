@@ -128,6 +128,7 @@ type IPageProps = {
   'data-testid'?: string;
   useNewTree?: boolean;
   useDebugPane?: boolean;
+  useGettingStarted?: boolean;
   navLinks?: INavTreeItem[];
   navLinkClick?: (item: INavTreeItem) => void;
   pageMode: PageMode;
@@ -136,7 +137,6 @@ type IPageProps = {
   skillId?: string;
   dialogId?: string;
   fileId?: string;
-  getStarted?: boolean;
 };
 
 const Page: React.FC<IPageProps> = (props) => {
@@ -185,7 +185,7 @@ const Page: React.FC<IPageProps> = (props) => {
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
-        {props.getStarted ? (
+        {props.useGettingStarted ? (
           <GetStarted toolbarItems={displayedToolbarItems} />
         ) : (
           <Toolbar toolbarItems={displayedToolbarItems} />
@@ -194,7 +194,7 @@ const Page: React.FC<IPageProps> = (props) => {
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
-        <div css={props.getStarted ? mainWithGetStarted : main(!!onRenderHeaderContent)} role="main">
+        <div css={props.useGettingStarted ? mainWithGetStarted : main(!!onRenderHeaderContent)} role="main">
           <Split
             resetOnDoubleClick
             initialPrimarySize="20%"

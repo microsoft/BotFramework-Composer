@@ -68,7 +68,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
       align: 'left',
     },
     {
-      text: 'Edit LG',
+      text: formatMessage('Edit LG'),
       type: 'action',
       buttonProps: {
         iconProps: { iconName: 'Robot' },
@@ -78,7 +78,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
       align: 'left',
     },
     {
-      text: 'Edit LU',
+      text: formatMessage('Edit LU'),
       type: 'action',
       buttonProps: {
         iconProps: { iconName: 'People' },
@@ -88,7 +88,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
       align: 'left',
     },
     {
-      text: 'Manage connections',
+      text: formatMessage('Manage connections'),
       type: 'action',
       buttonProps: {
         iconProps: { iconName: 'PlugConnected' },
@@ -117,14 +117,14 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
         <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 20 } }}>
           <h2 style={h2Style}>{botProject?.name}</h2>
           <p>
-            File Location: <span style={{ textOverflow: 'ellipses' }}>{location}</span>
+            {formatMessage('File Location:')} <span style={{ textOverflow: 'ellipses' }}>{location}</span>
           </p>
         </Stack.Item>
         <Stack.Item styles={{ root: { padding: 20 } }}>
-          <h3 style={h3Style}>Next steps</h3>
+          <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
           <Stack horizontal verticalFill tokens={{ childrenGap: 40 }}>
             <Stack.Item>
-              Customize
+              {formatMessage('Customize')}
               <ul style={ulStyle}>
                 <li style={liStyle}>
                   <Link href={linkToPackageManager} styles={linkStyle} onClick={linkClick}>
@@ -149,7 +149,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
               </ul>
             </Stack.Item>
             <Stack.Item>
-              Publish
+              {formatMessage('Publish')}
               <ul style={ulStyle}>
                 <li style={liStyle}>
                   <Link href={linkToProvision} styles={linkStyle} onClick={linkClick}>
@@ -166,7 +166,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
           </Stack>
         </Stack.Item>
         <Stack.Item styles={{ root: { borderLeft: '1px solid #3d3d3d', padding: 20 } }}>
-          <h3 style={h3Style}>Guides and references</h3>
+          <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
           <ul style={ulStyle}>
             <li style={liStyle}>
               <Link href={linkToGetStarted} styles={linkStyle} target="_blank" onClick={linkClick}>
