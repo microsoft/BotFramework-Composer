@@ -9,4 +9,4 @@ Pre-requisites: Before you can connect a bot to Speech, be sure you've completed
 * You've [created a Cognitive Services key](https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesAllInOne)
 * You've enabled the Speech connection in your bot's settings
 
-To verify your connection to the Speech service, [follow the instructions here](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-channel-connect-directlinespeech?view=azure-bot-service-4.0#example).
+To verify your connection to the Speech service, [follow the instructions here](https://docs.microsoft.com/azure/bot-service/bot-service-channel-connect-directlinespeech?view=azure-bot-service-4.0#example).

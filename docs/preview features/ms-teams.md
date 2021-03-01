@@ -10,10 +10,10 @@ Pre-requisites: Before you can connect a bot to MS Teams, be sure you've complet
 
 To finalize the connection to Teams, follow this instructions:
 
-1. Install [App Studio](https://aka.ms/InstallTeamsAppStudio), a Teams app that makes it easy to integrate your new bot with Teams. [Follow the full instructions here](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/app-studio-overview).
+1. Install [App Studio](https://aka.ms/InstallTeamsAppStudio), a Teams app that makes it easy to integrate your new bot with Teams. [Follow the full instructions here](https://docs.microsoft.com/microsoftteams/platform/concepts/build-and-test/app-studio-overview).
 2. Once installed, navigate to the the "Manifest editor" tab and select "Create a new app"
 3. Fill out the information in the "App details" section
 4. Navigate to the "Bots" item in the left hand nav.
-5. [Follow the instructions here](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/app-studio-overview#bots) to connect to your existing bot.
+5. [Follow the instructions here](https://docs.microsoft.com/microsoftteams/platform/concepts/build-and-test/app-studio-overview#bots) to connect to your existing bot.
 6. Finally, navigate to the "Test and distribute" item in the left hand nav to install your new bot application in the Teams channel where you'd like to test it.
 
