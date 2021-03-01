@@ -64,6 +64,7 @@
     "@botframework-composer/types": "*",
     "crypto": "^1.0.1",
     "debug": "4.1.1",
+    "electron-log": "^4.3.2",
     "electron-updater": "4.2.5",
     "fix-path": "^3.0.0",
     "format-message": "^6.2.3",

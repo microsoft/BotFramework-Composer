@@ -24,6 +24,14 @@ import { isLinux, isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
 import { getMachineId } from './utility/machineId';
 import { getSessionId } from './utility/sessionId';
+const eleclog = require('electron-log');
+
+eleclog.info('electron-log: start');
+
+const t1 = new Date().getTime();
+
+app.commandLine.appendSwitch('auto-detect', 'false');
+app.commandLine.appendSwitch('no-proxy-server');
 
 const env = log.extend('env');
 env('%O', process.env);
@@ -91,8 +99,9 @@ async function createAppDataDir() {
   await mkdirp(localPublishPath);
 }
 
-function initializeAppUpdater(settings: AppUpdaterSettings) {
+export function initializeAppUpdater(settings: AppUpdaterSettings) {
   log('Initializing app updater...');
+  eleclog.info('Initializing app updater...');
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
     const appUpdater = AppUpdater.getInstance();
@@ -164,23 +173,31 @@ async function loadServer() {
     sessionId,
     composerVersion: app.getVersion(),
   });
-  log(`Server started at port: ${serverPort}`);
+  log(`Server started end at port: ${serverPort}`);
 }
 
 async function main(show = false) {
   log('Rendering application...');
+  eleclog.info(`Rendering application at time ${Math.floor(new Date().getTime() - t1)} ms`);
   const mainWindow = ElectronWindow.getInstance().browserWindow;
+  eleclog.info(`initAppMenu..`);
   initAppMenu(mainWindow);
   if (mainWindow) {
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow.webContents.openDevTools();
     }
+    // log('start getBaseUrl...');
+    eleclog.info(`start getBaseUrl at time ${Math.floor(new Date().getTime() - t1)} ms`);
 
     await mainWindow.loadURL(getBaseUrl());
+    eleclog.info(`end getBaseUrl at time ${Math.floor(new Date().getTime() - t1)} ms`);
 
+    // log('end getBaseUrl...');
     if (show) {
       mainWindow.show();
     }
+    eleclog.info(`show at time ${Math.floor(new Date().getTime() - t1)} ms`);
+    log('mainWindow.show...');
 
     if (isWindows()) {
       // wait until the main window is showing and then open deep links
@@ -259,6 +276,7 @@ async function run() {
 
   app.on('ready', async () => {
     log('App ready');
+    eleclog.info('App ready');
 
     log('Loading latest known locale');
     loadLocale(currentAppLocale);
@@ -278,14 +296,22 @@ async function run() {
     });
 
     updateStatus(formatMessage('Starting server...'));
+    eleclog.info('Starting server...');
     await loadServer();
+    updateStatus(formatMessage('initSettingsListeners...'));
+    eleclog.info('initSettingsListeners...');
 
     initSettingsListeners();
+    updateStatus(formatMessage('main...'));
+    eleclog.info('main...');
     await main();
 
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
 
+    updateStatus(formatMessage('getMainWindow...'));
+
     const mainWindow = getMainWindow();
+
     mainWindow?.webContents.send('session-update', 'session-started');
   });
 
