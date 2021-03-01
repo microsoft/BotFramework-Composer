@@ -108,7 +108,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const [dialogHidden, setDialogHidden] = useState(true);
-  const [showAuthDialog, setShowAuthDialog] = useState(isShowAuthDialog(true));
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
