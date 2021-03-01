@@ -566,9 +566,6 @@
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
   },
-  "choose_a_template_for_your_bot_47ed06a8": {
-    "message": "Choose a template for your bot"
-  },
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
@@ -1979,8 +1976,8 @@
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft App Password"
   },
-  "microsoft_s_templates_offer_best_practices_for_dev_faa1a869": {
-    "message": "Microsoft’s templates offer best practices for developing conversational bots"
+  "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
+    "message": "Microsoft''s templates offer best practices for developing conversational bots."
   },
   "minimap_beb3be27": {
     "message": "Minimap"
@@ -2728,6 +2725,9 @@
   },
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
+  },
+  "select_a_template_874fe803": {
+    "message": "Select a template"
   },
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "Select a trigger on the left"
