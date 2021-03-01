@@ -280,6 +280,7 @@ export class BotProjectProvision {
               displayName: config.hostname, // todo: this may be wrong!
               endpoint: `https://${provisionResults.webApp?.hostname ?? (config.hostname + ".azurewebsites.net")}/api/messages`,
               appId: provisionResults.appId,
+              webAppHostname: provisionResults.webApp.hostname
             });
             provisionResults.botName = botName;
             break;
