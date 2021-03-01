@@ -19,7 +19,6 @@ function getProvider(info: ProviderInfo): ExternalContentProvider<IContentProvid
   switch (info.kind) {
     case 'pva':
       return new PowerVirtualAgentsProvider(info.metadata);
-
     default:
       return undefined;
   }
