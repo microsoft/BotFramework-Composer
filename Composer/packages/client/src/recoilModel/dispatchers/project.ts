@@ -413,6 +413,7 @@ export const projectDispatcher = () => {
     try {
       const { reset } = callbackHelpers;
       await httpClient.delete(`/projects/${projectId}`);
+      reset(filePersistenceState(projectId));
       luFileStatusStorage.removeAllStatuses(projectId);
       qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
