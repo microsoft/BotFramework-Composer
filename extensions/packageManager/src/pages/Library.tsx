@@ -724,15 +724,48 @@ const Library: React.FC = () => {
                     {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
                     {isInstalled(selectedItem) && selectedVersion === installedVersion(selectedItem) ? (
                       <span>
-                        {selectedVersion} {strings.installed}
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                        >
+                          {selectedVersion}
+                        </span>{' '}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installed}</span>
                       </span>
                     ) : isUpdate ? (
                       <span>
-                        {strings.updateButton} {selectedVersion}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.updateButton}</span>
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                        >
+                          {selectedVersion}
+                        </span>
                       </span>
                     ) : (
                       <span>
-                        {strings.installButton} {selectedVersion}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installButton}</span>{' '}
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                        >
+                          {selectedVersion}
+                        </span>
                       </span>
                     )}
                   </PrimaryButton>
