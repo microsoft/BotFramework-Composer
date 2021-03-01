@@ -106,7 +106,7 @@ export const publisherDispatcher = () => {
     // remove job id in publish storage if published
     if (status === PUBLISH_SUCCESS || status === PUBLISH_FAILED) {
       const publishJobIds = publishStorage.get('jobIds') || {};
-      publishJobIds[`${projectId}-${target.name}`] = '';
+      delete publishJobIds[`${projectId}-${target.name}`];
       publishStorage.set('jobIds', publishJobIds);
     }
     // the action below only applies to when a bot is being started using the "start bot" button
