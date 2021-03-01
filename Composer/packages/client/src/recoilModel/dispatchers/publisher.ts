@@ -26,6 +26,7 @@ import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
 import { setRootBotSettingState } from './setting';
+import { ClientStorage } from '../../utils/storage';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -46,6 +47,8 @@ const missingDotnetVersionError = {
 const checkIfDotnetVersionMissing = (err: any) => {
   return /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(err.message as string);
 };
+
+export const publishStorage = new ClientStorage(window.sessionStorage, 'publish');
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
@@ -98,7 +101,14 @@ export const publisherDispatcher = () => {
   ) => {
     if (data == null) return;
     const { set, snapshot } = callbackHelpers;
-    const { endpointURL, status } = data;
+    const { endpointURL, status, id } = data;
+
+    // remove job id in publish storage if published
+    if (status === PUBLISH_SUCCESS || status === PUBLISH_FAILED) {
+      const publishJobIds = publishStorage.get('jobIds');
+      publishJobIds[`${projectId}-${target.name}`] = '';
+      publishStorage.set('jobIds', publishJobIds);
+    }
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
@@ -189,6 +199,9 @@ export const publisherDispatcher = () => {
           },
           sensitiveSettings,
         });
+        const publishJobIds = publishStorage.get('jobIds') || {};
+        publishJobIds[`${projectId}-${target.name}`] = response.data.id;
+        publishStorage.set('jobIds', publishJobIds);
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
@@ -226,7 +239,13 @@ export const publisherDispatcher = () => {
   const getPublishStatus = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, jobId?: string) => {
       try {
-        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}${jobId ? '/' + jobId : ''}`);
+        const currentJobId =
+          jobId ??
+          (publishStorage.get('jobIds') ? publishStorage.get('jobIds')[`${projectId}-${target.name}`] : undefined);
+        if (!currentJobId) {
+          return;
+        }
+        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}/${currentJobId}`);
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
