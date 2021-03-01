@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { OneAuthInstance } from '../../src/auth/oneAuthService';
 
 jest.mock('../../src/electronWindow', () => ({
@@ -12,6 +15,9 @@ jest.mock('../../src/utility/platform', () => ({
   isLinux: () => process.env.TEST_IS_LINUX === 'true',
   isMac: () => false,
 }));
+
+const mockFetch = jest.fn().mockResolvedValue(true);
+jest.mock('node-fetch', () => async (...args) => mockFetch(...args));
 
 describe('OneAuth Serivce', () => {
   const INTERACTION_REQUIRED = 'interactionRequired';
@@ -29,7 +35,7 @@ describe('OneAuth Serivce', () => {
     initialize: jest.fn(),
     setLogCallback: jest.fn(),
     setLogPiiEnabled: jest.fn(),
-    signInInteractively: jest.fn().mockResolvedValue({ account: mockAccount }),
+    signInInteractively: jest.fn().mockResolvedValue({ account: mockAccount, credential: mockCredential }),
     shutdown: jest.fn(),
     AadConfiguration: class AAD {},
     AppConfiguration: class App {},
@@ -37,9 +43,11 @@ describe('OneAuth Serivce', () => {
     Status: {
       InteractionRequired: INTERACTION_REQUIRED,
     },
+    MsaConfiguration: class MSA {},
+    setFlights: jest.fn(),
   };
   let oneAuthService = new OneAuthInstance(); // bypass the shim logic
-  let processEnvBackup = { ...process.env };
+  const processEnvBackup = { ...process.env };
 
   afterEach(() => {
     process.env = processEnvBackup;
@@ -56,8 +64,10 @@ describe('OneAuth Serivce', () => {
     mockOneAuth.setLogPiiEnabled.mockClear();
     mockOneAuth.signInInteractively.mockClear();
     mockOneAuth.shutdown.mockClear();
+    mockFetch.mockClear();
     (oneAuthService as any).initialized = false;
     (oneAuthService as any).signedInAccount = undefined;
+    (oneAuthService as any).signedInARMAccount = undefined;
   });
 
   it('should sign in and get an access token (happy path)', async () => {
@@ -146,5 +156,67 @@ describe('OneAuth Serivce', () => {
     const result = await service.getAccessToken({});
 
     expect(result).toEqual({ accessToken: '', acquiredAt: 0, expiryTime: 99999999999 });
+  });
+
+  it('should get a list of tenants', async () => {
+    const mockTenants = [
+      {
+        tenantId: 'tenant1',
+      },
+      {
+        tenantId: 'tenant2',
+      },
+      {
+        tenantId: 'tenant3',
+      },
+    ];
+    mockFetch.mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValue({ value: mockTenants }),
+    });
+    const tenants = await oneAuthService.getTenants();
+
+    // it should have initialized
+    expect(mockOneAuth.setLogPiiEnabled).toHaveBeenCalled();
+    expect(mockOneAuth.setLogCallback).toHaveBeenCalled();
+    expect(mockOneAuth.initialize).toHaveBeenCalled();
+
+    // it should have signed in
+    expect(mockOneAuth.signInInteractively).toHaveBeenCalled();
+    expect((oneAuthService as any).signedInARMAccount).toEqual(mockAccount);
+
+    // it should have called the tenants API
+    expect(mockFetch.mock.calls[0][0]).toBe('https://management.azure.com/tenants?api-version=2020-01-01');
+
+    expect(tenants).toBe(mockTenants);
+  });
+
+  it('should throw an error if something goes wrong while getting a list of tenants', async () => {
+    mockFetch.mockRejectedValueOnce({ error: 'could not get a list of tenants' });
+
+    await expect(oneAuthService.getTenants()).rejects.toEqual({ error: 'could not get a list of tenants' });
+  });
+
+  it('should get an ARM token for a tenant', async () => {
+    mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({ credential: { value: 'someARMToken' } });
+    (oneAuthService as any).signedInARMAccount = {};
+    const result = await oneAuthService.getARMTokenForTenant('someTenant');
+
+    expect(result).toBe('someARMToken');
+  });
+
+  it('should return an empty string if there is no signed in ARM account', async () => {
+    (oneAuthService as any).signedInARMAccount = undefined;
+    const result = await oneAuthService.getARMTokenForTenant('someTenant');
+
+    expect(result).toBe('');
+  });
+
+  it('should throw an error if something goes wrong while getting an ARM token', async () => {
+    mockOneAuth.acquireCredentialSilently.mockRejectedValueOnce({ error: 'Could not get an ARM token' });
+    (oneAuthService as any).signedInARMAccount = {};
+
+    await expect(oneAuthService.getARMTokenForTenant('someTenant')).rejects.toEqual({
+      error: 'Could not get an ARM token',
+    });
   });
 });
