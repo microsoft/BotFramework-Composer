@@ -175,8 +175,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           {
             key: 'nuget',
             text: 'nuget',
-            url: 'https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true',
-            searchUrl: 'https://azuresearch-usnc.nuget.org/query?q={{keyword}}+Tags:%22bf-component%22&prerelease=true',
+            url:
+              'https://azuresearch-usnc.nuget.org/query?q=microsoft.bot.components+Tags:%22bf-component%22&prerelease=true&semVerLevel=2.0.0',
+            searchUrl:
+              'https://azuresearch-usnc.nuget.org/query?q=microsoft.bot.components+{{keyword}}+Tags:%22bf-component%22&prerelease=true&semVerLevel=2.0.0',
             readonly: true,
             // only ours
             // https://azuresearch-usnc.nuget.org/query?q={search keyword}+preview.bot.component+Tags:%22bf-component%22&prerelease=true
