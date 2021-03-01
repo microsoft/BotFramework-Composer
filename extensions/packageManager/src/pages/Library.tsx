@@ -775,7 +775,17 @@ const Library: React.FC = () => {
                 </Stack.Item>
               </Stack>
 
-              <h3>{selectedItem.name}</h3>
+              <h3 css={{ marginBottom: 0 }}>{selectedItem.name}</h3>
+
+              {isInstalled(selectedItem) ? (
+                <p>
+                  {formatMessage('Installed:')} {installedVersion(selectedItem)}
+                </p>
+              ) : (
+                <p>
+                  {formatMessage('Latest:')} {selectedItem.version}
+                </p>
+              )}
 
               {readmeContent && <ReactMarkdown>{readmeContent}</ReactMarkdown>}
 
