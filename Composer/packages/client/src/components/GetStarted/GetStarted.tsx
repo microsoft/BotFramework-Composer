@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// TODO: Remove path module
-
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect } from 'react';
