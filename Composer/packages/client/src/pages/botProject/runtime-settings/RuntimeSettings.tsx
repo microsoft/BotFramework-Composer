@@ -72,6 +72,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
     if (projectId) getBoilerplateVersion(projectId);
+  }, [projectId]);
+
+  useEffect(() => {
     setRuntimePath(settings.runtime?.path ?? '');
     setRuntimeCommand(settings.runtime?.command ?? '');
     setUsingCustomRuntime(settings.runtime?.customRuntime ?? false);
