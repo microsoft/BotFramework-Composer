@@ -42,6 +42,7 @@ export enum ProvisionErrors {
   CREATE_COUNTER_ERROR = 'CREATE_COUNTER_ERROR',
   CREATE_APP_REGISTRATION = 'CREATE_APP_REGISTRATION',
   GET_TENANTID = 'GET_TENANTID',
+  KEYVAULT_ERROR = "KEYVAULT_ERROR",
 }
 
 export enum AzurePublishErrors {
@@ -60,4 +61,7 @@ export enum AzurePublishErrors {
   // zip and upload error
   ZIP_FOLDER_ERROR = 'ZIP_FOLDER_ERROR',
   DEPLOY_ZIP_ERROR = 'DEPLOY_ZIP_ERROR',
+
+  // abs error
+  ABS_ERROR = 'ABS_ERROR'
 }
