@@ -24,6 +24,7 @@ import { creationFlowTypeState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNotification';
 import { dispatcherState } from '../../recoilModel';
+import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 
 import { LocationSelectContent } from './LocationSelectContent';
 
@@ -72,6 +73,9 @@ interface DefineConversationFormData {
   description: string;
   schemaUrl: string;
   location?: string;
+
+  profile?: Profile; // abs payload to create bot
+  source?: string; // where the payload come from
 
   templateDir?: string; // location of the imported template
   eTag?: string; // e tag used for content sync between composer and imported bot content
@@ -233,6 +237,16 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             }),
           });
           addNotification(notification);
+        }
+      }
+
+      if (props.location?.search) {
+        const decoded = decodeURIComponent(props.location.search);
+        const { source, payload } = querystring.parse(decoded);
+        if (payload && typeof payload === 'string' && typeof source === 'string') {
+          dataToSubmit.profile = JSON.parse(payload);
+          dataToSubmit.source = source;
+          dataToSubmit.alias = getAliasFromPayload(source, payload);
         }
       }
 
