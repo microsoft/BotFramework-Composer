@@ -172,7 +172,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
       openAlertModal(title, subTitle, { style: dialogStyle.console });
     }
   }, [schemas, projectId]);
-
   if (props.projectId && botProjects.includes(props.projectId)) {
     if (props.skillId && !botProjects.includes(props.skillId)) {
       return <LoadingSpinner />;

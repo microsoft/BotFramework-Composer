@@ -140,6 +140,39 @@ export type PublishTarget = {
   lastPublished?: Date;
 };
 
+// structure from json parse PublishTarget.configuration
+export type PublishProfile = {
+  name?: string;
+  environment?: string;
+  hostname?: string;
+  runtimeIdentifier: string;
+  settings: {
+    applicationInsights?: {
+      InstrumentationKey: string;
+    };
+    cosmosDb?: {
+      cosmosDBEndpoint: string;
+      authKey: string;
+      databaseId: string;
+      containerId: string;
+    };
+    blobStorage?: {
+      connectionString: string;
+      container: string;
+    };
+    luis?: {
+      authoringKey: string;
+      authoringEndpoint: string;
+      endpointKey: string;
+      endpoint: string;
+      region: string;
+    };
+    MicrosoftAppId: string;
+    MicrosoftAppPassword: string;
+  };
+  [key: string]: any;
+};
+
 export type Subscription = {
   subscriptionId: string;
   tenantId: string;
