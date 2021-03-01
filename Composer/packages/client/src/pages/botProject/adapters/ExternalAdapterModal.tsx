@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { DialogSetting } from '@bfc/shared';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
+import mapValues from 'lodash/mapValues';
 
 import { settingsState, dispatcherState } from '../../../recoilModel';
 import { useShell } from '../../../shell';
@@ -43,10 +44,16 @@ export function hasRequired(testObject: { [key: string]: ConfigValue }, fields?:
   return fields.every((field: string) => field in testObject);
 }
 
+function makeDefault(schema: JSONSchema7) {
+  const { properties } = schema;
+
+  return mapValues(properties, 'default');
+}
+
 const AdapterModal = (props: Props) => {
   const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName, isFirstTime } = props;
 
-  const [value, setValue] = useState(props.value);
+  const [value, setValue] = useState(props.value == null ? makeDefault(schema) : props.value);
   const { setSettings } = useRecoilValue(dispatcherState);
   const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
 
