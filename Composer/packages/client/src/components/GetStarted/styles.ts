@@ -13,7 +13,7 @@ export const wrapperStyle = {
 
 export const h2Style = {
   fontSize: FontSizes.size20,
-  marginTop: 0,
+  marginTop: -5,
 };
 export const h3Style = {
   fontSize: FontSizes.size16,
@@ -24,6 +24,13 @@ export const ulStyle = {
   listStyleType: 'none',
   margin: 0,
   padding: 0,
+};
+
+export const ulStyleGuides = {
+  listStyleType: 'none',
+  margin: 0,
+  padding: 0,
+  marginTop: -5,
 };
 
 export const liStyle = {

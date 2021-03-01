@@ -3,6 +3,8 @@
 
 // TODO: Remove path module
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -15,7 +17,7 @@ import { currentProjectIdState, locationState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { navigateTo } from '../../utils/navigation';
 
-import { wrapperStyle, buttonStyles, h2Style, h3Style, ulStyle, linkStyle, liStyle } from './styles';
+import { wrapperStyle, buttonStyles, h2Style, h3Style, ulStyle, ulStyleGuides, linkStyle, liStyle } from './styles';
 
 type GetStartedProps = {
   toolbarItems?: IToolbarItem[];
@@ -112,15 +114,18 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
 
   return (
     <div style={wrapperStyle}>
-      <Toolbar toolbarItems={props.toolbarItems ? items.concat(props.toolbarItems) : items} />
+      <Toolbar
+        css={{ paddingLeft: 25, borderBottom: '1px solid #3d3d3d' }}
+        toolbarItems={props.toolbarItems ? items.concat(props.toolbarItems) : items}
+      />
       <Stack horizontal>
-        <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 20 } }}>
+        <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 38 } }}>
           <h2 style={h2Style}>{botProject?.name}</h2>
           <p>
-            {formatMessage('File Location:')} <span style={{ textOverflow: 'ellipses' }}>{location}</span>
+            {formatMessage('File Location:')} <span style={{ textOverflow: 'ellipses', fontSize: 12 }}>{location}</span>
           </p>
         </Stack.Item>
-        <Stack.Item styles={{ root: { padding: 20 } }}>
+        <Stack.Item styles={{ root: { padding: 38 } }}>
           <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
           <Stack horizontal verticalFill tokens={{ childrenGap: 40 }}>
             <Stack.Item>
@@ -165,9 +170,9 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item styles={{ root: { borderLeft: '1px solid #3d3d3d', padding: 20 } }}>
+        <Stack.Item styles={{ root: { borderLeft: '1px solid #3d3d3d', padding: 38 } }}>
           <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
-          <ul style={ulStyle}>
+          <ul style={ulStyleGuides}>
             <li style={liStyle}>
               <Link href={linkToGetStarted} styles={linkStyle} target="_blank" onClick={linkClick}>
                 {formatMessage('Get started with Bot Framework Composer')}
