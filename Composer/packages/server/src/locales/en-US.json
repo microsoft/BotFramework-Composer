@@ -3260,6 +3260,9 @@
   "to_learn_more_about_the_qna_file_format_read_the_d_1ce18259": {
     "message": "> To learn more about the QnA file format, read the documentation at\n> { QNA_HELP }"
   },
+  "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
+    "message": "To learn more about the { title }, <a>visit its documentation page</a>."
+  },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
   },

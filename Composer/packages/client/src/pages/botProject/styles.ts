@@ -106,4 +106,4 @@ export const unknownIconStyle = (required: boolean) => {
   };
 };
 
-export const columnSizes = ['200px', '350px', '50px'];
+export const columnSizes = ['300px', '150px', '150px'];
