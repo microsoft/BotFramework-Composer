@@ -17,7 +17,6 @@ export const WorkingModal: React.FC<WorkingModalProps> = (props) => {
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: props.title,
       }}
       hidden={props.hidden}
       modalProps={{
@@ -25,7 +24,7 @@ export const WorkingModal: React.FC<WorkingModalProps> = (props) => {
       }}
     >
       <div css={modalControlGroup}>
-        <LoadingSpinner />
+        <LoadingSpinner message={props.title} />
       </div>
     </Dialog>
   );

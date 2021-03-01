@@ -17,7 +17,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';
-import { settingsState, userSettingsState, schemasState } from '../../recoilModel/atoms';
+import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
@@ -62,7 +62,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
   const currentProjectId = skillId ?? projectId;
-  const schemas = useRecoilValue(schemasState(currentProjectId));
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
 
   const isRootBot = !!botProject?.isRootBot;
@@ -118,6 +117,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   return (
     <Page
+      useDebugPane
       data-testid="BotProjectsSettings"
       headerStyle={header}
       mainRegionName={formatMessage('Bot projects settings list View')}
@@ -149,7 +149,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               key={'settingsjson'}
               editorSettings={userSettings.codeEditor}
               id={currentProjectId}
-              schema={schemas.sdk.content}
               value={mergedSettings}
               onChange={handleChange}
             />
