@@ -14,6 +14,7 @@ import { DialogSetting } from '@bfc/shared';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import mapValues from 'lodash/mapValues';
+import { JSONSchema4Type } from 'json-schema';
 
 import { settingsState, dispatcherState } from '../../../recoilModel';
 import { useShell } from '../../../shell';
@@ -25,8 +26,6 @@ export type AdapterRecord = {
   enabled: boolean;
 };
 
-type ConfigValue = string | number | boolean;
-
 type Props = {
   adapterKey: string;
   packageName: string;
@@ -36,10 +35,10 @@ type Props = {
   projectId: string;
   schema: JSONSchema7;
   uiSchema: JSONSchema7 & { helpLink?: string };
-  value?: { [key: string]: ConfigValue };
+  value?: { [key: string]: JSONSchema4Type };
 };
 
-export function hasRequired(testObject: { [key: string]: ConfigValue }, fields?: string[]) {
+export function hasRequired(testObject: { [key: string]: JSONSchema4Type | undefined }, fields?: string[]) {
   if (fields == null || fields.length === 0) return true;
   return fields.every((field: string) => field in testObject);
 }
