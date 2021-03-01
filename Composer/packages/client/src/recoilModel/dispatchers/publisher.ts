@@ -246,7 +246,7 @@ export const publisherDispatcher = () => {
           jobId ??
           (publishStorage.get('jobIds') ? publishStorage.get('jobIds')[`${projectId}-${target.name}`] : undefined);
         const response = await httpClient.get(
-          `/publish/${projectId}/status/${target.name}/${currentJobId ? '/' + currentJobId : ''}`
+          `/publish/${projectId}/status/${target.name}${currentJobId ? '/' + currentJobId : ''}`
         );
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
