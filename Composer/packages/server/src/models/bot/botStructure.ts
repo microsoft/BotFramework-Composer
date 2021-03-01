@@ -94,6 +94,7 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.crossTrainConfig, { CROSSTRAINCONFIGNAME: 'cross-train.config.json' }),
   '*.schema',
   '*.uischema',
+  'dialogs/*/language-generation/*/*/*.lg', // form dialog generated files aka <dialogId>/language-generation/<locale>/{<formProperty>,form}/*.lg
 ];
 
 // parse file name: [fileId].[locale].[fileType]
