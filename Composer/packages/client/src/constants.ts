@@ -189,7 +189,7 @@ export const DialogCreationCopy = {
   get CREATE_NEW_BOT_V2() {
     return {
       title: formatMessage('Choose a template for your bot'),
-      subText: formatMessage("Microsoft's templates offer best practices for developing conversational bots"),
+      subText: formatMessage('Microsoft’s templates offer best practices for developing conversational bots'),
     };
   },
   get CREATE_NEW_SKILLBOT() {

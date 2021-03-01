@@ -47,7 +47,7 @@ const LGPage: React.FC<RouteComponentProps<{
       navigateTo(url);
       TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
-    [dialogId, projectId, edit, lgFileId]
+    [dialogId, projectId, edit, lgFileId, baseURL]
   );
 
   const onRenderHeaderContent = () => {
@@ -61,6 +61,7 @@ const LGPage: React.FC<RouteComponentProps<{
   return (
     <Page
       showCommonLinks
+      useDebugPane
       useNewTree
       data-testid="LGPage"
       dialogId={dialogId}
