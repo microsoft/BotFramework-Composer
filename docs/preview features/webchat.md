@@ -2,7 +2,7 @@
 
 Once the web chat connection has been enabled in Bot Framework Composer, or via the Azure portal, there are a few additional steps required to get your bot connected.
 
-Pre-requisites: Before you can connect a bot to MS Teams, be sure you've completed the following actions:
+Pre-requisites: Before you can connect to your bot with web chat, be sure you've completed the following actions:
 
 * You've built a basic bot in Composer
 * You've created a publishing profile and published your bot to Azure
