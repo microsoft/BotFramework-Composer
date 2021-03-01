@@ -592,7 +592,7 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName, currentConfig]);
 
   const isSelectAddResources = useMemo(()=>{
-    return enabledResources.length>0;
+    return enabledResources.length>0 || requireResources.length>0;
   },[enabledResources]);
 
   const PageFormConfig = (
