@@ -732,6 +732,7 @@ const Library: React.FC = () => {
                             whiteSpace: 'nowrap',
                             display: 'inline-block',
                           }}
+                          title={selectedVersion}
                         >
                           {selectedVersion}
                         </span>{' '}
@@ -748,6 +749,7 @@ const Library: React.FC = () => {
                             whiteSpace: 'nowrap',
                             display: 'inline-block',
                           }}
+                          title={selectedVersion}
                         >
                           {selectedVersion}
                         </span>
@@ -763,6 +765,7 @@ const Library: React.FC = () => {
                             whiteSpace: 'nowrap',
                             display: 'inline-block',
                           }}
+                          title={selectedVersion}
                         >
                           {selectedVersion}
                         </span>
