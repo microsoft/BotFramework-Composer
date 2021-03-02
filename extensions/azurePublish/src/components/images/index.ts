@@ -10,6 +10,7 @@ import AppInsights from './Application-Insights.svg';
 import BlobStorage from './Storage-Accounts.svg';
 import FunctionApp from './Function-Apps.svg';
 import AppRegistration from './App-Registrations.svg';
+import QNAMaker from './QnA-Maker.svg';
 
 export {
   AppServicePlan,
@@ -21,4 +22,5 @@ export {
   BlobStorage,
   FunctionApp,
   AppRegistration,
+  QNAMaker,
 };
