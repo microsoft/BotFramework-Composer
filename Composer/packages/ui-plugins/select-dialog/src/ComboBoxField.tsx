@@ -17,6 +17,16 @@ interface ComboBoxFieldProps extends FieldProps {
   onChange: any;
 }
 
+const getIconName = (key: string) => {
+  if (key === ADD_DIALOG) {
+    return 'Add';
+  } else if (key === 'expression') {
+    return 'CalculatorEqualTo';
+  } else {
+    return 'OpenSource';
+  }
+};
+
 export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
   const {
     comboboxTitle,
@@ -34,11 +44,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
   const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
       <div>
-        <Icon
-          aria-hidden="true"
-          iconName={option.key === ADD_DIALOG ? 'Add' : 'OpenSource'}
-          style={{ marginRight: '8px' }}
-        />
+        <Icon aria-hidden="true" iconName={getIconName(option.key as string)} style={{ marginRight: '8px' }} />
         <span>{option.text}</span>
       </div>
     ) : null;
