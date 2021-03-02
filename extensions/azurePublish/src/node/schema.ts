@@ -117,6 +117,18 @@ const schema: JSONSchema7 = {
           },
           required: ['endpointKey', 'authoringKey', 'region'],
         },
+        qna: {
+          type: 'object',
+          properties: {
+            subscriptionKey: {
+              type: 'string'
+            },
+            endpoint: {
+              type: 'string'
+            }
+          },
+          required: ['subscriptionKey', 'endpoint']
+        },
         MicrosoftAppId: {
           type: 'string',
         },
@@ -159,6 +171,10 @@ const schema: JSONSchema7 = {
         endpointKey: '<endpoint key>',
         endpoint: '',
         region: 'westus',
+      },
+      qna: {
+        subscriptionKey: '<subscription key>',
+        endpoint: '<endpoint>'
       },
       MicrosoftAppId: '<app id from Bot Framework registration>',
       MicrosoftAppPassword: '<app password from Bot Framework registration>',

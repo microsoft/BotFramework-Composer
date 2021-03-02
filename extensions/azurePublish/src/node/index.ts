@@ -421,6 +421,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               endpoint: provisionResults.luisPrediction?.endpoint,
               region: provisionResults.resourceGroup.location,
             },
+            qna: {
+              subscriptionKey: provisionResults.qna?.subscriptionKey,
+              endpoint: provisionResults.qna?.endpoint,
+            },
             MicrosoftAppId: provisionResults.appId,
             MicrosoftAppPassword: provisionResults.appPassword,
           },
