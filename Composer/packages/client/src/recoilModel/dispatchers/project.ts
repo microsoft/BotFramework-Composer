@@ -550,14 +550,13 @@ export const projectDispatcher = () => {
       });
 
       if (response.data) {
-        callbackHelpers.set(fetchReadMePendingState, false);
         callbackHelpers.set(selectedTemplateReadMeState, response.data);
       }
-      callbackHelpers.set(fetchReadMePendingState, false);
     } catch (err) {
       handleProjectFailure(callbackHelpers, err);
-      callbackHelpers.set(fetchReadMePendingState, false);
       callbackHelpers.set(selectedTemplateReadMeState, '### Error encountered when getting template readMe');
+    } finally {
+      callbackHelpers.set(fetchReadMePendingState, false);
     }
   });
 

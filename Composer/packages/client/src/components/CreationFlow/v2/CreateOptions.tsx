@@ -25,10 +25,9 @@ import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pi
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
-import { useRecoilState } from 'recoil';
 
-import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary, FetchReadMeStatus } from '../../../constants';
-import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
+import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
+import { fetchReadMePendingState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
@@ -109,13 +108,18 @@ const optionKeys = {
   createFromTemplate: 'createFromTemplate',
 };
 
+const templateRequestUrl =
+  'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
+
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
+  selectedTemplateReadMe: string;
   templates: BotTemplate[];
   onDismiss: () => void;
   onNext: (data: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
+  setSelectedTemplateReadMe: (string) => void;
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
@@ -125,7 +129,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
-  const [readMe, setReadMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
 
   const selectedTemplate = useMemo(() => {
@@ -203,7 +206,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   useEffect(() => {
     if (currentTemplate) {
-      setReadMe('');
+      props.setSelectedTemplateReadMe('');
       props.fetchReadMe(currentTemplate);
     }
   }, [currentTemplate]);
@@ -247,18 +250,19 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending && <LoadingSpinner message={''} />}
-            <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
+            {fetchReadMePending && <LoadingSpinner />}
+            <TemplateDetailView readMe={props.selectedTemplateReadMe} templateId={currentTemplate} />
           </div>
         </div>
         <DialogFooter>
           <Link
             styles={{ root: { fontSize: '12px', float: 'left' } }}
-            href="https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title="
+            href={templateRequestUrl}
+            target="_blank"
             underline
           >
             <FontIcon style={{ marginRight: '5px' }} iconName="ChatInviteFriend" />
-            Need another template? Send us a request
+            {formatMessage('Need another template? Send us a request')}
           </Link>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
