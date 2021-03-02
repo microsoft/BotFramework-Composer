@@ -4,6 +4,7 @@
 import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 
 export const title = css`
   font-size: ${FontSizes.medium};
@@ -67,13 +68,17 @@ export const customerLabel = css`
   margin-right: 5px;
 `;
 
+// These bg and icon colors are the standard Fluent ones for Messaging, which
+// aren't exported anywhere they can easily be reached
+// Docs: https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/messaging
+
 export const errorContainer = css`
   display: flex;
   width: 100%;
   line-height: 24px;
   padding-top: 12px;
   padding-bottom: 12px;
-  background: #fed9cc;
+  background: '#fde7e9';
   color: ${NeutralColors.black};
 `;
 
@@ -84,7 +89,7 @@ export const errorTextStyle = css`
 
 export const errorIcon = {
   root: {
-    color: SharedColors.red20,
+    color: '#a80000',
     marginRight: 8,
     paddingLeft: 12,
     fontSize: FontSizes.medium,
