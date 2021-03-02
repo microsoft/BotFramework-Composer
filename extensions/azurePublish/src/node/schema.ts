@@ -46,6 +46,10 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'The resource id of your abs instance'
     },
+    resourceGroup: {
+      type: 'string',
+      title: 'the name of your resource group'
+    },
     armEndpoint: {
       type: 'string',
       title: 'The arm endpoint'
