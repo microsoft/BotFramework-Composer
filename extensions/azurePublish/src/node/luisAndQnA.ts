@@ -40,6 +40,12 @@ function getAccount(accounts: any, filter: string) {
   }
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 /**
 * return an array of all the files in a given directory
 * @param dir
@@ -112,6 +118,8 @@ export async function publishLuisToPrediction(
 
         // this should include an array of account info objects
         accountList = JSON.parse(response);
+        await sleep(1000);
+
         break;
       } catch (err) {
         if (retryCount < 1) {
@@ -132,6 +140,7 @@ export async function publishLuisToPrediction(
             throw err;
           }
         }
+        await sleep(1000);
       }
     }
 
@@ -142,12 +151,12 @@ export async function publishLuisToPrediction(
     // Assign the appropriate account to each of the applicable LUIS apps for this bot.
     // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be32228e8473de116325515
     for (const dialogKey in luisAppIds) {
+      await sleep(1000);
       const luisAppId = luisAppIds[dialogKey].appId;
       logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: `Assigning to luis app id: ${luisAppId}`,
       });
-
       // Retry at most twice for each api call
       let retryCount = 0;
       while (retryCount < 2) {
@@ -159,7 +168,7 @@ export async function publishLuisToPrediction(
             headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
           } as rp.RequestPromiseOptions;
           await rp.post(luisAssignEndpoint, options);
-
+          await sleep(1000);
           break;
         }
         catch (err) {
@@ -181,6 +190,7 @@ export async function publishLuisToPrediction(
               throw err;
             }
           }
+          await sleep(1000);
         }
       }
     }
