@@ -81,7 +81,7 @@ export const main = (hasRenderHeaderContent) => css`
 
 export const mainWithGetStarted = css`
   margin-left: 2px;
-  height: calc(100vh - 385px);
+  height: calc(100vh - 517px);
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
