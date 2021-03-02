@@ -5,8 +5,7 @@ import React, { useCallback, useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
-import { IntellisenseTextField } from '@bfc/adaptive-form';
-import { WithTypeIcons } from '@bfc/adaptive-form/lib/components/WithTypeIcons';
+import { IntellisenseTextField, WithTypeIcons } from '@bfc/adaptive-form';
 
 import ComboBoxField, { ADD_DIALOG } from './ComboBoxField';
 
