@@ -4,7 +4,6 @@
 import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 
 export const title = css`
   font-size: ${FontSizes.medium};
