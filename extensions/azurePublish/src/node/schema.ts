@@ -34,33 +34,21 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Name of your bot channel registration service'
     },
-    botId: {
-      type: 'string',
-      title: 'Id of your bot channel registration service'
-    },
-    appPasswordHint: {
-      type: 'string',
-      title: 'The password hint of your abs instance'
-    },
-    resourceId: {
-      type: 'string',
-      title: 'The resource id of your abs instance'
-    },
     resourceGroup: {
       type: 'string',
       title: 'the name of your resource group'
     },
-    armEndpoint: {
-      type: 'string',
-      title: 'The arm endpoint'
-    },
-    tenantId: {
-      type: 'string',
-      title: 'tenant id of your account'
-    },
     subscriptionId: {
       type: 'string',
       title: 'the id of your subscription'
+    },
+    region: {
+      type: 'string',
+      title: 'region of your resource group'
+    },
+    luisRegion: {
+      type: 'string',
+      title: 'region of your luis resource'
     },
     settings: {
       type: 'object',
@@ -154,12 +142,9 @@ const schema: JSONSchema7 = {
     runtimeIdentifier: 'win-x64',
     resourceGroup: '<name of your resource group>',
     botName: '<name of your bot channel registration>',
-    botId: '<id or your bot channel registration>',
-    appPasswordHint: '<the password hint of your abs instance>',
-    resourceId: '<resource id of your bot service>',
-    armEndpoint: 'https://management.azure.com',
-    tenantId: '<tenant id of your account>',
     subscriptionId: '<id of your subscription>',
+    region: '<region of your resource group>',
+    luisRegion: '<region of your luis resource>',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
