@@ -16,21 +16,22 @@ export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isAct
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const logItems = useRecoilValue(webChatLogsState(rootBotId ?? ''));
 
-  const [hasUnreadLog, setHasUnreadLog] = useState(false);
+  const [hasUnreadLogs, setHasUnreadLogs] = useState(false);
   const [lastReadLogIds, setLastReadLogIds] = useState<string[]>([]);
 
   useEffect(() => {
-    if (isActive || !logItems.length) {
-      setHasUnreadLog(false);
-      return;
-    }
-
     const newLogIds = logItems.map((item) => item.timestamp);
-    if (!isEqual(newLogIds, lastReadLogIds)) {
+    const areLogsSame = isEqual(newLogIds, lastReadLogIds);
+
+    if (!areLogsSame) {
       setLastReadLogIds(newLogIds);
-      if (!isActive) {
-        setHasUnreadLog(true);
+      if (isActive || !logItems.length) {
+        setHasUnreadLogs(false);
+        return;
       }
+      setHasUnreadLogs(true);
+    } else {
+      setHasUnreadLogs(false);
     }
   }, [logItems, isActive]);
 
@@ -50,7 +51,7 @@ export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isAct
       >
         {formatMessage('Webchat Inspector')}
       </div>
-      <DebugPanelErrorIndicator hasError={hasUnreadLog} />
+      <DebugPanelErrorIndicator hasError={hasUnreadLogs} />
     </div>
   );
 };

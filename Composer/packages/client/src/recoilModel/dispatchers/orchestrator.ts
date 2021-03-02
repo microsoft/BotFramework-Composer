@@ -2,13 +2,15 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { SDKKinds } from '@bfc/shared';
+import { RecognizerFile, SDKKinds } from '@bfc/shared';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import partition from 'lodash/partition';
 
 import { orchestratorDownloadNotificationProps } from '../../components/Orchestrator/DownloadNotification';
 import httpClient from '../../utils/httpUtil';
 import { dispatcherState } from '../../../src/recoilModel';
 import { recognizersSelectorFamily } from '../selectors/recognizers';
+import { Locales } from '../../locales';
 
 import { createNotification } from './notification';
 
@@ -33,46 +35,56 @@ export const downloadModel = (addr: string, model: 'en' | 'multilang') => {
   });
 };
 
+export const availableLanguageModels = (recognizerFiles: RecognizerFile[]) => {
+  const dialogsUsingOrchestrator = recognizerFiles.filter(
+    ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
+  );
+  const languageModels: ('en' | 'multilang')[] = [];
+  if (dialogsUsingOrchestrator.length) {
+    // pull out languages that Orchestrator has to support
+    const [enLuFiles, multiLangLuFiles] = partition(dialogsUsingOrchestrator, (f) =>
+      f.id.split('.')?.[1]?.toLowerCase()?.startsWith('en')
+    );
+
+    if (enLuFiles.length) {
+      languageModels.push('en');
+    }
+
+    if (
+      multiLangLuFiles
+        .map((r) => r.id.split('.')?.[1])
+        .filter((id) => id !== undefined)
+        .some((lang) => Locales.map((l) => l.locale).includes(lang?.toLowerCase()))
+    ) {
+      languageModels.push('multilang');
+    }
+  }
+  return languageModels;
+};
+
 export const orchestratorDispatcher = () => {
-  const downloadLanguageModels = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
-      const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
+  const downloadLanguageModels = useRecoilCallback(({ snapshot }: CallbackInterface) => async (projectId: string) => {
+    const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
 
-      const isUsingOrchestrator = recognizers.some(
-        ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
-      );
+    const isUsingOrchestrator = recognizers.some(
+      ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
+    );
 
-      if (isUsingOrchestrator) {
-        // pull out languages that Orchestrator has to support
-        const botLanguages = recognizers
-          .filter(({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer)
-          .map(({ id, content }) => id.split('.')?.[1]);
+    if (isUsingOrchestrator) {
+      // Download Model Notification
+      const { addNotification, deleteNotification } = await snapshot.getPromise(dispatcherState);
+      const notification = createNotification(orchestratorDownloadNotificationProps());
+      addNotification(notification);
 
-        const languageModels: ('en' | 'multilang')[] = [];
-        if (botLanguages.some((l) => l?.startsWith('en'))) {
-          languageModels.push('en');
+      try {
+        for (const languageModel of availableLanguageModels(recognizers)) {
+          await downloadModel('/orchestrator/download', languageModel);
         }
-
-        // TODO: We need to get a table of Orchestrator supported languages
-        if (botLanguages.length > 1) {
-          languageModels.push('multilang');
-        }
-
-        // Add Notification of downloading
-        const { addNotification, deleteNotification } = await snapshot.getPromise(dispatcherState);
-        const notification = createNotification(orchestratorDownloadNotificationProps());
-        addNotification(notification);
-
-        try {
-          for (const languageModel of languageModels) {
-            await downloadModel('/orchestrator/download', languageModel);
-          }
-        } finally {
-          deleteNotification(notification.id);
-        }
+      } finally {
+        deleteNotification(notification.id);
       }
     }
-  );
+  });
 
   return {
     downloadLanguageModels,
