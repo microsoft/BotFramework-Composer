@@ -126,7 +126,7 @@ export class LUServer {
     return items;
   }
 
-  protected validateLuOption(document: TextDocument, luOption?: LUOption) {
+  protected async validateLuOption(document: TextDocument, luOption?: LUOption) {
     if (!luOption) return;
 
     const diagnostics: string[] = [];
@@ -135,7 +135,7 @@ export class LUServer {
       diagnostics.push('[Error luOption] importResolver is required but not exist.');
     } else {
       const { fileId, sectionId } = luOption;
-      const luFile = this.getLUDocument(document)?.index();
+      const luFile = await this.getLUDocument(document)?.index();
       if (!luFile) {
         diagnostics.push(`[Error luOption] File ${fileId}.lu do not exist`);
       } else if (sectionId && sectionId !== PlaceHolderSectionName) {
