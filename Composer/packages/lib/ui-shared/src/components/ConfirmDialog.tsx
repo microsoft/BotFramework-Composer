@@ -6,7 +6,8 @@ import { jsx, css } from '@emotion/core';
 import * as React from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { Checkbox, ICheckboxProps } from 'office-ui-fabric-react/lib/Checkbox';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import ReactDOM from 'react-dom';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import formatMessage from 'format-message';
@@ -59,10 +60,31 @@ const confirmationContainer = css`
 
 // -------------------- ConfirmDialog -------------------- //
 
+/**
+ * When we want the user to check the box to confirm their action, in addition to confirming the dialog.
+ */
+type DoubleConfirmCheckboxProps = { kind: 'doubleConfirm'; checkboxLabel?: string };
+/**
+ * When we want to ask user for extra checks in addition to the original action confirmation.
+ */
+type AdditionalConfirmCheckboxProps = { kind: 'additionalConfirm' } & ICheckboxProps;
+
+type CheckboxProps = DoubleConfirmCheckboxProps | AdditionalConfirmCheckboxProps;
+
+const getDefaultAdditionalCheckboxValue = (checkboxProps?: CheckboxProps) => {
+  if (checkboxProps?.kind === 'additionalConfirm') {
+    const additionalCheckboxProps = checkboxProps as AdditionalConfirmCheckboxProps;
+
+    return additionalCheckboxProps.checked || additionalCheckboxProps.defaultChecked || undefined;
+  }
+
+  return undefined;
+};
+
 type ConfirmDialogProps = {
   onCancel: () => void;
-  onConfirm: () => void;
-  setting: any;
+  onConfirm: (additionalCheck?: boolean) => void;
+  setting: Record<string, any> & { checkboxProps?: CheckboxProps };
 };
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
@@ -74,14 +96,21 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     confirmText = formatMessage('Yes'),
     cancelText = formatMessage('Cancel'),
     style = dialogStyle.normal,
-    checkboxLabel,
+    checkboxProps,
     styles = { content: {}, main: {}, modal: {} },
   } = setting;
 
+  const [additionalCheckboxValue, setAdditionalCheckboxValue] = React.useState<boolean | undefined>(
+    getDefaultAdditionalCheckboxValue(checkboxProps)
+  );
   const [disabled, setDisabled] = React.useState(setting.disabled);
 
   const handleCheckbox = (event, checked) => {
     setDisabled(!checked);
+  };
+
+  const confirm = () => {
+    onConfirm(additionalCheckboxValue);
   };
 
   if (!title) {
@@ -91,6 +120,30 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   function defaultContentRender() {
     return <div css={builtInStyles[style]}> {subTitle} </div>;
   }
+
+  const renderCheckbox = React.useCallback(() => {
+    if (!checkboxProps) {
+      return null;
+    }
+
+    return (
+      <Stack styles={{ root: { margin: '16px 0' } }}>
+        {checkboxProps.kind === 'doubleConfirm' ? (
+          <Checkbox
+            checked={!disabled}
+            label={(checkboxProps as DoubleConfirmCheckboxProps).checkboxLabel}
+            onChange={handleCheckbox}
+          />
+        ) : (
+          <Checkbox
+            {...(checkboxProps as AdditionalConfirmCheckboxProps)}
+            checked={additionalCheckboxValue}
+            onChange={(_, checked) => setAdditionalCheckboxValue(checked)}
+          />
+        )}
+      </Stack>
+    );
+  }, [checkboxProps, disabled, additionalCheckboxValue]);
 
   return (
     <Dialog
@@ -108,17 +161,21 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     >
       <div css={[confirmationContainer, styles.content]}>
         {onRenderContent(subTitle, builtInStyles[style])}
-        {checkboxLabel && <Checkbox checked={!disabled} label={checkboxLabel} onChange={handleCheckbox} />}
+        {renderCheckbox()}
       </div>
       <DialogFooter>
-        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmText} onClick={onConfirm} />
+        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmText} onClick={confirm} />
         <DefaultButton data-testid="cancelPrompt" text={cancelText} onClick={onCancel} />
       </DialogFooter>
     </Dialog>
   );
 };
 
-export const OpenConfirmModal = (title, subTitle, setting = {}): Promise<boolean> => {
+export const OpenConfirmModal = (
+  title,
+  subTitle,
+  setting: Record<string, any> & { checkboxProps?: DoubleConfirmCheckboxProps } = {}
+): Promise<boolean> => {
   return new Promise((resolve) => {
     const node = document.createElement('div');
     document.body.appendChild(node);
@@ -134,6 +191,33 @@ export const OpenConfirmModal = (title, subTitle, setting = {}): Promise<boolean
     const onCancel = () => {
       removeNode();
       resolve(false);
+    };
+
+    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;
+    ReactDOM.render(modal, node);
+  });
+};
+
+export const OpenConfirmModalWithCheckbox = (
+  title,
+  subTitle,
+  setting: Record<string, any> & { checkboxProps?: CheckboxProps } = {}
+): Promise<{ additionalConfirm?: boolean } | null> => {
+  return new Promise((resolve) => {
+    const node = document.createElement('div');
+    document.body.appendChild(node);
+    const removeNode = () => {
+      ReactDOM.unmountComponentAtNode(node);
+      node.remove();
+    };
+
+    const onConfirm = (additionalConfirm?: boolean) => {
+      removeNode();
+      resolve({ additionalConfirm });
+    };
+    const onCancel = () => {
+      removeNode();
+      resolve(null);
     };
 
     const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;

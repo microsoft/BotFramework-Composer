@@ -18,7 +18,7 @@ import { onboardingState, userSettingsState, dispatcherState } from '../../../re
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import { SettingDropdown } from './SettingDropdown';
-// import { FontSettings } from './fontSettings';
+import { FontSettings } from './fontSettings';
 import * as images from './images';
 import { PreviewFeatureToggle } from './PreviewFeatureToggle';
 
@@ -182,7 +182,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           title={formatMessage('Sentence wrap')}
           onToggle={onCodeEditorChange('wordWrap')}
         />
-        {/* <FontSettings
+        <FontSettings
           description={formatMessage('Font settings used in the text editors.')}
           fontFamily={userSettings.codeEditor.fontSettings.fontFamily}
           fontSize={userSettings.codeEditor.fontSettings.fontSize}
@@ -190,7 +190,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           image={images.wordWrap}
           title={formatMessage('Font settings')}
           onChange={onCodeEditorChange('fontSettings')}
-        /> */}
+        />
       </section>
       <section css={section}>
         <h2>{formatMessage('Application Updates')}</h2>

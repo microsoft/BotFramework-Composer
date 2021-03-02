@@ -44,12 +44,32 @@ const expandJsonSchemaProperty = async (req: Request, res: Response) => {
   }
 };
 
+const skipSchemas: string[] = [
+  'boolean',
+  'date-time',
+  'date',
+  'email',
+  'enum',
+  'integer',
+  'iri',
+  'number',
+  'string',
+  'time',
+  'uri',
+];
 const getTemplateSchemas = async (req: Request, res: Response) => {
   const templatesDirs = await getTemplateDirs();
   const result = await schemas(templatesDirs);
 
   if (result !== undefined) {
-    res.status(200).json(result);
+    // TODO: Filter out base type schemas for now
+    const filteredSchemas = {};
+    for (const [name, definition] of Object.entries(result)) {
+      if (!skipSchemas.includes(name)) {
+        filteredSchemas[name] = definition;
+      }
+    }
+    res.status(200).json(filteredSchemas);
   } else {
     res.status(404).json({
       message: 'Failed to retrieve form dialog template schemas.',

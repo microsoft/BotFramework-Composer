@@ -188,8 +188,8 @@ export const DialogCreationCopy = {
   },
   get CREATE_NEW_BOT_V2() {
     return {
-      title: formatMessage('Choose a template for your bot'),
-      subText: formatMessage("Microsoft's templates offer best practices for developing conversational bots"),
+      title: formatMessage('Select a template'),
+      subText: formatMessage("Microsoft's templates offer best practices for developing conversational bots."),
     };
   },
   get CREATE_NEW_SKILLBOT() {
@@ -391,7 +391,7 @@ export const triggerNotSupportedWarning = () =>
 
 export const feedDictionary: { [key in FeedName]: string } = {
   firstPartyCsharp:
-    'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+    'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
   firstPartyNode: '',
 };
 

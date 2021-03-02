@@ -7,13 +7,13 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
-import { useRecoilValue } from 'recoil';
 import { css } from '@emotion/core';
+import { useRecoilValue } from 'recoil';
 
 import { Pagination } from '../../components/Pagination';
-import { diagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { DiagnosticList } from '../design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
+import { diagnosticsSelectorFamily } from '../../recoilModel';
 
+import { DiagnosticList } from './DiagnosticList';
 import { IDiagnosticInfo } from './types';
 
 // -------------------- Styles -------------------- //

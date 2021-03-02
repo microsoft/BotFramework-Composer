@@ -8,10 +8,10 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 import { exportSkillModalInfoState } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
 
 import { DiagnosticsTable } from './DiagnosticsTable';
 import { DiagnosticFilter } from './DiagnosticFilter';
@@ -21,8 +21,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const [showType, setShowType] = useState('');
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
-
-  const { projectId = '' } = props;
+  const projectId = (props.skillId ?? props.projectId) as string;
 
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigateTo(item.getUrl());

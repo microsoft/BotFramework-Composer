@@ -19,14 +19,12 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { separator } from '../../publish/styles';
 import { armScopes, graphScopes } from '../../../constants';
 import { PublishType } from '../../../recoilModel/types';
-import { isShowAuthDialog } from '../../../utils/auth';
-import { AuthDialog } from '../../../components/Auth/AuthDialog';
 import { PluginAPI } from '../../../plugins/api';
 import { dispatcherState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 
-type AddProfileDialogProps = {
+type ProfileFormDialogProps = {
   onDismiss: () => void;
   targets: PublishTarget[];
   types: PublishType[];
@@ -34,6 +32,7 @@ type AddProfileDialogProps = {
   updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
   projectId: string;
   setType: (value) => void;
+  current?: { index: number; item: PublishTarget } | null;
 };
 const labelContainer = css`
   display: flex;
@@ -72,12 +71,11 @@ const onRenderLabel = (props) => {
   );
 };
 
-export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
-  const { onDismiss, targets, types, onNext, updateSettings, projectId, setType } = props;
-  const [name, setName] = useState('');
+export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
+  const { onDismiss, targets, types, onNext, updateSettings, projectId, setType, current } = props;
+  const [name, setName] = useState(current?.item.name || '');
   const [errorMessage, setErrorMsg] = useState('');
-  const [targetType, setTargetType] = useState<string>('');
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const updateName = (e, newName) => {
@@ -144,23 +142,12 @@ export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph);
+      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
     };
   }, [name, targetType]);
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            onNext();
-          }}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       <Fragment>
         <div style={{ width: '49%', minHeight: '430px' }}>
           <form>
@@ -168,6 +155,7 @@ export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
               required
               ariaLabel={formatMessage('The name of your publishing file')}
               defaultValue={name}
+              disabled={current?.item.name ? true : false}
               errorMessage={errorMessage}
               label={formatMessage('Name')}
               placeholder={formatMessage('e.g. AzureBot')}
@@ -193,12 +181,8 @@ export const AddProfileDialog: React.FC<AddProfileDialogProps> = (props) => {
           <PrimaryButton
             disabled={saveDisabled}
             text={formatMessage('Next: Configure resources')}
-            onClick={async () => {
-              if (isShowAuthDialog(true)) {
-                setShowAuthDialog(true);
-              } else {
-                onNext();
-              }
+            onClick={() => {
+              onNext();
             }}
           />
         </DialogFooter>

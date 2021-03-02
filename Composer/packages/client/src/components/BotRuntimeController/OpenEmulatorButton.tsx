@@ -15,10 +15,10 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 
 type OpenEmulatorButtonProps = {
   projectId: string;
-  isRoot: boolean;
+  isRootBot: boolean;
 };
 
-export const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectId, isRoot }) => {
+export const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectId, isRootBot }) => {
   const { openBotInEmulator } = useRecoilValue(dispatcherState);
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const botEndpoints = useRecoilValue(botEndpointsState);
@@ -26,7 +26,7 @@ export const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectI
 
   const handleClick = () => {
     openBotInEmulator(projectId);
-    TelemetryClient.track('EmulatorButtonClicked', { isRoot, projectId });
+    TelemetryClient.track('EmulatorButtonClicked', { isRoot: isRootBot, projectId, location: 'BotController' });
   };
 
   return currentBotStatus === BotStatus.connected ? (

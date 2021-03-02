@@ -70,7 +70,6 @@ const Routes = (props) => {
             <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/all/*" />
-            <LGPage path="language-generation/common/*" />
             <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/all/*" />
@@ -172,7 +171,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
       openAlertModal(title, subTitle, { style: dialogStyle.console });
     }
   }, [schemas, projectId]);
-
   if (props.projectId && botProjects.includes(props.projectId)) {
     if (props.skillId && !botProjects.includes(props.skillId)) {
       return <LoadingSpinner />;
