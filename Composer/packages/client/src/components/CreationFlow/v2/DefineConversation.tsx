@@ -333,17 +333,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
           </Stack>
-          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                data-testid="NewDialogRuntimeType"
-                label={formatMessage('Runtime type')}
-                options={runtimeOptions}
-                selectedKey={formData.runtimeChoice}
-                onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
-              />
-            </StackItem>
-          </Stack>
           {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
