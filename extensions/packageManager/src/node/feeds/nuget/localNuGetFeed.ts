@@ -47,10 +47,10 @@ export class LocalNuGetFeed implements IFeed {
     // * pass each one through the getPackageInfo function, which extracts metadata from the package
     // * return a feed in the form that is used by nuget search API
     const packages = await readdir(url, { withFileTypes: true });
-    const feedPromises: Promise<IPackageDefinition>[] = [];
-    for (const p of packages.filter((f) => f.isDirectory())) {
-      feedPromises.push(this.getPackageInfo(url, p.name));
-    }
+
+    const feedPromises: Promise<IPackageDefinition>[] = packages
+      .filter((f) => f.isDirectory())
+      .map((f) => this.getPackageInfo(url, f.name));
 
     return await Promise.all(feedPromises);
   }
