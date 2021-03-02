@@ -701,7 +701,7 @@ export const ProjectTree: React.FC<Props> = ({
         onErrorClick={onErrorClick}
       />
     );
-    if (options.showDialogs && !bot.isRemote) {
+    if (options.showDialogs && !bot.isRemote && !bot.botError) {
       return (
         <ExpandableNode
           key={key}

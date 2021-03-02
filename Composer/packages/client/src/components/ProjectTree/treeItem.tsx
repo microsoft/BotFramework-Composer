@@ -379,7 +379,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
   const isBroken = !!link.botError;
-  const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
+  const spacerWidth = hasChildren && !isBroken ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   const overflowIconWidthOnHover = overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
 
