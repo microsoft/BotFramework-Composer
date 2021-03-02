@@ -79,9 +79,10 @@ export const main = (hasRenderHeaderContent) => css`
   label: PageMain;
 `;
 
+const heightOfGetStartedHeader = 517;
 export const mainWithGetStarted = css`
   margin-left: 2px;
-  height: calc(100vh - 517px);
+  height: calc(100vh - ${heightOfGetStartedHeader}px);
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
