@@ -30,30 +30,29 @@ const schema: JSONSchema7 = {
       title:
         'Runtime identifier for hosting bot, default to win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog',
     },
-    subscriptionId: {
-      type: 'string',
-      title: 'Id of your subscription'
-    },
-    resourceGroup: {
-      type: 'string',
-      title: 'Name of your resource group'
-    },
     botName: {
       type: 'string',
       title: 'Name of your bot channel registration service'
     },
-    abs: {
-      type: 'object',
-      properties: {
-        appPasswordHint: {
-          type: 'string',
-          title: 'The password hint of your abs instance'
-        },
-        resourceId: {
-          type: 'string',
-          title: 'The resource id of your abs instance'
-        }
-      }
+    botId: {
+      type: 'string',
+      title: 'Id of your bot channel registration service'
+    },
+    appPasswordHint: {
+      type: 'string',
+      title: 'The password hint of your abs instance'
+    },
+    resourceId: {
+      type: 'string',
+      title: 'The resource id of your abs instance'
+    },
+    armEndpoint: {
+      type: 'string',
+      title: 'The arm endpoint'
+    },
+    tenantId: {
+      type: 'string',
+      title: 'tenant id of your account'
     },
     settings: {
       type: 'object',
@@ -135,6 +134,11 @@ const schema: JSONSchema7 = {
     runtimeIdentifier: 'win-x64',
     resourceGroup: '<name of your resource group>',
     botName: '<name of your bot channel registration>',
+    botId: '<id or your bot channel registration>',
+    appPasswordHint: '<the password hint of your abs instance>',
+    resourceId: '<resource id of your bot service>',
+    armEndpoint: 'https://management.azure.com',
+    tenantId: '<tenant id of your account>',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
