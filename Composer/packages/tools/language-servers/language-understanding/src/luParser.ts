@@ -5,20 +5,23 @@ import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 
 import { parser } from '@microsoft/bf-lu/lib/parser';
-import { updateIntent } from '@bfc/indexers/lib/utils/luUtil';
+import { updateIntent, checkSection } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
-import { LuFile, ILUFeaturesConfig } from '@bfc/shared';
+import { LuFile, ILUFeaturesConfig, LuIntentSection, Diagnostic } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
+import { FoldingRange, TextDocument } from 'vscode-languageserver';
 
-const isTest = process.env?.NODE_ENV === 'test';
+import { getLineByIndex } from './utils';
+
+export const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
   id: string;
-  type: 'parse' | 'updateIntent' | 'parseFile';
+  type: 'parse' | 'updateIntent' | 'parseFile' | 'checkSection' | 'getFoldingRanges';
   error?: any;
   payload?: any;
 }
 
-class LuParserWithoutWorker {
+export class LuParserWithoutWorker {
   public async parse(content: string, id = '', config: ILUFeaturesConfig): Promise<LuFile> {
     return luIndexer.parse(content, id, config);
   }
@@ -32,6 +35,39 @@ class LuParserWithoutWorker {
   }
   public async parseFile(text, log, locale): Promise<any> {
     return await parser.parseFile(text, log, locale);
+  }
+  public async checkSection(intent: LuIntentSection, enableSections = true): Promise<Diagnostic[]> {
+    return checkSection(intent, enableSections);
+  }
+  public async getFoldingRanges(document: TextDocument | undefined): Promise<FoldingRange[]> {
+    const items: FoldingRange[] = [];
+    if (!document) {
+      return items;
+    }
+
+    const lineCount = document.lineCount;
+    let i = 0;
+    while (i < lineCount) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('>>')) {
+        for (let j = i + 1; j < lineCount; j++) {
+          if (getLineByIndex(document, j)?.startsWith('>>')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+
+          if (j === lineCount - 1) {
+            items.push(FoldingRange.create(i, j));
+            i = j;
+          }
+        }
+      }
+
+      i = i + 1;
+    }
+
+    return items;
   }
 }
 
@@ -78,6 +114,24 @@ class LuParserWithWorker {
     });
   }
 
+  public async checkSection(intent: LuIntentSection, enableSections = true): Promise<Diagnostic[]> {
+    const msgId = uniqueId();
+    const msg = { id: msgId, type: 'checkSection', payload: { intent, enableSections } };
+    return new Promise((resolve, reject) => {
+      this.resolves[msgId] = resolve;
+      this.rejects[msgId] = reject;
+      LuParserWithWorker.worker.send(msg);
+    });
+  }
+  public async getFoldingRanges(document: TextDocument | undefined): Promise<FoldingRange[]> {
+    const msgId = uniqueId();
+    const msg = { id: msgId, type: 'checkSection', payload: { document } };
+    return new Promise((resolve, reject) => {
+      this.resolves[msgId] = resolve;
+      this.rejects[msgId] = reject;
+      LuParserWithWorker.worker.send(msg);
+    });
+  }
   // Handle incoming calculation result
   public handleMsg(msg: WorkerMsg) {
     const { id, error, payload } = msg;
@@ -107,6 +161,6 @@ class LuParserWithWorker {
 }
 
 // Do not use worker when running test.
-const LuParser = isTest ? LuParserWithoutWorker : LuParserWithWorker;
+const LuParser = LuParserWithWorker;
 
 export { LuParser };

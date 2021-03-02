@@ -19,7 +19,7 @@ import {
   DocumentOnTypeFormattingParams,
   FoldingRange,
 } from 'vscode-languageserver-protocol';
-import { isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
+import { isValid, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 
 import { LuParser } from './luParser';
 import { EntityTypesObj, LineState } from './entityEnum';
@@ -103,31 +103,11 @@ export class LUServer {
 
   protected async foldingRangeHandler(params: FoldingRangeParams): Promise<FoldingRange[]> {
     const document = this.documents.get(params.textDocument.uri);
-    const items: FoldingRange[] = [];
+
+    const items: FoldingRange[] = await this.luParser.getFoldingRanges(document);
+
     if (!document) {
       return items;
-    }
-
-    const lineCount = document.lineCount;
-    let i = 0;
-    while (i < lineCount) {
-      const currLine = getLineByIndex(document, i);
-      if (currLine?.startsWith('>>')) {
-        for (let j = i + 1; j < lineCount; j++) {
-          if (getLineByIndex(document, j)?.startsWith('>>')) {
-            items.push(FoldingRange.create(i, j - 1));
-            i = j - 1;
-            break;
-          }
-
-          if (j === lineCount - 1) {
-            items.push(FoldingRange.create(i, j));
-            i = j;
-          }
-        }
-      }
-
-      i = i + 1;
     }
 
     const luResource = (await this.luParser.parse(document.getText(), undefined, {})).resource;
@@ -695,7 +675,7 @@ export class LUServer {
 
     // if inline editor, concat new content for validate
     if (fileId && sectionId) {
-      const sectionDiags = checkSection(
+      const sectionDiags = await this.luParser.checkSection(
         {
           Name: sectionId,
           Body: text,
