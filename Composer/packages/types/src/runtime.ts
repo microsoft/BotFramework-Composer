@@ -52,7 +52,7 @@ export type BotTemplate = {
 
 export type RuntimeTemplate = {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
-  eject: (project: IBotProject, localDisk?: any, isReplace?: boolean) => Promise<string>;
+  eject?: (project: IBotProject, localDisk?: any, isReplace?: boolean) => Promise<string>;
 
   /** build method used for local publish */
   build: (runtimePath: string, project: IBotProject) => Promise<void>;
@@ -63,6 +63,7 @@ export type RuntimeTemplate = {
     runtimePath: string,
     componentName: string,
     version: string,
+    source: string,
     project: IBotProject
   ) => Promise<string>;
 

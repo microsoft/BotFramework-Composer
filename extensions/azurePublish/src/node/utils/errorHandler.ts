@@ -1,18 +1,21 @@
-function CustomizeError (name, message, stack = undefined) {
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+function CustomizeError(name, message, stack = undefined) {
   this.name = name;
   this.message = message;
-  this.stack = stack || (new Error()).stack;
+  this.stack = stack || new Error().stack;
 }
 CustomizeError.prototype = Object.create(Error.prototype);
 CustomizeError.prototype.constructor = CustomizeError;
 
-export const isCustomizeError = (err)=> {
+export const isCustomizeError = (err) => {
   return err instanceof CustomizeError;
-}
+};
 
-export const createCustomizeError = (name, message, stack=undefined)=> {
-  return new CustomizeError(name,message, stack);
-}
+export const createCustomizeError = (name, message, stack = undefined) => {
+  return new CustomizeError(name, message, stack);
+};
 
 export const stringifyError = (error: any): string => {
   if (error instanceof Error) {
@@ -22,7 +25,7 @@ export const stringifyError = (error: any): string => {
   } else {
     return error;
   }
-}
+};
 export enum ProvisionErrors {
   CREATE_RESOURCEGROUP_ERROR = 'CREATE_RESOURCES_ERROR',
   PROVISION_ERROR = 'PROVISION_ERROR',
@@ -39,6 +42,7 @@ export enum ProvisionErrors {
   CREATE_COUNTER_ERROR = 'CREATE_COUNTER_ERROR',
   CREATE_APP_REGISTRATION = 'CREATE_APP_REGISTRATION',
   GET_TENANTID = 'GET_TENANTID',
+  KEYVAULT_ERROR = "KEYVAULT_ERROR",
 }
 
 export enum AzurePublishErrors {
@@ -57,4 +61,7 @@ export enum AzurePublishErrors {
   // zip and upload error
   ZIP_FOLDER_ERROR = 'ZIP_FOLDER_ERROR',
   DEPLOY_ZIP_ERROR = 'DEPLOY_ZIP_ERROR',
+
+  // abs error
+  ABS_ERROR = 'ABS_ERROR'
 }

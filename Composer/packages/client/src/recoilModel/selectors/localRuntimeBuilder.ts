@@ -10,13 +10,13 @@ import { isAbsHosted } from '../../utils/envUtil';
 import {
   botDisplayNameState,
   botStatusState,
+  dispatcherState,
   luFilesState,
   qnaFilesState,
   schemasState,
   settingsState,
 } from '../atoms';
 import { Dispatcher } from '../dispatchers';
-import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 import { getSensitiveProperties } from '../dispatchers/utils/project';
 
@@ -90,7 +90,11 @@ export const buildConfigurationSelector = selector({
         if (rootBotId) {
           sensitiveSettings = getSensitiveProperties(settings);
         }
-        return { ...result, name, dialogs, sensitiveSettings };
+        const secrets = {
+          msAppId: settings.MicrosoftAppId || '',
+          msPassword: settings.MicrosoftAppPassword || '',
+        };
+        return { ...result, name, dialogs, sensitiveSettings, secrets };
       });
   },
 });
@@ -115,6 +119,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
     buildWithDefaultRecognizer: async (projectId: string, buildDependencies) => {
       const { config } = buildDependencies;
       if (config) {
+        await dispatcher.downloadLanguageModels(projectId);
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
         await dispatcher.build(projectId, config.luis, config.qna);
       }

@@ -79,4 +79,26 @@ describe('structuresResponse', () => {
 ]
 `);
   });
+
+  it('structuredResponseToString: should return an empty string when the response template is an empty object', () => {
+    const structuredResponse: PartialStructuredResponse = {};
+    expect(structuredResponseToString(structuredResponse)).toEqual('');
+  });
+
+  it('structuredResponseToString: should return an empty string when the response template values are empty', () => {
+    const structuredResponse: PartialStructuredResponse = {
+      Text: { kind: 'Text', value: [], valueType: 'direct' },
+      Speak: { kind: 'Speak', value: [], valueType: 'template' },
+      Attachments: {
+        kind: 'Attachments',
+        value: [],
+        valueType: 'direct',
+      },
+      SuggestedActions: {
+        kind: 'SuggestedActions',
+        value: [],
+      },
+    };
+    expect(structuredResponseToString(structuredResponse)).toEqual('');
+  });
 });

@@ -142,7 +142,7 @@ export const navigationDispatcher = () => {
       }
       if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
 
-      set(designPageLocationState(projectId), {
+      set(designPageLocationState(skillId || projectId), {
         dialogId,
         selected: getSelected(focusPath) || selected,
         focused: focusPath ?? '',

@@ -6,16 +6,9 @@ import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 
 import { useDiagnosticsStatistics } from './useDiagnostics';
-import { Indicator } from './Indicator';
 
 export const DiagnosticsHeader = () => {
   const { hasError, hasWarning } = useDiagnosticsStatistics();
-
-  const indicator = hasError ? (
-    <Indicator color={'#EB3941'} size={5} />
-  ) : hasWarning ? (
-    <Indicator color={'#F4BD00'} size={5} />
-  ) : null;
 
   return (
     <div
@@ -28,12 +21,11 @@ export const DiagnosticsHeader = () => {
     >
       <div
         css={css`
-          margin-right: ${indicator ? 4 : 0}px;
+          margin-right: ${hasError || hasWarning ? 4 : 0}px;
         `}
       >
-        {formatMessage('Issues')}
+        {formatMessage('Problems')}
       </div>
-      {indicator}
     </div>
   );
 };
