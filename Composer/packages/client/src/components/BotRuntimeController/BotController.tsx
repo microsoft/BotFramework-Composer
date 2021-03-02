@@ -263,6 +263,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
             ariaDescription={formatMessage('Open start bots panel')}
+            data-testid="StartBotsPanel"
             disabled={disableStartBots}
             iconProps={{
               iconName: 'List',

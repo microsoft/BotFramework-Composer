@@ -19,7 +19,7 @@ export default {
   sendBoxButtonColor: `${NeutralColors.gray130}`,
   sendBoxButtonColorOnFocus: `${NeutralColors.gray140}`,
   sendBoxButtonColorOnHover: `${NeutralColors.gray150}`,
-  sendBoxTextColor: `${NeutralColors.gray150}`,
+  sendBoxTextColor: `${NeutralColors.black}`,
   sendBoxPlaceholderColor: `${NeutralColors.gray150}`,
   timestampColor: `${NeutralColors.gray130}`,
   suggestedActionBackground: `${NeutralColors.gray10}`,
@@ -34,4 +34,8 @@ export default {
   transcriptOverlayButtonColor: `${NeutralColors.gray10}`,
   transcriptOverlayButtonColorOnFocus: `${NeutralColors.gray10}`,
   transcriptOverlayButtonColorOnHover: `${NeutralColors.gray10}`,
+  transcriptActivityVisualKeyboardIndicatorWidth: 1,
+  transcriptVisualKeyboardIndicatorColor: `${CommunicationColors.primary}`,
+  transcriptVisualKeyboardIndicatorStyle: 'solid',
+  transcriptVisualKeyboardIndicatorWidth: 2,
 };

@@ -36,6 +36,7 @@ import {
   luImportsSelectorFamily,
   luFilesSelectorFamily,
   qnaFilesSelectorFamily,
+  dialogsWithLuProviderSelectorFamily,
 } from '../selectors';
 
 import { lgFilesSelectorFamily } from './lg';
@@ -127,7 +128,7 @@ export const botProjectSpaceSelector = selector({
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
-      const dialogs = get(dialogsSelectorFamily(projectId));
+      const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
       const luFiles = get(luFilesSelectorFamily(projectId));
       const lgFiles = get(lgFilesSelectorFamily(projectId));
       const qnaFiles = get(qnaFilesSelectorFamily(projectId));
@@ -215,7 +216,7 @@ export const perProjectDiagnosticsSelectorFamily = selectorFamily({
     const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
     const rootBotId = get(rootBotProjectIdSelector) || projectId;
     const rootSetting = get(settingsState(rootBotId));
-    const dialogs = get(dialogsSelectorFamily(projectId));
+    const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
     const luFiles = get(luFilesSelectorFamily(projectId));
     const lgFiles = get(lgFilesSelectorFamily(projectId));
