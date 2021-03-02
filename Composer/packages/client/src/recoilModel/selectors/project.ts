@@ -15,8 +15,6 @@ import {
   botProjectIdsState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
-  luFilesState,
-  qnaFilesState,
   skillManifestsState,
   dialogSchemasState,
   jsonSchemaFilesState,
@@ -36,6 +34,8 @@ import {
   buildEssentialsSelector,
   lgImportsSelectorFamily,
   luImportsSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
 } from '../selectors';
 
 import { lgFilesSelectorFamily } from './lg';
@@ -128,9 +128,9 @@ export const botProjectSpaceSelector = selector({
     const result = botProjects.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(dialogsSelectorFamily(projectId));
-      const luFiles = get(luFilesState(projectId));
+      const luFiles = get(luFilesSelectorFamily(projectId));
       const lgFiles = get(lgFilesSelectorFamily(projectId));
-      const qnaFiles = get(qnaFilesState(projectId));
+      const qnaFiles = get(qnaFilesSelectorFamily(projectId));
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
       const botProjectFile = get(botProjectFileState(projectId));
       const metaData = get(projectMetaDataState(projectId));
@@ -217,12 +217,12 @@ export const perProjectDiagnosticsSelectorFamily = selectorFamily({
     const rootSetting = get(settingsState(rootBotId));
     const dialogs = get(dialogsSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
-    const luFiles = get(luFilesState(projectId));
+    const luFiles = get(luFilesSelectorFamily(projectId));
     const lgFiles = get(lgFilesSelectorFamily(projectId));
     const setting = get(settingsState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
-    const qnaFiles = get(qnaFilesState(projectId));
+    const qnaFiles = get(qnaFilesSelectorFamily(projectId));
     const botProjectFile = get(botProjectFileState(projectId));
     const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
     const botAssets: BotAssets = {

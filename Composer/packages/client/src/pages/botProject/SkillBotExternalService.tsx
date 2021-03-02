@@ -15,8 +15,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import {
   dispatcherState,
   settingsState,
-  luFilesState,
-  qnaFilesState,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
   dialogsSelectorFamily,
   botDisplayNameState,
 } from '../../recoilModel';
@@ -72,8 +72,8 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const skillQnAKey = groupQnAKey[projectId];
 
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
 
   const isLUISKeyNeeded = BotIndexer.shouldUseLuis(dialogs, luFiles);
   const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);

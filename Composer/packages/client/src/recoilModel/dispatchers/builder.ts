@@ -12,8 +12,8 @@ import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, botStatusState, botRuntimeErrorState, settingsState } from '../atoms';
-import { dialogsSelectorFamily } from '../selectors';
+import { botStatusState, botRuntimeErrorState, settingsState } from '../atoms';
+import { dialogsSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from '../selectors';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 
 import { addNotificationInternal, createNotification } from './notification';
@@ -42,8 +42,8 @@ export const builderDispatcher = () => {
     ) => {
       const { set, snapshot } = callbackHelpers;
       const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const { languages } = await snapshot.getPromise(settingsState(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
       const referredQnaFiles = getReferredQnaFiles(qnaFiles, dialogs, false);

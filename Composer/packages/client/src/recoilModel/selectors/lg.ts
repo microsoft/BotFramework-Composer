@@ -15,9 +15,8 @@ export const lgFilesSelectorFamily = selectorFamily<LgFile[], string>({
       return get(lgFileState({ projectId, lgFileId }));
     });
   },
-  set: (projectId: string) => ({ set }, newLgFiles) => {
+  set: (projectId: string) => ({ set, get }, newLgFiles) => {
     const newLgFileArray = newLgFiles as LgFile[];
-
     set(
       lgFileIdsState(projectId),
       newLgFileArray.map((lgFile) => lgFile.id)

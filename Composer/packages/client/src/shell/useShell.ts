@@ -29,11 +29,11 @@ import {
   schemasState,
   focusPathState,
   localeState,
-  qnaFilesState,
+  qnaFilesSelectorFamily,
   designPageLocationState,
   botDisplayNameState,
   dialogSchemasState,
-  luFilesState,
+  luFilesSelectorFamily,
   rateInfoState,
   rootBotProjectIdSelector,
   featureFlagsState,
@@ -83,11 +83,11 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { undo, redo, commitChanges } = undoFunction;
-  const luFiles = useRecoilValue(luFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
