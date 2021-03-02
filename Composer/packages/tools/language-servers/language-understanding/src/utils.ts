@@ -5,6 +5,7 @@ import { Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-language
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { offsetRange } from '@bfc/indexers';
 import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic } from '@bfc/shared';
+import { FoldingRange } from 'vscode-languageserver';
 
 export interface LUOption {
   projectId: string;
@@ -77,4 +78,35 @@ export function getLineByIndex(document: TextDocument, line: number) {
   if (line >= lineCount || line < 0) return null;
 
   return document.getText().split(/\r?\n/g)[line];
+}
+
+export function createFoldingRanges(document: TextDocument | undefined) {
+  const items: FoldingRange[] = [];
+  if (!document) {
+    return items;
+  }
+
+  const lineCount = document.lineCount;
+  let i = 0;
+  while (i < lineCount) {
+    const currLine = getLineByIndex(document, i);
+    if (currLine?.startsWith('>>')) {
+      for (let j = i + 1; j < lineCount; j++) {
+        if (getLineByIndex(document, j)?.startsWith('>>')) {
+          items.push(FoldingRange.create(i, j - 1));
+          i = j - 1;
+          break;
+        }
+
+        if (j === lineCount - 1) {
+          items.push(FoldingRange.create(i, j));
+          i = j;
+        }
+      }
+    }
+
+    i = i + 1;
+  }
+
+  return items;
 }

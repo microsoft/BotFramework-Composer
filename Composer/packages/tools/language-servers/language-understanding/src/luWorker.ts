@@ -4,10 +4,9 @@
 import { luIndexer } from '@bfc/indexers';
 import { updateIntent, checkSection } from '@bfc/indexers/lib/utils/luUtil';
 import { parser } from '@microsoft/bf-lu/lib/parser';
-import { FoldingRange } from 'vscode-languageserver';
 
 import { WorkerMsg } from './luParser';
-import { getLineByIndex } from './utils';
+import { createFoldingRanges } from './utils';
 
 process.on('message', async (msg: WorkerMsg) => {
   try {
@@ -38,31 +37,7 @@ process.on('message', async (msg: WorkerMsg) => {
 
       case 'getFoldingRanges': {
         const { document } = msg.payload;
-        const items: FoldingRange[] = [];
-        if (document) {
-          const lineCount = document.lineCount;
-          let i = 0;
-          while (i < lineCount) {
-            const currLine = getLineByIndex(document, i);
-            if (currLine?.startsWith('>>')) {
-              for (let j = i + 1; j < lineCount; j++) {
-                if (getLineByIndex(document, j)?.startsWith('>>')) {
-                  items.push(FoldingRange.create(i, j - 1));
-                  i = j - 1;
-                  break;
-                }
-
-                if (j === lineCount - 1) {
-                  items.push(FoldingRange.create(i, j));
-                  i = j;
-                }
-              }
-            }
-
-            i = i + 1;
-          }
-        }
-        process.send?.({ id: msg.id, payload: items });
+        process.send?.({ id: msg.id, payload: createFoldingRanges(document) });
         break;
       }
     }
