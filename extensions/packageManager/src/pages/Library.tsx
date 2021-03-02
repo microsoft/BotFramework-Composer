@@ -547,7 +547,7 @@ const Library: React.FC = () => {
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
         <p>
-          {strings.description}{' '}
+          {strings.description}&nbsp;
           <Link href={docsUrl} target="_new">
             {strings.descriptionLink}
           </Link>
@@ -735,7 +735,8 @@ const Library: React.FC = () => {
                           title={selectedVersion}
                         >
                           {selectedVersion}
-                        </span>{' '}
+                        </span>
+                        &nbsp;
                         <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installed}</span>
                       </span>
                     ) : isUpdate ? (
@@ -756,7 +757,7 @@ const Library: React.FC = () => {
                       </span>
                     ) : (
                       <span>
-                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installButton}</span>{' '}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installButton}</span>&nbsp;
                         <span
                           css={{
                             maxWidth: 80,
