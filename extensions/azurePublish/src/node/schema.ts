@@ -46,10 +46,6 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'region of your resource group'
     },
-    luisRegion: {
-      type: 'string',
-      title: 'region of your luis resource'
-    },
     settings: {
       type: 'object',
       title: 'Settings for Azure resources',
@@ -144,7 +140,6 @@ const schema: JSONSchema7 = {
     botName: '<name of your bot channel registration>',
     subscriptionId: '<id of your subscription>',
     region: '<region of your resource group>',
-    luisRegion: '<region of your luis resource>',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
