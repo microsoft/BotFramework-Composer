@@ -140,6 +140,9 @@
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
   },
+  "add_a_package_2857cc9": {
+    "message": "Add a package"
+  },
   "add_a_publishing_profile_e926460e": {
     "message": "Add a publishing profile"
   },
@@ -157,6 +160,9 @@
   },
   "add_an_intent_trigger_a9acc149": {
     "message": "Add an intent trigger"
+  },
+  "add_and_remove_packages_9e439f32": {
+    "message": "Add and remove packages"
   },
   "add_custom_a376ce51": {
     "message": "Add Custom"
@@ -632,6 +638,9 @@
   "composer_settings_31b04099": {
     "message": "Composer Settings"
   },
+  "composer_tutorials_5e79e495": {
+    "message": "Composer tutorials"
+  },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer will restart."
   },
@@ -673,6 +682,9 @@
   },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
+  },
+  "connect_your_bot_to_new_services_b5b8191": {
+    "message": "Connect your bot to new services"
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -724,6 +736,9 @@
   },
   "create_a_bot_project_73e6ce33": {
     "message": "Create a bot project"
+  },
+  "create_a_cloud_hosting_environment_c1e610e1": {
+    "message": "Create a cloud hosting environment"
   },
   "create_a_condition_8686fd5": {
     "message": "Create a condition"
@@ -809,6 +824,9 @@
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
   },
+  "create_your_first_bot_a23748c1": {
+    "message": "Create your first bot"
+  },
   "creating_your_knowledge_base_ef4f9872": {
     "message": "Creating your knowledge base"
   },
@@ -826,6 +844,9 @@
   },
   "custom_runtime_426aa34f": {
     "message": "Custom runtime"
+  },
+  "customize_74cdc895": {
+    "message": "Customize"
   },
   "cut_c8c92681": {
     "message": "Cut"
@@ -901,6 +922,9 @@
   },
   "delete_activity_6d881872": {
     "message": "Delete activity"
+  },
+  "delete_bot_4b1527e4": {
+    "message": "Delete bot"
   },
   "delete_bot_73586104": {
     "message": "Delete Bot"
@@ -1106,6 +1130,12 @@
   "edit_kb_name_5e2d8c5b": {
     "message": "Edit KB name"
   },
+  "edit_lg_c14451bf": {
+    "message": "Edit LG"
+  },
+  "edit_lu_32fd20f7": {
+    "message": "Edit LU"
+  },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
   },
@@ -1117,6 +1147,9 @@
   },
   "edit_this_template_in_a_bot_response_view_a_7236985f": {
     "message": "Edit this template in<a>Bot Response view</a>"
+  },
+  "edit_what_your_bot_says_7c2ca21e": {
+    "message": "Edit what your bot says"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Ejecting runtime..."
@@ -1346,6 +1379,9 @@
   "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
     "message": "fields must be either all strings or all fieldset objects"
   },
+  "file_location_f6bf158b": {
+    "message": "File Location:"
+  },
   "file_name_8fd421ff": {
     "message": "File name"
   },
@@ -1363,6 +1399,9 @@
   },
   "filter_by_file_name_fa3d33b5": {
     "message": "Filter by file name"
+  },
+  "find_pre_built_adaptive_expressions_b106308e": {
+    "message": "Find pre-built Adaptive expressions"
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1451,6 +1490,9 @@
   "get_started_50c13c6c": {
     "message": "Get started!"
   },
+  "get_started_with_bot_framework_composer_57a6d38b": {
+    "message": "Get started with Bot Framework Composer"
+  },
   "getting_help_ab6811b0": {
     "message": "Getting Help"
   },
@@ -1471,6 +1513,9 @@
   },
   "greeting_f906f962": {
     "message": "Greeting"
+  },
+  "guides_and_references_38812f5f": {
+    "message": "Guides and references"
   },
   "handle_a_condition_f32eb8d": {
     "message": "Handle a Condition"
@@ -1703,6 +1748,9 @@
   "layout_56d3a203": {
     "message": "Layout: "
   },
+  "learn_about_adaptive_expressions_fb1b6c3c": {
+    "message": "Learn about Adaptive expressions"
+  },
   "learn_more_14816ec": {
     "message": "Learn More."
   },
@@ -1744,6 +1792,9 @@
   },
   "lg_file_already_exist_55195d20": {
     "message": "lg file already exist"
+  },
+  "lg_file_format_and_syntax_244103fb": {
+    "message": "LG file format and syntax"
   },
   "lg_file_id_not_found_6bd6869b": {
     "message": "LG file { id } not found"
@@ -1844,6 +1895,9 @@
   "lu_file_already_exist_7f118089": {
     "message": "lu file already exist"
   },
+  "lu_file_format_and_syntax_8211b0c9": {
+    "message": "LU file format and syntax"
+  },
   "lu_file_id_not_found_8732d33e": {
     "message": "LU file { id } not found"
   },
@@ -1894,6 +1948,9 @@
   },
   "manage_bot_languages_9ec36fd7": {
     "message": "Manage bot languages"
+  },
+  "manage_connections_442f1693": {
+    "message": "Manage connections"
   },
   "manage_profiles_715c2092": {
     "message": "Manage profiles"
@@ -2095,6 +2152,9 @@
   },
   "next_configure_resources_2ea29fdf": {
     "message": "Next: Configure resources"
+  },
+  "next_steps_fce2208": {
+    "message": "Next steps"
   },
   "no_editor_for_type_8b5593c5": {
     "message": "No Editor for { type }"
@@ -2452,6 +2512,9 @@
   },
   "publish_target_388f6adf": {
     "message": "Publish target"
+  },
+  "publish_updates_to_the_cloud_d4763021": {
+    "message": "Publish updates to the cloud"
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Publish your bots"
@@ -3224,6 +3287,9 @@
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
   },
+  "train_your_language_model_ee4cec6a": {
+    "message": "Train your language model"
+  },
   "trigger_phrases_f6754fa": {
     "message": "Trigger phrases"
   },
@@ -3286,6 +3352,9 @@
   },
   "unknown_state_23f73afb": {
     "message": "Unknown State"
+  },
+  "unread_notifications_indicator_e2ca00d5": {
+    "message": "Unread notifications Indicator"
   },
   "unused_8d193e3": {
     "message": "Unused"
