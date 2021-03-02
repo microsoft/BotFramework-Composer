@@ -396,6 +396,7 @@ const Library: React.FC = () => {
 
   // return true if the name, description or any of the keywords match the search term
   const applySearchTerm = (item: LibraryRef): boolean => {
+    // eslint-disable-next-line security/detect-non-literal-regexp
     const term = new RegExp(searchTerm.trim().toLocaleLowerCase());
     if (
       item.name.toLowerCase().match(term) ||

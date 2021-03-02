@@ -269,6 +269,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       for (const url of packageSources) {
         try {
           let raw;
+          // eslint-disable-next-line security/detect-non-literal-fs-filename
           if (fs.existsSync(url)) {
             const rawlocal = await crawlLocalFeed(url);
             // cast this to the form of the http response from nuget
