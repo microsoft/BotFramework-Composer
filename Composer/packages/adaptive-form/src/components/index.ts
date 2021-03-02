@@ -6,3 +6,4 @@ export * from './ErrorMessage';
 export * from './FieldLabel';
 export * from './fields';
 export * from './SchemaField';
+export * from './WithTypeIcons';
