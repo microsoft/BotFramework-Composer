@@ -75,12 +75,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     updateFeeds: async function (req, res) {
       const { key, updatedItem } = req.body;
 
-      let feeds = composer.store.read('feeds') as {
-        key: string;
-        text: string;
-        url: string;
-        searchUrl?: string;
-      }[];
+      let feeds = composer.store.read('feeds') as IPackageSource[];
 
       if (!updatedItem) {
         // update component state
@@ -131,8 +126,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
     },
     getFeed: async function (req, res) {
-      // why an array? In the future it is feasible we would want to mix several feeds together...
-      const packageSources: IPackageSource[] = [req.query];
+      // We receive an array of urls for the package sources to retrieve.
+      // Why an array? In the future it is feasible we would want to mix several feeds together...
+      const packageSourceUrls: string[] = [req.query.url];
+      let packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
+
+      // Get package sources that match a url in the feed query received.
+      packageSources = packageSources.filter((f) => f.url != null && packageSourceUrls.includes(f.url));
 
       let combined: IPackageDefinition[] = [];
       for (const packageSource of packageSources) {
@@ -144,10 +144,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             query: 'tags:bf-component',
           };
 
-          const packages = await feed.getPackages(packageQuery);
+          const packages = await feed.getPackages(packageSource.defaultQuery ?? packageQuery);
 
           if (Array.isArray(packages)) {
-            combined = combined.concat(packages);
+            combined.push(...packages);
           } else {
             composer.log('Received non-JSON response from ', packageSource.url);
           }

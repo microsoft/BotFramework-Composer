@@ -101,25 +101,23 @@ export class NuGetFeed implements IFeed {
    * Build NuGet search url based on the NuGet search spec.
    * Spec: https://docs.microsoft.com/en-us/nuget/api/search-query-service-resource#search-for-packages
    * @param baseUrl The NuGet search service url.
-   * @param query The desired query parameters.
+   * @param query The desired query parameters. Note that if a package source provides a query, that query will be prioritized.
+   * @todo Eventually que parameter query should augment the package query to support paging and further filtering. So the effective query will be a combination of the
+   * package query plus the specified query parameters.
    */
   private buildNuGetSearchUrl(baseUrl: string, query?: IPackageQuery): string {
-    // If a query is provided, it takes precedence. Otherwise, default to the package source one.
-    const effectiveQuery = query ?? this.packageSource?.defaultQuery;
-    let url: string = `${baseUrl}?prerelease=${effectiveQuery?.prerelease ?? true}&semVerLevel=${
-      effectiveQuery?.semVerLevel ?? '2.0.0'
-    }`;
+    let url: string = `${baseUrl}?prerelease=${query?.prerelease ?? true}&semVerLevel=${query?.semVerLevel ?? '2.0.0'}`;
 
-    if (effectiveQuery?.query) {
-      url = `${url}&q=${effectiveQuery.query}`;
+    if (query?.query) {
+      url = `${url}&q=${query.query}`;
     }
 
-    if (effectiveQuery?.take) {
-      url = `${url}&take=${effectiveQuery.take}`;
+    if (query?.take) {
+      url = `${url}&take=${query.take}`;
     }
 
-    if (effectiveQuery?.skip) {
-      url = `${url}&skip=${effectiveQuery.skip}`;
+    if (query?.skip) {
+      url = `${url}&skip=${query.skip}`;
     }
 
     return url;
