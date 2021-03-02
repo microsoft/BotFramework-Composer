@@ -13,7 +13,7 @@ export interface IndicatorProps {
 export const Indicator: React.FC<IndicatorProps> = ({ color }) => {
   return (
     <div
-      aria-label={formatMessage('Unread Errors Indicator')}
+      aria-label={formatMessage('Unread notifications Indicator')}
       css={css`
         background: ${color};
         width: 10px;
