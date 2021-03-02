@@ -54,6 +54,10 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'tenant id of your account'
     },
+    subscriptionId: {
+      type: 'string',
+      title: 'the id of your subscription'
+    },
     settings: {
       type: 'object',
       title: 'Settings for Azure resources',
@@ -151,6 +155,7 @@ const schema: JSONSchema7 = {
     resourceId: '<resource id of your bot service>',
     armEndpoint: 'https://management.azure.com',
     tenantId: '<tenant id of your account>',
+    subscriptionId: '<id of your subscription>',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
