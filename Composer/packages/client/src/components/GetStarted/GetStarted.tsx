@@ -120,7 +120,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
         <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 38 } }}>
           <h2 style={h2Style}>{botProject?.name}</h2>
           <p>
-            {formatMessage('File Location:')}{' '}
+            {formatMessage('File Location:')}
             <span
               style={{
                 display: 'inline-block',
