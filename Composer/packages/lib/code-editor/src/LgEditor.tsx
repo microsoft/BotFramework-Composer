@@ -20,9 +20,9 @@ export const LgEditor = (props: LgEditorProps) => {
 
   return mode === 'codeEditor' ? (
     <LgCodeEditor
-      options={{ folding: false }}
       toolbarHidden={codeEditorToolbarHidden}
       {...(editorProps as LgCodeEditorProps)}
+      options={{ folding: false, ...editorProps.options }}
     />
   ) : (
     <LgResponseEditor {...(editorProps as LgResponseEditorProps)} />
