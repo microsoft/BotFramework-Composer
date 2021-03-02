@@ -70,7 +70,11 @@ export const dialogsDispatcher = () => {
   );
 
   const createDialogCancel = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
+    const { func: onComplete } = await snapshot.getPromise(onCreateDialogCompleteState(projectId));
+
+    onComplete?.(null);
+
     set(actionsSeedState(projectId), []);
     set(onCreateDialogCompleteState(projectId), { func: undefined });
     set(showCreateDialogModalState, false);
