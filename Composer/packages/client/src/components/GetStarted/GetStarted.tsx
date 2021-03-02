@@ -120,7 +120,17 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
         <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 38 } }}>
           <h2 style={h2Style}>{botProject?.name}</h2>
           <p>
-            {formatMessage('File Location:')} <span style={{ textOverflow: 'ellipses', fontSize: 12 }}>{location}</span>
+            {formatMessage('File Location:')}{' '}
+            <span
+              style={{
+                display: 'inline-block',
+                overflowWrap: 'break-word',
+                maxWidth: '100%',
+                fontSize: 12,
+              }}
+            >
+              {location}
+            </span>
           </p>
         </Stack.Item>
         <Stack.Item styles={{ root: { padding: 38 } }}>
