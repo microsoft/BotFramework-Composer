@@ -1,11 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { lgImportResolverGenerator } from '@bfc/shared';
-import { lgUtil } from '@bfc/indexers';
 import { luIndexer } from '@bfc/indexers';
-import uniq from 'lodash/uniq';
-import { updateIntent, isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
+import { updateIntent } from '@bfc/indexers/lib/utils/luUtil';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 
 import { WorkerMsg } from './luParser';
