@@ -19,33 +19,23 @@ import {
   DocumentOnTypeFormattingParams,
   FoldingRange,
 } from 'vscode-languageserver-protocol';
-import { updateIntent, isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { luIndexer } from '@bfc/indexers';
-import { parser } from '@microsoft/bf-lu/lib/parser';
+import { isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 
+import { LuParser } from './luParser';
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
-import {
-  LUImportResolverDelegate,
-  LUOption,
-  LUDocument,
-  generateDiagnostic,
-  convertDiagnostics,
-  getLineByIndex,
-} from './utils';
+import { LUOption, LUDocument, generateDiagnostic, convertDiagnostics, getLineByIndex } from './utils';
 
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
 const InitializeDocumentsMethodName = 'initializeDocuments';
-
-const { parse } = luIndexer;
-const { parseFile } = parser;
 
 export class LUServer {
   protected workspaceRoot: URI | undefined;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LUDocuments: LUDocument[] = [];
+  private luParser = new LuParser();
 
   constructor(
     protected readonly connection: IConnection,
@@ -140,7 +130,7 @@ export class LUServer {
       i = i + 1;
     }
 
-    const luResource = parse(document.getText(), undefined, {}).resource;
+    const luResource = (await this.luParser.parse(document.getText(), undefined, {})).resource;
     const sections = luResource.Sections;
     for (const section in luResource.Sections) {
       const start = sections[section].Range.Start.Line - 1;
@@ -181,9 +171,9 @@ export class LUServer {
     );
   }
 
-  protected getImportResolver(document: TextDocument) {
+  protected async getImportResolver(document: TextDocument) {
     const editorContent = document.getText();
-    const internalImportResolver = () => {
+    const internalImportResolver = async () => {
       return {
         id: document.uri,
         content: editorContent,
@@ -193,14 +183,14 @@ export class LUServer {
 
     if (this.importResolver && fileId && projectId) {
       const resolver = this.importResolver;
-      return (source: string, id: string) => {
+      return async (source: string, id: string) => {
         const plainLuFile = resolver(source, id, projectId);
         if (!plainLuFile) {
           this.sendDiagnostics(document, [
             generateDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
           ]);
         }
-        const luFile = luIndexer.parse(plainLuFile.content, plainLuFile.id, luFeatures);
+        const luFile = await this.luParser.parse(plainLuFile.content, plainLuFile.id, luFeatures);
         let { content } = luFile;
         /**
          * source is . means use as file resolver, not import resolver
@@ -208,7 +198,9 @@ export class LUServer {
          * so here build the full content from server file content and editor content
          */
         if (source === '.' && sectionId) {
-          content = updateIntent(luFile, sectionId, { Name: sectionId, Body: editorContent }, luFeatures).content;
+          content = (
+            await this.luParser.updateIntent(luFile, sectionId, { Name: sectionId, Body: editorContent }, luFeatures)
+          ).content;
         }
         return { id, content };
       };
@@ -217,23 +209,23 @@ export class LUServer {
     return internalImportResolver;
   }
 
-  protected addLUDocument(document: TextDocument, luOption?: LUOption) {
+  protected async addLUDocument(document: TextDocument, luOption?: LUOption) {
     const { uri } = document;
     const { fileId, sectionId, projectId, luFeatures = {} } = luOption || {};
-    const index = () => {
-      const importResolver: LUImportResolverDelegate = this.getImportResolver(document);
+    const index = async () => {
+      const importResolver = await this.getImportResolver(document);
       let content: string = document.getText();
       // if inline mode, composite local with server resolved file.
       if (this.importResolver && fileId && sectionId) {
         try {
-          content = importResolver('.', `${fileId}.lu`).content;
+          content = (await importResolver('.', `${fileId}.lu`)).content;
         } catch (error) {
           // ignore if file not exist
         }
       }
 
       const id = fileId || uri;
-      const { intents: sections, diagnostics } = parse(content, id, luFeatures);
+      const { intents: sections, diagnostics } = await this.luParser.parse(content, id, luFeatures);
 
       return { sections, diagnostics, content };
     };
@@ -284,7 +276,7 @@ export class LUServer {
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
     const luDoc = this.getLUDocument(document);
-    const text = luDoc?.index().content || document.getText();
+    const text = (await (luDoc?.index()).content) || document.getText();
     const lines = text.split('\n');
     const position = params.position;
     const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
@@ -417,7 +409,7 @@ export class LUServer {
     const log = false;
     const locale = 'en-us';
     try {
-      parsedContent = await parseFile(text, log, locale);
+      parsedContent = await this.luParser.parseFile(text, log, locale);
     } catch (e) {
       // nothing to do in catch block
     }
@@ -439,7 +431,7 @@ export class LUServer {
     const range = Range.create(position.line, 0, position.line, position.character);
     const curLineContent = document.getText(range);
     const luDoc = this.getLUDocument(document);
-    const text = luDoc?.index().content || document.getText();
+    const text = (await luDoc?.index()).content || document.getText();
     const lines = text.split('\n');
     const curLineNumber = params.position.line;
     //const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
@@ -682,14 +674,14 @@ export class LUServer {
     }
   }
 
-  protected doValidate(document: TextDocument): void {
+  protected async doValidate(document: TextDocument): Promise<void> {
     const text = document.getText();
     const luDoc = this.getLUDocument(document);
     if (!luDoc) {
       return;
     }
     const { fileId, sectionId } = luDoc;
-    const luFile = luDoc.index();
+    const luFile = await luDoc.index();
     if (!luFile) {
       return;
     }
