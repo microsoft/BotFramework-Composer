@@ -145,13 +145,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       routeToTemplate = QnABotTemplateId;
     }
 
-    if (props.location && props.location.search) {
-      routeToTemplate += props.location.search;
-    }
+    // if (props.location && props.location.search) {
+    //   routeToTemplate += props.location.search;
+    // }
 
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
-    onNext(routeToTemplate);
+    onNext(routeToTemplate + props?.location?.search);
   };
 
   const tableColumns = [

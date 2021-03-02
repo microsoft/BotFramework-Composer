@@ -18,7 +18,9 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
         if (encodedUrl) {
           return decodeURIComponent(encodedUrl);
         } else if (source && payload) {
-          return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+          return `projects/create${process.env.NEW_CREATION_FLOW ? '/v2' : ''}?source=${encodeURIComponent(
+            source
+          )}&payload=${encodeURIComponent(payload)}`;
         } else {
           return '';
         }
@@ -30,7 +32,9 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
         if (!source || !payload) {
           return `projects/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
         } else {
-          return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+          return `projects/create${process.env.NEW_CREATION_FLOW ? '/v2' : ''}?source=${encodeURIComponent(
+            source
+          )}&payload=${encodeURIComponent(payload)}`;
         }
       }
 
