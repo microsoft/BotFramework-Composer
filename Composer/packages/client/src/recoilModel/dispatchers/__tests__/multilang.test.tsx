@@ -6,7 +6,6 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
-  luFilesState,
   settingsState,
   localeState,
   actionsSeedState,
@@ -15,7 +14,7 @@ import {
   currentProjectIdState,
   dispatcherState,
 } from '../../atoms';
-import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily, luFilesSelectorFamily } from '../../selectors';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';
 
@@ -43,7 +42,7 @@ describe('Multilang dispatcher', () => {
     const dialogs = useRecoilValue(dialogsSelectorFamily(state.projectId));
     const locale = useRecoilValue(localeState(state.projectId));
     const settings = useRecoilValue(settingsState(state.projectId));
-    const luFiles = useRecoilValue(luFilesState(state.projectId));
+    const luFiles = useRecoilValue(luFilesSelectorFamily(state.projectId));
     const lgFiles = useRecoilValue(lgFilesSelectorFamily(state.projectId));
     const onAddLanguageDialogComplete = useRecoilValue(onAddLanguageDialogCompleteState(state.projectId));
     const onDelLanguageDialogComplete = useRecoilValue(onDelLanguageDialogCompleteState(state.projectId));
@@ -72,7 +71,7 @@ describe('Multilang dispatcher', () => {
         { recoilState: dialogsSelectorFamily(state.projectId), initialValue: state.dialogs },
         { recoilState: localeState(state.projectId), initialValue: state.locale },
         { recoilState: lgFilesSelectorFamily(state.projectId), initialValue: state.lgFiles },
-        { recoilState: luFilesState(state.projectId), initialValue: state.luFiles },
+        { recoilState: luFilesSelectorFamily(state.projectId), initialValue: state.luFiles },
         { recoilState: settingsState(state.projectId), initialValue: state.settings },
       ],
       dispatcher: {

@@ -62,9 +62,7 @@ import {
   jsonSchemaFilesState,
   localeState,
   locationState,
-  luFilesState,
   projectMetaDataState,
-  qnaFilesState,
   recentProjectsState,
   schemasState,
   settingsState,
@@ -80,7 +78,12 @@ import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../selectors';
+import {
+  botRuntimeOperationsSelector,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+  rootBotProjectIdSelector,
+} from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
@@ -88,20 +91,8 @@ import { setRootBotSettingState } from '../setting';
 import { lgFilesSelectorFamily } from '../../selectors/lg';
 import { createMissingLgTemplatesForDialogs } from '../../../utils/lgUtil';
 
-import { crossTrainConfigState, lgFileState } from './../../atoms/botState';
+import { crossTrainConfigState, projectIndexingState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
-
-const repairBotProject = async (
-  callbackHelpers: CallbackInterface,
-  { projectId, botFiles }: { projectId: string; botFiles: any }
-) => {
-  const { set } = callbackHelpers;
-  const lgFiles: LgFile[] = botFiles.lgFiles;
-  const dialogs: DialogInfo[] = botFiles.dialogs;
-
-  const updatedLgFiles = await createMissingLgTemplatesForDialogs(projectId, dialogs, lgFiles);
-  set(lgFilesSelectorFamily(projectId), updatedLgFiles);
-};
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -250,6 +241,41 @@ const emptyLgFile = (id: string, content: string): LgFile => {
   };
 };
 
+const emptyLuFile = (id: string, content: string): LuFile => {
+  return {
+    id,
+    content,
+    diagnostics: [],
+    intents: [],
+    empty: true,
+    resource: {
+      Sections: [],
+      Errors: [],
+      Content: '',
+    },
+    imports: [],
+    rawData: true,
+  };
+};
+
+const emptyQnaFile = (id: string, content: string): QnAFile => {
+  return {
+    id,
+    content,
+    diagnostics: [],
+    qnaSections: [],
+    imports: [],
+    options: [],
+    empty: true,
+    resource: {
+      Sections: [],
+      Errors: [],
+      Content: '',
+    },
+    rawData: true,
+  };
+};
+
 export const loadProjectData = async (data) => {
   const { files, botName, settings, id: projectId } = data;
   const mergedSettings = getMergedSettings(projectId, settings, botName);
@@ -260,14 +286,9 @@ export const loadProjectData = async (data) => {
   //parse all resources with worker
   lgWorker.addProject(projectId);
 
-  const result = await Promise.all([
-    await luWorker.parseAll(luResources, mergedSettings.luFeatures),
-    await qnaWorker.parseAll(qnaResources),
-  ]);
-
   const lgFiles = lgResources.map(({ id, content }) => emptyLgFile(id, content));
-  const luFiles = result[0] as LuFile[];
-  const qnaFiles = result[1] as QnAFile[];
+  const luFiles = luResources.map(({ id, content }) => emptyLuFile(id, content));
+  const qnaFiles = qnaResources.map(({ id, content }) => emptyQnaFile(id, content));
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
   const updateQnAFiles = reformQnAToContainerKB(projectId, qnaFiles);
@@ -431,14 +452,14 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   });
 
   set(skillManifestsState(projectId), skillManifests);
-  set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
+  set(luFilesSelectorFamily(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesSelectorFamily(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
 
   set(dialogSchemasState(projectId), dialogSchemas);
   set(botEnvironmentState(projectId), botEnvironment);
   set(botDisplayNameState(projectId), botName);
-  set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
+  set(qnaFilesSelectorFamily(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
   set(botStatusState(projectId), BotStatus.inactive);
   set(locationState(projectId), location);
   set(schemasState(projectId), schemas);
@@ -449,21 +470,40 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
-
-  lgWorker.parseAll(projectId, lgFiles).then((result) => {
-    /*
-    If we set state for ervery single file, the UI may have many times re-render.
-    We may add a dialog during the loading stage. If we set lgFilesSelectorFamily directly,
-    this may overwrite the Ids state.
-    */
-    (result as LgFile[]).forEach((item) => {
-      set(lgFileState({ projectId, lgFileId: item.id }), (old) => (old.rawData ? item : old));
+  set(projectIndexingState(projectId), true);
+  setTimeout(async () => {
+    Promise.all([
+      await lgWorker.parseAll(projectId, lgFiles),
+      await luWorker.parseAll(luFiles, mergedSettings.luFeatures),
+      await qnaWorker.parseAll(qnaFiles),
+    ]).then((result) => {
+      /*
+      If we set state for ervery single file, the UI may have many times re-render.
+      We may add a dialog during the loading stage. If we set lgFilesSelectorFamily directly,
+      this may overwrite the Ids state.
+      */
+      set(lgFilesSelectorFamily(projectId), (prevFiles) => {
+        return prevFiles.map((item) => {
+          const file = (result[0] as LgFile[]).find((file) => file.id === item.id);
+          return file && item.rawData ? file : item;
+        });
+      });
+      set(luFilesSelectorFamily(projectId), (prevFiles) => {
+        return prevFiles.map((item) => {
+          const file = (result[1] as LuFile[]).find((file) => file.id === item.id);
+          return file && item.rawData ? file : item;
+        });
+      });
+      set(qnaFilesSelectorFamily(projectId), (prevFiles) => {
+        return prevFiles.map((item) => {
+          const file = (result[2] as QnAFile[]).find((file) => file.id === item.id);
+          return file && item.rawData ? file : item;
+        });
+      });
+      // async repair bot assets, add missing lg templates
+      set(projectIndexingState(projectId), false);
     });
-    // async repair bot assets, add missing lg templates
-    botFiles.lgFiles = result;
-    repairBotProject(callbackHelpers, { projectId, botFiles });
-  });
-
+  }, 0);
   return mainDialog;
 };
 

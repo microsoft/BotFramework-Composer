@@ -6,7 +6,7 @@ import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { useLuApi } from '../../src/shell/luApi';
-import { localeState, luFilesState, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
+import { localeState, luFilesSelectorFamily, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
 jest.mock('../../src/recoilModel/parsers/luWorker', () => {
@@ -34,7 +34,7 @@ describe('use luApi hooks', () => {
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
       set(localeState(state.projectId), 'en-us');
-      set(luFilesState(state.projectId), state.luFiles);
+      set(luFilesSelectorFamily(state.projectId), state.luFiles);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
         updateLuFile: updateLuFileMockMock,

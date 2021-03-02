@@ -10,9 +10,9 @@ import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../selectors/project';
 import { lgFilesSelectorFamily } from '../selectors/lg';
+import { luFilesSelectorFamily } from '../selectors';
 
 import {
-  luFilesState,
   localeState,
   settingsState,
   showAddLanguageModalState,
@@ -20,7 +20,6 @@ import {
   onDelLanguageDialogCompleteState,
   showDelLanguageModalState,
   botDisplayNameState,
-  // qnaFilesState,
 } from './../atoms/botState';
 
 const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: string[]): any[] => {
@@ -97,15 +96,10 @@ export const multilangDispatcher = () => {
         const addedLgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
         return [...prevlgFiles, ...addedLgFiles];
       });
-      set(luFilesState(projectId), (prevluFiles) => {
+      set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
         return [...prevluFiles, ...addedLuFiles];
       });
-      //TODO: support QnA multilang in future.
-      // set(qnaFilesState(projectId), (prevQnAFiles) => {
-      //   const addedQnAFiles = copyLanguageResources(prevQnAFiles, defaultLang, languages);
-      //   return [...prevQnAFiles, ...addedQnAFiles];
-      // });
       set(settingsState(projectId), (prevSettings) => {
         const settings: any = cloneDeep(prevSettings);
         if (Array.isArray(settings.languages)) {
@@ -140,14 +134,10 @@ export const multilangDispatcher = () => {
         const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
         return leftLgFiles;
       });
-      set(luFilesState(projectId), (prevluFiles) => {
+      set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const { left: leftLuFiles } = deleteLanguageResources(prevluFiles, languages);
         return leftLuFiles;
       });
-      // set(qnaFilesState(projectId), (prevQnAFiles) => {
-      //   const { left: leftQnAFiles } = deleteLanguageResources(prevQnAFiles, languages);
-      //   return leftQnAFiles;
-      // });
       set(settingsState(projectId), (prevSettings) => {
         const settings: any = cloneDeep(prevSettings);
 

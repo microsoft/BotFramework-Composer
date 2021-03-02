@@ -1,27 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgFile } from '@bfc/shared';
+import { QnAFile } from '@bfc/shared';
 import { selectorFamily } from 'recoil';
 
-import { lgFileIdsState, lgFileState } from '../atoms';
+import { qnaFileIdsState, qnaFileState } from '../atoms';
 
-export const lgFilesSelectorFamily = selectorFamily<LgFile[], string>({
-  key: 'lgFiles',
+export const qnaFilesSelectorFamily = selectorFamily<QnAFile[], string>({
+  key: 'qnaFiles',
   get: (projectId: string) => ({ get }) => {
-    const lgFileIds = get(lgFileIdsState(projectId));
+    const qnaFileIds = get(qnaFileIdsState(projectId));
 
-    return lgFileIds.map((lgFileId) => {
-      return get(lgFileState({ projectId, lgFileId }));
+    return qnaFileIds.map((qnaFileId) => {
+      return get(qnaFileState({ projectId, qnaFileId }));
     });
   },
-  set: (projectId: string) => ({ set }, newLgFiles) => {
-    const newLgFileArray = newLgFiles as LgFile[];
+  set: (projectId: string) => ({ set }, newQnaFiles) => {
+    const newQnaFileArray = newQnaFiles as QnAFile[];
 
     set(
-      lgFileIdsState(projectId),
-      newLgFileArray.map((lgFile) => lgFile.id)
+      qnaFileIdsState(projectId),
+      newQnaFileArray.map((qnaFile) => qnaFile.id)
     );
-    newLgFileArray.forEach((lgFile) => set(lgFileState({ projectId, lgFileId: lgFile.id }), lgFile));
+    newQnaFileArray.forEach((qnaFile) => set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), qnaFile));
   },
 });

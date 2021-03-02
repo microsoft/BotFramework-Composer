@@ -116,6 +116,7 @@ export type LuFile = {
   resource: LuParseResource;
   imports: { id: string; path: string; description: string }[];
   published?: boolean;
+  rawData: boolean;
 };
 
 export type LuParseResourceSection = {
@@ -154,6 +155,7 @@ export type QnAFile = {
   options: { id: string; name: string; value: string }[];
   empty: boolean;
   resource: LuParseResource;
+  rawData: boolean;
 };
 
 export type LgTemplate = {

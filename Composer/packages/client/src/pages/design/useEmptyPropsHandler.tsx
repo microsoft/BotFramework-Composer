@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import { globalHistory, WindowLocation } from '@reach/router';
-import { LgFile, PromptTab } from '@bfc/shared';
+import { LgFile, LuFile, PromptTab, QnAFile } from '@bfc/shared';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getDialogData } from '../../utils/dialogUtil';
@@ -14,9 +14,14 @@ import {
   localeState,
   lgFileState,
   lgFilesSelectorFamily,
+  luFileState,
+  qnaFileState,
+  settingsState,
 } from '../../recoilModel';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import lgDiagnosticWorker from '../../recoilModel/parsers/lgDiagnosticWorker';
+import luWorker from '../../recoilModel/parsers/luWorker';
+import qnaWorker from '../../recoilModel/parsers/qnaWorker';
 
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
@@ -34,8 +39,15 @@ export const useEmptyPropsHandler = (
 
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId: activeBot }));
   const locale = useRecoilValue(localeState(activeBot));
+  const settings = useRecoilValue(settingsState(activeBot));
   const [currentLg, setCurrentLg] = useRecoilState(
     lgFileState({ projectId: activeBot, lgFileId: `${dialogId}.${locale}` })
+  );
+  const [currentLu, setCurrentLu] = useRecoilState(
+    luFileState({ projectId: activeBot, luFileId: `${dialogId}.${locale}` })
+  );
+  const [currentQna, setCurrentQna] = useRecoilState(
+    qnaFileState({ projectId: activeBot, qnaFileId: `${dialogId}.${locale}` })
   );
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const { updateDialog, setDesignPageLocation, navTo } = useRecoilValue(dispatcherState);
@@ -61,6 +73,26 @@ export const useEmptyPropsHandler = (
       });
     }
   }, [currentDialog, currentLg, lgFiles]);
+
+  useEffect(() => {
+    if (!currentDialog || !currentLu.id) return;
+    if (currentLu.rawData) {
+      //for current dialog, check the lg file to make sure the file is parsed.
+      luWorker.parse(currentLu.id, currentLu.content, settings.luFeatures).then((result) => {
+        setCurrentLu(result as LuFile);
+      });
+    }
+  }, [currentDialog, currentLu]);
+
+  useEffect(() => {
+    if (!currentDialog || !currentQna.id) return;
+    if (currentQna.rawData) {
+      //for current dialog, check the lg file to make sure the file is parsed.
+      qnaWorker.parse(currentQna.id, currentQna.content).then((result) => {
+        setCurrentQna(result as QnAFile);
+      });
+    }
+  }, [currentDialog, currentQna]);
 
   useEffect(() => {
     if (!location || !currentDialog || !activeBot) return;
