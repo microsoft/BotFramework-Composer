@@ -4,7 +4,7 @@
 import { IExtensionRegistration } from '@bfc/extension-client';
 import { IFeed, IPackageQuery, IPackageDefinition } from '../feedInterfaces';
 import { INuGetPackage } from './nugetInterfaces';
-import { readdirSync, readFileSync } from 'fs-extra';
+import { readdir, readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
 import path from 'path';
 import * as semverSort from 'semver-sort';
@@ -46,13 +46,13 @@ export class LocalNuGetFeed implements IFeed {
     // * extract only folders from that list
     // * pass each one through the getPackageInfo function, which extracts metadata from the package
     // * return a feed in the form that is used by nuget search API
-    const packages = readdirSync(url, { withFileTypes: true }).filter((f) => f.isDirectory());
-    const feed = [];
-    for (const p of packages) {
-      feed.push(await this.getPackageInfo(url, p.name));
+    const packages = await readdir(url, { withFileTypes: true });
+    const feedPromises: Promise<IPackageDefinition>[] = [];
+    for (const p of packages.filter((f) => f.isDirectory())) {
+      feedPromises.push(this.getPackageInfo(url, p.name));
     }
 
-    return feed;
+    return await Promise.all(feedPromises);
   }
 
   /**
@@ -66,9 +66,8 @@ export class LocalNuGetFeed implements IFeed {
 
     let versions;
     try {
-      versions = readdirSync(packageDir, { withFileTypes: true })
-        .filter((f) => f.isDirectory())
-        .map((f) => f.name);
+      versions = await readdir(packageDir, { withFileTypes: true });
+      versions = versions.filter((f) => f.isDirectory()).map((f) => f.name);
       if (versions.length === 0) {
         throw new Error('version list is empty');
       }
@@ -82,7 +81,7 @@ export class LocalNuGetFeed implements IFeed {
     // Read from the nuspec file in the latest to get other info.
     try {
       const pathToNuspec = path.join(packageDir, versions[0], `${packageName}.nuspec`);
-      const xml = readFileSync(pathToNuspec, 'utf8');
+      const xml = await readFile(pathToNuspec, 'utf8');
       const parsed = await parseStringPromise(xml);
 
       const nugetPackage: INuGetPackage = {
