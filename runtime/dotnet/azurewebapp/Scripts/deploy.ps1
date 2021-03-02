@@ -163,7 +163,9 @@ if ($luisAuthoringKey -or $qnaSubscriptionKey) {
 		$null = New-Item -ItemType Directory -Force -Path generated\interruption
 	}
 
-	bf luis:cross-train --in . --out generated\interruption --config .\settings\cross-train.config.json --force
+	if (Test-Path .\settings\cross-train.config.json) {
+		bf luis:cross-train --in . --out generated\interruption --config .\settings\cross-train.config.json --force
+	}
 
 	if ($luisAuthoringKey) {
 		bf sampler:sampling --in generated\interruption --out generated\interruption --force
@@ -345,3 +347,5 @@ else {
 	Write-Host "! Could not deploy automatically to Azure. Review the log for more information." -ForegroundColor DarkRed
 	Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
 }
+
+Set-Location -Path $projFolder

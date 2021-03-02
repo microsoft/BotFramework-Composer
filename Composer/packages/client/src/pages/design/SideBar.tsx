@@ -107,6 +107,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   function handleSelect(destination: TreeLink) {
     if (destination.botError) {
       setBrokenSkillInfo(destination);
+      return;
     }
     const {
       skillId: targetSkillId,

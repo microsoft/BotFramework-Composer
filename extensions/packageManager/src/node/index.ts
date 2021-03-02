@@ -13,6 +13,20 @@ import { parseStringPromise } from 'xml2js';
 
 const API_ROOT = '/api';
 
+const hasSchema = (c) => {
+  // NOTE: A special case for orchestrator is included here because it does not directly include the schema
+  // the schema for orchestrator is in a dependent package
+  // additionally, our schemamerge command only returns the top level components found, even though
+  // it does properly discover and include the schema from this dependent package.
+  // without this special case, composer does not see orchestrator as being installed even though it is.
+  // in the future this should be resolved in the schemamerger library by causing the includesSchema property to be passed up to all parent libraries
+  return c.includesSchema || c.name.toLowerCase() === 'microsoft.bot.components.orchestrator';
+};
+
+const isAdaptiveComponent = (c) => {
+  return hasSchema(c) || c.includesExports;
+};
+
 export default async (composer: IExtensionRegistration): Promise<void> => {
   const normalizeFeed = async (feed) => {
     if (feed.objects) {
@@ -316,7 +330,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (dryRunMergeResults) {
           res.json({
             projectId,
-            components: dryRunMergeResults.components.filter((c) => c.includesSchema || c.includesExports),
+            components: dryRunMergeResults.components.filter(isAdaptiveComponent),
           });
         } else {
           res.status(500).json({
@@ -389,7 +403,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             // we need to prompt the user to confirm the changes before proceeding
             res.json({
               success: false,
-              components: dryRunMergeResults.components.filter((c) => c.includesSchema || c.includesExports),
+              components: dryRunMergeResults.components.filter(isAdaptiveComponent),
             });
           } else {
             const realMerge = new SchemaMerger(
@@ -404,7 +418,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
-            const installedComponents = mergeResults.components.filter((c) => c.includesSchema || c.includesExports);
+            const installedComponents = mergeResults.components.filter(isAdaptiveComponent);
             if (mergeResults) {
               res.json({
                 success: true,
@@ -417,7 +431,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               }
 
               // update the settings.plugins array
-              const newlyInstalledPlugin = installedComponents.find((c) => c.includesSchema && c.name == packageName);
+              const newlyInstalledPlugin = installedComponents.find((c) => hasSchema(c) && c.name == packageName);
               if (
                 newlyInstalledPlugin &&
                 !currentProject.settings.runtimeSettings?.plugins?.find((p) => p.name === newlyInstalledPlugin.name)
@@ -506,7 +520,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           res.json({
             success: true,
-            components: mergeResults.components.filter((c) => c.includesSchema || c.includesExports),
+            components: mergeResults.components.filter(isAdaptiveComponent),
           });
 
           // update the settings.plugins array
