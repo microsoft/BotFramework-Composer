@@ -11,7 +11,7 @@ import { LuFile, ILUFeaturesConfig, LuIntentSection, Diagnostic } from '@bfc/sha
 import uniqueId from 'lodash/uniqueId';
 import { FoldingRange, TextDocument } from 'vscode-languageserver';
 
-import { getLineByIndex } from './utils';
+import { createFoldingRanges } from './utils';
 
 export const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
@@ -40,34 +40,7 @@ export class LuParserWithoutWorker {
     return checkSection(intent, enableSections);
   }
   public async getFoldingRanges(document: TextDocument | undefined): Promise<FoldingRange[]> {
-    const items: FoldingRange[] = [];
-    if (!document) {
-      return items;
-    }
-
-    const lineCount = document.lineCount;
-    let i = 0;
-    while (i < lineCount) {
-      const currLine = getLineByIndex(document, i);
-      if (currLine?.startsWith('>>')) {
-        for (let j = i + 1; j < lineCount; j++) {
-          if (getLineByIndex(document, j)?.startsWith('>>')) {
-            items.push(FoldingRange.create(i, j - 1));
-            i = j - 1;
-            break;
-          }
-
-          if (j === lineCount - 1) {
-            items.push(FoldingRange.create(i, j));
-            i = j;
-          }
-        }
-      }
-
-      i = i + 1;
-    }
-
-    return items;
+    return createFoldingRanges(document);
   }
 }
 
