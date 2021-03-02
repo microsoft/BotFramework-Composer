@@ -25,13 +25,13 @@ import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pi
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
 import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
-import { useRecoilState, useRecoilValue } from 'recoil';
 
 // -------------------- Styles -------------------- //
 
@@ -255,12 +255,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         </div>
         <DialogFooter>
           <Link
-            styles={{ root: { fontSize: '12px', float: 'left' } }}
-            href={templateRequestUrl}
-            target="_blank"
             underline
+            href={templateRequestUrl}
+            styles={{ root: { fontSize: '12px', float: 'left' } }}
+            target="_blank"
           >
-            <FontIcon style={{ marginRight: '5px' }} iconName="ChatInviteFriend" />
+            <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
