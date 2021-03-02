@@ -2,18 +2,25 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
+import formatMessage from 'format-message';
 import React from 'react';
 
 export interface IndicatorProps {
-  size: number;
   color: string;
 }
 
-export const Indicator: React.FC<IndicatorProps> = ({ size, color }) => {
+export const Indicator: React.FC<IndicatorProps> = ({ color }) => {
   return (
-    <svg fill={color} height={size} viewBox="0 0 100 100" width={size} xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="50" />
-    </svg>
+    <div
+      aria-label={formatMessage('Unread notifications Indicator')}
+      css={css`
+        background: ${color};
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      `}
+      data-testid="DebugErrorIndicator"
+    />
   );
 };
