@@ -12,7 +12,7 @@
     "message": "Questo errore è dovuto probabilmente a dati con formato non valido o a funzionalità mancanti in Composer."
   },
   "ErrorInfo_part3": {
-    "message": "Provare a spostarsi in un altro nodo dell\"editor visivo."
+    "message": "Provare a spostarsi in un altro nodo dell’editor visivo."
   },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "un file di dialogo deve avere un nome"
@@ -39,7 +39,7 @@
     "message": "A publishing profile provides the secure connectivity required to publish your bot. "
   },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
-    "message": "Uno schema, o modulo, è l\"elenco delle proprietà che verranno raccolte dal bot."
+    "message": "Uno schema, o modulo, è l’elenco delle proprietà che verranno raccolte dal bot."
   },
   "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
     "message": "Bot competenze che può essere chiamato da un bot host."
@@ -285,7 +285,7 @@
     "message": "Lingua applicazione"
   },
   "application_language_settings_26f82dfc": {
-    "message": "Impostazioni lingua dell\"applicazione"
+    "message": "Impostazioni lingua dell’applicazione"
   },
   "application_settings_39e840c6": {
     "message": "Impostazioni applicazione"
@@ -447,13 +447,13 @@
     "message": "icona grigia di bot framework composer"
   },
   "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
-    "message": "Bot Framework Composer è un\"area del contenuto visiva per la creazione di bot e altri tipi di applicazioni conversazionali con lo stack tecnologico di Microsoft Bot Framework. Composer offre tutto ciò che serve per la creazione di un\"esperienza di conversazione moderna e all\"avanguardia."
+    "message": "Bot Framework Composer è un’area del contenuto visiva per la creazione di bot e altri tipi di applicazioni conversazionali con lo stack tecnologico di Microsoft Bot Framework. Composer offre tutto ciò che serve per la creazione di un’esperienza di conversazione moderna e all’avanguardia."
   },
   "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
-    "message": "Bot Framework Composer è un\"area del contenuto visiva open source per sviluppatori e team multi-disciplinari per la creazione di bot. Composer integra LUIS e QnA Maker e consente una composizione sofisticata delle risposte dei bot usando la generazione di linguaggio."
+    "message": "Bot Framework Composer è un’area del contenuto visiva open source per sviluppatori e team multi-disciplinari per la creazione di bot. Composer integra LUIS e QnA Maker e consente una composizione sofisticata delle risposte dei bot usando la generazione di linguaggio."
   },
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
-    "message": "Bot Framework fornisce l\"esperienza più completa per la creazione di applicazioni conversazionali."
+    "message": "Bot Framework fornisce l’esperienza più completa per la creazione di applicazioni conversazionali."
   },
   "bot_is_botname_c5af0c89": {
     "message": "Bot is { botName }"
@@ -582,7 +582,7 @@
     "message": "Cancella tutto"
   },
   "click_on_the_b_add_b_button_in_the_toolbar_and_sel_4daf351a": {
-    "message": "Fare clic sul pulsante <b>Aggiungi</b> nella barra degli strumenti, quindi selezionare <b>Aggiungi un nuovo trigger</b>. Nella procedura guidata <b>Crea un trigger</b> impostare il <b>Tipo di trigger</b> su <i>Finalità riconosciuta</i>, quindi configurare il <b>Nome del trigger</b> e le <b>Frasi del trigger</b>. Aggiungere quindi le azioni nell\"editor visivo."
+    "message": "Fare clic sul pulsante <b>Aggiungi</b> nella barra degli strumenti, quindi selezionare <b>Aggiungi un nuovo trigger</b>. Nella procedura guidata <b>Crea un trigger</b> impostare il <b>Tipo di trigger</b> su <i>Finalità riconosciuta</i>, quindi configurare il <b>Nome del trigger</b> e le <b>Frasi del trigger</b>. Aggiungere quindi le azioni nell’editor visivo."
   },
   "click_the_b_add_b_button_in_the_toolbar_and_select_79001156": {
     "message": "Fare clic sul pulsante <b>Aggiungi</b> nella barra degli strumenti e selezionare <b>Aggiungi un nuovo trigger</b> dal menu a discesa."
@@ -615,10 +615,10 @@
     "message": "Stacktrace componente:"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
-    "message": "Composer non riesce ancora a tradurre il bot automaticamente.\nPer creare una traduzione manualmente, Composer creerà una copia del contenuto del bot con il nome della lingua aggiuntiva. Questo contenuto può quindi essere tradotto senza influire sulla logica o sul flusso del bot originale ed è possibile passare da una lingua all\"altra per garantire che le risposte siano tradotte in modo corretto e appropriato."
+    "message": "Composer non riesce ancora a tradurre il bot automaticamente.\nPer creare una traduzione manualmente, Composer creerà una copia del contenuto del bot con il nome della lingua aggiuntiva. Questo contenuto può quindi essere tradotto senza influire sulla logica o sul flusso del bot originale ed è possibile passare da una lingua all’altra per garantire che le risposte siano tradotte in modo corretto e appropriato."
   },
   "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
-    "message": "Composer include una funzionalità di telemetria che raccoglie le informazioni sull\"utilizzo. È importante che il team di Composer comprenda come viene usato lo strumento in modo da poterlo migliorare."
+    "message": "Composer include una funzionalità di telemetria che raccoglie le informazioni sull’utilizzo. È importante che il team di Composer comprenda come viene usato lo strumento in modo da poterlo migliorare."
   },
   "composer_introduction_98a93701": {
     "message": "Introduzione di Composer"
@@ -627,7 +627,7 @@
     "message": "Composer è aggiornato."
   },
   "composer_language_is_the_language_of_composer_ui_c23a57b6": {
-    "message": "La lingua di Composer è la lingua dell\"interfaccia utente di Composer"
+    "message": "La lingua di Composer è la lingua dell’interfaccia utente di Composer"
   },
   "composer_logo_ba2048a0": {
     "message": "Logo di Composer"
@@ -642,7 +642,7 @@
     "message": "Composer verrà riavviato."
   },
   "composer_will_update_the_next_time_you_close_the_a_d74264a1": {
-    "message": "Composer verrà aggiornato alla successiva chiusura dell\"app."
+    "message": "Composer verrà aggiornato alla successiva chiusura dell’app."
   },
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
@@ -741,7 +741,7 @@
     "message": "Crea una Knowledge Base da zero o importa la Knowledge Base da un URL o da file PDF"
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
-    "message": "Crea un nome per il progetto che verrà usato per assegnare un nome all\"applicazione: (projectname-environment-LUfilename)"
+    "message": "Crea un nome per il progetto che verrà usato per assegnare un nome all’applicazione: (projectname-environment-LUfilename)"
   },
   "create_a_new_dialog_21d84b82": {
     "message": "Crea un nuovo dialogo"
@@ -933,7 +933,7 @@
     "message": "Elimina questo bot"
   },
   "deleting_dialogid_failed_1d7cc05a": {
-    "message": "L\"eliminazione di \"{ dialogId }\" non è riuscita."
+    "message": "L’eliminazione di \"{ dialogId }\" non è riuscita."
   },
   "describe_your_skill_88554792": {
     "message": "Descrivi la competenza"
@@ -1029,7 +1029,7 @@
     "message": "Disabilita"
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
-    "message": "Visualizzare le righe che si estendono oltre la larghezza dell\"editor alla riga successiva."
+    "message": "Visualizzare le righe che si estendono oltre la larghezza dell’editor alla riga successiva."
   },
   "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
     "message": "Display text used by the channel to render visually."
@@ -1191,28 +1191,28 @@
     "message": "Immetti un URL o sfoglia per caricare un file "
   },
   "enter_luis_application_name_df312e75": {
-    "message": "Immettere il nome dell\"applicazione LUIS"
+    "message": "Immettere il nome dell’applicazione LUIS"
   },
   "enter_luis_authoring_key_c59f8f1f": {
     "message": "Immettere la chiave di creazione LUIS"
   },
   "enter_luis_endpoint_key_f8eb30f5": {
-    "message": "Immettere la chiave dell\"endpoint LUIS"
+    "message": "Immettere la chiave dell’endpoint LUIS"
   },
   "enter_luis_region_2316eceb": {
-    "message": "Immettere l\"area LUIS"
+    "message": "Immettere l’area LUIS"
   },
   "enter_microsoft_app_id_c92101b0": {
-    "message": "Immettere l\"ID app Microsoft"
+    "message": "Immettere l’ID app Microsoft"
   },
   "enter_microsoft_app_password_b0926c39": {
-    "message": "Immettere la password dell\"app Microsoft"
+    "message": "Immettere la password dell’app Microsoft"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
     "message": "Immettere la chiave di sottoscrizione QnA Maker"
   },
   "enter_skill_host_endpoint_url_e22eeab5": {
-    "message": "Immettere l\"URL dell\"endpoint dell\"host competenze"
+    "message": "Immettere l’URL dell’endpoint dell’host competenze"
   },
   "entities_ef09392c": {
     "message": "Entità"
@@ -1239,7 +1239,7 @@
     "message": "Error fetching runtime templates"
   },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
-    "message": "Errore nello schema dell\"interfaccia utente per { title }: { errorMsg }\n{ options }"
+    "message": "Errore nello schema dell’interfaccia utente per { title }: { errorMsg }\n{ options }"
   },
   "error_occurred_5549a6b4": {
     "message": "Si è verificato un errore"
@@ -1254,7 +1254,7 @@
     "message": "{ error } Aggiungere funzioni sconosciute al campo customFunctions dell'impostazione."
   },
   "error_processing_schema_2c707cf3": {
-    "message": "Errore durante l\"elaborazione dello schema"
+    "message": "Errore durante l’elaborazione dello schema"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -1335,7 +1335,7 @@
     "message": "Fail to save bot"
   },
   "failed_to_start_1edb0dbe": {
-    "message": "L\"avvio non è riuscito"
+    "message": "L’avvio non è riuscito"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1560,7 +1560,7 @@
     "message": "In fase di test"
   },
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
-    "message": "Nella procedura guidata <b>Crea un trigger</b> impostare il tipo di trigger su <i>Attività</i> nell\"elenco a discesa. Impostare quindi il <b>Tipo di attività</b> su <i>Messaggio di saluto (attività ConversationUpdate)</i>, quindi fare clic sul pulsante <b>Invia</b>."
+    "message": "Nella procedura guidata <b>Crea un trigger</b> impostare il tipo di trigger su <i>Attività</i> nell’elenco a discesa. Impostare quindi il <b>Tipo di attività</b> su <i>Messaggio di saluto (attività ConversationUpdate)</i>, quindi fare clic sul pulsante <b>Invia</b>."
   },
   "inactive_34365329": {
     "message": "Inattivo"
@@ -1605,7 +1605,7 @@
     "message": "Installare le versioni preliminari di Composer, ogni giorno, per accedere e testare le funzionalità più recenti. <a>Altre informazioni</a>."
   },
   "install_the_update_and_restart_composer_fac30a61": {
-    "message": "Installare l\"aggiornamento e riavviare Composer."
+    "message": "Installare l’aggiornamento e riavviare Composer."
   },
   "integer_7f378275": {
     "message": "integer"
@@ -1641,7 +1641,7 @@
     "message": "Espressione o stringa interpolata da valutare."
   },
   "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
-    "message": "Introduzione di concetti chiave e di elementi dell\"esperienza utente per Composer."
+    "message": "Introduzione di concetti chiave e di elementi dell’esperienza utente per Composer."
   },
   "invalid_file_path_to_save_the_transcript_54c92a51": {
     "message": "Invalid file path to save the transcript."
@@ -1701,7 +1701,7 @@
     "message": "LanguagePolicy"
   },
   "last_modified_time_is_time_b1497d3": {
-    "message": "L\"ora dell\"ultima modifica è { time }"
+    "message": "L’ora dell’ultima modifica è { time }"
   },
   "layout_56d3a203": {
     "message": "Layout: "
@@ -1785,7 +1785,7 @@
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
   },
   "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
-    "message": "Elenco di lingue che il bot sarà in grado di comprendere (input dell\"utente) e in cui sarà in grado di rispondere (risposte del bot). Per rendere disponibile questo bot in altre lingue, fare clic su \"Gestisci lingue del bot\" per creare una copia della lingua predefinita e tradurre il contenuto nella nuova lingua."
+    "message": "Elenco di lingue che il bot sarà in grado di comprendere (input dell’utente) e in cui sarà in grado di rispondere (risposte del bot). Per rendere disponibile questo bot in altre lingue, fare clic su \"Gestisci lingue del bot\" per creare una copia della lingua predefinita e tradurre il contenuto nella nuova lingua."
   },
   "list_view_e33843f0": {
     "message": "Visualizzazione elenco"
@@ -1878,7 +1878,7 @@
     "message": "Luis build warning"
   },
   "luis_endpoint_key_c685e219": {
-    "message": "Chiave dell\"endpoint LUIS"
+    "message": "Chiave dell’endpoint LUIS"
   },
   "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
     "message": "LUIS key is required with the current recognizer setting to start your bot locally, and publish"
@@ -1914,7 +1914,7 @@
     "message": "URL del manifesto"
   },
   "manifest_url_can_not_be_accessed_a7f147b2": {
-    "message": "Non è possibile accedere all\"URL del manifesto"
+    "message": "Non è possibile accedere all’URL del manifesto"
   },
   "manifest_version_1edc004a": {
     "message": "Versioni del manifesto"
@@ -2031,7 +2031,7 @@
     "message": "più caratteri jolly"
   },
   "must_be_an_expression_error_477cbda6": {
-    "message": "deve essere un\"espressione: { error }"
+    "message": "deve essere un’espressione: { error }"
   },
   "must_have_a_name_d5c5c464": {
     "message": "Deve avere un nome"
@@ -2253,10 +2253,10 @@
     "message": "Proprietà facoltative"
   },
   "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
-    "message": "Facoltativo. L\"impostazione di un valore massimo consente al bot di rifiutare un valore troppo grande e di richiedere all\"utente un nuovo valore."
+    "message": "Facoltativo. L’impostazione di un valore massimo consente al bot di rifiutare un valore troppo grande e di richiedere all’utente un nuovo valore."
   },
   "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
-    "message": "Facoltativo. L\"impostazione di un valore minimo consente al bot di rifiutare un valore troppo piccolo e di richiedere all\"utente un nuovo valore."
+    "message": "Facoltativo. L’impostazione di un valore minimo consente al bot di rifiutare un valore troppo piccolo e di richiedere all’utente un nuovo valore."
   },
   "options_3ab0ea65": {
     "message": "Options"
@@ -2268,10 +2268,10 @@
     "message": "Riconoscimento agente di orchestrazione"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
-    "message": "file di generazione di linguaggio di origine non trovato nell\"archivio"
+    "message": "file di generazione di linguaggio di origine non trovato nell’archivio"
   },
   "origin_lu_file_not_found_in_store_19e5cc8f": {
-    "message": "file di comprensione del linguaggio di origine non trovato nell\"archivio"
+    "message": "file di comprensione del linguaggio di origine non trovato nell’archivio"
   },
   "original_ce7b7e64": {
     "message": " - Originale"
@@ -2310,10 +2310,10 @@
     "message": "Immettere un criterio regEx"
   },
   "please_log_in_before_continuing_b6eace13": {
-    "message": "Eseguire l\"accesso prima di continuare."
+    "message": "Eseguire l’accesso prima di continuare."
   },
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
-    "message": "Tornare alla Visualizzazione Progettazione per avviare l\"esercitazione sull\"onboarding."
+    "message": "Tornare alla Visualizzazione Progettazione per avviare l’esercitazione sull’onboarding."
   },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
     "message": "Selezionare un file di domande e risposte specifico per importare domande e risposte"
@@ -2331,7 +2331,7 @@
     "message": "Logo PowerVirtualAgents"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
-    "message": "premere INVIO per aggiungere questo elemento o TAB per passare all\"elemento interattivo successivo"
+    "message": "premere INVIO per aggiungere questo elemento o TAB per passare all’elemento interattivo successivo"
   },
   "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
     "message": "premere INVIO per aggiungere questo nome e passare alla riga successiva oppure premere TAB per passare al campo valore"
@@ -2379,7 +2379,7 @@
     "message": "Richiedi una data"
   },
   "prompt_for_a_date_or_a_time_d2df7f90": {
-    "message": "Richiedi una data o un\"ora"
+    "message": "Richiedi una data o un’ora"
   },
   "prompt_for_a_file_or_an_attachment_1bf18e7e": {
     "message": "Richiedi un file o un allegato"
@@ -2406,7 +2406,7 @@
     "message": "Descrizione della proprietà."
   },
   "property_editor_preferences_ad7a4b62": {
-    "message": "Preferenze dell\"editor di proprietà"
+    "message": "Preferenze dell’editor di proprietà"
   },
   "property_has_error_s_please_fix_the_error_s_for_th_e994c143": {
     "message": "La proprietà contiene errori, correggere gli errori per questa proprietà."
@@ -2550,7 +2550,7 @@
     "message": "Ripeti"
   },
   "redo_is_not_supported_b743e4dc": {
-    "message": "L\"azione Ripeti non è supportata"
+    "message": "L’azione Ripeti non è supportata"
   },
   "refer_to_the_syntax_documentation_here_df8dc9b4": {
     "message": "Vedere la documentazione sulla sintassi qui."
@@ -2661,7 +2661,7 @@
     "message": "La chiave di creazione del bot radice è vuota"
   },
   "root_bot_luis_region_is_empty_67932308": {
-    "message": "L\"area LUIS del bot radice è vuota"
+    "message": "L’area LUIS del bot radice è vuota"
   },
   "root_bot_of_your_project_that_greets_users_and_can_94570f36": {
     "message": "Bot radice del progetto che saluta gli utenti e può chiamare le competenze."
@@ -2778,7 +2778,7 @@
     "message": "Seleziona la versione runtime da aggiungere"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
-    "message": "Selezionare la lingua che il bot sarà in grado di comprendere (input dell\"utente) e in cui sarà in grado di rispondere (risposte del bot).\n    Per rendere disponibile questo bot in altre lingue, fare clic su \"Aggiungi\" per creare una copia della lingua predefinita e tradurre il contenuto nella nuova lingua."
+    "message": "Selezionare la lingua che il bot sarà in grado di comprendere (input dell’utente) e in cui sarà in grado di rispondere (risposte del bot).\n    Per rendere disponibile questo bot in altre lingue, fare clic su \"Aggiungi\" per creare una copia della lingua predefinita e tradurre il contenuto nella nuova lingua."
   },
   "select_which_dialogs_are_included_in_the_skill_man_281ef8c9": {
     "message": "Seleziona i dialoghi inclusi nel manifesto della competenza"
@@ -2871,13 +2871,13 @@
     "message": "Endpoint competenze"
   },
   "skill_host_endpoint_4118a173": {
-    "message": "Endpoint dell\"host competenze"
+    "message": "Endpoint dell’host competenze"
   },
   "skill_host_endpoint_url_e68b65f6": {
-    "message": "URL dell\"endpoint dell\"host competenze"
+    "message": "URL dell’endpoint dell’host competenze"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
-    "message": "L\"endpoint del manifesto della competenza non è configurato correttamente"
+    "message": "L’endpoint del manifesto della competenza non è configurato correttamente"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "Manifesto { skillName }"
@@ -3018,7 +3018,7 @@
     "message": "templateName manca o è vuoto"
   },
   "terms_of_use_6542769b": {
-    "message": "Condizioni per l\"utilizzo"
+    "message": "Condizioni per l’utilizzo"
   },
   "test_in_emulator_b1b3c278": {
     "message": "Esegui il test in Emulator"
@@ -3060,7 +3060,7 @@
     "message": "The page you are looking for can’t be found."
   },
   "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
-    "message": "Il tipo di proprietà definisce l\"input previsto. Il tipo può essere un elenco (o un\"enumerazione) di valori definiti o un formato dati, ad esempio una data, un indirizzo di posta elettronica, un numero o una stringa."
+    "message": "Il tipo di proprietà definisce l’input previsto. Il tipo può essere un elenco (o un’enumerazione) di valori definiti o un formato dati, ad esempio una data, un indirizzo di posta elettronica, un numero o una stringa."
   },
   "the_return_type_does_not_match_2ae72548": {
     "message": "il tipo restituito non corrisponde"
@@ -3075,7 +3075,7 @@
     "message": "The target where you publish your bot"
   },
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
-    "message": "Il messaggio di benvenuto viene attivato dall\"evento <i>ConversationUpdate</i>. Per aggiungere un nuovo trigger <i>ConversationUpdate</i>:"
+    "message": "Il messaggio di benvenuto viene attivato dall’evento <i>ConversationUpdate</i>. Per aggiungere un nuovo trigger <i>ConversationUpdate</i>:"
   },
   "there_are_no_kind_properties_e299287e": {
     "message": "Non sono presenti proprietà { kind }."
@@ -3096,10 +3096,10 @@
     "message": "Si è verificato un errore"
   },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
-    "message": "Si è verificato un errore imprevisto durante l\"importazione del contenuto del bot in <b>{ botName }</b>"
+    "message": "Si è verificato un errore imprevisto durante l’importazione del contenuto del bot in <b>{ botName }</b>"
   },
   "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
-    "message": "Si è verificato un errore imprevisto durante l\"estrazione dal profilo di pubblicazione <b>{ selectedTargetName }</b>"
+    "message": "Si è verificato un errore imprevisto durante l’estrazione dal profilo di pubblicazione <b>{ selectedTargetName }</b>"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "Si è verificato un errore durante la creazione della Knowledge Base"
@@ -3123,19 +3123,19 @@
     "message": "Questa è una diagnostica { severity }"
   },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
-    "message": "Questa è la lingua del bot che si sta attualmente usando per la creazione. Cambiare la lingua attiva nell\"elenco a discesa sottostante."
+    "message": "Questa è la lingua del bot che si sta attualmente usando per la creazione. Cambiare la lingua attiva nell’elenco a discesa sottostante."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
-    "message": "Lingua usata per l\"interfaccia utente di Composer."
+    "message": "Lingua usata per l’interfaccia utente di Composer."
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "Questa lingua verrà copiata e usata come base (e lingua di fallback) per la traduzione."
   },
   "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
-    "message": "Non è possibile completare l\"operazione. Il bot fa già parte del progetto bot"
+    "message": "Non è possibile completare l’operazione. Il bot fa già parte del progetto bot"
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
-    "message": "Non è possibile completare l\"operazione. La competenza fa già parte del progetto bot"
+    "message": "Non è possibile completare l’operazione. La competenza fa già parte del progetto bot"
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "Questa opzione consente agli utenti di fornire più valori per questa proprietà."
@@ -3147,7 +3147,7 @@
     "message": "Questo tipo di trigger non è supportato dal riconoscimento RegEx. Per assicurarsi che questo trigger venga attivato, modificare il tipo di riconoscimento."
   },
   "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
-    "message": "Questa versione del contenuto non è aggiornata e l\"ultima modifica è stata rifiutata. Il contenuto verrà aggiornato automaticamente."
+    "message": "Questa versione del contenuto non è aggiornata e l’ultima modifica è stata rifiutata. Il contenuto verrà aggiornato automaticamente."
   },
   "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
     "message": "Questa operazione eliminerà il dialogo e il relativo contenuto. Continuare?"
@@ -3204,7 +3204,7 @@
     "message": "Per eseguire questo bot, Composer richiede .NET Core SDK."
   },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
-    "message": "Per comprendere cosa dice l\"utente, il dialogo necessita di un \"Riconoscimento\", che include parole e frasi di esempio che gli utenti possono usare."
+    "message": "Per comprendere cosa dice l’utente, il dialogo necessita di un \"Riconoscimento\", che include parole e frasi di esempio che gli utenti possono usare."
   },
   "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
     "message": "Per comprendere cosa dice l'utente, il dialogo necessita di un \"IRecognizer\", che includa parole e frasi di esempio che gli utenti possono usare."
@@ -3240,7 +3240,7 @@
     "message": "Frasi trigger (finalità: #{ intentName })"
   },
   "triggers_connect_intents_with_bot_responses_think__fdfc97ea": {
-    "message": "I trigger collegano le finalità con le risposte del bot. È possibile pensare a un trigger come a una funzionalità del bot. Il bot è quindi una raccolta di trigger. Per aggiungere un nuovo trigger, fare clic sul pulsante <b>Aggiungi</b> nella barra degli strumenti e quindi selezionare l\"opzione <b>Aggiungi un nuovo trigger</b> dal menu a discesa."
+    "message": "I trigger collegano le finalità con le risposte del bot. È possibile pensare a un trigger come a una funzionalità del bot. Il bot è quindi una raccolta di trigger. Per aggiungere un nuovo trigger, fare clic sul pulsante <b>Aggiungi</b> nella barra degli strumenti e quindi selezionare l’opzione <b>Aggiungi un nuovo trigger</b> dal menu a discesa."
   },
   "true_1900d7ae": {
     "message": "true"
@@ -3279,7 +3279,7 @@
     "message": "Annulla"
   },
   "undo_is_not_supported_ecd6f9fc": {
-    "message": "L\"azione Annulla non è supportata"
+    "message": "L’azione Annulla non è supportata"
   },
   "uninstall_8730233": {
     "message": "Disinstalla"
@@ -3303,7 +3303,7 @@
     "message": "Aggiorna"
   },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
-    "message": "Aggiorna un\"attività inviata in precedenza durante la conversazione"
+    "message": "Aggiorna un’attività inviata in precedenza durante la conversazione"
   },
   "update_activity_2b05e6c6": {
     "message": "Aggiorna attività"
@@ -3330,7 +3330,7 @@
     "message": "Aggiorna script"
   },
   "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
-    "message": "L\"aggiornamento di { existingProjectName } sovrascriverà il contenuto del bot corrente e creerà un backup."
+    "message": "L’aggiornamento di { existingProjectName } sovrascriverà il contenuto del bot corrente e creerà un backup."
   },
   "updating_scripts_e17a5722": {
     "message": "Aggiornamento degli script... "
@@ -3339,16 +3339,16 @@
     "message": "URL"
   },
   "url_should_start_with_http_s_9ca55d94": {
-    "message": "L\"URL deve iniziare con http[s]://"
+    "message": "L’URL deve iniziare con http[s]://"
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Usa la chiave di creazione LUIS personalizzata"
   },
   "use_custom_luis_endpoint_key_572e2c29": {
-    "message": "Usa la chiave dell\"endpoint LUIS personalizzata"
+    "message": "Usa la chiave dell’endpoint LUIS personalizzata"
   },
   "use_custom_luis_region_49d31dbf": {
-    "message": "Usa l\"area LUIS personalizzata"
+    "message": "Usa l’area LUIS personalizzata"
   },
   "use_custom_qna_maker_subscription_key_126e79df": {
     "message": "Usa la chiave di sottoscrizione QnA Maker personalizzata"
@@ -3363,13 +3363,13 @@
     "message": "Usato in"
   },
   "user_input_673e4a89": {
-    "message": "Input dell\"utente"
+    "message": "Input dell’utente"
   },
   "user_input_a6ff658d": {
-    "message": "Input dell\"utente"
+    "message": "Input dell’utente"
   },
   "user_is_typing_790cb502": {
-    "message": "L\"utente sta digitando"
+    "message": "L’utente sta digitando"
   },
   "user_is_typing_typing_activity_cd938615": {
     "message": "User is typing (Typing activity)"
@@ -3423,7 +3423,7 @@
     "message": "Warning"
   },
   "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
-    "message": "Avviso: l\"azione che si sta per eseguire non può essere annullata. Se si continua, il bot e tutti i file correlati verranno eliminati nella cartella del progetto bot."
+    "message": "Avviso: l’azione che si sta per eseguire non può essere annullata. Se si continua, il bot e tutti i file correlati verranno eliminati nella cartella del progetto bot."
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"
@@ -3456,10 +3456,10 @@
     "message": "westus"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
-    "message": "Che cosa può fare l\"utente tramite questa conversazione? Ad esempio, BookATable, OrderACoffee e così via."
+    "message": "Che cosa può fare l’utente tramite questa conversazione? Ad esempio, BookATable, OrderACoffee e così via."
   },
   "what_is_the_name_of_the_custom_event_b28a7b3": {
-    "message": "Qual è il nome dell\"evento personalizzato?"
+    "message": "Qual è il nome dell’evento personalizzato?"
   },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "Qual è il nome di questo trigger"
@@ -3477,10 +3477,10 @@
     "message": "Qual è il tipo di questo trigger?"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
-    "message": "Cosa dice il bot all\"utente. Questo è un modello usato per creare il messaggio in uscita. Può includere regole di generazione di linguaggio, proprietà dalla memoria e altre funzionalità.\n\nAd esempio, per definire le variazioni che verranno selezionate in modo casuale, scrivere:\n- hello\n- hi"
+    "message": "Cosa dice il bot all’utente. Questo è un modello usato per creare il messaggio in uscita. Può includere regole di generazione di linguaggio, proprietà dalla memoria e altre funzionalità.\n\nAd esempio, per definire le variazioni che verranno selezionate in modo casuale, scrivere:\n- hello\n- hi"
   },
   "what_your_bot_says_to_the_user_visit_a_target_blan_7735479": {
-    "message": "Cosa dice il bot all\"utente. Vedere <a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\"> la documentazione</a> per un riferimento delle funzionalità."
+    "message": "Cosa dice il bot all’utente. Vedere <a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\"> la documentazione</a> per un riferimento delle funzionalità."
   },
   "when_deleting_a_language_only_the_content_will_be__8f7f8dee": {
     "message": "Quando si elimina una lingua, verrà rimosso solo il contenuto. Il flusso e la logica della conversazione e del dialogo rimarranno funzionali."
@@ -3489,7 +3489,7 @@
     "message": "Al termine, passare alla lingua appena creata e avviare il processo di traduzione (manuale)."
   },
   "when_multiple_people_are_working_with_models_you_w_32b48099": {
-    "message": "Quando più persone lavorano con i modelli, si vuole essere in grado di lavorare con i modelli indipendentemente l\"uno dall\"altro legati al controllo del codice sorgente."
+    "message": "Quando più persone lavorano con i modelli, si vuole essere in grado di lavorare con i modelli indipendentemente l’uno dall’altro legati al controllo del codice sorgente."
   },
   "which_activity_type_18333457": {
     "message": "Quale tipo di attività?"
@@ -3501,7 +3501,7 @@
     "message": "Quale evento?"
   },
   "write_an_expression_8773ea5c": {
-    "message": "Scrivi un\"espressione"
+    "message": "Scrivi un’espressione"
   },
   "write_your_message_5d0f151b": {
     "message": "Scrivi il messaggio"
@@ -3534,7 +3534,7 @@
     "message": "È possibile creare un nuovo bot da zero con Composer o iniziare con un modello."
   },
   "you_can_define_and_manage_b_intents_b_here_each_in_721b8a0c": {
-    "message": "È possibile definire e gestire le <b>finalità</b> qui. Ogni finalità descrive una specifica intenzione dell\"utente tramite espressioni (ad esempio, utente dice). <b>Le finalità sono spesso trigger del bot.</b>"
+    "message": "È possibile definire e gestire le <b>finalità</b> qui. Ogni finalità descrive una specifica intenzione dell’utente tramite espressioni (ad esempio, utente dice). <b>Le finalità sono spesso trigger del bot.</b>"
   },
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
     "message": "È possibile gestire tutte le risposte del bot qui. Usare i modelli per creare una logica di risposta sofisticata in base alle proprie esigenze."
@@ -3543,7 +3543,7 @@
     "message": "È possibile connettersi solo a una competenza nel bot radice."
   },
   "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
-    "message": "È possibile attivare o disattivare la raccolta dati in qualsiasi momento nelle impostazioni dell\"applicazione."
+    "message": "È possibile attivare o disattivare la raccolta dati in qualsiasi momento nelle impostazioni dell’applicazione."
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "Non si è autorizzati a salvare i bot qui"
