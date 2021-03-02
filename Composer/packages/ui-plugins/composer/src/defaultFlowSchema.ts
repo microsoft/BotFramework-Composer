@@ -205,7 +205,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     },
     hideFooter: '=!action.property',
   },
-  [SDKKinds.TelemetryTrackEvent]: {
+  [SDKKinds.TelemetryTrackEventAction]: {
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
