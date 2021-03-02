@@ -5,7 +5,7 @@ import Path from 'path';
 
 import React, { useEffect, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
 
 import { CreationFlowStatus } from '../../../constants';
@@ -17,7 +17,6 @@ import {
   currentProjectIdState,
   userSettingsState,
   templateProjectsState,
-  selectedTemplateReadMeState,
 } from '../../../recoilModel';
 import Home from '../../../pages/home/Home';
 import { useProjectIdCache } from '../../../utils/hooks';
@@ -54,7 +53,6 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
-  const [selectedTemplateReadMe, setSelectedTemplateReadMe] = useRecoilState(selectedTemplateReadMeState);
   const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
@@ -170,8 +168,6 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           fetchReadMe={fetchReadMe}
           fetchTemplates={fetchTemplatesV2}
           path="create"
-          selectedTemplateReadMe={selectedTemplateReadMe}
-          setSelectedTemplateReadMe={setSelectedTemplateReadMe}
           templates={templateProjects}
           onDismiss={handleDismiss}
           onNext={handleCreateNext}

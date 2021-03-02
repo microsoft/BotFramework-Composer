@@ -27,11 +27,11 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
 
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
-import { fetchReadMePendingState } from '../../../recoilModel';
+import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 // -------------------- Styles -------------------- //
 
@@ -113,13 +113,11 @@ const templateRequestUrl =
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
-  selectedTemplateReadMe: string;
   templates: BotTemplate[];
   onDismiss: () => void;
   onNext: (data: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
-  setSelectedTemplateReadMe: (string) => void;
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
@@ -129,6 +127,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
+  const [readMe, setReadMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
 
   const selectedTemplate = useMemo(() => {
@@ -206,10 +205,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   useEffect(() => {
     if (currentTemplate) {
-      props.setSelectedTemplateReadMe('');
+      setReadMe('');
       props.fetchReadMe(currentTemplate);
     }
-  }, [currentTemplate]);
+  }, [currentTemplate, props.fetchReadMe]);
 
   return (
     <Fragment>
@@ -251,7 +250,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
             {fetchReadMePending && <LoadingSpinner />}
-            <TemplateDetailView readMe={props.selectedTemplateReadMe} templateId={currentTemplate} />
+            <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
           </div>
         </div>
         <DialogFooter>
