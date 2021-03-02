@@ -473,34 +473,31 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(projectIndexingState(projectId), true);
   setTimeout(async () => {
     Promise.all([
-      await lgWorker.parseAll(projectId, lgFiles),
-      await luWorker.parseAll(luFiles, mergedSettings.luFeatures),
-      await qnaWorker.parseAll(qnaFiles),
-    ]).then((result) => {
-      /*
-      If we set state for ervery single file, the UI may have many times re-render.
-      We may add a dialog during the loading stage. If we set lgFilesSelectorFamily directly,
-      this may overwrite the Ids state.
-      */
-      set(lgFilesSelectorFamily(projectId), (prevFiles) => {
-        return prevFiles.map((item) => {
-          const file = (result[0] as LgFile[]).find((file) => file.id === item.id);
-          return file && item.rawData ? file : item;
+      lgWorker.parseAll(projectId, lgFiles).then((result) => {
+        set(lgFilesSelectorFamily(projectId), (prevFiles) => {
+          return prevFiles.map((item) => {
+            const file = (result as LgFile[]).find((file) => file.id === item.id);
+            return file && item.rawData ? file : item;
+          });
         });
-      });
-      set(luFilesSelectorFamily(projectId), (prevFiles) => {
-        return prevFiles.map((item) => {
-          const file = (result[1] as LuFile[]).find((file) => file.id === item.id);
-          return file && item.rawData ? file : item;
+      }),
+      luWorker.parseAll(luFiles, mergedSettings.luFeatures).then((result) => {
+        set(luFilesSelectorFamily(projectId), (prevFiles) => {
+          return prevFiles.map((item) => {
+            const file = (result as LuFile[]).find((file) => file.id === item.id);
+            return file && item.rawData ? file : item;
+          });
         });
-      });
-      set(qnaFilesSelectorFamily(projectId), (prevFiles) => {
-        return prevFiles.map((item) => {
-          const file = (result[2] as QnAFile[]).find((file) => file.id === item.id);
-          return file && item.rawData ? file : item;
+      }),
+      qnaWorker.parseAll(qnaFiles).then((result) => {
+        set(qnaFilesSelectorFamily(projectId), (prevFiles) => {
+          return prevFiles.map((item) => {
+            const file = (result as QnAFile[]).find((file) => file.id === item.id);
+            return file && item.rawData ? file : item;
+          });
         });
-      });
-      // async repair bot assets, add missing lg templates
+      }),
+    ]).then(() => {
       set(projectIndexingState(projectId), false);
     });
   }, 0);
