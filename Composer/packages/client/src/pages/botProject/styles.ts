@@ -84,7 +84,7 @@ export const errorTextStyle = css`
 
 export const errorIcon = {
   root: {
-    color: '#A80000',
+    color: SharedColors.red20,
     marginRight: 8,
     paddingLeft: 12,
     fontSize: FontSizes.medium,
