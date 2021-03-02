@@ -3,11 +3,12 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
+import { readdirSync, readFileSync } from 'fs';
+
 import * as semverSort from 'semver-sort';
 import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
-import { readdirSync, readFileSync } from 'fs';
 import { parseStringPromise } from 'xml2js';
 
 const API_ROOT = '/api';
@@ -174,8 +175,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           {
             key: 'nuget',
             text: 'nuget',
-            url: 'https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true',
-            searchUrl: 'https://azuresearch-usnc.nuget.org/query?q={{keyword}}+Tags:%22bf-component%22&prerelease=true',
+            url:
+              'https://azuresearch-usnc.nuget.org/query?q=microsoft.bot.components+Tags:%22bf-component%22&prerelease=true&semVerLevel=2.0.0',
+            searchUrl:
+              'https://azuresearch-usnc.nuget.org/query?q=microsoft.bot.components+{{keyword}}+Tags:%22bf-component%22&prerelease=true&semVerLevel=2.0.0',
             readonly: true,
             // only ours
             // https://azuresearch-usnc.nuget.org/query?q={search keyword}+preview.bot.component+Tags:%22bf-component%22&prerelease=true
@@ -268,11 +271,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         } catch (err) {
           composer.log('Could not load library from URL');
           composer.log(err);
-          return res
-            .status(err.response?.status || 500)
-            .json({
-              message: `Could not load feed. Please check the feed URL and format. Error message: ${err.message}`,
-            });
+          return res.status(err.response?.status || 500).json({
+            message: `Could not load feed. Please check the feed URL and format. Error message: ${err.message}`,
+          });
         }
       }
 
@@ -295,10 +296,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      let runtimePath = currentProject.settings?.runtime?.path;
-      if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, runtimePath);
-      }
+      const runtimePath = currentProject.getRuntimePath();
 
       if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
         const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
@@ -350,10 +348,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      let runtimePath = currentProject.settings?.runtime?.path;
-      if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, runtimePath);
-      }
+      const runtimePath = currentProject.getRuntimePath();
 
       if (packageName && runtimePath) {
         try {
@@ -422,12 +417,15 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               }
 
               // update the settings.plugins array
-              const newlyInstalledPlugin = installedComponents.find(c=>c.includesSchema && c.name==packageName);
-              if (newlyInstalledPlugin && !currentProject.settings.runtimeSettings?.plugins?.find((p)=>p.name===newlyInstalledPlugin.name)) {
+              const newlyInstalledPlugin = installedComponents.find((c) => c.includesSchema && c.name == packageName);
+              if (
+                newlyInstalledPlugin &&
+                !currentProject.settings.runtimeSettings?.plugins?.find((p) => p.name === newlyInstalledPlugin.name)
+              ) {
                 const newSettings = currentProject.settings;
                 if (!newSettings.runtimeSettings) {
                   newSettings.runtimeSettings = {
-                    plugins: []
+                    plugins: [],
                   };
                 }
                 newSettings.runtimeSettings.plugins.push({
@@ -478,10 +476,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         mergeErrors.push(msg);
       };
 
-      let runtimePath = currentProject.settings?.runtime?.path;
-      if (runtimePath && !path.isAbsolute(runtimePath)) {
-        runtimePath = path.resolve(currentProject.dir, runtimePath);
-      }
+      const runtimePath = currentProject.getRuntimePath();
 
       // get URL or package name
       const packageName = req.body.package;
@@ -515,12 +510,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           });
 
           // update the settings.plugins array
-          if (currentProject.settings.runtimeSettings?.plugins?.find((p)=>p.name===packageName)) {
+          if (currentProject.settings.runtimeSettings?.plugins?.find((p) => p.name === packageName)) {
             const newSettings = currentProject.settings;
-            newSettings.runtimeSettings.plugins = newSettings.runtimeSettings.plugins.filter((p)=>p.name!==packageName);
+            newSettings.runtimeSettings.plugins = newSettings.runtimeSettings.plugins.filter(
+              (p) => p.name !== packageName
+            );
             currentProject.updateEnvSettings(newSettings);
           }
-
         } catch (err) {
           res.json({
             success: false,

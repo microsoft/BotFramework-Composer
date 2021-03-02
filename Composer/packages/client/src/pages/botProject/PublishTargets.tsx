@@ -13,6 +13,8 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
+import { AuthDialog } from '../../components/Auth/AuthDialog';
+import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 
@@ -106,6 +108,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const [dialogHidden, setDialogHidden] = useState(true);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
@@ -145,7 +148,11 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                     styles={editPublishProfile}
                     onClick={() => {
                       setCurrent({ item: p, index: index });
-                      setDialogHidden(false);
+                      if (isShowAuthDialog(true)) {
+                        setShowAuthDialog(true);
+                      } else {
+                        setDialogHidden(false);
+                      }
                     }}
                   >
                     {formatMessage('Edit')}
@@ -157,12 +164,29 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           <ActionButton
             data-testid={'addNewPublishProfile'}
             styles={addPublishProfile}
-            onClick={() => setDialogHidden(false)}
+            onClick={() => {
+              if (isShowAuthDialog(true)) {
+                setShowAuthDialog(true);
+              } else {
+                setDialogHidden(false);
+              }
+            }}
           >
             {formatMessage('Add new')}
           </ActionButton>
         </div>
       </CollapsableWrapper>
+      {showAuthDialog && (
+        <AuthDialog
+          needGraph
+          next={() => {
+            setDialogHidden(false);
+          }}
+          onDismiss={() => {
+            setShowAuthDialog(false);
+          }}
+        />
+      )}
       {!dialogHidden ? (
         <PublishProfileDialog
           closeDialog={() => {
