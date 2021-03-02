@@ -6,7 +6,7 @@
     "message": "5 分钟简介"
   },
   "ErrorInfo_part1": {
-    "message": "表单编辑器出错!"
+    "message": "An error occurred in the form editor!"
   },
   "ErrorInfo_part2": {
     "message": "这可能是由 Composer 中的数据格式错误或功能缺失导致的。"
@@ -35,11 +35,14 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "属性是机器人收集的信息片段。属性名是 Composer 中使用的名称；它不一定是机器人的消息中显示的相同文本。"
   },
+  "a_publishing_profile_provides_the_secure_connectiv_e203980e": {
+    "message": "A publishing profile provides the secure connectivity required to publish your bot. "
+  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
-    "message": "A schema, or form, is the list of properties your bot will collect."
+    "message": "架构或窗体是机器人将收集的属性的列表。"
   },
   "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
-    "message": "A skill bot that can be called from a host bot."
+    "message": "可从主机机器人调用的技能机器人。"
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "订阅密钥在你创建 QnA Maker 资源时创建。"
@@ -52,6 +55,9 @@
   },
   "accepted_values_b4224bcd": {
     "message": "已接受值"
+  },
+  "accepting_40ba3b70": {
+    "message": "Accepting"
   },
   "accepts_multiple_values_73658f63": {
     "message": "接受多个值"
@@ -99,16 +105,22 @@
     "message": "已移动操作"
   },
   "active_language_6d001457": {
-    "message": "Active language"
+    "message": "可用的语言"
   },
   "activities_125193f7": {
     "message": "活动"
+  },
+  "activities_activity_received_cff408b2": {
+    "message": "Activities (Activity received)"
   },
   "activity_13915493": {
     "message": "活动"
   },
   "activity_received_2f20fa9d": {
     "message": "已收到活动"
+  },
+  "adaptive_card_785723e3": {
+    "message": "Adaptive card"
   },
   "adaptive_dialog_61a05dde": {
     "message": "自适应对话"
@@ -117,7 +129,7 @@
     "message": "添加"
   },
   "add_a_dialog_e378aa3a": {
-    "message": "Add a dialog"
+    "message": "添加对话框"
   },
   "add_a_new_key_5c208c29": {
     "message": "添加新的密钥"
@@ -128,14 +140,14 @@
   "add_a_new_value_24ca14ac": {
     "message": "添加新值"
   },
-  "add_a_publish_profile_fca2263a": {
-    "message": "添加发布配置文件"
+  "add_a_publishing_profile_e926460e": {
+    "message": "Add a publishing profile"
   },
   "add_a_skill_46d2b71c": {
     "message": "添加技能"
   },
   "add_a_trigger_c6861401": {
-    "message": "Add a trigger"
+    "message": "添加触发器"
   },
   "add_a_welcome_message_9e1480b2": {
     "message": "添加欢迎消息"
@@ -146,32 +158,44 @@
   "add_an_intent_trigger_a9acc149": {
     "message": "添加意向触发器"
   },
+  "add_custom_a376ce51": {
+    "message": "Add Custom"
+  },
   "add_custom_runtime_6b73dc44": {
     "message": "添加自定义运行时"
+  },
+  "add_more_to_this_response_d45bdfda": {
+    "message": "Add more to this response"
   },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "添加多个以逗号分隔的同义词"
   },
+  "add_new_916f2665": {
+    "message": "Add new"
+  },
   "add_new_answer_9de3808e": {
     "message": "添加新的答案"
+  },
+  "add_new_attachment_546a68c": {
+    "message": "Add new attachment"
   },
   "add_new_extension_19b82b77": {
     "message": "添加新的扩展"
   },
   "add_new_knowledge_base_1a3afed3": {
-    "message": "Add new knowledge base"
+    "message": "添加新的知识库"
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "添加新的 { propertyName }"
-  },
-  "add_new_publish_profile_93345a07": {
-    "message": "Add new publish profile"
   },
   "add_new_question_85612b7f": {
     "message": "添加新问题"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "在此处添加新的验证规则"
+  },
+  "add_new_variation_e49425ea": {
+    "message": "Add new variation"
   },
   "add_property_d381eba3": {
     "message": "添加属性"
@@ -180,10 +204,13 @@
     "message": "+ 添加 QnA 对"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> 添加一些示例短语来触发此意向:\n> - 请告诉我天气情况\n> -'{'city=Seattle'}'的天气怎么样\n\n> 实体定义:\n> @ ml city"
+    "message": "> 添加一些示例短语来触发此意向:\n> - 请告诉我天气情况\n> -“{'city=Seattle'}”的天气怎么样\n\n> 实体定义:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> 添加一些预期的用户响应:\n> - 请提醒我'{'itemTitle=buy milk'}'\n> - 提醒我'{'itemTitle'}'\n> - 将'{'itemTitle'}'添加到我的待办事项列表\n>\n> 实体定义:\n> @ ml itemTitle\n"
+    "message": "> 添加一些预期的用户响应:\n> - 请提醒我“{'itemTitle=buy milk'}”\n> - 提醒我“{'itemTitle'}”\n> - 将“{'itemTitle'}”添加到我的待办事项列表\n>\n> 实体定义:\n> @ ml itemTitle\n"
+  },
+  "add_suggested_action_baf855ca": {
+    "message": "Add suggested action"
   },
   "add_welcome_message_49d9ded9": {
     "message": "添加欢迎消息"
@@ -195,13 +222,43 @@
     "message": "高级选项"
   },
   "advanced_settings_view_json_b83638b4": {
-    "message": "Advanced Settings View (json)"
+    "message": "“高级设置”视图(JSON)"
   },
   "all_4321c3a1": {
     "message": "全部"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "创作密钥在你创建 LUIS 帐户时自动创建。"
+  },
+  "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
+    "message": "An error occurred connecting initializing the DirectLine server"
+  },
+  "an_error_occurred_parsing_the_transcript_for_a_con_a47395c3": {
+    "message": "An error occurred parsing the transcript for a conversation"
+  },
+  "an_error_occurred_receiving_an_activity_from_the_b_d734a7d": {
+    "message": "An error occurred receiving an activity from the bot."
+  },
+  "an_error_occurred_saving_the_transcript_to_disk_f5cb0f7c": {
+    "message": "An error occurred saving the transcript to disk."
+  },
+  "an_error_occurred_saving_transcripts_be37b977": {
+    "message": "An error occurred saving transcripts"
+  },
+  "an_error_occurred_sending_conversation_update_acti_85be9b0f": {
+    "message": "An error occurred sending conversation update activity to the bot"
+  },
+  "an_error_occurred_starting_a_new_conversation_7586fd9f": {
+    "message": "An error occurred starting a new conversation"
+  },
+  "an_error_occurred_trying_to_save_the_transcript_to_a6efda6f": {
+    "message": "An error occurred trying to save the transcript to disk"
+  },
+  "an_error_occurred_validating_the_microsoft_app_id__c2b9dc19": {
+    "message": "An error occurred validating the Microsoft App Id and Microsoft App Password."
+  },
+  "animation_card_1a7d75ff": {
+    "message": "Animation card"
   },
   "answer_4620913f": {
     "message": "答案"
@@ -222,13 +279,13 @@
     "message": "任何字符串"
   },
   "app_id_password_424f613a": {
-    "message": "App Id / Password"
+    "message": "应用 ID/密码"
   },
   "application_language_f100f3e0": {
     "message": "应用程序语言"
   },
   "application_language_settings_26f82dfc": {
-    "message": "Application Language settings"
+    "message": "“应用程序语言”设置"
   },
   "application_settings_39e840c6": {
     "message": "应用程序设置"
@@ -249,7 +306,7 @@
     "message": "是否确定要删除“{ propertyName }”?"
   },
   "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
-    "message": "Are you sure you want to remove this property?"
+    "message": "确定要删除此属性吗?"
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "是否确定要重新开始? 你的进度将会丢失。"
@@ -276,7 +333,7 @@
     "message": "提问"
   },
   "ask_activity_82c174e2": {
-    "message": "Ask Activity"
+    "message": "提问活动"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "至少要问一个问题"
@@ -284,8 +341,17 @@
   "attachment_input_e0ece49c": {
     "message": "附件输入"
   },
-  "australia_6a25c95b": {
-    "message": "澳大利亚"
+  "attachment_layout_b42b242": {
+    "message": "Attachment layout"
+  },
+  "attachments_694cf227": {
+    "message": "Attachments"
+  },
+  "audio_card_8587cf83": {
+    "message": "Audio card"
+  },
+  "australiaeast_f3227a31": {
+    "message": "australiaeast"
   },
   "authoring_canvas_18802e39": {
     "message": "创作画布"
@@ -300,7 +366,7 @@
     "message": "自动更新"
   },
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
-    "message": "Automatically generate dialogs that collect information from a user to manage conversations."
+    "message": "自动生成从用户处收集信息以管理对话的对话框。"
   },
   "back_2900f52a": {
     "message": "返回"
@@ -351,7 +417,7 @@
     "message": "布尔值。"
   },
   "bot_416bf08d": {
-    "message": "bot"
+    "message": "机器人"
   },
   "bot_7926b66d": {
     "message": "机器人"
@@ -360,10 +426,16 @@
     "message": "机器人询问"
   },
   "bot_content_was_successfully_imported_5a07ae64": {
-    "message": "Bot content was successfully imported."
+    "message": "已成功导入机器人内容。"
   },
   "bot_controller_319b408d": {
-    "message": "Bot Controller"
+    "message": "机器人控制器"
+  },
+  "bot_endpoint_not_available_in_the_request_43c381f8": {
+    "message": "Bot endpoint not available in the request"
+  },
+  "bot_files_created_986109df": {
+    "message": "Bot files created"
   },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "借助 Bot Framework Composer，开发人员和多学科团队可以使用 Bot Framework 中的最新组件(SDK、LG、LU 和声明性文件格式)生成所有类型的对话体验，所有这些都不需要编写代码。"
@@ -383,6 +455,9 @@
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
     "message": "Bot Framework 提供了最全面的对话应用程序生成体验。"
   },
+  "bot_is_botname_c5af0c89": {
+    "message": "Bot is { botName }"
+  },
   "bot_language_6cf30c2": {
     "message": "机器人语言"
   },
@@ -390,7 +465,10 @@
     "message": "机器人语言(活动) "
   },
   "bot_management_and_configurations_b7dadd69": {
-    "message": "Bot management and configurations"
+    "message": "机器人管理和配置"
+  },
+  "bot_name_cannot_not_start_with_a_number_d70239": {
+    "message": "Bot name cannot not start with a number"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "机器人名称为 { botName }"
@@ -399,10 +477,10 @@
     "message": "机器人项目文件不存在。"
   },
   "bot_projects_settings_list_view_ab58e5d": {
-    "message": "Bot projects settings list View"
+    "message": "“机器人项目设置”列表视图"
   },
   "bot_projects_settings_navigation_pane_c2074a5f": {
-    "message": "Bot Projects Settings Navigation Pane"
+    "message": "“机器人项目设置”导航窗格"
   },
   "bot_responses_4617b4a2": {
     "message": "机器人响应"
@@ -435,10 +513,10 @@
     "message": "生成你的第一个机器人"
   },
   "building_5e8a3c1d": {
-    "message": "Building"
+    "message": "正在生成"
   },
   "building_runtime_22f11a1f": {
-    "message": "Building runtime"
+    "message": "正在生成运行时"
   },
   "bytes_74acea97": {
     "message": "字节"
@@ -458,6 +536,21 @@
   "cancel_dialog_event_cc671dee": {
     "message": "取消对话事件"
   },
+  "cannot_find_a_matching_conversation_d6344e4a": {
+    "message": "Cannot find a matching conversation."
+  },
+  "cannot_parse_attachment_c3e552a5": {
+    "message": "Cannot parse attachment."
+  },
+  "cannot_post_activity_conversation_not_found_c1e26d2d": {
+    "message": "Cannot post activity. Conversation not found."
+  },
+  "cannot_upload_file_conversation_not_found_8a983504": {
+    "message": "Cannot upload file. Conversation not found."
+  },
+  "carousal_c65edfcd": {
+    "message": "Carousal"
+  },
   "change_recognizer_3145b93d": {
     "message": "更改识别器"
   },
@@ -472,6 +565,9 @@
   },
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "为新的机器人项目选择一个位置。"
+  },
+  "choose_a_template_for_your_bot_47ed06a8": {
+    "message": "Choose a template for your bot"
   },
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "选择如何创建你的机器人"
@@ -500,6 +596,9 @@
   "collapse_34080b4d": {
     "message": "折叠"
   },
+  "collapse_debug_panel_6f1c5869": {
+    "message": "Collapse debug panel"
+  },
   "collapse_navigation_17228b95": {
     "message": "折叠导航"
   },
@@ -507,10 +606,10 @@
     "message": "注释"
   },
   "comments_e07bcbe3": {
-    "message": "Comments"
+    "message": "注释"
   },
   "common_7911ab4b": {
-    "message": "Common"
+    "message": "通用"
   },
   "component_stacktrace_e24b1983": {
     "message": "组件 StackTrace:"
@@ -519,7 +618,7 @@
     "message": "Composer 还不能自动翻译机器人。\n若要手动创建翻译，Composer 将使用附加语言的名称创建机器人的内容副本。然后，可以在不影响原始机器人逻辑或流的情况下翻译此内容，你可以在不同语言之间切换，以确保正确且恰当地翻译响应。"
   },
   "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
-    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
+    "message": "Composer 包括用于收集使用情况信息的遥测功能。Composer 团队必须了解如何使用工具才能进行改进。"
   },
   "composer_introduction_98a93701": {
     "message": "Composer 简介"
@@ -528,7 +627,7 @@
     "message": "编辑器是最新的。"
   },
   "composer_language_is_the_language_of_composer_ui_c23a57b6": {
-    "message": "Composer language is the language of Composer UI"
+    "message": "Composer 语言是 Composer UI 的语言"
   },
   "composer_logo_ba2048a0": {
     "message": "Composer 徽标"
@@ -537,7 +636,7 @@
     "message": "Composer 需要 .NET Core SDK"
   },
   "composer_settings_31b04099": {
-    "message": "Composer Settings"
+    "message": "Composer 设置"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "将重启 Composer。"
@@ -573,7 +672,7 @@
     "message": "祝贺! 你已成功发布模型。"
   },
   "connect_a_remote_skill_10cf0724": {
-    "message": "Connect a remote skill"
+    "message": "连接远程技能"
   },
   "connect_to_a_skill_53c9dff0": {
     "message": "连接到技能"
@@ -582,10 +681,13 @@
     "message": "连接到 QnA 知识库"
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
-    "message": "Connecting to <b>{ source }</b> to import bot content..."
+    "message": "正在连接到 <b>{source}</b> 以导入机器人内容..."
   },
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
-    "message": "Connecting to <b>{ targetName }</b> to import bot content..."
+    "message": "正在连接到 <b>{targetName}</b> 以导入机器人内容..."
+  },
+  "continue_ac067716": {
+    "message": "Continue"
   },
   "continue_loop_22635585": {
     "message": "继续循环"
@@ -593,14 +695,17 @@
   "conversation_ended_a8bd37dd": {
     "message": "已结束对话"
   },
+  "conversation_ended_endofconversation_activity_41d0c83f": {
+    "message": "Conversation ended (EndOfConversation activity)"
+  },
+  "conversation_id_cannot_be_updated_2a973f13": {
+    "message": "Conversation ID cannot be updated."
+  },
   "conversation_invoked_e960884e": {
     "message": "已调用对话"
   },
-  "conversational_core_preview_template_is_available__ba9b43b8": {
-    "message": "Conversational Core preview template is available since you have that feature turned on."
-  },
-  "conversational_core_template_899e3082": {
-    "message": "Conversational Core Template"
+  "conversation_invoked_invoke_activity_71efde42": {
+    "message": "Conversation invoked (Invoke activity)"
   },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate 活动"
@@ -612,7 +717,7 @@
     "message": "复制内容以进行翻译"
   },
   "copy_project_location_to_clipboard_eb85c474": {
-    "message": "Copy project location to clipboard"
+    "message": "将项目位置复制到剪贴板"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "无法连接到存储。"
@@ -645,13 +750,13 @@
     "message": "单击上面的 \"+\" 创建新的窗体对话架构。"
   },
   "create_a_new_skill_e961ff28": {
-    "message": "Create a new skill"
+    "message": "创建新技能"
   },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "创建一个新技能清单或选择要编辑的清单"
   },
   "create_a_skill_in_your_bot_d7659e6b": {
-    "message": "Create a skill in your bot"
+    "message": "在机器人中创建技能"
   },
   "create_a_trigger_40e74743": {
     "message": "创建触发器"
@@ -726,22 +831,22 @@
     "message": "自定义识别器"
   },
   "custom_runtime_426aa34f": {
-    "message": "Custom runtime"
+    "message": "自定义运行时"
   },
   "cut_c8c92681": {
     "message": "剪切"
   },
   "data_collection_32efe1e7": {
-    "message": "Data collection"
+    "message": "数据收集"
   },
   "data_collection_7db2e237": {
-    "message": "Data Collection"
+    "message": "数据收集"
   },
   "data_loading_4c9bb9f6": {
     "message": "正在加载数据..."
   },
   "data_transferring_between_services_c0971544": {
-    "message": "Data transferring between services"
+    "message": "在服务之间传输数据"
   },
   "date_ee500367": {
     "message": "日期"
@@ -764,6 +869,9 @@
   "debug_break_870a75df": {
     "message": "调试中断"
   },
+  "debug_panel_header_2ee4d70c": {
+    "message": "Debug Panel Header"
+  },
   "debugging_options_20e2e9da": {
     "message": "调试选项"
   },
@@ -771,7 +879,7 @@
     "message": "默认语言"
   },
   "default_language_a976938d": {
-    "message": "DEFAULT LANGUAGE"
+    "message": "默认语言"
   },
   "default_language_b11c37db": {
     "message": "默认语言"
@@ -804,7 +912,7 @@
     "message": "删除机器人"
   },
   "delete_form_dialog_schema_c8e28229": {
-    "message": "Delete form dialog schema?"
+    "message": "要删除窗体对话框架构吗?"
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "删除知识库"
@@ -819,10 +927,10 @@
     "message": "删除属性"
   },
   "delete_property_da7646f6": {
-    "message": "Delete property?"
+    "message": "要删除属性吗?"
   },
   "delete_this_bot_fb78e519": {
-    "message": "Delete this bot"
+    "message": "删除此机器人"
   },
   "deleting_dialogid_failed_1d7cc05a": {
     "message": "无法删除“{ dialogId }”。"
@@ -836,32 +944,41 @@
   "design_51b2812a": {
     "message": "设计"
   },
+  "diagnostic_description_msg_9ddd1be": {
+    "message": "Diagnostic Description { msg }"
+  },
   "diagnostic_links_228dc6fe": {
-    "message": "diagnostic links"
+    "message": "诊断链接"
   },
   "diagnostic_list_29813310": {
-    "message": "Diagnostic list"
+    "message": "诊断列表"
   },
   "diagnostic_list_89b39c2e": {
-    "message": "Diagnostic List"
+    "message": "诊断列表"
   },
   "diagnostic_message_msg_5387e951": {
-    "message": "Diagnostic Message { msg }"
+    "message": "诊断消息 {msg}"
   },
   "diagnostic_type_e1979c21": {
-    "message": "Diagnostic type"
+    "message": "诊断类型"
   },
   "diagnostics_a11880f6": {
-    "message": "Diagnostics"
+    "message": "诊断"
   },
   "diagnostics_pane_2d77c390": {
-    "message": "Diagnostics Pane"
+    "message": "“诊断”窗格"
+  },
+  "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
+    "message": "Diagnostics tab which shows errors and warnings."
   },
   "dialog_68ba69ba": {
     "message": "(对话)"
   },
   "dialog_cancelled_767b512a": {
     "message": "已取消对话"
+  },
+  "dialog_cancelled_cancel_dialog_event_3eba3d7e": {
+    "message": "Dialog cancelled (Cancel dialog event)"
   },
   "dialog_data_61d5539b": {
     "message": "对话数据"
@@ -872,11 +989,11 @@
   "dialog_events_f1b2e2a0": {
     "message": "对话事件"
   },
-  "dialog_generation_failed_3c73e599": {
-    "message": "Dialog generation failed."
+  "dialog_generation_has_failed_550f0927": {
+    "message": "Dialog generation has failed."
   },
   "dialog_generation_was_successful_be280943": {
-    "message": "Dialog generation was successful."
+    "message": "已成功生成对话框。"
   },
   "dialog_input_schema_c7864fbd": {
     "message": "对话输入架构。"
@@ -896,6 +1013,9 @@
   "dialog_started_912507c": {
     "message": "已开始对话"
   },
+  "dialog_started_begin_dialog_event_751dc07e": {
+    "message": "Dialog started (Begin dialog event)"
+  },
   "dialog_with_the_name_value_already_exists_62838518": {
     "message": "已存在名为 { value } 的对话。"
   },
@@ -908,17 +1028,17 @@
   "disable_a5c05db3": {
     "message": "禁用"
   },
-  "discover_and_use_components_that_can_be_installed__49e308bf": {
-    "message": "Discover and use components that can be installed into your bot."
-  },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "在下一行显示超出编辑器宽度的行。"
   },
+  "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
+    "message": "Display text used by the channel to render visually."
+  },
   "do_you_want_to_proceed_cd35aa38": {
-    "message": "Do you want to proceed?"
+    "message": "是否继续?"
   },
   "do_you_want_to_update_b_existingprojectname_b_c34014f": {
-    "message": "Do you want to update <b>{ existingProjectName }</b>"
+    "message": "要更新 <b>{existingProjectName}</b> 吗"
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "是否继续?"
@@ -938,6 +1058,9 @@
   "downloading_bb6fb34b": {
     "message": "正在下载..."
   },
+  "downloading_language_model_9d40c817": {
+    "message": "Downloading Language Model"
+  },
   "duplicate_31cec192": {
     "message": "复制"
   },
@@ -950,8 +1073,14 @@
   "duplicate_name_d295a09d": {
     "message": "名称重复"
   },
+  "duplicate_root_dialog_name_287ab65b": {
+    "message": "Duplicate root dialog name"
+  },
   "duplicated_intents_recognized_d3908424": {
     "message": "已识别的意向重复"
+  },
+  "e_g_azurebot_e09f6769": {
+    "message": "e.g. AzureBot"
   },
   "early_adopters_e8db7999": {
     "message": "早期采用者"
@@ -992,6 +1121,9 @@
   "edit_source_45af68b4": {
     "message": "编辑源"
   },
+  "edit_this_template_in_a_bot_response_view_a_7236985f": {
+    "message": "Edit this template in<a>Bot Response view</a>"
+  },
   "ejecting_runtime_f6c90614": {
     "message": "正在弹出运行时..."
   },
@@ -1007,6 +1139,9 @@
   "emit_event_32aa6583": {
     "message": "发出事件"
   },
+  "empty_bot_template_that_routes_to_qna_configuratio_21531414": {
+    "message": "Empty bot template that routes to qna configuration"
+  },
   "empty_qna_icon_34c180c6": {
     "message": "空 QnA 图标"
   },
@@ -1018,9 +1153,6 @@
   },
   "enable_multi_turn_extraction_8a168892": {
     "message": "启用多轮次提取"
-  },
-  "enable_the_new_conversational_core_template_built__df338773": {
-    "message": "Enable the new conversational core template built on the component model"
   },
   "enabled_ba7cab66": {
     "message": "已启用"
@@ -1041,7 +1173,7 @@
     "message": "EndOfConversation 活动"
   },
   "endpoints_ff946539": {
-    "message": "Endpoints"
+    "message": "终结点"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
     "message": "输入清单 URL 以向机器人添加新技能。"
@@ -1053,37 +1185,40 @@
     "message": "输入最小值"
   },
   "enter_a_url_7b4d6063": {
-    "message": "Enter a URL"
+    "message": "输入 URL"
   },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "输入 URL 或浏览以上传文件"
   },
   "enter_luis_application_name_df312e75": {
-    "message": "Enter LUIS application name"
+    "message": "输入 LUIS 应用程序名称"
   },
   "enter_luis_authoring_key_c59f8f1f": {
-    "message": "Enter LUIS authoring key"
+    "message": "输入 LUIS 创作密钥"
   },
   "enter_luis_endpoint_key_f8eb30f5": {
-    "message": "Enter LUIS endpoint key"
+    "message": "输入 LUIS 终结点密钥"
   },
   "enter_luis_region_2316eceb": {
-    "message": "Enter LUIS region"
+    "message": "输入 LUIS 区域"
   },
   "enter_microsoft_app_id_c92101b0": {
-    "message": "Enter Microsoft App Id"
+    "message": "输入 Microsoft 应用 ID"
   },
   "enter_microsoft_app_password_b0926c39": {
-    "message": "Enter Microsoft App Password"
+    "message": "输入 Microsoft 应用密码"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
-    "message": "Enter QnA Maker Subscription key"
+    "message": "输入 QnA Maker 订阅密钥"
   },
   "enter_skill_host_endpoint_url_e22eeab5": {
-    "message": "Enter Skill host endpoint url"
+    "message": "输入技能主机终结点 URL"
   },
   "entities_ef09392c": {
     "message": "实体"
+  },
+  "entity_defined_in_lu_files_entity_1812c172": {
+    "message": "Entity defined in lu files: { entity }"
   },
   "environment_68aed6d3": {
     "message": "环境"
@@ -1100,20 +1235,29 @@
   "error_event_c079b608": {
     "message": "错误事件"
   },
+  "error_fetching_runtime_templates_5e8a4701": {
+    "message": "Error fetching runtime templates"
+  },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "{ title } 的 UI 架构出错: { errorMsg }\n{ options }"
-  },
-  "error_occured_ejecting_runtime_76bb48e7": {
-    "message": "弹出运行时出错!"
   },
   "error_occurred_5549a6b4": {
     "message": "出错了"
   },
+  "error_occurred_ejecting_runtime_8512129e": {
+    "message": "Error occurred ejecting runtime!"
+  },
+  "error_occurred_error_event_3e7f8ad0": {
+    "message": "Error occurred (Error event)"
+  },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
-    "message": "{ error } Please add unknown functions to setting''s customFunctions field."
+    "message": "{error} 请将未知函数添加到设置的 customFunctions 字段。"
   },
   "error_processing_schema_2c707cf3": {
     "message": "处理架构时出错"
+  },
+  "errorsmsg_8f5d3d85": {
+    "message": "{ errorsMsg }"
   },
   "event_activity_2067a94b": {
     "message": "事件活动"
@@ -1126,6 +1270,9 @@
   },
   "event_received_457f99d6": {
     "message": "已收到事件"
+  },
+  "event_received_event_activity_45ffed05": {
+    "message": "Event received (Event activity)"
   },
   "events_cf7a8c50": {
     "message": "事件"
@@ -1148,11 +1295,14 @@
   "expected_responses_intent_intentname_44b051c": {
     "message": "预期响应(意向: #{ intentName })"
   },
+  "expecting_4df12c00": {
+    "message": "Expecting"
+  },
   "export_json_2e2981f5": {
-    "message": "Export JSON"
+    "message": "导出 JSON"
   },
   "export_this_bot_as_zip_c4bfddf2": {
-    "message": "Export this bot as .zip"
+    "message": "将此机器人导出为 .zip"
   },
   "expression_7f906a13": {
     "message": "表达式"
@@ -1163,14 +1313,14 @@
   "expression_to_evaluate_ce4095b1": {
     "message": "要计算的表达式。"
   },
-  "extensions_7250a0bb": {
-    "message": "扩展"
+  "extension_settings_899ccb55": {
+    "message": "Extension Settings"
   },
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "不会更改外部资源。"
   },
   "external_services_da7820ce": {
-    "message": "External services"
+    "message": "外部服务"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "从联机常见问题解答、产品手册或其他文件中提取问答对。受支持的格式为 .tsv、.pdf、.doc、.docx、.xlsx，按顺序包含问题和答案。详细了解知识库源。跳过此步骤以在创建后手动添加问题和答案。可添加的源数量和文件大小取决于所选择的 QnA 服务 SKU。详细了解 QnA Maker SKU。"
@@ -1181,8 +1331,11 @@
   "extracting_qna_pairs_from_url_b0331bba": {
     "message": "从 { url } 中提取 QnA 对"
   },
+  "fail_to_save_bot_578fa8aa": {
+    "message": "Fail to save bot"
+  },
   "failed_to_start_1edb0dbe": {
-    "message": "Failed to start"
+    "message": "未能启动"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1191,7 +1344,7 @@
     "message": "False"
   },
   "fetching_form_dialog_schema_templates_failed_44e2dd63": {
-    "message": "Fetching form dialog schema templates failed."
+    "message": "提取窗体对话框架构模板失败。"
   },
   "field_set_6e7d7f67": {
     "message": "字段集"
@@ -1211,14 +1364,32 @@
   "file_type_fd1ba7ee": {
     "message": "文件类型"
   },
-  "filter_dialog_de3ce43f": {
-    "message": "筛选对话"
+  "filter_by_dialog_or_trigger_name_784ee5b0": {
+    "message": "Filter by dialog or trigger name"
+  },
+  "filter_by_file_name_fa3d33b5": {
+    "message": "Filter by file name"
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
   },
   "folder_foldername_already_exists_4a2260e9": {
     "message": "文件夹 { folderName } 已存在"
+  },
+  "font_family_baa0c6a3": {
+    "message": "Font family"
+  },
+  "font_settings_afc8127c": {
+    "message": "Font settings"
+  },
+  "font_settings_used_in_the_text_editors_a7ed1383": {
+    "message": "Font settings used in the text editors."
+  },
+  "font_size_bf4db203": {
+    "message": "Font size"
+  },
+  "font_weight_188bb2b9": {
+    "message": "Font weight"
   },
   "for_each_def04c48": {
     "message": "For Each"
@@ -1230,13 +1401,13 @@
     "message": "对于 list (或 enum)类型的属性，机器人只接受你定义的值。生成对话后，你可以为每个值提供同义词。"
   },
   "form_dialog_error_ba7c37fe": {
-    "message": "Form dialog error"
+    "message": "窗体对话框错误"
   },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "窗体对话架构操作"
   },
   "form_dialogs_4a1e22f9": {
-    "message": "Form dialogs"
+    "message": "窗体对话框"
   },
   "form_editor_7c2b02f0": {
     "message": "窗体编辑器"
@@ -1248,7 +1419,7 @@
     "message": "窗体范围内的操作"
   },
   "forms_preview_af001fab": {
-    "message": "Forms (preview)"
+    "message": "窗体(预览)"
   },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "fromTemplateName 不存在"
@@ -1265,20 +1436,23 @@
   "generate_dialog_b80a85b2": {
     "message": "生成对话"
   },
+  "generating_dialog_for_schemaid_51b2744f": {
+    "message": "Generating dialog for \"{ schemaId }\""
+  },
   "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
+    "message": "使用“{schemaId}”架构生成窗体对话框失败。请稍后重试。"
   },
   "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
-    "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
+    "message": "正在使用“{schemaId}”架构生成对话框，请稍候..."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "获取运行时代码的新副本"
   },
   "get_activity_members_11339605": {
-    "message": "Get activity members"
+    "message": "获取活动成员"
   },
   "get_conversation_members_71602275": {
-    "message": "Get conversation members"
+    "message": "获取对话成员"
   },
   "get_started_50c13c6c": {
     "message": "开始使用!"
@@ -1290,13 +1464,16 @@
     "message": "开始使用"
   },
   "getting_template_910a4116": {
-    "message": "Getting template"
+    "message": "正在获取模板"
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "转到 QnA 全视图页。"
   },
   "got_it_2c06b54a": {
     "message": "知道了!"
+  },
+  "greeting_conversationupdate_activity_3eb99c15": {
+    "message": "Greeting (ConversationUpdate activity)"
   },
   "greeting_f906f962": {
     "message": "问候语"
@@ -1310,11 +1487,17 @@
   "handover_to_human_1a619574": {
     "message": "转接到人工"
   },
+  "handover_to_human_handoff_activity_477a71fe": {
+    "message": "Handover to human (Handoff activity)"
+  },
   "help_us_improve_468828c5": {
-    "message": "Help us improve?"
+    "message": "要帮助我们进行改进吗?"
   },
   "here_s_what_we_know_4e9c1731": {
     "message": "以下是我们所了解的内容…"
+  },
+  "hero_card_cef4cd02": {
+    "message": "Hero card"
   },
   "hide_code_5dcffa94": {
     "message": "隐藏代码"
@@ -1349,20 +1532,26 @@
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "如果你已有 QnA 帐户，请提供以下信息。如果你还没有帐户，请先创建一个(免费)帐户。"
   },
+  "ignoring_dc76ef87": {
+    "message": "Ignoring"
+  },
   "import_as_new_35630827": {
-    "message": "Import as new"
+    "message": "导入为新的"
   },
   "import_schema_75659c5f": {
     "message": "导入架构"
   },
   "import_your_bot_to_new_project_8751d82f": {
-    "message": "Import your bot to new project"
+    "message": "将你的机器人导入到新项目"
   },
   "importing_b_botname_b_from_sourcename_f7410826": {
-    "message": "Importing <b>{ botName }</b> from { sourceName }..."
+    "message": "正在从 {sourceName} 导入 <b>{botName}</b>..."
   },
   "importing_bot_content_from_targetname_6da78f15": {
-    "message": "Importing bot content from { targetName }..."
+    "message": "正在从 {targetName} 导入机器人内容..."
+  },
+  "in_order_to_use_the_response_editor_please_fix_you_570408e8": {
+    "message": "In order to use the response editor, please fix your template errors first."
   },
   "in_production_5a70b8b4": {
     "message": "在生产中"
@@ -1374,13 +1563,40 @@
     "message": "在<b>“创建触发器”</b>向导中，将触发器类型设置为下拉列表中的<i>“活动”</i>。然后将<b>“活动类型”</b>设置为<i>“问候语(ConversationUpdate 活动)”</i>，然后单击<b>“提交”</b>按钮。"
   },
   "inactive_34365329": {
-    "message": "Inactive"
+    "message": "非活动状态"
   },
   "initializing_bot_project_48f55e12": {
-    "message": "Initializing bot project"
+    "message": "正在初始化机器人项目"
   },
   "input_1d1d9b8e": {
     "message": "输入"
+  },
+  "input_hint_37e0c163": {
+    "message": "Input hint: "
+  },
+  "input_hint_ab89f368": {
+    "message": "Input hint"
+  },
+  "insert_a_property_reference_in_memory_95d27746": {
+    "message": "Insert a property reference in memory"
+  },
+  "insert_a_template_reference_b1d4203e": {
+    "message": "Insert a template reference"
+  },
+  "insert_an_adaptive_expression_pre_built_function_32b1583a": {
+    "message": "Insert an adaptive expression pre-built function"
+  },
+  "insert_prebuilt_functions_22b05f8": {
+    "message": "Insert prebuilt functions"
+  },
+  "insert_property_reference_38f0605": {
+    "message": "Insert property reference"
+  },
+  "insert_ssml_tag_1fedbe80": {
+    "message": "Insert SSML tag"
+  },
+  "insert_template_reference_bb33720e": {
+    "message": "Insert template reference"
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "安装 Microsoft .NET Core SDK"
@@ -1427,14 +1643,17 @@
   "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
     "message": "Composer 的重要概念和用户体验元素简介。"
   },
+  "invalid_file_path_to_save_the_transcript_54c92a51": {
+    "message": "Invalid file path to save the transcript."
+  },
   "invoke_activity_87df4903": {
     "message": "调用活动"
   },
   "is_missing_or_empty_a551462e": {
     "message": "缺失或为空"
   },
-  "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
-    "message": "它不是内置函数或自定义函数。"
+  "it_s_not_a_built_in_function_or_a_custom_function_211f17dc": {
+    "message": "it’s not a built-in function or a custom function."
   },
   "item_actions_22d0242": {
     "message": "项操作"
@@ -1484,32 +1703,35 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "上次修改时间为 { time }"
   },
+  "layout_56d3a203": {
+    "message": "Layout: "
+  },
   "learn_more_14816ec": {
-    "message": "Learn More."
+    "message": "了解更多。"
   },
   "learn_more_a79a7918": {
     "message": "了解更多"
   },
   "learn_more_about_activities_134f453d": {
-    "message": "Learn more about activities"
+    "message": "详细了解活动"
   },
   "learn_more_about_endpoints_df156708": {
-    "message": "Learn more about endpoints"
+    "message": "详细了解终结点"
   },
   "learn_more_about_knowledge_base_sources_24369b09": {
     "message": "详细了解知识库源。"
   },
   "learn_more_about_manifests_6e7c364b": {
-    "message": "Learn more about manifests"
+    "message": "详细了解清单"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
-    "message": "Learn more about skill manifests"
+    "message": "详细了解技能清单"
   },
   "learn_more_about_title_d1d3edbe": {
     "message": "详细了解 { title }"
   },
   "learn_more_about_your_property_schema_3a0a0890": {
-    "message": "Learn more about your property schema"
+    "message": "详细了解属性架构"
   },
   "learn_more_c08939e8": {
     "message": "了解更多。"
@@ -1542,10 +1764,13 @@
     "message": "行 { startLine }:{ startCharacter } - 行 { endLine }:{ endCharacter }"
   },
   "link_to_this_skill_has_been_broken_343072bd": {
-    "message": "Link to this skill has been broken"
+    "message": "此技能的链接已损坏"
   },
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "链接到定义此 LUIS 意向的位置"
+  },
+  "list_6cc05": {
+    "message": "List"
   },
   "list_a034633b": {
     "message": "列表"
@@ -1553,8 +1778,14 @@
   "list_count_values_33ea7088": {
     "message": "列表 - { count } 个值"
   },
+  "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
+    "message": "List of actions rendered as suggestions to user."
+  },
+  "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
+    "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
+  },
   "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
-    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language."
+    "message": "机器人能够理解的语言(用户输入)以及能够响应的语言(机器人响应)的列表。若要使此机器人可以使用其他语言，请单击“添加机器人语言”，创建默认语言的副本，并将内容转换为新语言。"
   },
   "list_view_e33843f0": {
     "message": "列表视图"
@@ -1566,16 +1797,19 @@
     "message": "正在加载"
   },
   "local_bot_runtime_manager_812cbd0c": {
-    "message": "Local bot runtime manager"
+    "message": "本地机器人运行时管理器"
   },
   "local_composer_386e07d7": {
-    "message": "Local Composer"
+    "message": "本地 Composer"
   },
   "local_skill_6ce0d311": {
-    "message": "Local Skill."
+    "message": "本地技能。"
+  },
+  "locale_locale_is_not_supported_by_luis_a3a72047": {
+    "message": "locale \"{ locale }\" is not supported by LUIS"
   },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
-    "message": "Locate the bot file and repair the link"
+    "message": "找到机器人文件并修复链接"
   },
   "location_e17bd402": {
     "message": "位置"
@@ -1583,14 +1817,17 @@
   "location_is_location_8c17b5de": {
     "message": "位置为 { location }"
   },
+  "log_output_64a4dbec": {
+    "message": "Log output"
+  },
   "log_to_console_4fc23e34": {
     "message": "登录控制台"
   },
   "login_6f3d6249": {
     "message": "登录"
   },
-  "login_to_composer_eb42b41": {
-    "message": "登录到 Composer"
+  "login_to_azure_c0cb057e": {
+    "message": "Login to Azure"
   },
   "loop_for_each_item_53eb7c5b": {
     "message": "循环: 用于每个项"
@@ -1623,28 +1860,34 @@
     "message": "LUIS"
   },
   "luis_application_name_1530d3aa": {
-    "message": "LUIS application name"
+    "message": "LUIS 应用程序名称"
   },
   "luis_authoring_key_c8414499": {
-    "message": "LUIS authoring key"
+    "message": "LUIS 创作密钥"
   },
   "luis_authoring_key_cfaba7dd": {
     "message": "LUIS 创作密钥:"
   },
+  "luis_authoring_key_is_required_with_the_current_re_464f655e": {
+    "message": "LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish"
+  },
   "luis_authoring_region_b142f97b": {
     "message": "LUIS 创作区域"
   },
-  "luis_endpoint_key_c685e219": {
-    "message": "LUIS endpoint key"
+  "luis_build_warning_320e4ee2": {
+    "message": "Luis build warning"
   },
-  "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
-    "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
+  "luis_endpoint_key_c685e219": {
+    "message": "LUIS 终结点密钥"
+  },
+  "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
+    "message": "LUIS key is required with the current recognizer setting to start your bot locally, and publish"
   },
   "luis_region_9879d8de": {
-    "message": "LUIS region"
+    "message": "LUIS 区域"
   },
-  "luis_region_is_required_163ca19f": {
-    "message": "LUIS Region is required"
+  "luis_region_is_required_4b7a19af": {
+    "message": "LUIS region is required"
   },
   "main_dialog_eed5c847": {
     "message": "主对话"
@@ -1653,19 +1896,19 @@
     "message": "创建副本"
   },
   "manage_bot_languages_9ec36fd7": {
-    "message": "Manage bot languages"
+    "message": "管理机器人语言"
   },
   "manage_profiles_715c2092": {
-    "message": "Manage profiles"
+    "message": "管理配置文件"
   },
   "manage_properties_c9fa4456": {
     "message": "管理属性"
   },
   "manifest_could_not_be_loaded_1c011a6a": {
-    "message": "Manifest could not be loaded"
+    "message": "无法加载清单"
   },
   "manifest_editor_1426637": {
-    "message": "manifest editor"
+    "message": "清单编辑器"
   },
   "manifest_url_30824e88": {
     "message": "清单 URL"
@@ -1689,7 +1932,7 @@
     "message": "菜单项"
   },
   "merging_packages_6115c7ea": {
-    "message": "Merging Packages"
+    "message": "正在合并包"
   },
   "message_5c38209d": {
     "message": "消息"
@@ -1700,11 +1943,17 @@
   "message_deleted_activity_85dd8915": {
     "message": "“已删除消息”活动"
   },
+  "message_deleted_message_deleted_activity_dd2d4b9f": {
+    "message": "Message deleted (Message deleted activity)"
+  },
   "message_reaction_3704d790": {
     "message": "消息反应"
   },
   "message_reaction_activity_379944e7": {
     "message": "“消息反应”活动"
+  },
+  "message_reaction_message_reaction_activity_b9ac1076": {
+    "message": "Message reaction (Message reaction activity)"
   },
   "message_received_5abfe9a0": {
     "message": "已收到消息"
@@ -1712,17 +1961,26 @@
   "message_received_activity_1ff7c2a4": {
     "message": "“已收到消息”活动"
   },
+  "message_received_message_received_activity_4ef515f5": {
+    "message": "Message received (Message received activity)"
+  },
   "message_updated_4f2e37fe": {
     "message": "已更新消息"
   },
   "message_updated_activity_4997737e": {
     "message": "“已更新消息”活动"
   },
+  "message_updated_message_updated_activity_eacdb6bd": {
+    "message": "Message updated (Message updated activity)"
+  },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft 应用 ID"
   },
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft 应用密码"
+  },
+  "microsoft_s_templates_offer_best_practices_for_dev_faa1a869": {
+    "message": "Microsoft’s templates offer best practices for developing conversational bots"
   },
   "minimap_beb3be27": {
     "message": "缩略图"
@@ -1763,6 +2021,9 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI 展示"
   },
+  "msg_bf173fef": {
+    "message": "{ msg }"
+  },
   "multi_choice_839b54bb": {
     "message": "多个选项"
   },
@@ -1775,8 +2036,8 @@
   "must_have_a_name_d5c5c464": {
     "message": "必须有名称"
   },
-  "my_publish_profile_2ed56828": {
-    "message": "我的发布配置文件"
+  "my_staging_environment_2b92d0aa": {
+    "message": "My Staging Environment"
   },
   "name_1aed4a1b": {
     "message": "名称"
@@ -1785,7 +2046,7 @@
     "message": "为技能清单命名并保存它。"
   },
   "name_cannot_be_found_at_the_location_27560dcb": {
-    "message": "{ name } cannot be found at the location."
+    "message": "在该位置找不到 {name}。"
   },
   "name_copy_55d27c1a": {
     "message": "{ name }_Copy"
@@ -1817,6 +2078,9 @@
   "new_13daf639": {
     "message": "新建"
   },
+  "new_creation_experience_29591aca": {
+    "message": "New Creation Experience"
+  },
   "new_template_49e6f0f2": {
     "message": "新建模板"
   },
@@ -1835,6 +2099,9 @@
   "next_40e12421": {
     "message": "下一步"
   },
+  "next_configure_resources_2ea29fdf": {
+    "message": "Next: Configure resources"
+  },
   "no_editor_for_type_8b5593c5": {
     "message": "没有用于 { type } 的编辑器"
   },
@@ -1843,6 +2110,12 @@
   },
   "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
     "message": "没有与筛选条件匹配的窗体对话架构!"
+  },
+  "no_functions_found_e0db426b": {
+    "message": "No functions found"
+  },
+  "no_i_want_to_keep_the_content_just_de_reference_fr_fac5f2ce": {
+    "message": "No, I want to keep the content, just de-reference from this response."
   },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "没有名为 { id } 的 LU 文件"
@@ -1853,14 +2126,23 @@
   "no_name_e082310e": {
     "message": "[no name]"
   },
+  "no_properties_found_6f777f6e": {
+    "message": "No properties found"
+  },
   "no_qna_file_with_name_id_7cb89755": {
-    "message": "NO QNA FILE WITH NAME { id }"
+    "message": "没有名为 {id} 的 QnA 文件"
   },
   "no_search_results_1ba50423": {
     "message": "无搜索结果"
   },
+  "no_templates_found_d8dca69b": {
+    "message": "No templates found"
+  },
   "no_updates_available_cecd904d": {
     "message": "无可用更新"
+  },
+  "no_uploads_were_attached_as_a_part_of_the_request_63e92f54": {
+    "message": "No uploads were attached as a part of the request."
   },
   "no_wildcard_ff439e76": {
     "message": "无通配符"
@@ -1872,7 +2154,7 @@
     "message": "不是单个模板"
   },
   "not_now_97efd947": {
-    "message": "Not now"
+    "message": "以后再说"
   },
   "not_yet_published_669e37b3": {
     "message": "尚未发布"
@@ -1897,6 +2179,9 @@
   },
   "number_or_expression_55c7f9f": {
     "message": "数字或表达式"
+  },
+  "oauth_activities_are_not_available_for_testing_in__2207dcef": {
+    "message": "OAuth activities are not available for testing in Composer yet. Please continue using Bot Framework Emulator for testing OAuth actions."
   },
   "oauth_login_b6aa9534": {
     "message": "OAuth 登录"
@@ -1934,8 +2219,11 @@
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents 类型"
   },
+  "one_of_the_variations_added_below_will_be_selected_bee3c3f1": {
+    "message": "One of the variations added below will be selected at random by the LG library."
+  },
   "open_an_existing_skill_fbd87273": {
-    "message": "Open an existing skill"
+    "message": "打开现有技能"
   },
   "open_e0beb7b9": {
     "message": "打开"
@@ -1947,7 +2235,13 @@
     "message": "打开通知面板"
   },
   "open_start_bots_panel_f7f87200": {
-    "message": "Open start bots panel"
+    "message": "打开“启动机器人”面板"
+  },
+  "open_web_chat_23601990": {
+    "message": "Open Web Chat"
+  },
+  "open_web_chat_7a24d4f8": {
+    "message": "Open web chat"
   },
   "optional_221bcc9d": {
     "message": "可选"
@@ -1964,14 +2258,14 @@
   "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
     "message": "可选。设置最小值后，机器人可以拒绝过小的值，并重新提示用户输入新值。"
   },
+  "options_3ab0ea65": {
+    "message": "Options"
+  },
   "or_4f7d4edb": {
     "message": "或:"
   },
-  "orchestrator_36e58231": {
-    "message": "Orchestrator"
-  },
   "orchestrator_recognizer_cf38b65a": {
-    "message": "Orchestrator recognizer"
+    "message": "业务流程协调程序识别器"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "在存储中找不到原始 LG 文件"
@@ -1988,9 +2282,6 @@
   "output_5023cf84": {
     "message": "输出"
   },
-  "package_manager_6c42db30": {
-    "message": "Package manager"
-  },
   "page_number_cdee4179": {
     "message": "页码"
   },
@@ -1999,6 +2290,9 @@
   },
   "paste_5963d1c1": {
     "message": "粘贴"
+  },
+  "paste_token_here_eccec7e4": {
+    "message": "Paste token here"
   },
   "please_add_at_least_minitems_endpoint_5439fd74": {
     "message": "请至少添加 { minItems } 个终结点"
@@ -2021,9 +2315,6 @@
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
     "message": "请返回“设计视图”开始学习入门教程。"
   },
-  "please_select_a_event_type_200c4c9f": {
-    "message": "请选择事件类型"
-  },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
     "message": "请选择要导入 QnA 的特定 QnA 文件"
   },
@@ -2036,11 +2327,8 @@
   "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
     "message": "请选择清单架构版本"
   },
-  "please_select_an_activity_type_92f4a8a1": {
-    "message": "请选择活动类型"
-  },
   "powervirtualagents_logo_11858924": {
-    "message": "PowerVirtualAgents Logo"
+    "message": "PowerVirtualAgents 徽标"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "按 Enter 添加此项，或按 Tab 移到下一个交互式元素"
@@ -2051,14 +2339,20 @@
   "preview_features_e279bac5": {
     "message": "预览功能"
   },
+  "preview_the_new_adaptive_runtime_and_component_sys_1106041c": {
+    "message": "Preview the new adaptive runtime and component system"
+  },
   "previous_bd2ac015": {
     "message": "上一步"
   },
   "previous_bot_content_has_been_backed_up_to_d6d23960": {
-    "message": " Previous bot content has been backed up to:"
+    "message": " 以前的机器人内容已备份到:"
   },
   "previous_folder_e7eeb306": {
     "message": "上一个文件夹"
+  },
+  "primary_language_96276a64": {
+    "message": "Primary Language"
   },
   "privacy_290109ea": {
     "message": "隐私"
@@ -2067,13 +2361,16 @@
     "message": "“隐私”按钮"
   },
   "privacy_statement_da69ebc6": {
-    "message": "Privacy statement"
+    "message": "隐私声明"
+  },
+  "problems_31833f8c": {
+    "message": "Problems"
   },
   "progress_of_total_87de8616": {
     "message": "{ progress }% (共 { total } 个)"
   },
   "project_settings_bb885d3e": {
-    "message": "Project Settings"
+    "message": "项目设置"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "提示配置"
@@ -2129,6 +2426,24 @@
   "property_type_e38cf7e4": {
     "message": "属性类型"
   },
+  "provide_access_tokens_8ead7563": {
+    "message": "Provide access tokens"
+  },
+  "provide_arm_token_by_running_az_account_get_access_e9d825a4": {
+    "message": "Provide ARM token by running `az account get-access-token`"
+  },
+  "provide_graph_token_by_running_az_account_get_acce_6d27a279": {
+    "message": "Provide graph token by running `az account get-access-token  --resource-type ms-graph`"
+  },
+  "provision_failure_983d3844": {
+    "message": "Provision failure"
+  },
+  "provision_success_d6a6e437": {
+    "message": "Provision success"
+  },
+  "provisioning_1330aede": {
+    "message": "Provisioning ..."
+  },
   "pseudo_1a319287": {
     "message": "伪"
   },
@@ -2138,41 +2453,41 @@
   "publish_configuration_d759a4e3": {
     "message": "发布配置"
   },
-  "publish_destination_type_5f8c200a": {
-    "message": "发布目标类型"
-  },
   "publish_models_9a36752a": {
     "message": "发布模型"
   },
+  "publish_profiles_36fb522d": {
+    "message": "Publish profiles"
+  },
   "publish_selected_bots_825bc03a": {
-    "message": "Publish selected bots"
+    "message": "发布选定的机器人"
   },
   "publish_target_388f6adf": {
-    "message": "Publish target"
-  },
-  "publish_targets_8afc4467": {
-    "message": "Publish targets"
+    "message": "发布目标"
   },
   "publish_your_bots_6e1ba7c2": {
-    "message": "Publish your bots"
+    "message": "发布你的机器人"
   },
   "published_4bb5209e": {
     "message": "已发布"
   },
   "publishing_count_bots_b2a7f564": {
-    "message": "Publishing { count } bots"
+    "message": "正在发布 {count} 个机器人"
   },
   "publishing_d63a8f2d": {
     "message": "正在发布"
   },
   "publishing_name_to_publishtarget_failed_8677b68d": {
-    "message": "Publishing { name } to { publishTarget } failed."
+    "message": "将 {name} 发布到 {publishTarget} 失败。"
+  },
+  "publishing_target_46605bc5": {
+    "message": "Publishing target"
   },
   "pull_d1c3e8fe": {
-    "message": "Pull"
+    "message": "拉取"
   },
   "pull_from_selected_profile_b5c635ec": {
-    "message": "Pull from selected profile"
+    "message": "从选定的配置文件拉取"
   },
   "qna_28ee5e26": {
     "message": "QnA"
@@ -2184,10 +2499,10 @@
     "message": "已识别 QnA 意向"
   },
   "qna_maker_subscription_key_e009c9d9": {
-    "message": "QnA Maker Subscription key"
+    "message": "QnA Maker 订阅密钥"
   },
-  "qna_maker_subscription_key_is_required_to_start_yo_9c0bc65a": {
-    "message": "QnA Maker subscription Key is required to start your bot locally, and publish"
+  "qna_maker_subscription_key_is_required_to_start_yo_1892741": {
+    "message": "QnA Maker Subscription key is required to start your bot locally, and publish"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "QnA 导航窗格"
@@ -2208,7 +2523,7 @@
     "message": "问题现在为空"
   },
   "queued_d0e45c4b": {
-    "message": "Queued"
+    "message": "已排队"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -2219,11 +2534,11 @@
   "re_prompt_for_input_c3b5b3ab": {
     "message": "重新提示输入"
   },
+  "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
+    "message": "Re-prompt for input (Reprompt dialog event)"
+  },
   "recent_bots_53585911": {
     "message": "最近使用的机器人"
-  },
-  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
-    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
   },
   "recognizer_type_dc591e16": {
     "message": "识别器类型"
@@ -2253,10 +2568,22 @@
     "message": "正在重载"
   },
   "remote_skill_ed36a7e6": {
-    "message": "Remote skill"
+    "message": "远程技能"
   },
   "remote_skill_f9074d76": {
-    "message": "Remote Skill."
+    "message": "远程技能。"
+  },
+  "remove_all_attachments_9fbd3821": {
+    "message": "Remove all attachments"
+  },
+  "remove_all_speech_responses_2ac35289": {
+    "message": "Remove all speech responses"
+  },
+  "remove_all_suggested_actions_7c69eca3": {
+    "message": "Remove all suggested actions"
+  },
+  "remove_all_text_responses_77592d1a": {
+    "message": "Remove all text responses"
   },
   "remove_f47dc62a": {
     "message": "删除"
@@ -2265,13 +2592,19 @@
     "message": "删除此对话"
   },
   "remove_this_skill_from_project_4c1900a9": {
-    "message": "Remove this skill from project"
+    "message": "从项目中删除此技能"
   },
   "remove_this_skill_from_your_project_3c9d4b0f": {
-    "message": "Remove this skill from your project"
+    "message": "从你的项目中删除此技能"
   },
   "remove_this_trigger_622d866d": {
     "message": "删除此触发器"
+  },
+  "remove_variation_43b4f4d6": {
+    "message": "Remove variation"
+  },
+  "removing_a_modality_from_this_action_node_702b52be": {
+    "message": "Removing a modality from this action node"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "重复此对话"
@@ -2300,11 +2633,17 @@
   "response_is_response_3cd62f8f": {
     "message": "响应为 { response }"
   },
+  "response_variations_302594e": {
+    "message": "Response Variations"
+  },
   "responses_12d6df1d": {
     "message": "响应"
   },
-  "restart_all_bots_running_total_running_cf47a2b5": {
-    "message": "Restart all bots ({ running }/{ total } running)"
+  "restart_conversation_new_user_id_9c024543": {
+    "message": "Restart Conversation - new user ID"
+  },
+  "restart_conversation_same_user_id_a0188cca": {
+    "message": "Restart Conversation - same user ID"
   },
   "review_and_generate_63dec712": {
     "message": "审阅并生成"
@@ -2313,31 +2652,25 @@
     "message": "回退"
   },
   "root_bot_7bb35314": {
-    "message": "Root bot."
+    "message": "根机器人。"
   },
   "root_bot_da9de71c": {
-    "message": "Root Bot"
-  },
-  "root_bot_e2d0a1fc": {
-    "message": "Root bot"
+    "message": "根机器人"
   },
   "root_bot_luis_authoring_key_is_empty_aec2634e": {
-    "message": "Root Bot LUIS authoring key is empty"
-  },
-  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
-    "message": "Root Bot LUIS endpoint key is empty"
+    "message": "根机器人 LUIS 创作密钥为空"
   },
   "root_bot_luis_region_is_empty_67932308": {
-    "message": "Root Bot LUIS region is empty"
+    "message": "根机器人 LUIS 区域为空"
   },
   "root_bot_of_your_project_that_greets_users_and_can_94570f36": {
-    "message": "Root bot of your project that greets users, and can call skills."
+    "message": "项目的根机器人，用于问候用户，并且可以调用技能。"
   },
   "root_bot_qna_maker_subscription_key_is_empty_7b7c8c4a": {
-    "message": "Root Bot QnA Maker Subscription key is empty"
+    "message": "根机器人 QnA Maker 订阅密钥为空"
   },
   "running_c5a4998d": {
-    "message": "Running"
+    "message": "正在运行"
   },
   "runtime_already_exists_f181f5ec": {
     "message": "运行时已存在。"
@@ -2347,6 +2680,9 @@
   },
   "runtime_config_a2904ff9": {
     "message": "运行时配置"
+  },
+  "runtime_type_f9e2419b": {
+    "message": "Runtime type"
   },
   "sample_phrases_5d78fa35": {
     "message": "示例短语"
@@ -2384,17 +2720,29 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "搜索 npm 上的扩展"
   },
+  "search_functions_4a1afbc3": {
+    "message": "Search functions"
+  },
+  "search_properties_5bf3d868": {
+    "message": "Search properties"
+  },
+  "search_templates_669eab41": {
+    "message": "Search templates"
+  },
   "see_details_da74090e": {
-    "message": "See Details"
+    "message": "查看详细信息"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "选择机器人"
   },
   "select_a_publish_target_d4530c94": {
-    "message": "Select a publish target"
+    "message": "选择发布目标"
   },
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "在左侧选择触发器"
+  },
+  "select_a_trigger_type_219bb52f": {
+    "message": "Select a trigger type"
   },
   "select_all_f73344a8": {
     "message": "全选"
@@ -2408,11 +2756,17 @@
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "选择要编辑的架构或新建一个架构"
   },
+  "select_input_hint_267a6208": {
+    "message": "Select input hint"
+  },
   "select_language_to_delete_d1662d3d": {
     "message": "选择要删除的语言"
   },
   "select_manifest_version_4f5b1230": {
     "message": "选择清单版本"
+  },
+  "select_one_8e0af564": {
+    "message": "Select One"
   },
   "select_options_9ee7b227": {
     "message": "选择选项"
@@ -2460,7 +2814,7 @@
     "message": "设置目标文件夹"
   },
   "set_it_as_default_language_212f0a00": {
-    "message": "Set it as default language"
+    "message": "将其设置为默认语言"
   },
   "set_properties_7415af3c": {
     "message": "设置属性"
@@ -2469,7 +2823,7 @@
     "message": "创建机器人"
   },
   "setting_things_up_8022afe8": {
-    "message": "Setting things up..."
+    "message": "正在进行设置..."
   },
   "settings_5aa0fd0c": {
     "message": "设置"
@@ -2484,13 +2838,13 @@
     "message": "“设置”菜单"
   },
   "show_all_diagnostics_c11f4e09": {
-    "message": "Show All Diagnostics"
+    "message": "显示所有诊断"
   },
   "show_code_f3e9d1cc": {
     "message": "显示代码"
   },
   "show_item_diagnostics_f6e902c7": {
-    "message": "Show { item } Diagnostics"
+    "message": "显示 {item} 诊断"
   },
   "show_keys_3072a5b8": {
     "message": "显示密钥"
@@ -2498,11 +2852,14 @@
   "show_skill_manifest_5d0abde1": {
     "message": "显示技能清单"
   },
+  "sign_in_card_aac56fe0": {
+    "message": "Sign-in card"
+  },
   "sign_out_user_6845d640": {
     "message": "注销用户"
   },
   "skill_9b084d2e": {
-    "message": "Skill"
+    "message": "技能"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "技能对话名称"
@@ -2514,10 +2871,10 @@
     "message": "技能终结点"
   },
   "skill_host_endpoint_4118a173": {
-    "message": "Skill host endpoint"
+    "message": "技能主机终结点"
   },
   "skill_host_endpoint_url_e68b65f6": {
-    "message": "Skill host endpoint url"
+    "message": "技能主机终结点 URL"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "技能清单终结点配置不正确"
@@ -2526,10 +2883,10 @@
     "message": "{ skillName } 清单"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
-    "message": "Something happened while attempting to pull: { e }"
+    "message": "尝试进行拉取时出现问题: {e}"
   },
   "something_went_wrong_d238c551": {
-    "message": "Something went wrong"
+    "message": "出错了"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "抱歉，连接机器人运行时出现问题"
@@ -2549,6 +2906,9 @@
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "不允许使用空格和特殊字符。请使用字母、数字、- 或 _。"
   },
+  "spaces_and_special_characters_are_not_allowed_use__9f354fe3": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, or _."
+  },
   "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
     "message": "不允许使用空格和特殊字符。请使用字母、数字、- 或 _，并以字母开头。"
   },
@@ -2558,14 +2918,23 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "指定新机器人项目的名称、说明和位置。"
   },
-  "start_all_bots_eac99ea": {
-    "message": "Start all bots"
+  "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
+    "message": "Specify an attachment layout when there are more than one."
+  },
+  "speech_16063aed": {
+    "message": "Speech"
+  },
+  "spoken_text_used_by_the_channel_to_render_audibly_d07c7427": {
+    "message": "Spoken text used by the channel to render audibly."
+  },
+  "ssml_tag_981a8aac": {
+    "message": "SSML tag"
   },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
-    "message": "Start and stop local bot runtimes individually."
+    "message": "单独启动和停止本地机器人运行时。"
   },
   "start_bot_1da1ebf4": {
-    "message": "Start bot"
+    "message": "启动机器人"
   },
   "start_bot_25ecad14": {
     "message": "启动机器人"
@@ -2577,16 +2946,13 @@
     "message": "启动命令"
   },
   "start_over_d7ce7a57": {
-    "message": "Start over?"
+    "message": "要重新开始吗?"
   },
   "start_typing_kind_or_b0c305da": {
     "message": "开始键入 { kind } 或"
   },
   "starting_2b76fa0d": {
-    "message": "Starting"
-  },
-  "starting_bots_running_total_running_45302684": {
-    "message": "Starting bots.. ({ running }/{ total } running)"
+    "message": "正在启动"
   },
   "state_is_state_a2b8943": {
     "message": "状态为 { state }"
@@ -2594,17 +2960,20 @@
   "status_e7fdbe06": {
     "message": "状态"
   },
+  "status_pending_4c90cbc5": {
+    "message": "Status pending"
+  },
   "step_of_setlength_43c73821": {
     "message": "第 { step } 步，共 { setLength } 步"
   },
   "stop_bot_866e8976": {
-    "message": "Stop Bot"
+    "message": "停止机器人"
   },
   "stop_bot_be23cf96": {
-    "message": "Stop bot"
+    "message": "停止机器人"
   },
   "stopping_e4de5f4a": {
-    "message": "Stopping"
+    "message": "正在停止"
   },
   "string_24369b3": {
     "message": "字符串"
@@ -2618,11 +2987,32 @@
   "submit_a3cc6859": {
     "message": "提交"
   },
+  "suggested_actions_94d06bfa": {
+    "message": "Suggested Actions"
+  },
+  "suggested_propertiy_u_in_cardtype_ca80f69": {
+    "message": "Suggested propertiy { u } in { cardType }"
+  },
+  "suggestion_for_card_or_activity_type_b257066a": {
+    "message": "Suggestion for Card or Activity: { type }"
+  },
+  "switch_to_code_editor_3dcbe16f": {
+    "message": "switch to code editor"
+  },
+  "switch_to_response_editor_7b20b0e9": {
+    "message": "switch to response editor"
+  },
   "synonyms_optional_afe5cdb1": {
     "message": "同义词(可选)"
   },
+  "target_da92f4e6": {
+    "message": "Target"
+  },
   "tb_149f379c": {
     "message": "TB"
+  },
+  "template_name_c37cf8d9": {
+    "message": "Template name: "
   },
   "templatename_is_missing_or_empty_23e6b06e": {
     "message": "templateName 缺失或为空"
@@ -2638,6 +3028,12 @@
   },
   "text_7f4593da": {
     "message": "文本"
+  },
+  "text_if_you_proceed_to_switch_to_response_editor_y_5f975ffb": {
+    "message": "<text>If you proceed to switch to Response editor, you will lose your current template content, and start with a blank response. Do you want to continue?</text>"
+  },
+  "text_to_use_response_editor_the_lg_template_needs__7c0b3936": {
+    "message": "<text>To use Response editor, the LG template needs to be an activity response template. <a>Visit this document</a> to learn more.</text>"
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "技能的 /api/messages 终结点。"
@@ -2657,8 +3053,11 @@
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "如果需要，可手动对清单进行编辑和优化。"
   },
-  "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
-    "message": "找不到你要查找的页面。"
+  "the_name_of_your_publishing_file_cefbe3a1": {
+    "message": "The name of your publishing file"
+  },
+  "the_page_you_are_looking_for_can_t_be_found_acfd3adc": {
+    "message": "The page you are looking for can’t be found."
   },
   "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
     "message": "属性类型定义所需的输入。该类型可以是定义值的列表(或枚举)，也可以是数据格式(如日期、电子邮件、数字或字符串)。"
@@ -2668,6 +3067,12 @@
   },
   "the_root_bot_is_not_a_bot_project_d1495cf6": {
     "message": "根机器人不是机器人项目"
+  },
+  "the_skill_you_tried_to_remove_from_the_project_is__2c0bd965": {
+    "message": "The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action."
+  },
+  "the_target_where_you_publish_your_bot_3132ef47": {
+    "message": "The target where you publish your bot"
   },
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
     "message": "欢迎消息由 <i>ConversationUpdate</i> 事件触发。若要添加新的 <i>ConversationUpdate</i> 触发器，请执行以下操作:"
@@ -2681,14 +3086,20 @@
   "there_are_no_preview_features_at_this_time_a5c40953": {
     "message": "暂无预览功能。"
   },
+  "there_is_no_original_view_63a2eaed": {
+    "message": "There is no original view"
+  },
+  "there_is_no_thumbnail_view_908fe5cc": {
+    "message": "There is no thumbnail view"
+  },
   "there_was_an_error_74ed3c58": {
     "message": "存在错误"
   },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
-    "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
+    "message": "将机器人内容导入到 <b>{botName}</b> 时出现意外错误"
   },
   "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
-    "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
+    "message": "从发布配置文件<b>{selectedTargetName}</b>进行拉取时出现意外错误"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "创建你的 KB 时出错"
@@ -2709,10 +3120,10 @@
     "message": "此为必填字段。"
   },
   "this_is_a_severity_diagnostic_58312674": {
-    "message": "This is a { severity } diagnostic"
+    "message": "这是一个 {severity} 诊断"
   },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
-    "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
+    "message": "这是你当前正在创作的机器人语言。可在下面的下拉列表中更改可用的语言。"
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
     "message": "这是用于 Composer 用户界面的语言。"
@@ -2721,7 +3132,7 @@
     "message": "此语言将被复制并用作翻译的基础(和回退语言)。"
   },
   "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
-    "message": "This operation cannot be completed. The bot is already part of the Bot Project"
+    "message": "无法完成此操作。此机器人已是机器人项目的一部分"
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "无法完成此操作。此技能已是机器人项目的一部分"
@@ -2730,7 +3141,7 @@
     "message": "用户可以使用此选项为此属性提供多个值。"
   },
   "this_page_contains_detailed_information_about_your_b2b3413b": {
-    "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
+    "message": "此页面包含有关机器人的详细信息。出于安全原因，默认情况下它们处于隐藏状态。若要测试机器人或发布到 Azure，你可能需要提供这些设置"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "正则表达式识别器不支持此触发器类型。若要确保触发此触发器，请更改识别器类型。"
@@ -2745,7 +3156,10 @@
     "message": "这将打开 Emulator 应用程序。如果你尚未安装 Bot Framework Emulator，可在<a>此处</a>下载。"
   },
   "throw_exception_9d0d1db": {
-    "message": "Throw exception"
+    "message": "引发异常"
+  },
+  "thumbnail_card_7ebfa436": {
+    "message": "Thumbnail card"
   },
   "time_2b5aac58": {
     "message": "时间"
@@ -2765,6 +3179,12 @@
   "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
     "message": "若要自定义欢迎消息，请在可视化编辑器中选择<i>“发送响应”</i>操作。然后，在右侧“窗体编辑器”中，可以在<b>“语言生成”</b>字段中编辑机器人的欢迎消息。"
   },
+  "to_learn_more_a_visit_this_document_a_ce188d8": {
+    "message": "To learn more, <a>visit this document</a>."
+  },
+  "to_learn_more_about_ssml_tags_a_visit_this_documen_533b3e8": {
+    "message": "To learn more about SSML Tags, <a>visit this document</a>."
+  },
   "to_learn_more_about_the_lg_file_format_read_the_do_ef6e083d": {
     "message": "> 若要详细了解 LG 文件格式，请阅读以下文档:\n> { lgHelp }"
   },
@@ -2776,6 +3196,9 @@
   },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "若要使机器人作为一项技能供其他人使用，我们需要生成清单。"
+  },
+  "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
+    "message": "To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "若要运行此机器人，Composer 需要 .NET Core SDK。"
@@ -2800,6 +3223,15 @@
   },
   "total_mb_531a3721": {
     "message": "{ total }MB"
+  },
+  "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
+    "message": "{ total, plural,\n     =1 {Restart bot}\n  other {Restart all bots ({ running }/{ total } running)}\n}"
+  },
+  "total_plural_1_start_bot_other_start_all_bots_8e25aec9": {
+    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all bots}\n}"
+  },
+  "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
+    "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
   },
   "trigger_phrases_f6754fa": {
     "message": "触发器短语"
@@ -2837,9 +3269,6 @@
   "type_could_not_be_loaded_65ebaf86": {
     "message": "无法加载 { type }"
   },
-  "type_dialog_name_14a50769": {
-    "message": "键入对话名称"
-  },
   "type_form_dialog_schema_name_b767985c": {
     "message": "键入窗体对话架构名称"
   },
@@ -2871,7 +3300,7 @@
     "message": "未用"
   },
   "update_4d8ee62": {
-    "message": "Update"
+    "message": "更新"
   },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
     "message": "更新之前在对话期间发送的活动"
@@ -2901,7 +3330,7 @@
     "message": "更新脚本"
   },
   "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
-    "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
+    "message": "更新 {existingProjectName} 将覆盖当前机器人内容并创建一个备份。"
   },
   "updating_scripts_e17a5722": {
     "message": "正在更新脚本... "
@@ -2913,16 +3342,16 @@
     "message": "URL 应以 http[s]:// 开头"
   },
   "use_custom_luis_authoring_key_9c71470b": {
-    "message": "Use custom LUIS authoring key"
+    "message": "使用自定义 LUIS 创作密钥"
   },
   "use_custom_luis_endpoint_key_572e2c29": {
-    "message": "Use custom LUIS endpoint key"
+    "message": "使用自定义 LUIS 终结点密钥"
   },
   "use_custom_luis_region_49d31dbf": {
-    "message": "Use custom LUIS region"
+    "message": "使用自定义 LUIS 区域"
   },
   "use_custom_qna_maker_subscription_key_126e79df": {
-    "message": "Use custom QnA Maker Subscription key"
+    "message": "使用自定义 QnA Maker 订阅密钥"
   },
   "use_custom_runtime_d7d323fd": {
     "message": "使用自定义运行时"
@@ -2942,6 +3371,9 @@
   "user_is_typing_790cb502": {
     "message": "用户正在键入"
   },
+  "user_is_typing_typing_activity_cd938615": {
+    "message": "User is typing (Typing activity)"
+  },
   "validating_35b79a96": {
     "message": "正在验证..."
   },
@@ -2960,6 +3392,9 @@
   "version_version_a051e218": {
     "message": "版本 { version }"
   },
+  "video_card_cda18e03": {
+    "message": "Video card"
+  },
   "video_tutorials_79eb26ca": {
     "message": "视频教程:"
   },
@@ -2970,7 +3405,7 @@
     "message": "查看知识库"
   },
   "view_log_6d51af5e": {
-    "message": "View log"
+    "message": "查看日志"
   },
   "view_on_npm_2051324d": {
     "message": "在 npm 上查看"
@@ -2984,8 +3419,14 @@
   "warning_53c98b03": {
     "message": "警告!"
   },
+  "warning_aacb8c24": {
+    "message": "Warning"
+  },
   "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
     "message": "警告: 你即将执行的操作无法撤消。继续操作将删除此机器人以及机器人项目文件夹中的任何相关文件。"
+  },
+  "warningsmsg_e2c04bfe": {
+    "message": "{ warningsMsg }"
   },
   "we_have_created_a_sample_bot_to_help_you_get_start_95a58922": {
     "message": "我们已创建一个示例机器人，帮助你开始使用 Composer。单击此处打开机器人。"
@@ -2995,6 +3436,12 @@
   },
   "weather_bot_c38920cd": {
     "message": "天气机器人"
+  },
+  "webchat_inspector_4d0dfeb7": {
+    "message": "Webchat Inspector"
+  },
+  "webchat_log_b7213a9e": {
+    "message": "Webchat log."
   },
   "welcome_73d18b4d": {
     "message": "欢迎使用!"
@@ -3057,13 +3504,16 @@
     "message": "编写表达式"
   },
   "write_your_message_5d0f151b": {
-    "message": "Write your message"
+    "message": "撰写消息"
   },
   "yes_collect_data_b79b7844": {
-    "message": "Yes, collect data"
+    "message": "是，收集数据"
   },
   "yes_dde87d5": {
     "message": "是"
+  },
+  "yes_i_d_like_to_remove_the_the_content_of_this_tab_e870a0a": {
+    "message": "Yes, I’d like to remove the the content of this tab completely from the LG file."
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "你已经具有该名称的知识库。请选择其他名称，然后重试。"
@@ -3072,7 +3522,13 @@
     "message": "你即将向下面的配置文件发布机器人。是否要继续?"
   },
   "you_are_about_to_pull_project_files_from_the_selec_15786351": {
-    "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+    "message": "你将从所选发布配置文件中拉取项目文件。当前项目将被所拉取的文件覆盖，并自动保存为备份。你可以在以后随时检索该备份。"
+  },
+  "you_are_about_to_remove_modalitytitle_modality_fro_567167b3": {
+    "message": "You are about to remove { modalityTitle } modality from this action node. The content in the tab will be lost. Do you want to continue?"
+  },
+  "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
+    "message": "You are about to remove the skill from this project. Removing this skill won’t delete the files."
   },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "可以使用 Composer 从头开始创建新机器人，也可以从模板开始创建。"
@@ -3084,16 +3540,16 @@
     "message": "可以在此处管理所有机器人响应。根据自己的需要，充分利用模板创建复杂的响应逻辑。"
   },
   "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
-    "message": "You can only connect to a skill in the root bot."
+    "message": "只能连接到根机器人中的技能。"
   },
   "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
-    "message": "You can turn data collection on or off at any time in the Application Settings."
+    "message": "可以在“应用程序设置”中随时启用或禁用数据收集。"
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "你没有相关权限，无法在此处保存机器人"
   },
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
-    "message": "You have successfully published { name } to { publishTarget }"
+    "message": "已成功将 {name} 发布到 {publishTarget}"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
     "message": "Composer 上的机器人创建之旅"
@@ -3101,13 +3557,10 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "你的机器人使用 LUIS 和 QnA 进行自然语言理解。"
   },
-  "your_dialog_was_generated_successfully_61c13b73": {
-    "message": "Your dialog was generated successfully."
+  "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
+    "message": "Your dialog for \"{ schemaId }\" was generated successfully."
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "知识库已准备就绪!"
-  },
-  "your_project_2a42631c": {
-    "message": "your project"
   }
 }
