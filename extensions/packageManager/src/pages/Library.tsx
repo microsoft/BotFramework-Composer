@@ -547,7 +547,7 @@ const Library: React.FC = () => {
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
         <p>
-          {strings.description}{' '}
+          {strings.description}&nbsp;
           <Link href={docsUrl} target="_new">
             {strings.descriptionLink}
           </Link>
@@ -724,22 +724,69 @@ const Library: React.FC = () => {
                     {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
                     {isInstalled(selectedItem) && selectedVersion === installedVersion(selectedItem) ? (
                       <span>
-                        {selectedVersion} {strings.installed}
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                          title={selectedVersion}
+                        >
+                          {selectedVersion}
+                        </span>
+                        &nbsp;
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installed}</span>
                       </span>
                     ) : isUpdate ? (
                       <span>
-                        {strings.updateButton} {selectedVersion}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.updateButton}</span>
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                          title={selectedVersion}
+                        >
+                          {selectedVersion}
+                        </span>
                       </span>
                     ) : (
                       <span>
-                        {strings.installButton} {selectedVersion}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installButton}</span>&nbsp;
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                          title={selectedVersion}
+                        >
+                          {selectedVersion}
+                        </span>
                       </span>
                     )}
                   </PrimaryButton>
                 </Stack.Item>
               </Stack>
 
-              <h3>{selectedItem.name}</h3>
+              <h3 css={{ marginBottom: 0 }}>{selectedItem.name}</h3>
+
+              {isInstalled(selectedItem) ? (
+                <p css={{ marginTop: 0 }}>
+                  {formatMessage('Installed:')} {installedVersion(selectedItem)}
+                </p>
+              ) : (
+                <p css={{ marginTop: 0 }}>
+                  {formatMessage('Latest:')} {selectedItem.version}
+                </p>
+              )}
 
               {readmeContent && <ReactMarkdown>{readmeContent}</ReactMarkdown>}
 
