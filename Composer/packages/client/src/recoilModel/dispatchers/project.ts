@@ -14,6 +14,7 @@ import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { navigateTo } from '../../utils/navigation';
+import { getPublishProfileFromPayload } from '../../utils/electronUtil';
 import { projectIdCache } from '../../utils/projectCache';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import {
@@ -30,10 +31,10 @@ import {
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
-  settingsState,
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -276,7 +277,7 @@ export const projectDispatcher = () => {
   });
 
   const createNewBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
@@ -292,6 +293,8 @@ export const projectDispatcher = () => {
         urlSuffix,
         alias,
         preserveRoot,
+        profile,
+        source,
       } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
@@ -308,6 +311,13 @@ export const projectDispatcher = () => {
       );
       set(botProjectIdsState, [projectId]);
 
+      if (profile) {
+        // ABS Create Flow, update publishProfile after create project
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        const newProfile = getPublishProfileFromPayload(profile, source);
+
+        newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+      }
       // Post project creation
       set(projectMetaDataState(projectId), {
         isRootBot: true,
@@ -403,6 +413,7 @@ export const projectDispatcher = () => {
     try {
       const { reset } = callbackHelpers;
       await httpClient.delete(`/projects/${projectId}`);
+      reset(filePersistenceState(projectId));
       luFileStatusStorage.removeAllStatuses(projectId);
       qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
@@ -464,8 +475,9 @@ export const projectDispatcher = () => {
     callbackHelpers.reset(filePersistenceState(projectId));
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
 
+    const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
     // Reload needs to pull the settings from the local storage persisted in the current settingsState of the project
-    botFiles.mergedSettings = await snapshot.getPromise(settingsState(projectId));
+    botFiles.mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, botFiles.mergedSettings);
     await initBotState(callbackHelpers, projectData, botFiles);
   });
 
@@ -498,7 +510,9 @@ export const projectDispatcher = () => {
             }
 
             projectIdCache.set(projectId);
-            navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
+
+            // navigate to the new get started section
+            navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings'));
             callbackHelpers.set(botOpeningMessage, '');
             callbackHelpers.set(botOpeningState, false);
           } else {

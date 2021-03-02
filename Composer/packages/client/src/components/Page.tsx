@@ -15,6 +15,7 @@ import { dispatcherState, PageMode } from '../recoilModel';
 import { DebugPanel } from '../pages/design/DebugPanel/DebugPanel';
 import implementedDebugExtensions from '../pages/design/DebugPanel/TabExtensions';
 
+import { GetStarted } from './GetStarted/GetStarted';
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
 import { renderThinSplitter } from './Split/ThinSplitter';
@@ -62,9 +63,25 @@ export const headerContent = css`
   label: PageHeaderContent;
 `;
 
-export const main = css`
+export const main = (hasRenderHeaderContent) => css`
   margin-left: 2px;
-  height: calc(100vh - 165px);
+  height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
+  display: flex;
+  flex-grow: 1;
+  border-top: 1px solid #dddddd;
+  position: relative;
+  nav {
+    ul {
+      margin-top: 0px;
+    }
+  }
+
+  label: PageMain;
+`;
+
+export const mainWithGetStarted = css`
+  margin-left: 2px;
+  height: calc(100vh - 385px);
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
@@ -83,7 +100,6 @@ export const content = (shouldShowEditorError: boolean) => css`
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: auto;
   height: ${shouldShowEditorError ? 'calc(100% - 40px)' : '100%'};
   label: PageContent;
   box-sizing: border-box;
@@ -94,9 +110,9 @@ const contentStyle = css`
   flex-grow: 1;
   height: 0;
   position: relative;
+  overflow: auto;
+  box-sizing: border-box;
 `;
-
-const ShowDebugPanelPageTitle = ['User Input', 'QnA', 'Bot Responses'];
 
 // -------------------- Page -------------------- //
 
@@ -111,6 +127,8 @@ type IPageProps = {
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
   useNewTree?: boolean;
+  useDebugPane?: boolean;
+  useGettingStarted?: boolean;
   navLinks?: INavTreeItem[];
   navLinkClick?: (item: INavTreeItem) => void;
   pageMode: PageMode;
@@ -125,7 +143,6 @@ const Page: React.FC<IPageProps> = (props) => {
   const {
     title,
     navLinks,
-    navLinkClick,
     toolbarItems,
     onRenderHeaderContent,
     children,
@@ -134,6 +151,7 @@ const Page: React.FC<IPageProps> = (props) => {
     headerStyle = header,
     shouldShowEditorError = false,
     useNewTree,
+    useDebugPane,
     pageMode,
     showCommonLinks = false,
     projectId,
@@ -142,7 +160,7 @@ const Page: React.FC<IPageProps> = (props) => {
     fileId,
   } = props;
 
-  const { setPageElementState, setCurrentProjectId } = useRecoilValue(dispatcherState);
+  const { setPageElementState } = useRecoilValue(dispatcherState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState(pageMode, { leftSplitWidth: sizes.primary });
@@ -167,12 +185,16 @@ const Page: React.FC<IPageProps> = (props) => {
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
-        <Toolbar toolbarItems={displayedToolbarItems} />
+        {props.useGettingStarted ? (
+          <GetStarted toolbarItems={displayedToolbarItems} />
+        ) : (
+          <Toolbar toolbarItems={displayedToolbarItems} />
+        )}
         <div css={headerStyle}>
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
-        <div css={main} role="main">
+        <div css={props.useGettingStarted ? mainWithGetStarted : main(!!onRenderHeaderContent)} role="main">
           <Split
             resetOnDoubleClick
             initialPrimarySize="20%"
@@ -205,12 +227,11 @@ const Page: React.FC<IPageProps> = (props) => {
                   luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
                 }}
                 onSelect={(link) => {
-                  setCurrentProjectId(link.skillId ? link.skillId : link.projectId);
                   navigateTo(buildURL(pageMode, link));
                 }}
               />
             ) : (
-              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} onLinkClick={navLinkClick} />
+              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
             )}
             <div
               aria-label={mainRegionName}
@@ -219,7 +240,7 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {ShowDebugPanelPageTitle.indexOf(title) > -1 && <DebugPanel />}
+              {useDebugPane ? <DebugPanel /> : null}
             </div>
           </Split>
         </div>

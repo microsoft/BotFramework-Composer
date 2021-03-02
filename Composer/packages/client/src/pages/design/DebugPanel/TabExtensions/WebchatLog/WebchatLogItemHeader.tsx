@@ -4,14 +4,36 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import isEqual from 'lodash/isEqual';
 
 import { rootBotProjectIdSelector, webChatLogsState } from '../../../../../recoilModel';
 import { DebugPanelErrorIndicator } from '../DebugPanelErrorIndicator';
+import { DebugPanelTabHeaderProps } from '../types';
 
-export const WebchatLogItemHeader = () => {
+export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const logItems = useRecoilValue(webChatLogsState(rootBotId ?? ''));
+
+  const [hasUnreadLogs, setHasUnreadLogs] = useState(false);
+  const [lastReadLogIds, setLastReadLogIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const newLogIds = logItems.map((item) => item.timestamp);
+    const areLogsSame = isEqual(newLogIds, lastReadLogIds);
+
+    if (!areLogsSame) {
+      setLastReadLogIds(newLogIds);
+      if (isActive || !logItems.length) {
+        setHasUnreadLogs(false);
+        return;
+      }
+      setHasUnreadLogs(true);
+    } else {
+      setHasUnreadLogs(false);
+    }
+  }, [logItems, isActive]);
 
   return (
     <div
@@ -29,7 +51,7 @@ export const WebchatLogItemHeader = () => {
       >
         {formatMessage('Webchat Inspector')}
       </div>
-      <DebugPanelErrorIndicator hasError={logItems.length > 0} />
+      <DebugPanelErrorIndicator hasError={hasUnreadLogs} />
     </div>
   );
 };

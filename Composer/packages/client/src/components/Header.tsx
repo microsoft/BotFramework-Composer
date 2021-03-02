@@ -25,10 +25,12 @@ import {
   currentProjectIdState,
   settingsState,
   webChatEssentialsSelector,
+  isWebChatPanelVisibleState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import { useLocation } from '../utils/hooks';
+import TelemetryClient from '../telemetry/TelemetryClient';
 
 import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates } from './MultiLanguage';
@@ -146,14 +148,19 @@ export const Header = () => {
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
   const settings = useRecoilValue(settingsState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
+  const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
-  const { openBotInEmulator, appendLogToWebChatInspector, clearWebChatLogs } = useRecoilValue(dispatcherState);
+  const {
+    openBotInEmulator,
+    appendLogToWebChatInspector,
+    clearWebChatLogs,
+    setWebChatPanelVisibility,
+  } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
-  const [isWebChatPanelVisible, toggleWebChatPanel] = useState(false);
 
   const {
     location: { pathname },
@@ -164,7 +171,7 @@ export const Header = () => {
     const hideCondition = !pathname.endsWith('/home') || pathname.includes('/bot/');
     setStartBotsWidgetVisible(hideCondition);
     if (!hideCondition) {
-      toggleWebChatPanel(false);
+      setWebChatPanelVisibility(false);
     }
   }, [pathname]);
 
@@ -173,10 +180,10 @@ export const Header = () => {
   }, []);
 
   useEffect(() => {
-    if (!hideBotController && isWebChatPanelVisible) {
-      toggleWebChatPanel(false);
+    if (isWebChatPanelVisible) {
+      hideBotStartController(true);
     }
-  }, [hideBotController, isWebChatPanelVisible]);
+  }, [isWebChatPanelVisible]);
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
@@ -240,7 +247,15 @@ export const Header = () => {
 
       <div css={rightSection}>
         {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && (
-          <BotController isControllerHidden={hideBotController} onHideController={hideBotStartController} />
+          <BotController
+            isControllerHidden={hideBotController}
+            onHideController={(isHidden: boolean) => {
+              hideBotStartController(isHidden);
+              if (!isHidden) {
+                setWebChatPanelVisibility(false);
+              }
+            }}
+          />
         )}
         {showUpdateAvailableIcon && (
           <IconButton
@@ -289,7 +304,15 @@ export const Header = () => {
               },
             }}
             title={formatMessage('Open Web Chat')}
-            onClick={() => toggleWebChatPanel(!isWebChatPanelVisible)}
+            onClick={() => {
+              const currentWebChatVisibility = !isWebChatPanelVisible;
+              setWebChatPanelVisibility(currentWebChatVisibility);
+              if (currentWebChatVisibility) {
+                TelemetryClient.track('WebChatPaneOpened');
+              } else {
+                TelemetryClient.track('WebChatPaneClosed');
+              }
+            }}
           />
         )}
         <NotificationButton buttonStyles={buttonStyles} />
@@ -328,7 +351,7 @@ export const Header = () => {
         isOpen={isWebChatPanelVisible}
         styles={{
           root: {
-            marginTop: '94px',
+            marginTop: '50px',
           },
           scrollableContent: {
             width: '100%',
@@ -342,20 +365,19 @@ export const Header = () => {
           },
         }}
         type={PanelType.custom}
-        onDismiss={() => toggleWebChatPanel(false)}
+        onDismiss={() => {
+          setWebChatPanelVisibility(false);
+          TelemetryClient.track('WebChatPaneClosed');
+        }}
       >
         {webchatEssentials ? (
           <WebChatPanel
-            activeLocale={webchatEssentials.activeLocale}
             appendLogToWebChatInspector={appendLogToWebChatInspector}
-            botName={webchatEssentials.displayName}
-            botUrl={webchatEssentials.botUrl}
+            botData={{ ...webchatEssentials }}
             clearWebchatInspectorLogs={clearWebChatLogs}
             directlineHostUrl={BASEPATH}
             isWebChatPanelVisible={isWebChatPanelVisible}
             openBotInEmulator={openBotInEmulator}
-            projectId={webchatEssentials.botId}
-            secrets={webchatEssentials.secrets}
           />
         ) : null}
       </Panel>
