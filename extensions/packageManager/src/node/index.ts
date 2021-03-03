@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
+
 import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
+
 import { IFeed, IPackageDefinition, IPackageQuery, IPackageSource, PackageSourceType } from './feeds/feedInterfaces';
 import { FeedFactory } from './feeds/feedFactory';
 
@@ -148,7 +150,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // Get package sources that match a url in the feed query received.
       packageSources = packageSources.filter((f) => f.url != null && packageSourceUrls.includes(f.url));
 
-      let combined: IPackageDefinition[] = [];
+      const combined: IPackageDefinition[] = [];
       for (const packageSource of packageSources) {
         try {
           const feed: IFeed = await new FeedFactory(composer).build(packageSource);
