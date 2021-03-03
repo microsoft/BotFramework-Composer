@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import URI from 'vscode-uri';
-import { IConnection, LocationLink, TextDocuments } from 'vscode-languageserver';
+import { IConnection, TextDocuments } from 'vscode-languageserver';
 import formatMessage from 'format-message';
 import {
   Diagnostic,
@@ -19,6 +19,7 @@ import {
   DocumentOnTypeFormattingParams,
   FoldingRangeParams,
   FoldingRange,
+  Location,
 } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
@@ -55,6 +56,7 @@ export class LGServer {
   private _lgParser = new LgParser();
   private _luisEntities: string[] = [];
   private _lastLuContent: string[] = [];
+  private _lgFile: LgFile | undefined = undefined;
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
@@ -128,10 +130,27 @@ export class LGServer {
     this.connection.listen();
   }
 
-  protected definitionHandler(params: TextDocumentPositionParams): LocationLink[] {
-    const uri = this.LGDocuments[0].uri;
-    const loc = LocationLink.create(uri, Range.create(0, 0, 0, 2), Range.create(0, 0, 0, 2));
-    return [loc];
+  protected definitionHandler(params: TextDocumentPositionParams): Location | undefined {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return;
+    }
+    const wordRange = getRangeAtPosition(document, params.position);
+    const word = document.getText(wordRange);
+    console.log(word);
+    const result = this._lgFile?.templates.find((t) => t.name === word);
+    if (!result) {
+      return;
+    }
+
+    if (result.range) {
+      return Location.create(
+        params.textDocument.uri,
+        Range.create(result.range.start.line - 1, 0, result.range.end.line, 0)
+      );
+    }
+
+    return;
   }
 
   protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
@@ -817,6 +836,7 @@ export class LGServer {
       return;
     }
 
+    this._lgFile = lgFile;
     if (text.length === 0) {
       this.cleanDiagnostics(document);
       return;
