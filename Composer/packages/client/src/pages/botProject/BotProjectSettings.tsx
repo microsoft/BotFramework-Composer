@@ -83,48 +83,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   const { setSettings } = useRecoilValue(dispatcherState);
 
-  const navLinks: INavTreeItem[] = useMemo(() => {
-    const localBotProjects = botProjects.filter((b) => !b.isRemote);
-    const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
-      return {
-        id: b.projectId,
-        name: b.name,
-        ariaLabel: formatMessage('bot'),
-        url: createBotSettingUrl(rootBotProjectId ?? '', b.projectId),
-        isRootBot: b.isRootBot,
-      };
-    });
-    const rootBotIndex = localBotProjects.findIndex((link) => link.isRootBot);
-
-    if (rootBotIndex > -1) {
-      const rootBotLink = newbotProjectLinks.splice(rootBotIndex, 1)[0];
-      newbotProjectLinks.splice(0, 0, rootBotLink);
-    }
-    return newbotProjectLinks;
-  }, [botProjects]);
-
-  const onRenderHeaderContent = () => {
-    return formatMessage(
-      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'
-    );
-  };
-
-  const saveChangeResult = (result: DialogSetting) => {
-    setSettings(currentProjectId, result);
-  };
-
-  const handleChange = (result: any) => {
-    // prevent result was undefined, it will cause error
-    if (result && typeof result === 'object') {
-      saveChangeResult(result);
-    }
-  };
-
-  if (!botProject) {
-    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings`);
-    return null;
-  }
-
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
   const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
@@ -234,6 +192,48 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       setShowTeachingBubble(false);
     }
   }, []);
+
+  const navLinks: INavTreeItem[] = useMemo(() => {
+    const localBotProjects = botProjects.filter((b) => !b.isRemote);
+    const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
+      return {
+        id: b.projectId,
+        name: b.name,
+        ariaLabel: formatMessage('bot'),
+        url: createBotSettingUrl(rootBotProjectId ?? '', b.projectId),
+        isRootBot: b.isRootBot,
+      };
+    });
+    const rootBotIndex = localBotProjects.findIndex((link) => link.isRootBot);
+
+    if (rootBotIndex > -1) {
+      const rootBotLink = newbotProjectLinks.splice(rootBotIndex, 1)[0];
+      newbotProjectLinks.splice(0, 0, rootBotLink);
+    }
+    return newbotProjectLinks;
+  }, [botProjects]);
+
+  const onRenderHeaderContent = () => {
+    return formatMessage(
+      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'
+    );
+  };
+
+  const saveChangeResult = (result: DialogSetting) => {
+    setSettings(currentProjectId, result);
+  };
+
+  const handleChange = (result: any) => {
+    // prevent result was undefined, it will cause error
+    if (result && typeof result === 'object') {
+      saveChangeResult(result);
+    }
+  };
+
+  if (!botProject) {
+    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings`);
+    return null;
+  }
 
   return (
     <Page
