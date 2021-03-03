@@ -21,7 +21,7 @@ import formatMessage from 'format-message';
 import { useRecoilValue, selector } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client';
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import { dispatcherState, extensionsState } from '../../recoilModel';
 import httpClient from '../../utils/httpUtil';
@@ -130,6 +130,7 @@ const ExtensionsPage: React.FC<RouteComponentProps> = () => {
         onClick: () => {
           setShowNewModal(true);
         },
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
     },
@@ -152,6 +153,7 @@ const ExtensionsPage: React.FC<RouteComponentProps> = () => {
             }
           }
         },
+        styles: defaultToolbarButtonStyles,
       },
       disabled: selectedExtensions.length === 0,
       align: 'left',
@@ -167,6 +169,7 @@ const ExtensionsPage: React.FC<RouteComponentProps> = () => {
         onClick: () => {
           setShowSettings(true);
         },
+        styles: defaultToolbarButtonStyles,
       },
     },
   ];

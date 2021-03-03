@@ -4,6 +4,7 @@
 import { Request, Response } from 'express';
 
 import { authService } from '../services/auth/auth';
+import { useElectronContext } from '../utility/electronContext';
 import { isElectron } from '../utility/isElectron';
 
 type GetAccessTokenRequest = Request & {
@@ -14,6 +15,12 @@ type GetAccessTokenRequest = Request & {
     scopes: string;
     // used for native flow (electron)
     targetResource?: string;
+  };
+};
+
+type GetARMTokenForTenantRequest = Request & {
+  query: {
+    tenantId: string;
   };
 };
 
@@ -44,7 +51,30 @@ async function logOut(req, res) {
   res.status(200);
 }
 
+async function getTenants(req: Request, res: Response) {
+  try {
+    const { getTenants } = useElectronContext();
+    const tenants = await getTenants();
+    res.status(200).json({ tenants });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
+}
+
+async function getARMTokenForTenant(req: GetARMTokenForTenantRequest, res: Response) {
+  try {
+    const { tenantId } = req.query;
+    const { getARMTokenForTenant } = useElectronContext();
+    const accessToken = await getARMTokenForTenant(tenantId);
+    res.status(200).json({ accessToken });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
+}
+
 export const AuthController = {
   getAccessToken,
+  getTenants,
+  getARMTokenForTenant,
   logOut,
 };

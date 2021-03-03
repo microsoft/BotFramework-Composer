@@ -4,7 +4,7 @@
 import { useRecoilValue } from 'recoil';
 
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
-import { currentProjectIdState, diagnosticsSelectorFamily } from '../../../../../recoilModel';
+import { allDiagnosticsSelectorFamily } from '../../../../../recoilModel';
 import { DiagnosticSeverity } from '../../../../diagnostics/types';
 
 export const Severity = {
@@ -13,8 +13,7 @@ export const Severity = {
 };
 
 export const useDiagnosticsData = (): IDiagnosticInfo[] => {
-  const projectId = useRecoilValue(currentProjectIdState);
-  const diagnosticData = useRecoilValue(diagnosticsSelectorFamily(projectId));
+  const diagnosticData = useRecoilValue(allDiagnosticsSelectorFamily('All'));
 
   return diagnosticData ?? [];
 };

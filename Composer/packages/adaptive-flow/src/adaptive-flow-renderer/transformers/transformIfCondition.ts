@@ -14,7 +14,7 @@ export function transformIfCondtion(
   input,
   jsonpath: string
 ): { condition: IndexedNode; choice: IndexedNode; ifGroup: IndexedNode; elseGroup: IndexedNode } | null {
-  if (!input || input.$kind !== AdaptiveKinds.IfCondition) return null;
+  if (!input || typeof input !== 'object') return null;
 
   const result = {
     condition: new IndexedNode(`${jsonpath}`, {

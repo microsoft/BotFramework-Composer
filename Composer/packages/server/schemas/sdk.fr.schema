@@ -1,9 +1,9 @@
 {
   "title": "Genres de composant",
-  "description": "Il s'agit de tous les types qui peuvent être créés par le chargeur.",
+  "description": "Il s’agit de tous les types qui peuvent être créés par le chargeur.",
   "definitions": {
     "Microsoft.ActivityTemplate": {
-      "title": "Modèle d'activité Microsoft",
+      "title": "Modèle d’activité Microsoft",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -13,11 +13,11 @@
       "properties": {
         "template": {
           "title": "Modèle",
-          "description": "Modèle de générateur de langage à utiliser pour créer l'activité"
+          "description": "Modèle de générateur de langage à utiliser pour créer l’activité"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -27,7 +27,7 @@
     },
     "Microsoft.AdaptiveDialog": {
       "title": "Dialogue adaptatif",
-      "description": "Dialogue flexible, piloté par les données, qui peut s'adapter à la conversation.",
+      "description": "Dialogue flexible, piloté par les données, qui peut s’adapter à la conversation.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -41,7 +41,7 @@
         },
         "autoEndDialog": {
           "title": "Terminer automatiquement le dialogue",
-          "description": "Si la valeur est true, le dialogue se termine automatiquement s'il n'y a pas d'autres actions. Si la valeur est false, terminez manuellement le dialogue à l'aide de l'action EndDialog."
+          "description": "Si la valeur est true, le dialogue se termine automatiquement s’il n’y a pas d’autres actions. Si la valeur est false, terminez manuellement le dialogue à l’aide de l’action EndDialog."
         },
         "defaultResultProperty": {
           "title": "Propriété de résultat par défaut",
@@ -49,7 +49,7 @@
         },
         "recognizer": {
           "title": "Module de reconnaissance",
-          "description": "Module de reconnaissance d'entrée qui interprète l'entrée utilisateur dans l'intention et les entités."
+          "description": "Module de reconnaissance d’entrée qui interprète l’entrée utilisateur dans l’intention et les entités."
         },
         "generator": {
           "title": "Générateur de langage",
@@ -63,8 +63,8 @@
           "description": "Liste des déclencheurs définis pour ce dialogue.",
           "title": "Déclencheurs",
           "items": {
-            "title": "Déclencheurs d'événement",
-            "description": "Déclencheurs d'événement pour la gestion des événements."
+            "title": "Déclencheurs d’événement",
+            "description": "Déclencheurs d’événement pour la gestion des événements."
           }
         },
         "schema": {
@@ -81,8 +81,8 @@
           }
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -91,8 +91,8 @@
       }
     },
     "Microsoft.AgeEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité d'âge",
-      "description": "Module de reconnaissance qui reconnaît l'âge.",
+      "title": "Module de reconnaissance d’entité d’âge",
+      "description": "Module de reconnaissance qui reconnaît l’âge.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -101,8 +101,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -112,7 +112,7 @@
     },
     "Microsoft.Ask": {
       "title": "Envoyer une activité pour poser une question",
-      "description": "Il s'agit d'une action qui envoie une activité à l'utilisateur quand une réponse est attendue",
+      "description": "Il s’agit d’une action qui envoie une activité à l’utilisateur quand une réponse est attendue",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -122,7 +122,7 @@
       "properties": {
         "expectedProperties": {
           "title": "Propriétés attendues",
-          "description": "Propriétés attendues de l'utilisateur.",
+          "description": "Propriétés attendues de l’utilisateur.",
           "items": {
             "title": "Nom",
             "description": "Nom de la propriété"
@@ -130,7 +130,7 @@
         },
         "defaultOperation": {
           "title": "Opération par défaut",
-          "description": "Définit l'opération par défaut à utiliser quand aucune opération n'est reconnue dans la réponse à cette demande."
+          "description": "Définit l’opération par défaut à utiliser quand aucune opération n’est reconnue dans la réponse à cette demande."
         },
         "id": {
           "title": "ID",
@@ -145,8 +145,8 @@
           "description": "Activité à envoyer."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -155,7 +155,7 @@
       }
     },
     "Microsoft.AttachmentInput": {
-      "title": "Dialogue d'entrée de la pièce jointe",
+      "title": "Dialogue d’entrée de la pièce jointe",
       "description": "Collectez des informations : demandez un fichier ou une image.",
       "patternProperties": {
         "^\\$": {
@@ -212,7 +212,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer quand l'entrée utilisateur ne répond à aucune expression de validation."
+          "description": "Message à envoyer quand l’entrée utilisateur ne répond à aucune expression de validation."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -220,14 +220,14 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "validations": {
           "title": "Expressions de validation",
-          "description": "Expression pour valider l'entrée utilisateur.",
+          "description": "Expression pour valider l’entrée utilisateur.",
           "items": {
             "title": "Condition",
-            "description": "Expression qui doit être satisfaite pour que l'entrée soit considérée comme valide"
+            "description": "Expression qui doit être satisfaite pour que l’entrée soit considérée comme valide"
           }
         },
         "property": {
@@ -240,11 +240,11 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -289,15 +289,15 @@
         },
         "activityProcessed": {
           "title": "Activité traitée",
-          "description": "Quand la valeur est false, le dialogue appelé peut traiter l'activité en cours."
+          "description": "Quand la valeur est false, le dialogue appelé peut traiter l’activité en cours."
         },
         "resultProperty": {
           "title": "Propriété",
           "description": "Propriété pour stocker toute valeur retournée par le dialogue appelé."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -325,27 +325,27 @@
         },
         "activityProcessed": {
           "title": "Activité traitée",
-          "description": "Quand la valeur est false, la compétence est démarrée à l'aide de l'activité du contexte de tour actuel au lieu de l'activité de la propriété Activité."
+          "description": "Quand la valeur est false, la compétence est démarrée à l’aide de l’activité du contexte de tour actuel au lieu de l’activité de la propriété Activité."
         },
         "resultProperty": {
           "title": "Propriété",
           "description": "Propriété pour stocker toute valeur retournée par le dialogue appelé."
         },
         "botId": {
-          "title": "ID du bot de l'hôte de compétence",
-          "description": "ID d'application Microsoft qui doit appeler la compétence."
+          "title": "ID du bot de l’hôte de compétence",
+          "description": "ID d’application Microsoft qui doit appeler la compétence."
         },
         "skillHostEndpoint": {
           "title": "Hôte de compétence",
-          "description": "URL de rappel de l'hôte de compétence."
+          "description": "URL de rappel de l’hôte de compétence."
         },
         "connectionName": {
           "title": "Nom de connexion OAuth (SSO)",
           "description": "Nom de la connexion OAuth, à utiliser pour effectuer une connexion unique avec une compétence."
         },
         "skillAppId": {
-          "title": "ID d'application de compétence",
-          "description": "ID d'application Microsoft pour la compétence."
+          "title": "ID d’application de compétence",
+          "description": "ID d’application Microsoft pour la compétence."
         },
         "skillEndpoint": {
           "title": "Point de terminaison de la compétence ",
@@ -360,8 +360,8 @@
           "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre la compétence."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -371,7 +371,7 @@
     },
     "Microsoft.BreakLoop": {
       "title": "Arrêter la boucle",
-      "description": "Arrêter l'exécution de cette boucle",
+      "description": "Arrêter l’exécution de cette boucle",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -388,8 +388,8 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -399,7 +399,7 @@
     },
     "Microsoft.CancelAllDialogs": {
       "title": "Annuler tous les dialogues",
-      "description": "Annulez tous les dialogues actifs. Tous les dialogues de la chaîne de dialogues ont besoin d'un déclencheur pour capturer l'événement configuré dans cette action.",
+      "description": "Annulez tous les dialogues actifs. Tous les dialogues de la chaîne de dialogues ont besoin d’un déclencheur pour capturer l’événement configuré dans cette action.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -417,19 +417,19 @@
         },
         "activityProcessed": {
           "title": "Activité traitée",
-          "description": "Quand la valeur est false, le dialogue de l'appelant est informé qu'il doit traiter l'activité en cours."
+          "description": "Quand la valeur est false, le dialogue de l’appelant est informé qu’il doit traiter l’activité en cours."
         },
         "eventName": {
-          "title": "Nom de l'événement",
-          "description": "Nom de l'événement à émettre."
+          "title": "Nom de l’événement",
+          "description": "Nom de l’événement à émettre."
         },
         "eventValue": {
-          "title": "Valeur d'événement",
-          "description": "Valeur à émettre avec l'événement (facultatif)."
+          "title": "Valeur d’événement",
+          "description": "Valeur à émettre avec l’événement (facultatif)."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -439,7 +439,7 @@
     },
     "Microsoft.CancelDialog": {
       "title": "Annuler tous les dialogues",
-      "description": "Annulez tous les dialogues actifs. Tous les dialogues de la chaîne de dialogues ont besoin d'un déclencheur pour capturer l'événement configuré dans cette action.",
+      "description": "Annulez tous les dialogues actifs. Tous les dialogues de la chaîne de dialogues ont besoin d’un déclencheur pour capturer l’événement configuré dans cette action.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -457,19 +457,19 @@
         },
         "activityProcessed": {
           "title": "Activité traitée",
-          "description": "Quand la valeur est false, le dialogue de l'appelant est informé qu'il doit traiter l'activité en cours."
+          "description": "Quand la valeur est false, le dialogue de l’appelant est informé qu’il doit traiter l’activité en cours."
         },
         "eventName": {
-          "title": "Nom de l'événement",
-          "description": "Nom de l'événement à émettre."
+          "title": "Nom de l’événement",
+          "description": "Nom de l’événement à émettre."
         },
         "eventValue": {
-          "title": "Valeur d'événement",
-          "description": "Valeur à émettre avec l'événement (facultatif)."
+          "title": "Valeur d’événement",
+          "description": "Valeur à émettre avec l’événement (facultatif)."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -478,7 +478,7 @@
       }
     },
     "Microsoft.ChannelMentionEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de mention de canal",
+      "title": "Module de reconnaissance d’entité de mention de canal",
       "description": "Promeut les entités de mention passées par un canal via activity.entities dans le résultat du module de reconnaissance.",
       "patternProperties": {
         "^\\$": {
@@ -488,8 +488,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -498,7 +498,7 @@
       }
     },
     "Microsoft.ChoiceInput": {
-      "title": "Dialogue d'entrée du choix",
+      "title": "Dialogue d’entrée du choix",
       "description": "Collectez des informations : sélectionnez dans une liste de choix",
       "patternProperties": {
         "^\\$": {
@@ -535,7 +535,7 @@
               "items": {
                 "0": {
                   "title": "Choix simple",
-                  "description": "Un choix pour l'entrée de choix."
+                  "description": "Un choix pour l’entrée de choix."
                 }
               }
             },
@@ -571,7 +571,7 @@
         },
         "defaultLocale": {
           "title": "Paramètres régionaux par défaut",
-          "description": "Paramètres régionaux par défaut à utiliser pour analyser les choix de confirmation si l'appelant n'en passe aucun."
+          "description": "Paramètres régionaux par défaut à utiliser pour analyser les choix de confirmation si l’appelant n’en passe aucun."
         },
         "style": {
           "title": "Style de liste",
@@ -621,19 +621,19 @@
               "properties": {
                 "noValue": {
                   "title": "Aucune valeur",
-                  "description": "Si la valeur est true, le champ value du choix n'est pas exploré"
+                  "description": "Si la valeur est true, le champ value du choix n’est pas exploré"
                 },
                 "noAction": {
                   "title": "Aucune action",
-                  "description": "Si la valeur est true, le champ action.title du choix n'est PAS exploré"
+                  "description": "Si la valeur est true, le champ action.title du choix n’est PAS exploré"
                 },
                 "recognizeNumbers": {
                   "title": "Reconnaître les nombres",
-                  "description": "Si la valeur est true, le module de reconnaissance numérique est utilisé pour reconnaître une réponse d'index (1, 2, 3...) à l'invite."
+                  "description": "Si la valeur est true, le module de reconnaissance numérique est utilisé pour reconnaître une réponse d’index (1, 2, 3...) à l’invite."
                 },
                 "recognizeOrdinals": {
                   "title": "Reconnaître les ordinaux",
-                  "description": "Si la valeur est true, le module de reconnaissance des ordinaux est utilisé pour reconnaître une réponse ordinale (premier/deuxième/...) à l'invite."
+                  "description": "Si la valeur est true, le module de reconnaissance des ordinaux est utilisé pour reconnaître une réponse ordinale (premier/deuxième/...) à l’invite."
                 }
               }
             }
@@ -657,7 +657,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer quand l'entrée utilisateur ne répond à aucune expression de validation."
+          "description": "Message à envoyer quand l’entrée utilisateur ne répond à aucune expression de validation."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -665,14 +665,14 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "validations": {
           "title": "Expressions de validation",
-          "description": "Expression pour valider l'entrée utilisateur.",
+          "description": "Expression pour valider l’entrée utilisateur.",
           "items": {
             "title": "Condition",
-            "description": "Expression qui doit être satisfaite pour que l'entrée soit considérée comme valide"
+            "description": "Expression qui doit être satisfaite pour que l’entrée soit considérée comme valide"
           }
         },
         "property": {
@@ -685,11 +685,11 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -712,8 +712,8 @@
           "description": "Expression à évaluer"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -722,7 +722,7 @@
       }
     },
     "Microsoft.ConfirmInput": {
-      "title": "Confirmer le dialogue d'entrée",
+      "title": "Confirmer le dialogue d’entrée",
       "description": "Collectez des informations : demandez une confirmation (oui ou non).",
       "patternProperties": {
         "^\\$": {
@@ -737,7 +737,7 @@
         },
         "defaultLocale": {
           "title": "Paramètres régionaux par défaut",
-          "description": "Paramètres régionaux par défaut ou expression qui fournit les paramètres régionaux par défaut à utiliser s'ils sont introuvables dans l'activité."
+          "description": "Paramètres régionaux par défaut ou expression qui fournit les paramètres régionaux par défaut à utiliser s’ils sont introuvables dans l’activité."
         },
         "style": {
           "title": "Style de liste",
@@ -751,7 +751,7 @@
         },
         "choiceOptions": {
           "title": "Options de choix",
-          "description": "Options de choix ou expression qui fournit des options de choix pour contrôler les choix d'affichage de l'utilisateur.",
+          "description": "Options de choix ou expression qui fournit des options de choix pour contrôler les choix d’affichage de l’utilisateur.",
           "oneOf": {
             "0": {
               "title": "Options de choix",
@@ -771,7 +771,7 @@
                 },
                 "includeNumbers": {
                   "title": "Ajouter des chiffres",
-                  "description": "Si la valeur est true, les choix de style inline et liste sont précédés de l'index du choix."
+                  "description": "Si la valeur est true, les choix de style inline et liste sont précédés de l’index du choix."
                 }
               }
             }
@@ -786,7 +786,7 @@
           "description": "« Propriété » est défini sur la valeur de cette expression, sauf si sa valeur est null."
         },
         "confirmChoices": {
-          "title": "Tableau d'objets de choix",
+          "title": "Tableau d’objets de choix",
           "description": "Tableau de choix simples ou structurés.",
           "oneOf": {
             "0": {
@@ -847,7 +847,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer quand l'entrée utilisateur ne répond à aucune expression de validation."
+          "description": "Message à envoyer quand l’entrée utilisateur ne répond à aucune expression de validation."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -855,14 +855,14 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "validations": {
           "title": "Expressions de validation",
-          "description": "Expression pour valider l'entrée utilisateur.",
+          "description": "Expression pour valider l’entrée utilisateur.",
           "items": {
             "title": "Condition",
-            "description": "Expression qui doit être satisfaite pour que l'entrée soit considérée comme valide"
+            "description": "Expression qui doit être satisfaite pour que l’entrée soit considérée comme valide"
           }
         },
         "property": {
@@ -875,11 +875,11 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -888,7 +888,7 @@
       }
     },
     "Microsoft.ConfirmationEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de confirmation",
+      "title": "Module de reconnaissance d’entité de confirmation",
       "description": "Module de reconnaissance qui reconnaît les choix de confirmation (oui/non).",
       "patternProperties": {
         "^\\$": {
@@ -898,8 +898,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -908,8 +908,8 @@
       }
     },
     "Microsoft.ContinueConversationLater": {
-      "title": "Continuer la conversation plus tard (file d'attente)",
-      "description": "Continuer la conversation plus tard (via une file d'attente de Stockage Azure).",
+      "title": "Continuer la conversation plus tard (file d’attente)",
+      "description": "Continuer la conversation plus tard (via une file d’attente de Stockage Azure).",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -934,8 +934,8 @@
           "description": "Valeur à envoyer dans activity.value."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -945,7 +945,7 @@
     },
     "Microsoft.ContinueLoop": {
       "title": "Continuer la boucle",
-      "description": "Arrêtez l'exécution de ce modèle et continuez avec la prochaine itération de la boucle.",
+      "description": "Arrêtez l’exécution de ce modèle et continuez avec la prochaine itération de la boucle.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -962,8 +962,8 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -990,8 +990,8 @@
           "description": "Liste des modules de reconnaissance définis pour cet ensemble."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1000,7 +1000,7 @@
       }
     },
     "Microsoft.CurrencyEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité monétaire",
+      "title": "Module de reconnaissance d’entité monétaire",
       "description": "Module de reconnaissance qui reconnaît la monnaie.",
       "patternProperties": {
         "^\\$": {
@@ -1010,8 +1010,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1020,8 +1020,8 @@
       }
     },
     "Microsoft.DateTimeEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de date et d'heure",
-      "description": "Module de reconnaissance qui reconnaît des fragments de date et d'heure.",
+      "title": "Module de reconnaissance d’entité de date et d’heure",
+      "description": "Module de reconnaissance qui reconnaît des fragments de date et d’heure.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -1030,8 +1030,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1040,8 +1040,8 @@
       }
     },
     "Microsoft.DateTimeInput": {
-      "title": "Dialogue d'entrée de date/d'heure",
-      "description": "Collectez des informations : demandez la date et/ou l'heure",
+      "title": "Dialogue d’entrée de date/d’heure",
+      "description": "Collectez des informations : demandez la date et/ou l’heure",
       "defaultLocale": {
         "title": "Paramètres régionaux par défaut",
         "description": "Paramètres régionaux par défaut."
@@ -1083,7 +1083,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer quand l'entrée utilisateur ne répond à aucune expression de validation."
+          "description": "Message à envoyer quand l’entrée utilisateur ne répond à aucune expression de validation."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -1091,14 +1091,14 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "validations": {
           "title": "Expressions de validation",
-          "description": "Expression pour valider l'entrée utilisateur.",
+          "description": "Expression pour valider l’entrée utilisateur.",
           "items": {
             "title": "Condition",
-            "description": "Expression qui doit être satisfaite pour que l'entrée soit considérée comme valide"
+            "description": "Expression qui doit être satisfaite pour que l’entrée soit considérée comme valide"
           }
         },
         "property": {
@@ -1111,11 +1111,11 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1125,7 +1125,7 @@
     },
     "Microsoft.DebugBreak": {
       "title": "Arrêt du débogueur",
-      "description": "Si le débogueur est attaché, arrêtez l'exécution à ce stade de la conversation.",
+      "description": "Si le débogueur est attaché, arrêtez l’exécution à ce stade de la conversation.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -1142,8 +1142,8 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1152,7 +1152,7 @@
       }
     },
     "Microsoft.DeleteActivity": {
-      "title": "Supprimer l'activité",
+      "title": "Supprimer l’activité",
       "description": "Supprimer une activité qui a été envoyée précédemment.",
       "patternProperties": {
         "^\\$": {
@@ -1167,15 +1167,15 @@
         },
         "activityId": {
           "title": "ActivityId",
-          "description": "expression d'un activityId à supprimer"
+          "description": "expression d’un activityId à supprimer"
         },
         "disabled": {
           "title": "Désactivé",
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1185,7 +1185,7 @@
     },
     "Microsoft.DeleteProperties": {
       "title": "Supprimer les propriétés",
-      "description": "Supprimez plusieurs propriétés et les valeurs qu'elles contiennent.",
+      "description": "Supprimez plusieurs propriétés et les valeurs qu’elles contiennent.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -1210,8 +1210,8 @@
           }
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1221,7 +1221,7 @@
     },
     "Microsoft.DeleteProperty": {
       "title": "Supprimer la propriété",
-      "description": "Supprimez une propriété et les valeurs qu'elle contient.",
+      "description": "Supprimez une propriété et les valeurs qu’elle contient.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -1242,8 +1242,8 @@
           "description": "Propriété à supprimer."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1252,7 +1252,7 @@
       }
     },
     "Microsoft.DimensionEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de dimension",
+      "title": "Module de reconnaissance d’entité de dimension",
       "description": "Module de reconnaissance qui reconnaît la dimension.",
       "patternProperties": {
         "^\\$": {
@@ -1262,8 +1262,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1304,8 +1304,8 @@
           "description": "Actions à appliquer."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1354,8 +1354,8 @@
           "description": "Nouvelle valeur ou expression."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1364,7 +1364,7 @@
       }
     },
     "Microsoft.EmailEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité d'e-mail",
+      "title": "Module de reconnaissance d’entité d’e-mail",
       "description": "Module de reconnaissance qui reconnaît les e-mails.",
       "patternProperties": {
         "^\\$": {
@@ -1374,8 +1374,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1402,30 +1402,30 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "eventName": {
-          "title": "Nom de l'événement",
-          "description": "Nom de l'événement à émettre.",
+          "title": "Nom de l’événement",
+          "description": "Nom de l’événement à émettre.",
           "oneOf": {
             "0": {
               "title": "Événement intégré",
-              "description": "Type d'événement standard."
+              "description": "Type d’événement standard."
             },
             "1": {
               "title": "Événement personnalisé",
-              "description": "Type d'événement personnalisé"
+              "description": "Type d’événement personnalisé"
             }
           }
         },
         "eventValue": {
-          "title": "Valeur d'événement",
-          "description": "Valeur à émettre avec l'événement (facultatif)."
+          "title": "Valeur d’événement",
+          "description": "Valeur à émettre avec l’événement (facultatif)."
         },
         "bubbleEvent": {
-          "title": "Propager l'événement",
+          "title": "Propager l’événement",
           "description": "Si la valeur est true, cet événement est passé aux dialogues parents."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1456,8 +1456,8 @@
           "description": "Valeur de résultat retournée au dialogue parent."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1484,8 +1484,8 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1504,8 +1504,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1515,7 +1515,7 @@
     },
     "Microsoft.Foreach": {
       "title": "Pour chaque élément",
-      "description": "Exécutez des actions sur chaque élément d'une collection.",
+      "description": "Exécutez des actions sur chaque élément d’une collection.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -1536,20 +1536,20 @@
           "description": "Propriété qui contient le tableau."
         },
         "index": {
-          "title": "Propriété d'index",
-          "description": "Propriété qui contient l'index de l'élément."
+          "title": "Propriété d’index",
+          "description": "Propriété qui contient l’index de l’élément."
         },
         "value": {
           "title": "Propriété de valeur",
-          "description": "Propriété qui contient la valeur de l'élément."
+          "description": "Propriété qui contient la valeur de l’élément."
         },
         "actions": {
           "title": "Actions",
           "description": "Actions à exécuter pour chaque élément. Utilisez « $foreach.value » pour accéder à la valeur de chaque élément. Utilisez « $foreach.index » pour accéder à l'index de chaque élément."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1559,7 +1559,7 @@
     },
     "Microsoft.ForeachPage": {
       "title": "Pour chaque page",
-      "description": "Exécutez des actions sur chaque page (collection d'éléments) dans un tableau.",
+      "description": "Exécutez des actions sur chaque page (collection d’éléments) dans un tableau.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -1584,8 +1584,8 @@
           "description": "Actions à exécuter pour chaque page. Utilisez « $foreach.page » pour accéder à chaque page."
         },
         "pageIndex": {
-          "title": "Propriété d'index",
-          "description": "Propriété qui contient l'index de la page."
+          "title": "Propriété d’index",
+          "description": "Propriété qui contient l’index de la page."
         },
         "page": {
           "title": "Propriété de page",
@@ -1593,11 +1593,11 @@
         },
         "pageSize": {
           "title": "Taille de page",
-          "description": "Nombre d'éléments dans chaque page."
+          "description": "Nombre d’éléments dans chaque page."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1606,7 +1606,7 @@
       }
     },
     "Microsoft.GetActivityMembers": {
-      "title": "Obtenir les membres de l'activité",
+      "title": "Obtenir les membres de l’activité",
       "description": "Obtenir les membres qui participent à une activité. (BotFrameworkAdapter uniquement)",
       "patternProperties": {
         "^\\$": {
@@ -1624,16 +1624,16 @@
           "description": "Propriété (emplacement nommé pour stocker les informations)."
         },
         "activityId": {
-          "title": "ID d'activité",
-          "description": "ID d'activité ou expression d'un activityId à utiliser pour obtenir les membres. Si rien n'est défini, l'ID d'activité actuel est utilisé."
+          "title": "ID d’activité",
+          "description": "ID d’activité ou expression d’un activityId à utiliser pour obtenir les membres. Si rien n’est défini, l’ID d’activité actuel est utilisé."
         },
         "disabled": {
           "title": "Désactivé",
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1664,8 +1664,8 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1674,7 +1674,7 @@
       }
     },
     "Microsoft.GotoAction": {
-      "title": "Accéder à l'action",
+      "title": "Accéder à l’action",
       "description": "Accédez à une action par ID.",
       "patternProperties": {
         "^\\$": {
@@ -1692,12 +1692,12 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "actionId": {
-          "title": "ID d'action",
-          "description": "ID d'action à exécuter ensuite"
+          "title": "ID d’action",
+          "description": "ID d’action à exécuter ensuite"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1706,7 +1706,7 @@
       }
     },
     "Microsoft.GuidEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de GUID",
+      "title": "Module de reconnaissance d’entité de GUID",
       "description": "Module de reconnaissance qui reconnaît les GUID.",
       "patternProperties": {
         "^\\$": {
@@ -1716,8 +1716,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1726,7 +1726,7 @@
       }
     },
     "Microsoft.HashtagEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de mot-dièse",
+      "title": "Module de reconnaissance d’entité de mot-dièse",
       "description": "Module de reconnaissance qui reconnaît les mots-dièse.",
       "patternProperties": {
         "^\\$": {
@@ -1736,8 +1736,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1773,11 +1773,11 @@
         },
         "body": {
           "title": "Corps",
-          "description": "Corps à ajouter à l'appel HTTP (prend en charge la liaison de données)."
+          "description": "Corps à ajouter à l’appel HTTP (prend en charge la liaison de données)."
         },
         "resultProperty": {
           "title": "Propriété de résultat",
-          "description": "Propriété pour stocker le résultat de cette action. Le résultat peut comprendre l'une des 4 propriétés de la réponse HTTP : statusCode, reasonPhrase, content et headers. Si le contenu est JSON, il s'agit d'un objet désérialisé. Vous pouvez accéder aux valeurs via .content, par exemple."
+          "description": "Propriété pour stocker le résultat de cette action. Le résultat peut comprendre l’une des 4 propriétés de la réponse HTTP : statusCode, reasonPhrase, content et headers. Si le contenu est JSON, il s’agit d’un objet désérialisé. Vous pouvez accéder aux valeurs via .content, par exemple."
         },
         "contentType": {
           "title": "Type de contenu",
@@ -1798,8 +1798,8 @@
           }
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -1809,7 +1809,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "Composants correspondant à ActivityTemplate (modèle de chaîne), une activité ou une implémentation d'ActivityTemplate",
+      "description": "Composants correspondant à ActivityTemplate (modèle de chaîne), une activité ou une implémentation d’ActivityTemplate",
       "oneOf": {
         "1": {
           "description": "Une activité est le type de communication de base du protocole Bot Framework 3.0.",
@@ -1820,15 +1820,15 @@
               "title": "type"
             },
             "id": {
-              "description": "Contient un ID qui identifie l'activité sur la chaîne de façon unique.",
+              "description": "Contient un ID qui identifie l’activité sur la chaîne de façon unique.",
               "title": "ID"
             },
             "timestamp": {
-              "description": "Contient la date et l'heure d'envoi du message, en UTC, au format ISO-8601.",
+              "description": "Contient la date et l’heure d’envoi du message, en UTC, au format ISO-8601.",
               "title": "timestamp"
             },
             "localTimestamp": {
-              "description": "Contient la date et l'heure d'envoi du message, en heure locale, au format\nISO-8601.\nPar exemple, 2016-09-23T13:07:49.4714686-07:00.",
+              "description": "Contient la date et l’heure d’envoi du message, en heure locale, au format\nISO-8601.\nPar exemple, 2016-09-23T13:07:49.4714686-07:00.",
               "title": "localTimestamp"
             },
             "localTimezone": {
@@ -1844,15 +1844,15 @@
               "title": "channelId"
             },
             "from": {
-              "description": "Identifie l'expéditeur du message.",
+              "description": "Identifie l’expéditeur du message.",
               "title": "from"
             },
             "conversation": {
-              "description": "Identifie la conversation à laquelle l'activité appartient.",
+              "description": "Identifie la conversation à laquelle l’activité appartient.",
               "title": "conversation",
               "properties": {
                 "isGroup": {
-                  "description": "Indique si la conversation contient plus de deux participants au moment où\nl'activité a été générée",
+                  "description": "Indique si la conversation contient plus de deux participants au moment où\nl’activité a été générée",
                   "title": "isGroup"
                 },
                 "conversationType": {
@@ -1860,7 +1860,7 @@
                   "title": "conversationType"
                 },
                 "id": {
-                  "description": "ID de canal de l'utilisateur ou du bot sur ce canal (exemple : joe@smith.com ou @joesmith ou\n123456)",
+                  "description": "ID de canal de l’utilisateur ou du bot sur ce canal (exemple : joe@smith.com ou @joesmith ou\n123456)",
                   "title": "ID"
                 },
                 "name": {
@@ -1897,7 +1897,7 @@
                 "title": "ChannelAccount",
                 "properties": {
                   "id": {
-                    "description": "ID de canal de l'utilisateur ou du bot sur ce canal (exemple : joe@smith.com ou @joesmith ou\n123456)",
+                    "description": "ID de canal de l’utilisateur ou du bot sur ce canal (exemple : joe@smith.com ou @joesmith ou\n123456)",
                     "title": "ID"
                   },
                   "name": {
@@ -1942,11 +1942,11 @@
               "title": "topicName"
             },
             "historyDisclosed": {
-              "description": "Indique si l'historique antérieur de la chaîne est divulgué.",
+              "description": "Indique si l’historique antérieur de la chaîne est divulgué.",
               "title": "historyDisclosed"
             },
             "locale": {
-              "description": "Nom des paramètres régionaux pour le contenu du champ de texte.\nLe nom des paramètres régionaux est la combinaison d'un code de culture ISO 639 de deux ou trois lettres associé à\nune langue\net d'un code de sous-culture ISO 3166 de deux lettres associé à un pays ou une région.\nLe nom des paramètres régionaux peut également correspondre à une étiquette de langue BCP-47 valide.",
+              "description": "Nom des paramètres régionaux pour le contenu du champ de texte.\nLe nom des paramètres régionaux est la combinaison d’un code de culture ISO 639 de deux ou trois lettres associé à\nune langue\net d’un code de sous-culture ISO 3166 de deux lettres associé à un pays ou une région.\nLe nom des paramètres régionaux peut également correspondre à une étiquette de langue BCP-47 valide.",
               "title": "locale"
             },
             "text": {
@@ -1966,11 +1966,11 @@
               "title": "summary"
             },
             "suggestedActions": {
-              "description": "Actions suggérées pour l'activité.",
+              "description": "Actions suggérées pour l’activité.",
               "title": "suggestedActions",
               "properties": {
                 "to": {
-                  "description": "ID des destinataires pour lesquels afficher les actions. Ces ID sont relatifs au\nchannelId et à une partie tous les destinataires de l'activité",
+                  "description": "ID des destinataires pour lesquels afficher les actions. Ces ID sont relatifs au\nchannelId et à une partie tous les destinataires de l’activité",
                   "title": "to",
                   "items": {
                     "title": "ID",
@@ -1978,7 +1978,7 @@
                   }
                 },
                 "actions": {
-                  "description": "Actions pouvant être montrées à l'utilisateur",
+                  "description": "Actions pouvant être montrées à l’utilisateur",
                   "title": "actions",
                   "items": {
                     "description": "Action cliquable",
@@ -1993,7 +1993,7 @@
                         "title": "title"
                       },
                       "image": {
-                        "description": "URL de l'image qui s'affiche sur le bouton, à côté de l'étiquette de texte",
+                        "description": "URL de l’image qui s’affiche sur le bouton, à côté de l’étiquette de texte",
                         "title": "image"
                       },
                       "text": {
@@ -2005,7 +2005,7 @@
                         "title": "displayText"
                       },
                       "value": {
-                        "description": "Paramètre supplémentaire pour l'action. Le contenu de cette propriété dépend de l'ActionType",
+                        "description": "Paramètre supplémentaire pour l’action. Le contenu de cette propriété dépend de l’ActionType",
                         "title": "value"
                       },
                       "channelData": {
@@ -2070,11 +2070,11 @@
               "title": "action"
             },
             "replyToId": {
-              "description": "Contient l'ID du message auquel ce message répond.",
+              "description": "Contient l’ID du message auquel ce message répond.",
               "title": "replyToId"
             },
             "label": {
-              "description": "Étiquette descriptive de l'activité.",
+              "description": "Étiquette descriptive de l’activité.",
               "title": "label"
             },
             "valueType": {
@@ -2082,11 +2082,11 @@
               "title": "valueType"
             },
             "value": {
-              "description": "Valeur associée à l'activité.",
+              "description": "Valeur associée à l’activité.",
               "title": "value"
             },
             "name": {
-              "description": "Nom de l'opération associée à une activité Invoke ou Event.",
+              "description": "Nom de l’opération associée à une activité Invoke ou Event.",
               "title": "name"
             },
             "relatesTo": {
@@ -2094,7 +2094,7 @@
               "title": "relatesTo",
               "properties": {
                 "activityId": {
-                  "description": "(Facultatif) ID de l'activité à référencer",
+                  "description": "(Facultatif) ID de l’activité à référencer",
                   "title": "activityId"
                 },
                 "user": {
@@ -2124,7 +2124,7 @@
               "title": "code"
             },
             "expiration": {
-              "description": "Heure à laquelle l'activité doit être considérée comme « expirée » et ne doit pas être\nprésentée au destinataire.",
+              "description": "Heure à laquelle l’activité doit être considérée comme « expirée » et ne doit pas être\nprésentée au destinataire.",
               "title": "expiration"
             },
             "importance": {
@@ -2136,7 +2136,7 @@
               "title": "deliveryMode"
             },
             "listenFor": {
-              "description": "Liste d'expressions et de références que les systèmes de préparation linguistiques et vocaux doivent écouter",
+              "description": "Liste d’expressions et de références que les systèmes de préparation linguistiques et vocaux doivent écouter",
               "title": "listenFor",
               "items": {
                 "title": "Expression",
@@ -2144,18 +2144,18 @@
               }
             },
             "textHighlights": {
-              "description": "Collection de fragments de texte à mettre en surbrillance quand l'activité contient une valeur ReplyToId.",
+              "description": "Collection de fragments de texte à mettre en surbrillance quand l’activité contient une valeur ReplyToId.",
               "title": "textHighlights",
               "items": {
                 "description": "Référence une sous-chaîne de contenu dans un autre champ",
                 "title": "TextHighlight",
                 "properties": {
                   "text": {
-                    "description": "Définit l'extrait de texte à mettre en surbrillance",
+                    "description": "Définit l’extrait de texte à mettre en surbrillance",
                     "title": "text"
                   },
                   "occurrence": {
-                    "description": "Occurrence du champ de texte dans le texte référencé, s'il en existe plusieurs.",
+                    "description": "Occurrence du champ de texte dans le texte référencé, s’il en existe plusieurs.",
                     "title": "occurrence"
                   }
                 }
@@ -2184,8 +2184,8 @@
       "description": "Composants qui dérivent du dialogue"
     },
     "Microsoft.IEntityRecognizer": {
-      "title": "Modules de reconnaissance d'entité",
-      "description": "Composants qui dérivent d'EntityRecognizer.",
+      "title": "Modules de reconnaissance d’entité",
+      "description": "Composants qui dérivent d’EntityRecognizer.",
       "oneOf": {
         "0": {
           "title": "Référence à Microsoft.IEntityRecognizer",
@@ -2256,8 +2256,8 @@
           "description": "Actions à exécuter si la condition est false."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2291,7 +2291,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer quand l'entrée utilisateur ne répond à aucune expression de validation."
+          "description": "Message à envoyer quand l’entrée utilisateur ne répond à aucune expression de validation."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -2299,14 +2299,14 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "validations": {
           "title": "Expressions de validation",
-          "description": "Expression pour valider l'entrée utilisateur.",
+          "description": "Expression pour valider l’entrée utilisateur.",
           "items": {
             "title": "Condition",
-            "description": "Expression qui doit être satisfaite pour que l'entrée soit considérée comme valide"
+            "description": "Expression qui doit être satisfaite pour que l’entrée soit considérée comme valide"
           }
         },
         "property": {
@@ -2319,11 +2319,11 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2332,7 +2332,7 @@
       }
     },
     "Microsoft.IpEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité IP",
+      "title": "Module de reconnaissance d’entité IP",
       "description": "Module de reconnaissance qui reconnaît les modèles IP Internet (comme 192.1.1.1).",
       "patternProperties": {
         "^\\$": {
@@ -2342,8 +2342,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2370,8 +2370,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2381,7 +2381,7 @@
     },
     "Microsoft.LogAction": {
       "title": "Journaliser dans la console",
-      "description": "Journalisez un message dans l'application hôte. Envoyez une TraceActivity à Bot Framework Emulator (facultatif).",
+      "description": "Journalisez un message dans l’application hôte. Envoyez une TraceActivity à Bot Framework Emulator (facultatif).",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -2403,15 +2403,15 @@
         },
         "label": {
           "title": "Étiquette",
-          "description": "Étiquette de l'activité de trace (utilisée pour l'identifier dans une liste d'activités de trace.)"
+          "description": "Étiquette de l’activité de trace (utilisée pour l’identifier dans une liste d’activités de trace.)"
         },
         "traceActivity": {
-          "title": "Envoyer l'activité de trace",
+          "title": "Envoyer l’activité de trace",
           "description": "Si la valeur est true, envoie automatiquement une TraceActivity (vue dans Bot Framework Emulator)."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2434,8 +2434,8 @@
           "description": "ID unique facultatif utilisé avec RecognizerSet. D'autres modules de reconnaissance retournent l'intention « DeferToRecognizer_{Id} » pendant l'entraînement croisé des données pour ce module de reconnaissance."
         },
         "applicationId": {
-          "title": "ID d'application LUIS",
-          "description": "ID d'application pour votre modèle dans le service LUIS."
+          "title": "ID d’application LUIS",
+          "description": "ID d’application pour votre modèle dans le service LUIS."
         },
         "version": {
           "title": "Version de LUIS",
@@ -2450,15 +2450,15 @@
           "description": "Clé de prédiction LUIS utilisée pour appeler le point de terminaison."
         },
         "externalEntityRecognizer": {
-          "title": "Module de reconnaissance d'entité externe",
+          "title": "Module de reconnaissance d’entité externe",
           "description": "Les entités reconnues par ce module de reconnaissance sont passées à LUIS comme des entités externes."
         },
         "dynamicLists": {
           "title": "Listes dynamiques",
-          "description": "Listes d'entités définies au moment de l'exécution.",
+          "description": "Listes d’entités définies au moment de l’exécution.",
           "items": {
-            "title": "Liste d'entités",
-            "description": "Liste les valeurs canoniques et les synonymes d'une entité.",
+            "title": "Liste d’entités",
+            "description": "Liste les valeurs canoniques et les synonymes d’une entité.",
             "properties": {
               "entity": {
                 "title": "Entité",
@@ -2516,8 +2516,8 @@
           }
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2526,7 +2526,7 @@
       }
     },
     "Microsoft.MentionEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de mentions",
+      "title": "Module de reconnaissance d’entité de mentions",
       "description": "Module de reconnaissance qui reconnaît @Mentions",
       "patternProperties": {
         "^\\$": {
@@ -2536,8 +2536,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2556,8 +2556,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2581,15 +2581,15 @@
         },
         "languagePolicy": {
           "title": "Stratégie de langue",
-          "description": "Définit les langues de secours à essayer par langue d'entrée utilisateur."
+          "description": "Définit les langues de secours à essayer par langue d’entrée utilisateur."
         },
         "recognizers": {
           "title": "Modules de reconnaissance",
           "description": "Mappage de langue > Module de reconnaissance"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2598,7 +2598,7 @@
       }
     },
     "Microsoft.NumberEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité numérique",
+      "title": "Module de reconnaissance d’entité numérique",
       "description": "Module de reconnaissance qui reconnaît les nombres.",
       "patternProperties": {
         "^\\$": {
@@ -2608,8 +2608,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2618,7 +2618,7 @@
       }
     },
     "Microsoft.NumberInput": {
-      "title": "Dialogue d'entrée numérique",
+      "title": "Dialogue d’entrée numérique",
       "description": "Collectez des informations : demandez un nombre.",
       "patternProperties": {
         "^\\$": {
@@ -2641,7 +2641,7 @@
         },
         "defaultLocale": {
           "title": "Paramètres régionaux par défaut",
-          "description": "Paramètres régionaux par défaut à utiliser s'il n'y a pas de paramètres régionaux disponibles."
+          "description": "Paramètres régionaux par défaut à utiliser s’il n’y a pas de paramètres régionaux disponibles."
         },
         "id": {
           "title": "ID",
@@ -2661,7 +2661,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer quand l'entrée utilisateur ne répond à aucune expression de validation."
+          "description": "Message à envoyer quand l’entrée utilisateur ne répond à aucune expression de validation."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -2669,14 +2669,14 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "validations": {
           "title": "Expressions de validation",
-          "description": "Expression pour valider l'entrée utilisateur.",
+          "description": "Expression pour valider l’entrée utilisateur.",
           "items": {
             "title": "Condition",
-            "description": "Expression qui doit être satisfaite pour que l'entrée soit considérée comme valide"
+            "description": "Expression qui doit être satisfaite pour que l’entrée soit considérée comme valide"
           }
         },
         "property": {
@@ -2689,11 +2689,11 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2702,7 +2702,7 @@
       }
     },
     "Microsoft.NumberRangeEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de plage numérique",
+      "title": "Module de reconnaissance d’entité de plage numérique",
       "description": "Module de reconnaissance qui reconnaît les plages de nombres (exemple : 2 à 5).",
       "patternProperties": {
         "^\\$": {
@@ -2712,8 +2712,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2748,8 +2748,8 @@
           "description": "Titre affiché dans la carte de connexion OAuth."
         },
         "timeout": {
-          "title": "Délai d'expiration",
-          "description": "Paramètre d'expiration de la carte de connexion OAuth."
+          "title": "Délai d’expiration",
+          "description": "Paramètre d’expiration de la carte de connexion OAuth."
         },
         "property": {
           "title": "Propriété de jeton",
@@ -2757,7 +2757,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer si la réponse de l'utilisateur n'est pas valide."
+          "description": "Message à envoyer si la réponse de l’utilisateur n’est pas valide."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -2765,7 +2765,7 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "defaultValue": {
           "title": "Valeur par défaut",
@@ -2773,15 +2773,15 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "alwaysPrompt": {
           "title": "Toujours demander",
           "description": "Collectez des informations même si la « propriété » spécifiée n'est pas vide."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2790,8 +2790,8 @@
       }
     },
     "Microsoft.OnActivity": {
-      "title": "En cas d'activité",
-      "description": "Actions à exécuter en cas de réception d'une activité générique.",
+      "title": "En cas d’activité",
+      "description": "Actions à exécuter en cas de réception d’une activité générique.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -2800,7 +2800,7 @@
       },
       "properties": {
         "type": {
-          "title": "Type d'activité",
+          "title": "Type d’activité",
           "description": "Activity.Type à faire correspondre"
         },
         "condition": {
@@ -2809,7 +2809,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -2817,11 +2817,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2830,7 +2830,7 @@
       }
     },
     "Microsoft.OnAssignEntity": {
-      "title": "En cas d'attribution de l'entité",
+      "title": "En cas d’attribution de l’entité",
       "description": "Actions à effectuer quand une entité doit être attribuée à une propriété.",
       "patternProperties": {
         "^\\$": {
@@ -2841,7 +2841,7 @@
       "properties": {
         "property": {
           "title": "Propriété",
-          "description": "Propriété à définir après la sélection de l'entité."
+          "description": "Propriété à définir après la sélection de l’entité."
         },
         "entity": {
           "title": "Entité",
@@ -2849,7 +2849,7 @@
         },
         "operation": {
           "title": "Opération",
-          "description": "Opération d'attribution d'entité."
+          "description": "Opération d’attribution d’entité."
         },
         "condition": {
           "title": "Condition",
@@ -2857,7 +2857,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -2865,11 +2865,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2893,7 +2893,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -2901,11 +2901,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2914,8 +2914,8 @@
       }
     },
     "Microsoft.OnCancelDialog": {
-      "title": "En cas d'annulation du dialogue",
-      "description": "Actions à effectuer quand l'événement de dialogue est annulé.",
+      "title": "En cas d’annulation du dialogue",
+      "description": "Actions à effectuer quand l’événement de dialogue est annulé.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -2929,7 +2929,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -2937,11 +2937,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2950,8 +2950,8 @@
       }
     },
     "Microsoft.OnChooseEntity": {
-      "title": "En cas de choix de l'entité",
-      "description": "Actions à effectuer quand une valeur d'entité doit être résolue.",
+      "title": "En cas de choix de l’entité",
+      "description": "Actions à effectuer quand une valeur d’entité doit être résolue.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -2961,7 +2961,7 @@
       "properties": {
         "property": {
           "title": "Propriété à définir",
-          "description": "Propriété à définir après la sélection de l'entité."
+          "description": "Propriété à définir après la sélection de l’entité."
         },
         "entity": {
           "title": "Entité ambiguë",
@@ -2973,7 +2973,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -2981,11 +2981,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -2994,7 +2994,7 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "En cas d'ambiguïté de l'intention",
+      "title": "En cas d’ambiguïté de l’intention",
       "description": "Actions à effectuer quand une intention est ambiguë.",
       "patternProperties": {
         "^\\$": {
@@ -3008,7 +3008,7 @@
           "description": "Intentions devant se trouver dans le résultat ChooseIntent pour déclencher cette condition.",
           "items": {
             "title": "Intention",
-            "description": "Nom de l'intention entraînant le déclenchement."
+            "description": "Nom de l’intention entraînant le déclenchement."
           }
         },
         "condition": {
@@ -3017,7 +3017,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3025,11 +3025,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3039,7 +3039,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "En cas de choix de la propriété",
-      "description": "Actions à effectuer quand plusieurs mappages d'entités à des propriétés sont possibles.",
+      "description": "Actions à effectuer quand plusieurs mappages d’entités à des propriétés sont possibles.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -3048,8 +3048,8 @@
       },
       "properties": {
         "entity": {
-          "title": "Entité en cours d'attribution",
-          "description": "Entité en cours d'attribution à un choix de propriété"
+          "title": "Entité en cours d’attribution",
+          "description": "Entité en cours d’attribution à un choix de propriété"
         },
         "properties": {
           "title": "Propriétés possibles",
@@ -3061,10 +3061,10 @@
         },
         "entities": {
           "title": "Entités",
-          "description": "Noms d'entités ambigus.",
+          "description": "Noms d’entités ambigus.",
           "items": {
-            "title": "Nom d'entité",
-            "description": "Nom d'entité à choisir."
+            "title": "Nom d’entité",
+            "description": "Nom d’entité à choisir."
           }
         },
         "condition": {
@@ -3073,7 +3073,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3081,11 +3081,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3109,7 +3109,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3117,11 +3117,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3131,7 +3131,7 @@
     },
     "Microsoft.OnContinueConversation": {
       "title": "En cas de poursuite de la conversation",
-      "description": "Actions à effectuer quand une conversation est redémarrée à partir d'une action ContinueConversationLater.",
+      "description": "Actions à effectuer quand une conversation est redémarrée à partir d’une action ContinueConversationLater.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -3145,7 +3145,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3153,11 +3153,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3166,7 +3166,7 @@
       }
     },
     "Microsoft.OnConversationUpdateActivity": {
-      "title": "En cas d'activité ConversationUpdate",
+      "title": "En cas d’activité ConversationUpdate",
       "description": "Actions à effectuer quand une activité avec le type « ConversationUpdate » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3181,7 +3181,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3189,11 +3189,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3202,7 +3202,7 @@
       }
     },
     "Microsoft.OnDialogEvent": {
-      "title": "En cas d'événement de dialogue",
+      "title": "En cas d’événement de dialogue",
       "description": "Actions à effectuer quand un événement de dialogue spécifique se produit.",
       "patternProperties": {
         "^\\$": {
@@ -3212,8 +3212,8 @@
       },
       "properties": {
         "event": {
-          "title": "Nom d'événement de dialogue",
-          "description": "Nom de l'événement de dialogue."
+          "title": "Nom d’événement de dialogue",
+          "description": "Nom de l’événement de dialogue."
         },
         "condition": {
           "title": "Condition",
@@ -3221,7 +3221,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3229,11 +3229,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3243,7 +3243,7 @@
     },
     "Microsoft.OnEndOfActions": {
       "title": "En cas de fin des actions",
-      "description": "Actions à effectuer quand il n'y a plus d'actions dans le dialogue actuel.",
+      "description": "Actions à effectuer quand il n’y a plus d’actions dans le dialogue actuel.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -3257,7 +3257,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3265,11 +3265,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3278,7 +3278,7 @@
       }
     },
     "Microsoft.OnEndOfConversationActivity": {
-      "title": "En cas d'activité EndOfConversation",
+      "title": "En cas d’activité EndOfConversation",
       "description": "Actions à effectuer quand une activité avec le type « EndOfConversation » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3293,7 +3293,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3301,11 +3301,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3314,7 +3314,7 @@
       }
     },
     "Microsoft.OnError": {
-      "title": "En cas d'erreur",
+      "title": "En cas d’erreur",
       "description": "Action à effectuer quand un événement de dialogue « Error » se produit.",
       "patternProperties": {
         "^\\$": {
@@ -3329,7 +3329,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3337,11 +3337,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3350,7 +3350,7 @@
       }
     },
     "Microsoft.OnEventActivity": {
-      "title": "En cas d'activité Event",
+      "title": "En cas d’activité Event",
       "description": "Actions à effectuer quand une activité avec le type « Event » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3365,7 +3365,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3373,11 +3373,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3386,7 +3386,7 @@
       }
     },
     "Microsoft.OnHandoffActivity": {
-      "title": "En cas d'activité Handoff",
+      "title": "En cas d’activité Handoff",
       "description": "Actions à effectuer quand une activité avec le type « HandOff » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3401,7 +3401,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3409,11 +3409,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3422,7 +3422,7 @@
       }
     },
     "Microsoft.OnInstallationUpdateActivity": {
-      "title": "En cas d'activité InstallationUpdate",
+      "title": "En cas d’activité InstallationUpdate",
       "description": "Actions à effectuer quand une activité avec le type « InstallationUpdate » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3437,7 +3437,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3445,11 +3445,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3458,8 +3458,8 @@
       }
     },
     "Microsoft.OnIntent": {
-      "title": "En cas de reconnaissance de l'intention",
-      "description": "Actions à effectuer quand l'intention spécifiée est reconnue.",
+      "title": "En cas de reconnaissance de l’intention",
+      "description": "Actions à effectuer quand l’intention spécifiée est reconnue.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -3469,7 +3469,7 @@
       "properties": {
         "intent": {
           "title": "Intention",
-          "description": "Nom de l'intention."
+          "description": "Nom de l’intention."
         },
         "entities": {
           "title": "Entités",
@@ -3485,7 +3485,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3493,11 +3493,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3506,7 +3506,7 @@
       }
     },
     "Microsoft.OnInvokeActivity": {
-      "title": "En cas d'activité Invoke",
+      "title": "En cas d’activité Invoke",
       "description": "Actions à effectuer quand une activité avec le type « Invoke » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3521,7 +3521,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3529,11 +3529,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3542,7 +3542,7 @@
       }
     },
     "Microsoft.OnMessageActivity": {
-      "title": "En cas d'activité Message",
+      "title": "En cas d’activité Message",
       "description": "Actions à effectuer quand une activité avec le type « Message » est reçue. Remplace le déclencheur d'intention.",
       "patternProperties": {
         "^\\$": {
@@ -3557,7 +3557,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3565,11 +3565,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3578,7 +3578,7 @@
       }
     },
     "Microsoft.OnMessageDeleteActivity": {
-      "title": "En cas d'activité MessageDelete",
+      "title": "En cas d’activité MessageDelete",
       "description": "Actions à effectuer quand une activité avec le type « MessageDelete » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3593,7 +3593,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3601,11 +3601,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3614,7 +3614,7 @@
       }
     },
     "Microsoft.OnMessageReactionActivity": {
-      "title": "En cas d'activité MessageReaction",
+      "title": "En cas d’activité MessageReaction",
       "description": "Actions à effectuer quand une activité avec le type « MessageReaction » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3629,7 +3629,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3637,11 +3637,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3650,7 +3650,7 @@
       }
     },
     "Microsoft.OnMessageUpdateActivity": {
-      "title": "En cas d'activité MessageUpdate",
+      "title": "En cas d’activité MessageUpdate",
       "description": "Actions à effectuer quand une activité avec le type « MessageUpdate » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3665,7 +3665,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3673,11 +3673,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3701,7 +3701,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3709,11 +3709,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3737,7 +3737,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3745,11 +3745,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3758,7 +3758,7 @@
       }
     },
     "Microsoft.OnTypingActivity": {
-      "title": "En cas d'activité Typing",
+      "title": "En cas d’activité Typing",
       "description": "Actions à effectuer quand une activité avec le type « Typing » est reçue.",
       "patternProperties": {
         "^\\$": {
@@ -3773,7 +3773,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3781,11 +3781,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3794,7 +3794,7 @@
       }
     },
     "Microsoft.OnUnknownIntent": {
-      "title": "En cas d'intention inconnue",
+      "title": "En cas d’intention inconnue",
       "description": "Action à effectuer quand l'entrée utilisateur n'est pas reconnue ou si aucun des déclencheurs « En cas de reconnaissance de l'intention » ne correspond à l'intention reconnue.",
       "patternProperties": {
         "^\\$": {
@@ -3809,7 +3809,7 @@
         },
         "actions": {
           "title": "Actions",
-          "description": "Séquence d'actions à exécuter."
+          "description": "Séquence d’actions à exécuter."
         },
         "priority": {
           "title": "Priorité",
@@ -3817,11 +3817,11 @@
         },
         "runOnce": {
           "title": "Exécuter une fois",
-          "description": "True si la règle doit s'exécuter une fois pour chaque condition"
+          "description": "True si la règle doit s’exécuter une fois pour chaque condition"
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3830,7 +3830,7 @@
       }
     },
     "Microsoft.OrdinalEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité ordinale",
+      "title": "Module de reconnaissance d’entité ordinale",
       "description": "Module de reconnaissance qui reconnaît les ordinaux (exemple : premier, deuxième, 3ème).",
       "patternProperties": {
         "^\\$": {
@@ -3840,8 +3840,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3850,7 +3850,7 @@
       }
     },
     "Microsoft.PercentageEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de pourcentage",
+      "title": "Module de reconnaissance d’entité de pourcentage",
       "description": "Module de reconnaissance qui reconnaît les pourcentages.",
       "patternProperties": {
         "^\\$": {
@@ -3860,8 +3860,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3870,7 +3870,7 @@
       }
     },
     "Microsoft.PhoneNumberEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité de numéro de téléphone",
+      "title": "Module de reconnaissance d’entité de numéro de téléphone",
       "description": "Module de reconnaissance qui reconnaît les numéros de téléphone.",
       "patternProperties": {
         "^\\$": {
@@ -3880,8 +3880,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3908,32 +3908,32 @@
           "description": "Clé de point de terminaison pour la base de connaissances QnA Maker."
         },
         "hostname": {
-          "title": "Nom d'hôte",
-          "description": "Nom d'hôte pour votre service QnA Maker."
+          "title": "Nom d’hôte",
+          "description": "Nom d’hôte pour votre service QnA Maker."
         },
         "noAnswer": {
           "title": "Réponse de secours",
-          "description": "Réponse par défaut à retourner quand rien n'est trouvé dans la base de connaissances."
+          "description": "Réponse par défaut à retourner quand rien n’est trouvé dans la base de connaissances."
         },
         "threshold": {
           "title": "Seuil",
           "description": "Score seuil pour filtrer les résultats."
         },
         "activeLearningCardTitle": {
-          "title": "Titre de la carte d'apprentissage actif",
-          "description": "Titre de la carte de suggestions d'apprentissage actif."
+          "title": "Titre de la carte d’apprentissage actif",
+          "description": "Titre de la carte de suggestions d’apprentissage actif."
         },
         "cardNoMatchText": {
           "title": "Texte Aucune correspondance de carte",
-          "description": "Texte pour l'option Aucune correspondance."
+          "description": "Texte pour l’option Aucune correspondance."
         },
         "cardNoMatchResponse": {
           "title": "Réponse Aucune correspondance de carte",
-          "description": "Réponse personnalisée quand l'option Aucune correspondance a été sélectionnée."
+          "description": "Réponse personnalisée quand l’option Aucune correspondance a été sélectionnée."
         },
         "strictFilters": {
           "title": "Filtres stricts",
-          "description": "Filtres de métadonnées à utiliser pendant l'appel de la base de connaissances QnA Maker.",
+          "description": "Filtres de métadonnées à utiliser pendant l’appel de la base de connaissances QnA Maker.",
           "items": {
             "title": "Filtre de métadonnées",
             "description": "Filtre de métadonnées.",
@@ -3973,13 +3973,13 @@
           "oneOf": {
             "0": {
               "title": "Opérateur de jointure",
-              "description": "Valeur de l'opérateur de jointure à utiliser avec les valeurs de filtre stricts."
+              "description": "Valeur de l’opérateur de jointure à utiliser avec les valeurs de filtre stricts."
             }
           }
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -3989,7 +3989,7 @@
     },
     "Microsoft.QnAMakerRecognizer": {
       "title": "Module de reconnaissance QnAMaker",
-      "description": "Module de reconnaissance pour la génération d'intention QnAMatch à partir d'une base de connaissances.",
+      "description": "Module de reconnaissance pour la génération d’intention QnAMatch à partir d’une base de connaissances.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4010,8 +4010,8 @@
           "description": "Clé de point de terminaison pour la base de connaissances QnA Maker."
         },
         "hostname": {
-          "title": "Nom d'hôte",
-          "description": "Nom d'hôte pour votre service QnA Maker."
+          "title": "Nom d’hôte",
+          "description": "Nom d’hôte pour votre service QnA Maker."
         },
         "threshold": {
           "title": "Seuil",
@@ -4019,10 +4019,10 @@
         },
         "strictFilters": {
           "title": "Filtres stricts",
-          "description": "Filtres de métadonnées à utiliser pendant l'appel de la base de connaissances QnA Maker.",
+          "description": "Filtres de métadonnées à utiliser pendant l’appel de la base de connaissances QnA Maker.",
           "items": {
             "title": "Filtres de métadonnées",
-            "description": "Filtres de métadonnées à utiliser pendant l'interrogation de la base de connaissances QnA Maker.",
+            "description": "Filtres de métadonnées à utiliser pendant l’interrogation de la base de connaissances QnA Maker.",
             "properties": {
               "name": {
                 "title": "Nom",
@@ -4040,7 +4040,7 @@
           "description": "Nombre de réponses à récupérer."
         },
         "isTest": {
-          "title": "Utiliser l'environnement de test",
+          "title": "Utiliser l’environnement de test",
           "description": "True, en cas de pointage vers un environnement de test, sinon, false."
         },
         "rankerType": {
@@ -4059,20 +4059,20 @@
           "oneOf": {
             "0": {
               "title": "Opérateur de jointure",
-              "description": "Valeur de l'opérateur de jointure à utiliser avec les valeurs de filtre stricts."
+              "description": "Valeur de l’opérateur de jointure à utiliser avec les valeurs de filtre stricts."
             }
           }
         },
         "includeDialogNameInMetadata": {
           "title": "Inclure le nom de dialogue",
-          "description": "Quand la valeur est false, le nom de dialogue n'est pas passé à QnAMaker. (par défaut) a la valeur true"
+          "description": "Quand la valeur est false, le nom de dialogue n’est pas passé à QnAMaker. (par défaut) a la valeur true"
         },
         "metadata": {
           "title": "Filtres de métadonnées",
-          "description": "Filtres de métadonnées à utiliser pendant l'appel de la base de connaissances QnA Maker.",
+          "description": "Filtres de métadonnées à utiliser pendant l’appel de la base de connaissances QnA Maker.",
           "items": {
             "title": "Filtre de métadonnées",
-            "description": "Filtre de métadonnées à utiliser pendant l'appel de la base de connaissances QnA Maker.",
+            "description": "Filtre de métadonnées à utiliser pendant l’appel de la base de connaissances QnA Maker.",
             "properties": {
               "name": {
                 "title": "Nom",
@@ -4091,11 +4091,11 @@
         },
         "qnaId": {
           "title": "ID QnA",
-          "description": "Nombre ou expression qui est le QnAId à passer à l'API QnAMaker."
+          "description": "Nombre ou expression qui est le QnAId à passer à l’API QnAMaker."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4118,8 +4118,8 @@
           "description": "Valeur seed aléatoire pour démarrer la génération de nombres aléatoires."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4129,7 +4129,7 @@
     },
     "Microsoft.RecognizerSet": {
       "title": "Ensemble de modules de reconnaissance",
-      "description": "Crée l'union des intentions et des entités des modules de reconnaissance dans l'ensemble.",
+      "description": "Crée l’union des intentions et des entités des modules de reconnaissance dans l’ensemble.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4146,8 +4146,8 @@
           "description": "Liste des modules de reconnaissance définis pour cet ensemble."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4156,8 +4156,8 @@
       }
     },
     "Microsoft.RegexEntityRecognizer": {
-      "title": "Module de reconnaissance d'entité regex",
-      "description": "Module de reconnaissance qui reconnaît les modèles d'entrée basés sur regex.",
+      "title": "Module de reconnaissance d’entité regex",
+      "description": "Module de reconnaissance qui reconnaît les modèles d’entrée basés sur regex.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4167,15 +4167,15 @@
       "properties": {
         "name": {
           "title": "Nom",
-          "description": "Nom de l'entité"
+          "description": "Nom de l’entité"
         },
         "pattern": {
           "title": "Modèle",
-          "description": "Modèle exprimé sous forme d'expression régulière."
+          "description": "Modèle exprimé sous forme d’expression régulière."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4185,7 +4185,7 @@
     },
     "Microsoft.RegexRecognizer": {
       "title": "Module de reconnaissance de regex",
-      "description": "Utilisez des expressions régulières pour reconnaître les intentions et les entités de l'entrée utilisateur.",
+      "description": "Utilisez des expressions régulières pour reconnaître les intentions et les entités de l’entrée utilisateur.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4206,22 +4206,22 @@
             "properties": {
               "intent": {
                 "title": "Intention",
-                "description": "Nom de l'intention."
+                "description": "Nom de l’intention."
               },
               "pattern": {
                 "title": "Modèle",
-                "description": "Modèle d'expression régulière."
+                "description": "Modèle d’expression régulière."
               }
             }
           }
         },
         "entities": {
-          "title": "Modules de reconnaissance d'entité",
-          "description": "Collection de modules de reconnaissance d'entité à utiliser."
+          "title": "Modules de reconnaissance d’entité",
+          "description": "Collection de modules de reconnaissance d’entité à utiliser."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4261,11 +4261,11 @@
         },
         "activityProcessed": {
           "title": "Activité traitée",
-          "description": "Quand la valeur est false, le dialogue appelé peut traiter l'activité en cours."
+          "description": "Quand la valeur est false, le dialogue appelé peut traiter l’activité en cours."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4310,11 +4310,11 @@
         },
         "activityProcessed": {
           "title": "Activité traitée",
-          "description": "Quand la valeur est false, le dialogue appelé peut traiter l'activité en cours."
+          "description": "Quand la valeur est false, le dialogue appelé peut traiter l’activité en cours."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4324,7 +4324,7 @@
     },
     "Microsoft.ResourceMultiLanguageGenerator": {
       "title": "Générateur multilingue de ressource",
-      "description": "Générateur multilingue lié à la ressource par l'ID de ressource.",
+      "description": "Générateur multilingue lié à la ressource par l’ID de ressource.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4338,15 +4338,15 @@
         },
         "resourceId": {
           "title": "ID de ressource",
-          "description": "Ressource qui est le générateur de langue racine. D'autres générateurs avec le même nom et le même suffixe de langue sont chargés dans ce générateur et utilisés en fonction de la stratégie de langue."
+          "description": "Ressource qui est le générateur de langue racine. D’autres générateurs avec le même nom et le même suffixe de langue sont chargés dans ce générateur et utilisés en fonction de la stratégie de langue."
         },
         "languagePolicy": {
           "title": "Stratégie de langue",
-          "description": "Définissez une autre stratégie de langue pour ce générateur. Si la valeur n'est pas définie, la stratégie de langue internationale est utilisée."
+          "description": "Définissez une autre stratégie de langue pour ce générateur. Si la valeur n’est pas définie, la stratégie de langue internationale est utilisée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4377,8 +4377,8 @@
           "description": "Activité à envoyer."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4423,8 +4423,8 @@
           }
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4459,8 +4459,8 @@
           "description": "Nouvelle valeur ou expression."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4469,7 +4469,7 @@
       }
     },
     "Microsoft.SignOutUser": {
-      "title": "Déconnecter l'utilisateur",
+      "title": "Déconnecter l’utilisateur",
       "description": "Déconnectez un utilisateur qui a été connecté en utilisant OAuthInput.",
       "patternProperties": {
         "^\\$": {
@@ -4495,8 +4495,8 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4505,8 +4505,8 @@
       }
     },
     "Microsoft.StaticActivityTemplate": {
-      "title": "Modèle d'activité statique Microsoft",
-      "description": "Cela vous permet de définir un objet d'activité statique",
+      "title": "Modèle d’activité statique Microsoft",
+      "description": "Cela vous permet de définir un objet d’activité statique",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4519,8 +4519,8 @@
           "description": "Activité statique à utiliser."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4530,7 +4530,7 @@
     },
     "Microsoft.SwitchCondition": {
       "title": "Changer de condition",
-      "description": "Exécutez différentes actions en fonction de la valeur d'une propriété.",
+      "description": "Exécutez différentes actions en fonction de la valeur d’une propriété.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4573,8 +4573,8 @@
           "description": "Actions à exécuter si aucun des cas ne remplit la condition."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4583,8 +4583,8 @@
       }
     },
     "Microsoft.TelemetryTrackEvent": {
-      "title": "Télémétrie - Suivre l'événement",
-      "description": "Suivez un événement personnalisé à l'aide du client de télémétrie inscrit.",
+      "title": "Télémétrie - Suivre l’événement",
+      "description": "Suivez un événement personnalisé à l’aide du client de télémétrie inscrit.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4601,16 +4601,16 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "eventName": {
-          "title": "Nom de l'événement",
-          "description": "Nom de l'événement à suivre."
+          "title": "Nom de l’événement",
+          "description": "Nom de l’événement à suivre."
         },
         "properties": {
           "title": "Propriétés",
-          "description": "Une ou plusieurs propriétés à attacher à l'événement suivi."
+          "description": "Une ou plusieurs propriétés à attacher à l’événement suivi."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4629,8 +4629,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4640,7 +4640,7 @@
     },
     "Microsoft.TemplateEngineLanguageGenerator": {
       "title": "Générateur multilingue de modèle",
-      "description": "Générateur de modèle qui autorise uniquement l'évaluation inline des modèles.",
+      "description": "Générateur de modèle qui autorise uniquement l’évaluation inline des modèles.",
       "patternProperties": {
         "^\\$": {
           "title": "Propriété des outils",
@@ -4653,8 +4653,8 @@
           "description": "ID de générateur facultatif."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4663,7 +4663,7 @@
       }
     },
     "Microsoft.TextInput": {
-      "title": "Dialogue d'entrée de texte",
+      "title": "Dialogue d’entrée de texte",
       "description": "Informations de collecte - Demandez un mot ou une phrase.",
       "patternProperties": {
         "^\\$": {
@@ -4702,7 +4702,7 @@
         },
         "invalidPrompt": {
           "title": "Invite non valide",
-          "description": "Message à envoyer quand l'entrée utilisateur ne répond à aucune expression de validation."
+          "description": "Message à envoyer quand l’entrée utilisateur ne répond à aucune expression de validation."
         },
         "defaultValueResponse": {
           "title": "Réponse de la valeur par défaut",
@@ -4710,14 +4710,14 @@
         },
         "maxTurnCount": {
           "title": "Nombre maximum de tours",
-          "description": "Nombre maximal de tentatives de demande de collecte d'informations."
+          "description": "Nombre maximal de tentatives de demande de collecte d’informations."
         },
         "validations": {
           "title": "Expressions de validation",
-          "description": "Expression pour valider l'entrée utilisateur.",
+          "description": "Expression pour valider l’entrée utilisateur.",
           "items": {
             "title": "Condition",
-            "description": "Expression qui doit être satisfaite pour que l'entrée soit considérée comme valide"
+            "description": "Expression qui doit être satisfaite pour que l’entrée soit considérée comme valide"
           }
         },
         "property": {
@@ -4730,11 +4730,11 @@
         },
         "allowInterruptions": {
           "title": "Autoriser les interruptions",
-          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l'entrée."
+          "description": "Expression booléenne qui détermine si le parent doit être autorisé à interrompre l’entrée."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4757,8 +4757,8 @@
           "description": "Modèle de générateur de langue à évaluer pour créer le texte."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4785,12 +4785,12 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "errorValue": {
-          "title": "Valeur d'erreur",
-          "description": "Valeur de l'erreur à lever."
+          "title": "Valeur d’erreur",
+          "description": "Valeur de l’erreur à lever."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4818,11 +4818,11 @@
         },
         "name": {
           "title": "Nom",
-          "description": "Nom de l'activité trace"
+          "description": "Nom de l’activité trace"
         },
         "label": {
           "title": "Étiquette",
-          "description": "Étiquette de l'activité de trace (utilisée pour l'identifier dans une liste d'activités de trace.)"
+          "description": "Étiquette de l’activité de trace (utilisée pour l’identifier dans une liste d’activités de trace.)"
         },
         "valueType": {
           "title": "Type de valeur",
@@ -4833,8 +4833,8 @@
           "description": "Propriété qui contient la valeur à envoyer comme activité trace."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4853,8 +4853,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4881,16 +4881,16 @@
           "description": "Condition facultative qui, si la valeur est true, désactive cette action."
         },
         "activityId": {
-          "title": "ID d'activité",
-          "description": "Expression de chaîne avec l'ID d'activité à mettre à jour."
+          "title": "ID d’activité",
+          "description": "Expression de chaîne avec l’ID d’activité à mettre à jour."
         },
         "activity": {
           "title": "Activité",
           "description": "Activité à envoyer."
         },
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4899,7 +4899,7 @@
       }
     },
     "Microsoft.UrlEntityRecognizer": {
-      "title": "Module de reconnaissance d'URL",
+      "title": "Module de reconnaissance d’URL",
       "description": "Module de reconnaissance qui reconnaît les URL.",
       "patternProperties": {
         "^\\$": {
@@ -4909,8 +4909,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -4947,8 +4947,8 @@
       },
       "properties": {
         "$kind": {
-          "title": "Type de l'objet de dialogue",
-          "description": "Définit les propriétés valides du composant que vous configurez (à partir d'un fichier .schema de dialogue)"
+          "title": "Type de l’objet de dialogue",
+          "description": "Définit les propriétés valides du composant que vous configurez (à partir d’un fichier .schema de dialogue)"
         },
         "$designer": {
           "title": "Informations du concepteur",
@@ -5000,7 +5000,7 @@
       "oneOf": {
         "0": {
           "title": "Objet",
-          "description": "Constante d'objet."
+          "description": "Constante d’objet."
         }
       }
     },
@@ -5024,7 +5024,7 @@
       "oneOf": {
         "0": {
           "title": "Objet",
-          "description": "Constante d'objet."
+          "description": "Constante d’objet."
         },
         "1": {
           "title": "Tableau",

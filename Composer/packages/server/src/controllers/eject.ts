@@ -7,7 +7,7 @@ import { LocalDiskStorage } from '../models/storage/localDiskStorage';
 
 export const EjectController = {
   getTemplates: async (req, res) => {
-    res.json(ExtensionContext.extensions.runtimeTemplates);
+    res.json(ExtensionContext.extensions.runtimeTemplates.filter((t) => (t.eject ? true : false)));
   },
   eject: async (req, res) => {
     const user = await ExtensionContext.getUserFromRequest(req);
@@ -15,7 +15,7 @@ export const EjectController = {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     const template = ExtensionContext.extensions.runtimeTemplates.find((i) => i.key === req.params.template);
-    if (template) {
+    if (template?.eject) {
       let runtimePath;
       try {
         runtimePath = await template.eject(currentProject, new LocalDiskStorage(), req.body?.isReplace);
