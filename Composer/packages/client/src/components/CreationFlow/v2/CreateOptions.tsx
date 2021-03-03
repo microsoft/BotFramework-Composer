@@ -120,7 +120,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
   const { templates, onDismiss, onNext } = props;
-  const [currentTemplate, setCurrentTemplate] = useState('');
+  const [currentTemplateId, setCurrentTemplateId] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
   const readMe = useRecoilValue(selectedTemplateReadMeState);
@@ -130,7 +130,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       onSelectionChanged: () => {
         const t = selectedTemplate.getSelection()[0] as BotTemplate;
         if (t) {
-          setCurrentTemplate(t.id);
+          setCurrentTemplateId(t.id);
         }
       },
     });
@@ -139,7 +139,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const handleJumpToNext = () => {
     let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
-      routeToTemplate = currentTemplate;
+      routeToTemplate = currentTemplateId;
     }
 
     if (option === optionKeys.createFromQnA) {
@@ -188,11 +188,18 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     );
   };
 
+  const getTemplate = (): BotTemplate | undefined => {
+    const currentTemplate = templates.find((t) => {
+      return t.id === currentTemplateId;
+    });
+    return currentTemplate;
+  };
+
   useEffect(() => {
     if (templates.length > 1) {
       const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
       if (emptyBotTemplate) {
-        setCurrentTemplate(emptyBotTemplate.id);
+        setCurrentTemplateId(emptyBotTemplate.id);
         setEmptyBotKey(emptyBotTemplate.id);
       }
     }
@@ -205,10 +212,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [selectedFeed]);
 
   useEffect(() => {
-    if (currentTemplate) {
-      props.fetchReadMe(currentTemplate);
+    if (currentTemplateId) {
+      props.fetchReadMe(currentTemplateId);
     }
-  }, [currentTemplate]);
+  }, [currentTemplateId]);
 
   return (
     <Fragment>
@@ -249,14 +256,14 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
+            <TemplateDetailView readMe={readMe} template={getTemplate()} />
           </div>
         </div>
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
+            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null)}
             text={formatMessage('Next')}
             onClick={handleJumpToNext}
           />
