@@ -24,13 +24,14 @@ export const ulStyle = {
   listStyleType: 'none',
   margin: 0,
   padding: 0,
+  marginBottom: 20,
 };
 
 export const ulStyleGuides = {
   listStyleType: 'none',
   margin: 0,
   padding: 0,
-  marginTop: -5,
+  marginBottom: 20,
 };
 
 export const liStyle = {
