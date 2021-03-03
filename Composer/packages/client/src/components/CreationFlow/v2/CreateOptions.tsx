@@ -218,11 +218,11 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [selectedFeed]);
 
   useEffect(() => {
-    if (currentTemplate) {
+    if (currentTemplateId) {
       setReadMe('');
-      props.fetchReadMe(currentTemplate);
+      props.fetchReadMe(currentTemplateId);
     }
-  }, [currentTemplate, props.fetchReadMe]);
+  }, [currentTemplateId, props.fetchReadMe]);
 
   return (
     <Fragment>
