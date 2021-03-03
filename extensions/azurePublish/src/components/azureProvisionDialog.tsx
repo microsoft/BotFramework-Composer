@@ -713,7 +713,6 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   useEffect(()=>{
-    console.log(listItems);
     if(listItems?.length === 0) {
       setTitle(DialogTitle.EDIT);
       setPage(PageTypes.EditJson);
@@ -913,7 +912,7 @@ export const AzureProvisionDialog: React.FC = () => {
         {page === PageTypes.ReviewResource && PageReview}
         {page === PageTypes.EditJson && (
           <JsonEditor
-            height={500}
+            height={400}
             value={currentConfig || importConfig}
             id={publishType}
             schema={getSchema()}
