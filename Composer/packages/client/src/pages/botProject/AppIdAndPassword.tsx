@@ -10,21 +10,16 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from '@uifabric/styling';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-// -------------------- Styles -------------------- //
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+import { title } from './styles';
+// -------------------- Styles -------------------- //
 
 const labelContainer = css`
   display: flex;
@@ -119,7 +114,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
   }, [projectId, mergedSettings, localMicrosoftAppId]);
 
   return (
-    <CollapsableWrapper title={formatMessage('App Id / Password')} titleStyle={titleStyle}>
+    <CollapsableWrapper title={formatMessage('App Id / Password')} titleStyle={title}>
       <div css={appIdAndPasswordStyle}>
         <TextField
           aria-label={formatMessage('Microsoft App Id')}
