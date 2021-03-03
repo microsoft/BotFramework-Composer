@@ -9,6 +9,7 @@ import formatMessage from 'format-message';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
@@ -111,21 +112,21 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   useEffect(() => {}, []);
 
   return (
-    <div style={wrapperStyle}>
+    <Panel isOpen>
       <Toolbar
-        css={{ paddingLeft: 25, borderBottom: '1px solid #3d3d3d' }}
+        css={{ borderBottom: '1px solid #3d3d3d' }}
         toolbarItems={props.toolbarItems ? items.concat(props.toolbarItems) : items}
       />
-      <Stack horizontal>
-        <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 38 } }}>
+      <Stack>
+        <Stack.Item grow={0} styles={{ root: { padding: 10 } }}>
           <h2 style={h2Style}>{botProject?.name}</h2>
           <p>
             {formatMessage('File Location:')} <span style={{ textOverflow: 'ellipses', fontSize: 12 }}>{location}</span>
           </p>
         </Stack.Item>
-        <Stack.Item styles={{ root: { padding: 38 } }}>
+        <Stack.Item styles={{ root: { padding: 10 } }}>
           <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
-          <Stack horizontal verticalFill tokens={{ childrenGap: 40 }}>
+          <Stack tokens={{ childrenGap: 20 }}>
             <Stack.Item>
               {formatMessage('Customize')}
               <ul style={ulStyle}>
@@ -168,7 +169,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item styles={{ root: { borderLeft: '1px solid #3d3d3d', padding: 38 } }}>
+        <Stack.Item styles={{ root: { padding: 10 } }}>
           <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
           <ul style={ulStyleGuides}>
             <li style={liStyle}>
@@ -209,6 +210,6 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
           </ul>
         </Stack.Item>
       </Stack>
-    </div>
+    </Panel>
   );
 };

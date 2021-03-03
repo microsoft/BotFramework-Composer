@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 import { FontSizes } from '@uifabric/fluent-theme';
 export const linkStyle = {
-  root: { color: '#56CCF2', selectors: { ':hover': { color: '#56CCF2' } } },
+  // root: { color: '#56CCF2', selectors: { ':hover': { color: '#56CCF2' } } },
 };
 
 export const wrapperStyle = {
-  backgroundColor: '#333',
+  // backgroundColor: '#333',
   color: '#FFF',
   paddingBottom: '20px',
 };
