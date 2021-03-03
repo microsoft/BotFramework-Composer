@@ -55,7 +55,17 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
       <Stack>
         <Stack.Item grow={0}>
           <p>
-            {formatMessage('File Location:')} <span style={{ textOverflow: 'ellipses', fontSize: 12 }}>{location}</span>
+            {formatMessage('File Location:')}
+            <span
+              style={{
+                display: 'inline-block',
+                overflowWrap: 'break-word',
+                maxWidth: '100%',
+                fontSize: 12,
+              }}
+            >
+              {location}
+            </span>
           </p>
         </Stack.Item>
         <Stack.Item>
