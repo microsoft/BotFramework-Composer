@@ -11,13 +11,40 @@
             }
         }
     },
+    "Microsoft.Ask": {
+        "flow": {
+            "footer": {
+                "description": "= Default operation"
+            }
+        },
+        "form": {
+            "label": "Send a response to ask a question",
+            "subtitle": "Ask Activity"
+        }
+    },
+    "Microsoft.AttachmentInput": {
+        "form": {
+            "label": "Prompt for a file or an attachment",
+            "subtitle": "Attachment Input"
+        }
+    },
     "Microsoft.BeginDialog": {
+        "flow": {
+            "footer": {
+                "description": "= Return value"
+            }
+        },
         "form": {
             "label": "Begin a new dialog",
             "subtitle": "Begin Dialog"
         }
     },
     "Microsoft.BeginSkill": {
+        "flow": {
+            "footer": {
+                "description": "= Result"
+            }
+        },
         "form": {
             "label": "Connect to a skill",
             "subtitle": "Skill Dialog"
@@ -30,15 +57,38 @@
         }
     },
     "Microsoft.CancelAllDialogs": {
+        "flow": {
+            "body": {
+                "description": "(Event)"
+            }
+        },
         "form": {
             "label": "Cancel all active dialogs",
             "subtitle": "Cancel All Dialogs"
+        }
+    },
+    "Microsoft.ChoiceInput": {
+        "form": {
+            "label": "Prompt with multi-choice",
+            "subtitle": "Choice Input"
+        }
+    },
+    "Microsoft.ConfirmInput": {
+        "form": {
+            "label": "Prompt for confirmation",
+            "subtitle": "Confirm Input"
         }
     },
     "Microsoft.ContinueLoop": {
         "form": {
             "label": "Continue loop",
             "subtitle": "Continue loop"
+        }
+    },
+    "Microsoft.DateTimeInput": {
+        "form": {
+            "label": "Prompt for a date or a time",
+            "subtitle": "Date Time Input"
         }
     },
     "Microsoft.DebugBreak": {
@@ -65,12 +115,22 @@
         }
     },
     "Microsoft.EditArray": {
+        "flow": {
+            "footer": {
+                "description": "= Result"
+            }
+        },
         "form": {
             "label": "Edit an array property",
             "subtitle": "Edit Array"
         }
     },
     "Microsoft.EmitEvent": {
+        "flow": {
+            "body": {
+                "description": "(Event)"
+            }
+        },
         "form": {
             "label": "Emit a custom event",
             "subtitle": "Emit Event"
@@ -100,7 +160,29 @@
             "subtitle": "For Each Page"
         }
     },
+    "Microsoft.GetActivityMembers": {
+        "flow": {
+            "body": {
+                "description": "= ActivityId"
+            },
+            "footer": {
+                "description": "= Result property"
+            }
+        }
+    },
+    "Microsoft.GetConversationMembers": {
+        "flow": {
+            "footer": {
+                "description": "= Result property"
+            }
+        }
+    },
     "Microsoft.HttpRequest": {
+        "flow": {
+            "footer": {
+                "description": "= Result property"
+            }
+        },
         "form": {
             "label": "Send an HTTP request",
             "subtitle": "HTTP Request"
@@ -116,6 +198,226 @@
         "form": {
             "label": "Log to console",
             "subtitle": "Log Action"
+        }
+    },
+    "Microsoft.NumberInput": {
+        "form": {
+            "label": "Prompt for a number",
+            "subtitle": "Number Input"
+        }
+    },
+    "Microsoft.OAuthInput": {
+        "flow": {
+            "footer": {
+                "description": "= Token property"
+            }
+        },
+        "form": {
+            "label": "OAuth login",
+            "subtitle": "OAuth Input"
+        }
+    },
+    "Microsoft.OnActivity": {
+        "form": {
+            "label": "Activities",
+            "subtitle": "Activity received"
+        },
+        "trigger": {
+            "label": "Activities (Activity received)",
+            "submenu": {
+                "label": "Activities"
+            }
+        }
+    },
+    "Microsoft.OnAssignEntity": {
+        "form": {
+            "label": "Handle a condition when an entity is assigned",
+            "subtitle": "EntityAssigned activity"
+        }
+    },
+    "Microsoft.OnBeginDialog": {
+        "form": {
+            "label": "Dialog started",
+            "subtitle": "Begin dialog event"
+        },
+        "trigger": {
+            "label": "Dialog started (Begin dialog event)",
+            "submenu": {
+                "label": "Dialog events"
+            }
+        }
+    },
+    "Microsoft.OnCancelDialog": {
+        "form": {
+            "label": "Dialog cancelled",
+            "subtitle": "Cancel dialog event"
+        },
+        "trigger": {
+            "label": "Dialog cancelled (Cancel dialog event)"
+        }
+    },
+    "Microsoft.OnChooseIntent": {
+        "trigger": {
+            "label": "Duplicated intents recognized"
+        }
+    },
+    "Microsoft.OnCondition": {
+        "form": {
+            "label": "Handle a condition",
+            "subtitle": "Condition"
+        }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+        "form": {
+            "description": "Handle the events fired when a user begins a new conversation with the bot.",
+            "label": "Greeting",
+            "subtitle": "ConversationUpdate activity"
+        },
+        "trigger": {
+            "label": "Greeting (ConversationUpdate activity)"
+        }
+    },
+    "Microsoft.OnDialogEvent": {
+        "form": {
+            "label": "Dialog events",
+            "subtitle": "Dialog event"
+        },
+        "trigger": {
+            "label": "Custom events"
+        }
+    },
+    "Microsoft.OnEndOfActions": {
+        "form": {
+            "label": "Handle a condition when actions have ended",
+            "subtitle": "EndOfActions activity"
+        }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+        "form": {
+            "label": "Conversation ended",
+            "subtitle": "EndOfConversation activity"
+        },
+        "trigger": {
+            "label": "Conversation ended (EndOfConversation activity)"
+        }
+    },
+    "Microsoft.OnError": {
+        "form": {
+            "label": "Error occurred",
+            "subtitle": "Error event"
+        },
+        "trigger": {
+            "label": "Error occurred (Error event)"
+        }
+    },
+    "Microsoft.OnEventActivity": {
+        "form": {
+            "label": "Event received",
+            "subtitle": "Event activity"
+        },
+        "trigger": {
+            "label": "Event received (Event activity)"
+        }
+    },
+    "Microsoft.OnHandoffActivity": {
+        "form": {
+            "label": "Handover to human",
+            "subtitle": "Handoff activity"
+        },
+        "trigger": {
+            "label": "Handover to human (Handoff activity)"
+        }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+        "form": {
+            "label": "Installation updated",
+            "subtitle": "Installation updated activity"
+        }
+    },
+    "Microsoft.OnIntent": {
+        "form": {
+            "label": "Intent recognized",
+            "subtitle": "Intent recognized"
+        },
+        "trigger": {
+            "label": "Intent recognized"
+        }
+    },
+    "Microsoft.OnInvokeActivity": {
+        "form": {
+            "label": "Conversation invoked",
+            "subtitle": "Invoke activity"
+        },
+        "trigger": {
+            "label": "Conversation invoked (Invoke activity)"
+        }
+    },
+    "Microsoft.OnMessageActivity": {
+        "form": {
+            "label": "Message received",
+            "subtitle": "Message received activity"
+        },
+        "trigger": {
+            "label": "Message received (Message received activity)"
+        }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+        "form": {
+            "label": "Message deleted",
+            "subtitle": "Message deleted activity"
+        },
+        "trigger": {
+            "label": "Message deleted (Message deleted activity)"
+        }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+        "form": {
+            "label": "Message reaction",
+            "subtitle": "Message reaction activity"
+        },
+        "trigger": {
+            "label": "Message reaction (Message reaction activity)"
+        }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+        "form": {
+            "label": "Message updated",
+            "subtitle": "Message updated activity"
+        },
+        "trigger": {
+            "label": "Message updated (Message updated activity)"
+        }
+    },
+    "Microsoft.OnQnAMatch": {
+        "trigger": {
+            "label": "QnA Intent recognized"
+        }
+    },
+    "Microsoft.OnRepromptDialog": {
+        "form": {
+            "label": "Re-prompt for input",
+            "subtitle": "Reprompt dialog event"
+        },
+        "trigger": {
+            "label": "Re-prompt for input (Reprompt dialog event)"
+        }
+    },
+    "Microsoft.OnTypingActivity": {
+        "form": {
+            "label": "User is typing",
+            "subtitle": "Typing activity"
+        },
+        "trigger": {
+            "label": "User is typing (Typing activity)"
+        }
+    },
+    "Microsoft.OnUnknownIntent": {
+        "form": {
+            "label": "Unknown intent",
+            "subtitle": "Unknown intent recognized"
+        },
+        "trigger": {
+            "label": "Unknown intent"
         }
     },
     "Microsoft.RepeatDialog": {
@@ -134,6 +436,15 @@
         "form": {
             "label": "Send a response",
             "subtitle": "Send Activity"
+        }
+    },
+    "Microsoft.SendHandoffActivity": {
+        "form": {
+            "label": "Send a handoff request",
+            "subtitle": "Send Handoff Activity"
+        },
+        "menu": {
+            "label": "Send Handoff Event"
         }
     },
     "Microsoft.SetProperties": {
@@ -160,7 +471,18 @@
             "subtitle": "Switch Condition"
         }
     },
+    "Microsoft.TextInput": {
+        "form": {
+            "label": "Prompt for text",
+            "subtitle": "Text Input"
+        }
+    },
     "Microsoft.ThrowException": {
+        "flow": {
+            "body": {
+                "description": "= ErrorValue"
+            }
+        },
         "form": {
             "label": "Throw an exception",
             "subtitle": "Throw an exception"
@@ -172,185 +494,15 @@
             "subtitle": "Trace Activity"
         }
     },
-    "Microsoft.Ask": {
+    "Microsoft.UpdateActivity": {
+        "flow": {
+            "header": {
+                "title": "Update activity"
+            }
+        },
         "form": {
-            "label": "Send a response to ask a question",
-            "subtitle": "Ask Activity"
-        }
-    },
-    "Microsoft.AttachmentInput": {
-        "form": {
-            "label": "Prompt for a file or an attachment",
-            "subtitle": "Attachment Input"
-        }
-    },
-    "Microsoft.ChoiceInput": {
-        "form": {
-            "label": "Prompt with multi-choice",
-            "subtitle": "Choice Input"
-        }
-    },
-    "Microsoft.ConfirmInput": {
-        "form": {
-            "label": "Prompt for confirmation",
-            "subtitle": "Confirm Input"
-        }
-    },
-    "Microsoft.DateTimeInput": {
-        "form": {
-            "label": "Prompt for a date or a time",
-            "subtitle": "Date Time Input"
-        }
-    },
-    "Microsoft.NumberInput": {
-        "form": {
-            "label": "Prompt for a number",
-            "subtitle": "Number Input"
-        }
-    },
-    "Microsoft.OAuthInput": {
-        "form": {
-            "label": "OAuth login",
-            "subtitle": "OAuth Input"
-        }
-    },
-    "Microsoft.TextInput": {
-        "form": {
-            "label": "Prompt for text",
-            "subtitle": "Text Input"
-        }
-    },
-    "Microsoft.OnActivity": {
-        "form": {
-            "label": "Activities",
-            "subtitle": "Activity received"
-        }
-    },
-    "Microsoft.OnAssignEntity": {
-        "form": {
-            "label": "Handle a condition when an entity is assigned",
-            "subtitle": "EntityAssigned activity"
-        }
-    },
-    "Microsoft.OnBeginDialog": {
-        "form": {
-            "label": "Dialog started",
-            "subtitle": "Begin dialog event"
-        }
-    },
-    "Microsoft.OnCancelDialog": {
-        "form": {
-            "label": "Dialog cancelled",
-            "subtitle": "Cancel dialog event"
-        }
-    },
-    "Microsoft.OnCondition": {
-        "form": {
-            "label": "Handle a condition",
-            "subtitle": "Condition"
-        }
-    },
-    "Microsoft.OnConversationUpdateActivity": {
-        "form": {
-            "description": "Handle the events fired when a user begins a new conversation with the bot.",
-            "label": "Greeting",
-            "subtitle": "ConversationUpdate activity"
-        }
-    },
-    "Microsoft.OnDialogEvent": {
-        "form": {
-            "label": "Dialog events",
-            "subtitle": "Dialog event"
-        }
-    },
-    "Microsoft.OnEndOfActions": {
-        "form": {
-            "label": "Handle a condition when actions have ended",
-            "subtitle": "EndOfActions activity"
-        }
-    },
-    "Microsoft.OnEndOfConversationActivity": {
-        "form": {
-            "label": "Conversation ended",
-            "subtitle": "EndOfConversation activity"
-        }
-    },
-    "Microsoft.OnError": {
-        "form": {
-            "label": "Error occurred",
-            "subtitle": "Error event"
-        }
-    },
-    "Microsoft.OnEventActivity": {
-        "form": {
-            "label": "Event received",
-            "subtitle": "Event activity"
-        }
-    },
-    "Microsoft.OnHandoffActivity": {
-        "form": {
-            "label": "Handover to human",
-            "subtitle": "Handoff activity"
-        }
-    },
-    "Microsoft.OnInstallationUpdateActivity": {
-        "form": {
-            "label": "Installation updated",
-            "subtitle": "Installation updated activity"
-        }
-    },
-    "Microsoft.OnIntent": {
-        "form": {
-            "label": "Intent recognized",
-            "subtitle": "Intent recognized"
-        }
-    },
-    "Microsoft.OnInvokeActivity": {
-        "form": {
-            "label": "Conversation invoked",
-            "subtitle": "Invoke activity"
-        }
-    },
-    "Microsoft.OnMessageActivity": {
-        "form": {
-            "label": "Message received",
-            "subtitle": "Message received activity"
-        }
-    },
-    "Microsoft.OnMessageDeleteActivity": {
-        "form": {
-            "label": "Message deleted",
-            "subtitle": "Message deleted activity"
-        }
-    },
-    "Microsoft.OnMessageReactionActivity": {
-        "form": {
-            "label": "Message reaction",
-            "subtitle": "Message reaction activity"
-        }
-    },
-    "Microsoft.OnMessageUpdateActivity": {
-        "form": {
-            "label": "Message updated",
-            "subtitle": "Message updated activity"
-        }
-    },
-    "Microsoft.OnRepromptDialog": {
-        "form": {
-            "label": "Re-prompt for input",
-            "subtitle": "Reprompt dialog event"
-        }
-    },
-    "Microsoft.OnTypingActivity": {
-        "form": {
-            "label": "User is typing",
-            "subtitle": "Typing activity"
-        }
-    },
-    "Microsoft.OnUnknownIntent": {
-        "form": {
-            "label": "Unknown intent",
-            "subtitle": "Unknown intent recognized"
+            "label": "Update an activity",
+            "subtitle": "Update Activity"
         }
     }
 }

@@ -13,7 +13,7 @@ import { CheckNameAvailabilityResponseBody } from '@azure/arm-botservice/esm/mod
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
-
+import { AzureResourceTypes } from '../types';
 import {
   AzureAPIStatus,
   AzureResourceProviderType,
@@ -406,57 +406,57 @@ export const getPreview = (hostname: string) => {
     {
       name: azureWebAppName,
       icon: Images.AppService,
-      key: 'webApp',
+      key: AzureResourceTypes.WEBAPP,
     },
     {
-      name: 'Microsoft Application Registration',
+      name: azureWebAppName,
       icon: Images.AppRegistration,
-      key: 'appRegistration',
+      key: AzureResourceTypes.APP_REGISTRATION,
     },
     {
       name: botServiceName,
       icon: Images.BotServices,
-      key: 'botRegistration',
+      key: AzureResourceTypes.BOT_REGISTRATION,
     },
     {
       name: azureWebAppName,
       icon: Images.FunctionApp,
-      key: 'azureFunctions',
+      key: AzureResourceTypes.AZUREFUNCTIONS,
     },
     {
       name: cosmosDbName,
       icon: Images.AzureCosmosDb,
-      key: 'cosmosDb',
+      key: AzureResourceTypes.COSMOSDB,
     },
     {
       name: blobStorageName,
       icon: Images.BlobStorage,
-      key: 'blobStorage',
+      key: AzureResourceTypes.BLOBSTORAGE,
     },
     {
       name: applicationInsightsName,
       icon: Images.AppInsights,
-      key: 'applicationInsights',
+      key: AzureResourceTypes.APPINSIGHTS,
     },
     {
       name: luisAuthoringName,
       icon: Images.CognitiveServices,
-      key: 'luisAuthoring',
+      key: AzureResourceTypes.LUIS_AUTHORING,
     },
     {
       name: luisResourceName,
       icon: Images.CognitiveServices,
-      key: 'luisPrediction',
+      key: AzureResourceTypes.LUIS_PREDICTION,
     },
     {
       name: qnaAccountName,
-      icon: Images.CognitiveServices,
-      key: 'qna',
+      icon: Images.QNAMaker,
+      key: AzureResourceTypes.QNA,
     },
     {
       name: azureServicePlanName,
       icon: Images.AppServicePlan,
-      key: 'servicePlan',
+      key: AzureResourceTypes.SERVICE_PLAN,
     },
   ];
 

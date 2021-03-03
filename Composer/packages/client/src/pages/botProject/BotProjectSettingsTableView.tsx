@@ -8,6 +8,7 @@ import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+import { useFeatureFlag } from '../../utils/hooks';
 
 import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { AppIdAndPassword } from './AppIdAndPassword';
@@ -16,6 +17,7 @@ import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
 import { DeleteBotButton } from './DeleteBotButton';
+import AdapterSection from './adapters/AdapterSection';
 
 // -------------------- Styles -------------------- //
 
@@ -40,17 +42,20 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
+  const useAdapters = useFeatureFlag('NEW_CREATION_FLOW');
+
   return (
     <div css={container}>
       {isRootBot && <SkillHostEndPoint projectId={projectId} />}
       <AppIdAndPassword projectId={projectId} />
       <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <BotLanguage projectId={projectId} />
+      {isRootBot && useAdapters && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
       <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
       <div css={publishTargetsWrap(!isRootBot)}>
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
       </div>
-      {isRootBot && <DeleteBotButton projectId={projectId} />}
+      {isRootBot && <DeleteBotButton projectId={projectId} scrollToSectionId={scrollToSectionId} />}
     </div>
   );
 };

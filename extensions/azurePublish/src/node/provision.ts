@@ -16,9 +16,10 @@ export interface ProvisionConfig {
   tenantId?: string;
   hostname: string; // for previous bot, it's ${name}-${environment}
   externalResources: ResourceType[];
-  location: { id: string; name: string; displayName: string };
+  location: string;
   luisLocation: string;
-  subscription: { subscriptionId: string; tenantId: string; displayName: string };
+  subscription: string;
+  resourceGroup?: string;
   logger?: (string) => any;
   name: string; // profile name
   type: string; // webapp or function
@@ -42,7 +43,7 @@ export class BotProjectProvision {
   private tenantId = '';
 
   constructor(config: ProvisionConfig) {
-    this.subscriptionId = config.subscription.subscriptionId;
+    this.subscriptionId = config.subscription;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.graphToken = config.graphToken;
@@ -202,6 +203,7 @@ export class BotProjectProvision {
 
       // this object collects all of the various configuration output
       const provisionResults = {
+        subscriptionId: null,
         appId: null,
         appPassword: null,
         resourceGroup: null,
@@ -215,7 +217,7 @@ export class BotProjectProvision {
         botName: null,
       };
 
-      const resourceGroupName = `${config.hostname}`;
+      const resourceGroupName = config.resourceGroup ?? config.hostname;
 
       // azure resource manager class config
       const armConfig = {
@@ -224,13 +226,15 @@ export class BotProjectProvision {
         logger: this.logger,
       } as AzureResourceManangerConfig;
 
+      provisionResults.subscriptionId = this.subscriptionId;
+
       // This object is used to actually make the calls to Azure...
       this.azureResourceManagementClient = new AzureResourceMananger(armConfig);
 
       // Ensure the resource group is ready
       provisionResults.resourceGroup = await this.azureResourceManagementClient.createResourceGroup({
         name: resourceGroupName,
-        location: config.location.name,
+        location: config.location,
       });
 
       // SOME OF THESE MUST HAPPEN IN THE RIGHT ORDER!
@@ -258,10 +262,8 @@ export class BotProjectProvision {
             // eslint-disable-next-line no-case-declarations
             const hostname = await this.azureResourceManagementClient.deployWebAppResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
-              name: config.hostname,
-              appId: provisionResults.appId,
-              appPwd: provisionResults.appPassword,
+              location: config.location ?? provisionResults.resourceGroup.location,
+              name: config.hostname
             });
             provisionResults.webApp = {
               hostname: hostname,
@@ -271,16 +273,16 @@ export class BotProjectProvision {
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
           case AzureResourceTypes.BOT_REGISTRATION:
-            await this.azureResourceManagementClient.deployBotResource({
+            const botName = await this.azureResourceManagementClient.deployBotResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname, // come back to this!
               displayName: config.hostname, // todo: this may be wrong!
-              endpoint: `https://${provisionResults.webApp.hostname}/api/messages`,
+              endpoint: `https://${provisionResults.webApp?.hostname ?? (config.hostname + ".azurewebsites.net")}/api/messages`,
               appId: provisionResults.appId,
               webAppHostname: provisionResults.webApp.hostname
             });
-            provisionResults.botName = config.hostname;
+            provisionResults.botName = botName;
             break;
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -288,10 +290,8 @@ export class BotProjectProvision {
           case AzureResourceTypes.AZUREFUNCTIONS: {
             const functionsHostName = await this.azureResourceManagementClient.deployAzureFunctions({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
-              name: config.hostname,
-              appId: provisionResults.appId,
-              appPwd: provisionResults.appPassword,
+              location: config.location ?? provisionResults.resourceGroup.location,
+              name: config.hostname
             });
             provisionResults.webApp = {
               hostname: functionsHostName,
@@ -304,7 +304,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.COSMOSDB:
             provisionResults.cosmosDB = await this.azureResourceManagementClient.deployCosmosDBResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname.replace(/_/g, '').substr(0, 31).toLowerCase(),
               databaseName: `botstate-db`,
               containerName: `botstate-container`,
@@ -316,7 +316,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.APPINSIGHTS:
             provisionResults.appInsights = await this.azureResourceManagementClient.deployAppInsightsResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname,
             });
 
@@ -358,7 +358,7 @@ export class BotProjectProvision {
             // eslint-disable-next-line no-case-declarations
             provisionResults.blobStorage = await this.azureResourceManagementClient.deployBlobStorageResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, ''),
               containerName: 'transcripts',
             });
@@ -369,7 +369,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.QNA:
             provisionResults.qna = await this.azureResourceManagementClient.deployQnAReource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.location ?? provisionResults.resourceGroup.location,
               name: `${config.hostname}-qna`,
             });
             break;
