@@ -112,6 +112,8 @@ const optionKeys = {
 const templateRequestUrl =
   'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
 
+const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
+
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
@@ -125,10 +127,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
   const { templates, onDismiss, onNext } = props;
-  const [currentTemplateId, setCurrentTemplateId] = useState('');
+  const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
-  const [readMe, setReadMe] = useRecoilState(selectedTemplateReadMeState);
+  const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
 
   const selectedTemplate = useMemo(() => {
@@ -175,8 +177,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
             <img
-              alt={formatMessage('Composer Logo')}
-              aria-label={formatMessage('Composer Logo')}
+              alt={formatMessage('Microsoft Logo')}
+              aria-label={formatMessage('Microsoft Logo')}
               src={msftIcon}
               style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px' }}
             />
@@ -219,7 +221,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   useEffect(() => {
     if (currentTemplateId) {
-      setReadMe('');
       props.fetchReadMe(currentTemplateId);
     }
   }, [currentTemplateId, props.fetchReadMe]);
@@ -263,8 +264,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending && <LoadingSpinner />}
-            <TemplateDetailView readMe={readMe} template={getTemplate()} />
+            {fetchReadMePending ? <LoadingSpinner /> : <TemplateDetailView readMe={readMe} template={getTemplate()} />}
           </div>
         </div>
         <DialogFooter>

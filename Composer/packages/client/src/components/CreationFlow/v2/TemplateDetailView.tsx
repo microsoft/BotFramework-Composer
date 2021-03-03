@@ -36,7 +36,7 @@ const templateVersion = css`
   display: block;
   left: 55px;
   width: fit-content;
-  bottom: 20px;
+  bottom: 18px;
 `;
 
 type TemplateDetailViewProps = {
@@ -45,12 +45,9 @@ type TemplateDetailViewProps = {
 };
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  // readMe comes from npm where first line is the template title.
-  // Composer formats and displays its own template title and strips out the first line to avoid redundent titles
+  // Composer formats and displays its own template title and strips out title from read me to avoid redundant titles
   const getStrippedReadMe = () => {
-    const lines = props.readMe.split('\n');
-    lines.splice(0, 1);
-    return lines.join('\n');
+    return props.readMe.replace(/^(#|##) (.*)/, '').trim();
   };
 
   return (
@@ -65,7 +62,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         <span css={templateTitle}>{props.template?.name}</span>
         <span css={templateVersion}>{props.template?.package?.packageVersion}</span>
       </div>
-      <ReactMarkdown>{getStrippedReadMe()}</ReactMarkdown>
+      <ReactMarkdown linkTarget="_blank">{getStrippedReadMe()}</ReactMarkdown>
     </div>
   );
 };
