@@ -278,7 +278,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else {
       getARMToken().then(currentUser=>{
         if(currentUser?.token){
-          setToken(token);
+          setToken(currentUser?.token);
         }
         setCurrentUser(currentUser);
       });

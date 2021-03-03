@@ -83,13 +83,11 @@ export const getARMToken = async() => {
   let tenant = getTenantsFromCache();
   if(!tenant){
     const tenants = await getTenants();
-    console.log(tenants);
     // set tenantId in cache.
     window.localStorage.setItem(TENANTID, tenants[0].tenantId);
     tenant = tenants[0].tenantId;
   }
   const token = await getARMTokenForTenant(tenant);
-  console.log('get token');
   const decoded = decodeToken(token);
   return decoded ? {
     token: token,
