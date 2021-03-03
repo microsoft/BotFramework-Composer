@@ -19,6 +19,7 @@
   },
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@azure/arm-subscriptions": "^3.0.0",
     "@bfc/adaptive-flow": "*",
     "@bfc/adaptive-form": "*",
     "@bfc/code-editor": "*",

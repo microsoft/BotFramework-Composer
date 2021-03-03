@@ -5,7 +5,7 @@
       "label": "Dialogo adattivo",
       "properties": {
         "recognizer": {
-          "description": "Per comprendere cosa dice l'utente, il dialogo necessita di un \"Riconoscimento\", che include parole e frasi di esempio che gli utenti possono usare.",
+          "description": "Per comprendere cosa dice l’utente, il dialogo necessita di un \"Riconoscimento\", che include parole e frasi di esempio che gli utenti possono usare.",
           "label": "Comprensione del linguaggio"
         }
       }
@@ -162,8 +162,8 @@
   },
   "Microsoft.ThrowException": {
     "form": {
-      "label": "Genera un'eccezione",
-      "subtitle": "Genera un'eccezione"
+      "label": "Genera un’eccezione",
+      "subtitle": "Genera un’eccezione"
     }
   },
   "Microsoft.TraceActivity": {
@@ -198,7 +198,7 @@
   },
   "Microsoft.DateTimeInput": {
     "form": {
-      "label": "Richiedi una data o un'ora",
+      "label": "Richiedi una data o un’ora",
       "subtitle": "Input data/ora"
     }
   },
@@ -228,7 +228,7 @@
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Gestisci una condizione quando viene assegnata un'entità",
+      "label": "Gestisci una condizione quando viene assegnata un’entità",
       "subtitle": "Attività EntityAssigned"
     }
   },
@@ -343,7 +343,7 @@
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "L'utente sta digitando",
+      "label": "L’utente sta digitando",
       "subtitle": "Attività di digitazione"
     }
   },
