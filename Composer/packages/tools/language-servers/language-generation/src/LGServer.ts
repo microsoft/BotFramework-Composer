@@ -137,7 +137,6 @@ export class LGServer {
     }
     const wordRange = getRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
-    console.log(word);
     const result = this._lgFile?.templates.find((t) => t.name === word);
     if (!result) {
       return;
