@@ -73,39 +73,28 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
   return diagnostics;
 }
 
-export function getLineByIndex(document: TextDocument, line: number) {
-  const lineCount = document.lineCount;
-  if (line >= lineCount || line < 0) return null;
-
-  return document.getText().split(/\r?\n/g)[line];
-}
-
-export function createFoldingRanges(document: TextDocument | undefined) {
+export function createFoldingRanges(lines: string[], prefix: string) {
   const items: FoldingRange[] = [];
-  if (!document) {
+
+  if (!lines || lines.length === 0) {
     return items;
   }
 
-  const lineCount = document.lineCount;
-  let i = 0;
-  while (i < lineCount) {
-    const currLine = getLineByIndex(document, i);
-    if (currLine?.startsWith('>>')) {
-      for (let j = i + 1; j < lineCount; j++) {
-        if (getLineByIndex(document, j)?.startsWith('>>')) {
-          items.push(FoldingRange.create(i, j - 1));
-          i = j - 1;
-          break;
-        }
+  const lineCount = lines.length;
+  let startIdx = -1;
 
-        if (j === lineCount - 1) {
-          items.push(FoldingRange.create(i, j));
-          i = j;
-        }
+  for (let i = 0; i < lineCount; i++) {
+    if (lines[i].trim().startsWith(prefix)) {
+      if (startIdx !== -1) {
+        items.push(FoldingRange.create(startIdx, i - 1));
       }
-    }
 
-    i = i + 1;
+      startIdx = i;
+    }
+  }
+
+  if (startIdx !== -1) {
+    items.push(FoldingRange.create(startIdx, lineCount - 1));
   }
 
   return items;

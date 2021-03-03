@@ -13,7 +13,6 @@ import {
   extractLUISContent,
   getSuggestionEntities,
   suggestionAllEntityTypes,
-  getLineByIndex,
   generateDiagnostic,
   convertDiagnostics,
   convertSeverity,
@@ -21,7 +20,7 @@ import {
 import { LgParser } from '../lib/lgParser';
 
 const textDoc: TextDocument = {
-  getText: () => '-this is an entity: ${@name}',
+  getText: () => 'ithis is an entity: ${@name}',
   uri: 'inmemory://model/1',
   languageId: 'botbuilderlg',
   version: 2,
@@ -88,11 +87,6 @@ describe('LG LSP Server Function Unit Tests', () => {
   it('Test getSuggestionEntities function', () => {
     const result = getSuggestionEntities(luisObj, suggestionAllEntityTypes);
     expect(result).toEqual(['name', 'zipcode']);
-  });
-
-  it('Test getLineByIndex function', () => {
-    const result = getLineByIndex(textDoc2, 2);
-    expect(result).toEqual('line2');
   });
 
   it('Test generateDiagnostic function', () => {

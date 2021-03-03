@@ -38,7 +38,7 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
-  getLineByIndex,
+  createFoldingRanges,
 } from './utils';
 
 // define init methods call from client
@@ -128,53 +128,13 @@ export class LGServer {
 
   protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
     const document = this.documents.get(params.textDocument.uri);
-    const items: FoldingRange[] = [];
     if (!document) {
-      return items;
+      return [];
     }
 
-    const lineCount = document.lineCount;
-    let i = 0;
-    while (i < lineCount) {
-      const currLine = getLineByIndex(document, i);
-      if (currLine?.startsWith('>>')) {
-        for (let j = i + 1; j < lineCount; j++) {
-          if (getLineByIndex(document, j)?.startsWith('>>')) {
-            items.push(FoldingRange.create(i, j - 1));
-            i = j - 1;
-            break;
-          }
-
-          if (j === lineCount - 1) {
-            items.push(FoldingRange.create(i, j));
-            i = j;
-          }
-        }
-      }
-
-      i = i + 1;
-    }
-
-    for (let i = 0; i < lineCount; i++) {
-      const currLine = getLineByIndex(document, i);
-      if (currLine?.startsWith('#')) {
-        let j = i + 1;
-        for (j = i + 1; j < lineCount; j++) {
-          const secLine = getLineByIndex(document, j);
-          if (secLine?.startsWith('>>') || secLine?.startsWith('#')) {
-            items.push(FoldingRange.create(i, j - 1));
-            i = j - 1;
-            break;
-          }
-        }
-
-        if (i !== j - 1) {
-          items.push(FoldingRange.create(i, j - 1));
-          i == j - 2;
-        }
-      }
-    }
-
+    const lines = document.getText().split(/\r?\n/g);
+    let items = createFoldingRanges(lines, '>>');
+    items = items.concat(createFoldingRanges(lines, '#'));
     return items;
   }
 

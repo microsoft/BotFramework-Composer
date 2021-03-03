@@ -6,8 +6,6 @@ import { updateIntent, checkSection } from '@bfc/indexers/lib/utils/luUtil';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 
 import { WorkerMsg } from './luParser';
-import { createFoldingRanges } from './utils';
-
 process.on('message', async (msg: WorkerMsg) => {
   try {
     switch (msg.type) {
@@ -32,12 +30,6 @@ process.on('message', async (msg: WorkerMsg) => {
       case 'checkSection': {
         const { intent, enableSections } = msg.payload;
         process.send?.({ id: msg.id, payload: checkSection(intent, enableSections) });
-        break;
-      }
-
-      case 'getFoldingRanges': {
-        const { document } = msg.payload;
-        process.send?.({ id: msg.id, payload: createFoldingRanges(document) });
         break;
       }
     }

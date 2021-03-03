@@ -24,7 +24,7 @@ import { isValid, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil'
 import { LuParser } from './luParser';
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
-import { LUOption, LUDocument, generateDiagnostic, convertDiagnostics, getLineByIndex } from './utils';
+import { LUOption, LUDocument, generateDiagnostic, convertDiagnostics, createFoldingRanges } from './utils';
 
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
@@ -103,25 +103,13 @@ export class LUServer {
 
   protected async foldingRangeHandler(params: FoldingRangeParams): Promise<FoldingRange[]> {
     const document = this.documents.get(params.textDocument.uri);
-
-    const items: FoldingRange[] = await this.luParser.getFoldingRanges(document);
-
     if (!document) {
-      return items;
+      return [];
     }
 
-    const luResource = (await this.luParser.parse(document.getText(), undefined, {})).resource;
-    const sections = luResource.Sections;
-    for (const section in luResource.Sections) {
-      const start = sections[section].Range.Start.Line - 1;
-      let end = sections[section].Range.End.Line - 1;
-      const sectionLastLine = getLineByIndex(document, end);
-      if (sectionLastLine?.startsWith('>>')) {
-        end = end - 1;
-      }
-
-      items.push(FoldingRange.create(start, end));
-    }
+    const lines = document.getText().split(/\r?\n/g);
+    let items: FoldingRange[] = createFoldingRanges(lines, '>>');
+    items = items.concat(createFoldingRanges(lines, '#'));
 
     return items;
   }

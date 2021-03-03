@@ -9,9 +9,6 @@ import { updateIntent, checkSection } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
 import { LuFile, ILUFeaturesConfig, LuIntentSection, Diagnostic } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
-import { FoldingRange, TextDocument } from 'vscode-languageserver';
-
-import { createFoldingRanges } from './utils';
 
 export const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
@@ -38,9 +35,6 @@ export class LuParserWithoutWorker {
   }
   public async checkSection(intent: LuIntentSection, enableSections = true): Promise<Diagnostic[]> {
     return checkSection(intent, enableSections);
-  }
-  public async getFoldingRanges(document: TextDocument | undefined): Promise<FoldingRange[]> {
-    return createFoldingRanges(document);
   }
 }
 
@@ -96,15 +90,7 @@ class LuParserWithWorker {
       LuParserWithWorker.worker.send(msg);
     });
   }
-  public async getFoldingRanges(document: TextDocument | undefined): Promise<FoldingRange[]> {
-    const msgId = uniqueId();
-    const msg = { id: msgId, type: 'checkSection', payload: { document } };
-    return new Promise((resolve, reject) => {
-      this.resolves[msgId] = resolve;
-      this.rejects[msgId] = reject;
-      LuParserWithWorker.worker.send(msg);
-    });
-  }
+
   // Handle incoming calculation result
   public handleMsg(msg: WorkerMsg) {
     const { id, error, payload } = msg;
