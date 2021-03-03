@@ -25,6 +25,7 @@ import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pi
 import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 
+import msftIcon from '../../../images/msftIcon.svg';
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
 import { selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
@@ -167,6 +168,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       onRender: (item) => (
         <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
+            <img
+              alt={formatMessage('Composer Logo')}
+              aria-label={formatMessage('Composer Logo')}
+              src={msftIcon}
+              style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px' }}
+            />
             {item.name}
           </div>
         </div>
