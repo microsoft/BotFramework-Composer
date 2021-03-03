@@ -470,36 +470,34 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
   set(projectIndexingState(projectId), true);
-  setTimeout(async () => {
-    Promise.all([
-      lgWorker.parseAll(projectId, lgFiles).then((result) => {
-        set(lgFilesSelectorFamily(projectId), (prevFiles) => {
-          return prevFiles.map((item) => {
-            const file = (result as LgFile[]).find((file) => file.id === item.id);
-            return file && item.rawData ? file : item;
-          });
+  Promise.all([
+    lgWorker.parseAll(projectId, lgFiles).then((result) => {
+      set(lgFilesSelectorFamily(projectId), (prevFiles) => {
+        return prevFiles.map((item) => {
+          const file = (result as LgFile[]).find((file) => file.id === item.id);
+          return file && item.rawData ? file : item;
         });
-      }),
-      luWorker.parseAll(luFiles, mergedSettings.luFeatures).then((result) => {
-        set(luFilesSelectorFamily(projectId), (prevFiles) => {
-          return prevFiles.map((item) => {
-            const file = (result as LuFile[]).find((file) => file.id === item.id);
-            return file && item.rawData ? file : item;
-          });
+      });
+    }),
+    luWorker.parseAll(luFiles, mergedSettings.luFeatures).then((result) => {
+      set(luFilesSelectorFamily(projectId), (prevFiles) => {
+        return prevFiles.map((item) => {
+          const file = (result as LuFile[]).find((file) => file.id === item.id);
+          return file && item.rawData ? file : item;
         });
-      }),
-      qnaWorker.parseAll(qnaFiles).then((result) => {
-        set(qnaFilesSelectorFamily(projectId), (prevFiles) => {
-          return prevFiles.map((item) => {
-            const file = (result as QnAFile[]).find((file) => file.id === item.id);
-            return file && item.rawData ? file : item;
-          });
+      });
+    }),
+    qnaWorker.parseAll(qnaFiles).then((result) => {
+      set(qnaFilesSelectorFamily(projectId), (prevFiles) => {
+        return prevFiles.map((item) => {
+          const file = (result as QnAFile[]).find((file) => file.id === item.id);
+          return file && item.rawData ? file : item;
         });
-      }),
-    ]).then(() => {
-      set(projectIndexingState(projectId), false);
-    });
-  }, 0);
+      });
+    }),
+  ]).then(() => {
+    set(projectIndexingState(projectId), false);
+  });
   return mainDialog;
 };
 
