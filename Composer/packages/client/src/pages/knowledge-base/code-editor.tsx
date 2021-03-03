@@ -22,19 +22,19 @@ import { backIcon } from './styles';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
+  locale: string;
   skillId?: string;
   qnaFileId?: string;
 }
 
 const lspServerPath = '/lu-language-server';
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { projectId = '', dialogId = '', skillId } = props;
+  const { projectId = '', dialogId = '', skillId, locale } = props;
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
-  const locale = useRecoilValue(localeState(actualProjectId));
   const userSettings = useRecoilValue(userSettingsState);
 
   const search = props.location?.search ?? '';
