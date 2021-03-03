@@ -5,9 +5,9 @@ import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { getAccessToken, logOut, usePublishApi } from '@bfc/extension-client';
+import { logOut, usePublishApi } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { ResourceGroup } from '@azure/arm-resources/esm/models';
+
 import { DeployLocation } from '@botframework-composer/types';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import {
@@ -30,11 +30,8 @@ import {
   Selection,
   SelectionMode,
 } from 'office-ui-fabric-react';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
-import jwtDecode from 'jwt-decode';
-
-import { AzureResourceTypes, ResourcesItem, authConfig } from '../types';
+import { AzureResourceTypes, ResourcesItem } from '../types';
 
 import {
   getResourceList,
@@ -45,6 +42,7 @@ import {
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
 } from './api';
+import { getExistResources, getARMToken, removePlaceholder,decodeToken,iconStyle} from './util';
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
@@ -75,77 +73,6 @@ const DialogTitle = {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
   }
-};
-
-function decodeToken(token: string) {
-  try {
-    return jwtDecode<any>(token);
-  } catch (err) {
-    console.error('decode token error in ', err);
-    return null;
-  }
-}
-
-function removePlaceholder(config:any){
-  try{
-    if(config){
-      let str = JSON.stringify(config);
-      str = str.replace(/<[^>]*>/g, '');
-      const newConfig = JSON.parse(str);
-      return newConfig;
-    } else {
-      return undefined;
-    }
-  }catch(e){
-    console.error(e);
-  }
-};
-
-function getExistResources (config){
-  const result = [];
-  if(config){
-    // If name or hostname is configured, it means the webapp is already created.
-    if(config.hostname || config.name){
-      result.push(AzureResourceTypes.WEBAPP);
-    }
-    if(config.settings?.MicrosoftAppId){
-      result.push(AzureResourceTypes.BOT_REGISTRATION);
-      result.push(AzureResourceTypes.APP_REGISTRATION);
-    }
-    if(config.settings?.luis?.authoringKey){
-      result.push(AzureResourceTypes.LUIS_AUTHORING);
-    }
-    if(config.settings?.luis?.endpointKey){
-      result.push(AzureResourceTypes.LUIS_PREDICTION);
-    }
-    if(config.settings?.qna?.subscriptionKey){
-      result.push(AzureResourceTypes.QNA);
-    }
-    if(config.settings?.applicationInsights?.InstrumentationKey){
-      result.push(AzureResourceTypes.APPINSIGHTS);
-    }
-    if(config.settings?.cosmosDb?.authKey){
-      result.push(AzureResourceTypes.COSMOSDB);
-    }
-    if(config.settings?.blobStorage?.connectionString){
-      result.push(AzureResourceTypes.BLOBSTORAGE);
-    }
-    return result;
-  } else return [];
-}
-
-const iconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
 };
 
 const onRenderLabel = (props) => {
@@ -284,6 +211,7 @@ const reviewCols: IColumn[] = [
     isPadded: true,
   },
 ];
+
 export const AzureProvisionDialog: React.FC = () => {
   const {
     currentProjectId,
@@ -348,19 +276,11 @@ export const AzureProvisionDialog: React.FC = () => {
         });
       }
     } else {
-      getAccessToken(authConfig.arm).then((token) => {
-        setToken(token);
-        // decode token
-        const decoded = decodeToken(token);
-        if (decoded) {
-          setCurrentUser({
-            token: token,
-            email: decoded.upn,
-            name: decoded.name,
-            expiration: (decoded.exp || 0) * 1000, // convert to ms,
-            sessionExpired: false,
-          });
+      getARMToken().then(currentUser=>{
+        if(currentUser?.token){
+          setToken(token);
         }
+        setCurrentUser(currentUser);
       });
     }
   }, []);
@@ -703,7 +623,6 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   useEffect(()=>{
-    console.log(listItems);
     if(listItems?.length === 0) {
       setTitle(DialogTitle.EDIT);
       setPage(PageTypes.EditJson);

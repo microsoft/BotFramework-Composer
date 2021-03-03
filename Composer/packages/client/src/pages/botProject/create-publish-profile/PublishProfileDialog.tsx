@@ -10,7 +10,7 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
+import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
@@ -140,8 +140,17 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         let arm, graph;
         if (!isGetTokenFromUser()) {
           // login or get token implicit
-          arm = await AuthClient.getAccessToken(armScopes);
+          let tenantId = getTenantIdFromCache();
+          if (!tenantId) {
+            const tenants = await AuthClient.getTenants();
+            tenantId = tenants[0].tenantId;
+            setTenantId(tenantId);
+          }
+          console.log('tenant-------', tenantId);
+          arm = await AuthClient.getARMTokenForTenant(tenantId);
           graph = await AuthClient.getAccessToken(graphScopes);
+          console.log('arm---------', arm);
+          console.log('graph-------', graph);
         } else {
           // get token from cache
           arm = getTokenFromCache('accessToken');
