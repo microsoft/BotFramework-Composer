@@ -13,7 +13,8 @@ Param(
 	[string] $publishProfilePath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt"),
 	[string] $runtimeIdentifier = 'win-x64',
-	[string] $luisResource
+	[string] $luisResource,
+	[string] $resourceGroup
 )
 
 if ($PSVersionTable.PSVersion.Major -lt 6) {
@@ -52,6 +53,7 @@ if ($publishProfilePath) {
 	$qnaSubscriptionKey = $qnaConfig.subscriptionKey
 
 	$runtimeIdentifier = $publishProfile.runtimeIdentifier
+	$resourceGroup = $publishProfile.resourceGroup
 }
 
 # Get mandatory parameters
@@ -74,6 +76,10 @@ if (-not $luisAuthoringKey) {
 
 if (-not $luisEndpointKey) {
 	$luisEndpointKey = ""
+}
+
+if (-not $resourceGroup) {
+	$resourceGroup = "$name-$environment"
 }
 
 # Reset log file
@@ -314,8 +320,6 @@ if ($qnaSubscriptionKey) {
 
 # write settings file to settings path
 $settings | ConvertTo-Json -depth 100 | Out-File $settingsPath
-
-$resourceGroup = "$name-$environment"
 
 # if all done, compress the folder and deploy to azure
 if ($?) {
