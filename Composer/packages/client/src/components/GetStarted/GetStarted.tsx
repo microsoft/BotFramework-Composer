@@ -14,11 +14,11 @@ import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-import { h2Style, h3Style, ulStyle, ulStyleGuides, linkStyle, liStyle } from './styles';
+import { h3Style, ulStyle, liStyle } from './styles';
 
 type GetStartedProps = {
   isOpen: boolean;
-  onDismiss: any;
+  onDismiss: () => void;
 };
 
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
@@ -73,22 +73,22 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
           {formatMessage('Customize')}
           <ul style={ulStyle}>
             <li style={liStyle}>
-              <Link href={linkToPackageManager} styles={linkStyle} onClick={linkClick}>
+              <Link href={linkToPackageManager} onClick={linkClick}>
                 {formatMessage('Add and remove packages')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToLGEditor} styles={linkStyle} onClick={linkClick}>
+              <Link href={linkToLGEditor} onClick={linkClick}>
                 {formatMessage('Edit what your bot says')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToLUEditor} styles={linkStyle} onClick={linkClick}>
+              <Link href={linkToLUEditor} onClick={linkClick}>
                 {formatMessage('Train your language model')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToConnections} styles={linkStyle} onClick={linkClick}>
+              <Link href={linkToConnections} onClick={linkClick}>
                 {formatMessage('Connect your bot to new services')}
               </Link>
             </li>
@@ -96,12 +96,12 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
           {formatMessage('Publish')}
           <ul style={ulStyle}>
             <li style={liStyle}>
-              <Link href={linkToProvision} styles={linkStyle} onClick={linkClick}>
+              <Link href={linkToProvision} onClick={linkClick}>
                 {formatMessage('Create a cloud hosting environment')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToPublish} styles={linkStyle} onClick={linkClick}>
+              <Link href={linkToPublish} onClick={linkClick}>
                 {formatMessage('Publish updates to the cloud')}
               </Link>
             </li>
@@ -109,39 +109,39 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
         </Stack.Item>
         <Stack.Item>
           <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
-          <ul style={ulStyleGuides}>
+          <ul style={ulStyle}>
             <li style={liStyle}>
-              <Link href={linkToGetStarted} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToGetStarted} target="_blank" onClick={linkClick}>
                 {formatMessage('Get started with Bot Framework Composer')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToCreateFirstBot} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToCreateFirstBot} target="_blank" onClick={linkClick}>
                 {formatMessage('Create your first bot')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToTutorials} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToTutorials} target="_blank" onClick={linkClick}>
                 {formatMessage('Composer tutorials')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToAdaptiveExpressions} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToAdaptiveExpressions} target="_blank" onClick={linkClick}>
                 {formatMessage('Learn about Adaptive expressions')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToPreBuiltExpressions} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToPreBuiltExpressions} target="_blank" onClick={linkClick}>
                 {formatMessage('Find pre-built Adaptive expressions')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToLUFileFormat} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToLUFileFormat} target="_blank" onClick={linkClick}>
                 {formatMessage('LU file format and syntax')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToLGFileFormat} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToLGFileFormat} target="_blank" onClick={linkClick}>
                 {formatMessage('LG file format and syntax')}
               </Link>
             </li>
