@@ -1,13 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { IExtensionRegistration } from '@bfc/extension-client';
-import { IFeed, IPackageQuery, IPackageDefinition } from '../feedInterfaces';
-import { INuGetPackage } from './nugetInterfaces';
 import { readdir, readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
-import path from 'path';
 import * as semverSort from 'semver-sort';
+
+import { IFeed, IPackageQuery, IPackageDefinition } from '../feedInterfaces';
+
+import { INuGetPackage } from './nugetInterfaces';
 
 /**
  * NuGet feed in local file system.
@@ -15,8 +18,8 @@ import * as semverSort from 'semver-sort';
  * Docs: https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds.
  */
 export class LocalNuGetFeed implements IFeed {
-  private language: string = 'c#';
-  private source: string = 'nuget';
+  private language = 'c#';
+  private source = 'nuget';
 
   /**
    * Creates a local NuGet feed.
@@ -108,7 +111,7 @@ export class LocalNuGetFeed implements IFeed {
    * @param nugetPackage
    */
   private asPackageDefinition(nugetPackage: INuGetPackage): IPackageDefinition {
-    return <IPackageDefinition>{
+    return {
       name: nugetPackage.id,
       version: nugetPackage.version,
       versions: nugetPackage.versions
@@ -120,6 +123,6 @@ export class LocalNuGetFeed implements IFeed {
       description: nugetPackage.description,
       language: this.language,
       source: this.source,
-    };
+    } as IPackageDefinition;
   }
 }

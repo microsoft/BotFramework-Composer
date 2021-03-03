@@ -31,7 +31,7 @@ const usage = () => {
     ['appPassword', '16 character password'],
     ['environment', 'Environment name (Defaults to dev)'],
     ['location', 'Azure Region (Defaults to westus)'],
-    ['resourceGroup', "Name of your resource group (Defaults to name-environment)"],
+    ['resourceGroup', 'Name of your resource group (Defaults to name-environment)'],
     ['appId', 'Microsoft App ID (Will create if absent)'],
     ['tenantId', 'ID of your tenant if required (will choose first in list by default)'],
     ['createLuisResource', 'Create a LUIS resource? Default true'],
@@ -805,7 +805,7 @@ msRestNodeAuth
         resourceGroup: resourceGroup,
         botName: name,
         region: location,
-        subscriptionId: subId
+        subscriptionId: subId,
       };
 
       console.log(chalk.white(JSON.stringify(profile, null, 2)));
