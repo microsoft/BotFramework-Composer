@@ -168,7 +168,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
                 <TeachingBubble
                   hasCloseButton
                   hasCondensedHeadline
-                  headline={formatMessage('Get started with your new bot')}
+                  headline={formatMessage('Get your bot up and running')}
                   target="#rocketButton"
                   onDismiss={hideTeachingBubble}
                 >

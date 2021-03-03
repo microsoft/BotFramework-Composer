@@ -106,8 +106,6 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
               </Link>
             </li>
           </ul>
-        </Stack.Item>
-        <Stack.Item>
           <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
           <ul style={ulStyle}>
             <li style={liStyle}>
