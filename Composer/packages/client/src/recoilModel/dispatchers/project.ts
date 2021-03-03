@@ -28,6 +28,7 @@ import {
   createQnAOnState,
   currentProjectIdState,
   dispatcherState,
+  fetchReadMePendingState,
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
@@ -543,6 +544,7 @@ export const projectDispatcher = () => {
 
   const fetchReadMe = useRecoilCallback((callbackHelpers: CallbackInterface) => async (moduleName: string) => {
     try {
+      callbackHelpers.set(fetchReadMePendingState, true);
       const response = await httpClient.get(`/assets/templateReadme`, {
         params: { moduleName: encodeURIComponent(moduleName) },
       });
@@ -552,7 +554,12 @@ export const projectDispatcher = () => {
       }
     } catch (err) {
       handleProjectFailure(callbackHelpers, err);
-      callbackHelpers.set(selectedTemplateReadMeState, '');
+      callbackHelpers.set(
+        selectedTemplateReadMeState,
+        formatMessage('### Error encountered when getting template readMe')
+      );
+    } finally {
+      callbackHelpers.set(fetchReadMePendingState, false);
     }
   });
 
