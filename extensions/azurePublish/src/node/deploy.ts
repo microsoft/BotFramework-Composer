@@ -10,6 +10,10 @@ import archiver from 'archiver';
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
+import { AzureBotService } from '@azure/arm-botservice';
+import { TokenCredentials } from '@azure/ms-rest-js';
+import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
+import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -43,9 +47,18 @@ export class BotProjectDeploy {
     name: string,
     environment: string,
     hostname?: string,
-    luisResource?: string
+    luisResource?: string,
+    absSettings?: any
   ) {
     try {
+      this.logger(absSettings);
+
+      await this.linkBotWithWebapp(settings, absSettings, hostname);
+
+      if (absSettings) {
+        await this.BindKeyVault(absSettings, hostname);
+      }
+
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -162,10 +175,8 @@ export class BotProjectDeploy {
       message: 'Uploading zip file...',
     });
 
-    const publishEndpoint = `https://${
-      hostname ? hostname : name + (env ? '-' + env : '')
-    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    const publishEndpoint = `https://${hostname ? hostname : name + (env ? '-' + env : '')
+      }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
       this.logger('%O', err);
@@ -197,4 +208,194 @@ export class BotProjectDeploy {
       }
     }
   }
+
+  /**
+   * link the bot channel registration with azure web app service
+   * @param absSettings the abs settings
+   * @param hostname the hostname of webapp which bot service would be linked to
+   */
+  private async linkBotWithWebapp(settings: any, absSettings: any, hostname: string) {
+    let subscriptionId = '';
+    let resourceGroupName = '';
+    let botName = '';
+
+    if (absSettings.resourceId) {
+      try {
+        if (!subscriptionId) {
+          subscriptionId = absSettings.resourceId.match(/subscriptions\/([\w-]*)\//)[1];
+        }
+        if (!resourceGroupName) {
+          resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^\/]*)/)[1];
+        }
+        if (!botName) {
+          botName = absSettings.resourceId.match(/botServices\/([^\/]*)/)[1];
+        }
+      } catch (error) {
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: 'Abs settings resourceId is incomplete, skip linking bot with webapp ...'
+        });
+        return;
+      }
+    }
+    else {
+      subscriptionId = settings.subscriptionId;
+      resourceGroupName = settings.resourceGroup;
+      botName = settings.botName;
+    }
+
+    if (!subscriptionId || !hostname || !resourceGroupName || !botName) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'Abs settings incomplete, skip linking bot with webapp ...'
+      });
+      return;
+    }
+
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Linking bot with webapp ...'
+    });
+
+    const creds = new TokenCredentials(this.accessToken);
+    const azureBotSerivce = new AzureBotService(creds, subscriptionId);
+
+    const botGetResult = await azureBotSerivce.bots.get(resourceGroupName, botName);
+    if (botGetResult?._response?.status >= 300) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: botGetResult._response?.bodyAsText,
+      });
+      throw createCustomizeError(AzurePublishErrors.ABS_ERROR, botGetResult._response?.bodyAsText);
+    }
+
+    const bot = botGetResult._response.parsedBody;
+    bot.properties.endpoint = `https://${hostname}.azurewebsites.net/api/messages`;
+
+    const botUpdateResult = await azureBotSerivce.bots.update(resourceGroupName, botName, {
+      tags: {
+        webapp: hostname
+      },
+      properties: bot.properties
+    });
+
+    if (botUpdateResult?._response?.status >= 300) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: botUpdateResult._response?.bodyAsText,
+      });
+      throw createCustomizeError(AzurePublishErrors.ABS_ERROR, botUpdateResult._response?.bodyAsText);
+    }
+  }
+
+  /**
+   * Bind key vault settings to webapp
+   * @param absSettings
+   */
+  private async BindKeyVault(absSettings: any, hostname: string) {
+    if (!hostname) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'hostname incomplete, return ...'
+      });
+      return
+    }
+
+    const webAppName = hostname;
+    const hint = absSettings.appPasswordHint;
+    if (!hint) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'appPasswordHint incomplete, return ...'
+      });
+      return
+    }
+    const vaultName = hint.match(/vaults\/([^\/]*)/)[1];
+    const secretName = hint.match(/secrets\/([^\/]*)/)[1];
+    const subscriptionId = hint.match(/subscriptions\/([\w-]*)\//)[1];
+    const resourceGroupName = hint.match(/resourceGroups\/([^\/]*)/)[1];
+
+    const email = absSettings.email;
+
+    this.logger(`${subscriptionId}, ${resourceGroupName}, ${webAppName}, ${vaultName}, ${secretName}, ${email}`);
+
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Binding Key Vault ...'
+    });
+
+    const creds = new TokenCredentials(this.accessToken);
+
+    const keyVaultApiConfig = {
+      creds: creds,
+      logger: this.logger,
+      subscriptionId: subscriptionId
+    } as KeyVaultApiConfig;
+    const keyVaultApi = new KeyVaultApi(keyVaultApiConfig);
+
+    await keyVaultApi.WebAppAssignIdentity(resourceGroupName, webAppName);
+
+    const principalId = await keyVaultApi.WebAppIdentityShow(resourceGroupName, webAppName);
+    this.logger(`principal id : ${principalId}`);
+
+    const tenantId = await this.getTenantId(this.accessToken, subscriptionId);
+    await keyVaultApi.KeyVaultSetPolicy(resourceGroupName, vaultName, email, principalId, tenantId);
+
+    this.logger('getting secret ...')
+    const secret = await keyVaultApi.KeyVaultGetSecret(resourceGroupName, vaultName, secretName);
+
+    // const secret = await keyVaultApi.KeyVaultGetSecretValue(resourceGroupName, vaultName, secretName);
+
+    this.logger(`secret: ${secret}`);
+    await keyVaultApi.UpdateKeyVaultAppSettings(resourceGroupName, webAppName, secret);
+
+    // await keyVaultApi.UpdateKeyVaultValueAppSettings(resourceGroupName, webAppName, secret);
+  }
+
+  private async getTenantId(accessToken: string, subId: string) {
+    if (!accessToken) {
+      throw new Error(
+        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+      );
+    }
+    if (!subId) {
+      throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
+    }
+    try {
+      const tenantUrl = `https://management.azure.com/subscriptions/${subId}?api-version=2020-01-01`;
+      const options = {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      };
+      const response = await rp.get(tenantUrl, options);
+      const jsonRes = JSON.parse(response);
+      if (jsonRes.tenantId === undefined) {
+        throw new Error(`No tenants found in the account.`);
+      }
+      return jsonRes.tenantId;
+    } catch (err) {
+      throw new Error(`Get Tenant Id Failed`);
+    }
+  }
+}
+
+export const isProfileComplete = (profile) => {
+  if (!profile) {
+    throw new Error('Required field `settings` is missing from publishing profile.');
+  }
+  if (!profile.hostname && !profile.name) {
+    throw new Error("Required field `name` or `hostname` is missing from publishing profile.");
+  }
+  if (!profile.settings?.MicrosoftAppId) {
+    throw Error('Required field `MicrosoftAppId` is missing from publishing profile.');
+  }
+}
+
+export const getAbsSettings = (config) => {
+  return {
+    appPasswordHint: config.appPasswordHint,
+    subscriptionId: config.subscriptionId,
+    resourceGroup: config.resourceGroup,
+    resourceId: config.resourceId,
+    botName: config.botName
+  };
 }
