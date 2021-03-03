@@ -115,7 +115,7 @@ export enum SDKKinds {
   BeginSkill = 'Microsoft.BeginSkill',
   StaticActivityTemplate = 'Microsoft.StaticActivityTemplate',
   SwitchCondition = 'Microsoft.SwitchCondition',
-  TelemetryTrackEvent = 'Microsoft.TelemetryTrackEvent',
+  TelemetryTrackEventAction = 'Microsoft.TelemetryTrackEventAction',
   TemperatureEntityRecognizer = 'Microsoft.TemperatureEntityRecognizer',
   TemplateEngineLanguageGenerator = 'Microsoft.TemplateEngineLanguageGenerator',
   TextInput = 'Microsoft.TextInput',
@@ -153,6 +153,9 @@ interface AdaptiveSchema extends Omit<JSONSchema7, 'definitions' | 'properties' 
   $designer?: {
     id: string;
     [key: string]: any;
+  };
+  $package?: {
+    name?: string;
   };
   definitions?: SchemaDefinitions;
   oneOf?: AdaptiveSchema[];

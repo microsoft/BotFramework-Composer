@@ -273,8 +273,8 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
             onClick={modeChange}
           >
             {editorMode === 'codeEditor'
-              ? formatMessage('switch to response editor')
-              : formatMessage('switch to code editor')}
+              ? formatMessage('Switch to response editor')
+              : formatMessage('Switch to code editor')}
           </Link>
         </TooltipHost>
       </Stack>
