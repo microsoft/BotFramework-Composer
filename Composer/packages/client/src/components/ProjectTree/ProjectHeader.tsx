@@ -14,9 +14,9 @@ import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSe
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 
-import { TreeLink, ProjectTreeOptions } from './ProjectTree';
-import { doesLinkMatch } from './helpers';
+import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
+import { ProjectTreeOptions, TreeLink } from './types';
 
 const icons = {
   BOT: 'CubeShape',
@@ -143,7 +143,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         onBotRemoveSkill(projectId);
       },
     };
-    if (isRemote) {
+    if (isRemote || botError) {
       return [removeSkillItem];
     }
 
@@ -161,6 +161,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         hasChildren={!isRemote}
         icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
+        isChildSelected={isChildDialogLinkSelected(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
         menu={options.showMenu ? menu : []}

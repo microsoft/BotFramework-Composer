@@ -27,12 +27,16 @@ import {
   dialogIdsState,
   dialogState,
   schemasState,
+  botEndpointsState,
+  localeState,
+  botStatusState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
   buildEssentialsSelector,
   lgImportsSelectorFamily,
   luImportsSelectorFamily,
+  dialogsWithLuProviderSelectorFamily,
 } from '../selectors';
 
 import { lgFilesSelectorFamily } from './lg';
@@ -124,7 +128,7 @@ export const botProjectSpaceSelector = selector({
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
-      const dialogs = get(dialogsSelectorFamily(projectId));
+      const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
       const luFiles = get(luFilesState(projectId));
       const lgFiles = get(lgFilesSelectorFamily(projectId));
       const qnaFiles = get(qnaFilesState(projectId));
@@ -212,7 +216,7 @@ export const perProjectDiagnosticsSelectorFamily = selectorFamily({
     const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
     const rootBotId = get(rootBotProjectIdSelector) || projectId;
     const rootSetting = get(settingsState(rootBotId));
-    const dialogs = get(dialogsSelectorFamily(projectId));
+    const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const lgFiles = get(lgFilesSelectorFamily(projectId));
@@ -320,5 +324,34 @@ export const projectTreeSelectorFamily = selectorFamily<
         botError,
       };
     });
+  },
+});
+
+export const webChatEssentialsSelector = selector({
+  key: 'webChatEssentialsSelector',
+  get: ({ get }) => {
+    const projectId = get(rootBotProjectIdSelector);
+    if (!projectId) {
+      return undefined;
+    }
+    const settings = get(settingsState(projectId));
+    const secrets = {
+      msAppId: settings.MicrosoftAppId || '',
+      msPassword: settings.MicrosoftAppPassword || '',
+    };
+    const botEndpoints = get(botEndpointsState);
+    const botUrl = botEndpoints[projectId];
+    const botName = get(botDisplayNameState(projectId));
+    const activeLocale = get(localeState(projectId));
+    const botStatus = get(botStatusState(projectId));
+
+    return {
+      projectId,
+      botName,
+      secrets,
+      botUrl,
+      activeLocale,
+      botStatus,
+    };
   },
 });

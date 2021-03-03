@@ -97,7 +97,7 @@ export const formEditor = css`
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 100%;
   min-width: 300px;
 `;

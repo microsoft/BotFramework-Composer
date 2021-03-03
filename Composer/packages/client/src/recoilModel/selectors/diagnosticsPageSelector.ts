@@ -33,9 +33,8 @@ import {
 
 import { crossTrainConfigState } from './../atoms/botState';
 import { formDialogSchemasSelectorFamily, rootBotProjectIdSelector } from './project';
-import { dialogsSelectorFamily } from './dialogs';
 import { recognizersSelectorFamily } from './recognizers';
-import { dialogDiagnosticsSelectorFamily } from './validatedDialogs';
+import { dialogDiagnosticsSelectorFamily, dialogsWithLuProviderSelectorFamily } from './validatedDialogs';
 import { lgFilesSelectorFamily } from './lg';
 
 export const botAssetsSelectFamily = selectorFamily({
@@ -44,7 +43,7 @@ export const botAssetsSelectFamily = selectorFamily({
     const projectsMetaData = get(projectMetaDataState(projectId));
     if (!projectsMetaData || projectsMetaData.isRemote) return null;
 
-    const dialogs = get(dialogsSelectorFamily(projectId));
+    const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const lgFiles = get(lgFilesSelectorFamily(projectId));
     const setting = get(settingsState(projectId));

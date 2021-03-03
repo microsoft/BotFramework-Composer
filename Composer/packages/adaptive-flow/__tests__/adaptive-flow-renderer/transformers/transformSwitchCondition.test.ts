@@ -4,10 +4,9 @@
 import { transformSwitchCondition } from '../../../src/adaptive-flow-renderer/transformers/transformSwitchCondition';
 import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/AdaptiveKinds';
 
-test('should return NULL when input is not SwitchCondition', () => {
+test('should return NULL when input is invalid', () => {
   expect(transformSwitchCondition(null, '')).toBeNull();
-  expect(transformSwitchCondition({}, '')).toBeNull();
-  expect(transformSwitchCondition({ $kind: 'wrong' }, '')).toBeNull();
+  expect(transformSwitchCondition({}, '')).toBeTruthy();
 });
 
 test('should return correct schema when input empty cases', () => {

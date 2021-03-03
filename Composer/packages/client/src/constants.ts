@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FeedName } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -185,6 +186,12 @@ export const DialogCreationCopy = {
       subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
     };
   },
+  get CREATE_NEW_BOT_V2() {
+    return {
+      title: formatMessage('Select a template'),
+      subText: formatMessage("Microsoft's templates offer best practices for developing conversational bots."),
+    };
+  },
   get CREATE_NEW_SKILLBOT() {
     return {
       title: formatMessage('Create a skill in your bot'),
@@ -349,9 +356,11 @@ export enum AppUpdaterStatus {
 
 export const EmptyBotTemplateId = 'EmptyBot';
 
-export const QnABotTemplateId = 'QnASample';
-
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
+
+export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
+
+export const invalidNameCharRegex = /[^a-z^A-Z^0-9^_]/g;
 
 export const authConfig = {
   // for web login
@@ -379,3 +388,24 @@ export const triggerNotSupportedWarning = () =>
   formatMessage(
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
+
+export const feedDictionary: { [key in FeedName]: string } = {
+  firstPartyCsharp:
+    'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
+  firstPartyNode: '',
+};
+
+// TODO: replace language options with available languages pertinent to the selected template (issue #5554)
+export const defaultPrimaryLanguage = 'english';
+
+export const mockLanguageOptions: IDropdownOption[] = [
+  { key: defaultPrimaryLanguage, text: 'English' },
+  { key: 'spanish', text: 'Spanish' },
+];
+
+export const defaultRuntime = 'azureWebApp';
+
+export const runtimeOptions: IDropdownOption[] = [
+  { key: defaultRuntime, text: 'Azure Web App' },
+  { key: 'azureFunctions', text: 'Azure Functions' },
+];

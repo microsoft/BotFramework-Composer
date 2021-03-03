@@ -14,7 +14,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import {
@@ -22,8 +22,8 @@ import {
   settingsState,
   luFilesState,
   qnaFilesState,
-  dialogsSelectorFamily,
   botDisplayNameState,
+  dialogsWithLuProviderSelectorFamily,
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -31,14 +31,9 @@ import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
 
-// -------------------- Styles -------------------- //
+import { title } from './styles';
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+// -------------------- Styles -------------------- //
 
 const labelContainer = css`
   display: flex;
@@ -171,7 +166,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
   const rootqnaKey = groupQnAKey.root;
 
-  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
@@ -333,7 +328,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   };
 
   return (
-    <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
+    <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
       <div css={externalServiceContainerStyle}>
         <TextField
           aria-label={formatMessage('LUIS application name')}

@@ -1,28 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplate } from '@botframework-composer/types';
+import styled from '@emotion/styled';
 import { EditorDidMount } from '@monaco-editor/react';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import React, { useEffect, useState } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { BaseEditor, BaseEditorProps, OnInit } from '../BaseEditor';
+import { BaseEditor, OnInit } from '../BaseEditor';
 import { LG_HELP } from '../constants';
 import { registerLGLanguage } from '../languages';
-import { LGOption } from '../utils';
+import { LgCodeEditorProps } from '../types';
+import { computeRequiredEdits } from '../utils/lgUtils';
 import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry } from '../utils/lspUtil';
+import { withTooltip } from '../utils/withTooltip';
 
-import { LgEditorToolbar } from './LgEditorToolbar';
-import { computeRequiredEdits } from './utils';
+import { LgEditorToolbar as DefaultLgEditorToolbar } from './LgEditorToolbar';
+import { ToolbarButtonPayload } from './types';
 
 const placeholder = formatMessage(
   `> To learn more about the LG file format, read the documentation at
@@ -31,25 +32,38 @@ const placeholder = formatMessage(
 );
 
 const linkStyles = {
-  root: { fontSize: 12, ':hover': { textDecoration: 'none' }, ':active': { textDecoration: 'none' } },
+  root: {
+    fontSize: FluentTheme.fonts.small.fontSize,
+    ':hover': { textDecoration: 'none' },
+    ':active': { textDecoration: 'none' },
+  },
 };
 
-const fontSize12Style = { root: { fontSize: 12 } };
-const grayTextStyle = { root: { color: NeutralColors.gray80, fontSize: 12 } };
+const botIconStyles = { root: { padding: '0 4px', fontSize: FluentTheme.fonts.small.fontSize } };
+const grayTextStyle = { root: { color: NeutralColors.gray80, fontSize: FluentTheme.fonts.small.fontSize } };
 
-export interface LgCodeEditorProps extends BaseEditorProps {
-  lgTemplates?: readonly LgTemplate[];
-  lgOption?: LGOption;
-  onNavigateToLgPage?: (lgFileId: string) => void;
-  languageServer?:
-    | {
-        host?: string;
-        hostname?: string;
-        port?: number | string;
-        path: string;
-      }
-    | string;
-}
+const LgTemplateLink = withTooltip(
+  {
+    content: (
+      <Text variant="small">
+        {formatMessage.rich('Edit this template in<a>Bot Response view</a>', {
+          a: ({ children }) => (
+            <Text key="pageLink" variant="small">
+              <Icon iconName="Robot" styles={botIconStyles} />
+              {children}
+            </Text>
+          ),
+        })}
+      </Text>
+    ),
+  },
+  Link
+);
+
+const LgEditorToolbar = styled(DefaultLgEditorToolbar)({
+  border: `1px solid ${NeutralColors.gray120}`,
+  borderBottom: 'none',
+});
 
 const defaultLGServer = {
   path: '/lg-language-server',
@@ -66,10 +80,22 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   const options = {
     quickSuggestions: true,
     wordBasedSuggestions: false,
+    folding: true,
     ...props.options,
   };
 
-  const { lgOption, languageServer, onInit: onInitProp, lgTemplates, onNavigateToLgPage, ...restProps } = props;
+  const {
+    toolbarHidden,
+    lgOption,
+    languageServer,
+    onInit: onInitProp,
+    memoryVariables,
+    lgTemplates,
+    telemetryClient,
+    onNavigateToLgPage,
+    ...restProps
+  } = props;
+
   const lgServer = languageServer || defaultLGServer;
 
   let editorId = '';
@@ -79,18 +105,6 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   }
 
   const [editor, setEditor] = useState<any>();
-  const [properties, setProperties] = useState<string[] | undefined>();
-
-  const fetchAvailableProperties = React.useCallback(async () => {
-    if (window.monacoLGEditorInstance) {
-      await window.monacoLGEditorInstance.onReady();
-      window.monacoLGEditorInstance.sendRequest('fetchProperties', { projectId: lgOption?.projectId });
-      window.monacoLGEditorInstance.onNotification('properties', (params: { result: string[] }) => {
-        const { result } = params;
-        setProperties(result);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (!editor) return;
@@ -116,12 +130,10 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLGEditorInstance = languageClient;
-          (async () => await fetchAvailableProperties())();
         },
       });
     } else {
       sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
-      (async () => await fetchAvailableProperties())();
     }
   }, [editor]);
 
@@ -141,28 +153,35 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   };
 
   const selectToolbarMenuItem = React.useCallback(
-    (text: string) => {
+    (text: string, itemType: ToolbarButtonPayload['kind']) => {
       if (editor) {
         const edits = computeRequiredEdits(text, editor);
         if (edits?.length) {
           editor.executeEdits('toolbarMenu', edits);
         }
       }
+      telemetryClient.track('LGQuickInsertItem', {
+        itemType,
+        item: itemType === 'function' ? text : undefined,
+        location: 'LGCodeEditor',
+      });
     },
-    [editor]
+    [editor, telemetryClient]
   );
 
   const navigateToLgPage = React.useCallback(() => {
     onNavigateToLgPage?.(lgOption?.fileId ?? 'common');
-  }, [onNavigateToLgPage]);
+  }, [onNavigateToLgPage, lgOption?.fileId]);
 
   return (
     <Stack verticalFill>
-      <LgEditorToolbar
-        lgTemplates={lgTemplates}
-        properties={properties}
-        onSelectToolbarMenuItem={selectToolbarMenuItem}
-      />
+      {!toolbarHidden && (
+        <LgEditorToolbar
+          lgTemplates={lgTemplates}
+          properties={memoryVariables}
+          onSelectToolbarMenuItem={selectToolbarMenuItem}
+        />
+      )}
       <BaseEditor
         helpURL={LG_HELP}
         id={editorId}
@@ -174,27 +193,12 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
         theme="lgtheme"
         onInit={onInit}
       />
-      {onNavigateToLgPage && (
+      {onNavigateToLgPage && lgOption && (
         <Stack horizontal verticalAlign="center">
           <Text styles={grayTextStyle}>{formatMessage('Template name: ')}</Text>
-          <TooltipHost
-            content={
-              <Stack horizontal styles={fontSize12Style}>
-                {formatMessage.rich('Edit this template in <a>Bot Response view</a>', {
-                  a: ({ children }) => (
-                    <Stack key="pageLink" horizontal tokens={{ childrenGap: 4, padding: '0 0 0 4px' }}>
-                      <Icon iconName="Robot" styles={fontSize12Style} />
-                      <Text styles={fontSize12Style}>{children}</Text>
-                    </Stack>
-                  ),
-                })}
-              </Stack>
-            }
-          >
-            <Link as="button" styles={linkStyles} onClick={navigateToLgPage}>
-              #{lgOption?.templateId}()
-            </Link>
-          </TooltipHost>
+          <LgTemplateLink as="button" styles={linkStyles} onClick={navigateToLgPage}>
+            #{lgOption.templateId}()
+          </LgTemplateLink>
         </Stack>
       )}
     </Stack>

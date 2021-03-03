@@ -16,7 +16,8 @@
     "terser-webpack-plugin": "^2.3.7",
     "axios": "^0.21.1",
     "y18n": "^5.0.5",
-    "immer": "^8.0.1"
+    "immer": "^8.0.1",
+    "url-parse": "^1.5.1"
   },
   "engines": {
     "node": ">=12"
@@ -46,8 +47,9 @@
     "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @botframework-composer/* -p @bfc/* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
-    "build:extensions": "node scripts/compileExtensions.js",
+    "build:extensions": "cd ../extensions && yarn && yarn build:all",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
+    "start:debug": "cross-env NODE_ENV=production PORT=3000 DEBUG=* yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:dev:electron": "concurrently  \"npm:start:client\" \"npm:start:electron\"",
@@ -82,7 +84,7 @@
     }
   },
   "lint-staged": {
-    "packages/**/*.{ts,tsx,js,jsx}": [
+    "**/*.{ts,tsx,js,jsx}": [
       "prettier --write",
       "git add"
     ]
@@ -98,6 +100,7 @@
     "@bfc/eslint-plugin-bfcomposer": "*",
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@testing-library/cypress": "7.0.0-beta.1",
+    "@testing-library/user-event": "12.6.3",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",
     "chalk": "^4.0.0",

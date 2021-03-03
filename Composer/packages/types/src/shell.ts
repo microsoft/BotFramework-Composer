@@ -23,9 +23,9 @@ import { FeatureFlagKey } from './featureFlags';
 import { TelemetryClient } from './telemetry';
 
 /** Recursively marks all properties as optional. */
-type AllPartial<T> = {
-  [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
-};
+// type AllPartial<T> = {
+//   [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
+// };
 
 export type HttpClient = AxiosInstance;
 
@@ -66,12 +66,13 @@ export type DisabledMenuActions = {
 
 export type ApplicationContextApi = {
   navigateTo: (to: string, opts?: { state?: any; replace?: boolean }) => void;
-  updateUserSettings: (settings: AllPartial<UserSettings>) => void;
+  updateUserSettings: (settings: Partial<UserSettings>) => void;
   announce: (message: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   isFeatureEnabled: (featureFlagKey: FeatureFlagKey) => boolean;
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
+  updateFlowZoomRate: (currentRate: number) => void;
   telemetryClient: TelemetryClient;
 };
 
@@ -111,6 +112,7 @@ export type LgContextApi = {
 };
 
 export type ProjectContextApi = {
+  getMemoryVariables: (projectId: string, options?: { signal: AbortSignal }) => Promise<string[]>;
   getDialog: (dialogId: string) => any;
   saveDialog: (dialogId: string, newDialogData: any) => any;
   reloadProject: () => void;
@@ -120,13 +122,12 @@ export type ProjectContextApi = {
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   renameRegExIntent: (id: string, intentName: string, newIntentName: string) => void;
   updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
-  createDialog: (actions: any) => Promise<string | null>;
+  createDialog: (actions?: any[]) => Promise<string | null>;
   commitChanges: () => void;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   createQnATrigger: (id: string) => void;
-  updateFlowZoomRate: (currentRate: number) => void;
   updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };

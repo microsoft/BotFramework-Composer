@@ -26,13 +26,13 @@ import {
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
+import { subtitle } from '../styles';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
 import {
   breathingSpace,
   runtimeSettingsStyle,
-  runtimeControls,
   runtimeToggle,
   labelContainer,
   customerLabel,
@@ -65,13 +65,20 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [ejecting, setEjecting] = useState(false);
   const [needsUpdate, setNeedsUpdate] = useState(false);
   const [templateKey, setTemplateKey] = useState('');
-  const [runtimePath, setRuntimePath] = useState(settings.runtime ? settings.runtime.path : '');
-  const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime ? settings.runtime.command : '');
+  const [runtimePath, setRuntimePath] = useState(settings.runtime?.path ?? '');
+  const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime?.command ?? '');
+  const [usingCustomRuntime, setUsingCustomRuntime] = useState(settings.runtime?.customRuntime ?? false);
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
     if (projectId) getBoilerplateVersion(projectId);
   }, [projectId]);
+
+  useEffect(() => {
+    setRuntimePath(settings.runtime?.path ?? '');
+    setRuntimeCommand(settings.runtime?.command ?? '');
+    setUsingCustomRuntime(settings.runtime?.customRuntime ?? false);
+  }, [settings, projectId]);
 
   useEffect(() => {
     setNeedsUpdate(!!boilerplateVersion.updateRequired);
@@ -86,6 +93,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const toggleCustomRuntime = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
+    setUsingCustomRuntime(isOn);
     TelemetryClient.track('CustomRuntimeToggleChanged', { enabled: isOn });
   };
 
@@ -119,7 +127,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   };
 
   const header = () => (
-    <div css={runtimeControls}>
+    <div css={subtitle}>
       {formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}
     </div>
   );
@@ -128,7 +136,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     <div css={runtimeToggle}>
       <Toggle
         inlineLabel
-        checked={settings.runtime?.customRuntime}
+        checked={usingCustomRuntime}
         label={formatMessage('Use custom runtime')}
         onChange={toggleCustomRuntime}
       />

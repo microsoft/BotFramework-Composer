@@ -27,6 +27,15 @@ const BotStructureTemplate = {
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
     recognizer: 'dialogs/${DIALOGNAME}/recognizers/${RECOGNIZERNAME}',
   },
+  importedDialogs: {
+    entry: 'dialogs/imported/${DIALOGNAME}/${DIALOGNAME}.dialog',
+    lg: 'dialogs/imported/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
+    lu: 'dialogs/imported/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    qna: 'dialogs/imported/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
+    sourceQnA: 'dialogs/imported/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
+    dialogSchema: 'dialogs/imported/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
+    recognizer: 'dialogs/imported/${DIALOGNAME}/recognizers/${RECOGNIZERNAME}',
+  },
   formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
   botProject: '${BOTNAME}.botproj',
@@ -54,6 +63,35 @@ const parseSourceFileName = (name: string, locale: string) => {
 
   return { fileId, dialogId, fileType, locale };
 };
+
+export const BotStructureFilesPatterns = [
+  templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.settings, { FILENAME: 'appsettings.json' }),
+  templateInterpolate(BotStructureTemplate.dialogs.entry, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.dialogs.dialogSchema, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.dialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
+
+  templateInterpolate(BotStructureTemplate.importedDialogs.entry, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.importedDialogs.dialogSchema, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.importedDialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
+
+  templateInterpolate(BotStructureTemplate.formDialogs, { FORMDIALOGNAME: '*.form' }),
+  templateInterpolate(BotStructureTemplate.skillManifests, { MANIFESTFILENAME: '*.json' }),
+  templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.recognizer, { RECOGNIZERNAME: '*.dialog' }),
+  templateInterpolate(BotStructureTemplate.crossTrainConfig, { CROSSTRAINCONFIGNAME: 'cross-train.config.json' }),
+  '*.schema',
+  '*.uischema',
+  'language-generation/**/*.lg',
+  'language-understanding/**/*.lu',
+  'knowledge-base/**/*.qna',
+  'dialogs/*/language-generation/**/*.lg',
+  'dialogs/*/language-understanding/**/*.lu',
+  'dialogs/*/knowledge-base/**/*.qna',
+  'dialogs/imported/*/language-generation/**/*.lg',
+  'dialogs/imported/*/language-understanding/**/*.lu',
+  'dialogs/imported/*/knowledge-base/**/*.qna',
+];
 
 // parse file name: [fileId].[locale].[fileType]
 export const parseFileName = (name: string, defaultLocale: string) => {

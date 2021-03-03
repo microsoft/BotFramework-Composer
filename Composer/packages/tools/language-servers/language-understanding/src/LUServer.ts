@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 
 import URI from 'vscode-uri';
-import { IConnection, TextDocuments } from 'vscode-languageserver';
+import { FoldingRangeParams, IConnection, TextDocuments } from 'vscode-languageserver';
 import {
-  TextDocument,
   Diagnostic,
   CompletionList,
   Position,
@@ -14,14 +13,26 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import { TextDocument } from 'vscode-languageserver-textdocument';
+import {
+  TextDocumentPositionParams,
+  DocumentOnTypeFormattingParams,
+  FoldingRange,
+} from 'vscode-languageserver-protocol';
 import { updateIntent, isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
-import { LUImportResolverDelegate, LUOption, LUDocument, generateDiagnostic, convertDiagnostics } from './utils';
+import {
+  LUImportResolverDelegate,
+  LUOption,
+  LUDocument,
+  generateDiagnostic,
+  convertDiagnostics,
+  getLineByIndex,
+} from './utils';
 
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
@@ -69,7 +80,7 @@ export class LUServer {
             resolveProvider: true,
             triggerCharacters: ['@', ' ', '{', ':', '[', '('],
           },
-          foldingRangeProvider: false,
+          foldingRangeProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -78,6 +89,9 @@ export class LUServer {
     });
     this.connection.onCompletion((params) => this.completion(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
+      this.foldingRangeHandler(foldingRangeParams)
+    );
     this.connection.onRequest((method, params) => {
       if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
@@ -95,6 +109,51 @@ export class LUServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected async foldingRangeHandler(params: FoldingRangeParams): Promise<FoldingRange[]> {
+    const document = this.documents.get(params.textDocument.uri);
+    const items: FoldingRange[] = [];
+    if (!document) {
+      return items;
+    }
+
+    const lineCount = document.lineCount;
+    let i = 0;
+    while (i < lineCount) {
+      const currLine = getLineByIndex(document, i);
+      if (currLine?.startsWith('>>')) {
+        for (let j = i + 1; j < lineCount; j++) {
+          if (getLineByIndex(document, j)?.startsWith('>>')) {
+            items.push(FoldingRange.create(i, j - 1));
+            i = j - 1;
+            break;
+          }
+
+          if (j === lineCount - 1) {
+            items.push(FoldingRange.create(i, j));
+            i = j;
+          }
+        }
+      }
+
+      i = i + 1;
+    }
+
+    const luResource = parse(document.getText(), undefined, {}).resource;
+    const sections = luResource.Sections;
+    for (const section in luResource.Sections) {
+      const start = sections[section].Range.Start.Line - 1;
+      let end = sections[section].Range.End.Line - 1;
+      const sectionLastLine = getLineByIndex(document, end);
+      if (sectionLastLine?.startsWith('>>')) {
+        end = end - 1;
+      }
+
+      items.push(FoldingRange.create(start, end));
+    }
+
+    return items;
   }
 
   protected validateLuOption(document: TextDocument, luOption?: LUOption) {
@@ -250,6 +309,7 @@ export class LUServer {
         if (entityGroup && entityGroup.length >= 2) {
           entityName = entityGroup[1];
         }
+
         if (mlEntities.includes(entityName)) {
           const newPos = Position.create(pos.line, 0);
           const item: TextEdit = TextEdit.insert(newPos, '\t-@');

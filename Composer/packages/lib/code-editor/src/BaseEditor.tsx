@@ -19,8 +19,9 @@ const defaultOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
   wordWrapColumn: 120,
-  fontFamily: 'Segoe UI',
-  fontSize: 14,
+  fontFamily: 'Courier',
+  fontSize: '18px',
+  fontWeight: 600,
   lineNumbers: 'off',
   quickSuggestions: false,
   minimap: {
@@ -96,6 +97,9 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
       enabled: overrides.minimap,
       maxColumn: overrides.minimap ? 120 : 0,
     },
+    fontFamily: overrides?.fontSettings?.fontFamily,
+    fontSize: overrides?.fontSettings?.fontSize,
+    fontWeight: Number(overrides?.fontSettings?.fontWeight),
   };
 };
 
@@ -113,7 +117,7 @@ export interface BaseEditorProps extends EditorProps {
   warningMessage?: string; // warning text show below editor
   errorMessage?: string; // error text show below editor
   editorSettings?: Partial<CodeEditorSettings>;
-  onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
+  onChangeSettings?: (settings: CodeEditorSettings) => void;
   onBlur?: (id: string) => void;
   onFocus?: (id: string) => void;
 }
@@ -184,7 +188,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onBlurListener.dispose();
       };
     }
-  }, [editorRef.current]);
+  }, [editorRef.current, onBlur, onFocus]);
 
   useEffect(() => {
     if (editorRef.current) {

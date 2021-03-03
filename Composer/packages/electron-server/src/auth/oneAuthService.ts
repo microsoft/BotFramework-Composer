@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 import path from 'path';
 
-import { ElectronAuthParameters } from '@botframework-composer/types';
+import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
+import fetch from 'node-fetch';
 
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac } from '../utility/platform';
@@ -26,11 +27,18 @@ const GRAPH_RESOURCE = 'https://graph.microsoft.com';
 const DEFAULT_LOCALE = 'en'; // TODO: get this from settings?
 const DEFAULT_AUTH_SCHEME = 2; // bearer token
 const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // work and school accounts
+const ARM_AUTHORITY = 'https://login.microsoftonline.com/organizations';
+const ARM_RESOURCE = 'https://management.core.windows.net';
+
+type GetTenantsResult = {
+  value: AzureTenant[];
+};
 
 export class OneAuthInstance extends OneAuthBase {
   private initialized: boolean;
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
+  private signedInARMAccount: OneAuth.Account | undefined;
 
   constructor() {
     super();
@@ -57,13 +65,22 @@ export class OneAuthInstance extends OneAuthBase {
         'Please login',
         window.getNativeWindowHandle()
       );
+      const msaConfig = new this.oneAuth.MsaConfiguration(
+        COMPOSER_CLIENT_ID,
+        COMPOSER_REDIRECT_URI,
+        GRAPH_RESOURCE + '/Application.ReadWrite.All',
+        undefined
+      );
       const aadConfig = new this.oneAuth.AadConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
         GRAPH_RESOURCE,
         false // prefer broker
       );
-      this.oneAuth.initialize(appConfig, undefined, aadConfig, undefined);
+      this.oneAuth.setFlights([
+        2, // UseMsalforMsa
+      ]);
+      this.oneAuth.initialize(appConfig, msaConfig, aadConfig, undefined);
       this.initialized = true;
       log('Service initialized.');
     } else {
@@ -135,6 +152,54 @@ export class OneAuthInstance extends OneAuthBase {
       log('Error while trying to get an access token: %O', e);
       throw e;
     }
+  }
+
+  public async getTenants(): Promise<AzureTenant[]> {
+    try {
+      if (!this.initialized) {
+        this.initialize();
+      }
+      // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
+      log('Logging user into ARM...');
+      this.signedInARMAccount = undefined;
+      const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+      this.signedInARMAccount = result.account;
+      const token = result.credential.value;
+
+      // call the tenants API
+      const tenantsResult = await fetch('https://management.azure.com/tenants?api-version=2020-01-01', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const tenants = (await tenantsResult.json()) as GetTenantsResult;
+      log('Got Azure tenants for user: %O', tenants.value);
+      return tenants.value;
+    } catch (e) {
+      log('There was an error trying to log the user into ARM: %O', e);
+      throw e;
+    }
+  }
+
+  public async getARMTokenForTenant(tenantId: string): Promise<string> {
+    if (this.signedInARMAccount) {
+      try {
+        log('Getting an ARM token for tenant %s', tenantId);
+        const tokenParams = new this.oneAuth.AuthParameters(
+          DEFAULT_AUTH_SCHEME,
+          `https://login.microsoftonline.com/${tenantId}`,
+          ARM_RESOURCE,
+          '',
+          ''
+        );
+        const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
+        log('Acquired ARM token for tenant: %s', result.credential.value);
+        return result.credential.value;
+      } catch (e) {
+        log('There was an error trying to get an ARM token for tenant %s: %O', tenantId, e);
+        throw e;
+      }
+    }
+    return '';
   }
 
   public shutdown() {

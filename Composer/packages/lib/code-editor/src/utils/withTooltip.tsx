@@ -4,9 +4,11 @@
 import * as React from 'react';
 import { ITooltipHostProps, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
-type Props = ITooltipHostProps;
+export type WithTooltipProps = ITooltipHostProps;
 
-export const withTooltip = <P,>(tooltipProps: Props, Component: React.FC<P>) => (props: P) => (
+export const withTooltip = <P,>(tooltipProps: WithTooltipProps, Component: React.FC<P> | React.ComponentType<P>) => (
+  props: P
+) => (
   <TooltipHost {...tooltipProps}>
     <Component {...props} />
   </TooltipHost>

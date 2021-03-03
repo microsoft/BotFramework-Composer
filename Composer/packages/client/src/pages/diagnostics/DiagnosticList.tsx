@@ -12,26 +12,19 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
-import { RouteComponentProps } from '@reach/router';
-import { useRecoilValue } from 'recoil';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
-
-import { Pagination } from '../../components/Pagination';
-import { diagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
 
 import { IDiagnosticInfo } from './types';
 
 // -------------------- Styles -------------------- //
 
 const icons = {
-  Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
-  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
+  Error: { iconName: 'StatusErrorFull', color: SharedColors.red10 },
+  Warning: { iconName: 'WarningSolid', color: SharedColors.yellow10 },
 };
 
 const diagnostic = mergeStyleSets({
@@ -53,24 +46,9 @@ const typeIcon = (icon) => css`
   font-size: 16px;
   width: 24px;
   height: 24px;
-  background: ${icon.background};
   line-height: 24px;
   color: ${icon.color};
   cursor: pointer;
-`;
-
-const listRoot = css`
-  position: relative;
-  overflow-y: auto;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const tableView = css`
-  position: relative;
-  flex-grow: 1;
 `;
 
 const detailList = css`
@@ -89,13 +67,10 @@ const content = css`
 `;
 
 // -------------------- Diagnosticist -------------------- //
-export interface IDiagnosticListProps extends RouteComponentProps {
-  skillId?: string;
-  showType: string;
+export interface IDiagnosticListProps {
+  diagnosticItems: IDiagnosticInfo[];
   onItemClick: (item: IDiagnosticInfo) => void;
 }
-
-const itemCount = 10;
 
 const columns: IColumn[] = [
   {
@@ -200,37 +175,19 @@ function onRenderDetailsHeader(props, defaultRender) {
   );
 }
 
-export const DiagnosticList: React.FC<IDiagnosticListProps> = (props) => {
-  const { onItemClick, skillId = '', showType } = props;
-  const diagnostics = useRecoilValue(diagnosticsSelectorFamily(skillId));
-  const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
-  const [pageIndex, setPageIndex] = useState<number>(1);
-
-  const pageCount: number = useMemo(() => {
-    return Math.ceil(availableDiagnostics.length / itemCount) || 1;
-  }, [availableDiagnostics]);
-
-  const showItems = availableDiagnostics.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
-
+export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems, onItemClick }) => {
   return (
-    <div css={listRoot} data-testid="diagnostics-table-view" role="main">
-      <div aria-label={formatMessage('Diagnostic list')} css={tableView} role="region">
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
-            isHeaderVisible
-            checkboxVisibility={CheckboxVisibility.hidden}
-            columns={columns}
-            css={detailList}
-            items={showItems}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionMode={SelectionMode.single}
-            setKey="none"
-            onItemInvoked={onItemClick}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-          />
-        </ScrollablePane>
-      </div>
-      <Pagination pageCount={pageCount} onChange={setPageIndex} />
-    </div>
+    <DetailsList
+      isHeaderVisible
+      checkboxVisibility={CheckboxVisibility.hidden}
+      columns={columns}
+      css={detailList}
+      items={diagnosticItems}
+      layoutMode={DetailsListLayoutMode.justified}
+      selectionMode={SelectionMode.single}
+      setKey="none"
+      onItemInvoked={onItemClick}
+      onRenderDetailsHeader={onRenderDetailsHeader}
+    />
   );
 };

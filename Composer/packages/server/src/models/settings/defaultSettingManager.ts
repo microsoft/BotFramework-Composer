@@ -36,6 +36,7 @@ export class DefaultSettingManager extends FileSettingManager {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
         RemoveRecipientMention: false,
+        UseSetSpeakMiddleware: true,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
@@ -51,6 +52,10 @@ export class DefaultSettingManager extends FileSettingManager {
       blobStorage: {
         connectionString: '',
         container: 'transcripts',
+      },
+      speech: {
+        voiceFontName: 'en-US-AriaNeural',
+        fallbackToTextForSpeechIfEmpty: true,
       },
       luis: {
         name: '',

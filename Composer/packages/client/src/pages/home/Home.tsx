@@ -10,11 +10,16 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
-import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
+import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
+import {
+  recentProjectsState,
+  templateIdState,
+  currentProjectIdState,
+  featureFlagsState,
+} from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import * as home from './styles';
@@ -69,7 +74,8 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowType,
   } = useRecoilValue(dispatcherState);
 
-  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
+  const featureFlags = useRecoilValue(featureFlagsState);
+  const botTemplates = useRecoilValue(templateProjectsState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -90,6 +96,12 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
+  const onClickNewBot = () => {
+    setCreationFlowType('Bot');
+    setCreationFlowStatus(CreationFlowStatus.NEW);
+    featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
+  };
+
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
@@ -99,12 +111,10 @@ const Home: React.FC<RouteComponentProps> = () => {
           iconName: 'CirclePlus',
         },
         onClick: () => {
-          setCreationFlowType('Bot');
-          setCreationFlowStatus(CreationFlowStatus.NEW);
-          navigate(`projects/create`);
+          onClickNewBot();
           TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
-          TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
         },
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-New',
@@ -122,6 +132,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/open`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'openBot' });
         },
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-Open',
@@ -139,6 +150,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/${projectId}/${templateId}/save`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
         },
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
       disabled: botName ? false : true,
@@ -163,9 +175,8 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.newBotItem}
                 title={addButton}
                 onClick={() => {
-                  TelemetryClient.track('CreateNewBotProject', { method: 'newCallToAction' });
-                  setCreationFlowStatus(CreationFlowStatus.NEW);
-                  navigate('projects/create');
+                  onClickNewBot();
+                  TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
                 }}
               />
             </div>
@@ -246,15 +257,17 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
-          <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
-          <p css={home.examplesDescription}>
-            {formatMessage(
-              "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
-            )}
-          </p>
-          <ExampleList examples={filteredTemplates} onClick={onClickTemplate} />
-        </div>
+        {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
+          <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
+            <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
+            <p css={home.examplesDescription}>
+              {formatMessage(
+                "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
+              )}
+            </p>
+            <ExampleList examples={botTemplates} onClick={onClickTemplate} />
+          </div>
+        )}
       </div>
     </div>
   );

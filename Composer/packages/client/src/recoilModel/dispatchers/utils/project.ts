@@ -21,6 +21,7 @@ import {
   RootBotManagedProperties,
   defaultPublishConfig,
   LgFile,
+  QnABotTemplateId,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -32,7 +33,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
-import { BotStatus, QnABotTemplateId } from '../../../constants';
+import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
 import httpClient from '../../../utils/httpUtil';
@@ -71,9 +72,10 @@ import {
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
   createQnAOnState,
+  botEndpointsState,
+  dispatcherState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
-import { dispatcherState } from '../../DispatcherWrapper';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
@@ -107,6 +109,7 @@ export const resetBotStates = async ({ reset }: CallbackInterface, projectId: st
     const currentRecoilAtom: any = botstates[state];
     reset(currentRecoilAtom(projectId));
   });
+  reset(botEndpointsState);
 };
 
 export const setErrorOnBotProject = async (
@@ -454,7 +457,6 @@ export const openRemoteSkill = async (
     isRemote: true,
   });
 
-  //TODO: open remote url 404. isRemote set to false?
   const manifestResponse = await httpClient.get(
     `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
   );
@@ -547,6 +549,7 @@ export const createNewBotFromTemplate = async (
 export const createNewBotFromTemplateV2 = async (
   callbackHelpers,
   templateId: string,
+  templateVersion: string,
   name: string,
   description: string,
   location: string,
@@ -560,6 +563,7 @@ export const createNewBotFromTemplateV2 = async (
   const jobId = await httpClient.post(`/v2/projects`, {
     storageId: 'default',
     templateId,
+    templateVersion,
     name,
     description,
     location,
@@ -587,17 +591,21 @@ const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) =>
   }
 };
 
-const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier }) => {
+const handleSkillLoadingFailure = (callbackHelpers, { isRemote, ex, skillNameIdentifier }) => {
   const { set } = callbackHelpers;
   // Generating a dummy project id which will be replaced by the user from the UI.
   const projectId = uuid();
+  set(projectMetaDataState(projectId), {
+    isRootBot: false,
+    isRemote,
+  });
   set(botDisplayNameState(projectId), skillNameIdentifier);
   set(botNameIdentifierState(projectId), skillNameIdentifier);
   setErrorOnBotProject(callbackHelpers, projectId, skillNameIdentifier, ex);
   return projectId;
 };
 
-const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
+export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
   const { set, snapshot } = callbackHelpers;
   const dispatcher = await snapshot.getPromise(dispatcherState);
@@ -639,12 +647,14 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
       for (const nameIdentifier in skills) {
         const skill = skills[nameIdentifier];
         let skillPromise;
+        let isRemote = false;
         if (!skill.remote && skill.workspace) {
           const rootBotPath = location;
           const skillPath = skill.workspace;
           const absoluteSkillPath = path.join(rootBotPath, skillPath);
           skillPromise = openLocalSkill(callbackHelpers, absoluteSkillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
+          isRemote = true;
           skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
         }
         if (skillPromise) {
@@ -659,6 +669,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
             })
             .catch((ex) => {
               const projectId = handleSkillLoadingFailure(callbackHelpers, {
+                isRemote,
                 skillNameIdentifier: nameIdentifier,
                 ex,
               });
@@ -760,4 +771,10 @@ export const checkIfBotExistsInBotProjectFile = async (
     }
   }
   return false;
+};
+
+export const getMemoryVariables = async (projectId: string, options?: { signal: AbortSignal }) => {
+  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, { signal: options?.signal });
+  const json = (await res.json()) as { variables: string[] };
+  return json.variables ?? [];
 };

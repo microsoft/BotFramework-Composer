@@ -62,31 +62,37 @@ export async function getNewProjRef(
 export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
   if (currentProject.settings?.runtime?.customRuntime === true) {
     const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-    const runtimePath = currentProject.settings.runtime.path;
+    const runtimePath = currentProject.getRuntimePath();
+    if (runtimePath) {
+      if (!fs.existsSync(runtimePath)) {
+        if (runtime.eject) {
+          await runtime.eject(currentProject, currentProject.fileStorage);
+        } else {
+          log('Eject skipped for project with invalid runtime setting');
+        }
+      }
+      // install all dependencies and build the app
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
+      await runtime.build(runtimePath, currentProject);
 
-    if (!fs.existsSync(runtimePath)) {
-      await runtime.eject(currentProject, currentProject.fileStorage);
+      const manifestFile = runtime.identifyManifest(currentProject.dataDir, currentProject.name);
+
+      // run the merge command to merge all package dependencies from the template to the bot project
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Merging Packages'));
+      const realMerge = new SchemaMerger(
+        [manifestFile, '!**/imported/**', '!**/generated/**'],
+        Path.join(currentProject.dataDir, 'schemas/sdk'),
+        Path.join(currentProject.dataDir, 'dialogs/imported'),
+        false,
+        false,
+        console.log,
+        console.warn,
+        console.error
+      );
+
+      await realMerge.merge();
+    } else {
+      log('Schema merge step skipped for project without runtime path');
     }
-
-    // install all dependencies and build the app
-    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
-    await runtime.build(runtimePath, currentProject);
-
-    const manifestFile = runtime.identifyManifest(runtimePath);
-
-    // run the merge command to merge all package dependencies from the template to the bot project
-    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Merging Packages'));
-    const realMerge = new SchemaMerger(
-      [manifestFile],
-      Path.join(currentProject.dataDir, 'schemas/sdk'),
-      Path.join(currentProject.dataDir, 'dialogs/imported'),
-      false,
-      false,
-      console.log,
-      console.warn,
-      console.error
-    );
-
-    await realMerge.merge();
   }
 }

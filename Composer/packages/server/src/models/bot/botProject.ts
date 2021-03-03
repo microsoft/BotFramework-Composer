@@ -32,7 +32,7 @@ import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
 
-import { isCrossTrainConfig } from './botStructure';
+import { BotStructureFilesPatterns, isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
@@ -195,21 +195,23 @@ export class BotProject implements IBotProject {
     };
   };
 
+  /**
+   * return the absolute path to the runtime project for use when starting or building the app
+   */
+  public getRuntimePath = (): string | undefined => {
+    let runtimePath = this.settings?.runtime?.path;
+    if (runtimePath && !Path.isAbsolute(runtimePath)) {
+      runtimePath = Path.resolve(this.dir, 'settings', runtimePath);
+    }
+    return runtimePath;
+  };
+
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
     return await this.settingManager.get(obfuscate);
   };
 
   public getEnvSettings = async (obfuscate: boolean) => {
     const settings = await this.settingManager.get(obfuscate);
-
-    // Resolve relative path for custom runtime if the path is relative
-    if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
-      const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
-      if (fs.existsSync(absolutePath)) {
-        settings.runtime.path = absolutePath;
-        await this.updateEnvSettings(settings);
-      }
-    }
 
     // fix old bot have no language settings
     if (!settings?.defaultLanguage) {
@@ -708,6 +710,7 @@ export class BotProject implements IBotProject {
   // update file in this project this function will guarantee the memory cache
   // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
+    log('Update file', relativePath, content);
     const file = this.files.get(Path.basename(relativePath));
     if (!file) {
       throw new Error(`no such file at ${relativePath}`);
@@ -768,26 +771,7 @@ export class BotProject implements IBotProject {
 
     await this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
-    const patterns = [
-      '**/*.dialog',
-      '**/*.dialog.schema',
-      '**/*.form',
-      '**/*.lg',
-      '**/*.lu',
-      '**/*.qna',
-      '**/*.json',
-      'sdk.override.schema',
-      'sdk.override.uischema',
-      'sdk.schema',
-      'sdk.uischema',
-      'app.override.schema',
-      'app.override.uischema',
-      'app.schema',
-      'app.uischema',
-      '*.botproj',
-      'cross-train.config.json',
-    ];
-    for (const pattern of patterns) {
+    for (const pattern of BotStructureFilesPatterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
@@ -796,6 +780,8 @@ export class BotProject implements IBotProject {
           pattern,
           '!(generated/**)',
           '!(runtime/**)',
+          '!(bin/**)',
+          '!(obj/**)',
           '!(scripts/**)',
           '!(settings/appsettings.json)',
           '!(**/luconfig.json)',
@@ -871,11 +857,11 @@ export class BotProject implements IBotProject {
       }
     }
 
-    const pattern = '**/*.qna';
+    const patterns = BotStructureFilesPatterns.filter((pattern) => pattern.endsWith('.qna'));
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
+    const paths = await this.fileStorage.glob([...patterns, '!(generated/**)', '!(runtime/**)'], root);
 
     for (const filePath of paths.sort()) {
       const realFilePath: string = Path.join(root, filePath);
