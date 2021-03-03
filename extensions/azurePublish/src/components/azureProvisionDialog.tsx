@@ -283,10 +283,10 @@ const reviewCols: IColumn[] = [
     minWidth: 100,
     isRowHeader: true,
     data: 'string',
-    onRender: (item: ResourcesItem & { name; icon }) => {
+    onRender: (item: ResourcesItem) => {
       return (
         <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>
-          {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global' : item.region?.displayName || item}
+          {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global' : item?.region}
         </div>
       );
     },
@@ -307,6 +307,10 @@ export const AzureProvisionDialog: React.FC = () => {
     getTokenFromCache,
     isGetTokenFromUser,
   } = usePublishApi();
+  // set type of publish - azurePublish or azureFunctionsPublish
+  const publishType = getType();
+  const currentConfig = removePlaceholder(publishConfig);
+
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
@@ -320,8 +324,8 @@ export const AzureProvisionDialog: React.FC = () => {
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
-  const [currentLocation, setLocation] = useState<DeployLocation>();
-  const [currentLuisLocation, setCurrentLuisLocation] = useState<DeployLocation>();
+  const [currentLocation, setLocation] = useState<string>(currentConfig?.region);
+  const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(currentConfig?.settings?.luis?.region);
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
   const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>([]); // create from optional list
   const [requireResources, setRequireResources] = useState<ResourcesItem[]>([]);
@@ -335,9 +339,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
 
   const timerRef = useRef<any>();
-  // set type of publish - azurePublish or azureFunctionsPublish
-  const publishType = getType();
-  const currentConfig = removePlaceholder(publishConfig);
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -418,7 +419,7 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [deployLocations]);
 
   const luisLocationsOption = useMemo((): IDropdownOption[] => {
-    return luisLocations.map((t) => ({ key: t.id, text: t.displayName }));
+    return luisLocations.map((t) => ({ key: t.name, text: t.displayName }));
   }, [luisLocations]);
 
   const updateCurrentSubscription = useMemo(
@@ -485,12 +486,12 @@ export const AzureProvisionDialog: React.FC = () => {
     () => (_e, option?: IDropdownOption) => {
       const location = deployLocations.find((t) => t.name === option?.key);
       if (location) {
-        setLocation(location);
+        setLocation(location.name);
         const region = luisLocations.find((item) => item.name === location.name);
         if (region) {
-          setCurrentLuisLocation(region);
+          setCurrentLuisLocation(region.name);
         } else {
-          setCurrentLuisLocation(luisLocations[0]);
+          setCurrentLuisLocation(luisLocations[0].name);
         }
       }
     },
@@ -499,9 +500,9 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const updateLuisLocation = useMemo(
     () => (_e, option?: IDropdownOption) => {
-      const location = luisLocations.find((t) => t.id === option?.key);
+      const location = luisLocations.find((t) => t.name === option?.key);
       if (location) {
-        setCurrentLuisLocation(location);
+        setCurrentLuisLocation(location.name);
       }
     },
     [luisLocations]
@@ -613,9 +614,9 @@ export const AzureProvisionDialog: React.FC = () => {
       !currentHostName ||
       errorHostName !== '' ||
       errorResourceGroupName !== '' ||
-      (!currentConfig?.region && !currentLocation)
+      !currentLocation
     );
-  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName, currentConfig]);
+  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName]);
 
   const isSelectAddResources = useMemo(() => {
     return enabledResources.length > 0 || requireResources.length > 0;
@@ -678,7 +679,7 @@ export const AzureProvisionDialog: React.FC = () => {
           ) : (
             <Dropdown
               required
-              defaultSelectedKey={currentConfig?.region || currentLocation?.name}
+              defaultSelectedKey={currentLocation}
               label={'Region'}
               options={deployLocationsOption}
               placeholder={'Select one'}
@@ -686,10 +687,20 @@ export const AzureProvisionDialog: React.FC = () => {
               onChange={updateCurrentLocation}
             />
           )}
-          {currentLocation && currentLuisLocation && currentLocation.name !== currentLuisLocation.name && (
+          {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
+            <TextField
+              disabled
+              required
+              defaultValue={currentConfig?.settings?.luis?.region}
+              label={formatMessage('Region for Luis')}
+              styles={{ root: { paddingBottom: '8px' } }}
+              onRenderLabel={onRenderLabel}
+            />
+          )}
+          {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
             <Dropdown
               required
-              defaultSelectedKey={currentLuisLocation.id}
+              defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
               label={'Region for Luis'}
               options={luisLocationsOption}
               placeholder={'Select one'}
@@ -730,7 +741,6 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log(listItems);
     if (listItems?.length === 0) {
       setTitle(DialogTitle.EDIT);
       setPage(PageTypes.EditJson);
@@ -849,7 +859,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 setTitle(DialogTitle.REVIEW);
                 let selectedResources = requireResources.concat(enabledResources);
                 selectedResources = selectedResources.map((item) => {
-                  let region = currentConfig?.region ? { displayName: currentConfig?.region } : currentLocation;
+                  let region = currentConfig?.region || currentLocation;
                   if (item.key.includes('luis')) {
                     region = currentLuisLocation;
                   }
@@ -895,8 +905,8 @@ export const AzureProvisionDialog: React.FC = () => {
                   subscription: currentSubscription,
                   resourceGroup: currentResourceGroup,
                   hostname: currentHostName,
-                  location: currentConfig?.region || currentLocation.name,
-                  luisLocation: currentLuisLocation?.name || currentConfig?.region || currentLocation.name,
+                  location: currentLocation,
+                  luisLocation: currentLuisLocation || currentLocation,
                   type: publishType,
                   externalResources: selectedResources,
                 });
@@ -944,7 +954,7 @@ export const AzureProvisionDialog: React.FC = () => {
       {page === PageTypes.ReviewResource && PageReview}
       {page === PageTypes.EditJson && (
         <JsonEditor
-          height={500}
+          height={400}
           id={publishType}
           schema={getSchema()}
           value={currentConfig || importConfig}
