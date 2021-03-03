@@ -459,7 +459,6 @@ export const openRemoteSkill = async (
     isRemote: true,
   });
 
-  //TODO: open remote url 404. isRemote set to false?
   const manifestResponse = await httpClient.get(
     `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
   );
@@ -594,10 +593,14 @@ const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) =>
   }
 };
 
-const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier }) => {
+const handleSkillLoadingFailure = (callbackHelpers, { isRemote, ex, skillNameIdentifier }) => {
   const { set } = callbackHelpers;
   // Generating a dummy project id which will be replaced by the user from the UI.
   const projectId = uuid();
+  set(projectMetaDataState(projectId), {
+    isRootBot: false,
+    isRemote,
+  });
   set(botDisplayNameState(projectId), skillNameIdentifier);
   set(botNameIdentifierState(projectId), skillNameIdentifier);
   setErrorOnBotProject(callbackHelpers, projectId, skillNameIdentifier, ex);
@@ -646,12 +649,14 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
       for (const nameIdentifier in skills) {
         const skill = skills[nameIdentifier];
         let skillPromise;
+        let isRemote = false;
         if (!skill.remote && skill.workspace) {
           const rootBotPath = location;
           const skillPath = skill.workspace;
           const absoluteSkillPath = path.join(rootBotPath, skillPath);
           skillPromise = openLocalSkill(callbackHelpers, absoluteSkillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
+          isRemote = true;
           skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
         }
         if (skillPromise) {
@@ -666,6 +671,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
             })
             .catch((ex) => {
               const projectId = handleSkillLoadingFailure(callbackHelpers, {
+                isRemote,
                 skillNameIdentifier: nameIdentifier,
                 ex,
               });
