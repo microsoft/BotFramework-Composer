@@ -18,15 +18,17 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
-import { selectedTemplateReadMeState } from '../../../recoilModel';
+import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
@@ -106,6 +108,9 @@ const optionKeys = {
   createFromTemplate: 'createFromTemplate',
 };
 
+const templateRequestUrl =
+  'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
+
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
@@ -122,7 +127,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
-  const readMe = useRecoilValue(selectedTemplateReadMeState);
+  const [readMe, setReadMe] = useRecoilState(selectedTemplateReadMeState);
+  const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
 
   const selectedTemplate = useMemo(() => {
     return new Selection({
@@ -199,9 +205,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   useEffect(() => {
     if (currentTemplate) {
+      setReadMe('');
       props.fetchReadMe(currentTemplate);
     }
-  }, [currentTemplate]);
+  }, [currentTemplate, props.fetchReadMe]);
 
   return (
     <Fragment>
@@ -242,10 +249,20 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
+            {fetchReadMePending && <LoadingSpinner />}
             <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
           </div>
         </div>
         <DialogFooter>
+          <Link
+            underline
+            href={templateRequestUrl}
+            styles={{ root: { fontSize: '12px', float: 'left' } }}
+            target="_blank"
+          >
+            <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
+            {formatMessage('Need another template? Send us a request')}
+          </Link>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"

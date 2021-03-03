@@ -143,7 +143,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         onBotRemoveSkill(projectId);
       },
     };
-    if (isRemote) {
+    if (isRemote || botError) {
       return [removeSkillItem];
     }
 

@@ -320,6 +320,11 @@ export const debugPanelActiveTabState = atom<DebugDrawerKeys | undefined>({
   default: undefined,
 });
 
+export const fetchReadMePendingState = atom<boolean>({
+  key: getFullyQualifiedKey('fetchReadMePendingState'),
+  default: false,
+});
+
 export const selectedTemplateReadMeState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateReadMeState'),
   default: '',
