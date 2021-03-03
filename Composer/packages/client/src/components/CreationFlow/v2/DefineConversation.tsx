@@ -15,16 +15,9 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { QnABotTemplateId } from '@bfc/shared';
 
-import {
-  DialogCreationCopy,
-  nameRegexV2,
-  runtimeOptions,
-  defaultPrimaryLanguage,
-  defaultRuntime,
-} from '../../../constants';
+import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage, defaultRuntime } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
