@@ -162,6 +162,7 @@ export type TelemetryEvents = ApplicationEvents &
   GettingStartedEvents &
   BotProjectEvents &
   DesignerEvents &
+  ABSChannelsEvents &
   SessionEvents &
   BotSettingsEvents &
   OtherEvents &
