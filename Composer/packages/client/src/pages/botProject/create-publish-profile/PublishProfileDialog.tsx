@@ -149,14 +149,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           let tenantId = getTenantIdFromCache();
           if (!tenantId) {
             const tenants = await AuthClient.getTenants();
-            tenantId = tenants[0].tenantId;
+            tenantId = tenants?.[0]?.tenantId;
             setTenantId(tenantId);
           }
-          console.log('tenant-------', tenantId);
           arm = await AuthClient.getARMTokenForTenant(tenantId);
           graph = await AuthClient.getAccessToken(graphScopes);
-          console.log('arm---------', arm);
-          console.log('graph-------', graph);
         } else {
           // get token from cache
           arm = getTokenFromCache('accessToken');

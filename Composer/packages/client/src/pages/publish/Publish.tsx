@@ -229,7 +229,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       let tenant = getTenantIdFromCache();
       if (!tenant) {
         const tenants = await AuthClient.getTenants();
-        tenant = tenants[0].tenantId;
+        tenant = tenants?.[0]?.tenantId;
         setTenantId(tenant);
       }
       token = await AuthClient.getARMTokenForTenant(tenant);

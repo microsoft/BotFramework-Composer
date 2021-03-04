@@ -17,7 +17,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { separator } from '../../publish/styles';
-import { armScopes, graphScopes } from '../../../constants';
+import { graphScopes } from '../../../constants';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { dispatcherState } from '../../../recoilModel';
@@ -138,7 +138,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
         let tenantId = getTenantIdFromCache();
         if (!tenantId) {
           const tenants = await AuthClient.getTenants();
-          tenantId = tenants[0].tenantId;
+          tenantId = tenants?.[0]?.tenantId;
           setTenantId(tenantId);
         }
         arm = await AuthClient.getARMTokenForTenant(tenantId);
