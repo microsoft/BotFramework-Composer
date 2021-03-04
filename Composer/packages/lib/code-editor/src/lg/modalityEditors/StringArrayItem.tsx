@@ -38,7 +38,7 @@ const Input = styled(TextField)({
   padding: '8px 0 8px 4px',
   width: '100%',
   position: 'relative',
-  '& input': {
+  '& input, & textarea': {
     fontSize: FluentTheme.fonts.small.fontSize,
   },
   '& .ms-TextField-fieldGroup::after': {
@@ -196,6 +196,8 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
       <Input
         componentRef={(ref) => (itemRef.current = ref)}
         defaultValue={value}
+        multiline={value.length > 50}
+        resizable={false}
         styles={textFieldStyles}
         onChange={onChange}
         onClick={click}
