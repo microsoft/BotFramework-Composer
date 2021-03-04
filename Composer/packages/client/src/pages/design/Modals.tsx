@@ -99,22 +99,21 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
 
     const { name, urls = [], locales, multiTurn } = data;
     if (urls.length !== 0) {
-      const urlsLocalesPair: { url: string; locale: string }[] = [];
-      const sourceFileToBeCopied = [];
-      for (let i = 0; i < urls.length; i++) {
-        if (urls[i]) {
-          urlsLocalesPair.push({ url: urls[i], locale: locales[i] });
-        } else {
-          sourceFileToBeCopied.push(locales[i]);
-        }
-      }
       await Promise.all(
         urls.map((url, index) => {
-          return createQnAKBFromUrl({ id: `${dialogId}.${locales[index]}`, name, url, multiTurn, projectId });
+          return createQnAKBFromUrl({
+            id: dialogId,
+            locale: locales[index],
+            name,
+            url,
+            multiTurn,
+            projectId,
+            filteredLocales: locales,
+          });
         })
       );
     } else {
-      await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
+      await createQnAKBFromScratch({ id: dialogId, name, projectId });
     }
     commitChanges();
   };

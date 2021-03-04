@@ -159,6 +159,22 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
     }
   };
 
+  const removeEmptyUrls = (formData: CreateQnAFromUrlFormData) => {
+    const urls: string[] = [];
+    const locales: string[] = [];
+    for (let i = 0; i < formData.urls.length; i++) {
+      if (formData.urls[i]) {
+        urls.push(formData.urls[i]);
+        locales.push(formData.locales[i]);
+      }
+    }
+    return {
+      ...formData,
+      locales,
+      urls,
+    };
+  };
+
   return (
     <Dialog
       dialogContentProps={{
@@ -292,7 +308,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
             if (hasErrors(formDataErrors)) {
               return;
             }
-            onSubmit(formData);
+            onSubmit(removeEmptyUrls(formData));
             TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: false });
           }}
         />
