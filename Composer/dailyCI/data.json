@@ -1,5 +1,15 @@
 {
   "version": 1,
+  "storageConnections": [
+    {
+      "id": "default",
+      "name": "This PC",
+      "type": "LocalDisk",
+      "path": "",
+      "platform": "win32",
+      "defaultPath": "C:\\Users"
+    }
+  ],
   "projectLocationMap": {
     "55586.955975498255": {
       "eTag": "",
