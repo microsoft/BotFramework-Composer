@@ -76,7 +76,7 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
 export function createFoldingRanges(lines: string[], prefix: string) {
   const items: FoldingRange[] = [];
 
-  if (!lines || lines.length === 0) {
+  if (!lines?.length) {
     return items;
   }
 
