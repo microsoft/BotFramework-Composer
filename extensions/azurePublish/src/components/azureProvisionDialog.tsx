@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { logOut, usePublishApi } from '@bfc/extension-client';
+import { logOut, usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -30,6 +30,8 @@ import {
   SelectionMode,
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
+import { SharedColors } from '@uifabric/fluent-theme';
+
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
 import {
@@ -41,8 +43,7 @@ import {
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
 } from './api';
-import { getExistResources, getARMToken, removePlaceholder, decodeToken } from './util';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { getExistResources, removePlaceholder, decodeToken } from './util';
 
 const iconStyle = (required) => {
   return {
@@ -249,6 +250,8 @@ export const AzureProvisionDialog: React.FC = () => {
     getType,
     getTokenFromCache,
     isGetTokenFromUser,
+    getTenantIdFromCache,
+    setTenantId,
   } = usePublishApi();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
@@ -301,12 +304,37 @@ export const AzureProvisionDialog: React.FC = () => {
         });
       }
     } else {
-      getARMToken().then((currentUser) => {
-        if (currentUser?.token) {
-          setToken(currentUser?.token);
-        }
-        setCurrentUser(currentUser);
-      });
+      if (!getTenantIdFromCache()) {
+        getTenants().then((tenants) => {
+          if (tenants?.length > 0) {
+            // set tenantId in cache.
+            setTenantId(tenants[0].tenantId);
+            getARMTokenForTenant(tenants[0].tenantId).then((token) => {
+              setToken(token);
+              const decoded = decodeToken(token);
+              setCurrentUser({
+                token: token,
+                email: decoded.upn,
+                name: decoded.name,
+                expiration: (decoded.exp || 0) * 1000, // convert to ms,
+                sessionExpired: false,
+              });
+            });
+          }
+        });
+      } else {
+        getARMTokenForTenant(getTenantIdFromCache()).then((token) => {
+          setToken(token);
+          const decoded = decodeToken(token);
+          setCurrentUser({
+            token: token,
+            email: decoded.upn,
+            name: decoded.name,
+            expiration: (decoded.exp || 0) * 1000, // convert to ms,
+            sessionExpired: false,
+          });
+        });
+      }
     }
   }, []);
 
@@ -644,7 +672,10 @@ export const AzureProvisionDialog: React.FC = () => {
           )}
         </form>
       )}
-      {choice.key === 'create' && subscriptionOption.length < 1 && <Spinner label="Loading" />}
+      {choice.key === 'create' && !subscriptionOption && <Spinner label="Loading" />}
+      {choice.key === 'create' && subscriptionOption && subscriptionOption.length < 1 && (
+        <div> your subscription list is empty, please add your subscription, or login with another account.</div>
+      )}
       {choice.key === 'import' && (
         <div style={{ width: '50%', marginTop: '10px', height: '100%' }}>
           <div

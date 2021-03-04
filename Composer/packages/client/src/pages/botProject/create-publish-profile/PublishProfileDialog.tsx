@@ -93,6 +93,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
     };
+    PluginAPI.publish.getTenantIdFromCache = () => {
+      return getTenantIdFromCache();
+    };
+    PluginAPI.publish.setTenantId = (value) => {
+      setTenantId(value);
+    };
   }, []);
 
   // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe

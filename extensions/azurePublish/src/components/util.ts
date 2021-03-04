@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { getTenants, getARMTokenForTenant } from '@bfc/extension-client';
 import jwtDecode from 'jwt-decode';
 import { AzureResourceTypes } from '../types';
 
@@ -59,30 +58,4 @@ export const getExistResources = (config) => {
     }
     return result;
   } else return [];
-};
-
-const TENANTID = 'tenantId';
-const getTenantsFromCache = () => {
-  return window.localStorage.getItem(TENANTID);
-};
-
-export const getARMToken = async () => {
-  let tenant = getTenantsFromCache();
-  if (!tenant) {
-    const tenants = await getTenants();
-    // set tenantId in cache.
-    window.localStorage.setItem(TENANTID, tenants[0].tenantId);
-    tenant = tenants[0].tenantId;
-  }
-  const token = await getARMTokenForTenant(tenant);
-  const decoded = decodeToken(token);
-  return decoded
-    ? {
-        token: token,
-        email: decoded.upn,
-        name: decoded.name,
-        expiration: (decoded.exp || 0) * 1000, // convert to ms,
-        sessionExpired: false,
-      }
-    : {};
 };
