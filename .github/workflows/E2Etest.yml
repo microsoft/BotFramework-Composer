@@ -1,10 +1,6 @@
 name: Composer E2E test
 
 on:
-  push:
-    branches:
-# would be main in main
-      - qika/dailyCI
   schedule:
     - cron: "0 0 * * *"
 
