@@ -89,6 +89,19 @@ describe('OneAuth Serivce', () => {
     expect(result.expiryTime).toBe(mockCredential.expiresOn);
   });
 
+  it('should use arm account as account if account not exist', async () => {
+    (oneAuthService as any).signedInAccount = undefined;
+    (oneAuthService as any).signedInARMAccount = mockAccount;
+    const result = await oneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
+
+    expect(mockOneAuth.signInInteractively).not.toHaveBeenCalled();
+    // it should have called acquireCredentialSilently
+    expect(mockOneAuth.acquireCredentialSilently).toHaveBeenCalled();
+
+    expect(result.accessToken).toBe(mockCredential.value);
+    expect(result.expiryTime).toBe(mockCredential.expiresOn);
+  });
+
   it('should try to acquire a token interactively if interaction is required', async () => {
     mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({ error: { status: INTERACTION_REQUIRED } });
     const result = await oneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
@@ -204,10 +217,20 @@ describe('OneAuth Serivce', () => {
     expect(result).toBe('someARMToken');
   });
 
-  it('should return an empty string if there is no signed in ARM account', async () => {
+  it('should login first if signedInARMAccount is undefined', async () => {
     (oneAuthService as any).signedInARMAccount = undefined;
+    await oneAuthService.getARMTokenForTenant('tenantId');
+    // it should have signed in
+    expect(mockOneAuth.signInInteractively).toHaveBeenCalled();
+    expect((oneAuthService as any).signedInARMAccount).toEqual(mockAccount);
+  });
+
+  it('should return an empty string if there is no signed in ARM , and login fail', async () => {
+    (oneAuthService as any).signedInARMAccount = undefined;
+    mockOneAuth.signInInteractively.mockReturnValueOnce({ account: undefined });
     const result = await oneAuthService.getARMTokenForTenant('someTenant');
 
+    expect((oneAuthService as any).signedInARMAccount).toBeUndefined();
     expect(result).toBe('');
   });
 
