@@ -5,18 +5,15 @@ on:
     branches:
 # would be main in main
       - qika/dailyCI
-#  schedule:
-# Would be '0 0 0 * *' in main
-#    - cron: "0 0 * * *"
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   Build-And-Test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-    # Remove this while merged to main branch
-    - run: git checkout qika/dailyCI
+    - uses: actions/checkout@v2
 
     - name: Set up Node.js version
       uses: actions/setup-node@v1
