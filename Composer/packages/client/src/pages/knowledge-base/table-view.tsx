@@ -371,7 +371,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!qnaFile) return;
-                          await removeQnAImport({ id: qnaFile.id, sourceId: containerId, projectId: actualProjectId });
+                          await removeQnAImport({
+                            id: qnaFile.id,
+                            sourceId: containerId.split(`.${locale}`)[0],
+                            projectId: actualProjectId,
+                          });
                           await removeQnAFile({ id: containerId, projectId: actualProjectId });
                         },
                       },
