@@ -84,9 +84,11 @@ const Library: React.FC = () => {
     descriptionLink: formatMessage('Learn more'),
     viewDocumentation: formatMessage('View documentation'),
     installButton: formatMessage('Install'),
+    installToolbarButton: formatMessage('Add a package'),
+
     updateButton: formatMessage('Update to'),
     installed: formatMessage('installed'),
-    importDialogTitle: formatMessage('Install a Package'),
+    importDialogTitle: formatMessage('Add a package'),
     installProgress: formatMessage('Installing package...'),
     uninstallProgress: formatMessage('Removing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
@@ -316,7 +318,7 @@ const Library: React.FC = () => {
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
-      text: strings.installButton,
+      text: strings.installToolbarButton,
       buttonProps: {
         iconProps: {
           iconName: 'Add',
