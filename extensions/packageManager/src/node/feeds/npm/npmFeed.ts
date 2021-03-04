@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFeed, IPackageDefinition, IPackageQuery, IPackageSource } from '../feedInterfaces';
 import { IExtensionRegistration } from '@bfc/extension-client';
 import axios from 'axios';
+
+import { IFeed, IPackageDefinition, IPackageQuery, IPackageSource } from '../feedInterfaces';
 
 /**
  * Npm feed implementation.
@@ -13,8 +14,8 @@ import axios from 'axios';
  * from here.
  */
 export class NpmFeed implements IFeed {
-  private language: string = 'js';
-  private source: string = 'npm';
+  private language = 'js';
+  private source = 'npm';
 
   /**
    * Creates an npm feed.

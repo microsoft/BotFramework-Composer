@@ -14,6 +14,7 @@ import {
   getAccessTokenUrl,
   isTokenExpired,
   cleanTokenFromCache,
+  removeTenantFromCache,
 } from './auth';
 import { isElectron } from './electronUtil';
 import storage from './storage';
@@ -103,6 +104,8 @@ async function logOut() {
     cleanTokenFromCache('idToken');
     cleanTokenFromCache(authConfig.clientId);
   }
+  // clean tenantId cache
+  removeTenantFromCache();
 }
 
 /**

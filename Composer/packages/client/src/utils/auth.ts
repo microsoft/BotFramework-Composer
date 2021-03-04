@@ -275,6 +275,9 @@ export function getTenantIdFromCache() {
 export function setTenantId(value: string) {
   storage.set('tenantId', value);
 }
+export function removeTenantFromCache() {
+  storage.remove('tenantId');
+}
 
 // clean token by clientId with fuzzy matching or key
 export function cleanTokenFromCache(key: string) {
