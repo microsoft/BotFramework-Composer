@@ -15,7 +15,7 @@ const config: PluginConfig = {
       form: {
         properties: {
           activity: {
-            label: formatMessage('Language Generation'),
+            label: formatMessage('Bot Responses'),
             description: formatMessage(
               'What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi'
             ),

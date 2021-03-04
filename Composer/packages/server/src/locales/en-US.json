@@ -119,6 +119,9 @@
   "activity_received_2f20fa9d": {
     "message": "Activity received"
   },
+  "adapters_fd4173b1": {
+    "message": "Adapters"
+  },
   "adaptive_card_785723e3": {
     "message": "Adaptive card"
   },
@@ -374,6 +377,9 @@
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
     "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
+  "azure_bot_service_channels_5b358c1c": {
+    "message": "Azure Bot Service channels"
+  },
   "back_2900f52a": {
     "message": "Back"
   },
@@ -575,6 +581,12 @@
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
+  "choose_publishing_profile_ee7ecc78": {
+    "message": "Choose publishing profile"
+  },
+  "choose_subscription_3d78d10d": {
+    "message": "Choose subscription"
+  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -592,6 +604,12 @@
   },
   "close_d634289d": {
     "message": "Close"
+  },
+  "cognitive_service_region_87c668be": {
+    "message": "Cognitive Service Region"
+  },
+  "cognitive_services_key_fcfd093f": {
+    "message": "Cognitive services key"
   },
   "collapse_34080b4d": {
     "message": "Collapse"
@@ -650,8 +668,17 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
+  "configure_adapter_2f621249": {
+    "message": "Configure adapter"
+  },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Configure Composer to start your bot using runtime code you can customize and control."
+  },
+  "configure_ecb97e30": {
+    "message": "Configure"
+  },
+  "configured_8d0f4dc8": {
+    "message": "Configured"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
@@ -683,8 +710,14 @@
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
   },
+  "connect_to_speech_service_9d877e37": {
+    "message": "Connect to Speech Service"
+  },
   "connect_your_bot_to_new_services_b5b8191": {
     "message": "Connect your bot to new services"
+  },
+  "connect_your_bot_to_other_messaging_services_c7f6aed6": {
+    "message": "Connect your bot to other messaging services."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -1061,6 +1094,9 @@
   "do_you_wish_to_continue_96469eaf": {
     "message": "Do you wish to continue?"
   },
+  "documentation_d82f6eec": {
+    "message": "Documentation"
+  },
   "does_not_exist_3a34b418": {
     "message": "Does Not Exist"
   },
@@ -1181,6 +1217,12 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
   },
+  "enable_speech_e30d6a2a": {
+    "message": "Enable Speech"
+  },
+  "enable_speech_e4a16f1c": {
+    "message": "Enable speech"
+  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -1216,6 +1258,12 @@
   },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
+  },
+  "enter_cognitive_service_region_a0f684a4": {
+    "message": "Enter cognitive service region"
+  },
+  "enter_cognitive_services_key_b78e4b55": {
+    "message": "Enter cognitive services key"
   },
   "enter_luis_application_name_df312e75": {
     "message": "Enter LUIS application name"
@@ -1345,6 +1393,9 @@
   },
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "External resources will not be changed."
+  },
+  "external_service_adapters_5218e6a3": {
+    "message": "External service adapters"
   },
   "external_services_da7820ce": {
     "message": "External services"
@@ -1477,6 +1528,9 @@
   },
   "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
     "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
+  },
+  "get_a_key_bb364e3": {
+    "message": "Get a key"
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1642,6 +1696,9 @@
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
+  },
+  "install_more_adapters_in_a_package_settings_a_e8b0df7a": {
+    "message": "Install more adapters in <a>Package Settings</a>."
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
@@ -2072,6 +2129,9 @@
   "move_up_b1c4d3a5": {
     "message": "Move Up"
   },
+  "ms_teams_15993b97": {
+    "message": "MS Teams"
+  },
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
@@ -2477,6 +2537,9 @@
   "property_type_e38cf7e4": {
     "message": "Property Type"
   },
+  "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
+    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
+  },
   "provide_access_tokens_8ead7563": {
     "message": "Provide access tokens"
   },
@@ -2503,6 +2566,9 @@
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
+  },
+  "publish_profile_to_configure_ca758e68": {
+    "message": "Publish profile to configure:"
   },
   "publish_profiles_36fb522d": {
     "message": "Publish profiles"
@@ -3041,6 +3107,9 @@
   "submit_a3cc6859": {
     "message": "Submit"
   },
+  "subscription_id_250f5e1f": {
+    "message": "Subscription Id:"
+  },
   "suggested_actions_94d06bfa": {
     "message": "Suggested Actions"
   },
@@ -3050,11 +3119,11 @@
   "suggestion_for_card_or_activity_type_b257066a": {
     "message": "Suggestion for Card or Activity: { type }"
   },
-  "switch_to_code_editor_3dcbe16f": {
-    "message": "switch to code editor"
+  "switch_to_code_editor_aa03c4b7": {
+    "message": "Switch to code editor"
   },
-  "switch_to_response_editor_7b20b0e9": {
-    "message": "switch to response editor"
+  "switch_to_response_editor_cb0efe35": {
+    "message": "Switch to response editor"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
@@ -3164,6 +3233,9 @@
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
   },
+  "this_cognitive_service_account_is_already_set_as_t_841165f7": {
+    "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
+  },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "This configures a data driven dialog via a collection of events and actions."
   },
@@ -3247,6 +3319,9 @@
   },
   "to_learn_more_about_the_qna_file_format_read_the_d_1ce18259": {
     "message": "> To learn more about the QnA file format, read the documentation at\n> { QNA_HELP }"
+  },
+  "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
+    "message": "To learn more about the { title }, <a>visit its documentation page</a>."
   },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
@@ -3496,6 +3571,9 @@
   },
   "weather_bot_c38920cd": {
     "message": "Weather Bot"
+  },
+  "webchat_a134b64b": {
+    "message": "Webchat"
   },
   "webchat_inspector_4d0dfeb7": {
     "message": "Webchat Inspector"
