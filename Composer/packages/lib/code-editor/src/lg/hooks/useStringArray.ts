@@ -8,10 +8,6 @@ import { ArrayBasedStructuredResponseItem, ModalityType, PartialStructuredRespon
 import { getTemplateId } from '../../utils/structuredResponse';
 import { LGOption } from '../../utils/types';
 
-const onlyText = (modalities?: ModalityType[]): boolean => {
-  return modalities?.length === 1 && modalities[0] === 'Text';
-};
-
 const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
   response: T,
   lgTemplates?: readonly LgTemplate[],
@@ -21,7 +17,7 @@ const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
   const template = lgTemplates?.find(({ name }) => name === templateId);
   return response?.value && template?.body
     ? template?.body?.replace(/- /g, '').split(/\r?\n/g) || []
-    : response?.value || (onlyText(modalities) ? [''] : []);
+    : response?.value || (modalities?.length === 1 && modalities[0] === 'Text' ? [''] : []);
 };
 
 export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
