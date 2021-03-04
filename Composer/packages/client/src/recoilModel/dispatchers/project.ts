@@ -513,7 +513,7 @@ export const projectDispatcher = () => {
             projectIdCache.set(projectId);
 
             // navigate to the new get started section
-            navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings'));
+            navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
             callbackHelpers.set(botOpeningMessage, '');
             callbackHelpers.set(botOpeningState, false);
           } else {
