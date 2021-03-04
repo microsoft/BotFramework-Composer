@@ -16,7 +16,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 
 import { validateName, validateUrl } from './constants';
-import { styles, dialogWindow, textField } from './styles';
+import { styles, dialogWindow, textFieldKBName } from './styles';
 
 type EditQnAFromUrlModalProps = {
   qnaFiles: QnAFile[];
@@ -84,7 +84,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
             placeholder={formatMessage('Type a name that describes this content')}
-            styles={textField}
+            styles={textFieldKBName}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
           />
@@ -96,7 +96,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
             errorMessage={formErrors.url}
             label={formatMessage('Knowledge source')}
             placeholder={formatMessage('Enter a URL or browse to upload a file ')}
-            styles={textField}
+            styles={textFieldKBName}
             value={formData.url}
             onChange={(e, url) => updateUrl(url)}
           />

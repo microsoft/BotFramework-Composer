@@ -97,15 +97,27 @@ const QnAPage: React.FC<RouteComponentProps<{
           onDismiss={() => {
             actions.createQnAFromUrlDialogCancel({ projectId: creatQnAOnInfo.projectId });
           }}
-          onSubmit={async ({ name, url, multiTurn = false }) => {
-            if (url) {
-              await actions.createQnAKBFromUrl({
-                id: `${creatQnAOnInfo.dialogId}.${locale}`,
-                name,
-                url,
-                multiTurn,
-                projectId: creatQnAOnInfo.projectId,
-              });
+          onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
+            console.log(name, urls, locales, multiTurn);
+            if (urls.length !== 0) {
+              await Promise.all(
+                urls.map((url, index) => {
+                  actions.createQnAKBFromUrl({
+                    id: `${creatQnAOnInfo.dialogId}.${locales[index]}`,
+                    name,
+                    url,
+                    multiTurn,
+                    projectId: creatQnAOnInfo.projectId,
+                  });
+                })
+              );
+              // await actions.createQnAKBFromUrl({
+              //   id: `${creatQnAOnInfo.dialogId}.${locale}`,
+              //   name,
+              //   url,
+              //   multiTurn,
+              //   projectId: creatQnAOnInfo.projectId,
+              // });
             } else {
               await actions.createQnAKBFromScratch({
                 id: `${creatQnAOnInfo.dialogId}.${locale}`,

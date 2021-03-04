@@ -15,7 +15,7 @@ import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getBaseName } from '../../utils/fileUtil';
 
 import { validateName } from './constants';
-import { styles, dialogWindow, textField } from './styles';
+import { styles, dialogWindow, textFieldKBName } from './styles';
 
 type EditQnAFromScratchModalProps = {
   qnaFiles: QnAFile[];
@@ -72,7 +72,7 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
             placeholder={formatMessage('Type a name that describes this content')}
-            styles={textField}
+            styles={textFieldKBName}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
           />

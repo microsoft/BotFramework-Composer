@@ -16,7 +16,7 @@ import { dispatcherState, showCreateQnAFromUrlDialogState } from '../../recoilMo
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { validateName, CreateQnAFromModalProps, CreateQnAFromScratchFormData } from './constants';
-import { subText, styles, dialogWindowMini, textField } from './styles';
+import { subText, styles, dialogWindowMini, textFieldKBName } from './styles';
 
 const formConfig: FieldConfig<CreateQnAFromScratchFormData> = {
   name: {
@@ -72,7 +72,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
             placeholder={formatMessage('Type a name that describes this content')}
-            styles={textField}
+            styles={textFieldKBName}
             value={formData.name}
             onChange={(e, name = '') => updateField('name', name)}
           />

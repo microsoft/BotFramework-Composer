@@ -9,20 +9,40 @@ import { FieldValidator } from '../../hooks/useForm';
 export type CreateQnAFromScratchFormData = {
   name: string;
 };
+
 export type CreateQnAFromUrlFormData = {
-  url: string;
+  urls: string[];
+  locales: string[];
   name: string;
   multiTurn: boolean;
 };
 
+export type CreateQnAFromUrlFormDataErrors = {
+  urls: string[];
+  name: string;
+};
+
 export type CreateQnAFormData = {
-  url?: string;
+  urls?: string[];
+  locales?: string[];
   name: string;
   multiTurn?: boolean;
 };
 
 export type CreateQnAFromModalProps = {
   projectId: string;
+  dialogId: string;
+  qnaFiles: QnAFile[];
+  subscriptionKey?: string;
+  onDismiss?: () => void;
+  onSubmit: (formData: CreateQnAFormData) => void;
+};
+
+export type CreateQnAFromUrlModalProps = {
+  projectId: string;
+  activeLocale: string;
+  locales: string[];
+  defaultLocale: string;
   dialogId: string;
   qnaFiles: QnAFile[];
   subscriptionKey?: string;
