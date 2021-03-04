@@ -124,10 +124,18 @@ export const StringArrayEditor = React.memo(
       const keydownHandler = (e: KeyboardEvent) => {
         if (submitKeys.includes(e.key)) {
           setCalloutTargetElement(null);
-          setCurrentIndex(null);
           // Remove empty variations only if necessary
-          if (items.some((item) => !item)) {
-            onChange(items.filter(Boolean));
+
+          const filteredItems = items.filter(Boolean);
+
+          if (e.key === 'Enter') {
+            onChange([...filteredItems, '']);
+            setCurrentIndex(filteredItems.length);
+          } else {
+            setCurrentIndex(null);
+            if (items.length !== filteredItems.length) {
+              onChange(filteredItems);
+            }
           }
         }
       };
