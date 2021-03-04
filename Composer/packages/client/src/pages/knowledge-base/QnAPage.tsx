@@ -134,16 +134,17 @@ const QnAPage: React.FC<RouteComponentProps<{
             actions.createQnAFromUrlDialogCancel({ projectId: creatQnAOnInfo.projectId });
           }}
           onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
-            console.log(name, urls, locales, multiTurn);
             if (urls.length !== 0) {
               await Promise.all(
                 urls.map((url, index) => {
                   actions.createQnAKBFromUrl({
-                    id: `${creatQnAOnInfo.dialogId}.${locales[index]}`,
+                    id: creatQnAOnInfo.dialogId,
                     name,
                     url,
+                    locale: locales[index],
                     multiTurn,
                     projectId: creatQnAOnInfo.projectId,
+                    filteredLocales: locales,
                   });
                 })
               );
@@ -156,7 +157,7 @@ const QnAPage: React.FC<RouteComponentProps<{
               // });
             } else {
               await actions.createQnAKBFromScratch({
-                id: `${creatQnAOnInfo.dialogId}.${locale}`,
+                id: creatQnAOnInfo.dialogId,
                 name,
                 projectId: creatQnAOnInfo.projectId,
               });
