@@ -13,12 +13,13 @@ import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import { dispatcherState, userSettingsState, qnaFilesState, localeState } from '../../recoilModel';
+import { dispatcherState, userSettingsState, qnaFilesState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { getBaseName } from '../../utils/fileUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { backIcon } from './styles';
+import { qnaSuffix } from './table-view';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
@@ -42,7 +43,9 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const searchContainerName =
     searchContainerId && typeof searchContainerId === 'string' && getBaseName(searchContainerId);
   const targetFileId =
-    searchContainerId && typeof searchContainerId === 'string' ? searchContainerId : `${dialogId}.${locale}`;
+    searchContainerId && typeof searchContainerId === 'string'
+      ? `${searchContainerId}${qnaSuffix(locale)}`
+      : `${dialogId}.${locale}`;
   const file = qnaFiles.find(({ id }) => id === targetFileId);
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;

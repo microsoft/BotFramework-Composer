@@ -75,21 +75,14 @@ const QnAPage: React.FC<RouteComponentProps<{
   };
 
   const onRenderHeaderContent = () => {
-    return (
-      <div css={{ width: '80%', display: 'flex', justifyContent: 'space-between' }}>
-        <TabHeader
-          languages={languages}
-          locale={currentLocale}
-          defaultLanguage={defaultLanguage}
-          onChangeLocale={onChangeLocale}
-        ></TabHeader>
-        {!isRoot && (
-          <ActionButton data-testid="showcode" onClick={onToggleEditMode}>
-            {edit ? formatMessage('Hide code') : formatMessage('Show code')}
-          </ActionButton>
-        )}
-      </div>
-    );
+    if (!isRoot) {
+      return (
+        <ActionButton data-testid="showcode" onClick={onToggleEditMode}>
+          {edit ? formatMessage('Hide code') : formatMessage('Show code')}
+        </ActionButton>
+      );
+    }
+    return null;
   };
 
   return (
@@ -108,24 +101,31 @@ const QnAPage: React.FC<RouteComponentProps<{
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router component={Fragment} primary={false}>
-          <CodeEditor
-            dialogId={dialogId}
-            locale={currentLocale}
-            path="/edit"
-            projectId={projectId}
-            qnaFileId={qnaFileId}
-            skillId={skillId}
-          />
-          <TableView
-            dialogId={dialogId}
-            locale={currentLocale}
-            path="/"
-            projectId={projectId}
-            qnaFileId={qnaFileId}
-            skillId={skillId}
-          />
-        </Router>
+        <TabHeader
+          defaultLanguage={defaultLanguage}
+          languages={languages}
+          locale={currentLocale}
+          onChangeLocale={onChangeLocale}
+        >
+          <Router component={Fragment} primary={false}>
+            <CodeEditor
+              dialogId={dialogId}
+              locale={currentLocale}
+              path="/edit"
+              projectId={projectId}
+              qnaFileId={qnaFileId}
+              skillId={skillId}
+            />
+            <TableView
+              dialogId={dialogId}
+              locale={currentLocale}
+              path="/"
+              projectId={projectId}
+              qnaFileId={qnaFileId}
+              skillId={skillId}
+            />
+          </Router>
+        </TabHeader>
         <CreateQnAModal
           dialogId={creatQnAOnInfo.dialogId}
           projectId={creatQnAOnInfo.projectId}
