@@ -673,7 +673,7 @@ export const AzureProvisionDialog: React.FC = () => {
         </form>
       )}
       {choice.key === 'create' && !subscriptionOption && <Spinner label="Loading" />}
-      {choice.key === 'create' && subscriptionOption && subscriptionOption.length < 1 && (
+      {choice.key === 'create' && subscriptionOption?.length < 1 && (
         <div> your subscription list is empty, please add your subscription, or login with another account.</div>
       )}
       {choice.key === 'import' && (
@@ -778,7 +778,17 @@ export const AzureProvisionDialog: React.FC = () => {
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
             />
-          ) : null}
+          ) : (
+            <div
+              style={{ color: 'blue', cursor: 'pointer' }}
+              onClick={() => {
+                closeDialog();
+                logOut();
+              }}
+            >
+              sign out
+            </div>
+          )}
           <div>
             <DefaultButton style={{ margin: '0 4px' }} text={'Back'} onClick={onBack} />
             {choice.key === 'create' ? (
