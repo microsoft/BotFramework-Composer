@@ -1376,6 +1376,9 @@
   "expecting_4df12c00": {
     "message": "Expecting"
   },
+  "explore_next_steps_and_find_valuable_references_an_a0820025": {
+    "message": "Explore next steps and find valuable references and learning resources to design, build, and publish your new bot using Composer."
+  },
   "export_json_2e2981f5": {
     "message": "Export JSON"
   },
@@ -1549,6 +1552,9 @@
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
+  },
+  "get_started_with_your_new_bot_da9aaf6a": {
+    "message": "Get started with your new bot"
   },
   "getting_help_ab6811b0": {
     "message": "Getting Help"

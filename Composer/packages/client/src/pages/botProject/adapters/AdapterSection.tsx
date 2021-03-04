@@ -32,7 +32,7 @@ const renderSectionHeader = (name: string, tooltip?: string) => (
 const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (containerRef.current && scrollToSectionId === '#runtimeSettings') {
+    if (containerRef.current && scrollToSectionId === '#connections') {
       containerRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [scrollToSectionId]);
