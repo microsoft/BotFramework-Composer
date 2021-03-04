@@ -97,9 +97,22 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     if (!projectId || !dialogId) return;
     await createQnATrigger(projectId, dialogId);
 
-    const { name, url, multiTurn } = data;
-    if (url) {
-      await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn, projectId });
+    const { name, urls = [], locales, multiTurn } = data;
+    if (urls.length !== 0) {
+      const urlsLocalesPair: { url: string; locale: string }[] = [];
+      const sourceFileToBeCopied = [];
+      for (let i = 0; i < urls.length; i++) {
+        if (urls[i]) {
+          urlsLocalesPair.push({ url: urls[i], locale: locales[i] });
+        } else {
+          sourceFileToBeCopied.push(locales[i]);
+        }
+      }
+      await Promise.all(
+        urls.map((url, index) => {
+          return createQnAKBFromUrl({ id: `${dialogId}.${locales[index]}`, name, url, multiTurn, projectId });
+        })
+      );
     } else {
       await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
     }

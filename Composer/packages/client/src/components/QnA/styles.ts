@@ -37,10 +37,35 @@ export const dialogWindowMini = css`
   min-height: 308px;
 `;
 
-export const textField = {
+export const urlPairStyle = css`
+  display: flex;
+  max-width: 517px;
+`;
+
+export const textFieldKBName = {
   root: {
-    width: '400px',
-    paddingBottom: '20px',
+    width: 400,
+    paddingBottom: 20,
+  },
+};
+
+export const textFieldLocales = {
+  root: {
+    width: 115,
+    marginRight: 20,
+    paddingBottom: 20,
+    selectors: {
+      '.ms-Label': {
+        color: NeutralColors.gray160,
+      },
+    },
+  },
+};
+
+export const textFieldUrl = {
+  root: {
+    width: 350,
+    paddingBottom: 20,
   },
 };
 
