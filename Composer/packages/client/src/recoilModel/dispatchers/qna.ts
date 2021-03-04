@@ -463,7 +463,7 @@ ${response.data}
       projectId: string;
     }) => {
       const { snapshot } = callbackHelpers;
-      const locale = await snapshot.getPromise(localeState(projectId));
+      const locale = (await snapshot.getPromise(settingsState(projectId))).defaultLanguage;
       id = `${id}.${locale}`;
       await dismissCreateQnAModal({ projectId });
 
