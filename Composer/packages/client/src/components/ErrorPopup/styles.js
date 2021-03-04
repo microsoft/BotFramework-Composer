@@ -9,6 +9,10 @@ export const consoleStyle = css`
   color: #fff;
   padding: 15px;
   margin-bottom: 20px;
+
+  a {
+    color: #8080ff;
+  }
 `;
 export const dialogSubTitle = css`
   font-size: ${FontSizes.medium};
