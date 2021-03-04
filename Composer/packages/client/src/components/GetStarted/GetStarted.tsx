@@ -3,22 +3,22 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { navigateTo } from '../../utils/navigation';
 
-import { wrapperStyle, buttonStyles, h2Style, h3Style, ulStyle, ulStyleGuides, linkStyle, liStyle } from './styles';
+import { h3Style, ulStyle, liStyle } from './styles';
 
 type GetStartedProps = {
-  toolbarItems?: IToolbarItem[];
+  isOpen: boolean;
+  onDismiss: () => void;
 };
 
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
@@ -33,7 +33,6 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const linkToPublish = `/bot/${projectId}/publish`;
   const linkToLGEditor = `/bot/${projectId}/language-generation`;
   const linkToLUEditor = `/bot/${projectId}/language-understanding`;
-  const linkToDelete = `/bot/${projectId}/botProjectsSettings/#deleteBot`;
   const linkToAdaptiveExpressions =
     'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-adaptive-expressions?view=azure-bot-service-4.0&tabs=arithmetic';
   const linkToGetStarted = 'https://docs.microsoft.com/en-us/composer/introduction';
@@ -46,169 +45,107 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const linkToPreBuiltExpressions =
     'https://docs.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0';
 
-  const items: IToolbarItem[] = [
-    {
-      text: formatMessage('Delete bot'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'Trash' },
-        onClick: () => buttonClick(linkToDelete),
-        styles: buttonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Add a package'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'Package' },
-        onClick: () => buttonClick(linkToPackageManager),
-        styles: buttonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Edit LG'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'Robot' },
-        onClick: () => buttonClick(linkToLGEditor),
-        styles: buttonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Edit LU'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'People' },
-        onClick: () => buttonClick(linkToLUEditor),
-        styles: buttonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Manage connections'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'PlugConnected' },
-        onClick: () => buttonClick(linkToConnections),
-        styles: buttonStyles,
-      },
-      align: 'left',
-    },
-  ];
-
   const linkClick = (event) => {
+    props.onDismiss();
     TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: event.target.href });
   };
 
-  const buttonClick = (link) => {
-    TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
-    navigateTo(link);
-  };
-
-  useEffect(() => {}, []);
-
   return (
-    <div style={wrapperStyle}>
-      <Toolbar
-        css={{ paddingLeft: 25, borderBottom: '1px solid #3d3d3d' }}
-        toolbarItems={props.toolbarItems ? items.concat(props.toolbarItems) : items}
-      />
-      <Stack horizontal>
-        <Stack.Item grow={0} styles={{ root: { width: 250, borderRight: '1px solid #3d3d3d', padding: 38 } }}>
-          <h2 style={h2Style}>{botProject?.name}</h2>
+    <Panel headerText={botProject?.name} isOpen={props.isOpen} onDismiss={props.onDismiss}>
+      <Stack>
+        <Stack.Item grow={0}>
           <p>
-            {formatMessage('File Location:')} <span style={{ textOverflow: 'ellipses', fontSize: 12 }}>{location}</span>
+            {formatMessage('File Location:')}
+            <span
+              style={{
+                display: 'inline-block',
+                overflowWrap: 'break-word',
+                maxWidth: '100%',
+                fontSize: 12,
+              }}
+            >
+              {location}
+            </span>
           </p>
         </Stack.Item>
-        <Stack.Item styles={{ root: { padding: 38 } }}>
+        <Stack.Item>
           <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
-          <Stack horizontal verticalFill tokens={{ childrenGap: 40 }}>
-            <Stack.Item>
-              {formatMessage('Customize')}
-              <ul style={ulStyle}>
-                <li style={liStyle}>
-                  <Link href={linkToPackageManager} styles={linkStyle} onClick={linkClick}>
-                    {formatMessage('Add and remove packages')}
-                  </Link>
-                </li>
-                <li style={liStyle}>
-                  <Link href={linkToLGEditor} styles={linkStyle} onClick={linkClick}>
-                    {formatMessage('Edit what your bot says')}
-                  </Link>
-                </li>
-                <li style={liStyle}>
-                  <Link href={linkToLUEditor} styles={linkStyle} onClick={linkClick}>
-                    {formatMessage('Train your language model')}
-                  </Link>
-                </li>
-                <li style={liStyle}>
-                  <Link href={linkToConnections} styles={linkStyle} onClick={linkClick}>
-                    {formatMessage('Connect your bot to new services')}
-                  </Link>
-                </li>
-              </ul>
-            </Stack.Item>
-            <Stack.Item>
-              {formatMessage('Publish')}
-              <ul style={ulStyle}>
-                <li style={liStyle}>
-                  <Link href={linkToProvision} styles={linkStyle} onClick={linkClick}>
-                    {formatMessage('Create a cloud hosting environment')}
-                  </Link>
-                </li>
-                <li style={liStyle}>
-                  <Link href={linkToPublish} styles={linkStyle} onClick={linkClick}>
-                    {formatMessage('Publish updates to the cloud')}
-                  </Link>
-                </li>
-              </ul>
-            </Stack.Item>
-          </Stack>
-        </Stack.Item>
-        <Stack.Item styles={{ root: { borderLeft: '1px solid #3d3d3d', padding: 38 } }}>
-          <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
-          <ul style={ulStyleGuides}>
+          {formatMessage('Customize')}
+          <ul style={ulStyle}>
             <li style={liStyle}>
-              <Link href={linkToGetStarted} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToPackageManager} onClick={linkClick}>
+                {formatMessage('Add and remove packages')}
+              </Link>
+            </li>
+            <li style={liStyle}>
+              <Link href={linkToLGEditor} onClick={linkClick}>
+                {formatMessage('Edit what your bot says')}
+              </Link>
+            </li>
+            <li style={liStyle}>
+              <Link href={linkToLUEditor} onClick={linkClick}>
+                {formatMessage('Train your language model')}
+              </Link>
+            </li>
+            <li style={liStyle}>
+              <Link href={linkToConnections} onClick={linkClick}>
+                {formatMessage('Connect your bot to new services')}
+              </Link>
+            </li>
+          </ul>
+          {formatMessage('Publish')}
+          <ul style={ulStyle}>
+            <li style={liStyle}>
+              <Link href={linkToProvision} onClick={linkClick}>
+                {formatMessage('Create a cloud hosting environment')}
+              </Link>
+            </li>
+            <li style={liStyle}>
+              <Link href={linkToPublish} onClick={linkClick}>
+                {formatMessage('Publish updates to the cloud')}
+              </Link>
+            </li>
+          </ul>
+          <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
+          <ul style={ulStyle}>
+            <li style={liStyle}>
+              <Link href={linkToGetStarted} target="_blank" onClick={linkClick}>
                 {formatMessage('Get started with Bot Framework Composer')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToCreateFirstBot} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToCreateFirstBot} target="_blank" onClick={linkClick}>
                 {formatMessage('Create your first bot')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToTutorials} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToTutorials} target="_blank" onClick={linkClick}>
                 {formatMessage('Composer tutorials')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToLGFileFormat} styles={linkStyle} target="_blank" onClick={linkClick}>
-                {formatMessage('LG file format and syntax')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToAdaptiveExpressions} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToAdaptiveExpressions} target="_blank" onClick={linkClick}>
                 {formatMessage('Learn about Adaptive expressions')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToPreBuiltExpressions} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToPreBuiltExpressions} target="_blank" onClick={linkClick}>
                 {formatMessage('Find pre-built Adaptive expressions')}
               </Link>
             </li>
             <li style={liStyle}>
-              <Link href={linkToLUFileFormat} styles={linkStyle} target="_blank" onClick={linkClick}>
+              <Link href={linkToLUFileFormat} target="_blank" onClick={linkClick}>
                 {formatMessage('LU file format and syntax')}
+              </Link>
+            </li>
+            <li style={liStyle}>
+              <Link href={linkToLGFileFormat} target="_blank" onClick={linkClick}>
+                {formatMessage('LG file format and syntax')}
               </Link>
             </li>
           </ul>
         </Stack.Item>
       </Stack>
-    </div>
+    </Panel>
   );
 };

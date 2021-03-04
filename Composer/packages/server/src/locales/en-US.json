@@ -1307,6 +1307,9 @@
   "error_afac7133": {
     "message": "Error:"
   },
+  "error_encountered_when_getting_template_readme_17dcbc61": {
+    "message": "### Error encountered when getting template readMe"
+  },
   "error_event_c079b608": {
     "message": "Error event"
   },
@@ -1372,6 +1375,9 @@
   },
   "expecting_4df12c00": {
     "message": "Expecting"
+  },
+  "explore_next_steps_and_find_valuable_references_an_a0820025": {
+    "message": "Explore next steps and find valuable references and learning resources to design, build, and publish your new bot using Composer."
   },
   "export_json_2e2981f5": {
     "message": "Export JSON"
@@ -1546,6 +1552,9 @@
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
+  },
+  "get_started_with_your_new_bot_da9aaf6a": {
+    "message": "Get started with your new bot"
   },
   "getting_help_ab6811b0": {
     "message": "Getting Help"
@@ -2186,6 +2195,9 @@
   "navigation_to_see_actions_3be545c9": {
     "message": "navigation to see actions"
   },
+  "need_another_template_send_us_a_request_5cf2a4d5": {
+    "message": "Need another template? Send us a request"
+  },
   "new_13daf639": {
     "message": "New"
   },
@@ -2461,9 +2473,6 @@
   },
   "previous_folder_e7eeb306": {
     "message": "previous folder"
-  },
-  "primary_language_96276a64": {
-    "message": "Primary Language"
   },
   "privacy_290109ea": {
     "message": "Privacy"
@@ -2797,9 +2806,6 @@
   },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
-  },
-  "runtime_type_f9e2419b": {
-    "message": "Runtime type"
   },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
