@@ -76,7 +76,7 @@ export const StringArrayEditor = React.memo(
   }: StringArrayEditorProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+    const [currentIndex, setCurrentIndex] = useState<number | null>(items.length === 1 && items[0] === '' ? 0 : null);
     const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLInputElement | null>(null);
 
     const onItemChange = useCallback(

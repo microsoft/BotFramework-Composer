@@ -5,12 +5,12 @@ import formatMessage from 'format-message';
 import React from 'react';
 
 import { useStringArray } from '../hooks/useStringArray';
-import { CommonModalityEditorProps, TextStructuredResponseItem } from '../types';
+import { CommonModalityEditorProps, ModalityType, TextStructuredResponseItem } from '../types';
 
 import { ModalityEditorContainer } from './ModalityEditorContainer';
 import { StringArrayEditor } from './StringArrayEditor';
 
-type Props = CommonModalityEditorProps & { response: TextStructuredResponseItem };
+type Props = CommonModalityEditorProps & { response: TextStructuredResponseItem; modalities: ModalityType[] };
 
 const TextModalityEditor = React.memo(
   ({
@@ -19,6 +19,7 @@ const TextModalityEditor = React.memo(
     lgOption,
     lgTemplates,
     memoryVariables,
+    modalities,
     onTemplateChange,
     onRemoveModality,
     onRemoveTemplate,
@@ -33,7 +34,7 @@ const TextModalityEditor = React.memo(
         onTemplateChange,
         onUpdateResponseTemplate,
       },
-      { lgOption, lgTemplates }
+      { lgOption, lgTemplates, modalities }
     );
 
     return (
