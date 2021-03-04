@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, useEffect, useState, useRef } from 'react';
+import { useMemo, useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { rootBotProjectIdSelector } from '../../../../../recoilModel';
@@ -30,13 +30,11 @@ export const WebchatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   const navigateToNewestLogEntry = () => {
     if (currentLogItemCount && webChatContainerRef?.current) {
       const lastChild = webChatContainerRef.current.lastElementChild;
-      lastChild?.scrollIntoView({
-        behavior: 'smooth',
-      });
+      lastChild?.scrollIntoView();
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (navigateToLatestEntry) {
       navigateToNewestLogEntry();
       navigateToLatestEntryWhenActive(false);

@@ -56,9 +56,7 @@ describe('<WebchatPanel />', () => {
 
     mockServerPort.mockResolvedValue(4000);
 
-    const { rerender, findByText } = render(
-      <WebChatPanel clearWebchatInspectorLogs={jest.fn()} {...props} appendLogToWebChatInspector={jest.fn()} />
-    );
+    const { rerender, findByText } = render(<WebChatPanel {...props} />);
 
     mockstartNewConversation.mockResolvedValue({
       directline: {
@@ -74,14 +72,7 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(
-        <WebChatPanel
-          {...props}
-          isWebChatPanelVisible
-          appendLogToWebChatInspector={jest.fn()}
-          clearWebchatInspectorLogs={jest.fn()}
-        />
-      );
+      rerender(<WebChatPanel {...props} isWebChatPanelVisible />);
       await findByText('Restart Conversation - new user ID');
     });
   });
