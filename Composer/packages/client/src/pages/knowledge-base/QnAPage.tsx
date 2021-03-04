@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { Fragment, useCallback, Suspense, useEffect } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -12,11 +12,19 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogIdsState, qnaFilesState, dispatcherState, createQnAOnState, localeState } from '../../recoilModel';
+import {
+  dialogIdsState,
+  qnaFilesState,
+  dispatcherState,
+  createQnAOnState,
+  localeState,
+  settingsState,
+} from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
+import { TabHeader } from './TabHeader';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
@@ -36,6 +44,9 @@ const QnAPage: React.FC<RouteComponentProps<{
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const creatQnAOnInfo = useRecoilValue(createQnAOnState);
+  const settings = useRecoilValue(settingsState(actualProjectId));
+  const { languages, defaultLanguage } = settings;
+  const [currentLocale, setCurrentLocale] = useState(locale);
 
   const path = props.location?.pathname ?? '';
 
@@ -59,6 +70,10 @@ const QnAPage: React.FC<RouteComponentProps<{
     [dialogId, actualProjectId, edit]
   );
 
+  const onChangeLocale = (locale) => {
+    setCurrentLocale(locale);
+  };
+
   const onRenderHeaderContent = () => {
     if (!isRoot) {
       return (
@@ -81,15 +96,36 @@ const QnAPage: React.FC<RouteComponentProps<{
       pageMode={'knowledge-base'}
       projectId={projectId}
       skillId={skillId}
-      title={formatMessage('QnA')}
+      title={formatMessage('Knowledge(QnA)')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
-          <TableView dialogId={dialogId} path="/" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
-        </Router>
+        <TabHeader
+          defaultLanguage={defaultLanguage}
+          languages={languages}
+          locale={currentLocale}
+          onChangeLocale={onChangeLocale}
+        >
+          <Router component={Fragment} primary={false}>
+            <CodeEditor
+              dialogId={dialogId}
+              locale={currentLocale}
+              path="/edit"
+              projectId={projectId}
+              qnaFileId={qnaFileId}
+              skillId={skillId}
+            />
+            <TableView
+              dialogId={dialogId}
+              locale={currentLocale}
+              path="/"
+              projectId={projectId}
+              qnaFileId={qnaFileId}
+              skillId={skillId}
+            />
+          </Router>
+        </TabHeader>
         <CreateQnAModal
           dialogId={creatQnAOnInfo.dialogId}
           projectId={creatQnAOnInfo.projectId}
