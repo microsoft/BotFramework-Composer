@@ -157,7 +157,7 @@ type TextFieldItemProps = Omit<Props, 'onRemove' | 'mode' | 'onFocus' | 'telemet
 const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldItemProps) => {
   const itemRef = useRef<ITextField | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     itemRef.current?.focus();

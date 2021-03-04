@@ -4,20 +4,20 @@
 import { LgTemplate } from '@bfc/shared';
 import React from 'react';
 
-import { ArrayBasedStructuredResponseItem, ModalityType, PartialStructuredResponse } from '../types';
+import { ArrayBasedStructuredResponseItem, PartialStructuredResponse } from '../types';
 import { getTemplateId } from '../../utils/structuredResponse';
 import { LGOption } from '../../utils/types';
 
 const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
   response: T,
   lgTemplates?: readonly LgTemplate[],
-  modalities?: ModalityType[]
+  focusOnMount?: boolean
 ): string[] => {
   const templateId = getTemplateId(response);
   const template = lgTemplates?.find(({ name }) => name === templateId);
   return response?.value && template?.body
     ? template?.body?.replace(/- /g, '').split(/\r?\n/g) || []
-    : response?.value || (modalities?.length === 1 && modalities[0] === 'Text' ? [''] : []);
+    : response?.value || (focusOnMount ? [''] : []);
 };
 
 export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
@@ -29,7 +29,7 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
     onUpdateResponseTemplate: (response: PartialStructuredResponse) => void;
   },
   options?: {
-    modalities?: ModalityType[];
+    focusOnMount?: boolean;
     lgOption?: LGOption;
     lgTemplates?: readonly LgTemplate[];
   }
@@ -37,10 +37,10 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
   const newTemplateNameSuffix = React.useMemo(() => kind.toLowerCase(), [kind]);
 
   const { onRemoveTemplate, onTemplateChange, onUpdateResponseTemplate } = callbacks;
-  const { lgOption, lgTemplates, modalities } = options || {};
+  const { lgOption, lgTemplates, focusOnMount } = options || {};
 
   const [templateId, setTemplateId] = React.useState(getTemplateId(structuredResponse));
-  const [items, setItems] = React.useState<string[]>(getInitialItems(structuredResponse, lgTemplates, modalities));
+  const [items, setItems] = React.useState<string[]>(getInitialItems(structuredResponse, lgTemplates, focusOnMount));
 
   const onChange = React.useCallback(
     (newItems: string[]) => {

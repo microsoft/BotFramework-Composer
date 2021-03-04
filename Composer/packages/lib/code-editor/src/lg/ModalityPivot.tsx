@@ -154,7 +154,13 @@ const renderModalityEditor = ({
         />
       );
     case 'Text':
-      return <TextModalityEditor {...commonProps} modalities={modalities} response={structuredResponse?.Text as TextStructuredResponseItem} />;
+      return (
+        <TextModalityEditor
+          {...commonProps}
+          focusOnMount={modalities.length === 1 && modalities[0] === 'Text'}
+          response={structuredResponse?.Text as TextStructuredResponseItem}
+        />
+      );
   }
 };
 
