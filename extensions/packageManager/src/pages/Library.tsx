@@ -137,15 +137,16 @@ const Library: React.FC = () => {
   };
 
   const getLibraryAPI = () => {
-    const feedUrl = `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    const feedUrl = `${API_ROOT}/feed?key=${feed}`;
     return httpClient.get(feedUrl);
   };
 
   const getSearchResults = () => {
-    const feedUrl = feeds.find((f) => f.key == feed).searchUrl
-      ? `${API_ROOT}/feed?url=` +
-        encodeURIComponent(feeds.find((f) => f.key == feed).searchUrl.replace(/\{\{keyword\}\}/g, searchTerm))
-      : `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    // const feedUrl = feeds.find((f) => f.key == feed).searchUrl
+    //   ? `${API_ROOT}/feed?url=` +
+    //     encodeURIComponent(feeds.find((f) => f.key == feed).searchUrl.replace(/\{\{keyword\}\}/g, searchTerm))
+    //   : `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    const feedUrl = `${API_ROOT}/feed?key=${feed}&term=${encodeURIComponent(searchTerm)}`;
     return httpClient.get(feedUrl);
   };
 

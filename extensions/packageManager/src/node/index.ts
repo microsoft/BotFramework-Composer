@@ -63,13 +63,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // if no sources are in the config file, set the default list to our 1st party feed.
       if (!packageSources) {
         packageSources = [
-          {
-            key: 'npm',
-            text: 'npm',
-            url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
-            searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bf-component&size=100&from=0',
-            readonly: true,
-          },
+          // TODO: Re-enable the NPM feed when we have a JS runtime
+          // {
+          //   key: 'npm',
+          //   text: 'npm',
+          //   url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
+          //   searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bf-component&size=100&from=0',
+          //   readonly: true,
+          // },
           {
             key: 'nuget',
             text: 'nuget',
@@ -79,6 +80,17 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               prerelease: true,
               semVerLevel: '2.0.0',
               query: 'microsoft.bot.components+tags:bf-component',
+            },
+            type: PackageSourceType.NuGet,
+          },
+          {
+            key: 'nuget-community',
+            text: 'community packages',
+            url: 'https://api.nuget.org/v3/index.json',
+            defaultQuery: {
+              prerelease: true,
+              semVerLevel: '2.0.0',
+              query: 'tags:bf-component',
             },
             type: PackageSourceType.NuGet,
           },
@@ -144,14 +156,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     getFeed: async function (req, res) {
       // We receive an array of urls for the package sources to retrieve.
       // Why an array? In the future it is feasible we would want to mix several feeds together...
-      const packageSourceUrls: string[] = [req.query.url];
-      let packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      // Get package sources that match a url in the feed query received.
-      packageSources = packageSources.filter((f) => f.url != null && packageSourceUrls.includes(f.url));
+      const packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
+      const packageSource = packageSources.find((source) => source.key === req.query.key);
       const combined: IPackageDefinition[] = [];
-      for (const packageSource of packageSources) {
+
+      if (packageSource) {
         try {
           const feed: IFeed = await new FeedFactory(composer).build(packageSource);
           const packageQuery: IPackageQuery = {
@@ -174,6 +185,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             message: `Could not load feed from URL ${packageSource.url}. Please check the feed URL and format. Error message: ${err.message}`,
           });
         }
+      } else {
+        return res.status(500).json({
+          message: `Could not find feed with key ${req.query.key}`,
+        });
       }
 
       const recentlyUsed = (composer.store.read('recentlyUsed') as any[]) || [];
