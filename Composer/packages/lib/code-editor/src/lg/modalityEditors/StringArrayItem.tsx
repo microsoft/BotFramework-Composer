@@ -89,6 +89,8 @@ const textFieldStyles = {
   },
 };
 
+const textFieldResizeMaxCharsThreshold = 25;
+
 type Props = {
   mode: 'edit' | 'view';
   editorMode?: 'single' | 'editor';
@@ -196,7 +198,7 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
       <Input
         componentRef={(ref) => (itemRef.current = ref)}
         defaultValue={value}
-        multiline={value.length > 50}
+        multiline={value.length > textFieldResizeMaxCharsThreshold}
         resizable={false}
         styles={textFieldStyles}
         onChange={onChange}
