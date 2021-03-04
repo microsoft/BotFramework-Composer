@@ -6,7 +6,10 @@ Pre-requisites: Before you can connect a bot to Speech, be sure you've completed
 
 * You've built a basic bot in Composer
 * You've created a publishing profile and published your bot to Azure
-* You've [created a Cognitive Services key](https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesAllInOne)
+* You've [created a Speech Service](https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesSpeechServices) in the same DC Region of your Bot Registration (Reccomend to add to the same Resource Group if possible)
 * You've enabled the Speech connection in your bot's settings
-
-To verify your connection to the Speech service, [follow the instructions here](https://docs.microsoft.com/azure/bot-service/bot-service-channel-connect-directlinespeech?view=azure-bot-service-4.0#example).
+* Download the Windows [Voice Assistant Client](https://github.com/Azure-Samples/Cognitive-Services-Voice-Assistant/releases) (Only Available for Windows)
+* In Windows Voice Assistant Client put your Speech Key in Subscritpion Key under General Settings and your DC region in the Subscription key region. Then Save and Apply Profile.
+![image](https://user-images.githubusercontent.com/18688053/109964028-bead8d80-7cb2-11eb-8161-738db214ce9e.png)
+* Test your solution by clicking Reconnect and using the microfone button in the bottom right of the Windows Voice Assistant Client
+![image](https://user-images.githubusercontent.com/18688053/109963900-90c84900-7cb2-11eb-8c0c-7a6b1c7980cd.png)
