@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { publishStorage } from '../recoilModel/dispatchers/publisher';
+
 import httpClient from './httpUtil';
 
 enum PollingStateEnum {
@@ -39,8 +41,14 @@ export class PublishStatusPollingUpdater {
 
   private async fetchPublishStatusData(botProjectId: string, publishTargetName: string, onData: OnDataHandler) {
     // TODO: DONT set HTTP Status code with 500 404 directly!
+    const currentJobId = publishStorage.get('jobIds')
+      ? publishStorage.get('jobIds')[`${botProjectId}-${publishTargetName}`]
+      : undefined;
+    if (!currentJobId) {
+      return;
+    }
     const response = await httpClient
-      .get(`/publish/${this.botProjectId}/status/${this.publishTargetName}`)
+      .get(`/publish/${this.botProjectId}/status/${this.publishTargetName}/${currentJobId}`)
       .catch((reason) => reason.response);
 
     onData({

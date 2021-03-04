@@ -815,14 +815,6 @@ export class AzureResourceMananger {
               name: 'WEBSITE_NODE_DEFAULT_VERSION',
               value: '10.14.1',
             },
-            {
-              name: 'MicrosoftAppId',
-              value: config.appId,
-            },
-            {
-              name: 'MicrosoftAppPassword',
-              value: config.appPwd,
-            },
           ],
           cors: {
             allowedOrigins: ['https://botservice.hosting.portal.azure.net', 'https://hosting.onecloud.azure-test.net/'],
@@ -947,6 +939,9 @@ export class AzureResourceMananger {
         name: config.name,
         location: 'global',
         kind: 'bot',
+        tags: {
+          webapp: config.webAppHostname,
+        },
       });
 
       if (botResult?._response?.status >= 300) {
@@ -956,6 +951,7 @@ export class AzureResourceMananger {
         });
         throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, botResult._response?.bodyAsText);
       }
+      return config.name;
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,

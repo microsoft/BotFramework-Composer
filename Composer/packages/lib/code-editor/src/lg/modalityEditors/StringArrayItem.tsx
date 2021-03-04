@@ -246,6 +246,7 @@ export const StringArrayItem = (props: Props) => {
               lgOption={lgOption}
               lgTemplates={lgTemplates}
               memoryVariables={memoryVariables}
+              options={{ folding: false }}
               telemetryClient={telemetryClient}
               value={value}
               onChange={onLgChange}

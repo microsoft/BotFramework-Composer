@@ -8,8 +8,7 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import { FontSizes } from '@uifabric/fluent-theme';
-
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
+import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 export type PublishToolbarProps = {
   canPublish: boolean;
@@ -55,6 +54,7 @@ export const PublishToolbar: React.FC<PublishToolbarProps> = ({ canPublish, canP
           iconName: 'CloudDownload',
         },
         onClick: onPull,
+        styles: defaultToolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Pull',

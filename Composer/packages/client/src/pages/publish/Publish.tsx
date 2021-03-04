@@ -175,7 +175,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // Show result notifications
       const displayedNotifications = showNotificationsRef.current;
       if (displayedNotifications[botProjectId]) {
-        const resultNotification = createNotification(getPublishedNotificationCardProps(updatedBot));
+        const resultNotification = createNotification(
+          getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status })
+        );
         addNotification(resultNotification);
         setTimeout(() => {
           deleteNotification(resultNotification.id);
