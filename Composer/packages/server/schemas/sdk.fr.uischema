@@ -1,11 +1,11 @@
 {
   "Microsoft.AdaptiveDialog": {
     "form": {
-      "description": "Cela configure un dialogue piloté par les données via une collection d'événements et d'actions.",
+      "description": "Cela configure un dialogue piloté par les données via une collection d’événements et d’actions.",
       "label": "Dialogue adaptatif",
       "properties": {
         "recognizer": {
-          "description": "Pour comprendre ce que dit l'utilisateur, votre dialogue a besoin d'un « module de reconnaissance » qui comprend des exemples de mots et de phrases utilisables par les utilisateurs.",
+          "description": "Pour comprendre ce que dit l’utilisateur, votre dialogue a besoin d’un « module de reconnaissance » qui comprend des exemples de mots et de phrases utilisables par les utilisateurs.",
           "label": "Compréhension du langage"
         }
       }
@@ -115,7 +115,7 @@
   "Microsoft.LogAction": {
     "form": {
       "label": "Journaliser dans la console",
-      "subtitle": "Journaliser l'action"
+      "subtitle": "Journaliser l’action"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -150,8 +150,8 @@
   },
   "Microsoft.SignOutUser": {
     "form": {
-      "label": "Déconnecter l'utilisateur",
-      "subtitle": "Déconnecter l'utilisateur"
+      "label": "Déconnecter l’utilisateur",
+      "subtitle": "Déconnecter l’utilisateur"
     }
   },
   "Microsoft.SwitchCondition": {
@@ -193,13 +193,13 @@
   "Microsoft.ConfirmInput": {
     "form": {
       "label": "Demander une confirmation",
-      "subtitle": "Confirmer l'entrée"
+      "subtitle": "Confirmer l’entrée"
     }
   },
   "Microsoft.DateTimeInput": {
     "form": {
       "label": "Demander une date ou une heure",
-      "subtitle": "Entrée de date et d'heure"
+      "subtitle": "Entrée de date et d’heure"
     }
   },
   "Microsoft.NumberInput": {
@@ -277,8 +277,8 @@
   },
   "Microsoft.OnError": {
     "form": {
-      "label": "Une erreur s'est produite",
-      "subtitle": "Événement d'erreur"
+      "label": "Une erreur s’est produite",
+      "subtitle": "Événement d’erreur"
     }
   },
   "Microsoft.OnEventActivity": {
@@ -343,7 +343,7 @@
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "L'utilisateur est en train de taper",
+      "label": "L’utilisateur est en train de taper",
       "subtitle": "Activité Typing"
     }
   },
