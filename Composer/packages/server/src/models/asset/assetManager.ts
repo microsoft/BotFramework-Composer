@@ -135,8 +135,6 @@ export class AssetManager {
         throw new Error(`error hit when installing remote template`);
       }
 
-      ref.path = `${ref.path}/${projectName}`;
-
       return ref;
     } catch (err) {
       if (err?.message.match(/npm/)) {
@@ -164,8 +162,10 @@ export class AssetManager {
       log('Looking up local packages');
       await yeomanEnv.lookupLocalPackages();
       return true;
-    } catch {
-      return false;
+    } catch (err) {
+      log('Error installing template');
+      log(err);
+      throw err;
     }
   }
 
