@@ -3,7 +3,9 @@
 
 import { FileInfo } from '@bfc/shared';
 import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
+import { writeFile } from 'fs-extra';
 
+import { Path } from '../../../utility/path';
 import { IOrchestratorBuildOutput } from '../interface';
 
 import { RequestMsg } from './types';
@@ -34,7 +36,8 @@ export async function orchestratorBuilder(
       id: fi.name,
       content: fi.content,
     }));
-  const result = await Orchestrator.buildAsync(
+
+  return await Orchestrator.buildAsync(
     modelPath,
     luObjects,
     orchestratorLabelResolvers,
@@ -43,7 +46,18 @@ export async function orchestratorBuilder(
     null,
     fullEmbedding
   );
-  return result;
+}
+
+export async function writeSnapshot(output: IOrchestratorBuildOutput, generatedFolderPath: string) {
+  // write snapshot data into /generated folder
+  const snapshots: { [key: string]: string } = {};
+  for (const dialog of output.outputs) {
+    const bluFilePath = Path.resolve(generatedFolderPath, dialog.id.replace('.lu', '.blu'));
+    snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
+
+    await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
+  }
+  return snapshots;
 }
 
 const handleMessage = async (msg: RequestMsg) => {
@@ -51,9 +65,10 @@ const handleMessage = async (msg: RequestMsg) => {
   try {
     switch (payload.type) {
       case 'build': {
-        const { files, modelPath } = payload;
+        const { files, modelPath, generatedFolderPath } = payload;
         const result = await orchestratorBuilder(files, modelPath);
-        process.send?.({ id: msg.id, payload: result });
+        const snapshots = await writeSnapshot(result, generatedFolderPath);
+        process.send?.({ id: msg.id, payload: snapshots });
         break;
       }
     }

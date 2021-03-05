@@ -224,17 +224,7 @@ export class Builder {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
     // build snapshots from LU files
     if (!this.orchestratorBuilder) return;
-    const returnData = await this.orchestratorBuilder.build(luFiles, modelPath);
-    // write snapshot data into /generated folder
-    const snapshots: { [key: string]: string } = {};
-    for (const dialog of returnData.outputs) {
-      const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
-      snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
-
-      await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
-    }
-
-    return snapshots;
+    return await this.orchestratorBuilder.build(luFiles, modelPath, this.generatedFolderPath);
   };
 
   /**

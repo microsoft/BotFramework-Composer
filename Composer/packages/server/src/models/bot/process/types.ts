@@ -6,6 +6,7 @@ export type BuildPayload = {
   type: 'build';
   files: FileInfo[];
   modelPath: string;
+  generatedFolderPath: string;
 };
 
 export type RequestMsg = {

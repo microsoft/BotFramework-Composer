@@ -28,9 +28,13 @@ class OrchestratorBuilder {
     this.worker.on('message', this.handleMsg.bind(this));
   }
 
-  public async build(files: FileInfo[], modelPath: string): Promise<IOrchestratorBuildOutput> {
+  public async build(
+    files: FileInfo[],
+    modelPath: string,
+    generatedFolderPath: string
+  ): Promise<{ [key: string]: string }> {
     const msgId = uniqueId();
-    const msg = { id: msgId, payload: { files, type: 'build', modelPath } };
+    const msg = { id: msgId, payload: { files, type: 'build', modelPath, generatedFolderPath } };
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
