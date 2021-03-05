@@ -38,6 +38,9 @@ const Page = {
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
   const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
+  const [name, setName] = useState(current?.item.name || '');
+  const [targetType, setTargetType] = useState<string>(current?.item.type || '');
+
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
   const { provisionToTarget } = useRecoilValue(dispatcherState);
@@ -176,9 +179,13 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
             </div>
             <ProfileFormDialog
               current={current}
+              name={name}
               projectId={projectId}
+              setName={setName}
+              setTargetType={setTargetType}
               setType={setSelectType}
               targets={targets}
+              targetType={targetType}
               types={types}
               updateSettings={savePublishTarget}
               onDismiss={closeDialog}

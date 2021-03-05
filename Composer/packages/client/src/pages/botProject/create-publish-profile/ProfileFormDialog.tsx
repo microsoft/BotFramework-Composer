@@ -32,6 +32,10 @@ type ProfileFormDialogProps = {
   updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
   projectId: string;
   setType: (value) => void;
+  name: string;
+  targetType: string;
+  setName: (value: string) => void;
+  setTargetType: (value: string) => void;
   current?: { index: number; item: PublishTarget } | null;
 };
 const labelContainer = css`
@@ -72,10 +76,21 @@ const onRenderLabel = (props) => {
 };
 
 export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
-  const { onDismiss, targets, types, onNext, updateSettings, projectId, setType, current } = props;
-  const [name, setName] = useState(current?.item.name || '');
+  const {
+    name,
+    setName,
+    targetType,
+    setTargetType,
+    onDismiss,
+    targets,
+    types,
+    onNext,
+    updateSettings,
+    projectId,
+    setType,
+    current,
+  } = props;
   const [errorMessage, setErrorMsg] = useState('');
-  const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const updateName = (e, newName) => {
