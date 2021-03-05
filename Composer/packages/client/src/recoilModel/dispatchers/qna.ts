@@ -108,7 +108,7 @@ export const createQnAFileState = async (
   // copy default locale qna file on other locales
   if (locale === defaultLanguage) {
     languages
-      .filter((lang) => !filteredLocales.includes(lang))
+      .filter((lang) => ![...filteredLocales, defaultLanguage].includes(lang))
       .forEach((lang) => {
         const fileId = `${id}.${lang}`;
         qnaFileStatusStorage.updateFileStatus(projectId, fileId);
