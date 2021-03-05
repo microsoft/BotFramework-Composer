@@ -263,6 +263,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [token, setToken] = useState<string>();
   const [currentUser, setCurrentUser] = useState<any>();
+  const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [choice, setChoice] = useState(choiceOptions[0]);
   const [currentSubscription, setSubscription] = useState<string>('');
@@ -309,31 +310,42 @@ export const AzureProvisionDialog: React.FC = () => {
           if (tenants?.length > 0) {
             // set tenantId in cache.
             setTenantId(tenants[0].tenantId);
-            getARMTokenForTenant(tenants[0].tenantId).then((token) => {
-              setToken(token);
-              const decoded = decodeToken(token);
-              setCurrentUser({
-                token: token,
-                email: decoded.upn,
-                name: decoded.name,
-                expiration: (decoded.exp || 0) * 1000, // convert to ms,
-                sessionExpired: false,
+            getARMTokenForTenant(tenants[0].tenantId)
+              .then((token) => {
+                setToken(token);
+                const decoded = decodeToken(token);
+                setCurrentUser({
+                  token: token,
+                  email: decoded.upn,
+                  name: decoded.name,
+                  expiration: (decoded.exp || 0) * 1000, // convert to ms,
+                  sessionExpired: false,
+                });
+              })
+              .catch((err) => {
+                setCurrentUser(undefined);
+                setLoginErrorMsg(err.message || err.toString());
               });
-            });
           }
         });
       } else {
-        getARMTokenForTenant(getTenantIdFromCache()).then((token) => {
-          setToken(token);
-          const decoded = decodeToken(token);
-          setCurrentUser({
-            token: token,
-            email: decoded.upn,
-            name: decoded.name,
-            expiration: (decoded.exp || 0) * 1000, // convert to ms,
-            sessionExpired: false,
+        getARMTokenForTenant(getTenantIdFromCache())
+          .then((token) => {
+            setToken(token);
+            const decoded = decodeToken(token);
+            setCurrentUser({
+              token: token,
+              email: decoded.upn,
+              name: decoded.name,
+              expiration: (decoded.exp || 0) * 1000, // convert to ms,
+              sessionExpired: false,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            setCurrentUser(undefined);
+            setLoginErrorMsg(err.message || err.toString());
           });
-        });
       }
     }
   }, []);
@@ -672,9 +684,12 @@ export const AzureProvisionDialog: React.FC = () => {
           )}
         </form>
       )}
-      {choice.key === 'create' && !subscriptionOption && <Spinner label="Loading" />}
-      {choice.key === 'create' && subscriptionOption?.length < 1 && (
-        <div> your subscription list is empty, please add your subscription, or login with another account.</div>
+      {choice.key === 'create' && !!loginErrorMsg && <div style={{ marginTop: '10px' }}> {loginErrorMsg} </div>}
+      {choice.key === 'create' && !loginErrorMsg && !subscriptionOption && <Spinner label="Loading" />}
+      {choice.key === 'create' && currentUser && subscriptionOption?.length < 1 && (
+        <div style={{ marginTop: '10px' }}>
+          Your subscription list is empty, please add your subscription, or login with another account.
+        </div>
       )}
       {choice.key === 'import' && (
         <div style={{ width: '50%', marginTop: '10px', height: '100%' }}>
@@ -786,7 +801,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 logOut();
               }}
             >
-              sign out
+              Sign out
             </div>
           )}
           <div>

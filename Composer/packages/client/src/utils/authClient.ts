@@ -91,6 +91,8 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
 }
 
 async function logOut() {
+  // clean tenantId cache
+  removeTenantFromCache();
   if (isElectron()) {
     try {
       const url = '/api/auth/logOut';
@@ -104,8 +106,6 @@ async function logOut() {
     cleanTokenFromCache('idToken');
     cleanTokenFromCache(authConfig.clientId);
   }
-  // clean tenantId cache
-  removeTenantFromCache();
 }
 
 /**
@@ -125,8 +125,13 @@ async function getARMTokenForTenant(tenantId: string): Promise<string> {
   }
 
   const result = await fetch(`/api/auth/getARMTokenForTenant?tenantId=${tenantId}`, options);
-  const { accessToken = '' } = await result.json();
-  return accessToken;
+  if (result.status >= 400) {
+    const data = await result.json();
+    throw Error(data.error?.diagnostics?.description || 'get ARM token failure');
+  } else {
+    const { accessToken = '' } = await result.json();
+    return accessToken;
+  }
 }
 
 /**
