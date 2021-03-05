@@ -13,6 +13,7 @@ import { CheckNameAvailabilityResponseBody } from '@azure/arm-botservice/esm/mod
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
+
 import { AzureResourceTypes } from '../types';
 import {
   AzureAPIStatus,
