@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 import * as React from 'react';
-import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
+import { useState, useMemo, useEffect, Fragment, useCallback, useRef, Suspense } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { logOut, usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
@@ -600,97 +600,98 @@ export const AzureProvisionDialog: React.FC = () => {
   const PageFormConfig = (
     <Fragment>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} style={{}} onChange={updateChoice} />
-      {subscriptionOption?.length > 0 && choice.key === 'create' && (
-        <form style={{ width: '50%', marginTop: '16px' }}>
-          <Dropdown
-            required
-            ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-            defaultSelectedKey={currentSubscription}
-            disabled={currentConfig?.subscriptionId}
-            label={formatMessage('Subscription')}
-            options={subscriptionOption}
-            placeholder={'Select one'}
-            styles={{ root: { paddingBottom: '8px' } }}
-            onChange={updateCurrentSubscription}
-            onRenderLabel={onRenderLabel}
-          />
-          <TextField
-            required
-            ariaLabel={formatMessage(
-              'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
-            )}
-            defaultValue={currentResourceGroup}
-            disabled={currentConfig?.resourceGroup}
-            errorMessage={errorResourceGroupName}
-            label={formatMessage('Resource group name')}
-            placeholder={'Name of your new resource group'}
-            styles={{ root: { paddingBottom: '8px' } }}
-            onChange={updateCurrentResourceGroup}
-            onRenderLabel={onRenderLabel}
-          />
-          <TextField
-            required
-            ariaLabel={formatMessage(
-              'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
-            )}
-            defaultValue={currentHostName}
-            disabled={currentConfig?.hostname || currentConfig?.name}
-            errorMessage={errorHostName}
-            label={formatMessage('Resource name')}
-            placeholder={'Name of your services'}
-            styles={{ root: { paddingBottom: '8px' } }}
-            onChange={newHostName}
-            onRenderLabel={onRenderLabel}
-          />
-          {currentConfig?.region ? (
-            <TextField
-              required
-              defaultValue={currentConfig?.region}
-              disabled={currentConfig?.region}
-              label={formatMessage('Region')}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onRenderLabel={onRenderLabel}
-            />
-          ) : (
+      <Suspense fallback={<Spinner label="Loading" />}>
+        {subscriptionOption?.length > 0 && choice.key === 'create' && (
+          <form style={{ width: '50%', marginTop: '16px' }}>
             <Dropdown
               required
-              defaultSelectedKey={currentLocation}
-              label={'Region'}
-              options={deployLocationsOption}
+              ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
+              defaultSelectedKey={currentSubscription}
+              disabled={currentConfig?.subscriptionId}
+              label={formatMessage('Subscription')}
+              options={subscriptionOption}
               placeholder={'Select one'}
               styles={{ root: { paddingBottom: '8px' } }}
-              onChange={updateCurrentLocation}
-            />
-          )}
-          {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
-            <TextField
-              disabled
-              required
-              defaultValue={currentConfig?.settings?.luis?.region}
-              label={formatMessage('Region for Luis')}
-              styles={{ root: { paddingBottom: '8px' } }}
+              onChange={updateCurrentSubscription}
               onRenderLabel={onRenderLabel}
             />
-          )}
-          {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
-            <Dropdown
+            <TextField
               required
-              defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
-              label={'Region for Luis'}
-              options={luisLocationsOption}
-              placeholder={'Select one'}
-              onChange={updateLuisLocation}
+              ariaLabel={formatMessage(
+                'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
+              )}
+              defaultValue={currentResourceGroup}
+              disabled={currentConfig?.resourceGroup}
+              errorMessage={errorResourceGroupName}
+              label={formatMessage('Resource group name')}
+              placeholder={'Name of your new resource group'}
+              styles={{ root: { paddingBottom: '8px' } }}
+              onChange={updateCurrentResourceGroup}
+              onRenderLabel={onRenderLabel}
             />
-          )}
-        </form>
-      )}
-      {choice.key === 'create' && !!loginErrorMsg && <div style={{ marginTop: '10px' }}> {loginErrorMsg} </div>}
-      {choice.key === 'create' && !loginErrorMsg && !subscriptionOption && <Spinner label="Loading" />}
-      {choice.key === 'create' && currentUser && subscriptionOption?.length < 1 && (
-        <div style={{ marginTop: '10px' }}>
-          Your subscription list is empty, please add your subscription, or login with another account.
-        </div>
-      )}
+            <TextField
+              required
+              ariaLabel={formatMessage(
+                'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
+              )}
+              defaultValue={currentHostName}
+              disabled={currentConfig?.hostname || currentConfig?.name}
+              errorMessage={errorHostName}
+              label={formatMessage('Resource name')}
+              placeholder={'Name of your services'}
+              styles={{ root: { paddingBottom: '8px' } }}
+              onChange={newHostName}
+              onRenderLabel={onRenderLabel}
+            />
+            {currentConfig?.region ? (
+              <TextField
+                required
+                defaultValue={currentConfig?.region}
+                disabled={currentConfig?.region}
+                label={formatMessage('Region')}
+                styles={{ root: { paddingBottom: '8px' } }}
+                onRenderLabel={onRenderLabel}
+              />
+            ) : (
+              <Dropdown
+                required
+                defaultSelectedKey={currentLocation}
+                label={'Region'}
+                options={deployLocationsOption}
+                placeholder={'Select one'}
+                styles={{ root: { paddingBottom: '8px' } }}
+                onChange={updateCurrentLocation}
+              />
+            )}
+            {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
+              <TextField
+                disabled
+                required
+                defaultValue={currentConfig?.settings?.luis?.region}
+                label={formatMessage('Region for Luis')}
+                styles={{ root: { paddingBottom: '8px' } }}
+                onRenderLabel={onRenderLabel}
+              />
+            )}
+            {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
+              <Dropdown
+                required
+                defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
+                label={'Region for Luis'}
+                options={luisLocationsOption}
+                placeholder={'Select one'}
+                onChange={updateLuisLocation}
+              />
+            )}
+          </form>
+        )}
+        {choice.key === 'create' && loginErrorMsg !== '' && <div style={{ marginTop: '10px' }}> {loginErrorMsg} </div>}
+        {choice.key === 'create' && currentUser && subscriptionOption?.length < 1 && (
+          <div style={{ marginTop: '10px' }}>
+            Your subscription list is empty, please add your subscription, or login with another account.
+          </div>
+        )}
+      </Suspense>
       {choice.key === 'import' && (
         <div style={{ width: '50%', marginTop: '10px', height: '100%' }}>
           <div
