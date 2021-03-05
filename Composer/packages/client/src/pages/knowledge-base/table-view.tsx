@@ -34,7 +34,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
-import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFilesState, settingsState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
@@ -96,6 +96,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
+  const settings = useRecoilValue(settingsState(actualProjectId));
+  const { languages } = settings;
   const {
     removeQnAImport,
     removeQnAFile,
@@ -371,12 +373,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!qnaFile) return;
-                          await removeQnAImport({
-                            id: qnaFile.id,
-                            sourceId: containerId.split(`.${locale}`)[0],
-                            projectId: actualProjectId,
+                          languages.forEach(async (l) => {
+                            const sourceNameWithoutLocale = containerId.split(`.${locale}`)[0];
+                            await removeQnAImport({
+                              id: qnaFile.id,
+                              sourceId: sourceNameWithoutLocale,
+                              projectId: actualProjectId,
+                            });
+                            await removeQnAFile({ id: `${sourceNameWithoutLocale}.${l}`, projectId: actualProjectId });
                           });
-                          await removeQnAFile({ id: containerId, projectId: actualProjectId });
                         },
                       },
                     ] as IOverflowSetItemProps[]
