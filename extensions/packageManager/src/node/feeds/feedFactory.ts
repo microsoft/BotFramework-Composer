@@ -1,13 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import * as fs from 'fs';
+
 import { IExtensionRegistration } from '@bfc/extension-client';
+import axios from 'axios';
+
 import { IFeed, IPackageSource, PackageSourceType } from './feedInterfaces';
 import { NpmFeed } from './npm/npmFeed';
 import { LocalNuGetFeed } from './nuget/localNuGetFeed';
 import { NuGetFeed } from './nuget/nugetFeed';
-import axios from 'axios';
-import * as fs from 'fs';
 
 /**
  * Builds the correct feed abstraction based on the provided package source information.
@@ -27,6 +29,7 @@ export class FeedFactory {
     this.composer.log(`Feed factory processing url ${packageSource.url}`);
 
     // If the url is a file system url, create LocalNuGetFeed
+    /* eslint-disable-next-line security/detect-non-literal-fs-filename */
     if (fs.existsSync(packageSource.url)) {
       return new LocalNuGetFeed(this.composer, packageSource.url);
     } else {
