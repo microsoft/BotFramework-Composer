@@ -33,7 +33,7 @@
     "message": "Un profil de ce nom existe déjà."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Une propriété est une information collectée par votre bot. Le nom de propriété est le nom utilisé dans Composer, ce n'est pas nécessairement le même texte que celui qui apparaît dans les messages de votre bot."
+    "message": "Une propriété est une information collectée par votre bot. Le nom de propriété est le nom utilisé dans Composer, ce n’est pas nécessairement le même texte que celui qui apparaît dans les messages de votre bot."
   },
   "a_publishing_profile_provides_the_secure_connectiv_e203980e": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot. "
@@ -204,10 +204,10 @@
     "message": "+ Ajouter une paire QnA"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> ajouter des exemples d'expressions pour déclencher cette intention :\n> - peux-tu me donner la météo\n> - comment est la météo à « {'city=Paris'} »\n\n> définitions d'entité :\n> @ ml city"
+    "message": "> ajouter des exemples d’expressions pour déclencher cette intention :\n> - peux-tu me donner la météo\n> - comment est la météo à « '{'city=Paris'}' »\n\n> définitions d’entité :\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> ajouter des réponses utilisateur attendues :\n> - peux-tu me rappeler de « {'itemTitle=acheter du lait'} »\n> - rappelle-moi de « {'itemTitle'} »\n> - ajouter « {'itemTitle'} » à ma liste de choses à faire\n>\n> définitions d'entité :\n> @ ml itemTitle\n"
+    "message": "> ajouter des réponses utilisateur attendues :\n> - peux-tu me rappeler de « '{'itemTitle=acheter du lait'}' »\n> - rappelle-moi de « '{'itemTitle'}' »\n> - ajouter « '{'itemTitle'}' » à ma liste de choses à faire\n>\n> définitions d’entité :\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
@@ -723,7 +723,7 @@
     "message": "Impossible de se connecter au stockage."
   },
   "couldn_t_complete_the_update_a337a359": {
-    "message": "Impossible d'effectuer la mise à jour :"
+    "message": "Impossible d’effectuer la mise à jour :"
   },
   "create_132b3be1": {
     "message": "Créer"
@@ -2703,7 +2703,7 @@
     "message": "Schéma"
   },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } n'existe pas, sélectionner un schéma à modifier ou en créer un"
+    "message": "{ schemaId } n’existe pas, sélectionner un schéma à modifier ou en créer un"
   },
   "schemas_74566170": {
     "message": "Schémas"
@@ -3105,7 +3105,7 @@
     "message": "Une erreur s’est produite durant la création de votre base de connaissances"
   },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
-    "message": "Ces exemples rassemblent toutes les bonnes pratiques et les composants de prise en charge que nous avons identifiés dans le cadre de la création d'expériences de conversation."
+    "message": "Ces exemples rassemblent toutes les bonnes pratiques et les composants de prise en charge que nous avons identifiés dans le cadre de la création d’expériences de conversation."
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "Ces tâches sont utilisées pour générer le manifeste et décrire les fonctionnalités de cette compétence aux personnes susceptibles de l’utiliser."
@@ -3153,7 +3153,7 @@
     "message": "Cette opération supprime le dialogue et son contenu. Voulez-vous continuer ?"
   },
   "this_will_open_your_emulator_application_if_you_do_ba277151": {
-    "message": "Cette opération ouvre votre application d'émulateur. Si vous n'avez pas encore installé Bot Framework Emulator, vous pouvez le télécharger <a>ici</a>."
+    "message": "Cette opération ouvre votre application d’émulateur. Si vous n’avez pas encore installé Bot Framework Emulator, vous pouvez le télécharger <a>ici</a>."
   },
   "throw_exception_9d0d1db": {
     "message": "Lever une exception"
@@ -3177,7 +3177,7 @@
     "message": "{ title }. { msg }"
   },
   "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
-    "message": "Pour personnaliser le message d'accueil, sélectionnez l'action <i>Envoyer une réponse</i> dans l'éditeur visuel. Ensuite, dans l'éditeur de formulaire à droite, vous pouvez modifier le message d'accueil du bot dans le champ <b>Génération de langage</b>."
+    "message": "Pour personnaliser le message d’accueil, sélectionnez l’action <i>Envoyer une réponse</i> dans l’éditeur visuel. Ensuite, dans l’éditeur de formulaire à droite, vous pouvez modifier le message d’accueil du bot dans le champ <b>Génération de langage</b>."
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
@@ -3207,7 +3207,7 @@
     "message": "Pour comprendre ce que dit l’utilisateur, votre dialogue a besoin d’un « module de reconnaissance » qui comprend des exemples de mots et de phrases utilisables par les utilisateurs."
   },
   "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
-    "message": "Pour comprendre ce que l'utilisateur dit, votre dialogue a besoin d'un « IRecognizer » qui contient des exemples de mots et de phrases que les utilisateurs peuvent utiliser."
+    "message": "Pour comprendre ce que l’utilisateur dit, votre dialogue a besoin d’un « IRecognizer » qui contient des exemples de mots et de phrases que les utilisateurs peuvent utiliser."
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "Dans quelle langue voulez-vous traduire votre bot ?"
