@@ -26,7 +26,7 @@ import {
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { subtitle } from '../styles';
+import { subtitle, errorContainer, errorTextStyle, errorIcon, customError } from '../styles';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
@@ -78,6 +78,15 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     setRuntimePath(settings.runtime?.path ?? '');
     setRuntimeCommand(settings.runtime?.command ?? '');
     setUsingCustomRuntime(settings.runtime?.customRuntime ?? false);
+    const errorMessage = formatMessage('This is a required field.');
+    const errors = { command: '', path: '' };
+    if (!settings.runtime?.path && settings.runtime?.customRuntime) {
+      errors.path = errorMessage;
+    }
+    if (!settings.runtime?.command && settings.runtime?.customRuntime) {
+      errors.command = errorMessage;
+    }
+    setFormDataErrors(errors);
   }, [settings, projectId]);
 
   useEffect(() => {
@@ -203,6 +212,16 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     );
   };
 
+  const errorElement = (errorText: string) => {
+    if (!errorText) return '';
+    return (
+      <div css={errorContainer} data-testId="哈哈">
+        <Icon iconName="ErrorBadge" styles={errorIcon} />
+        <div css={errorTextStyle}>{errorText}</div>
+      </div>
+    );
+  };
+
   return botName ? (
     <div css={runtimeSettingsStyle} id="runtimeSettings">
       {header()}
@@ -212,9 +231,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           required
           data-testid="runtimeCodeLocation"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
-          errorMessage={formDataErrors.path}
+          errorMessage={errorElement(formDataErrors.path)}
           label={formatMessage('Runtime code location')}
-          styles={name}
+          styles={customError}
           value={runtimePath}
           onBlur={() => handleRuntimeSettingOnBlur('path')}
           onChange={handleRuntimeSettingOnChange('path')}
@@ -233,9 +252,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           required
           data-testid="runtimeCommand"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
-          errorMessage={formDataErrors.command}
+          errorMessage={errorElement(formDataErrors.command)}
           label={formatMessage('Start command')}
-          styles={name}
+          styles={customError}
           value={runtimeCommand}
           onBlur={() => handleRuntimeSettingOnBlur('command')}
           onChange={handleRuntimeSettingOnChange('command')}
@@ -265,6 +284,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
       <EjectModal ejectRuntime={callEjectRuntime} hidden={!ejectModalVisible} onDismiss={closeEjectModal} />
     </div>
   ) : (
-    <LoadingSpinner />
-  );
+      <LoadingSpinner />
+    );
 };

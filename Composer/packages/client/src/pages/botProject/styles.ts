@@ -67,6 +67,16 @@ export const customerLabel = css`
   margin-right: 5px;
 `;
 
+export const customError = {
+  root: {
+    selectors: {
+      'p > span': {
+        width: '100%',
+      },
+    },
+  },
+};
+
 // These bg and icon colors are the standard Fluent ones for Messaging, which
 // aren't exported anywhere they can easily be reached
 // Docs: https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/messaging
@@ -77,7 +87,7 @@ export const errorContainer = css`
   line-height: 24px;
   padding-top: 12px;
   padding-bottom: 12px;
-  background: '#fde7e9';
+  background: #fed9cc;
   color: ${NeutralColors.black};
 `;
 
