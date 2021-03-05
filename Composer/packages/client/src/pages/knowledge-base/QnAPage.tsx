@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { Fragment, useCallback, Suspense, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -45,7 +45,11 @@ const QnAPage: React.FC<RouteComponentProps<{
   const locale = useRecoilValue(localeState(actualProjectId));
   const creatQnAOnInfo = useRecoilValue(createQnAOnState);
   const settings = useRecoilValue(settingsState(actualProjectId));
-  const { languages, defaultLanguage } = settings;
+  const { defaultLanguage } = settings;
+  const languages = useMemo(() => (defaultLanguage === locale ? [defaultLanguage] : [locale, defaultLanguage]), [
+    locale,
+    defaultLanguage,
+  ]);
   const [currentLocale, setCurrentLocale] = useState(locale);
 
   const path = props.location?.pathname ?? '';
@@ -103,8 +107,8 @@ const QnAPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <TabHeader
           defaultLanguage={defaultLanguage}
-          languages={languages}
           locale={currentLocale}
+          languages={languages}
           onChangeLocale={onChangeLocale}
         >
           <Router component={Fragment} primary={false}>

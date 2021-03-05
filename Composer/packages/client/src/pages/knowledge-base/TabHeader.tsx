@@ -16,9 +16,8 @@ export type TabHeaderProps = {
 export const TabHeader: React.FC<TabHeaderProps> = (props) => {
   const { locale, defaultLanguage, languages, onChangeLocale, children } = props;
   const languageList = useMemo(() => {
-    const langs = languages.filter((l) => l !== defaultLanguage).concat(defaultLanguage);
-    return languageListTemplates(langs, locale, defaultLanguage).filter((l) => l.isEnabled);
-  }, languages);
+    return languageListTemplates(languages, locale, defaultLanguage).filter((l) => l.isEnabled);
+  }, [languages]);
   const [selectedKey, setSelectedKey] = useState<number>(languageList.findIndex((l) => l.locale === locale) || 0);
 
   const handleLinkClick = (item?: PivotItem) => {
