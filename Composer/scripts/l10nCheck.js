@@ -30,8 +30,12 @@ for (;;) {
         errorCount += 1;
       }
     }
-    if (/[^'{}]'[^'{}]/.exec(msg)) {
+    if (/(\p{L}|\s)'(\p{L})/.exec(msg)) {
       console.log(src, `single quote between letters`);
+      errorCount += 1;
+    }
+    if (/([^']\{')|('\}[^'])/.exec(msg)) {
+      console.log(src, `incorrect brace quoting`);
       errorCount += 1;
     }
   }
