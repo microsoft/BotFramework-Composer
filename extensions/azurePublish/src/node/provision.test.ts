@@ -26,6 +26,4 @@ jest.mock('request-promise', () => {
   return { get: async (...args) => await mockGet(args), RequestPromiseOptions: {} };
 });
 
-describe('provision', () => {
-
-});
+describe('provision', () => {});
