@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import jwtDecode from 'jwt-decode';
+
 import { AzureResourceTypes } from '../types';
 
 export const decodeToken = (token: string) => {
