@@ -10,7 +10,6 @@ import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
 import partition from 'lodash/partition';
-import set from 'lodash/set';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -89,7 +88,8 @@ export class Builder {
     luFiles: FileInfo[],
     qnaFiles: FileInfo[],
     allFiles: FileInfo[],
-    emptyFiles: { [key: string]: boolean }
+    emptyFiles: { [key: string]: boolean },
+    directVersionPublish: boolean
   ) => {
     const userAgent = getUserAgent();
     setEnvDefault('LUIS_USER_AGENT', userAgent);
@@ -108,7 +108,7 @@ export class Builder {
       } else {
         this.containOrchestrator = false;
       }
-      await this.runLuBuild(luBuildFiles);
+      await this.runLuBuild(luBuildFiles, directVersionPublish);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
@@ -476,7 +476,7 @@ export class Builder {
     );
   }
 
-  private async runLuBuild(files: FileInfo[]) {
+  private async runLuBuild(files: FileInfo[], directVersionPublish: boolean) {
     if (!files.length) return;
 
     const config = this._getConfig(files);
@@ -493,19 +493,10 @@ export class Builder {
       keptVersionCount: 10,
       isStaging: false,
       region: config.region,
-      directVersionPublish: false,
+      directVersionPublish: directVersionPublish,
     });
-    // delete version property
-    for (let i = 0; i < buildResult.length; i++) {
-      if (buildResult[i].id && buildResult[i].id.endsWith('.json')) {
-        const luisAppsMap = JSON.parse(buildResult[i]?.content).luis;
-        for (const appName of Object.keys(luisAppsMap)) {
-          delete luisAppsMap[appName].version;
-        }
-        set(buildResult[i], 'content', JSON.stringify({ luis: luisAppsMap }));
-      }
-    }
-    await this.writeLuisSettings(buildResult, this.generatedFolderPath);
+
+    await this.writeLuisSettings(buildResult, this.generatedFolderPath, directVersionPublish);
   }
 
   private async runQnaBuild(files: FileInfo[]) {
@@ -533,7 +524,7 @@ export class Builder {
     });
   }
 
-  private writeLuisSettings = async (contents, out: string) => {
+  private writeLuisSettings = async (contents, out: string, directVersionPublish: boolean) => {
     const settingsContents = contents.filter((c) => c.id && c.id.endsWith('.json'));
     if (settingsContents && settingsContents.length > 0) {
       const outPath = Path.join(Path.resolve(out), settingsContents[0].id);
@@ -545,7 +536,11 @@ export class Builder {
         for (const appName of Object.keys(luisAppsMap)) {
           mergedSettings.luis[appName] = {
             appId: luisAppsMap[appName].appId,
+            version: luisAppsMap[appName].version,
           };
+          if (!directVersionPublish) {
+            delete mergedSettings.luis[appName].version;
+          }
         }
       }
 
