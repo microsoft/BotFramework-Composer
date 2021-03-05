@@ -34,18 +34,14 @@ export const WebchatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   };
 
   useEffect(() => {
-    if (navigateToLatestEntry) {
+    if (navigateToLatestEntry && isActive) {
       navigateToNewestLogEntry();
       navigateToLatestEntryWhenActive(false);
     }
-  }, [isActive]);
+  }, [isActive, navigateToLatestEntry]);
 
   useEffect(() => {
-    if (isActive) {
-      navigateToNewestLogEntry();
-    } else {
-      navigateToLatestEntryWhenActive(true);
-    }
+    navigateToLatestEntryWhenActive(true);
   }, [currentLogItemCount]);
 
   return (
