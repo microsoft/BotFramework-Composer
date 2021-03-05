@@ -107,8 +107,8 @@ const QnAPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <TabHeader
           defaultLanguage={defaultLanguage}
-          locale={currentLocale}
           languages={languages}
+          locale={currentLocale}
           onChangeLocale={onChangeLocale}
         >
           <Router component={Fragment} primary={false}>
@@ -152,13 +152,6 @@ const QnAPage: React.FC<RouteComponentProps<{
                   });
                 })
               );
-              // await actions.createQnAKBFromUrl({
-              //   id: `${creatQnAOnInfo.dialogId}.${locale}`,
-              //   name,
-              //   url,
-              //   multiTurn,
-              //   projectId: creatQnAOnInfo.projectId,
-              // });
             } else {
               await actions.createQnAKBFromScratch({
                 id: creatQnAOnInfo.dialogId,
