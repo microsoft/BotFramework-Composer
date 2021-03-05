@@ -29,8 +29,8 @@ import {
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
-import { useLocation } from '../utils/hooks';
 import TelemetryClient from '../telemetry/TelemetryClient';
+import { useBotControllerBar } from '../hooks/useControllerBar';
 
 import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates } from './MultiLanguage';
@@ -152,7 +152,6 @@ export const Header = () => {
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
-  const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
   const {
     openBotInEmulator,
@@ -162,18 +161,13 @@ export const Header = () => {
   } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
 
-  const {
-    location: { pathname },
-  } = useLocation();
+  const isShow = useBotControllerBar();
 
   useEffect(() => {
-    // hide it on the /home page, but make sure not to hide on /bot/stuff/home in case someone names a dialog "home"
-    const hideCondition = !pathname.endsWith('/home') || pathname.includes('/bot/');
-    setStartBotsWidgetVisible(hideCondition);
-    if (!hideCondition) {
+    if (!isShow) {
       setWebChatPanelVisibility(false);
     }
-  }, [pathname]);
+  }, [isShow]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
@@ -246,7 +240,7 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && (
+        {isShow && !checkForPVASchema(schemas.sdk) && (
           <BotController
             isControllerHidden={hideBotController}
             onHideController={(isHidden: boolean) => {
@@ -265,7 +259,7 @@ export const Header = () => {
             onClick={onUpdateAvailableClick}
           />
         )}
-        {showStartBotsWidget && (
+        {isShow && (
           <IconButton
             ariaDescription={formatMessage('Open web chat')}
             css={css`
