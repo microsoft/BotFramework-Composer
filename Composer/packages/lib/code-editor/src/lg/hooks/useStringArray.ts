@@ -10,13 +10,14 @@ import { LGOption } from '../../utils/types';
 
 const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
   response: T,
-  lgTemplates?: readonly LgTemplate[]
+  lgTemplates?: readonly LgTemplate[],
+  focusOnMount?: boolean
 ): string[] => {
   const templateId = getTemplateId(response);
   const template = lgTemplates?.find(({ name }) => name === templateId);
   return response?.value && template?.body
     ? template?.body?.replace(/- /g, '').split(/\r?\n/g) || []
-    : response?.value || [];
+    : response?.value || (focusOnMount ? [''] : []);
 };
 
 export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
@@ -28,6 +29,7 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
     onUpdateResponseTemplate: (response: PartialStructuredResponse) => void;
   },
   options?: {
+    focusOnMount?: boolean;
     lgOption?: LGOption;
     lgTemplates?: readonly LgTemplate[];
   }
@@ -35,10 +37,10 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
   const newTemplateNameSuffix = React.useMemo(() => kind.toLowerCase(), [kind]);
 
   const { onRemoveTemplate, onTemplateChange, onUpdateResponseTemplate } = callbacks;
-  const { lgOption, lgTemplates } = options || {};
+  const { lgOption, lgTemplates, focusOnMount } = options || {};
 
   const [templateId, setTemplateId] = React.useState(getTemplateId(structuredResponse));
-  const [items, setItems] = React.useState<string[]>(getInitialItems(structuredResponse, lgTemplates));
+  const [items, setItems] = React.useState<string[]>(getInitialItems(structuredResponse, lgTemplates, focusOnMount));
 
   const onChange = React.useCallback(
     (newItems: string[]) => {
