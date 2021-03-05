@@ -512,10 +512,9 @@ const Library: React.FC = () => {
     navigateTo(`/bot/${currentProjectId}/botProjectsSettings/#runtimeSettings`);
   };
 
-  const updateFeed = async (key: string, updatedItem: PackageSourceFeed) => {
+  const updateFeed = async (feeds: PackageSourceFeed[]) => {
     const response = await httpClient.post(`${API_ROOT}/feeds`, {
-      key: key,
-      updatedItem: updatedItem,
+      feeds,
     });
 
     // update the list of feeds in the component state

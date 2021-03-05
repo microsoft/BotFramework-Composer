@@ -101,21 +101,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       res.json(packageSources);
     },
     updateFeeds: async function (req, res) {
-      const { key, updatedItem } = req.body;
-
-      let feeds = composer.store.read('feeds') as IPackageSource[];
-
-      if (!updatedItem) {
-        // update component state
-        feeds = feeds.filter((f) => f.key !== key);
-      } else if (feeds.filter((f) => f.key === key).length) {
-        // item found
-        feeds = feeds.map((f) => (f.key === key ? updatedItem : f));
-      } else {
-        // new item to be appended
-        feeds = feeds.concat([updatedItem]);
-      }
-
+      const { feeds } = req.body;
       composer.store.write('feeds', feeds);
       res.json(feeds);
     },
