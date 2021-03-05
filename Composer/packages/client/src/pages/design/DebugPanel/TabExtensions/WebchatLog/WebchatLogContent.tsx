@@ -27,7 +27,6 @@ export const WebchatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   }, [displayedLogs]);
 
   const navigateToNewestLogEntry = () => {
-    console.log('Jere', currentLogItemCount);
     if (currentLogItemCount && webChatContainerRef?.current) {
       const lastChild = webChatContainerRef.current.lastElementChild;
       lastChild?.scrollIntoView();
@@ -43,7 +42,6 @@ export const WebchatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
 
   useEffect(() => {
     if (isActive) {
-      console.log('Jere');
       navigateToNewestLogEntry();
     } else {
       navigateToLatestEntryWhenActive(true);
