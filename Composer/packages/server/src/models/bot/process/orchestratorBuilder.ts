@@ -12,12 +12,20 @@ import { IOrchestratorBuildOutput } from '../interface';
 import { ResponseMsg } from './types';
 
 class OrchestratorBuilder {
-  private static _worker: ChildProcess;
+  private worker: ChildProcess;
   private resolves = {};
   private rejects = {};
 
   constructor() {
-    OrchestratorBuilder.worker.on('message', this.handleMsg.bind(this));
+    const workerScriptPath = path.join(__dirname, 'orchestratorWorker.ts');
+    if (fs.existsSync(workerScriptPath)) {
+      // set exec arguments to empty, avoid fork nodemon `--inspect` error
+      this.worker = fork(workerScriptPath, [], { execArgv: ['-r', 'ts-node/register'] });
+    } else {
+      // set exec arguments to empty, avoid fork nodemon `--inspect` error
+      this.worker = fork(path.join(__dirname, 'orchestratorWorker.js'), [], { execArgv: [] });
+    }
+    this.worker.on('message', this.handleMsg.bind(this));
   }
 
   public async build(files: FileInfo[], modelPath: string): Promise<IOrchestratorBuildOutput> {
@@ -26,7 +34,7 @@ class OrchestratorBuilder {
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
-      OrchestratorBuilder.worker.send(msg);
+      this.worker.send(msg);
     });
   }
 
@@ -46,21 +54,8 @@ class OrchestratorBuilder {
     delete this.rejects[id];
   }
 
-  static get worker() {
-    if (this._worker && !this._worker.killed) {
-      return this._worker;
-    }
-
-    const workerScriptPath = path.join(__dirname, 'orchestratorWorker.ts');
-    if (fs.existsSync(workerScriptPath)) {
-      // set exec arguments to empty, avoid fork nodemon `--inspect` error
-      this._worker = fork(workerScriptPath, [], { execArgv: ['-r', 'ts-node/register'] });
-    } else {
-      // set exec arguments to empty, avoid fork nodemon `--inspect` error
-      this._worker = fork(path.join(__dirname, 'orchestratorWorker.js'), [], { execArgv: [] });
-    }
-
-    return this._worker;
+  public exit() {
+    this.worker.kill();
   }
 }
 

@@ -62,7 +62,7 @@ export class Builder {
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
   private containOrchestrator = false;
-  private orchestratorBuilder = new OrchestratorBuilder();
+  private orchestratorBuilder?: OrchestratorBuilder = undefined;
 
   public luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -113,6 +113,11 @@ export class Builder {
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
+    } finally {
+      if (this.orchestratorBuilder) {
+        this.orchestratorBuilder.exit();
+        this.orchestratorBuilder = undefined;
+      }
     }
   };
 
@@ -161,6 +166,10 @@ export class Builder {
    */
   public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
+
+    if (!this.orchestratorBuilder) {
+      this.orchestratorBuilder = new OrchestratorBuilder();
+    }
 
     const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
       f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
@@ -214,8 +223,8 @@ export class Builder {
   ) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
     // build snapshots from LU files
+    if (!this.orchestratorBuilder) return;
     const returnData = await this.orchestratorBuilder.build(luFiles, modelPath);
-
     // write snapshot data into /generated folder
     const snapshots: { [key: string]: string } = {};
     for (const dialog of returnData.outputs) {
