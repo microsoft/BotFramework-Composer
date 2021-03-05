@@ -67,6 +67,7 @@
     "test:integration:clean": "node scripts/clean-e2e.js",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
+    "lint:extensions": "cd ../extensions && yarn lint",
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
     "typecheck:server": "yarn workspace @bfc/server typecheck",
     "typecheck:client": "yarn workspace @bfc/client typecheck",
@@ -84,7 +85,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,jsx}": [
+    "../**/*.{ts,tsx,js,jsx}": [
       "prettier --write",
       "git add"
     ]
