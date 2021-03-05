@@ -60,6 +60,7 @@ export interface IOrchestratorNLRList {
 export interface IOrchestratorProgress {
   (status: string): void;
 }
+
 export interface IOrchestratorBuildOutput {
   outputs: [{ id: string; snapshot: Uint8Array; recognizer: Record<string, BaseSchema> }];
   settings: {
@@ -68,4 +69,14 @@ export interface IOrchestratorBuildOutput {
       snapshots: Map<string, string>;
     };
   };
+}
+
+export interface IOrchestratorSettings {
+  orchestrator: {
+    models: {
+      en?: string,
+      multilang?: string
+    },
+    snapshots: Record<string, string>,
+  },
 }

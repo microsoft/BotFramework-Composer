@@ -7,6 +7,7 @@ import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
+import cloneDeep from 'lodash/cloneDeep';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
 import partition from 'lodash/partition';
@@ -18,7 +19,7 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
 
-import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
+import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -60,8 +61,13 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
-  private containOrchestrator = false;
   private orchestratorLabelResolvers = new Map<string, LabelResolver>();
+  private orchestratorSettings: IOrchestratorSettings = {
+    orchestrator: {
+      models: {},
+      snapshots: {},
+    }
+  };
 
   public luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -102,11 +108,6 @@ export class Builder {
 
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
       const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
-      if (orchestratorBuildFiles.length) {
-        this.containOrchestrator = true;
-      } else {
-        this.containOrchestrator = false;
-      }
       await this.runLuBuild(luBuildFiles);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
@@ -167,13 +168,6 @@ export class Builder {
 
     const nlrList = await this.runOrchestratorNlrList();
 
-    const orchestratorSettings = {
-      orchestrator: {
-        models: {},
-        snapshots: {},
-      },
-    };
-
     const modelDatas = [
       { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
       { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
@@ -188,15 +182,15 @@ export class Builder {
         await this.runOrchestratorNlrGet(modelPath, modelData.model);
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
-        orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
+        this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
         for (const snap in snapshotData) {
-          orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
+          this.orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
         }
       }
     }
 
     const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
-    await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
+    await writeFile(orchestratorSettingsPath, JSON.stringify(this.orchestratorSettings));
   };
 
   /**
@@ -296,15 +290,30 @@ export class Builder {
   }
 
   public async copyModelPathToBot() {
-    if (this.containOrchestrator) {
-      const nlrList = await this.runOrchestratorNlrList();
-      const defaultNLR = nlrList.defaults.en_intent;
-      const folderName = defaultNLR.replace('.onnx', '');
-      const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
-      const destDir = Path.resolve(Path.join(this.botDir, MODEL), folderName);
-      await copy(modelPath, destDir);
-      await this.updateOrchestratorSetting(folderName);
+    for (let lang in this.orchestratorSettings.orchestrator.models) {
+      const modelName = Path.basename(this.orchestratorSettings.orchestrator.models[lang], '.onnx');
+      const destDir = Path.resolve(Path.join(this.botDir, MODEL), modelName);
+      await copy(this.orchestratorSettings.orchestrator.models[lang], destDir);
     }
+
+    await this.updateOrchestratorSetting();
+  }
+
+  private async updateOrchestratorSetting() {
+    const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
+
+    const content = cloneDeep(this.orchestratorSettings);
+
+    keys(content.orchestrator.models).forEach(modelPath => {
+      let modelName = Path.basename(content.orchestrator.models[modelPath], '.onnx');
+      content.orchestrator.models[modelPath] = `${MODEL}/${modelName}`;
+    });
+
+    keys(content.orchestrator.snapshots).forEach((key) => {
+      content.orchestrator.snapshots[key] = Path.relative(Path.resolve(this.generatedFolderPath,'..'), content.orchestrator.snapshots[key]);
+    });
+
+    await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
   }
 
   public async getQnaConfig() {
@@ -324,18 +333,6 @@ export class Builder {
     Object.assign(qna, qnaConfig.qna, { endpointKey: endpointKey.primaryEndpointKey });
 
     return qna;
-  }
-
-  private async updateOrchestratorSetting(dirName: string) {
-    const runtimeRootPath = './ComposerDialogs';
-    const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
-    const content = JSON.parse(await this.storage.readFile(settingPath));
-    content.orchestrator.ModelPath = `${runtimeRootPath}/${MODEL}/${dirName}`;
-    keys(content.orchestrator.snapshots).forEach((key) => {
-      const values = content.orchestrator.snapshots[key].split('ComposerDialogs');
-      content.orchestrator.snapshots[key] = `${runtimeRootPath}${values[1]}`;
-    });
-    await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
   }
 
   private async createGeneratedDir() {
