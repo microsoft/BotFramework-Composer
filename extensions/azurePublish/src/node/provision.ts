@@ -263,7 +263,7 @@ export class BotProjectProvision {
             const hostname = await this.azureResourceManagementClient.deployWebAppResource({
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
-              name: config.hostname
+              name: config.hostname,
             });
             provisionResults.webApp = {
               hostname: hostname,
@@ -272,18 +272,21 @@ export class BotProjectProvision {
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
-          case AzureResourceTypes.BOT_REGISTRATION:
+          case AzureResourceTypes.BOT_REGISTRATION: {
             const botName = await this.azureResourceManagementClient.deployBotResource({
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname, // come back to this!
               displayName: config.hostname, // todo: this may be wrong!
-              endpoint: `https://${provisionResults.webApp?.hostname ?? (config.hostname + ".azurewebsites.net")}/api/messages`,
+              endpoint: `https://${
+                provisionResults.webApp?.hostname ?? config.hostname + '.azurewebsites.net'
+              }/api/messages`,
               appId: provisionResults.appId,
-              webAppHostname: provisionResults.webApp.hostname
+              webAppHostname: provisionResults.webApp.hostname,
             });
             provisionResults.botName = botName;
             break;
+          }
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
@@ -291,7 +294,7 @@ export class BotProjectProvision {
             const functionsHostName = await this.azureResourceManagementClient.deployAzureFunctions({
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
-              name: config.hostname
+              name: config.hostname,
             });
             provisionResults.webApp = {
               hostname: functionsHostName,
