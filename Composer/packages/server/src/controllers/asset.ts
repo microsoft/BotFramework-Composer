@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { BotTemplateV2, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import AssetService from '../services/asset';
@@ -22,7 +22,7 @@ async function getProjTemplates(req: Request, res: Response) {
 
 export async function getProjTemplatesV2(req: any, res: any) {
   try {
-    let templates: BotTemplateV2[] = [];
+    let templates: BotTemplate[] = [];
 
     // Get FeedUrl
     const { feedUrls, getFirstPartyNpm } = req.body;
