@@ -284,6 +284,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
       <EjectModal ejectRuntime={callEjectRuntime} hidden={!ejectModalVisible} onDismiss={closeEjectModal} />
     </div>
   ) : (
-      <LoadingSpinner />
-    );
+    <LoadingSpinner />
+  );
 };
