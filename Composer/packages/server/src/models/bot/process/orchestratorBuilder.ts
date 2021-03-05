@@ -7,8 +7,6 @@ import path from 'path';
 import { FileInfo } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 
-import { IOrchestratorBuildOutput } from '../interface';
-
 import { ResponseMsg } from './types';
 
 class OrchestratorBuilder {
