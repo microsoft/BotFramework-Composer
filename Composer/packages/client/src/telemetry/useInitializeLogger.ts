@@ -18,10 +18,13 @@ export const useInitializeLogger = () => {
   const rootProjectId = useRecoilValue(currentProjectIdState);
   const { telemetry } = useRecoilValue(userSettingsState);
   const featureFlags = useRecoilValue(featureFlagsState);
-  const reducedFeatureFlags = Object.entries(featureFlags).reduce((acc, [key, { enabled }]) => ({
-    ...acc,
-    [camelCase(key)]: enabled,
-  }));
+  const reducedFeatureFlags = Object.entries(featureFlags).reduce(
+    (acc, [key, { enabled }]) => ({
+      ...acc,
+      [camelCase(key)]: enabled,
+    }),
+    {}
+  );
 
   const {
     location: { pathname },
