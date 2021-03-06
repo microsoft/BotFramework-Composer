@@ -42,6 +42,7 @@
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
     "build:prod": "yarn build:dev && yarn build:client && yarn build:server && yarn build:electron",
+    "build:ci": "yarn l10n:check && yarn build:dev",
     "build:dev": "yarn build:libs && yarn build:extensions",
     "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
     "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @botframework-composer/* -p @bfc/* -c build",

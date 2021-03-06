@@ -18,6 +18,7 @@ for (;;) {
   const json = JSON.parse(data);
   for (const [key, val] of Object.entries(json)) {
     const msg = val.message;
+
     const src = `${dirent.name} at ${key}:`;
     if (/\{.*plural.*}/.exec(msg)) {
       // if we're in a "plural" rules section...
@@ -30,7 +31,7 @@ for (;;) {
         errorCount += 1;
       }
     }
-    if (/(\p{L}|\s)'(\p{L})/.exec(msg)) {
+    if (/(\p{L}|\s|\w)'(\p{L}|\w)/.exec(msg)) {
       console.log(src, `single quote between letters`);
       errorCount += 1;
     }
