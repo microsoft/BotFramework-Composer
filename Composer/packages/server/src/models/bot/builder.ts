@@ -19,7 +19,12 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
 
-import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
+import {
+  IOrchestratorBuildOutput,
+  IOrchestratorNLRList,
+  IOrchestratorProgress,
+  IOrchestratorSettings,
+} from './interface';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -66,7 +71,7 @@ export class Builder {
     orchestrator: {
       models: {},
       snapshots: {},
-    }
+    },
   };
 
   public luBuilder = new luBuild.Builder((message) => {
@@ -301,16 +306,18 @@ export class Builder {
 
   private async updateOrchestratorSetting() {
     const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
-
     const content = cloneDeep(this.orchestratorSettings);
 
-    keys(content.orchestrator.models).forEach(modelPath => {
+    keys(content.orchestrator.models).forEach((modelPath) => {
       let modelName = Path.basename(content.orchestrator.models[modelPath], '.onnx');
-      content.orchestrator.models[modelPath] = `${MODEL}/${modelName}`;
+      //content.orchestrator.models[modelPath] = `${MODEL}/${modelName}`;
+      content.orchestrator.models[modelPath] = Path.join(MODEL, modelName);
     });
 
     keys(content.orchestrator.snapshots).forEach((key) => {
-      content.orchestrator.snapshots[key] = Path.relative(Path.resolve(this.generatedFolderPath,'..'), content.orchestrator.snapshots[key]);
+      //content.orchestrator.snapshots[key] = Path.relative(Path.resolve(this.generatedFolderPath,'..'), content.orchestrator.snapshots[key]);
+      let snapshotName = Path.basename(content.orchestrator.snapshots[key]);
+      content.orchestrator.snapshots[key] = Path.join(GENERATEDFOLDER, snapshotName);
     });
 
     await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
