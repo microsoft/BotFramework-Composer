@@ -8,6 +8,8 @@ import formatMessage from 'format-message';
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
+import { templateSortOrder } from '../constants';
+import _ from 'lodash';
 
 async function getProjTemplates(req: Request, res: Response) {
   try {
@@ -48,8 +50,24 @@ export async function getProjTemplatesV2(req: any, res: any) {
       templates = templates.concat(await getNpmTemplates());
     }
 
+    let sortedTemplateList: BotTemplate[] = [];
+
+    // Sort incoming template array and reassign display name based on sort list
+    templateSortOrder.forEach((tempSortEntry, index) => {
+      const templateIndex = templates.findIndex((template) => {
+        return template.id === tempSortEntry.generatorName;
+      })
+      if (templateIndex != -1){
+      templates[templateIndex].name = tempSortEntry.displayName;
+      sortedTemplateList.push(templates[templateIndex]);
+      }
+    })
+
+    // append any templates not defined in sort list
+    sortedTemplateList = _.union(sortedTemplateList, templates);
+
     // return templates
-    res.status(200).json(templates);
+    res.status(200).json(sortedTemplateList);
   } catch (error) {
     res.status(400).json({
       message: error instanceof Error ? error.message : error,
