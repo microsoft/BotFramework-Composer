@@ -12,6 +12,7 @@ import {
   IQnAConfig,
   SkillSetting,
   QnAFile,
+  SDKKinds,
 } from '@bfc/shared';
 
 import { BotIndexer } from '../src/botIndexer';
@@ -58,6 +59,7 @@ const botAssets: BotAssets = {
     {
       luFile: 'a.lu',
       skills: ['Email-Skill', 'Calendar-Skill'],
+      luProvider: SDKKinds.LuisRecognizer,
     } as DialogInfo,
   ],
   setting: {
@@ -159,10 +161,47 @@ describe('checkSkillSetting', () => {
 
 describe('filterLUISFilesToPublish', () => {
   it('should filter luFiles left LUIS supported locale file', () => {
-    const luFilesToPublish = filterLUISFilesToPublish(botAssets.luFiles);
+    const luFilesToPublish = filterLUISFilesToPublish(botAssets.luFiles, botAssets.dialogs);
     expect(luFilesToPublish.length).toEqual(2);
     expect(luFilesToPublish).not.toContain({
       id: 'a.ar',
+    });
+  });
+
+  it('should not filter locales for Orchestrator', () => {
+    const botAssetsOrch = {
+      ...botAssets,
+      luFiles: [
+        {
+          id: 'a.es',
+          empty: false,
+        } as LuFile,
+        {
+          id: 'b.es',
+          empty: false,
+        } as LuFile,
+      ],
+      dialogs: [
+        {
+          luFile: 'a',
+          luProvider: SDKKinds.OrchestratorRecognizer,
+        } as DialogInfo,
+        {
+          luFile: 'b',
+          luProvider: SDKKinds.LuisRecognizer,
+        } as DialogInfo,
+      ],
+    };
+
+    const luFilesToPublish = filterLUISFilesToPublish(botAssetsOrch.luFiles, botAssetsOrch.dialogs);
+    expect(luFilesToPublish.length).toEqual(1);
+    expect(luFilesToPublish).not.toContainEqual({
+      id: 'b.es',
+      empty: false,
+    });
+    expect(luFilesToPublish).toContainEqual({
+      id: 'a.es',
+      empty: false,
     });
   });
 });
