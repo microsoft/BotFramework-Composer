@@ -78,7 +78,7 @@ export type ILuisConfig = {
   region?: string;
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
-  directVersionPublish: boolean;
+  directVersionPublish?: boolean;
 };
 
 export type ILUFeaturesConfig = {
