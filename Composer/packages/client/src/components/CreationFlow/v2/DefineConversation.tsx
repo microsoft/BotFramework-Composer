@@ -18,7 +18,7 @@ import { useRecoilValue } from 'recoil';
 import { QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 
-import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage, defaultRuntime } from '../../../constants';
+import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
