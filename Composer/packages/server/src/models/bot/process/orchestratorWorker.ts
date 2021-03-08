@@ -50,7 +50,7 @@ export async function orchestratorBuilder(
 
 export async function writeSnapshot(output: IOrchestratorBuildOutput, generatedFolderPath: string) {
   // write snapshot data into /generated folder
-  const snapshots: { [key: string]: string } = {};
+  const snapshots: Record<string, string> = {};
   for (const dialog of output.outputs) {
     const bluFilePath = Path.resolve(generatedFolderPath, dialog.id.replace('.lu', '.blu'));
     snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
