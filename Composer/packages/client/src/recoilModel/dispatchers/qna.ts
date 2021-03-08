@@ -17,7 +17,7 @@ import {
 } from '../atoms/botState';
 import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { getBaseName } from '../../utils/fileUtil';
+import { getBaseName, getKBName, getKBLocale } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
 import {
   getQnaFailedNotification,
@@ -222,27 +222,23 @@ export const renameKBFileState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-  const locale = await snapshot.getPromise(localeState(projectId));
-
-  const targetQnAFile =
-    qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
+  const locale = getKBLocale(id);
+  const targetQnAFile = qnaFiles.find((item) => item.id === id);
   if (!targetQnAFile) {
     throw new Error(`rename qna container file ${id} not exist`);
   }
 
-  const existQnAFile =
-    qnaFiles.find((item) => item.id === name) || qnaFiles.find((item) => item.id === `${name}.${locale}`);
-  if (existQnAFile) {
+  const newQnAFile = qnaFiles.find((item) => item.id === `${name}.source.${locale}`);
+  if (newQnAFile) {
     throw new Error(`rename qna container file to ${name} already exist`);
   }
-  qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
-
+  qnaFileStatusStorage.removeFileStatus(projectId, id);
   set(qnaFilesState(projectId), (prevQnAFiles) => {
     return prevQnAFiles.map((file) => {
-      if (file.id === targetQnAFile.id) {
+      if (file.id === id) {
         return {
           ...file,
-          id: name,
+          id: `${name}.source.${locale}`,
         };
       }
       return file;

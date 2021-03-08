@@ -12,7 +12,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { getBaseName } from '../../utils/fileUtil';
+import { getKBName } from '../../utils/fileUtil';
 
 import { validateName } from './constants';
 import { styles, dialogWindow, textFieldKBName } from './styles';
@@ -43,7 +43,7 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
   const { onDismiss, onSubmit, qnaFiles, qnaFile } = props;
 
   formConfig.name.validate = validateName(qnaFiles.filter(({ id }) => qnaFile.id !== id));
-  formConfig.name.defaultValue = getBaseName(qnaFile.id);
+  formConfig.name.defaultValue = getKBName(qnaFile.id);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors;
 

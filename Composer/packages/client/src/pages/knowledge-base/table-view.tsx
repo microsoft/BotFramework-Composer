@@ -36,7 +36,7 @@ import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
 import { dialogsSelectorFamily, qnaFilesState, settingsState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
-import { getBaseName } from '../../utils/fileUtil';
+import { getBaseName, getKBName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
@@ -275,15 +275,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onSubmitEditKB = async ({ name }: { name: string }) => {
     if (!editQnAFile) return;
-    const newId = `${name}.source`;
-    await actions.renameQnAKB({ id: editQnAFile.id, name: newId, projectId: actualProjectId });
+    const newSourceId = `${name}.source`;
+    for (let i = 0; i < languages.length; i++) {
+      await actions.renameQnAKB({
+        id: `${getBaseName(editQnAFile.id)}.${languages[i]}`,
+        name: name,
+        projectId: actualProjectId,
+      });
+    }
     if (!qnaFile) return;
-    await actions.updateQnAImport({
-      id: qnaFile.id,
-      sourceId: editQnAFile.id,
-      newSourceId: newId,
-      projectId: actualProjectId,
-    });
+    await Promise.all(
+      languages.map((language) => {
+        return actions.updateQnAImport({
+          id: `${getBaseName(qnaFile.id)}.${language}`,
+          sourceId: getBaseName(editQnAFile.id),
+          newSourceId,
+          projectId: actualProjectId,
+        });
+      })
+    );
     setEditQnAFile(undefined);
   };
 
@@ -373,15 +383,20 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!qnaFile) return;
-                          languages.forEach(async (l) => {
-                            const sourceNameWithoutLocale = containerId.split(`.${locale}`)[0];
-                            await removeQnAImport({
-                              id: qnaFile.id,
-                              sourceId: sourceNameWithoutLocale,
-                              projectId: actualProjectId,
-                            });
-                            await removeQnAFile({ id: `${sourceNameWithoutLocale}.${l}`, projectId: actualProjectId });
-                          });
+                          await Promise.all(
+                            languages.map(async (language) => {
+                              const sourceNameWithoutLocale = getBaseName(containerId);
+                              await removeQnAImport({
+                                id: qnaFile.id,
+                                sourceId: sourceNameWithoutLocale,
+                                projectId: actualProjectId,
+                              });
+                              await removeQnAFile({
+                                id: `${sourceNameWithoutLocale}.${language}`,
+                                projectId: actualProjectId,
+                              });
+                            })
+                          );
                         },
                       },
                     ] as IOverflowSetItemProps[]
