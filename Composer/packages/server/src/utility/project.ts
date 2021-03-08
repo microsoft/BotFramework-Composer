@@ -15,6 +15,7 @@ import log from '../logger';
 import AssetService from '../services/asset';
 import { BotProject } from '../models/bot/botProject';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
+import * as creationWorker from '../workers/creation_worker';
 
 import { Path } from './path';
 
@@ -79,6 +80,7 @@ export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
 
       // run the merge command to merge all package dependencies from the template to the bot project
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Merging Packages'));
+      await creationWorker.runWork();
       const realMerge = new SchemaMerger(
         [manifestFile, '!**/imported/**', '!**/generated/**'],
         Path.join(currentProject.dataDir, 'schemas/sdk'),
