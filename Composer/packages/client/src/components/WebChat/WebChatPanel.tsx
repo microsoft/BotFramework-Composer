@@ -2,12 +2,14 @@
 // Licensed under the MIT License.
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
+import { useRecoilValue } from 'recoil';
 import { DirectLineLog } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
+import { dispatcherState } from '../../recoilModel';
 
 import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
@@ -28,19 +30,20 @@ export interface WebChatPanelProps {
   /** Directline host url. By default, set to Composer host url. */
   directlineHostUrl?: string;
   isWebChatPanelVisible: boolean;
-  appendLogToWebChatInspector: (projectId: string, log: DirectLineLog) => void;
-  clearWebchatInspectorLogs: (projectId: string) => void;
-  openBotInEmulator: (projectId: string) => void;
 }
 
 export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   directlineHostUrl = BASEPATH,
   botData,
   isWebChatPanelVisible,
-  openBotInEmulator,
-  appendLogToWebChatInspector,
-  clearWebchatInspectorLogs,
 }) => {
+  const {
+    openBotInEmulator,
+    appendLogToWebChatInspector,
+    clearWebChatLogs,
+    setDebugPanelExpansion,
+    setActiveTabInDebugPanel,
+  } = useRecoilValue(dispatcherState);
   const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
@@ -60,6 +63,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           directLineErrorChannel.current.onmessage = (event) => {
             const data: DirectLineLog = JSON.parse(event.data);
             appendLogToWebChatInspector(projectId, data);
+            setTimeout(() => {
+              setActiveTabInDebugPanel('WebChatInspector');
+              setDebugPanelExpansion(true);
+            }, 300);
           };
         }
       } catch (ex) {
@@ -72,6 +79,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           message: formatMessage('An error occurred connecting initializing the DirectLine server'),
         };
         appendLogToWebChatInspector(projectId, err);
+        setActiveTabInDebugPanel('WebChatInspector');
+        setDebugPanelExpansion(true);
       }
     };
 
@@ -81,6 +90,12 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       directLineErrorChannel.current?.close();
     };
   }, []);
+
+  useEffect(() => {
+    if (botUrl) {
+      setCurrentConversation('');
+    }
+  }, [botUrl]);
 
   const sendInitialActivities = async (chatData: ChatData) => {
     try {
@@ -137,7 +152,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       );
       setConversationData(chatData);
       sendInitialActivities(chatData);
-      clearWebchatInspectorLogs(projectId);
+      clearWebChatLogs(projectId);
     } catch (ex) {
       // DL errors are handled through socket above.
     }
