@@ -6,8 +6,7 @@ import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { useState, useMemo, useCallback, Fragment, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useState, useMemo, useCallback, Fragment } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -17,20 +16,13 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { separator } from '../../publish/styles';
-import { armScopes, graphScopes } from '../../../constants';
 import { PublishType } from '../../../recoilModel/types';
-import { PluginAPI } from '../../../plugins/api';
-import { dispatcherState } from '../../../recoilModel';
-import { AuthClient } from '../../../utils/authClient';
-import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 
 type ProfileFormDialogProps = {
   onDismiss: () => void;
   targets: PublishTarget[];
   types: PublishType[];
   onNext: () => void;
-  updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
-  projectId: string;
   setType: (value) => void;
   name: string;
   targetType: string;
@@ -76,22 +68,8 @@ const onRenderLabel = (props) => {
 };
 
 export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
-  const {
-    name,
-    setName,
-    targetType,
-    setTargetType,
-    onDismiss,
-    targets,
-    types,
-    onNext,
-    updateSettings,
-    projectId,
-    setType,
-    current,
-  } = props;
+  const { name, setName, targetType, setTargetType, onDismiss, targets, types, onNext, setType, current } = props;
   const [errorMessage, setErrorMsg] = useState('');
-  const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const updateName = (e, newName) => {
     setName(newName);
@@ -130,36 +108,6 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const saveDisabled = useMemo(() => {
     return !targetType || !name || !!errorMessage;
   }, [errorMessage, name, targetType]);
-
-  // pass functions to extensions
-  useEffect(() => {
-    PluginAPI.publish.getType = () => {
-      return targetType;
-    };
-    PluginAPI.publish.getSchema = () => {
-      return types.find((t) => t.name === targetType)?.schema;
-    };
-    PluginAPI.publish.savePublishConfig = (config) => {
-      updateSettings(name, targetType, JSON.stringify(config) || '{}');
-    };
-  }, [targetType, name, types, updateSettings]);
-
-  useEffect(() => {
-    PluginAPI.publish.startProvision = async (config) => {
-      const fullConfig = { ...config, name: name, type: targetType };
-      let arm, graph;
-      if (!isGetTokenFromUser()) {
-        // login or get token implicit
-        arm = await AuthClient.getAccessToken(armScopes);
-        graph = await AuthClient.getAccessToken(graphScopes);
-      } else {
-        // get token from cache
-        arm = getTokenFromCache('accessToken');
-        graph = getTokenFromCache('graphToken');
-      }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
-    };
-  }, [name, targetType]);
 
   return (
     <Fragment>

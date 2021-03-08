@@ -49,7 +49,12 @@ export function usePublishApi() {
   function isGetTokenFromUser(): boolean {
     return window[ComposerGlobalName].isGetTokenFromUser();
   }
-
+  function getExtensionState(): any {
+    return window[ComposerGlobalName].getExtensionState();
+  }
+  function setExtensionState(value: any) {
+    return window[ComposerGlobalName].setExtensionState(value);
+  }
   return {
     publishConfig: getPublishConfig(),
     startProvision,
@@ -62,5 +67,7 @@ export function usePublishApi() {
     savePublishConfig,
     getTokenFromCache,
     isGetTokenFromUser,
+    getExtensionState,
+    setExtensionState,
   };
 }

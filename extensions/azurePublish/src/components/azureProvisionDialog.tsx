@@ -38,7 +38,6 @@ import { AzureResourceTypes, ResourcesItem, authConfig } from '../types';
 import {
   getResourceList,
   getSubscriptions,
-  getResourceGroups,
   getDeployLocations,
   getPreview,
   getLuisAuthoringRegions,
@@ -306,10 +305,14 @@ export const AzureProvisionDialog: React.FC = () => {
     getType,
     getTokenFromCache,
     isGetTokenFromUser,
+    setExtensionState,
+    getExtensionState,
   } = usePublishApi();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
   const currentConfig = removePlaceholder(publishConfig);
+  const extensionState = getExtensionState();
+  console.log(extensionState);
 
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
@@ -318,17 +321,19 @@ export const AzureProvisionDialog: React.FC = () => {
   const [token, setToken] = useState<string>();
   const [currentUser, setCurrentUser] = useState<any>();
 
-  const [choice, setChoice] = useState(choiceOptions[0]);
-  const [currentSubscription, setSubscription] = useState<string>('');
-  const [currentResourceGroup, setResourceGroup] = useState<string>('');
-  const [currentHostName, setHostName] = useState('');
+  const [choice, setChoice] = useState(extensionState?.choice || choiceOptions[0]);
+  const [currentSubscription, setSubscription] = useState<string>(extensionState?.subscriptionId || '');
+  const [currentResourceGroup, setResourceGroup] = useState<string>(extensionState?.resourceGroup || '');
+  const [currentHostName, setHostName] = useState(extensionState?.hostName || '');
   const [errorHostName, setErrorHostName] = useState('');
   const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
-  const [currentLocation, setLocation] = useState<string>(currentConfig?.region);
-  const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(currentConfig?.settings?.luis?.region);
+  const [currentLocation, setLocation] = useState<string>(extensionState?.location || currentConfig?.region);
+  const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(
+    extensionState?.luisLocation || currentConfig?.settings?.luis?.region
+  );
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
-  const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>([]); // create from optional list
-  const [requireResources, setRequireResources] = useState<ResourcesItem[]>([]);
+  const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>(extensionState?.enableResources || []); // create from optional list
+  const [requireResources, setRequireResources] = useState<ResourcesItem[]>(extensionState?.requireResources || []);
 
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState<any>();
@@ -624,7 +629,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageFormConfig = (
     <Fragment>
-      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} style={{}} onChange={updateChoice} />
+      <ChoiceGroup defaultSelectedKey={choice.key} options={choiceOptions} style={{}} onChange={updateChoice} />
       {subscriptionOption?.length > 0 && choice.key === 'create' && (
         <form style={{ width: '50%', marginTop: '16px' }}>
           <Dropdown
@@ -814,7 +819,24 @@ export const AzureProvisionDialog: React.FC = () => {
             />
           ) : null}
           <div>
-            <DefaultButton style={{ margin: '0 4px' }} text={'Back'} onClick={onBack} />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={'Back'}
+              onClick={() => {
+                // setExtensionState
+                setExtensionState({
+                  subscriptionId: currentSubscription,
+                  resourceGroup: currentResourceGroup,
+                  hostName: currentHostName,
+                  location: currentLocation,
+                  luisLocation: currentLuisLocation,
+                  enableResources: enabledResources,
+                  requireResources: requireResources,
+                  choice: choice,
+                });
+                onBack();
+              }}
+            />
             {choice.key === 'create' ? (
               <PrimaryButton
                 disabled={isDisAble}
