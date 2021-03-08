@@ -37,10 +37,11 @@ export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
       continue;
     }
     const currentImports = file.imports.map((item) => {
+      const importedFile = getFile(getBaseName(item.id));
       return {
         displayName: item.description,
         importPath: item.path,
-        id: getBaseName(item.id),
+        id: importedFile ? importedFile.id : '',
       };
     });
 
@@ -63,7 +64,7 @@ export const lgImportsSelectorFamily = selectorFamily<LanguageFileImport[], { pr
       get(lgFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
 
     // Have to exclude common as a special case
-    return getLanguageFileImports(dialogId, getFile).filter((i) => i.id !== 'common');
+    return getLanguageFileImports(dialogId, getFile).filter((i) => getBaseName(i.id) !== 'common');
   },
 });
 
