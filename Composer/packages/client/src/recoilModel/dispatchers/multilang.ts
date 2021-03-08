@@ -130,12 +130,12 @@ export const multilangDispatcher = () => {
       const onDelLanguageDialogComplete = (await snapshot.getPromise(onDelLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesSelectorFamily(projectId), (prevlgFiles) => {
-        const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
+      set(lgFilesSelectorFamily(projectId), (prevLgFiles) => {
+        const { left: leftLgFiles } = deleteLanguageResources(prevLgFiles, languages);
         return leftLgFiles;
       });
-      set(luFilesSelectorFamily(projectId), (prevluFiles) => {
-        const { left: leftLuFiles } = deleteLanguageResources(prevluFiles, languages);
+      set(luFilesSelectorFamily(projectId), (prevLuFiles) => {
+        const { left: leftLuFiles } = deleteLanguageResources(prevLuFiles, languages);
         return leftLuFiles;
       });
       set(settingsState(projectId), (prevSettings) => {

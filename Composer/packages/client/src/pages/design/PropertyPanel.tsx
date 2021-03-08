@@ -21,7 +21,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 import { PropertyEditor } from './PropertyEditor';
 import { ManifestEditor } from './ManifestEditor';
-import useRawDataResourceChecker from './useRawDataResourceChecker';
+import useAssetsParsingState from './useAssetsParsingState';
 
 type PropertyViewProps = {
   projectId: string;
@@ -35,7 +35,7 @@ const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '',
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(projectId));
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const skills = useRecoilValue(skillsStateSelector);
-  const loading = useRawDataResourceChecker(projectId);
+  const loading = useAssetsParsingState(projectId);
   const skillManifestFile = useMemo(() => {
     if (!isSkill) return undefined;
 

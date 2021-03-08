@@ -275,6 +275,39 @@ const emptyQnaFile = (id: string, content: string): QnAFile => {
   };
 };
 
+const parseAllAssets = async ({ set }: CallbackInterface, projectId: string, botFiles: any) => {
+  const { luFiles, lgFiles, qnaFiles, mergedSettings } = botFiles;
+
+  const [parsedLgFiles, parsedLuFiles, parsedQnaFiles] = await Promise.all([
+    lgWorker.parseAll(projectId, lgFiles),
+    luWorker.parseAll(luFiles, mergedSettings.luFeatures),
+    qnaWorker.parseAll(qnaFiles),
+  ]);
+
+  set(lgFilesSelectorFamily(projectId), (oldFiles) => {
+    return oldFiles.map((item) => {
+      const file = (parsedLgFiles as LgFile[]).find((file) => file.id === item.id);
+      return file && item.isContentUnparsed ? file : item;
+    });
+  });
+
+  set(luFilesSelectorFamily(projectId), (oldFiles) => {
+    return oldFiles.map((item) => {
+      const file = (parsedLuFiles as LuFile[]).find((file) => file.id === item.id);
+      return file && item.isContentUnparsed ? file : item;
+    });
+  });
+
+  set(qnaFilesSelectorFamily(projectId), (oldFiles) => {
+    return oldFiles.map((item) => {
+      const file = (parsedQnaFiles as QnAFile[]).find((file) => file.id === item.id);
+      return file && item.isContentUnparsed ? file : item;
+    });
+  });
+
+  set(projectIndexingState(projectId), false);
+};
+
 export const loadProjectData = async (data) => {
   const { files, botName, settings, id: projectId } = data;
   const mergedSettings = getMergedSettings(projectId, settings, botName);
@@ -470,34 +503,8 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
   set(projectIndexingState(projectId), true);
-  Promise.all([
-    lgWorker.parseAll(projectId, lgFiles).then((result) => {
-      set(lgFilesSelectorFamily(projectId), (prevFiles) => {
-        return prevFiles.map((item) => {
-          const file = (result as LgFile[]).find((file) => file.id === item.id);
-          return file && item.isContentUnparsed ? file : item;
-        });
-      });
-    }),
-    luWorker.parseAll(luFiles, mergedSettings.luFeatures).then((result) => {
-      set(luFilesSelectorFamily(projectId), (prevFiles) => {
-        return prevFiles.map((item) => {
-          const file = (result as LuFile[]).find((file) => file.id === item.id);
-          return file && item.isContentUnparsed ? file : item;
-        });
-      });
-    }),
-    qnaWorker.parseAll(qnaFiles).then((result) => {
-      set(qnaFilesSelectorFamily(projectId), (prevFiles) => {
-        return prevFiles.map((item) => {
-          const file = (result as QnAFile[]).find((file) => file.id === item.id);
-          return file && item.isContentUnparsed ? file : item;
-        });
-      });
-    }),
-  ]).then(() => {
-    set(projectIndexingState(projectId), false);
-  });
+  parseAllAssets(callbackHelpers, projectId, botFiles);
+
   return mainDialog;
 };
 

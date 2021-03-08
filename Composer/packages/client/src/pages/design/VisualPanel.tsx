@@ -27,7 +27,7 @@ import { WarningMessage } from './WarningMessage';
 import { visualPanel } from './styles';
 import VisualPanelHeader from './VisualPanelHeader';
 import VisualEditorWrapper from './VisualEditorWrapper';
-import useRawDataResourceChecker from './useRawDataResourceChecker';
+import useAssetsParsingState from './useAssetsParsingState';
 
 type VisualPanelProps = {
   projectId: string;
@@ -39,7 +39,7 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const schemas = useRecoilValue(schemasState(projectId));
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(projectId));
-  const loading = useRawDataResourceChecker(projectId);
+  const loading = useAssetsParsingState(projectId);
   const { updateDialog, navTo } = useRecoilValue(dispatcherState);
 
   const selected = decodeDesignerPathToArrayPath(currentDialog?.content, encodedSelected || '');

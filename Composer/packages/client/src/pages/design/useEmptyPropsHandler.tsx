@@ -66,32 +66,45 @@ export const useEmptyPropsHandler = (
 
   useEffect(() => {
     if (!currentDialog || !currentLg.id) return;
+    let isMounted = true;
     if (currentLg.isContentUnparsed) {
       //for current dialog, check the lg file to make sure the file is parsed.
       lgDiagnosticWorker.parse(activeBot, currentLg.id, currentLg.content, lgFiles).then((result) => {
-        setCurrentLg(result as LgFile);
+        isMounted ? setCurrentLg(result as LgFile) : null;
       });
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [currentDialog, currentLg, lgFiles]);
 
   useEffect(() => {
     if (!currentDialog || !currentLu.id) return;
+    let isMounted = true;
     if (currentLu.isContentUnparsed) {
-      //for current dialog, check the lg file to make sure the file is parsed.
+      //for current dialog, check the lu file to make sure the file is parsed.
       luWorker.parse(currentLu.id, currentLu.content, settings.luFeatures).then((result) => {
-        setCurrentLu(result as LuFile);
+        isMounted ? setCurrentLu(result as LuFile) : null;
       });
+      return () => {
+        isMounted = false;
+      };
     }
   }, [currentDialog, currentLu]);
 
   useEffect(() => {
     if (!currentDialog || !currentQna.id) return;
+    let isMounted = true;
     if (currentQna.isContentUnparsed) {
-      //for current dialog, check the lg file to make sure the file is parsed.
+      //for current dialog, check the qna file to make sure the file is parsed.
       qnaWorker.parse(currentQna.id, currentQna.content).then((result) => {
-        setCurrentQna(result as QnAFile);
+        isMounted ? setCurrentQna(result as QnAFile) : null;
       });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [currentDialog, currentQna]);
 
   useEffect(() => {
