@@ -7,7 +7,7 @@ import { FeatureFlagMap } from '@botframework-composer/types';
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   NEW_CREATION_FLOW: {
     displayName: formatMessage('New Creation Experience'),
-    description: formatMessage('Preview the new adaptive runtime and component system'),
+    description: formatMessage('Preview the new adaptive runtime and component system.'),
     isHidden: false,
     enabled: false,
   },
