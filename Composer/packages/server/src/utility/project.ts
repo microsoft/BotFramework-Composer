@@ -4,7 +4,6 @@
 import * as fs from 'fs';
 
 import { remove } from 'fs-extra';
-import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 import formatMessage from 'format-message';
 import { UserIdentity } from '@botframework-composer/types';
 
