@@ -10,10 +10,11 @@ import { CommonModalityEditorProps, TextStructuredResponseItem } from '../types'
 import { ModalityEditorContainer } from './ModalityEditorContainer';
 import { StringArrayEditor } from './StringArrayEditor';
 
-type Props = CommonModalityEditorProps & { response: TextStructuredResponseItem };
+type Props = CommonModalityEditorProps & { focusOnMount: boolean; response: TextStructuredResponseItem };
 
 const TextModalityEditor = React.memo(
   ({
+    focusOnMount,
     response,
     removeModalityDisabled: disableRemoveModality,
     lgOption,
@@ -33,7 +34,7 @@ const TextModalityEditor = React.memo(
         onTemplateChange,
         onUpdateResponseTemplate,
       },
-      { lgOption, lgTemplates }
+      { lgOption, lgTemplates, focusOnMount }
     );
 
     return (
@@ -46,6 +47,7 @@ const TextModalityEditor = React.memo(
         modalityTitle={formatMessage('Text')}
         modalityType="Text"
         removeModalityOptionText={formatMessage('Remove all text responses')}
+        showRemoveModalityPrompt={!!response?.value.length}
         onRemoveModality={onRemoveModality}
       >
         <StringArrayEditor

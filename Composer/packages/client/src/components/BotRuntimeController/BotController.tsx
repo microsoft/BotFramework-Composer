@@ -135,19 +135,22 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
       if (statusIconClass !== 'Refresh') {
         onHideController(false);
       }
-      setStatusIconClass('Refresh');
 
-      setStartPanelButtonText(
-        formatMessage(
-          `{
+      if (runningBots.projectIds.length) {
+        setStatusIconClass('Refresh');
+
+        setStartPanelButtonText(
+          formatMessage(
+            `{
           total, plural,
             =1 {Restart bot}
           other {Restart all bots ({running}/{total} running)}
         }`,
-          { running: runningBots.projectIds.length, total: runningBots.totalBots }
-        )
-      );
-      return;
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+        return;
+      }
     }
 
     setStatusIconClass('Play');
@@ -263,6 +266,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
             ariaDescription={formatMessage('Open start bots panel')}
+            data-testid="StartBotsPanel"
             disabled={disableStartBots}
             iconProps={{
               iconName: 'List',

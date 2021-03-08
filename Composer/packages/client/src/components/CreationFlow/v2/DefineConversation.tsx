@@ -15,18 +15,10 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 
-import {
-  DialogCreationCopy,
-  nameRegexV2,
-  invalidNameCharRegex,
-  mockLanguageOptions,
-  runtimeOptions,
-  defaultPrimaryLanguage,
-} from '../../../constants';
+import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage, defaultRuntime } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -121,23 +113,29 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = (templateId?: string) => {
     if (templateId) {
-      return templateId.replace(invalidNameCharRegex, '_');
+      // use almost the same patterns as in assetManager.ts
+      return templateId
+        .replace(/^@microsoft\/generator-microsoft-bot-/, '') // clean up our complex package names
+        .replace(/^generator-/, '') // clean up other package names too
+        .trim()
+        .replace(/-/, '_')
+        .toLocaleLowerCase();
     }
   };
 
   const getDefaultName = () => {
-    let i = -1;
+    let i = 0;
     const bot = normalizeTemplateId(templateId);
-    let defaultName = '';
-    do {
-      i++;
-      defaultName = `${bot}_${i}`;
-    } while (
+    let defaultName = `${bot}`;
+    while (
       files.some((file) => {
         return file.name.toLowerCase() === defaultName.toLowerCase();
       }) &&
       i < MAXTRYTIMES
-    );
+    ) {
+      i++;
+      defaultName = `${bot}_${i}`;
+    }
     return defaultName;
   };
   const { addNotification } = useRecoilValue(dispatcherState);
@@ -326,26 +324,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 styles={description}
                 value={formData.description}
                 onChange={(_e, val) => updateField('description', val)}
-              />
-            </StackItem>
-          </Stack>
-          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                data-testid="NewDialogPrimaryLanguage"
-                label={formatMessage('Primary Language')}
-                options={mockLanguageOptions}
-                selectedKey={formData.primaryLanguage}
-                onChange={(_e, option) => updateField('primaryLanguage', option?.key.toString())}
-              />
-            </StackItem>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                data-testid="NewDialogRuntimeType"
-                label={formatMessage('Runtime type')}
-                options={runtimeOptions}
-                selectedKey={formData.runtimeChoice}
-                onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
               />
             </StackItem>
           </Stack>

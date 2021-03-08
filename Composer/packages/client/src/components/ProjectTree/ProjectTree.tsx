@@ -527,7 +527,7 @@ export const ProjectTree: React.FC<Props> = ({
         key={`lg_${item.id}`}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.LG}
+        icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
@@ -571,7 +571,7 @@ export const ProjectTree: React.FC<Props> = ({
         key={`lu_${item.id}`}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.LU}
+        icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
@@ -701,7 +701,7 @@ export const ProjectTree: React.FC<Props> = ({
         onErrorClick={onErrorClick}
       />
     );
-    if (options.showDialogs && !bot.isRemote) {
+    if (options.showDialogs && !bot.isRemote && !bot.botError) {
       return (
         <ExpandableNode
           key={key}

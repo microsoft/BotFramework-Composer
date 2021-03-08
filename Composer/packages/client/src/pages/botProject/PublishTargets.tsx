@@ -8,22 +8,18 @@ import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
+import { AuthDialog } from '../../components/Auth/AuthDialog';
+import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
+import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes } from './styles';
 
 // -------------------- Styles -------------------- //
-
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
 
 const publishTargetsContainer = css`
   display: flex;
@@ -34,33 +30,6 @@ const publishTargetsHeader = css`
   display: flex;
   flex-direction: row;
   height: 42px;
-`;
-
-const publishTargetsHeaderText = css`
-  width: 300px;
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  border-bottom: 1px solid ${NeutralColors.gray30};
-  padding-top: 10px;
-  padding-left: 10px;
-`;
-
-const publishTargetsItem = css`
-  display: flex;
-  flex-direction: row;
-  height: 42px;
-`;
-
-const publishTargetsItemText = css`
-  width: 300px;
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${NeutralColors.gray30};
-  padding-top: 10px;
-  padding-left: 10px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 `;
 
 const addPublishProfile = {
@@ -83,15 +52,6 @@ const editPublishProfile = {
   },
 };
 
-const publishTargetsEditButton = css`
-  width: 200px;
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.regular};
-  border-bottom: 1px solid ${NeutralColors.gray30};
-  padding-top: 3px;
-  padding-left: 10px;
-`;
-
 // -------------------- PublishTargets -------------------- //
 
 type PublishTargetsProps = {
@@ -106,6 +66,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const [dialogHidden, setDialogHidden] = useState(true);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
@@ -124,28 +85,32 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={titleStyle}>
+      <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={title}>
         <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
           <div css={publishTargetsHeader}>
-            <div css={publishTargetsHeaderText}>{formatMessage('Name')} </div>
-            <div css={publishTargetsHeaderText}>{formatMessage('Target')} </div>
-            <div css={publishTargetsHeaderText}> </div>
+            <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')} </div>
+            <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Target')} </div>
+            <div css={tableColumnHeader(columnSizes[2])}> </div>
           </div>
           {publishTargets?.map((p, index) => {
             return (
-              <div key={index} css={publishTargetsItem}>
-                <div css={publishTargetsItemText} title={p.name}>
+              <div key={index} css={tableRow}>
+                <div css={tableRowItem(columnSizes[0])} title={p.name}>
                   {p.name}
                 </div>
-                <div css={publishTargetsItemText} title={p.type}>
+                <div css={tableRowItem(columnSizes[1])} title={p.type}>
                   {p.type}
                 </div>
-                <div css={publishTargetsEditButton}>
+                <div css={tableRowItem(columnSizes[2])}>
                   <ActionButton
                     styles={editPublishProfile}
                     onClick={() => {
                       setCurrent({ item: p, index: index });
-                      setDialogHidden(false);
+                      if (isShowAuthDialog(true)) {
+                        setShowAuthDialog(true);
+                      } else {
+                        setDialogHidden(false);
+                      }
                     }}
                   >
                     {formatMessage('Edit')}
@@ -157,12 +122,29 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           <ActionButton
             data-testid={'addNewPublishProfile'}
             styles={addPublishProfile}
-            onClick={() => setDialogHidden(false)}
+            onClick={() => {
+              if (isShowAuthDialog(true)) {
+                setShowAuthDialog(true);
+              } else {
+                setDialogHidden(false);
+              }
+            }}
           >
             {formatMessage('Add new')}
           </ActionButton>
         </div>
       </CollapsableWrapper>
+      {showAuthDialog && (
+        <AuthDialog
+          needGraph
+          next={() => {
+            setDialogHidden(false);
+          }}
+          onDismiss={() => {
+            setShowAuthDialog(false);
+          }}
+        />
+      )}
       {!dialogHidden ? (
         <PublishProfileDialog
           closeDialog={() => {

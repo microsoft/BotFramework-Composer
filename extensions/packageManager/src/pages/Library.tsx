@@ -64,7 +64,7 @@ const Library: React.FC = () => {
   const [selectedItemVersions, setSelectedItemVersions] = useState<string[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<string>('');
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
-  const [working, setWorking] = useState(false);
+  const [working, setWorking] = useState<string>('');
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [readmeContent, setReadmeContent] = useState<string>('');
@@ -88,6 +88,7 @@ const Library: React.FC = () => {
     installed: formatMessage('installed'),
     importDialogTitle: formatMessage('Install a Package'),
     installProgress: formatMessage('Installing package...'),
+    uninstallProgress: formatMessage('Removing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
     installedCategory: formatMessage('Installed'),
     updateConfirmationPrompt: formatMessage(
@@ -176,6 +177,10 @@ const Library: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    getInstalledLibraries();
+  }, [currentProjectId]);
+
+  useEffect(() => {
     if (!feed && feeds.length) {
       if (runtimeLanguage === 'js') {
         setFeed('npm');
@@ -195,7 +200,6 @@ const Library: React.FC = () => {
     const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
     if (settings?.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
-      getInstalledLibraries();
       // detect programming language.
       // should one day be a dynamic property of the runtime or at least stored in the settings?
       if (settings.runtime.key === 'node-azurewebapp') {
@@ -355,9 +359,9 @@ const Library: React.FC = () => {
 
     if (okToProceed) {
       closeDialog();
-      setWorking(true);
+      setWorking(strings.installProgress);
       await importComponent(packageName, version, isUpdating || false, source);
-      setWorking(false);
+      setWorking('');
     }
   };
 
@@ -373,6 +377,8 @@ const Library: React.FC = () => {
           await installComponentAPI(currentProjectId, packageName, version, true, source);
         }
       } else {
+        setWorking('');
+
         updateInstalledComponents(results.data.components);
 
         // reload modified content
@@ -390,6 +396,7 @@ const Library: React.FC = () => {
 
   // return true if the name, description or any of the keywords match the search term
   const applySearchTerm = (item: LibraryRef): boolean => {
+    // eslint-disable-next-line security/detect-non-literal-regexp
     const term = new RegExp(searchTerm.trim().toLocaleLowerCase());
     if (
       item.name.toLowerCase().match(term) ||
@@ -461,7 +468,7 @@ const Library: React.FC = () => {
       const okToProceed = await confirm(title, msg);
       if (okToProceed) {
         closeDialog();
-        setWorking(true);
+        setWorking(strings.uninstallProgress);
         try {
           const results = await uninstallComponentAPI(currentProjectId, selectedItem.name);
 
@@ -480,7 +487,7 @@ const Library: React.FC = () => {
             summary: strings.importError,
           });
         }
-        setWorking(false);
+        setWorking('');
       }
     }
   };
@@ -530,19 +537,18 @@ const Library: React.FC = () => {
       >
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
       </Dialog>
-      <WorkingModal hidden={!working} title={strings.installProgress} />
+      <WorkingModal hidden={working === ''} title={working} />
       <FeedModal
         closeDialog={() => setModalVisible(false)}
         feeds={feeds}
         hidden={!isModalVisible}
-        title={strings.installProgress}
         onUpdateFeed={updateFeed}
       />
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
         <p>
-          {strings.description}{' '}
+          {strings.description}&nbsp;
           <Link href={docsUrl} target="_new">
             {strings.descriptionLink}
           </Link>
@@ -719,22 +725,69 @@ const Library: React.FC = () => {
                     {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
                     {isInstalled(selectedItem) && selectedVersion === installedVersion(selectedItem) ? (
                       <span>
-                        {selectedVersion} {strings.installed}
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                          title={selectedVersion}
+                        >
+                          {selectedVersion}
+                        </span>
+                        &nbsp;
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installed}</span>
                       </span>
                     ) : isUpdate ? (
                       <span>
-                        {strings.updateButton} {selectedVersion}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.updateButton}</span>
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                          title={selectedVersion}
+                        >
+                          {selectedVersion}
+                        </span>
                       </span>
                     ) : (
                       <span>
-                        {strings.installButton} {selectedVersion}
+                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installButton}</span>&nbsp;
+                        <span
+                          css={{
+                            maxWidth: 80,
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
+                          }}
+                          title={selectedVersion}
+                        >
+                          {selectedVersion}
+                        </span>
                       </span>
                     )}
                   </PrimaryButton>
                 </Stack.Item>
               </Stack>
 
-              <h3>{selectedItem.name}</h3>
+              <h3 css={{ marginBottom: 0 }}>{selectedItem.name}</h3>
+
+              {isInstalled(selectedItem) ? (
+                <p css={{ marginTop: 0 }}>
+                  {formatMessage('Installed:')} {installedVersion(selectedItem)}
+                </p>
+              ) : (
+                <p css={{ marginTop: 0 }}>
+                  {formatMessage('Latest:')} {selectedItem.version}
+                </p>
+              )}
 
               {readmeContent && <ReactMarkdown>{readmeContent}</ReactMarkdown>}
 
