@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { pathExists, writeFile, copy } from 'fs-extra';
+import { pathExists, writeFile, copy, existsSync, mkdirSync } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
@@ -89,7 +89,8 @@ export class Builder {
     luFiles: FileInfo[],
     qnaFiles: FileInfo[],
     allFiles: FileInfo[],
-    emptyFiles: { [key: string]: boolean }
+    emptyFiles: { [key: string]: boolean },
+    directVersionPublish: boolean
   ) => {
     const userAgent = getUserAgent();
     setEnvDefault('LUIS_USER_AGENT', userAgent);
@@ -108,7 +109,7 @@ export class Builder {
       } else {
         this.containOrchestrator = false;
       }
-      await this.runLuBuild(luBuildFiles);
+      await this.runLuBuild(luBuildFiles, directVersionPublish);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
@@ -439,7 +440,7 @@ export class Builder {
     );
   }
 
-  private async runLuBuild(files: FileInfo[]) {
+  private async runLuBuild(files: FileInfo[], directVersionPublish: boolean) {
     if (!files.length) return;
 
     const config = this._getConfig(files);
@@ -456,13 +457,10 @@ export class Builder {
       keptVersionCount: 10,
       isStaging: false,
       region: config.region,
-      directVersionPublish: true,
+      directVersionPublish: directVersionPublish,
     });
 
-    await this.luBuilder.writeDialogAssets(buildResult, {
-      force: true,
-      out: this.generatedFolderPath,
-    });
+    await this.writeLuisSettings(buildResult, this.generatedFolderPath, directVersionPublish);
   }
 
   private async runQnaBuild(files: FileInfo[]) {
@@ -489,6 +487,45 @@ export class Builder {
       out: this.generatedFolderPath,
     });
   }
+
+  private writeLuisSettings = async (contents, out: string, directVersionPublish: boolean) => {
+    const settingsContents = contents.filter((c) => c.id && c.id.endsWith('.json'));
+    if (settingsContents && settingsContents.length > 0) {
+      const outPath = Path.join(Path.resolve(out), settingsContents[0].id);
+
+      //merge
+      const mergedSettings = { path: '', luis: {} };
+      for (const content of contents) {
+        const luisAppsMap = JSON.parse(content.content).luis;
+        for (const appName of Object.keys(luisAppsMap)) {
+          mergedSettings.luis[appName] = {
+            appId: luisAppsMap[appName].appId,
+            version: luisAppsMap[appName].version,
+          };
+          if (!directVersionPublish) {
+            delete mergedSettings.luis[appName].version;
+          }
+        }
+      }
+
+      const newContent = {
+        content: JSON.stringify({ luis: mergedSettings.luis }, null, 4),
+        path: Path.basename(outPath),
+      };
+
+      //write
+      let outFilePath;
+      if (out) {
+        outFilePath = Path.join(Path.resolve(out), Path.basename(newContent.path));
+      } else {
+        outFilePath = newContent.path;
+      }
+      if (!existsSync(Path.dirname(outFilePath))) {
+        mkdirSync(Path.dirname(outFilePath));
+      }
+      await writeFile(outFilePath, newContent.content, 'utf-8');
+    }
+  };
 
   //delete files in generated folder
   private async deleteDir(path: string) {
