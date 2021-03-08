@@ -33,7 +33,7 @@
     "message": "Esiste già un profilo con il nome specificato."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Una proprietà è un'informazione che verrà raccolta dal bot. Il nome della proprietà è il nome usato in Composer; non è necessariamente lo stesso testo che verrà visualizzato nei messaggi del bot."
+    "message": "Una proprietà è un’informazione che verrà raccolta dal bot. Il nome della proprietà è il nome usato in Composer; non è necessariamente lo stesso testo che verrà visualizzato nei messaggi del bot."
   },
   "a_publishing_profile_provides_the_secure_connectiv_e203980e": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot. "
@@ -204,10 +204,10 @@
     "message": "+ Aggiungi coppia di domanda e risposta"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> aggiungere alcune frasi di esempio per attivare questa finalità:\n> - che tempo fa\n> - com'è il tempo a '{'city=Seattle'}'\n\n>definizioni di entità:\n> @ ml city"
+    "message": "> aggiungere alcune frasi di esempio per attivare questa finalità:\n> - che tempo fa\n> - com’è il tempo a '{'city=Seattle'}'\n\n>definizioni di entità:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> aggiungere alcune risposte previste dell'utente:\n> - Ricordami di '{'itemTitle=buy milk'}'\n> - ricordami '{'itemTitle'}'\n> - aggiungere '{'itemTitle'}' all'elenco di cose da fare\n>\n> definizioni di entità:\n> @ ml itemTitle\n"
+    "message": "> aggiungere alcune risposte previste dell’utente:\n> - Ricordami di '{'itemTitle=buy milk'}'\n> - ricordami '{'itemTitle'}'\n> - aggiungere '{'itemTitle'}' all’elenco di cose da fare\n>\n> definizioni di entità:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
@@ -723,7 +723,7 @@
     "message": "Non è stato possibile connettersi alla risorsa di archiviazione."
   },
   "couldn_t_complete_the_update_a337a359": {
-    "message": "Non è stato possibile completare l'aggiornamento:"
+    "message": "Non è stato possibile completare l’aggiornamento:"
   },
   "create_132b3be1": {
     "message": "Crea"
@@ -1251,7 +1251,7 @@
     "message": "Error occurred (Error event)"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
-    "message": "{ error } Aggiungere funzioni sconosciute al campo customFunctions dell'impostazione."
+    "message": "{ error } Aggiungere funzioni sconosciute al campo customFunctions dell’impostazione."
   },
   "error_processing_schema_2c707cf3": {
     "message": "Errore durante l’elaborazione dello schema"
@@ -3153,7 +3153,7 @@
     "message": "Questa operazione eliminerà il dialogo e il relativo contenuto. Continuare?"
   },
   "this_will_open_your_emulator_application_if_you_do_ba277151": {
-    "message": "Questa operazione aprirà l'applicazione Emulator. Se Bot Framework Emulator non è stato ancora installato, è possibile scaricarlo <a>qui</a>."
+    "message": "Questa operazione aprirà l’applicazione Emulator. Se Bot Framework Emulator non è stato ancora installato, è possibile scaricarlo <a>qui</a>."
   },
   "throw_exception_9d0d1db": {
     "message": "Genera eccezione"
@@ -3177,7 +3177,7 @@
     "message": "{ title }. { msg }"
   },
   "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
-    "message": "Per personalizzare il messaggio di benvenuto, selezionare l'azione <i>Invia una risposta</i> nell'editor visivo. Quindi, nell'editor di moduli a destra è possibile modificare il messaggio di benvenuto del bot nel campo <b>Generazione di linguaggio</b>."
+    "message": "Per personalizzare il messaggio di benvenuto, selezionare l’azione <i>Invia una risposta</i> nell’editor visivo. Quindi, nell’editor di moduli a destra è possibile modificare il messaggio di benvenuto del bot nel campo <b>Generazione di linguaggio</b>."
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
@@ -3207,7 +3207,7 @@
     "message": "Per comprendere cosa dice l’utente, il dialogo necessita di un \"Riconoscimento\", che include parole e frasi di esempio che gli utenti possono usare."
   },
   "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
-    "message": "Per comprendere cosa dice l'utente, il dialogo necessita di un \"IRecognizer\", che includa parole e frasi di esempio che gli utenti possono usare."
+    "message": "Per comprendere cosa dice l’utente, il dialogo necessita di un \"IRecognizer\", che includa parole e frasi di esempio che gli utenti possono usare."
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "In quale lingua verrà tradotto il bot?"

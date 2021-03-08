@@ -33,7 +33,7 @@
     "message": "Bu ada sahip bir profil zaten var."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer'de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
+    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer’de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
   },
   "a_publishing_profile_provides_the_secure_connectiv_e203980e": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot. "
