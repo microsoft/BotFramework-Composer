@@ -215,10 +215,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const errorElement = (errorText: string) => {
     if (!errorText) return '';
     return (
-      <div css={errorContainer}>
+      <span css={errorContainer}>
         <Icon iconName="ErrorBadge" styles={errorIcon} />
-        <div css={errorTextStyle}>{errorText}</div>
-      </div>
+        <span css={errorTextStyle}>{errorText}</span>
+      </span>
     );
   };
 

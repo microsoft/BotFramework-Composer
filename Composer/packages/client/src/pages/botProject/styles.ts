@@ -84,7 +84,7 @@ export const customError = {
 export const errorContainer = css`
   display: flex;
   width: 100%;
-  line-height: 24px;
+  line-height: 20px;
   padding-top: 12px;
   padding-bottom: 12px;
   background: #fed9cc;
