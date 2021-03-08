@@ -257,12 +257,12 @@ export const AzureProvisionDialog: React.FC = () => {
   const publishType = getType();
   const currentConfig = removePlaceholder(publishConfig);
 
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
 
   const [token, setToken] = useState<string>();
-  const [currentUser, setCurrentUser] = useState<any>();
+  const [currentUser, setCurrentUser] = useState<any>(undefined);
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [choice, setChoice] = useState(choiceOptions[0]);
@@ -386,7 +386,7 @@ export const AzureProvisionDialog: React.FC = () => {
   };
 
   const subscriptionOption = useMemo(() => {
-    return subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
+    return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
   const deployLocationsOption = useMemo((): IDropdownOption[] => {
@@ -399,7 +399,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const updateCurrentSubscription = useMemo(
     () => (_e, option?: IDropdownOption) => {
-      const sub = subscriptionOption.find((t) => t.key === option?.key);
+      const sub = subscriptionOption?.find((t) => t.key === option?.key);
 
       if (sub) {
         setSubscription(sub.key);
