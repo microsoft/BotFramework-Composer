@@ -12,7 +12,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     ),
     isHidden: false,
     enabled: false,
-    documentationLink: 'https://aka.ms/AAbf42g',
+    documentationLink: 'https://aka.ms/ComponentTemplateDocumentation',
   },
   FORM_DIALOG: {
     displayName: formatMessage('Form dialogs'),

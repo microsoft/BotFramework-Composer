@@ -11,7 +11,6 @@ export const templateSortOrder = [
 ];
 
 export const sortTemplates = (templates: BotTemplate[]): BotTemplate[] => {
-  console.log(templates);
   let sortedTemplateList: BotTemplate[] = [];
 
   // Sort incoming template array and reassign display name based on sort list
