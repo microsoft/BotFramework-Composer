@@ -204,10 +204,10 @@
     "message": "+ Agregar par PyR"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> agregue algunas frases de ejemplo para desencadenar esta intención:\n> - dime el tiempo\n-¿cómo es el tiempo en \"{'city=Seattle'}\"?\n\nDefiniciones de entidad:\n> @ ml city"
+    "message": "> agregue algunas frases de ejemplo para desencadenar esta intención:\n> - dime el tiempo\n-¿cómo es el tiempo en '{'city=Seattle'}'?\n\nDefiniciones de entidad:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> agregue algunas respuestas de usuario esperadas:\n> - Recuérdame que \"{\"itemTitle=compre leche\"}\"\n> - Recuérdame que \"{\" itemTitle \"}\"\n> - agregue \"{\"itemTitle\"}\" a mi lista de tareas pendientes\n>\n> definiciones de entidad:\n> @ ml itemTitle\n"
+    "message": "> agregue algunas respuestas de usuario esperadas:\n> - Recuérdame que '{'itemTitle=compre leche'}'\n> - Recuérdame que '{' itemTitle '}'\n> - agregue '{'itemTitle'}' a mi lista de tareas pendientes\n>\n> definiciones de entidad:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
