@@ -17,6 +17,7 @@ import {
   QnAFile,
   BotProjectFile,
   SDKKinds,
+  RecognizerFile,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 
@@ -179,6 +180,7 @@ const validate = (
     setting: DialogSetting;
     skillManifests: SkillManifestFile[];
     botProjectFile: BotProjectFile;
+    recognizers: RecognizerFile[];
     isRemote?: boolean;
     isRootBot?: boolean;
   },
@@ -194,8 +196,15 @@ const validate = (
   return [...checkManifest(assets), ...settingDiagnostics];
 };
 
-const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
+const filterLUISFilesToPublish = (luFiles: LuFile[], dialogFiles: DialogInfo[]): LuFile[] => {
   return luFiles.filter((file) => {
+    if (
+      dialogFiles.some(
+        (dialog) => dialog.luFile === getBaseName(file.id) && dialog.luProvider === SDKKinds.OrchestratorRecognizer
+      )
+    ) {
+      return true;
+    }
     const locale = getLocale(file.id);
     return locale && LUISLocales.includes(locale);
   });
