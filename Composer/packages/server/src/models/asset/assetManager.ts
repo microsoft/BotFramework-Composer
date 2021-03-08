@@ -22,6 +22,7 @@ import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
+import { runTemplateInstallationWorker } from '../../workers/creation_worker';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -159,10 +160,11 @@ export class AssetManager {
     try {
       log('Installing generator', npmPackageName);
       templateVersion = templateVersion ? templateVersion : '*';
-      await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
+      await runTemplateInstallationWorker(npmPackageName, templateVersion, yeomanEnv);
+      // await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
 
-      log('Looking up local packages');
-      await yeomanEnv.lookupLocalPackages();
+      // log('Looking up local packages');
+      // await yeomanEnv.lookupLocalPackages();
       return true;
     } catch {
       return false;
