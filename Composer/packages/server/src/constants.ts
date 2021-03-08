@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { QnABotTemplateId } from "@bfc/shared";
+import { QnABotTemplateId } from '@bfc/shared';
 
 export const BASEURL = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
 
@@ -23,4 +23,8 @@ export const piiProperties = ['projectId', 'rootProjectId'];
 
 export const COMPOSER_VERSION = '1.3.1';
 
-export const templateSortOrder = [{ generatorName: '@microsoft/generator-microsoft-bot-empty', displayName: 'Blank bot' }, { generatorName: '@microsoft/generator-microsoft-bot-conversational-core', displayName: 'Basic conversational bot' }, { generatorName: QnABotTemplateId, displayName: 'QnAMaker bot' }]
+export const templateSortOrder = [
+  { generatorName: '@microsoft/generator-microsoft-bot-empty', displayName: 'Blank bot' },
+  { generatorName: '@microsoft/generator-microsoft-bot-conversational-core', displayName: 'Basic conversational bot' },
+  { generatorName: QnABotTemplateId, displayName: 'QnAMaker bot' },
+];

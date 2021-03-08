@@ -4,12 +4,12 @@
 import { Request, Response } from 'express';
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
+import union from 'lodash/union';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
 import { templateSortOrder } from '../constants';
-import _ from 'lodash';
 
 async function getProjTemplates(req: Request, res: Response) {
   try {
@@ -56,15 +56,15 @@ export async function getProjTemplatesV2(req: any, res: any) {
     templateSortOrder.forEach((tempSortEntry, index) => {
       const templateIndex = templates.findIndex((template) => {
         return template.id === tempSortEntry.generatorName;
-      })
-      if (templateIndex != -1){
-      templates[templateIndex].name = tempSortEntry.displayName;
-      sortedTemplateList.push(templates[templateIndex]);
+      });
+      if (templateIndex != -1) {
+        templates[templateIndex].name = tempSortEntry.displayName;
+        sortedTemplateList.push(templates[templateIndex]);
       }
-    })
+    });
 
     // append any templates not defined in sort list
-    sortedTemplateList = _.union(sortedTemplateList, templates);
+    sortedTemplateList = union(sortedTemplateList, templates);
 
     // return templates
     res.status(200).json(sortedTemplateList);
