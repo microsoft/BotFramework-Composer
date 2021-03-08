@@ -3,7 +3,7 @@
 
 import rimraf from 'rimraf';
 import { enableFetchMocks } from 'jest-fetch-mock';
-import { BotTemplateV2 } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 
 import { ExtensionContext } from '../../../models/extension/extensionContext';
 import { Path } from '../../../utility/path';
@@ -139,14 +139,13 @@ describe('assetManager', () => {
           id: 'generator-conversational-core',
           name: 'Conversational Core',
           description: 'Preview conversational core package for TESTING ONLY',
-          keywords: ['conversationalcore', 'yeoman-generator'],
           package: {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',
             packageVersion: '1.0.3',
           },
         },
-      ] as BotTemplateV2[]);
+      ] as BotTemplate[]);
     });
   });
 
