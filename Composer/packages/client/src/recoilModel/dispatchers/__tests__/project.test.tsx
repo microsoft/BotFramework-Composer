@@ -70,9 +70,13 @@ jest.mock('../../parsers/lgWorker', () => {
 
     parseAll: (id, files) =>
       new Promise((resolve) =>
-        files.map(({ id, content }) => {
-          require('@bfc/indexers').lgUtil.parse(id, content, files);
-        })
+        resolve(
+          files.map(({ id, content }) => {
+            const result = require('@bfc/indexers').lgUtil.parse(id, content, files);
+            delete result.parseResult;
+            return result;
+          })
+        )
       ),
   };
 });
