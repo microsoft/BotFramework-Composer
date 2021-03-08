@@ -312,7 +312,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const publishType = getType();
   const currentConfig = removePlaceholder(publishConfig);
   const extensionState = getExtensionState();
-  console.log(extensionState);
 
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
