@@ -195,7 +195,7 @@ export class Builder {
     }
 
     const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
-    await writeFile(orchestratorSettingsPath, JSON.stringify(this.orchestratorSettings));
+    await writeFile(orchestratorSettingsPath, JSON.stringify(this.orchestratorSettings, null, 2));
   };
 
   /**
@@ -294,30 +294,38 @@ export class Builder {
     );
   }
 
+  /**
+   * Orchestrator: Copy language models into bot project (in preparation for publishing)
+   *
+   * Models are placed as a sibling to ComposerDialogs by default
+   */
   public async copyModelPathToBot() {
     for (let lang in this.orchestratorSettings.orchestrator.models) {
       const modelName = Path.basename(this.orchestratorSettings.orchestrator.models[lang], '.onnx');
-      const destDir = Path.resolve(Path.join(this.botDir, MODEL), modelName);
+      const destDir = Path.resolve(this.botDir, '..', MODEL, modelName);
       await copy(this.orchestratorSettings.orchestrator.models[lang], destDir);
     }
 
     await this.updateOrchestratorSetting();
   }
 
+  /**
+   * Orchestrator: Update Orchestrator Settings for publishing
+   *
+   * Orchestrator file paths are updated relative to the project root.
+   */
   private async updateOrchestratorSetting() {
-    const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
+    const settingPath = Path.join(this.botDir, GENERATEDFOLDER, 'orchestrator.settings.json');
     const content = cloneDeep(this.orchestratorSettings);
 
     keys(content.orchestrator.models).forEach((modelPath) => {
       let modelName = Path.basename(content.orchestrator.models[modelPath], '.onnx');
-      //content.orchestrator.models[modelPath] = `${MODEL}/${modelName}`;
       content.orchestrator.models[modelPath] = Path.join(MODEL, modelName);
     });
 
     keys(content.orchestrator.snapshots).forEach((key) => {
-      //content.orchestrator.snapshots[key] = Path.relative(Path.resolve(this.generatedFolderPath,'..'), content.orchestrator.snapshots[key]);
       let snapshotName = Path.basename(content.orchestrator.snapshots[key]);
-      content.orchestrator.snapshots[key] = Path.join(GENERATEDFOLDER, snapshotName);
+      content.orchestrator.snapshots[key] = Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
     });
 
     await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));

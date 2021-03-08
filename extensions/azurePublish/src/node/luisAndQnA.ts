@@ -10,7 +10,7 @@ import { ILuisConfig, FileInfo, IBotProject } from '@botframework-composer/types
 import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
 
-const botPath = (projPath: string) => path.join(projPath); // there should not be a need to specify the sub directory
+const botPath = (projPath: string) => path.join(projPath, 'ComposerDialogs'); // there should not be a need to specify the sub directory
 
 type QnaConfigType = {
   subscriptionKey: string;
