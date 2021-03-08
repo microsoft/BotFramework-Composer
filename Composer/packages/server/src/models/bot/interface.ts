@@ -74,9 +74,9 @@ export interface IOrchestratorBuildOutput {
 export interface IOrchestratorSettings {
   orchestrator: {
     models: {
-      en?: string,
-      multilang?: string
-    },
-    snapshots: Record<string, string>,
-  },
+      en?: string;
+      multilang?: string;
+    };
+    snapshots: Record<string, string>;
+  };
 }

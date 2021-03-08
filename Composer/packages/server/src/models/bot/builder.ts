@@ -260,7 +260,7 @@ export class Builder {
    * Models are placed as a sibling to ComposerDialogs by default
    */
   public async copyModelPathToBot() {
-    for (let lang in this.orchestratorSettings.orchestrator.models) {
+    for (const lang in this.orchestratorSettings.orchestrator.models) {
       const modelName = Path.basename(this.orchestratorSettings.orchestrator.models[lang], '.onnx');
       const destDir = Path.resolve(this.botDir, '..', MODEL, modelName);
       await copy(this.orchestratorSettings.orchestrator.models[lang], destDir);
@@ -279,12 +279,12 @@ export class Builder {
     const content = cloneDeep(this.orchestratorSettings);
 
     keys(content.orchestrator.models).forEach((modelPath) => {
-      let modelName = Path.basename(content.orchestrator.models[modelPath], '.onnx');
+      const modelName = Path.basename(content.orchestrator.models[modelPath], '.onnx');
       content.orchestrator.models[modelPath] = Path.join(MODEL, modelName);
     });
 
     keys(content.orchestrator.snapshots).forEach((key) => {
-      let snapshotName = Path.basename(content.orchestrator.snapshots[key]);
+      const snapshotName = Path.basename(content.orchestrator.snapshots[key]);
       content.orchestrator.snapshots[key] = Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
     });
 
