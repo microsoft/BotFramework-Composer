@@ -236,7 +236,7 @@ const emptyLgFile = (id: string, content: string): LgFile => {
     templates: [],
     allTemplates: [],
     imports: [],
-    rawData: true,
+    isContentUnparsed: true,
   };
 };
 
@@ -253,7 +253,7 @@ const emptyLuFile = (id: string, content: string): LuFile => {
       Content: '',
     },
     imports: [],
-    rawData: true,
+    isContentUnparsed: true,
   };
 };
 
@@ -271,7 +271,7 @@ const emptyQnaFile = (id: string, content: string): QnAFile => {
       Errors: [],
       Content: '',
     },
-    rawData: true,
+    isContentUnparsed: true,
   };
 };
 
@@ -475,7 +475,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
       set(lgFilesSelectorFamily(projectId), (prevFiles) => {
         return prevFiles.map((item) => {
           const file = (result as LgFile[]).find((file) => file.id === item.id);
-          return file && item.rawData ? file : item;
+          return file && item.isContentUnparsed ? file : item;
         });
       });
     }),
@@ -483,7 +483,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
       set(luFilesSelectorFamily(projectId), (prevFiles) => {
         return prevFiles.map((item) => {
           const file = (result as LuFile[]).find((file) => file.id === item.id);
-          return file && item.rawData ? file : item;
+          return file && item.isContentUnparsed ? file : item;
         });
       });
     }),
@@ -491,7 +491,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
       set(qnaFilesSelectorFamily(projectId), (prevFiles) => {
         return prevFiles.map((item) => {
           const file = (result as QnAFile[]).find((file) => file.id === item.id);
-          return file && item.rawData ? file : item;
+          return file && item.isContentUnparsed ? file : item;
         });
       });
     }),

@@ -37,28 +37,30 @@ const updateLuFiles = (
     deletes?: LuFile[];
     updates?: LuFile[];
   },
-  needUpdate?: (current: LuFile, changed: LuFile) => boolean
+  getLatestFile?: (current: LuFile, changed: LuFile) => LuFile
 ) => {
   const { updates, adds, deletes } = changes;
 
   // updates
   updates?.forEach((luFile) => {
-    set(luFileState({ projectId, luFileId: luFile.id }), (preFile) =>
-      needUpdate ? (needUpdate(preFile, luFile) ? luFile : preFile) : luFile
+    set(luFileState({ projectId, luFileId: luFile.id }), (oldLuFile) =>
+      getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile
     );
   });
 
   // deletes
   if (deletes?.length) {
-    set(luFileIdsState(projectId), (ids) => ids.filter((id) => !deletes.map((file) => file.id).includes(id)));
+    const deletedIds = deletes.map((file) => file.id);
+    set(luFileIdsState(projectId), (ids) => ids.filter((id) => !deletedIds.includes(id)));
   }
 
   // adds
   if (adds?.length) {
-    set(luFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
+    const addedIds = adds.map((file) => file.id);
+    set(luFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
     adds.forEach((luFile) => {
-      set(luFileState({ projectId, luFileId: luFile.id }), (preFile) =>
-        needUpdate ? (needUpdate(preFile, luFile) ? luFile : preFile) : luFile
+      set(luFileState({ projectId, luFileId: luFile.id }), (oldLuFile) =>
+        getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile
       );
     });
   }
@@ -204,7 +206,8 @@ export const luDispatcher = () => {
          */
         updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
           // compare to drop expired content already setted above.
-          return current.id === id ? current?.content === changed?.content : true;
+          if (current.id === id && current?.content !== changed?.content) return current;
+          return changed;
         });
       } catch (error) {
         setError(callbackHelpers, error);

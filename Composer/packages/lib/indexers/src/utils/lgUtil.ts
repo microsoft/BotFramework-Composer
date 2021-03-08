@@ -78,7 +78,7 @@ export function convertTemplatesToLgFile(id = '', content: string, parseResult: 
     imports,
     options: parseResult.options,
     parseResult,
-    rawData: false,
+    isContentUnparsed: false,
   };
 }
 

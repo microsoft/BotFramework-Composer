@@ -78,31 +78,31 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
         />
       )}
 
-      {loading ? (
-        <LoadingSpinner />
-      ) : dialogJsonVisible && currentDialog ? (
-        <JsonEditor
-          key={'dialogjson'}
-          editorSettings={userSettings.codeEditor}
-          id={currentDialog.id}
-          schema={schemas.sdk.content}
-          value={currentDialog.content || undefined}
-          onChange={(data) => {
-            updateDialog({ id: currentDialog.id, content: data, projectId });
-          }}
-        />
-      ) : withWarning ? (
-        <WarningMessage
-          isVisible={warningIsVisible}
-          okText={formatMessage('Change Recognizer')}
-          onCancel={() => {
-            setWarningIsVisible(false);
-          }}
-          onOk={() => navTo(projectId, dialogId ?? null)}
-        />
-      ) : (
-        <VisualEditorWrapper dialogId={dialogId} pluginConfig={pluginConfig} projectId={projectId} />
-      )}
+      {loading && <LoadingSpinner />}
+      {!loading &&
+        (dialogJsonVisible && currentDialog ? (
+          <JsonEditor
+            key={'dialogjson'}
+            editorSettings={userSettings.codeEditor}
+            id={currentDialog.id}
+            schema={schemas.sdk.content}
+            value={currentDialog.content || undefined}
+            onChange={(data) => {
+              updateDialog({ id: currentDialog.id, content: data, projectId });
+            }}
+          />
+        ) : withWarning ? (
+          <WarningMessage
+            isVisible={warningIsVisible}
+            okText={formatMessage('Change Recognizer')}
+            onCancel={() => {
+              setWarningIsVisible(false);
+            }}
+            onOk={() => navTo(projectId, dialogId ?? null)}
+          />
+        ) : (
+          <VisualEditorWrapper dialogId={dialogId} pluginConfig={pluginConfig} projectId={projectId} />
+        ))}
     </div>
   );
 });

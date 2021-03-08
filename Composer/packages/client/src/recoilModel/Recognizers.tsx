@@ -211,7 +211,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   useEffect(() => {
     try {
       //if the lu file still in the loading stage, do nothing
-      if (luFiles.filter((item) => item.rawData).length) return;
+      if (luFiles.some((item) => item.isContentUnparsed)) return;
 
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
 

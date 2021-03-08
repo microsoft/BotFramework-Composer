@@ -133,9 +133,7 @@ export class LGServer {
     }
 
     const lines = document.getText().split(/\r?\n/g);
-    let items = createFoldingRanges(lines, '>>');
-    items = items.concat(createFoldingRanges(lines, '#'));
-    return items;
+    return [...createFoldingRanges(lines, '>>'), ...createFoldingRanges(lines, '#')];
   }
 
   protected updateObject(propertyList: string[]): void {

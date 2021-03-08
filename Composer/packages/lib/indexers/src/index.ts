@@ -74,15 +74,14 @@ class Indexer {
 
   public index(files: FileInfo[], botName: string) {
     const result = this.classifyFile(files);
-    //const luFeatures = settings.luFeatures;
     const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
     const { skillManifestFiles, crossTrainConfigs } = this.separateConfigAndManifests(result[FileExtensions.Manifest]);
     const assets = {
       dialogs: dialogIndexer.index(dialogs, botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
-      lgResources: this.getResources(result[FileExtensions.lg], '.lg'),
-      luResources: this.getResources(result[FileExtensions.Lu], '.lu'),
-      qnaResources: this.getResources(result[FileExtensions.QnA], '.qna'),
+      lgResources: this.getResources(result[FileExtensions.lg], FileExtensions.lg),
+      luResources: this.getResources(result[FileExtensions.Lu], FileExtensions.Lu),
+      qnaResources: this.getResources(result[FileExtensions.QnA], FileExtensions.QnA),
       skillManifests: skillManifestIndexer.index(skillManifestFiles),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
       jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),

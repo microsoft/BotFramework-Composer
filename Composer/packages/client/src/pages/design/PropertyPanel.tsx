@@ -53,13 +53,13 @@ const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '',
 
   return (
     <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
-      {loading ? (
-        <LoadingSpinner />
-      ) : isRemoteSkill && skillManifestFile ? (
-        <ManifestEditor formData={skillManifestFile} />
-      ) : (
-        <PropertyEditor key={focusPath + undoVersion} />
-      )}
+      {loading && <LoadingSpinner />}
+      {!loading &&
+        (isRemoteSkill && skillManifestFile ? (
+          <ManifestEditor formData={skillManifestFile} />
+        ) : (
+          <PropertyEditor key={focusPath + undoVersion} />
+        ))}
     </EditorExtension>
   );
 });

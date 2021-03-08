@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { LuFile } from '@bfc/shared';
-import { selectorFamily } from 'recoil';
+import { selectorFamily, DefaultValue } from 'recoil';
 
 import { luFileIdsState, luFileState } from '../atoms';
 
@@ -15,13 +15,12 @@ export const luFilesSelectorFamily = selectorFamily<LuFile[], string>({
       return get(luFileState({ projectId, luFileId }));
     });
   },
-  set: (projectId: string) => ({ set }, newLuFiles) => {
-    const newLuFileArray = newLuFiles as LuFile[];
-
+  set: (projectId: string) => ({ set }, newLuFiles: LuFile[] | DefaultValue) => {
+    if (newLuFiles instanceof DefaultValue) return;
     set(
       luFileIdsState(projectId),
-      newLuFileArray.map((luFile) => luFile.id)
+      newLuFiles.map((luFile) => luFile.id)
     );
-    newLuFileArray.forEach((luFile) => set(luFileState({ projectId, luFileId: luFile.id }), luFile));
+    newLuFiles.forEach((luFile) => set(luFileState({ projectId, luFileId: luFile.id }), luFile));
   },
 });

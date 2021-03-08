@@ -66,7 +66,7 @@ export const useEmptyPropsHandler = (
 
   useEffect(() => {
     if (!currentDialog || !currentLg.id) return;
-    if (currentLg.rawData) {
+    if (currentLg.isContentUnparsed) {
       //for current dialog, check the lg file to make sure the file is parsed.
       lgDiagnosticWorker.parse(activeBot, currentLg.id, currentLg.content, lgFiles).then((result) => {
         setCurrentLg(result as LgFile);
@@ -76,7 +76,7 @@ export const useEmptyPropsHandler = (
 
   useEffect(() => {
     if (!currentDialog || !currentLu.id) return;
-    if (currentLu.rawData) {
+    if (currentLu.isContentUnparsed) {
       //for current dialog, check the lg file to make sure the file is parsed.
       luWorker.parse(currentLu.id, currentLu.content, settings.luFeatures).then((result) => {
         setCurrentLu(result as LuFile);
@@ -86,7 +86,7 @@ export const useEmptyPropsHandler = (
 
   useEffect(() => {
     if (!currentDialog || !currentQna.id) return;
-    if (currentQna.rawData) {
+    if (currentQna.isContentUnparsed) {
       //for current dialog, check the lg file to make sure the file is parsed.
       qnaWorker.parse(currentQna.id, currentQna.content).then((result) => {
         setCurrentQna(result as QnAFile);

@@ -92,9 +92,9 @@ export const multilangDispatcher = () => {
       const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesSelectorFamily(projectId), (prevlgFiles) => {
-        const addedLgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
-        return [...prevlgFiles, ...addedLgFiles];
+      set(lgFilesSelectorFamily(projectId), (oldLgFiles) => {
+        const addedLgFiles = copyLanguageResources(oldLgFiles, defaultLang, languages);
+        return [...oldLgFiles, ...addedLgFiles];
       });
       set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);

@@ -129,7 +129,7 @@ export function convertLuParseResultToLuFile(
     diagnostics,
     imports,
     resource: { Sections, Errors, Content },
-    rawData: false,
+    isContentUnparsed: false,
   };
 }
 

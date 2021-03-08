@@ -108,10 +108,8 @@ export class LUServer {
     }
 
     const lines = document.getText().split(/\r?\n/g);
-    let items: FoldingRange[] = createFoldingRanges(lines, '>>');
-    items = items.concat(createFoldingRanges(lines, '#'));
 
-    return items;
+    return [...createFoldingRanges(lines, '>>'), ...createFoldingRanges(lines, '#')];
   }
 
   protected async validateLuOption(document: TextDocument, luOption?: LUOption) {

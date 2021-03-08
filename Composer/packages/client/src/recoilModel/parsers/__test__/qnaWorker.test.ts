@@ -24,7 +24,7 @@ describe('test qna worker', () => {
     ${'```'}`;
     const result: any = await qnaWorker.parse('', content);
     expect(result.qnaSections.length).toBe(1);
-    expect(result.rawData).toBe(false);
+    expect(result.isContentUnparsed).toBe(false);
   });
 
   it('get expected parse result', async () => {

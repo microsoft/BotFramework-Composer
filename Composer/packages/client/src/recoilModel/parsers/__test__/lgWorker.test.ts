@@ -24,7 +24,7 @@ const lgFiles = [
   {
     id: 'common.en-us',
     content: `\r\n# Hello\r\n-hi`,
-    rawData: true,
+    isContentUnparsed: true,
   },
 ] as LgFile[];
 

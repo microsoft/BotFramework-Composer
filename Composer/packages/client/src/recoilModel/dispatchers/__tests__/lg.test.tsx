@@ -46,7 +46,7 @@ const lgFiles = [
     diagnostics: [],
     imports: [],
     allTemplates: [{ name: 'Hello', body: '-hi', parameters: [] }],
-    rawData: false,
+    isContentUnparsed: false,
   },
 ] as LgFile[];
 

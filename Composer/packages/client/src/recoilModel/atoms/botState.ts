@@ -56,7 +56,7 @@ const emptyLg: LgFile = {
   templates: [],
   allTemplates: [],
   imports: [],
-  rawData: true,
+  isContentUnparsed: true,
 };
 
 const emptyLu: LuFile = {
@@ -71,7 +71,7 @@ const emptyLu: LuFile = {
     Content: '',
   },
   imports: [],
-  rawData: true,
+  isContentUnparsed: true,
 };
 
 const emptyQna: QnAFile = {
@@ -87,7 +87,7 @@ const emptyQna: QnAFile = {
     Errors: [],
     Content: '',
   },
-  rawData: true,
+  isContentUnparsed: true,
 };
 
 type LgStateParams = { projectId: string; lgFileId: string };

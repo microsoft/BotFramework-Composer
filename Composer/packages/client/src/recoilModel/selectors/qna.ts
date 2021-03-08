@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { QnAFile } from '@bfc/shared';
-import { selectorFamily } from 'recoil';
+import { DefaultValue, selectorFamily } from 'recoil';
 
 import { qnaFileIdsState, qnaFileState } from '../atoms';
 
@@ -15,13 +15,13 @@ export const qnaFilesSelectorFamily = selectorFamily<QnAFile[], string>({
       return get(qnaFileState({ projectId, qnaFileId }));
     });
   },
-  set: (projectId: string) => ({ set }, newQnaFiles) => {
-    const newQnaFileArray = newQnaFiles as QnAFile[];
+  set: (projectId: string) => ({ set }, newQnaFiles: QnAFile[] | DefaultValue) => {
+    if (newQnaFiles instanceof DefaultValue) return;
 
     set(
       qnaFileIdsState(projectId),
-      newQnaFileArray.map((qnaFile) => qnaFile.id)
+      newQnaFiles.map((qnaFile) => qnaFile.id)
     );
-    newQnaFileArray.forEach((qnaFile) => set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), qnaFile));
+    newQnaFiles.forEach((qnaFile) => set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), qnaFile));
   },
 });

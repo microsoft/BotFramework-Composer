@@ -45,28 +45,30 @@ const updateQnaFiles = (
     deletes?: QnAFile[];
     updates?: QnAFile[];
   },
-  needUpdate?: (current: QnAFile, changed: QnAFile) => boolean
+  getLatestFile?: (current: QnAFile, changed: QnAFile) => QnAFile
 ) => {
   const { updates, adds, deletes } = changes;
 
   // updates
   updates?.forEach((qnaFile) => {
-    set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (preFile) =>
-      needUpdate ? (needUpdate(preFile, qnaFile) ? qnaFile : preFile) : qnaFile
+    set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (oldQnaFile) =>
+      getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile
     );
   });
 
   // deletes
   if (deletes?.length) {
-    set(qnaFileIdsState(projectId), (ids) => ids.filter((id) => !deletes.map((file) => file.id).includes(id)));
+    const deletedIds = deletes.map((file) => file.id);
+    set(qnaFileIdsState(projectId), (ids) => ids.filter((id) => !deletedIds.includes(id)));
   }
 
   // adds
   if (adds?.length) {
-    set(qnaFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
+    const addedIds = adds.map((file) => file.id);
+    set(qnaFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
     adds.forEach((qnaFile) => {
-      set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (preFile) =>
-        needUpdate ? (needUpdate(preFile, qnaFile) ? qnaFile : preFile) : qnaFile
+      set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (oldQnaFile) =>
+        getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile
       );
     });
   }
