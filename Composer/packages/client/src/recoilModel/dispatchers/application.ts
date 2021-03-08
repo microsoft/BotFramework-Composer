@@ -13,10 +13,13 @@ import {
   PageMode,
   creationFlowTypeState,
   pageElementState,
+  debugPanelExpansionState,
+  debugPanelActiveTabState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
+import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
 
 import { setError } from './shared';
 
@@ -117,6 +120,16 @@ export const applicationDispatcher = () => {
     }
   );
 
+  const setDebugPanelExpansion = useRecoilCallback(({ set }: CallbackInterface) => (isExpanded: boolean) => {
+    set(debugPanelExpansionState, isExpanded);
+  });
+
+  const setActiveTabInDebugPanel = useRecoilCallback(
+    ({ set }: CallbackInterface) => (activeTab: DebugDrawerKeys | undefined) => {
+      set(debugPanelActiveTabState, activeTab);
+    }
+  );
+
   return {
     setAppUpdateStatus,
     setAppUpdateShowing,
@@ -129,5 +142,7 @@ export const applicationDispatcher = () => {
     setApplicationLevelError,
     setCreationFlowType,
     setPageElementState,
+    setDebugPanelExpansion,
+    setActiveTabInDebugPanel,
   };
 };
