@@ -261,7 +261,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'locale?: string'],
       ReturnType.String,
-      'Convert a string to all upper case characters.'
+      'Convert a string to all lower case characters.'
     ),
   ],
   [
@@ -269,7 +269,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'locale?: string'],
       ReturnType.String,
-      'Convert a string to all lower case characters.'
+      'Convert a string to all upper case characters.'
     ),
   ],
   [
