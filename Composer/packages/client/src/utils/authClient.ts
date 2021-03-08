@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AuthParameters } from '@botframework-composer/types';
+import { AuthParameters, AzureTenant } from '@botframework-composer/types';
 
 import { authConfig } from '../constants';
 
@@ -105,7 +105,51 @@ async function logOut() {
   }
 }
 
+/**
+ * Will retrieve an ARM token for the desired Azure tenant.
+ * NOTE: Should call getTenants() beforehand to retrieve a list of
+ * available tenants.
+ * @param tenantId The Azure tenant to get an ARM token for
+ */
+async function getARMTokenForTenant(tenantId: string): Promise<string> {
+  const options = {
+    method: 'GET',
+    headers: {},
+  };
+  if (isElectron()) {
+    const { __csrf__ = '' } = window;
+    options.headers['X-CSRF-Token'] = __csrf__;
+  }
+
+  const result = await fetch(`/api/auth/getARMTokenForTenant?tenantId=${tenantId}`, options);
+  const { accessToken = '' } = await result.json();
+  return accessToken;
+}
+
+/**
+ * Will log the user into ARM and return a list of available Azure tenants for the user.
+ * This should then be used to display the list of tenants in the UI, allowing the user
+ * to select a tenant. The selected tenant ID should then be passed to getARMTokenForTenant()
+ * to get an ARM token for reading / writing Azure resources in that tenant.
+ */
+async function getTenants(): Promise<AzureTenant[]> {
+  const options = {
+    method: 'GET',
+    headers: {},
+  };
+  if (isElectron()) {
+    const { __csrf__ = '' } = window;
+    options.headers['X-CSRF-Token'] = __csrf__;
+  }
+
+  const result = await fetch('/api/auth/getTenants', options);
+  const { tenants = [] } = await result.json();
+  return tenants;
+}
+
 export const AuthClient = {
   getAccessToken,
+  getARMTokenForTenant,
+  getTenants,
   logOut,
 };

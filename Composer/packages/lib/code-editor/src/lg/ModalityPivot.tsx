@@ -88,6 +88,7 @@ const renderModalityEditor = ({
   lgOption,
   lgTemplates,
   memoryVariables,
+  modalities,
   telemetryClient,
   editorSettings,
   onRemoveModality,
@@ -103,6 +104,7 @@ const renderModalityEditor = ({
   lgOption?: LGOption;
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
+  modalities: ModalityType[];
   telemetryClient: TelemetryClient;
   editorSettings?: Partial<CodeEditorSettings>;
   onRemoveModality: (modality: ModalityType) => void;
@@ -152,7 +154,13 @@ const renderModalityEditor = ({
         />
       );
     case 'Text':
-      return <TextModalityEditor {...commonProps} response={structuredResponse?.Text as TextStructuredResponseItem} />;
+      return (
+        <TextModalityEditor
+          {...commonProps}
+          focusOnMount={modalities.length === 1 && modalities[0] === 'Text'}
+          response={structuredResponse?.Text as TextStructuredResponseItem}
+        />
+      );
   }
 };
 
@@ -266,7 +274,7 @@ export const ModalityPivot = React.memo((props: Props) => {
   ]);
 
   const onRemoveModality = useCallback(
-    (modality: ModalityType, removeReferencedTemplates = false) => {
+    (modality: ModalityType, keepReferencedTemplates = false) => {
       if (modalities.length > 1) {
         const updatedModalities = modalities.filter((item) => item !== modality);
         setModalities(updatedModalities);
@@ -291,8 +299,8 @@ export const ModalityPivot = React.memo((props: Props) => {
           }
 
           // Remove attachments created by the LG Response Editor
-          if (modality === 'Attachments' && removeReferencedTemplates) {
-            const attachments = (structuredResponse?.[modality] as AttachmentsStructuredResponseItem)?.value;
+          if (modality === 'Attachments' && !keepReferencedTemplates) {
+            const attachments = (structuredResponse?.[modality] as AttachmentsStructuredResponseItem)?.value || [];
             for (const attachment of attachments) {
               const templateId = extractTemplateNameFromExpression(attachment);
               if (templateId?.startsWith(`${lgOption.templateId}_attachment_`)) {
@@ -355,7 +363,7 @@ export const ModalityPivot = React.memo((props: Props) => {
       onUpdateResponseTemplate({
         InputHint: {
           kind: 'InputHint',
-          value: inputHint !== 'none' ? inputHint : '',
+          value: inputHint,
         } as InputHintStructuredResponseItem,
       });
     },
@@ -391,6 +399,7 @@ export const ModalityPivot = React.memo((props: Props) => {
           lgOption,
           lgTemplates,
           memoryVariables,
+          modalities,
           telemetryClient,
           editorSettings,
           onRemoveModality,

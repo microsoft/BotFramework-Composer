@@ -38,7 +38,7 @@ const Input = styled(TextField)({
   padding: '8px 0 8px 4px',
   width: '100%',
   position: 'relative',
-  '& input': {
+  '& input, & textarea': {
     fontSize: FluentTheme.fonts.small.fontSize,
   },
   '& .ms-TextField-fieldGroup::after': {
@@ -55,7 +55,7 @@ const Input = styled(TextField)({
   },
 });
 
-const StyledLgCodeEditor = styled(LgCodeEditor)({
+const LgCodeEditorContainer = styled.div({
   padding: '8px 0 8px 4px',
 });
 
@@ -88,6 +88,8 @@ const textFieldStyles = {
     },
   },
 };
+
+const textFieldResizeMaxCharsThreshold = 25;
 
 type Props = {
   mode: 'edit' | 'view';
@@ -155,7 +157,7 @@ type TextFieldItemProps = Omit<Props, 'onRemove' | 'mode' | 'onFocus' | 'telemet
 const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldItemProps) => {
   const itemRef = useRef<ITextField | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     itemRef.current?.focus();
@@ -196,6 +198,8 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
       <Input
         componentRef={(ref) => (itemRef.current = ref)}
         defaultValue={value}
+        multiline={value.length > textFieldResizeMaxCharsThreshold}
+        resizable={false}
         styles={textFieldStyles}
         onChange={onChange}
         onClick={click}
@@ -238,17 +242,20 @@ export const StringArrayItem = (props: Props) => {
         editorMode === 'single' ? (
           <TextFieldItem value={value} onChange={onChange} onShowCallout={onShowCallout} />
         ) : (
-          <StyledLgCodeEditor
-            editorDidMount={onEditorDidMount}
-            editorSettings={codeEditorSettings}
-            height={150}
-            lgOption={lgOption}
-            lgTemplates={lgTemplates}
-            memoryVariables={memoryVariables}
-            telemetryClient={telemetryClient}
-            value={value}
-            onChange={onLgChange}
-          />
+          <LgCodeEditorContainer>
+            <LgCodeEditor
+              editorDidMount={onEditorDidMount}
+              editorSettings={codeEditorSettings}
+              height={150}
+              lgOption={lgOption}
+              lgTemplates={lgTemplates}
+              memoryVariables={memoryVariables}
+              options={{ folding: false }}
+              telemetryClient={telemetryClient}
+              value={value}
+              onChange={onLgChange}
+            />
+          </LgCodeEditorContainer>
         )
       ) : (
         <TextViewItem value={value} onFocus={onFocus} onRemove={onRemove} onRenderDisplayText={onRenderDisplayText} />

@@ -216,8 +216,11 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     (lgFileId: string) => {
       // eslint-disable-next-line security/detect-non-literal-regexp
       const pattern = new RegExp(`.${locale}`, 'g');
-      lgFileId = lgFileId.replace(pattern, '');
-      shellApi.navigateTo(`/bot/${projectId}/language-generation/${lgFileId}`);
+      const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
+      const url = currentDialog.isFormDialog
+        ? `/bot/${projectId}/language-generation/${currentDialog.id}/item/${fileId}`
+        : `/bot/${projectId}/language-generation/${fileId}`;
+      shellApi.navigateTo(url);
     },
     [shellApi, projectId, locale]
   );
@@ -270,8 +273,8 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
             onClick={modeChange}
           >
             {editorMode === 'codeEditor'
-              ? formatMessage('switch to response editor')
-              : formatMessage('switch to code editor')}
+              ? formatMessage('Switch to response editor')
+              : formatMessage('Switch to code editor')}
           </Link>
         </TooltipHost>
       </Stack>

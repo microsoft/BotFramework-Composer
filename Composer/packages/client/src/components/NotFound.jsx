@@ -48,7 +48,7 @@ export const NotFound = (props) => {
     <div css={notfoundbody}>
       <div css={notfoundcontainer}>
         <div>
-          <div css={description}>{formatMessage("The page you are looking for can't be found.")}</div>
+          <div css={description}>{formatMessage('The page you are looking for can’t be found.')}</div>
           <div css={notfoundicon}>{'404'}</div>
         </div>
       </div>

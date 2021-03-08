@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core';
 import { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, CommandButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
 
 // -------------------- Styles -------------------- //
@@ -32,11 +32,9 @@ export const rightActions = css`
   margin-right: 20px;
 `;
 
-export const actionButton = css`
-  font-size: 16px;
-  margin-top: 2px;
-  margin-left: 15px;
-`;
+export const defaultToolbarButtonStyles: IButtonStyles = {
+  root: { fontSize: '16px', marginTop: '2px', marginLeft: '15px' },
+};
 
 // -------------------- IToolbarItem -------------------- //
 
@@ -48,6 +46,7 @@ export type IToolbarItem = {
   buttonProps?: {
     iconProps?: IIconProps;
     onClick?: () => void;
+    styles?: IButtonStyles;
   };
   menuProps?: IContextualMenuProps;
   align?: string;
@@ -62,13 +61,7 @@ const renderItemList = (item: IToolbarItem, index: number) => {
     return <Fragment key={index}>{item.element}</Fragment>;
   } else if (item.type === 'action') {
     return (
-      <ActionButton
-        key={index}
-        css={actionButton}
-        {...item.buttonProps}
-        data-testid={item.dataTestid}
-        disabled={item.disabled}
-      >
+      <ActionButton key={index} {...item.buttonProps} data-testid={item.dataTestid} disabled={item.disabled}>
         {item.text}
       </ActionButton>
     );
@@ -76,11 +69,11 @@ const renderItemList = (item: IToolbarItem, index: number) => {
     return (
       <CommandButton
         key={index}
-        css={actionButton}
         data-testid={item.dataTestid}
         disabled={item.disabled}
         iconProps={item.buttonProps?.iconProps}
         menuProps={item.menuProps}
+        styles={defaultToolbarButtonStyles}
         text={item.text}
       />
     );

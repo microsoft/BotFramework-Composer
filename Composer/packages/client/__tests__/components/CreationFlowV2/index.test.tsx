@@ -86,7 +86,7 @@ describe('<CreationFlowV2/>', () => {
       appLocale: 'en-US',
       description: '',
       location: expectedLocation,
-      name: 'generator_conversational_core_0',
+      name: 'conversational_core',
       schemaUrl: '',
       templateId: 'generator-conversational-core',
       templateVersion: '',
