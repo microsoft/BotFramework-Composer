@@ -28,7 +28,7 @@ export interface TabExtensionConfig {
   HeaderWidget: FC<DebugPanelTabHeaderProps> | string;
 
   /** Tab content component used when debug panel is expanded. */
-  ContentWidget: FC;
+  ContentWidget: FC<DebugPanelTabHeaderProps>;
 
   /** Extra component displayed on the right side of Composer command bar. */
   ToolbarWidget?: FC;
