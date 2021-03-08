@@ -6,7 +6,7 @@ import { pathExists, writeFile, copy } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
-import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
+import { Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
 import partition from 'lodash/partition';
@@ -18,7 +18,8 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
 
-import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
+import { IOrchestratorNLRList, IOrchestratorProgress } from './interface';
+import { OrchestratorBuilder } from './process/orchestratorBuilder';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -61,7 +62,7 @@ export class Builder {
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
   private containOrchestrator = false;
-  private orchestratorLabelResolvers = new Map<string, LabelResolver>();
+  private orchestratorBuilder?: OrchestratorBuilder = undefined;
 
   public luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -112,6 +113,11 @@ export class Builder {
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
+    } finally {
+      if (this.orchestratorBuilder) {
+        this.orchestratorBuilder.exit();
+        this.orchestratorBuilder = undefined;
+      }
     }
   };
 
@@ -160,6 +166,10 @@ export class Builder {
    */
   public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
+
+    if (!this.orchestratorBuilder) {
+      this.orchestratorBuilder = new OrchestratorBuilder();
+    }
 
     const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
       f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
@@ -212,20 +222,9 @@ export class Builder {
     emptyFiles: { [key: string]: boolean }
   ) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
-
     // build snapshots from LU files
-    const returnData = await this.orchestratorBuilder(luFiles, modelPath);
-
-    // write snapshot data into /generated folder
-    const snapshots: { [key: string]: string } = {};
-    for (const dialog of returnData.outputs) {
-      const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
-      snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
-
-      await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
-    }
-
-    return snapshots;
+    if (!this.orchestratorBuilder) return;
+    return await this.orchestratorBuilder.build(luFiles, modelPath, this.generatedFolderPath);
   };
 
   /**
@@ -258,41 +257,6 @@ export class Builder {
     if (!(await pathExists(modelPath))) {
       await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
     }
-  }
-
-  /**
-   * Orchestrator: Build command to compile .lu files into Binary LU (.blu) snapshots.
-   *
-   * A snapshot (.blu file) is created per .lu supplied
-   *
-   * @param files - Array of FileInfo
-   * @param modelPath - Path to NLR model folder
-   * @param isDialog - Flag to toggle creation of Recognizer Dialogs (default: true)
-   * @param fullEmbedding - Use larger embeddings and skip size optimization (default: false)
-   * @returns An object containing snapshot bytes and recognizer dialogs for each .lu file
-   */
-  public async orchestratorBuilder(
-    files: FileInfo[],
-    modelPath: string,
-    isDialog = true,
-    fullEmbedding = false
-  ): Promise<IOrchestratorBuildOutput> {
-    const luObjects = files
-      .filter((fi) => fi.name.endsWith('.lu') && fi.content)
-      .map((fi) => ({
-        id: fi.name,
-        content: fi.content,
-      }));
-
-    return await Orchestrator.buildAsync(
-      modelPath,
-      luObjects,
-      this.orchestratorLabelResolvers,
-      isDialog,
-      '',
-      null,
-      fullEmbedding
-    );
   }
 
   public async copyModelPathToBot() {
