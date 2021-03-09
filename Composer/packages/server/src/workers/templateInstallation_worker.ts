@@ -6,9 +6,11 @@ import { Worker, isMainThread, workerData, parentPort } from 'worker_threads';
 import Environment from 'yeoman-environment';
 import yeoman from 'yeoman-environment';
 import TerminalAdapter from 'yeoman-environment/lib/adapter';
+import formatMessage from 'format-message';
 
 import { templateGeneratorPath } from '../settings/env';
 import log from '../logger';
+import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 const installRemoteTemplate = async (
   yeomanEnv: Environment,
@@ -48,12 +50,16 @@ const instantiateRemoteTemplate = async (
 const yeomenWork = async (npmPackageName: string, templateVersion: string, dstDir: string, projectName: string) => {
   const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
   // create yeoman environment
+  parentPort?.postMessage({ status: formatMessage('Getting Yeomen environment') });
+
   const yeomanEnv = yeoman.createEnv(
     '',
     { yeomanRepository: templateGeneratorPath },
     new TerminalAdapter({ console: console })
   );
   await yeomanEnv.lookupLocalPackages();
+
+  parentPort?.postMessage({ status: formatMessage('Installing Yeomen template') });
 
   const remoteTemplateAvailable = await installRemoteTemplate(
     yeomanEnv,
@@ -62,6 +68,8 @@ const yeomenWork = async (npmPackageName: string, templateVersion: string, dstDi
     templateVersion
   );
   if (remoteTemplateAvailable) {
+    parentPort?.postMessage({ status: formatMessage('Instantiating Yeomen template') });
+
     await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName);
   } else {
     // handle error
@@ -73,7 +81,8 @@ export function startYeomanTemplateWork(
   npmPackageName: string,
   templateVersion: string,
   dstDir: string,
-  projectName: string
+  projectName: string,
+  jobId: string
 ) {
   return new Promise<void>((resolve, reject) => {
     const w = new Worker(__filename, {
@@ -85,6 +94,9 @@ export function startYeomanTemplateWork(
     w.on('message', (message) => {
       if (message?.error) {
         reject(message.error);
+      }
+      if (message?.status) {
+        BackgroundProcessManager.updateProcess(jobId, 202, message?.status);
       }
     });
   });

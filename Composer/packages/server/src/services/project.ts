@@ -450,6 +450,7 @@ export class BotProjectService {
             templateVersion,
             name,
             locationRef,
+            jobId,
             user
           );
 

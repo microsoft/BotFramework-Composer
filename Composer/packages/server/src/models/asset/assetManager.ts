@@ -93,6 +93,7 @@ export class AssetManager {
     templateVersion: string,
     projectName: string,
     ref: LocationRef,
+    jobId: string,
     user?: UserIdentity
   ): Promise<LocationRef> {
     try {
@@ -109,7 +110,7 @@ export class AssetManager {
 
       const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
 
-      await startYeomanTemplateWork(npmPackageName, templateVersion, dstDir, projectName);
+      await startYeomanTemplateWork(npmPackageName, templateVersion, dstDir, projectName, jobId);
 
       ref.path = `${ref.path}/${projectName}`;
 
