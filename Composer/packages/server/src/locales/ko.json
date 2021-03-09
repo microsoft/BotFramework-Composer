@@ -1785,7 +1785,7 @@
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
   },
   "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
-    "message": "봇이 이해(사용자 입력)하고 응답(봇 응답)할 수 있는 언어의 목록입니다. 이 봇을 다른 언어로 사용할 수 있게 하려면 '봇 언어 관리'를 클릭하여 기본 언어의 복사본을 만든 다음, 콘텐츠를 새 언어로 번역합니다."
+    "message": "봇이 이해(사용자 입력)하고 응답(봇 응답)할 수 있는 언어의 목록입니다. 이 봇을 다른 언어로 사용할 수 있게 하려면 ’봇 언어 관리’를 클릭하여 기본 언어의 복사본을 만든 다음, 콘텐츠를 새 언어로 번역합니다."
   },
   "list_view_e33843f0": {
     "message": "목록 보기"
