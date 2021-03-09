@@ -9,13 +9,13 @@ import * as rp from 'request-promise';
 import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
+import { FeatureFlagMap } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
-import { FeatureFlagMap } from '@botframework-composer/types';
 
 export class BotProjectDeploy {
   private accessToken: string;
