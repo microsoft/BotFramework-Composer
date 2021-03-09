@@ -31,7 +31,7 @@ if (!isMainThread) {
     });
 }
 
-export function startMerge(manifestFile: string, currentProject: BotProject) {
+export function runDialogMergeWorker(manifestFile: string, currentProject: BotProject) {
   return new Promise<void>((resolve, reject) => {
     const w = new Worker(__filename, {
       workerData: { manifestFile, dataDir: currentProject.dataDir },

@@ -37,14 +37,13 @@ const instantiateRemoteTemplate = async (
   generatorName: string,
   dstDir: string,
   projectName: string
-): Promise<boolean> => {
+) => {
   log('About to instantiate a template!', dstDir, generatorName, projectName);
   yeomanEnv.cwd = dstDir;
 
   await yeomanEnv.run([generatorName, projectName], {}, () => {
     log('Template successfully instantiated', dstDir, generatorName, projectName);
   });
-  return true;
 };
 
 const yeomanWork = async (npmPackageName: string, templateVersion: string, dstDir: string, projectName: string) => {
@@ -77,7 +76,7 @@ const yeomanWork = async (npmPackageName: string, templateVersion: string, dstDi
   }
 };
 
-export function startYeomanTemplateWork(
+export function runYeomanTemplateWorker(
   npmPackageName: string,
   templateVersion: string,
   dstDir: string,
