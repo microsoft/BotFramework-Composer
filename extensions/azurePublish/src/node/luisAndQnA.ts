@@ -10,8 +10,11 @@ import { ILuisConfig, FileInfo, IBotProject, RuntimeTemplate } from '@botframewo
 import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
 
+const isUsingAdaptiveRuntime = (runtime?: RuntimeTemplate): boolean =>
+  runtime?.key === 'csharp-azurewebapp-v2' || runtime?.key === 'adaptive-runtime-dotnet-webapp';
+
 const botPath = (projPath: string, runtime?: RuntimeTemplate) =>
-  runtime?.key === 'csharp-azurewebapp-v2' ? projPath : path.join(projPath, 'ComposerDialogs');
+  isUsingAdaptiveRuntime(runtime) ? projPath : path.join(projPath, 'ComposerDialogs');
 
 type QnaConfigType = {
   subscriptionKey: string;
@@ -239,5 +242,5 @@ export async function build(project: IBotProject, path: string, settings: BuildS
   builder.rootDir = botPath(path, settings?.runtime);
   builder.setBuildConfig({ ...luisConfig, ...qnaConfig }, project.settings.downsampling);
   await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[], emptyFiles);
-  await builder.copyModelPathToBot(settings?.runtime);
+  await builder.copyModelPathToBot(isUsingNewRuntime(settings?.runtime));
 }
