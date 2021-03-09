@@ -17,12 +17,12 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { separator } from '../../publish/styles';
-import { armScopes, graphScopes } from '../../../constants';
+import { graphScopes } from '../../../constants';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { dispatcherState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
-import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
+import { getTenantIdFromCache, setTenantId, getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
 
 type ProfileFormDialogProps = {
   onDismiss: () => void;
@@ -135,7 +135,13 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
       let arm, graph;
       if (!isGetTokenFromUser()) {
         // login or get token implicit
-        arm = await AuthClient.getAccessToken(armScopes);
+        let tenantId = getTenantIdFromCache();
+        if (!tenantId) {
+          const tenants = await AuthClient.getTenants();
+          tenantId = tenants?.[0]?.tenantId;
+          setTenantId(tenantId);
+        }
+        arm = await AuthClient.getARMTokenForTenant(tenantId);
         graph = await AuthClient.getAccessToken(graphScopes);
       } else {
         // get token from cache
