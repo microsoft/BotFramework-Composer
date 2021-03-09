@@ -18,7 +18,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
-import { runYeomanTemplateWorker } from '../../workers/templateInstallation.worker';
+import { runYeomanTemplatePipeline } from '../../workers/templateInstallation.worker';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -110,7 +110,7 @@ export class AssetManager {
 
       const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
 
-      await runYeomanTemplateWorker(npmPackageName, templateVersion, dstDir, projectName, jobId);
+      await runYeomanTemplatePipeline(npmPackageName, templateVersion, dstDir, projectName, jobId);
 
       ref.path = `${ref.path}/${projectName}`;
 

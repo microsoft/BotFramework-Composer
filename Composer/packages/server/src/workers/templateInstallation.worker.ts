@@ -76,7 +76,7 @@ const yeomanWork = async (npmPackageName: string, templateVersion: string, dstDi
   }
 };
 
-export function runYeomanTemplateWorker(
+export function runYeomanTemplatePipeline(
   npmPackageName: string,
   templateVersion: string,
   dstDir: string,
