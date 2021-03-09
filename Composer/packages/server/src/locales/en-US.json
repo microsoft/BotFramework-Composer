@@ -1223,6 +1223,9 @@
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
   },
+  "enable_the_component_model_including_the_new_creat_f6e5659c": {
+    "message": "Enable the Component Model including the new creation experience, the Adaptive Runtime, and Package Manager."
+  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -1628,8 +1631,8 @@
   "if_condition_56c9be4a": {
     "message": "If Condition"
   },
-  "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
-    "message": "If this problem persists, please file an issue on"
+  "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
+    "message": "If this problem persists, please file an issue on <a>GitHub</a>"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
@@ -1706,8 +1709,8 @@
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
-  "install_more_adapters_in_a_package_settings_a_e8b0df7a": {
-    "message": "Install more adapters in <a>Package Settings</a>."
+  "install_more_adapters_in_a_the_package_manager_a_156fb028": {
+    "message": "Install more adapters in <a>the package manager</a>."
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
@@ -2195,9 +2198,6 @@
   "new_13daf639": {
     "message": "New"
   },
-  "new_creation_experience_29591aca": {
-    "message": "New Creation Experience"
-  },
   "new_template_49e6f0f2": {
     "message": "New template"
   },
@@ -2455,9 +2455,6 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
-  },
-  "preview_the_new_adaptive_runtime_and_component_sys_4a2fc32c": {
-    "message": "Preview the new adaptive runtime and component system."
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -3161,6 +3158,9 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
   },
+  "the_component_model_febefd93": {
+    "message": "The Component Model"
+  },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
@@ -3572,8 +3572,8 @@
   "weather_bot_c38920cd": {
     "message": "Weather Bot"
   },
-  "webchat_a134b64b": {
-    "message": "Webchat"
+  "web_chat_c5ca7ab6": {
+    "message": "Web Chat"
   },
   "webchat_inspector_4d0dfeb7": {
     "message": "Webchat Inspector"
