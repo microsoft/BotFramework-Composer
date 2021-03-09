@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, act } from '@botframework-composer/test-utils';
+import { act } from '@botframework-composer/test-utils';
 
 import { WebChatPanel } from '../WebChatPanel';
 import { BotStatus } from '../../../constants';
+import { renderWithRecoil, wrapWithRecoil } from '../../../../__tests__/testUtils';
 
 const mockstartNewConversation = jest.fn();
 const mockSendActivity = jest.fn();
@@ -56,9 +57,7 @@ describe('<WebchatPanel />', () => {
 
     mockServerPort.mockResolvedValue(4000);
 
-    const { rerender, findByText } = render(
-      <WebChatPanel clearWebchatInspectorLogs={jest.fn()} {...props} appendLogToWebChatInspector={jest.fn()} />
-    );
+    const { rerender, findByText } = renderWithRecoil(<WebChatPanel {...props} />);
 
     mockstartNewConversation.mockResolvedValue({
       directline: {
@@ -74,14 +73,7 @@ describe('<WebchatPanel />', () => {
     });
 
     await act(async () => {
-      rerender(
-        <WebChatPanel
-          {...props}
-          isWebChatPanelVisible
-          appendLogToWebChatInspector={jest.fn()}
-          clearWebchatInspectorLogs={jest.fn()}
-        />
-      );
+      rerender(wrapWithRecoil(<WebChatPanel {...props} isWebChatPanelVisible />));
       await findByText('Restart Conversation - new user ID');
     });
   });
