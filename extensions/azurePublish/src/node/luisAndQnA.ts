@@ -5,15 +5,15 @@ import * as path from 'path';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
-import { ILuisConfig, FileInfo, IBotProject, RuntimeTemplate } from '@botframework-composer/types';
+import { ILuisConfig, FileInfo, IBotProject, RuntimeTemplate, DialogSetting } from '@botframework-composer/types';
 
 import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
 
-const isUsingAdaptiveRuntime = (runtime?: RuntimeTemplate): boolean =>
+const isUsingAdaptiveRuntime = (runtime?: DialogSetting['runtime']): boolean =>
   runtime?.key === 'csharp-azurewebapp-v2' || runtime?.key === 'adaptive-runtime-dotnet-webapp';
 
-const botPath = (projPath: string, runtime?: RuntimeTemplate) =>
+const botPath = (projPath: string, runtime?: DialogSetting['runtime']) =>
   isUsingAdaptiveRuntime(runtime) ? projPath : path.join(projPath, 'ComposerDialogs');
 
 type QnaConfigType = {
@@ -33,7 +33,7 @@ interface BuildSettingType {
   qna: QnaConfigType;
   luResources: Resource[];
   qnaResources: Resource[];
-  runtime?: RuntimeTemplate;
+  runtime?: DialogSetting['runtime'];
 }
 
 function getAccount(accounts: any, filter: string) {
