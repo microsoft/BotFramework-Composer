@@ -33,7 +33,7 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
       if (!option) return null;
       const compatible = checkRecognizerCompatibility(option.key as SDKKinds, recognizerType);
       return (
-        <div css={optionStyles}>
+        <div key={option.text} css={optionStyles}>
           {option.text}
           {!compatible && <Icon iconName={'warning'} style={warningIconStyles} />}
         </div>
@@ -80,6 +80,7 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
       const selectedKey = nextNode ? getKey(nextNode) : '';
       const dropdown = (
         <Dropdown
+          key={currentNode.label}
           data-testid={currentNode.label}
           label={currentNode.prompt}
           options={currentNode.children.map((x) => {
