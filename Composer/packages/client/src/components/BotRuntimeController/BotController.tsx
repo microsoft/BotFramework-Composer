@@ -131,23 +131,26 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
       return;
     }
 
-    if (botOperationsCompleted && runningBots.projectIds.length) {
+    if (botOperationsCompleted) {
       if (statusIconClass !== 'Refresh') {
         onHideController(false);
       }
-      setStatusIconClass('Refresh');
 
-      setStartPanelButtonText(
-        formatMessage(
-          `{
+      if (runningBots.projectIds.length) {
+        setStatusIconClass('Refresh');
+
+        setStartPanelButtonText(
+          formatMessage(
+            `{
           total, plural,
             =1 {Restart bot}
           other {Restart all bots ({running}/{total} running)}
         }`,
-          { running: runningBots.projectIds.length, total: runningBots.totalBots }
-        )
-      );
-      return;
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+        return;
+      }
     }
 
     setStatusIconClass('Play');
