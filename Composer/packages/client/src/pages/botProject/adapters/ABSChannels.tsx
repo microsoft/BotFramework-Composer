@@ -562,7 +562,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
-            {absTableRow(CHANNELS.WEBCHAT, formatMessage('Webchat'), webchatHelpLink)}
+            {absTableRow(CHANNELS.WEBCHAT, formatMessage('Web Chat'), webchatHelpLink)}
             {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}
