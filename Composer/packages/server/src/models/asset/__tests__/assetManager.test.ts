@@ -10,8 +10,6 @@ import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
 import StorageService from '../../../services/storage';
 
-const mockchdir = jest.spyOn(process, 'chdir').mockImplementation(() => {});
-
 jest.mock('azure-storage', () => {
   return {};
 });
@@ -38,6 +36,14 @@ jest.mock('../../../models/extension/extensionContext', () => {
       extensions: {
         botTemplates: [],
       },
+    },
+  };
+});
+
+jest.mock('../../../workers/templateInstallation.worker', () => {
+  return {
+    runYeomanTemplatePipeline: () => {
+      return;
     },
   };
 });
@@ -164,7 +170,6 @@ describe('assetManager', () => {
         path: '/path/to/npmbot/sampleConversationalCore',
         storageId: 'default',
       });
-      expect(mockchdir).toBeCalledWith('/path/to/npmbot');
     });
   });
 });
