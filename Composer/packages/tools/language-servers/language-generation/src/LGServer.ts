@@ -331,7 +331,7 @@ export class LGServer {
     return resultArr.join(', ');
   }
 
-  private matchLineState(
+  private matchStructuredLG(
     params: TextDocumentPositionParams,
     templateId: string | undefined
   ): LGCursorState | undefined {
@@ -351,6 +351,34 @@ export class LGServer {
         (line.trim() === '[' || line.trim() === '[]')
       ) {
         state.push(STRUCTURELG);
+      }
+    }
+
+    return state.length >= 1 ? state.pop() : undefined;
+  }
+
+  private matchCurLineState(
+    params: TextDocumentPositionParams,
+    templateId: string | undefined
+  ): LGCursorState | undefined {
+    const state: LGCursorState[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    const keyValueRegex = /.+=.+/;
+    for (const line of lines) {
+      if (line.trim().startsWith('#')) {
+        state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('-')) {
+        state.push(TEMPLATEBODY);
+      } else if ((state[state.length - 1] === TEMPLATENAME || templateId) && line.trim().startsWith('[')) {
+        state.push(STRUCTURELG);
+      } else if (state[state.length - 1] === STRUCTURELG && (line.trim() === '' || keyValueRegex.test(line))) {
+        state.push(STRUCTURELG);
+      } else {
+        state.push(ROOT);
       }
     }
 
@@ -423,7 +451,10 @@ export class LGServer {
     return undefined;
   }
 
-  private matchState(params: TextDocumentPositionParams): LGCursorState | undefined {
+  private matchState(
+    params: TextDocumentPositionParams,
+    curLineState: LGCursorState | undefined
+  ): LGCursorState | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return;
@@ -437,7 +468,7 @@ export class LGServer {
       return TEMPLATENAME;
     } else if (lineContent.trim().startsWith('>')) {
       return COMMENTS;
-    } else if (lineContent.trim().startsWith('-')) {
+    } else if (lineContent.trim().startsWith('-') || curLineState === STRUCTURELG) {
       state.push(TEMPLATEBODY);
     } else {
       return ROOT;
@@ -528,7 +559,6 @@ export class LGServer {
     const position = params.position;
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
-    console.log(wordAtCurRange);
     const endWithDot = wordAtCurRange.endsWith('.');
 
     this.updateMemoryVariables(params.textDocument.uri);
@@ -573,7 +603,6 @@ export class LGServer {
 
     const wordRange = getEntityRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
-    console.log('word in body:', word);
     const startWithAt = word.startsWith('@');
 
     const completionEntityList = this._luisEntities.map((entity: string) => {
@@ -610,9 +639,10 @@ export class LGServer {
 
     const completionPropertyResult = this.findValidMemoryVariables(params);
 
-    const curLineState = this.matchLineState(params, templateId);
+    const isStructuredLG = this.matchStructuredLG(params, templateId);
 
-    if (curLineState === STRUCTURELG) {
+    //sugegst card types if an initial [ line after template line
+    if (isStructuredLG === STRUCTURELG) {
       const cardTypesSuggestions: CompletionItem[] = cardTypes.map((type) => {
         return {
           label: type,
@@ -628,62 +658,67 @@ export class LGServer {
       });
     }
 
-    const cardType = this.matchCardTypeState(params, templateId);
-    const propsList = this.findLastStructureLGProps(params, templateId);
-    const cardNameRegex = /^\s*\[[\w]+/;
-    const lastLine = lines[lines.length - 2];
-    const paddingIndent = cardNameRegex.test(lastLine) ? '\t' : '';
-    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment', 'Activity'];
-    if (cardType && cardTypes.includes(cardType)) {
-      const items: CompletionItem[] = [];
-      if (normalCardTypes.includes(cardType)) {
-        cardPropDict[cardType].forEach((u) => {
-          if (!propsList?.includes(u)) {
-            const item = {
-              label: `${u}: ${cardPropPossibleValueType[u]}`,
-              kind: CompletionItemKind.Snippet,
-              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
-            };
-            items.push(item);
-          }
-        });
-      } else if (cardType.endsWith('Card')) {
-        cardPropDict.Cards.forEach((u) => {
-          if (!propsList?.includes(u)) {
-            const item = {
-              label: `${u}: ${cardPropPossibleValueType[u]}`,
-              kind: CompletionItemKind.Snippet,
-              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
-            };
-            items.push(item);
-          }
-        });
-      } else {
-        cardPropDict.Others.forEach((u) => {
-          if (!propsList?.includes(u)) {
-            const item = {
-              label: `${u}: ${cardPropPossibleValueType[u]}`,
-              kind: CompletionItemKind.Snippet,
-              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
-            };
-            items.push(item);
-          }
-        });
-      }
+    const curLineState = this.matchCurLineState(params, templateId);
+    const curPosInLineState = this.matchState(params, curLineState);
 
-      if (items.length > 0) {
-        return Promise.resolve({
-          isIncomplete: false,
-          items: items,
-        });
+    // if the current editing line is in a structured LG and cur postion is not in an expression, returns the missing property fields
+    if (curLineState === STRUCTURELG && curPosInLineState !== EXPRESSION) {
+      const cardType = this.matchCardTypeState(params, templateId);
+      const propsList = this.findLastStructureLGProps(params, templateId);
+      const cardNameRegex = /^\s*\[[\w]+/;
+      const lastLine = lines[lines.length - 2];
+      const paddingIndent = cardNameRegex.test(lastLine) ? '\t' : '';
+      const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment', 'Activity'];
+      if (cardType && cardTypes.includes(cardType)) {
+        const items: CompletionItem[] = [];
+        if (normalCardTypes.includes(cardType)) {
+          cardPropDict[cardType].forEach((u) => {
+            if (!propsList?.includes(u)) {
+              const item = {
+                label: `${u}: ${cardPropPossibleValueType[u]}`,
+                kind: CompletionItemKind.Snippet,
+                insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+                documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
+              };
+              items.push(item);
+            }
+          });
+        } else if (cardType.endsWith('Card')) {
+          cardPropDict.Cards.forEach((u) => {
+            if (!propsList?.includes(u)) {
+              const item = {
+                label: `${u}: ${cardPropPossibleValueType[u]}`,
+                kind: CompletionItemKind.Snippet,
+                insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+                documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
+              };
+              items.push(item);
+            }
+          });
+        } else {
+          cardPropDict.Others.forEach((u) => {
+            if (!propsList?.includes(u)) {
+              const item = {
+                label: `${u}: ${cardPropPossibleValueType[u]}`,
+                kind: CompletionItemKind.Snippet,
+                insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+                documentation: formatMessage('Suggested propertiy { u } in { cardType }', { u: u, cardType: cardType }),
+              };
+              items.push(item);
+            }
+          });
+        }
+
+        if (items.length > 0) {
+          return Promise.resolve({
+            isIncomplete: false,
+            items: items,
+          });
+        }
       }
     }
 
-    const matchedState = this.matchState(params);
-    if (matchedState === EXPRESSION) {
+    if (curPosInLineState === EXPRESSION) {
       if (endWithDot) {
         return Promise.resolve({
           isIncomplete: false,
