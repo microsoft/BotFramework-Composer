@@ -161,7 +161,7 @@ describe('assetManager', () => {
         mockLocRef
       );
       expect(newBotLocationRef).toStrictEqual({
-        path: '/path/to/npmbot/sampleConversationalCore',
+        path: '/path/to/npmbot',
         storageId: 'default',
       });
       expect(mockchdir).toBeCalledWith('/path/to/npmbot');
