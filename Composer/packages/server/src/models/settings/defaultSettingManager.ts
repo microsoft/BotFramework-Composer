@@ -66,6 +66,7 @@ export class DefaultSettingManager extends FileSettingManager {
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
+        directVersionPublish: true,
       },
       luFeatures: {
         enablePattern: true,

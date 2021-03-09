@@ -54,6 +54,6 @@ export function checkLuisBuild(luFiles: LuFile[], dialogs: DialogInfo[]) {
     throw new Error(formatMessage(`The Following LuFile(s) are invalid: \n`) + msg);
   }
   // supported LUIS locale.
-  const supported = BotIndexer.filterLUISFilesToPublish(referred);
+  const supported = BotIndexer.filterLUISFilesToPublish(referred, dialogs);
   return supported;
 }
