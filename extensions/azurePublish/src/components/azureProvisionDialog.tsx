@@ -33,7 +33,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
 import jwtDecode from 'jwt-decode';
 
-import { AzureResourceTypes, ResourcesItem, authConfig } from '../types';
+import { AzureResourceTypes, ResourcesItem, authConfig, AzureResourceProviderType } from '../types';
 
 import {
   getResourceList,
@@ -43,6 +43,8 @@ import {
   getPreview,
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
+  getSupportedRegionsByType,
+  getResourceGroupRegions,
 } from './api';
 
 const choiceOptions: IChoiceGroupOption[] = [
@@ -512,9 +514,12 @@ export const AzureProvisionDialog: React.FC = () => {
     if (currentSubscription && token) {
       // get resource group under subscription
       getDeployLocations(token, currentSubscription).then((data: DeployLocation[]) => {
-        setDeployLocations(data);
+        const resourceGroupRegions = new Set(getResourceGroupRegions());
+        const filteredData = data.filter((x) => resourceGroupRegions.has(x.name));
+        setDeployLocations(filteredData);
+
         const luRegions = getLuisAuthoringRegions();
-        const region = data.filter((item) => luRegions.includes(item.name));
+        const region = filteredData.filter((item) => luRegions.includes(item.name));
         setLuisLocations(region);
       });
     }
