@@ -52,6 +52,10 @@ const QnAPage: React.FC<RouteComponentProps<{
   ]);
   const [currentLocale, setCurrentLocale] = useState(locale);
 
+  useEffect(() => {
+    setCurrentLocale(locale);
+  }, [locale]);
+
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
