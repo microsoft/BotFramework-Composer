@@ -5,9 +5,9 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, FileExtensions, BotTemplateV2, FeedType } from '@bfc/extension';
+import { UserIdentity, FileExtensions, FeedType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import { QnABotTemplateId } from '@bfc/shared/lib/constant';
+import { BotTemplate, QnABotTemplateId } from '@bfc/shared/lib/constant';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -245,26 +245,25 @@ export class AssetManager {
     }
   }
 
-  private async getFeedContents(feedUrl: string): Promise<BotTemplateV2[] | undefined | null> {
+  private async getFeedContents(feedUrl: string): Promise<BotTemplate[] | undefined | null> {
     try {
       const res = await fetch(feedUrl);
       const data = await res.json();
       const feedType = this.getFeedType();
       if (feedType === 'npm') {
         return data.objects.map((result) => {
-          const { name, version, description = '', keywords = [] } = result.package;
+          const { name, version, description = '' } = result.package;
           const displayName = this.getPackageDisplayName(name);
           return {
             id: name,
             name: displayName,
             description: description,
-            keywords: keywords,
             package: {
               packageName: name,
               packageSource: 'npm',
               packageVersion: version,
             },
-          } as BotTemplateV2;
+          } as BotTemplate;
         });
       } else if (feedType === 'nuget') {
         // TODO: handle nuget processing
@@ -276,8 +275,8 @@ export class AssetManager {
     }
   }
 
-  public async getCustomFeedTemplates(feedUrls: string[]): Promise<BotTemplateV2[]> {
-    let templates: BotTemplateV2[] = [];
+  public async getCustomFeedTemplates(feedUrls: string[]): Promise<BotTemplate[]> {
+    let templates: BotTemplate[] = [];
     const invalidFeedUrls: string[] = [];
 
     for (const feed of feedUrls) {

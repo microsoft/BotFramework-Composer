@@ -1223,6 +1223,9 @@
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
   },
+  "enable_the_component_model_including_the_new_creat_f6e5659c": {
+    "message": "Enable the Component Model including the new creation experience, the Adaptive Runtime, and Package Manager."
+  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -1307,6 +1310,9 @@
   "error_afac7133": {
     "message": "Error:"
   },
+  "error_encountered_when_getting_template_readme_17dcbc61": {
+    "message": "### Error encountered when getting template readMe"
+  },
   "error_event_c079b608": {
     "message": "Error event"
   },
@@ -1372,6 +1378,9 @@
   },
   "expecting_4df12c00": {
     "message": "Expecting"
+  },
+  "explore_next_steps_and_find_valuable_references_an_a0820025": {
+    "message": "Explore next steps and find valuable references and learning resources to design, build, and publish your new bot using Composer."
   },
   "export_json_2e2981f5": {
     "message": "Export JSON"
@@ -1546,6 +1555,9 @@
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
+  },
+  "get_your_bot_up_and_running_418dd8ea": {
+    "message": "Get your bot up and running"
   },
   "getting_help_ab6811b0": {
     "message": "Getting Help"
@@ -1910,9 +1922,6 @@
   "local_skill_6ce0d311": {
     "message": "Local Skill."
   },
-  "locale_locale_is_not_supported_by_luis_a3a72047": {
-    "message": "locale \"{ locale }\" is not supported by LUIS"
-  },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Locate the bot file and repair the link"
   },
@@ -1981,9 +1990,6 @@
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
-  },
-  "luis_build_warning_320e4ee2": {
-    "message": "Luis build warning"
   },
   "luis_endpoint_key_c685e219": {
     "message": "LUIS endpoint key"
@@ -2186,11 +2192,11 @@
   "navigation_to_see_actions_3be545c9": {
     "message": "navigation to see actions"
   },
+  "need_another_template_send_us_a_request_5cf2a4d5": {
+    "message": "Need another template? Send us a request"
+  },
   "new_13daf639": {
     "message": "New"
-  },
-  "new_creation_experience_29591aca": {
-    "message": "New Creation Experience"
   },
   "new_template_49e6f0f2": {
     "message": "New template"
@@ -2450,9 +2456,6 @@
   "preview_features_e279bac5": {
     "message": "Preview features"
   },
-  "preview_the_new_adaptive_runtime_and_component_sys_1106041c": {
-    "message": "Preview the new adaptive runtime and component system"
-  },
   "previous_bd2ac015": {
     "message": "Previous"
   },
@@ -2461,9 +2464,6 @@
   },
   "previous_folder_e7eeb306": {
     "message": "previous folder"
-  },
-  "primary_language_96276a64": {
-    "message": "Primary Language"
   },
   "privacy_290109ea": {
     "message": "Privacy"
@@ -2797,9 +2797,6 @@
   },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
-  },
-  "runtime_type_f9e2419b": {
-    "message": "Runtime type"
   },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
@@ -3160,6 +3157,9 @@
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
+  },
+  "the_component_model_febefd93": {
+    "message": "The Component Model"
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."

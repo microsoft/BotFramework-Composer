@@ -10,6 +10,7 @@ export const DebugPaneFooterHeight = 24;
 export const debugPaneContainerStyle = css`
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `;
 
 export const debugPaneHeaderStyle = css`
@@ -19,6 +20,7 @@ export const debugPaneHeaderStyle = css`
 
 export const debugPaneContentStyle = css`
   height: calc(100% - ${DebugPaneHeaderHeight}px);
+  overflow-y: hidden;
   overflow-x: auto;
 `;
 
