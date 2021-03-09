@@ -224,3 +224,33 @@ export function getLineByIndex(document: TextDocument, line: number) {
 
   return document.getText().split(/\r?\n/g)[line];
 }
+
+export function extractVaribles(content: string): string[] {
+  const lines = content.split(/\r?\n/g);
+  const keyValueRegex = /\s*[a-zA-Z]+\s*=.+/;
+  const exprRegex = /\$\{.+\}/g;
+  const varabileRegex = /[a-zA-Z].[a-zA-Z0-9.]+/;
+  let varibles: string[] = [];
+  for (const line of lines) {
+    if (line.trim().startsWith('-') || keyValueRegex.test(line)) {
+      const exprs = line.match(exprRegex);
+      if (exprs) {
+        for (const expr of exprs) {
+          //trim the starting ${ and ending }
+          const body = expr.substr(2, expr.length - 3);
+          const removed = body
+            .replace(/[a-zA-Z0-9.]+\(/, '')
+            .replace(/"[^"]*"/, '')
+            .replace(/'[^']*'/, '')
+            .replace(')', '');
+          const localVaribles = removed.match(varabileRegex);
+          if (localVaribles) {
+            varibles = varibles.concat(localVaribles);
+          }
+        }
+      }
+    }
+  }
+
+  return varibles;
+}

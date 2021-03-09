@@ -21,6 +21,7 @@ import {
   FoldingRange,
 } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
+import uniq from 'lodash/uniq';
 import isEqual from 'lodash/isEqual';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
@@ -55,6 +56,7 @@ export class LGServer {
   private _lgParser = new LgParser();
   private _luisEntities: string[] = [];
   private _lastLuContent: string[] = [];
+  private _userDefinedVariblesInLG: string[] = [];
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
@@ -193,6 +195,8 @@ export class LGServer {
         tempVariable = tempVariable[property];
       }
     }
+
+    console.log(this.memoryVariables);
   }
 
   protected updateMemoryVariables(uri: string): void {
@@ -210,6 +214,14 @@ export class LGServer {
     }
 
     memoryFileInfo.forEach((variable) => {
+      const propertyList = variable.split('.');
+      if (propertyList.length >= 1) {
+        this.updateObject(propertyList);
+      }
+    });
+
+    console.log(this._userDefinedVariblesInLG);
+    this._userDefinedVariblesInLG.forEach((variable) => {
       const propertyList = variable.split('.');
       if (propertyList.length >= 1) {
         this.updateObject(propertyList);
@@ -239,6 +251,8 @@ export class LGServer {
       const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      const lgContents: string[] = lgTextFiles.map((e) => e.content);
+      this._userDefinedVariblesInLG = (await this._lgParser.extractLGVariables(undefined, lgContents)).lgVariables;
       if (fileId && templateId) {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
         if (lgTextFile) {
@@ -780,6 +794,13 @@ export class LGServer {
 
   protected validate(document: TextDocument): void {
     this.cleanPendingValidation(document);
+    setTimeout(async () => {
+      this._userDefinedVariblesInLG = uniq(
+        this._userDefinedVariblesInLG.concat(
+          (await this._lgParser.extractLGVariables(document.getText(), [])).lgVariables
+        )
+      );
+    });
     this.pendingValidationRequests.set(
       document.uri,
       setTimeout(async () => {
