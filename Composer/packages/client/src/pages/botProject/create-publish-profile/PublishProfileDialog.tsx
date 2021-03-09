@@ -17,7 +17,7 @@ import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { AuthClient } from '../../../utils/authClient';
-import { armScopes, graphScopes } from '../../../constants';
+import { graphScopes } from '../../../constants';
 import { dispatcherState } from '../../../recoilModel';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
