@@ -204,10 +204,10 @@
     "message": "+ 添加 QnA 对"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> 添加一些示例短语来触发此意向:\n> - 请告诉我天气情况\n> -“{'city=Seattle'}”的天气怎么样\n\n> 实体定义:\n> @ ml city"
+    "message": "> 添加一些示例短语来触发此意向:\n> - 请告诉我天气情况\n> -“'{'city=Seattle'}'”的天气怎么样\n\n> 实体定义:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> 添加一些预期的用户响应:\n> - 请提醒我“{'itemTitle=buy milk'}”\n> - 提醒我“{'itemTitle'}”\n> - 将“{'itemTitle'}”添加到我的待办事项列表\n>\n> 实体定义:\n> @ ml itemTitle\n"
+    "message": "> 添加一些预期的用户响应:\n> - 请提醒我“'{'itemTitle=buy milk'}'”\n> - 提醒我“'{'itemTitle'}'”\n> - 将“'{'itemTitle'}'”添加到我的待办事项列表\n>\n> 实体定义:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"

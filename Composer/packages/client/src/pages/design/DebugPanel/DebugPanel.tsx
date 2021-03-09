@@ -4,16 +4,16 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useCallback, useMemo } from 'react';
-import { useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { Resizable } from 're-resizable';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../recoilModel';
+import { debugPanelExpansionState, debugPanelActiveTabState, dispatcherState } from '../../../recoilModel';
 
 import {
   debugPaneContainerStyle,
@@ -28,12 +28,13 @@ import debugExtensions from './TabExtensions';
 import { DebugDrawerKeys, DebugPanelTabHeaderProps } from './TabExtensions/types';
 
 export const DebugPanel: React.FC = () => {
-  const [isPanelExpanded, setPanelExpansion] = useRecoilState(debugPanelExpansionState);
-  const [activeTab, setActiveTab] = useRecoilState(debugPanelActiveTabState);
+  const { setActiveTabInDebugPanel, setDebugPanelExpansion } = useRecoilValue(dispatcherState);
+  const isPanelExpanded = useRecoilValue(debugPanelExpansionState);
+  const activeTab = useRecoilValue(debugPanelActiveTabState);
 
   const onExpandPanel = useCallback((activeTabKey: DebugDrawerKeys) => {
-    setPanelExpansion(true);
-    setActiveTab(activeTabKey);
+    setDebugPanelExpansion(true);
+    setActiveTabInDebugPanel(activeTabKey);
     TelemetryClient.track('DrawerPaneTabOpened', {
       tabType: activeTabKey,
     });
@@ -41,8 +42,8 @@ export const DebugPanel: React.FC = () => {
   }, []);
 
   const onCollapsePanel = useCallback(() => {
-    setPanelExpansion(false);
-    setActiveTab(undefined);
+    setDebugPanelExpansion(false);
+    setActiveTabInDebugPanel(undefined);
     TelemetryClient.track('DrawerPaneClosed');
   }, []);
 
@@ -113,14 +114,6 @@ export const DebugPanel: React.FC = () => {
     );
   }, [isPanelExpanded, activeTab]);
 
-  const activeTabContent = useMemo(() => {
-    const configOfActiveTab = debugExtensions.find((ext) => ext.key === activeTab);
-    if (!configOfActiveTab || !configOfActiveTab.ContentWidget) return null;
-
-    const { ContentWidget } = configOfActiveTab;
-    return <ContentWidget key={`tabContent-${configOfActiveTab.key}`} />;
-  }, [activeTab]);
-
   return (
     <Resizable
       css={css`
@@ -179,7 +172,10 @@ export const DebugPanel: React.FC = () => {
         </div>
       </div>
       <div css={debugPaneContentStyle} data-testid="debug-panel__content">
-        {activeTabContent}
+        {debugExtensions.map((debugTabs) => {
+          const { ContentWidget } = debugTabs;
+          return <ContentWidget key={`tabContent-${debugTabs.key}`} isActive={activeTab === debugTabs.key} />;
+        })}
       </div>
     </Resizable>
   );

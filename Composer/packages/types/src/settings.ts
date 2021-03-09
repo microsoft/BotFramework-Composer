@@ -78,6 +78,7 @@ export type ILuisConfig = {
   region?: string;
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+  directVersionPublish?: boolean;
 };
 
 export type ILUFeaturesConfig = {
@@ -101,4 +102,8 @@ export type IQnAConfig = {
 export type IConfig = ILuisConfig & {
   subscriptionKey: string;
   qnaRegion: string | 'westus';
+};
+
+export type LgOptions = {
+  customFunctions: string[];
 };

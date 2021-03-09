@@ -44,6 +44,8 @@ const optionRoot = css`
 const dialogCopy = css`
   margin: 0px;
   color: #000;
+  word-wrap: break-word;
+  word-break: break-all;
 `;
 
 const dialogFooter: Partial<IDialogFooterStyles> = {
