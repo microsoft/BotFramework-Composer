@@ -45,7 +45,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   const file = luFileId
     ? luFiles.find(({ id }) => id === luFileId)
-    : luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+    : luFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
 
   const defaultLangFile = luFileId
     ? luFiles.find(({ id }) => id === luFileId)

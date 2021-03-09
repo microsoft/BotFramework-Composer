@@ -497,7 +497,13 @@ export class BotProject implements IBotProject {
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey ?? '', qnaRegion: qnaConfig.qnaRegion ?? '' },
         this.settings.downsampling
       );
-      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[], emptyFiles);
+      await this.builder.build(
+        luFiles,
+        qnaFiles,
+        Array.from(this.files.values()) as FileInfo[],
+        emptyFiles,
+        !!this.settings.luis.directVersionPublish
+      );
     }
   };
 
