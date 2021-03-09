@@ -150,5 +150,13 @@ module.exports = {
         'security/detect-unsafe-regex': 'off',
       },
     },
+    {
+      files: ['scripts/*.js'],
+      rules: {
+        'no-console': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+        'lodash/import-scope': 'off',
+      },
+    },
   ],
 };
