@@ -229,7 +229,8 @@ export function extractVaribles(content: string): string[] {
   const lines = content.split(/\r?\n/g);
   const keyValueRegex = /\s*[a-zA-Z]+\s*=.+/;
   const exprRegex = /\$\{.+\}/g;
-  const varabileRegex = /[a-zA-Z].[a-zA-Z0-9.]+/;
+  // eslint-disable-next-line security/detect-unsafe-regex
+  const varabileRegex = /[a-zA-Z]+\.[a-zA-Z0-9]+(\.[a-zA-Z0-9.]+)?/g;
   let varibles: string[] = [];
   for (const line of lines) {
     if (line.trim().startsWith('-') || keyValueRegex.test(line)) {

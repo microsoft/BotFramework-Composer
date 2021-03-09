@@ -56,7 +56,8 @@ export class LGServer {
   private _lgParser = new LgParser();
   private _luisEntities: string[] = [];
   private _lastLuContent: string[] = [];
-  private _userDefinedVariblesInLG: string[] = [];
+  private _curDefinedVariblesInLG: string[] = [];
+  private _otherDefinedVariblesInLG: string[] = [];
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
@@ -213,6 +214,7 @@ export class LGServer {
       return;
     }
 
+    this.memoryVariables = {};
     memoryFileInfo.forEach((variable) => {
       const propertyList = variable.split('.');
       if (propertyList.length >= 1) {
@@ -220,8 +222,14 @@ export class LGServer {
       }
     });
 
-    console.log(this._userDefinedVariblesInLG);
-    this._userDefinedVariblesInLG.forEach((variable) => {
+    this._curDefinedVariblesInLG.forEach((variable) => {
+      const propertyList = variable.split('.');
+      if (propertyList.length >= 1) {
+        this.updateObject(propertyList);
+      }
+    });
+
+    this._otherDefinedVariblesInLG.forEach((variable) => {
       const propertyList = variable.split('.');
       if (propertyList.length >= 1) {
         this.updateObject(propertyList);
@@ -251,8 +259,13 @@ export class LGServer {
       const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
-      const lgContents: string[] = lgTextFiles.map((e) => e.content);
-      this._userDefinedVariblesInLG = (await this._lgParser.extractLGVariables(undefined, lgContents)).lgVariables;
+      const lgContents: string[] = [];
+      lgTextFiles.forEach((item) => {
+        if (item.id !== fileId) {
+          lgContents.push(item.content);
+        }
+      });
+      this._otherDefinedVariblesInLG = (await this._lgParser.extractLGVariables(undefined, lgContents)).lgVariables;
       if (fileId && templateId) {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
         if (lgTextFile) {
@@ -795,10 +808,8 @@ export class LGServer {
   protected validate(document: TextDocument): void {
     this.cleanPendingValidation(document);
     setTimeout(async () => {
-      this._userDefinedVariblesInLG = uniq(
-        this._userDefinedVariblesInLG.concat(
-          (await this._lgParser.extractLGVariables(document.getText(), [])).lgVariables
-        )
+      this._curDefinedVariblesInLG = uniq(
+        (await this._lgParser.extractLGVariables(document.getText(), [])).lgVariables
       );
     });
     this.pendingValidationRequests.set(
