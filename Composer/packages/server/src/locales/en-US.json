@@ -1763,9 +1763,6 @@
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
   },
-  "it_s_not_a_built_in_function_or_a_custom_function_211f17dc": {
-    "message": "it’s not a built-in function or a custom function."
-  },
   "item_actions_22d0242": {
     "message": "Item Actions"
   },
@@ -2095,6 +2092,9 @@
   },
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft App Password"
+  },
+  "microsoft_logo_4378a7cb": {
+    "message": "Microsoft Logo"
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
