@@ -42,7 +42,7 @@ const FontSettings: React.FC<IFontSettingsProps> = (props) => {
         </Label>
         <p css={styles.settingsDescription}>{description}</p>
       </div>
-      <Stack gap={10}>
+      <Stack tokens={{ childrenGap: 20 }}>
         <TextField
           data-testid="FontFamily"
           label={formatMessage('Font family')}
