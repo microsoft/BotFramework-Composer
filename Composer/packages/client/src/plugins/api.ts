@@ -37,6 +37,8 @@ interface PublishAPI {
   isGetTokenFromUser?: () => boolean;
   getExtensionState?: <T extends {}>() => T | undefined;
   setExtensionState?: <T = any>(value: T) => void;
+  getTenantIdFromCache?: () => string;
+  setTenantId?: (value: string) => void;
 }
 
 class API implements IAPI {
@@ -63,6 +65,8 @@ class API implements IAPI {
       isGetTokenFromUser: undefined,
       getExtensionState: undefined,
       setExtensionState: undefined,
+      getTenantIdFromCache: undefined,
+      setTenantId: undefined,
     };
   }
 }

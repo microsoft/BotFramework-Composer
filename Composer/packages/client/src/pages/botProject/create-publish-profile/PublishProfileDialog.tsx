@@ -11,14 +11,14 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
+import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { AuthClient } from '../../../utils/authClient';
-import { armScopes, graphScopes } from '../../../constants';
+import { graphScopes } from '../../../constants';
 import { dispatcherState } from '../../../recoilModel';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
@@ -121,6 +121,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.setExtensionState = <T extends {}>(value: T): void => {
       setExtensionState(value as any);
     };
+    PluginAPI.publish.getTenantIdFromCache = () => {
+      return getTenantIdFromCache();
+    };
+    PluginAPI.publish.setTenantId = (value) => {
+      setTenantId(value);
+    };
   }, []);
 
   // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
@@ -156,34 +162,38 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   );
 
   useEffect(() => {
-    PluginAPI.publish.startProvision = async (config) => {
-      const fullConfig = { ...config, name: name, type: targetType };
-      let arm, graph;
-      if (!isGetTokenFromUser()) {
-        // login or get token implicit
-        arm = await AuthClient.getAccessToken(armScopes);
-        graph = await AuthClient.getAccessToken(graphScopes);
-      } else {
-        // get token from cache
-        arm = getTokenFromCache('accessToken');
-        graph = getTokenFromCache('graphToken');
-      }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
-    };
-  }, [name, targetType, projectId]);
-
-  // pass functions to extensions
-  useEffect(() => {
-    PluginAPI.publish.getType = () => {
-      return targetType;
-    };
-    PluginAPI.publish.getSchema = () => {
-      return types.find((t) => t.name === targetType)?.schema;
-    };
-    PluginAPI.publish.savePublishConfig = (config) => {
-      savePublishTarget(name, targetType, JSON.stringify(config) || '{}');
-    };
-  }, [targetType, name, types, savePublishTarget]);
+    if (current?.item?.type) {
+      PluginAPI.publish.getType = () => {
+        return current?.item?.type;
+      };
+      PluginAPI.publish.getSchema = () => {
+        return types.find((t) => t.name === current?.item?.type)?.schema;
+      };
+      PluginAPI.publish.savePublishConfig = (config) => {
+        savePublishTarget(current?.item.name, current?.item?.type, JSON.stringify(config) || '{}');
+      };
+      PluginAPI.publish.startProvision = async (config) => {
+        const fullConfig = { ...config, name: current.item.name, type: current.item.type };
+        let arm, graph;
+        if (!isGetTokenFromUser()) {
+          // login or get token implicit
+          let tenantId = getTenantIdFromCache();
+          if (!tenantId) {
+            const tenants = await AuthClient.getTenants();
+            tenantId = tenants?.[0]?.tenantId;
+            setTenantId(tenantId);
+          }
+          arm = await AuthClient.getARMTokenForTenant(tenantId);
+          graph = await AuthClient.getAccessToken(graphScopes);
+        } else {
+          // get token from cache
+          arm = getTokenFromCache('accessToken');
+          graph = getTokenFromCache('graphToken');
+        }
+        provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      };
+    }
+  }, [current, types, savePublishTarget]);
 
   return (
     <Fragment>
@@ -224,9 +234,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           </div>
         )}
         {page === Page.ConfigProvision && selectedType?.bundleId && (
-          <div css={publishSurfaceStyles}>
-            <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
-          </div>
+          <Fragment>
+            <div style={{ marginBottom: '16px' }}>{dialogTitle.subText}</div>
+            <div css={publishSurfaceStyles}>
+              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+            </div>
+          </Fragment>
         )}
       </Dialog>
     </Fragment>

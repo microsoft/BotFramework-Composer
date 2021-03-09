@@ -46,6 +46,12 @@ export function usePublishApi() {
   function getTokenFromCache(): { accessToken: string; graphToken: string } {
     return window[ComposerGlobalName].getTokenFromCache();
   }
+  function getTenantIdFromCache(): string {
+    return window[ComposerGlobalName].getTenantIdFromCache();
+  }
+  function setTenantId(value): void {
+    window[ComposerGlobalName].setTenantId(value);
+  }
   function isGetTokenFromUser(): boolean {
     return window[ComposerGlobalName].isGetTokenFromUser();
   }
@@ -69,5 +75,7 @@ export function usePublishApi() {
     isGetTokenFromUser,
     getExtensionState,
     setExtensionState,
+    getTenantIdFromCache,
+    setTenantId,
   };
 }
