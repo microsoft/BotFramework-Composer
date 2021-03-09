@@ -322,7 +322,7 @@ export default async (composer: any): Promise<void> => {
   });
 
   composer.addRuntimeTemplate({
-    key: 'csharp-azurewebapp-v2',
+    key: 'adaptive-runtime-dotnet-webapp',
     name: 'C#',
     startCommand: 'dotnet run',
     path: dotnetTemplatePath,
