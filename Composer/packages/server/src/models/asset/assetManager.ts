@@ -7,10 +7,7 @@ import path from 'path';
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions, BotTemplateV2, FeedType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import yeoman from 'yeoman-environment';
-import Environment from 'yeoman-environment';
-import TerminalAdapter from 'yeoman-environment/lib/adapter';
-import { QnABotTemplateId } from '@bfc/shared';
+import { QnABotTemplateId } from '@bfc/shared/lib/constant';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -21,8 +18,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
-import { templateGeneratorPath } from '../../settings/env';
-import { runTemplateInstallationWorker } from '../../workers/creation_worker';
+import { startYeomanTemplateWork } from '../../workers/templateInstallation_worker';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -111,30 +107,9 @@ export class AssetManager {
       log('About to create folder', dstDir);
       mkdirSync(dstDir, { recursive: true });
 
-      // find selected template
       const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
-      const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
-      // create yeoman environment
-      const yeomanEnv = yeoman.createEnv(
-        '',
-        { yeomanRepository: templateGeneratorPath },
-        new TerminalAdapter({ console: console })
-      );
-      yeomanEnv.lookupLocalPackages();
-
-      const remoteTemplateAvailable = await this.installRemoteTemplate(
-        yeomanEnv,
-        generatorName,
-        npmPackageName,
-        templateVersion
-      );
-
-      if (remoteTemplateAvailable) {
-        await this.instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName);
-      } else {
-        throw new Error(`error hit when installing remote template`);
-      }
+      await startYeomanTemplateWork(npmPackageName, templateVersion, dstDir, projectName);
 
       ref.path = `${ref.path}/${projectName}`;
 
@@ -148,43 +123,6 @@ export class AssetManager {
         throw new Error(`Error hit when instantiating remote template: ${err?.message}`);
       }
     }
-  }
-
-  private async installRemoteTemplate(
-    yeomanEnv: Environment,
-    generatorName: string,
-    npmPackageName: string,
-    templateVersion: string
-  ): Promise<boolean> {
-    yeomanEnv.cwd = templateGeneratorPath;
-    try {
-      log('Installing generator', npmPackageName);
-      templateVersion = templateVersion ? templateVersion : '*';
-      await runTemplateInstallationWorker(npmPackageName, templateVersion, yeomanEnv);
-      // await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
-
-      // log('Looking up local packages');
-      // await yeomanEnv.lookupLocalPackages();
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  private async instantiateRemoteTemplate(
-    yeomanEnv: Environment,
-    generatorName: string,
-    dstDir: string,
-    projectName: string
-  ): Promise<boolean> {
-    log('About to instantiate a template!', dstDir, generatorName, projectName);
-    yeomanEnv.cwd = dstDir;
-    process.chdir(dstDir);
-
-    await yeomanEnv.run([generatorName, projectName], {}, () => {
-      log('Template successfully instantiated', dstDir, generatorName, projectName);
-    });
-    return true;
   }
 
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
