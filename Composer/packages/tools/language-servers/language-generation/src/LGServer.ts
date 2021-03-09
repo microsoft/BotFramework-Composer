@@ -528,6 +528,7 @@ export class LGServer {
     const position = params.position;
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
+    console.log(wordAtCurRange);
     const endWithDot = wordAtCurRange.endsWith('.');
 
     this.updateMemoryVariables(params.textDocument.uri);
@@ -561,6 +562,7 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
+    const includesDot = wordAtCurRange.includes('.');
     const lgDoc = this.getLGDocument(document);
     const lgFile = await lgDoc?.index();
     const templateId = lgDoc?.templateId;
@@ -571,7 +573,7 @@ export class LGServer {
 
     const wordRange = getEntityRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
-
+    console.log('word in body:', word);
     const startWithAt = word.startsWith('@');
 
     const completionEntityList = this._luisEntities.map((entity: string) => {
@@ -692,11 +694,13 @@ export class LGServer {
           isIncomplete: false,
           items: completionEntityList,
         });
-      } else {
+      } else if (!includesDot) {
         return Promise.resolve({
           isIncomplete: false,
           items: [...completionTemplateList, ...completionFunctionList, ...completionPropertyResult],
         });
+      } else {
+        return Promise.resolve(null);
       }
     } else {
       return Promise.resolve(null);
