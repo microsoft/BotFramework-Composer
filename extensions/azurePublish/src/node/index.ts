@@ -13,6 +13,7 @@ import {
   IExtensionRegistration,
   PublishResponse,
   PublishResult,
+  FeatureFlagMap,
 } from '@botframework-composer/types';
 
 import { authConfig, ResourcesItem } from '../types';
@@ -268,7 +269,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       profileName: string,
       jobId: string,
       resourcekey: string,
-      customizeConfiguration: DeployResources
+      customizeConfiguration: DeployResources,
+      featureFlags: FeatureFlagMap
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
@@ -285,7 +287,17 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       // Perform the deploy
-      await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource, abs);
+      await azDeployer.deploy(
+        project,
+        settings,
+        profileName,
+        name,
+        environment,
+        hostname,
+        luisResource,
+        abs,
+        featureFlags
+      );
 
       // If we've made it this far, the deploy succeeded!
       BackgroundProcessManager.updateProcess(jobId, 200, 'Success');
@@ -322,6 +334,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         luResources,
         qnaResources,
         abs,
+        featureFlags,
       } = config;
       try {
         // get the appropriate runtime template which contains methods to build and configure the runtime
@@ -365,7 +378,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           profileName,
           jobId,
           resourcekey,
-          customizeConfiguration
+          customizeConfiguration,
+          featureFlags
         );
       } catch (err) {
         this.logger('%O', err);
@@ -482,7 +496,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       } = config;
 
       const abs = getAbsSettings(config);
-      const { luResources, qnaResources } = metadata;
+      const { luResources, qnaResources, featureFlags } = metadata;
 
       // get the bot id from the project
       const botId = project.id;
@@ -513,7 +527,12 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // verify publish profile
         isProfileComplete(config);
 
-        this.asyncPublish({ ...config, accessToken, luResources, qnaResources, abs }, project, resourcekey, jobId);
+        this.asyncPublish(
+          { ...config, accessToken, luResources, qnaResources, abs, featureFlags },
+          project,
+          resourcekey,
+          jobId
+        );
 
         return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
       } catch (err) {

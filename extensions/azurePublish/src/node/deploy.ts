@@ -15,6 +15,7 @@ import { build, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
+import { FeatureFlagMap } from '@botframework-composer/types';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -49,7 +50,8 @@ export class BotProjectDeploy {
     environment: string,
     hostname?: string,
     luisResource?: string,
-    absSettings?: any
+    absSettings?: any,
+    featureFlags?: FeatureFlagMap
   ) {
     try {
       this.logger(absSettings);
@@ -77,7 +79,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Building the bot app...',
       });
-      await build(project, this.projPath, settings);
+      await build(project, this.projPath, settings, featureFlags);
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
@@ -93,7 +95,8 @@ export class BotProjectDeploy {
         settings.luis,
         luisResource,
         this.projPath,
-        this.logger
+        this.logger,
+        featureFlags
       );
 
       const qnaConfig = await project.builder.getQnaConfig();

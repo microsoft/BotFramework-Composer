@@ -18,7 +18,7 @@ import {
   qnaFilesState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
-import { botEndpointsState } from '../atoms';
+import { botEndpointsState, featureFlagsState } from '../atoms';
 import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
 import { ClientStorage } from '../../utils/storage';
@@ -189,6 +189,7 @@ export const publisherDispatcher = () => {
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const luFiles = await snapshot.getPromise(luFilesState(projectId));
         const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+        const featureFlags = await snapshot.getPromise(featureFlagsState);
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           accessToken: token,
@@ -196,6 +197,7 @@ export const publisherDispatcher = () => {
             ...metadata,
             luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
             qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            featureFlags,
           },
           sensitiveSettings,
         });

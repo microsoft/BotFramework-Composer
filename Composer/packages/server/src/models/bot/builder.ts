@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { pathExists, writeFile, copy, existsSync, mkdirSync } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
+import { FeatureFlagMap } from '@botframework-composer/types';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
@@ -259,22 +260,28 @@ export class Builder {
    *
    * Models are placed as a sibling to ComposerDialogs by default
    */
-  public async copyModelPathToBot() {
+  public async copyModelPathToBot(featureFlags: FeatureFlagMap) {
     for (const lang in this.orchestratorSettings.orchestrator.models) {
       const modelName = Path.basename(this.orchestratorSettings.orchestrator.models[lang], '.onnx');
-      const destDir = Path.resolve(this.botDir, '..', MODEL, modelName);
+
+      const destDir = featureFlags.NEW_CREATION_FLOW.enabled
+        ? Path.resolve(this.botDir, MODEL, modelName)
+        : Path.resolve(this.botDir, '..', MODEL, modelName);
+
       await copy(this.orchestratorSettings.orchestrator.models[lang], destDir);
     }
 
-    await this.updateOrchestratorSetting();
+    await this.updateOrchestratorSetting(featureFlags);
   }
 
   /**
    * Orchestrator: Update Orchestrator Settings for publishing
    *
-   * Orchestrator file paths are updated relative to the project root.
+   * Models are located in <project root>/model
+   * In the Adaptive Runtime, Orchestrator snapshot files are located in <project root>/generated.
+   * In the Legacy Runtime, Orchestrator snapshot files are located in <project root>/ComposerDialogs/generated.
    */
-  private async updateOrchestratorSetting() {
+  private async updateOrchestratorSetting(featureFlags: FeatureFlagMap) {
     const settingPath = Path.join(this.botDir, GENERATEDFOLDER, 'orchestrator.settings.json');
     const content = cloneDeep(this.orchestratorSettings);
 
@@ -285,7 +292,10 @@ export class Builder {
 
     keys(content.orchestrator.snapshots).forEach((key) => {
       const snapshotName = Path.basename(content.orchestrator.snapshots[key]);
-      content.orchestrator.snapshots[key] = Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
+
+      content.orchestrator.snapshots[key] = featureFlags.NEW_CREATION_FLOW.enabled
+        ? Path.join(GENERATEDFOLDER, snapshotName)
+        : Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
     });
 
     await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
