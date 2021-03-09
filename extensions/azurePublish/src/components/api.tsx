@@ -14,7 +14,7 @@ import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices'
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 
-import { AzureResourceTypes } from '../types';
+import { AzureResourceTypes, ResourceGroupSupportLocation } from '../types';
 import {
   AzureAPIStatus,
   AzureResourceProviderType,
@@ -140,6 +140,32 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
   }
 };
 
+/**
+ * Get all supported regions
+ * @param token
+ * @param subscriptionId
+ */
+export const getAllSupportedRegions = async (token: string, subscriptionId: string): Promise<Array<string>> => {
+  let regionsSet = new Set<string>();
+  for (let value of Object.values(AzureResourceProviderType)) {
+    if (value !== AzureResourceProviderType.Bot) {
+      const regions = await getSupportedRegionsByType(token, subscriptionId, value);
+      if (regionsSet.size === 0) {
+        regionsSet = new Set(regions);
+      } else {
+        regionsSet = new Set([...regionsSet].filter((x) => new Set(regions).has(x)));
+      }
+    }
+  }
+  return Array.from(regionsSet);
+};
+
+/**
+ * Get supported regions by resource type
+ * @param token
+ * @param subscriptionId
+ * @param resourceType
+ */
 export const getSupportedRegionsByType = async (
   token: string,
   subscriptionId: string,
@@ -470,4 +496,8 @@ export const getLuisAuthoringRegions = (): string[] => {
 
 export const getLuisPredictionRegions = (): { [key: string]: string[] } => {
   return LuisPublishSupportLocation;
+};
+
+export const getResourceGroupRegions = (): string[] => {
+  return ResourceGroupSupportLocation;
 };
