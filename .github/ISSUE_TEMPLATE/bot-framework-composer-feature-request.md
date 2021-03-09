@@ -2,7 +2,7 @@
 name: Feature Request
 about: Suggest an idea for the Bot Framework Composer
 title: ""
-labels: "Type: Enhancement, Needs-triage"
+labels: "feature-request, Needs-triage"
 assignees: ""
 ---
 
