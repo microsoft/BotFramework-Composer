@@ -9,7 +9,6 @@ import * as rp from 'request-promise';
 import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import { FeatureFlagMap } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
@@ -50,8 +49,7 @@ export class BotProjectDeploy {
     environment: string,
     hostname?: string,
     luisResource?: string,
-    absSettings?: any,
-    featureFlags?: FeatureFlagMap
+    absSettings?: any
   ) {
     try {
       this.logger(absSettings);
@@ -79,7 +77,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Building the bot app...',
       });
-      await build(project, this.projPath, settings, featureFlags);
+      await build(project, this.projPath, settings);
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
@@ -96,7 +94,7 @@ export class BotProjectDeploy {
         luisResource,
         this.projPath,
         this.logger,
-        featureFlags
+        settings?.runtime
       );
 
       const qnaConfig = await project.builder.getQnaConfig();
