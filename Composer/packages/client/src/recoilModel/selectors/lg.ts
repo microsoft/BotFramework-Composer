@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 import { LgFile } from '@bfc/shared';
 import { selectorFamily } from 'recoil';
+import { filterCustomFunctionError } from '@bfc/indexers/lib/utils/lgUtil';
 
-import { filterCustomFunctionError } from '../../utils/lgUtil';
 import { lgFileIdsState, lgFileState, settingsState } from '../atoms';
 
 export const lgFilesSelectorFamily = selectorFamily<LgFile[], string>({
