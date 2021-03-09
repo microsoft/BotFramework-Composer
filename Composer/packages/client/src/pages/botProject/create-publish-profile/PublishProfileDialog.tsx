@@ -8,6 +8,7 @@ import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { useRecoilValue } from 'recoil';
 
 import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
@@ -30,18 +31,25 @@ type PublishProfileDialogProps = {
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
 };
-
+type ResourcesItem = {
+  description: string;
+  text: string;
+  tier: string;
+  group: string;
+  key: string;
+  required: boolean;
+  [key: string]: any;
+};
 type ExtensionState = AzureExtensionState; // can expand to pva like | PVAExtensionState
-
 type AzureExtensionState = {
   subscriptionId: string;
   resourceGroup: string;
   hostName: string;
   location: string;
   luisLocation: string;
-  enableResources: any;
-  requireResources: any;
-  choice: any;
+  enabledResources: ResourcesItem[];
+  requiredResources: ResourcesItem[];
+  choice: IChoiceGroupOption;
 };
 
 const Page = {
@@ -110,8 +118,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
     };
-    PluginAPI.publish.setExtensionState = (value) => {
-      setExtensionState(value);
+    PluginAPI.publish.setExtensionState = <T extends {}>(value: T): void => {
+      setExtensionState(value as any);
     };
   }, []);
 
@@ -121,8 +129,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.currentProjectId = () => {
       return projectId;
     };
-    PluginAPI.publish.getExtensionState = () => {
-      return extensionState;
+    PluginAPI.publish.getExtensionState = <T extends {}>(): T | undefined => {
+      return extensionState as T | undefined;
     };
     if (current?.item.type) {
       setPage(Page.ConfigProvision);
