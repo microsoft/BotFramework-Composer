@@ -157,7 +157,8 @@ describe('assetManager', () => {
         'generator-conversational-core',
         '1.0.3',
         'sampleConversationalCore',
-        mockLocRef
+        mockLocRef,
+        '0'
       );
       expect(newBotLocationRef).toStrictEqual({
         path: '/path/to/npmbot/sampleConversationalCore',

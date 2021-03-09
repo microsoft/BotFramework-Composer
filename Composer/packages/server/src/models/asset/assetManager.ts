@@ -7,7 +7,7 @@ import path from 'path';
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions, FeedType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import { BotTemplate, QnABotTemplateId } from '@bfc/shared/lib/constant';
+import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
