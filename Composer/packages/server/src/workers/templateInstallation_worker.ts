@@ -47,10 +47,10 @@ const instantiateRemoteTemplate = async (
   return true;
 };
 
-const yeomenWork = async (npmPackageName: string, templateVersion: string, dstDir: string, projectName: string) => {
+const yeomanWork = async (npmPackageName: string, templateVersion: string, dstDir: string, projectName: string) => {
   const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
   // create yeoman environment
-  parentPort?.postMessage({ status: formatMessage('Getting Yeomen environment') });
+  parentPort?.postMessage({ status: formatMessage('Getting Yeoman environment') });
 
   const yeomanEnv = yeoman.createEnv(
     '',
@@ -59,7 +59,7 @@ const yeomenWork = async (npmPackageName: string, templateVersion: string, dstDi
   );
   await yeomanEnv.lookupLocalPackages();
 
-  parentPort?.postMessage({ status: formatMessage('Installing Yeomen template') });
+  parentPort?.postMessage({ status: formatMessage('Installing Yeoman template') });
 
   const remoteTemplateAvailable = await installRemoteTemplate(
     yeomanEnv,
@@ -68,7 +68,7 @@ const yeomenWork = async (npmPackageName: string, templateVersion: string, dstDi
     templateVersion
   );
   if (remoteTemplateAvailable) {
-    parentPort?.postMessage({ status: formatMessage('Instantiating Yeomen template') });
+    parentPort?.postMessage({ status: formatMessage('Instantiating Yeoman template') });
 
     await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName);
   } else {
@@ -103,7 +103,7 @@ export function startYeomanTemplateWork(
 }
 
 if (!isMainThread) {
-  yeomenWork(workerData.npmPackageName, workerData.templateVersion, workerData.dstDir, workerData.projectName)
+  yeomanWork(workerData.npmPackageName, workerData.templateVersion, workerData.dstDir, workerData.projectName)
     .then(() => {
       process.exit(0);
     })
