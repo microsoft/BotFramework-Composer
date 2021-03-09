@@ -147,7 +147,7 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
  */
 export const getAllSupportedRegions = async (token: string, subscriptionId: string): Promise<Array<string>> => {
   let regionsSet = new Set<string>();
-  for (let value of Object.values(AzureResourceProviderType)) {
+  for (const value of Object.values(AzureResourceProviderType)) {
     if (value !== AzureResourceProviderType.Bot) {
       const regions = await getSupportedRegionsByType(token, subscriptionId, value);
       if (regionsSet.size === 0) {
