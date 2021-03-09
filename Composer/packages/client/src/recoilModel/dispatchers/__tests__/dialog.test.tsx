@@ -147,7 +147,10 @@ describe('dialog dispatcher', () => {
 
     expect(renderedComponent.current.dialogs).toEqual([{ id: '1' }, { id: '2' }]);
     expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '1' }, { id: '2' }]);
-    expect(renderedComponent.current.lgFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
+    expect(renderedComponent.current.lgFiles).toEqual([
+      { id: '1.en-us', diagnostics: [] },
+      { id: '2.en-us', diagnostics: [] },
+    ]);
     expect(renderedComponent.current.luFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
     expect(renderedComponent.current.qnaFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
   });
