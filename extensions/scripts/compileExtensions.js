@@ -4,16 +4,17 @@
 /* eslint-disable no-console */
 /* eslint-disable security/detect-non-literal-fs-filename */
 
-const fs = require('fs-extra');
 const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
+
+const fs = require('fs-extra');
 
 const { compile } = require('./build');
 
 const FORCE = process.argv.includes('--force') || process.argv.includes('-f');
 
-const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname);
+const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '..');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
 console.log('Compiling extensions in %s', extensionsDir);
@@ -22,7 +23,7 @@ if (FORCE) {
   console.log('--force is true. Forcing a rebuild of all extensions.');
 }
 
-const ignoredDirs = ['node_modules'];
+const ignoredDirs = ['scripts', 'node_modules'];
 const allExtensions = fs
   .readdirSync(extensionsDir, { withFileTypes: true })
   .filter((ent) => !ignoredDirs.includes(ent.name));
@@ -31,7 +32,7 @@ const checkComposerLibs = () => {
   const libsToCheck = ['types', 'extension', 'extension-client', 'lib/shared'];
 
   for (const libName of libsToCheck) {
-    const libPath = path.resolve(__dirname, '../Composer/packages/', libName, 'lib/index.js');
+    const libPath = path.resolve(__dirname, '../../Composer/packages/', libName, 'lib/index.js');
     if (!fs.existsSync(libPath)) {
       console.error('Composer libraries have not yet been compiled. Run `yarn build:libs` first.');
       process.exit(1);
@@ -80,7 +81,7 @@ const writeToCache = (name, lastModified) => {
 };
 
 const missingMain = (extPath, packageJSON) => {
-  const main = packageJSON && packageJSON.main;
+  const main = packageJSON?.main;
 
   if (main) {
     return !fs.existsSync(path.join(extPath, main));
