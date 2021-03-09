@@ -405,11 +405,11 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
         // NOTE: bringing in Moment for this is not very efficient, but will
         // work for now until we can read file modification dates in as
         // numeric timestamps instead of preformatted strings
-        const { key } = currentSort;
+        const { key, descending } = currentSort;
         const v1 = key === 'lastModified' ? moment(f1[key]) : f1[key];
         const v2 = key === 'lastModified' ? moment(f2[key]) : f2[key];
-        if (v1 < v2) return currentSort.descending ? 1 : -1;
-        if (v1 > v2) return currentSort.descending ? -1 : 1;
+        if (v1 < v2) return descending ? 1 : -1;
+        if (v1 > v2) return descending ? -1 : 1;
         return 0;
       });
       return result;
