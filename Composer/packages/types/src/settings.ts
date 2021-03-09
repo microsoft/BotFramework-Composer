@@ -103,3 +103,7 @@ export type IConfig = ILuisConfig & {
   subscriptionKey: string;
   qnaRegion: string | 'westus';
 };
+
+export type LgOptions = {
+  customFunctions: string[];
+};

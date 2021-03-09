@@ -47,17 +47,17 @@ export const validateExpressions: ValidateFunc = (
   const diagnostics = expressions.reduce((diagnostics: Diagnostic[], expression) => {
     const { required, path, types, value } = expression;
     let errorMessage = '';
-
+    let warningMessage = '';
     try {
       newCache[value] = cache?.[value] ? cache[value] : checkExpression(value, required);
       errorMessage = checkReturnType(newCache[value], types);
     } catch (error) {
-      errorMessage = filterCustomFunctionError(error.message, customFunctions);
+      //change the missing custom function error to warning
+      warningMessage = filterCustomFunctionError(error.message, customFunctions);
     }
 
-    if (!errorMessage) return diagnostics;
-
-    diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Error, path));
+    if (errorMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Error, path));
+    if (warningMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Warning, path));
 
     return diagnostics;
   }, []);
