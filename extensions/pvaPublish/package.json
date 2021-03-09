@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "node ../build.js",
+    "build": "node ../scripts/build.js",
     "watch": "yarn build --watch",
     "test": "yarn test:node && yarn test:ui",
     "test:node": "jest --config jest.config.node.js",

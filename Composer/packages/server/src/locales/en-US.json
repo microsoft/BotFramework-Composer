@@ -1631,8 +1631,8 @@
   "if_condition_56c9be4a": {
     "message": "If Condition"
   },
-  "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
-    "message": "If this problem persists, please file an issue on"
+  "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
+    "message": "If this problem persists, please file an issue on <a>GitHub</a>"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
@@ -1762,9 +1762,6 @@
   },
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
-  },
-  "it_s_not_a_built_in_function_or_a_custom_function_211f17dc": {
-    "message": "it’s not a built-in function or a custom function."
   },
   "item_actions_22d0242": {
     "message": "Item Actions"
@@ -2095,6 +2092,9 @@
   },
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft App Password"
+  },
+  "microsoft_logo_4378a7cb": {
+    "message": "Microsoft Logo"
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
@@ -3572,8 +3572,8 @@
   "weather_bot_c38920cd": {
     "message": "Weather Bot"
   },
-  "webchat_a134b64b": {
-    "message": "Webchat"
+  "web_chat_c5ca7ab6": {
+    "message": "Web Chat"
   },
   "webchat_inspector_4d0dfeb7": {
     "message": "Webchat Inspector"
