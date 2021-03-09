@@ -97,7 +97,7 @@ describe('Multilang dispatcher', () => {
     });
     expect(renderedComponent.current.settings.languages).toEqual(['en-us', 'fr-fr', 'zh-cn']);
     expect(renderedComponent.current.lgFiles.length).toEqual(3);
-    expect(renderedComponent.current.lgFiles[2]).toEqual({ id: 'a.zh-cn', content: 'hi' });
+    expect(renderedComponent.current.lgFiles[2]).toEqual({ id: 'a.zh-cn', content: 'hi', diagnostics: [] });
     expect(renderedComponent.current.luFiles.length).toEqual(3);
     expect(renderedComponent.current.luFiles[2]).toEqual({ id: 'a.zh-cn', content: 'hi' });
     expect(renderedComponent.current.locale).toEqual('zh-cn');

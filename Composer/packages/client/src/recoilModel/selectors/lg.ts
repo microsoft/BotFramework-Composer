@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { lgUtil } from '@bfc/indexers';
 import { LgFile } from '@bfc/shared';
 import { selectorFamily } from 'recoil';
 
+import { filterCustomFunctionError } from '../../utils/lgUtil';
 import { lgFileIdsState, lgFileState, settingsState } from '../atoms';
 
 export const lgFilesSelectorFamily = selectorFamily<LgFile[], string>({
@@ -13,7 +13,7 @@ export const lgFilesSelectorFamily = selectorFamily<LgFile[], string>({
     const settings = get(settingsState(projectId));
     return lgFileIds.map((lgFileId) => {
       const lgFile = get(lgFileState({ projectId, lgFileId }));
-      const diagnostics = lgUtil.filterCustomFunctionError(lgFile.diagnostics, settings?.customFunctions ?? []);
+      const diagnostics = filterCustomFunctionError(lgFile.diagnostics, settings?.customFunctions ?? []);
       return { ...lgFile, diagnostics };
     });
   },

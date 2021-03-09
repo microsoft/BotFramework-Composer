@@ -7,7 +7,7 @@ import difference from 'lodash/difference';
 import lgWorker from '../recoilModel/parsers/lgWorker';
 
 import { getBaseName } from './fileUtil';
-
+export * from '@bfc/indexers/lib/utils/lgUtil';
 /**
  * Auto create placeholder template used in dialog but did not exist in <dialog>.<*locale>.lg
  */

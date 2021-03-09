@@ -285,8 +285,7 @@ export function extractOptionByKey(nameOfKey: string, options: string[]): string
   return result;
 }
 
-export function filterCustomFunctionError(diagnostics: Diagnostic[], customFunctions: string[]) {
-  if (!diagnostics) return diagnostics;
+export function filterCustomFunctionError(diagnostics: Diagnostic[] = [], customFunctions: string[] = []) {
   return diagnostics.reduce((result: Diagnostic[], d: Diagnostic) => {
     //If the custom functions are defined in runtime, use the field from settings to filter
     if (d.message.endsWith(BUILT_IN_FUNCTION_ERROR)) {
