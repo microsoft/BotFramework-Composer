@@ -38,8 +38,9 @@ export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
     }
     const currentImports = file.imports.map((item) => {
       const importedFile = getFile(getBaseName(item.id));
+      const displayName = item.id.substring(0, item.id.indexOf('.'));
       return {
-        displayName: item.description,
+        displayName,
         importPath: item.path,
         id: importedFile ? importedFile.id : '',
       };
