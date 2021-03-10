@@ -509,14 +509,6 @@ export const projectDispatcher = () => {
 
             const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
 
-            if (profile) {
-              // ABS Create Flow, update publishProfile after create project
-              const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
-              const newProfile = getPublishProfileFromPayload(profile, source);
-
-              newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-            }
-
             // Post project creation
             callbackHelpers.set(projectMetaDataState(projectId), {
               isRootBot: true,
@@ -527,7 +519,13 @@ export const projectDispatcher = () => {
               callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
               callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
             }
+            if (profile) {
+              // ABS Create Flow, update publishProfile after create project
+              const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
+              const newProfile = getPublishProfileFromPayload(profile, source);
 
+              newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+            }
             projectIdCache.set(projectId);
 
             // navigate to the new get started section
