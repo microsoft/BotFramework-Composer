@@ -24,7 +24,6 @@ export const classNames = mergeStyleSets({
     flexDirection: 'column',
     width: '50%',
     textAlign: 'center',
-    marginTop: '-20%',
   },
 });
 

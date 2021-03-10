@@ -35,7 +35,10 @@ export const TabHeader: React.FC<TabHeaderProps> = (props) => {
       aria-label="select locale"
       selectedKey={String(selectedKey)}
       style={{ height: '100%' }}
-      styles={{ itemContainer: { height: 'calc(100% - 60px)', marginTop: '10px' } }}
+      styles={{
+        root: { position: 'absolute', left: '20px', top: '10px' },
+        itemContainer: { height: 'calc(100% - 60px)', marginTop: '44px' },
+      }}
       onLinkClick={handleLinkClick}
     >
       {languageList.map((l, index) => (
