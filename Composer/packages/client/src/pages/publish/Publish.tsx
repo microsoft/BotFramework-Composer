@@ -21,6 +21,7 @@ import {
   setTenantId,
   getTenantIdFromCache,
 } from '../../utils/auth';
+import { vaultScopes } from '../../constants';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
@@ -234,6 +235,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
       token = await AuthClient.getARMTokenForTenant(tenant);
     }
+    // get keyvault token
+    const result = await AuthClient.getAccessToken(vaultScopes);
+    console.log('kv -----------', result);
 
     setPublishDialogVisiblity(false);
     // notifications
