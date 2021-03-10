@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -11,6 +11,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
 
@@ -23,11 +24,22 @@ type GetStartedProps = {
   onDismiss: () => void;
 };
 
+type NextSteps = {
+  checked: boolean;
+  key: string;
+  label: string;
+  checkedLabel: string;
+  onClick: () => void;
+};
+
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const projectId = useRecoilValue(currentProjectIdState);
   const location = useRecoilValue(locationState(projectId));
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
+
+  const nextSteps: NextSteps[] = [];
+
   let hasLUIS = false;
   let hasQNA = false;
   if (botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion) {
@@ -36,7 +48,25 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   if (botProject?.setting?.qna?.subscriptionKey) {
     hasQNA = true;
   }
-  console.log('CONTENT OF BOT PROJECT', botProject);
+
+  if (props.requiresLUIS) {
+    nextSteps.push({
+      key: 'luis',
+      label: formatMessage('Set up Language Understanding service'),
+      checkedLabel: formatMessage('Language Understanding configured!'),
+      checked: hasLUIS,
+      onClick: () => {},
+    });
+  }
+  if (props.requiresQNA) {
+    nextSteps.push({
+      key: 'qna',
+      label: formatMessage('Set up QNA Maker service'),
+      checkedLabel: formatMessage('QNA Maker configured!'),
+      checked: hasQNA,
+      onClick: () => {},
+    });
+  }
 
   const linkToPackageManager = `/bot/${projectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${projectId}/botProjectsSettings/#connections`;
@@ -82,16 +112,15 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
         <Stack.Item>
           <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
 
-          {props.requiresLUIS && (
-            <ActionButton iconProps={{ iconName: hasLUIS ? 'checkmark' : 'robot' }}>
-              Set up your bot's Azure language understanding service
+          {nextSteps.map((step) => (
+            <ActionButton
+              key={step.key}
+              iconProps={{ iconName: step.checked ? 'checkmark' : 'robot' }}
+              onClick={step.onClick}
+            >
+              {step.checked ? step.checkedLabel : step.label}
             </ActionButton>
-          )}
-          {props.requiresQNA && (
-            <ActionButton iconProps={{ iconName: hasQNA ? 'checkmark' : 'robot' }}>
-              Set up your bot's Azure QNA Maker service
-            </ActionButton>
-          )}
+          ))}
 
           {formatMessage('Customize')}
           <ul style={ulStyle}>

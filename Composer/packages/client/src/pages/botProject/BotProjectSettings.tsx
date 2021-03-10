@@ -27,7 +27,6 @@ import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { useFeatureFlag } from '../../utils/hooks';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
