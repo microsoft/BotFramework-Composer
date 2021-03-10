@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/extension.js",
   "scripts": {
-    "build": "node ../build.js",
+    "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
   "composer": {
