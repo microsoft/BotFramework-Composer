@@ -94,6 +94,7 @@ export const BotStructureFilesPatterns = [
   'dialogs/imported/*/language-generation/**/*.lg',
   'dialogs/imported/*/language-understanding/**/*.lu',
   'dialogs/imported/*/knowledge-base/**/*.qna',
+  'dialogs/*/*.json',
 ];
 
 // parse file name: [fileId].[locale].[fileType]
