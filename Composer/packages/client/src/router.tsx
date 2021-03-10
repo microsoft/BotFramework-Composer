@@ -19,7 +19,6 @@ import {
   botOpeningState,
   pluginPagesSelector,
   botOpeningMessage,
-  featureFlagsState,
 } from './recoilModel';
 import { localBotsSettingDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
@@ -47,7 +46,6 @@ const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const spinnerText = useRecoilValue(botOpeningMessage);
-  const featureFlags = useRecoilValue(featureFlagsState);
 
   return (
     <div css={data}>

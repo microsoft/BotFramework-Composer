@@ -257,7 +257,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   return (
     <Fragment>
       <DialogWrapper
-        isOpen
+        isOpen={isOpen}
         {...DialogCreationCopy.CREATE_NEW_BOT_V2}
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
