@@ -247,7 +247,6 @@ export class LGServer {
     const index = async (): Promise<LgFile> => {
       const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
-      console.log('projectId', projectId);
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
       if (fileId && templateId) {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
