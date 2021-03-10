@@ -200,8 +200,10 @@ export class Builder {
       }
     }
 
-    const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
-    await writeFile(orchestratorSettingsPath, JSON.stringify(this.orchestratorSettings, null, 2));
+    if (this.orchestratorSettings.orchestrator.models.en || this.orchestratorSettings.orchestrator.models.multilang) {
+      const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
+      await writeFile(orchestratorSettingsPath, JSON.stringify(this.orchestratorSettings, null, 2));
+    }
   };
 
   /**
@@ -297,7 +299,9 @@ export class Builder {
         : Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
     });
 
-    await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
+    if (this.orchestratorSettings.orchestrator.models.en || this.orchestratorSettings.orchestrator.models.multilang) {
+      await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
+    }
   }
 
   public async getQnaConfig() {
