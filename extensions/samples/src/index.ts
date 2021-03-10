@@ -69,6 +69,10 @@ const samplesRegitry = {
     name: 'QnA Sample',
     description: 'A sample bot that import online QnA resource',
   },
+  HandoverSample: {
+    name: 'Hand over to human',
+    description: 'Advanced sample to connect human users through Bot Composer',
+  },
 };
 
 function getRemoteSamples(): BotTemplate[] {
