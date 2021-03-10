@@ -125,7 +125,16 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         newTargets.push({ name, type, configuration });
       }
       await setPublishTargets(newTargets, projectId);
-      TelemetryClient.track('NewPublishingProfileSaved', { type });
+      try {
+        const parsedConfiguration = JSON.parse(configuration);
+        TelemetryClient.track('NewPublishingProfileSaved', {
+          type,
+          msAppId: parsedConfiguration.settings?.MicrosoftAppId,
+          subscriptionId: parsedConfiguration.subscriptionId,
+        });
+      } catch {
+        TelemetryClient.track('NewPublishingProfileSaved', { type });
+      }
     },
     [targets, projectId]
   );

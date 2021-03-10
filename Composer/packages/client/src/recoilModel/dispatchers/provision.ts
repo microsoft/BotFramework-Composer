@@ -138,7 +138,11 @@ export const provisionDispatcher = () => {
             };
           });
 
-          TelemetryClient.track('NewPublishingProfileSaved', { type: targetType });
+          TelemetryClient.track('NewPublishingProfileSaved', {
+            type: targetType,
+            msAppId: response.data.config.settings?.MicrosoftAppId,
+            subscriptionId: response.data.config.subscriptionId,
+          });
 
           notification = getProvisionSuccessNotification(response.data.message);
           isCleanTimer = true;
