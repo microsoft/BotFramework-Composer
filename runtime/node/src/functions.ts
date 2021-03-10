@@ -13,7 +13,7 @@ import {
 } from 'botbuilder';
 import { AuthenticationConfiguration, SimpleCredentialProvider } from 'botframework-connector';
 import { ComposerBot } from './shared/composerBot';
-import { getBotAdapter, getSettings, getTelemetryClient } from './shared/helpers';
+import { configureTelemetry, getBotAdapter, getSettings, getTelemetryClient } from './shared/helpers';
 import { SkillConversationIdFactory } from './shared/skillConversationIdFactory';
 
 // Create shared memory storage.
@@ -34,6 +34,9 @@ const telemetryClient = getTelemetryClient();
 
 // Create composer bot instance with root dialog.
 const bot = new ComposerBot(userState, conversationState, skillConversationIdFactory, telemetryClient);
+
+// Configure telemetry client.
+configureTelemetry(adapter, telemetryClient);
 
 export const messagesTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
   context.log('Messages endpoint triggerd.');

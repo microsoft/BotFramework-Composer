@@ -3,11 +3,7 @@
 
 import * as restify from 'restify';
 import { ConversationState, MemoryStorage, UserState } from 'botbuilder';
-import {
-  ApplicationInsightsTelemetryClient,
-  ApplicationInsightsWebserverMiddleware,
-  TelemetryInitializerMiddleware,
-} from 'botbuilder-applicationinsights';
+import { ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import { ComposerBot } from './shared/composerBot';
 import {
   getBotAdapter,
@@ -55,7 +51,8 @@ configureSkillEndpoint(server, adapter, bot, skillConversationIdFactory);
 configureManifestsEndpoint(server);
 
 // Configure telemetry client, initializers and middleware.
-configureTelemetry(server, adapter, telemetryClient);
+server.use(ApplicationInsightsWebserverMiddleware);
+configureTelemetry(adapter, telemetryClient);
 
 // Get port and listen.
 const port = getServerPort();

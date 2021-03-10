@@ -250,16 +250,12 @@ export const configureManifestsEndpoint = (server: Server) => {
 };
 
 /**
- * Configure telemetry.
- * @param server Web server to be configured.
+ * Configure botframework adapter to use telemetry client.
+ * @param adapter Botframework adapter to be configured.
+ * @param telemetryClient Telemetry client.
  */
-export const configureTelemetry = (
-  server: Server,
-  adapter: BotFrameworkAdapter,
-  telemetryClient: BotTelemetryClient
-): void => {
+export const configureTelemetry = (adapter: BotFrameworkAdapter, telemetryClient: BotTelemetryClient): void => {
   const settings = getSettings();
-  server.use(ApplicationInsightsWebserverMiddleware);
 
   const telemetryLoggerMiddleware = new TelemetryLoggerMiddleware(
     telemetryClient,
