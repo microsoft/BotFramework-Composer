@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { app, dialog, ipcMain, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import { app, clipboard, dialog, ipcMain, Menu, MenuItemConstructorOptions, shell } from 'electron';
 import formatMessage from 'format-message';
 
 import { AppUpdater } from './appUpdater';
@@ -53,6 +53,16 @@ function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
     ];
   }
   return [{ role: 'close', label: formatMessage('Close') }];
+}
+
+function getAppVersionInfo() {
+  return [
+    `Version:  ${app.getVersion()}`,
+    `Electron: ${process.versions.electron}`,
+    `Chrome: ${process.versions.chrome}`,
+    `NodeJS: ${process.versions.node}`,
+    `V8: ${process.versions.v8}`,
+  ].join('\n');
 }
 
 export function initAppMenu(win?: Electron.BrowserWindow) {
@@ -218,19 +228,20 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
           label: formatMessage('About'),
           click: async () => {
             // show dialog with name and version
-            dialog.showMessageBox({
-              title: 'Bot Framework Composer',
-              message: `
-                Bot Framework Composer
-
-                Version:  ${app.getVersion()}
-                Electron: ${process.versions.electron}
-                Chrome: ${process.versions.chrome}
-                NodeJS: ${process.versions.node}
-                V8: ${process.versions.v8}
-              `,
-              type: 'info',
-            });
+            dialog
+              .showMessageBox({
+                title: 'Bot Framework Composer',
+                message: ['Bot Framework Composer', '', getAppVersionInfo()].join('\n'),
+                type: 'info',
+                buttons: ['Copy', 'OK'],
+                defaultId: 1,
+                noLink: true,
+              })
+              .then((selection) => {
+                if (selection.response === 0) {
+                  clipboard.writeText(getAppVersionInfo());
+                }
+              });
           },
         },
       ],

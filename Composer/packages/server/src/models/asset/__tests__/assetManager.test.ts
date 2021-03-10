@@ -3,14 +3,12 @@
 
 import rimraf from 'rimraf';
 import { enableFetchMocks } from 'jest-fetch-mock';
-import { BotTemplateV2 } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 
 import { ExtensionContext } from '../../../models/extension/extensionContext';
 import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
 import StorageService from '../../../services/storage';
-
-const mockchdir = jest.spyOn(process, 'chdir').mockImplementation(() => {});
 
 jest.mock('azure-storage', () => {
   return {};
@@ -38,6 +36,14 @@ jest.mock('../../../models/extension/extensionContext', () => {
       extensions: {
         botTemplates: [],
       },
+    },
+  };
+});
+
+jest.mock('../../../workers/templateInstallation.worker', () => {
+  return {
+    runYeomanTemplatePipeline: () => {
+      return;
     },
   };
 });
@@ -139,14 +145,13 @@ describe('assetManager', () => {
           id: 'generator-conversational-core',
           name: 'Conversational Core',
           description: 'Preview conversational core package for TESTING ONLY',
-          keywords: ['conversationalcore', 'yeoman-generator'],
           package: {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',
             packageVersion: '1.0.3',
           },
         },
-      ] as BotTemplateV2[]);
+      ] as BotTemplate[]);
     });
   });
 
@@ -158,13 +163,13 @@ describe('assetManager', () => {
         'generator-conversational-core',
         '1.0.3',
         'sampleConversationalCore',
-        mockLocRef
+        mockLocRef,
+        '0'
       );
       expect(newBotLocationRef).toStrictEqual({
         path: '/path/to/npmbot/sampleConversationalCore',
         storageId: 'default',
       });
-      expect(mockchdir).toBeCalledWith('/path/to/npmbot');
     });
   });
 });

@@ -113,7 +113,6 @@ describe('skill dispatcher', () => {
         { recoilState: displaySkillManifestState, initialValue: undefined },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: botProjectIdsState, initialValue: [projectId, ...skillIds] },
-        { recoilState: settingsState(projectId), initialValue: {} },
         {
           recoilState: botProjectFileState(projectId),
           initialValue: {

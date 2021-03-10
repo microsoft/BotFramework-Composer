@@ -27,6 +27,7 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
+import msftIcon from '../../../images/msftIcon.svg';
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
 import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
@@ -111,6 +112,8 @@ const optionKeys = {
 const templateRequestUrl =
   'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
 
+const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
+
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
@@ -124,10 +127,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
   const { templates, onDismiss, onNext } = props;
-  const [currentTemplate, setCurrentTemplate] = useState('');
+  const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
-  const [readMe, setReadMe] = useRecoilState(selectedTemplateReadMeState);
+  const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
 
   const selectedTemplate = useMemo(() => {
@@ -135,7 +138,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       onSelectionChanged: () => {
         const t = selectedTemplate.getSelection()[0] as BotTemplate;
         if (t) {
-          setCurrentTemplate(t.id);
+          setCurrentTemplateId(t.id);
         }
       },
     });
@@ -144,7 +147,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const handleJumpToNext = () => {
     let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
-      routeToTemplate = currentTemplate;
+      routeToTemplate = currentTemplateId;
     }
 
     if (option === optionKeys.createFromQnA) {
@@ -173,6 +176,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       onRender: (item) => (
         <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
+            <img
+              alt={formatMessage('Microsoft Logo')}
+              aria-label={formatMessage('Microsoft Logo')}
+              src={msftIcon}
+              style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px' }}
+            />
             {item.name}
           </div>
         </div>
@@ -187,11 +196,18 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     );
   };
 
+  const getTemplate = (): BotTemplate | undefined => {
+    const currentTemplate = templates.find((t) => {
+      return t.id === currentTemplateId;
+    });
+    return currentTemplate;
+  };
+
   useEffect(() => {
     if (templates.length > 1) {
       const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
       if (emptyBotTemplate) {
-        setCurrentTemplate(emptyBotTemplate.id);
+        setCurrentTemplateId(emptyBotTemplate.id);
         setEmptyBotKey(emptyBotTemplate.id);
       }
     }
@@ -204,11 +220,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [selectedFeed]);
 
   useEffect(() => {
-    if (currentTemplate) {
-      setReadMe('');
-      props.fetchReadMe(currentTemplate);
+    if (currentTemplateId) {
+      props.fetchReadMe(currentTemplateId);
     }
-  }, [currentTemplate, props.fetchReadMe]);
+  }, [currentTemplateId, props.fetchReadMe]);
 
   return (
     <Fragment>
@@ -249,8 +264,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending && <LoadingSpinner />}
-            <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
+            {fetchReadMePending ? <LoadingSpinner /> : <TemplateDetailView readMe={readMe} template={getTemplate()} />}
           </div>
         </div>
         <DialogFooter>
@@ -266,7 +280,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
+            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null)}
             text={formatMessage('Next')}
             onClick={handleJumpToNext}
           />
