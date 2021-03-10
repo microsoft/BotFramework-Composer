@@ -297,12 +297,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           </div>
         </div>
         <DialogFooter>
-          <Link
-            underline
-            href={templateRequestUrl}
-            styles={{ root: { fontSize: '12px', float: 'left' } }}
-            target="_blank"
-          >
+          <Link href={templateRequestUrl} styles={{ root: { fontSize: '12px', float: 'left' } }} target="_blank">
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>

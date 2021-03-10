@@ -507,6 +507,8 @@ export const projectDispatcher = () => {
               settingStorage.remove(projectId);
             }
 
+            const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
+
             if (profile) {
               // ABS Create Flow, update publishProfile after create project
               const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
@@ -514,8 +516,6 @@ export const projectDispatcher = () => {
 
               newProfile && dispatcher.setPublishTargets([newProfile], projectId);
             }
-
-            const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
 
             // Post project creation
             callbackHelpers.set(projectMetaDataState(projectId), {
