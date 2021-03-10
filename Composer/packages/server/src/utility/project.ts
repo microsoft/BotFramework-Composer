@@ -4,7 +4,6 @@
 import * as fs from 'fs';
 
 import { remove } from 'fs-extra';
-import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 import formatMessage from 'format-message';
 import { UserIdentity } from '@botframework-composer/types';
 
@@ -15,6 +14,7 @@ import log from '../logger';
 import AssetService from '../services/asset';
 import { BotProject } from '../models/bot/botProject';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
+import { runDialogMerge } from '../workers/dialogMerge.worker';
 
 import { Path } from './path';
 
@@ -79,18 +79,7 @@ export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
 
       // run the merge command to merge all package dependencies from the template to the bot project
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Merging Packages'));
-      const realMerge = new SchemaMerger(
-        [manifestFile, '!**/imported/**', '!**/generated/**'],
-        Path.join(currentProject.dataDir, 'schemas/sdk'),
-        Path.join(currentProject.dataDir, 'dialogs/imported'),
-        false,
-        false,
-        console.log,
-        console.warn,
-        console.error
-      );
-
-      await realMerge.merge();
+      await runDialogMerge(manifestFile, currentProject);
     } else {
       log('Schema merge step skipped for project without runtime path');
     }

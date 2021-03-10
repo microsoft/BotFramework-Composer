@@ -14,6 +14,8 @@ export function useTriggerConfig() {
 
   const isPvaEnv = Boolean(get(schemas, 'sdk.content.definitions["Microsoft.VirtualAgents.Recognizer"]'));
 
+  const getSDKDefaultTitle = ($kind): string => get(schemas, `sdk.content.definitions["${$kind}"].title`, $kind);
+
   const triggerConfig: TriggerUISchema = useMemo(() => {
     const implementedTriggerSchema: TriggerUISchema = {};
     Object.entries(plugins.uiSchema ?? {}).forEach(([$kind, options]) => {
@@ -27,6 +29,15 @@ export function useTriggerConfig() {
       delete implementedTriggerSchema[SDKKinds.OnChooseIntent];
       delete implementedTriggerSchema[SDKKinds.OnQnAMatch];
     }
+
+    // Use sdk.schema title as fallback trigger label
+    Object.entries(implementedTriggerSchema).forEach(([$kind, triggerOptions]) => {
+      if (!triggerOptions) return;
+      if (!triggerOptions.label) {
+        triggerOptions.label = getSDKDefaultTitle($kind);
+      }
+    });
+
     return implementedTriggerSchema;
   }, [plugins.uiSchema]);
 

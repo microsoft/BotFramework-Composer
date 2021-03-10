@@ -74,7 +74,12 @@ class ExtensionContext implements IExtensionContext {
 
   // get the runtime template currently used from project
   public getRuntimeByProject(project: IBotProject): RuntimeTemplate {
-    const type = project.settings?.runtime?.key || DEFAULT_RUNTIME;
+    let type = project.settings?.runtime?.key || DEFAULT_RUNTIME;
+
+    // support backwards compatibility with pre-release identifier
+    if (type === 'csharp-azurewebapp-v2') {
+      type = 'adaptive-runtime-dotnet-webapp';
+    }
     const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
     if (template) {
       return template;
@@ -87,6 +92,10 @@ class ExtensionContext implements IExtensionContext {
   public getRuntime(type: string | undefined): RuntimeTemplate {
     if (!type) {
       type = DEFAULT_RUNTIME;
+    }
+    // support backwards compatibility with pre-release identifier
+    if (type === 'csharp-azurewebapp-v2') {
+      type = 'adaptive-runtime-dotnet-webapp';
     }
     const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
     if (template) {
