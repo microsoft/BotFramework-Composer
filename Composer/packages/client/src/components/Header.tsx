@@ -88,31 +88,31 @@ const rightSection = css`
   justify-content: flex-end;
   width: 50%;
   margin: 0 10px;
-
-  & > div:first-of-type {
-    margin-right: 7px;
-  }
-
-  & > button:first-of-type {
-    margin-right: 20px;
-  }
 `;
 
 const buttonStyles: IButtonStyles = {
   icon: {
     color: '#fff',
-    fontSize: FontSizes.size20,
+    fontSize: FontSizes.size18,
   },
   root: {
-    height: '20px',
-    width: '20px',
-    marginTop: '4px',
+    height: '40px',
+    width: '40px',
+    selectors: {
+      ':disabled .ms-Button-icon': {
+        opacity: 0.4,
+        color: `${NeutralColors.white}`,
+      },
+    },
   },
   rootHovered: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
   rootPressed: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+  },
+  rootDisabled: {
+    backgroundColor: `${CommunicationColors.primary}`,
   },
 };
 
@@ -153,12 +153,7 @@ export const Header = () => {
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
-  const {
-    openBotInEmulator,
-    appendLogToWebChatInspector,
-    clearWebChatLogs,
-    setWebChatPanelVisibility,
-  } = useRecoilValue(dispatcherState);
+  const { setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
 
   const isShow = useBotControllerBar();
@@ -241,62 +236,30 @@ export const Header = () => {
 
       <div css={rightSection}>
         {isShow && !checkForPVASchema(schemas.sdk) && (
-          <BotController
-            isControllerHidden={hideBotController}
-            onHideController={(isHidden: boolean) => {
-              hideBotStartController(isHidden);
-              if (!isHidden) {
-                setWebChatPanelVisibility(false);
-              }
-            }}
-          />
-        )}
-        {showUpdateAvailableIcon && (
-          <IconButton
-            iconProps={{ iconName: 'History' }}
-            styles={buttonStyles}
-            title={formatMessage('Update available')}
-            onClick={onUpdateAvailableClick}
-          />
+          <div
+            css={css`
+              margin-right: 12px;
+            `}
+          >
+            <BotController
+              isControllerHidden={hideBotController}
+              onHideController={(isHidden: boolean) => {
+                hideBotStartController(isHidden);
+                if (!isHidden) {
+                  setWebChatPanelVisibility(false);
+                }
+              }}
+            />
+          </div>
         )}
         {isShow && (
           <IconButton
             ariaDescription={formatMessage('Open web chat')}
-            css={css`
-              &::after {
-                content: '';
-                position: absolute;
-                top: 6px;
-                bottom: 0;
-                right: -5px;
-                background: ${NeutralColors.gray40};
-                height: 23px;
-                margin: 0px auto;
-                width: 1px;
-              }
-            `}
             disabled={!webchatEssentials?.botUrl}
             iconProps={{
               iconName: 'OfficeChat',
             }}
-            styles={{
-              root: {
-                color: NeutralColors.white,
-                height: '36px',
-                selectors: {
-                  ':disabled .ms-Button-icon': {
-                    opacity: 0.4,
-                    color: `${NeutralColors.white}`,
-                  },
-                },
-              },
-              rootDisabled: {
-                backgroundColor: `${CommunicationColors.primary}`,
-              },
-              rootHovered: {
-                backgroundColor: 'rgba(255, 255, 255, 0.6)',
-              },
-            }}
+            styles={buttonStyles}
             title={formatMessage('Open Web Chat')}
             onClick={() => {
               const currentWebChatVisibility = !isWebChatPanelVisible;
@@ -310,6 +273,14 @@ export const Header = () => {
           />
         )}
         <NotificationButton buttonStyles={buttonStyles} />
+        {showUpdateAvailableIcon && (
+          <IconButton
+            iconProps={{ iconName: 'History' }}
+            styles={buttonStyles}
+            title={formatMessage('Update available')}
+            onClick={onUpdateAvailableClick}
+          />
+        )}
       </div>
       {teachingBubbleVisibility && (
         <Callout
@@ -366,12 +337,9 @@ export const Header = () => {
       >
         {webchatEssentials ? (
           <WebChatPanel
-            appendLogToWebChatInspector={appendLogToWebChatInspector}
             botData={{ ...webchatEssentials }}
-            clearWebchatInspectorLogs={clearWebChatLogs}
             directlineHostUrl={BASEPATH}
             isWebChatPanelVisible={isWebChatPanelVisible}
-            openBotInEmulator={openBotInEmulator}
           />
         ) : null}
       </Panel>

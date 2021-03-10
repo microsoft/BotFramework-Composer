@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { pathExists, writeFile, copy } from 'fs-extra';
+import { pathExists, writeFile, copy, existsSync, mkdirSync } from 'fs-extra';
 import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
-import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
+import { Orchestrator } from '@microsoft/bf-orchestrator';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
 import partition from 'lodash/partition';
@@ -18,7 +18,8 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
 
-import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
+import { IOrchestratorNLRList, IOrchestratorProgress } from './interface';
+import { OrchestratorBuilder } from './process/orchestratorBuilder';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -61,7 +62,7 @@ export class Builder {
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
   private containOrchestrator = false;
-  private orchestratorLabelResolvers = new Map<string, LabelResolver>();
+  private orchestratorBuilder?: OrchestratorBuilder = undefined;
 
   public luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -88,7 +89,8 @@ export class Builder {
     luFiles: FileInfo[],
     qnaFiles: FileInfo[],
     allFiles: FileInfo[],
-    emptyFiles: { [key: string]: boolean }
+    emptyFiles: { [key: string]: boolean },
+    directVersionPublish: boolean
   ) => {
     const userAgent = getUserAgent();
     setEnvDefault('LUIS_USER_AGENT', userAgent);
@@ -107,11 +109,16 @@ export class Builder {
       } else {
         this.containOrchestrator = false;
       }
-      await this.runLuBuild(luBuildFiles);
+      await this.runLuBuild(luBuildFiles, directVersionPublish);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
+    } finally {
+      if (this.orchestratorBuilder) {
+        this.orchestratorBuilder.exit();
+        this.orchestratorBuilder = undefined;
+      }
     }
   };
 
@@ -160,6 +167,10 @@ export class Builder {
    */
   public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
+
+    if (!this.orchestratorBuilder) {
+      this.orchestratorBuilder = new OrchestratorBuilder();
+    }
 
     const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
       f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
@@ -212,20 +223,9 @@ export class Builder {
     emptyFiles: { [key: string]: boolean }
   ) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
-
     // build snapshots from LU files
-    const returnData = await this.orchestratorBuilder(luFiles, modelPath);
-
-    // write snapshot data into /generated folder
-    const snapshots: { [key: string]: string } = {};
-    for (const dialog of returnData.outputs) {
-      const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
-      snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
-
-      await writeFile(bluFilePath, Buffer.from(dialog.snapshot));
-    }
-
-    return snapshots;
+    if (!this.orchestratorBuilder) return;
+    return await this.orchestratorBuilder.build(luFiles, modelPath, this.generatedFolderPath);
   };
 
   /**
@@ -258,41 +258,6 @@ export class Builder {
     if (!(await pathExists(modelPath))) {
       await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
     }
-  }
-
-  /**
-   * Orchestrator: Build command to compile .lu files into Binary LU (.blu) snapshots.
-   *
-   * A snapshot (.blu file) is created per .lu supplied
-   *
-   * @param files - Array of FileInfo
-   * @param modelPath - Path to NLR model folder
-   * @param isDialog - Flag to toggle creation of Recognizer Dialogs (default: true)
-   * @param fullEmbedding - Use larger embeddings and skip size optimization (default: false)
-   * @returns An object containing snapshot bytes and recognizer dialogs for each .lu file
-   */
-  public async orchestratorBuilder(
-    files: FileInfo[],
-    modelPath: string,
-    isDialog = true,
-    fullEmbedding = false
-  ): Promise<IOrchestratorBuildOutput> {
-    const luObjects = files
-      .filter((fi) => fi.name.endsWith('.lu') && fi.content)
-      .map((fi) => ({
-        id: fi.name,
-        content: fi.content,
-      }));
-
-    return await Orchestrator.buildAsync(
-      modelPath,
-      luObjects,
-      this.orchestratorLabelResolvers,
-      isDialog,
-      '',
-      null,
-      fullEmbedding
-    );
   }
 
   public async copyModelPathToBot() {
@@ -475,7 +440,7 @@ export class Builder {
     );
   }
 
-  private async runLuBuild(files: FileInfo[]) {
+  private async runLuBuild(files: FileInfo[], directVersionPublish: boolean) {
     if (!files.length) return;
 
     const config = this._getConfig(files);
@@ -492,13 +457,10 @@ export class Builder {
       keptVersionCount: 10,
       isStaging: false,
       region: config.region,
-      directVersionPublish: true,
+      directVersionPublish: directVersionPublish,
     });
 
-    await this.luBuilder.writeDialogAssets(buildResult, {
-      force: true,
-      out: this.generatedFolderPath,
-    });
+    await this.writeLuisSettings(buildResult, this.generatedFolderPath, directVersionPublish);
   }
 
   private async runQnaBuild(files: FileInfo[]) {
@@ -525,6 +487,45 @@ export class Builder {
       out: this.generatedFolderPath,
     });
   }
+
+  private writeLuisSettings = async (contents, out: string, directVersionPublish: boolean) => {
+    const settingsContents = contents.filter((c) => c.id && c.id.endsWith('.json'));
+    if (settingsContents && settingsContents.length > 0) {
+      const outPath = Path.join(Path.resolve(out), settingsContents[0].id);
+
+      //merge
+      const mergedSettings = { path: '', luis: {} };
+      for (const content of contents) {
+        const luisAppsMap = JSON.parse(content.content).luis;
+        for (const appName of Object.keys(luisAppsMap)) {
+          mergedSettings.luis[appName] = {
+            appId: luisAppsMap[appName].appId,
+            version: luisAppsMap[appName].version,
+          };
+          if (!directVersionPublish) {
+            delete mergedSettings.luis[appName].version;
+          }
+        }
+      }
+
+      const newContent = {
+        content: JSON.stringify({ luis: mergedSettings.luis }, null, 4),
+        path: Path.basename(outPath),
+      };
+
+      //write
+      let outFilePath;
+      if (out) {
+        outFilePath = Path.join(Path.resolve(out), Path.basename(newContent.path));
+      } else {
+        outFilePath = newContent.path;
+      }
+      if (!existsSync(Path.dirname(outFilePath))) {
+        mkdirSync(Path.dirname(outFilePath));
+      }
+      await writeFile(outFilePath, newContent.content, 'utf-8');
+    }
+  };
 
   //delete files in generated folder
   private async deleteDir(path: string) {
