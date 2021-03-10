@@ -23,7 +23,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --max-http-header-size=16000 --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "yarn build && yarn start",
     "watch": [
       "src",
       "../extension/lib"
