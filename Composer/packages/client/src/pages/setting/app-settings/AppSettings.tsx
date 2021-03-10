@@ -202,21 +202,20 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
         <PreviewFeatureToggle />
       </section>
-      {renderElectronSettings ||
-        (process.env.NODE_ENV === 'development' && (
-          <section css={section}>
-            <h2>{formatMessage('Data Collection')}</h2>
-            <SettingToggle
-              checked={!!userSettings.telemetry.allowDataCollection}
-              description={formatMessage(
-                'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.'
-              )}
-              id="dataCollectionToggle"
-              title={formatMessage('Data collection')}
-              onToggle={handleDataCollectionChange}
-            />
-          </section>
-        ))}
+      {(renderElectronSettings || process.env.NODE_ENV === 'development') && (
+        <section css={section}>
+          <h2>{formatMessage('Data Collection')}</h2>
+          <SettingToggle
+            checked={!!userSettings.telemetry.allowDataCollection}
+            description={formatMessage(
+              'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.'
+            )}
+            id="dataCollectionToggle"
+            title={formatMessage('Data collection')}
+            onToggle={handleDataCollectionChange}
+          />
+        </section>
+      )}
     </div>
   );
 };
