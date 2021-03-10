@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "build": "node ../build.js",
+    "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
   "dependencies": {

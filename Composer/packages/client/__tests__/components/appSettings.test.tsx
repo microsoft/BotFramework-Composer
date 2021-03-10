@@ -18,14 +18,13 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
   });
 
   it('should render the user settings page', () => {
-    const { getByText, getAllByText } = renderWithRecoil(<AppSettings />, ({ set }) => {
+    const { getByText } = renderWithRecoil(<AppSettings />, ({ set }) => {
       set(onboardingState, {
         coachMarkRefs: {},
         complete: false,
       });
     });
     // there are 2 onboarding texts
-    getAllByText('Onboarding');
     getByText('Property editor preferences');
     getByText('Application Updates');
   });
