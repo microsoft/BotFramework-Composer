@@ -45,6 +45,18 @@ type GettingStartedEvents = {
   GettingStartedLinkClicked: { method: 'link' | 'button'; url: string };
 };
 
+type PackageManagerEvents = {
+  PackageInstallConflictFound: { package: string; version: string; isUpdate: boolean };
+  PackageInstallConflictResolved: { package: string; version: string; isUpdate: boolean };
+  PackageInstalled: { package: string; version: string; isUpdate: boolean };
+  PackageInstallFailed: { package: string; version: string; isUpdate: boolean };
+  PackageSearch: { term: string };
+  PackageUninstalled: { package: string };
+  PackageUninstallFailed: { package: string };
+  PackageFeedAdded: undefined;
+  PackageFeedDeleted: undefined;
+};
+
 type SessionEvents = {
   SessionStarted: { os: string };
   SessionEnded: undefined;
@@ -161,6 +173,7 @@ type PageView = {
 export type TelemetryEvents = ApplicationEvents &
   GettingStartedEvents &
   BotProjectEvents &
+  PackageManagerEvents &
   DesignerEvents &
   ABSChannelsEvents &
   SessionEvents &
