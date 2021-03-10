@@ -4,8 +4,9 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { PageNames } from '@bfc/shared';
+import camelCase from 'lodash/camelCase';
 
-import { currentProjectIdState, userSettingsState } from '../recoilModel';
+import { currentProjectIdState, featureFlagsState, userSettingsState } from '../recoilModel';
 import { getPageName } from '../utils/getPageName';
 import { useLocation } from '../utils/hooks';
 
@@ -16,12 +17,21 @@ const { ipcRenderer } = window;
 export const useInitializeLogger = () => {
   const rootProjectId = useRecoilValue(currentProjectIdState);
   const { telemetry } = useRecoilValue(userSettingsState);
+  const featureFlags = useRecoilValue(featureFlagsState);
+  const reducedFeatureFlags = Object.entries(featureFlags).reduce(
+    (acc, [key, { enabled }]) => ({
+      ...acc,
+      [camelCase(key)]: enabled,
+    }),
+    {}
+  );
+
   const {
     location: { pathname },
   } = useLocation();
   const page = useMemo<PageNames>(() => getPageName(pathname), [pathname]);
 
-  TelemetryClient.setup(telemetry, { rootProjectId, page });
+  TelemetryClient.setup(telemetry, { rootProjectId, page, ...reducedFeatureFlags });
 
   useEffect(() => {
     ipcRenderer?.on('session-update', (_event, name) => {

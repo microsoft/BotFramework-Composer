@@ -92,9 +92,11 @@ const Library: React.FC = () => {
     descriptionLink: formatMessage('Learn more'),
     viewDocumentation: formatMessage('View documentation'),
     installButton: formatMessage('Install'),
+    installToolbarButton: formatMessage('Add a package'),
+
     updateButton: formatMessage('Update to'),
     installed: formatMessage('installed'),
-    importDialogTitle: formatMessage('Install a Package'),
+    importDialogTitle: formatMessage('Add a package'),
     installProgress: formatMessage('Installing package...'),
     uninstallProgress: formatMessage('Removing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
@@ -145,15 +147,12 @@ const Library: React.FC = () => {
   };
 
   const getLibraryAPI = () => {
-    const feedUrl = `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    const feedUrl = `${API_ROOT}/feed?key=${feed}`;
     return httpClient.get(feedUrl);
   };
 
   const getSearchResults = () => {
-    const feedUrl = feeds.find((f) => f.key == feed).searchUrl
-      ? `${API_ROOT}/feed?url=` +
-        encodeURIComponent(feeds.find((f) => f.key == feed).searchUrl.replace(/\{\{keyword\}\}/g, searchTerm))
-      : `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    const feedUrl = `${API_ROOT}/feed?key=${feed}&term=${encodeURIComponent(searchTerm)}`;
     return httpClient.get(feedUrl);
   };
 
@@ -327,7 +326,7 @@ const Library: React.FC = () => {
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
-      text: strings.installButton,
+      text: strings.installToolbarButton,
       buttonProps: {
         iconProps: {
           iconName: 'Add',
@@ -542,10 +541,9 @@ const Library: React.FC = () => {
     navigateTo(`/bot/${currentProjectId}/botProjectsSettings/#runtimeSettings`);
   };
 
-  const updateFeed = async (key: string, updatedItem: PackageSourceFeed) => {
+  const updateFeed = async (feeds: PackageSourceFeed[]) => {
     const response = await httpClient.post(`${API_ROOT}/feeds`, {
-      key: key,
-      updatedItem: updatedItem,
+      feeds,
     });
 
     // update the list of feeds in the component state
