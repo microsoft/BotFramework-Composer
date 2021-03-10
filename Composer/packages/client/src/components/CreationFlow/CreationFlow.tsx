@@ -82,11 +82,7 @@ const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => 
   };
 
   useEffect(() => {
-    if (featureFlags.NEW_CREATION_FLOW?.enabled) {
-      navigate(`/v2/projects/create${props?.location?.search}`);
-    } else {
-      fetchResources();
-    }
+    fetchResources();
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
