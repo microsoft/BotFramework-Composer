@@ -185,6 +185,9 @@ export class OneAuthInstance extends OneAuthBase {
   }
 
   public async getARMTokenForTenant(tenantId: string): Promise<string> {
+    if (!this.initialized) {
+      this.initialize();
+    }
     // sign in arm account.
     if (!this.signedInARMAccount) {
       const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');

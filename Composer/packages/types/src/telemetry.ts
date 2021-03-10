@@ -144,6 +144,14 @@ type WebChatEvents = {
   SaveTranscriptClicked: undefined;
 };
 
+type ABSChannelsEvents = {
+  ConnectionsAddNewProfile: undefined;
+  ConnectionsChannelStatusDisplayed: { teams: boolean; speech: boolean; webchat: boolean };
+  ConnectionsChannelStatusError: { error: string };
+  ConnectionsToggleChannel: { channel: string; enabled: boolean };
+  ConnectionsToggleChannelFailed: { channel: string; enabled: boolean };
+};
+
 type OtherEvents = {};
 
 type PageView = {
@@ -167,6 +175,7 @@ export type TelemetryEvents = ApplicationEvents &
   BotProjectEvents &
   PackageManagerEvents &
   DesignerEvents &
+  ABSChannelsEvents &
   SessionEvents &
   BotSettingsEvents &
   OtherEvents &
