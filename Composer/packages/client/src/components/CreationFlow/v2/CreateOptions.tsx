@@ -121,7 +121,7 @@ const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onNext: (data: string) => void;
+  onNext: (templateName: string, urlData?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
@@ -158,13 +158,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       routeToTemplate = QnABotTemplateId;
     }
 
-    if (props.location && props.location.search) {
-      routeToTemplate += props.location.search;
-    }
-
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
-    onNext(routeToTemplate);
+    if (props.location && props.location.search) {
+      onNext(routeToTemplate, props.location.search);
+    } else {
+      onNext(routeToTemplate);
+    }
   };
 
   const tableColumns = [
