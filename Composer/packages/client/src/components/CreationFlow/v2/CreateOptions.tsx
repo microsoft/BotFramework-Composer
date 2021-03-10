@@ -20,17 +20,20 @@ import {
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import axios from 'axios';
+import querystring from 'query-string';
 
 import msftIcon from '../../../images/msftIcon.svg';
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
 import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
+import { getAliasFromPayload } from '../../../utils/electronUtil';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
@@ -126,6 +129,7 @@ type CreateOptionsProps = {
 export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { templates, onDismiss, onNext } = props;
   const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
   const [emptyBotKey, setEmptyBotKey] = useState('');
@@ -212,6 +216,31 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       }
     }
   }, [templates]);
+
+  useEffect(() => {
+    // open bot directly if alias exist.
+    if (props.location?.search) {
+      const decoded = decodeURIComponent(props.location.search);
+      const { source, payload } = querystring.parse(decoded);
+      if (typeof source === 'string' && typeof payload === 'string') {
+        const alias = getAliasFromPayload(source, payload);
+        // check to see if Composer currently has a bot project corresponding to the alias
+        axios
+          .get<any>(`/api/projects/alias/${alias}`)
+          .then((aliasRes) => {
+            if (aliasRes.status === 200) {
+              navigate(`/bot/${aliasRes.data.id}`);
+              return;
+            }
+          })
+          .catch((e) => {
+            setIsOpen(true);
+          });
+        return;
+      }
+    }
+    setIsOpen(true);
+  }, [props.location?.search]);
 
   useEffect(() => {
     if (selectedFeed?.props?.itemKey) {

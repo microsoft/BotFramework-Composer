@@ -19,6 +19,7 @@ import {
   botOpeningState,
   pluginPagesSelector,
   botOpeningMessage,
+  featureFlagsState,
 } from './recoilModel';
 import { localBotsSettingDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
@@ -46,6 +47,7 @@ const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const spinnerText = useRecoilValue(botOpeningMessage);
+  const featureFlags = useRecoilValue(featureFlagsState);
 
   return (
     <div css={data}>
@@ -105,6 +107,9 @@ const Routes = (props) => {
           </ProjectRouter>
           <SettingPage path="settings/*" />
           <ExtensionsPage path="extensions/*" />
+          {featureFlags.NEW_CREATION_FLOW?.enabled && (
+            <Redirect noThrow from="projects/create" to="v2/projects/create" />
+          )}
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouterV2 path="v2/projects/*" />
           <BotCreationFlowRouter path="home" />
