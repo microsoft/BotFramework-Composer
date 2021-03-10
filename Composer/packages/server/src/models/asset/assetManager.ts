@@ -112,8 +112,6 @@ export class AssetManager {
 
       await runYeomanTemplatePipeline(npmPackageName, templateVersion, dstDir, projectName, jobId);
 
-      ref.path = `${ref.path}/${projectName}`;
-
       return ref;
     } catch (err) {
       if (err?.message.match(/npm/)) {
