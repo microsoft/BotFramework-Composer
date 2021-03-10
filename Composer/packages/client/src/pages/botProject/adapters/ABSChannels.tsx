@@ -291,9 +291,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const speech = await fetchChannelStatus(CHANNELS.SPEECH);
 
         TelemetryClient.track('ConnectionsChannelStatusDisplayed', {
-          teams: teams?.enabled || false,
-          webchat: webchat?.enabled || false,
-          speech: speech?.enabled || false,
+          teams: teams?.enabled ?? false,
+          webchat: webchat?.enabled ?? false,
+          speech: speech?.enabled ?? false,
         });
 
         if (teams && webchat && speech) {
