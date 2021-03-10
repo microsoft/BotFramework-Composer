@@ -6,6 +6,8 @@ import { useRecoilValue } from 'recoil';
 import { Suspense, Fragment } from 'react';
 import React from 'react';
 
+import { onboardingDisabled } from '../../constants';
+
 import { isElectron } from './../../utils/electronUtil';
 import { appUpdateState, userSettingsState, onboardingState } from './../../recoilModel';
 
@@ -20,7 +22,8 @@ export const Assistant = () => {
 
   const renderDataCollectionDialog =
     isElectron() && !appUpdaterDialogShowing && typeof telemetry.allowDataCollection === 'undefined';
-  const renderOnboarding = !renderDataCollectionDialog && !appUpdaterDialogShowing && !onboarding.complete;
+  const renderOnboarding =
+    !onboardingDisabled && !renderDataCollectionDialog && !appUpdaterDialogShowing && !onboarding.complete;
   const renderAppUpdater = isElectron();
 
   return (
