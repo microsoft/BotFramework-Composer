@@ -47,9 +47,12 @@ export const openDeleteBotModal = async (onConfirm: () => Promise<void>) => {
   );
   const title = formatMessage('Delete Bot');
   const settings = {
+    onRenderContent: () => {
+      return <div>{warningText}</div>;
+    },
     confirmText: formatMessage('Yes, delete'),
   };
-  const res = await OpenConfirmModal(title, warningText, settings);
+  const res = await OpenConfirmModal(title, null, settings);
   if (res) {
     await onConfirm();
   }
