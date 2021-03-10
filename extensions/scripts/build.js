@@ -1,6 +1,9 @@
-const fs = require('fs-extra');
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 const path = require('path');
 
+const fs = require('fs-extra');
 const esbuild = require('esbuild');
 const GlobalsPlugin = require('esbuild-plugin-globals');
 
@@ -55,6 +58,7 @@ const getBundleConfigs = (extPath, packageJSON, watch = false) => {
     const p = path.join(extPath, 'src', contribDir);
 
     if (fs.pathExistsSync(p)) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       for (const contrib of fs.readdirSync(p, { withFileTypes: true })) {
         const cPath = path.join(p, contrib.name);
 
