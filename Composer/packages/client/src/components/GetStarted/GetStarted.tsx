@@ -3,21 +3,23 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
-import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { h3Style, ulStyle, liStyle } from './styles';
 
 type GetStartedProps = {
   isOpen: boolean;
+  requiresLUIS: boolean;
+  requiresQNA: boolean;
   onDismiss: () => void;
 };
 
@@ -26,6 +28,15 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const location = useRecoilValue(locationState(projectId));
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
+  let hasLUIS = false;
+  let hasQNA = false;
+  if (botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion) {
+    hasLUIS = true;
+  }
+  if (botProject?.setting?.qna?.subscriptionKey) {
+    hasQNA = true;
+  }
+  console.log('CONTENT OF BOT PROJECT', botProject);
 
   const linkToPackageManager = `/bot/${projectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${projectId}/botProjectsSettings/#connections`;
@@ -70,6 +81,18 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
         </Stack.Item>
         <Stack.Item>
           <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
+
+          {props.requiresLUIS && (
+            <ActionButton iconProps={{ iconName: hasLUIS ? 'checkmark' : 'robot' }}>
+              Set up your bot's Azure language understanding service
+            </ActionButton>
+          )}
+          {props.requiresQNA && (
+            <ActionButton iconProps={{ iconName: hasQNA ? 'checkmark' : 'robot' }}>
+              Set up your bot's Azure QNA Maker service
+            </ActionButton>
+          )}
+
           {formatMessage('Customize')}
           <ul style={ulStyle}>
             <li style={liStyle}>
