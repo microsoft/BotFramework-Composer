@@ -93,7 +93,8 @@ export class BotProjectDeploy {
         settings.luis,
         luisResource,
         this.projPath,
-        this.logger
+        this.logger,
+        settings?.runtime
       );
 
       const qnaConfig = await project.builder.getQnaConfig();
