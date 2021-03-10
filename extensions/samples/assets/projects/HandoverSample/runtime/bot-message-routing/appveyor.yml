@@ -1,0 +1,15 @@
+version: 1.9.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+before_build:
+- cmd: dotnet --version
+- cmd: nuget restore
+build:
+  publish_nuget: false
+  include_nuget_references: true
+  verbosity: minimal
+test:
+  assemblies:
+    only:
+      - '**\*.Tests.dll'
