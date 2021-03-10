@@ -123,7 +123,7 @@ export const StringArrayEditor = React.memo(
 
           const filteredItems = items.filter(Boolean);
 
-          if (e.key === 'Enter') {
+          if (e.key === 'Enter' && containerRef.current?.contains(e.target as Node)) {
             onChange([...filteredItems, '']);
             setCurrentIndex(filteredItems.length);
           } else {
