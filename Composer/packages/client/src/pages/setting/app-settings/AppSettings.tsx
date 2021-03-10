@@ -202,7 +202,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
         <PreviewFeatureToggle />
       </section>
-      {renderElectronSettings && (
+      {(renderElectronSettings || process.env.NODE_ENV === 'development') && (
         <section css={section}>
           <h2>{formatMessage('Data Collection')}</h2>
           <SettingToggle
