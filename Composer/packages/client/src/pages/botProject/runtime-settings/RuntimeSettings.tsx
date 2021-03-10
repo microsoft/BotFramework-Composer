@@ -235,18 +235,20 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
       {header()}
       {!isAdaptive && toggleOfCustomRuntime()}
       <div>
-        <TextField
-          required
-          data-testid="runtimeCodeLocation"
-          disabled={!settings.runtime || !settings.runtime.customRuntime}
-          errorMessage={errorElement(formDataErrors.path)}
-          label={formatMessage('Runtime code location')}
-          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-          value={runtimePath}
-          onBlur={() => handleRuntimeSettingOnBlur('path')}
-          onChange={handleRuntimeSettingOnChange('path')}
-          onRenderLabel={onRenderLabel}
-        />
+        {!isAdaptive && (
+          <TextField
+            required
+            data-testid="runtimeCodeLocation"
+            disabled={!settings.runtime || !settings.runtime.customRuntime}
+            errorMessage={errorElement(formDataErrors.path)}
+            label={formatMessage('Runtime code location')}
+            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            value={runtimePath}
+            onBlur={() => handleRuntimeSettingOnBlur('path')}
+            onChange={handleRuntimeSettingOnChange('path')}
+            onRenderLabel={onRenderLabel}
+          />
+        )}
         {!isAdaptive && (
           <div>
             <span css={textOr}>{formatMessage('Or: ')}</span>
