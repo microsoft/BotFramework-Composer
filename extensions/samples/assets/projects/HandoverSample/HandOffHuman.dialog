@@ -92,30 +92,10 @@
       },
       "actions": [
         {
-          "$kind": "Microsoft.IfCondition",
+          "$kind": "PostDialog",
           "$designer": {
-            "id": "SmUwRX"
-          },
-          "condition": "=dialog.watching || dialog.connected",
-          "actions": [
-            {
-              "$kind": "PostDialog",
-              "$designer": {
-                "id": "rWerSJ"
-              }
-            }
-          ],
-          "elseActions": [
-            {
-              "$kind": "Microsoft.TraceActivity",
-              "$designer": {
-                "id": "1XAV0P"
-              },
-              "name": "Handover",
-              "label": "Post",
-              "value": "Not watching nor connected"
-            }
-          ]
+            "id": "bEFZAF"
+          }
         }
       ]
     },
@@ -133,32 +113,6 @@
             "id": "SkAHOd"
           },
           "resultProperty": "$response"
-        },
-        {
-          "$kind": "Microsoft.IfCondition",
-          "$designer": {
-            "id": "XxNV2x"
-          },
-          "condition": "=$response",
-          "actions": [
-            {
-              "$kind": "Microsoft.SetProperty",
-              "$designer": {
-                "id": "ZKBJ9F"
-              },
-              "property": "dialog.watching",
-              "value": true
-            }
-          ],
-          "elseActions": [
-            {
-              "$kind": "Microsoft.DeleteProperty",
-              "$designer": {
-                "id": "LIFaBo"
-              },
-              "property": "=dialog.watching"
-            }
-          ]
         }
       ]
     },
@@ -175,33 +129,7 @@
           "$designer": {
             "id": "QPtxgK"
           },
-          "resultProperty": "$response"
-        },
-        {
-          "$kind": "Microsoft.IfCondition",
-          "$designer": {
-            "id": "XYlbeO"
-          },
-          "condition": "=$response",
-          "actions": [
-            {
-              "$kind": "Microsoft.SetProperty",
-              "$designer": {
-                "id": "g8aaNt"
-              },
-              "property": "dialog.connected",
-              "value": true
-            }
-          ],
-          "elseActions": [
-            {
-              "$kind": "Microsoft.DeleteProperty",
-              "$designer": {
-                "id": "KIsgcl"
-              },
-              "property": "dialog.connected"
-            }
-          ]
+          "resultProperty": "=$response"
         }
       ]
     },
