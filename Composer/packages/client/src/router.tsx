@@ -107,9 +107,6 @@ const Routes = (props) => {
           </ProjectRouter>
           <SettingPage path="settings/*" />
           <ExtensionsPage path="extensions/*" />
-          {featureFlags.NEW_CREATION_FLOW?.enabled && (
-            <Redirect noThrow from="projects/create" to="v2/projects/create" />
-          )}
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouterV2 path="v2/projects/*" />
           <BotCreationFlowRouter path="home" />

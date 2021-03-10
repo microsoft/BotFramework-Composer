@@ -31,7 +31,7 @@ import DefineConversation from './DefineConversation';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
-const CreationFlow: React.FC<CreationFlowProps> = () => {
+const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => {
   const {
     fetchTemplates,
     fetchTemplatesV2,
@@ -82,7 +82,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   useEffect(() => {
-    fetchResources();
+    if (featureFlags.NEW_CREATION_FLOW?.enabled) {
+      navigate(`/v2/projects/create${props?.location?.search}`);
+    } else {
+      fetchResources();
+    }
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
