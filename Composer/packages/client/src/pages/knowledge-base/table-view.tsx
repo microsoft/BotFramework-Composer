@@ -36,7 +36,7 @@ import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
 import { dialogsSelectorFamily, qnaFilesState, settingsState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
-import { getBaseName, getKBName } from '../../utils/fileUtil';
+import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
