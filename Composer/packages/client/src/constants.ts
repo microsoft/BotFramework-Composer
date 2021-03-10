@@ -409,3 +409,5 @@ export const runtimeOptions: IDropdownOption[] = [
   { key: defaultRuntime, text: 'Azure Web App' },
   { key: 'azureFunctions', text: 'Azure Functions' },
 ];
+
+export const onboardingDisabled = true;
