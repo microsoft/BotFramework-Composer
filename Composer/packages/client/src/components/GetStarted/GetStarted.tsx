@@ -122,7 +122,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
             </ActionButton>
           ))}
 
-          {formatMessage('Customize')}
+          <h3>{formatMessage('Customize')}</h3>
           <ul style={ulStyle}>
             <li style={liStyle}>
               <Link href={linkToPackageManager} onClick={linkClick}>
