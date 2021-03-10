@@ -17,7 +17,7 @@ import {
   TextField,
 } from 'office-ui-fabric-react';
 import { useState, useEffect, Fragment } from 'react';
-import { useApplicationApi } from '@bfc/extension-client';
+import { useApplicationApi, useTelemetryClient, TelemetryClient } from '@bfc/extension-client';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { v4 as uuid } from 'uuid';
@@ -47,6 +47,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
   const [items, setItems] = useState<PackageSourceFeed[]>(props.feeds);
   const [editRow, setEditRow] = useState<boolean>(false);
   const { confirm } = useApplicationApi();
+  const telemetryClient: TelemetryClient = useTelemetryClient();
 
   const uitext = {
     title: formatMessage('Edit feeds'),
@@ -180,6 +181,8 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     selection.setKeySelected(newItem.key, true, false);
     setSelection(selection);
 
+    telemetryClient.track('PackageFeedAdded', {});
+
     setEditRow(true);
   };
 
@@ -191,6 +194,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       )
     ) {
       setSelectedItem(undefined);
+      telemetryClient.track('PackageFeedDeleted', {});
       props.onUpdateFeed(selectedItem.key, null);
     }
   };

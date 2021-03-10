@@ -4,7 +4,7 @@
   "description": "publish assets to a remote URL",
   "main": "dist/extension.js",
   "scripts": {
-    "build": "node ../build.js",
+    "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
   "composer": {
