@@ -2,6 +2,9 @@
 // Licensed under the MIT License.
 import { PublishTarget } from '@bfc/shared';
 
+import { armScopes } from '../constants';
+
+import { AuthClient } from './authClient';
 /**
  * Returns true if the client is embedded in the Composer Electron environment.
  */
@@ -23,7 +26,10 @@ export type Profile = ABSProfile; // can include PVAProfile or other type of pro
  *
  * @param profile payload from bf's create protocol
  */
-export function getPublishProfileFromPayload(profile: Profile, source: string): PublishTarget | undefined {
+export async function getPublishProfileFromPayload(
+  profile: Profile,
+  source: string
+): Promise<PublishTarget | undefined> {
   switch (source) {
     case 'abs': {
       const appId = profile.appId;
@@ -37,7 +43,10 @@ export function getPublishProfileFromPayload(profile: Profile, source: string): 
       temp.botName = (names && names.length > 0 && names[1]) || '';
       delete temp.appId;
 
-      console.log(temp);
+      //TODO. handle key vault hint
+      const resu = await AuthClient.getAccessToken(armScopes);
+      console.log(resu);
+
       return {
         name: `${source}-${profile.botName}`,
         type: 'azurePublish',
