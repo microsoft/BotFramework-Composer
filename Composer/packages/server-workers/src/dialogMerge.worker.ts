@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import * as Path from 'path';
 import { Worker, isMainThread, workerData, parentPort } from 'worker_threads';
-
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
-
-import { Path } from '../utility/path';
-import { BotProject } from '../models/bot/botProject';
 
 if (!isMainThread) {
   const realMerge = new SchemaMerger(
@@ -31,10 +28,10 @@ if (!isMainThread) {
     });
 }
 
-export function runDialogMerge(manifestFile: string, currentProject: BotProject) {
+export function runDialogMerge(manifestFile: string, currentProjectDataDir: string) {
   return new Promise<void>((resolve, reject) => {
     const w = new Worker(__filename, {
-      workerData: { manifestFile, dataDir: currentProject.dataDir },
+      workerData: { manifestFile, dataDir: currentProjectDataDir },
     });
     w.on('exit', (returnCode) => {
       if (returnCode === 0) {

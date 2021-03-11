@@ -8,23 +8,24 @@ import yeoman from 'yeoman-environment';
 import TerminalAdapter from 'yeoman-environment/lib/adapter';
 import formatMessage from 'format-message';
 
-import { templateGeneratorPath } from '../settings/env';
-import log from '../logger';
-import { BackgroundProcessManager } from '../services/backgroundProcessManager';
+// import { templateGeneratorPath } from '../settings/env';
+// import log from '../logger';
+// import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 const installRemoteTemplate = async (
   yeomanEnv: Environment,
+  templateGeneratorPath: string,
   generatorName: string,
   npmPackageName: string,
   templateVersion: string
 ): Promise<boolean> => {
   yeomanEnv.cwd = templateGeneratorPath;
   try {
-    log('Installing generator', npmPackageName);
+    // log('Installing generator', npmPackageName);
     templateVersion = templateVersion ? templateVersion : '*';
     await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
 
-    log('Looking up local packages');
+    // log('Looking up local packages');
     await yeomanEnv.lookupLocalPackages();
     return true;
   } catch {
@@ -38,15 +39,21 @@ const instantiateRemoteTemplate = async (
   dstDir: string,
   projectName: string
 ) => {
-  log('About to instantiate a template!', dstDir, generatorName, projectName);
+  // log('About to instantiate a template!', dstDir, generatorName, projectName);
   yeomanEnv.cwd = dstDir;
 
   await yeomanEnv.run([generatorName, projectName], {}, () => {
-    log('Template successfully instantiated', dstDir, generatorName, projectName);
+    // log('Template successfully instantiated', dstDir, generatorName, projectName);
   });
 };
 
-const yeomanWork = async (npmPackageName: string, templateVersion: string, dstDir: string, projectName: string) => {
+const yeomanWork = async (
+  npmPackageName: string,
+  templateVersion: string,
+  dstDir: string,
+  projectName: string,
+  templateGeneratorPath: string
+) => {
   const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
   // create yeoman environment
   parentPort?.postMessage({ status: formatMessage('Getting Yeoman environment') });
@@ -62,6 +69,7 @@ const yeomanWork = async (npmPackageName: string, templateVersion: string, dstDi
 
   const remoteTemplateAvailable = await installRemoteTemplate(
     yeomanEnv,
+    templateGeneratorPath,
     generatorName,
     npmPackageName,
     templateVersion
@@ -81,12 +89,15 @@ export function runYeomanTemplatePipeline(
   templateVersion: string,
   dstDir: string,
   projectName: string,
-  jobId: string
+  jobId: string,
+  templateGeneratorPath: string,
+  BackgroundProcessManager: any
 ) {
   return new Promise<void>((resolve, reject) => {
     const w = new Worker(__filename, {
-      workerData: { npmPackageName, templateVersion, dstDir, projectName },
+      workerData: { npmPackageName, templateVersion, dstDir, projectName, templateGeneratorPath },
     });
+    w.on('error', reject);
     w.on('exit', () => {
       resolve();
     });
@@ -102,7 +113,13 @@ export function runYeomanTemplatePipeline(
 }
 
 if (!isMainThread) {
-  yeomanWork(workerData.npmPackageName, workerData.templateVersion, workerData.dstDir, workerData.projectName)
+  yeomanWork(
+    workerData.npmPackageName,
+    workerData.templateVersion,
+    workerData.dstDir,
+    workerData.projectName,
+    workerData.templateGeneratorPath
+  )
     .then(() => {
       process.exit(0);
     })

@@ -8,6 +8,7 @@ import find from 'lodash/find';
 import { UserIdentity, FileExtensions, FeedType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
+import { runYeomanTemplatePipeline } from '@bfc/server-workers/lib/templateInstallation.worker';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -18,7 +19,8 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
-import { runYeomanTemplatePipeline } from '../../workers/templateInstallation.worker';
+import { templateGeneratorPath } from '../../settings/env';
+import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -110,7 +112,15 @@ export class AssetManager {
 
       const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
 
-      await runYeomanTemplatePipeline(npmPackageName, templateVersion, dstDir, projectName, jobId);
+      await runYeomanTemplatePipeline(
+        npmPackageName,
+        templateVersion,
+        dstDir,
+        projectName,
+        jobId,
+        templateGeneratorPath,
+        BackgroundProcessManager
+      );
 
       return ref;
     } catch (err) {

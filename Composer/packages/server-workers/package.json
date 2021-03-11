@@ -1,0 +1,28 @@
+{
+  "name": "@bfc/server-workers",
+  "version": "0.0.1",
+  "description": "Background workers for the server",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "yarn clean && tsc",
+    "clean": "rimraf lib",
+    "lint": "eslint --quiet src",
+    "prepublishOnly": "npm run lint && npm run build"
+  },
+  "author": "benbro@microsoft.com",
+  "license": "MIT",
+  "dependencies": {
+    "yeoman-environment": "^2.10.3",
+    "format-message": "^6.2.3",
+    "@microsoft/bf-dialog": "4.11.0-dev.20201025.69cf2b9"
+  },
+  "devDependencies": {
+    "@types/yeoman-environment": "^2.10.2",
+    "eslint": "7.0.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
+  }
+}

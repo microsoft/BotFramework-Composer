@@ -33,6 +33,7 @@
     "packages/intellisense",
     "packages/lib/*",
     "packages/server",
+    "packages/server-workers",
     "packages/test-utils",
     "packages/tools/built-in-functions",
     "packages/tools/language-servers/*",
