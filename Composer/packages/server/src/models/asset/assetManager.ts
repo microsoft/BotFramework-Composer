@@ -26,7 +26,7 @@ let workerPath = '@bfc/server-workers/lib/templateInstallation.worker';
 if (isElectron) {
   workerPath = path.join(
     process.resourcesPath,
-    'app.asar.unpacked/node_modules/@bfc/server-workers/lib/tempalteInstallation.worker'
+    'app.asar.unpacked/node_modules/@bfc/server-workers/lib/templateInstallation.worker'
   );
 }
 
