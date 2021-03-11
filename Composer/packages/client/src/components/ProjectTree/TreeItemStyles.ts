@@ -27,7 +27,6 @@ export const projectTreeItem = css`
   outline: none;
   display: flex;
   align-items: center;
-  height: 24px;
   padding-left: 4px;
 
   label: ProjectTreeItem;
@@ -77,9 +76,6 @@ export const navContainer = (
   textWidth: number
 ) => css`
   display: inline-flex;
-  position: relative;
-  top: -6px;
-  height: 20px;
 
   ${isAnyMenuOpen
     ? ''
