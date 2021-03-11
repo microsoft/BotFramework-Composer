@@ -34,10 +34,10 @@ export const TabHeader: React.FC<TabHeaderProps> = (props) => {
     <Pivot
       aria-label="select locale"
       selectedKey={String(selectedKey)}
-      style={{ height: '100%' }}
+      style={{ height: '100%', overflow: 'auto' }}
       styles={{
-        root: { position: 'absolute', left: '20px', top: '10px' },
-        itemContainer: { height: 'calc(100% - 60px)', marginTop: '44px' },
+        root: { position: 'absolute', left: '20px', top: '0px', width: 'calc(100% - 40px)' },
+        itemContainer: { height: 'calc(100% - 60px)', marginTop: '60px', padding: '0 20px' },
       }}
       onLinkClick={handleLinkClick}
     >

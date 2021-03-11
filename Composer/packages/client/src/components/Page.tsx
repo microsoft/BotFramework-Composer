@@ -88,7 +88,7 @@ export const content = (shouldShowEditorError: boolean) => css`
   box-sizing: border-box;
 `;
 
-const contentStyle = css`
+const defaultContentStyle = css`
   padding: 20px;
   flex-grow: 1;
   height: 0;
@@ -104,6 +104,7 @@ type IPageProps = {
   toolbarItems: IToolbarItem[];
   title: string;
   headerStyle?: SerializedStyles;
+  contentStyle?: SerializedStyles;
   navRegionName: string;
   mainRegionName: string;
   shouldShowEditorError?: boolean;
@@ -131,6 +132,7 @@ const Page: React.FC<IPageProps> = (props) => {
     navRegionName,
     mainRegionName,
     headerStyle = header,
+    contentStyle = defaultContentStyle,
     shouldShowEditorError = false,
     useNewTree,
     useDebugPane,
