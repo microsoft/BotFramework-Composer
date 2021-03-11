@@ -6,8 +6,8 @@ import * as fs from 'fs';
 import { remove } from 'fs-extra';
 import formatMessage from 'format-message';
 import { UserIdentity } from '@botframework-composer/types';
-import { runDialogMerge } from '@bfc/server-workers/lib/dialogMerge.worker';
 
+import { isElectron } from '../utility/isElectron';
 import { ExtensionContext } from '../models/extension/extensionContext';
 import { LocationRef } from '../models/bot/interface';
 import settings from '../settings';
@@ -17,6 +17,17 @@ import { BotProject } from '../models/bot/botProject';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 import { Path } from './path';
+
+let workerPath = '@bfc/server-workers/lib/dialogMerge.worker';
+if (isElectron) {
+  workerPath = Path.join(
+    process.resourcesPath,
+    'app.asar.unpacked/node_modules/@bfc/server-workers/lib/dialogMerge.worker'
+  );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
+const { runDialogMerge } = require(workerPath);
 
 export function getLocationRef(location: string, storageId: string, name: string) {
   // default the path to the default folder.
