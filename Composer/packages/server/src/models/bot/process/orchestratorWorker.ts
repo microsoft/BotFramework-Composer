@@ -10,6 +10,24 @@ import { IOrchestratorBuildOutput } from '../interface';
 
 import { RequestMsg } from './types';
 
+export class LabelResolversCache {
+  // use projectId to support multiple bots.
+  projects: Map<string, Map<string, LabelResolver>> = new Map();
+
+  public set(projectId: string, value: Map<string, LabelResolver>) {
+    this.projects.set(projectId, value);
+  }
+
+  public get(projectId: string) {
+    return this.projects.get(projectId) ?? new Map<string, LabelResolver>();
+  }
+
+  public removeProject(projectId: string) {
+    this.projects.delete(projectId);
+  }
+}
+
+const cache = new LabelResolversCache();
 /**
  * Orchestrator: Build command to compile .lu files into Binary LU (.blu) snapshots.
  *
@@ -23,12 +41,13 @@ import { RequestMsg } from './types';
  */
 
 export async function orchestratorBuilder(
+  projectId: string,
   files: FileInfo[],
   modelPath: string,
   isDialog = true,
   fullEmbedding = false
 ): Promise<IOrchestratorBuildOutput> {
-  const orchestratorLabelResolvers = new Map<string, LabelResolver>();
+  const orchestratorLabelResolvers = cache.get(projectId);
 
   const luObjects = files
     .filter((fi) => fi.name.endsWith('.lu') && fi.content)
@@ -36,8 +55,7 @@ export async function orchestratorBuilder(
       id: fi.name,
       content: fi.content,
     }));
-
-  return await Orchestrator.buildAsync(
+  const result = await Orchestrator.buildAsync(
     modelPath,
     luObjects,
     orchestratorLabelResolvers,
@@ -46,6 +64,8 @@ export async function orchestratorBuilder(
     null,
     fullEmbedding
   );
+  cache.set(projectId, orchestratorLabelResolvers);
+  return result;
 }
 
 export async function writeSnapshot(output: IOrchestratorBuildOutput, generatedFolderPath: string) {
@@ -65,8 +85,8 @@ const handleMessage = async (msg: RequestMsg) => {
   try {
     switch (payload.type) {
       case 'build': {
-        const { files, modelPath, generatedFolderPath } = payload;
-        const result = await orchestratorBuilder(files, modelPath);
+        const { files, modelPath, generatedFolderPath, projectId } = payload;
+        const result = await orchestratorBuilder(projectId, files, modelPath);
         const snapshots = await writeSnapshot(result, generatedFolderPath);
         process.send?.({ id: msg.id, payload: snapshots });
         break;
