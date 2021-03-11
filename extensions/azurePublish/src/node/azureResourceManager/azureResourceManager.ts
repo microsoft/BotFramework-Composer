@@ -932,13 +932,14 @@ export class AzureResourceMananger {
           displayName: config.displayName ?? config.name,
           endpoint: config.endpoint ?? '',
           msaAppId: config.appId ?? '',
+          openWithHint: 'bfcomposer://',
         },
         sku: {
           name: 'F0',
         },
         name: config.name,
         location: 'global',
-        kind: 'bot',
+        kind: 'azurebot',
         tags: {
           webapp: config.webAppHostname,
         },
