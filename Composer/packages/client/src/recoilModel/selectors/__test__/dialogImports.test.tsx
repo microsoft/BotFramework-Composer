@@ -51,22 +51,22 @@ describe('dialogImports selectors', () => {
     const fileImports = getLanguageFileImports('name1', getFile);
     expect(fileImports).toEqual([
       {
-        displayName: 'display-name2.lg',
+        displayName: 'name2',
         id: 'name2',
         importPath: '../files/name2.lg',
       },
       {
-        displayName: 'display-name3.lg',
+        displayName: 'name3',
         id: 'name3',
         importPath: '../files/name3.lg',
       },
       {
-        displayName: 'display-name4.lg',
+        displayName: 'name4',
         id: 'name4',
         importPath: '../files/name4.lg',
       },
       {
-        displayName: 'display-name5-entity.lg',
+        displayName: 'name5-entity',
         id: 'name5-entity',
         importPath: '../files/name5-entity.lg',
       },

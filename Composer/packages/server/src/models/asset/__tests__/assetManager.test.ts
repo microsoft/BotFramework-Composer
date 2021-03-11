@@ -167,7 +167,7 @@ describe('assetManager', () => {
         '0'
       );
       expect(newBotLocationRef).toStrictEqual({
-        path: '/path/to/npmbot/sampleConversationalCore',
+        path: '/path/to/npmbot',
         storageId: 'default',
       });
     });
