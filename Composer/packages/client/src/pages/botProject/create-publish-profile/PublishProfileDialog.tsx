@@ -8,7 +8,6 @@ import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { useRecoilValue } from 'recoil';
 
 import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
@@ -31,26 +30,6 @@ type PublishProfileDialogProps = {
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
 };
-type ResourcesItem = {
-  description: string;
-  text: string;
-  tier: string;
-  group: string;
-  key: string;
-  required: boolean;
-  [key: string]: any;
-};
-type ExtensionState = AzureExtensionState; // can expand to pva like | PVAExtensionState
-type AzureExtensionState = {
-  subscriptionId: string;
-  resourceGroup: string;
-  hostName: string;
-  location: string;
-  luisLocation: string;
-  enabledResources: ResourcesItem[];
-  requiredResources: ResourcesItem[];
-  choice: IChoiceGroupOption;
-};
 
 const Page = {
   ProfileForm: Symbol('form'),
@@ -61,7 +40,6 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
-  const [extensionState, setExtensionState] = useState<ExtensionState | undefined>();
 
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
@@ -98,7 +76,9 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   // setup plugin APIs
   useEffect(() => {
-    PluginAPI.publish.closeDialog = closeDialog;
+    PluginAPI.publish.closeDialog = () => {
+      closeDialog();
+    };
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle({
@@ -118,9 +98,6 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
     };
-    PluginAPI.publish.setExtensionState = <T extends {}>(value: T): void => {
-      setExtensionState(value as any);
-    };
     PluginAPI.publish.getTenantIdFromCache = () => {
       return getTenantIdFromCache();
     };
@@ -135,15 +112,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.currentProjectId = () => {
       return projectId;
     };
-    PluginAPI.publish.getExtensionState = <T extends {}>(): T | undefined => {
-      return extensionState as T | undefined;
-    };
     if (current?.item.type) {
       setPage(Page.ConfigProvision);
     } else {
       setPage(Page.ProfileForm);
     }
-  }, [current, projectId, extensionState]);
+  }, [current, projectId]);
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
@@ -162,38 +136,36 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   );
 
   useEffect(() => {
-    if (current?.item?.type) {
-      PluginAPI.publish.getType = () => {
-        return current?.item?.type;
-      };
-      PluginAPI.publish.getSchema = () => {
-        return types.find((t) => t.name === current?.item?.type)?.schema;
-      };
-      PluginAPI.publish.savePublishConfig = (config) => {
-        savePublishTarget(current?.item.name, current?.item?.type, JSON.stringify(config) || '{}');
-      };
-      PluginAPI.publish.startProvision = async (config) => {
-        const fullConfig = { ...config, name: current.item.name, type: current.item.type };
-        let arm, graph;
-        if (!isGetTokenFromUser()) {
-          // login or get token implicit
-          let tenantId = getTenantIdFromCache();
-          if (!tenantId) {
-            const tenants = await AuthClient.getTenants();
-            tenantId = tenants?.[0]?.tenantId;
-            setTenantId(tenantId);
-          }
-          arm = await AuthClient.getARMTokenForTenant(tenantId);
-          graph = await AuthClient.getAccessToken(graphScopes);
-        } else {
-          // get token from cache
-          arm = getTokenFromCache('accessToken');
-          graph = getTokenFromCache('graphToken');
+    PluginAPI.publish.getType = () => {
+      return targetType;
+    };
+    PluginAPI.publish.getSchema = () => {
+      return types.find((t) => t.name === targetType)?.schema;
+    };
+    PluginAPI.publish.savePublishConfig = (config) => {
+      savePublishTarget(name, targetType, JSON.stringify(config) || '{}');
+    };
+    PluginAPI.publish.startProvision = async (config) => {
+      const fullConfig = { ...config, name: name, type: targetType };
+      let arm, graph;
+      if (!isGetTokenFromUser()) {
+        // login or get token implicit
+        let tenantId = getTenantIdFromCache();
+        if (!tenantId) {
+          const tenants = await AuthClient.getTenants();
+          tenantId = tenants?.[0]?.tenantId;
+          setTenantId(tenantId);
         }
-        provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
-      };
-    }
-  }, [current, types, savePublishTarget]);
+        arm = await AuthClient.getARMTokenForTenant(tenantId);
+        graph = await AuthClient.getAccessToken(graphScopes);
+      } else {
+        // get token from cache
+        arm = getTokenFromCache('accessToken');
+        graph = getTokenFromCache('graphToken');
+      }
+      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+    };
+  }, [name, targetType, types, savePublishTarget]);
 
   return (
     <Fragment>
@@ -207,7 +179,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         modalProps={{
           isBlocking: true,
         }}
-        onDismiss={closeDialog}
+        onDismiss={() => {
+          closeDialog();
+          // remove extension state when parent component destroy
+          window.localStorage.removeItem(`${targetType}:state`);
+        }}
       >
         {page !== Page.ConfigProvision && (
           <div>

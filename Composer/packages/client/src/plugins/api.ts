@@ -35,8 +35,6 @@ interface PublishAPI {
   savePublishConfig?: (config: PublishConfig) => void;
   getTokenFromCache?: () => { accessToken: string; graphToken: string };
   isGetTokenFromUser?: () => boolean;
-  getExtensionState?: <T extends {}>() => T | undefined;
-  setExtensionState?: <T = any>(value: T) => void;
   getTenantIdFromCache?: () => string;
   setTenantId?: (value: string) => void;
 }
@@ -63,8 +61,6 @@ class API implements IAPI {
       savePublishConfig: undefined,
       getTokenFromCache: undefined,
       isGetTokenFromUser: undefined,
-      getExtensionState: undefined,
-      setExtensionState: undefined,
       getTenantIdFromCache: undefined,
       setTenantId: undefined,
     };

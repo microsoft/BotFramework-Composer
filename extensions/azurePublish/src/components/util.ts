@@ -60,3 +60,52 @@ export const getExistResources = (config) => {
     return result;
   } else return [];
 };
+
+const defaultExtensionState = {
+  subscriptionId: '',
+  resourceGroup: '',
+  hostName: '',
+  location: '',
+  luisLocation: '',
+  enabledResources: [],
+  requiredResources: [],
+  choice: { key: 'create', text: 'Create new Azure resources' },
+};
+
+type ResourcesItem = {
+  description: string;
+  text: string;
+  tier: string;
+  group: string;
+  key: string;
+  required: boolean;
+  [key: string]: any;
+};
+
+type AzureExtensionState = {
+  subscriptionId: string;
+  resourceGroup: string;
+  hostName: string;
+  location: string;
+  luisLocation: string;
+  enabledResources: ResourcesItem[];
+  requiredResources: ResourcesItem[];
+  choice: { key: string; text: string };
+};
+
+export const getExtensionState = (): AzureExtensionState => {
+  const state = window.localStorage.getItem(`${window.Composer?.__extensionId}:state`);
+  if (state) {
+    return JSON.parse(state);
+  } else {
+    return defaultExtensionState;
+  }
+};
+
+export const setExtensionState = (value) => {
+  window.localStorage.setItem(`${window.Composer?.__extensionId}:state`, JSON.stringify(value));
+};
+
+export const clearExtensionState = () => {
+  window.localStorage.removeItem(`${window.Composer?.__extensionId}:state`);
+};

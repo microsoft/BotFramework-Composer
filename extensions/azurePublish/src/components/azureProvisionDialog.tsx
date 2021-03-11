@@ -42,7 +42,14 @@ import {
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
 } from './api';
-import { getExistResources, removePlaceholder, decodeToken } from './util';
+import {
+  getExistResources,
+  removePlaceholder,
+  decodeToken,
+  getExtensionState,
+  setExtensionState,
+  clearExtensionState,
+} from './util';
 
 const iconStyle = (required) => {
   return {
@@ -235,16 +242,7 @@ const reviewCols: IColumn[] = [
     isPadded: true,
   },
 ];
-const defaultExtensionState = {
-  subscriptionId: '',
-  resourceGroup: '',
-  hostName: '',
-  location: '',
-  luisLocation: '',
-  enabledResources: [],
-  requiredResources: [],
-  choice: choiceOptions[0],
-};
+
 export const AzureProvisionDialog: React.FC = () => {
   const {
     currentProjectId,
@@ -258,15 +256,13 @@ export const AzureProvisionDialog: React.FC = () => {
     getType,
     getTokenFromCache,
     isGetTokenFromUser,
-    setExtensionState,
-    getExtensionState,
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
   const currentConfig = removePlaceholder(publishConfig);
-  const extensionState = { ...defaultExtensionState, ...getExtensionState() };
+  const extensionState = getExtensionState();
 
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
@@ -282,9 +278,9 @@ export const AzureProvisionDialog: React.FC = () => {
   const [currentHostName, setHostName] = useState(extensionState.hostName);
   const [errorHostName, setErrorHostName] = useState('');
   const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
-  const [currentLocation, setLocation] = useState<string>(extensionState.location || currentConfig?.region);
+  const [currentLocation, setLocation] = useState<string>(currentConfig?.region || extensionState.location);
   const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(
-    extensionState.luisLocation || currentConfig?.settings?.luis?.region
+    currentConfig?.settings?.luis?.region || extensionState.luisLocation
   );
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
   const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>(extensionState.enabledResources); // create from optional list
@@ -560,14 +556,16 @@ export const AzureProvisionDialog: React.FC = () => {
       // call back to the main Composer API to begin this process...
       startProvision(options);
       closeDialog();
+      clearExtensionState();
     },
     []
   );
 
   const onSave = useMemo(
-    () => () => {
+    () => async () => {
       savePublishConfig(importConfig);
       closeDialog();
+      clearExtensionState();
     },
     [importConfig]
   );
@@ -823,7 +821,6 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
-                // setExtensionState
                 setExtensionState({
                   subscriptionId: currentSubscription,
                   resourceGroup: currentResourceGroup,
