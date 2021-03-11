@@ -185,12 +185,7 @@ export const ProjectTree: React.FC<Props> = ({
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
 
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
-  const selectorOptions = {
-    showLgImports: options.showLgImports ?? false,
-    showLuImports: options.showLuImports ?? false,
-  };
-  const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelectorFamily(selectorOptions));
-
+  const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelectorFamily);
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
@@ -504,28 +499,21 @@ export const ProjectTree: React.FC<Props> = ({
       : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, 1);
   };
 
-  const renderLgImport = (
-    item: LanguageFileImport,
-    dialog: DialogInfo,
-    projectId: string,
-    dialogLink: TreeLink
-  ): React.ReactNode => {
+  const renderLgImport = (item: LanguageFileImport, projectId: string): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
-      dialogId: dialog.id,
       lgFileId: item.id,
+      dialogId: 'all',
       displayName: item.displayName ?? item.id,
       diagnostics: [],
       isRoot: false,
-      parentLink: dialogLink,
       isRemote: false,
     };
 
     return (
       <TreeItem
         key={`lg_${item.id}`}
-        dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
         icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
@@ -540,36 +528,29 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderLgImports = (dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
+  const renderLgImports = (dialog: DialogInfo, projectId: string) => {
     return lgImportsByProjectByDialog[projectId][dialog.id]
       .filter((lgImport) => filterMatch(dialog.displayName) || filterMatch(lgImport.displayName))
       .map((lgImport) => {
-        return renderLgImport(lgImport, dialog, projectId, dialogLink);
+        return renderLgImport(lgImport, projectId);
       });
   };
 
-  const renderLuImport = (
-    item: LanguageFileImport,
-    dialog: DialogInfo,
-    projectId: string,
-    dialogLink: TreeLink
-  ): React.ReactNode => {
+  const renderLuImport = (item: LanguageFileImport, projectId: string): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
-      dialogId: dialog.id,
       luFileId: item.id,
       displayName: item.displayName ?? item.id,
+      dialogId: 'all',
       diagnostics: [],
       isRoot: false,
-      parentLink: dialogLink,
       isRemote: false,
     };
 
     return (
       <TreeItem
         key={`lu_${item.id}`}
-        dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
         icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
@@ -584,16 +565,16 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderLuImports = (dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
+  const renderLuImports = (dialog: DialogInfo, projectId: string) => {
     return luImportsByProjectByDialog[projectId][dialog.id]
       .filter((luImport) => filterMatch(dialog.displayName) || filterMatch(luImport.displayName))
       .map((luImport) => {
-        return renderLuImport(luImport, dialog, projectId, dialogLink);
+        return renderLuImport(luImport, projectId);
       });
   };
 
   const createDetailsTree = (bot: TreeDataPerProject, startDepth: number) => {
-    const { projectId } = bot;
+    const { projectId, lgImportsList, luImportsList } = bot;
     const dialogs = bot.sortedDialogs;
 
     const filteredDialogs =
@@ -605,56 +586,73 @@ export const ProjectTree: React.FC<Props> = ({
           );
     const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
 
-    if (options.showTriggers || options.showLgImports || options.showLuImports) {
-      return [
-        ...commonLink,
-        ...filteredDialogs.map((dialog: DialogInfo) => {
-          const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
-          const key = 'dialog-' + dialog.id;
-          let lgImports, luImports;
-          if (options.showLgImports) {
-            lgImports = renderLgImports(dialog, projectId, dialogLink);
-          }
+    const importedLgLinks = options.showLgImports ? lgImportsList.map((file) => renderLgImport(file, projectId)) : [];
+    const importedLuLinks = options.showLuImports ? luImportsList.map((file) => renderLuImport(file, projectId)) : [];
 
-          if (options.showLuImports) {
-            luImports = renderLuImports(dialog, projectId, dialogLink);
-          }
+    return [
+      ...commonLink,
+      ...importedLgLinks,
+      ...importedLuLinks,
+      ...filteredDialogs.map((dialog: DialogInfo) => {
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
+        const key = 'dialog-' + dialog.id;
 
-          const showExpanded =
-            options.showTriggers ||
-            (options.showLgImports && lgImports.length > 0) ||
-            (options.showLuImports && luImports.length > 0);
-          if (showExpanded) {
-            return (
-              <ExpandableNode
-                key={key}
-                defaultState={getPageElement(key)}
-                depth={startDepth}
-                detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
-                isActive={doesLinkMatch(dialogLink, selectedLink)}
-                summary={summaryElement}
-                onToggle={(newState) => setPageElement(key, newState)}
-              >
-                <div>
-                  {options.showTriggers && renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}
-                  {options.showLgImports && lgImports}
-                  {options.showLuImports && luImports}
-                </div>
-              </ExpandableNode>
-            );
-          } else {
-            return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
-          }
-        }),
-      ];
-    } else {
-      return [
-        ...commonLink,
-        ...filteredDialogs.map(
-          (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement
-        ),
-      ];
-    }
+        let lgImports, luImports;
+        if (options.showLgImports) {
+          lgImports = renderLgImports(dialog, projectId);
+        }
+
+        if (options.showLuImports) {
+          luImports = renderLuImports(dialog, projectId);
+        }
+
+        if (options.showTriggers) {
+          return (
+            <ExpandableNode
+              key={key}
+              defaultState={getPageElement(key)}
+              depth={startDepth}
+              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
+              isActive={doesLinkMatch(dialogLink, selectedLink)}
+              summary={summaryElement}
+              onToggle={(newState) => setPageElement(key, newState)}
+            >
+              <div>{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
+            </ExpandableNode>
+          );
+        } else if (options.showLgImports && lgImports.length > 0 && dialog.isFormDialog) {
+          return (
+            <ExpandableNode
+              key={key}
+              defaultState={getPageElement(key)}
+              depth={startDepth}
+              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
+              isActive={doesLinkMatch(dialogLink, selectedLink)}
+              summary={summaryElement}
+              onToggle={(newState) => setPageElement(key, newState)}
+            >
+              <div>{lgImports}</div>
+            </ExpandableNode>
+          );
+        } else if (options.showLuImports && luImports.length > 0 && dialog.isFormDialog) {
+          return (
+            <ExpandableNode
+              key={key}
+              defaultState={getPageElement(key)}
+              depth={startDepth}
+              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
+              isActive={doesLinkMatch(dialogLink, selectedLink)}
+              summary={summaryElement}
+              onToggle={(newState) => setPageElement(key, newState)}
+            >
+              <div>{luImports}</div>
+            </ExpandableNode>
+          );
+        } else {
+          return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
+        }
+      }),
+    ];
   };
 
   const createBotSubtree = (bot: TreeDataPerProject) => {
