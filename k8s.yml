@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: composer
+  namespace: botframework
+spec:
+  selector:
+    matchLabels:
+      app: composer
+  serviceName: composer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: composer
+    spec:
+      containers:
+      - name: composer
+        image: aistudio.azurecr.io/botframework-composer:latest
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: appdata
+          mountPath: /AppData
+        - name: bots
+          mountPath: /Bots
+        - name: runtime
+          mountPath: /Runtime
+        env:
+        - name: COMPOSER_BOTS_FOLDER
+          value: /Bots
+        - name: COMPOSER_RUNTIME_FOLDER
+          value: /Runtime
+        - name: COMPOSER_APP_DATA
+          value: /AppData/data.json
+        - name: PORT
+          value: "3000"
+        - name: BOT_ENDPOINT
+          value: http://0.0.0.0:3979
+  volumeClaimTemplates:
+  - metadata:
+      name: appdata
+    spec:
+      storageClassName: azurefile
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: bots
+    spec:
+      storageClassName: azurefile
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: runtime
+    spec:
+      storageClassName: azurefile
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 3Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: composer
+  namespace: botframework
+spec:
+  selector:
+    app: composer
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: composer
+  namespace: botframework
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+  - hosts:
+    - composer.k8s.az.standardlabs.dev
+    secretName: composer-tls
+  rules:
+  - host: composer.k8s.az.standardlabs.dev
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: composer
+          servicePort: 3000
