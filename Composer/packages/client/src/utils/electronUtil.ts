@@ -4,6 +4,7 @@ import { PublishTarget } from '@bfc/shared';
 
 import { armScopes } from '../constants';
 
+import httpClient from './httpUtil';
 import { AuthClient } from './authClient';
 /**
  * Returns true if the client is embedded in the Composer Electron environment.
@@ -30,46 +31,21 @@ export async function getPublishProfileFromPayload(
   profile: Profile,
   source: string
 ): Promise<PublishTarget | undefined> {
-  switch (source) {
-    case 'abs': {
-      const appId = profile.appId;
-      // parse subscriptionId ... from profile
-      const temp = { ...profile };
-      const subs = profile.resourceId.match(/subscriptions\/([\w-]*)\//);
-      const groups = profile.resourceId.match(/resourceGroups\/([^/]*)/);
-      const names = profile.resourceId.match(/botServices\/([^/]*)/);
-      temp.subscriptionId = (subs && subs.length > 0 && subs[1]) || '';
-      temp.resourceGroup = (groups && groups.length > 0 && groups[1]) || '';
-      temp.botName = (names && names.length > 0 && names[1]) || '';
-      delete temp.appId;
-
-      //TODO. handle key vault hint
-      const resu = await AuthClient.getAccessToken(armScopes);
-      console.log(resu);
-
-      return {
-        name: `${source}-${profile.botName}`,
-        type: 'azurePublish',
-        configuration: JSON.stringify({
-          hostname: '',
-          runtimeIdentifier: 'win-x64',
-          settings: {
-            MicrosoftAppId: appId,
-          },
-          ...temp,
-        }),
-      };
-    }
+  try {
+    const resutl = await httpClient.post(`/import/${source}/generateProfile`, profile);
+    console.log(resutl);
+    return resutl.data;
+  } catch (error) {
+    console.log(error);
   }
 }
 
-export function getAliasFromPayload(source: string, payload: string): string | undefined {
-  switch (source) {
-    case 'abs':
-      if (payload) {
-        const profile: ABSProfile = JSON.parse(payload);
-        const alias = `${source}-${profile.botName}-${profile.appId}`;
-        return alias;
-      }
+export async function getAliasFromPayload(source: string, payload: string): Promise<string | undefined> {
+  try {
+    const resutl = await httpClient.post(`/import/${source}/getAlias`, JSON.parse(payload));
+    console.log(resutl);
+    return resutl.data.alias;
+  } catch (error) {
+    console.log(error);
   }
 }

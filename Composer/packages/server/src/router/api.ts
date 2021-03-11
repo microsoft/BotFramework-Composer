@@ -122,6 +122,8 @@ router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 // importing
 router.post('/import/:source', ImportController.startImport);
 router.post('/import/:source/authenticate', ImportController.authenticate);
+router.post('/import/:source/generateProfile', ImportController.generateProfile);
+router.post('/import/:source/getAlias', ImportController.getAlias);
 
 // Process status
 router.get('/status/:jobId', StatusController.getStatus);

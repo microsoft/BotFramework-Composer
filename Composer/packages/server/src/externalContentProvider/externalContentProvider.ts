@@ -53,4 +53,9 @@ export abstract class ExternalContentProvider<T extends IContentProviderMetadata
    * (Optional) Performs any necessary authentication for the service and returns an access token.
    */
   abstract authenticate?(): Promise<string>;
+
+  /**
+   * get different type of profiles base on provider
+   */
+  abstract generateProfile?(): Promise<unknown>;
 }

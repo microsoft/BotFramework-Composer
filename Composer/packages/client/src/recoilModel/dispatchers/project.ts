@@ -315,7 +315,7 @@ export const projectDispatcher = () => {
       if (profile) {
         // ABS Create Flow, update publishProfile after create project
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const newProfile = getPublishProfileFromPayload(profile, source);
+        const newProfile = await getPublishProfileFromPayload(profile, source);
 
         newProfile && dispatcher.setPublishTargets([newProfile], projectId);
       }
