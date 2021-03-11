@@ -7,6 +7,7 @@ import { DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 import { offsetRange } from '@bfc/indexers';
+import { LGResource, Templates } from 'botbuilder-lg';
 
 const { parseFile } = parser;
 
@@ -254,4 +255,30 @@ export function extractVaribles(content: string): string[] {
   }
 
   return varibles;
+}
+
+function findExpr(pst: any, result: string[]): void {
+  const exprRegex = /\$\{.*\}/;
+  if (pst.childCount === 0) {
+    if (exprRegex.test(pst.text)) {
+      result.push(pst.text.substr(2, pst.text.length - 3));
+    }
+  } else {
+    const count = pst.childCount;
+    for (let i = 0; i < count; i++) {
+      const child = pst.getChild(i);
+      findExpr(child, result);
+    }
+  }
+}
+
+function findAllExprs(content: string): string[] {
+  const result = [];
+  const templates = Templates.parseResource(new LGResource('id', 'name', content));
+  templates.allTemplates.forEach((t) => {
+    const parseTree = t.templateBodyParseTree;
+    findExpr(parseTree, result);
+  });
+
+  return result;
 }
