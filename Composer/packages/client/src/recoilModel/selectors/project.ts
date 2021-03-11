@@ -274,8 +274,8 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
   },
 });
 
-export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
-  key: 'projectTreeSelectorFamily',
+export const projectTreeSelector = selector<TreeDataPerProject[]>({
+  key: 'projectTreeSelector',
   get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
     return projectIds.map((projectId: string) => {
