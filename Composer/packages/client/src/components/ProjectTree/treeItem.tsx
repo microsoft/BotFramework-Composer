@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useState, useCallback } from 'react';
 import { FontSizes } from '@uifabric/fluent-theme';
-import { DefaultPalette } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -13,205 +12,30 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ICalloutContentStyles, Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
 import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
-
-// -------------------- Styles -------------------- //
-
-const projectTreeItemContainer = css`
-  outline: none;
-  :focus {
-    outline: rgb(102, 102, 102) solid 1px;
-    z-index: 1;
-  }
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: left;
-  cursor: pointer;
-
-  label: ProjectTreeItemContainer;
-`;
-
-const projectTreeItem = css`
-  outline: none;
-  display: flex;
-  align-items: center;
-  height: 24px;
-  padding-left: 4px;
-
-  label: ProjectTreeItem;
-`;
-
-export const moreMenu: Partial<ICalloutContentStyles> = {
-  root: {
-    marginTop: '-1px',
-  },
-};
-
-export const menuStyle: Partial<IContextualMenuStyles> = {
-  subComponentStyles: {
-    menuItem: {},
-    callout: moreMenu,
-  },
-};
-
-export const moreButton = (isActive: boolean): IButtonStyles => {
-  return {
-    root: {
-      alignSelf: 'stretch',
-      visibility: isActive ? 'visible' : 'hidden',
-      height: 24,
-      width: 24,
-      color: '#000',
-    },
-    menuIcon: {
-      fontSize: '12px',
-      color: NeutralColors.gray160,
-    },
-    rootHovered: {
-      color: DefaultPalette.accent,
-      selectors: {
-        '.ms-Button-menuIcon': {
-          fontWeight: 600,
-        },
-      },
-    },
-  };
-};
-
-const navContainer = (isAnyMenuOpen: boolean, isActive: boolean, menuOpenHere: boolean, textWidth: number) => css`
-  ${isAnyMenuOpen
-    ? ''
-    : `&:hover {
-  background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
-
-  .dialog-more-btn {
-    visibility: visible;
-  }
-  .action-btn {
-    visibility: visible;
-  }
-  .treeItem-text {
-    max-width: ${textWidth}px;
-  }
-  }`};
-  background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
-`;
-
-const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
-  label: navItem;
-  position: relative;
-  height: 24px;
-  font-size: 12px;
-  padding-left: ${padLeft}px;
-  margin-left: ${marginLeft}px;
-  opacity: ${isBroken ? 0.5 : 1};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  :hover {
-    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
-  }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
-
-  &:focus {
-    outline: none;
-    .ms-Fabric--isFocusVisible &::after {
-      top: 0px;
-      right: 1px;
-      bottom: 0px;
-      left: 1px;
-      content: '';
-      position: absolute;
-      z-index: 1;
-      border: 1px solid ${NeutralColors.white};
-      border-image: initial;
-      outline: rgb(102, 102, 102) solid 1px;
-    }
-  }
-`;
-
-export const diagnosticLink = css`
-  display: flex;
-  align-content: start;
-  p {
-    margin: 2px 5px;
-    max-width: 300px;
-  }
-`;
-
-export const overflowSet = (isBroken: boolean) => css`
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  justify-content: space-between;
-  display: flex;
-  i {
-    color: ${isBroken ? SharedColors.red20 : 'inherit'};
-  }
-`;
-
-const moreButtonContainer = {
-  root: {
-    lineHeight: '1',
-    display: 'flex' as 'flex',
-  },
-};
-
-const statusIcon = {
-  fontSize: 15,
-  paddingLeft: 8,
-};
-
-const warningIcon = {
-  ...statusIcon,
-  color: '#BE880A',
-};
-
-const errorIcon = {
-  ...statusIcon,
-  color: '#CC3F3F',
-};
-
-const diagnosticIcon = {
-  width: '20px',
-  height: '20px',
-  fontSize: '12px',
-  lineHeight: '20px',
-  textAlign: 'center' as 'center',
-};
-
-const diagnosticErrorIcon = {
-  ...diagnosticIcon,
-  color: '#A80000',
-  background: '#FED9CC',
-};
-
-const diagnosticWarningIcon = {
-  ...diagnosticIcon,
-  color: '#8A8780',
-  background: '#FFF4CE',
-};
-const itemName = (nameWidth: number) => css`
-  max-width: ${nameWidth}px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 1;
-`;
-
-const calloutRootStyle = css`
-  padding: 11px;
-`;
+import {
+  calloutRootStyle,
+  diagnosticLink,
+  diagnosticWarningIcon,
+  diagnosticErrorIcon,
+  warningIcon,
+  errorIcon,
+  projectTreeItem,
+  projectTreeItemContainer,
+  itemName,
+  moreButton,
+  moreButtonContainer,
+  navContainer,
+  navItem,
+  menuStyle,
+  overflowSet,
+} from './TreeItemStyles';
 
 // -------------------- TreeItem -------------------- //
 
@@ -495,7 +319,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   );
 
   return (
-    <div
+    <span
       css={navContainer(
         isMenuOpen,
         isActive,
@@ -503,7 +327,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover
       )}
     >
-      <div
+      <span
         aria-label={a11yLabel}
         css={navItem(isBroken, padLeft, marginLeft, isActive)}
         data-testid={a11yLabel}
@@ -518,7 +342,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           }
         }}
       >
-        <div style={{ minWidth: `${spacerWidth}px` }}></div>
+        <span style={{ minWidth: `${spacerWidth}px` }}></span>
         <OverflowSet
           //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
           //remove this at that time
@@ -546,7 +370,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             setThisItemSelected
           )}
         />
-      </div>
-    </div>
+      </span>
+    </span>
   );
 };

@@ -20,7 +20,7 @@ import {
   TreeDataPerProject,
   jsonSchemaFilesByProjectIdSelector,
   pageElementState,
-  projectTreeSelectorFamily,
+  projectTreeSelector,
 } from '../../recoilModel';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { useFeatureFlag } from '../../utils/hooks';
@@ -70,7 +70,6 @@ const tree = css`
 `;
 
 const headerCSS = (label: string, isActive?: boolean) => css`
-  margin-top: -6px;
   width: 100%;
   label: ${label};
   :hover {
@@ -185,7 +184,7 @@ export const ProjectTree: React.FC<Props> = ({
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
 
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
-  const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelectorFamily);
+  const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelector);
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
 
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
