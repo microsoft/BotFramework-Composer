@@ -78,7 +78,47 @@ async function startImport(req: ImportRequest, res: Response) {
   }
 }
 
+async function generateProfile(req: ImportRequest, res: Response) {
+  const { source } = req.params;
+  const payload = req.body;
+  console.log(source);
+  console.log(payload);
+
+  const contentProvider = contentProviderFactory.getProvider({ kind: source, metadata: payload });
+  if (contentProvider?.generateProfile) {
+    try {
+      contentProvider.generateProfile();
+    } catch (err) {
+      res.status(500).json({ message: err.stack });
+    }
+  } else {
+    res.status(400).json({ message: 'No content provider found for source: ' + source });
+  }
+}
+
+async function getAlias(req: ImportRequest, res: Response) {
+  const { source } = req.params;
+  console.log(req);
+  const payload = req.body;
+  console.log(source);
+  console.log(payload);
+  const contentProvider = contentProviderFactory.getProvider({ kind: source, metadata: payload });
+  if (contentProvider?.getAlias) {
+    try {
+      const alias = await contentProvider.getAlias();
+      console.log(alias);
+      res.status(200).json({ alias });
+    } catch (error) {
+      res.status(500).json({ message: error.stack });
+    }
+  } else {
+    res.status(400).json({ message: 'No content provider found for source: ' + source });
+  }
+}
+
 export const ImportController = {
   authenticate,
   startImport,
+  generateProfile,
+  getAlias,
 };
