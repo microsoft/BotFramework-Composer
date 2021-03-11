@@ -474,7 +474,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
+        {renderTriggerList(triggers, dialog, projectId, link, 1)}
       </ExpandableNode>
     );
   };
@@ -616,7 +616,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
+              {renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}
             </ExpandableNode>
           );
         } else if (options.showLgImports && lgImports.length > 0 && dialog.isFormDialog) {
@@ -630,7 +630,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{lgImports}</div>
+              {lgImports}
             </ExpandableNode>
           );
         } else if (options.showLuImports && luImports.length > 0 && dialog.isFormDialog) {
@@ -644,7 +644,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{luImports}</div>
+              {luImports}
             </ExpandableNode>
           );
         } else {
@@ -706,7 +706,7 @@ export const ProjectTree: React.FC<Props> = ({
           summary={projectHeader}
           onToggle={(newState) => setPageElement(key, newState)}
         >
-          <div>{createDetailsTree(bot, 1)}</div>
+          {createDetailsTree(bot, 1)}
         </ExpandableNode>
       );
     } else if (options.showRemote) {

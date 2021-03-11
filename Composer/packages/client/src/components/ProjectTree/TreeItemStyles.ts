@@ -137,8 +137,6 @@ export const diagnosticLink = css`
 `;
 
 export const overflowSet = (isBroken: boolean) => css`
-  width: 100%;
-  height: 100%;
   box-sizing: border-box;
   justify-content: space-between;
   display: inline-flex;
