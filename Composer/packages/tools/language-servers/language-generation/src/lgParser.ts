@@ -45,7 +45,7 @@ class LgParserWithoutWorker {
     return { suggestEntities: uniq(suggestEntities) };
   }
 
-  public async extractLGVariables(curCbangedFile: string | undefined, lgFiles: string[]) {
+  public extractLGVariables(curCbangedFile: string | undefined, lgFiles: string[]) {
     let result: string[] = [];
     if (curCbangedFile) {
       result = findAllVariables(curCbangedFile);

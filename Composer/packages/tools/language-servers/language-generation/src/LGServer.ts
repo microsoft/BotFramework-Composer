@@ -569,13 +569,16 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
-    const memoryVariblesRootCompletionList = Object.keys(this._mergedVariables).map((e) => {
-      return {
-        label: e.toString(),
-        kind: CompletionItemKind.Property,
-        insertText: e.toString(),
-        documentation: '',
-      };
+    const memoryVariblesRootCompletionList: CompletionItem[] = [];
+    Object.keys(this._mergedVariables).forEach((e) => {
+      if (e.length > 1) {
+        memoryVariblesRootCompletionList.push({
+          label: e.toString(),
+          kind: CompletionItemKind.Property,
+          insertText: e.toString(),
+          documentation: '',
+        });
+      }
     });
 
     if (!wordAtCurRange || !endWithDot) {
@@ -848,24 +851,22 @@ export class LGServer {
     }
   }
 
-  protected updateLGVariables(document: TextDocument) {
-    setTimeout(async () => {
-      const variables = uniq((await this._lgParser.extractLGVariables(document.getText(), [])).lgVariables);
-      this._curDefinedVariblesInLG = {};
-      variables.forEach((variable) => {
-        const propertyList = variable.split('.');
-        if (propertyList.length >= 1) {
-          this.updateObject(propertyList, this._curDefinedVariblesInLG);
-        }
-      });
-
-      this._mergedVariables = merge(
-        {},
-        this.memoryVariables,
-        this._curDefinedVariblesInLG,
-        this._otherDefinedVariblesInLG
-      );
+  protected async updateLGVariables(document: TextDocument) {
+    const variables = uniq((await this._lgParser.extractLGVariables(document.getText(), [])).lgVariables);
+    this._curDefinedVariblesInLG = {};
+    variables.forEach((variable) => {
+      const propertyList = variable.split('.');
+      if (propertyList.length >= 1) {
+        this.updateObject(propertyList, this._curDefinedVariblesInLG);
+      }
     });
+
+    this._mergedVariables = merge(
+      {},
+      this.memoryVariables,
+      this._curDefinedVariblesInLG,
+      this._otherDefinedVariblesInLG
+    );
   }
 
   protected validate(document: TextDocument): void {
