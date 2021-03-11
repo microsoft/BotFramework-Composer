@@ -11,11 +11,11 @@ const plugins = {
   uiSchema: {
     foo: {
       form: {},
-      menu: 'foo menu config',
+      menu: { label: 'foo menu config' },
     },
     bar: {
       form: {},
-      menu: 'bar menu config',
+      menu: { label: 'bar menu config' },
     },
   },
 };
@@ -43,8 +43,8 @@ describe('useMenuConfig', () => {
     const { result } = renderHook(() => useMenuConfig(), { wrapper });
 
     expect(result.current.menuSchema).toEqual({
-      foo: 'foo menu config',
-      bar: 'bar menu config',
+      foo: { label: 'foo menu config' },
+      bar: { label: 'bar menu config' },
     });
   });
 });
