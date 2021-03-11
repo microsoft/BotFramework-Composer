@@ -76,6 +76,11 @@ export const navContainer = (
   menuOpenHere: boolean,
   textWidth: number
 ) => css`
+  display: inline-flex;
+  position: relative;
+  top: -6px;
+  height: 20px;
+
   ${isAnyMenuOpen
     ? ''
     : `&:hover {
@@ -96,11 +101,9 @@ export const navContainer = (
 
 export const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
   label: navItem;
-  height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
   margin-left: ${marginLeft}px;
-  margin-top: -6px;
   opacity: ${isBroken ? 0.5 : 1};
   display: inline-flex;
   flex-direction: row;
