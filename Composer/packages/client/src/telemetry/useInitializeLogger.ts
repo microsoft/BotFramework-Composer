@@ -52,7 +52,9 @@ export const useInitializeLogger = () => {
     if (pathname === '/projects/import' || pathname === '/projects/create') {
       const url = new URL(href);
       const source = url.searchParams.get('source');
-      TelemetryClient.track('HandoffToComposerCompleted', { source });
+      if (source) {
+        TelemetryClient.track('HandoffToComposerCompleted', { source });
+      }
     }
   }, [pathname, href]);
 
