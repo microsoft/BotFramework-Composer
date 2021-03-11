@@ -24,6 +24,7 @@ import { createNotification } from '../../../recoilModel/dispatchers/notificatio
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
 import { dispatcherState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
+import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
 
 // -------------------- Styles -------------------- //
 
@@ -73,12 +74,14 @@ type DefineConversationFormData = {
   runtimeChoice: string;
   location?: string;
   templateVersion?: string;
+  profile?: Profile; // abs payload to create bot
+  source?: string; // where the payload come from
+  alias?: string; // identifier that is used to track bots between imports
 
   pvaData?: {
     templateDir?: string; // location of the imported template
     eTag?: string; // e tag used for content sync between composer and imported bot content
     urlSuffix?: string; // url to deep link to after creation
-    alias?: string; // identifier that is used to track bots between imports
     preserveRoot?: boolean; // identifier that is used to determine ay project file renames upon creation
   };
 };
@@ -250,9 +253,9 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             templateDir: templateDir,
             eTag: eTag,
             urlSuffix: urlSuffix,
-            alias: alias,
             preserveRoot: true,
           };
+          dataToSubmit.alias = alias;
 
           // create a notification to indicate import success
           const notification = createNotification({
@@ -263,6 +266,16 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             }),
           });
           addNotification(notification);
+        }
+      }
+
+      if (props.location?.search) {
+        const decoded = decodeURIComponent(props.location.search);
+        const { source, payload } = querystring.parse(decoded);
+        if (payload && typeof payload === 'string' && typeof source === 'string') {
+          dataToSubmit.profile = JSON.parse(payload);
+          dataToSubmit.source = source;
+          dataToSubmit.alias = getAliasFromPayload(source, payload);
         }
       }
 
