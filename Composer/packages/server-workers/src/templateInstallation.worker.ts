@@ -8,9 +8,7 @@ import yeoman from 'yeoman-environment';
 import TerminalAdapter from 'yeoman-environment/lib/adapter';
 import formatMessage from 'format-message';
 
-// import { templateGeneratorPath } from '../settings/env';
 // import log from '../logger';
-// import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 const installRemoteTemplate = async (
   yeomanEnv: Environment,

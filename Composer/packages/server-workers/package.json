@@ -14,9 +14,6 @@
   },
   "author": "benbro@microsoft.com",
   "license": "MIT",
-  "workspaces": {
-    "nohoist": ["yeoman-environment","format-message","@microsoft/bf-dialog"]
-  },
   "dependencies": {
     "yeoman-environment": "^2.10.3",
     "format-message": "^6.2.3",

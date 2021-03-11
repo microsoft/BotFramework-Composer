@@ -3,6 +3,7 @@
 
 import * as Path from 'path';
 import { Worker, isMainThread, workerData, parentPort } from 'worker_threads';
+
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 if (!isMainThread) {
