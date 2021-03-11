@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import React, { Fragment, useCallback, Suspense, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
@@ -27,6 +27,15 @@ import TableView, { qnaSuffix } from './table-view';
 import { TabHeader } from './TabHeader';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
+
+const qnaContentStyle = css`
+  flex-grow: 1;
+  height: 0;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0px;
+`;
 
 const QnAPage: React.FC<RouteComponentProps<{
   dialogId: string;
@@ -134,6 +143,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       skillId={skillId}
       title={formatMessage('Knowledge(QnA)')}
       toolbarItems={[]}
+      contentStyle={qnaContentStyle}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
