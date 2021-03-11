@@ -9,7 +9,7 @@ import uniqueId from 'lodash/uniqueId';
 import { lgUtil } from '@bfc/indexers';
 import uniq from 'lodash/uniq';
 
-import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes, extractVaribles } from './utils';
+import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes, findAllVariables } from './utils';
 
 const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
@@ -48,11 +48,9 @@ class LgParserWithoutWorker {
   public async extractLGVariables(curCbangedFile: string | undefined, lgFiles: string[]) {
     let result: string[] = [];
     if (curCbangedFile) {
-      result = extractVaribles(curCbangedFile);
+      result = findAllVariables(curCbangedFile);
     } else {
-      for (const file of lgFiles) {
-        result = result.concat(extractVaribles(file));
-      }
+      result = findAllVariables(lgFiles);
     }
 
     return { lgVariables: uniq(result) };

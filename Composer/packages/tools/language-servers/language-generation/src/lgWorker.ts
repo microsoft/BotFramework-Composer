@@ -5,8 +5,10 @@ import { lgImportResolverGenerator } from '@bfc/shared';
 import { lgUtil } from '@bfc/indexers';
 import uniq from 'lodash/uniq';
 
+import { findAllExprs } from '../lib/utils';
+
 import { WorkerMsg } from './lgParser';
-import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes, extractVaribles } from './utils';
+import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes } from './utils';
 
 process.on('message', async (msg: WorkerMsg) => {
   try {
@@ -49,11 +51,9 @@ process.on('message', async (msg: WorkerMsg) => {
         const { curCbangedFile, lgFiles } = msg.payload;
         let result: string[] = [];
         if (curCbangedFile) {
-          result = extractVaribles(curCbangedFile);
+          result = findAllExprs(curCbangedFile);
         } else {
-          for (const file of lgFiles) {
-            result = result.concat(extractVaribles(file));
-          }
+          result = findAllExprs(lgFiles);
         }
 
         process.send?.({ id: msg.id, payload: { lgVariables: result } });

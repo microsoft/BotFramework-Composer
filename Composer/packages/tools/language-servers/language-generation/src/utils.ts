@@ -8,6 +8,7 @@ import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 import { offsetRange } from '@bfc/indexers';
 import { LGResource, Templates } from 'botbuilder-lg';
+import uniq from 'lodash/uniq';
 
 const { parseFile } = parser;
 
@@ -226,37 +227,6 @@ export function getLineByIndex(document: TextDocument, line: number) {
   return document.getText().split(/\r?\n/g)[line];
 }
 
-export function extractVaribles(content: string): string[] {
-  const lines = content.split(/\r?\n/g);
-  const keyValueRegex = /\s*[a-zA-Z]+\s*=.+/;
-  const exprRegex = /\$\{.+\}/g;
-  // eslint-disable-next-line security/detect-unsafe-regex
-  const varabileRegex = /[a-zA-Z]+\.[a-zA-Z0-9]+(\.[a-zA-Z0-9.]+)?/g;
-  let varibles: string[] = [];
-  for (const line of lines) {
-    if (line.trim().startsWith('-') || keyValueRegex.test(line)) {
-      const exprs = line.match(exprRegex);
-      if (exprs) {
-        for (const expr of exprs) {
-          //trim the starting ${ and ending }
-          const body = expr.substr(2, expr.length - 3);
-          const removed = body
-            .replace(/[a-zA-Z0-9.]+\(/, '')
-            .replace(/"[^"]*"/, '')
-            .replace(/'[^']*'/, '')
-            .replace(')', '');
-          const localVaribles = removed.match(varabileRegex);
-          if (localVaribles) {
-            varibles = varibles.concat(localVaribles);
-          }
-        }
-      }
-    }
-  }
-
-  return varibles;
-}
-
 function findExpr(pst: any, result: string[]): void {
   const exprRegex = /\$\{.*\}/;
   if (pst.childCount === 0) {
@@ -272,13 +242,33 @@ function findExpr(pst: any, result: string[]): void {
   }
 }
 
-function findAllExprs(content: string): string[] {
+function findAllExprs(contents: string | string[]): string[] {
   const result = [];
-  const templates = Templates.parseResource(new LGResource('id', 'name', content));
-  templates.allTemplates.forEach((t) => {
-    const parseTree = t.templateBodyParseTree;
-    findExpr(parseTree, result);
-  });
+  if (typeof contents === 'string') {
+    const templates = Templates.parseResource(new LGResource('id', 'name', contents));
+    templates.allTemplates.forEach((t) => {
+      const parseTree = t.templateBodyParseTree;
+      findExpr(parseTree, result);
+    });
+  } else {
+    for (const lg of contents) {
+      const templates = Templates.parseResource(new LGResource('id', 'name', lg));
+      templates.allTemplates.forEach((t) => {
+        const parseTree = t.templateBodyParseTree;
+        findExpr(parseTree, result);
+      });
+    }
+  }
 
-  return result;
+  return uniq(result);
+}
+
+export function findAllVariables(contents: string | string[]) {
+  const exprs = findAllExprs(contents);
+  const result = [];
+  for (const expr of exprs) {
+    findExpr(expr, result);
+  }
+
+  return uniq(result);
 }
