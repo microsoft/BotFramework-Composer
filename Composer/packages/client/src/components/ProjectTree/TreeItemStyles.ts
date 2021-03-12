@@ -50,7 +50,7 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
     root: {
       alignSelf: 'stretch',
       visibility: isActive ? 'visible' : 'hidden',
-      height: 24,
+      height: 20,
       width: 24,
       color: NeutralColors.black,
     },
@@ -104,6 +104,7 @@ export const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, 
   display: inline-flex;
   flex-direction: row;
   align-items: center;
+  height: 20px;
 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
@@ -137,9 +138,13 @@ export const diagnosticLink = css`
 `;
 
 export const overflowSet = (isBroken: boolean) => css`
-  box-sizing: border-box;
+  label: overflow-set;
+  max-height: 16px;
   justify-content: space-between;
   display: inline-flex;
+  position: relative;
+  top: -6px;
+  min-width: 100%;
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
   }
