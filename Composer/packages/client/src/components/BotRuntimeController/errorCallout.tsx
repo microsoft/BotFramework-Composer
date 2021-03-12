@@ -105,23 +105,23 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
     }
   };
   const parseObject = function (map): IErrorMessage[] {
-    let obj = Object.keys(map).map(function (k) {
-      let field: IField = fieldsWhiteList.get(k) || { visible: true, name: k };
+    return Object.keys(map)
+      .map((k) => {
+        const field: IField = fieldsWhiteList.get(k) || { visible: true, name: k };
 
-      return {
-        key: field.name,
-        value: map[k],
-        order: field.index || 1000,
-        isPre: map[k] != null && typeof map[k] == 'string' && map[k].length >= 75 && map[k].indexOf('\n') != -1,
-        visible:
-          field.visible ||
-          (map[k] != null && ((typeof map[k] == 'string' && map[k].trim() != '') || typeof map[k] != 'string')),
-      };
-    });
-
-    return obj.sort(function (left, right) {
-      return left.order - right.order;
-    });
+        return {
+          key: field.name,
+          value: map[k],
+          order: field.index || 1000,
+          isPre: map[k] != null && typeof map[k] == 'string' && map[k].length >= 75 && map[k].indexOf('\n') != -1,
+          visible:
+            field.visible ||
+            (map[k] != null && ((typeof map[k] == 'string' && map[k].trim() != '') || typeof map[k] != 'string')),
+        };
+      })
+      .sort((left, right) => {
+        return left.order - right.order;
+      });
   };
   const renderRow = function (obj: IErrorMessage) {
     return (
@@ -133,11 +133,11 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   };
 
   const buildErrorMessage = (error) => {
-    let jsonObj = convertToJson(error.message);
+    const jsonObj = convertToJson(error.message);
     if (jsonObj === null) {
       return error.message + ' ';
     } else {
-      let parsed = parseObject(jsonObj);
+      const parsed = parseObject(jsonObj);
 
       return <div>{parsed.map(renderRow)}</div>;
     }
