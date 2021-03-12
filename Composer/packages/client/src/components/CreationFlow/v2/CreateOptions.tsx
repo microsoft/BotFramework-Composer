@@ -20,17 +20,20 @@ import {
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import axios from 'axios';
+import querystring from 'query-string';
 
 import msftIcon from '../../../images/msftIcon.svg';
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
 import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
+import { getAliasFromPayload } from '../../../utils/electronUtil';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
@@ -118,7 +121,7 @@ const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onNext: (data: string) => void;
+  onNext: (templateName: string, urlData?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
@@ -126,6 +129,7 @@ type CreateOptionsProps = {
 export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { templates, onDismiss, onNext } = props;
   const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
   const [emptyBotKey, setEmptyBotKey] = useState('');
@@ -154,13 +158,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       routeToTemplate = QnABotTemplateId;
     }
 
-    if (props.location && props.location.search) {
-      routeToTemplate += props.location.search;
-    }
-
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
-    onNext(routeToTemplate);
+    if (props.location && props.location.search) {
+      onNext(routeToTemplate, props.location.search);
+    } else {
+      onNext(routeToTemplate);
+    }
   };
 
   const tableColumns = [
@@ -214,6 +218,31 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [templates]);
 
   useEffect(() => {
+    // open bot directly if alias exist.
+    if (props.location?.search) {
+      const decoded = decodeURIComponent(props.location.search);
+      const { source, payload } = querystring.parse(decoded);
+      if (typeof source === 'string' && typeof payload === 'string') {
+        const alias = getAliasFromPayload(source, payload);
+        // check to see if Composer currently has a bot project corresponding to the alias
+        axios
+          .get<any>(`/api/projects/alias/${alias}`)
+          .then((aliasRes) => {
+            if (aliasRes.status === 200) {
+              navigate(`/bot/${aliasRes.data.id}`);
+              return;
+            }
+          })
+          .catch((e) => {
+            setIsOpen(true);
+          });
+        return;
+      }
+    }
+    setIsOpen(true);
+  }, [props.location?.search]);
+
+  useEffect(() => {
     if (selectedFeed?.props?.itemKey) {
       props.fetchTemplates([feedDictionary[selectedFeed.props.itemKey]]);
     }
@@ -228,7 +257,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   return (
     <Fragment>
       <DialogWrapper
-        isOpen
+        isOpen={isOpen}
         {...DialogCreationCopy.CREATE_NEW_BOT_V2}
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
@@ -268,12 +297,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           </div>
         </div>
         <DialogFooter>
-          <Link
-            underline
-            href={templateRequestUrl}
-            styles={{ root: { fontSize: '12px', float: 'left' } }}
-            target="_blank"
-          >
+          <Link href={templateRequestUrl} styles={{ root: { fontSize: '12px', float: 'left' } }} target="_blank">
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>
