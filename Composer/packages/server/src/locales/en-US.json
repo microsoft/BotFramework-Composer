@@ -1712,8 +1712,8 @@
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
-  "install_more_adapters_in_a_package_settings_a_e8b0df7a": {
-    "message": "Install more adapters in <a>Package Settings</a>."
+  "install_more_adapters_in_a_the_package_manager_a_156fb028": {
+    "message": "Install more adapters in <a>the package manager</a>."
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
