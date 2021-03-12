@@ -9,46 +9,44 @@ import TerminalAdapter from 'yeoman-environment/lib/adapter';
 import logger from '../logger';
 const log = logger.extend('templateInstallation');
 
-const installRemoteTemplate = (
+const installRemoteTemplate = async (
   yeomanEnv: yeoman,
   templateGeneratorPath: string,
   npmPackageName: string,
   templateVersion: string
-): boolean => {
+) => {
   yeomanEnv.cwd = templateGeneratorPath;
   try {
     log('Installing generator', npmPackageName);
     templateVersion = templateVersion ? templateVersion : '*';
-    yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
+    await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
 
-    log('Looking up local packages');
-    yeomanEnv.lookupLocalPackages();
+    // log('Looking up local packages');
+    // await yeomanEnv.lookupLocalPackages();
     return true;
   } catch {
     return false;
   }
 };
 
-const instantiateRemoteTemplate = (
+const instantiateRemoteTemplate = async (
   yeomanEnv: yeoman,
   generatorName: string,
   dstDir: string,
   projectName: string
 ): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    log('About to instantiate a template!', dstDir, generatorName, projectName);
-    yeomanEnv.cwd = dstDir;
+  log('About to instantiate a template!', dstDir, generatorName, projectName);
+  yeomanEnv.cwd = dstDir;
 
-    yeomanEnv.run([generatorName, projectName], {}, (err) => {
-      if (err) {
-        log('Template failed to instantiate', dstDir, generatorName, projectName);
-        reject(err);
-      } else {
-        log('Template successfully instantiated', dstDir, generatorName, projectName);
-        resolve();
-      }
-    });
-  });
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore @types/yeoman-environment is outdated
+    await yeomanEnv.run([generatorName, projectName]);
+    log('Template successfully instantiated', dstDir, generatorName, projectName);
+  } catch (err) {
+    log('Template failed to instantiate', dstDir, generatorName, projectName);
+    throw err;
+  }
 };
 
 const yeomanWork = async (
