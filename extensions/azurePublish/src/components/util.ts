@@ -92,20 +92,3 @@ type AzureExtensionState = {
   requiredResources: ResourcesItem[];
   choice: { key: string; text: string };
 };
-
-export const getExtensionState = (): AzureExtensionState => {
-  const state = window.localStorage.getItem(`${window.Composer?.__extensionId}:state`);
-  if (state) {
-    return JSON.parse(state);
-  } else {
-    return defaultExtensionState;
-  }
-};
-
-export const setExtensionState = (value) => {
-  window.localStorage.setItem(`${window.Composer?.__extensionId}:state`, JSON.stringify(value));
-};
-
-export const clearExtensionState = () => {
-  window.localStorage.removeItem(`${window.Composer?.__extensionId}:state`);
-};
