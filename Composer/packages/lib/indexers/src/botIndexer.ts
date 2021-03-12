@@ -131,7 +131,7 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
   } = assets;
 
   // if use LUIS, continue
-  const useLUIS = dialogs.some((item) => !!item.luFile);
+  const useLUIS = dialogs.some((item) => !!item.luFile && item?.luProvider === SDKKinds.LuisRecognizer);
   if (!useLUIS) return [];
 
   const unsupportedLocales = difference(languages, LUISLocales);
