@@ -78,7 +78,7 @@ describe('ExternalAdapterSettings', () => {
       initRecoilState
     );
 
-    const link = getByText('Package Settings');
+    const link = getByText('the package manager');
 
     expect(link.attributes.getNamedItem('href')?.value).toEqual('plugin/package-manager/package-manager');
   });

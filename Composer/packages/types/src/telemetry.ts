@@ -39,6 +39,7 @@ export enum PageNames {
 
 type ApplicationEvents = {
   NotificationPanelOpened: undefined;
+  HandoffToComposerCompleted: { source: string };
 };
 
 type GettingStartedEvents = {
