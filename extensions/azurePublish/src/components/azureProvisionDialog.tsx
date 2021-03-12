@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import formatMessage from 'format-message';
 import * as React from 'react';
+import formatMessage from 'format-message';
+import styled from '@emotion/styled';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -26,8 +27,9 @@ import {
   Persona,
   IPersonaProps,
   PersonaSize,
-  Selection,
   SelectionMode,
+  Stack,
+  Text,
 } from 'office-ui-fabric-react';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JsonEditor } from '@bfc/code-editor';
@@ -38,12 +40,18 @@ import { AzureResourceTypes, ResourcesItem, authConfig } from '../types';
 import {
   getResourceList,
   getSubscriptions,
-  getResourceGroups,
   getDeployLocations,
   getPreview,
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
 } from './api';
+import { ChooseResourcesList } from './ChooseResourcesList';
+
+// ---------- Styles ---------- //
+
+const AddResourcesSectionName = styled(Text)`
+  font-size: 16px;
+`;
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
@@ -175,53 +183,6 @@ const onRenderLabel = (props) => {
   );
 };
 
-const columns: IColumn[] = [
-  {
-    key: 'Icon',
-    name: 'File Type',
-    isIconOnly: true,
-    fieldName: 'name',
-    minWidth: 16,
-    maxWidth: 16,
-    onRender: (item: ResourcesItem & { name; icon }) => {
-      return <img src={item.icon} />;
-    },
-  },
-  {
-    key: 'Name',
-    name: formatMessage('Name'),
-    className: 'name',
-    fieldName: 'name',
-    minWidth: 300,
-    isRowHeader: true,
-    data: 'string',
-    onRender: (item: ResourcesItem & { name; icon }) => {
-      return (
-        <div style={{ whiteSpace: 'normal' }}>
-          <div style={{ fontSize: '14px', color: NeutralColors.gray190 }}>{item.text}</div>
-          <div style={{ fontSize: '12px', color: NeutralColors.gray130 }}>{item.tier}</div>
-        </div>
-      );
-    },
-    isPadded: true,
-  },
-  {
-    key: 'Description',
-    name: formatMessage('Description'),
-    className: 'description',
-    fieldName: 'description',
-    minWidth: 380,
-    isRowHeader: true,
-    data: 'string',
-    onRender: (item: ResourcesItem & { name; icon }) => {
-      return (
-        <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>{item.description}</div>
-      );
-    },
-    isPadded: true,
-  },
-];
-
 const reviewCols: IColumn[] = [
   {
     key: 'Icon',
@@ -334,8 +295,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [importConfig, setImportConfig] = useState<any>();
 
   const [page, setPage] = useState(PageTypes.ConfigProvision);
-  const [group, setGroup] = useState<IGroup[]>();
-  const [listItems, setListItem] = useState<(ResourcesItem & { name; icon })[]>();
+  const [listItems, setListItem] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
 
   const timerRef = useRef<any>();
@@ -393,13 +353,6 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentConfig]);
 
-  useEffect(() => {
-    if (token) {
-      getSubscriptions(token).then(setSubscriptions);
-      getResources();
-    }
-  }, [token]);
-
   const getResources = async () => {
     try {
       const resources = await getResourceList(currentProjectId(), publishType);
@@ -409,6 +362,13 @@ export const AzureProvisionDialog: React.FC = () => {
       console.log('ERROR', err);
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      getSubscriptions(token).then(setSubscriptions);
+      getResources();
+    }
+  }, [token]);
 
   const subscriptionOption = useMemo(() => {
     return subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
@@ -540,25 +500,10 @@ export const AzureProvisionDialog: React.FC = () => {
       }
 
       // set review list
-      const groups: IGroup[] = [];
       const requireList = result.filter((item) => item.required);
       setRequireResources(requireList);
       const externalList = result.filter((item) => !item.required);
-      groups.push({
-        key: 'required',
-        name: 'Required',
-        startIndex: 0,
-        count: requireList.length,
-      });
-      groups.push({
-        key: 'optional',
-        name: 'Optional',
-        startIndex: requireList.length,
-        count: externalList.length,
-      });
       const items = requireList.concat(externalList);
-
-      setGroup(groups);
       setListItem(items);
 
       setPage(PageTypes.AddResources);
@@ -747,43 +692,39 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [listItems]);
 
-  const selection = useMemo(() => {
-    const s = new Selection({
-      onSelectionChanged: () => {
-        const list = s.getSelection();
-        setEnabledResources(list);
-      },
-      canSelectItem: (item, index) => {
-        return item.required === false;
-      },
-    });
-    if (s && listItems) {
-      s.setItems(listItems, false);
-      s.setAllSelected(true);
-    }
-    return s;
-  }, [listItems]);
+  const PageAddResources = () => {
+    if (listItems) {
+      const requiredListItems = listItems.filter((item) => item.required);
+      const optionalListItems = listItems.filter((item) => !item.required);
+      const selectedResourceKeys = enabledResources.map((r) => r.key);
 
-  const PageAddResources = useMemo(() => {
-    return (
-      <Fragment>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 64px)' }}>
-          <DetailsList
-            isHeaderVisible
-            checkboxVisibility={CheckboxVisibility.onHover}
-            columns={columns}
-            getKey={(item) => item.key}
-            groups={group}
-            items={listItems}
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={selection}
-            selectionMode={SelectionMode.multiple}
-            setKey="none"
-          />
+      return (
+        <ScrollablePane
+          data-is-scrollable="true"
+          scrollbarVisibility={ScrollbarVisibility.auto}
+          style={{ height: 'calc(100vh - 64px)' }}
+        >
+          <Stack>
+            <AddResourcesSectionName>{formatMessage('Required')}</AddResourcesSectionName>
+            <ChooseResourcesList items={requiredListItems} />
+            <AddResourcesSectionName>{formatMessage('Optional')}</AddResourcesSectionName>
+            <ChooseResourcesList
+              items={optionalListItems}
+              selectedKeys={selectedResourceKeys}
+              onSelectionChanged={(keys) => {
+                const newSelection = listItems.filter(
+                  (item) => item.required === true || keys.find((key) => key === item.key)
+                );
+                setEnabledResources(newSelection);
+              }}
+            />
+          </Stack>
         </ScrollablePane>
-      </Fragment>
-    );
-  }, [group, listItems, selection]);
+      );
+    } else {
+      return <Fragment />;
+    }
+  };
 
   const PageReview = (
     <Fragment>
@@ -857,7 +798,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 setPage(PageTypes.ReviewResource);
                 setTitle(DialogTitle.REVIEW);
-                let selectedResources = requireResources.concat(enabledResources);
+                let selectedResources = enabledResources.slice();
                 selectedResources = selectedResources.map((item) => {
                   let region = currentConfig?.region || currentLocation;
                   if (item.key.includes('luis')) {
@@ -950,7 +891,7 @@ export const AzureProvisionDialog: React.FC = () => {
   return (
     <div style={{ height: '100vh' }}>
       {page === PageTypes.ConfigProvision && PageFormConfig}
-      {page === PageTypes.AddResources && PageAddResources}
+      {page === PageTypes.AddResources && PageAddResources()}
       {page === PageTypes.ReviewResource && PageReview}
       {page === PageTypes.EditJson && (
         <JsonEditor
