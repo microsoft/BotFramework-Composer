@@ -84,42 +84,42 @@ export const updateQnAFileState = async (
 
 export const createQnAFileState = async (
   callbackHelpers: CallbackInterface,
-  {
-    id,
-    content,
-    locale,
-    projectId,
-    filteredLocales = [],
-  }: { id: string; content: string; projectId: string; locale: string; filteredLocales: string[] }
+  { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
   const { languages, defaultLanguage } = await snapshot.getPromise(settingsState(projectId));
-  const createdQnaId = `${id}.${locale}`;
+  const createdQnaId = `${id}.${defaultLanguage}`;
   const createdQnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
   if (qnaFiles.find((qna) => qna.id === createdQnaId)) {
     throw new Error('qna file already exist');
   }
   const changes: QnAFile[] = [];
-  changes.push({
-    ...createdQnaFile,
-    id: `${id}.${locale}`,
-  });
   // copy default locale qna file on other locales
-  if (locale === defaultLanguage) {
-    languages
-      .filter((lang) => ![...filteredLocales, defaultLanguage].includes(lang))
-      .forEach((lang) => {
-        const fileId = `${id}.${lang}`;
-        qnaFileStatusStorage.updateFileStatus(projectId, fileId);
-        changes.push({
-          ...createdQnaFile,
-          id: fileId,
-        });
-      });
-  }
+  languages.forEach((lang) => {
+    const fileId = `${id}.${lang}`;
+    qnaFileStatusStorage.updateFileStatus(projectId, fileId);
+    changes.push({
+      ...createdQnaFile,
+      id: fileId,
+    });
+  });
 
   set(qnaFilesState(projectId), qnaFilesAtomUpdater({ adds: changes }));
+};
+
+export const createSourceQnAFileByLocaleState = async (
+  callbackHelpers: CallbackInterface,
+  { id, content, locale, projectId }: { id: string; content: string; locale: string; projectId: string }
+) => {
+  const { set, snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const createdQnaId = `${id}.${locale}`;
+  const createdQnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
+  if (qnaFiles.find((qna) => qna.id === createdQnaId)) {
+    throw new Error('qna file already exist');
+  }
+  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ adds: [createdQnaFile] }));
 };
 
 /**
@@ -152,16 +152,39 @@ export const removeQnAFileState = async (
 
 export const createKBFileState = async (
   callbackHelpers: CallbackInterface,
+  { id, name, content, projectId }: { id: string; name: string; content: string; projectId: string }
+) => {
+  const { snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const { defaultLanguage } = await snapshot.getPromise(settingsState(projectId));
+  const createdSourceQnAId = `${name}.source.${defaultLanguage}`;
+
+  if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
+    throw new Error(`source qna file ${createdSourceQnAId}.qna already exist`);
+  }
+
+  // if created on a dialog, need update this dialog's all locale qna ref
+  if (id.includes('.source') === false) {
+    updateDialogQnARef(callbackHelpers, { id, name, projectId, qnaFiles });
+  }
+
+  qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
+
+  //need to create other locale qna files
+  await createQnAFileState(callbackHelpers, { id: `${name}.source`, content, projectId });
+};
+
+export const createKBFileByLocaleState = async (
+  callbackHelpers: CallbackInterface,
   {
     id,
     name,
     content,
-    projectId,
     locale,
-    filteredLocales = [],
-  }: { id: string; name: string; content: string; locale: string; projectId: string; filteredLocales?: string[] }
+    projectId,
+  }: { id: string; name: string; content: string; locale: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
+  const { snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
   const createdSourceQnAId = `${name}.source.${locale}`;
 
@@ -169,29 +192,35 @@ export const createKBFileState = async (
     throw new Error(`source qna file ${createdSourceQnAId}.qna already exist`);
   }
 
-  let updatedQnAFiles: QnAFile[] = [];
-
   // if created on a dialog, need update this dialog's all locale qna ref
   if (id.includes('.source') === false) {
-    const updatedQnAId = id;
-    if (!qnaFiles.find((f) => f.id === updatedQnAId)) {
-      throw new Error(`update qna file ${updatedQnAId}.qna not exist`);
-    }
-
-    updatedQnAFiles = qnaFiles
-      .filter((file) => !file.id.endsWith('.source') && getBaseName(file.id) === getBaseName(updatedQnAId))
-      .map((file) => {
-        return qnaUtil.addImport(file, `${name}.source.qna`);
-      });
-
-    qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
-    set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles }));
+    updateDialogQnARef(callbackHelpers, { id, name, projectId, qnaFiles });
   }
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
 
-  //need to create other locale qna files
-  await createQnAFileState(callbackHelpers, { id: `${name}.source`, content, locale, projectId, filteredLocales });
+  await createSourceQnAFileByLocaleState(callbackHelpers, { id: createdSourceQnAId, content, locale, projectId });
+};
+
+const updateDialogQnARef = (
+  callbackHelpers: CallbackInterface,
+  params: { id: string; name: string; projectId: string; qnaFiles: QnAFile[] }
+) => {
+  const { set } = callbackHelpers;
+  const { id, name, projectId, qnaFiles } = params;
+
+  let updatedQnAFiles: QnAFile[] = [];
+  if (!qnaFiles.find((f) => getBaseName(f.id) === id)) {
+    throw new Error(`update qna file ${id}.{locale} not exist`);
+  }
+
+  updatedQnAFiles = qnaFiles
+    .filter((file) => getBaseName(file.id) === id)
+    .map((file) => {
+      qnaFileStatusStorage.updateFileStatus(projectId, file.id);
+      return qnaUtil.addImport(file, `${name}.source.qna`);
+    });
+  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles }));
 };
 
 export const removeKBFileState = async (
@@ -347,8 +376,6 @@ export const qnaDispatcher = () => {
       id,
       content,
       projectId,
-      locale,
-      filteredLocales = [],
     }: {
       id: string;
       locale: string;
@@ -356,7 +383,7 @@ export const qnaDispatcher = () => {
       projectId: string;
       filteredLocales: string[];
     }) => {
-      await createQnAFileState(callbackHelpers, { id, locale, content, projectId, filteredLocales });
+      await createQnAFileState(callbackHelpers, { id, content, projectId });
     }
   );
 
@@ -381,7 +408,6 @@ export const qnaDispatcher = () => {
       locale,
       multiTurn,
       projectId,
-      filteredLocales = [],
     }: {
       id: string; // dialogId.locale
       name: string;
@@ -389,10 +415,8 @@ export const qnaDispatcher = () => {
       locale: string;
       multiTurn: boolean;
       projectId: string;
-      filteredLocales?: string[];
     }) => {
       const { snapshot } = callbackHelpers;
-      id = `${id}.${locale}`;
       await dismissCreateQnAModal({ projectId });
       const notification = createNotification(getQnaPendingNotification(url));
       addNotificationInternal(callbackHelpers, notification);
@@ -402,9 +426,6 @@ export const qnaDispatcher = () => {
         response = await httpClient.get(`/utilities/qna/parse`, {
           params: { url: encodeURIComponent(url), multiTurn },
         });
-        const content = response.data;
-
-        await updateQnAFileState(callbackHelpers, { id, content, projectId });
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
         const notification = createNotification(
           getQnaSuccessNotification(() => {
@@ -433,18 +454,128 @@ export const qnaDispatcher = () => {
 ${response.data}
 `;
 
-      await createKBFileState(callbackHelpers, {
+      await createKBFileByLocaleState(callbackHelpers, {
         id,
         name,
         content: contentForSourceQnA,
         locale,
-        filteredLocales,
         projectId,
       });
 
       await createQnAFromUrlDialogSuccess({ projectId });
+      return contentForSourceQnA;
     }
   );
+
+  const createQnAKBsFromUrls = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      name,
+      urls,
+      locales,
+      multiTurn,
+      projectId,
+    }: {
+      id: string; // dialogId.locale
+      name: string;
+      urls: string[];
+      locales: string[];
+      multiTurn: boolean;
+      projectId: string;
+    }) => {
+      const { snapshot } = callbackHelpers;
+      await dismissCreateQnAModal({ projectId });
+      const pairs: { locale: string; content: string }[] = locales.map((locale) => {
+        return { locale, content: '' };
+      });
+      await Promise.all(
+        urls.map(async (url, index) => {
+          const notification = createNotification(getQnaPendingNotification(url));
+          addNotificationInternal(callbackHelpers, notification);
+
+          let response;
+          try {
+            response = await httpClient.get(`/utilities/qna/parse`, {
+              params: { url: encodeURIComponent(url), multiTurn },
+            });
+            const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+            const notification = createNotification(
+              getQnaSuccessNotification(() => {
+                navigateTo(
+                  rootBotProjectId === projectId
+                    ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                    : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+                );
+                deleteNotificationInternal(callbackHelpers, notification.id);
+              })
+            );
+            addNotificationInternal(callbackHelpers, notification);
+          } catch (err) {
+            addNotificationInternal(
+              callbackHelpers,
+              createNotification(getQnaFailedNotification(err.response?.data?.message))
+            );
+            createQnAFromUrlDialogCancel({ projectId });
+            return;
+          } finally {
+            deleteNotificationInternal(callbackHelpers, notification.id);
+          }
+
+          const contentForSourceQnA = `> !# @source.url=${url}
+          > !# @source.multiTurn=${multiTurn}
+          ${response.data}
+          `;
+          pairs[index].content = contentForSourceQnA;
+        })
+      );
+
+      const { languages } = await snapshot.getPromise(settingsState(projectId));
+
+      const toBeCopiedLocales = languages.filter((l) => {
+        return !locales.includes(l);
+      });
+      toBeCopiedLocales.forEach((locale) => {
+        pairs.push({ locale, content: pairs[0].content });
+      });
+      await createKBFileOnLocalesState(callbackHelpers, {
+        id,
+        name,
+        data: pairs,
+        projectId,
+      });
+      await createQnAFromUrlDialogSuccess({ projectId });
+    }
+  );
+
+  const createKBFileOnLocalesState = async (
+    callbackHelpers: CallbackInterface,
+    {
+      id,
+      name,
+      data,
+      projectId,
+    }: { id: string; name: string; data: { content: string; locale: string }[]; projectId: string }
+  ) => {
+    const { set, snapshot } = callbackHelpers;
+    const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+    const changes: QnAFile[] = [];
+    // if created on a dialog, need update this dialog's all locale qna ref
+    if (id.includes('.source') === false) {
+      updateDialogQnARef(callbackHelpers, { id, name, projectId, qnaFiles });
+    }
+    await Promise.all(
+      data.map(async (d) => {
+        const createdSourceQnAId = `${name}.source.${d.locale}`;
+
+        if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
+          throw new Error(`source qna file ${createdSourceQnAId}.qna already exist`);
+        }
+        const createdQnaFile = (await qnaWorker.parse(createdSourceQnAId, d.content)) as QnAFile;
+        changes.push(createdQnaFile);
+      })
+    );
+    set(qnaFilesState(projectId), qnaFilesAtomUpdater({ adds: changes }));
+  };
 
   const createQnAKBFromScratch = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
@@ -453,23 +584,14 @@ ${response.data}
       projectId,
       content = '',
     }: {
-      id: string; // dialogId.locale
+      id: string;
       name: string;
       content?: string;
       projectId: string;
     }) => {
-      const { snapshot } = callbackHelpers;
-      const locale = (await snapshot.getPromise(settingsState(projectId))).defaultLanguage;
-      id = `${id}.${locale}`;
       await dismissCreateQnAModal({ projectId });
 
-      await createKBFileState(callbackHelpers, {
-        id,
-        name,
-        content,
-        projectId,
-        locale,
-      });
+      await createKBFileState(callbackHelpers, { id, name, content, projectId });
       await createQnAFromScratchDialogSuccess({ projectId });
       const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
       const notification = createNotification(
@@ -688,6 +810,37 @@ ${response.data}
     }
   );
 
+  const copyDefaultQnASourceFileOnLocales = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      locales,
+      name,
+      projectId,
+    }: {
+      locales: string[];
+      name: string;
+      projectId: string;
+    }) => {
+      const { set, snapshot } = callbackHelpers;
+      const { defaultLanguage } = await snapshot.getPromise(settingsState(projectId));
+      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const defaultQnAFile = qnaFiles.find((f) => f.id === `${name}.source.${defaultLanguage}`);
+      if (!defaultQnAFile) {
+        throw new Error(`${name}.source.${defaultLanguage} does not exist`);
+      }
+      const changes: QnAFile[] = [];
+      // copy default locale qna file on other locales
+      locales.forEach((lang) => {
+        const fileId = `${name}.source.${lang}`;
+        qnaFileStatusStorage.updateFileStatus(projectId, fileId);
+        changes.push({
+          ...defaultQnAFile,
+          id: fileId,
+        });
+        set(qnaFilesState(projectId), qnaFilesAtomUpdater({ adds: changes }));
+      });
+    }
+  );
+
   return {
     createQnAImport,
     removeQnAImport,
@@ -710,5 +863,6 @@ ${response.data}
     createQnAFromScratchDialogCancel,
     createQnAFromUrlDialogBegin,
     createQnAFromUrlDialogCancel,
+    createQnAKBsFromUrls,
   };
 };

@@ -507,6 +507,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     <EditableField
                       key={question.id}
                       ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
+                      containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                       depth={0}
                       disabled={isAllowEdit}
                       enableIcon={isExpanded}
@@ -522,7 +523,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       required={isOnlyQuestion}
                       requiredMessage={formatMessage('At least one question is required')}
                       resizable={false}
-                      containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                       styles={editableField}
                       value={question.content}
                       onBlur={(_id, value = '') => {
@@ -560,13 +560,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   componentFocusOnMount
                   required
                   ariaLabel={formatMessage('Question is empty now')}
+                  containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                   depth={0}
                   disabled={isAllowEdit}
                   id={'NewQuestion'}
                   name={'New Question'}
                   placeholder={formatMessage('Add new question')}
                   styles={editableField}
-                  containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                   value={''}
                   onBlur={(_id, value) => {
                     const newValue = value?.trim();
