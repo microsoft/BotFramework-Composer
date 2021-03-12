@@ -98,7 +98,7 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
     const designerName = formData.$designer?.name;
     const id = formData.id;
     return designerName ?? id ?? uiLabel ?? schema.title;
-  }, [formData.$designer?.name, uiLabel, schema.title]);
+  }, [formData.$designer?.name, uiLabel, schema.title, formData.id]);
 
   const getHelpLinkLabel = (): string => {
     return (uiLabel || schema.title || '').toLowerCase();
