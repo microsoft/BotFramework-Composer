@@ -27,8 +27,9 @@ export const useInitializeLogger = () => {
   );
 
   const {
-    location: { pathname },
+    location: { href, pathname },
   } = useLocation();
+
   const page = useMemo<PageNames>(() => getPageName(pathname), [pathname]);
 
   TelemetryClient.setup(telemetry, { rootProjectId, page, ...reducedFeatureFlags });
@@ -55,6 +56,17 @@ export const useInitializeLogger = () => {
     TelemetryClient.track('NavigateTo', { sectionName: page, url: page });
     TelemetryClient.pageView(page, page);
   }, [page]);
+
+  useEffect(() => {
+    // Track if Composer was opened from PVA or ABS
+    if (pathname === '/projects/import' || pathname === '/projects/create') {
+      const url = new URL(href);
+      const source = url.searchParams.get('source');
+      if (source) {
+        TelemetryClient.track('HandoffToComposerCompleted', { source });
+      }
+    }
+  }, [pathname, href]);
 
   const handleBeforeUnload = useCallback(() => {
     TelemetryClient.drain();
