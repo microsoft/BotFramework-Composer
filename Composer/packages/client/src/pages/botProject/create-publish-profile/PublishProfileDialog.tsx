@@ -76,9 +76,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   // setup plugin APIs
   useEffect(() => {
-    PluginAPI.publish.closeDialog = () => {
-      closeDialog();
-    };
+    PluginAPI.publish.closeDialog = closeDialog;
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle({
