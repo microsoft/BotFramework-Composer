@@ -96,9 +96,9 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
   const uiSubtitle = typeof uiOptions?.subtitle === 'function' ? uiOptions.subtitle(formData) : uiOptions.subtitle;
   const initialValue = useMemo(() => {
     const designerName = formData.$designer?.name;
-
-    return designerName ?? uiLabel ?? schema.title;
-  }, [formData.$designer?.name, uiLabel, schema.title]);
+    const id = formData.id;
+    return designerName ?? id ?? uiLabel ?? schema.title;
+  }, [formData.$designer?.name, uiLabel, schema.title, formData.id]);
 
   const getHelpLinkLabel = (): string => {
     return (uiLabel || schema.title || '').toLowerCase();
