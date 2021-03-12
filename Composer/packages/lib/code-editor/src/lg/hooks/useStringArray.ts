@@ -23,10 +23,10 @@ const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
         // eslint-disable-next-line security/detect-unsafe-regex
         ?.split(/(?<!\\)- /g)
         // Ignore empty or newline strings
-        ?.filter((s) => s !== '' && s !== '\n')
-        ?.map((s) => s.replace(/\r?\n$/g, ''))
+        .filter((s) => s !== '' && s !== '\n')
+        .map((s) => s.replace(/\r?\n$/g, ''))
         // Remove LG template multiline block symbol
-        ?.map((s) => s.replace(/```/g, '')) || []
+        .map((s) => s.replace(/```/g, '')) || []
     : response?.value || (focusOnMount ? [''] : []);
 };
 
