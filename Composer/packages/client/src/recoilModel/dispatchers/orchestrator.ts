@@ -14,12 +14,20 @@ import { Locales } from '../../locales';
 
 import { createNotification } from './notification';
 
-export const downloadModel = (addr: string, model: 'en' | 'multilang') => {
+export const downloadModel = (addr: string, model: 'en' | 'multilang', notificationStartCallback: () => void) => {
   return new Promise<boolean>((resolve, reject) => {
     httpClient.post(addr, { language: model }).then((resp) => {
+      if (resp.status === 201) {
+        resolve(true);
+        return;
+      }
+
       if (resp.status !== 200) {
         reject(false);
+        return;
       }
+
+      notificationStartCallback();
 
       const statusUri = resp.data;
 
@@ -74,11 +82,12 @@ export const orchestratorDispatcher = () => {
       // Download Model Notification
       const { addNotification, deleteNotification } = await snapshot.getPromise(dispatcherState);
       const notification = createNotification(orchestratorDownloadNotificationProps());
-      addNotification(notification);
 
       try {
         for (const languageModel of availableLanguageModels(recognizers)) {
-          await downloadModel('/orchestrator/download', languageModel);
+          await downloadModel('/orchestrator/download', languageModel, () => {
+            addNotification(notification);
+          });
         }
       } finally {
         deleteNotification(notification.id);
