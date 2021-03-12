@@ -7,7 +7,7 @@ import path from 'path';
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions, FeedType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -108,7 +108,7 @@ export class AssetManager {
       log('About to create folder', dstDir);
       mkdirSync(dstDir, { recursive: true });
 
-      const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
+      const npmPackageName = templateId === QnABotTemplateId ? emptyBotNpmTemplateName : templateId;
 
       await runYeomanTemplatePipeline(npmPackageName, templateVersion, dstDir, projectName, jobId);
 

@@ -502,8 +502,8 @@ export class BotProjectService {
               log('Open project', botRef);
               const id = await BotProjectService.openProject(botRef, user);
 
-              // in the case of PVA, we need to update the eTag and alias used by the import mechanism
-              createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
+              // in the case of remote project, we need to update the eTag and alias used by the import mechanism
+              BotProjectService.setProjectLocationData(id, { alias, eTag });
 
               log('Get Project by Id', id);
               const currentProject = await BotProjectService.getProjectById(id, user);
