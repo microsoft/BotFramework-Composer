@@ -64,7 +64,7 @@ const getActionName = (action, pluginConfig?: PluginConfig) => {
     detectedActionName = nameFromAction;
   } else {
     const kind: string = action?.$kind as string;
-    const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
+    const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label;
     if (typeof actionNameFromSchema === 'string') {
       detectedActionName = actionNameFromSchema;
     } else if (typeof actionNameFromSchema === 'function') {
@@ -145,7 +145,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
             b.label = getFriendlyName(get(currentDialog.content, `triggers[${name}]`));
             break;
           case BreadcrumbKeyPrefix.Action:
-            b.label = getActionName(get(currentDialog.content, name));
+            b.label = getActionName(get(currentDialog.content, name), pluginConfig);
             break;
         }
         return b;
