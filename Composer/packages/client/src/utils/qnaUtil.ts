@@ -7,7 +7,7 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import { QnAFile, DialogInfo } from '@bfc/shared';
-import { qnaUtil } from '@bfc/indexers';
+import { qnaUtil, BotIndexer } from '@bfc/indexers';
 
 import { createFile, updateFile, deleteFile } from '../recoilModel/persistence/http';
 
@@ -24,6 +24,15 @@ export const getReferredQnaFiles = (qnaFiles: QnAFile[], dialogs: DialogInfo[], 
     return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale && contentNotEmpty);
   });
 };
+
+export const checkQnaBuild = (qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
+  const referred = getReferredQnaFiles(qnaFiles, dialogs, false);
+
+  // supported QnA locale.
+  const supported = BotIndexer.filterQnAFilesToPublish(referred, dialogs);
+  return supported;
+};
+
 // substring text file by lines
 export const substringTextByLine = (text: string, start?: number, end?: number): string => {
   return text.split('\n').slice(start, end).join('\n');
