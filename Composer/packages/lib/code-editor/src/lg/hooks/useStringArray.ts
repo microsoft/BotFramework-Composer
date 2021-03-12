@@ -19,11 +19,12 @@ const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
   const template = lgTemplates?.find(({ name }) => name === templateId);
   return response?.value && template?.body
     ? template?.body
-        // Look behind (negative) and split by non-escaped -
+        // Split by non-escaped -
         // eslint-disable-next-line security/detect-unsafe-regex
         ?.split(/(?<!\\)- /g)
         // Ignore empty or newline strings
         ?.filter((s) => s !== '' && s !== '\n')
+        ?.map((s) => s.replace(/\r?\n$/g, ''))
         // Remove LG template multiline block symbol
         ?.map((s) => s.replace(/```/g, '')) || []
     : response?.value || (focusOnMount ? [''] : []);
