@@ -8,8 +8,8 @@ import find from 'lodash/find';
 import { UserIdentity, FileExtensions, FeedType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
 import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
+import { ServerWorker } from '@bfc/server-workers';
 
-import { isElectron } from '../../utility/isElectron';
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -21,17 +21,6 @@ import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
 import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
-
-let workerPath = '@bfc/server-workers/lib/templateInstallation.worker';
-if (isElectron) {
-  workerPath = path.join(
-    process.resourcesPath,
-    'app.asar.unpacked/node_modules/@bfc/server-workers/lib/templateInstallation.worker'
-  );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
-const { runYeomanTemplatePipeline } = require(workerPath);
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -123,14 +112,18 @@ export class AssetManager {
 
       const npmPackageName = templateId === QnABotTemplateId ? emptyBotNpmTemplateName : templateId;
 
-      await runYeomanTemplatePipeline(
-        npmPackageName,
-        templateVersion,
-        dstDir,
-        projectName,
-        jobId,
-        templateGeneratorPath,
-        BackgroundProcessManager
+      await ServerWorker.execute(
+        'templateInstallation',
+        {
+          npmPackageName,
+          templateVersion,
+          dstDir,
+          projectName,
+          templateGeneratorPath,
+        },
+        (status, msg) => {
+          BackgroundProcessManager.updateProcess(jobId, status, msg);
+        }
       );
 
       return ref;
