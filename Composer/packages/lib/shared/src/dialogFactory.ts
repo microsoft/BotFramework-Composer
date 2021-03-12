@@ -26,16 +26,17 @@ const initialInputDialog = {
 };
 
 export function getFriendlyName(data: BaseSchema, isDialog = false): string {
-  if (data?.$designer?.name) {
-    return data?.$designer?.name;
+  if (!data) return '';
+  if (data.$designer?.name !== undefined) {
+    return data.$designer?.name;
   }
 
   if (isDialog) {
     return data.id;
   }
 
-  if (data?.intent) {
-    return `${data?.intent}`;
+  if (data.intent) {
+    return `${data.intent}`;
   }
 
   return conceptLabels()[data.$kind]?.title ?? data.$kind;
