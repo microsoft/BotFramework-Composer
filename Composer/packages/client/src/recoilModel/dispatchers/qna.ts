@@ -17,7 +17,7 @@ import {
 } from '../atoms/botState';
 import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { getBaseName, getKBName, getKBLocale } from '../../utils/fileUtil';
+import { getBaseName, getKBLocale } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
 import {
   getQnaFailedNotification,
@@ -807,37 +807,6 @@ ${response.data}
       projectId: string;
     }) => {
       await renameKBFileState(callbackHelpers, { id, name, projectId });
-    }
-  );
-
-  const copyDefaultQnASourceFileOnLocales = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      locales,
-      name,
-      projectId,
-    }: {
-      locales: string[];
-      name: string;
-      projectId: string;
-    }) => {
-      const { set, snapshot } = callbackHelpers;
-      const { defaultLanguage } = await snapshot.getPromise(settingsState(projectId));
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-      const defaultQnAFile = qnaFiles.find((f) => f.id === `${name}.source.${defaultLanguage}`);
-      if (!defaultQnAFile) {
-        throw new Error(`${name}.source.${defaultLanguage} does not exist`);
-      }
-      const changes: QnAFile[] = [];
-      // copy default locale qna file on other locales
-      locales.forEach((lang) => {
-        const fileId = `${name}.source.${lang}`;
-        qnaFileStatusStorage.updateFileStatus(projectId, fileId);
-        changes.push({
-          ...defaultQnAFile,
-          id: fileId,
-        });
-        set(qnaFilesState(projectId), qnaFilesAtomUpdater({ adds: changes }));
-      });
     }
   );
 
