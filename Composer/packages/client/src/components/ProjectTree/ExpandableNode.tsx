@@ -19,6 +19,7 @@ type Props = {
 };
 
 const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) => css`
+  max-height: 24px;
   label: summary;
   padding-left: ${depth * INDENT_PER_LEVEL + 12}px;
   :hover {
