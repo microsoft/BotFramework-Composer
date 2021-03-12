@@ -97,7 +97,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
 
   initialBreadcrumbArray.push({
     key: buildKey(BreadcrumbKeyPrefix.Dialog, dialogId),
-    label: dialogMap[dialogId]?.$designer?.name ?? dialogMap[dialogId]?.$designer?.$designer?.name,
+    label: getFriendlyName(dialogMap[dialogId], true),
     link: {
       projectId: projectId,
       dialogId: dialogId,
@@ -108,7 +108,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   if (triggerIndex != null && trigger != null) {
     initialBreadcrumbArray.push({
       key: buildKey(BreadcrumbKeyPrefix.Trigger, triggerIndex),
-      label: trigger.$designer?.name || getFriendlyName(trigger),
+      label: getFriendlyName(trigger),
       link: {
         projectId: projectId,
         dialogId: dialogId,
@@ -139,7 +139,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
 
         switch (prefix) {
           case BreadcrumbKeyPrefix.Dialog:
-            b.label = getFriendlyName(currentDialog.content);
+            b.label = getFriendlyName(currentDialog.content, true);
             break;
           case BreadcrumbKeyPrefix.Trigger:
             b.label = getFriendlyName(get(currentDialog.content, `triggers[${name}]`));
