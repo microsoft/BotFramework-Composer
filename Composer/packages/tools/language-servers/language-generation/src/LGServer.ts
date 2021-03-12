@@ -827,7 +827,7 @@ export class LGServer {
     return true;
   }
 
-  protected getOtherLGVariables(lgOption: LGOption | undefined): void {
+  protected async getOtherLGVariables(lgOption: LGOption | undefined): Promise<void> {
     const { fileId, projectId } = lgOption || {};
     if (projectId && fileId) {
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
@@ -838,15 +838,13 @@ export class LGServer {
         }
       });
 
-      setTimeout(async () => {
-        const variables = uniq((await this._lgParser.extractLGVariables(undefined, lgContents)).lgVariables);
-        this._otherDefinedVariblesInLG = {};
-        variables.forEach((variable) => {
-          const propertyList = variable.split('.');
-          if (propertyList.length >= 1) {
-            this.updateObject(propertyList, this._otherDefinedVariblesInLG);
-          }
-        });
+      const variables = uniq((await this._lgParser.extractLGVariables(undefined, lgContents)).lgVariables);
+      this._otherDefinedVariblesInLG = {};
+      variables.forEach((variable) => {
+        const propertyList = variable.split('.');
+        if (propertyList.length >= 1) {
+          this.updateObject(propertyList, this._otherDefinedVariblesInLG);
+        }
       });
     }
   }
