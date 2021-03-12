@@ -13,6 +13,7 @@ import {
   showCreateDialogModalState,
   dialogState,
   dispatcherState,
+  settingsState,
 } from '../atoms';
 
 import { createLgFileState, removeLgFileState } from './lg';

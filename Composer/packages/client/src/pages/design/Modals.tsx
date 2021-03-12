@@ -14,7 +14,6 @@ import {
   dispatcherState,
   schemasState,
   showCreateDialogModalState,
-  localeState,
   qnaFilesState,
   displaySkillManifestState,
   brokenSkillInfoState,
@@ -22,6 +21,7 @@ import {
   dialogModalInfoState,
   triggerModalInfoState,
   showAddSkillDialogModalState,
+  settingsState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { undoFunctionState } from '../../recoilModel/undo/history';
@@ -48,7 +48,6 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
   const displaySkillManifestNameIdentifier = useRecoilValue(displaySkillManifestState);
 
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-  const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const { commitChanges } = undoFunction;
 
@@ -59,7 +58,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     setCreationFlowStatus,
     setCreationFlowType,
     removeSkillFromBotProject,
-    createQnAKBFromUrl,
+    createQnAKBsFromUrls,
     createQnAKBFromScratch,
     createTrigger,
     createQnATrigger,
@@ -99,19 +98,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
 
     const { name, urls = [], locales, multiTurn } = data;
     if (urls.length !== 0) {
-      await Promise.all(
-        urls.map((url, index) => {
-          return createQnAKBFromUrl({
-            id: dialogId,
-            locale: locales[index],
-            name,
-            url,
-            multiTurn,
-            projectId,
-            filteredLocales: locales,
-          });
-        })
-      );
+      await createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
     } else {
       await createQnAKBFromScratch({ id: dialogId, name, projectId });
     }
