@@ -40,6 +40,7 @@ const Input = styled(TextField)({
   position: 'relative',
   '& input, & textarea': {
     fontSize: FluentTheme.fonts.small.fontSize,
+    maxHeight: '97px',
   },
   '& .ms-TextField-fieldGroup::after': {
     content: '""',
@@ -89,8 +90,6 @@ const textFieldStyles = {
   },
 };
 
-const textFieldResizeMaxCharsThreshold = 25;
-
 type Props = {
   mode: 'edit' | 'view';
   editorMode?: 'single' | 'editor';
@@ -105,9 +104,9 @@ type Props = {
   onJumpTo?: (direction: 'next' | 'previous') => void;
   onRemove: () => void;
   onFocus: () => void;
-  onChange?: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => void;
+  onChange?: (event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>, value?: string) => void;
   onLgChange?: (value: string) => void;
-  onShowCallout?: (target: HTMLInputElement) => void;
+  onShowCallout?: (target: HTMLTextAreaElement) => void;
 };
 
 type TextViewItemProps = Pick<Props, 'value' | 'onRemove' | 'onFocus' | 'onRenderDisplayText' | 'codeEditorSettings'>;
@@ -157,34 +156,35 @@ type TextFieldItemProps = Omit<Props, 'onRemove' | 'mode' | 'onFocus' | 'telemet
 const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldItemProps) => {
   const itemRef = useRef<ITextField | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     itemRef.current?.focus();
     if (containerRef.current) {
-      inputRef.current = containerRef.current.querySelector('input');
+      inputRef.current = containerRef.current.querySelector('textarea');
     }
   }, []);
 
   const focus = React.useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
+    (e: React.FocusEvent<HTMLTextAreaElement>) => {
       e.stopPropagation();
-      onShowCallout?.(e.target as HTMLInputElement);
+      onShowCallout?.(e.target as HTMLTextAreaElement);
     },
     [onShowCallout]
   );
 
   const click = React.useCallback(
-    (e: React.MouseEvent<HTMLInputElement>) => {
+    (e: React.MouseEvent<HTMLTextAreaElement>) => {
       e.stopPropagation();
-      onShowCallout?.(e.target as HTMLInputElement);
+      onShowCallout?.(e.target as HTMLTextAreaElement);
     },
     [onShowCallout]
   );
 
   React.useEffect(() => {
     if (inputRef.current && inputRef.current.value !== value) {
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')
+        ?.set;
       if (nativeInputValueSetter) {
         nativeInputValueSetter.call(inputRef.current, value);
         const inputEvent = new Event('input', { bubbles: true });
@@ -196,9 +196,10 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
   return (
     <div ref={containerRef}>
       <Input
+        autoAdjustHeight
+        multiline
         componentRef={(ref) => (itemRef.current = ref)}
         defaultValue={value}
-        multiline={value.length > textFieldResizeMaxCharsThreshold}
         resizable={false}
         styles={textFieldStyles}
         onChange={onChange}

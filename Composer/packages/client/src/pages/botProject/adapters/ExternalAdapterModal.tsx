@@ -89,7 +89,11 @@ const AdapterModal = (props: Props) => {
           <Text key="helptext">
             {formatMessage.rich('To learn more about the { title }, <a>visit its documentation page</a>.', {
               title: schema.title,
-              a: ({ children }) => <Link href={uiSchema.helpLink}>{children}</Link>,
+              a: ({ children }) => (
+                <Link href={uiSchema.helpLink} target="_blank">
+                  {children}
+                </Link>
+              ),
             })}
           </Text>
           <DialogFooter>

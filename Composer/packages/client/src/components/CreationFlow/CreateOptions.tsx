@@ -30,7 +30,7 @@ import querystring from 'query-string';
 import axios from 'axios';
 
 import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
-import { creationFlowTypeState } from '../../recoilModel';
+import { creationFlowTypeState, featureFlagsState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { getAliasFromPayload } from '../../utils/electronUtil';
 
@@ -129,6 +129,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const creationFlowType = useRecoilValue(creationFlowTypeState);
+  const featureFlags = useRecoilValue(featureFlagsState);
 
   const selection = useMemo(() => {
     return new Selection({
@@ -234,6 +235,12 @@ export function CreateOptions(props: CreateOptionsProps) {
     }
     return null;
   };
+
+  useEffect(() => {
+    if (featureFlags.NEW_CREATION_FLOW?.enabled) {
+      navigate(`/v2/projects/create${props?.location?.search}`);
+    }
+  });
 
   useEffect(() => {
     if (templates.length > 1) {
