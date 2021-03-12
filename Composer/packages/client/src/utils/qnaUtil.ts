@@ -33,9 +33,8 @@ export const substringTextByLine = (text: string, start?: number, end?: number):
  * @param qnaFiles
  */
 export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[], locales: string[]): QnAFile[] => {
-  const sourceQnAFileId = locales.map((l) => `.source.${l}`);
   const qnaFilesNeedMigrate = qnaFiles.filter((file) => {
-    return !file.id.endsWith('.source') && !sourceQnAFileId.includes(file.id) && file.qnaSections.length;
+    return !file.id.endsWith('.source') && !locales.includes(file.id.split('.source.')[1]) && file.qnaSections.length;
   });
   if (!qnaFilesNeedMigrate.length) return qnaFiles;
   const updatedFiles: QnAFile[] = [];
