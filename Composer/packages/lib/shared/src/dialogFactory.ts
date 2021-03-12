@@ -4,7 +4,7 @@
 import { JSONSchema7 } from 'json-schema';
 import merge from 'lodash/merge';
 import formatMessage from 'format-message';
-import { DesignerData, MicrosoftIDialog, LuIntentSection, SDKKinds } from '@botframework-composer/types';
+import { DesignerData, MicrosoftIDialog, LuIntentSection, SDKKinds, BaseSchema } from '@botframework-composer/types';
 
 import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
@@ -25,9 +25,13 @@ const initialInputDialog = {
   defaultValueResponse: '',
 };
 
-export function getFriendlyName(data): string {
+export function getFriendlyName(data: BaseSchema, isDialog = false): string {
   if (data?.$designer?.name) {
     return data?.$designer?.name;
+  }
+
+  if (isDialog) {
+    return data.id;
   }
 
   if (data?.intent) {
