@@ -15,7 +15,7 @@ import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getKBName } from '../../utils/fileUtil';
 
 import { validateName } from './constants';
-import { styles, dialogWindow, textFieldKBName } from './styles';
+import { styles, dialogWindow, textFieldKBNameFromScratch } from './styles';
 
 type EditQnAFromScratchModalProps = {
   qnaFiles: QnAFile[];
@@ -25,12 +25,16 @@ type EditQnAFromScratchModalProps = {
 };
 
 export type EditQnAFromScratchFormData = {
+  preName: string;
   name: string;
 };
 
 const formConfig: FieldConfig<EditQnAFromScratchFormData> = {
   name: {
     required: true,
+    defaultValue: '',
+  },
+  preName: {
     defaultValue: '',
   },
 };
@@ -44,6 +48,7 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
 
   formConfig.name.validate = validateName(qnaFiles.filter(({ id }) => qnaFile.id !== id));
   formConfig.name.defaultValue = getKBName(qnaFile.id);
+  formConfig.preName.defaultValue = getKBName(qnaFile.id);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors;
 
@@ -61,7 +66,7 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
       hidden={false}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: styles.modalCreateFromScratch,
       }}
       onDismiss={onDismiss}
     >
@@ -72,7 +77,7 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
             placeholder={formatMessage('Type a name that describes this content')}
-            styles={textFieldKBName}
+            styles={textFieldKBNameFromScratch}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
           />

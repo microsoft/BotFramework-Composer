@@ -16,7 +16,13 @@ export const styles = {
       fontSize: FontSizes.size14,
     },
   },
-  modal: {
+  modalCreateFromUrl: {
+    main: {
+      maxWidth: '960px !important',
+      width: '960px',
+    },
+  },
+  modalCreateFromScratch: {
     main: {
       maxWidth: '600px !important',
     },
@@ -39,10 +45,17 @@ export const dialogWindowMini = css`
 
 export const urlPairStyle = css`
   display: flex;
-  max-width: 517px;
+  width: 760px;
 `;
 
-export const textFieldKBName = {
+export const textFieldKBNameFromUrl = {
+  root: {
+    width: 760,
+    paddingBottom: 20,
+  },
+};
+
+export const textFieldKBNameFromScratch = {
   root: {
     width: 400,
     paddingBottom: 20,
@@ -64,8 +77,10 @@ export const textFieldLocales = {
 
 export const textFieldUrl = {
   root: {
-    width: 350,
-    paddingBottom: 20,
+    paddingBottom: 12,
+  },
+  fieldGroup: {
+    width: 760,
   },
 };
 
@@ -79,3 +94,10 @@ export const subText = css`
   font-size: 14px;
   font-weight: 400;
 `;
+
+export const knowledgeBaseStyle = {
+  root: {
+    color: NeutralColors.gray160,
+    fontWeight: '600' as '600',
+  },
+};

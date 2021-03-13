@@ -273,16 +273,23 @@ const TableView: React.FC<TableViewProps> = (props) => {
     createQnAQuestion(payload);
   };
 
-  const onSubmitEditKB = async ({ name }: { name: string }) => {
+  const onSubmitEditKB = async ({ preName, name }: { preName: string; name: string }) => {
     if (!editQnAFile) return;
-    const newSourceId = `${name}.source`;
-    for (let i = 0; i < languages.length; i++) {
-      await actions.renameQnAKB({
-        id: `${getBaseName(editQnAFile.id)}.${languages[i]}`,
-        name: name,
-        projectId: actualProjectId,
-      });
+    if (preName === name) {
+      setEditQnAFile(undefined);
+      return;
     }
+    const newSourceId = `${name}.source`;
+    await Promise.all(
+      languages.map((language) => {
+        return actions.renameQnAKB({
+          id: `${getBaseName(editQnAFile.id)}.${language}`,
+          name: name,
+          projectId: actualProjectId,
+        });
+      })
+    );
+
     if (!qnaFile) return;
     await Promise.all(
       languages.map((language) => {
