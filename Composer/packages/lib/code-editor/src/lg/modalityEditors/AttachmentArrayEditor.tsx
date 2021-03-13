@@ -67,6 +67,7 @@ type AttachmentArrayEditorProps = {
   memoryVariables?: readonly string[];
   lgOption?: LGOption;
   onChange: (items: string[]) => void;
+  onRemoveTemplate: (templateId: string) => void;
   onTemplateChange: (templateId: string, body?: string) => void;
   telemetryClient: TelemetryClient;
   codeEditorSettings?: Partial<CodeEditorSettings>;
@@ -80,6 +81,7 @@ export const AttachmentArrayEditor = React.memo(
     memoryVariables,
     onChange,
     onTemplateChange,
+    onRemoveTemplate,
     telemetryClient,
     codeEditorSettings,
   }: AttachmentArrayEditorProps) => {
@@ -108,11 +110,12 @@ export const AttachmentArrayEditor = React.memo(
     );
 
     const onRemove = React.useCallback(
-      (index: number) => () => {
-        const newItems = items.filter((_, idx) => idx !== index);
+      (templateId: string) => () => {
+        const newItems = items.filter((id) => id !== templateId);
         onChange(newItems);
+        onRemoveTemplate(templateId);
       },
-      [items, onChange]
+      [items, onChange, onRemoveTemplate]
     );
 
     const onAddTemplateClick = React.useCallback(
@@ -239,11 +242,12 @@ export const AttachmentArrayEditor = React.memo(
             lgTemplates={lgTemplates}
             memoryVariables={memoryVariables}
             mode={idx === currentIndex ? 'edit' : 'view'}
+            removeTooltipTextContent={formatMessage('Remove attachment')}
             telemetryClient={telemetryClient}
             value={body}
             onFocus={onFocus(idx)}
             onLgChange={onLgCodeChange(name)}
-            onRemove={onRemove(idx)}
+            onRemove={onRemove(name)}
             onRenderDisplayText={onRenderDisplayText(idx)}
           />
         ))}
