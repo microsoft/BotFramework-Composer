@@ -20,6 +20,7 @@ type Props = {
 
 const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) => css`
   max-height: 24px;
+  width: calc(100%-${depth * INDENT_PER_LEVEL + 12}px);
   label: summary;
   padding-left: ${depth * INDENT_PER_LEVEL + 12}px;
   :hover {

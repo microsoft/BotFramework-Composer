@@ -358,33 +358,35 @@ export const ProjectTree: React.FC<Props> = ({
     };
 
     return (
-      <TreeItem
-        key={`${item.id}_${item.index}`}
-        dialogName={dialog.displayName}
-        extraSpace={INDENT_PER_LEVEL}
-        icon={icons.TRIGGER}
-        isActive={doesLinkMatch(link, selectedLink)}
-        isMenuOpen={isMenuOpen}
-        link={link}
-        marginLeft={depth * INDENT_PER_LEVEL}
-        menu={
-          options.showDelete
-            ? [
-                {
-                  label: formatMessage('Remove this trigger'),
-                  icon: 'Delete',
-                  onClick: (link) => {
-                    onDialogDeleteTrigger?.(projectId, link.dialogId ?? '', link.trigger ?? 0);
+      <div>
+        <TreeItem
+          key={`${item.id}_${item.index}`}
+          dialogName={dialog.displayName}
+          extraSpace={INDENT_PER_LEVEL}
+          icon={icons.TRIGGER}
+          isActive={doesLinkMatch(link, selectedLink)}
+          isMenuOpen={isMenuOpen}
+          link={link}
+          marginLeft={depth * INDENT_PER_LEVEL}
+          menu={
+            options.showDelete
+              ? [
+                  {
+                    label: formatMessage('Remove this trigger'),
+                    icon: 'Delete',
+                    onClick: (link) => {
+                      onDialogDeleteTrigger?.(projectId, link.dialogId ?? '', link.trigger ?? 0);
+                    },
                   },
-                },
-              ]
-            : []
-        }
-        menuOpenCallback={setMenuOpen}
-        showErrors={options.showErrors}
-        textWidth={leftSplitWidth - TREE_PADDING}
-        onSelect={handleOnSelect}
-      />
+                ]
+              : []
+          }
+          menuOpenCallback={setMenuOpen}
+          showErrors={options.showErrors}
+          textWidth={leftSplitWidth - TREE_PADDING}
+          onSelect={handleOnSelect}
+        />
+      </div>
     );
   };
 
