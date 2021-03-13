@@ -36,7 +36,14 @@ export const TabHeader: React.FC<TabHeaderProps> = (props) => {
       selectedKey={String(selectedKey)}
       style={{ height: '100%', overflow: 'auto' }}
       styles={{
-        root: { position: 'absolute', left: '20px', top: '0px', width: 'calc(100% - 40px)' },
+        root: {
+          position: 'absolute',
+          left: '20px',
+          top: '0px',
+          width: 'calc(100% - 40px)',
+          zIndex: 1000,
+          backgroundColor: 'white',
+        },
         itemContainer: { height: 'calc(100% - 60px)', marginTop: '60px', padding: '0 20px' },
       }}
       onLinkClick={handleLinkClick}
