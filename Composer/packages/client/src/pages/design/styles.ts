@@ -147,7 +147,7 @@ export const middleTriggerElements = css`
 `;
 
 export const triggerButton = css`
-  font-size: 12px;
+  font-size: 14px;
   color: #0078d4;
 `;
 
