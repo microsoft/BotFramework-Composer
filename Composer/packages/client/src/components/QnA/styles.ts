@@ -32,7 +32,6 @@ export const styles = {
 export const dialogWindow = css`
   display: flex;
   flex-direction: column;
-  width: 552px;
   min-height: 254px;
 `;
 
@@ -99,5 +98,12 @@ export const knowledgeBaseStyle = {
   root: {
     color: NeutralColors.gray160,
     fontWeight: '600' as '600',
+  },
+};
+
+export const urlStackStyle = {
+  root: {
+    overflowY: 'auto' as 'auto',
+    marginBottom: 10,
   },
 };
