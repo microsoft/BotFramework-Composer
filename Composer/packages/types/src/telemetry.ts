@@ -39,10 +39,23 @@ export enum PageNames {
 
 type ApplicationEvents = {
   NotificationPanelOpened: undefined;
+  HandoffToComposerCompleted: { source: string };
 };
 
 type GettingStartedEvents = {
   GettingStartedLinkClicked: { method: 'link' | 'button'; url: string };
+};
+
+type PackageManagerEvents = {
+  PackageInstallConflictFound: { package: string; version: string; isUpdate: boolean };
+  PackageInstallConflictResolved: { package: string; version: string; isUpdate: boolean };
+  PackageInstalled: { package: string; version: string; isUpdate: boolean };
+  PackageInstallFailed: { package: string; version: string; isUpdate: boolean };
+  PackageSearch: { term: string };
+  PackageUninstalled: { package: string };
+  PackageUninstallFailed: { package: string };
+  PackageFeedAdded: undefined;
+  PackageFeedDeleted: undefined;
 };
 
 type SessionEvents = {
@@ -96,8 +109,8 @@ type QnaEvents = {
 
 type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
-  NewPublishingProfileSaved: { type: string };
-  PublishingProfileStarted: { target: string; projectId: string };
+  NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
+  PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileCompleted: { target: string; projectId: string };
 };
 
@@ -132,6 +145,14 @@ type WebChatEvents = {
   SaveTranscriptClicked: undefined;
 };
 
+type ABSChannelsEvents = {
+  ConnectionsAddNewProfile: undefined;
+  ConnectionsChannelStatusDisplayed: { teams: boolean; speech: boolean; webchat: boolean };
+  ConnectionsChannelStatusError: { error: string };
+  ConnectionsToggleChannel: { channel: string; enabled: boolean };
+  ConnectionsToggleChannelFailed: { channel: string; enabled: boolean };
+};
+
 type OtherEvents = {};
 
 type PageView = {
@@ -153,7 +174,9 @@ type PageView = {
 export type TelemetryEvents = ApplicationEvents &
   GettingStartedEvents &
   BotProjectEvents &
+  PackageManagerEvents &
   DesignerEvents &
+  ABSChannelsEvents &
   SessionEvents &
   BotSettingsEvents &
   OtherEvents &

@@ -5,6 +5,7 @@ import { QnAFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { FieldValidator } from '../../hooks/useForm';
+import { getBaseName } from '../../utils/fileUtil';
 
 export type CreateQnAFromScratchFormData = {
   name: string;
@@ -40,7 +41,6 @@ export type CreateQnAFromModalProps = {
 
 export type CreateQnAFromUrlModalProps = {
   projectId: string;
-  activeLocale: string;
   locales: string[];
   defaultLocale: string;
   dialogId: string;
@@ -72,7 +72,9 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
         );
       }
 
-      const duplicatedItemIndex = sources.findIndex((item) => item.id.toLowerCase() === `${name.toLowerCase()}.source`);
+      const duplicatedItemIndex = sources.findIndex(
+        (item) => getBaseName(item.id.toLowerCase()) === `${name.toLowerCase()}.source`
+      );
       if (duplicatedItemIndex > -1) {
         currentError = formatMessage('You already have a KB with that name. Choose another name and try again.');
       }

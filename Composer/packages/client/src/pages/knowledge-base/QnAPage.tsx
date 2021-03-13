@@ -134,6 +134,7 @@ const QnAPage: React.FC<RouteComponentProps<{
     <Page
       useDebugPane
       useNewTree
+      contentStyle={qnaContentStyle}
       data-testid="QnAPage"
       dialogId={dialogId}
       mainRegionName={formatMessage('QnA editor')}
@@ -143,7 +144,6 @@ const QnAPage: React.FC<RouteComponentProps<{
       skillId={skillId}
       title={formatMessage('Knowledge(QnA)')}
       toolbarItems={[]}
-      contentStyle={qnaContentStyle}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
@@ -168,19 +168,7 @@ const QnAPage: React.FC<RouteComponentProps<{
           }}
           onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
             if (urls.length !== 0) {
-              await Promise.all(
-                urls.map((url, index) => {
-                  actions.createQnAKBFromUrl({
-                    id: creatQnAOnInfo.dialogId,
-                    name,
-                    url,
-                    locale: locales[index],
-                    multiTurn,
-                    projectId: creatQnAOnInfo.projectId,
-                    filteredLocales: locales,
-                  });
-                })
-              );
+              actions.createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
             } else {
               await actions.createQnAKBFromScratch({
                 id: creatQnAOnInfo.dialogId,

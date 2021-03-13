@@ -9,8 +9,9 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { PrimaryButton, DefaultButton, CommandButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { dispatcherState, onCreateQnAFromUrlDialogCompleteState } from '../../recoilModel';
@@ -29,10 +30,10 @@ import {
   styles,
   dialogWindow,
   textFieldUrl,
-  textFieldLocales,
-  textFieldKBName,
+  textFieldKBNameFromUrl,
   warning,
   urlPairStyle,
+  knowledgeBaseStyle,
 } from './styles';
 
 const DialogTitle = () => {
@@ -65,13 +66,22 @@ const hasErrors = (errors: CreateQnAFromUrlFormDataErrors) => {
   return false;
 };
 
+const initializeLocales = (locales: string[], defaultLocale: string) => {
+  const newLocales = [...locales];
+  const index = newLocales.findIndex((l) => l === defaultLocale);
+  if (index < 0) throw new Error(`default language ${defaultLocale} does not exist in languages`);
+  newLocales.splice(index, 1);
+  newLocales.unshift(defaultLocale);
+  return newLocales;
+};
+
 export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (props) => {
-  const { onDismiss, onSubmit, dialogId, projectId, qnaFiles, locales, defaultLocale, activeLocale } = props;
+  const { onDismiss, onSubmit, dialogId, projectId, qnaFiles, locales, defaultLocale } = props;
   const actions = useRecoilValue(dispatcherState);
   const onComplete = useRecoilValue(onCreateQnAFromUrlDialogCompleteState(projectId));
   const [formData, setFormData] = useState<CreateQnAFromUrlFormData>({
     urls: [],
-    locales: defaultLocale === activeLocale ? [defaultLocale] : [defaultLocale, activeLocale],
+    locales: initializeLocales(locales, defaultLocale),
     name: '',
     multiTurn: false,
   });
@@ -79,25 +89,10 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
     urls: [],
     name: '',
   });
-
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = hasErrors(formDataErrors) || !formData.urls[0] || !formData.name;
-  const addLocalesMenu = locales
-    .filter((locale) => !formData.locales.includes(locale))
-    .map((item) => {
-      return {
-        key: item,
-        ariaLabel: item,
-        text: item,
-        onClick: () => addLocales(item),
-      };
-    });
 
   const validFormDataName = validateName(qnaFiles);
-
-  const addLocales = (locale: string) => {
-    setFormData({ ...formData, locales: [...formData.locales, locale] });
-  };
 
   const onChangeNameField = (value: string | undefined) => {
     updateNameField(value);
@@ -150,15 +145,6 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
     TelemetryClient.track('AddNewKnowledgeBaseCanceled');
   };
 
-  const removeLocale = (locale) => {
-    const locales = [...formData.locales];
-    const index = locales.findIndex((l) => l === locale);
-    if (index > -1) {
-      locales.splice(index, 1);
-      setFormData({ ...formData, locales });
-    }
-  };
-
   const removeEmptyUrls = (formData: CreateQnAFromUrlFormData) => {
     const urls: string[] = [];
     const locales: string[] = [];
@@ -178,14 +164,14 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
   return (
     <Dialog
       dialogContentProps={{
-        type: DialogType.normal,
+        type: DialogType.close,
         title: <DialogTitle />,
         styles: styles.dialog,
       }}
       hidden={false}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: styles.modalCreateFromUrl,
       }}
       onDismiss={handleDismiss}
     >
@@ -197,87 +183,34 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
             errorMessage={formDataErrors.name}
             label={formatMessage('Knowledge base name')}
             placeholder={formatMessage('Type a name that describes this content')}
-            styles={textFieldKBName}
+            styles={textFieldKBNameFromUrl}
             value={formData.name}
             onChange={(e, name = '') => onChangeNameField(name)}
           />
         </Stack>
         <Stack>
-          <div css={urlPairStyle}>
-            <TextField
-              disabled
-              data-testid={`defaultLocalesOnCreateQnAModal`}
-              label={formatMessage('KB Languages')}
-              styles={textFieldLocales}
-              value={defaultLocale}
-            />
-            <TextField
-              required
-              data-testid={`knowledgeLocationTextField-url`}
-              errorMessage={formDataErrors.urls[0]}
-              label={formatMessage('Knowledge source')}
-              placeholder={formatMessage('Enter a URL')}
-              styles={textFieldUrl}
-              value={formData.urls[0]}
-              onChange={(e, url = '') => onChangeUrlsField(url, 0)}
-            />
-          </div>
-          {defaultLocale !== activeLocale && (
-            <div css={urlPairStyle}>
-              <TextField
-                disabled
-                data-testid={`activeLocalesOnCreateQnAModal`}
-                styles={textFieldLocales}
-                value={activeLocale}
-              />
-              <TextField
-                data-testid={`knowledgeLocationTextField-url`}
-                errorMessage={formDataErrors.urls[1]}
-                placeholder={formatMessage('Enter a URL')}
-                styles={textFieldUrl}
-                value={formData.urls[1]}
-                onChange={(e, url = '') => onChangeUrlsField(url, 1)}
-              />
-            </div>
-          )}
-          {formData.locales
-            .filter((locale) => {
-              return locale !== defaultLocale && locale !== activeLocale;
-            })
-            .map((locale, index) => {
-              const newIndex = index + (defaultLocale !== activeLocale ? 2 : 1);
-              return (
-                <div key={`add${locale}InCreateQnAFromUrlModal`} css={urlPairStyle}>
-                  <TextField disabled styles={textFieldLocales} value={locale} />
-                  <TextField
-                    errorMessage={formDataErrors.urls[newIndex]}
-                    placeholder={formatMessage('Enter a URL')}
-                    styles={textFieldUrl}
-                    value={formData.urls[newIndex]}
-                    onChange={(e, url = '') => onChangeUrlsField(url, newIndex)}
-                  />
-                  <IconButton iconProps={{ iconName: 'Cancel' }} onClick={() => removeLocale(locale)} />
-                </div>
-              );
-            })}
+          <Text styles={knowledgeBaseStyle}>{formatMessage('Knowledge base')}</Text>
+          {formData.locales.map((locale, i) => {
+            return (
+              <div key={`add${locale}InCreateQnAFromUrlModal`} css={urlPairStyle}>
+                <TextField
+                  errorMessage={formDataErrors.urls[i]}
+                  label={locale}
+                  placeholder={formatMessage('Enter a URL')}
+                  required={i === 0}
+                  styles={textFieldUrl}
+                  value={formData.urls[i]}
+                  onChange={(e, url = '') => onChangeUrlsField(url, i)}
+                />
+              </div>
+            );
+          })}
 
           {!isQnAFileselected && (
             <div css={warning}> {formatMessage('Please select a specific qna file to import QnA')}</div>
           )}
         </Stack>
         <Stack>
-          <CommandButton
-            data-is-focusable
-            data-testid="AddLanguageButton"
-            iconProps={{ iconName: 'Add' }}
-            menuProps={{ items: addLocalesMenu }}
-            text={formatMessage('Add')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.stopPropagation();
-              }
-            }}
-          />
           <Checkbox
             label={formatMessage('Enable multi-turn extraction')}
             onChange={(_e, val) => onChangeMultiTurn(val)}
@@ -303,7 +236,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
-          text={formatMessage('Create KB')}
+          text={formatMessage('Create knowledge base')}
           onClick={() => {
             if (hasErrors(formDataErrors)) {
               return;

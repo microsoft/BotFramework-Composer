@@ -273,16 +273,23 @@ const TableView: React.FC<TableViewProps> = (props) => {
     createQnAQuestion(payload);
   };
 
-  const onSubmitEditKB = async ({ name }: { name: string }) => {
+  const onSubmitEditKB = async ({ preName, name }: { preName: string; name: string }) => {
     if (!editQnAFile) return;
-    const newSourceId = `${name}.source`;
-    for (let i = 0; i < languages.length; i++) {
-      await actions.renameQnAKB({
-        id: `${getBaseName(editQnAFile.id)}.${languages[i]}`,
-        name: name,
-        projectId: actualProjectId,
-      });
+    if (preName === name) {
+      setEditQnAFile(undefined);
+      return;
     }
+    const newSourceId = `${name}.source`;
+    await Promise.all(
+      languages.map((language) => {
+        return actions.renameQnAKB({
+          id: `${getBaseName(editQnAFile.id)}.${language}`,
+          name: name,
+          projectId: actualProjectId,
+        });
+      })
+    );
+
     if (!qnaFile) return;
     await Promise.all(
       languages.map((language) => {
@@ -507,6 +514,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     <EditableField
                       key={question.id}
                       ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
+                      containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                       depth={0}
                       disabled={isAllowEdit}
                       enableIcon={isExpanded}
@@ -522,7 +530,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       required={isOnlyQuestion}
                       requiredMessage={formatMessage('At least one question is required')}
                       resizable={false}
-                      containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                       styles={editableField}
                       value={question.content}
                       onBlur={(_id, value = '') => {
@@ -560,13 +567,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   componentFocusOnMount
                   required
                   ariaLabel={formatMessage('Question is empty now')}
+                  containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                   depth={0}
                   disabled={isAllowEdit}
                   id={'NewQuestion'}
                   name={'New Question'}
                   placeholder={formatMessage('Add new question')}
                   styles={editableField}
-                  containerStyles={{ name: 'questionField', styles: 'height: 35px' }}
                   value={''}
                   onBlur={(_id, value) => {
                     const newValue = value?.trim();
