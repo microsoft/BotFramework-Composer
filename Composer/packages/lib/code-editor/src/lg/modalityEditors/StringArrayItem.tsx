@@ -99,6 +99,7 @@ type Props = {
   value: string;
   codeEditorSettings?: Partial<CodeEditorSettings>;
   telemetryClient: TelemetryClient;
+  removeTooltipTextContent?: string;
   onRenderDisplayText?: () => React.ReactNode;
   onBlur?: () => void;
   onJumpTo?: (direction: 'next' | 'previous') => void;
@@ -109,47 +110,62 @@ type Props = {
   onShowCallout?: (target: HTMLTextAreaElement) => void;
 };
 
-type TextViewItemProps = Pick<Props, 'value' | 'onRemove' | 'onFocus' | 'onRenderDisplayText' | 'codeEditorSettings'>;
+type TextViewItemProps = Pick<
+  Props,
+  'value' | 'onRemove' | 'onFocus' | 'onRenderDisplayText' | 'codeEditorSettings' | 'removeTooltipTextContent'
+>;
 
-const TextViewItem = React.memo(({ value, onRemove, onFocus, onRenderDisplayText }: TextViewItemProps) => {
-  const remove = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      e.stopPropagation();
-      e.preventDefault();
-      onRemove();
-    },
-    [onRemove]
-  );
+const TextViewItem = React.memo(
+  ({ removeTooltipTextContent, value, onRemove, onFocus, onRenderDisplayText }: TextViewItemProps) => {
+    const remove = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.stopPropagation();
+        e.preventDefault();
+        onRemove();
+      },
+      [onRemove]
+    );
 
-  const focus = React.useCallback(
-    (e: React.FocusEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      onFocus();
-    },
-    [onFocus]
-  );
+    const focus = React.useCallback(
+      (e: React.FocusEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        onFocus();
+      },
+      [onFocus]
+    );
 
-  const click = React.useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      onFocus();
-    },
-    [onFocus]
-  );
+    const click = React.useCallback(
+      (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        onFocus();
+      },
+      [onFocus]
+    );
 
-  const RemoveIcon = React.useMemo(() => withTooltip({ content: formatMessage('Remove variation') }, IconButton), []);
+    const RemoveIcon = React.useMemo(
+      () => withTooltip({ content: removeTooltipTextContent ?? formatMessage('Remove variation') }, IconButton),
+      [removeTooltipTextContent]
+    );
 
-  return (
-    <TextViewItemRoot horizontal tokens={textViewRootTokens} verticalAlign="center">
-      <Stack grow styles={textViewContainerStyles} tabIndex={0} verticalAlign="center" onClick={click} onFocus={focus}>
-        <Text styles={displayTextStyles} variant="small">
-          {onRenderDisplayText?.() ?? value}
-        </Text>
-      </Stack>
-      <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
-    </TextViewItemRoot>
-  );
-});
+    return (
+      <TextViewItemRoot horizontal tokens={textViewRootTokens} verticalAlign="center">
+        <Stack
+          grow
+          styles={textViewContainerStyles}
+          tabIndex={0}
+          verticalAlign="center"
+          onClick={click}
+          onFocus={focus}
+        >
+          <Text styles={displayTextStyles} variant="small">
+            {onRenderDisplayText?.() ?? value}
+          </Text>
+        </Stack>
+        <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
+      </TextViewItemRoot>
+    );
+  }
+);
 
 type TextFieldItemProps = Omit<Props, 'onRemove' | 'mode' | 'onFocus' | 'telemetryClient'>;
 
@@ -226,6 +242,7 @@ export const StringArrayItem = (props: Props) => {
     value,
     telemetryClient,
     codeEditorSettings,
+    removeTooltipTextContent,
   } = props;
 
   const onEditorDidMount = React.useCallback(
@@ -259,7 +276,13 @@ export const StringArrayItem = (props: Props) => {
           </LgCodeEditorContainer>
         )
       ) : (
-        <TextViewItem value={value} onFocus={onFocus} onRemove={onRemove} onRenderDisplayText={onRenderDisplayText} />
+        <TextViewItem
+          removeTooltipTextContent={removeTooltipTextContent}
+          value={value}
+          onFocus={onFocus}
+          onRemove={onRemove}
+          onRenderDisplayText={onRenderDisplayText}
+        />
       )}
     </Root>
   );
