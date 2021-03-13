@@ -104,7 +104,7 @@ export const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, 
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  height: 20px;
+  height: 24px;
 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
@@ -142,8 +142,6 @@ export const overflowSet = (isBroken: boolean) => css`
   max-height: 16px;
   justify-content: space-between;
   display: inline-flex;
-  position: relative;
-  top: -6px;
   min-width: 100%;
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
