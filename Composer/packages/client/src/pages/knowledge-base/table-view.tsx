@@ -394,7 +394,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                             languages.map(async (language) => {
                               const sourceNameWithoutLocale = getBaseName(containerId);
                               await removeQnAImport({
-                                id: qnaFile.id,
+                                id: `${getBaseName(qnaFile.id)}.${language}`,
                                 sourceId: sourceNameWithoutLocale,
                                 projectId: actualProjectId,
                               });
