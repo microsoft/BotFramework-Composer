@@ -77,7 +77,7 @@ export const StringArrayEditor = React.memo(
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState<number | null>(items.length === 1 && items[0] === '' ? 0 : null);
-    const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLInputElement | null>(null);
+    const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLTextAreaElement | null>(null);
 
     const onItemChange = useCallback(
       (index: number) => (_, newValue?: string) => {
@@ -112,7 +112,7 @@ export const StringArrayEditor = React.memo(
       setCurrentIndex(items.length);
     }, [items, onChange]);
 
-    const onShowCallout = useCallback((targetElement: HTMLInputElement) => {
+    const onShowCallout = useCallback((targetElement: HTMLTextAreaElement) => {
       setCalloutTargetElement(targetElement);
     }, []);
 
@@ -123,7 +123,7 @@ export const StringArrayEditor = React.memo(
 
           const filteredItems = items.filter(Boolean);
 
-          if (e.key === 'Enter') {
+          if (e.key === 'Enter' && containerRef.current?.contains(e.target as Node)) {
             onChange([...filteredItems, '']);
             setCurrentIndex(filteredItems.length);
           } else {

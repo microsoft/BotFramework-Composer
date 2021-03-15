@@ -15,7 +15,8 @@ context('Onboarding', () => {
     cy.visitPage('Design');
   });
 
-  it('walk through product tour teaching bubbles', () => {
+  // The onboarding test is disabled since we are temporarily disabling onboarding
+  xit('walk through product tour teaching bubbles', () => {
     cy.findByTestId('onboardingNextSet').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();

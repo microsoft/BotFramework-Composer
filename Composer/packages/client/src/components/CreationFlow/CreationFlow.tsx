@@ -31,7 +31,7 @@ import DefineConversation from './DefineConversation';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
-const CreationFlow: React.FC<CreationFlowProps> = () => {
+const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => {
   const {
     fetchTemplates,
     fetchTemplatesV2,
