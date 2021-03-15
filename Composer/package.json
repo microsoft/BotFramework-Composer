@@ -84,6 +84,11 @@
     "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas && rimraf l10ntemp",
     "l10n:check": "node scripts/l10nCheck.js"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx}": [
       "prettier --write",
