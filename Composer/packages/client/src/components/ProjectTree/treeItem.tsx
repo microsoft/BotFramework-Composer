@@ -250,7 +250,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                 tabIndex={-1}
               />
             )}
-            <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
+            <span className={'treeItem-text'} css={itemName(maxTextWidth - (item.icon == null ? 0 : 12))}>
               {item.displayName}
             </span>
             {showErrors && (
