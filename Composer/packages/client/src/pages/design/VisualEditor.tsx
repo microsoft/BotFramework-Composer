@@ -33,6 +33,7 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger, isRemoteSkill) {
           </React.Fragment>
         ) : isTriggerEmpty ? (
           <React.Fragment>
+            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
             {formatMessage(`This dialog has no trigger yet.`)}
             <ActionButton
               css={triggerButton}
