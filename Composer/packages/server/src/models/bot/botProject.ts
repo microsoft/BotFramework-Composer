@@ -867,11 +867,11 @@ export class BotProject implements IBotProject {
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    const paths = await this.fileStorage.glob([...patterns, '!(generated/**)', '!(runtime/**)'], root);
+    const paths = this.fileStorage.globSync([...patterns, '!(generated/**)', '!(runtime/**)'], root);
 
     for (const filePath of paths.sort()) {
       const realFilePath: string = Path.join(root, filePath);
-      const fileInfo = await this._getFileInfo(realFilePath);
+      const fileInfo = this._getFileInfo(realFilePath);
       if (fileInfo) {
         fileList.set(fileInfo.name, fileInfo);
       }
@@ -920,10 +920,10 @@ export class BotProject implements IBotProject {
 
     debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
-    const paths = await this.fileStorage.glob('*.{uischema,schema}', schemasDir);
+    const paths = this.fileStorage.globSync('*.{uischema,schema}', schemasDir);
 
     for (const path of paths) {
-      const fileInfo = await this._getFileInfo(Path.join(schemasDir, path));
+      const fileInfo = this._getFileInfo(Path.join(schemasDir, path));
       if (fileInfo) {
         schemas.push(fileInfo);
       }
@@ -933,20 +933,16 @@ export class BotProject implements IBotProject {
   };
 
   private _getFileInfo = (path: string): FileInfo | undefined => {
-    try {
-      const stats = this.fileStorage.statSync(path);
-      if (stats.isFile) {
-        const content: string = this.fileStorage.readFileSync(path);
-        return {
-          name: Path.basename(path),
-          content: content,
-          path: path,
-          relativePath: Path.relative(this.dir, path),
-          lastModified: stats.lastModified,
-        };
-      }
-    } catch (e) {
-      console.log(e);
+    const stats = this.fileStorage.statSync(path);
+    if (stats.isFile) {
+      const content: string = this.fileStorage.readFileSync(path);
+      return {
+        name: Path.basename(path),
+        content: content,
+        path: path,
+        relativePath: Path.relative(this.dir, path),
+        lastModified: stats.lastModified,
+      };
     }
   };
 
