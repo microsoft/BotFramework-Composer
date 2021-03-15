@@ -105,6 +105,10 @@ export class OneAuthInstance extends OneAuthBase {
         log('Mac development env detected. Getting access token using interactive sign in instead of silently.');
         return this.TEMPORARY_getAccessTokenOnMacDev(params);
       }
+      // if Account not exist, use arm account. in case the window popup again
+      if (!this.signedInAccount) {
+        this.signedInAccount = this.signedInARMAccount;
+      }
 
       if (!this.signedInAccount) {
         // we need to sign in
@@ -181,6 +185,15 @@ export class OneAuthInstance extends OneAuthBase {
   }
 
   public async getARMTokenForTenant(tenantId: string): Promise<string> {
+    if (!this.initialized) {
+      this.initialize();
+    }
+    // sign in arm account.
+    if (!this.signedInARMAccount) {
+      const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+      this.signedInARMAccount = result.account;
+    }
     if (this.signedInARMAccount) {
       try {
         log('Getting an ARM token for tenant %s', tenantId);

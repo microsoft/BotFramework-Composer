@@ -105,7 +105,6 @@ export class BotProjectService {
       'dialog.lastIntent',
       'dialog.lastTriggerEvent',
       'turn.lastresult',
-      'turn.activity',
       'turn.recognized',
       'turn.recognized.intent',
       'turn.recognized.score',
@@ -116,6 +115,25 @@ export class BotProjectService {
       'turn.dialogEvent',
       'turn.repeatedIds',
       'turn.activityProcessed',
+      'turn.activity.type',
+      'turn.activity.timestamp',
+      'turn.activity.localTimestamp',
+      'turn.activity.localTimezone',
+      'turn.activity.from',
+      'turn.activity.recipient',
+      'turn.activity.topicName',
+      'turn.activity.locale',
+      'turn.activity.text',
+      'turn.activity.speak',
+      'turn.activity.summary',
+      'turn.activity.suggestedActions',
+      'turn.activity.attachments',
+      'turn.activity.entities',
+      'turn.activity.action',
+      'turn.activity.name',
+      'turn.activity.value',
+      'turn.activity.importance',
+      'turn.activity.semanticAction',
     ];
     const projectVariables =
       BotProjectService.getIndexedProjectById(projectId)?.dialogFiles.map(({ content }) => {
@@ -451,6 +469,7 @@ export class BotProjectService {
             templateVersion,
             name,
             locationRef,
+            jobId,
             runtimeChoice,
             user
           );
@@ -485,8 +504,8 @@ export class BotProjectService {
               log('Open project', botRef);
               const id = await BotProjectService.openProject(botRef, user);
 
-              // in the case of PVA, we need to update the eTag and alias used by the import mechanism
-              createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
+              // in the case of remote project, we need to update the eTag and alias used by the import mechanism
+              BotProjectService.setProjectLocationData(id, { alias, eTag });
 
               log('Get Project by Id', id);
               const currentProject = await BotProjectService.getProjectById(id, user);

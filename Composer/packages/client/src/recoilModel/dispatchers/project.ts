@@ -354,8 +354,11 @@ export const projectDispatcher = () => {
         urlSuffix,
         alias,
         preserveRoot,
+        profile,
+        source,
         runtimeChoice,
       } = newProjectData;
+
       // starts the creation process and stores the jobID in state for tracking
       const response = await createNewBotFromTemplateV2(
         callbackHelpers,
@@ -372,8 +375,9 @@ export const projectDispatcher = () => {
         alias,
         preserveRoot
       );
+
       if (response.data.jobId) {
-        dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix);
+        dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix, profile, source);
       }
     } catch (ex) {
       set(botProjectIdsState, []);
@@ -485,7 +489,13 @@ export const projectDispatcher = () => {
   });
 
   const updateCreationMessage = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (jobId: string, templateId: string, urlSuffix: string) => {
+    (callbackHelpers: CallbackInterface) => async (
+      jobId: string,
+      templateId: string,
+      urlSuffix: string,
+      profile: any,
+      source: any
+    ) => {
       const timer = setInterval(async () => {
         try {
           const response = await httpClient.get(`/status/${jobId}`);
@@ -511,7 +521,13 @@ export const projectDispatcher = () => {
               callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
               callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
             }
+            if (profile) {
+              // ABS Create Flow, update publishProfile after create project
+              const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
+              const newProfile = getPublishProfileFromPayload(profile, source);
 
+              newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+            }
             projectIdCache.set(projectId);
 
             // navigate to the new get started section

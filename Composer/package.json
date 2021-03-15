@@ -22,23 +22,27 @@
   "engines": {
     "node": ">=12"
   },
-  "workspaces": [
-    "packages/adaptive-flow",
-    "packages/adaptive-form",
-    "packages/client",
-    "packages/electron-server",
-    "packages/extension",
-    "packages/extension-client",
-    "packages/form-dialogs",
-    "packages/intellisense",
-    "packages/lib/*",
-    "packages/server",
-    "packages/test-utils",
-    "packages/tools/built-in-functions",
-    "packages/tools/language-servers/*",
-    "packages/types",
-    "packages/ui-plugins/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/adaptive-flow",
+      "packages/adaptive-form",
+      "packages/client",
+      "packages/electron-server",
+      "packages/extension",
+      "packages/extension-client",
+      "packages/form-dialogs",
+      "packages/intellisense",
+      "packages/lib/*",
+      "packages/server",
+      "packages/server-workers",
+      "packages/test-utils",
+      "packages/tools/built-in-functions",
+      "packages/tools/language-servers/*",
+      "packages/types",
+      "packages/ui-plugins/*"
+    ],
+    "nohoist": ["**/server-workers/**"]
+  },
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
     "build:prod": "yarn build:dev && yarn build:client && yarn build:server && yarn build:electron",
@@ -79,11 +83,6 @@
     "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp ./packages",
     "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas && rimraf l10ntemp",
     "l10n:check": "node scripts/l10nCheck.js"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx}": [
