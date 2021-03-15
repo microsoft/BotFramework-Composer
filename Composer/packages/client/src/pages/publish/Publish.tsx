@@ -9,7 +9,12 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult } from '@bfc/shared';
 
-import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
+import {
+  dispatcherState,
+  localBotPublishHistorySelector,
+  localBotsDataSelector,
+  publishTypesState,
+} from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
@@ -55,6 +60,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
+  const publishTypes = useRecoilValue(publishTypesState(projectId));
+  const { getPublishTargetTypes } = useRecoilValue(dispatcherState);
 
   const pendingNotificationRef = useRef<Notification>();
   const showNotificationsRef = useRef<Record<string, boolean>>({});
@@ -128,6 +135,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
     }
   }, [botList]);
+
+  useEffect(() => {
+    if (projectId) {
+      getPublishTargetTypes(projectId);
+    }
+  }, [projectId]);
 
   useEffect(() => {
     // Clear intervals when unmount
@@ -361,6 +374,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             botStatusList={botStatusList}
             checkedIds={checkedSkillIds}
             disableCheckbox={isPublishPending}
+            publishTypes={publishTypes}
             onChangePublishTarget={changePublishTarget}
             onCheck={updateCheckedSkills}
             onManagePublishProfile={manageSkillPublishProfile}

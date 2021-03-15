@@ -3,29 +3,124 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import styled from '@emotion/styled';
 import moment from 'moment';
 import formatMessage from 'format-message';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Icon, IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import React, { useState, Fragment, useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { PublishResult } from '@bfc/shared';
+import { PublishResult, PublishTarget } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
+import { List } from 'office-ui-fabric-react/lib/List';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Text } from 'office-ui-fabric-react/lib/Text';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+import { PublishType } from '../../recoilModel/types';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
 
+/*
+  Stack
+    Bot
+      - Checkbox
+      - Name
+      Publish Profiles
+        Publish Profile
+        - Radio
+        - Name
+        - Target
+        - Edit Button
+        - Delete Button
+          Last Published
+            - Date/Time
+            - Status
+            - Message
+            // We should remove Comment - it is useless
+    - Add Button
+*/
+
+// ---------- Styles ---------- //
+
+const Root = styled(List)`
+  margin: 15px 0 0 15px;
+`;
+
+const BotItem = styled(Stack)``;
+
+const PublishBotCheckbox = styled(Checkbox)`
+  font-size: 18px;
+`;
+
+const BotHeader = styled(Stack)``;
+
+const BotIcon = styled(Icon)`
+  margin-left: 7px;
+`;
+
+const BotName = styled(Text)`
+  margin-left: 2px !important;
+`;
+
+const BotDetails = styled(Stack)`
+  padding: 4px 0 0 15px;
+`;
+
+const PublishProfileChoiceGroup = styled(ChoiceGroup)`
+  padding: 0 0 0 5px;
+`;
+
+const ProfileChoice = styled(Stack)``;
+
+const ProfileHeader = styled(Stack)`
+  align-items: center;
+`;
+
+const ProfileIcon = styled(Icon)`
+  margin-left: 7px;
+`;
+
+const ProfileName = styled(Text)`
+  margin-left: 2px !important;
+`;
+
+const ProfileAction = styled(ActionButton)`
+  font-size: 10px;
+`;
+
+const AddProfileAction = styled(ActionButton)`
+  margin: 10px 0 0 0 !important;
+  font-size: 12px;
+`;
+
+const ProfileType = styled(Text)`
+  color: gray;
+  font-size: 12px;
+`;
+
+const ProfileDetails = styled(Stack)`
+  margin-left: 30px;
+`;
+
+const addProfileIcon: IIconProps = { iconName: 'Add' };
+const editProfileIcon: IIconProps = { iconName: 'Edit' };
+const deleteProfileIcon: IIconProps = { iconName: 'Delete' };
+
+// ---------- BotStatusList Component ---------- //
+
 export type BotStatusListProps = {
   botStatusList: BotStatus[];
   botPublishHistoryList: BotPublishHistory;
+  publishTypes: PublishType[];
 
   /** When set to true, disable the checkbox. */
   disableCheckbox: boolean;
@@ -39,6 +134,7 @@ export type BotStatusListProps = {
 export const BotStatusList: React.FC<BotStatusListProps> = ({
   botStatusList,
   botPublishHistoryList,
+  publishTypes,
   disableCheckbox,
   checkedIds,
   onCheck,
@@ -58,7 +154,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const getPublishTargetOptions = (item: BotStatus): IDropdownOption[] => {
     const options: IDropdownOption[] = [];
     item.publishTargets &&
-      item.publishTargets.forEach((target, index) => {
+      item.publishTargets.forEach((target) => {
         options.push({
           key: target.name,
           text: target.name,
@@ -72,14 +168,18 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     return options;
   };
 
-  const onChangeCheckbox = (skillId: string, isChecked?: boolean) => {
-    if (isChecked) {
-      if (checkedIds.some((id) => id === skillId)) return;
-      onCheck([...checkedIds, skillId]);
-    } else {
-      onCheck(checkedIds.filter((id) => id !== skillId));
-    }
-  };
+  const onChangeCheckbox = React.useCallback(
+    (skillId: string, isChecked?: boolean) => {
+      if (isChecked) {
+        if (!checkedIds.some((id) => id === skillId)) {
+          onCheck([...checkedIds, skillId]);
+        }
+      } else {
+        onCheck(checkedIds.filter((id) => id !== skillId));
+      }
+    },
+    [checkedIds]
+  );
 
   const handleChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
     if (option) {
@@ -295,32 +395,97 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     );
   };
 
+  const renderProfileChoice = (
+    botStatus: BotStatus,
+    publishTarget: PublishTarget,
+    props: IChoiceGroupOption | undefined,
+    defaultRender?: (props?: IChoiceGroupOption | undefined) => JSX.Element | null
+  ) => {
+    const targetType = publishTypes.find((pt) => publishTarget.type === pt.name)?.description || publishTarget.type;
+    return (
+      <ProfileChoice>
+        <ProfileHeader horizontal>
+          <Fragment>{props && defaultRender?.({ ...props, text: '' })}</Fragment>
+          <ProfileIcon iconName="CloudUpload" />
+          <ProfileName>{props?.text}</ProfileName>
+          <ProfileAction iconProps={editProfileIcon} title={formatMessage('Edit')} />
+          <ProfileAction iconProps={deleteProfileIcon} title={formatMessage('Delete')} />
+        </ProfileHeader>
+        <ProfileDetails>
+          <ProfileType>{targetType}</ProfileType>
+        </ProfileDetails>
+      </ProfileChoice>
+    );
+  };
+
+  const renderBotCheckboxLabel = (botStatus: BotStatus) => {
+    return (
+      <Fragment>
+        <BotIcon iconName="CubeShape" />
+        <BotName>{botStatus.name}</BotName>
+      </Fragment>
+    );
+  };
+
+  const renderBotListItem = (botStatus: BotStatus): React.ReactNode => {
+    const isChecked = checkedIds?.some((id) => id === botStatus.id);
+    const profileOptions: IChoiceGroupOption[] = botStatus.publishTargets
+      ? botStatus.publishTargets.map((p) => {
+          return {
+            key: p.name,
+            text: p.name,
+            onRenderField: (props, defaultRender) => renderProfileChoice(botStatus, p, props, defaultRender),
+          };
+        })
+      : [];
+
+    return (
+      <BotItem key={botStatus.id}>
+        <BotHeader horizontal>
+          <PublishBotCheckbox
+            checked={isChecked}
+            label={botStatus.name}
+            onChange={(_, isChecked) => onChangeCheckbox(botStatus.id, isChecked)}
+            onRenderLabel={() => renderBotCheckboxLabel(botStatus)}
+          />
+        </BotHeader>
+        <BotDetails>
+          <PublishProfileChoiceGroup disabled={!isChecked} options={profileOptions} />
+          <AddProfileAction iconProps={addProfileIcon}>Add Publishing Profile</AddProfileAction>
+        </BotDetails>
+      </BotItem>
+    );
+  };
+
   return (
-    <div css={listRoot} data-testid={'bot-status-list'}>
-      <div css={tableView}>
-        <DetailsList
-          isHeaderVisible
-          checkboxVisibility={CheckboxVisibility.hidden}
-          columns={columns.map((col) => ({
-            ...col,
-            isSorted: col.key === currentSort.key,
-            isSortedDescending: currentSort.descending,
-          }))}
-          css={detailList}
-          items={displayedItems}
-          styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
-          onColumnHeaderClick={(_, clickedCol) => {
-            if (!clickedCol) return;
-            if (clickedCol.key === currentSort.key) {
-              clickedCol.isSortedDescending = !currentSort.descending;
-              setSort({ key: clickedCol.key, descending: !currentSort.descending });
-            } else {
-              clickedCol.isSorted = false;
-            }
-          }}
-          onRenderRow={renderTableRow}
-        />
+    <Fragment>
+      <Root items={botStatusList.slice()} onRenderCell={(item) => renderBotListItem(item as BotStatus)} />
+      <div css={listRoot} data-testid={'bot-status-list'}>
+        <div css={tableView}>
+          <DetailsList
+            isHeaderVisible
+            checkboxVisibility={CheckboxVisibility.hidden}
+            columns={columns.map((col) => ({
+              ...col,
+              isSorted: col.key === currentSort.key,
+              isSortedDescending: currentSort.descending,
+            }))}
+            css={detailList}
+            items={displayedItems}
+            styles={{ root: { selectors: { '.ms-DetailsRow-fields': { display: 'flex', alignItems: 'center' } } } }}
+            onColumnHeaderClick={(_, clickedCol) => {
+              if (!clickedCol) return;
+              if (clickedCol.key === currentSort.key) {
+                clickedCol.isSortedDescending = !currentSort.descending;
+                setSort({ key: clickedCol.key, descending: !currentSort.descending });
+              } else {
+                clickedCol.isSorted = false;
+              }
+            }}
+            onRenderRow={renderTableRow}
+          />
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
