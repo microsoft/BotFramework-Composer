@@ -95,6 +95,7 @@ export type TemplateInstallationArgs = {
   dstDir: string;
   projectName: string;
   templateGeneratorPath: string;
+  runtimeChoice: string;
 };
 
 if (!isMainThread) {

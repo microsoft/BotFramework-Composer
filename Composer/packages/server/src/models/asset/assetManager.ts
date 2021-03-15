@@ -121,11 +121,12 @@ export class AssetManager {
           dstDir,
           projectName,
           templateGeneratorPath,
-          runtimeChoice
+          runtimeChoice,
         },
         (status, msg) => {
           BackgroundProcessManager.updateProcess(jobId, status, msg);
         }
+      );
       return ref;
     } catch (err) {
       if (err?.message.match(/npm/)) {
