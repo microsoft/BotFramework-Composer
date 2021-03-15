@@ -3,8 +3,7 @@
 
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
@@ -34,49 +33,7 @@ import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeade
 import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 import { ProjectTreeOptions, TreeLink, TreeMenuItem } from './types';
-
-// -------------------- Styles -------------------- //
-
-const root = css`
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-  .ms-List-cell {
-    min-height: 36px;
-  }
-`;
-
-const focusStyle = css`
-  height: 100%;
-  position: relative;
-`;
-
-const icons = {
-  TRIGGER: 'LightningBolt',
-  DIALOG: 'Org',
-  FORM_DIALOG: 'Table',
-  FORM_FIELD: 'Variable2', // x in parentheses
-  FORM_TRIGGER: 'TriggerAuto', // lightning bolt with gear
-  FILTER: 'Filter',
-  LG: 'Robot',
-  LU: 'People',
-};
-
-const tree = css`
-  height: calc(100% - 45px);
-  overflow-y: auto;
-  label: tree;
-`;
-
-const headerCSS = (label: string, isActive?: boolean) => css`
-  width: 100%;
-  label: ${label};
-  :hover {
-    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
-  }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
-`;
+import { root, tree, focusStyle, headerCSS, icons } from './styles';
 
 // -------------------- Helper functions -------------------- //
 
@@ -280,7 +237,6 @@ export const ProjectTree: React.FC<Props> = ({
         <span
           key={dialog.id}
           ref={dialog.isRoot ? addMainDialogRef : null}
-          css={headerCSS('dialog-header', doesLinkMatch(dialogLink, selectedLink))}
           data-testid={`DialogHeader-${dialog.displayName}`}
           role="grid"
         >

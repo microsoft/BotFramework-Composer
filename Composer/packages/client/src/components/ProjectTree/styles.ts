@@ -8,6 +8,8 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 
+import { INDENT_PER_LEVEL } from './constants';
+
 export const projectTreeItemContainer = css`
   outline: none;
   :focus {
@@ -95,16 +97,16 @@ export const navContainer = (
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 `;
 
-export const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
-  label: navItem;
+export const treeItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
+  label: treeItem;
   font-size: 12px;
-  padding-left: ${padLeft}px;
-  margin-left: ${marginLeft}px;
   opacity: ${isBroken ? 0.5 : 1};
   display: inline-flex;
   flex-direction: row;
+  padding-left: ${padLeft}px;
+  padding-top: 6px;
+  margin-left: ${marginLeft}px;
   align-items: center;
-  height: 24px;
 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
@@ -139,10 +141,8 @@ export const diagnosticLink = css`
 
 export const overflowSet = (isBroken: boolean) => css`
   label: overflow-set;
-  max-height: 16px;
   justify-content: space-between;
   display: inline-flex;
-  min-width: 100%;
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
   }
@@ -193,9 +193,59 @@ export const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex-shrink: 1;
 `;
 
 export const calloutRootStyle = css`
   padding: 11px;
+`;
+
+export const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) => css`
+  label: summary;
+  padding-left: ${depth * INDENT_PER_LEVEL + 12}px;
+  :hover {
+    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+  }
+  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
+  ${isOpen ? 'list-style-type: "⏷";' : 'list-style-type: "⏵";'}
+`;
+
+export const root = css`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  .ms-List-cell {
+    min-height: 36px;
+  }
+`;
+
+export const focusStyle = css`
+  height: 100%;
+  position: relative;
+`;
+
+export const icons = {
+  TRIGGER: 'LightningBolt',
+  DIALOG: 'Org',
+  FORM_DIALOG: 'Table',
+  FORM_FIELD: 'Variable2', // x in parentheses
+  FORM_TRIGGER: 'TriggerAuto', // lightning bolt with gear
+  FILTER: 'Filter',
+  LG: 'Robot',
+  LU: 'People',
+};
+
+export const tree = css`
+  height: calc(100% - 45px);
+  overflow-y: auto;
+  label: tree;
+`;
+
+export const headerCSS = (label: string, isActive?: boolean) => css`
+  width: 100%;
+  label: ${label};
+  :hover {
+    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+  }
+  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 `;

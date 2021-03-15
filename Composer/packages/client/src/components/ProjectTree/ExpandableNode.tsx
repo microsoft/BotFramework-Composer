@@ -2,11 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { useState, MouseEvent, KeyboardEvent } from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { INDENT_PER_LEVEL } from './constants';
+import { summaryStyle } from './styles';
 
 type Props = {
   children: React.ReactNode;
@@ -17,22 +16,6 @@ type Props = {
   defaultState?: boolean;
   isActive?: boolean;
 };
-
-const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) => css`
-  max-height: 24px;
-  width: calc(100%-${depth * INDENT_PER_LEVEL + 12}px);
-  label: summary;
-  padding-left: ${depth * INDENT_PER_LEVEL + 12}px;
-  :hover {
-    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
-  }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
-  ${isOpen ? 'list-style-type: "⏷";' : 'list-style-type: "⏵";'}
-`;
-
-const nodeStyle = css`
-  margin-top: 2px;
-`;
 
 export const ExpandableNode = ({
   children,
@@ -62,13 +45,13 @@ export const ExpandableNode = ({
   }
 
   return (
-    <div css={nodeStyle} data-testid="dialog">
+    <div data-testid="dialog">
       <details ref={detailsRef} open={isExpanded}>
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
         <summary
           css={summaryStyle(depth, isActive, isExpanded)}
           data-testid={'summaryTag'}
-          role="button"
+          role="treegrid"
           tabIndex={0}
           onClick={handleClick}
           onKeyUp={handleKey}
