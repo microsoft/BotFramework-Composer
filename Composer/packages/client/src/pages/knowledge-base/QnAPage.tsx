@@ -52,7 +52,7 @@ const QnAPage: React.FC<RouteComponentProps<{
   const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
-  const creatQnAOnInfo = useRecoilValue(createQnAOnState);
+  const createQnAOnInfo = useRecoilValue(createQnAOnState);
   const settings = useRecoilValue(settingsState(actualProjectId));
   const { defaultLanguage } = settings;
   const languages = useMemo(() => (defaultLanguage === locale ? [defaultLanguage] : [locale, defaultLanguage]), [
@@ -160,20 +160,20 @@ const QnAPage: React.FC<RouteComponentProps<{
           onRenderContent()
         )}
         <CreateQnAModal
-          dialogId={creatQnAOnInfo.dialogId}
-          projectId={creatQnAOnInfo.projectId}
+          dialogId={createQnAOnInfo.dialogId}
+          projectId={createQnAOnInfo.projectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId: creatQnAOnInfo.projectId });
+            actions.createQnAFromUrlDialogCancel({ projectId: createQnAOnInfo.projectId });
           }}
           onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
             if (urls.length !== 0) {
               actions.createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
             } else {
               await actions.createQnAKBFromScratch({
-                id: creatQnAOnInfo.dialogId,
+                id: createQnAOnInfo.dialogId,
                 name,
-                projectId: creatQnAOnInfo.projectId,
+                projectId: createQnAOnInfo.projectId,
               });
             }
           }}

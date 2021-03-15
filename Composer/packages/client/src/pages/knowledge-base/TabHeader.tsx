@@ -48,11 +48,11 @@ export const TabHeader: React.FC<TabHeaderProps> = (props) => {
       }}
       onLinkClick={handleLinkClick}
     >
-      {languageList.map((l, index) => (
+      {languageList.map((l) => (
         <PivotItem
-          key={index}
+          key={l.language}
           headerText={`${l.language}${l.isDefault ? '(Default)' : ''}`}
-          itemKey={index.toString()}
+          itemKey={l.language.toString()}
           style={{ height: '100%' }}
         >
           {children}

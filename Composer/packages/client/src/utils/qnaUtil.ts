@@ -108,8 +108,7 @@ export const copySourceQnAFilesOnOtherLocales = (
     deleteFile(projectId, `${originalSourceQnAFiles[i].id}.qna`);
   }
   qnaFiles.push(...createdFiles);
-  const newQnAFiles = qnaFiles.filter((f) => !f.id.endsWith('.source'));
-  return newQnAFiles;
+  return qnaFiles.filter((f) => !f.id.endsWith('.source'));
 };
 
 export const getQnAFileUrlOption = (file: QnAFile): string | undefined => {

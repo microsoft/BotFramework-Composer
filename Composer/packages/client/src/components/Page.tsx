@@ -195,7 +195,7 @@ const Page: React.FC<IPageProps> = (props) => {
                   showLuImports: pageMode === 'language-understanding',
                   showRemote: false,
                   showMenu: false,
-                  showQnAMenu: title === 'Knowledge(QnA)',
+                  showQnAMenu: pageMode === 'knowledge-base',
                   showErrors: false,
                   showCommonLinks,
                 }}
