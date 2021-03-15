@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -36,6 +36,12 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
   const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>(rootLuisEndpointKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
+
+  useEffect(() => {
+    setLocalRootLuisKey(rootLuisKey);
+    setLocalRootLuisEndpointKey(rootLuisEndpointKey);
+    setLocalRootLuisRegion(rootLuisRegion);
+  }, [rootLuisKey, rootLuisEndpointKey, rootLuisRegion]);
 
   const closeDialog = () => {
     props.onDismiss();

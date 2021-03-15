@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -15,6 +15,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
 import { ManageLuis } from '../ManageLuis/ManageLuis';
+import { ManageQNA } from '../ManageQNA/ManageQNA';
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -42,54 +43,83 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
+  const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
+
   const { setSettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-
+  const [nextSteps, setNextSteps] = useState<NextSteps[]>([]);
   const hideManageLuis = () => {
     setDisplayManageLuis(false);
   };
+  const hideManageQNA = () => {
+    setDisplayManageQNA(false);
+  };
+
+  const doNextStep = (currentStep) => {
+    const nextAction = nextSteps.filter((f) => !f.checked && f.key != currentStep)?.[0];
+    if (nextAction) {
+      nextAction.onClick();
+    }
+  };
 
   const updateLuisSettings = (newLuisSettings) => {
-    console.log('Updating luis settings', newLuisSettings);
     setSettings(projectId, {
       ...mergedSettings,
       luis: { ...mergedSettings.luis, ...newLuisSettings },
     });
+
+    // once update, launch the next step if any
+    doNextStep('luis');
   };
 
-  const nextSteps: NextSteps[] = [];
-
-  let hasLUIS = false;
-  let hasQNA = false;
-  if (botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion) {
-    hasLUIS = true;
-  }
-  if (botProject?.setting?.qna?.subscriptionKey) {
-    hasQNA = true;
-  }
-
-  if (props.requiresLUIS) {
-    nextSteps.push({
-      key: 'luis',
-      label: formatMessage('Set up Language Understanding service'),
-      checkedLabel: formatMessage('Language Understanding configured!'),
-      checked: hasLUIS,
-      onClick: () => {
-        setDisplayManageLuis(true);
-      },
+  const updateQNASettings = (newQNASettings) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      qna: { ...mergedSettings.qna, ...newQNASettings },
     });
-  }
-  if (props.requiresQNA) {
-    nextSteps.push({
-      key: 'qna',
-      label: formatMessage('Set up QNA Maker service'),
-      checkedLabel: formatMessage('QNA Maker configured!'),
-      checked: hasQNA,
-      onClick: () => {},
-    });
-  }
+
+    // once update, launch the next step if any
+    doNextStep('qna');
+  };
+
+  useEffect(() => {
+    const newNextSteps: NextSteps[] = [];
+
+    let hasLUIS = false;
+    let hasQNA = false;
+    if (botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion) {
+      hasLUIS = true;
+    }
+    if (botProject?.setting?.qna?.subscriptionKey) {
+      hasQNA = true;
+    }
+
+    if (props.requiresLUIS) {
+      newNextSteps.push({
+        key: 'luis',
+        label: formatMessage('Set up Language Understanding service'),
+        checkedLabel: formatMessage('Language Understanding configured!'),
+        checked: hasLUIS,
+        onClick: () => {
+          setDisplayManageLuis(true);
+        },
+      });
+    }
+    if (props.requiresQNA) {
+      newNextSteps.push({
+        key: 'qna',
+        label: formatMessage('Set up QNA Maker service'),
+        checkedLabel: formatMessage('QNA Maker configured!'),
+        checked: hasQNA,
+        onClick: () => {
+          setDisplayManageQNA(true);
+        },
+      });
+    }
+    setNextSteps(newNextSteps);
+  }, [botProject]);
 
   const linkToPackageManager = `/bot/${projectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${projectId}/botProjectsSettings/#connections`;
@@ -117,8 +147,10 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   return (
     <Fragment>
       <ManageLuis hidden={!displayManageLuis} onDismiss={hideManageLuis} onGetKey={updateLuisSettings} />
+      <ManageQNA hidden={!displayManageQNA} onDismiss={hideManageQNA} onGetKey={updateQNASettings} />
       <Panel
         headerText={botProject?.name}
+        isBlocking={false}
         isOpen={props.isOpen}
         styles={{
           root: {
