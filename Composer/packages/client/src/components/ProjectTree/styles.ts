@@ -71,13 +71,15 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-export const navContainer = (
+export const treeItem = (
   isAnyMenuOpen: boolean,
   isActive: boolean,
   menuOpenHere: boolean,
-  textWidth: number
+  isBroken: boolean,
+  padLeft: number,
+  marginLeft: number
 ) => css`
-  display: inline-flex;
+  label: treeItem_container;
 
   ${isAnyMenuOpen
     ? ''
@@ -90,28 +92,16 @@ export const navContainer = (
   .action-btn {
     visibility: visible;
   }
-  .treeItem-text {
-    max-width: ${textWidth}px;
-  }
   }`};
-  background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
-`;
+  background: ${isActive ? NeutralColors.gray40 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 
-export const treeItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
-  label: treeItem;
   font-size: 12px;
   opacity: ${isBroken ? 0.5 : 1};
   display: inline-flex;
   flex-direction: row;
   padding-left: ${padLeft}px;
-  padding-top: 6px;
   margin-left: ${marginLeft}px;
   align-items: center;
-
-  :hover {
-    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
-  }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 
   &:focus {
     outline: none;
@@ -205,7 +195,7 @@ export const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
   }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
+  background: ${isActive ? NeutralColors.gray40 : NeutralColors.white};
   ${isOpen ? 'list-style-type: "⏷";' : 'list-style-type: "⏵";'}
 `;
 

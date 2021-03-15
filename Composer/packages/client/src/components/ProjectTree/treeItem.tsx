@@ -31,7 +31,6 @@ import {
   itemName,
   moreButton,
   moreButtonContainer,
-  navContainer,
   treeItem,
   menuStyle,
   overflowSet,
@@ -205,8 +204,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const isBroken = !!link.botError;
   const spacerWidth = hasChildren && !isBroken ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
-  const overflowIconWidthOnHover = overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
-
   const overflowIconWidthActiveOrChildSelected =
     (isActive || isChildSelected) && overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
 
@@ -320,57 +317,48 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   return (
     <span
-      css={navContainer(
-        isMenuOpen,
-        isActive,
-        thisItemSelected,
-        textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover
-      )}
-    >
-      <span
-        aria-label={a11yLabel}
-        css={treeItem(isBroken, padLeft, marginLeft, isActive)}
-        data-testid={a11yLabel}
-        role="gridcell"
-        tabIndex={0}
-        onClick={() => {
+      aria-label={a11yLabel}
+      css={treeItem(isMenuOpen, isActive, thisItemSelected, isBroken, padLeft, marginLeft)}
+      data-testid={a11yLabel}
+      role="gridcell"
+      tabIndex={0}
+      onClick={() => {
+        onSelect?.(link);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
           onSelect?.(link);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            onSelect?.(link);
-          }
-        }}
-      >
-        <span style={{ minWidth: `${spacerWidth}px` }}></span>
-        <OverflowSet
-          //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
-          //remove this at that time
-          doNotContainWithinFocusZone
-          css={overflowSet(isBroken)}
-          data-testid={linkString}
-          items={[
-            {
-              key: linkString,
-              icon: isBroken ? 'RemoveLink' : icon,
-              ...link,
-            },
-          ]}
-          overflowItems={overflowMenu}
-          role="row"
-          styles={{ item: { flex: 1 } }}
-          onRenderItem={onRenderItem(
-            textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
-            showErrors
-          )}
-          onRenderOverflowButton={onRenderOverflowButton(
-            !!isActive,
-            isChildSelected,
-            menuOpenCallback,
-            setThisItemSelected
-          )}
-        />
-      </span>
+        }
+      }}
+    >
+      <span style={{ minWidth: `${spacerWidth}px` }}></span>
+      <OverflowSet
+        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
+        //remove this at that time
+        doNotContainWithinFocusZone
+        css={overflowSet(isBroken)}
+        data-testid={linkString}
+        items={[
+          {
+            key: linkString,
+            icon: isBroken ? 'RemoveLink' : icon,
+            ...link,
+          },
+        ]}
+        overflowItems={overflowMenu}
+        role="row"
+        styles={{ item: { flex: 1 } }}
+        onRenderItem={onRenderItem(
+          textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
+          showErrors
+        )}
+        onRenderOverflowButton={onRenderOverflowButton(
+          !!isActive,
+          isChildSelected,
+          menuOpenCallback,
+          setThisItemSelected
+        )}
+      />
     </span>
   );
 };
