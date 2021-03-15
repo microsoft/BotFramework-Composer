@@ -88,7 +88,7 @@ function getClientEnvironment(publicUrl) {
         PUBLIC_URL: publicUrl,
         GIT_SHA: getGitSha().toString().replace('\n', ''),
         SDK_PACKAGE_VERSION: '4.12.0', // TODO: change this when Composer supports custom schema/custom runtime
-        COMPOSER_VERSION: '1.4.0-rc0',
+        COMPOSER_VERSION: '1.4.0-rc1',
         LOCAL_PUBLISH_PATH:
           process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../../extensions/localPublish/hostedBots'),
         WEBLOGIN_CLIENTID: process.env.WEBLOGIN_CLIENTID,

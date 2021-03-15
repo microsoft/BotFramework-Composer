@@ -2,7 +2,7 @@
   "name": "@bfc/electron-server",
   "license": "MIT",
   "author": "Microsoft Corporation",
-  "version": "1.4.0-rc0",
+  "version": "1.4.0-rc1",
   "description": "Electron wrapper around Composer that launches Composer as a desktop application.",
   "main": "./build/main.js",
   "engines": {
