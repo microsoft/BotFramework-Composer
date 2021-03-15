@@ -32,10 +32,10 @@ import {
   moreButton,
   moreButtonContainer,
   navContainer,
-  navItem,
+  treeItem,
   menuStyle,
   overflowSet,
-} from './TreeItemStyles';
+} from './styles';
 
 // -------------------- TreeItem -------------------- //
 
@@ -329,7 +329,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
     >
       <span
         aria-label={a11yLabel}
-        css={navItem(isBroken, padLeft, marginLeft, isActive)}
+        css={treeItem(isBroken, padLeft, marginLeft, isActive)}
         data-testid={a11yLabel}
         role="gridcell"
         tabIndex={0}
