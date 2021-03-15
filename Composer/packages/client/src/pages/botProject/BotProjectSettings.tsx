@@ -65,7 +65,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const userSettings = useRecoilValue(userSettingsState);
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
-  const [toolbarItems, setToolbarItems] = useState<IToolbarItem[]>([]);
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
@@ -87,60 +86,58 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     navigateTo(link);
   };
 
-  useEffect(() => {
-    setToolbarItems([
-      {
-        text: formatMessage('Add a package'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'Package' },
-          onClick: () => buttonClick(linkToPackageManager),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
+  const toolbarItems = [
+    {
+      text: formatMessage('Add a package'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'Package' },
+        onClick: () => buttonClick(linkToPackageManager),
+        styles: defaultToolbarButtonStyles,
       },
-      {
-        text: formatMessage('Edit LG'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'Robot' },
-          onClick: () => buttonClick(linkToLGEditor),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
+      align: 'left',
+    },
+    {
+      text: formatMessage('Edit LG'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'Robot' },
+        onClick: () => buttonClick(linkToLGEditor),
+        styles: defaultToolbarButtonStyles,
       },
-      {
-        text: formatMessage('Edit LU'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'People' },
-          onClick: () => buttonClick(linkToLUEditor),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
+      align: 'left',
+    },
+    {
+      text: formatMessage('Edit LU'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'People' },
+        onClick: () => buttonClick(linkToLUEditor),
+        styles: defaultToolbarButtonStyles,
       },
-      {
-        text: formatMessage('Manage connections'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'PlugConnected' },
-          onClick: () => buttonClick(linkToConnections),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
+      align: 'left',
+    },
+    {
+      text: formatMessage('Manage connections'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'PlugConnected' },
+        onClick: () => buttonClick(linkToConnections),
+        styles: defaultToolbarButtonStyles,
       },
-      {
-        text: formatMessage('Delete bot'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'Trash' },
-          onClick: () => buttonClick(linkToDelete),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
+      align: 'left',
+    },
+    {
+      text: formatMessage('Delete bot'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'Trash' },
+        onClick: () => buttonClick(linkToDelete),
+        styles: defaultToolbarButtonStyles,
       },
-    ]);
-  }, []);
+      align: 'left',
+    },
+  ];
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const localBotProjects = botProjects.filter((b) => !b.isRemote);
@@ -199,14 +196,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <GetStarted
-          isOpen={showGetStarted}
-          requiresLUIS={requiresLUIS}
-          requiresQNA={requiresQNA}
-          onDismiss={() => {
-            toggleGetStarted(false);
-          }}
-        />
         <div css={container}>
           <div css={mainContentHeader}>
             <div css={botNameStyle}>

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -14,6 +14,10 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { currentProjectIdState, locationState } from '../../recoilModel';
+import { ManageLuis } from '../ManageLuis/ManageLuis';
+import { dispatcherState, settingsState } from '../../recoilModel';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
 import { h3Style, ulStyle, liStyle } from './styles';
 
@@ -37,6 +41,23 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const location = useRecoilValue(locationState(projectId));
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
+  const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
+  const { setSettings } = useRecoilValue(dispatcherState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
+  const settings = useRecoilValue(settingsState(projectId));
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
+
+  const hideManageLuis = () => {
+    setDisplayManageLuis(false);
+  };
+
+  const updateLuisSettings = (newLuisSettings) => {
+    console.log('Updating luis settings', newLuisSettings);
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, ...newLuisSettings },
+    });
+  };
 
   const nextSteps: NextSteps[] = [];
 
@@ -55,7 +76,9 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
       label: formatMessage('Set up Language Understanding service'),
       checkedLabel: formatMessage('Language Understanding configured!'),
       checked: hasLUIS,
-      onClick: () => {},
+      onClick: () => {
+        setDisplayManageLuis(true);
+      },
     });
   }
   if (props.requiresQNA) {
@@ -92,112 +115,132 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   };
 
   return (
-    <Panel headerText={botProject?.name} isOpen={props.isOpen} onDismiss={props.onDismiss}>
-      <Stack>
-        <Stack.Item grow={0}>
-          <p>
-            {formatMessage('File Location:')}
-            <span
-              style={{
-                display: 'inline-block',
-                overflowWrap: 'break-word',
-                maxWidth: '100%',
-                fontSize: 12,
-              }}
-            >
-              {location}
-            </span>
-          </p>
-        </Stack.Item>
-        <Stack.Item>
-          <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
+    <Fragment>
+      <ManageLuis hidden={!displayManageLuis} onDismiss={hideManageLuis} onGetKey={updateLuisSettings} />
+      <Panel
+        headerText={botProject?.name}
+        isOpen={props.isOpen}
+        styles={{
+          root: {
+            marginTop: '50px',
+          },
+          scrollableContent: {
+            width: '100%',
+            height: '100%',
+          },
+          content: {
+            width: '100%',
+            height: '100%',
+          },
+        }}
+        onDismiss={props.onDismiss}
+      >
+        <Stack>
+          <Stack.Item grow={0}>
+            <p>
+              {formatMessage('File Location:')}
+              <span
+                style={{
+                  display: 'inline-block',
+                  overflowWrap: 'break-word',
+                  maxWidth: '100%',
+                  fontSize: 12,
+                }}
+              >
+                {location}
+              </span>
+            </p>
+          </Stack.Item>
+          <Stack.Item>
+            <h3 style={h3Style}>{formatMessage('Next steps')}</h3>
 
-          {nextSteps.map((step) => (
-            <ActionButton
-              key={step.key}
-              iconProps={{ iconName: step.checked ? 'checkmark' : 'robot' }}
-              onClick={step.onClick}
-            >
-              {step.checked ? step.checkedLabel : step.label}
-            </ActionButton>
-          ))}
+            {nextSteps.map((step) => (
+              <ActionButton
+                key={step.key}
+                iconProps={{ iconName: step.checked ? 'checkmark' : 'robot' }}
+                onClick={step.onClick}
+              >
+                {step.checked ? step.checkedLabel : step.label}
+              </ActionButton>
+            ))}
 
-          <h3>{formatMessage('Customize')}</h3>
-          <ul style={ulStyle}>
-            <li style={liStyle}>
-              <Link href={linkToPackageManager} onClick={linkClick}>
-                {formatMessage('Add and remove packages')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToLGEditor} onClick={linkClick}>
-                {formatMessage('Edit what your bot says')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToLUEditor} onClick={linkClick}>
-                {formatMessage('Train your language model')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToConnections} onClick={linkClick}>
-                {formatMessage('Connect your bot to new services')}
-              </Link>
-            </li>
-          </ul>
-          {formatMessage('Publish')}
-          <ul style={ulStyle}>
-            <li style={liStyle}>
-              <Link href={linkToProvision} onClick={linkClick}>
-                {formatMessage('Create a cloud hosting environment')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToPublish} onClick={linkClick}>
-                {formatMessage('Publish updates to the cloud')}
-              </Link>
-            </li>
-          </ul>
-          <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
-          <ul style={ulStyle}>
-            <li style={liStyle}>
-              <Link href={linkToGetStarted} target="_blank" onClick={linkClick}>
-                {formatMessage('Get started with Bot Framework Composer')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToCreateFirstBot} target="_blank" onClick={linkClick}>
-                {formatMessage('Create your first bot')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToTutorials} target="_blank" onClick={linkClick}>
-                {formatMessage('Composer tutorials')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToAdaptiveExpressions} target="_blank" onClick={linkClick}>
-                {formatMessage('Learn about Adaptive expressions')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToPreBuiltExpressions} target="_blank" onClick={linkClick}>
-                {formatMessage('Find pre-built Adaptive expressions')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToLUFileFormat} target="_blank" onClick={linkClick}>
-                {formatMessage('LU file format and syntax')}
-              </Link>
-            </li>
-            <li style={liStyle}>
-              <Link href={linkToLGFileFormat} target="_blank" onClick={linkClick}>
-                {formatMessage('LG file format and syntax')}
-              </Link>
-            </li>
-          </ul>
-        </Stack.Item>
-      </Stack>
-    </Panel>
+            <h3>{formatMessage('Customize')}</h3>
+            <ul style={ulStyle}>
+              <li style={liStyle}>
+                <Link href={linkToPackageManager} onClick={linkClick}>
+                  {formatMessage('Add and remove packages')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToLGEditor} onClick={linkClick}>
+                  {formatMessage('Edit what your bot says')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToLUEditor} onClick={linkClick}>
+                  {formatMessage('Train your language model')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToConnections} onClick={linkClick}>
+                  {formatMessage('Connect your bot to new services')}
+                </Link>
+              </li>
+            </ul>
+            {formatMessage('Publish')}
+            <ul style={ulStyle}>
+              <li style={liStyle}>
+                <Link href={linkToProvision} onClick={linkClick}>
+                  {formatMessage('Create a cloud hosting environment')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToPublish} onClick={linkClick}>
+                  {formatMessage('Publish updates to the cloud')}
+                </Link>
+              </li>
+            </ul>
+            <h3 style={h3Style}>{formatMessage('Guides and references')}</h3>
+            <ul style={ulStyle}>
+              <li style={liStyle}>
+                <Link href={linkToGetStarted} target="_blank" onClick={linkClick}>
+                  {formatMessage('Get started with Bot Framework Composer')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToCreateFirstBot} target="_blank" onClick={linkClick}>
+                  {formatMessage('Create your first bot')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToTutorials} target="_blank" onClick={linkClick}>
+                  {formatMessage('Composer tutorials')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToAdaptiveExpressions} target="_blank" onClick={linkClick}>
+                  {formatMessage('Learn about Adaptive expressions')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToPreBuiltExpressions} target="_blank" onClick={linkClick}>
+                  {formatMessage('Find pre-built Adaptive expressions')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToLUFileFormat} target="_blank" onClick={linkClick}>
+                  {formatMessage('LU file format and syntax')}
+                </Link>
+              </li>
+              <li style={liStyle}>
+                <Link href={linkToLGFileFormat} target="_blank" onClick={linkClick}>
+                  {formatMessage('LG file format and syntax')}
+                </Link>
+              </li>
+            </ul>
+          </Stack.Item>
+        </Stack>
+      </Panel>
+    </Fragment>
   );
 };

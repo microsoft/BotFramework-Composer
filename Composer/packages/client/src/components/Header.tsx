@@ -16,7 +16,6 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { BotIndexer } from '@bfc/indexers';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
 import { BASEPATH } from '../constants';
 import { schemasState } from '../recoilModel/atoms';
