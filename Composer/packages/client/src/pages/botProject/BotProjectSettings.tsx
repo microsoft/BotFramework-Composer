@@ -4,25 +4,21 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useMemo, useState, Suspense, Fragment, useEffect } from 'react';
+import React, { useMemo, useState, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogSetting } from '@bfc/shared';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { defaultToolbarButtonStyles, IToolbarItem } from '@bfc/ui-shared';
-import { BotIndexer } from '@bfc/indexers';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
-import { GetStarted } from '../../components/GetStarted/GetStarted';
 import { Page } from '../../components/Page';
-import { dispatcherState, dialogsWithLuProviderSelectorFamily, luFilesState, qnaFilesState } from '../../recoilModel';
+import { dispatcherState } from '../../recoilModel';
 import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
@@ -69,19 +65,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const userSettings = useRecoilValue(userSettingsState);
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
-  const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
-  const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(true);
   const [toolbarItems, setToolbarItems] = useState<IToolbarItem[]>([]);
-
-  // These are needed to determine if the bot needs LUIS or QNA
-  // this data is passed into the GetStarted widget
-  // ... if the get started widget moves, this code should too!
-  const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-  const requiresLUIS = BotIndexer.shouldUseLuis(dialogs, luFiles);
-  const requiresQNA = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
-  // ... end of get started stuff
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
@@ -101,14 +85,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const buttonClick = (link) => {
     TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
     navigateTo(link);
-  };
-
-  const hideTeachingBubble = () => {
-    setShowTeachingBubble(false);
-  };
-  const toggleGetStarted = (newvalue) => {
-    hideTeachingBubble();
-    setShowGetStarted(newvalue);
   };
 
   useEffect(() => {
@@ -163,37 +139,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
         },
         align: 'left',
       },
-      {
-        type: 'element',
-        element: (
-          <Fragment>
-            <ActionButton iconProps={{ iconName: 'Rocket' }} id="rocketButton" onClick={() => toggleGetStarted(true)} />
-            {showTeachingBubble && (
-              <TeachingBubble
-                hasCloseButton
-                hasCondensedHeadline
-                headline={formatMessage('Get your bot up and running')}
-                target="#rocketButton"
-                onDismiss={hideTeachingBubble}
-              >
-                {formatMessage(
-                  'Explore next steps and find valuable references and learning resources to design, build, and publish your new bot using Composer.'
-                )}
-              </TeachingBubble>
-            )}
-          </Fragment>
-        ),
-        align: 'right',
-      },
     ]);
-  }, [showTeachingBubble]);
-
-  useEffect(() => {
-    if (props.location?.hash === '#getstarted') {
-      setShowTeachingBubble(true);
-    } else {
-      setShowTeachingBubble(false);
-    }
   }, []);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
