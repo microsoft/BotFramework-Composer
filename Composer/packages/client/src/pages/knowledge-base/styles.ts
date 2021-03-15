@@ -208,20 +208,6 @@ export const editableField = {
       '::placeholder': {
         fontSize: FontSizes.size12,
       },
-      '::before': {
-        position: 'absolute',
-        content: '...',
-        insetBlockEnd: 0,
-        insetInlineEnd: 0,
-      },
-      '::after': {
-        content: '',
-        position: 'absolute',
-        insetInlineEnd: 0,
-        width: '1rem',
-        height: '1rem',
-        background: 'White',
-      },
     },
   },
 };
