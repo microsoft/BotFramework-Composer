@@ -21,7 +21,6 @@ import {
   dialogModalInfoState,
   triggerModalInfoState,
   showAddSkillDialogModalState,
-  settingsState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { undoFunctionState } from '../../recoilModel/undo/history';

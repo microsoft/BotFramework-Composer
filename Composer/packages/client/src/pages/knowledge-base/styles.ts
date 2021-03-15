@@ -4,6 +4,7 @@ import { css } from '@emotion/core';
 import { FontWeights, mergeStyleSets } from '@uifabric/styling';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 
 export const classNames = mergeStyleSets({
   groupHeader: {
@@ -176,7 +177,7 @@ export const backIcon = {
   },
 };
 
-export const editableField = {
+export const editableField: Partial<ITextFieldStyles> = {
   root: {
     height: '100%',
     selectors: {

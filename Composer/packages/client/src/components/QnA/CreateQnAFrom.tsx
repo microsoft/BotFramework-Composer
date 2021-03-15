@@ -11,7 +11,6 @@ import {
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
   settingsState,
-  localeState,
 } from '../../recoilModel';
 
 import CreateQnAFromScratchModal from './CreateQnAFromScratchModal';

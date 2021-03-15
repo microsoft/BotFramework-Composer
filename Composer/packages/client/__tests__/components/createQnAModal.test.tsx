@@ -12,11 +12,15 @@ describe('<CreateQnAFromUrlModal />', () => {
   const onDismiss = jest.fn(() => {});
   const onSubmit = jest.fn(() => {});
   const projectId = 'test-create-qna';
+  const locales = ['en-us', 'ch-zn'];
+  const defaultLocale = 'en-us';
 
   it('renders <CreateQnAFromUrlModal /> and create from scratch', () => {
     const container = renderWithRecoil(
       <CreateQnAFromUrlModal
+        defaultLocale={defaultLocale}
         dialogId="test"
+        locales={locales}
         projectId={projectId}
         qnaFiles={[]}
         onDismiss={onDismiss}
@@ -37,7 +41,9 @@ describe('<CreateQnAFromUrlModal />', () => {
   it('create with name/url and validate the value', () => {
     const container = renderWithRecoil(
       <CreateQnAFromUrlModal
+        defaultLocale={defaultLocale}
         dialogId="test"
+        locales={locales}
         projectId={projectId}
         qnaFiles={[]}
         onDismiss={onDismiss}
