@@ -146,6 +146,9 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.getType = () => {
       return targetType;
     };
+    PluginAPI.publish.getName = () => {
+      return name;
+    };
     PluginAPI.publish.getSchema = () => {
       return types.find((t) => t.name === targetType)?.schema;
     };
@@ -186,11 +189,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         modalProps={{
           isBlocking: true,
         }}
-        onDismiss={() => {
-          closeDialog();
-          // remove extension state when parent component destroy
-          window.localStorage.removeItem(`${targetType}:state`);
-        }}
+        onDismiss={closeDialog}
       >
         {page !== Page.ConfigProvision && (
           <div>

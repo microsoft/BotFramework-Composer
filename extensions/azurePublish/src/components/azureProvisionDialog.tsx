@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef, Suspense } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { logOut, usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
+import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -31,6 +31,7 @@ import {
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { get } from 'request';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -42,14 +43,7 @@ import {
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
 } from './api';
-import {
-  getExistResources,
-  removePlaceholder,
-  decodeToken,
-  getExtensionState,
-  setExtensionState,
-  clearExtensionState,
-} from './util';
+import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
 
 const iconStyle = (required) => {
   return {
@@ -254,15 +248,19 @@ export const AzureProvisionDialog: React.FC = () => {
     setTitle,
     getSchema,
     getType,
+    getName,
     getTokenFromCache,
     isGetTokenFromUser,
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
+
+  const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
+  const profileName = getName();
   const currentConfig = removePlaceholder(publishConfig);
-  const extensionState = getExtensionState();
+  const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
@@ -555,8 +553,8 @@ export const AzureProvisionDialog: React.FC = () => {
     () => async (options) => {
       // call back to the main Composer API to begin this process...
       startProvision(options);
+      clearAll();
       closeDialog();
-      clearExtensionState();
     },
     []
   );
@@ -564,8 +562,8 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSave = useMemo(
     () => async () => {
       savePublishConfig(importConfig);
+      clearAll();
       closeDialog();
-      clearExtensionState();
     },
     [importConfig]
   );
@@ -809,6 +807,7 @@ export const AzureProvisionDialog: React.FC = () => {
             <div
               style={{ color: 'blue', cursor: 'pointer' }}
               onClick={() => {
+                clearAll();
                 closeDialog();
                 logOut();
               }}
@@ -821,7 +820,8 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
-                setExtensionState({
+                clearAll();
+                setItem(profileName, {
                   subscriptionId: currentSubscription,
                   resourceGroup: currentResourceGroup,
                   hostName: currentHostName,

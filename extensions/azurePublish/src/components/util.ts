@@ -61,7 +61,7 @@ export const getExistResources = (config) => {
   } else return [];
 };
 
-const defaultExtensionState = {
+export const defaultExtensionState = {
   subscriptionId: '',
   resourceGroup: '',
   hostName: '',
