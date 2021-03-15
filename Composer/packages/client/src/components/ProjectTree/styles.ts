@@ -105,6 +105,8 @@ export const treeItem = (
   opacity: ${isBroken ? 0.5 : 1};
   padding-left: ${padLeft}px;
   margin-left: ${marginLeft}px;
+  position: relative;
+  top: -4px;
 
   &:focus {
     outline: none;
