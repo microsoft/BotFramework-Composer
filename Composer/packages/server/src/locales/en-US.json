@@ -1223,6 +1223,9 @@
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
   },
+  "enable_the_component_model_including_the_new_creat_f6e5659c": {
+    "message": "Enable the Component Model including the new creation experience, the Adaptive Runtime, and Package Manager."
+  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -1553,8 +1556,8 @@
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
   },
-  "get_started_with_your_new_bot_da9aaf6a": {
-    "message": "Get started with your new bot"
+  "get_your_bot_up_and_running_418dd8ea": {
+    "message": "Get your bot up and running"
   },
   "getting_help_ab6811b0": {
     "message": "Getting Help"
@@ -1628,8 +1631,8 @@
   "if_condition_56c9be4a": {
     "message": "If Condition"
   },
-  "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
-    "message": "If this problem persists, please file an issue on"
+  "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
+    "message": "If this problem persists, please file an issue on <a>GitHub</a>"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
@@ -1706,8 +1709,8 @@
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
-  "install_more_adapters_in_a_package_settings_a_e8b0df7a": {
-    "message": "Install more adapters in <a>Package Settings</a>."
+  "install_more_adapters_in_a_the_package_manager_a_156fb028": {
+    "message": "Install more adapters in <a>the package manager</a>."
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
@@ -1759,9 +1762,6 @@
   },
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
-  },
-  "it_s_not_a_built_in_function_or_a_custom_function_211f17dc": {
-    "message": "it’s not a built-in function or a custom function."
   },
   "item_actions_22d0242": {
     "message": "Item Actions"
@@ -1919,9 +1919,6 @@
   "local_skill_6ce0d311": {
     "message": "Local Skill."
   },
-  "locale_locale_is_not_supported_by_luis_a3a72047": {
-    "message": "locale \"{ locale }\" is not supported by LUIS"
-  },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Locate the bot file and repair the link"
   },
@@ -1990,9 +1987,6 @@
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
-  },
-  "luis_build_warning_320e4ee2": {
-    "message": "Luis build warning"
   },
   "luis_endpoint_key_c685e219": {
     "message": "LUIS endpoint key"
@@ -2099,6 +2093,9 @@
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft App Password"
   },
+  "microsoft_logo_4378a7cb": {
+    "message": "Microsoft Logo"
+  },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
   },
@@ -2200,9 +2197,6 @@
   },
   "new_13daf639": {
     "message": "New"
-  },
-  "new_creation_experience_29591aca": {
-    "message": "New Creation Experience"
   },
   "new_template_49e6f0f2": {
     "message": "New template"
@@ -2462,9 +2456,6 @@
   "preview_features_e279bac5": {
     "message": "Preview features"
   },
-  "preview_the_new_adaptive_runtime_and_component_sys_1106041c": {
-    "message": "Preview the new adaptive runtime and component system"
-  },
   "previous_bd2ac015": {
     "message": "Previous"
   },
@@ -2710,6 +2701,9 @@
   },
   "remove_all_text_responses_77592d1a": {
     "message": "Remove all text responses"
+  },
+  "remove_attachment_81f30aa3": {
+    "message": "Remove attachment"
   },
   "remove_f47dc62a": {
     "message": "Remove"
@@ -3167,6 +3161,9 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
   },
+  "the_component_model_febefd93": {
+    "message": "The Component Model"
+  },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
@@ -3578,8 +3575,8 @@
   "weather_bot_c38920cd": {
     "message": "Weather Bot"
   },
-  "webchat_a134b64b": {
-    "message": "Webchat"
+  "web_chat_c5ca7ab6": {
+    "message": "Web Chat"
   },
   "webchat_inspector_4d0dfeb7": {
     "message": "Webchat Inspector"

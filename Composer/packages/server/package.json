@@ -23,13 +23,14 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --max-http-header-size=16000 --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "yarn build && yarn start",
     "watch": [
       "src",
-      "../extension/lib"
+      "../extension/lib",
+      "../../../extensions/**/dist/extension.js"
     ],
-    "ext": "ts",
-    "delay": 2
+    "ext": "ts,js",
+    "delay": 2.5
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "7.8.3",
@@ -75,6 +76,7 @@
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
     "@bfc/shared": "*",
+    "@bfc/server-workers": "*",
     "@botframework-composer/types": "*",
     "@microsoft/bf-dialog": "4.11.0-dev.20201025.69cf2b9",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
