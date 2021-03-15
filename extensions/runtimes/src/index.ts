@@ -192,7 +192,7 @@ export default async (composer: any): Promise<void> => {
   });
 
   composer.addRuntimeTemplate({
-    key: 'node-azurewebapp',
+    key: 'node-azurewebapp-old',
     name: 'JS (preview)',
     startCommand: 'node ./lib/webapp.js',
     path: nodeTemplatePath,
@@ -472,5 +472,104 @@ export default async (composer: any): Promise<void> => {
         }
       }
     },
+  });
+
+  /**
+   * This is support for the new javascript runtime
+   */
+  composer.addRuntimeTemplate({
+    key: 'node-azurewebapp',
+    name: 'JS (preview)',
+    startCommand: 'node ./lib/webapp.js',
+    path: nodeTemplatePath,
+    build: async (runtimePath: string, _project: any) => {
+      // do stuff
+      composer.log('BUILD THIS JS PROJECT');
+      // install dev dependencies in production, make sure typescript is installed
+      const { stderr: installErr } = await execAsync('npm install && npm install --only=dev', {
+        cwd: runtimePath,
+        timeout: 120000,
+      });
+      if (installErr) {
+        // in order to not throw warning, we just log all warning and error message
+        composer.log(`npm install timeout, ${installErr}`);
+      }
+
+      // runtime build need typescript
+      const { stderr: install2Err } = await execAsync('npm run build', {
+        cwd: runtimePath,
+      });
+      if (install2Err) {
+        throw new Error(install2Err);
+      }
+      composer.log('BUILD COMPLETE');
+    },
+    installComponent: async (
+      runtimePath: string,
+      packageName: string,
+      version: string,
+      source: string,
+      _project: any
+    ): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `npm install --loglevel=error --save ${packageName}${version ? '@' + version : ''}`,
+        {
+          cwd: path.join(runtimePath),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    uninstallComponent: async (runtimePath: string, packageName: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `npm uninstall --loglevel=error --save ${packageName}`,
+        {
+          cwd: path.join(runtimePath),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    identifyManifest: (runtimePath: string, projName?: string): string => {
+      return path.join(runtimePath, 'package.json');
+    },
+    buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
+      // do stuff
+      composer.log('BUILD THIS JS PROJECT');
+      const { stderr: installErr } = await execAsync('npm install', {
+        cwd: path.resolve(runtimePath, '../'),
+      });
+      if (installErr) {
+        composer.log(installErr);
+      }
+      const { stderr: install2Err } = await execAsync('npm run build', {
+        cwd: path.resolve(runtimePath, '../'),
+      });
+      if (install2Err) {
+        throw new Error(install2Err);
+      }
+      // write settings to disk in the appropriate location
+      const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
+      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
+        await fs.mkdirp(path.dirname(settingsPath));
+      }
+      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
+
+      composer.log('BUILD COMPLETE');
+      return path.resolve(runtimePath, '../');
+    },
+    setSkillManifest: async (
+      dstRuntimePath: string,
+      dstStorage: IFileStorage,
+      srcManifestDir: string,
+      srcStorage: IFileStorage,
+      mode = 'azurewebapp'
+    ) => {},
   });
 };

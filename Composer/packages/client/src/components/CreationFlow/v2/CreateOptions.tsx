@@ -24,7 +24,7 @@ import { navigate, RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { csharpFeedKey } from '@botframework-composer/types';
+import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
 import querystring from 'query-string';
@@ -271,6 +271,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           }}
         >
           <PivotItem headerText="C#" itemKey={csharpFeedKey}></PivotItem>
+          <PivotItem headerText="Node" itemKey={nodeFeedKey}></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
