@@ -10,21 +10,9 @@ import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
 import StorageService from '../../../services/storage';
 
-const mockchdir = jest.spyOn(process, 'chdir').mockImplementation(() => {});
-
 jest.mock('azure-storage', () => {
   return {};
 });
-
-jest.mock('yeoman-environment', () => ({
-  createEnv: jest.fn().mockImplementation(() => {
-    return {
-      lookupLocalPackages: jest.fn(),
-      installLocalGenerators: jest.fn().mockReturnValue(true),
-      run: jest.fn(),
-    };
-  }),
-}));
 
 jest.mock('fs-extra', () => {
   return {
@@ -32,12 +20,20 @@ jest.mock('fs-extra', () => {
   };
 });
 
-jest.mock('../../../models/extension/extensionContext', () => {
+jest.mock('@bfc/extension', () => {
   return {
     ExtensionContext: {
       extensions: {
         botTemplates: [],
       },
+    },
+  };
+});
+
+jest.mock('@bfc/server-workers', () => {
+  return {
+    ServerWorker: {
+      execute: jest.fn(),
     },
   };
 });
@@ -157,13 +153,13 @@ describe('assetManager', () => {
         'generator-conversational-core',
         '1.0.3',
         'sampleConversationalCore',
-        mockLocRef
+        mockLocRef,
+        '0'
       );
       expect(newBotLocationRef).toStrictEqual({
-        path: '/path/to/npmbot/sampleConversationalCore',
+        path: '/path/to/npmbot',
         storageId: 'default',
       });
-      expect(mockchdir).toBeCalledWith('/path/to/npmbot');
     });
   });
 });

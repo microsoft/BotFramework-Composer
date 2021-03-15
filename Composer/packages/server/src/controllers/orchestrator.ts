@@ -60,6 +60,11 @@ async function downloadDefaultModel(req: Request, res: Response) {
   const modelName = lang.language === 'en' ? modelList.defaults?.en_intent : modelList.defaults?.multilingual_intent;
   const modelPath = await getModelPath(modelName);
 
+  if (await pathExists(modelPath)) {
+    state = DownloadState.ALREADYDOWNLOADED;
+    return res.send(201);
+  }
+
   const onProgress = (msg: string) => {
     setTimeout(() => {
       state = DownloadState.DOWNLOADING;
@@ -73,11 +78,7 @@ async function downloadDefaultModel(req: Request, res: Response) {
   state = DownloadState.DOWNLOADING;
 
   setTimeout(async () => {
-    if (!(await pathExists(modelPath))) {
-      await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
-    } else {
-      state = DownloadState.ALREADYDOWNLOADED;
-    }
+    await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
   }, 0);
 
   return res.send(200, '/orchestrator/status');
