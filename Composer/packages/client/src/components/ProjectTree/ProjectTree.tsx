@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
@@ -314,7 +314,15 @@ export const ProjectTree: React.FC<Props> = ({
     };
 
     return (
-      <div>
+      <div
+        css={css`
+           {
+            label: stackedChildren;
+            max-height: 24px;
+            min-width: 100%;
+          }
+        `}
+      >
         <TreeItem
           key={`${item.id}_${item.index}`}
           dialogName={dialog.displayName}
@@ -339,7 +347,7 @@ export const ProjectTree: React.FC<Props> = ({
           }
           menuOpenCallback={setMenuOpen}
           showErrors={options.showErrors}
-          textWidth={leftSplitWidth - TREE_PADDING}
+          textWidth={leftSplitWidth - TREE_PADDING - depth * INDENT_PER_LEVEL}
           onSelect={handleOnSelect}
         />
       </div>

@@ -336,7 +336,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
         doNotContainWithinFocusZone
-        css={overflowSet(isBroken)}
+        css={overflowSet(isBroken, textWidth)}
         data-testid={linkString}
         items={[
           {
@@ -347,11 +347,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         ]}
         overflowItems={overflowMenu}
         role="row"
-        styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(
-          textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
-          showErrors
-        )}
+        onRenderItem={onRenderItem(textWidth, showErrors)}
         onRenderOverflowButton={onRenderOverflowButton(
           !!isActive,
           isChildSelected,

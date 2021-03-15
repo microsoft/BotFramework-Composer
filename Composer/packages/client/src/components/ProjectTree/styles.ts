@@ -8,7 +8,7 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 
-import { INDENT_PER_LEVEL } from './constants';
+import { INDENT_PER_LEVEL, ROW_HEIGHT } from './constants';
 
 export const projectTreeItemContainer = css`
   outline: none;
@@ -81,27 +81,30 @@ export const treeItem = (
 ) => css`
   label: treeItem_container;
 
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  height: ${ROW_HEIGHT}px;
+
   ${isAnyMenuOpen
     ? ''
     : `&:hover {
-  background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+      background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
 
-  .dialog-more-btn {
-    visibility: visible;
-  }
-  .action-btn {
-    visibility: visible;
-  }
-  }`};
+      .dialog-more-btn {
+        visibility: visible;
+      }
+      .action-btn {
+        visibility: visible;
+      }
+    }`};
+
   background: ${isActive ? NeutralColors.gray40 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 
   font-size: 12px;
   opacity: ${isBroken ? 0.5 : 1};
-  display: inline-flex;
-  flex-direction: row;
   padding-left: ${padLeft}px;
   margin-left: ${marginLeft}px;
-  align-items: center;
 
   &:focus {
     outline: none;
@@ -129,10 +132,12 @@ export const diagnosticLink = css`
   }
 `;
 
-export const overflowSet = (isBroken: boolean) => css`
+export const overflowSet = (isBroken: boolean, width: number) => css`
   label: overflow-set;
-  justify-content: space-between;
   display: inline-flex;
+  justify-content: flex-start;
+  min-width: ${width}px;
+
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
   }
@@ -180,7 +185,7 @@ export const diagnosticWarningIcon = {
   background: '#FFF4CE',
 };
 export const itemName = (nameWidth: number) => css`
-  max-width: ${nameWidth}px;
+  min-width: ${nameWidth}px;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
