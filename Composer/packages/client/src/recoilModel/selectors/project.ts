@@ -191,6 +191,7 @@ export const rootBotProjectIdSelector = selector({
   key: 'rootBotProjectIdSelector',
   get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
+    console.log(`projectIds: ${projectIds}`);
     const rootBotId = projectIds[0];
     const botProjectFile = get(botProjectFileState(rootBotId));
 
