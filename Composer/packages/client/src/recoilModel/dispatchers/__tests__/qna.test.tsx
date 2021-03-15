@@ -44,6 +44,7 @@ jest.mock('../../parsers/qnaWorker', () => {
 
 const projectId = '123asad.123sad';
 const locale = 'en-us';
+const filteredLocales = ['ar', 'af'];
 
 const content = `# ? What's your name?
 \`\`\`
@@ -201,6 +202,8 @@ describe('QnA dispatcher', () => {
         id: 'guide',
         content: '> guide',
         projectId,
+        locale,
+        filteredLocales,
       });
     });
 
