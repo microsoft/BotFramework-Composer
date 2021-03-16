@@ -208,6 +208,22 @@ export class OneAuthInstance extends OneAuthBase {
         log('Acquired ARM token for tenant: %s', result.credential.value);
         return result.credential.value;
       } catch (e) {
+        if (e.error?.status === this.oneAuth.Status.InteractionRequired) {
+          // try again but interactively
+          log('Acquiring ARM token failed: Interaction required. Trying again interactively to get access token.');
+          const tokenParams = new this.oneAuth.AuthParameters(
+            DEFAULT_AUTH_SCHEME,
+            `https://login.microsoftonline.com/${tenantId}`,
+            ARM_RESOURCE,
+            '',
+            ''
+          );
+          const result = await this.oneAuth.acquireCredentialInteractively(this.signedInARMAccount.id, tokenParams, '');
+          if (result.credential && result.credential.value) {
+            log('Acquired access token interactively. %s', result.credential.value);
+            return result.credential.value;
+          }
+        }
         log('There was an error trying to get an ARM token for tenant %s: %O', tenantId, e);
         throw e;
       }
