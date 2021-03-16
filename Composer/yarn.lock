@@ -3947,10 +3947,10 @@
     tslib "^2.0.3"
     xml2js "^0.4.19"
 
-"@microsoft/bf-dispatcher@4.12.0-beta.20210218.668cdac":
-  version "4.12.0-beta.20210218.668cdac"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.12.0-beta.20210218.668cdac.tgz#17188e85bd0fe14bf1986f6ae5d13249d57ffa12"
-  integrity sha512-kJYdLgMB50tUoxrDUOMfZ2tuJZirga43KJh05RZoPM3lG7DD3GIVlU4fjUtw1juXjDoEIXB867WVe2XefHi9og==
+"@microsoft/bf-dispatcher@4.12.0-beta.20210316.cdd0819":
+  version "4.12.0-beta.20210316.cdd0819"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.12.0-beta.20210316.cdd0819.tgz#454a612d4e17edc964675259be84ccc1c51425b4"
+  integrity sha512-TzkkoUTIITiBjwB8+UIjle9PCRJH8jolczOTEQszCDB3t7twfs54tLXzTmNVBS/bP9EAgZ+TY4xzd8IhoK/XdQ==
   dependencies:
     "@microsoft/bf-lu" next
     "@oclif/command" "~1.5.19"
@@ -4057,19 +4057,19 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-orchestrator@4.12.0-beta.20210218.668cdac":
-  version "4.12.0-beta.20210218.668cdac"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.12.0-beta.20210218.668cdac.tgz#427cd984402e17f7247646a22b7ba70a81702d8d"
-  integrity sha512-eklhuBPL2Qm3ETWew8A1B3C69zJ0KiTnhXdSKVvDs8VFm7w2Ks6HDOUUYb9UsMqWzBYKTO5Y2YNYfaG4rPQq2g==
+"@microsoft/bf-orchestrator@4.12.0-beta.20210316.cdd0819":
+  version "4.12.0-beta.20210316.cdd0819"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.12.0-beta.20210316.cdd0819.tgz#1869942269909759eb81e8ce9a538019392c2def"
+  integrity sha512-1jIYXtw+x6mm7cM0iCunf/hM7d+xrI5D3UnVMUrILK8t2oByuLyj7NUyt7oSrSmlAwhEAtYGJ/5xpdqdIxKw0Q==
   dependencies:
-    "@microsoft/bf-dispatcher" "4.12.0-beta.20210218.668cdac"
+    "@microsoft/bf-dispatcher" "4.12.0-beta.20210316.cdd0819"
     "@microsoft/bf-lu" next
     "@types/fs-extra" "~8.1.0"
     "@types/node-fetch" "~2.5.5"
     fast-text-encoding "^1.0.3"
     fs-extra "~9.0.0"
     node-fetch "~2.6.0"
-    orchestrator-core "4.12.0-preview"
+    orchestrator-core beta
     read-text-file "~1.1.0"
     tslib "^1.10.0"
     unzip-stream "^0.3.1"
@@ -17309,10 +17309,10 @@ optionator@^0.9.1:
     type-check "^0.4.0"
     word-wrap "^1.2.3"
 
-orchestrator-core@4.12.0-preview:
-  version "4.12.0-preview"
-  resolved "https://registry.yarnpkg.com/orchestrator-core/-/orchestrator-core-4.12.0-preview.tgz#e16703ff0fe45a96cd7b637fcec7697448584a36"
-  integrity sha512-RHQM5UK7xZuV9eN+NJKv/iGKBeQ/Pvxkki1j2Bgm1pq845Icor51MrlJKmAeJSIVxIUY0r4JBBNulLfq3I4UPA==
+orchestrator-core@beta:
+  version "4.13.0-dev.20210314.2955922h"
+  resolved "https://registry.yarnpkg.com/orchestrator-core/-/orchestrator-core-4.13.0-dev.20210314.2955922h.tgz#e0ee7852f8654bc72ad7eb10114617a5287cbd7c"
+  integrity sha512-pNyUPjjXc0GuRFYZXvlcicCdipsJCmaCNFmHB3ogYEZo48JW+nCC6Nul1FEZAFeZIDTKZcyBrYg0pY2pCKR+4Q==
   dependencies:
     bindings "1.2.1"
     node-addon-api "^3.0.0"
