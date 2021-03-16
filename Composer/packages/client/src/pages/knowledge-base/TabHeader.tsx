@@ -4,7 +4,7 @@
 import React, { useState, ReactNode, useMemo } from 'react';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
-import { languageListTemplates } from '../../components/MultiLanguage';
+import { languageListTemplates, LanguageTemplate } from '../../components/MultiLanguage';
 
 export type TabHeaderProps = {
   locale: string;
@@ -16,7 +16,9 @@ export type TabHeaderProps = {
 export const TabHeader: React.FC<TabHeaderProps> = (props) => {
   const { locale, defaultLanguage, languages, onChangeLocale, children } = props;
   const languageList = useMemo(() => {
-    return languageListTemplates(languages, locale, defaultLanguage).filter((l) => l.isEnabled);
+    const languageTemplates = languageListTemplates(languages, locale, defaultLanguage).filter((l) => l.isEnabled);
+    const defaultLanguageTemplate = languageTemplates.find((l) => l.locale === defaultLanguage) as LanguageTemplate;
+    return [...languageTemplates.filter((l) => l.locale !== defaultLanguage), defaultLanguageTemplate];
   }, [languages]);
   const [selectedKey, setSelectedKey] = useState<number>(languageList.findIndex((l) => l.locale === locale) || 0);
 
