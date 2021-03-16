@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
+import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import React, { useEffect, useState, useCallback, Fragment, useRef } from 'react';
 import {
   DetailsList,
@@ -348,6 +349,49 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
 
       const onRenderTitle = () => {
+        function onRenderContent(subTitle, style) {
+          return (
+            <div>
+              {subTitle && <div style={style}>{subTitle}</div>}
+              <p>{'Do you wish to continue?'}</p>
+            </div>
+          );
+        }
+
+        async function handleDeleteQnASourceFile(projectId: string, qnaFileId: string) {
+          let setting: Record<string, string | ((subTitle: string, style: any) => JSX.Element)> = {
+            confirmBtnText: formatMessage('Yes'),
+            cancelBtnText: formatMessage('Cancel'),
+          };
+          const title = formatMessage('Warning');
+          const subTitle = formatMessage(
+            'Delete one source file will also delete qna files with the same name on other locales'
+          );
+
+          setting = {
+            onRenderContent,
+            style: dialogStyle.console,
+          };
+          const result = await OpenConfirmModal(title, subTitle, setting);
+
+          if (result) {
+            await Promise.all(
+              languages.map(async (language) => {
+                const sourceNameWithoutLocale = getBaseName(containerId);
+                await removeQnAImport({
+                  id: `${getBaseName(qnaFileId)}.${language}`,
+                  sourceId: sourceNameWithoutLocale,
+                  projectId,
+                });
+                await removeQnAFile({
+                  id: `${sourceNameWithoutLocale}.${language}`,
+                  projectId,
+                });
+              })
+            );
+          }
+        }
+
         return (
           <div className={classNames.groupHeader}>
             {isImportedSource && (
@@ -390,20 +434,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!qnaFile) return;
-                          await Promise.all(
-                            languages.map(async (language) => {
-                              const sourceNameWithoutLocale = getBaseName(containerId);
-                              await removeQnAImport({
-                                id: `${getBaseName(qnaFile.id)}.${language}`,
-                                sourceId: sourceNameWithoutLocale,
-                                projectId: actualProjectId,
-                              });
-                              await removeQnAFile({
-                                id: `${sourceNameWithoutLocale}.${language}`,
-                                projectId: actualProjectId,
-                              });
-                            })
-                          );
+                          handleDeleteQnASourceFile(actualProjectId, qnaFile.id);
                         },
                       },
                     ] as IOverflowSetItemProps[]
