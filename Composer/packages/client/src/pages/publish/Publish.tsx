@@ -3,12 +3,15 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
+import { useState, useEffect, useMemo, Fragment, useRef, useCallback } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { PublishResult } from '@bfc/shared';
+import { PublishResult, PublishTarget } from '@bfc/shared';
+import { string } from 'prop-types';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
+import { PublishProfileDialog } from '../botProject/create-publish-profile/PublishProfileDialog';
 import {
   dispatcherState,
   localBotPublishHistorySelector,
@@ -45,6 +48,12 @@ import {
   deleteNotificationInterval,
 } from './publishPageUtils';
 
+type PublishProfileDialogContext = {
+  projectId: string;
+  publishTargetIndex: number;
+  publishTargets: PublishTarget[];
+};
+
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
 
@@ -69,7 +78,17 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [profileDialogVisible, setProfileDialogVisible] = useState(false);
+  const [profileDialogContext, setProfileDialogContext] = useState<PublishProfileDialogContext>();
+  const [showAuthDialog, setShowAuthDialog] = useState<{
+    show: boolean;
+    needGraph: boolean;
+    next?: () => void;
+  }>({
+    show: false,
+    needGraph: false,
+  });
+
   const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>(
     initUpdaterStatus(publishHistoryList)
   );
@@ -316,14 +335,106 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
+  const onAddPublishProfileDialog = (projectId: string) => {
+    const botStatus = botStatusList.find((b) => b.id === projectId);
+    if (botStatus?.publishTargets) {
+      setProfileDialogContext({
+        projectId,
+        publishTargetIndex: -1,
+        publishTargets: botStatus.publishTargets,
+      });
+
+      if (isShowAuthDialog(true)) {
+        setShowAuthDialog({ show: true, needGraph: true, next: () => setProfileDialogVisible(true) });
+      } else {
+        setProfileDialogVisible(true);
+      }
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Could not find project to add a publishing profile.`);
+      setProfileDialogContext(undefined);
+    }
+  };
+
+  const onEditPublishProfileDialog = (projectId: string, publishTarget: PublishTarget) => {
+    const botStatus = botStatusList.find((b) => b.id === projectId);
+    const publishTargetIndex = botStatus?.publishTargets
+      ? botStatus?.publishTargets?.findIndex((t) => {
+          return t.name === publishTarget.name;
+        })
+      : -1;
+    if (botStatus?.publishTargets && publishTargetIndex !== -1) {
+      setProfileDialogContext({
+        projectId,
+        publishTargetIndex,
+        publishTargets: botStatus.publishTargets,
+      });
+      if (isShowAuthDialog(true)) {
+        setShowAuthDialog({ show: true, needGraph: true, next: () => setProfileDialogVisible(true) });
+      } else {
+        setProfileDialogVisible(true);
+      }
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Could not find publishing profile to edit.`);
+      setProfileDialogContext(undefined);
+    }
+  };
+
+  const onDeletePublishProfileDialog = useCallback(
+    async (projectId: string, publishTarget: PublishTarget) => {
+      const targetName = publishTarget.name;
+      const confirmed = await OpenConfirmModal(
+        formatMessage('Delete?'),
+        formatMessage(
+          'Are you sure you want to remove "{targetName}"? This will only remove the profile and will not delete provisioned resources.',
+          { targetName }
+        )
+      );
+      if (confirmed) {
+        const publishTargets = botPropertyData[projectId].publishTargets;
+        const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);
+        setPublishTargets(newPublishTargets, projectId);
+      }
+    },
+    [botPropertyData]
+  );
+
+  const onClosePublishProfileDialog = () => {
+    setProfileDialogVisible(false);
+    setProfileDialogContext(undefined);
+  };
+
+  const renderProfileWizard = (): React.ReactNode => {
+    if (profileDialogVisible && profileDialogContext) {
+      const { projectId, publishTargetIndex, publishTargets } = profileDialogContext;
+      const current =
+        publishTargetIndex !== -1 ? { index: publishTargetIndex, item: publishTargets[publishTargetIndex] } : null;
+      return (
+        <PublishProfileDialog
+          closeDialog={onClosePublishProfileDialog}
+          current={current}
+          projectId={projectId}
+          setPublishTargets={setPublishTargets}
+          targets={publishTargets}
+          types={publishTypes}
+        />
+      );
+    }
+
+    return undefined;
+  };
+
   return (
     <Fragment>
-      {showAuthDialog && (
+      {showAuthDialog.show && (
         <AuthDialog
-          needGraph={false}
-          next={() => setPublishDialogVisiblity(true)}
+          needGraph={showAuthDialog.needGraph}
+          next={() => {
+            showAuthDialog?.next();
+          }}
           onDismiss={() => {
-            setShowAuthDialog(false);
+            setShowAuthDialog({ show: false, needGraph: false });
           }}
         />
       )}
@@ -353,7 +464,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         canPull={canPull}
         onPublish={() => {
           if (isShowAuthDialog(false)) {
-            setShowAuthDialog(true);
+            setShowAuthDialog({ show: true, needGraph: false, next: () => setPublishDialogVisiblity(true) });
           } else {
             setPublishDialogVisiblity(true);
           }
@@ -375,13 +486,17 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             checkedIds={checkedSkillIds}
             disableCheckbox={isPublishPending}
             publishTypes={publishTypes}
+            onAddProfile={onAddPublishProfileDialog}
             onChangePublishTarget={changePublishTarget}
             onCheck={updateCheckedSkills}
+            onDeleteProfile={onDeletePublishProfileDialog}
+            onEditProfile={onEditPublishProfileDialog}
             onManagePublishProfile={manageSkillPublishProfile}
             onRollbackClick={onRollbackToVersion}
           />
         </div>
       </div>
+      {renderProfileWizard()}
     </Fragment>
   );
 };

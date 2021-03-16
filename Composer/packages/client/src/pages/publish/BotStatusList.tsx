@@ -94,12 +94,6 @@ const ProfileChoiceField = styled(Stack)`
 const ProfileChoiceLabel = styled(Stack)`
   margin-left: 25px !important;
   align-items: flex-start;
-  &:hover {
-    .edit-profile-action,
-    .delete-profile-action {
-      opacity: 1;
-    }
-  }
 `;
 
 const ProfileHeader = styled(Stack)`
@@ -160,6 +154,17 @@ const profileChoiceGroupStyles: IChoiceGroupOptionStyles = {
       },
     },
   },
+  choiceFieldWrapper: {
+    selectors: {
+      ':hover': {
+        selectors: {
+          '.edit-profile-action, .delete-profile-action': {
+            opacity: '1',
+          },
+        },
+      },
+    },
+  },
 };
 
 const addProfileIcon: IIconProps = { iconName: 'Add' };
@@ -180,6 +185,10 @@ export type BotStatusListProps = {
   onCheck: (skillIds: string[]) => void;
   onChangePublishTarget: (PublishTarget: string, item: BotStatus) => void;
   onRollbackClick: (selectedVersion: PublishResult, item: BotStatus) => void;
+
+  onAddProfile: (skillId: string) => void;
+  onEditProfile: (skillId: string, publishTarget: PublishTarget) => void;
+  onDeleteProfile: (skillId: string, publishTarget: PublishTarget) => void;
 };
 
 export const BotStatusList: React.FC<BotStatusListProps> = ({
@@ -188,6 +197,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   publishTypes,
   disableCheckbox,
   checkedIds,
+  onAddProfile,
+  onEditProfile,
+  onDeleteProfile,
   onCheck,
   onManagePublishProfile,
   onChangePublishTarget,
@@ -446,29 +458,24 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     );
   };
 
-  const renderProfileChoiceField = (
-    props: IChoiceGroupOption | undefined,
-    defaultRender?: (props?: IChoiceGroupOption | undefined) => JSX.Element | null
-  ) => {
-    return <ProfileChoiceField horizontal>{props && defaultRender?.({ ...props, text: '' })}</ProfileChoiceField>;
-  };
-
   const renderProfileChoiceLabel = (botStatus: BotStatus, publishTarget: PublishTarget) => {
     const targetType = publishTypes.find((pt) => publishTarget.type === pt.name)?.description || publishTarget.type;
     return (
       <ProfileChoiceLabel>
         <ProfileHeader horizontal>
           <ProfileIcon iconName="CloudUpload" />
-          <ProfileName>{botStatus.name}</ProfileName>
+          <ProfileName>{publishTarget.name}</ProfileName>
           <EditProfileAction
             className="edit-profile-action"
             iconProps={editProfileIcon}
             title={formatMessage('Edit')}
+            onClick={() => onEditProfile(botStatus.id, publishTarget)}
           />
           <DeleteProfileAction
             className="delete-profile-action"
             iconProps={deleteProfileIcon}
             title={formatMessage('Delete')}
+            onClick={() => onDeleteProfile(botStatus.id, publishTarget)}
           />
         </ProfileHeader>
         <ProfileDetails>
@@ -513,7 +520,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
         </BotHeader>
         <BotDetails>
           <PublishProfileChoiceGroup disabled={!isChecked} options={profileOptions} />
-          <AddProfileAction iconProps={addProfileIcon}>Add Publishing Profile</AddProfileAction>
+          <AddProfileAction iconProps={addProfileIcon} onClick={() => onAddProfile(botStatus.id)}>
+            {formatMessage('Add Publishing Profile')}
+          </AddProfileAction>
         </BotDetails>
       </BotItem>
     );
