@@ -777,33 +777,32 @@ export class BotProject implements IBotProject {
 
     await this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
-    for (const pattern of BotStructureFilesPatterns) {
-      // load only from the data dir, otherwise may get "build" versions from
-      // deployment process
-      const root = this.dataDir;
-      const paths = await this.fileStorage.glob(
-        [
-          pattern,
-          '!(generated/**)',
-          '!(runtime/**)',
-          '!(bin/**)',
-          '!(obj/**)',
-          '!(scripts/**)',
-          '!(settings/appsettings.json)',
-          '!(**/luconfig.json)',
-        ],
-        root
-      );
 
-      for (const filePath of paths.sort()) {
-        const realFilePath: string = Path.join(root, filePath);
-        const fileInfo = await this._getFileInfo(realFilePath);
-        if (fileInfo) {
-          if (fileList.has(fileInfo.name)) {
-            throw new Error(`duplicate file found: ${fileInfo.relativePath}`);
-          }
-          fileList.set(fileInfo.name, fileInfo);
+    // load only from the data dir, otherwise may get "build" versions from
+    // deployment process
+    const root = this.dataDir;
+    const paths = await this.fileStorage.glob(
+      [
+        ...BotStructureFilesPatterns,
+        '!(generated/**)',
+        '!(runtime/**)',
+        '!(bin/**)',
+        '!(obj/**)',
+        '!(scripts/**)',
+        '!(settings/appsettings.json)',
+        '!(**/luconfig.json)',
+      ],
+      root
+    );
+
+    for (const filePath of paths.sort()) {
+      const realFilePath: string = Path.join(root, filePath);
+      const fileInfo = await this._getFileInfo(realFilePath);
+      if (fileInfo) {
+        if (fileList.has(fileInfo.name)) {
+          throw new Error(`duplicate file found: ${fileInfo.relativePath}`);
         }
+        fileList.set(fileInfo.name, fileInfo);
       }
     }
 
