@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { RootBotManagedProperties } from '@bfc/shared';
+import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
@@ -25,6 +25,7 @@ import {
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
+  createQnAOnState,
   creationFlowTypeState,
   currentProjectIdState,
   dispatcherState,
@@ -32,6 +33,7 @@ import {
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
+  showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -104,7 +106,11 @@ export const projectDispatcher = () => {
   );
 
   const addExistingSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default'): Promise<void> => {
+    (callbackHelpers: CallbackInterface) => async (
+      path: string,
+      storageId = 'default',
+      templateId?: string
+    ): Promise<void> => {
       const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
@@ -124,6 +130,11 @@ export const projectDispatcher = () => {
         if (!mainDialog) {
           const error = await snapshot.getPromise(botErrorState(projectId));
           throw error;
+        }
+
+        if (templateId === QnABotTemplateId) {
+          callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
+          callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
         }
 
         set(botProjectIdsState, (current) => [...current, projectId]);
@@ -509,9 +520,10 @@ export const projectDispatcher = () => {
             callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
             const { botFiles, projectData } = loadProjectData(response.data.result);
             const projectId = response.data.result.id;
+
             if (creationFlowType === 'Skill') {
               // Skill Creation
-              addExistingSkillToBotProject(projectData.location);
+              await addExistingSkillToBotProject(projectData.location, 'default', templateId);
             } else {
               // Root Bot Creation
               await postRootBotCreation(
