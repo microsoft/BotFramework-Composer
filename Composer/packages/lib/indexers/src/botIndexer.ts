@@ -235,7 +235,7 @@ const filterLUISFilesToPublish = (luFiles: LuFile[], dialogFiles: DialogInfo[]):
   });
 };
 
-const filterQnAFilesToPublish = (qnaFiles: QnAFile[], dialogFiles: DialogInfo[]): QnAFile[] => {
+const filterQnAFilesToPublish = (qnaFiles: QnAFile[]): QnAFile[] => {
   return qnaFiles.filter((file) => {
     const locale = getLocale(file.id);
     return locale && QnALocales.includes(locale);
