@@ -20,7 +20,12 @@ import get from 'lodash/get';
 import { List } from 'office-ui-fabric-react/lib/List';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import {
+  ChoiceGroup,
+  IChoiceGroupOption,
+  IChoiceGroupOptionStyles,
+  IChoiceGroupStyles,
+} from 'office-ui-fabric-react/lib/ChoiceGroup';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 import { PublishType } from '../../recoilModel/types';
@@ -79,22 +84,55 @@ const PublishProfileChoiceGroup = styled(ChoiceGroup)`
   padding: 0 0 0 5px;
 `;
 
-const ProfileChoice = styled(Stack)``;
+const ProfileChoiceField = styled(Stack)`
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  border: 1px solid cyan;
+`;
+
+const ProfileChoiceLabel = styled(Stack)`
+  margin-left: 25px !important;
+  align-items: flex-start;
+  &:hover {
+    .edit-profile-action,
+    .delete-profile-action {
+      opacity: 1;
+    }
+  }
+`;
 
 const ProfileHeader = styled(Stack)`
   align-items: center;
 `;
 
 const ProfileIcon = styled(Icon)`
-  margin-left: 7px;
+  margin-left: 7px !important;
 `;
 
 const ProfileName = styled(Text)`
-  margin-left: 2px !important;
+  margin-left: 4px !important;
+  line-height: 24px;
 `;
 
-const ProfileAction = styled(ActionButton)`
+const EditProfileAction = styled(IconButton)`
+  margin-left: 5px !important;
   font-size: 10px;
+  line-height: 10px;
+  height: 24px;
+  width: 32px;
+  opacity: 0;
+  transition: opacity 300ms;
+`;
+
+const DeleteProfileAction = styled(IconButton)`
+  margin-left: 5px !important;
+  font-size: 10px;
+  line-height: 10px;
+  height: 24px;
+  width: 32px;
+  opacity: 0;
+  transition: opacity 300ms;
 `;
 
 const AddProfileAction = styled(ActionButton)`
@@ -108,8 +146,21 @@ const ProfileType = styled(Text)`
 `;
 
 const ProfileDetails = styled(Stack)`
-  margin-left: 30px;
+  margin-left: 15px;
 `;
+
+const profileChoiceGroupStyles: IChoiceGroupOptionStyles = {
+  field: {
+    selectors: {
+      '::before': {
+        marginTop: '2px',
+      },
+      '::after': {
+        marginTop: '2px',
+      },
+    },
+  },
+};
 
 const addProfileIcon: IIconProps = { iconName: 'Add' };
 const editProfileIcon: IIconProps = { iconName: 'Edit' };
@@ -395,26 +446,35 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     );
   };
 
-  const renderProfileChoice = (
-    botStatus: BotStatus,
-    publishTarget: PublishTarget,
+  const renderProfileChoiceField = (
     props: IChoiceGroupOption | undefined,
     defaultRender?: (props?: IChoiceGroupOption | undefined) => JSX.Element | null
   ) => {
+    return <ProfileChoiceField horizontal>{props && defaultRender?.({ ...props, text: '' })}</ProfileChoiceField>;
+  };
+
+  const renderProfileChoiceLabel = (botStatus: BotStatus, publishTarget: PublishTarget) => {
     const targetType = publishTypes.find((pt) => publishTarget.type === pt.name)?.description || publishTarget.type;
     return (
-      <ProfileChoice>
+      <ProfileChoiceLabel>
         <ProfileHeader horizontal>
-          <Fragment>{props && defaultRender?.({ ...props, text: '' })}</Fragment>
           <ProfileIcon iconName="CloudUpload" />
-          <ProfileName>{props?.text}</ProfileName>
-          <ProfileAction iconProps={editProfileIcon} title={formatMessage('Edit')} />
-          <ProfileAction iconProps={deleteProfileIcon} title={formatMessage('Delete')} />
+          <ProfileName>{botStatus.name}</ProfileName>
+          <EditProfileAction
+            className="edit-profile-action"
+            iconProps={editProfileIcon}
+            title={formatMessage('Edit')}
+          />
+          <DeleteProfileAction
+            className="delete-profile-action"
+            iconProps={deleteProfileIcon}
+            title={formatMessage('Delete')}
+          />
         </ProfileHeader>
         <ProfileDetails>
           <ProfileType>{targetType}</ProfileType>
         </ProfileDetails>
-      </ProfileChoice>
+      </ProfileChoiceLabel>
     );
   };
 
@@ -434,7 +494,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
           return {
             key: p.name,
             text: p.name,
-            onRenderField: (props, defaultRender) => renderProfileChoice(botStatus, p, props, defaultRender),
+            styles: profileChoiceGroupStyles,
+            // onRenderField: (props, defaultRender) => renderProfileChoiceField(props, defaultRender),
+            onRenderLabel: () => renderProfileChoiceLabel(botStatus, p),
           };
         })
       : [];
