@@ -55,21 +55,18 @@ const QnAPage: React.FC<RouteComponentProps<{
   const createQnAOnInfo = useRecoilValue(createQnAOnState);
   const settings = useRecoilValue(settingsState(actualProjectId));
   const { defaultLanguage } = settings;
-  const languages = useMemo(() => (defaultLanguage === locale ? [defaultLanguage] : [locale, defaultLanguage]), [
-    locale,
-    defaultLanguage,
-  ]);
+  const languages = defaultLanguage === locale ? [defaultLanguage] : [locale, defaultLanguage];
   const [currentLocale, setCurrentLocale] = useState(locale);
 
   const showTabBar = useMemo(() => {
     const targetFileId = dialogId.endsWith(qnaSuffix(locale)) ? dialogId : `${dialogId}.${locale}`;
-    const qnaFile = qnaFileId
-      ? qnaFiles.find(({ id }) => id === qnaFileId)
-      : qnaFiles.find(({ id }) => id === targetFileId);
+    const qnaFile = qnaFiles.find(({ id }) => id === qnaFileId ?? targetFileId);
     return !(defaultLanguage === locale || qnaFile?.empty);
   }, [defaultLanguage, locale, qnaFiles, dialogId, qnaFileId]);
   useEffect(() => {
-    setCurrentLocale(locale);
+    if (locale !== currentLocale) {
+      setCurrentLocale(locale);
+    }
   }, [locale]);
 
   const path = props.location?.pathname ?? '';
