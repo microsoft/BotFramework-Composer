@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
+import { RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 

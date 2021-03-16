@@ -4,7 +4,6 @@ import Path from 'path';
 
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { navigate } from '@reach/router';
 import { BotTemplate } from '@botframework-composer/types';
 
 import { CreateOptions } from '../../components/CreationFlow/CreateOptions';
