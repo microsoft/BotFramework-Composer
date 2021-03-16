@@ -88,6 +88,7 @@ const renderModalityEditor = ({
   lgOption,
   lgTemplates,
   memoryVariables,
+  modalities,
   telemetryClient,
   editorSettings,
   onRemoveModality,
@@ -103,6 +104,7 @@ const renderModalityEditor = ({
   lgOption?: LGOption;
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
+  modalities: ModalityType[];
   telemetryClient: TelemetryClient;
   editorSettings?: Partial<CodeEditorSettings>;
   onRemoveModality: (modality: ModalityType) => void;
@@ -152,7 +154,13 @@ const renderModalityEditor = ({
         />
       );
     case 'Text':
-      return <TextModalityEditor {...commonProps} response={structuredResponse?.Text as TextStructuredResponseItem} />;
+      return (
+        <TextModalityEditor
+          {...commonProps}
+          focusOnMount={modalities.length === 1 && modalities[0] === 'Text'}
+          response={structuredResponse?.Text as TextStructuredResponseItem}
+        />
+      );
   }
 };
 
@@ -391,6 +399,7 @@ export const ModalityPivot = React.memo((props: Props) => {
           lgOption,
           lgTemplates,
           memoryVariables,
+          modalities,
           telemetryClient,
           editorSettings,
           onRemoveModality,

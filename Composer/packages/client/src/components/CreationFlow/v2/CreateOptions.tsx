@@ -20,16 +20,20 @@ import {
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import axios from 'axios';
+import querystring from 'query-string';
 
+import msftIcon from '../../../images/msftIcon.svg';
 import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
 import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
+import { getAliasFromPayload } from '../../../utils/electronUtil';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
@@ -111,11 +115,13 @@ const optionKeys = {
 const templateRequestUrl =
   'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
 
+const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
+
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onNext: (data: string) => void;
+  onNext: (templateName: string, urlData?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
@@ -123,11 +129,12 @@ type CreateOptionsProps = {
 export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { templates, onDismiss, onNext } = props;
-  const [currentTemplate, setCurrentTemplate] = useState('');
+  const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
-  const [readMe, setReadMe] = useRecoilState(selectedTemplateReadMeState);
+  const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
 
   const selectedTemplate = useMemo(() => {
@@ -135,7 +142,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       onSelectionChanged: () => {
         const t = selectedTemplate.getSelection()[0] as BotTemplate;
         if (t) {
-          setCurrentTemplate(t.id);
+          setCurrentTemplateId(t.id);
         }
       },
     });
@@ -144,20 +151,20 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const handleJumpToNext = () => {
     let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
-      routeToTemplate = currentTemplate;
+      routeToTemplate = currentTemplateId;
     }
 
     if (option === optionKeys.createFromQnA) {
       routeToTemplate = QnABotTemplateId;
     }
 
-    if (props.location && props.location.search) {
-      routeToTemplate += props.location.search;
-    }
-
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
-    onNext(routeToTemplate);
+    if (props.location && props.location.search) {
+      onNext(routeToTemplate, props.location.search);
+    } else {
+      onNext(routeToTemplate);
+    }
   };
 
   const tableColumns = [
@@ -173,6 +180,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       onRender: (item) => (
         <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
+            <img
+              alt={formatMessage('Microsoft Logo')}
+              aria-label={formatMessage('Microsoft Logo')}
+              src={msftIcon}
+              style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px' }}
+            />
             {item.name}
           </div>
         </div>
@@ -187,15 +200,47 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     );
   };
 
+  const getTemplate = (): BotTemplate | undefined => {
+    const currentTemplate = templates.find((t) => {
+      return t.id === currentTemplateId;
+    });
+    return currentTemplate;
+  };
+
   useEffect(() => {
     if (templates.length > 1) {
       const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
       if (emptyBotTemplate) {
-        setCurrentTemplate(emptyBotTemplate.id);
+        setCurrentTemplateId(emptyBotTemplate.id);
         setEmptyBotKey(emptyBotTemplate.id);
       }
     }
   }, [templates]);
+
+  useEffect(() => {
+    // open bot directly if alias exist.
+    if (props.location?.search) {
+      const decoded = decodeURIComponent(props.location.search);
+      const { source, payload } = querystring.parse(decoded);
+      if (typeof source === 'string' && typeof payload === 'string') {
+        const alias = getAliasFromPayload(source, payload);
+        // check to see if Composer currently has a bot project corresponding to the alias
+        axios
+          .get<any>(`/api/projects/alias/${alias}`)
+          .then((aliasRes) => {
+            if (aliasRes.status === 200) {
+              navigate(`/bot/${aliasRes.data.id}`);
+              return;
+            }
+          })
+          .catch((e) => {
+            setIsOpen(true);
+          });
+        return;
+      }
+    }
+    setIsOpen(true);
+  }, [props.location?.search]);
 
   useEffect(() => {
     if (selectedFeed?.props?.itemKey) {
@@ -204,16 +249,15 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [selectedFeed]);
 
   useEffect(() => {
-    if (currentTemplate) {
-      setReadMe('');
-      props.fetchReadMe(currentTemplate);
+    if (currentTemplateId) {
+      props.fetchReadMe(currentTemplateId);
     }
-  }, [currentTemplate, props.fetchReadMe]);
+  }, [currentTemplateId, props.fetchReadMe]);
 
   return (
     <Fragment>
       <DialogWrapper
-        isOpen
+        isOpen={isOpen}
         {...DialogCreationCopy.CREATE_NEW_BOT_V2}
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
@@ -249,24 +293,18 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending && <LoadingSpinner />}
-            <TemplateDetailView readMe={readMe} templateId={currentTemplate} />
+            {fetchReadMePending ? <LoadingSpinner /> : <TemplateDetailView readMe={readMe} template={getTemplate()} />}
           </div>
         </div>
         <DialogFooter>
-          <Link
-            underline
-            href={templateRequestUrl}
-            styles={{ root: { fontSize: '12px', float: 'left' } }}
-            target="_blank"
-          >
+          <Link href={templateRequestUrl} styles={{ root: { fontSize: '12px', float: 'left' } }} target="_blank">
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
+            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null)}
             text={formatMessage('Next')}
             onClick={handleJumpToNext}
           />

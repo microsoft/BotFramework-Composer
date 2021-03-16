@@ -10,14 +10,14 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, isGetTokenFromUser } from '../../../utils/auth';
+import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { AuthClient } from '../../../utils/authClient';
-import { armScopes, graphScopes } from '../../../constants';
+import { graphScopes } from '../../../constants';
 import { dispatcherState } from '../../../recoilModel';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
@@ -93,6 +93,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
     };
+    PluginAPI.publish.getTenantIdFromCache = () => {
+      return getTenantIdFromCache();
+    };
+    PluginAPI.publish.setTenantId = (value) => {
+      setTenantId(value);
+    };
   }, []);
 
   // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
@@ -119,7 +125,16 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         newTargets.push({ name, type, configuration });
       }
       await setPublishTargets(newTargets, projectId);
-      TelemetryClient.track('NewPublishingProfileSaved', { type });
+      try {
+        const parsedConfiguration = JSON.parse(configuration);
+        TelemetryClient.track('NewPublishingProfileSaved', {
+          type,
+          msAppId: parsedConfiguration.settings?.MicrosoftAppId,
+          subscriptionId: parsedConfiguration.subscriptionId,
+        });
+      } catch {
+        TelemetryClient.track('NewPublishingProfileSaved', { type });
+      }
     },
     [targets, projectId]
   );
@@ -140,7 +155,13 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         let arm, graph;
         if (!isGetTokenFromUser()) {
           // login or get token implicit
-          arm = await AuthClient.getAccessToken(armScopes);
+          let tenantId = getTenantIdFromCache();
+          if (!tenantId) {
+            const tenants = await AuthClient.getTenants();
+            tenantId = tenants?.[0]?.tenantId;
+            setTenantId(tenantId);
+          }
+          arm = await AuthClient.getARMTokenForTenant(tenantId);
           graph = await AuthClient.getAccessToken(graphScopes);
         } else {
           // get token from cache
@@ -189,9 +210,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           </div>
         )}
         {page === Page.ConfigProvision && selectedType?.bundleId && (
-          <div css={publishSurfaceStyles}>
-            <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
-          </div>
+          <Fragment>
+            <div style={{ marginBottom: '16px' }}>{dialogTitle.subText}</div>
+            <div css={publishSurfaceStyles}>
+              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+            </div>
+          </Fragment>
         )}
       </Dialog>
     </Fragment>

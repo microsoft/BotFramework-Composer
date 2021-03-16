@@ -18,6 +18,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { navigateTo } from '../../../utils/navigation';
 import { settingsState } from '../../../recoilModel';
@@ -114,6 +115,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
+      TelemetryClient.track('ConnectionsAddNewProfile');
       navigateTo(`/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`);
     } else {
       let newtoken = '';
@@ -288,6 +290,12 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const webchat = await fetchChannelStatus(CHANNELS.WEBCHAT);
         const speech = await fetchChannelStatus(CHANNELS.SPEECH);
 
+        TelemetryClient.track('ConnectionsChannelStatusDisplayed', {
+          teams: teams?.enabled ?? false,
+          webchat: webchat?.enabled ?? false,
+          speech: speech?.enabled ?? false,
+        });
+
         if (teams && webchat && speech) {
           setChannelStatus({
             [CHANNELS.TEAMS]: teams,
@@ -297,6 +305,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           setLoadingStatus(false);
         }
       } catch (err) {
+        TelemetryClient.track('ConnectionsChannelStatusError', { error: err.message });
         setLoadingStatus(false);
         setChannelStatus(undefined);
         setErrorMessage(err.message);
@@ -319,6 +328,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const toggleService = (channel) => {
     return async (_, enabled) => {
+      TelemetryClient.track('ConnectionsToggleChannel', { channel, enabled });
+
       if (enabled && channel === CHANNELS.SPEECH) {
         setShowSpeechModal(true);
       } else {
@@ -337,6 +348,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             await deleteChannelService(channel);
           }
         } catch (err) {
+          TelemetryClient.track('ConnectionsToggleChannelFailed', { channel, enabled });
+
           setApplicationLevelError(err);
           setChannelStatus({
             ...channelStatus,
@@ -366,6 +379,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         isDefaultBotForCogSvcAccount: isDefault,
       });
     } catch (err) {
+      TelemetryClient.track('ConnectionsToggleChannelFailed', { channel: 'speech', enabled: true });
+
       setChannelStatus({
         ...channelStatus,
         [CHANNELS.SPEECH]: {
@@ -562,7 +577,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
-            {absTableRow(CHANNELS.WEBCHAT, formatMessage('Webchat'), webchatHelpLink)}
+            {absTableRow(CHANNELS.WEBCHAT, formatMessage('Web Chat'), webchatHelpLink)}
             {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}

@@ -4,7 +4,6 @@
 import { LgTemplate, TelemetryClient } from '@bfc/shared';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import debounce from 'lodash/debounce';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { ILinkStyles, Link } from 'office-ui-fabric-react/lib/Link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -77,23 +76,16 @@ export const StringArrayEditor = React.memo(
   }: StringArrayEditorProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-    const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLInputElement | null>(null);
-
-    const debouncedChange = React.useCallback(
-      debounce((items: string[], callback: (arr: string[]) => void) => {
-        callback(items);
-      }, 300),
-      []
-    );
+    const [currentIndex, setCurrentIndex] = useState<number | null>(items.length === 1 && items[0] === '' ? 0 : null);
+    const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLTextAreaElement | null>(null);
 
     const onItemChange = useCallback(
       (index: number) => (_, newValue?: string) => {
         const updatedItems = [...items];
         updatedItems[index] = newValue ?? '';
-        debouncedChange(updatedItems, onChange);
+        onChange(updatedItems);
       },
-      [debouncedChange, items, onChange]
+      [items, onChange]
     );
 
     const onItemFocus = useCallback(
@@ -107,8 +99,12 @@ export const StringArrayEditor = React.memo(
       (index: number) => () => {
         const newItems = items.filter((_, idx) => idx !== index);
         onChange(newItems);
+
+        if (currentIndex) {
+          setCurrentIndex(newItems.length - 1);
+        }
       },
-      [items, onChange]
+      [currentIndex, items, onChange]
     );
 
     const onClickAddVariation = useCallback(() => {
@@ -116,18 +112,38 @@ export const StringArrayEditor = React.memo(
       setCurrentIndex(items.length);
     }, [items, onChange]);
 
-    const onShowCallout = useCallback((targetElement: HTMLInputElement) => {
+    const onShowCallout = useCallback((targetElement: HTMLTextAreaElement) => {
       setCalloutTargetElement(targetElement);
     }, []);
 
     useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
         if (submitKeys.includes(e.key)) {
+          // Allow multiline via shift+Enter
+          if (e.key === 'Enter' && e.shiftKey) {
+            return;
+          }
+
           setCalloutTargetElement(null);
-          setCurrentIndex(null);
-          // Remove empty variations only if necessary
-          if (items.some((item) => !item)) {
-            onChange(items.filter(Boolean));
+          // Filter our empty or newline strings
+          const filteredItems = items.filter((s) => s !== '' && s !== '\n');
+          if (e.key === 'Enter' && containerRef.current?.contains(e.target as Node)) {
+            // If the value is not filtered, go to the next entry
+            // Otherwise cancel editing
+            if (items.length === filteredItems.length) {
+              e.preventDefault();
+              onChange([...filteredItems, '']);
+              setCurrentIndex(filteredItems.length);
+            } else {
+              onChange(filteredItems);
+              setCurrentIndex(null);
+            }
+          } else {
+            setCurrentIndex(null);
+            // Remove empty variations only if necessary
+            if (items.length !== filteredItems.length) {
+              onChange(filteredItems);
+            }
           }
         }
       };

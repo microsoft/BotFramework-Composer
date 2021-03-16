@@ -52,11 +52,17 @@ export class AzureResourceMananger {
    */
   public async createResourceGroup(config: ResourceGroupConfig): Promise<ResourceGroupConfig> {
     if (!config.name) {
-      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, 'You should provide a valid resource group name.');
+      throw createCustomizeError(
+        ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
+        'You should provide a valid resource group name.'
+      );
     }
     // Create a new resource group
     if (!config.location) {
-      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, 'You should provide a valid resource group name.');
+      throw createCustomizeError(
+        ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
+        'You should provide a valid resource group name.'
+      );
     }
 
     try {
@@ -808,7 +814,7 @@ export class AzureResourceMananger {
             {
               name: 'WEBSITE_NODE_DEFAULT_VERSION',
               value: '10.14.1',
-            }
+            },
           ],
           cors: {
             allowedOrigins: ['https://botservice.hosting.portal.azure.net', 'https://hosting.onecloud.azure-test.net/'],
@@ -926,16 +932,17 @@ export class AzureResourceMananger {
           displayName: config.displayName ?? config.name,
           endpoint: config.endpoint ?? '',
           msaAppId: config.appId ?? '',
+          openWithHint: 'bfcomposer://',
         },
         sku: {
           name: 'F0',
         },
         name: config.name,
         location: 'global',
-        kind: 'bot',
+        kind: 'azurebot',
         tags: {
-          webapp: config.webAppHostname
-        }
+          webapp: config.webAppHostname,
+        },
       });
 
       if (botResult?._response?.status >= 300) {

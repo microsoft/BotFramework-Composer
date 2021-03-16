@@ -187,7 +187,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // point to the declarative assets (possibly in remote storage)
         const botFiles = project.getProject().files;
 
-        if (runtime.key === 'csharp-azurewebapp-v2') {
+        // include both pre-release and release identifiers here
+        // TODO: eventually we can clean this up when the "old" runtime is deprecated
+        // (old runtime support is the else block below)
+        if (runtime.key === 'csharp-azurewebapp-v2' || runtime.key === 'adaptive-runtime-dotnet-webapp') {
           const buildFolder = this.getProjectFolder(resourcekey, this.mode);
 
           // clean up from any previous deploys
@@ -321,7 +324,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         accessToken,
         luResources,
         qnaResources,
-        abs
+        abs,
       } = config;
       try {
         // get the appropriate runtime template which contains methods to build and configure the runtime
@@ -355,7 +358,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           environment,
           hostname,
           luisResource,
-          abs
+          abs,
         };
         await this.performDeploymentAction(
           project,
@@ -402,9 +405,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // GOT PROVISION RESULTS!
         // cast this into the right form for a publish profile
 
-        var currentProfile = null;
-        if (config.currentProfile)
-        {
+        let currentProfile = null;
+        if (config.currentProfile) {
           currentProfile = JSON.parse(config.currentProfile.configuration);
         }
         const currentSettings = currentProfile?.settings;
@@ -416,18 +418,21 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
           botName: currentProfile?.botName ?? provisionResults.botName,
           hostname: config.hostname ?? currentProfile?.hostname,
-          luisResource: provisionResults.luisPrediction? `${config.hostname}-luis` : currentProfile?.luisResource,
+          luisResource: provisionResults.luisPrediction ? `${config.hostname}-luis` : currentProfile?.luisResource,
           runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
           region: config.location,
           settings: {
             applicationInsights: {
-              InstrumentationKey: provisionResults.appInsights?.instrumentationKey ?? currentSettings?.applicationInsights?.InstrumentationKey,
+              InstrumentationKey:
+                provisionResults.appInsights?.instrumentationKey ??
+                currentSettings?.applicationInsights?.InstrumentationKey,
             },
             cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
             blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
             luis: {
               authoringKey: provisionResults.luisAuthoring?.authoringKey ?? currentSettings?.luis?.authoringKey,
-              authoringEndpoint: provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
+              authoringEndpoint:
+                provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
               endpointKey: provisionResults.luisPrediction?.endpointKey ?? currentSettings?.luis?.endpointKey,
               endpoint: provisionResults.luisPrediction?.endpoint ?? currentSettings?.luis?.endpoint,
               region: provisionResults.luisPrediction?.location ?? currentSettings?.luis?.region,
@@ -438,9 +443,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             },
             MicrosoftAppId: provisionResults.appId ?? currentSettings?.MicrosoftAppId,
             MicrosoftAppPassword: provisionResults.appPassword ?? currentSettings?.MicrosoftAppPassword,
-          }
+          },
         };
-        for (let configUnit in currentProfile) {
+        for (const configUnit in currentProfile) {
           if (!(configUnit in publishProfile)) {
             publishProfile[configUnit] = currentProfile[configUnit];
           }
@@ -465,7 +470,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       BackgroundProcessManager.removeProcess(jobId);
     };
 
-
     /**************************************************************************************************
      * plugin methods for publish
      *************************************************************************************************/
@@ -481,7 +485,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       } = config;
 
       const abs = getAbsSettings(config);
-      const {luResources, qnaResources} = metadata;
+      const { luResources, qnaResources } = metadata;
 
       // get the bot id from the project
       const botId = project.id;
@@ -512,7 +516,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // verify publish profile
         isProfileComplete(config);
 
-        this.asyncPublish({...config, accessToken, luResources, qnaResources, abs}, project, resourcekey, jobId);
+        this.asyncPublish({ ...config, accessToken, luResources, qnaResources, abs }, project, resourcekey, jobId);
 
         return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
       } catch (err) {

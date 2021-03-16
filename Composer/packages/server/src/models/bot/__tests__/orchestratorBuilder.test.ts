@@ -10,6 +10,7 @@ import { Utility } from '@microsoft/bf-orchestrator';
 import { IFileStorage } from '../../storage/interface';
 import { Builder } from '../builder';
 import mockLUInput from '../__mocks__/mockLUInput.json';
+import { orchestratorBuilder } from '../process/orchestratorWorker';
 
 const nlrId = 'pretrained.20200924.microsoft.dte.00.06.en.onnx';
 const nlrPath: string = path.resolve('./orchestrator_ut_model/');
@@ -47,22 +48,16 @@ describe('Orchestrator Tests', () => {
   });
 
   it('throws if input empty', () => {
-    const builder = new Builder('', {} as IFileStorage, 'en-us');
-
-    expect(builder.orchestratorBuilder([], nlrPath)).rejects.toThrow();
+    expect(orchestratorBuilder('test', [], nlrPath)).rejects.toThrow();
   });
 
   it('throws if NLR path invalid', () => {
-    const builder = new Builder('', {} as IFileStorage, 'en-us');
-
     const data: FileInfo[] = [{ name: 'hello', content: 'test', lastModified: '', path: '', relativePath: '' }];
-    expect(builder.orchestratorBuilder(data, 'invalidPath')).rejects.toThrow();
+    expect(orchestratorBuilder('test', data, 'invalidPath')).rejects.toThrow();
   });
 
   it('produces expected snapshot and recognizer shape', async () => {
-    const builder = new Builder('', {} as IFileStorage, 'en-us');
-
-    const buildOutput = await builder.orchestratorBuilder(mockLUInput, nlrPath);
+    const buildOutput = await orchestratorBuilder('test', mockLUInput, nlrPath);
 
     expect(buildOutput.outputs.map((o) => o.id)).toContain('additem.en-us.lu');
 
@@ -71,8 +66,7 @@ describe('Orchestrator Tests', () => {
   });
 
   it('produces expected recognizer shape', async () => {
-    const builder = new Builder('', {} as IFileStorage, 'en-us');
-    const buildOutput = await builder.orchestratorBuilder(mockLUInput, nlrPath);
+    const buildOutput = await orchestratorBuilder('test', mockLUInput, nlrPath);
 
     expect(buildOutput.outputs.map((o) => o.id)).toContain('additem.en-us.lu');
 
