@@ -71,10 +71,6 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.dialogs.dialogSchema, { DIALOGNAME: '*' }),
   templateInterpolate(BotStructureTemplate.dialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
 
-  templateInterpolate(BotStructureTemplate.importedDialogs.entry, { DIALOGNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.dialogSchema, { DIALOGNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
-
   templateInterpolate(BotStructureTemplate.formDialogs, { FORMDIALOGNAME: '*.form' }),
   templateInterpolate(BotStructureTemplate.skillManifests, { MANIFESTFILENAME: '*.json' }),
   templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
@@ -88,9 +84,11 @@ export const BotStructureFilesPatterns = [
   'dialogs/*/language-generation/**/*.lg',
   'dialogs/*/language-understanding/**/*.lu',
   'dialogs/*/knowledge-base/**/*.qna',
-  'dialogs/imported/*/language-generation/**/*.lg',
-  'dialogs/imported/*/language-understanding/**/*.lu',
-  'dialogs/imported/*/knowledge-base/**/*.qna',
+  'dialogs/imported/**/*.dialog',
+  'dialogs/imported/**/language-generation/**/*.lg',
+  'dialogs/imported/**/language-understanding/**/*.lu',
+  'dialogs/imported/**/knowledge-base/**/*.qna',
+  'dialogs/imported/**/*.dialog.schema',
   'dialogs/*/*.json',
 ];
 
