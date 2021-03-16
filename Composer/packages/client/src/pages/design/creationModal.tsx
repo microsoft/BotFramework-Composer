@@ -103,7 +103,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         const templateVersion = templateProjects.find((template: BotTemplate) => {
           return template.id == templateId;
         })?.package?.packageVersion;
-        const newBotData2 = {
+        const newCreationBotData = {
           templateId: templateId || '',
           templateVersion: templateVersion || '',
           name: formData.name,
@@ -119,7 +119,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
           profile: formData?.profile,
           source: formData?.source,
         };
-        createNewBotV2(newBotData2);
+        createNewBotV2(newCreationBotData);
       } else {
         addNewSkillToBotProject(newBotData);
       }

@@ -25,7 +25,6 @@ import {
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
-  createQnAOnState,
   creationFlowTypeState,
   currentProjectIdState,
   dispatcherState,
@@ -33,10 +32,9 @@ import {
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
-  showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
-import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -54,7 +52,6 @@ import {
   navigateToSkillBot,
   openLocalSkill,
   openRemoteSkill,
-  openRootBotAndSkills,
   openRootBotAndSkillsByPath,
   openRootBotAndSkillsByProjectId,
   removeRecentProject,
@@ -515,36 +512,18 @@ export const projectDispatcher = () => {
             if (creationFlowType === 'Skill') {
               // Skill Creation
               addExistingSkillToBotProject(projectData.location);
-
-              return projectId;
             } else {
               // Root Bot Creation
-              callbackHelpers.set(botProjectIdsState, (current) => [...current, projectId]);
-
-              if (settingStorage.get(projectId)) {
-                settingStorage.remove(projectId);
-              }
-              const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
-              callbackHelpers.set(projectMetaDataState(projectId), {
-                isRootBot: true,
-                isRemote: false,
-              });
-              // if create from QnATemplate, continue creation flow.
-              if (templateId === QnABotTemplateId) {
-                callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
-                callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
-              }
-              if (profile) {
-                // ABS Create Flow, update publishProfile after create project
-                const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
-                const newProfile = getPublishProfileFromPayload(profile, source);
-
-                newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-              }
-              projectIdCache.set(projectId);
-
-              // navigate to the new get started section
-              navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
+              await postRootBotCreation(
+                callbackHelpers,
+                projectId,
+                botFiles,
+                projectData,
+                templateId,
+                profile,
+                source,
+                projectIdCache
+              );
             }
             callbackHelpers.set(botOpeningMessage, '');
             callbackHelpers.set(botOpeningState, false);
