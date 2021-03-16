@@ -180,7 +180,7 @@ export class Builder {
           throw new Error('Model not set');
         }
         const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
-        await this.runOrchestratorNlrGet(modelPath, modelData.model);
+        //await this.runOrchestratorNlrGet(modelPath, modelData.model);
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
         this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;

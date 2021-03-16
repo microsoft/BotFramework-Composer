@@ -37,7 +37,8 @@ async function getModelList(): Promise<IOrchestratorNLRList> {
 let state: DownloadState = DownloadState.STOPPED;
 
 interface DefaultModelRequest {
-  language: 'en' | 'multilang';
+  type: 'en_intent' | 'multilingual_intent';
+  name: string;
 }
 
 function isDefaultModelRequest(arg: any): arg is DefaultModelRequest {
@@ -49,16 +50,23 @@ async function status(req: Request, res: Response) {
 }
 
 async function downloadDefaultModel(req: Request, res: Response) {
-  const lang = req.body;
+  const modelData = req.body?.modelData;
 
-  if (!isDefaultModelRequest(lang)) {
+  if (!isDefaultModelRequest(modelData)) {
     res.send(400);
     return;
   }
 
-  const modelList = await getModelList();
-  const modelName = lang.language === 'en' ? modelList.defaults?.en_intent : modelList.defaults?.multilingual_intent;
-  const modelPath = await getModelPath(modelName);
+  let modelName = '';
+
+  if (modelData?.name === 'default') {
+    const modelList = await getModelList();
+    modelName = modelList.defaults[modelData.type];
+  } else {
+    modelName = modelData.name;
+  }
+
+  const modelPath = await getModelPath(modelData.name);
 
   if (await pathExists(modelPath)) {
     state = DownloadState.ALREADYDOWNLOADED;

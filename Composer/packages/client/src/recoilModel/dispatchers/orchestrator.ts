@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { RecognizerFile, SDKKinds } from '@bfc/shared';
+import { DialogSetting, RecognizerFile, SDKKinds } from '@bfc/shared';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import partition from 'lodash/partition';
 
@@ -13,10 +13,16 @@ import { recognizersSelectorFamily } from '../selectors/recognizers';
 import { Locales } from '../../locales';
 
 import { createNotification } from './notification';
+import { settingsState } from '../atoms';
 
-export const downloadModel = (addr: string, model: 'en' | 'multilang', notificationStartCallback: () => void) => {
+interface IModelQueueItem {
+  type: 'en_intent' | 'multilingual_intent';
+  name: string;
+}
+
+export const downloadModel = (addr: string, model: IModelQueueItem, notificationStartCallback: () => void) => {
   return new Promise<boolean>((resolve, reject) => {
-    httpClient.post(addr, { language: model }).then((resp) => {
+    httpClient.post(addr, { modelData: model }).then((resp) => {
       if (resp.status === 201) {
         resolve(true);
         return;
@@ -43,11 +49,11 @@ export const downloadModel = (addr: string, model: 'en' | 'multilang', notificat
   });
 };
 
-export const availableLanguageModels = (recognizerFiles: RecognizerFile[]) => {
+export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSettings: DialogSetting) => {
   const dialogsUsingOrchestrator = recognizerFiles.filter(
     ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
   );
-  const languageModels: ('en' | 'multilang')[] = [];
+  const languageModels: IModelQueueItem[] = [];
   if (dialogsUsingOrchestrator.length) {
     // pull out languages that Orchestrator has to support
     const [enLuFiles, multiLangLuFiles] = partition(dialogsUsingOrchestrator, (f) =>
@@ -55,7 +61,7 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[]) => {
     );
 
     if (enLuFiles.length) {
-      languageModels.push('en');
+      languageModels.push({ type: 'en_intent', name: botSettings?.orchestrator?.modelNames?.en_intent ?? 'default' });
     }
 
     if (
@@ -64,7 +70,10 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[]) => {
         .filter((id) => id !== undefined)
         .some((lang) => Locales.map((l) => l.locale).includes(lang?.toLowerCase()))
     ) {
-      languageModels.push('multilang');
+      languageModels.push({
+        type: 'multilingual_intent',
+        name: botSettings?.orchestrator?.modelNames?.multilingual_intent ?? 'default',
+      });
     }
   }
   return languageModels;
@@ -82,9 +91,10 @@ export const orchestratorDispatcher = () => {
       // Download Model Notification
       const { addNotification, deleteNotification } = await snapshot.getPromise(dispatcherState);
       const notification = createNotification(orchestratorDownloadNotificationProps());
+      const botSettings = await snapshot.getPromise(settingsState(projectId));
 
       try {
-        for (const languageModel of availableLanguageModels(recognizers)) {
+        for (const languageModel of availableLanguageModels(recognizers, botSettings)) {
           await downloadModel('/orchestrator/download', languageModel, () => {
             addNotification(notification);
           });
