@@ -56,12 +56,12 @@ const updateLgFiles = (
 
   // adds
   if (adds?.length) {
-    set(lgFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
     adds.forEach((lgFile) => {
       set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
         needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
       );
     });
+    set(lgFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
   }
 };
 
