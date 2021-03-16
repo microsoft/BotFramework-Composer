@@ -220,19 +220,39 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     navigateTo(url);
   };
 
+  const isPublishingToAzure = (items: BotStatus[]) => {
+    for (const bot of items) {
+      const setting = botPropertyData[bot.id].setting;
+      const publishTargets = botPropertyData[bot.id].publishTargets;
+      if (!(bot.publishTarget && publishTargets && setting)) {
+        continue;
+      }
+      if (bot.publishTarget && publishTargets) {
+        const selectedTarget = publishTargets.find((target) => target.name === bot.publishTarget);
+        if (selectedTarget?.type === 'azurePublish' || selectedTarget?.type === 'azureFunctionsPublish') {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const publish = async (items: BotStatus[]) => {
     // get token
     let token = '';
-    if (isGetTokenFromUser()) {
-      token = getTokenFromCache('accessToken');
-    } else {
-      let tenant = getTenantIdFromCache();
-      if (!tenant) {
-        const tenants = await AuthClient.getTenants();
-        tenant = tenants?.[0]?.tenantId;
-        setTenantId(tenant);
+    if (isPublishingToAzure(items)) {
+      // TODO: this logic needs to be moved into the Azure publish extensions
+      if (isGetTokenFromUser()) {
+        token = getTokenFromCache('accessToken');
+      } else {
+        let tenant = getTenantIdFromCache();
+        if (!tenant) {
+          const tenants = await AuthClient.getTenants();
+          tenant = tenants?.[0]?.tenantId;
+          setTenantId(tenant);
+        }
+        token = await AuthClient.getARMTokenForTenant(tenant);
       }
-      token = await AuthClient.getARMTokenForTenant(tenant);
     }
 
     setPublishDialogVisiblity(false);
