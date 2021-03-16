@@ -21,7 +21,7 @@ import {
 import { LgParser } from '../lib/lgParser';
 
 const textDoc: TextDocument = {
-  getText: () => 'ithis is an entity: ${@name}',
+  getText: () => '-this is an entity: ${@name}',
   uri: 'inmemory://model/1',
   languageId: 'botbuilderlg',
   version: 2,

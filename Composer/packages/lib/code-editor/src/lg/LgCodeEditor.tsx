@@ -131,6 +131,12 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLGEditorInstance = languageClient;
+
+          languageClient.onReady().then(() =>
+            languageClient.onNotification('GotoDefinition', (result) => {
+              console.log(result);
+            })
+          );
         },
       });
     } else {

@@ -57,6 +57,7 @@ export class LGServer {
   private _luisEntities: string[] = [];
   private _lastLuContent: string[] = [];
   private _lgFile: LgFile | undefined = undefined;
+  private _templateDefinitions: Record<string, any> = {};
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
@@ -137,16 +138,18 @@ export class LGServer {
     }
     const wordRange = getRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
-    const result = this._lgFile?.templates.find((t) => t.name === word);
-    if (!result) {
-      return;
-    }
+    const curFileResult = this._lgFile?.templates.find((t) => t.name === word);
 
-    if (result.range) {
+    if (curFileResult?.range) {
       return Location.create(
         params.textDocument.uri,
-        Range.create(result.range.start.line - 1, 0, result.range.end.line, 0)
+        Range.create(curFileResult.range.start.line - 1, 0, curFileResult.range.end.line, 0)
       );
+    }
+
+    const refResult = this._templateDefinitions[word];
+    if (refResult) {
+      this.connection.sendNotification('GotoDefinition', refResult);
     }
 
     return;
@@ -265,6 +268,7 @@ export class LGServer {
       const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      this.recordTemplatesDefintions(lgTextFiles);
       if (fileId && templateId) {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
         if (lgTextFile) {
@@ -272,6 +276,7 @@ export class LGServer {
           return await this._lgParser.updateTemplate(lgFile, templateId, { body: content }, lgTextFiles);
         }
       }
+
       return await this._lgParser.parse(fileId || uri, content, lgTextFiles);
     };
     const lgDocument: LGDocument = {
@@ -282,6 +287,27 @@ export class LGServer {
       index,
     };
     this.LGDocuments.push(lgDocument);
+  }
+
+  protected async recordTemplatesDefintions(lgTextFiles: any[]) {
+    for (const file of lgTextFiles) {
+      const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
+      for (const template of lgTemplates.templates) {
+        this._templateDefinitions[template.name] = {
+          fileId: this.removeLocaleInId(file.id),
+          line: template?.range?.start?.line,
+        };
+      }
+    }
+  }
+
+  private removeLocaleInId(fileId: string): string {
+    const idx = fileId.lastIndexOf('.');
+    if (idx !== -1) {
+      return fileId.substring(0, idx);
+    } else {
+      return fileId;
+    }
   }
 
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
