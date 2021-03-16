@@ -27,15 +27,6 @@ const BotStructureTemplate = {
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
     recognizer: 'dialogs/${DIALOGNAME}/recognizers/${RECOGNIZERNAME}',
   },
-  importedDialogs: {
-    entry: 'dialogs/imported/${DIALOGNAME}/${DIALOGNAME}.dialog',
-    lg: 'dialogs/imported/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
-    lu: 'dialogs/imported/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
-    qna: 'dialogs/imported/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
-    sourceQnA: 'dialogs/imported/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
-    dialogSchema: 'dialogs/imported/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
-    recognizer: 'dialogs/imported/${DIALOGNAME}/recognizers/${RECOGNIZERNAME}',
-  },
   formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
   botProject: '${BOTNAME}.botproj',
@@ -71,10 +62,6 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.dialogs.dialogSchema, { DIALOGNAME: '*' }),
   templateInterpolate(BotStructureTemplate.dialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
 
-  templateInterpolate(BotStructureTemplate.importedDialogs.entry, { DIALOGNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.dialogSchema, { DIALOGNAME: '*' }),
-  templateInterpolate(BotStructureTemplate.importedDialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
-
   templateInterpolate(BotStructureTemplate.formDialogs, { FORMDIALOGNAME: '*.form' }),
   templateInterpolate(BotStructureTemplate.skillManifests, { MANIFESTFILENAME: '*.json' }),
   templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
@@ -88,9 +75,11 @@ export const BotStructureFilesPatterns = [
   'dialogs/*/language-generation/**/*.lg',
   'dialogs/*/language-understanding/**/*.lu',
   'dialogs/*/knowledge-base/**/*.qna',
-  'dialogs/imported/*/language-generation/**/*.lg',
-  'dialogs/imported/*/language-understanding/**/*.lu',
-  'dialogs/imported/*/knowledge-base/**/*.qna',
+  'dialogs/imported/**/*.dialog',
+  'dialogs/imported/**/language-generation/**/*.lg',
+  'dialogs/imported/**/language-understanding/**/*.lu',
+  'dialogs/imported/**/knowledge-base/**/*.qna',
+  'dialogs/imported/**/*.dialog.schema',
   'dialogs/*/*.json',
 ];
 
