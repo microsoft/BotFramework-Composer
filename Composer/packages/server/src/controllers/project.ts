@@ -158,7 +158,7 @@ async function removeProject(req: Request, res: Response) {
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
@@ -195,7 +195,7 @@ async function openProject(req: Request, res: Response) {
 async function saveProjectAs(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.name) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
