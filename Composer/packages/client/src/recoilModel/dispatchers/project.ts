@@ -26,6 +26,7 @@ import {
   botProjectSpaceLoadedState,
   botStatusState,
   createQnAOnState,
+  creationFlowTypeState,
   currentProjectIdState,
   dispatcherState,
   fetchReadMePendingState,
@@ -35,7 +36,7 @@ import {
   showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
-import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -53,7 +54,6 @@ import {
   navigateToSkillBot,
   openLocalSkill,
   openRemoteSkill,
-  openRootBotAndSkills,
   openRootBotAndSkillsByPath,
   openRootBotAndSkillsByProjectId,
   removeRecentProject,
@@ -106,7 +106,11 @@ export const projectDispatcher = () => {
   );
 
   const addExistingSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default'): Promise<void> => {
+    (callbackHelpers: CallbackInterface) => async (
+      path: string,
+      storageId = 'default',
+      templateId?: string
+    ): Promise<void> => {
       const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
@@ -126,6 +130,11 @@ export const projectDispatcher = () => {
         if (!mainDialog) {
           const error = await snapshot.getPromise(botErrorState(projectId));
           throw error;
+        }
+
+        if (templateId === QnABotTemplateId) {
+          callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
+          callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
         }
 
         set(botProjectIdsState, (current) => [...current, projectId]);
@@ -338,7 +347,13 @@ export const projectDispatcher = () => {
   const createNewBotV2 = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
     const { set, snapshot } = callbackHelpers;
     try {
-      await flushExistingTasks(callbackHelpers);
+      const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
+
+      // flush existing tasks for new root bot creation
+      if (creationFlowType != 'Skill') {
+        await flushExistingTasks(callbackHelpers);
+      }
+
       const dispatcher = await snapshot.getPromise(dispatcherState);
       set(botOpeningState, true);
       const {
@@ -500,36 +515,28 @@ export const projectDispatcher = () => {
           if (response.data?.httpStatusCode === 200 && response.data.result) {
             // Bot creation successful
             clearInterval(timer);
+            const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
+
             callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
             const { botFiles, projectData } = loadProjectData(response.data.result);
             const projectId = response.data.result.id;
-            if (settingStorage.get(projectId)) {
-              settingStorage.remove(projectId);
+
+            if (creationFlowType === 'Skill') {
+              // Skill Creation
+              await addExistingSkillToBotProject(projectData.location, 'default', templateId);
+            } else {
+              // Root Bot Creation
+              await postRootBotCreation(
+                callbackHelpers,
+                projectId,
+                botFiles,
+                projectData,
+                templateId,
+                profile,
+                source,
+                projectIdCache
+              );
             }
-
-            const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
-
-            // Post project creation
-            callbackHelpers.set(projectMetaDataState(projectId), {
-              isRootBot: true,
-              isRemote: false,
-            });
-            // if create from QnATemplate, continue creation flow.
-            if (templateId === QnABotTemplateId) {
-              callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
-              callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
-            }
-            if (profile) {
-              // ABS Create Flow, update publishProfile after create project
-              const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
-              const newProfile = getPublishProfileFromPayload(profile, source);
-
-              newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-            }
-            projectIdCache.set(projectId);
-
-            // navigate to the new get started section
-            navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
             callbackHelpers.set(botOpeningMessage, '');
             callbackHelpers.set(botOpeningState, false);
           } else {
