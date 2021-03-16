@@ -57,12 +57,12 @@ const updateLuFiles = (
   // adds
   if (adds?.length) {
     const addedIds = adds.map((file) => file.id);
-    set(luFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
     adds.forEach((luFile) => {
       set(luFileState({ projectId, luFileId: luFile.id }), (oldLuFile) =>
         getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile
       );
     });
+    set(luFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
   }
 };
 const getRelatedLuFileChanges = async (

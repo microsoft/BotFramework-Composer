@@ -65,12 +65,12 @@ const updateQnaFiles = (
   // adds
   if (adds?.length) {
     const addedIds = adds.map((file) => file.id);
-    set(qnaFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
     adds.forEach((qnaFile) => {
       set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (oldQnaFile) =>
         getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile
       );
     });
+    set(qnaFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
   }
 };
 
