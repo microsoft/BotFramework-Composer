@@ -33,6 +33,7 @@ const AttachmentModalityEditor = React.memo(
     onAttachmentLayoutChange,
     onUpdateResponseTemplate,
     onRemoveModality,
+    onRemoveTemplate,
     onTemplateChange,
     telemetryClient,
     editorSettings,
@@ -108,6 +109,7 @@ const AttachmentModalityEditor = React.memo(
           selectedKey="text"
           telemetryClient={telemetryClient}
           onChange={handleChange}
+          onRemoveTemplate={onRemoveTemplate}
           onTemplateChange={onTemplateChange}
         />
       </ModalityEditorContainer>

@@ -119,16 +119,27 @@ export const StringArrayEditor = React.memo(
     useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
         if (submitKeys.includes(e.key)) {
+          // Allow multiline via shift+Enter
+          if (e.key === 'Enter' && e.shiftKey) {
+            return;
+          }
+
           setCalloutTargetElement(null);
-
-          const filteredItems = items.filter(Boolean);
-
+          // Filter our empty or newline strings
+          const filteredItems = items.filter((s) => s !== '' && s !== '\n');
           if (e.key === 'Enter' && containerRef.current?.contains(e.target as Node)) {
-            onChange([...filteredItems, '']);
-            setCurrentIndex(filteredItems.length);
+            // If the value is not filtered, go to the next entry
+            // Otherwise cancel editing
+            if (items.length === filteredItems.length) {
+              e.preventDefault();
+              onChange([...filteredItems, '']);
+              setCurrentIndex(filteredItems.length);
+            } else {
+              onChange(filteredItems);
+              setCurrentIndex(null);
+            }
           } else {
             setCurrentIndex(null);
-
             // Remove empty variations only if necessary
             if (items.length !== filteredItems.length) {
               onChange(filteredItems);
