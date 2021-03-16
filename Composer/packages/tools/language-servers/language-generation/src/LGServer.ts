@@ -295,6 +295,7 @@ export class LGServer {
       for (const template of lgTemplates.templates) {
         this._templateDefinitions[template.name] = {
           fileId: this.removeLocaleInId(file.id),
+          templateId: template.name,
           line: template?.range?.start?.line,
         };
       }
