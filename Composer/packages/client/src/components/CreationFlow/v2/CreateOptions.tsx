@@ -209,6 +209,16 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   };
 
   useEffect(() => {
+    if (templates.length > 1) {
+      const emptyBotTemplate = find(templates, ['id', defaultTemplateId]);
+      if (emptyBotTemplate) {
+        setCurrentTemplateId(emptyBotTemplate.id);
+        setEmptyBotKey(emptyBotTemplate.id);
+      }
+    }
+  }, [templates]);
+
+  useEffect(() => {
     // open bot directly if alias exist.
     if (props.location?.search) {
       const decoded = decodeURIComponent(props.location.search);
