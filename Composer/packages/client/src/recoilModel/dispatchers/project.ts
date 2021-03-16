@@ -376,7 +376,7 @@ export const projectDispatcher = () => {
       );
 
       if (response.data.jobId) {
-        dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix, profile, source);
+        dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix, profile, source, name, location);
       }
     } catch (ex) {
       set(botProjectIdsState, []);
@@ -494,7 +494,8 @@ export const projectDispatcher = () => {
       urlSuffix: string,
       profile: any,
       source: any,
-      botName?: string
+      botName?: string,
+      location?: string
     ) => {
       const { set, snapshot } = callbackHelpers;
 
@@ -515,28 +516,33 @@ export const projectDispatcher = () => {
             if (creationFlowType === 'Skill') {
               // Skill Creation
 
-              const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-              console.log(`rootBotProjId: ${rootBotProjectId}`);
-              if (!rootBotProjectId || !botName) {
-                console.log('in here friends!');
-                callbackHelpers.set(botOpeningMessage, '');
-                callbackHelpers.set(botOpeningState, false);
-                return;
-              }
-              const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+              // const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
+              // console.log(`rootBotProjId: ${rootBotProjectId}`);
+              // if (!rootBotProjectId || !botName) {
+              //   console.log('in here friends!');
 
-              const skillNameIdentifier: string = await getSkillNameIdentifier(
-                callbackHelpers,
-                getFileNameFromPath(botName)
-              );
-              set(botNameIdentifierState(projectId), skillNameIdentifier);
-              set(projectMetaDataState(projectId), {
-                isRemote: false,
-                isRootBot: false,
-              });
-              set(botProjectIdsState, (current) => [...current, projectId]);
-              await dispatcher.addLocalSkillToBotProjectFile(projectId);
-              navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
+              //   callbackHelpers.set(botOpeningMessage, '');
+              //   callbackHelpers.set(botOpeningState, false);
+              //   return;
+              // }
+              const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+              console.log(`location: ${location}`);
+
+              if (location) {
+                addExistingSkillToBotProject(location);
+              }
+              // const skillNameIdentifier: string = await getSkillNameIdentifier(
+              //   callbackHelpers,
+              //   getFileNameFromPath(botName)
+              // );
+              // set(botNameIdentifierState(projectId), skillNameIdentifier);
+              // set(projectMetaDataState(projectId), {
+              //   isRemote: false,
+              //   isRootBot: false,
+              // });
+              // set(botProjectIdsState, (current) => [...current, projectId]);
+              // await dispatcher.addLocalSkillToBotProjectFile(projectId);
+              // navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
               return projectId;
             } else {
               // Root Bot Creation
@@ -567,6 +573,7 @@ export const projectDispatcher = () => {
               // navigate to the new get started section
               navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
             }
+            console.log('in here');
             callbackHelpers.set(botOpeningMessage, '');
             callbackHelpers.set(botOpeningState, false);
           } else {
