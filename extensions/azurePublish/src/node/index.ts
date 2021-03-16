@@ -190,7 +190,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // include both pre-release and release identifiers here
         // TODO: eventually we can clean this up when the "old" runtime is deprecated
         // (old runtime support is the else block below)
-        if (runtime.key === 'csharp-azurewebapp-v2' || runtime.key === 'adaptive-runtime-dotnet-webapp') {
+        if (
+          runtime.key === 'csharp-azurewebapp-v2' ||
+          runtime.key === 'adaptive-runtime-dotnet-webapp' ||
+          runtime.key === 'node-azurewebapp'
+        ) {
           const buildFolder = this.getProjectFolder(resourcekey, this.mode);
 
           // clean up from any previous deploys

@@ -541,28 +541,28 @@ export default async (composer: any): Promise<void> => {
     },
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
-      composer.log('BUILD THIS JS PROJECT');
+      composer.log(`BUILD THIS JS PROJECT in ${runtimePath}`);
       const { stderr: installErr } = await execAsync('npm install', {
-        cwd: path.resolve(runtimePath, '../'),
+        cwd: path.resolve(runtimePath, '.'),
       });
       if (installErr) {
         composer.log(installErr);
       }
-      const { stderr: install2Err } = await execAsync('npm run build', {
-        cwd: path.resolve(runtimePath, '../'),
-      });
-      if (install2Err) {
-        throw new Error(install2Err);
-      }
+      // const { stderr: install2Err } = await execAsync('npm run build', {
+      //   cwd: path.resolve(runtimePath, '.'),
+      // });
+      // if (install2Err) {
+      //   throw new Error(install2Err);
+      // }
       // write settings to disk in the appropriate location
-      const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
+      const settingsPath = path.join(runtimePath, 'settings', 'appsettings.json');
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
         await fs.mkdirp(path.dirname(settingsPath));
       }
       await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
 
       composer.log('BUILD COMPLETE');
-      return path.resolve(runtimePath, '../');
+      return path.resolve(runtimePath, '.');
     },
     setSkillManifest: async (
       dstRuntimePath: string,
