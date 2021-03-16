@@ -4,6 +4,7 @@
 import styled from '@emotion/styled';
 import { EditorDidMount } from '@monaco-editor/react';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
@@ -134,7 +135,9 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
 
           languageClient.onReady().then(() =>
             languageClient.onNotification('GotoDefinition', (result) => {
-              console.log(result);
+              if (lgOption?.projectId) {
+                navigate(`/bot/${lgOption.projectId}/language-generation/${result.fileId}/edit#L=${result.line}`);
+              }
             })
           );
         },
