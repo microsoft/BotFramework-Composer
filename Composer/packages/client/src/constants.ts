@@ -390,9 +390,9 @@ export const triggerNotSupportedWarning = () =>
   );
 
 export const feedDictionary: { [key in FeedName]: string } = {
-  firstPartyCsharp:
+  dotnet:
     'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-  firstPartyNode: 'https://registry.npmjs.org/-/v1/search?text=generator+scope:standardlabs-test',
+  js: 'https://registry.npmjs.org/-/v1/search?text=generator+scope:standardlabs-test',
 };
 
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)

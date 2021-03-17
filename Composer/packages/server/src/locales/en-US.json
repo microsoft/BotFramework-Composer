@@ -1223,9 +1223,6 @@
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
   },
-  "enable_the_component_model_including_the_new_creat_f6e5659c": {
-    "message": "Enable the Component Model including the new creation experience, the Adaptive Runtime, and Package Manager."
-  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -2198,6 +2195,9 @@
   "new_13daf639": {
     "message": "New"
   },
+  "new_creation_experience_29591aca": {
+    "message": "New Creation Experience"
+  },
   "new_template_49e6f0f2": {
     "message": "New template"
   },
@@ -2455,6 +2455,9 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
+  },
+  "preview_the_new_bot_creation_experience_create_new_e0b7150f": {
+    "message": "Preview the new bot creation experience. Create new bots that use the Adaptive Runtime, and can be enhanced using Package Manager."
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -2800,6 +2803,9 @@
   },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
+  },
+  "runtime_type_f9e2419b": {
+    "message": "Runtime type"
   },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
@@ -3160,9 +3166,6 @@
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
-  },
-  "the_component_model_febefd93": {
-    "message": "The Component Model"
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."

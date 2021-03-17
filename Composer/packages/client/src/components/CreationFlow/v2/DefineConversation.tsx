@@ -15,11 +15,11 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey, QnABotTemplateId } from '@bfc/shared';
+import { QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage, runtimeOptions } from '../../../constants';
+import { DialogCreationCopy, nameRegexV2, runtimeOptions, defaultRuntime } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -98,6 +98,7 @@ type DefineConversationProps = {
   focusedStorageFolder: StorageFolder;
 } & RouteComponentProps<{
   templateId: string;
+  runtimeLanguage: string;
   location: string;
 }>;
 
@@ -113,6 +114,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   } = props;
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
+  const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : defaultRuntime;
 
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = (templateId?: string) => {
@@ -177,7 +179,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
       required: false,
     },
     runtimeChoice: {
-      required: true,
+      required: false,
     },
     schemaUrl: {
       required: false,
@@ -203,7 +205,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
-      runtimeLanguage: csharpFeedKey,
+      runtimeLanguage: runtimeLanguage,
       runtimeChoice: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
@@ -280,8 +282,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = getAliasFromPayload(source, payload);
         }
       }
-      dataToSubmit.runtimeLanguage = 'js';
-
       onSubmit({ ...dataToSubmit }, templateId || '');
     },
     [hasErrors, formData]
