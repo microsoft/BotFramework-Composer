@@ -26,6 +26,7 @@ import { triggerNotSupported } from '../../utils/dialogValidator';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { dialog } from '../ErrorPopup/styles';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -34,7 +35,6 @@ import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeade
 import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 import { ProjectTreeOptions, TreeLink, TreeMenuItem } from './types';
-import { dialog } from '../ErrorPopup/styles';
 
 // -------------------- Styles -------------------- //
 
